@@ -241,6 +241,13 @@ _Pvt_Extensions
 *.swp
 *.bak
 *.lib
+*.zip
+*.rar
+*.ace
+*.exe
+*.dll
+*.msi
+
 build/
 obj/
 [Dd]ebug*/
