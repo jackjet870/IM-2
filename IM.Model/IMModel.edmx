@@ -1,0 +1,678 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="IMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Guests">
+          <Key>
+            <PropertyRef Name="guID" />
+          </Key>
+          <Property Name="guID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="guHReservID" Type="varchar" MaxLength="15" />
+          <Property Name="guls" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="guMembershipNum" Type="varchar" MaxLength="15" />
+          <Property Name="guOnGroup" Type="bit" Nullable="false" />
+          <Property Name="guHotel" Type="varchar" MaxLength="30" />
+          <Property Name="guRoomNum" Type="varchar" MaxLength="15" />
+          <Property Name="guCheckInD" Type="datetime" Nullable="false" />
+          <Property Name="guCheckOutD" Type="datetime" Nullable="false" />
+          <Property Name="guCheckIn" Type="bit" Nullable="false" />
+          <Property Name="guLastName1" Type="varchar" MaxLength="65" />
+          <Property Name="guFirstName1" Type="varchar" MaxLength="40" />
+          <Property Name="guAge1" Type="tinyint" />
+          <Property Name="gums1" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="guLastname2" Type="varchar" MaxLength="25" />
+          <Property Name="guFirstName2" Type="varchar" MaxLength="40" />
+          <Property Name="guAge2" Type="tinyint" />
+          <Property Name="gums2" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="guPax" Type="decimal" Precision="4" Scale="1" Nullable="false" />
+          <Property Name="guag" Type="varchar" MaxLength="35" />
+          <Property Name="guco" Type="varchar" MaxLength="25" />
+          <Property Name="gumk" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="gula" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="guLW" Type="bit" Nullable="false" />
+          <Property Name="guNW" Type="bit" Nullable="false" />
+          <Property Name="guAvail" Type="bit" Nullable="false" />
+          <Property Name="guInfo" Type="bit" Nullable="false" />
+          <Property Name="guInvit" Type="bit" Nullable="false" />
+          <Property Name="guloInfo" Type="varchar" MaxLength="10" />
+          <Property Name="guloInvit" Type="varchar" MaxLength="10" />
+          <Property Name="guPRAssign" Type="varchar" MaxLength="10" />
+          <Property Name="guPRAvail" Type="varchar" MaxLength="10" />
+          <Property Name="guPRInfo" Type="varchar" MaxLength="10" />
+          <Property Name="guPRInvit1" Type="varchar" MaxLength="10" />
+          <Property Name="guSelfGen" Type="bit" Nullable="false" />
+          <Property Name="guPRInvit2" Type="varchar" MaxLength="10" />
+          <Property Name="guPRInvit3" Type="varchar" MaxLength="10" />
+          <Property Name="guPRCaptain1" Type="varchar" MaxLength="10" />
+          <Property Name="guPRCaptain2" Type="varchar" MaxLength="10" />
+          <Property Name="guPRCaptain3" Type="varchar" MaxLength="10" />
+          <Property Name="guum" Type="tinyint" Nullable="false" />
+          <Property Name="guInfoD" Type="datetime" />
+          <Property Name="gumo" Type="varchar" MaxLength="15" />
+          <Property Name="gumoA" Type="bit" Nullable="false" />
+          <Property Name="guComments" Type="nvarchar" MaxLength="100" />
+          <Property Name="guQuinella" Type="bit" Nullable="false" />
+          <Property Name="guOutInvitNum" Type="varchar" MaxLength="8" />
+          <Property Name="guCity" Type="varchar" MaxLength="40" />
+          <Property Name="guState" Type="varchar" MaxLength="40" />
+          <Property Name="guInvitD" Type="datetime" />
+          <Property Name="guInvitT" Type="datetime" />
+          <Property Name="guResch" Type="bit" Nullable="false" />
+          <Property Name="guReschD" Type="datetime" />
+          <Property Name="guReschT" Type="datetime" />
+          <Property Name="guBookD" Type="datetime" />
+          <Property Name="guBookT" Type="datetime" />
+          <Property Name="guPickUpT" Type="datetime" />
+          <Property Name="guDirect" Type="bit" Nullable="false" />
+          <Property Name="guBookCanc" Type="bit" Nullable="false" />
+          <Property Name="guShowD" Type="datetime" />
+          <Property Name="gusr" Type="varchar" MaxLength="10" />
+          <Property Name="guHotelB" Type="varchar" MaxLength="30" />
+          <Property Name="guDeposit" Type="money" Nullable="false" />
+          <Property Name="guDepositTwisted" Type="money" Nullable="false" />
+          <Property Name="guDepositReceived" Type="money" Nullable="false" />
+          <Property Name="gucu" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="guCCType" Type="varchar" MaxLength="30" />
+          <Property Name="guExtraInfo" Type="varchar" MaxLength="50" />
+          <Property Name="guTimeInT" Type="datetime" />
+          <Property Name="guTimeOutT" Type="datetime" />
+          <Property Name="guOccup1" Type="varchar" MaxLength="25" />
+          <Property Name="guOccup2" Type="varchar" MaxLength="25" />
+          <Property Name="guTaxiIn" Type="money" Nullable="false" />
+          <Property Name="guTaxiOut" Type="money" Nullable="false" />
+          <Property Name="guDepositgr" Type="int" />
+          <Property Name="guTaxiIngr" Type="int" />
+          <Property Name="guTaxiOutgr" Type="int" />
+          <Property Name="guShow" Type="bit" Nullable="false" />
+          <Property Name="guShowSeq" Type="tinyint" />
+          <Property Name="guQ" Type="bit" Nullable="false" />
+          <Property Name="guQType" Type="varchar" MaxLength="4" />
+          <Property Name="guNQ" Type="bit" Nullable="false" />
+          <Property Name="guCTour" Type="bit" Nullable="false" />
+          <Property Name="guInOut" Type="bit" Nullable="false" />
+          <Property Name="guWalkOut" Type="bit" Nullable="false" />
+          <Property Name="guMealTicket" Type="bit" Nullable="false" />
+          <Property Name="guMealTicketQty" Type="int" Nullable="false" />
+          <Property Name="guMealTicketFolios" Type="varchar" MaxLength="30" />
+          <Property Name="guSale" Type="bit" Nullable="false" />
+          <Property Name="guGiftsReceived" Type="bit" Nullable="false" />
+          <Property Name="guEntryHost" Type="varchar" MaxLength="10" />
+          <Property Name="guGiftsHost" Type="varchar" MaxLength="10" />
+          <Property Name="guExitHost" Type="varchar" MaxLength="10" />
+          <Property Name="guLiner1Type" Type="tinyint" Nullable="false" />
+          <Property Name="guLiner1" Type="varchar" MaxLength="10" />
+          <Property Name="guLiner2" Type="varchar" MaxLength="10" />
+          <Property Name="guLinerCaptain1" Type="varchar" MaxLength="10" />
+          <Property Name="guCloser1" Type="varchar" MaxLength="10" />
+          <Property Name="guCloser2" Type="varchar" MaxLength="10" />
+          <Property Name="guCloser3" Type="varchar" MaxLength="10" />
+          <Property Name="guExit1" Type="varchar" MaxLength="10" />
+          <Property Name="guExit2" Type="varchar" MaxLength="10" />
+          <Property Name="guCloserCaptain1" Type="varchar" MaxLength="10" />
+          <Property Name="guPodium" Type="varchar" MaxLength="10" />
+          <Property Name="guVLO" Type="varchar" MaxLength="10" />
+          <Property Name="guWComments" Type="nvarchar" MaxLength="100" />
+          <Property Name="guGComments" Type="nvarchar" MaxLength="100" />
+          <Property Name="guEComments" Type="nvarchar" MaxLength="100" />
+          <Property Name="guStatus" Type="varchar" MaxLength="1" />
+          <Property Name="guInternetTransfer" Type="bit" Nullable="false" />
+          <Property Name="guO1" Type="varchar" MaxLength="20" />
+          <Property Name="guO2" Type="varchar" MaxLength="20" />
+          <Property Name="guO3" Type="varchar" MaxLength="20" />
+          <Property Name="guO4" Type="varchar" MaxLength="20" />
+          <Property Name="guO5" Type="varchar" MaxLength="20" />
+          <Property Name="guO6" Type="varchar" MaxLength="20" />
+          <Property Name="guTwistedDeposit" Type="bit" Nullable="false" />
+          <Property Name="guInvitNum" Type="int" />
+          <Property Name="guTO" Type="varchar" MaxLength="10" />
+          <Property Name="guoc" Type="varchar" MaxLength="3" />
+          <Property Name="guDepositRet" Type="bit" Nullable="false" />
+          <Property Name="guTaxiInRet" Type="bit" Nullable="false" />
+          <Property Name="guTaxiOutRet" Type="bit" Nullable="false" />
+          <Property Name="guFirstBookD" Type="datetime" />
+          <Property Name="guHReservIDC" Type="varchar" MaxLength="15" />
+          <Property Name="guRef" Type="int" />
+          <Property Name="guTimeCloserT" Type="datetime" />
+          <Property Name="guTimeExitT" Type="datetime" />
+          <Property Name="guTour" Type="bit" Nullable="false" />
+          <Property Name="guShow2" Type="bit" Nullable="false" />
+          <Property Name="guShow2D" Type="datetime" />
+          <Property Name="guQ2" Type="bit" Nullable="false" />
+          <Property Name="guQType2" Type="varchar" MaxLength="4" />
+          <Property Name="guNQ2" Type="bit" Nullable="false" />
+          <Property Name="guCTour2" Type="bit" Nullable="false" />
+          <Property Name="guDirect2" Type="bit" Nullable="false" />
+          <Property Name="guQuinella2" Type="bit" Nullable="false" />
+          <Property Name="guTour2" Type="bit" Nullable="false" />
+          <Property Name="guInOut2" Type="bit" Nullable="false" />
+          <Property Name="guWalkOut2" Type="bit" Nullable="false" />
+          <Property Name="guTimeIn2T" Type="datetime" />
+          <Property Name="guTimeCloser2T" Type="datetime" />
+          <Property Name="guTimeExit2T" Type="datetime" />
+          <Property Name="guTimeOut2T" Type="datetime" />
+          <Property Name="guFlight" Type="varchar" MaxLength="10" />
+          <Property Name="guGStatus" Type="varchar" MaxLength="5" />
+          <Property Name="guDepSale" Type="money" Nullable="false" />
+          <Property Name="gulsOriginal" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="guAntesIO" Type="bit" Nullable="false" />
+          <Property Name="guReschDT" Type="datetime" />
+          <Property Name="guDepositSaleNum" Type="varchar" MaxLength="10" />
+          <Property Name="guDepositSaleD" Type="datetime" />
+          <Property Name="guRoomsQty" Type="int" Nullable="false" />
+          <Property Name="guChildren" Type="tinyint" Nullable="false" />
+          <Property Name="guChildrenAges" Type="varchar" MaxLength="20" />
+          <Property Name="guQuinellaSplit" Type="bit" Nullable="false" />
+          <Property Name="guOriginAvail" Type="bit" Nullable="false" />
+          <Property Name="guDivResConsec" Type="tinyint" Nullable="false" />
+          <Property Name="guDivResLeadSource" Type="varchar" MaxLength="10" />
+          <Property Name="guDivResResNum" Type="varchar" MaxLength="15" />
+          <Property Name="guGuestRef" Type="varchar" MaxLength="12" />
+          <Property Name="guShowsQty" Type="tinyint" Nullable="false" />
+          <Property Name="guFamily" Type="bit" Nullable="false" />
+          <Property Name="guBirthDate1" Type="datetime" />
+          <Property Name="guBirthDate2" Type="datetime" />
+          <Property Name="guBirthDate3" Type="datetime" />
+          <Property Name="guBirthDate4" Type="datetime" />
+          <Property Name="guts" Type="varchar" MaxLength="10" />
+          <Property Name="guEmail1" Type="varchar" MaxLength="50" />
+          <Property Name="guEmail2" Type="varchar" MaxLength="50" />
+          <Property Name="guMainInvit" Type="int" />
+          <Property Name="guOverflow" Type="bit" Nullable="false" />
+          <Property Name="guIdentification" Type="bit" Nullable="false" />
+          <Property Name="guAccountGiftsCard" Type="varchar" MaxLength="16" />
+          <Property Name="guQtyGiftsCard" Type="int" Nullable="false" />
+          <Property Name="guCheckOutHotelD" Type="datetime" Nullable="false" />
+          <Property Name="guIncludedTour" Type="bit" Nullable="false" />
+          <Property Name="guFollow" Type="bit" Nullable="false" />
+          <Property Name="guFollowD" Type="datetime" />
+          <Property Name="guPRFollow" Type="varchar" MaxLength="10" />
+          <Property Name="guReservationType" Type="varchar" MaxLength="1" />
+          <Property Name="guHotelPrevious" Type="varchar" MaxLength="10" />
+          <Property Name="guFolioPrevious" Type="varchar" MaxLength="15" />
+          <Property Name="guGroup" Type="bit" Nullable="false" />
+          <Property Name="gunb" Type="int" />
+          <Property Name="guNoBookD" Type="datetime" />
+          <Property Name="guPRNoBook" Type="varchar" MaxLength="10" />
+          <Property Name="guPRNote" Type="bit" Nullable="false" />
+          <Property Name="guCompany" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="guSaveProgram" Type="bit" Nullable="false" />
+          <Property Name="guWithQuinella" Type="bit" Nullable="false" />
+          <Property Name="guIdProfileOpera" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="guAvailBySystem" Type="bit" Nullable="false" />
+          <Property Name="gurt" Type="varchar" MaxLength="10" />
+          <Property Name="gucl" Type="int" />
+          <Property Name="gupt" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="guCreationD" Type="datetime" Nullable="false" />
+          <Property Name="guInterval" Type="bit" Nullable="false" />
+          <Property Name="guReimpresion" Type="tinyint" />
+          <Property Name="gurm" Type="tinyint" />
+          <Property Name="guPresentedInvitation" Type="bit" />
+          <Property Name="guLastNameOriginal" Type="varchar" MaxLength="65" />
+          <Property Name="guFirstNameOriginal" Type="varchar" MaxLength="40" />
+          <Property Name="guDespositRefund" Type="bit" />
+          <Property Name="guDepositsRefund" Type="bit" />
+        </EntityType>
+        <EntityContainer Name="IMModelStoreContainer">
+          <EntitySet Name="Guests" EntityType="Self.Guests" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="IMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Guests" EntityType="IMModel.Guest" />
+        </EntityContainer>
+        <EntityType Name="Guest">
+          <Key>
+            <PropertyRef Name="guID" />
+          </Key>
+          <Property Name="guID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="guHReservID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="guls" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guMembershipNum" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="guOnGroup" Type="Boolean" Nullable="false" />
+          <Property Name="guHotel" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="guRoomNum" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="guCheckInD" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="guCheckOutD" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="guCheckIn" Type="Boolean" Nullable="false" />
+          <Property Name="guLastName1" Type="String" MaxLength="65" FixedLength="false" Unicode="false" />
+          <Property Name="guFirstName1" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="guAge1" Type="Byte" />
+          <Property Name="gums1" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guLastname2" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="guFirstName2" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="guAge2" Type="Byte" />
+          <Property Name="gums2" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guPax" Type="Decimal" Nullable="false" Precision="4" Scale="1" />
+          <Property Name="guag" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
+          <Property Name="guco" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="gumk" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="gula" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="guLW" Type="Boolean" Nullable="false" />
+          <Property Name="guNW" Type="Boolean" Nullable="false" />
+          <Property Name="guAvail" Type="Boolean" Nullable="false" />
+          <Property Name="guInfo" Type="Boolean" Nullable="false" />
+          <Property Name="guInvit" Type="Boolean" Nullable="false" />
+          <Property Name="guloInfo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guloInvit" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guPRAssign" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guPRAvail" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guPRInfo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guPRInvit1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guSelfGen" Type="Boolean" Nullable="false" />
+          <Property Name="guPRInvit2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guPRInvit3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guPRCaptain1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guPRCaptain2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guPRCaptain3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guum" Type="Byte" Nullable="false" />
+          <Property Name="guInfoD" Type="DateTime" Precision="3" />
+          <Property Name="gumo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="gumoA" Type="Boolean" Nullable="false" />
+          <Property Name="guComments" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="guQuinella" Type="Boolean" Nullable="false" />
+          <Property Name="guOutInvitNum" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="guCity" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="guState" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="guInvitD" Type="DateTime" Precision="3" />
+          <Property Name="guInvitT" Type="DateTime" Precision="3" />
+          <Property Name="guResch" Type="Boolean" Nullable="false" />
+          <Property Name="guReschD" Type="DateTime" Precision="3" />
+          <Property Name="guReschT" Type="DateTime" Precision="3" />
+          <Property Name="guBookD" Type="DateTime" Precision="3" />
+          <Property Name="guBookT" Type="DateTime" Precision="3" />
+          <Property Name="guPickUpT" Type="DateTime" Precision="3" />
+          <Property Name="guDirect" Type="Boolean" Nullable="false" />
+          <Property Name="guBookCanc" Type="Boolean" Nullable="false" />
+          <Property Name="guShowD" Type="DateTime" Precision="3" />
+          <Property Name="gusr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guHotelB" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="guDeposit" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="guDepositTwisted" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="guDepositReceived" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="gucu" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guCCType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="guExtraInfo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="guTimeInT" Type="DateTime" Precision="3" />
+          <Property Name="guTimeOutT" Type="DateTime" Precision="3" />
+          <Property Name="guOccup1" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="guOccup2" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="guTaxiIn" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="guTaxiOut" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="guDepositgr" Type="Int32" />
+          <Property Name="guTaxiIngr" Type="Int32" />
+          <Property Name="guTaxiOutgr" Type="Int32" />
+          <Property Name="guShow" Type="Boolean" Nullable="false" />
+          <Property Name="guShowSeq" Type="Byte" />
+          <Property Name="guQ" Type="Boolean" Nullable="false" />
+          <Property Name="guQType" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="guNQ" Type="Boolean" Nullable="false" />
+          <Property Name="guCTour" Type="Boolean" Nullable="false" />
+          <Property Name="guInOut" Type="Boolean" Nullable="false" />
+          <Property Name="guWalkOut" Type="Boolean" Nullable="false" />
+          <Property Name="guMealTicket" Type="Boolean" Nullable="false" />
+          <Property Name="guMealTicketQty" Type="Int32" Nullable="false" />
+          <Property Name="guMealTicketFolios" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="guSale" Type="Boolean" Nullable="false" />
+          <Property Name="guGiftsReceived" Type="Boolean" Nullable="false" />
+          <Property Name="guEntryHost" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guGiftsHost" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guExitHost" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guLiner1Type" Type="Byte" Nullable="false" />
+          <Property Name="guLiner1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guLiner2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guLinerCaptain1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guCloser1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guCloser2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guCloser3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guExit1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guExit2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guCloserCaptain1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guPodium" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guVLO" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guWComments" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="guGComments" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="guEComments" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="guStatus" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="guInternetTransfer" Type="Boolean" Nullable="false" />
+          <Property Name="guO1" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="guO2" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="guO3" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="guO4" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="guO5" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="guO6" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="guTwistedDeposit" Type="Boolean" Nullable="false" />
+          <Property Name="guInvitNum" Type="Int32" />
+          <Property Name="guTO" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guoc" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="guDepositRet" Type="Boolean" Nullable="false" />
+          <Property Name="guTaxiInRet" Type="Boolean" Nullable="false" />
+          <Property Name="guTaxiOutRet" Type="Boolean" Nullable="false" />
+          <Property Name="guFirstBookD" Type="DateTime" Precision="3" />
+          <Property Name="guHReservIDC" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="guRef" Type="Int32" />
+          <Property Name="guTimeCloserT" Type="DateTime" Precision="3" />
+          <Property Name="guTimeExitT" Type="DateTime" Precision="3" />
+          <Property Name="guTour" Type="Boolean" Nullable="false" />
+          <Property Name="guShow2" Type="Boolean" Nullable="false" />
+          <Property Name="guShow2D" Type="DateTime" Precision="3" />
+          <Property Name="guQ2" Type="Boolean" Nullable="false" />
+          <Property Name="guQType2" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="guNQ2" Type="Boolean" Nullable="false" />
+          <Property Name="guCTour2" Type="Boolean" Nullable="false" />
+          <Property Name="guDirect2" Type="Boolean" Nullable="false" />
+          <Property Name="guQuinella2" Type="Boolean" Nullable="false" />
+          <Property Name="guTour2" Type="Boolean" Nullable="false" />
+          <Property Name="guInOut2" Type="Boolean" Nullable="false" />
+          <Property Name="guWalkOut2" Type="Boolean" Nullable="false" />
+          <Property Name="guTimeIn2T" Type="DateTime" Precision="3" />
+          <Property Name="guTimeCloser2T" Type="DateTime" Precision="3" />
+          <Property Name="guTimeExit2T" Type="DateTime" Precision="3" />
+          <Property Name="guTimeOut2T" Type="DateTime" Precision="3" />
+          <Property Name="guFlight" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guGStatus" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="guDepSale" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="gulsOriginal" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guAntesIO" Type="Boolean" Nullable="false" />
+          <Property Name="guReschDT" Type="DateTime" Precision="3" />
+          <Property Name="guDepositSaleNum" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guDepositSaleD" Type="DateTime" Precision="3" />
+          <Property Name="guRoomsQty" Type="Int32" Nullable="false" />
+          <Property Name="guChildren" Type="Byte" Nullable="false" />
+          <Property Name="guChildrenAges" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="guQuinellaSplit" Type="Boolean" Nullable="false" />
+          <Property Name="guOriginAvail" Type="Boolean" Nullable="false" />
+          <Property Name="guDivResConsec" Type="Byte" Nullable="false" />
+          <Property Name="guDivResLeadSource" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guDivResResNum" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="guGuestRef" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="guShowsQty" Type="Byte" Nullable="false" />
+          <Property Name="guFamily" Type="Boolean" Nullable="false" />
+          <Property Name="guBirthDate1" Type="DateTime" Precision="3" />
+          <Property Name="guBirthDate2" Type="DateTime" Precision="3" />
+          <Property Name="guBirthDate3" Type="DateTime" Precision="3" />
+          <Property Name="guBirthDate4" Type="DateTime" Precision="3" />
+          <Property Name="guts" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guEmail1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="guEmail2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="guMainInvit" Type="Int32" />
+          <Property Name="guOverflow" Type="Boolean" Nullable="false" />
+          <Property Name="guIdentification" Type="Boolean" Nullable="false" />
+          <Property Name="guAccountGiftsCard" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
+          <Property Name="guQtyGiftsCard" Type="Int32" Nullable="false" />
+          <Property Name="guCheckOutHotelD" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="guIncludedTour" Type="Boolean" Nullable="false" />
+          <Property Name="guFollow" Type="Boolean" Nullable="false" />
+          <Property Name="guFollowD" Type="DateTime" Precision="3" />
+          <Property Name="guPRFollow" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guReservationType" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="guHotelPrevious" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guFolioPrevious" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="guGroup" Type="Boolean" Nullable="false" />
+          <Property Name="gunb" Type="Int32" />
+          <Property Name="guNoBookD" Type="DateTime" Precision="3" />
+          <Property Name="guPRNoBook" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guPRNote" Type="Boolean" Nullable="false" />
+          <Property Name="guCompany" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="guSaveProgram" Type="Boolean" Nullable="false" />
+          <Property Name="guWithQuinella" Type="Boolean" Nullable="false" />
+          <Property Name="guIdProfileOpera" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="guAvailBySystem" Type="Boolean" Nullable="false" />
+          <Property Name="gurt" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="gucl" Type="Int32" />
+          <Property Name="gupt" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guCreationD" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="guInterval" Type="Boolean" Nullable="false" />
+          <Property Name="guReimpresion" Type="Byte" />
+          <Property Name="gurm" Type="Byte" />
+          <Property Name="guPresentedInvitation" Type="Boolean" />
+          <Property Name="guLastNameOriginal" Type="String" MaxLength="65" FixedLength="false" Unicode="false" />
+          <Property Name="guFirstNameOriginal" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="guDespositRefund" Type="Boolean" />
+          <Property Name="guDepositsRefund" Type="Boolean" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IMModelStoreContainer" CdmEntityContainer="IMEntities">
+          <EntitySetMapping Name="Guests">
+            <EntityTypeMapping TypeName="IMModel.Guest">
+              <MappingFragment StoreEntitySet="Guests">
+                <ScalarProperty Name="guDepositsRefund" ColumnName="guDepositsRefund" />
+                <ScalarProperty Name="guDespositRefund" ColumnName="guDespositRefund" />
+                <ScalarProperty Name="guFirstNameOriginal" ColumnName="guFirstNameOriginal" />
+                <ScalarProperty Name="guLastNameOriginal" ColumnName="guLastNameOriginal" />
+                <ScalarProperty Name="guPresentedInvitation" ColumnName="guPresentedInvitation" />
+                <ScalarProperty Name="gurm" ColumnName="gurm" />
+                <ScalarProperty Name="guReimpresion" ColumnName="guReimpresion" />
+                <ScalarProperty Name="guInterval" ColumnName="guInterval" />
+                <ScalarProperty Name="guCreationD" ColumnName="guCreationD" />
+                <ScalarProperty Name="gupt" ColumnName="gupt" />
+                <ScalarProperty Name="gucl" ColumnName="gucl" />
+                <ScalarProperty Name="gurt" ColumnName="gurt" />
+                <ScalarProperty Name="guAvailBySystem" ColumnName="guAvailBySystem" />
+                <ScalarProperty Name="guIdProfileOpera" ColumnName="guIdProfileOpera" />
+                <ScalarProperty Name="guWithQuinella" ColumnName="guWithQuinella" />
+                <ScalarProperty Name="guSaveProgram" ColumnName="guSaveProgram" />
+                <ScalarProperty Name="guCompany" ColumnName="guCompany" />
+                <ScalarProperty Name="guPRNote" ColumnName="guPRNote" />
+                <ScalarProperty Name="guPRNoBook" ColumnName="guPRNoBook" />
+                <ScalarProperty Name="guNoBookD" ColumnName="guNoBookD" />
+                <ScalarProperty Name="gunb" ColumnName="gunb" />
+                <ScalarProperty Name="guGroup" ColumnName="guGroup" />
+                <ScalarProperty Name="guFolioPrevious" ColumnName="guFolioPrevious" />
+                <ScalarProperty Name="guHotelPrevious" ColumnName="guHotelPrevious" />
+                <ScalarProperty Name="guReservationType" ColumnName="guReservationType" />
+                <ScalarProperty Name="guPRFollow" ColumnName="guPRFollow" />
+                <ScalarProperty Name="guFollowD" ColumnName="guFollowD" />
+                <ScalarProperty Name="guFollow" ColumnName="guFollow" />
+                <ScalarProperty Name="guIncludedTour" ColumnName="guIncludedTour" />
+                <ScalarProperty Name="guCheckOutHotelD" ColumnName="guCheckOutHotelD" />
+                <ScalarProperty Name="guQtyGiftsCard" ColumnName="guQtyGiftsCard" />
+                <ScalarProperty Name="guAccountGiftsCard" ColumnName="guAccountGiftsCard" />
+                <ScalarProperty Name="guIdentification" ColumnName="guIdentification" />
+                <ScalarProperty Name="guOverflow" ColumnName="guOverflow" />
+                <ScalarProperty Name="guMainInvit" ColumnName="guMainInvit" />
+                <ScalarProperty Name="guEmail2" ColumnName="guEmail2" />
+                <ScalarProperty Name="guEmail1" ColumnName="guEmail1" />
+                <ScalarProperty Name="guts" ColumnName="guts" />
+                <ScalarProperty Name="guBirthDate4" ColumnName="guBirthDate4" />
+                <ScalarProperty Name="guBirthDate3" ColumnName="guBirthDate3" />
+                <ScalarProperty Name="guBirthDate2" ColumnName="guBirthDate2" />
+                <ScalarProperty Name="guBirthDate1" ColumnName="guBirthDate1" />
+                <ScalarProperty Name="guFamily" ColumnName="guFamily" />
+                <ScalarProperty Name="guShowsQty" ColumnName="guShowsQty" />
+                <ScalarProperty Name="guGuestRef" ColumnName="guGuestRef" />
+                <ScalarProperty Name="guDivResResNum" ColumnName="guDivResResNum" />
+                <ScalarProperty Name="guDivResLeadSource" ColumnName="guDivResLeadSource" />
+                <ScalarProperty Name="guDivResConsec" ColumnName="guDivResConsec" />
+                <ScalarProperty Name="guOriginAvail" ColumnName="guOriginAvail" />
+                <ScalarProperty Name="guQuinellaSplit" ColumnName="guQuinellaSplit" />
+                <ScalarProperty Name="guChildrenAges" ColumnName="guChildrenAges" />
+                <ScalarProperty Name="guChildren" ColumnName="guChildren" />
+                <ScalarProperty Name="guRoomsQty" ColumnName="guRoomsQty" />
+                <ScalarProperty Name="guDepositSaleD" ColumnName="guDepositSaleD" />
+                <ScalarProperty Name="guDepositSaleNum" ColumnName="guDepositSaleNum" />
+                <ScalarProperty Name="guReschDT" ColumnName="guReschDT" />
+                <ScalarProperty Name="guAntesIO" ColumnName="guAntesIO" />
+                <ScalarProperty Name="gulsOriginal" ColumnName="gulsOriginal" />
+                <ScalarProperty Name="guDepSale" ColumnName="guDepSale" />
+                <ScalarProperty Name="guGStatus" ColumnName="guGStatus" />
+                <ScalarProperty Name="guFlight" ColumnName="guFlight" />
+                <ScalarProperty Name="guTimeOut2T" ColumnName="guTimeOut2T" />
+                <ScalarProperty Name="guTimeExit2T" ColumnName="guTimeExit2T" />
+                <ScalarProperty Name="guTimeCloser2T" ColumnName="guTimeCloser2T" />
+                <ScalarProperty Name="guTimeIn2T" ColumnName="guTimeIn2T" />
+                <ScalarProperty Name="guWalkOut2" ColumnName="guWalkOut2" />
+                <ScalarProperty Name="guInOut2" ColumnName="guInOut2" />
+                <ScalarProperty Name="guTour2" ColumnName="guTour2" />
+                <ScalarProperty Name="guQuinella2" ColumnName="guQuinella2" />
+                <ScalarProperty Name="guDirect2" ColumnName="guDirect2" />
+                <ScalarProperty Name="guCTour2" ColumnName="guCTour2" />
+                <ScalarProperty Name="guNQ2" ColumnName="guNQ2" />
+                <ScalarProperty Name="guQType2" ColumnName="guQType2" />
+                <ScalarProperty Name="guQ2" ColumnName="guQ2" />
+                <ScalarProperty Name="guShow2D" ColumnName="guShow2D" />
+                <ScalarProperty Name="guShow2" ColumnName="guShow2" />
+                <ScalarProperty Name="guTour" ColumnName="guTour" />
+                <ScalarProperty Name="guTimeExitT" ColumnName="guTimeExitT" />
+                <ScalarProperty Name="guTimeCloserT" ColumnName="guTimeCloserT" />
+                <ScalarProperty Name="guRef" ColumnName="guRef" />
+                <ScalarProperty Name="guHReservIDC" ColumnName="guHReservIDC" />
+                <ScalarProperty Name="guFirstBookD" ColumnName="guFirstBookD" />
+                <ScalarProperty Name="guTaxiOutRet" ColumnName="guTaxiOutRet" />
+                <ScalarProperty Name="guTaxiInRet" ColumnName="guTaxiInRet" />
+                <ScalarProperty Name="guDepositRet" ColumnName="guDepositRet" />
+                <ScalarProperty Name="guoc" ColumnName="guoc" />
+                <ScalarProperty Name="guTO" ColumnName="guTO" />
+                <ScalarProperty Name="guInvitNum" ColumnName="guInvitNum" />
+                <ScalarProperty Name="guTwistedDeposit" ColumnName="guTwistedDeposit" />
+                <ScalarProperty Name="guO6" ColumnName="guO6" />
+                <ScalarProperty Name="guO5" ColumnName="guO5" />
+                <ScalarProperty Name="guO4" ColumnName="guO4" />
+                <ScalarProperty Name="guO3" ColumnName="guO3" />
+                <ScalarProperty Name="guO2" ColumnName="guO2" />
+                <ScalarProperty Name="guO1" ColumnName="guO1" />
+                <ScalarProperty Name="guInternetTransfer" ColumnName="guInternetTransfer" />
+                <ScalarProperty Name="guStatus" ColumnName="guStatus" />
+                <ScalarProperty Name="guEComments" ColumnName="guEComments" />
+                <ScalarProperty Name="guGComments" ColumnName="guGComments" />
+                <ScalarProperty Name="guWComments" ColumnName="guWComments" />
+                <ScalarProperty Name="guVLO" ColumnName="guVLO" />
+                <ScalarProperty Name="guPodium" ColumnName="guPodium" />
+                <ScalarProperty Name="guCloserCaptain1" ColumnName="guCloserCaptain1" />
+                <ScalarProperty Name="guExit2" ColumnName="guExit2" />
+                <ScalarProperty Name="guExit1" ColumnName="guExit1" />
+                <ScalarProperty Name="guCloser3" ColumnName="guCloser3" />
+                <ScalarProperty Name="guCloser2" ColumnName="guCloser2" />
+                <ScalarProperty Name="guCloser1" ColumnName="guCloser1" />
+                <ScalarProperty Name="guLinerCaptain1" ColumnName="guLinerCaptain1" />
+                <ScalarProperty Name="guLiner2" ColumnName="guLiner2" />
+                <ScalarProperty Name="guLiner1" ColumnName="guLiner1" />
+                <ScalarProperty Name="guLiner1Type" ColumnName="guLiner1Type" />
+                <ScalarProperty Name="guExitHost" ColumnName="guExitHost" />
+                <ScalarProperty Name="guGiftsHost" ColumnName="guGiftsHost" />
+                <ScalarProperty Name="guEntryHost" ColumnName="guEntryHost" />
+                <ScalarProperty Name="guGiftsReceived" ColumnName="guGiftsReceived" />
+                <ScalarProperty Name="guSale" ColumnName="guSale" />
+                <ScalarProperty Name="guMealTicketFolios" ColumnName="guMealTicketFolios" />
+                <ScalarProperty Name="guMealTicketQty" ColumnName="guMealTicketQty" />
+                <ScalarProperty Name="guMealTicket" ColumnName="guMealTicket" />
+                <ScalarProperty Name="guWalkOut" ColumnName="guWalkOut" />
+                <ScalarProperty Name="guInOut" ColumnName="guInOut" />
+                <ScalarProperty Name="guCTour" ColumnName="guCTour" />
+                <ScalarProperty Name="guNQ" ColumnName="guNQ" />
+                <ScalarProperty Name="guQType" ColumnName="guQType" />
+                <ScalarProperty Name="guQ" ColumnName="guQ" />
+                <ScalarProperty Name="guShowSeq" ColumnName="guShowSeq" />
+                <ScalarProperty Name="guShow" ColumnName="guShow" />
+                <ScalarProperty Name="guTaxiOutgr" ColumnName="guTaxiOutgr" />
+                <ScalarProperty Name="guTaxiIngr" ColumnName="guTaxiIngr" />
+                <ScalarProperty Name="guDepositgr" ColumnName="guDepositgr" />
+                <ScalarProperty Name="guTaxiOut" ColumnName="guTaxiOut" />
+                <ScalarProperty Name="guTaxiIn" ColumnName="guTaxiIn" />
+                <ScalarProperty Name="guOccup2" ColumnName="guOccup2" />
+                <ScalarProperty Name="guOccup1" ColumnName="guOccup1" />
+                <ScalarProperty Name="guTimeOutT" ColumnName="guTimeOutT" />
+                <ScalarProperty Name="guTimeInT" ColumnName="guTimeInT" />
+                <ScalarProperty Name="guExtraInfo" ColumnName="guExtraInfo" />
+                <ScalarProperty Name="guCCType" ColumnName="guCCType" />
+                <ScalarProperty Name="gucu" ColumnName="gucu" />
+                <ScalarProperty Name="guDepositReceived" ColumnName="guDepositReceived" />
+                <ScalarProperty Name="guDepositTwisted" ColumnName="guDepositTwisted" />
+                <ScalarProperty Name="guDeposit" ColumnName="guDeposit" />
+                <ScalarProperty Name="guHotelB" ColumnName="guHotelB" />
+                <ScalarProperty Name="gusr" ColumnName="gusr" />
+                <ScalarProperty Name="guShowD" ColumnName="guShowD" />
+                <ScalarProperty Name="guBookCanc" ColumnName="guBookCanc" />
+                <ScalarProperty Name="guDirect" ColumnName="guDirect" />
+                <ScalarProperty Name="guPickUpT" ColumnName="guPickUpT" />
+                <ScalarProperty Name="guBookT" ColumnName="guBookT" />
+                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
+                <ScalarProperty Name="guReschT" ColumnName="guReschT" />
+                <ScalarProperty Name="guReschD" ColumnName="guReschD" />
+                <ScalarProperty Name="guResch" ColumnName="guResch" />
+                <ScalarProperty Name="guInvitT" ColumnName="guInvitT" />
+                <ScalarProperty Name="guInvitD" ColumnName="guInvitD" />
+                <ScalarProperty Name="guState" ColumnName="guState" />
+                <ScalarProperty Name="guCity" ColumnName="guCity" />
+                <ScalarProperty Name="guOutInvitNum" ColumnName="guOutInvitNum" />
+                <ScalarProperty Name="guQuinella" ColumnName="guQuinella" />
+                <ScalarProperty Name="guComments" ColumnName="guComments" />
+                <ScalarProperty Name="gumoA" ColumnName="gumoA" />
+                <ScalarProperty Name="gumo" ColumnName="gumo" />
+                <ScalarProperty Name="guInfoD" ColumnName="guInfoD" />
+                <ScalarProperty Name="guum" ColumnName="guum" />
+                <ScalarProperty Name="guPRCaptain3" ColumnName="guPRCaptain3" />
+                <ScalarProperty Name="guPRCaptain2" ColumnName="guPRCaptain2" />
+                <ScalarProperty Name="guPRCaptain1" ColumnName="guPRCaptain1" />
+                <ScalarProperty Name="guPRInvit3" ColumnName="guPRInvit3" />
+                <ScalarProperty Name="guPRInvit2" ColumnName="guPRInvit2" />
+                <ScalarProperty Name="guSelfGen" ColumnName="guSelfGen" />
+                <ScalarProperty Name="guPRInvit1" ColumnName="guPRInvit1" />
+                <ScalarProperty Name="guPRInfo" ColumnName="guPRInfo" />
+                <ScalarProperty Name="guPRAvail" ColumnName="guPRAvail" />
+                <ScalarProperty Name="guPRAssign" ColumnName="guPRAssign" />
+                <ScalarProperty Name="guloInvit" ColumnName="guloInvit" />
+                <ScalarProperty Name="guloInfo" ColumnName="guloInfo" />
+                <ScalarProperty Name="guInvit" ColumnName="guInvit" />
+                <ScalarProperty Name="guInfo" ColumnName="guInfo" />
+                <ScalarProperty Name="guAvail" ColumnName="guAvail" />
+                <ScalarProperty Name="guNW" ColumnName="guNW" />
+                <ScalarProperty Name="guLW" ColumnName="guLW" />
+                <ScalarProperty Name="gula" ColumnName="gula" />
+                <ScalarProperty Name="gumk" ColumnName="gumk" />
+                <ScalarProperty Name="guco" ColumnName="guco" />
+                <ScalarProperty Name="guag" ColumnName="guag" />
+                <ScalarProperty Name="guPax" ColumnName="guPax" />
+                <ScalarProperty Name="gums2" ColumnName="gums2" />
+                <ScalarProperty Name="guAge2" ColumnName="guAge2" />
+                <ScalarProperty Name="guFirstName2" ColumnName="guFirstName2" />
+                <ScalarProperty Name="guLastname2" ColumnName="guLastname2" />
+                <ScalarProperty Name="gums1" ColumnName="gums1" />
+                <ScalarProperty Name="guAge1" ColumnName="guAge1" />
+                <ScalarProperty Name="guFirstName1" ColumnName="guFirstName1" />
+                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
+                <ScalarProperty Name="guCheckIn" ColumnName="guCheckIn" />
+                <ScalarProperty Name="guCheckOutD" ColumnName="guCheckOutD" />
+                <ScalarProperty Name="guCheckInD" ColumnName="guCheckInD" />
+                <ScalarProperty Name="guRoomNum" ColumnName="guRoomNum" />
+                <ScalarProperty Name="guHotel" ColumnName="guHotel" />
+                <ScalarProperty Name="guOnGroup" ColumnName="guOnGroup" />
+                <ScalarProperty Name="guMembershipNum" ColumnName="guMembershipNum" />
+                <ScalarProperty Name="guls" ColumnName="guls" />
+                <ScalarProperty Name="guHReservID" ColumnName="guHReservID" />
+                <ScalarProperty Name="guID" ColumnName="guID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
