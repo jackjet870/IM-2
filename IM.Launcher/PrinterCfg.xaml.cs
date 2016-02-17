@@ -112,8 +112,9 @@ namespace IM.Launcher
           }
           catch (Exception ex)
           {
-              MessageBox.Show("Can not save the configuration printer", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-              return;
+            string message = String.Format("Can not save the configuration printer\n {0}",ex.Message);
+            MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
           }
       }
 
@@ -154,7 +155,8 @@ namespace IM.Launcher
           }
           catch (Exception ex)
           {
-              return null;
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return null;
           }
       }
 
