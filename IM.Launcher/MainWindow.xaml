@@ -1,0 +1,10 @@
+﻿<Window x:Class="IM.Launcher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Launcher" Height="846" Width="181" MaxHeight="846" MaxWidth="181" ResizeMode="NoResize"
+        Name="Launcher" Loaded="Window_Loaded" KeyDown="Launcher_KeyDown" Closing="Launcher_Closing" ShowInTaskbar="True" >
+    <Grid Name="grdPanel">
+        <Label Name="lblVersion" Content="Version" Background="LightBlue"
+               HorizontalAlignment="Center" Margin="29,10,26,0" VerticalAlignment="Top" Width="100"/>
+    </Grid>
+</Window>
