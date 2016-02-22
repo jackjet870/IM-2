@@ -40,13 +40,13 @@
                             <TextBlock Text="Print" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Name="btnPreview" HorizontalAlignment="Left" Margin="204,3,0,0" VerticalAlignment="Top" Width="65" Background="White">
+                    <Button Name="btnPreview" HorizontalAlignment="Left" Margin="204,3,0,0" VerticalAlignment="Top" Width="65" Background="White" Click="btnPreview_Click">
                         <StackPanel>
                             <Image Source="Images/Preview.png" Width="24" Height="24" HorizontalAlignment="Center"></Image>
                             <TextBlock Text="Preview" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Name="btnReport" HorizontalAlignment="Left" Margin="271,3,0,0" VerticalAlignment="Top" Width="65" Background="White">
+                    <Button Name="btnReport" HorizontalAlignment="Left" Margin="271,3,0,0" VerticalAlignment="Top" Width="65" Background="White" Click="btnReport_Click">
                         <StackPanel>
                             <Image Source="Images/Report.png" Width="24" Height="24" HorizontalAlignment="Center"></Image>
                             <TextBlock Text="Rpt Dsg" HorizontalAlignment="Center"/>

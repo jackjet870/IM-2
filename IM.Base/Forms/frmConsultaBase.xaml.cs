@@ -4,6 +4,7 @@ using System.Windows.Media;
 using System.Windows.Input;
 using IM.Base.Entities;
 using IM.Base.Enums;
+using IM.Base.Interfaces;
 
 namespace IM.ConsultaBase
 {
@@ -13,7 +14,7 @@ namespace IM.ConsultaBase
   /// <history>
   /// [lchairez] 09/Feb/2016 Created
   /// </history>
-  public partial class frmConsultaBase : Window
+  public partial class frmConsultaBase : Window, IMetodosPublicos
   {
     private string _titleForm = String.Empty;
     private string _user = String.Empty;
@@ -116,6 +117,39 @@ namespace IM.ConsultaBase
       var about = new frmAbout();
       about.Owner = this;
       about.ShowDialog();
+    }
+
+    /// <summary>
+    /// Imprime el reporte
+    /// </summary>
+    /// <history>
+    /// [lchairez] 09/Feb/2016 Created
+    /// </history>
+    private void btnPrint_Click(object sender, RoutedEventArgs e)
+    {
+      PrintReport();
+    }
+
+    /// <summary>
+    /// Muestra una vista previa del reporte
+    /// </summary>
+    /// <history>
+    /// [lchairez] 09/Feb/2016 Created
+    /// </history>
+    private void btnPreview_Click(object sender, RoutedEventArgs e)
+    {
+      ShowReport();
+    }
+
+    /// <summary>
+    /// Muestra el diseño del reporte.
+    /// </summary>
+    /// <history>
+    /// [lchairez] 09/Feb/2016 Created
+    /// </history>
+    private void btnReport_Click(object sender, RoutedEventArgs e)
+    {
+      ShowReportDesigner();
     }
 
     #endregion
@@ -235,9 +269,24 @@ namespace IM.ConsultaBase
 
     #endregion
 
-    private void btnPrint_Click(object sender, RoutedEventArgs e)
+    #region Métodos públicos
+
+    public void PrintReport()
     {
-      //ShowPrintReport();
+      throw new NotImplementedException();
     }
+
+    public void ShowReport()
+    {
+      throw new NotImplementedException();
+    }
+
+    public void ShowReportDesigner()
+    {
+      throw new NotImplementedException();
+    }
+
+    #endregion
+        
   }
 }

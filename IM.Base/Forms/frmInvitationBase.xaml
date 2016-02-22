@@ -1,0 +1,144 @@
+﻿<Window x:Class="IM.ConsultaBase.frmInvitationBase"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.ConsultaBase"
+        mc:Ignorable="d"
+        Title="frmInvitationBase" Height="800" Width="700">
+    <Grid Background="SkyBlue" Name="grdGeneral">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="10"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="55"></RowDefinition>
+            <RowDefinition Height="55"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <!--ROW 1-->
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid Name="Row1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="200"></ColumnDefinition>
+                    <ColumnDefinition Width="200"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <!--INFORMACION USER-->
+                <GroupBox Grid.Column="0" Name="grbUser" Height="50" VerticalAlignment="Top">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" Source="Images/User.png"/>
+                        <Label Grid.Column="1" Name="lblUser" VerticalAlignment="Center" FontSize="11" Foreground="Black" FontWeight="Bold"/>
+                    </Grid>
+                </GroupBox>
+
+                <!--TIPOS DE INVITACIONES (QUINIELLA, SHOW, INTERVAL)-->
+                <GroupBox Grid.Column="1" Name="grbTypeInvitations" Height="50" VerticalAlignment="Top">
+                    <Grid Name="grdTypeInvitations">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        
+                        <!--QUINIELLA-->
+                        <Label Grid.Column="0" Grid.Row="0" Name="lbQuiniella" Content="Quiniella"/>
+                        <CheckBox Grid.Column="0" Grid.Row="1" Name="chkQuiniella" Width="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        
+                        <!--SHOW-->
+                        <Label Grid.Column="1" Grid.Row="0" Name="lblShow" Content="Show" HorizontalAlignment="Center"/>
+                        <CheckBox Grid.Column="1" Grid.Row="1" Name="chkShow" Width="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        
+                        <!--INTERVAL-->
+                        <Label Grid.Column="2" Grid.Row="0" Name="lblInterval" Content="Interval" HorizontalAlignment="Center"/>
+                        <CheckBox Grid.Column="2" Grid.Row="1" Name="chkInterval" Width="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </GroupBox>
+
+                <!--LENGUAJE-->
+                <GroupBox Grid.Column="2" Name="grbLanguage" Height="50" VerticalAlignment="Top">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Name="lblLanguage" Content="Language" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                        <ComboBox Grid.Row="1" Name="cmbLanguage"/>
+                    </Grid>
+                    
+                </GroupBox>
+
+
+            </Grid>
+        </Grid>
+
+        <!--ROW 2-->
+        <Grid Grid.Row="2" Grid.Column="1" Height="50" VerticalAlignment="Top">
+            <GroupBox>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Name="colGuid"></ColumnDefinition>
+                        <ColumnDefinition Name="colReservNum"></ColumnDefinition>
+                        <ColumnDefinition Name="colBtnSearch"></ColumnDefinition>
+                        <ColumnDefinition Name="colOutInvitation"></ColumnDefinition>
+                        <ColumnDefinition Name="colRebookRef"></ColumnDefinition>
+                        <ColumnDefinition Name="colDate"></ColumnDefinition>
+                        <ColumnDefinition Name="colTime"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <!--GUID-->
+                    <Label Grid.Column="0" Grid.Row="0" Name="lblGuid" Content="GUID" HorizontalAlignment="Center"/>
+                    <TextBox Grid.Column="0" Grid.Row="1" Name="txtGuid"/>
+                    
+                    <!-- NÚMERO DE RESERVACIÓN-->
+                    <Label Grid.Column="1" Grid.Row="0" Name="lblReservationNumber" Content="Rsrv Num." HorizontalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Name="txtReservationNumber"/>
+                    
+                    <!--BOTÓN BUSCAR-->
+                    <Button Grid.Column="2" Grid.Row="1" Content="Search" Width="80"/>
+
+                    <!--OUT. INVIT .-->
+                    <Label Grid.Column="3" Grid.Row="0" Name="lblOutInvitation" Content="Out Invit." HorizontalAlignment="Center"/>
+                    <TextBox Grid.Column="3" Grid.Row="1" Name="txtOutInvitation"/>
+                    
+                    <!--REBOOK REF.-->
+                    <Label Grid.Column="4" Grid.Row="0" Name="lblRebookRef" Content="Rebook Ref." HorizontalAlignment="Center"/>
+                    <TextBox Grid.Column="4" Grid.Row="1" Name="txtRebookRef"/>
+
+                    <!--DATE-->
+                    <Label Grid.Column="5" Grid.Row="0" Name="lblDate" Content="Date" HorizontalAlignment="Center"/>
+                    <TextBox Grid.Column="5" Grid.Row="1" Name="txtDate"/>
+
+                    <!--TIME-->
+                    <Label Grid.Column="6" Grid.Row="0" Name="lblTime" Content="Time" HorizontalAlignment="Center"/>
+                    <TextBox Grid.Column="6" Grid.Row="1" Name="txtTime"/>
+                </Grid>
+            </GroupBox>
+            
+        </Grid>
+
+    </Grid>
+</Window>
+
+    
