@@ -1,0 +1,29 @@
+USE [OrigosVCPalace]
+GO
+
+/****** Object:  Table [dbo].[ReasonCancellationFolios]    Script Date: 01/04/2016 15:11:44 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[ReasonCancellationFolios](
+	[rcfID] [varchar](3) NOT NULL,
+	[rcfN] [varchar](100) NOT NULL,
+	[rcfA] [bit] NOT NULL,
+ CONSTRAINT [PK__ReasonCancellati__6656DF1B] PRIMARY KEY CLUSTERED 
+(
+	[rcfID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 100) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+

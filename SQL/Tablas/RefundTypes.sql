@@ -1,0 +1,32 @@
+USE [OrigosVCPalace]
+GO
+
+/****** Object:  Table [dbo].[RefundTypes]    Script Date: 12/16/2015 13:00:04 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[RefundTypes](
+	[rfID] [varchar](2) NOT NULL,
+	[rfN] [varchar](60) NULL,
+	[rfA] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[rfID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[RefundTypes] ADD  DEFAULT ((1)) FOR [rfA]
+GO
+
+
