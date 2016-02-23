@@ -29,6 +29,14 @@ namespace IM.Model
     
         public virtual DbSet<Guest> Guests { get; set; }
     
+        public virtual ObjectResult<GetCountries> USP_OR_GetCountries(Nullable<byte> status)
+        {
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCountries>("USP_OR_GetCountries", statusParameter);
+        }
         public virtual ObjectResult<GetLanguages> USP_OR_GetLanguages(Nullable<byte> status)
         {
             var statusParameter = status.HasValue ?

@@ -215,6 +215,9 @@
           <Property Name="guDespositRefund" Type="bit" />
           <Property Name="guDepositsRefund" Type="bit" />
         </EntityType>
+        <Function Name="USP_OR_GetCountries" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
         <Function Name="spProcessMailOuts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
@@ -235,6 +238,9 @@
       <Schema Namespace="IMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="IMEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Guests" EntityType="IMModel.Guest" />
+          <FunctionImport Name="USP_OR_GetCountries" ReturnType="Collection(IMModel.GetCountries)">
+          <Parameter Name="Status" Mode="In" Type="Byte" />
+          </FunctionImport>
           <FunctionImport Name="USP_OR_GetLanguages" ReturnType="Collection(IMModel.GetLanguages)">
           <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
@@ -457,6 +463,10 @@
           <Property Name="guDespositRefund" Type="Boolean" />
           <Property Name="guDepositsRefund" Type="Boolean" />
           </EntityType>
+        <ComplexType Name="GetCountries">
+          <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="coN" Nullable="false" MaxLength="50" />
+        </ComplexType>
         <ComplexType Name="GetLanguages">
           <Property Type="String" Name="laID" Nullable="false" MaxLength="2" />
           <Property Type="String" Name="laN" Nullable="false" MaxLength="10" />
@@ -685,6 +695,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetCountries" FunctionName="IMModel.Store.USP_OR_GetCountries">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetCountries">
+                <ScalarProperty Name="coID" ColumnName="coID" />
+                <ScalarProperty Name="coN" ColumnName="coN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_GetLanguages" FunctionName="IMModel.Store.USP_OR_GetLanguages">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.GetLanguages">
