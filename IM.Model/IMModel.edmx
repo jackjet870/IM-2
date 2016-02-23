@@ -215,6 +215,17 @@
           <Property Name="guDespositRefund" Type="bit" />
           <Property Name="guDepositsRefund" Type="bit" />
         </EntityType>
+        <Function Name="spProcessMailOuts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LeadSource" Type="varchar" Mode="In" />
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetLanguages" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetMailOutTextsByLeadSource" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="mtls" Type="varchar" Mode="In" />
+          <Parameter Name="mtA" Type="bit" Mode="In" />
+        </Function>
         <EntityContainer Name="IMModelStoreContainer">
           <EntitySet Name="Guests" EntityType="Self.Guests" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -224,6 +235,17 @@
       <Schema Namespace="IMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="IMEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Guests" EntityType="IMModel.Guest" />
+          <FunctionImport Name="USP_OR_GetLanguages" ReturnType="Collection(IMModel.GetLanguages)">
+          <Parameter Name="Status" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetMailOutTextsByLeadSource" ReturnType="Collection(IMModel.GetMailOutTextsByLeadSource)">
+            <Parameter Name="mtls" Mode="In" Type="String" />
+            <Parameter Name="mtA" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="spProcessMailOuts">
+            <Parameter Name="LeadSource" Mode="In" Type="String" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Guest">
           <Key>
@@ -434,8 +456,19 @@
           <Property Name="guFirstNameOriginal" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="guDespositRefund" Type="Boolean" />
           <Property Name="guDepositsRefund" Type="Boolean" />
-        </EntityType>
-      </Schema>
+          </EntityType>
+        <ComplexType Name="GetLanguages">
+          <Property Type="String" Name="laID" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="laN" Nullable="false" MaxLength="10" />
+        </ComplexType>       
+        <ComplexType Name="GetMailOutTextsByLeadSource">
+          <Property Type="String" Name="mtmoCode" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="mtla" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="mtRTF" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="laMrMrs" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="laRoom" Nullable="false" MaxLength="10" />
+        </ComplexType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -652,6 +685,26 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetLanguages" FunctionName="IMModel.Store.USP_OR_GetLanguages">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetLanguages">
+                <ScalarProperty Name="laID" ColumnName="laID" />
+                <ScalarProperty Name="laN" ColumnName="laN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetMailOutTextsByLeadSource" FunctionName="IMModel.Store.USP_OR_GetMailOutTextsByLeadSource">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetMailOutTextsByLeadSource">
+                <ScalarProperty Name="mtmoCode" ColumnName="mtmoCode" />
+                <ScalarProperty Name="mtla" ColumnName="mtla" />
+                <ScalarProperty Name="mtRTF" ColumnName="mtRTF" />
+                <ScalarProperty Name="laMrMrs" ColumnName="laMrMrs" />
+                <ScalarProperty Name="laRoom" ColumnName="laRoom" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spProcessMailOuts" FunctionName="IMModel.Store.spProcessMailOuts" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -667,7 +720,7 @@
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="true" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>

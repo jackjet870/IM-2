@@ -12,6 +12,8 @@ namespace IM.Model
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class IMEntities : DbContext
     {
@@ -26,5 +28,40 @@ namespace IM.Model
         }
     
         public virtual DbSet<Guest> Guests { get; set; }
+    
+        public virtual ObjectResult<GetLanguages> USP_OR_GetLanguages(Nullable<byte> status)
+        {
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLanguages>("USP_OR_GetLanguages", statusParameter);
+        }
+    
+        public virtual ObjectResult<GetMailOutTextsByLeadSource> USP_OR_GetMailOutTextsByLeadSource(string mtls, Nullable<bool> mtA)
+        {
+            var mtlsParameter = mtls != null ?
+                new ObjectParameter("mtls", mtls) :
+                new ObjectParameter("mtls", typeof(string));
+    
+            var mtAParameter = mtA.HasValue ?
+                new ObjectParameter("mtA", mtA) :
+                new ObjectParameter("mtA", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMailOutTextsByLeadSource>("USP_OR_GetMailOutTextsByLeadSource", mtlsParameter, mtAParameter);
+        }
+    
+        public virtual int spProcessMailOuts(string leadSource, Nullable<System.DateTime> date)
+        {
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spProcessMailOuts", leadSourceParameter, dateParameter);
+        }
     }
 }
