@@ -12,6 +12,8 @@ namespace IM.Model
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class IMEntities : DbContext
     {
@@ -26,5 +28,14 @@ namespace IM.Model
         }
     
         public virtual DbSet<Guest> Guests { get; set; }
+    
+        public virtual ObjectResult<GetCountries> USP_OR_GetCountries(Nullable<byte> status)
+        {
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCountries>("USP_OR_GetCountries", statusParameter);
+        }
     }
 }
