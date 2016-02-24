@@ -215,8 +215,26 @@
           <Property Name="guDespositRefund" Type="bit" />
           <Property Name="guDepositsRefund" Type="bit" />
         </EntityType>
+        <Function Name="USP_OR_GetAgencies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetCountries" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetLeadSourcesByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="User" Type="varchar" Mode="In" />
+          <Parameter Name="Programs" Type="varchar" Mode="In" />
+          <Parameter Name="Regions" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetMarkets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetSalesRooms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetSalesRoomsByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="User" Type="varchar" Mode="In" />
+          <Parameter Name="Regions" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="IMModelStoreContainer">
           <EntitySet Name="Guests" EntityType="Self.Guests" Schema="dbo" store:Type="Tables" />
@@ -229,6 +247,24 @@
           <EntitySet Name="Guests" EntityType="IMModel.Guest" />
           <FunctionImport Name="USP_OR_GetCountries" ReturnType="Collection(IMModel.GetCountries)">
           <Parameter Name="Status" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetAgencies" ReturnType="Collection(IMModel.GetAgencies)">
+          <Parameter Name="Status" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetSalesRooms" ReturnType="Collection(IMModel.GetSalesRooms)">
+          <Parameter Name="Status" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetMarkets" ReturnType="Collection(IMModel.GetMarkets)">
+          <Parameter Name="Status" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetLeadSourcesByUser" ReturnType="Collection(IMModel.GetLeadSourcesByUser)">
+            <Parameter Name="User" Mode="In" Type="String" />
+            <Parameter Name="Programs" Mode="In" Type="String" />
+            <Parameter Name="Regions" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetSalesRoomsByUser" ReturnType="Collection(IMModel.GetSalesRoomsByUser)">
+            <Parameter Name="User" Mode="In" Type="String" />
+            <Parameter Name="Regions" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Guest">
@@ -444,6 +480,28 @@
         <ComplexType Name="GetCountries">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
           <Property Type="String" Name="coN" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GetAgencies">
+          <Property Type="String" Name="agID" Nullable="false" MaxLength="35" />
+          <Property Type="String" Name="agN" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="GetSalesRooms">
+          <Property Type="String" Name="srID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="srN" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="GetMarkets">
+          <Property Type="String" Name="mkID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="mkN" Nullable="false" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="GetSalesRoomsByUser">
+          <Property Type="String" Name="srID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="srN" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="srwh" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="plpe" Nullable="false" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="GetLeadSourcesByUser">
+          <Property Type="String" Name="lsID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="lsN" Nullable="false" MaxLength="30" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -667,6 +725,48 @@
               <ComplexTypeMapping TypeName="IMModel.GetCountries">
                 <ScalarProperty Name="coID" ColumnName="coID" />
                 <ScalarProperty Name="coN" ColumnName="coN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetAgencies" FunctionName="IMModel.Store.USP_OR_GetAgencies">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetAgencies">
+                <ScalarProperty Name="agID" ColumnName="agID" />
+                <ScalarProperty Name="agN" ColumnName="agN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetSalesRooms" FunctionName="IMModel.Store.USP_OR_GetSalesRooms">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetSalesRooms">
+                <ScalarProperty Name="srID" ColumnName="srID" />
+                <ScalarProperty Name="srN" ColumnName="srN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetMarkets" FunctionName="IMModel.Store.USP_OR_GetMarkets">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetMarkets">
+                <ScalarProperty Name="mkID" ColumnName="mkID" />
+                <ScalarProperty Name="mkN" ColumnName="mkN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetLeadSourcesByUser" FunctionName="IMModel.Store.USP_OR_GetLeadSourcesByUser">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetLeadSourcesByUser">
+                <ScalarProperty Name="lsID" ColumnName="lsID" />
+                <ScalarProperty Name="lsN" ColumnName="lsN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetSalesRoomsByUser" FunctionName="IMModel.Store.USP_OR_GetSalesRoomsByUser">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetSalesRoomsByUser">
+                <ScalarProperty Name="srID" ColumnName="srID" />
+                <ScalarProperty Name="srN" ColumnName="srN" />
+                <ScalarProperty Name="srwh" ColumnName="srwh" />
+                <ScalarProperty Name="plpe" ColumnName="plpe" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

@@ -37,5 +37,62 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCountries>("USP_OR_GetCountries", statusParameter);
         }
+    
+        public virtual ObjectResult<GetAgencies> USP_OR_GetAgencies(Nullable<byte> status)
+        {
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAgencies>("USP_OR_GetAgencies", statusParameter);
+        }
+    
+        public virtual ObjectResult<GetSalesRooms> USP_OR_GetSalesRooms(Nullable<byte> status)
+        {
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalesRooms>("USP_OR_GetSalesRooms", statusParameter);
+        }
+    
+        public virtual ObjectResult<GetMarkets> USP_OR_GetMarkets(Nullable<byte> status)
+        {
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMarkets>("USP_OR_GetMarkets", statusParameter);
+        }
+    
+        public virtual ObjectResult<GetLeadSourcesByUser> USP_OR_GetLeadSourcesByUser(string user, string programs, string regions)
+        {
+            var userParameter = user != null ?
+                new ObjectParameter("User", user) :
+                new ObjectParameter("User", typeof(string));
+    
+            var programsParameter = programs != null ?
+                new ObjectParameter("Programs", programs) :
+                new ObjectParameter("Programs", typeof(string));
+    
+            var regionsParameter = regions != null ?
+                new ObjectParameter("Regions", regions) :
+                new ObjectParameter("Regions", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLeadSourcesByUser>("USP_OR_GetLeadSourcesByUser", userParameter, programsParameter, regionsParameter);
+        }
+    
+        public virtual ObjectResult<GetSalesRoomsByUser> USP_OR_GetSalesRoomsByUser(string user, string regions)
+        {
+            var userParameter = user != null ?
+                new ObjectParameter("User", user) :
+                new ObjectParameter("User", typeof(string));
+    
+            var regionsParameter = regions != null ?
+                new ObjectParameter("Regions", regions) :
+                new ObjectParameter("Regions", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalesRoomsByUser>("USP_OR_GetSalesRoomsByUser", userParameter, regionsParameter);
+        }
     }
 }
