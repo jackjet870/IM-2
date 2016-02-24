@@ -55,6 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="GetCountries.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Guest.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -83,7 +86,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <Fakes Include="Fakes\EntityFramework.fakes" />
     <None Include="IMModel.edmx.diagram">
       <DependentUpon>IMModel.edmx</DependentUpon>
     </None>
