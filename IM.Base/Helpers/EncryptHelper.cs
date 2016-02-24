@@ -11,7 +11,7 @@ namespace IM.Base.Helpers
   /// <history>
   ///   [wtorres]  23/02/2016 Created
   /// </history>
-  class EncryptHelper
+  public class EncryptHelper
   {
     #region Metodos publicos
     
