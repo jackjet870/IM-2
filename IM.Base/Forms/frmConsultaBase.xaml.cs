@@ -6,7 +6,7 @@ using IM.Base.Entities;
 using IM.Base.Enums;
 using IM.Base.Interfaces;
 
-namespace IM.ConsultaBase
+namespace IM.Base.Forms
 {
   /// <summary>
   /// Interaction logic for frmConsultaBase.xaml
