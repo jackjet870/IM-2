@@ -41,7 +41,7 @@
                             <ColumnDefinition Width="30"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" Source="Images/User.png"/>
+                        <Image Grid.Column="0" Source="../Images/User.png"/>
                         <Label Grid.Column="1" Name="lblUser" VerticalAlignment="Center" FontSize="11" Foreground="Black" FontWeight="Bold"/>
                     </Grid>
                 </GroupBox>
