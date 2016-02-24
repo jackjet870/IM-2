@@ -1,0 +1,23 @@
+﻿<Window x:Class="IM.Base.Forms.frmSplash"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Base.Forms"
+        mc:Ignorable="d"
+        ResizeMode="NoResize" WindowStyle="None"  
+        WindowStartupLocation="CenterScreen" Background="White" BorderThickness="5" BorderBrush="AliceBlue" Width="609.509" Height="444.434" >
+
+    <Canvas>
+        <TextBlock x:Name="txtTitle" HorizontalAlignment="Left" Margin="252,10,0,0" TextWrapping="Wrap" Text="Intelligence Marketing " VerticalAlignment="Top" Height="34" Width="312" FontSize="21.333"/>
+        <TextBlock x:Name="txtVersion" HorizontalAlignment="Left" Margin="252,49,0,0" TextWrapping="Wrap" Text="Version v1.1.0" VerticalAlignment="Top" Height="34" Width="312" FontSize="16"/>
+        <Image x:Name="imgLogo" HorizontalAlignment="Left" Height="205" VerticalAlignment="Top" Width="225" Source="../Images/IM.png" Canvas.Left="10" Canvas.Top="25"/>
+        <Label x:Name="lblServer" Content="lblServer" HorizontalAlignment="Left" Margin="80,235,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblDB" Content="lblDB" HorizontalAlignment="Left" Margin="80,263,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblPlatform" Content="Better Timeshare Management" Canvas.Left="194" Canvas.Top="309" FontSize="16"/>
+        <Label x:Name="lblClient" Content="Product licensed to: Searching..." Canvas.Left="218" Canvas.Top="343"/>
+        <Label x:Name="lblSN" Content="Serial Number: Searching..." Canvas.Left="228" Canvas.Top="371"/>
+        <Label x:Name="lblBottom" Content="1998-2005 Copyright. This computer program is protected by copyright law and international treaties." Canvas.Left="45" Canvas.Top="412"/>
+        <ContentControl x:Name="cntContentLogin" Content="Loading Login..." Canvas.Left="240" Canvas.Top="83" Height="203" Width="290"/>
+    </Canvas>
+</Window>

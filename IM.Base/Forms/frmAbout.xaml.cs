@@ -2,7 +2,7 @@
 using System.Windows;
 
 
-namespace IM.ConsultaBase
+namespace IM.Base.Forms
 {
   /// <summary>
   /// Interaction logic for frmAbout.xaml
