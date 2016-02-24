@@ -132,8 +132,10 @@ namespace IM.Launcher
       switch ((EnumMenu)button.Tag)
       {
           case EnumMenu.InHouse:
-              //llamar módulo
-              break;
+            var login = new IM.Base.Forms.frmLogin();
+            login.Owner = this;
+            login.ShowDialog();
+            break;
           case EnumMenu.Assignment:
               //llamar módulo
               break;

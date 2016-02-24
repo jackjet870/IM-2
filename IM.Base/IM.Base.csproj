@@ -30,6 +30,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -50,6 +57,7 @@
     <Compile Include="Forms\frmConsultaBase.xaml.cs" />
     <Compile Include="Forms\frmInvitationBase.xaml.cs" />
     <Compile Include="Forms\frmLogin.xaml.cs" />
+    <Compile Include="Helpers\EncryptHelper.cs" />
     <Compile Include="Forms\frmSplash.xaml.cs">
       <DependentUpon>frmSplash.xaml</DependentUpon>
     </Compile>
@@ -90,6 +98,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IM.BusinessRules\IM.BusinessRules.csproj">
+      <Project>{13f00191-f647-4865-bd19-1e0ea12f6838}</Project>
+      <Name>IM.BusinessRules</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
