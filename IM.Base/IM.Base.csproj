@@ -30,6 +30,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -50,21 +57,25 @@
     <Compile Include="Forms\frmConsultaBase.xaml.cs" />
     <Compile Include="Forms\frmInvitationBase.xaml.cs" />
     <Compile Include="Forms\frmLogin.xaml.cs" />
+    <Compile Include="Helpers\EncryptHelper.cs" />
+    <Compile Include="Forms\frmSplash.xaml.cs">
+      <DependentUpon>frmSplash.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Interfaces\IMetodosPublicos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Images\About.png" />
-    <Content Include="Images\Date.png" />
-    <Content Include="Images\IM.ico" />
-    <Content Include="Images\IM.png" />
-    <Content Include="Images\Layout.png" />
-    <Content Include="Images\Login.png" />
-    <Content Include="Images\Preview.png" />
-    <Content Include="Images\Printer.png" />
-    <Content Include="Images\Refresh.png" />
-    <Content Include="Images\Report.png" />
-    <Content Include="Images\User.png" />
+    <Resource Include="Images\About.png" />
+    <Resource Include="Images\Date.png" />
+    <Resource Include="Images\IM.ico" />
+    <Resource Include="Images\IM.png" />
+    <Resource Include="Images\Layout.png" />
+    <Resource Include="Images\Login.png" />
+    <Resource Include="Images\Preview.png" />
+    <Resource Include="Images\Printer.png" />
+    <Resource Include="Images\Refresh.png" />
+    <Resource Include="Images\Report.png" />
+    <Resource Include="Images\User.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Forms\frmAbout.xaml">
@@ -83,6 +94,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Forms\frmSplash.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IM.BusinessRules\IM.BusinessRules.csproj">
+      <Project>{13f00191-f647-4865-bd19-1e0ea12f6838}</Project>
+      <Name>IM.BusinessRules</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

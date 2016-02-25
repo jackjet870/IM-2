@@ -1,9 +1,9 @@
-﻿<Window x:Class="IM.ConsultaBase.frmInvitationBase"
+﻿<Window x:Class="IM.Base.Forms.frmInvitationBase"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.ConsultaBase"
+        xmlns:local="clr-namespace:IM.Base.Forms"
         mc:Ignorable="d"
         Title="frmInvitationBase" Height="800" Width="700">
     <Grid Background="SkyBlue" Name="grdGeneral">
@@ -41,7 +41,7 @@
                             <ColumnDefinition Width="30"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" Source="Images/User.png"/>
+                        <Image Grid.Column="0" Source="../Images/User.png"/>
                         <Label Grid.Column="1" Name="lblUser" VerticalAlignment="Center" FontSize="11" Foreground="Black" FontWeight="Bold"/>
                     </Grid>
                 </GroupBox>

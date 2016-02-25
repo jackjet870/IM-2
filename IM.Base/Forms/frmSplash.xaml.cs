@@ -15,13 +15,18 @@ using System.Windows.Shapes;
 namespace IM.Base.Forms
 {
     /// <summary>
-    /// Interaction logic for frmInvitationBase.xaml
+    /// Interaction logic for frmSplash.xaml
     /// </summary>
-    public partial class frmInvitationBase : Window
+    public partial class frmSplash : Window
     {
-        public frmInvitationBase()
+        public frmSplash()
         {
             InitializeComponent();
+        }
+        public frmSplash(UserControl frmLogin)
+        {
+            InitializeComponent();
+            cntContentLogin.Content = frmLogin;
         }
     }
 }
