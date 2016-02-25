@@ -21,33 +21,23 @@ namespace IM.Launcher.Classes
       /// <returns>Lista de Botones</returns>
       public IEnumerable<Button> CreateButtons()
       {
-          var lstButtons = new List<Button>();
-          Button button = null;
-          int x = 10; //los botones estarán alineados 10px en el eje X
-          int y = 41; //los botones iniciarán con 41px en el eje Y
+        var lstButtons = new List<Button>();
+        Button button = null;
+                        
+        foreach (var item in ListOfButtons())
+        {
+          button = new Button();
+          button.Name = "btn" + item.Value.Trim().Replace(" ", "");
+          button.Tag = (EnumMenu)item.Key;
+          button.TabIndex = item.Key;
 
-          foreach(var item in ListOfButtons())
-          {
-            button = new Button();
-            button.Name = "btn" + item.Value.Trim().Replace(" ", "");
-            button.Content = ConfigContentButton(item.Value, (EnumMenu) item.Key);
-            button.HorizontalAlignment = HorizontalAlignment.Left;
-            button.VerticalAlignment = VerticalAlignment.Top;
-            button.Margin = new Thickness(x, y, 0, 0);
-            button.Width = 145;
-            button.Height = 30;
-            //button.Foreground = Brushes.AliceBlue;
-            //button.Background = Brushes.SteelBlue;
-            button.Tag = (EnumMenu)item.Key;
-            button.TabIndex = item.Key;
+          button.Style = StyleButton();
+          button.Content = ConfigContentButton(item.Value, (EnumMenu)item.Key);
+        
+          lstButtons.Add(button);
+        }
 
-            button.Style = StyleButton();    
-
-            y += 35; // la variable y aumenta 36 pixeles para comodar el botón abajo del anterior
-            lstButtons.Add(button);
-          }
-
-          return lstButtons;
+        return lstButtons;
       }
 
       /// <summary>
@@ -114,30 +104,29 @@ namespace IM.Launcher.Classes
       /// <param name="description">Es el texto quse tendrá el botón</param>
       /// <returns>Regresa un StackPanel con la imagen y el texto de botón</returns>
       private StackPanel ConfigContentButton(string description, EnumMenu enumMenu)
-        {
-          string pathImages = Path.Combine(Directory.GetCurrentDirectory(), "images\\");
-          string uri = String.Format("{0}{1}.png", pathImages, enumMenu.ToString());
+      {
 
-          var img = new Image();
-          img.Source = new BitmapImage(new Uri(uri));
-            
-          img.Height = 24;
-          img.Width = 24;
-          img.HorizontalAlignment = HorizontalAlignment.Left;
-            
-          TextBlock text = new TextBlock();
-          text.HorizontalAlignment = HorizontalAlignment.Center;
-          text.Margin = new Thickness(4,-18,0,0);
-          text.Text = description;
-            
-          StackPanel stackPnl = new StackPanel();
-          stackPnl.Width = 135;
-          stackPnl.Height= 30;
+        StackPanel stackPnl = new StackPanel();
+        stackPnl.Width = 135;
 
-          stackPnl.Children.Add(img);
-          stackPnl.Children.Add(text);
-          return stackPnl;
-        }
+        string pathImages = Path.Combine(Directory.GetCurrentDirectory(), "images\\");
+        string uri = String.Format("{0}{1}.png", pathImages, enumMenu.ToString());
+
+        var img = new Image();
+        img.Source = new BitmapImage(new Uri(uri));
+
+        img.MaxWidth = 24;
+        img.HorizontalAlignment = HorizontalAlignment.Left;            
+        TextBlock text = new TextBlock();
+        text.HorizontalAlignment = HorizontalAlignment.Center;
+        text.VerticalAlignment = VerticalAlignment.Center;
+        text.Margin = new Thickness(4,-25,0,0);
+        text.Text = description;
+            
+        stackPnl.Children.Add(img);
+        stackPnl.Children.Add(text);
+        return stackPnl;
+      }
 
     private Style StyleButton()
     {
