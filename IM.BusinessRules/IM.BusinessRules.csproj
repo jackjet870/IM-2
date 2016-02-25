@@ -49,9 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BR\BRAgencies.cs" />
     <Compile Include="BR\BRCountries.cs" />
     <Compile Include="Entities\UserNormalLogin.cs" />
     <Compile Include="Login\Login.cs" />
+    <Compile Include="BR\BRLeadSources.cs" />
+    <Compile Include="BR\BRMarkets.cs" />
+    <Compile Include="BR\BRSalesRooms.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
