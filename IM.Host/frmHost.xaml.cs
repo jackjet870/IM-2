@@ -16,6 +16,8 @@ using IM.Base.Entities;
 using IM.Base.Enums;
 using IM.Base.Interfaces;
 using IM.Base.Forms;
+using IM.Model;
+using IM.Host.Forms;
 
 namespace IM.Host
 {
@@ -73,10 +75,18 @@ namespace IM.Host
         /// </history>
         private void frmHost_Loaded(object sender, RoutedEventArgs e)
         {
-            ConfigControls();
+            //ConfigControls();
             CkeckKeysPress(StatusBarCap, Key.Capital);
             CkeckKeysPress(StatusBarIns, Key.Insert);
             CkeckKeysPress(StatusBarNum, Key.NumLock);
+
+            CollectionViewSource guestPremanifestHostViewSource = ((CollectionViewSource)(this.FindResource("guestPremanifestHostViewSource")));
+            // Load data by setting the CollectionViewSource.Source property:
+            // guestPremanifestHostViewSource.Source = [generic data source]
+
+            IMEntities ef = new IMEntities();
+
+            guestPremanifestHostViewSource.Source = ef.GetPremanifestHost(Convert.ToDateTime("02-25-2016"), "MPS");
         }
 
         /// <summary>
@@ -178,29 +188,7 @@ namespace IM.Host
             KeyDefault(StatusBarCap);
             KeyDefault(StatusBarIns);
             KeyDefault(StatusBarNum);
-            ConfigControlDate();
         }
-
-        /// <summary>
-        /// Confugra los valores predeterminados de la forma al ser cargado
-        /// </summary>
-        /// <history>
-        /// [lchairez] 09/Feb/2016 Created
-        /// </history>
-        //private void ConfigForm()
-        //{
-
-            //this.Title = _titleForm;
-
-            /*//Asignamos tamaño de la pantalla a la forma
-            this.Width = SystemParameters.PrimaryScreenWidth;
-            this.Height = SystemParameters.PrimaryScreenHeight - 40;
-
-            //Centramos la forma
-            Rect workArea = SystemParameters.WorkArea;
-            this.Left = (workArea.Width - this.Width) / 2 + workArea.Left;
-            this.Top = (workArea.Height - this.Height) / 2 + workArea.Top;*/
-        //}
 
         /// <summary>
         /// Configura el GroupBox Información del Usuario al ser cargada la forma
@@ -225,18 +213,7 @@ namespace IM.Host
             var heigthgrdMenu = grdPanel.ActualHeight;
             var heightStatusBar = stbStatusBar.ActualHeight;
 
-            dtgDatos.Margin = new Thickness(5, heigthgrdMenu + 5, 5, heightStatusBar + 5);//Asigamos la posición del grid, así como su alto y ancho
-        }
-
-        /// <summary>
-        /// Configura el control de fechas para cargar la fecha actual
-        /// </summary>
-        /// <history>
-        /// [lchairez] 09/Feb/2016 Created
-        /// </history>
-        private void ConfigControlDate()
-        {
-            dtpDate.SelectedDate = DateTime.Now;
+            //dtgDatos.Margin = new Thickness(5, heigthgrdMenu + 5, 5, heightStatusBar + 5);//Asigamos la posición del grid, así como su alto y ancho
         }
 
         /// <summary>
@@ -299,6 +276,27 @@ namespace IM.Host
         private void StatusBarCap_KeyDown(object sender, KeyEventArgs e)
         {
 
+        }
+
+        private void dtpDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
+        }
+
+        private void btnCloseSalesRoom_Click(object sender, RoutedEventArgs e)
+        {
+            frmCloseSalesRoom mfrCloseSalesRoom = new frmCloseSalesRoom(this);
+            mfrCloseSalesRoom.ShowInTaskbar = false;
+            mfrCloseSalesRoom.Owner = this;
+            AplicarEfecto(this);
+            mfrCloseSalesRoom.ShowDialog();
+        }
+
+        private void AplicarEfecto(Window win)
+        {
+            var objBlur = new System.Windows.Media.Effects.BlurEffect();
+            objBlur.Radius = 5;
+            win.Effect = objBlur;
         }
     }
 

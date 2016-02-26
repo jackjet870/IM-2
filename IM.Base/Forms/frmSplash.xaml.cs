@@ -23,10 +23,23 @@ namespace IM.Base.Forms
         {
             InitializeComponent();
         }
-        public frmSplash(UserControl frmLogin)
+
+        /// <summary>
+        /// Función para ejecutar el frmLogin sobre el Splash
+        /// </summary>
+        /// <param name="pParent"> Instancia del frmLogin segun sea el tipo </param>
+        /// <history>
+        /// [vipacheco] 2-26-2016 Created
+        /// </history>
+        public void ShowLogin(Window pChildLogin)
         {
-            InitializeComponent();
-            cntContentLogin.Content = frmLogin;
+            pChildLogin.WindowStyle = WindowStyle.None;
+            pChildLogin.ShowInTaskbar = false;
+            pChildLogin.Owner = this;
+
+            pChildLogin.Left = this.Left + 240;
+            pChildLogin.Top = this.Top + 83;
+            pChildLogin.ShowDialog();
         }
     }
 }

@@ -28,6 +28,7 @@ namespace IM.Model
         }
     
         public virtual DbSet<Guest> Guests { get; set; }
+        public virtual DbSet<SalesRoom> SalesRooms { get; set; }
     
         public virtual ObjectResult<GetCountries> USP_OR_GetCountries(Nullable<byte> status)
         {
@@ -36,6 +37,28 @@ namespace IM.Model
                 new ObjectParameter("Status", typeof(byte));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCountries>("USP_OR_GetCountries", statusParameter);
+        }
+    
+        public virtual ObjectResult<GuestPremanifestHost> GetPremanifestHost(Nullable<System.DateTime> date, string salesRoom)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestPremanifestHost>("GetPremanifestHost", dateParameter, salesRoomParameter);
+        }
+    
+        public virtual ObjectResult<USP_OR_GetSalesRoom_Result> USP_OR_GetSalesRoom(string salesRoom)
+        {
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<USP_OR_GetSalesRoom_Result>("USP_OR_GetSalesRoom", salesRoomParameter);
         }
     }
 }

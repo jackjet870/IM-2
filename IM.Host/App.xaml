@@ -1,9 +1,11 @@
 ﻿<Application x:Class="IM.Host.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:IM.Host"
-             StartupUri="frmHost.xaml">
+             xmlns:local="clr-namespace:IM.Host">
+    <!--StartUri="frmHost.xaml">-->
+
     <Application.Resources>
-         
+
+        
     </Application.Resources>
 </Application>

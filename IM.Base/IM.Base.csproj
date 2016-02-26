@@ -57,6 +57,9 @@
     <Compile Include="Forms\frmConsultaBase.xaml.cs" />
     <Compile Include="Forms\frmInvitationBase.xaml.cs" />
     <Compile Include="Forms\frmLogin.xaml.cs" />
+    <Compile Include="Forms\frmLoginPlace.xaml.cs">
+      <DependentUpon>frmLoginPlace.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\EncryptHelper.cs" />
     <Compile Include="Forms\frmSplash.xaml.cs">
       <DependentUpon>frmSplash.xaml</DependentUpon>
@@ -93,6 +96,10 @@
     <Page Include="Forms\frmLogin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\frmLoginPlace.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\frmSplash.xaml">
       <Generator>MSBuild:Compile</Generator>

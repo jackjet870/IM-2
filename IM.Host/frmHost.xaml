@@ -1,16 +1,21 @@
-﻿<Window x:Class="IM.Host.frmHost"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:IM.Host"
+        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.frmHost"
         mc:Ignorable="d"
         Title="Host" 
         Height="400.189" Width="1104.812" 
         WindowStartupLocation="CenterScreen" WindowState="Maximized"
         Loaded="frmHost_Loaded"
         KeyDown="frmHost_KeyDown">
+
+    <Window.Resources>
+        <CollectionViewSource x:Key="guestPremanifestHostViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GuestPremanifestHost}, CreateList=True }"/>
+    </Window.Resources>
 
     <Grid>
         <!--#region DEFINICION DE ROW´s GRID-->
@@ -27,7 +32,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="10"/>
                 <!--Columna para separar del límite izquierdo el GroupBox de Options -->
-                <ColumnDefinition Width="520"/>
+                <ColumnDefinition Width="600"/>
                 <ColumnDefinition Width="265"/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="10"/>
@@ -67,7 +72,7 @@
                     </Button>
                     <Button x:Name="btnLayout" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="65" Background="White">
                         <StackPanel>
-                            <Image Source="/IM.Base;component/Images/Layout.jpg" Width="24" Height="24" HorizontalAlignment="Center"/>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/Layout.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                             <TextBlock Text="Layouts" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
@@ -77,12 +82,17 @@
                             <TextBlock Text="About" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-
+                    <Button x:Name="btnCloseSalesRoom" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="112" Background="White" Height="43" Click="btnCloseSalesRoom_Click">
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/About.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Close Sales Room" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
             </GroupBox>
             <GroupBox x:Name="grbDate" Grid.Column="2" Header="Date" Height="70" VerticalAlignment="Top" FontWeight="Bold" Margin="9,0,10,0">
                 <Grid>
-                    <DatePicker x:Name="dtpDate" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="30" SelectedDate="{x:Static sys:DateTime.Now}" SelectedDateFormat="Long" FontSize="10"/>
+                    <DatePicker x:Name="dtpDate" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="30" SelectedDateFormat="Long" SelectedDate="{x:Static sys:DateTime.Today}" FontSize="10"/>
                 </Grid>
             </GroupBox>
             <GroupBox x:Name="grbInfUser" Grid.Column="3" Header="Informartion User" HorizontalAlignment="Right" Width="261" VerticalAlignment="Top" Height="70" FontWeight="Bold" Margin="0,0,10,0">
@@ -102,17 +112,110 @@
                 </Grid>
             </GroupBox>
         </Grid>
+        <!--#endregion-->
+        <Grid Grid.Row="1" DataContext="{StaticResource guestPremanifestHostViewSource}" >
+            <DataGrid x:Name="guestPremanifestHostDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="10,10,10,10" RowDetailsVisibilityMode="VisibleWhenSelected" Height="Auto" Width="Auto">
+                <DataGrid.Columns>
+                    <!--#region DEFAULT COLUMN-->
+                    <DataGridTextColumn x:Name="guShowSeq" Binding="{Binding guShowSeq}" Header="Seq" Width="SizeToHeader">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="ToolTip" Value="Sequency"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="guIDColumn" Binding="{Binding guID}" Header="GUID" Width="SizeToHeader">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="ToolTip" Value="Guest ID"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="gulsColumn" Binding="{Binding guls}" Header="LS" Width="SizeToHeader">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="ToolTip" Value="Lead Source"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="guloInvitColumn" Binding="{Binding guloInvit}" Header="Loc" Width="SizeToHeader">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="ToolTip" Value="Location"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridCheckBoxColumn x:Name="guQuinellaColumn" Binding="{Binding guQuinella}" Header="Qui" Width="SizeToHeader">
+                        <DataGridCheckBoxColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="ToolTip" Value="Quinella"/>
+                            </Style>
+                        </DataGridCheckBoxColumn.HeaderStyle>
+                    </DataGridCheckBoxColumn>
+                    <DataGridTextColumn x:Name="guHReservIDColumn" Binding="{Binding guHReservID}" Header="Reserv. #" Width="SizeToHeader">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="ToolTip" Value="Reservation Number"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
 
-        <!--#endregion-->
-        <!--#region DATA GRID-->
-        <DataGrid x:Name="dtgDatos" Grid.Row="1" />
-        <!--#endregion-->
+                    <!--#endregion-->
+                    
+                    <DataGridTextColumn x:Name="coNColumn" Binding="{Binding coN}" Header="co N" ToolTipService.ToolTip="CONOCE" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="cuNColumn" Binding="{Binding cuN}" Header="cu N" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="guagColumn" Binding="{Binding guag}" Header="guag" Width="SizeToHeader"/>
+                    <DataGridCheckBoxColumn x:Name="guBookCancColumn" Binding="{Binding guBookCanc}" Header="gu Book Canc" Width="SizeToHeader"/>
+                    <DataGridTemplateColumn x:Name="guCheckInDColumn" Header="gu Check In D" Width="SizeToHeader">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <DatePicker SelectedDate="{Binding guCheckInD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn x:Name="guCheckOutDColumn" Header="gu Check Out D" Width="SizeToHeader">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <DatePicker SelectedDate="{Binding guCheckOutD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn x:Name="gucoColumn" Binding="{Binding guco}" Header="guco" Width="SizeToHeader"/>
+                    <DataGridCheckBoxColumn x:Name="guCTourColumn" Binding="{Binding guCTour}" Header="gu CTour" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="guDepositColumn" Binding="{Binding guDeposit}" Header="gu Deposit" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="guDepositReceivedColumn" Binding="{Binding guDepositReceived}" Header="gu Deposit Received" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="guFirstName1Column" Binding="{Binding guFirstName1}" Header="gu First Name 1" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="guFirstName2Column" Binding="{Binding guFirstName2}" Header="gu First Name 2" Width="SizeToHeader"/>
+                    <DataGridCheckBoxColumn x:Name="guGiftsReceivedColumn" Binding="{Binding guGiftsReceived}" Header="gu Gifts Received" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="guHotelColumn" Binding="{Binding guHotel}" Header="gu Hotel" Width="SizeToHeader"/>
+                    <DataGridCheckBoxColumn x:Name="guInOutColumn" Binding="{Binding guInOut}" Header="gu In Out" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="guLastName1Column" Binding="{Binding guLastName1}" Header="gu Last Name 1" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="guLastName2Column" Binding="{Binding guLastName2}" Header="gu Last Name 2" Width="SizeToHeader"/>
+                    <DataGridCheckBoxColumn x:Name="guMealTicketColumn" Binding="{Binding guMealTicket}" Header="gu Meal Ticket" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="guMembershipNumColumn" Binding="{Binding guMembershipNum}" Header="gu Membership Num" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="guOutInvitNumColumn" Binding="{Binding guOutInvitNum}" Header="gu Out Invit Num" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="guPaxColumn" Binding="{Binding guPax}" Header="gu Pax" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="guPRInvit1Column" Binding="{Binding guPRInvit1}" Header="gu PRInvit 1" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="guRoomNumColumn" Binding="{Binding guRoomNum}" Header="gu Room Num" Width="SizeToHeader"/>
+                    <DataGridCheckBoxColumn x:Name="guSaleColumn" Binding="{Binding guSale}" Header="gu Sale" Width="SizeToHeader"/>
+                    <DataGridCheckBoxColumn x:Name="guSaveProgramColumn" Binding="{Binding guSaveProgram}" Header="gu Save Program" Width="SizeToHeader"/>
+                    <DataGridCheckBoxColumn x:Name="guShowColumn" Binding="{Binding guShow}" Header="gu Show" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="guTaxiInColumn" Binding="{Binding guTaxiIn}" Header="gu Taxi In" Width="SizeToHeader"/>
+                    <DataGridCheckBoxColumn x:Name="guTourColumn" Binding="{Binding guTour}" Header="gu Tour" Width="SizeToHeader"/>
+                    <DataGridCheckBoxColumn x:Name="guWalkOutColumn" Binding="{Binding guWalkOut}" Header="gu Walk Out" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="guWCommentsColumn" Binding="{Binding guWComments}" Header="gu WComments" Width="SizeToHeader"/>
+                    <DataGridCheckBoxColumn x:Name="guWithQuinellaColumn" Binding="{Binding guWithQuinella}" Header="gu With Quinella" Width="SizeToHeader"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+
+        </Grid>
+
         <!--#region DETALLES-->
-        <Grid Grid.Row="2" Background="Beige"/>
-        <!---->
-
-		<!--#endregion-->
-
+        <Grid Grid.Row="2" Background="Beige">
+            
+        </Grid>
+        <!--#endregion-->
         <!--#region PIE DE FORMA-->
         <StatusBar x:Name="stbStatusBar" Height="30" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Grid.Row="3">
             <StatusBarItem Grid.Column="0" x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
@@ -120,6 +223,7 @@
             <StatusBarItem Grid.Column="2" x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
             <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0/0" HorizontalAlignment="Right" Width="50"/>
         </StatusBar>
+        <!--#endregion-->
 
     </Grid>
 
