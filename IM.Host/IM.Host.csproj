@@ -60,11 +60,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Forms\frmCloseSalesRoom.xaml">
+    <Page Include="Forms\frmSalesRoomsLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Forms\frmSalesRoomLog.xaml">
+    <Page Include="Forms\frmCloseSalesRoom.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -76,11 +76,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Forms\frmSalesRoomsLog.xaml.cs">
+      <DependentUpon>frmSalesRoomsLog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmCloseSalesRoom.xaml.cs">
       <DependentUpon>frmCloseSalesRoom.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmSalesRoomLog.xaml.cs">
-      <DependentUpon>frmSalesRoomLog.xaml</DependentUpon>
     </Compile>
     <Compile Include="frmHost.xaml.cs">
       <DependentUpon>frmHost.xaml</DependentUpon>

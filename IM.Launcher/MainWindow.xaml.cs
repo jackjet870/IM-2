@@ -22,10 +22,10 @@ namespace IM.Launcher
     private bool pushCtrl = false;
     private bool pushCtrlE = false;
     public MainWindow()
-        {
-            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
-            InitializeComponent();
-        }
+    {
+      WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+      InitializeComponent();
+    }
 
     #region Métodos de la forma
 
@@ -37,9 +37,16 @@ namespace IM.Launcher
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      var screenHeight = SystemParameters.PrimaryScreenHeight;
+      this.Height = screenHeight - 200;
+
+      Rect workArea = System.Windows.SystemParameters.WorkArea;
+      this.Left = (workArea.Width - this.Width) / 2 + workArea.Left;
+      this.Top = (workArea.Height - this.Height) / 2 + workArea.Top;
+
       var thisApp = Assembly.GetExecutingAssembly();
       AssemblyName name = new AssemblyName(thisApp.FullName);
-
+      
       lblVersion.Content = "Launcher v" + name.Version;
       lblVersion.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
       CreateButtons(this);
@@ -110,12 +117,14 @@ namespace IM.Launcher
     private void CreateButtons(MainWindow form)
     {
       var lstButtons = new Classes.ConfigButton().CreateButtons();
+      int row = 1;
       foreach (var btn in lstButtons.OrderBy(o=> (int)o.Tag))
       {
-          //Agregamos sus eventos
-          btn.Click += btn_Click;
-
-          grdPanel.Children.Add(btn);
+        //Agregamos sus eventos
+        btn.Click += btn_Click;
+        Grid.SetRow(btn, row);
+        grdPanel.Children.Add(btn);
+        row++;  
       }
     }
 
@@ -132,9 +141,9 @@ namespace IM.Launcher
       switch ((EnumMenu)button.Tag)
       {
           case EnumMenu.InHouse:
-            var login = new IM.Base.Forms.frmLogin();
-            login.Owner = this;
-            login.ShowDialog();
+            var invit = new IM.Base.Forms.frmInvitationBase();
+            invit.ShowDialog();
+            
             break;
           case EnumMenu.Assignment:
               //llamar módulo

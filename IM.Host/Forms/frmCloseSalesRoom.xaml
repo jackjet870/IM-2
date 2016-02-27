@@ -59,6 +59,6 @@
                 </Grid>
             </GroupBox>
         </StackPanel>
-        <Button x:Name="btnLog" Content="Log" Margin="350,200,350,0" VerticalAlignment="Center" Height="29"/>
+        <Button x:Name="btnLog" Content="Log" Margin="350,200,350,0" VerticalAlignment="Center" Height="29" Click="btnLog_Click"/>
     </Grid>
 </Window>

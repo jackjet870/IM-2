@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace IM.Host.Forms
 {
     /// <summary>
-    /// Interaction logic for frmSalesRoomLog.xaml
+    /// Interaction logic for frmSalesRoomsLog.xaml
     /// </summary>
-    public partial class frmSalesRoomLog : Window
+    public partial class frmSalesRoomsLog : Window
     {
-        public frmSalesRoomLog()
+        public frmSalesRoomsLog()
         {
             InitializeComponent();
         }

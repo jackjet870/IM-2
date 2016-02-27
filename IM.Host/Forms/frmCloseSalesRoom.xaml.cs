@@ -68,5 +68,13 @@ namespace IM.Host.Forms
             }
 
         }
+
+        private void btnLog_Click(object sender, RoutedEventArgs e)
+        {
+            frmSalesRoomsLog mfrmSalesRoomsLog = new frmSalesRoomsLog();
+            mfrmSalesRoomsLog.ShowInTaskbar = false;
+            mfrmSalesRoomsLog.Owner = this;
+            mfrmSalesRoomsLog.ShowDialog();
+        }
     }
 }
