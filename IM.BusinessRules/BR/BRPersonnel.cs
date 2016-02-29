@@ -43,5 +43,19 @@ namespace IM.BusinessRules.BR
       }
       return usrD;
     }
+
+    public static bool ChangePassword(string user, string newPassword, DateTime serverDate)
+    {
+      int result;      
+      using (var dbContext = new IMEntities())
+      {
+        Personnel _personnel = dbContext.Personnels.Where(c => c.peID == user).FirstOrDefault();
+        _personnel.pePwd = newPassword;
+        _personnel.pePwdD = serverDate.Date;
+
+        result = dbContext.SaveChanges();
+      }
+      return Convert.ToBoolean(result);
+    }
   }
 }

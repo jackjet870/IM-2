@@ -126,6 +126,9 @@
     <Compile Include="permissionsLogin.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Personnel.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="rolesLogin.cs">
       <DependentUpon>IMModel.tt</DependentUpon>

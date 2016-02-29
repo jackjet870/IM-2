@@ -52,6 +52,7 @@
     <Compile Include="BR\BRAgencies.cs" />
     <Compile Include="BR\BRCountries.cs" />
     <Compile Include="BR\BRGifts.cs" />
+    <Compile Include="BR\BRHelpers.cs" />
     <Compile Include="BR\BRPersonnel.cs" />
     <Compile Include="BR\BRWhsMovs.cs" />
     <Compile Include="Entities\UserNormalLogin.cs" />
