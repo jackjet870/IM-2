@@ -53,7 +53,7 @@ namespace IM.Base.Forms
         return;
       }
 
-      var user = new IM.BusinessRules.Login.Login().GetUserLogin(txtUser.Text, txtPassword.Password);
+      var user = IM.BusinessRules.BR.BRPersonnel.login(Model.Enums.LoginType.Normal, txtUser.Text);
 
       if(user == null)
       {
@@ -61,13 +61,13 @@ namespace IM.Base.Forms
         txtUser.Focus();
         return;
       }
-      else if(user.PePwd != EncryptHelper.Encrypt(txtPassword.Password, encryptCode))
+      else if(user.User.pePwd != EncryptHelper.Encrypt(txtPassword.Password, encryptCode))
       {
         CustomMessage("Invalid password.", "Error", MessageBoxImage.Error);
         txtPassword.Focus();
         return;
       }
-      else if(!user.PeA)
+      else if(!user.User.peA)
       {
         CustomMessage("User ID is inactive.", "Error", MessageBoxImage.Error);
         txtUser.Focus();

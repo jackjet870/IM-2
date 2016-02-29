@@ -52,11 +52,11 @@
     <Compile Include="BR\BRAgencies.cs" />
     <Compile Include="BR\BRCountries.cs" />
     <Compile Include="BR\BRGifts.cs" />
+    <Compile Include="BR\BRInvitationBase.cs" />
     <Compile Include="BR\BRPersonnel.cs" />
     <Compile Include="BR\BRWhsMovs.cs" />
     <Compile Include="Entities\UserNormalLogin.cs" />
     <Compile Include="Enums\InvitationType.cs" />
-    <Compile Include="Login\Login.cs" />
     <Compile Include="BR\BRLeadSources.cs" />
     <Compile Include="BR\BRMarkets.cs" />
     <Compile Include="BR\BRSalesRooms.cs" />

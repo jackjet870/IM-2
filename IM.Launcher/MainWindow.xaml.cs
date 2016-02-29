@@ -141,9 +141,8 @@ namespace IM.Launcher
       switch ((EnumMenu)button.Tag)
       {
           case EnumMenu.InHouse:
-            var invit = new IM.Base.Forms.frmInvitationBase();
+          var invit = new IM.Base.Forms.frmInvitationBase(IM.BusinessRules.Enums.InvitationType.InHouse);
             invit.ShowDialog();
-            
             break;
           case EnumMenu.Assignment:
               //llamar módulo
