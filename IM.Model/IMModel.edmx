@@ -240,40 +240,39 @@
           <Property Name="srCECOID" Type="varchar" MaxLength="2" />
           <Property Name="srCEBEID" Type="varchar" MaxLength="2" />
         </EntityType>
-        <Function Name="USP_OR_GetCountries" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Status" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="USP_OR_GetPremanifestHost" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Date" Type="datetime" Mode="In" />
-          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="USP_OR_GetSalesRoom" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
-        </Function>
-		<Function Name="USP_OR_GetAgencies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Status" Type="tinyint" Mode="In" />
-        </Function>
- <Function Name="USP_OR_GetLeadSourcesByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="User" Type="varchar" Mode="In" />
-          <Parameter Name="Programs" Type="varchar" Mode="In" />
-          <Parameter Name="Regions" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="USP_OR_GetMarkets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Status" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="USP_OR_GetSalesRooms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Status" Type="tinyint" Mode="In" />
-        </Function>
-        <Function Name="USP_OR_GetSalesRoomsByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="User" Type="varchar" Mode="In" />
-          <Parameter Name="Regions" Type="varchar" Mode="In" />
-        </Function>
-<Function Name="spProcessMailOuts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <EntityType Name="WhsMovs">
+          <Key>
+            <PropertyRef Name="wmID" />
+          </Key>
+          <Property Name="wmID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="wmD" Type="datetime" Nullable="false" />
+          <Property Name="wmwh" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="wmQty" Type="int" Nullable="false" />
+          <Property Name="wmgi" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="wmComments" Type="varchar" MaxLength="50" />
+          <Property Name="wmpe" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <Function Name="spProcessMailOuts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetAgencies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetCountries" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetGifts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Locations" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetLanguages" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetLeadSourcesByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="User" Type="varchar" Mode="In" />
+          <Parameter Name="Programs" Type="varchar" Mode="In" />
+          <Parameter Name="Regions" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetMailOuts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="guls" Type="varchar" Mode="In" />
@@ -285,9 +284,40 @@
           <Parameter Name="mtls" Type="varchar" Mode="In" />
           <Parameter Name="mtA" Type="bit" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetMarkets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetPremanifestHost" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetSalesRoom" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetSalesRooms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetSalesRoomsByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="User" Type="varchar" Mode="In" />
+          <Parameter Name="Regions" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetWarehousesByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="User" Type="varchar" Mode="In" />
+          <Parameter Name="Regions" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetWhsMovs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="wmwh" Type="varchar" Mode="In" />
+          <Parameter Name="wmD" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_Login" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LoginType" Type="tinyint" Mode="In" />
+          <Parameter Name="User" Type="varchar" Mode="In" />
+          <Parameter Name="Place" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="IMModelStoreContainer">
           <EntitySet Name="Guests" EntityType="Self.Guests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SalesRooms" EntityType="Self.SalesRooms" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WhsMovs" EntityType="Self.WhsMovs" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -302,7 +332,7 @@
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="USP_OR_GetSalesRoom" ReturnType="Collection(IMModel.USP_OR_GetSalesRoom_Result)">
+          <FunctionImport Name="USP_OR_GetSalesRoom" ReturnType="Collection(IMModel.GetSalesRoom)">
           <Parameter Name="SalesRoom" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="SalesRooms" EntityType="IMModel.SalesRoom" />
@@ -340,6 +370,31 @@
             <Parameter Name="guCheckInD" Mode="In" Type="DateTime" />
             <Parameter Name="guCheckOutD" Mode="In" Type="DateTime" />
             <Parameter Name="guBookD" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <EntitySet Name="WhsMovs" EntityType="IMModel.WhsMov" />
+          <FunctionImport Name="USP_OR_GetGifts" ReturnType="Collection(IMModel.GetGifts)">
+            <Parameter Name="Locations" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetWarehousesByUser" ReturnType="Collection(IMModel.GetWarehousesByUser)">
+            <Parameter Name="User" Mode="In" Type="String" />
+            <Parameter Name="Regions" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetWhsMovs" ReturnType="Collection(IMModel.GetWhsMovs)">
+            <Parameter Name="wmwh" Mode="In" Type="String" />
+            <Parameter Name="wmD" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_Login">
+            <ReturnType Type="Collection(IMModel.userLogin)" />
+            <ReturnType Type="Collection(IMModel.rolesLogin)" />
+            <ReturnType Type="Collection(IMModel.permissionsLogin)" />
+            <ReturnType Type="Collection(IMModel.salesRoomLogin)" />
+            <ReturnType Type="Collection(IMModel.locationLogin)" />
+            <ReturnType Type="Collection(IMModel.leadSourceLogin)" />
+            <ReturnType Type="Collection(IMModel.warehouseLogin)" />
+            <Parameter Name="LoginType" Mode="In" Type="Byte" />
+            <Parameter Name="User" Mode="In" Type="String" />
+            <Parameter Name="Place" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Guest">
@@ -601,7 +656,7 @@
           <Property Type="Boolean" Name="guResch" Nullable="true" />
           <Property Type="Boolean" Name="guBookCanc" Nullable="false" />
         </ComplexType>
-        <ComplexType Name="USP_OR_GetSalesRoom_Result">
+        <ComplexType Name="GetSalesRoom">
           <Property Type="String" Name="srID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="srN" Nullable="false" MaxLength="30" />
           <Property Type="DateTime" Name="srShowsCloseD" Nullable="false" Precision="23" />
@@ -693,6 +748,76 @@
           <Property Type="String" Name="gula" Nullable="false" MaxLength="2" />
           <Property Type="Boolean" Name="gumoA" Nullable="false" />
           <Property Type="String" Name="guComments" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <EntityType Name="WhsMov">
+          <Key>
+            <PropertyRef Name="wmID" />
+          </Key>
+          <Property Name="wmID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="wmD" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="wmwh" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="wmQty" Type="Int32" Nullable="false" />
+          <Property Name="wmgi" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="wmComments" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="wmpe" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="GetGifts">
+          <Property Type="String" Name="giID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="giN" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GetWarehousesByUser">
+          <Property Type="String" Name="whID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="whN" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="plpe" Nullable="false" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="GetWhsMovs">
+          <Property Type="DateTime" Name="wmD" Nullable="false" Precision="23" />
+          <Property Type="String" Name="wmpe" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="wmQty" Nullable="false" />
+          <Property Type="String" Name="giN" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="wmComments" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="wmwh" Nullable="false" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="userLogin">
+          <Property Type="String" Name="peID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="Boolean" Name="peA" Nullable="false" />
+          <Property Type="String" Name="pePwd" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="pePwdDays" Nullable="false" />
+          <Property Type="DateTime" Name="pePwdD" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="rolesLogin" >
+          <Property Type="String" Name="prro" Nullable="false" />
+          <Property Type="String" Name="roN" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="permissionsLogin" >
+          <Property Type="String" Name="pppm" Nullable="false" />
+          <Property Type="String" Name="pmN" Nullable="false" />
+          <Property Type="Int32" Name="pppl" Nullable="false" />
+          <Property Type="String" Name="plN" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="salesRoomLogin" >
+          <Property Type="String" Name="srID" Nullable="false" />
+          <Property Type="String" Name="srN" Nullable="false" />
+          <Property Type="String" Name="srcu" Nullable="false" />
+          <Property Type="Int32" Name="srHoursDif" Nullable="false" />
+          <Property Type="String" Name="srAddOut" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="leadSourceLogin" >
+          <Property Type="String" Name="lsID" Nullable="false" />
+          <Property Type="String" Name="lsN" Nullable="false" />
+          <Property Type="String" Name="lspg" Nullable="false" />
+          <Property Type="Int32" Name="lsHoursDif" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="locationLogin" >
+          <Property Type="String" Name="loID" Nullable="false" />
+          <Property Type="String" Name="loN" Nullable="false" />
+          <Property Type="String" Name="losr" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="warehouseLogin" >
+          <Property Type="String" Name="whID" Nullable="false" />
+          <Property Type="String" Name="whN" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -970,7 +1095,7 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_GetSalesRoom" FunctionName="IMModel.Store.USP_OR_GetSalesRoom">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.USP_OR_GetSalesRoom_Result">
+              <ComplexTypeMapping TypeName="IMModel.GetSalesRoom">
                 <ScalarProperty Name="srID" ColumnName="srID" />
                 <ScalarProperty Name="srN" ColumnName="srN" />
                 <ScalarProperty Name="srShowsCloseD" ColumnName="srShowsCloseD" />
@@ -1096,6 +1221,105 @@
                 <ScalarProperty Name="gula" ColumnName="gula" />
                 <ScalarProperty Name="gumoA" ColumnName="gumoA" />
                 <ScalarProperty Name="guComments" ColumnName="guComments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="WhsMovs">
+            <EntityTypeMapping TypeName="IMModel.WhsMov">
+              <MappingFragment StoreEntitySet="WhsMovs">
+                <ScalarProperty Name="wmpe" ColumnName="wmpe" />
+                <ScalarProperty Name="wmComments" ColumnName="wmComments" />
+                <ScalarProperty Name="wmgi" ColumnName="wmgi" />
+                <ScalarProperty Name="wmQty" ColumnName="wmQty" />
+                <ScalarProperty Name="wmwh" ColumnName="wmwh" />
+                <ScalarProperty Name="wmD" ColumnName="wmD" />
+                <ScalarProperty Name="wmID" ColumnName="wmID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGifts" FunctionName="IMModel.Store.USP_OR_GetGifts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetGifts">
+                <ScalarProperty Name="giID" ColumnName="giID" />
+                <ScalarProperty Name="giN" ColumnName="giN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetWarehousesByUser" FunctionName="IMModel.Store.USP_OR_GetWarehousesByUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetWarehousesByUser">
+                <ScalarProperty Name="whID" ColumnName="whID" />
+                <ScalarProperty Name="whN" ColumnName="whN" />
+                <ScalarProperty Name="plpe" ColumnName="plpe" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetWhsMovs" FunctionName="IMModel.Store.USP_OR_GetWhsMovs">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetWhsMovs">
+                <ScalarProperty Name="wmD" ColumnName="wmD" />
+                <ScalarProperty Name="wmpe" ColumnName="wmpe" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="wmQty" ColumnName="wmQty" />
+                <ScalarProperty Name="giN" ColumnName="giN" />
+                <ScalarProperty Name="wmComments" ColumnName="wmComments" />
+                <ScalarProperty Name="wmwh" ColumnName="wmwh" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_Login" FunctionName="IMModel.Store.USP_OR_Login">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.userLogin">
+                <ScalarProperty Name="peID" ColumnName="peID" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="peA" ColumnName="peA" />
+                <ScalarProperty Name="pePwd" ColumnName="pePwd" />
+                <ScalarProperty Name="pePwdDays" ColumnName="pePwdDays" />
+                <ScalarProperty Name="pePwdD" ColumnName="pePwdD" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.rolesLogin">
+                <ScalarProperty Name="prro" ColumnName="prro" />
+                <ScalarProperty Name="roN" ColumnName="roN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.permissionsLogin">
+                <ScalarProperty Name="pppm" ColumnName="pppm" />
+                <ScalarProperty Name="pmN" ColumnName="pmN" />
+                <ScalarProperty Name="pppl" ColumnName="pppl" />
+                <ScalarProperty Name="plN" ColumnName="plN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.salesRoomLogin">
+                <ScalarProperty Name="srID" ColumnName="srID" />
+                <ScalarProperty Name="srN" ColumnName="srN" />
+                <ScalarProperty Name="srcu" ColumnName="srcu" />
+                <ScalarProperty Name="srHoursDif" ColumnName="srHoursDif" />
+                <ScalarProperty Name="srAddOut" ColumnName="srAddOut" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.locationLogin">
+                <ScalarProperty Name="loID" ColumnName="loID" />
+                <ScalarProperty Name="loN" ColumnName="loN" />
+                <ScalarProperty Name="losr" ColumnName="losr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.leadSourceLogin">
+                <ScalarProperty Name="lsID" ColumnName="lsID" />
+                <ScalarProperty Name="lsN" ColumnName="lsN" />
+                <ScalarProperty Name="lspg" ColumnName="lspg" />
+                <ScalarProperty Name="lsHoursDif" ColumnName="lsHoursDif" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.warehouseLogin">
+                <ScalarProperty Name="whID" ColumnName="whID" />
+                <ScalarProperty Name="whN" ColumnName="whN" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

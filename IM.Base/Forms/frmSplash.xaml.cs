@@ -24,22 +24,27 @@ namespace IM.Base.Forms
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Función para ejecutar el frmLogin sobre el Splash
-        /// </summary>
-        /// <param name="pParent"> Instancia del frmLogin segun sea el tipo </param>
-        /// <history>
-        /// [vipacheco] 2-26-2016 Created
-        /// </history>
-        public void ShowLogin(Window pChildLogin)
-        {
-            pChildLogin.WindowStyle = WindowStyle.None;
-            pChildLogin.ShowInTaskbar = false;
-            pChildLogin.Owner = this;
+    public void ShowLogin(ref frmLoginPlace frmLogin)
+    {
+      frmLogin.WindowStyle = WindowStyle.None;
+      frmLogin.ShowInTaskbar = false;
+      frmLogin.Owner = this;
 
-            pChildLogin.Left = this.Left + 240;
-            pChildLogin.Top = this.Top + 83;
-            pChildLogin.ShowDialog();
-        }
+      frmLogin.Left = this.Left + 240;
+      frmLogin.Top = this.Top + 83;
+      frmLogin.ShowDialog();      
+    }
+
+    /// <summary>
+    /// Función para ejecutar el frmLogin sobre el Splash
+    /// </summary>
+    /// <param name="pParent"> Instancia del frmLogin segun sea el tipo </param>
+    /// <history>
+    /// [vipacheco] 2-26-2016 Created
+    /// </history>
+    public void ShowLogin(Window pChildLogin)
+    {
+
+    }
     }
 }

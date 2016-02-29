@@ -9,4 +9,5 @@ namespace IM.Base.Enums
     Animation,
     Regen
   }
+
 }

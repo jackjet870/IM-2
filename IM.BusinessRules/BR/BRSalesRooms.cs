@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IM.Model;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,7 +18,7 @@ namespace IM.BusinessRules.BR
     {
       try
       {
-        using (var model = new IM.Model.IMEntities())
+        using (var model = new IMEntities())
         {
           return model.USP_OR_GetSalesRooms(Convert.ToByte(status)).ToList();
         }
@@ -38,9 +39,34 @@ namespace IM.BusinessRules.BR
     {
       try
       {
-        using (var model = new IM.Model.IMEntities())
+        using (var model = new IMEntities())
         {
           return model.USP_OR_GetSalesRoomsByUser(user,regions).ToList();
+        }
+      }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+
+    }
+
+    /// <summary>
+    /// Obtiene los datos de una sala de ventas en específico.
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="regions"></param>
+    /// <returns></returns>
+    ///  <history>
+    /// [edgrodriguez] 29/Feb/2016 Created
+    /// </history>
+    public static GetSalesRoom GetSalesRoom(string salesRoom)
+    {
+      try
+      {
+        using (var model = new IMEntities())
+        {
+          return model.USP_OR_GetSalesRoom(salesRoom).FirstOrDefault();
         }
       }
       catch (Exception ex)

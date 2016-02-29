@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.BusinessRules", "IM.Busi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Host", "IM.Host\IM.Host.csproj", "{F51C105B-9EC2-4617-8FD4-0729AEB50AA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.InventoryMoves", "IM.InventoryMoves\IM.InventoryMoves.csproj", "{9351E555-6800-4E9C-9BDE-BC8DB9D29711}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,14 @@ Global
 		{F51C105B-9EC2-4617-8FD4-0729AEB50AA1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F51C105B-9EC2-4617-8FD4-0729AEB50AA1}.Release|x86.ActiveCfg = Release|Any CPU
 		{F51C105B-9EC2-4617-8FD4-0729AEB50AA1}.Release|x86.Build.0 = Release|Any CPU
+		{9351E555-6800-4E9C-9BDE-BC8DB9D29711}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9351E555-6800-4E9C-9BDE-BC8DB9D29711}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9351E555-6800-4E9C-9BDE-BC8DB9D29711}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9351E555-6800-4E9C-9BDE-BC8DB9D29711}.Debug|x86.Build.0 = Debug|Any CPU
+		{9351E555-6800-4E9C-9BDE-BC8DB9D29711}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9351E555-6800-4E9C-9BDE-BC8DB9D29711}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9351E555-6800-4E9C-9BDE-BC8DB9D29711}.Release|x86.ActiveCfg = Release|Any CPU
+		{9351E555-6800-4E9C-9BDE-BC8DB9D29711}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

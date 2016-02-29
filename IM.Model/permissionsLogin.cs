@@ -11,13 +11,11 @@ namespace IM.Model
 {
     using System;
     
-    public partial class USP_OR_GetSalesRoom_Result
+    public partial class permissionsLogin
     {
-        public string srID { get; set; }
-        public string srN { get; set; }
-        public System.DateTime srShowsCloseD { get; set; }
-        public System.DateTime srMealTicketsCloseD { get; set; }
-        public System.DateTime srSalesCloseD { get; set; }
-        public System.DateTime srGiftsRcptCloseD { get; set; }
+        public string pppm { get; set; }
+        public string pmN { get; set; }
+        public int pppl { get; set; }
+        public string plN { get; set; }
     }
 }

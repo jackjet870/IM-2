@@ -1,0 +1,8 @@
+﻿<Application x:Class="IM.InventoryMoves.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:IM.InventoryMoves">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>

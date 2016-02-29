@@ -6,34 +6,34 @@
         xmlns:local="clr-namespace:IM.Base.Forms"
         mc:Ignorable="d"
         Title="Login" Height="203" Width="290" ResizeMode="NoResize"
-        Background="White" BorderThickness="5" BorderBrush="AliceBlue" WindowStartupLocation="Manual">
-    
-    <Grid Background="SkyBlue" x:Name="frmLogin">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="65"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="21*"/>
-            <RowDefinition Height="27*"/>
-            <RowDefinition Height="22*"/>
-            <RowDefinition Height="12*"/>
-            <RowDefinition Height="15"/>
-        </Grid.RowDefinitions>
+        Background="White" BorderThickness="5" BorderBrush="AliceBlue" WindowStartupLocation="Manual" Loaded="Window_Loaded">
 
-        <Label Grid.Column="0" Grid.Row="1" Content="User ID:" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" Foreground="White" Margin="0,2,206,18" Grid.ColumnSpan="2" Height="22" Width="56"/>
-        <TextBox Grid.Column="1" Grid.Row="1" Name="txtUser" VerticalAlignment="Center" Height="24" Width="180" HorizontalAlignment="Left" Margin="5,1,0,17"/>
+  <Grid Background="SkyBlue" x:Name="frmLogin">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="80"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="10"/>
+      <RowDefinition Height="21*"/>
+      <RowDefinition Height="27*"/>
+      <RowDefinition Height="22*"/>
+      <RowDefinition Height="12*"/>
+      <RowDefinition Height="15"/>
+    </Grid.RowDefinitions>
 
-        <Label Grid.Column="0" Grid.Row="1" Content="Password:" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" Foreground="White" Margin="0,38,206,36" Grid.RowSpan="2" Grid.ColumnSpan="2" Height="22" Width="67"/>
-        <PasswordBox Name="txtPassword" Grid.Column="1" Grid.Row="1" Width="180" Height="24" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,36,0,36" Grid.RowSpan="2"/>
+    <Label Grid.Column="0" Grid.Row="1" Content="User ID:" HorizontalContentAlignment="Right" FontWeight="Bold" Foreground="White" Height="22"/>
+    <TextBox Grid.Column="1" Grid.Row="1" Name="txtUser" VerticalAlignment="Center" Height="24" Width="180" HorizontalAlignment="Left" LostFocus="txtUser_LostFocus" CharacterCasing="Upper"/>
 
-        <Label Grid.Column="0" Grid.Row="2" Content="Location:" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" Foreground="White" Margin="0,28,206,4" Grid.ColumnSpan="2" Height="22" Width="61"/>
-        <ComboBox Name="cmbLocation" Grid.Column="1" Grid.Row="2" Width="180" HorizontalAlignment="Left" Margin="5,27,0,3"/>
+    <Label Grid.Column="0" Grid.Row="2" Content="Password:" VerticalAlignment="Center" HorizontalContentAlignment="Right" FontWeight="Bold" Foreground="White" Height="22"/>
+    <PasswordBox Name="txtPassword" Grid.Column="1" Grid.Row="2" Width="180" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left" />
 
-        <Button Name="btnAceptar" Content="Ok" Grid.Row="3" Width="88" HorizontalAlignment="Left" Background="White" FontWeight="Bold" Click="btnAceptar_Click" Margin="45,15,0,0" Grid.ColumnSpan="2"/>
-        <Button Name="btnCancelar" Content="Cancel" Grid.Row="3" Grid.Column="1" Margin="102,15,25,0" Background="White" FontWeight="Bold" Click="btnCancelar_Click"/>
-        <CheckBox x:Name="chkChangePwd" Content="Changed Password" HorizontalAlignment="Left" Margin="45,14,0,0" Grid.Row="4" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="13" Width="107" Grid.RowSpan="2"/>
-        <CheckBox x:Name="chkAutoSign" Content="Auto Sign" Grid.Column="1" HorizontalAlignment="Left" Margin="116,14,0,0" Grid.Row="4" VerticalAlignment="Top" Height="13" Width="62" Grid.RowSpan="2"/>
-    </Grid>
+    <Label Name="lblPlace" Grid.Column="0" Grid.Row="3" Content="Location:" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" Height="22" HorizontalContentAlignment="Right" />
+    <ComboBox Name="cmbLocation" Grid.Column="1" Grid.Row="3" Width="180" Height="25" HorizontalAlignment="Left"/>
+
+    <Button Name="btnAceptar" Content="Ok" Grid.Row="4" Grid.Column="1" Width="80" HorizontalAlignment="Left" Background="White" FontWeight="Bold" Click="btnAceptar_Click"/>
+    <Button Name="btnCancelar" Content="Cancel" Grid.Row="4" Grid.Column="1" Width="80" HorizontalAlignment="Right" Background="White" FontWeight="Bold" Click="btnCancelar_Click" Margin="5 0 15 0" />
+    <CheckBox x:Name="chkChangePwd" Content="Changed Password" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="5" VerticalAlignment="Top" Height="13" Width="107"/>
+    <CheckBox x:Name="chkAutoSign" Content="Auto Sign" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Top" Height="13" Width="62" Grid.RowSpan="2" Margin="5 0 15 0"/>
+  </Grid>
 </Window>

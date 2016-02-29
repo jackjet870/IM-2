@@ -29,6 +29,7 @@ namespace IM.Model
     
         public virtual DbSet<Guest> Guests { get; set; }
         public virtual DbSet<SalesRoom> SalesRooms { get; set; }
+        public virtual DbSet<WhsMov> WhsMovs { get; set; }
     
         public virtual ObjectResult<GetCountries> USP_OR_GetCountries(Nullable<byte> status)
         {
@@ -52,13 +53,13 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestPremanifestHost>("GetPremanifestHost", dateParameter, salesRoomParameter);
         }
     
-        public virtual ObjectResult<USP_OR_GetSalesRoom_Result> USP_OR_GetSalesRoom(string salesRoom)
+        public virtual ObjectResult<GetSalesRoom> USP_OR_GetSalesRoom(string salesRoom)
         {
             var salesRoomParameter = salesRoom != null ?
                 new ObjectParameter("SalesRoom", salesRoom) :
                 new ObjectParameter("SalesRoom", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<USP_OR_GetSalesRoom_Result>("USP_OR_GetSalesRoom", salesRoomParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSalesRoom>("USP_OR_GetSalesRoom", salesRoomParameter);
         }
     
         public virtual ObjectResult<GetAgencies> USP_OR_GetAgencies(Nullable<byte> status)
@@ -172,6 +173,62 @@ namespace IM.Model
                 new ObjectParameter("guBookD", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMailOuts>("USP_OR_GetMailOuts", gulsParameter, guCheckInDParameter, guCheckOutDParameter, guBookDParameter);
+        }
+    
+        public virtual ObjectResult<GetGifts> USP_OR_GetGifts(string locations, Nullable<byte> status)
+        {
+            var locationsParameter = locations != null ?
+                new ObjectParameter("Locations", locations) :
+                new ObjectParameter("Locations", typeof(string));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetGifts>("USP_OR_GetGifts", locationsParameter, statusParameter);
+        }
+    
+        public virtual ObjectResult<GetWarehousesByUser> USP_OR_GetWarehousesByUser(string user, string regions)
+        {
+            var userParameter = user != null ?
+                new ObjectParameter("User", user) :
+                new ObjectParameter("User", typeof(string));
+    
+            var regionsParameter = regions != null ?
+                new ObjectParameter("Regions", regions) :
+                new ObjectParameter("Regions", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetWarehousesByUser>("USP_OR_GetWarehousesByUser", userParameter, regionsParameter);
+        }
+    
+        public virtual ObjectResult<GetWhsMovs> USP_OR_GetWhsMovs(string wmwh, Nullable<System.DateTime> wmD)
+        {
+            var wmwhParameter = wmwh != null ?
+                new ObjectParameter("wmwh", wmwh) :
+                new ObjectParameter("wmwh", typeof(string));
+    
+            var wmDParameter = wmD.HasValue ?
+                new ObjectParameter("wmD", wmD) :
+                new ObjectParameter("wmD", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetWhsMovs>("USP_OR_GetWhsMovs", wmwhParameter, wmDParameter);
+        }
+    
+        public virtual ObjectResult<userLogin> USP_OR_Login(Nullable<byte> loginType, string user, string place)
+        {
+            var loginTypeParameter = loginType.HasValue ?
+                new ObjectParameter("LoginType", loginType) :
+                new ObjectParameter("LoginType", typeof(byte));
+    
+            var userParameter = user != null ?
+                new ObjectParameter("User", user) :
+                new ObjectParameter("User", typeof(string));
+    
+            var placeParameter = place != null ?
+                new ObjectParameter("Place", place) :
+                new ObjectParameter("Place", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<userLogin>("USP_OR_Login", loginTypeParameter, userParameter, placeParameter);
         }
     }
 }
