@@ -5,26 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Base.Forms"
         mc:Ignorable="d"
-        Title="Invitation Base" Height="800" Width="700">
-    <Grid Background="SkyBlue" Name="grdGeneral">
+        Title="Invitation Base" Height="1200" Width="700" Loaded="frmInvitationBase_Loaded">
+    <Grid Background="SkyBlue" Name="grdGeneral"
+          ScrollViewer.CanContentScroll="True"
+          ScrollViewer.VerticalScrollBarVisibility="Visible">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10"></ColumnDefinition>
+            <ColumnDefinition Width="5"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition Width="10"></ColumnDefinition>
+            <ColumnDefinition Width="5"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="10"></RowDefinition>
-            <RowDefinition Height="55"></RowDefinition>
-            <RowDefinition Height="55"></RowDefinition>
-            <RowDefinition Height="55"></RowDefinition>
+            <RowDefinition Height="5"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="235"></RowDefinition>
+            <RowDefinition Height="215"></RowDefinition>
+            <RowDefinition Height="215"></RowDefinition>
             <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
-            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="5"></RowDefinition>
         </Grid.RowDefinitions>
-        
+
         <!--#region ROW 1:  INFO USER/ TIPO DE INVITACIONES Y LENGUAJE-->
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid Name="Row1">
@@ -35,7 +37,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!--#region INFORMACION USER-->
-                <GroupBox Grid.Column="0" Name="grbUser" Height="50" VerticalAlignment="Top">
+                <GroupBox Grid.Column="0" Name="grbUser" Height="45" VerticalAlignment="Top">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30"></ColumnDefinition>
@@ -46,9 +48,9 @@
                     </Grid>
                 </GroupBox>
                 <!--#endregion-->
-                
+
                 <!--#region TIPOS DE INVITACIONES (QUINIELLA, SHOW, INTERVAL)-->
-                <GroupBox Grid.Column="1" Name="grbTypeInvitations" Height="50" VerticalAlignment="Top">
+                <GroupBox Grid.Column="1" Name="grbTypeInvitations" Height="45" VerticalAlignment="Top">
                     <Grid Name="grdTypeInvitations">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition></ColumnDefinition>
@@ -61,32 +63,32 @@
                         </Grid.RowDefinitions>
 
                         <!--#region QUINIELLA-->
-                        <Label Grid.Column="0" Grid.Row="0" Name="lbQuiniella" Content="Quiniella"/>
+                        <Label Grid.Column="0" Grid.Row="0" Name="lbQuiniella" FontSize="10" HorizontalAlignment="Center">Quiniella</Label>
                         <CheckBox Grid.Column="0" Grid.Row="1" Name="chkQuiniella" Width="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <!--#endregion-->
-                        
+
                         <!--#region SHOW-->
-                        <Label Grid.Column="1" Grid.Row="0" Name="lblShow" Content="Show" HorizontalAlignment="Center"/>
+                        <Label Grid.Column="1" Grid.Row="0" Name="lblShow" HorizontalAlignment="Center" FontSize="10">Show</Label>
                         <CheckBox Grid.Column="1" Grid.Row="1" Name="chkShow" Width="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <!--#endregion-->
-                        
+
                         <!--#region INTERVAL-->
-                        <Label Grid.Column="2" Grid.Row="0" Name="lblInterval" Content="Interval" HorizontalAlignment="Center"/>
+                        <Label Grid.Column="2" Grid.Row="0" Name="lblInterval" FontSize="10" HorizontalAlignment="Center">Interval</Label>
                         <CheckBox Grid.Column="2" Grid.Row="1" Name="chkInterval" Width="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <!--#endregion-->
                     </Grid>
                 </GroupBox>
                 <!--#endregion-->
-                
+
                 <!--#region LENGUAJE-->
-                <GroupBox Grid.Column="2" Name="grbLanguage" Height="50" VerticalAlignment="Top">
+                <GroupBox Grid.Column="2" Name="grbLanguage" Height="45" VerticalAlignment="Top">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Label Grid.Row="0" Name="lblLanguage" Content="Language" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                        <ComboBox Grid.Row="1" Name="cmbLanguage"/>
+                        <Label Grid.Row="0" Name="lblLanguage" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Top">Language</Label>
+                        <ComboBox Grid.Row="1" Name="cmbLanguage" FontSize="10"/>
                     </Grid>
 
                 </GroupBox>
@@ -94,9 +96,9 @@
             </Grid>
         </Grid>
         <!--#endregion-->
-        
+
         <!--#region ROW 2: INFO INVITADO-->
-        <Grid Grid.Row="2" Grid.Column="1" Height="50" VerticalAlignment="Top">
+        <Grid Grid.Row="2" Grid.Column="1" Height="45" VerticalAlignment="Top">
             <GroupBox>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -112,40 +114,48 @@
                         <ColumnDefinition Name="colDate"></ColumnDefinition>
                         <ColumnDefinition Name="colTime"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <!--GUID-->
-                    <Label Grid.Column="0" Grid.Row="0" Name="lblGuid" Content="GUID" HorizontalAlignment="Center"/>
-                    <TextBox Grid.Column="0" Grid.Row="1" Name="txtGuid"/>
-                    
-                    <!-- NÚMERO DE RESERVACIÓN-->
-                    <Label Grid.Column="1" Grid.Row="0" Name="lblReservationNumber" Content="Rsrv Num." HorizontalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Grid.Row="1" Name="txtReservationNumber"/>
-                    
-                    <!--BOTÓN BUSCAR-->
-                    <Button Grid.Column="2" Grid.Row="1" Content="Search" Width="80"/>
 
-                    <!--OUT. INVIT .-->
-                    <Label Grid.Column="3" Grid.Row="0" Name="lblOutInvitation" Content="Out Invit." HorizontalAlignment="Center"/>
-                    <TextBox Grid.Column="3" Grid.Row="1" Name="txtOutInvitation"/>
-                    
-                    <!--REBOOK REF.-->
-                    <Label Grid.Column="4" Grid.Row="0" Name="lblRebookRef" Content="Rebook Ref." HorizontalAlignment="Center"/>
-                    <TextBox Grid.Column="4" Grid.Row="1" Name="txtRebookRef"/>
+                    <!--#region GUID-->
+                    <Label Grid.Column="0" Grid.Row="0" Name="lblGuid" HorizontalAlignment="Center" FontSize="10">GUID</Label>
+                    <TextBox Grid.Column="0" Grid.Row="1" Name="txtGuid" FontSize="10"/>
+                    <!--#endregion-->
 
-                    <!--DATE-->
-                    <Label Grid.Column="5" Grid.Row="0" Name="lblDate" Content="Date" HorizontalAlignment="Center"/>
-                    <TextBox Grid.Column="5" Grid.Row="1" Name="txtDate"/>
+                    <!--#region NÚMERO DE RESERVACIÓN-->
+                    <Label Grid.Column="1" Grid.Row="0" Name="lblReservationNumber" HorizontalAlignment="Center" FontSize="10">Rsrv Num.</Label>
+                    <TextBox Grid.Column="1" Grid.Row="1" Name="txtReservationNumber" FontSize="10"/>
+                    <!--#endregion-->
 
-                    <!--TIME-->
-                    <Label Grid.Column="6" Grid.Row="0" Name="lblTime" Content="Time" HorizontalAlignment="Center"/>
-                    <TextBox Grid.Column="6" Grid.Row="1" Name="txtTime"/>
+                    <!--#region BOTÓN BUSCAR-->
+                    <Button Grid.Column="2" Grid.Row="1" Width="80" Name="btnSearch" Click="btnSearch_Click" FontSize="10">Search</Button>
+                    <!--#endregion-->
+
+                    <!--#region OUT. INVIT .-->
+                    <Label Grid.Column="3" Grid.Row="0" Name="lblOutInvitation" FontSize="10" HorizontalAlignment="Center">Out Invit.</Label>
+                    <TextBox Grid.Column="3" Grid.Row="1" Name="txtOutInvitation" FontSize="10"/>
+                    <!--#endregion-->
+
+                    <!--#region REBOOK REF.-->
+                    <Label Grid.Column="4" Grid.Row="0" Name="lblRebookRef" FontSize="10" HorizontalAlignment="Center">Rebook Ref.</Label>
+                    <TextBox Grid.Column="4" Grid.Row="1" Name="txtRebookRef" FontSize="10"/>
+                    <!--#endregion-->
+
+                    <!--#region DATE-->
+                    <Label Grid.Column="5" Grid.Row="0" Name="lblDate" FontSize="10" HorizontalAlignment="Center">Date</Label>
+                    <TextBox Grid.Column="5" Grid.Row="1" Name="txtDate" FontSize="10"/>
+                    <!--#endregion-->
+
+                    <!--#region TIME-->
+                    <Label Grid.Column="6" Grid.Row="0" Name="lblTime" FontSize="10" HorizontalAlignment="Center">Time</Label>
+                    <TextBox Grid.Column="6" Grid.Row="1" Name="txtTime" FontSize="10"/>
+                    <!--#endregion-->
                 </Grid>
             </GroupBox>
-            
+
         </Grid>
         <!--#endregion-->
-        
+
         <!--#region ROW 3: PÉRFIL DE OPERA-->
-        <Grid Grid.Column="1" Grid.Row="3" Height="50" VerticalAlignment="Top">
+        <Grid Grid.Column="1" Grid.Row="3" Height="45" VerticalAlignment="Top">
             <GroupBox>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -158,26 +168,27 @@
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Column="0" Grid.Row="0" Content="ID" HorizontalAlignment="Center"/>
-                    <TextBox Grid.Column="0" Grid.Row="1" Name="txtIDOpera"/>
+                    <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" FontSize="10">ID</Label>
+                    <TextBox Grid.Column="0" Grid.Row="1" Name="txtIDOpera" FontSize="10"/>
 
-                    <Label Grid.Column="1" Grid.Row="0" Content="Last Name" HorizontalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Grid.Row="1" Name="txtLastNameOpera"/>
+                    <Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" FontSize="10">Last Name</Label>
+                    <TextBox Grid.Column="1" Grid.Row="1" Name="txtLastNameOpera" FontSize="10"/>
 
-                    <Label Grid.Column="2" Grid.Row="0" Content="First Name" HorizontalAlignment="Center"/>
-                    <TextBox Grid.Column="2" Grid.Row="1" Name="txtFirstNameOpera"/>
+                    <Label Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" FontSize="10">First Name</Label>
+                    <TextBox Grid.Column="2" Grid.Row="1" Name="txtFirstNameOpera" FontSize="10"/>
                 </Grid>
             </GroupBox>
         </Grid>
         <!--#endregion-->
-        
-        <!--#region ROW 4: GUEST 1/GUEST 2/GIFTS -->
-        <Grid Grid.Column="1" Grid.Row="4" Height="230" VerticalAlignment="Top">
+
+        <!--#region ROW 4: INVITADO 1/INVITADO 2/REGALOS -->
+        <Grid Grid.Column="1" Grid.Row="4" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
+
             <!--#region GUEST 1-->
             <GroupBox Grid.Column="0" Header="Guest 1">
                 <Grid>
@@ -197,23 +208,23 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Label Grid.ColumnSpan="2" Grid.Row="0" Content="Last Name"/>
-                    <TextBox  Grid.ColumnSpan="2" Grid.Row="1" Name="txtLastNameGuest1"/>
-                    
-                    <Label Grid.ColumnSpan="2" Grid.Row="2" Content="First Name"/>
-                    <TextBox  Grid.ColumnSpan="2" Grid.Row="3" Name="txtFirstNameGuest1"/>
-                    
-                    <Label Grid.Column="0"  Grid.Row="4" Content="Age"/>
-                    <TextBox  Grid.Column="0" Grid.Row="5" Name="txtAgeGuest1"/>
-                    
-                    <Label Grid.Column="1" Grid.Row="4" Content="Marital Status"/>
-                    <ComboBox Grid.Column="2" Grid.Row="5" Name="cmbMaritalStatusGuest1"/>
+                    <Label Grid.ColumnSpan="2" Grid.Row="0" FontSize="10">Last Name</Label>
+                    <TextBox  Grid.ColumnSpan="2" Grid.Row="1" Name="txtLastNameGuest1" FontSize="10"/>
 
-                    <Label Grid.ColumnSpan="2" Grid.Row="6" Content="Ocuppation"/>
-                    <TextBox  Grid.ColumnSpan="2" Grid.Row="7" Name="txtOcuppationGuest1"/>
-                    
-                    <Label Grid.ColumnSpan="2" Grid.Row="8" Content="Email"/>
-                    <TextBox  Grid.ColumnSpan="2" Grid.Row="9" Name="txtEmailGuest1"/>
+                    <Label Grid.ColumnSpan="2" Grid.Row="2" FontSize="10">First Name</Label>
+                    <TextBox  Grid.ColumnSpan="2" Grid.Row="3" Name="txtFirstNameGuest1" FontSize="10"/>
+
+                    <Label Grid.Column="0"  Grid.Row="4" FontSize="10">Age</Label>
+                    <TextBox  Grid.Column="0" Grid.Row="5" Name="txtAgeGuest1" FontSize="10"/>
+
+                    <Label Grid.Column="1" Grid.Row="4" FontSize="10">Marital Status</Label>
+                    <ComboBox Grid.Column="2" Grid.Row="5" Name="cmbMaritalStatusGuest1" FontSize="10"/>
+
+                    <Label Grid.ColumnSpan="2" Grid.Row="6" FontSize="10">Ocuppation</Label>
+                    <TextBox  Grid.ColumnSpan="2" Grid.Row="7" Name="txtOcuppationGuest1" FontSize="10"/>
+
+                    <Label Grid.ColumnSpan="2" Grid.Row="8" FontSize="10">Email</Label>
+                    <TextBox  Grid.ColumnSpan="2" Grid.Row="9" Name="txtEmailGuest1" FontSize="10"/>
                 </Grid>
             </GroupBox>
             <!--#endregion-->
@@ -237,32 +248,32 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Label Grid.ColumnSpan="2" Grid.Row="0" Content="Last Name"/>
-                    <TextBox  Grid.ColumnSpan="2" Grid.Row="1" Name="txtLastNameGuest2"/>
+                    <Label Grid.ColumnSpan="2" Grid.Row="0" FontSize="10">Last Name</Label>
+                    <TextBox  Grid.ColumnSpan="2" Grid.Row="1" Name="txtLastNameGuest2" FontSize="10"/>
 
-                    <Label Grid.ColumnSpan="2" Grid.Row="2" Content="First Name"/>
-                    <TextBox  Grid.ColumnSpan="2" Grid.Row="3" Name="txtFirstNameGuest2"/>
+                    <Label Grid.ColumnSpan="2" Grid.Row="2" FontSize="10">First Name</Label>
+                    <TextBox  Grid.ColumnSpan="2" Grid.Row="3" Name="txtFirstNameGuest2" FontSize="10"/>
 
-                    <Label Grid.Column="0"  Grid.Row="4" Content="Age"/>
-                    <TextBox  Grid.Column="0" Grid.Row="5" Name="txtAgeGuest2"/>
+                    <Label Grid.Column="0"  Grid.Row="4" FontSize="10">Age</Label>
+                    <TextBox  Grid.Column="0" Grid.Row="5" Name="txtAgeGuest2" FontSize="10"/>
 
-                    <Label Grid.Column="1" Grid.Row="4" Content="Marital Status"/>
-                    <ComboBox Grid.Column="2" Grid.Row="5" Name="cmbMaritalStatusGuest2"/>
+                    <Label Grid.Column="1" Grid.Row="4" FontSize="10">Marital Status</Label>
+                    <ComboBox Grid.Column="2" Grid.Row="5" Name="cmbMaritalStatusGuest2" FontSize="10"/>
 
-                    <Label Grid.ColumnSpan="2" Grid.Row="6" Content="Ocuppation"/>
-                    <TextBox  Grid.ColumnSpan="2" Grid.Row="7" Name="txtOcuppationGuest2"/>
+                    <Label Grid.ColumnSpan="2" Grid.Row="6" FontSize="10">Ocuppation</Label>
+                    <TextBox  Grid.ColumnSpan="2" Grid.Row="7" Name="txtOcuppationGuest2" FontSize="10"/>
 
-                    <Label Grid.ColumnSpan="2" Grid.Row="8" Content="Email"/>
-                    <TextBox  Grid.ColumnSpan="2" Grid.Row="9" Name="txtEmailGuest2"/>
+                    <Label Grid.ColumnSpan="2" Grid.Row="8" FontSize="10">Email</Label>
+                    <TextBox  Grid.ColumnSpan="2" Grid.Row="9" Name="txtEmailGuest2" FontSize="10"/>
                 </Grid>
             </GroupBox>
             <!--#endregion-->
-            
+
             <!--#region GIFTS-->
             <GroupBox Grid.Column="2" Header="Gifts">
                 <Grid >
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="160"></RowDefinition>
+                        <RowDefinition Height="150"></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
@@ -273,18 +284,347 @@
                     </Grid.ColumnDefinitions>
                     <DataGrid Grid.ColumnSpan="3" Grid.Row="0" Name="dtgGifts"></DataGrid>
 
-                    <Label Grid.Column="0" Grid.Row="1" Content="Max Auth." HorizontalAlignment="Center"/>
-                    <TextBox Grid.Column="0" Grid.Row="2" Name="txtMaxAuth"/>
+                    <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" FontSize="10">Max Auth.</Label>
+                    <TextBox Grid.Column="0" Grid.Row="2" Name="txtMaxAuth" FontSize="10"/>
 
-                    <Label Grid.Column="1" Grid.Row="1" Content="Total Cost." HorizontalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Grid.Row="2" Name="txtTotalCost"/>
-                    
-                    <Label Grid.Column="2" Grid.Row="1" Content="Total Price." HorizontalAlignment="Center"/>
-                    <TextBox Grid.Column="2" Grid.Row="2" Name="txtTotalPrice"/>
+                    <Label Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" FontSize="10">Total Cost.</Label>
+                    <TextBox Grid.Column="1" Grid.Row="2" Name="txtTotalCost" FontSize="10"/>
+
+                    <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" FontSize="10">Total Price.</Label>
+                    <TextBox Grid.Column="2" Grid.Row="2" Name="txtTotalPrice" FontSize="10"/>
                 </Grid>
             </GroupBox>
-            
+
             <!--#endregion-->
+
+
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region ROW 5: INFORMACION DEL PR/ OTRA INFORMACIÓN-->
+        <Grid Grid.Column="1" Grid.Row="5" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <!--#region INFORMACION DEL PR-->
+            <GroupBox Header="">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition MaxWidth="50"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Name="rowPRContractTitles"></RowDefinition>
+                        <RowDefinition Name="rowPRContract"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <!--#region PR CONTRAC-->
+                    <Label Grid.Column="1" Grid.Row="0" FontSize="10">PR Contract</Label>
+                    <TextBox Grid.Column="1" Grid.Row="1" Name="txtPRContract" FontSize="10"/>
+                    <ComboBox Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" Name="cmbPRContract" FontSize="10"/>
+                    <!--#endregion-->
+
+                    <!--#region TITULOS PR / BOTON CHANGE -->
+                    <Button Grid.Column="0" Grid.Row="2" Name="btnChange" Click="btnChange_Click" FontSize="10">Change</Button>
+                    <Label Grid.Column="1" Grid.Row="2" FontSize="10">PR</Label>
+                    <!--#endregion-->
+
+                    <!--#region CONTROLES PR / BOTON RESCHEDULE -->
+                    <Button Grid.Column="0" Grid.Row="3" Name="btnReschedule" Click="btnReschedule_Click">Reschedule</Button>
+                    <TextBox Grid.Column="1" Grid.Row="3" Name="txtPR"/>
+                    <ComboBox Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="3" Name="cmbPR"/>
+                    <!--#endregion-->
+
+                    <!--#region TITULOS SALES ROOM / LOCATION / -->
+                    <Button Grid.Column="0" Grid.Row="4" Name="btnRebook" Click="btnRebook_Click" FontSize="10">Rebook</Button>
+                    <Label Grid.Column="1" Grid.Row="4" Name="lblSalesRoom" FontSize="10">Sales</Label>
+                    <Label Grid.Column="1" Grid.Row="4" Name="lblLocation" Visibility="Hidden" FontSize="10">Location</Label>
+                    <TextBox Grid.Column="1" Grid.Row="5" Name="txtSalesRoom" FontSize="10"/>
+                    <TextBox Grid.Column="1" Grid.Row="5" Name="txtLocation" Visibility="Hidden" FontSize="10"/>
+                    <ComboBox Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" Name="cmbPRSalesRoom" FontSize="10"/>
+                    <ComboBox Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" Name="cmbLocation" Visibility="Hidden" FontSize="10"/>
+                    <!--#endregion-->
+
+                    <!--#region TITULOS BEFORE IN & OUT / BOOKING DATE/TIME /DIRECT  Before In& Out-->
+                    <Label Grid.Column="0" Grid.Row="6" FontSize="10">Before In - Out</Label>
+                    <Label Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="6" FontSize="10">Book Date and Time</Label>
+                    <Label Grid.Column="3" Grid.Row="6" HorizontalAlignment="Center" FontSize="10">Direct</Label>
+                    <!--#endregion-->
+
+                    <!--#region CONTROLES BEFORE IN & OUT / BOOKING DATE/TIME /DIRECT  Before In& Out-->
+                    <CheckBox Grid.Column="0" Grid.Row="7" Name="chkBeforeInOut" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <DatePicker Grid.Column="1" Grid.Row="7" Name="txtBookingDate" FontSize="10"></DatePicker>
+                    <ComboBox Grid.Column="2" Grid.Row="7" Name="cmbBookingTime" FontSize="10"/>
+                    <CheckBox Grid.Column="3" Grid.Row="7" Name="chkDirect" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10"/>
+                    <!--#endregion-->
+
+                    <!--#region TITULOS LOCATION / RESCHEDULE / FLIGHT # / SALES ROOM-->
+                    <Label Grid.Column="0" Grid.Row="8" Name="lblLocation2" FontSize="10">Location</Label>
+                    <Label Grid.Column="0" Grid.Row="8" Name="lblSalesRoom2" Visibility="Hidden" FontSize="10">Sales Room</Label>
+                    <Label Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="8" Name="lblReschedule" FontSize="10">Reschedule Date and Time</Label>
+                    <Label Grid.Column="2" Grid.Row="8" Name="lblFlightNumber" Visibility="Hidden" FontSize="10">Flight Number</Label>
+                    <Label Grid.Column="3" Grid.Row="8" Name="lblRefresh" FontSize="10">Refresh</Label>
+                    <!--#endregion-->
+
+                    <!--#region CONTROLES LOCATION / RESCHEDULE / FLIGHT #-->
+                    <TextBox Grid.Column="0" Grid.Row="9" Name="txtLocation2" FontSize="10"/>
+                    <TextBox Grid.Column="0" Grid.Row="9" Name="txtSalesRoom2" Visibility="Hidden" FontSize="10"/>
+                    <TextBox Grid.Column="1" Grid.Row="9" Name="txtRescheduleDate" FontSize="10"/>
+                    <ComboBox Grid.Column="2" Grid.Row="9" Name="cmbRescheduleTime" FontSize="10"/>
+                    <TextBox Grid.Column="2" Grid.Row="9" Name="txtFlightNumber" FontSize="10" Visibility="Hidden"/>
+                    <CheckBox Grid.Column="3" Grid.Row="9" Name="chkRefresh" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10"/>
+                    <!--#endregion-->
+                </Grid>
+            </GroupBox>
+            <!--#endregion-->
+
+            <!--#region OTRA INFORMACION-->
+            <GroupBox Grid.Column="1" Header="Other Information">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <!--#region OTRA INFORMACION-->
+                    <TextBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Name="txtOtherInformation" FontSize="10"/>
+                    <!--#endregion-->
+
+                    <!--#region TITULOS ROOM / HOTEL-->
+                    <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" FontSize="10">Room</Label>
+                    <Label Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center" FontSize="10">Hotel</Label>
+                    <!--#endregion-->
+
+                    <!--#region CONTROLES ROOM / HOTEL-->
+                    <TextBox Grid.Column="0" Grid.Row="2" Name="txtRoom" FontSize="10"/>
+                    <ComboBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Name="cmbHotel" FontSize="10"/>
+                    <!--#endregion-->
+
+                    <!--#region TITULOS AGENCY -->
+                    <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center">Agency</Label>
+                    <!--#endregion-->
+
+                    <!--#region CONTROLES AGENCY-->
+                    <TextBox Grid.Column="0" Grid.Row="4" Name="txtAgency" FontSize="10"/>
+                    <ComboBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4" Name="cmbAgency" FontSize="10"/>
+                    <!--#endregion-->
+
+                    <!--#region TITULOS COUNTRY -->
+                    <Label Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center" FontSize="10">Country</Label>
+                    <!--#endregion-->
+
+                    <!--#region CONTROLES COUNTRY-->
+                    <TextBox Grid.Column="0" Grid.Row="6" Name="txtCountry" FontSize="10"/>
+                    <ComboBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="6" Name="cmbCountry" FontSize="10"/>
+                    <!--#endregion-->
+
+                    <!--#region TITULOS PAX 7 ARRIVAL / DEPARTURE -->
+                    <Label Grid.Column="0" Grid.Row="7" HorizontalAlignment="Center" FontSize="10">Pax</Label>
+                    <Label Grid.Column="1" Grid.Row="7" HorizontalAlignment="Center" FontSize="10">Arrival</Label>
+                    <Label Grid.Column="2" Grid.Row="7" HorizontalAlignment="Center" FontSize="10">Departure</Label>
+                    <!--#endregion-->
+
+                    <!--#region CONTROLES PAX 7 ARRIVAL / DEPARTURE-->
+                    <TextBox Grid.Column="0" Grid.Row="8" Name="txtPax"/>
+                    <TextBox Grid.Column="1" Grid.Row="8" Name="txtArrival"/>
+                    <TextBox Grid.Column="2" Grid.Row="8" Name="txtDeparture"/>
+                    <!--#endregion-->
+                </Grid>
+            </GroupBox>
+            <!--#endregion-->
+
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region ROW 6: DEPOSITS-->
+        <Grid Grid.Column="1" Grid.Row="6" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition ></RowDefinition>
+                <RowDefinition ></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <!--#region DEPOSITS-->
+            <GroupBox Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Header="Deposits">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <!--#region GRID DEPOSITOS-->
+                    <DataGrid Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="3" Name="dtgDeposits"></DataGrid>
+                    <!--#endregion-->
+
+                    <!--#region BURNED / CURRENCY-->
+                    <Label Grid.Column="0" Grid.Row="3" FontSize="10">Burned</Label>
+                    <TextBox Grid.Column="1" Grid.Row="3" Name="txtBurned"/>
+                    <Label Grid.Column="2" Grid.Row="3" FontSize="10">Currency</Label>
+                    <ComboBox Grid.Column="3" Grid.Row="3" FontSize="10"/>
+                    <!--#endregion-->
+
+                    <!--#region PAYMENT TYPE-->
+                    <Label Grid.Column="0" Grid.Row="4" FontSize="10">Payment Type</Label>
+                    <ComboBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4" Name="cmbPaymentType" FontSize="10"/>
+                    <!--#endregion-->
+
+                    <!--#region RESORT-->
+                    <Label Grid.Column="0" Grid.Row="5" FontSize="10">Resort</Label>
+                    <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="5" Name="cmbResort" FontSize="10"/>
+                    <!--#endregion-->
+
+                </Grid>
+            </GroupBox>
+            <!--#endregion-->
+            
+            <!--#region GUEST STATUS-->
+            <GroupBox Grid.Column="1" Grid.Row="0" Header="Guest Status">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <!--#region GUEST STATUS-->
+                    <Label Grid.Column="0" Grid.Row="0" FontSize="10">Guest Status</Label>
+                    <TextBox Grid.Column="1" Grid.Row="0" Name="txtGuestStatus" FontSize="10"/>
+                    <!--#endregion-->
+                    
+                    <!--#region GRID GUEST STATUS-->
+                    <DataGrid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Name="dtgGuestStatus"></DataGrid>
+                    <!--#endregion-->
+                </Grid>
+            </GroupBox>
+            <!--#endregion-->
+
+            <!--#region CREDIT CARD-->
+            <GroupBox Grid.Column="1" Grid.Row="1" Header="Credit Card">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <!--#region CREDIT CARD COMPANY-->
+                    <Label Grid.Column="0" Grid.Row="0" FontSize="10">CC Company</Label>
+                    <TextBox Grid.Column="1" Grid.Row="0" Name="txtxCCCompany" FontSize="10"/>
+                    <!--#endregion-->
+
+                    <!--#region GRID CREDIT CARD COMPANY-->
+                    <DataGrid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Name="dtgCCCompany"></DataGrid>
+                    <!--#endregion-->
+                </Grid>
+            </GroupBox>
+            <!--#endregion-->
+        </Grid>
+        <!--#endregion-->
+        
+        <!--#region ROW 7: ADDITIONAL INFORMATION / ELECTRONIC PURSE / ROOMS QUANTITY -->
+        <Grid Grid.Column="1" Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <!--#region GRID ADDITIONAL INFORMATION-->
+            <GroupBox Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Header="Additional Infomation">
+                <DataGrid Name="dtgAdditInform"></DataGrid>
+            </GroupBox>
+            <!--#endregion-->
+            
+            <!--#region ELECTRONIC PURSE-->
+            <GroupBox Grid.Column="1" Grid.Row="0" Header="Electronic Purse">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Label Grid.Column="0" FontSize="10">Account</Label>
+                    <TextBox Grid.Column="1" Name="txtElectronicPurse"></TextBox>
+                    <Button Grid.Column="2">Included Tours</Button>
+                </Grid>
+            </GroupBox>
+            <!--#endregion-->
+            
+            <!--#region ROOMS QUANTITY-->
+            <GroupBox Grid.Column="1" Grid.Row="1" Header="Rooms Quantity">
+                <TextBox Name="txtRoomQuantity"></TextBox>
+            </GroupBox>
+            <!--#endregion-->
+            
+        </Grid>
+        <!--#endregion-->
+        
+        <!--#region ROW 8: AREA DE BOTONES-->
+        <Grid Grid.Column="1" Grid.Row="8">
+            <GroupBox>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="1">Edit</Button>
+                    <Button Grid.Column="2">Print</Button>
+                    <Button Grid.Column="3">Save</Button>
+                    <Button Grid.Column="4">Cancel</Button>
+                    <Button Grid.Column="5">Log</Button>
+                </Grid>
+            </GroupBox>
         </Grid>
         <!--#endregion-->
     </Grid>

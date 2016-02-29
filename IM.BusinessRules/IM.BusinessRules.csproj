@@ -55,6 +55,7 @@
     <Compile Include="BR\BRPersonnel.cs" />
     <Compile Include="BR\BRWhsMovs.cs" />
     <Compile Include="Entities\UserNormalLogin.cs" />
+    <Compile Include="Enums\InvitationType.cs" />
     <Compile Include="Login\Login.cs" />
     <Compile Include="BR\BRLeadSources.cs" />
     <Compile Include="BR\BRMarkets.cs" />
