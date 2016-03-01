@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using IM.InventoryMoves.Clases;
+using IM.InventoryMovements.Clases;
 using IM.Model;
 using IM.Model.Entities;
 using IM.BusinessRules.BR;
@@ -20,12 +20,12 @@ using IM.Base.Forms;
 using System.Data.Entity.SqlServer;
 using System.ComponentModel;
 
-namespace IM.InventoryMoves
+namespace IM.InventoryMovements
 {
   /// <summary>
-  /// Interaction logic for frmInventoryMoves.xaml
+  /// Interaction logic for frmInventoryMovements.xaml
   /// </summary>
-  public partial class frmInventoryMoves : Window
+  public partial class frmInventoryMovements : Window
   {
     #region Variables
     private DateTime? _dtmcurrent = null; //Variable para manejar un problema del control DatePicker
@@ -38,7 +38,7 @@ namespace IM.InventoryMoves
     CollectionViewSource getGiftsViewSource;
     CollectionViewSource whsMovViewSource;
     #endregion
-    public frmInventoryMoves( UserData userData)
+    public frmInventoryMovements( UserData userData)
     {
       InitializeComponent();
       _userLogin = userData.User;
@@ -52,7 +52,7 @@ namespace IM.InventoryMoves
     /// <history>
     /// [edgrodriguez] 18/Feb/2016 Created
     /// </history>
-    private void frmInventoryMoves_Loaded(object sender, RoutedEventArgs e)
+    private void frmInventoryMovements_Loaded(object sender, RoutedEventArgs e)
     {
       _salesRoom = BRSalesRooms.GetSalesRoom(_warehouseLogin.whID);
       CkeckKeysPress(StatusBarCap, Key.Capital);
@@ -72,7 +72,7 @@ namespace IM.InventoryMoves
     /// <history>
     /// [edgrodriguez] 18/Feb/2016 Created
     /// </history>
-    private void frmInventoryMoves_KeyDown(object sender, KeyEventArgs e)
+    private void frmInventoryMovements_KeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key == Key.Capital)
       {

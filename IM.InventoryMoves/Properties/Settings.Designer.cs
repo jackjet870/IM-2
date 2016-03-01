@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace IM.InventoryMoves.Properties {
+namespace IM.InventoryMovements.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

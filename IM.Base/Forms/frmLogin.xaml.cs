@@ -15,6 +15,7 @@ using IM.Model;
 using IM.Model.Entities;
 using IM.BusinessRules.BR;
 using IM.Model.Enums;
+using System.IO;
 
 namespace IM.Base.Forms
 {
@@ -31,6 +32,7 @@ namespace IM.Base.Forms
     private List<GetLocationsByUser> _lstLocaByUsr = new List<GetLocationsByUser>();
     private GetSalesRoom _gsrObj = new GetSalesRoom();
     #endregion
+    private Helpers.IniFileHelper _iniFileHelper;
 
     /// <summary>
     /// Contructor Modificado
@@ -227,6 +229,7 @@ namespace IM.Base.Forms
       //Se verifican las banderas de ChangePassword y AutoSign
       chkAutoSign.Visibility = (_blnAutoSign) ? Visibility.Visible : Visibility.Hidden;
       chkChangePwd.Visibility=(_blnChangePassword) ? Visibility.Visible : Visibility.Hidden;
+      LoadFromFile();
     }
 
     /// <summary>
@@ -289,7 +292,24 @@ namespace IM.Base.Forms
 
     private void LoadFromFile()
     {
-
+      string strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
+      if (File.Exists(strArchivo))
+      {
+        _iniFileHelper = new Helpers.IniFileHelper(strArchivo);
+        txtUser.Text = _iniFileHelper.readText("Login", "UserName", "");
+        txtPassword.Password = _iniFileHelper.readText("Login", "Password", "");
+        switch(_loginType)
+        {
+          case LoginType.Warehouse:
+            if (cmbLocation.Visibility == Visibility.Visible)
+            {
+              txtUser_LostFocus(null, null);
+              cmbLocation.SelectedValue = _iniFileHelper.readText("Login", "Warehouse", "");
+            }
+            btnAceptar.Focus();
+            break;
+        }       
+      }
     }
   }
 }

@@ -9,7 +9,7 @@ using IM.Model.Entities;
 using IM.Base.Forms;
 using IM.Model.Enums;
 
-namespace IM.InventoryMoves
+namespace IM.InventoryMovements
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -28,7 +28,7 @@ namespace IM.InventoryMoves
       if (frmLogin.isAuthenticated)
       {
         UserData userData = frmLogin.userData;
-        frmInventoryMoves frmInvMovs = new frmInventoryMoves(userData);
+        frmInventoryMovements frmInvMovs = new frmInventoryMovements(userData);
         frmInvMovs.ShowDialog();
         frmSplash.Close();
       }

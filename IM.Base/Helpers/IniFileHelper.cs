@@ -103,40 +103,6 @@ namespace IM.Base.Helpers
       // Borrar una sección
       WritePrivateProfileString(sSection, 0, 0, sIniFile);
     }
-    //public string IniGet(string sFileName, string sSection, string sKeyName, string sDefault)
-    //{
-    //  //--------------------------------------------------------------------------
-    //  // Devuelve el valor de una clave de un fichero INI
-    //  // Los parámetros son:
-    //  //   sFileName   El fichero INI
-    //  //   sSection    La sección de la que se quiere leer
-    //  //   sKeyName    Clave
-    //  //   sDefault    Valor opcional que devolverá si no se encuentra la clave
-    //  //--------------------------------------------------------------------------
-    //  int ret;
-    //  string sRetVal;
-    //  //
-    //  sRetVal = new string(' ', 255);
-    //  //
-    //  ret = GetPrivateProfileString(sSection, sKeyName, sDefault, sRetVal, sRetVal.Length, sFileName);
-    //  if (ret == 0)
-    //  {
-    //    return sDefault;
-    //  }
-    //  else
-    //  {
-    //    return sRetVal.Substring(0, ret);
-    //  }
-    //}
-    //public void IniWrite(string sFileName, string sSection, string sKeyName, string sValue)
-    //{
-    //  //--------------------------------------------------------------------------
-    //  // Guarda los datos de configuración
-    //  // Los parámetros son los mismos que en LeerIni
-    //  // Siendo sValue el valor a guardar
-    //  //
-    //  WritePrivateProfileString(sSection, sKeyName, sValue, sFileName);
-    //}
     public string[] IniGetSection(string sFileName, string sSection)
     {
       //--------------------------------------------------------------------------
@@ -253,7 +219,7 @@ namespace IM.Base.Helpers
       else
         Value = Convert.ToDateTime(Text);
 
-      return Value; 
+      return Value;
     }
 
     public void writeDate(string Section, string Key, DateTime Value)

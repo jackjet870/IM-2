@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.BusinessRules", "IM.Busi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Host", "IM.Host\IM.Host.csproj", "{F51C105B-9EC2-4617-8FD4-0729AEB50AA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.InventoryMoves", "IM.InventoryMoves\IM.InventoryMoves.csproj", "{9351E555-6800-4E9C-9BDE-BC8DB9D29711}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.InventoryMovements", "IM.InventoryMoves\IM.InventoryMovements.csproj", "{9351E555-6800-4E9C-9BDE-BC8DB9D29711}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Inhouse", "IM.Inhouse\IM.Inhouse.csproj", "{B803B281-004C-4D8F-BB9F-065E3B19FA70}"
 EndProject
