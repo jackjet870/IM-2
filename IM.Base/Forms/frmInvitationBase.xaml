@@ -543,7 +543,7 @@
                         <!--#endregion-->
 
                         <!--#region ROOMS QUANTITY-->
-                        <GroupBox Grid.Column="1" Grid.Row="1" Header="Rooms Quantity">
+                        <GroupBox Grid.Column="1" Grid.Row="1" Header="Rooms Quantity" Name="grbRoomQuantity">
                             <TextBox Name="txtRoomQuantity" Width="100" Height="35" HorizontalAlignment="Center"></TextBox>
                         </GroupBox>
                         <!--#endregion-->

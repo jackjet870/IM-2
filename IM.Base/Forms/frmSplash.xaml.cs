@@ -24,7 +24,7 @@ namespace IM.Base.Forms
             InitializeComponent();
         }
 
-    public void ShowLogin(ref frmLoginPlace frmLogin)
+    public void ShowLogin(ref frmLogin frmLogin)
     {
       frmLogin.WindowStyle = WindowStyle.None;
       frmLogin.ShowInTaskbar = false;

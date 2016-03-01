@@ -30,6 +30,7 @@ namespace IM.Model
         public virtual DbSet<Guest> Guests { get; set; }
         public virtual DbSet<SalesRoom> SalesRooms { get; set; }
         public virtual DbSet<WhsMov> WhsMovs { get; set; }
+        public virtual DbSet<Personnel> Personnels { get; set; }
     
         public virtual ObjectResult<GetCountries> USP_OR_GetCountries(Nullable<byte> status)
         {
@@ -229,6 +230,43 @@ namespace IM.Model
                 new ObjectParameter("Place", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<userLogin>("USP_OR_Login", loginTypeParameter, userParameter, placeParameter);
+        }
+    
+        public virtual ObjectResult<USP_OR_GetPersonnel_Result> USP_OR_GetPersonnel(string leadSources, string salesRooms, string roles, Nullable<byte> status, string permission, string relationalOperator, Nullable<int> permissionLevel, string dept)
+        {
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            var rolesParameter = roles != null ?
+                new ObjectParameter("Roles", roles) :
+                new ObjectParameter("Roles", typeof(string));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(byte));
+    
+            var permissionParameter = permission != null ?
+                new ObjectParameter("Permission", permission) :
+                new ObjectParameter("Permission", typeof(string));
+    
+            var relationalOperatorParameter = relationalOperator != null ?
+                new ObjectParameter("RelationalOperator", relationalOperator) :
+                new ObjectParameter("RelationalOperator", typeof(string));
+    
+            var permissionLevelParameter = permissionLevel.HasValue ?
+                new ObjectParameter("PermissionLevel", permissionLevel) :
+                new ObjectParameter("PermissionLevel", typeof(int));
+    
+            var deptParameter = dept != null ?
+                new ObjectParameter("Dept", dept) :
+                new ObjectParameter("Dept", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<USP_OR_GetPersonnel_Result>("USP_OR_GetPersonnel", leadSourcesParameter, salesRoomsParameter, rolesParameter, statusParameter, permissionParameter, relationalOperatorParameter, permissionLevelParameter, deptParameter);
         }
     }
 }

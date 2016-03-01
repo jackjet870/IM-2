@@ -22,7 +22,7 @@ namespace IM.InventoryMoves
 
 
       frmSplash frmSplash = new frmSplash();
-      frmLoginPlace frmLogin = new frmLoginPlace(frmSplash, true, LoginType.Warehouse);
+      frmLogin frmLogin = new frmLogin(frmSplash, true, LoginType.Warehouse);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.isAuthenticated)

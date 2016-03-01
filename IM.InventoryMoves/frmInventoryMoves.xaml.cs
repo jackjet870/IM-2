@@ -62,11 +62,7 @@ namespace IM.InventoryMoves
       lblWareHouse.Content = _warehouseLogin.whN;
       lblCloseDate.Content = "Close Receipts Date: " + _salesRoom.srGiftsRcptCloseD.ToString("dd/MMM/yyyy");
       InicializarGrdNew();
-      using (var dbContext = new Model.IMEntities())
-      {
-        var dQuery = dbContext.Database.SqlQuery<DateTime>("SELECT GETDATE()");
-        _dtmServerdate = dQuery.AsEnumerable().First();
-      }    
+      _dtmServerdate = BRHelpers.GetServerDate();
     }
 
     /// <summary>

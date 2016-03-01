@@ -55,7 +55,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
-    <Compile Include="Entities\PersonnelInvitationBase.cs" />
     <Compile Include="Entities\userData.cs" />
     <Compile Include="Enums\LoginType.cs" />
     <Compile Include="GetAgencies.cs">
@@ -125,6 +124,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="permissionsLogin.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Personnel.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
