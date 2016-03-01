@@ -28,6 +28,7 @@ namespace IM.Base.Forms
     public bool isAuthenticated { get; set; }
     #region  Variables login tipo Almacen
     private List<GetWarehousesByUser> _lstWhsByUsr = new List<GetWarehousesByUser>();
+    private List<GetLocationsByUser> _lstLocaByUsr = new List<GetLocationsByUser>();
     private GetSalesRoom _gsrObj = new GetSalesRoom();
     #endregion
 
@@ -56,6 +57,7 @@ namespace IM.Base.Forms
     /// [vipacheco] 2-26-2016 Created
     /// [edgrodriguez] 27/02/2016 Modified
     /// [edgrodriguez] 29/02/2016 Modified
+    /// [jorcanche] 01/03/2016 Modified (Se agrega el "Case" Location)
     /// </history>
     private void btnAceptar_Click(object sender, RoutedEventArgs e)
     {
@@ -114,6 +116,15 @@ namespace IM.Base.Forms
             return;
           }
           break;
+        case LoginType.Location: //Hotel 
+                                 // validamos que el usuario tenga permiso
+          if (!userData.Permissions.Exists(c => c.pppm == "REGISTER" && c.pppl > 1))
+          {
+            MessageBox.Show("User doesn't have access", "IM Inhouse", MessageBoxButton.OK, MessageBoxImage.Information);
+            btnCancelar_Click(null, null);
+            return;
+          }
+          break;
       }
       isAuthenticated = true;
       Close();
@@ -134,6 +145,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [vipacheco] 2-26-2016 Created
     /// [edgrodriguez] 27/02/2016 Modified
+    /// [jorcanche] 01/03/2016 Modified (Se agrega el "Case" Location)
     /// </history>
     private void txtUser_LostFocus(object sender, RoutedEventArgs e)
     {
@@ -153,7 +165,22 @@ namespace IM.Base.Forms
           }
           else
             cmbLocation.IsEnabled = false;
-          break;       
+          break;
+        case LoginType.Location://Hotel
+          using (var dbContext = new Model.IMEntities())
+          {
+            _lstLocaByUsr = dbContext.USP_OR_GetLocationsByUser(txtUser.Text, "IH").ToList();
+          }
+          if (_lstLocaByUsr.Count > 0)
+          {
+            cmbLocation.ItemsSource = _lstLocaByUsr;
+            cmbLocation.SelectedValuePath = "loID";
+            cmbLocation.DisplayMemberPath = "loN";
+            cmbLocation.IsEnabled = true;         
+          }
+          else
+            cmbLocation.IsEnabled = false;
+          break;
       }
     }
 
@@ -176,6 +203,7 @@ namespace IM.Base.Forms
     ///  <history>
     /// [edgrodriguez] 29/02/2016 Created
     /// [edgrodriguez] 29/02/2016 Modified
+    /// [jorcanche] 01/03/2016 Modified (Se agrega el "Case" Location)
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
@@ -190,6 +218,9 @@ namespace IM.Base.Forms
           cmbLocation.Visibility = Visibility.Hidden;
           lblPlace.Visibility = Visibility.Hidden;
           Height = Height - 25;
+          break;        
+        case LoginType.Location: // Hotel
+          lblPlace.Content = "Location";
           break;
       }
 
@@ -204,6 +235,7 @@ namespace IM.Base.Forms
     /// <returns>bool</returns>
     /// <history>
     /// [lchairez] 24/Feb/2016 Created
+    /// [jorcanche] 01/03/2016 Modified (Se agrega el "Case" Location)
     /// </history>
     private bool Validar()
     {
@@ -227,6 +259,9 @@ namespace IM.Base.Forms
           {
             case LoginType.Warehouse:
               CustomMessage("Specify the Warehouse.", "Warning", MessageBoxImage.Exclamation);              
+              break;
+            case LoginType.Location:
+              CustomMessage("Specify the Location.", "Warning", MessageBoxImage.Exclamation);
               break;
           }
 
