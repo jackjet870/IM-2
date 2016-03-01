@@ -11,11 +11,9 @@ namespace IM.Model
 {
     using System;
     
-    public partial class leadSourceLogin
+    public partial class refundTypes
     {
-        public string lsID { get; set; }
-        public string lsN { get; set; }
-        public string lspg { get; set; }
-        public short lsHoursDif { get; set; }
+        public string rfID { get; set; }
+        public string rfN { get; set; }
     }
 }

@@ -11,11 +11,10 @@ namespace IM.Model
 {
     using System;
     
-    public partial class leadSourceLogin
+    public partial class unAvailMots
     {
-        public string lsID { get; set; }
-        public string lsN { get; set; }
-        public string lspg { get; set; }
-        public short lsHoursDif { get; set; }
+        public string umID { get; set; }
+        public string umN { get; set; }
+        public bool umA { get; set; }
     }
 }

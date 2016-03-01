@@ -11,11 +11,13 @@ namespace IM.Model
 {
     using System;
     
-    public partial class leadSourceLogin
+    public partial class leadSources
     {
         public string lsID { get; set; }
         public string lsN { get; set; }
         public string lspg { get; set; }
-        public short lsHoursDif { get; set; }
+        public string lsho { get; set; }
+        public bool lsRegen { get; set; }
+        public bool lsAnimation { get; set; }
     }
 }

@@ -11,11 +11,17 @@ namespace IM.Model
 {
     using System;
     
-    public partial class leadSourceLogin
+    public partial class dayOFF
     {
-        public string lsID { get; set; }
-        public string lsN { get; set; }
-        public string lspg { get; set; }
-        public short lsHoursDif { get; set; }
+        public string dope { get; set; }
+        public string peN { get; set; }
+        public string doList { get; set; }
+        public bool doMonday { get; set; }
+        public bool doTuesday { get; set; }
+        public bool doWednesday { get; set; }
+        public bool doThursday { get; set; }
+        public bool doFriday { get; set; }
+        public bool doSaturday { get; set; }
+        public bool doSunday { get; set; }
     }
 }

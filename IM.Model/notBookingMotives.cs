@@ -11,11 +11,10 @@ namespace IM.Model
 {
     using System;
     
-    public partial class leadSourceLogin
+    public partial class notBookingMotives
     {
-        public string lsID { get; set; }
-        public string lsN { get; set; }
-        public string lspg { get; set; }
-        public short lsHoursDif { get; set; }
+        public int nbID { get; set; }
+        public string nbN { get; set; }
+        public bool nbA { get; set; }
     }
 }

@@ -267,5 +267,101 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<USP_OR_GetPersonnel_Result>("USP_OR_GetPersonnel", leadSourcesParameter, salesRoomsParameter, rolesParameter, statusParameter, permissionParameter, relationalOperatorParameter, permissionLevelParameter, deptParameter);
         }
+    
+        public virtual ObjectResult<GetGuestsArrivals> USP_OR_GetArrivals(Nullable<System.DateTime> date, string leadSource, string markets, Nullable<int> available, Nullable<int> contacted, Nullable<int> invited, Nullable<int> onGroup)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var marketsParameter = markets != null ?
+                new ObjectParameter("Markets", markets) :
+                new ObjectParameter("Markets", typeof(string));
+    
+            var availableParameter = available.HasValue ?
+                new ObjectParameter("Available", available) :
+                new ObjectParameter("Available", typeof(int));
+    
+            var contactedParameter = contacted.HasValue ?
+                new ObjectParameter("Contacted", contacted) :
+                new ObjectParameter("Contacted", typeof(int));
+    
+            var invitedParameter = invited.HasValue ?
+                new ObjectParameter("Invited", invited) :
+                new ObjectParameter("Invited", typeof(int));
+    
+            var onGroupParameter = onGroup.HasValue ?
+                new ObjectParameter("OnGroup", onGroup) :
+                new ObjectParameter("OnGroup", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetGuestsArrivals>("USP_OR_GetArrivals", dateParameter, leadSourceParameter, marketsParameter, availableParameter, contactedParameter, invitedParameter, onGroupParameter);
+        }
+    
+        public virtual ObjectResult<GetGuestsAvailables> USP_OR_GetAvailables(Nullable<System.DateTime> currentDate, string leadSource, string markets, Nullable<int> contacted, Nullable<int> invited, Nullable<int> onGroup)
+        {
+            var currentDateParameter = currentDate.HasValue ?
+                new ObjectParameter("CurrentDate", currentDate) :
+                new ObjectParameter("CurrentDate", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var marketsParameter = markets != null ?
+                new ObjectParameter("Markets", markets) :
+                new ObjectParameter("Markets", typeof(string));
+    
+            var contactedParameter = contacted.HasValue ?
+                new ObjectParameter("Contacted", contacted) :
+                new ObjectParameter("Contacted", typeof(int));
+    
+            var invitedParameter = invited.HasValue ?
+                new ObjectParameter("Invited", invited) :
+                new ObjectParameter("Invited", typeof(int));
+    
+            var onGroupParameter = onGroup.HasValue ?
+                new ObjectParameter("OnGroup", onGroup) :
+                new ObjectParameter("OnGroup", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetGuestsAvailables>("USP_OR_GetAvailables", currentDateParameter, leadSourceParameter, marketsParameter, contactedParameter, invitedParameter, onGroupParameter);
+        }
+    
+        public virtual ObjectResult<GetLocationsByUser> USP_OR_GetLocationsByUser(string user, string program)
+        {
+            var userParameter = user != null ?
+                new ObjectParameter("User", user) :
+                new ObjectParameter("User", typeof(string));
+    
+            var programParameter = program != null ?
+                new ObjectParameter("Program", program) :
+                new ObjectParameter("Program", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationsByUser>("USP_OR_GetLocationsByUser", userParameter, programParameter);
+        }
+    
+        public virtual ObjectResult<GetGuestsPremanifest> USP_OR_GetPremanifest(Nullable<System.DateTime> date, string leadSource, string markets, Nullable<int> onGroup)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var marketsParameter = markets != null ?
+                new ObjectParameter("Markets", markets) :
+                new ObjectParameter("Markets", typeof(string));
+    
+            var onGroupParameter = onGroup.HasValue ?
+                new ObjectParameter("OnGroup", onGroup) :
+                new ObjectParameter("OnGroup", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetGuestsPremanifest>("USP_OR_GetPremanifest", dateParameter, leadSourceParameter, marketsParameter, onGroupParameter);
+        }
     }
 }

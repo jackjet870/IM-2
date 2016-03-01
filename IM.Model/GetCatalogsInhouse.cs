@@ -11,11 +11,9 @@ namespace IM.Model
 {
     using System;
     
-    public partial class leadSourceLogin
+    public partial class GetCatalogsInhouse
     {
-        public string lsID { get; set; }
-        public string lsN { get; set; }
-        public string lspg { get; set; }
-        public short lsHoursDif { get; set; }
+        public string mkID { get; set; }
+        public string mkN { get; set; }
     }
 }

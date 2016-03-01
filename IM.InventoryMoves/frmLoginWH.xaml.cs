@@ -7,7 +7,7 @@ using IM.Model.Entities;
 using IM.BusinessRules.BR;
 
 
-namespace IM.InventoryMoves
+namespace IM.InventoryMovements
 {
   /// <summary>
   /// Interaction logic for frmLoginWH.xaml
@@ -40,7 +40,7 @@ namespace IM.InventoryMoves
       //    //{
       //    //  srObj = dbContext.SalesRooms.Where(c => c.srWH == cmbLocation.SelectedValue.ToString()).FirstOrDefault();
       //    //}
-      //    frmInventoryMoves frmInvMovs = new frmInventoryMoves(_unlObj);
+      //    frmInventoryMovements frmInvMovs = new frmInventoryMovements(_unlObj);
       //    frmInvMovs.Show();
       //    Close();
       //  }

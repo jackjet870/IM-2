@@ -215,6 +215,27 @@
           <Property Name="guDespositRefund" Type="bit" />
           <Property Name="guDepositsRefund" Type="bit" />
         </EntityType>
+        <EntityType Name="Personnel">
+          <Key>
+            <PropertyRef Name="peID" />
+          </Key>
+          <Property Name="peID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="peN" Type="varchar" MaxLength="40" />
+          <Property Name="pePwd" Type="varchar" MaxLength="10" />
+          <Property Name="peCaptain" Type="varchar" MaxLength="10" />
+          <Property Name="peA" Type="bit" Nullable="false" />
+          <Property Name="peps" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="pePwdD" Type="datetime" Nullable="false" />
+          <Property Name="pePwdDays" Type="int" Nullable="false" />
+          <Property Name="peTeamType" Type="varchar" MaxLength="2" />
+          <Property Name="pePlaceID" Type="varchar" MaxLength="10" />
+          <Property Name="peTeam" Type="varchar" MaxLength="10" />
+          <Property Name="pepo" Type="varchar" MaxLength="10" />
+          <Property Name="peLinerID" Type="varchar" MaxLength="10" />
+          <Property Name="pede" Type="varchar" MaxLength="10" />
+          <Property Name="peSalesmanID" Type="varchar" MaxLength="15" />
+          <Property Name="peCollaboratorID" Type="varchar" MaxLength="11" />
+        </EntityType>
         <EntityType Name="SalesRooms">
           <Key>
             <PropertyRef Name="srID" />
@@ -252,12 +273,365 @@
           <Property Name="wmComments" Type="varchar" MaxLength="50" />
           <Property Name="wmpe" Type="varchar" MaxLength="10" />
         </EntityType>
+        <Association Name="FK_Guests_Personnel_Closer1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guCloser1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Closer2">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guCloser2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Closer3">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guCloser3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_CloserCaptain1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guCloserCaptain1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_EntryHost">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guEntryHost" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Exit1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guExit1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Exit2">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guExit2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_ExitHost">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guExitHost" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_GiftsHost">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guGiftsHost" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Liner1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guLiner1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Liner2">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guLiner2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_LinerCaptain1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guLinerCaptain1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Podium">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guPodium" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PR1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guPRInvit1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PR2">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guPRInvit2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PR3">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guPRInvit3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRAssign">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guPRAssign" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRAvail">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guPRAvail" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRCaptain1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guPRCaptain1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRCaptain2">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guPRCaptain2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRCaptain3">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guPRCaptain3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRContact">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guPRInfo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRFollow">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guPRFollow" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRNoBook">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guPRNoBook" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_VLO">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guVLO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Personnel_Personnel_Liner">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Personnel1" Type="Self.Personnel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Personnel1">
+              <PropertyRef Name="peLinerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesRooms_Personnel_Boss">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="SalesRooms" Type="Self.SalesRooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SalesRooms">
+              <PropertyRef Name="srBoss" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WhsMovs_Personnel">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="WhsMovs" Type="Self.WhsMovs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="WhsMovs">
+              <PropertyRef Name="wmpe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="spProcessMailOuts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetAgencies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetArrivals" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSource" Type="varchar" Mode="In" />
+          <Parameter Name="Markets" Type="varchar" Mode="In" />
+          <Parameter Name="Available" Type="int" Mode="In" />
+          <Parameter Name="Contacted" Type="int" Mode="In" />
+          <Parameter Name="Invited" Type="int" Mode="In" />
+          <Parameter Name="OnGroup" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetAvailables" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CurrentDate" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSource" Type="varchar" Mode="In" />
+          <Parameter Name="Markets" Type="varchar" Mode="In" />
+          <Parameter Name="Contacted" Type="int" Mode="In" />
+          <Parameter Name="Invited" Type="int" Mode="In" />
+          <Parameter Name="OnGroup" Type="int" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetCountries" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
@@ -274,6 +648,13 @@
           <Parameter Name="Programs" Type="varchar" Mode="In" />
           <Parameter Name="Regions" Type="varchar" Mode="In" />
         </Function>
+<<<<<<< HEAD
+=======
+        <Function Name="USP_OR_GetLocationsByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="User" Type="varchar" Mode="In" />
+          <Parameter Name="Program" Type="varchar" Mode="In" />
+        </Function>
+>>>>>>> 9390c6577b42c2257ae7b52eb0068a10dd1f49bc
         <Function Name="USP_OR_GetMailOutTextsByLeadSource" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="mtls" Type="varchar" Mode="In" />
           <Parameter Name="mtA" Type="bit" Mode="In" />
@@ -291,6 +672,15 @@
           <Parameter Name="PermissionLevel" Type="int" Mode="In" />
           <Parameter Name="Dept" Type="varchar" Mode="In" />
         </Function>
+<<<<<<< HEAD
+=======
+        <Function Name="USP_OR_GetPremanifest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSource" Type="varchar" Mode="In" />
+          <Parameter Name="Markets" Type="varchar" Mode="In" />
+          <Parameter Name="OnGroup" Type="int" Mode="In" />
+        </Function>
+>>>>>>> 9390c6577b42c2257ae7b52eb0068a10dd1f49bc
         <Function Name="USP_OR_GetPremanifestHost" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
@@ -320,8 +710,121 @@
         </Function>
         <EntityContainer Name="IMModelStoreContainer">
           <EntitySet Name="Guests" EntityType="Self.Guests" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Personnel" EntityType="Self.Personnel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SalesRooms" EntityType="Self.SalesRooms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WhsMovs" EntityType="Self.WhsMovs" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Guests_Personnel_Closer1" Association="Self.FK_Guests_Personnel_Closer1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Closer2" Association="Self.FK_Guests_Personnel_Closer2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Closer3" Association="Self.FK_Guests_Personnel_Closer3">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_CloserCaptain1" Association="Self.FK_Guests_Personnel_CloserCaptain1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_EntryHost" Association="Self.FK_Guests_Personnel_EntryHost">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Exit1" Association="Self.FK_Guests_Personnel_Exit1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Exit2" Association="Self.FK_Guests_Personnel_Exit2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_ExitHost" Association="Self.FK_Guests_Personnel_ExitHost">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_GiftsHost" Association="Self.FK_Guests_Personnel_GiftsHost">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Liner1" Association="Self.FK_Guests_Personnel_Liner1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Liner2" Association="Self.FK_Guests_Personnel_Liner2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_LinerCaptain1" Association="Self.FK_Guests_Personnel_LinerCaptain1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Podium" Association="Self.FK_Guests_Personnel_Podium">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PR1" Association="Self.FK_Guests_Personnel_PR1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PR2" Association="Self.FK_Guests_Personnel_PR2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PR3" Association="Self.FK_Guests_Personnel_PR3">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRAssign" Association="Self.FK_Guests_Personnel_PRAssign">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRAvail" Association="Self.FK_Guests_Personnel_PRAvail">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRCaptain1" Association="Self.FK_Guests_Personnel_PRCaptain1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRCaptain2" Association="Self.FK_Guests_Personnel_PRCaptain2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRCaptain3" Association="Self.FK_Guests_Personnel_PRCaptain3">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRContact" Association="Self.FK_Guests_Personnel_PRContact">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRFollow" Association="Self.FK_Guests_Personnel_PRFollow">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRNoBook" Association="Self.FK_Guests_Personnel_PRNoBook">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_VLO" Association="Self.FK_Guests_Personnel_VLO">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Personnel_Personnel_Liner" Association="Self.FK_Personnel_Personnel_Liner">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Personnel1" EntitySet="Personnel" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesRooms_Personnel_Boss" Association="Self.FK_SalesRooms_Personnel_Boss">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="SalesRooms" EntitySet="SalesRooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WhsMovs_Personnel" Association="Self.FK_WhsMovs_Personnel">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="WhsMovs" EntitySet="WhsMovs" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -409,6 +912,149 @@
             <Parameter Name="RelationalOperator" Mode="In" Type="String" />
             <Parameter Name="PermissionLevel" Mode="In" Type="Int32" />
             <Parameter Name="Dept" Mode="In" Type="String" />
+<<<<<<< HEAD
+=======
+          </FunctionImport>
+          <EntitySet Name="Personnels" EntityType="IMModel.Personnel" />
+          <AssociationSet Name="FK_Guests_Personnel_Closer1" Association="IMModel.FK_Guests_Personnel_Closer1">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Closer2" Association="IMModel.FK_Guests_Personnel_Closer2">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Closer3" Association="IMModel.FK_Guests_Personnel_Closer3">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_CloserCaptain1" Association="IMModel.FK_Guests_Personnel_CloserCaptain1">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_EntryHost" Association="IMModel.FK_Guests_Personnel_EntryHost">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Exit1" Association="IMModel.FK_Guests_Personnel_Exit1">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Exit2" Association="IMModel.FK_Guests_Personnel_Exit2">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_ExitHost" Association="IMModel.FK_Guests_Personnel_ExitHost">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_GiftsHost" Association="IMModel.FK_Guests_Personnel_GiftsHost">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Liner1" Association="IMModel.FK_Guests_Personnel_Liner1">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Liner2" Association="IMModel.FK_Guests_Personnel_Liner2">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_LinerCaptain1" Association="IMModel.FK_Guests_Personnel_LinerCaptain1">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Podium" Association="IMModel.FK_Guests_Personnel_Podium">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PR1" Association="IMModel.FK_Guests_Personnel_PR1">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PR2" Association="IMModel.FK_Guests_Personnel_PR2">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PR3" Association="IMModel.FK_Guests_Personnel_PR3">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRAssign" Association="IMModel.FK_Guests_Personnel_PRAssign">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRAvail" Association="IMModel.FK_Guests_Personnel_PRAvail">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRCaptain1" Association="IMModel.FK_Guests_Personnel_PRCaptain1">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRCaptain2" Association="IMModel.FK_Guests_Personnel_PRCaptain2">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRCaptain3" Association="IMModel.FK_Guests_Personnel_PRCaptain3">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRContact" Association="IMModel.FK_Guests_Personnel_PRContact">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRFollow" Association="IMModel.FK_Guests_Personnel_PRFollow">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_PRNoBook" Association="IMModel.FK_Guests_Personnel_PRNoBook">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_VLO" Association="IMModel.FK_Guests_Personnel_VLO">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Personnel_Personnel_Liner" Association="IMModel.FK_Personnel_Personnel_Liner">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Personnel1" EntitySet="Personnels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesRooms_Personnel_Boss" Association="IMModel.FK_SalesRooms_Personnel_Boss">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="SalesRoom" EntitySet="SalesRooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WhsMovs_Personnel" Association="IMModel.FK_WhsMovs_Personnel">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="WhsMov" EntitySet="WhsMovs" />
+          </AssociationSet>
+          <FunctionImport Name="USP_OR_GetArrivals" ReturnType="Collection(IMModel.GetGuestsArrivals)">
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSource" Mode="In" Type="String" />
+            <Parameter Name="Markets" Mode="In" Type="String" />
+            <Parameter Name="Available" Mode="In" Type="Int32" />
+            <Parameter Name="Contacted" Mode="In" Type="Int32" />
+            <Parameter Name="Invited" Mode="In" Type="Int32" />
+            <Parameter Name="OnGroup" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetAvailables" ReturnType="Collection(IMModel.GetGuestsAvailables)">
+            <Parameter Name="CurrentDate" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSource" Mode="In" Type="String" />
+            <Parameter Name="Markets" Mode="In" Type="String" />
+            <Parameter Name="Contacted" Mode="In" Type="Int32" />
+            <Parameter Name="Invited" Mode="In" Type="Int32" />
+            <Parameter Name="OnGroup" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetLocationsByUser" ReturnType="Collection(IMModel.GetLocationsByUser)">
+            <Parameter Name="User" Mode="In" Type="String" />
+            <Parameter Name="Program" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetPremanifest" ReturnType="Collection(IMModel.GetGuestsPremanifest)">
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSource" Mode="In" Type="String" />
+            <Parameter Name="Markets" Mode="In" Type="String" />
+            <Parameter Name="OnGroup" Mode="In" Type="Int32" />
+>>>>>>> 9390c6577b42c2257ae7b52eb0068a10dd1f49bc
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Guest">
@@ -620,6 +1266,31 @@
           <Property Name="guFirstNameOriginal" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="guDespositRefund" Type="Boolean" />
           <Property Name="guDepositsRefund" Type="Boolean" />
+          <NavigationProperty Name="Personnel" Relationship="IMModel.FK_Guests_Personnel_Closer1" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel1" Relationship="IMModel.FK_Guests_Personnel_Closer2" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel2" Relationship="IMModel.FK_Guests_Personnel_Closer3" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel3" Relationship="IMModel.FK_Guests_Personnel_CloserCaptain1" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel4" Relationship="IMModel.FK_Guests_Personnel_EntryHost" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel5" Relationship="IMModel.FK_Guests_Personnel_Exit1" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel6" Relationship="IMModel.FK_Guests_Personnel_Exit2" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel7" Relationship="IMModel.FK_Guests_Personnel_ExitHost" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel8" Relationship="IMModel.FK_Guests_Personnel_GiftsHost" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel9" Relationship="IMModel.FK_Guests_Personnel_Liner1" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel10" Relationship="IMModel.FK_Guests_Personnel_Liner2" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel11" Relationship="IMModel.FK_Guests_Personnel_LinerCaptain1" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel12" Relationship="IMModel.FK_Guests_Personnel_Podium" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel13" Relationship="IMModel.FK_Guests_Personnel_PR1" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel14" Relationship="IMModel.FK_Guests_Personnel_PR2" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel15" Relationship="IMModel.FK_Guests_Personnel_PR3" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel16" Relationship="IMModel.FK_Guests_Personnel_PRAssign" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel17" Relationship="IMModel.FK_Guests_Personnel_PRAvail" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel18" Relationship="IMModel.FK_Guests_Personnel_PRCaptain1" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel19" Relationship="IMModel.FK_Guests_Personnel_PRCaptain2" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel20" Relationship="IMModel.FK_Guests_Personnel_PRCaptain3" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel21" Relationship="IMModel.FK_Guests_Personnel_PRContact" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel22" Relationship="IMModel.FK_Guests_Personnel_PRFollow" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel23" Relationship="IMModel.FK_Guests_Personnel_PRNoBook" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel24" Relationship="IMModel.FK_Guests_Personnel_VLO" FromRole="Guest" ToRole="Personnel" />
         </EntityType>
         <ComplexType Name="GetCountries">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -702,6 +1373,7 @@
           <Property Name="srUseSistur" Type="Boolean" Nullable="false" />
           <Property Name="srCECOID" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="srCEBEID" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Personnel" Relationship="IMModel.FK_SalesRooms_Personnel_Boss" FromRole="SalesRoom" ToRole="Personnel" />
         </EntityType>
        <ComplexType Name="GetAgencies">
           <Property Type="String" Name="agID" Nullable="false" MaxLength="35" />
@@ -774,6 +1446,7 @@
           <Property Name="wmgi" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="wmComments" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="wmpe" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Personnel" Relationship="IMModel.FK_WhsMovs_Personnel" FromRole="WhsMov" ToRole="Personnel" />
         </EntityType>
         <ComplexType Name="GetGifts">
           <Property Type="String" Name="giID" Nullable="false" MaxLength="10" />
@@ -822,7 +1495,7 @@
           <Property Type="String" Name="lsID" Nullable="false" />
           <Property Type="String" Name="lsN" Nullable="false" />
           <Property Type="String" Name="lspg" Nullable="false" />
-          <Property Type="Int32" Name="lsHoursDif" Nullable="false" />
+          <Property Type="Int16" Name="lsHoursDif" Nullable="false" />
         </ComplexType>
         <ComplexType Name="locationLogin" >
           <Property Type="String" Name="loID" Nullable="false" />
@@ -838,6 +1511,560 @@
           <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="deN" Nullable="true" MaxLength="50" />
         </ComplexType>
+<<<<<<< HEAD
+=======
+        <EntityType Name="Personnel">
+          <Key>
+            <PropertyRef Name="peID" />
+          </Key>
+          <Property Name="peID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="peN" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="pePwd" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="peCaptain" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="peA" Type="Boolean" Nullable="false" />
+          <Property Name="peps" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="pePwdD" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="pePwdDays" Type="Int32" Nullable="false" />
+          <Property Name="peTeamType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="pePlaceID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="peTeam" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="pepo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="peLinerID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="pede" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="peSalesmanID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="peCollaboratorID" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Guests" Relationship="IMModel.FK_Guests_Personnel_Closer1" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests1" Relationship="IMModel.FK_Guests_Personnel_Closer2" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests2" Relationship="IMModel.FK_Guests_Personnel_Closer3" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests3" Relationship="IMModel.FK_Guests_Personnel_CloserCaptain1" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests4" Relationship="IMModel.FK_Guests_Personnel_EntryHost" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests5" Relationship="IMModel.FK_Guests_Personnel_Exit1" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests6" Relationship="IMModel.FK_Guests_Personnel_Exit2" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests7" Relationship="IMModel.FK_Guests_Personnel_ExitHost" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests8" Relationship="IMModel.FK_Guests_Personnel_GiftsHost" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests9" Relationship="IMModel.FK_Guests_Personnel_Liner1" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests10" Relationship="IMModel.FK_Guests_Personnel_Liner2" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests11" Relationship="IMModel.FK_Guests_Personnel_LinerCaptain1" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests12" Relationship="IMModel.FK_Guests_Personnel_Podium" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests13" Relationship="IMModel.FK_Guests_Personnel_PR1" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests14" Relationship="IMModel.FK_Guests_Personnel_PR2" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests15" Relationship="IMModel.FK_Guests_Personnel_PR3" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests16" Relationship="IMModel.FK_Guests_Personnel_PRAssign" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests17" Relationship="IMModel.FK_Guests_Personnel_PRAvail" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests18" Relationship="IMModel.FK_Guests_Personnel_PRCaptain1" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests19" Relationship="IMModel.FK_Guests_Personnel_PRCaptain2" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests20" Relationship="IMModel.FK_Guests_Personnel_PRCaptain3" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests21" Relationship="IMModel.FK_Guests_Personnel_PRContact" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests22" Relationship="IMModel.FK_Guests_Personnel_PRFollow" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests23" Relationship="IMModel.FK_Guests_Personnel_PRNoBook" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests24" Relationship="IMModel.FK_Guests_Personnel_VLO" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Personnel1" Relationship="IMModel.FK_Personnel_Personnel_Liner" FromRole="Personnel" ToRole="Personnel1" />
+          <NavigationProperty Name="Personnel2" Relationship="IMModel.FK_Personnel_Personnel_Liner" FromRole="Personnel1" ToRole="Personnel" />
+          <NavigationProperty Name="SalesRooms" Relationship="IMModel.FK_SalesRooms_Personnel_Boss" FromRole="Personnel" ToRole="SalesRoom" />
+          <NavigationProperty Name="WhsMovs" Relationship="IMModel.FK_WhsMovs_Personnel" FromRole="Personnel" ToRole="WhsMov" />
+        </EntityType>
+        <Association Name="FK_Guests_Personnel_Closer1">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guCloser1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Closer2">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guCloser2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Closer3">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guCloser3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_CloserCaptain1">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guCloserCaptain1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_EntryHost">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guEntryHost" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Exit1">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guExit1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Exit2">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guExit2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_ExitHost">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guExitHost" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_GiftsHost">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guGiftsHost" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Liner1">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guLiner1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Liner2">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guLiner2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_LinerCaptain1">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guLinerCaptain1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Podium">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guPodium" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PR1">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guPRInvit1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PR2">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guPRInvit2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PR3">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guPRInvit3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRAssign">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guPRAssign" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRAvail">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guPRAvail" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRCaptain1">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guPRCaptain1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRCaptain2">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guPRCaptain2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRCaptain3">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guPRCaptain3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRContact">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guPRInfo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRFollow">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guPRFollow" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_PRNoBook">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guPRNoBook" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_VLO">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guVLO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Personnel_Personnel_Liner">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Personnel" Role="Personnel1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Personnel1">
+              <PropertyRef Name="peLinerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesRooms_Personnel_Boss">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.SalesRoom" Role="SalesRoom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="SalesRoom">
+              <PropertyRef Name="srBoss" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WhsMovs_Personnel">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.WhsMov" Role="WhsMov" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="WhsMov">
+              <PropertyRef Name="wmpe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="GetGuestsArrivals">
+          <Property Type="String" Name="guStatus" Nullable="true" MaxLength="1" />
+          <Property Type="Int32" Name="guID" Nullable="false" />
+          <Property Type="String" Name="gulsOriginal" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="guHReservID" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="guIdProfileOpera" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="Reservation" Nullable="false" MaxLength="1" />
+          <Property Type="Boolean" Name="guCheckIn" Nullable="false" />
+          <Property Type="String" Name="guRoomNum" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="guFirstName1" Nullable="true" MaxLength="40" />
+          <Property Type="DateTime" Name="guCheckInD" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="guCheckOutD" Nullable="false" Precision="23" />
+          <Property Type="String" Name="guco" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="coN" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="guag" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="agN" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="agcl" Nullable="true" />
+          <Property Type="Decimal" Name="guPax" Nullable="false" Precision="4" Scale="1" />
+          <Property Type="String" Name="guO1" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="guO2" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="guCCType" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="gurt" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="guPRAssign" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="guAvail" Nullable="false" />
+          <Property Type="String" Name="guPRAvail" Nullable="true" MaxLength="10" />
+          <Property Type="Byte" Name="guum" Nullable="false" />
+          <Property Type="Boolean" Name="guInfo" Nullable="false" />
+          <Property Type="DateTime" Name="guInfoD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="guPRInfo" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="guFollow" Nullable="false" />
+          <Property Type="DateTime" Name="guFollowD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="guPRFollow" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="guInvit" Nullable="false" />
+          <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="guPRInvit1" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="gunb" Nullable="true" />
+          <Property Type="DateTime" Name="guNoBookD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="guPRNoBook" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="guQuinella" Nullable="false" />
+          <Property Type="Int32" Name="gagu" Nullable="true" />
+          <Property Type="Boolean" Name="guGroup" Nullable="false" />
+          <Property Type="String" Name="GroupN" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Equity" Nullable="false" MaxLength="1" />
+          <Property Type="Int32" Name="gucl" Nullable="true" />
+          <Property Type="String" Name="clN" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="guCompany" Nullable="false" Precision="2" Scale="0" />
+          <Property Type="String" Name="guMembershipNum" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="mtN" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="guBookCanc" Nullable="false" />
+          <Property Type="Boolean" Name="guShow" Nullable="false" />
+          <Property Type="Boolean" Name="guLW" Nullable="false" />
+          <Property Type="Boolean" Name="guPRNote" Nullable="false" />
+          <Property Type="String" Name="Notes" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="guComments" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="GetGuestsAvailables">
+          <Property Type="String" Name="guStatus" Nullable="true" MaxLength="1" />
+          <Property Type="Boolean" Name="guCheckIn" Nullable="false" />
+          <Property Type="Int32" Name="guID" Nullable="false" />
+          <Property Type="String" Name="guIdProfileOpera" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="guRoomNum" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="guFirstName1" Nullable="true" MaxLength="40" />
+          <Property Type="DateTime" Name="guCheckInD" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="guCheckOutD" Nullable="false" Precision="23" />
+          <Property Type="String" Name="guco" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="coN" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="guag" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="agN" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="agcl" Nullable="true" />
+          <Property Type="Decimal" Name="guPax" Nullable="false" Precision="4" Scale="1" />
+          <Property Type="String" Name="guCCType" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="guPRAssign" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="guAvail" Nullable="false" />
+          <Property Type="String" Name="guPRAvail" Nullable="true" MaxLength="10" />
+          <Property Type="Byte" Name="guum" Nullable="false" />
+          <Property Type="Boolean" Name="guInfo" Nullable="false" />
+          <Property Type="DateTime" Name="guInfoD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="guPRInfo" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="guFollow" Nullable="false" />
+          <Property Type="DateTime" Name="guFollowD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="guPRFollow" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="guInvit" Nullable="false" />
+          <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="guPRInvit1" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="gunb" Nullable="true" />
+          <Property Type="DateTime" Name="guNoBookD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="guPRNoBook" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="guQuinella" Nullable="false" />
+          <Property Type="Int32" Name="gagu" Nullable="true" />
+          <Property Type="Boolean" Name="guGroup" Nullable="false" />
+          <Property Type="String" Name="Equity" Nullable="false" MaxLength="1" />
+          <Property Type="Int32" Name="gucl" Nullable="true" />
+          <Property Type="String" Name="clN" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="guCompany" Nullable="false" Precision="2" Scale="0" />
+          <Property Type="String" Name="guMembershipNum" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="mtN" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="guBookCanc" Nullable="false" />
+          <Property Type="Boolean" Name="guShow" Nullable="false" />
+          <Property Type="Boolean" Name="guLW" Nullable="false" />
+          <Property Type="Boolean" Name="guPRNote" Nullable="false" />
+          <Property Type="String" Name="Notes" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="guComments" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="GetLocationsByUser">
+          <Property Type="String" Name="loID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="loN" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="lols" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="losr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="plpe" Nullable="false" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="GetGuestsPremanifest">
+          <Property Type="String" Name="guStatus" Nullable="true" MaxLength="1" />
+          <Property Type="Int32" Name="guID" Nullable="false" />
+          <Property Type="String" Name="guIdProfileOpera" Nullable="false" MaxLength="15" />
+          <Property Type="Boolean" Name="guCheckIn" Nullable="false" />
+          <Property Type="String" Name="guRoomNum" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="guFirstName1" Nullable="true" MaxLength="40" />
+          <Property Type="DateTime" Name="guCheckInD" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="guCheckOutD" Nullable="false" Precision="23" />
+          <Property Type="String" Name="guco" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="coN" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="guag" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="agN" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="agcl" Nullable="true" />
+          <Property Type="Decimal" Name="guPax" Nullable="false" Precision="4" Scale="1" />
+          <Property Type="String" Name="guO2" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="guCCType" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="guPRAssign" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="guAvail" Nullable="false" />
+          <Property Type="Boolean" Name="guInfo" Nullable="false" />
+          <Property Type="String" Name="guPRInfo" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="guFollow" Nullable="false" />
+          <Property Type="DateTime" Name="guFollowD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="guPRFollow" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="guInvit" Nullable="false" />
+          <Property Type="DateTime" Name="guInvitD" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="guInvitT" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="guResch" Nullable="true" />
+          <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="guBookT" Nullable="true" Precision="23" />
+          <Property Type="String" Name="guPRInvit1" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="gunb" Nullable="true" />
+          <Property Type="DateTime" Name="guNoBookD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="guPRNoBook" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="guQuinella" Nullable="false" />
+          <Property Type="Int32" Name="gagu" Nullable="true" />
+          <Property Type="Boolean" Name="guGroup" Nullable="false" />
+          <Property Type="String" Name="Equity" Nullable="false" MaxLength="1" />
+          <Property Type="Int32" Name="gucl" Nullable="true" />
+          <Property Type="String" Name="clN" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="guCompany" Nullable="false" Precision="2" Scale="0" />
+          <Property Type="String" Name="guMembershipNum" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="mtN" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="guShow" Nullable="false" />
+          <Property Type="Boolean" Name="guTour" Nullable="false" />
+          <Property Type="Boolean" Name="guBookCanc" Nullable="false" />
+          <Property Type="Boolean" Name="guSale" Nullable="false" />
+          <Property Type="Boolean" Name="guLW" Nullable="false" />
+          <Property Type="Boolean" Name="guPRNote" Nullable="false" />
+          <Property Type="String" Name="Notes" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="guComments" Nullable="true" MaxLength="100" />
+        </ComplexType>
+>>>>>>> 9390c6577b42c2257ae7b52eb0068a10dd1f49bc
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1320,6 +2547,212 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+<<<<<<< HEAD
+=======
+          <EntitySetMapping Name="Personnels">
+            <EntityTypeMapping TypeName="IMModel.Personnel">
+              <MappingFragment StoreEntitySet="Personnel">
+                <ScalarProperty Name="peCollaboratorID" ColumnName="peCollaboratorID" />
+                <ScalarProperty Name="peSalesmanID" ColumnName="peSalesmanID" />
+                <ScalarProperty Name="pede" ColumnName="pede" />
+                <ScalarProperty Name="peLinerID" ColumnName="peLinerID" />
+                <ScalarProperty Name="pepo" ColumnName="pepo" />
+                <ScalarProperty Name="peTeam" ColumnName="peTeam" />
+                <ScalarProperty Name="pePlaceID" ColumnName="pePlaceID" />
+                <ScalarProperty Name="peTeamType" ColumnName="peTeamType" />
+                <ScalarProperty Name="pePwdDays" ColumnName="pePwdDays" />
+                <ScalarProperty Name="pePwdD" ColumnName="pePwdD" />
+                <ScalarProperty Name="peps" ColumnName="peps" />
+                <ScalarProperty Name="peA" ColumnName="peA" />
+                <ScalarProperty Name="peCaptain" ColumnName="peCaptain" />
+                <ScalarProperty Name="pePwd" ColumnName="pePwd" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="peID" ColumnName="peID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetArrivals" FunctionName="IMModel.Store.USP_OR_GetArrivals">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetGuestsArrivals">
+                <ScalarProperty Name="guStatus" ColumnName="guStatus" />
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="gulsOriginal" ColumnName="gulsOriginal" />
+                <ScalarProperty Name="guHReservID" ColumnName="guHReservID" />
+                <ScalarProperty Name="guIdProfileOpera" ColumnName="guIdProfileOpera" />
+                <ScalarProperty Name="Reservation" ColumnName="Reservation" />
+                <ScalarProperty Name="guCheckIn" ColumnName="guCheckIn" />
+                <ScalarProperty Name="guRoomNum" ColumnName="guRoomNum" />
+                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
+                <ScalarProperty Name="guFirstName1" ColumnName="guFirstName1" />
+                <ScalarProperty Name="guCheckInD" ColumnName="guCheckInD" />
+                <ScalarProperty Name="guCheckOutD" ColumnName="guCheckOutD" />
+                <ScalarProperty Name="guco" ColumnName="guco" />
+                <ScalarProperty Name="coN" ColumnName="coN" />
+                <ScalarProperty Name="guag" ColumnName="guag" />
+                <ScalarProperty Name="agN" ColumnName="agN" />
+                <ScalarProperty Name="agcl" ColumnName="agcl" />
+                <ScalarProperty Name="guPax" ColumnName="guPax" />
+                <ScalarProperty Name="guO1" ColumnName="guO1" />
+                <ScalarProperty Name="guO2" ColumnName="guO2" />
+                <ScalarProperty Name="guCCType" ColumnName="guCCType" />
+                <ScalarProperty Name="gurt" ColumnName="gurt" />
+                <ScalarProperty Name="guPRAssign" ColumnName="guPRAssign" />
+                <ScalarProperty Name="guAvail" ColumnName="guAvail" />
+                <ScalarProperty Name="guPRAvail" ColumnName="guPRAvail" />
+                <ScalarProperty Name="guum" ColumnName="guum" />
+                <ScalarProperty Name="guInfo" ColumnName="guInfo" />
+                <ScalarProperty Name="guInfoD" ColumnName="guInfoD" />
+                <ScalarProperty Name="guPRInfo" ColumnName="guPRInfo" />
+                <ScalarProperty Name="guFollow" ColumnName="guFollow" />
+                <ScalarProperty Name="guFollowD" ColumnName="guFollowD" />
+                <ScalarProperty Name="guPRFollow" ColumnName="guPRFollow" />
+                <ScalarProperty Name="guInvit" ColumnName="guInvit" />
+                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
+                <ScalarProperty Name="guPRInvit1" ColumnName="guPRInvit1" />
+                <ScalarProperty Name="gunb" ColumnName="gunb" />
+                <ScalarProperty Name="guNoBookD" ColumnName="guNoBookD" />
+                <ScalarProperty Name="guPRNoBook" ColumnName="guPRNoBook" />
+                <ScalarProperty Name="guQuinella" ColumnName="guQuinella" />
+                <ScalarProperty Name="gagu" ColumnName="gagu" />
+                <ScalarProperty Name="guGroup" ColumnName="guGroup" />
+                <ScalarProperty Name="GroupN" ColumnName="GroupN" />
+                <ScalarProperty Name="Equity" ColumnName="Equity" />
+                <ScalarProperty Name="gucl" ColumnName="gucl" />
+                <ScalarProperty Name="clN" ColumnName="clN" />
+                <ScalarProperty Name="guCompany" ColumnName="guCompany" />
+                <ScalarProperty Name="guMembershipNum" ColumnName="guMembershipNum" />
+                <ScalarProperty Name="mtN" ColumnName="mtN" />
+                <ScalarProperty Name="guBookCanc" ColumnName="guBookCanc" />
+                <ScalarProperty Name="guShow" ColumnName="guShow" />
+                <ScalarProperty Name="guLW" ColumnName="guLW" />
+                <ScalarProperty Name="guPRNote" ColumnName="guPRNote" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="guComments" ColumnName="guComments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetAvailables" FunctionName="IMModel.Store.USP_OR_GetAvailables">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetGuestsAvailables">
+                <ScalarProperty Name="guStatus" ColumnName="guStatus" />
+                <ScalarProperty Name="guCheckIn" ColumnName="guCheckIn" />
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="guIdProfileOpera" ColumnName="guIdProfileOpera" />
+                <ScalarProperty Name="guRoomNum" ColumnName="guRoomNum" />
+                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
+                <ScalarProperty Name="guFirstName1" ColumnName="guFirstName1" />
+                <ScalarProperty Name="guCheckInD" ColumnName="guCheckInD" />
+                <ScalarProperty Name="guCheckOutD" ColumnName="guCheckOutD" />
+                <ScalarProperty Name="guco" ColumnName="guco" />
+                <ScalarProperty Name="coN" ColumnName="coN" />
+                <ScalarProperty Name="guag" ColumnName="guag" />
+                <ScalarProperty Name="agN" ColumnName="agN" />
+                <ScalarProperty Name="agcl" ColumnName="agcl" />
+                <ScalarProperty Name="guPax" ColumnName="guPax" />
+                <ScalarProperty Name="guCCType" ColumnName="guCCType" />
+                <ScalarProperty Name="guPRAssign" ColumnName="guPRAssign" />
+                <ScalarProperty Name="guAvail" ColumnName="guAvail" />
+                <ScalarProperty Name="guPRAvail" ColumnName="guPRAvail" />
+                <ScalarProperty Name="guum" ColumnName="guum" />
+                <ScalarProperty Name="guInfo" ColumnName="guInfo" />
+                <ScalarProperty Name="guInfoD" ColumnName="guInfoD" />
+                <ScalarProperty Name="guPRInfo" ColumnName="guPRInfo" />
+                <ScalarProperty Name="guFollow" ColumnName="guFollow" />
+                <ScalarProperty Name="guFollowD" ColumnName="guFollowD" />
+                <ScalarProperty Name="guPRFollow" ColumnName="guPRFollow" />
+                <ScalarProperty Name="guInvit" ColumnName="guInvit" />
+                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
+                <ScalarProperty Name="guPRInvit1" ColumnName="guPRInvit1" />
+                <ScalarProperty Name="gunb" ColumnName="gunb" />
+                <ScalarProperty Name="guNoBookD" ColumnName="guNoBookD" />
+                <ScalarProperty Name="guPRNoBook" ColumnName="guPRNoBook" />
+                <ScalarProperty Name="guQuinella" ColumnName="guQuinella" />
+                <ScalarProperty Name="gagu" ColumnName="gagu" />
+                <ScalarProperty Name="guGroup" ColumnName="guGroup" />
+                <ScalarProperty Name="Equity" ColumnName="Equity" />
+                <ScalarProperty Name="gucl" ColumnName="gucl" />
+                <ScalarProperty Name="clN" ColumnName="clN" />
+                <ScalarProperty Name="guCompany" ColumnName="guCompany" />
+                <ScalarProperty Name="guMembershipNum" ColumnName="guMembershipNum" />
+                <ScalarProperty Name="mtN" ColumnName="mtN" />
+                <ScalarProperty Name="guBookCanc" ColumnName="guBookCanc" />
+                <ScalarProperty Name="guShow" ColumnName="guShow" />
+                <ScalarProperty Name="guLW" ColumnName="guLW" />
+                <ScalarProperty Name="guPRNote" ColumnName="guPRNote" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="guComments" ColumnName="guComments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetLocationsByUser" FunctionName="IMModel.Store.USP_OR_GetLocationsByUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetLocationsByUser">
+                <ScalarProperty Name="loID" ColumnName="loID" />
+                <ScalarProperty Name="loN" ColumnName="loN" />
+                <ScalarProperty Name="lols" ColumnName="lols" />
+                <ScalarProperty Name="losr" ColumnName="losr" />
+                <ScalarProperty Name="plpe" ColumnName="plpe" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetPremanifest" FunctionName="IMModel.Store.USP_OR_GetPremanifest">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetGuestsPremanifest">
+                <ScalarProperty Name="guStatus" ColumnName="guStatus" />
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="guIdProfileOpera" ColumnName="guIdProfileOpera" />
+                <ScalarProperty Name="guCheckIn" ColumnName="guCheckIn" />
+                <ScalarProperty Name="guRoomNum" ColumnName="guRoomNum" />
+                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
+                <ScalarProperty Name="guFirstName1" ColumnName="guFirstName1" />
+                <ScalarProperty Name="guCheckInD" ColumnName="guCheckInD" />
+                <ScalarProperty Name="guCheckOutD" ColumnName="guCheckOutD" />
+                <ScalarProperty Name="guco" ColumnName="guco" />
+                <ScalarProperty Name="coN" ColumnName="coN" />
+                <ScalarProperty Name="guag" ColumnName="guag" />
+                <ScalarProperty Name="agN" ColumnName="agN" />
+                <ScalarProperty Name="agcl" ColumnName="agcl" />
+                <ScalarProperty Name="guPax" ColumnName="guPax" />
+                <ScalarProperty Name="guO2" ColumnName="guO2" />
+                <ScalarProperty Name="guCCType" ColumnName="guCCType" />
+                <ScalarProperty Name="guPRAssign" ColumnName="guPRAssign" />
+                <ScalarProperty Name="guAvail" ColumnName="guAvail" />
+                <ScalarProperty Name="guInfo" ColumnName="guInfo" />
+                <ScalarProperty Name="guPRInfo" ColumnName="guPRInfo" />
+                <ScalarProperty Name="guFollow" ColumnName="guFollow" />
+                <ScalarProperty Name="guFollowD" ColumnName="guFollowD" />
+                <ScalarProperty Name="guPRFollow" ColumnName="guPRFollow" />
+                <ScalarProperty Name="guInvit" ColumnName="guInvit" />
+                <ScalarProperty Name="guInvitD" ColumnName="guInvitD" />
+                <ScalarProperty Name="guInvitT" ColumnName="guInvitT" />
+                <ScalarProperty Name="guResch" ColumnName="guResch" />
+                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
+                <ScalarProperty Name="guBookT" ColumnName="guBookT" />
+                <ScalarProperty Name="guPRInvit1" ColumnName="guPRInvit1" />
+                <ScalarProperty Name="gunb" ColumnName="gunb" />
+                <ScalarProperty Name="guNoBookD" ColumnName="guNoBookD" />
+                <ScalarProperty Name="guPRNoBook" ColumnName="guPRNoBook" />
+                <ScalarProperty Name="guQuinella" ColumnName="guQuinella" />
+                <ScalarProperty Name="gagu" ColumnName="gagu" />
+                <ScalarProperty Name="guGroup" ColumnName="guGroup" />
+                <ScalarProperty Name="Equity" ColumnName="Equity" />
+                <ScalarProperty Name="gucl" ColumnName="gucl" />
+                <ScalarProperty Name="clN" ColumnName="clN" />
+                <ScalarProperty Name="guCompany" ColumnName="guCompany" />
+                <ScalarProperty Name="guMembershipNum" ColumnName="guMembershipNum" />
+                <ScalarProperty Name="mtN" ColumnName="mtN" />
+                <ScalarProperty Name="guShow" ColumnName="guShow" />
+                <ScalarProperty Name="guTour" ColumnName="guTour" />
+                <ScalarProperty Name="guBookCanc" ColumnName="guBookCanc" />
+                <ScalarProperty Name="guSale" ColumnName="guSale" />
+                <ScalarProperty Name="guLW" ColumnName="guLW" />
+                <ScalarProperty Name="guPRNote" ColumnName="guPRNote" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="guComments" ColumnName="guComments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+>>>>>>> 9390c6577b42c2257ae7b52eb0068a10dd1f49bc
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -37,7 +37,7 @@
         <AssociationConnector Association="IMModel.FK_Personnel_Personnel_Liner" />
         <AssociationConnector Association="IMModel.FK_SalesRooms_Personnel_Boss" />
         <AssociationConnector Association="IMModel.FK_WhsMovs_Personnel" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

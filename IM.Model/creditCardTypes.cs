@@ -11,11 +11,10 @@ namespace IM.Model
 {
     using System;
     
-    public partial class leadSourceLogin
+    public partial class creditCardTypes
     {
-        public string lsID { get; set; }
-        public string lsN { get; set; }
-        public string lspg { get; set; }
-        public short lsHoursDif { get; set; }
+        public string ccID { get; set; }
+        public string ccN { get; set; }
+        public bool ccIsCreditCard { get; set; }
     }
 }

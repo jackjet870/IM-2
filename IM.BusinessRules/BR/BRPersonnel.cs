@@ -44,6 +44,19 @@ namespace IM.BusinessRules.BR
       return usrD;
     }
 
+<<<<<<< HEAD
+=======
+    public static IEnumerable<USP_OR_GetPersonnel_Result> PersonnelByLS(string leadSource)
+    {
+      UserData usrD = new UserData();
+      using (var dbContext = new IMEntities())
+      {
+        var personnel = dbContext.USP_OR_GetPersonnel(leadSource, String.Empty, "PR", 1, String.Empty, String.Empty, null, String.Empty);
+      }
+      return null;
+    }
+
+>>>>>>> 9390c6577b42c2257ae7b52eb0068a10dd1f49bc
     public static bool ChangePassword(string user, string newPassword, DateTime serverDate)
     {
       int result;      
@@ -57,6 +70,7 @@ namespace IM.BusinessRules.BR
       }
       return Convert.ToBoolean(result);
     }
+<<<<<<< HEAD
 
     public static IEnumerable<USP_OR_GetPersonnel_Result> GetPersonnelByLS(string leadSource)
     {
@@ -66,5 +80,7 @@ namespace IM.BusinessRules.BR
         return null;
       }
     }
+=======
+>>>>>>> 9390c6577b42c2257ae7b52eb0068a10dd1f49bc
   }
 }

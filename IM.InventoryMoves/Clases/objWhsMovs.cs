@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IM.InventoryMoves.Clases
+namespace IM.InventoryMovements.Clases
 {
   public class objWhsMovs : Model.WhsMov, IDataErrorInfo
   {

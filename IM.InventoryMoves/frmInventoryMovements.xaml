@@ -4,12 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="clr-namespace:IM.InventoryMoves"
-        xmlns:Clases="clr-namespace:IM.InventoryMoves.Clases" xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.InventoryMoves.frmInventoryMoves"
+        xmlns:local="clr-namespace:IM.InventoryMovements"
+        xmlns:Clases="clr-namespace:IM.InventoryMovements.Clases" xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.InventoryMovements.frmInventoryMovements"
         mc:Ignorable="d"
         Title="Origos Inventory Movements" Height="650" Width="800" WindowStartupLocation="CenterScreen" 
         MaxHeight="650" MaxWidth="800" WindowStyle="SingleBorderWindow" ResizeMode="NoResize"       
-        Loaded="frmInventoryMoves_Loaded" KeyDown="frmInventoryMoves_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+        Loaded="frmInventoryMovements_Loaded" KeyDown="frmInventoryMovements_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
   <Window.Resources>
     <CollectionViewSource x:Key="objWhsMovsViewSource" d:DesignSource="{d:DesignInstance {x:Type Clases:objWhsMovs}, CreateList=True}"/>
     <CollectionViewSource x:Key="getGiftsViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GetGifts}, CreateList=True}"/>

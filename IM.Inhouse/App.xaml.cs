@@ -9,7 +9,7 @@ using IM.Model.Entities;
 using IM.Base.Forms;
 using IM.Model.Enums;
 
-namespace IM.InventoryMovements
+namespace IM.Inhouse
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -19,19 +19,17 @@ namespace IM.InventoryMovements
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-
-
       frmSplash frmSplash = new frmSplash();
-      frmLogin frmLogin = new frmLogin(frmSplash, true, LoginType.Warehouse);
+      frmLogin frmLogin = new frmLogin(frmSplash, true, LoginType.Location);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.isAuthenticated)
       {
         UserData userData = frmLogin.userData;
-        frmInventoryMovements frmInvMovs = new frmInventoryMovements(userData);
-        frmInvMovs.ShowDialog();
+        frmRegister frmRegis = new frmRegister(userData);
+        frmRegis.ShowDialog();
         frmSplash.Close();
-      }
+      }      
     }
   }
 }

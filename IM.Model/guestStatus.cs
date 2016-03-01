@@ -11,11 +11,10 @@ namespace IM.Model
 {
     using System;
     
-    public partial class leadSourceLogin
+    public partial class guestStatus
     {
-        public string lsID { get; set; }
-        public string lsN { get; set; }
-        public string lspg { get; set; }
-        public short lsHoursDif { get; set; }
+        public string gsID { get; set; }
+        public string gsN { get; set; }
+        public decimal gsMaxAuthGifts { get; set; }
     }
 }
