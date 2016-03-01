@@ -115,39 +115,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\About.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Date.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\IM.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\IM.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Layout.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Login.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Preview.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Printer.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Report.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\User.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\IM.Base\IM.Base.csproj">
       <Project>{5870c4ea-8b03-44a1-b9a2-20e48a59a64f}</Project>
       <Name>IM.Base</Name>
