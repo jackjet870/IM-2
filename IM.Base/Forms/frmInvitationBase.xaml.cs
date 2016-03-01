@@ -302,14 +302,20 @@ namespace IM.Base.Forms
       colElectronicPurseCreditCard.Width = new GridLength(0);
     }
 
+    /// <summary>
+    /// Carga lal ista de lenguajes
+    /// </summary>
+    /// <history>
+    /// [lchairez] 29/02/2016 Created
+    /// </history>
     private void CargarComboLanguage()
     {
-      var languages= IM.BusinessRules.BR.BRInvitationBase.GetLanguage();
+      var languages = IM.BusinessRules.BR.BRInvitationBase.GetLanguage();
       cmbLanguage.DisplayMemberPath = "laN";
       cmbLanguage.SelectedValuePath = "laID";
       cmbLanguage.SelectedValue = "ES";
       cmbLanguage.ItemsSource = languages.ToList();
-      
+
     }
     #endregion
   }

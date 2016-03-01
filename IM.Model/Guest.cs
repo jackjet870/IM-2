@@ -219,31 +219,5 @@ namespace IM.Model
         public string guFirstNameOriginal { get; set; }
         public Nullable<bool> guDespositRefund { get; set; }
         public Nullable<bool> guDepositsRefund { get; set; }
-    
-        public virtual Personnel Personnel { get; set; }
-        public virtual Personnel Personnel1 { get; set; }
-        public virtual Personnel Personnel2 { get; set; }
-        public virtual Personnel Personnel3 { get; set; }
-        public virtual Personnel Personnel4 { get; set; }
-        public virtual Personnel Personnel5 { get; set; }
-        public virtual Personnel Personnel6 { get; set; }
-        public virtual Personnel Personnel7 { get; set; }
-        public virtual Personnel Personnel8 { get; set; }
-        public virtual Personnel Personnel9 { get; set; }
-        public virtual Personnel Personnel10 { get; set; }
-        public virtual Personnel Personnel11 { get; set; }
-        public virtual Personnel Personnel12 { get; set; }
-        public virtual Personnel Personnel13 { get; set; }
-        public virtual Personnel Personnel14 { get; set; }
-        public virtual Personnel Personnel15 { get; set; }
-        public virtual Personnel Personnel16 { get; set; }
-        public virtual Personnel Personnel17 { get; set; }
-        public virtual Personnel Personnel18 { get; set; }
-        public virtual Personnel Personnel19 { get; set; }
-        public virtual Personnel Personnel20 { get; set; }
-        public virtual Personnel Personnel21 { get; set; }
-        public virtual Personnel Personnel22 { get; set; }
-        public virtual Personnel Personnel23 { get; set; }
-        public virtual Personnel Personnel24 { get; set; }
     }
 }

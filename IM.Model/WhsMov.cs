@@ -21,7 +21,5 @@ namespace IM.Model
         public string wmgi { get; set; }
         public string wmComments { get; set; }
         public string wmpe { get; set; }
-    
-        public virtual Personnel Personnel { get; set; }
     }
 }

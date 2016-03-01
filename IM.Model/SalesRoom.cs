@@ -34,7 +34,5 @@ namespace IM.Model
         public bool srUseSistur { get; set; }
         public string srCECOID { get; set; }
         public string srCEBEID { get; set; }
-    
-        public virtual Personnel Personnel { get; set; }
     }
 }

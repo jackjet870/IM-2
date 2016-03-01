@@ -274,18 +274,22 @@
           <Parameter Name="Programs" Type="varchar" Mode="In" />
           <Parameter Name="Regions" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="USP_OR_GetMailOuts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="guls" Type="varchar" Mode="In" />
-          <Parameter Name="guCheckInD" Type="datetime" Mode="In" />
-          <Parameter Name="guCheckOutD" Type="datetime" Mode="In" />
-          <Parameter Name="guBookD" Type="datetime" Mode="In" />
-        </Function>
         <Function Name="USP_OR_GetMailOutTextsByLeadSource" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="mtls" Type="varchar" Mode="In" />
           <Parameter Name="mtA" Type="bit" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetMarkets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetPersonnel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+          <Parameter Name="Roles" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+          <Parameter Name="Permission" Type="varchar" Mode="In" />
+          <Parameter Name="RelationalOperator" Type="varchar" Mode="In" />
+          <Parameter Name="PermissionLevel" Type="int" Mode="In" />
+          <Parameter Name="Dept" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetPremanifestHost" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="datetime" Mode="In" />
@@ -395,6 +399,16 @@
             <Parameter Name="LoginType" Mode="In" Type="Byte" />
             <Parameter Name="User" Mode="In" Type="String" />
             <Parameter Name="Place" Mode="In" Type="String" />
+            </FunctionImport>
+          <FunctionImport Name="USP_OR_GetPersonnel" ReturnType="Collection(IMModel.USP_OR_GetPersonnel_Result)">
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+            <Parameter Name="Roles" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="Byte" />
+            <Parameter Name="Permission" Mode="In" Type="String" />
+            <Parameter Name="RelationalOperator" Mode="In" Type="String" />
+            <Parameter Name="PermissionLevel" Mode="In" Type="Int32" />
+            <Parameter Name="Dept" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Guest">
@@ -819,6 +833,11 @@
           <Property Type="String" Name="whID" Nullable="false" />
           <Property Type="String" Name="whN" Nullable="false" />
         </ComplexType>
+        <ComplexType Name="USP_OR_GetPersonnel_Result">
+          <Property Type="String" Name="peID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="deN" Nullable="true" MaxLength="50" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1193,37 +1212,6 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="spProcessMailOuts" FunctionName="IMModel.Store.spProcessMailOuts" />
-          <FunctionImportMapping FunctionImportName="USP_OR_GetMailOuts" FunctionName="IMModel.Store.USP_OR_GetMailOuts">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.GetMailOuts">
-                <ScalarProperty Name="guStatus" ColumnName="guStatus" />
-                <ScalarProperty Name="guBookT" ColumnName="guBookT" />
-                <ScalarProperty Name="guPickUpT" ColumnName="guPickUpT" />
-                <ScalarProperty Name="guRoomNum" ColumnName="guRoomNum" />
-                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
-                <ScalarProperty Name="guFirstName1" ColumnName="guFirstName1" />
-                <ScalarProperty Name="guPax" ColumnName="guPax" />
-                <ScalarProperty Name="guCheckIn" ColumnName="guCheckIn" />
-                <ScalarProperty Name="guCheckInD" ColumnName="guCheckInD" />
-                <ScalarProperty Name="guCheckOutD" ColumnName="guCheckOutD" />
-                <ScalarProperty Name="guco" ColumnName="guco" />
-                <ScalarProperty Name="coN" ColumnName="coN" />
-                <ScalarProperty Name="guag" ColumnName="guag" />
-                <ScalarProperty Name="agN" ColumnName="agN" />
-                <ScalarProperty Name="guInfo" ColumnName="guInfo" />
-                <ScalarProperty Name="guInvit" ColumnName="guInvit" />
-                <ScalarProperty Name="guBookCanc" ColumnName="guBookCanc" />
-                <ScalarProperty Name="guInfoD" ColumnName="guInfoD" />
-                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
-                <ScalarProperty Name="guPRInvit1" ColumnName="guPRInvit1" />
-                <ScalarProperty Name="peN" ColumnName="peN" />
-                <ScalarProperty Name="gumo" ColumnName="gumo" />
-                <ScalarProperty Name="gula" ColumnName="gula" />
-                <ScalarProperty Name="gumoA" ColumnName="gumoA" />
-                <ScalarProperty Name="guComments" ColumnName="guComments" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="WhsMovs">
             <EntityTypeMapping TypeName="IMModel.WhsMov">
               <MappingFragment StoreEntitySet="WhsMovs">
@@ -1320,6 +1308,15 @@
               <ComplexTypeMapping TypeName="IMModel.warehouseLogin">
                 <ScalarProperty Name="whID" ColumnName="whID" />
                 <ScalarProperty Name="whN" ColumnName="whN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetPersonnel" FunctionName="IMModel.Store.USP_OR_GetPersonnel">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.USP_OR_GetPersonnel_Result">
+                <ScalarProperty Name="peID" ColumnName="peID" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="deN" ColumnName="deN" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
