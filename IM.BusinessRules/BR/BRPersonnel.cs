@@ -43,7 +43,7 @@ namespace IM.BusinessRules.BR
       }
       return usrD;
     }
-<<<<<<< HEAD
+
     public static IEnumerable<USP_OR_GetPersonnel_Result> PersonnelByLS(string leadSource)
     {
       UserData usrD = new UserData();
@@ -53,9 +53,6 @@ namespace IM.BusinessRules.BR
       }
       return null;
     }
-
-
-=======
 
     public static bool ChangePassword(string user, string newPassword, DateTime serverDate)
     {
@@ -70,6 +67,5 @@ namespace IM.BusinessRules.BR
       }
       return Convert.ToBoolean(result);
     }
->>>>>>> b20d8fa616937da20fef9ab4c11a5ca86335fe4b
   }
 }

@@ -52,11 +52,8 @@
     <Compile Include="BR\BRAgencies.cs" />
     <Compile Include="BR\BRCountries.cs" />
     <Compile Include="BR\BRGifts.cs" />
-<<<<<<< HEAD
     <Compile Include="BR\BRInvitationBase.cs" />
-=======
     <Compile Include="BR\BRHelpers.cs" />
->>>>>>> b20d8fa616937da20fef9ab4c11a5ca86335fe4b
     <Compile Include="BR\BRPersonnel.cs" />
     <Compile Include="BR\BRWhsMovs.cs" />
     <Compile Include="Entities\UserNormalLogin.cs" />

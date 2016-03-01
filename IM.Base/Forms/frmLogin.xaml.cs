@@ -62,35 +62,23 @@ namespace IM.Base.Forms
       if (!Validar())
         return;
 
-<<<<<<< HEAD
       var user = IM.BusinessRules.BR.BRPersonnel.login(Model.Enums.LoginType.Normal, txtUser.Text);
 
-      if(user == null)
-=======
       userData = BRPersonnel.login(_loginType, txtUser.Text, (cmbLocation.Visibility == Visibility.Visible) ? cmbLocation.SelectedValue.ToString() : "");
       string _encryptPassword = Helpers.EncryptHelper.Encrypt(txtPassword.Password);
       if (userData.User == null)
->>>>>>> b20d8fa616937da20fef9ab4c11a5ca86335fe4b
       {
         CustomMessage("User ID does not exist.", "Error", MessageBoxImage.Error);
         txtUser.Focus();
         return;
       }
-<<<<<<< HEAD
-      else if(user.User.pePwd != EncryptHelper.Encrypt(txtPassword.Password, encryptCode))
-=======
       else if (userData.User.pePwd != Helpers.EncryptHelper.Encrypt(txtPassword.Password))
->>>>>>> b20d8fa616937da20fef9ab4c11a5ca86335fe4b
       {
         CustomMessage("Invalid password.", "Error", MessageBoxImage.Error);
         txtPassword.Focus();
         return;
       }
-<<<<<<< HEAD
-      else if(!user.User.peA)
-=======
       else if (!userData.User.peA)
->>>>>>> b20d8fa616937da20fef9ab4c11a5ca86335fe4b
       {
         CustomMessage("User ID is inactive.", "Error", MessageBoxImage.Error);
         txtUser.Focus();
