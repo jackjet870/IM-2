@@ -250,5 +250,11 @@ namespace IM.Base.Forms
     {
       MessageBox.Show(message, titulo, MessageBoxButton.OK, image);
     }
+
+
+    private void LoadFromFile()
+    {
+
+    }
   }
 }

@@ -66,6 +66,7 @@
     <Compile Include="Forms\frmSplash.xaml.cs">
       <DependentUpon>frmSplash.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\IniFileHelper.cs" />
     <Compile Include="Interfaces\IMetodosPublicos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
