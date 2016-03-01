@@ -11,11 +11,12 @@ namespace IM.Model
 {
     using System;
     
-    public partial class leadSourceLogin
+    public partial class GetLocationsByUser
     {
-        public string lsID { get; set; }
-        public string lsN { get; set; }
-        public string lspg { get; set; }
-        public short lsHoursDif { get; set; }
+        public string loID { get; set; }
+        public string loN { get; set; }
+        public string lols { get; set; }
+        public string losr { get; set; }
+        public string plpe { get; set; }
     }
 }
