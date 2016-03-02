@@ -1,38 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Model;
 using IM.Model.Entities;
 using IM.BusinessRules.BR;
 using IM.Model.Enums;
 using System.IO;
+using IM.Base.Helpers;
 
 namespace IM.Base.Forms
 {
   public partial class frmLogin : Window
   {
+    #region Atributos
+
     protected Window _frmBase = null;
     protected bool _blnChangePassword;
     protected LoginType _loginType;
     protected bool _blnAutoSign;
-    public UserData userData { get; set; }
-    public bool isAuthenticated { get; set; }
-    #region  Variables login tipo Almacen
     private List<GetWarehousesByUser> _lstWhsByUsr = new List<GetWarehousesByUser>();
     private List<GetLocationsByUser> _lstLocaByUsr = new List<GetLocationsByUser>();
-    private GetSalesRoom _gsrObj = new GetSalesRoom();
-    #endregion
     private Helpers.IniFileHelper _iniFileHelper;
+
+    #endregion
+    
+    #region Propiedades
+
+    public UserData userData { get; set; }
+    public bool isAuthenticated { get; set; }
+
+    #endregion
+
+    #region Constructores y destructores
 
     /// <summary>
     /// Contructor Modificado
@@ -52,6 +52,89 @@ namespace IM.Base.Forms
       _blnAutoSign = blnAutoSign;
     }
 
+    #endregion
+
+    #region Metodos
+
+    #region Validate
+
+    /// <summary>
+    /// Valida que los controles del formulario se encuentren llenos
+    /// </summary>
+    /// <returns>bool</returns>
+    /// <history>
+    /// [lchairez] 24/Feb/2016 Created
+    /// [jorcanche] 01/03/2016 Modified (Se agrega el "Case" Location)
+    /// </history>
+    private bool Validate()
+    {
+      bool res = true;
+
+      if (String.IsNullOrEmpty(txtUser.Text))
+      {
+        UIHelper.ShowMessage("Specify the User ID.", MessageBoxImage.Warning);
+        res = false;
+      }
+      else if (String.IsNullOrEmpty(txtPassword.Password))
+      {
+        UIHelper.ShowMessage("Specify the Password.", MessageBoxImage.Warning);
+        res = false;
+      }
+      else if (cmbLocation.Visibility == Visibility.Visible)
+      {
+        if (cmbLocation.SelectedItem == null)
+        {
+          switch (_loginType)
+          {
+            case LoginType.Warehouse:
+              UIHelper.ShowMessage("Specify the Warehouse.", MessageBoxImage.Warning);              
+              break;
+            case LoginType.Location:
+              UIHelper.ShowMessage("Specify the Location.", MessageBoxImage.Warning);
+              break;
+          }
+
+          res = false;
+        }
+      }
+
+      return res;
+    }
+
+    #endregion
+
+    #region LoadFromFile
+
+    private void LoadFromFile()
+    {
+      string strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
+      if (File.Exists(strArchivo))
+      {
+        _iniFileHelper = new Helpers.IniFileHelper(strArchivo);
+        txtUser.Text = _iniFileHelper.readText("Login", "UserName", "");
+        txtPassword.Password = _iniFileHelper.readText("Login", "Password", "");
+        switch (_loginType)
+        {
+          case LoginType.Warehouse:
+            if (cmbLocation.Visibility == Visibility.Visible)
+            {
+              txtUser_LostFocus(null, null);
+              cmbLocation.SelectedValue = _iniFileHelper.readText("Login", "Warehouse", "");
+            }
+            btnAceptar.Focus();
+            break;
+        }
+      }
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Eventos del formulario
+
+    #region btnAceptar_Click
+
     /// <summary>
     /// Funcion que recibe la instancia de 
     /// </summary>
@@ -63,7 +146,7 @@ namespace IM.Base.Forms
     /// </history>
     private void btnAceptar_Click(object sender, RoutedEventArgs e)
     {
-      if (!Validar())
+      if (!Validate())
         return;
 
       var user = IM.BusinessRules.BR.BRPersonnel.login(Model.Enums.LoginType.Normal, txtUser.Text);
@@ -72,23 +155,22 @@ namespace IM.Base.Forms
       string _encryptPassword = Helpers.EncryptHelper.Encrypt(txtPassword.Password);
       if (userData.User == null)
       {
-        CustomMessage("User ID does not exist.", "Error", MessageBoxImage.Error);
+        UIHelper.ShowMessage("User ID does not exist.", MessageBoxImage.Error);
         txtUser.Focus();
         return;
       }
       else if (userData.User.pePwd != Helpers.EncryptHelper.Encrypt(txtPassword.Password))
       {
-        CustomMessage("Invalid password.", "Error", MessageBoxImage.Error);
+        UIHelper.ShowMessage("Invalid password.", MessageBoxImage.Error);
         txtPassword.Focus();
         return;
       }
       else if (!userData.User.peA)
       {
-        CustomMessage("User ID is inactive.", "Error", MessageBoxImage.Error);
+        UIHelper.ShowMessage("User ID is inactive.", MessageBoxImage.Error);
         txtUser.Focus();
         return;
       }
-
 
       //Validamos la contraseña no haya expirado o el check este activo.
       DateTime _expireDate = userData.User.pePwdD.AddDays(userData.User.pePwdDays);
@@ -102,7 +184,7 @@ namespace IM.Base.Forms
       // validamos las contraseña
       if (!_encryptPassword.Equals(userData.User.pePwd))
       {
-        CustomMessage("Invalid password.", "Intelligence Marketing", MessageBoxImage.Information);
+        UIHelper.ShowMessage("Invalid password.");
         txtPassword.Focus();
         return;
       }
@@ -113,7 +195,7 @@ namespace IM.Base.Forms
           // validamos que el usuario tenga permiso
           if (!userData.Permissions.Exists(c => c.pppm == "GIFTSRCPTS" && c.pppl > 1))
           {
-            CustomMessage("User doesn't have access", "IM Inventory Movements", MessageBoxImage.Information);
+            UIHelper.ShowMessage("User doesn't have access");
             btnCancelar_Click(null, null);
             return;
           }
@@ -122,7 +204,7 @@ namespace IM.Base.Forms
                                  // validamos que el usuario tenga permiso
           if (!userData.Permissions.Exists(c => c.pppm == "REGISTER" && c.pppl > 1))
           {
-            MessageBox.Show("User doesn't have access", "IM Inhouse", MessageBoxButton.OK, MessageBoxImage.Information);
+            UIHelper.ShowMessage("User doesn't have access");
             btnCancelar_Click(null, null);
             return;
           }
@@ -135,11 +217,19 @@ namespace IM.Base.Forms
         _frmBase.Hide();
     }
 
+    #endregion
+
+    #region btnCancelar_Click
+
     private void btnCancelar_Click(object sender, RoutedEventArgs e)
     {
       _frmBase.Close();
       Close();
     }
+
+    #endregion
+
+    #region txtUser_LostFocus
 
     /// <summary>
     /// Método de carga del formulario.
@@ -186,18 +276,9 @@ namespace IM.Base.Forms
       }
     }
 
-    /// <summary>
-    /// Inicializa los campos de Usuario y Password.
-    /// </summary>
-    /// <history>
-    /// [edgrodriguez] 26/Feb/2016 Created
-    /// </history>
-    private void iniciarCampos()
-    {
-      txtUser.Focus();
-      txtUser.SelectAll();
-    }
+    #endregion
 
+    #region Window_Loaded
 
     /// <summary>
     /// Inicializacion del formulario.
@@ -232,84 +313,8 @@ namespace IM.Base.Forms
       LoadFromFile();
     }
 
-    /// <summary>
-    /// Valida que los controles del formulario se encuentren llenos
-    /// </summary>
-    /// <returns>bool</returns>
-    /// <history>
-    /// [lchairez] 24/Feb/2016 Created
-    /// [jorcanche] 01/03/2016 Modified (Se agrega el "Case" Location)
-    /// </history>
-    private bool Validar()
-    {
-      bool res = true;
+    #endregion
 
-      if (String.IsNullOrEmpty(txtUser.Text))
-      {
-        CustomMessage("Specify the User ID.", "Warning", MessageBoxImage.Exclamation);
-        res = false;
-      }
-      else if (String.IsNullOrEmpty(txtPassword.Password))
-      {
-        CustomMessage("Specify the Password.", "Warning", MessageBoxImage.Exclamation);
-        res = false;
-      }
-      else if (cmbLocation.Visibility == Visibility.Visible)
-      {
-        if (cmbLocation.SelectedItem == null)
-        {
-          switch (_loginType)
-          {
-            case LoginType.Warehouse:
-              CustomMessage("Specify the Warehouse.", "Warning", MessageBoxImage.Exclamation);              
-              break;
-            case LoginType.Location:
-              CustomMessage("Specify the Location.", "Warning", MessageBoxImage.Exclamation);
-              break;
-          }
-
-          res = false;
-        }
-      }
-
-      return res;
-    }
-
-    /// <summary>
-    /// Envia un mensaje al usuario
-    /// </summary>
-    /// <param name="message">Mensaje que se mostrará</param>
-    /// <param name="titulo">Título de la ventana</param>
-    /// <param name="image">Imagen que se mostrará en la ventana</param>
-    /// <history>
-    /// [lchairez] 24/Feb/2016 Created
-    /// </history>
-    private void CustomMessage(string message, string titulo, MessageBoxImage image)
-    {
-      MessageBox.Show(message, titulo, MessageBoxButton.OK, image);
-    }
-
-
-    private void LoadFromFile()
-    {
-      string strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
-      if (File.Exists(strArchivo))
-      {
-        _iniFileHelper = new Helpers.IniFileHelper(strArchivo);
-        txtUser.Text = _iniFileHelper.readText("Login", "UserName", "");
-        txtPassword.Password = _iniFileHelper.readText("Login", "Password", "");
-        switch(_loginType)
-        {
-          case LoginType.Warehouse:
-            if (cmbLocation.Visibility == Visibility.Visible)
-            {
-              txtUser_LostFocus(null, null);
-              cmbLocation.SelectedValue = _iniFileHelper.readText("Login", "Warehouse", "");
-            }
-            btnAceptar.Focus();
-            break;
-        }       
-      }
-    }
+    #endregion    
   }
 }

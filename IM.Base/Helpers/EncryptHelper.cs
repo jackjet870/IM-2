@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace IM.Base.Helpers
@@ -13,8 +11,13 @@ namespace IM.Base.Helpers
   /// </history>
   public class EncryptHelper
   {
+    #region Atributos
+
     private const string _encryptCode = "1O3r5i7g9o8s";
-    #region Metodos publicos
+
+    #endregion
+
+    #region Metodos
 
     /// <summary>
     /// Encripta y desencripta un texto

@@ -9,34 +9,6 @@
         <EntityTypeShape EntityType="IMModel.SalesRoom" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="IMModel.WhsMov" Width="1.5" PointX="5.375" PointY="0.75" />
         <EntityTypeShape EntityType="IMModel.Personnel" Width="1.5" PointX="0.75" PointY="16" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Closer1" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Closer2" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Closer3" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_CloserCaptain1" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_EntryHost" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Exit1" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Exit2" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_ExitHost" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_GiftsHost" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Liner1" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Liner2" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_LinerCaptain1" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Podium" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PR1" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PR2" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PR3" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRAssign" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRAvail" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRCaptain1" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRCaptain2" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRCaptain3" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRContact" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRFollow" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRNoBook" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_VLO" />
-        <AssociationConnector Association="IMModel.FK_Personnel_Personnel_Liner" />
-        <AssociationConnector Association="IMModel.FK_SalesRooms_Personnel_Boss" />
-        <AssociationConnector Association="IMModel.FK_WhsMovs_Personnel" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
