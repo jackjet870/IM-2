@@ -65,13 +65,9 @@ namespace IM.Base.Forms
     {
       if (!Validar())
         return;
-<<<<<<< HEAD
-
-=======
 
       var user = IM.BusinessRules.BR.BRPersonnel.login(Model.Enums.LoginType.Normal, txtUser.Text);
 
->>>>>>> 9390c6577b42c2257ae7b52eb0068a10dd1f49bc
       userData = BRPersonnel.login(_loginType, txtUser.Text, (cmbLocation.Visibility == Visibility.Visible) ? cmbLocation.SelectedValue.ToString() : "");
       string _encryptPassword = Helpers.EncryptHelper.Encrypt(txtPassword.Password);
       if (userData.User == null)

@@ -648,13 +648,6 @@
           <Parameter Name="Programs" Type="varchar" Mode="In" />
           <Parameter Name="Regions" Type="varchar" Mode="In" />
         </Function>
-<<<<<<< HEAD
-=======
-        <Function Name="USP_OR_GetLocationsByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="User" Type="varchar" Mode="In" />
-          <Parameter Name="Program" Type="varchar" Mode="In" />
-        </Function>
->>>>>>> 9390c6577b42c2257ae7b52eb0068a10dd1f49bc
         <Function Name="USP_OR_GetMailOutTextsByLeadSource" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="mtls" Type="varchar" Mode="In" />
           <Parameter Name="mtA" Type="bit" Mode="In" />
@@ -672,15 +665,12 @@
           <Parameter Name="PermissionLevel" Type="int" Mode="In" />
           <Parameter Name="Dept" Type="varchar" Mode="In" />
         </Function>
-<<<<<<< HEAD
-=======
         <Function Name="USP_OR_GetPremanifest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
           <Parameter Name="Markets" Type="varchar" Mode="In" />
           <Parameter Name="OnGroup" Type="int" Mode="In" />
         </Function>
->>>>>>> 9390c6577b42c2257ae7b52eb0068a10dd1f49bc
         <Function Name="USP_OR_GetPremanifestHost" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
@@ -912,8 +902,6 @@
             <Parameter Name="RelationalOperator" Mode="In" Type="String" />
             <Parameter Name="PermissionLevel" Mode="In" Type="Int32" />
             <Parameter Name="Dept" Mode="In" Type="String" />
-<<<<<<< HEAD
-=======
           </FunctionImport>
           <EntitySet Name="Personnels" EntityType="IMModel.Personnel" />
           <AssociationSet Name="FK_Guests_Personnel_Closer1" Association="IMModel.FK_Guests_Personnel_Closer1">
@@ -1054,7 +1042,6 @@
             <Parameter Name="LeadSource" Mode="In" Type="String" />
             <Parameter Name="Markets" Mode="In" Type="String" />
             <Parameter Name="OnGroup" Mode="In" Type="Int32" />
->>>>>>> 9390c6577b42c2257ae7b52eb0068a10dd1f49bc
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Guest">
@@ -1511,8 +1498,6 @@
           <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="deN" Nullable="true" MaxLength="50" />
         </ComplexType>
-<<<<<<< HEAD
-=======
         <EntityType Name="Personnel">
           <Key>
             <PropertyRef Name="peID" />
@@ -2064,7 +2049,6 @@
           <Property Type="String" Name="Notes" Nullable="false" MaxLength="1" />
           <Property Type="String" Name="guComments" Nullable="true" MaxLength="100" />
         </ComplexType>
->>>>>>> 9390c6577b42c2257ae7b52eb0068a10dd1f49bc
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2547,8 +2531,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-<<<<<<< HEAD
-=======
           <EntitySetMapping Name="Personnels">
             <EntityTypeMapping TypeName="IMModel.Personnel">
               <MappingFragment StoreEntitySet="Personnel">
@@ -2684,75 +2666,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="USP_OR_GetLocationsByUser" FunctionName="IMModel.Store.USP_OR_GetLocationsByUser">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.GetLocationsByUser">
-                <ScalarProperty Name="loID" ColumnName="loID" />
-                <ScalarProperty Name="loN" ColumnName="loN" />
-                <ScalarProperty Name="lols" ColumnName="lols" />
-                <ScalarProperty Name="losr" ColumnName="losr" />
-                <ScalarProperty Name="plpe" ColumnName="plpe" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="USP_OR_GetPremanifest" FunctionName="IMModel.Store.USP_OR_GetPremanifest">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.GetGuestsPremanifest">
-                <ScalarProperty Name="guStatus" ColumnName="guStatus" />
-                <ScalarProperty Name="guID" ColumnName="guID" />
-                <ScalarProperty Name="guIdProfileOpera" ColumnName="guIdProfileOpera" />
-                <ScalarProperty Name="guCheckIn" ColumnName="guCheckIn" />
-                <ScalarProperty Name="guRoomNum" ColumnName="guRoomNum" />
-                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
-                <ScalarProperty Name="guFirstName1" ColumnName="guFirstName1" />
-                <ScalarProperty Name="guCheckInD" ColumnName="guCheckInD" />
-                <ScalarProperty Name="guCheckOutD" ColumnName="guCheckOutD" />
-                <ScalarProperty Name="guco" ColumnName="guco" />
-                <ScalarProperty Name="coN" ColumnName="coN" />
-                <ScalarProperty Name="guag" ColumnName="guag" />
-                <ScalarProperty Name="agN" ColumnName="agN" />
-                <ScalarProperty Name="agcl" ColumnName="agcl" />
-                <ScalarProperty Name="guPax" ColumnName="guPax" />
-                <ScalarProperty Name="guO2" ColumnName="guO2" />
-                <ScalarProperty Name="guCCType" ColumnName="guCCType" />
-                <ScalarProperty Name="guPRAssign" ColumnName="guPRAssign" />
-                <ScalarProperty Name="guAvail" ColumnName="guAvail" />
-                <ScalarProperty Name="guInfo" ColumnName="guInfo" />
-                <ScalarProperty Name="guPRInfo" ColumnName="guPRInfo" />
-                <ScalarProperty Name="guFollow" ColumnName="guFollow" />
-                <ScalarProperty Name="guFollowD" ColumnName="guFollowD" />
-                <ScalarProperty Name="guPRFollow" ColumnName="guPRFollow" />
-                <ScalarProperty Name="guInvit" ColumnName="guInvit" />
-                <ScalarProperty Name="guInvitD" ColumnName="guInvitD" />
-                <ScalarProperty Name="guInvitT" ColumnName="guInvitT" />
-                <ScalarProperty Name="guResch" ColumnName="guResch" />
-                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
-                <ScalarProperty Name="guBookT" ColumnName="guBookT" />
-                <ScalarProperty Name="guPRInvit1" ColumnName="guPRInvit1" />
-                <ScalarProperty Name="gunb" ColumnName="gunb" />
-                <ScalarProperty Name="guNoBookD" ColumnName="guNoBookD" />
-                <ScalarProperty Name="guPRNoBook" ColumnName="guPRNoBook" />
-                <ScalarProperty Name="guQuinella" ColumnName="guQuinella" />
-                <ScalarProperty Name="gagu" ColumnName="gagu" />
-                <ScalarProperty Name="guGroup" ColumnName="guGroup" />
-                <ScalarProperty Name="Equity" ColumnName="Equity" />
-                <ScalarProperty Name="gucl" ColumnName="gucl" />
-                <ScalarProperty Name="clN" ColumnName="clN" />
-                <ScalarProperty Name="guCompany" ColumnName="guCompany" />
-                <ScalarProperty Name="guMembershipNum" ColumnName="guMembershipNum" />
-                <ScalarProperty Name="mtN" ColumnName="mtN" />
-                <ScalarProperty Name="guShow" ColumnName="guShow" />
-                <ScalarProperty Name="guTour" ColumnName="guTour" />
-                <ScalarProperty Name="guBookCanc" ColumnName="guBookCanc" />
-                <ScalarProperty Name="guSale" ColumnName="guSale" />
-                <ScalarProperty Name="guLW" ColumnName="guLW" />
-                <ScalarProperty Name="guPRNote" ColumnName="guPRNote" />
-                <ScalarProperty Name="Notes" ColumnName="Notes" />
-                <ScalarProperty Name="guComments" ColumnName="guComments" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
->>>>>>> 9390c6577b42c2257ae7b52eb0068a10dd1f49bc
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

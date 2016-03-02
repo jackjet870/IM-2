@@ -30,6 +30,7 @@ namespace IM.Model
         public virtual DbSet<Guest> Guests { get; set; }
         public virtual DbSet<SalesRoom> SalesRooms { get; set; }
         public virtual DbSet<WhsMov> WhsMovs { get; set; }
+        public virtual DbSet<Personnel> Personnels { get; set; }
     
         public virtual ObjectResult<GetCountries> USP_OR_GetCountries(Nullable<byte> status)
         {
