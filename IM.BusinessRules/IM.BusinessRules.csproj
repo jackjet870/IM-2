@@ -22,7 +22,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -57,7 +57,7 @@
     <Compile Include="BR\BRHelpers.cs" />
     <Compile Include="BR\BRPersonnel.cs" />
     <Compile Include="BR\BRWhsMovs.cs" />
-    <Compile Include="Entities\UserNormalLogin.cs" />
+    <Compile Include="Classes\UserNormalLogin.cs" />
     <Compile Include="Enums\InvitationType.cs" />
     <Compile Include="BR\BRLeadSources.cs" />
     <Compile Include="BR\BRMarkets.cs" />

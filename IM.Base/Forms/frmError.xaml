@@ -1,4 +1,4 @@
-﻿<Window x:Class="IM.Base.Forms.ErrorMessage"
+﻿<Window x:Class="IM.Base.Forms.frmError"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                 Title="Error" Height="358" Width="453" ResizeMode="NoResize" Background="SkyBlue" WindowStyle="ToolWindow"

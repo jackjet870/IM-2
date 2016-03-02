@@ -8,7 +8,7 @@ namespace IM.Base.Forms
   /// <history>
   /// [lchairez] 11/Feb/2016 Created
   /// </history>
-  public partial class ErrorMessage : Window
+  public partial class frmError : Window
   {
     #region Atributos
 
@@ -24,7 +24,7 @@ namespace IM.Base.Forms
     /// <history>
     ///  [lchairez] 11/Feb/2016 Created
     /// </history>
-    public ErrorMessage(string errorMessage)
+    public frmError(string errorMessage)
     {
       this._errorMessage = errorMessage;
       WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;

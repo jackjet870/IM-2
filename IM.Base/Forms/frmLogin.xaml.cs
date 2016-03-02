@@ -80,9 +80,9 @@ namespace IM.Base.Forms
         UIHelper.ShowMessage("Specify the Password.", MessageBoxImage.Warning);
         res = false;
       }
-      else if (cmbLocation.Visibility == Visibility.Visible)
+      else if (cmbPlace.Visibility == Visibility.Visible)
       {
-        if (cmbLocation.SelectedItem == null)
+        if (cmbPlace.SelectedItem == null)
         {
           switch (_loginType)
           {
@@ -116,10 +116,10 @@ namespace IM.Base.Forms
         switch (_loginType)
         {
           case LoginType.Warehouse:
-            if (cmbLocation.Visibility == Visibility.Visible)
+            if (cmbPlace.Visibility == Visibility.Visible)
             {
               txtUser_LostFocus(null, null);
-              cmbLocation.SelectedValue = _iniFileHelper.readText("Login", "Warehouse", "");
+              cmbPlace.SelectedValue = _iniFileHelper.readText("Login", "Warehouse", "");
             }
             btnAceptar.Focus();
             break;
@@ -151,7 +151,7 @@ namespace IM.Base.Forms
 
       var user = IM.BusinessRules.BR.BRPersonnel.login(Model.Enums.LoginType.Normal, txtUser.Text);
 
-      userData = BRPersonnel.login(_loginType, txtUser.Text, (cmbLocation.Visibility == Visibility.Visible) ? cmbLocation.SelectedValue.ToString() : "");
+      userData = BRPersonnel.login(_loginType, txtUser.Text, (cmbPlace.Visibility == Visibility.Visible) ? cmbPlace.SelectedValue.ToString() : "");
       string _encryptPassword = Helpers.EncryptHelper.Encrypt(txtPassword.Password);
       if (userData.User == null)
       {
@@ -250,13 +250,13 @@ namespace IM.Base.Forms
           }
           if (_lstWhsByUsr.Count > 0)
           {
-            cmbLocation.ItemsSource = _lstWhsByUsr;
-            cmbLocation.SelectedValuePath = "whID";
-            cmbLocation.DisplayMemberPath = "whN";
-            cmbLocation.IsEnabled = true;
+            cmbPlace.ItemsSource = _lstWhsByUsr;
+            cmbPlace.SelectedValuePath = "whID";
+            cmbPlace.DisplayMemberPath = "whN";
+            cmbPlace.IsEnabled = true;
           }
           else
-            cmbLocation.IsEnabled = false;
+            cmbPlace.IsEnabled = false;
           break;
         case LoginType.Location://Hotel
           using (var dbContext = new Model.IMEntities())
@@ -265,13 +265,13 @@ namespace IM.Base.Forms
           }
           if (_lstLocaByUsr.Count > 0)
           {
-            cmbLocation.ItemsSource = _lstLocaByUsr;
-            cmbLocation.SelectedValuePath = "loID";
-            cmbLocation.DisplayMemberPath = "loN";
-            cmbLocation.IsEnabled = true;         
+            cmbPlace.ItemsSource = _lstLocaByUsr;
+            cmbPlace.SelectedValuePath = "loID";
+            cmbPlace.DisplayMemberPath = "loN";
+            cmbPlace.IsEnabled = true;         
           }
           else
-            cmbLocation.IsEnabled = false;
+            cmbPlace.IsEnabled = false;
           break;
       }
     }
@@ -298,7 +298,7 @@ namespace IM.Base.Forms
           lblPlace.Content = "Warehouse";
           break;
         case LoginType.Normal:
-          cmbLocation.Visibility = Visibility.Hidden;
+          cmbPlace.Visibility = Visibility.Hidden;
           lblPlace.Visibility = Visibility.Hidden;
           Height = Height - 25;
           break;        

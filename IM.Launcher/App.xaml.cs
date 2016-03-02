@@ -14,7 +14,7 @@ namespace IM.Launcher
     /// Constructor de la aplicacion
     /// </summary>
     /// <history>
-    ///   [wtorres]  11/02/2015 Created
+    ///   [wtorres]  11/02/2016 Created
     /// </history>
     public App()
       : base()
@@ -24,20 +24,20 @@ namespace IM.Launcher
 
     #endregion
 
-    #region Metodos privados
+    #region Metodos
 
     /// <summary>
     /// Despliega los mensajes de error de la aplicacion
     /// </summary>
     /// <history>
-    ///   [wtorres]  11/02/2015 Created
+    ///   [wtorres]  11/02/2016 Created
     /// </history>
     private void App_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
-      var errorMessage = new ErrorMessage(e.Exception.Message);
-      errorMessage.ShowDialog();
-      if (errorMessage.DialogResult.HasValue && !errorMessage.DialogResult.Value)
+      var frm = new frmError(e.Exception.Message);
+      frm.ShowDialog();
+      if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
       {
         Application.Current.Shutdown();
       }

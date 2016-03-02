@@ -43,12 +43,18 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Images\IM.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>IM.InventoryMovements.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
@@ -84,12 +90,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Clases\objWhsMovs.cs" />
-    <Compile Include="frmInventoryMovements.xaml.cs">
+    <Compile Include="Classes\objWhsMovs.cs" />
+    <Compile Include="Forms\frmInventoryMovements.xaml.cs">
       <DependentUpon>frmInventoryMovements.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="frmLoginWH.xaml.cs">
-      <DependentUpon>frmLoginWH.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -120,16 +123,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="frmInventoryMovements.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="frmLoginWH.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\IM.Base\IM.Base.csproj">
       <Project>{5870c4ea-8b03-44a1-b9a2-20e48a59a64f}</Project>
       <Name>IM.Base</Name>
@@ -149,6 +142,16 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\IM.ico" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Forms\frmInventoryMovements.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

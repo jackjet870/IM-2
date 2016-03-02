@@ -99,10 +99,10 @@ namespace IM.InventoryMovements
       switch (e.ScrollEventType)
       {
         case System.Windows.Controls.Primitives.ScrollEventType.SmallIncrement:
-          DTPicker.SelectedDate = DTPicker.SelectedDate.Value.AddDays(-1);
+          dtpDate.SelectedDate = dtpDate.SelectedDate.Value.AddDays(-1);
           break;
         case System.Windows.Controls.Primitives.ScrollEventType.SmallDecrement:
-          DTPicker.SelectedDate = DTPicker.SelectedDate.Value.AddDays(1);
+          dtpDate.SelectedDate = dtpDate.SelectedDate.Value.AddDays(1);
           break;
       }
     }
@@ -126,15 +126,15 @@ namespace IM.InventoryMovements
     /// <history>
     /// [edgrodriguez] 19/Feb/2016 Created
     /// </history>
-    private void DTPicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+    private void dtpDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
     {
-      if (_dtmcurrent != DTPicker.SelectedDate)
+      if (_dtmcurrent != dtpDate.SelectedDate)
       {
         try
         {
           whsMovViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("whsMovViewSource")));
           // Load data by setting the CollectionViewSource.Source property:
-          whsMovViewSource.Source =  BRWhsMovs.getWhsMovs(_warehouseLogin.whID, DTPicker.SelectedDate.Value);
+          whsMovViewSource.Source =  BRWhsMovs.getWhsMovs(_warehouseLogin.whID, dtpDate.SelectedDate.Value);
           StatusBarReg.Content=string.Format("{0}/{1}",grd.SelectedItems.Count,whsMovViewSource.View.SourceCollection.Cast<GetWhsMovs>().Count());
 
         }
@@ -143,7 +143,7 @@ namespace IM.InventoryMovements
 
         }
       }
-      _dtmcurrent = DTPicker.SelectedDate;
+      _dtmcurrent = dtpDate.SelectedDate;
     }
 
     /// <summary>
@@ -173,7 +173,7 @@ namespace IM.InventoryMovements
           {
             _lstobjWhsMovs.ForEach(c =>
             {
-              c.wmD = DTPicker.SelectedDate.Value;
+              c.wmD = dtpDate.SelectedDate.Value;
               c.wmwh = _warehouseLogin.whID;
               c.wmpe = _userLogin.peID;
 
@@ -191,7 +191,7 @@ namespace IM.InventoryMovements
             }).ToList();
             BRWhsMovs.saveWhsMovs(ref lstWhsMov);
             InicializarGrdNew();
-            grd.ItemsSource = BRWhsMovs.getWhsMovs(_warehouseLogin.whID, DTPicker.SelectedDate.Value);
+            grd.ItemsSource = BRWhsMovs.getWhsMovs(_warehouseLogin.whID, dtpDate.SelectedDate.Value);
           }
         }
       }
@@ -268,16 +268,16 @@ namespace IM.InventoryMovements
     {
       bool blnValid = true;
       DateTime dtmsrGiftsRcptCloseD = _salesRoom.srGiftsRcptCloseD;
-      if (dtmsrGiftsRcptCloseD >= DTPicker.SelectedDate.Value)
+      if (dtmsrGiftsRcptCloseD >= dtpDate.SelectedDate.Value)
       {
         MessageBox.Show("Date already close. New movements can not be added.", "Caution", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        DTPicker.SelectedDate = dtmsrGiftsRcptCloseD.AddDays(1);
+        dtpDate.SelectedDate = dtmsrGiftsRcptCloseD.AddDays(1);
         blnValid = false;
       }
-      else if (DTPicker.SelectedDate.Value > _dtmServerdate)
+      else if (dtpDate.SelectedDate.Value > _dtmServerdate)
       {
         MessageBox.Show("Date can not be greater than today.", "Caution", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        DTPicker.SelectedDate = _dtmServerdate;
+        dtpDate.SelectedDate = _dtmServerdate;
         blnValid = false;
       }
 

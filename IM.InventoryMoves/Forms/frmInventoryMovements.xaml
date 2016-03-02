@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:IM.InventoryMovements"
         xmlns:Clases="clr-namespace:IM.InventoryMovements.Clases" xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.InventoryMovements.frmInventoryMovements"
         mc:Ignorable="d"
-        Title="Origos Inventory Movements" Height="650" Width="800" WindowStartupLocation="CenterScreen" 
+        Title="Inventory Movements" Height="650" Width="800" WindowStartupLocation="CenterScreen" 
         MaxHeight="650" MaxWidth="800" WindowStyle="SingleBorderWindow" ResizeMode="NoResize"       
         Loaded="frmInventoryMovements_Loaded" KeyDown="frmInventoryMovements_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
   <Window.Resources>
@@ -75,7 +75,7 @@
         </Button>
         <GroupBox x:Name="fraDate" Grid.Column="2" Header="_Date" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Height="75" Width="200" FontWeight="Bold">
           <Grid>
-            <DatePicker x:Name="DTPicker" HorizontalAlignment="Left" VerticalAlignment="Center" Width="140" DisplayDate="" SelectedDate="{x:Static sys:DateTime.Today}" Height="25" Margin="10,15,10,10" SelectedDateChanged="DTPicker_SelectedDateChanged" />
+            <DatePicker x:Name="dtpDate" HorizontalAlignment="Left" VerticalAlignment="Center" Width="140" DisplayDate="" SelectedDate="{x:Static sys:DateTime.Today}" Height="25" Margin="10,15,10,10" SelectedDateChanged="dtpDate_SelectedDateChanged" />
             <ScrollBar x:Name="upd" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,10,10" Scroll="upd_Scroll" Maximum="99999" Minimum="-99999"/>
           </Grid>
         </GroupBox>
