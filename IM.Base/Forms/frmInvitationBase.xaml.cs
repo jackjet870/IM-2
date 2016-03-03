@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IM.Model.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,14 +18,16 @@ namespace IM.Base.Forms
   {
 
     private IM.BusinessRules.Enums.InvitationType _invitationType;
+    private UserData _user;
     public frmInvitationBase()
     {
       InitializeComponent();
     }
 
-    public frmInvitationBase(IM.BusinessRules.Enums.InvitationType invitationType)
+    public frmInvitationBase(IM.BusinessRules.Enums.InvitationType invitationType, UserData user)
     {
       this._invitationType = invitationType;
+      _user = user;
       InitializeComponent();
     }
 
@@ -38,8 +41,8 @@ namespace IM.Base.Forms
     /// </history>
     private void frmInvitationBase_Loaded(object sender, RoutedEventArgs e)
     {
-      ConfiguracionControles();
-      CargarControles();
+      ControlsConfiguration();
+      LoadControls();
     }
 
     /// <summary>
@@ -140,6 +143,82 @@ namespace IM.Base.Forms
     {
 
     }
+
+
+    private void cmbPRContract_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void cmbPR_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void cmbSalesRoom_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void cmbLocation_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void cmbBookingTime_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void cmbRescheduleTime_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void cmbHotel_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void cmbAgency_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void cmbCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void cmbPaymentType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void cmbResort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void cmbMaritalStatusGuest1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void cmbMaritalStatusGuest2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
+
+    private void cmbLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
     #endregion
 
     #region Métodos privados
@@ -150,31 +229,48 @@ namespace IM.Base.Forms
     /// <history>
     /// [lchairez] 29/02/2016 Created.
     /// </history>
-    private void ConfiguracionControles()
+    private void ControlsConfiguration()
     {
       switch (_invitationType)
       {
         case BusinessRules.Enums.InvitationType.InHouse:
-          ConfiguracionControlesInHouse();
+          InHouseControlsConfig();
           break;
         case BusinessRules.Enums.InvitationType.OutHouse:
-          ConfiguracionControlesOutHouse();
+          OutHouseControlsConfig();
           break;
         case BusinessRules.Enums.InvitationType.Host:
-          ConfiguracionControlesHost();
+          HostControlsConfig();
           break;
         case BusinessRules.Enums.InvitationType.Animation:
-          ConfiguracionControlesAnimation();
+          AnimationControlsConfig();
           break;
         case BusinessRules.Enums.InvitationType.Regen:
-          ConfiguracionControlesRegen();
+          RegenControlsConfig();
           break;
       }
     }
 
-    private void CargarControles()
+    private void LoadControls()
     {
-      CargarComboLanguage();
+      switch (_invitationType)
+      {
+        case BusinessRules.Enums.InvitationType.InHouse:
+          LoadInHouseControls();
+          break;
+        case BusinessRules.Enums.InvitationType.OutHouse:
+          LoadOutHouseControls();
+          break;
+        case BusinessRules.Enums.InvitationType.Host:
+          LoadHostControls();
+          break;
+        case BusinessRules.Enums.InvitationType.Animation:
+          LoadAnimationControls();
+          break;
+        case BusinessRules.Enums.InvitationType.Regen:
+          LoadRegenControls();
+          break;
+      }
     }
 
     /// <summary>
@@ -183,7 +279,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [lchairez] 29/02/2016 Created.
     /// </history>
-    private void ConfiguracionControlesInHouse()
+    private void InHouseControlsConfig()
     {
       colOutInvitation.Width = new GridLength(0); //Con esta instrucción desaparece la columna
       rowPRContract.Height = new GridLength(0); //Con esta instrucción desaparece el renglon
@@ -202,7 +298,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [lchairez] 29/02/2016 Created.
     /// </history>
-    private void ConfiguracionControlesOutHouse()
+    private void OutHouseControlsConfig()
     {
       colReservNum.Width = new GridLength(0);
       colBtnSearch.Width = new GridLength(0);
@@ -233,7 +329,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [lchairez] 29/02/2016 Created.
     /// </history>
-    private void ConfiguracionControlesHost()
+    private void HostControlsConfig()
     {
       rowPRContractTitles.Height = new GridLength(0);
       rowPRContract.Height = new GridLength(0);
@@ -260,7 +356,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [lchairez] 29/02/2016 Created.
     /// </history>
-    private void ConfiguracionControlesAnimation()
+    private void AnimationControlsConfig()
     {
       colOutInvitation.Width = new GridLength(0);
       rowPRContractTitles.Height = new GridLength(0);
@@ -285,7 +381,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [lchairez] 29/02/2016 Created.
     /// </history>
-    private void ConfiguracionControlesRegen()
+    private void RegenControlsConfig()
     {
       colOutInvitation.Width = new GridLength(0);
       rowPRContractTitles.Height = new GridLength(0);
@@ -303,20 +399,142 @@ namespace IM.Base.Forms
     }
 
     /// <summary>
-    /// Carga lal ista de lenguajes
+    /// Carga los controles del formulatio Invitation In House
     /// </summary>
     /// <history>
     /// [lchairez] 29/02/2016 Created
     /// </history>
-    private void CargarComboLanguage()
+    private void LoadInHouseControls()
     {
-      var languages = IM.BusinessRules.BR.BRInvitationBase.GetLanguage();
-      cmbLanguage.DisplayMemberPath = "laN";
-      cmbLanguage.SelectedValuePath = "laID";
-      cmbLanguage.SelectedValue = "ES";
-      cmbLanguage.ItemsSource = languages.ToList();
+      var catalog = IM.BusinessRules.BR.BRInvitationBase.GetCatalogInvitInHouse(_user.Location.loID, _user.User.peID, _user.LeadSource.lsID);
 
+      LoadComboBoxes(catalog.Languages, cmbLanguage, "la", "ES");
+      LoadComboBoxes(catalog.PersonnelByLocation, cmbPR, "pe");
+      LoadComboBoxes(catalog.SalesRooms, cmbSalesRoom , "sr");
+      LoadComboBoxes(catalog.Hotels, cmbHotel , "hoID", "hoID",_user.Location.loN);
+      LoadComboBoxes(catalog.Agencies, cmbAgency , "ag");
+      LoadComboBoxes(catalog.Countries, cmbCountry, "co");
+      LoadComboBoxes(catalog.Currencies, cmbCurrency, "cu", "US");
+      LoadComboBoxes(catalog.PaymentTypes, cmbPaymentType, "pt","CS");
+      LoadComboBoxes(catalog.Hotels, cmbResort, "hoID", "hoID", String.Empty);
     }
+
+    /// <summary>
+    /// Carga los controles del formulatio Invitation Out House
+    /// </summary>
+    /// <history>
+    /// [lchairez] 29/02/2016 Created
+    /// </history>
+    private void LoadOutHouseControls()
+    {
+      //var catalog = IM.BusinessRules.BR.BRInvitationBase.GetCatalogInvitInHouse(_user.Location.loID, _user.User.peID, _user.LeadSource.lsID);
+
+      //LoadComboBoxes(catalog.Languages, cmbLanguage, "la", "ES");
+      //LoadComboBoxes(catalog.PersonnelByLocation, cmbPR, "pe");
+      //LoadComboBoxes(catalog.SalesRooms, cmbSalesRoom, "sr");
+      //LoadComboBoxes(catalog.Hotels, cmbHotel, "hoID", "hoID", _user.Location.loN);
+      //LoadComboBoxes(catalog.Agencies, cmbAgency, "ag");
+      //LoadComboBoxes(catalog.Countries, cmbCountry, "co");
+      //LoadComboBoxes(catalog.Currencies, cmbCurrency, "cu", "US");
+      //LoadComboBoxes(catalog.PaymentTypes, cmbPaymentType, "pt", "CS");
+      //LoadComboBoxes(catalog.Hotels, cmbResort, "hoID", "hoID", String.Empty);
+    }
+
+    /// <summary>
+    /// Carga los controles del formulatio Invitation Host
+    /// </summary>
+    /// <history>
+    /// [lchairez] 29/02/2016 Created
+    /// </history>
+    private void LoadHostControls()
+    {
+      //var catalog = IM.BusinessRules.BR.BRInvitationBase.GetCatalogInvitInHouse(_user.Location.loID, _user.User.peID, _user.LeadSource.lsID);
+
+      //LoadComboBoxes(catalog.Languages, cmbLanguage, "la", "ES");
+      //LoadComboBoxes(catalog.PersonnelByLocation, cmbPR, "pe");
+      //LoadComboBoxes(catalog.SalesRooms, cmbSalesRoom, "sr");
+      //LoadComboBoxes(catalog.Hotels, cmbHotel, "hoID", "hoID", _user.Location.loN);
+      //LoadComboBoxes(catalog.Agencies, cmbAgency, "ag");
+      //LoadComboBoxes(catalog.Countries, cmbCountry, "co");
+      //LoadComboBoxes(catalog.Currencies, cmbCurrency, "cu", "US");
+      //LoadComboBoxes(catalog.PaymentTypes, cmbPaymentType, "pt", "CS");
+      //LoadComboBoxes(catalog.Hotels, cmbResort, "hoID", "hoID", String.Empty);
+    }
+
+    /// <summary>
+    /// Carga los controles del formulatio Invitation Animation
+    /// </summary>
+    /// <history>
+    /// [lchairez] 29/02/2016 Created
+    /// </history>
+    private void LoadAnimationControls()
+    {
+      //var catalog = IM.BusinessRules.BR.BRInvitationBase.GetCatalogInvitInHouse(_user.Location.loID, _user.User.peID, _user.LeadSource.lsID);
+
+      //LoadComboBoxes(catalog.Languages, cmbLanguage, "la", "ES");
+      //LoadComboBoxes(catalog.PersonnelByLocation, cmbPR, "pe");
+      //LoadComboBoxes(catalog.SalesRooms, cmbSalesRoom, "sr");
+      //LoadComboBoxes(catalog.Hotels, cmbHotel, "hoID", "hoID", _user.Location.loN);
+      //LoadComboBoxes(catalog.Agencies, cmbAgency, "ag");
+      //LoadComboBoxes(catalog.Countries, cmbCountry, "co");
+      //LoadComboBoxes(catalog.Currencies, cmbCurrency, "cu", "US");
+      //LoadComboBoxes(catalog.PaymentTypes, cmbPaymentType, "pt", "CS");
+      //LoadComboBoxes(catalog.Hotels, cmbResort, "hoID", "hoID", String.Empty);
+    }
+    /// <summary>
+    /// Carga los controles del formulatio Invitation Regen
+    /// </summary>
+    /// <history>
+    /// [lchairez] 29/02/2016 Created
+    /// </history>
+    private void LoadRegenControls()
+    {
+      //var catalog = IM.BusinessRules.BR.BRInvitationBase.GetCatalogInvitInHouse(_user.Location.loID, _user.User.peID, _user.LeadSource.lsID);
+
+      //LoadComboBoxes(catalog.Languages, cmbLanguage, "la", "ES");
+      //LoadComboBoxes(catalog.PersonnelByLocation, cmbPR, "pe");
+      //LoadComboBoxes(catalog.SalesRooms, cmbSalesRoom, "sr");
+      //LoadComboBoxes(catalog.Hotels, cmbHotel, "hoID", "hoID", _user.Location.loN);
+      //LoadComboBoxes(catalog.Agencies, cmbAgency, "ag");
+      //LoadComboBoxes(catalog.Countries, cmbCountry, "co");
+      //LoadComboBoxes(catalog.Currencies, cmbCurrency, "cu", "US");
+      //LoadComboBoxes(catalog.PaymentTypes, cmbPaymentType, "pt", "CS");
+      //LoadComboBoxes(catalog.Hotels, cmbResort, "hoID", "hoID", String.Empty);
+    }
+
+    /// <summary>
+    /// Carga los combos de la forma
+    /// </summary>
+    /// <param name="items">Lista de elementos que contendrá el combo</param>
+    /// <param name="combo">Combo que se llenará con los elementos</param>
+    /// <param name="displayItem">Nombre del elemento</param>
+    /// <param name="valueItem">Valor del elemento</param>
+    /// <param name="defaultValue">Valor que será seleccionado por default</param>
+    private void LoadComboBoxes(IEnumerable<object> items, ComboBox combo, string displayItem, string valueItem, string defaultValue = "")
+    {
+      combo.DisplayMemberPath = displayItem;
+      combo.SelectedValuePath = valueItem;
+      combo.SelectedValue = defaultValue;
+      combo.ItemsSource = items;
+    }
+
+    /// <summary>
+    /// Carga los combos de la forma
+    /// </summary>
+    /// <param name="items">Lista de elementos que contendrá el combo</param>
+    /// <param name="combo">Combo que se llenará con los elementos</param>
+    /// <param name="displayItem">Nombre del elemento</param>
+    /// <param name="valueItem">Valor del elemento</param>
+    /// <param name="defaultValue">Valor que será seleccionado por default</param>
+    private void LoadComboBoxes(IEnumerable<object> items, ComboBox combo, string prefix, string defaultValue = "")
+    {
+      combo.DisplayMemberPath = String.Format("{0}N", prefix);
+      combo.SelectedValuePath = String.Format("{0}ID", prefix);
+      combo.SelectedValue = defaultValue;
+      combo.ItemsSource = items;
+    }
+
     #endregion
+
   }
 }

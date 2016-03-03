@@ -11,13 +11,9 @@ namespace IM.Model
 {
     using System;
     
-    public partial class leadSources
+    public partial class currency
     {
-        public string lsID { get; set; }
-        public string lsN { get; set; }
-        public string lspg { get; set; }
-        public string lsho { get; set; }
-        public bool lsRegen { get; set; }
-        public bool lsAnimation { get; set; }
+        public string cuID { get; set; }
+        public string cuN { get; set; }
     }
 }

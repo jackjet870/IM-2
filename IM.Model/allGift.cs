@@ -11,7 +11,7 @@ namespace IM.Model
 {
     using System;
     
-    public partial class allGifts
+    public partial class allGift
     {
         public string giID { get; set; }
         public string giN { get; set; }

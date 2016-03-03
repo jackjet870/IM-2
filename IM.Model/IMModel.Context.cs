@@ -364,5 +364,22 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetGuestsPremanifest>("USP_OR_GetPremanifest", dateParameter, leadSourceParameter, marketsParameter, onGroupParameter);
         }
+    
+        public virtual ObjectResult<GetCatalogsInhouse> USP_OR_GetCatalogsInhouse(string location, string pR, string leadSource)
+        {
+            var locationParameter = location != null ?
+                new ObjectParameter("Location", location) :
+                new ObjectParameter("Location", typeof(string));
+    
+            var pRParameter = pR != null ?
+                new ObjectParameter("PR", pR) :
+                new ObjectParameter("PR", typeof(string));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCatalogsInhouse>("USP_OR_GetCatalogsInhouse", locationParameter, pRParameter, leadSourceParameter);
+        }
     }
 }

@@ -11,10 +11,9 @@ namespace IM.Model
 {
     using System;
     
-    public partial class agencies
+    public partial class paymentType
     {
-        public string agID { get; set; }
-        public string agN { get; set; }
-        public string agmk { get; set; }
+        public string ptID { get; set; }
+        public string ptN { get; set; }
     }
 }

@@ -11,9 +11,10 @@ namespace IM.Model
 {
     using System;
     
-    public partial class currencies
+    public partial class creditCardType
     {
-        public string cuID { get; set; }
-        public string cuN { get; set; }
+        public string ccID { get; set; }
+        public string ccN { get; set; }
+        public bool ccIsCreditCard { get; set; }
     }
 }

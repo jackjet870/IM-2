@@ -11,10 +11,10 @@ namespace IM.Model
 {
     using System;
     
-    public partial class creditCardTypes
+    public partial class unAvailMot
     {
-        public string ccID { get; set; }
-        public string ccN { get; set; }
-        public bool ccIsCreditCard { get; set; }
+        public byte umID { get; set; }
+        public string umN { get; set; }
+        public bool umA { get; set; }
     }
 }

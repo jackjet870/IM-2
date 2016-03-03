@@ -11,9 +11,14 @@ namespace IM.Model
 {
     using System;
     
-    public partial class paymentTypes
+    public partial class packagesGift
     {
-        public string ptID { get; set; }
-        public string ptN { get; set; }
+        public string gpPack { get; set; }
+        public string gpgi { get; set; }
+        public int gpQty { get; set; }
+        public decimal giPrice1 { get; set; }
+        public decimal giPrice2 { get; set; }
+        public decimal giPrice3 { get; set; }
+        public decimal giPrice4 { get; set; }
     }
 }

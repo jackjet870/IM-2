@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace IM.Model.Entities
 {
-  public class CatalogInvitInHouse
+  public class CatalogInvitOutHouse
   {
-    public IEnumerable<GetCatalogsInhouse> Markets { get; set; }
-    
-    public IEnumerable<unAvailMot> UnAvailMots { get; set; }
-
     public IEnumerable<currency> Currencies { get; set; }
 
     public IEnumerable<GetLanguages> Languages { get; set; }
@@ -35,20 +31,36 @@ namespace IM.Model.Entities
     public IEnumerable<agency> Agencies { get; set; }
 
     public IEnumerable<hotel> Hotels { get; set; }
-    
-    public IEnumerable<guestStatus> GuestStatus { get; set; }
-
-    public IEnumerable<creditCardType> CreditCards { get; set; }
-
-    public IEnumerable<notBookingMotiv> NotBookingMotives { get; set; }
 
     public IEnumerable<GetCountries> Countries { get; set; }
+
+    public IEnumerable<guestStatus> GuestStatus { get; set; }
+
+    public IEnumerable<paymentType> PaymentTypes { get; set; }
 
     public IEnumerable<assistanceStatus> AssistanceStatus { get; set; }
 
     public IEnumerable<dayOFF> DaysOff { get; set; }
 
-    public IEnumerable<paymentType> PaymentTypes { get; set; }
+
+
+
+
+    public IEnumerable<GetCatalogsInhouse> Markets { get; set; }
+    
+    public IEnumerable<unAvailMot> UnAvailMots { get; set; }
+
+    
+
+    public IEnumerable<creditCardType> CreditCards { get; set; }
+
+    public IEnumerable<notBookingMotiv> NotBookingMotives { get; set; }
+
+    
+
+    
+
+    
 
     public IEnumerable<refundType> RefundTypes { get; set; }
     

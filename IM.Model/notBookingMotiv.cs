@@ -11,10 +11,10 @@ namespace IM.Model
 {
     using System;
     
-    public partial class locationGifts
+    public partial class notBookingMotiv
     {
-        public string giID { get; set; }
-        public string giN { get; set; }
-        public bool giWPax { get; set; }
+        public int nbID { get; set; }
+        public string nbN { get; set; }
+        public bool nbA { get; set; }
     }
 }

@@ -54,22 +54,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="agencies.cs">
+    <Compile Include="agency.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="allGifts.cs">
+    <Compile Include="allGift.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="assistanceStatus.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Class1.cs" />
+    <Compile Include="Classes\CatalogInvitOutHouse.cs" />
     <Compile Include="Classes\CatalogInvitInHouse.cs" />
     <Compile Include="Classes\userData.cs" />
-    <Compile Include="creditCardTypes.cs">
+    <Compile Include="creditCardType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="currencies.cs">
+    <Compile Include="currency.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="dayOFF.cs">
@@ -79,13 +80,7 @@
     <Compile Include="GetAgencies.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="GetCatalogsHost.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="GetCatalogsInhouse.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="GetCatalogsOutside.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="GetCountries.cs">
@@ -169,10 +164,10 @@
     <Compile Include="leadSourceLogin.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="leadSources.cs">
+    <Compile Include="leadSourcesInvitInHouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="locationGifts.cs">
+    <Compile Include="locationGift.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="locationLogin.cs">
@@ -181,13 +176,13 @@
     <Compile Include="maritalStatus.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="notBookingMotives.cs">
+    <Compile Include="notBookingMotiv.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="packagesGifts.cs">
+    <Compile Include="packagesGift.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="paymentTypes.cs">
+    <Compile Include="paymentType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="permissionsLogin.cs">
@@ -200,7 +195,7 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="refundTypes.cs">
+    <Compile Include="refundType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="rolesLogin.cs">
@@ -212,7 +207,7 @@
     <Compile Include="salesRoomLogin.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="unAvailMots.cs">
+    <Compile Include="unAvailMot.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="userLogin.cs">

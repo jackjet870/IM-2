@@ -11,10 +11,10 @@ namespace IM.Model
 {
     using System;
     
-    public partial class notBookingMotives
+    public partial class agency
     {
-        public int nbID { get; set; }
-        public string nbN { get; set; }
-        public bool nbA { get; set; }
+        public string agID { get; set; }
+        public string agN { get; set; }
+        public string agmk { get; set; }
     }
 }

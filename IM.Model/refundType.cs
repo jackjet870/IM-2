@@ -11,10 +11,9 @@ namespace IM.Model
 {
     using System;
     
-    public partial class unAvailMots
+    public partial class refundType
     {
-        public string umID { get; set; }
-        public string umN { get; set; }
-        public bool umA { get; set; }
+        public string rfID { get; set; }
+        public string rfN { get; set; }
     }
 }

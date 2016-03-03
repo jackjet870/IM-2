@@ -11,9 +11,10 @@ namespace IM.Model
 {
     using System;
     
-    public partial class GetCatalogsHost
+    public partial class locationGift
     {
-        public string cuID { get; set; }
-        public string cuN { get; set; }
+        public string giID { get; set; }
+        public string giN { get; set; }
+        public bool giWPax { get; set; }
     }
 }
