@@ -55,6 +55,9 @@
     <Compile Include="BR\BRGuests.cs" />
     <Compile Include="BR\BRInvitationBase.cs" />
     <Compile Include="BR\BRHelpers.cs" />
+    <Compile Include="BR\BRLanguages.cs" />
+    <Compile Include="BR\BRMailOuts.cs" />
+    <Compile Include="BR\BRMailOutTexts.cs" />
     <Compile Include="BR\BRPersonnel.cs" />
     <Compile Include="BR\BRWhsMovs.cs" />
     <Compile Include="Classes\UserNormalLogin.cs" />

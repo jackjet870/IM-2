@@ -14,7 +14,7 @@ namespace IM.Model
     public partial class GetPersonnel
     {
         public string peID { get; set; }
-        public string peN { get; set; }
         public string deN { get; set; }
+        public string peN { get; set; }
     }
 }

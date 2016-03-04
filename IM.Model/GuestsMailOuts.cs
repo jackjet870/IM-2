@@ -11,9 +11,9 @@ namespace IM.Model
 {
     using System;
     
-    public partial class GetMailOuts
+    public partial class GuestsMailOuts
     {
-        public string guStatus { get; set; }
+        public Nullable<int> guStatus { get; set; }
         public Nullable<System.DateTime> guBookT { get; set; }
         public Nullable<System.DateTime> guPickUpT { get; set; }
         public string guRoomNum { get; set; }

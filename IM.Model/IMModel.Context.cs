@@ -155,27 +155,6 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spProcessMailOuts", leadSourceParameter, dateParameter);
         }
     
-        public virtual ObjectResult<GetMailOuts> USP_OR_GetMailOuts(string guls, Nullable<System.DateTime> guCheckInD, Nullable<System.DateTime> guCheckOutD, Nullable<System.DateTime> guBookD)
-        {
-            var gulsParameter = guls != null ?
-                new ObjectParameter("guls", guls) :
-                new ObjectParameter("guls", typeof(string));
-    
-            var guCheckInDParameter = guCheckInD.HasValue ?
-                new ObjectParameter("guCheckInD", guCheckInD) :
-                new ObjectParameter("guCheckInD", typeof(System.DateTime));
-    
-            var guCheckOutDParameter = guCheckOutD.HasValue ?
-                new ObjectParameter("guCheckOutD", guCheckOutD) :
-                new ObjectParameter("guCheckOutD", typeof(System.DateTime));
-    
-            var guBookDParameter = guBookD.HasValue ?
-                new ObjectParameter("guBookD", guBookD) :
-                new ObjectParameter("guBookD", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMailOuts>("USP_OR_GetMailOuts", gulsParameter, guCheckInDParameter, guCheckOutDParameter, guBookDParameter);
-        }
-    
         public virtual ObjectResult<GetGifts> USP_OR_GetGifts(string locations, Nullable<byte> status)
         {
             var locationsParameter = locations != null ?
@@ -380,6 +359,27 @@ namespace IM.Model
                 new ObjectParameter("LeadSource", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCatalogsInhouse>("USP_OR_GetCatalogsInhouse", locationParameter, pRParameter, leadSourceParameter);
+        }
+    
+        public virtual ObjectResult<GuestsMailOuts> USP_OR_GetGuestsMailOuts(string guls, Nullable<System.DateTime> guCheckInD, Nullable<System.DateTime> guCheckOutD, Nullable<System.DateTime> guBookD)
+        {
+            var gulsParameter = guls != null ?
+                new ObjectParameter("guls", guls) :
+                new ObjectParameter("guls", typeof(string));
+    
+            var guCheckInDParameter = guCheckInD.HasValue ?
+                new ObjectParameter("guCheckInD", guCheckInD) :
+                new ObjectParameter("guCheckInD", typeof(System.DateTime));
+    
+            var guCheckOutDParameter = guCheckOutD.HasValue ?
+                new ObjectParameter("guCheckOutD", guCheckOutD) :
+                new ObjectParameter("guCheckOutD", typeof(System.DateTime));
+    
+            var guBookDParameter = guBookD.HasValue ?
+                new ObjectParameter("guBookD", guBookD) :
+                new ObjectParameter("guBookD", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestsMailOuts>("USP_OR_GetGuestsMailOuts", gulsParameter, guCheckInDParameter, guCheckOutDParameter, guBookDParameter);
         }
     }
 }

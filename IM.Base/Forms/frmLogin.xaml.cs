@@ -116,10 +116,18 @@ namespace IM.Base.Forms
         switch (_loginType)
         {
           case LoginType.Warehouse:
-            if (cmbPlace.Visibility == Visibility.Visible)
+           if (cmbPlace.Visibility == Visibility.Visible)
             {
               txtUser_LostFocus(null, null);
               cmbPlace.SelectedValue = _iniFileHelper.readText("Login", "Warehouse", "");
+            }
+            btnAceptar.Focus();
+            break;
+          case LoginType.Location:
+            if (cmbPlace.Visibility == Visibility.Visible)
+            {
+              txtUser_LostFocus(null, null);
+              cmbPlace.SelectedValue = _iniFileHelper.readText("Login", "Location", "");
             }
             btnAceptar.Focus();
             break;

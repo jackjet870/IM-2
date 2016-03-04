@@ -63,7 +63,6 @@
     <Compile Include="assistanceStatus.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Class1.cs" />
     <Compile Include="Classes\CatalogInvitOutHouse.cs" />
     <Compile Include="Classes\CatalogInvitInHouse.cs" />
     <Compile Include="Classes\userData.cs" />
@@ -122,9 +121,6 @@
     <Compile Include="GetLanguages.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="GetMailOuts.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="GetMailOutTextsByLeadSource.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -138,6 +134,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="GuestPremanifestHost.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GuestsMailOuts.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="guestStatus.cs">
