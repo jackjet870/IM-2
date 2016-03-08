@@ -1,23 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using IM.Base.Entities;
-using IM.Base.Enums;
 using IM.Base.Interfaces;
 using IM.Base.Forms;
-using IM.Model;
 using IM.Host.Forms;
+using IM.BusinessRules.BR;
 
 namespace IM.Host
 {
@@ -83,10 +73,8 @@ namespace IM.Host
             CollectionViewSource guestPremanifestHostViewSource = ((CollectionViewSource)(this.FindResource("guestPremanifestHostViewSource")));
             // Load data by setting the CollectionViewSource.Source property:
             // guestPremanifestHostViewSource.Source = [generic data source]
-
-            IMEntities ef = new IMEntities();
-
-            guestPremanifestHostViewSource.Source = ef.GetPremanifestHost(Convert.ToDateTime("02-25-2016"), "MPS");
+            
+            guestPremanifestHostViewSource.Source = BRGuests.GetGuestsPremanifestHost(new DateTime(2016, 2, 25), "MPS");
         }
 
         /// <summary>

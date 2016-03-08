@@ -126,6 +126,10 @@
       <Project>{5870c4ea-8b03-44a1-b9a2-20e48a59a64f}</Project>
       <Name>IM.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IM.BusinessRules\IM.BusinessRules.csproj">
+      <Project>{13f00191-f647-4865-bd19-1e0ea12f6838}</Project>
+      <Name>IM.BusinessRules</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IM.Model\IM.Model.csproj">
       <Project>{4d0c8faf-7eeb-4a36-9826-e190a0d9fe72}</Project>
       <Name>IM.Model</Name>

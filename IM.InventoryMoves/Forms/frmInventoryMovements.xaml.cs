@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using IM.InventoryMovements.Clases;
 using IM.Model;
-using IM.Model.Entities;
+using IM.Model.Classes;
 using IM.BusinessRules.BR;
 using IM.BusinessRules.Entities;
 using IM.Base.Forms;
@@ -27,23 +27,29 @@ namespace IM.InventoryMovements
   /// </summary>
   public partial class frmInventoryMovements : Window
   {
-    #region Variables
+    #region Atributos
+
     private DateTime? _dtmcurrent = null; //Variable para manejar un problema del control DatePicker
-    private warehouseLogin _warehouseLogin = new warehouseLogin();
+    private WarehouseLogin _warehouseLogin = new WarehouseLogin();
     private List<objWhsMovs> _lstobjWhsMovs = null;//Lista para nuevos registros de WhsMovs
-    private userLogin _userLogin = new userLogin();
-    private GetSalesRoom _salesRoom = new GetSalesRoom();
+    private UserLogin _userLogin = new UserLogin();
+    private SalesRoomCloseDates _salesRoom = new SalesRoomCloseDates();
     private DateTime _dtmServerdate = new DateTime();
     CollectionViewSource objWhsMovsViewSource;
     CollectionViewSource getGiftsViewSource;
     CollectionViewSource whsMovViewSource;
     #endregion
-    public frmInventoryMovements( UserData userData)
+
+    #region Constructores y destructores
+
+    public frmInventoryMovements(UserData userData)
     {
       InitializeComponent();
       _userLogin = userData.User;
       _warehouseLogin = userData.Warehouse;
     }
+
+    #endregion
 
     #region Metodos del formulario
     /// <summary>
@@ -134,8 +140,8 @@ namespace IM.InventoryMovements
         {
           whsMovViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("whsMovViewSource")));
           // Load data by setting the CollectionViewSource.Source property:
-          whsMovViewSource.Source =  BRWhsMovs.getWhsMovs(_warehouseLogin.whID, dtpDate.SelectedDate.Value);
-          StatusBarReg.Content=string.Format("{0}/{1}",grd.SelectedItems.Count,whsMovViewSource.View.SourceCollection.Cast<GetWhsMovs>().Count());
+          whsMovViewSource.Source =  BRWarehouseMovements.GetWarehouseMovements(_warehouseLogin.whID, dtpDate.SelectedDate.Value);
+          StatusBarReg.Content=string.Format("{0}/{1}",grd.SelectedItems.Count,whsMovViewSource.View.SourceCollection.Cast<WarehouseMovementShort>().Count());
 
         }
         catch (Exception ex)
@@ -179,7 +185,7 @@ namespace IM.InventoryMovements
 
             });
 
-            List<WhsMov> lstWhsMov = _lstobjWhsMovs.Select(c => new WhsMov
+            List<WarehouseMovement> lstWhsMov = _lstobjWhsMovs.Select(c => new WarehouseMovement
             {              
               wmComments = c.wmComments,
               wmD = c.wmD,
@@ -189,9 +195,9 @@ namespace IM.InventoryMovements
               wmQty = c.wmQty,
               wmwh = c.wmwh
             }).ToList();
-            BRWhsMovs.saveWhsMovs(ref lstWhsMov);
+            BRWarehouseMovements.SaveWarehouseMovements(ref lstWhsMov);
             InicializarGrdNew();
-            grd.ItemsSource = BRWhsMovs.getWhsMovs(_warehouseLogin.whID, dtpDate.SelectedDate.Value);
+            grd.ItemsSource = BRWarehouseMovements.GetWarehouseMovements(_warehouseLogin.whID, dtpDate.SelectedDate.Value);
           }
         }
       }
@@ -218,7 +224,7 @@ namespace IM.InventoryMovements
     /// </history>
     private void grd_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      StatusBarReg.Content = string.Format("{0}/{1}", grd.SelectedItems.Count, whsMovViewSource.View.SourceCollection.Cast<GetWhsMovs>().Count());
+      StatusBarReg.Content = string.Format("{0}/{1}", grd.SelectedItems.Count, whsMovViewSource.View.SourceCollection.Cast<WarehouseMovementShort>().Count());
     }
     #endregion
 
@@ -298,7 +304,7 @@ namespace IM.InventoryMovements
       objWhsMovsViewSource.Source = _lstobjWhsMovs;
       getGiftsViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("getGiftsViewSource")));
       // Load data by setting the CollectionViewSource.Source property:
-      getGiftsViewSource.Source = BRGifts.getGifts(_warehouseLogin.whID, 1);
+      getGiftsViewSource.Source = BRGifts.GetGifts(_warehouseLogin.whID, 1);
     }    
     #endregion
   }

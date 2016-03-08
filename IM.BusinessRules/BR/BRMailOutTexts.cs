@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using IM.Model;
 
 namespace IM.BusinessRules.BR
 {
   public class BRMailOutTexts
   {
+    #region GetMailOutTextsByLeadSource
+
     /// <summary>
     /// Obtiene el catalogo de MailOutText por la Clave del Lead Source
     /// </summary>
@@ -14,12 +17,14 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [aalcocer] 24/02/2016 Created
     /// </history>
-    public static List<Model.GetMailOutTextsByLeadSource> GetMailOutTextsByLeadSource(string leadSourceID, bool status)
+    public static List<MailOutTextByLeadSource> GetMailOutTextsByLeadSource(string leadSourceID, bool status)
     {
-      using (var cn = new Model.IMEntities())
+      using (var dbContext = new Model.IMEntities())
       {
-        return cn.USP_OR_GetMailOutTextsByLeadSource(leadSourceID, status).ToList();
+        return dbContext.USP_OR_GetMailOutTextsByLeadSource(leadSourceID, status).ToList();
       }
     }
+
+    #endregion
   }
 }

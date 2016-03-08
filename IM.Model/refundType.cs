@@ -10,10 +10,21 @@
 namespace IM.Model
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class refundType
+    public partial class RefundType
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public RefundType()
+        {
+            this.DepositsRefunds = new HashSet<DepositRefund>();
+        }
+    
         public string rfID { get; set; }
         public string rfN { get; set; }
+        public Nullable<bool> rfA { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DepositRefund> DepositsRefunds { get; set; }
     }
 }

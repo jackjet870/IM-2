@@ -3,11 +3,11 @@ using System.Reflection;
 
 namespace IM.MailOuts.Classes
 {
-  public class ObjGuestsMailOuts : Model.GuestsMailOuts
+  public class ObjGuestsMailOuts : Model.GuestMailOut
   {
-    public Model.GuestsMailOuts Parent { get; set; }
+    public Model.GuestMailOut Parent { get; set; }
 
-    public ObjGuestsMailOuts(Model.GuestsMailOuts parent)
+    public ObjGuestsMailOuts(Model.GuestMailOut parent)
     {
       Parent = parent;
 

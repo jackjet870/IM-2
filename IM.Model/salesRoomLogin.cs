@@ -11,7 +11,7 @@ namespace IM.Model
 {
     using System;
     
-    public partial class salesRoomLogin
+    public partial class SalesRoomLogin
     {
         public string srID { get; set; }
         public string srN { get; set; }

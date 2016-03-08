@@ -11,7 +11,7 @@ namespace IM.Model
 {
     using System;
     
-    public partial class warehouseLogin
+    public partial class WarehouseLogin
     {
         public string whID { get; set; }
         public string whN { get; set; }

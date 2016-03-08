@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace IM.Model.Entities
+namespace IM.Model.Classes
 {
   /// <summary>
   /// Entidad de Usuario. Contiene todos los permisos, roles e información específica.
@@ -15,12 +11,12 @@ namespace IM.Model.Entities
   /// </history>
   public class UserData
   {
-    public userLogin User { get; set; }
-    public List<rolesLogin> Roles { get; set; }
-    public List<permissionsLogin> Permissions { get; set; }
-    public salesRoomLogin SalesRoom { get; set; }
-    public locationLogin Location { get; set; }
-    public leadSourceLogin LeadSource { get; set; }
-    public warehouseLogin Warehouse { get; set; }
+    public UserLogin User { get; set; }
+    public List<RoleLogin> Roles { get; set; }
+    public List<PermissionLogin> Permissions { get; set; }
+    public SalesRoomLogin SalesRoom { get; set; }
+    public LocationLogin Location { get; set; }
+    public LeadSourceLogin LeadSource { get; set; }
+    public WarehouseLogin Warehouse { get; set; }
   }
 }

@@ -10,11 +10,12 @@
 namespace IM.Model
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class guestStatus
+    public partial class GuestStatus
     {
-        public string gsID { get; set; }
-        public string gsN { get; set; }
-        public decimal gsMaxAuthGifts { get; set; }
+        public int gtgu { get; set; }
+        public byte gtQuantity { get; set; }
+        public string gtgs { get; set; }
     }
 }

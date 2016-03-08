@@ -10,9 +10,24 @@
 namespace IM.Model
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class hotel
+    public partial class Hotel
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Hotel()
+        {
+            this.LeadSources = new HashSet<LeadSource>();
+        }
+    
         public string hoID { get; set; }
+        public string hoGroup { get; set; }
+        public string hoar { get; set; }
+        public bool hoA { get; set; }
+    
+        public virtual Area Area { get; set; }
+        public virtual HotelGroup HotelGroup { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LeadSource> LeadSources { get; set; }
     }
 }

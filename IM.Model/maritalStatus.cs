@@ -10,10 +10,12 @@
 namespace IM.Model
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class maritalStatus
+    public partial class MaritalStatus
     {
         public string msID { get; set; }
         public string msN { get; set; }
+        public bool msA { get; set; }
     }
 }

@@ -14,6 +14,25 @@ namespace IM.Model
     
     public partial class Guest
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Guest()
+        {
+            this.DepositsRefunds = new HashSet<DepositRefund>();
+            this.GiftsReceipts = new HashSet<GiftsReceipt>();
+            this.Groups = new HashSet<Group>();
+            this.GuestsMovements = new HashSet<GuestMovement>();
+            this.GuestsPromotions = new HashSet<GuestPromotion>();
+            this.InvitsGifts = new HashSet<InvitationGift>();
+            this.MealTickets = new HashSet<MealTicket>();
+            this.PRNotes = new HashSet<PRNote>();
+            this.Sales = new HashSet<Sale>();
+            this.SalesLogs = new HashSet<SaleLog>();
+            this.ShowsSalesmen = new HashSet<ShowSalesman>();
+            this.Guests1 = new HashSet<Guest>();
+            this.Guests = new HashSet<Guest>();
+            this.GuestsGroups = new HashSet<GuestsGroup>();
+        }
+    
         public int guID { get; set; }
         public string guHReservID { get; set; }
         public string guls { get; set; }
@@ -220,6 +239,18 @@ namespace IM.Model
         public Nullable<bool> guDespositRefund { get; set; }
         public Nullable<bool> guDepositsRefund { get; set; }
     
+        public virtual Agency Agency { get; set; }
+        public virtual Club Club { get; set; }
+        public virtual Country Country { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DepositRefund> DepositsRefunds { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GiftsReceipt> GiftsReceipts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Group> Groups { get; set; }
+        public virtual GuestOpera GuestOpera { get; set; }
+        public virtual NotBookingMotive NotBookingMotive { get; set; }
+        public virtual PaymentType PaymentType { get; set; }
         public virtual Personnel Personnel { get; set; }
         public virtual Personnel Personnel1 { get; set; }
         public virtual Personnel Personnel2 { get; set; }
@@ -245,5 +276,29 @@ namespace IM.Model
         public virtual Personnel Personnel22 { get; set; }
         public virtual Personnel Personnel23 { get; set; }
         public virtual Personnel Personnel24 { get; set; }
+        public virtual ReimpresionMotive ReimpresionMotive { get; set; }
+        public virtual RoomType RoomType { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GuestMovement> GuestsMovements { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GuestPromotion> GuestsPromotions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<InvitationGift> InvitsGifts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MealTicket> MealTickets { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PRNote> PRNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sale> Sales { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SaleLog> SalesLogs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ShowSalesman> ShowsSalesmen { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Guest> Guests1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Guest> Guests { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GuestsGroup> GuestsGroups { get; set; }
     }
 }

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using IM.Model;
-using IM.Model.Entities;
+using IM.Model.Classes;
 using IM.BusinessRules.BR;
 using IM.Model.Enums;
 using System.IO;
 using IM.Base.Helpers;
+using IM.BusinessRules.BR;
 
 namespace IM.Base.Forms
 {
@@ -19,16 +19,14 @@ namespace IM.Base.Forms
     protected bool _blnChangePassword;
     protected LoginType _loginType;
     protected bool _blnAutoSign;
-    private List<GetWarehousesByUser> _lstWhsByUsr = new List<GetWarehousesByUser>();
-    private List<GetLocationsByUser> _lstLocaByUsr = new List<GetLocationsByUser>();
-    private Helpers.IniFileHelper _iniFileHelper;
+    private IniFileHelper _iniFileHelper;
 
     #endregion
-    
+
     #region Propiedades
 
     public UserData userData { get; set; }
-    public bool isAuthenticated { get; set; }
+    public bool IsAuthenticated { get; set; }
 
     #endregion
 
@@ -43,7 +41,7 @@ namespace IM.Base.Forms
     /// [edgrodriguez] 27/02/2016 Modified
     /// [edgrodriguez] 29/02/2016 Modified
     /// </history>
-    public frmLogin(Window pParentSplash=null, bool blnChangePassword = false, LoginType loginType = LoginType.Normal, bool blnAutoSign = false)
+    public frmLogin(Window pParentSplash = null, bool blnChangePassword = false, LoginType loginType = LoginType.Normal, bool blnAutoSign = false)
     {
       InitializeComponent();
       _frmBase = pParentSplash;
@@ -87,7 +85,7 @@ namespace IM.Base.Forms
           switch (_loginType)
           {
             case LoginType.Warehouse:
-              UIHelper.ShowMessage("Specify the Warehouse.", MessageBoxImage.Warning);              
+              UIHelper.ShowMessage("Specify the Warehouse.", MessageBoxImage.Warning);
               break;
             case LoginType.Location:
               UIHelper.ShowMessage("Specify the Location.", MessageBoxImage.Warning);
@@ -116,7 +114,7 @@ namespace IM.Base.Forms
         switch (_loginType)
         {
           case LoginType.Warehouse:
-           if (cmbPlace.Visibility == Visibility.Visible)
+            if (cmbPlace.Visibility == Visibility.Visible)
             {
               txtUser_LostFocus(null, null);
               cmbPlace.SelectedValue = _iniFileHelper.readText("Login", "Warehouse", "");
@@ -157,9 +155,9 @@ namespace IM.Base.Forms
       if (!Validate())
         return;
 
-      var user = IM.BusinessRules.BR.BRPersonnel.login(Model.Enums.LoginType.Normal, txtUser.Text);
+      var user = BRPersonnel.Login(Model.Enums.LoginType.Normal, txtUser.Text);
 
-      userData = BRPersonnel.login(_loginType, txtUser.Text, (cmbPlace.Visibility == Visibility.Visible) ? cmbPlace.SelectedValue.ToString() : "");
+      userData = BRPersonnel.Login(_loginType, txtUser.Text, (cmbPlace.Visibility == Visibility.Visible) ? cmbPlace.SelectedValue.ToString() : "");
       string _encryptPassword = Helpers.EncryptHelper.Encrypt(txtPassword.Password);
       if (userData.User == null)
       {
@@ -185,7 +183,7 @@ namespace IM.Base.Forms
       DateTime _serverDate = BRHelpers.GetServerDate();
       if (_serverDate > _expireDate || (bool)chkChangePwd.IsChecked)
       {
-        frmChangePassword changePwd = new frmChangePassword(userData.User,_serverDate);
+        frmChangePassword changePwd = new frmChangePassword(userData.User, _serverDate);
         changePwd.ShowDialog();
       }
 
@@ -218,7 +216,7 @@ namespace IM.Base.Forms
           }
           break;
       }
-      isAuthenticated = true;
+      IsAuthenticated = true;
       Close();
 
       if (_frmBase != null)
@@ -251,14 +249,11 @@ namespace IM.Base.Forms
     {
       switch (_loginType)
       {
-        case  LoginType.Warehouse://Almacen
-          using (var dbContext = new Model.IMEntities())
+        case LoginType.Warehouse://Almacen
+          List<WarehouseByUser> warehouses = BRWarehouses.GetWarehousesByUser(txtUser.Text, "ALL");
+          if (warehouses.Count > 0)
           {
-            _lstWhsByUsr = dbContext.USP_OR_GetWarehousesByUser(txtUser.Text, "ALL").ToList();
-          }
-          if (_lstWhsByUsr.Count > 0)
-          {
-            cmbPlace.ItemsSource = _lstWhsByUsr;
+            cmbPlace.ItemsSource = warehouses;
             cmbPlace.SelectedValuePath = "whID";
             cmbPlace.DisplayMemberPath = "whN";
             cmbPlace.IsEnabled = true;
@@ -266,17 +261,14 @@ namespace IM.Base.Forms
           else
             cmbPlace.IsEnabled = false;
           break;
-        case LoginType.Location://Hotel
-          using (var dbContext = new Model.IMEntities())
+        case LoginType.Location://Locacion
+          List<LocationByUser> locations = BRLocations.GetLocationsByUser(txtUser.Text, "IH");
+          if (locations.Count > 0)
           {
-            _lstLocaByUsr = dbContext.USP_OR_GetLocationsByUser(txtUser.Text, "IH").ToList();
-          }
-          if (_lstLocaByUsr.Count > 0)
-          {
-            cmbPlace.ItemsSource = _lstLocaByUsr;
+            cmbPlace.ItemsSource = locations;
             cmbPlace.SelectedValuePath = "loID";
             cmbPlace.DisplayMemberPath = "loN";
-            cmbPlace.IsEnabled = true;         
+            cmbPlace.IsEnabled = true;
           }
           else
             cmbPlace.IsEnabled = false;
@@ -309,7 +301,7 @@ namespace IM.Base.Forms
           cmbPlace.Visibility = Visibility.Hidden;
           lblPlace.Visibility = Visibility.Hidden;
           Height = Height - 25;
-          break;        
+          break;
         case LoginType.Location: // Hotel
           lblPlace.Content = "Location";
           break;
@@ -317,7 +309,7 @@ namespace IM.Base.Forms
 
       //Se verifican las banderas de ChangePassword y AutoSign
       chkAutoSign.Visibility = (_blnAutoSign) ? Visibility.Visible : Visibility.Hidden;
-      chkChangePwd.Visibility=(_blnChangePassword) ? Visibility.Visible : Visibility.Hidden;
+      chkChangePwd.Visibility = (_blnChangePassword) ? Visibility.Visible : Visibility.Hidden;
       LoadFromFile();
     }
 

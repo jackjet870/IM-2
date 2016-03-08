@@ -11,7 +11,7 @@ namespace IM.Model
 {
     using System;
     
-    public partial class leadSourceLogin
+    public partial class LeadSourceLogin
     {
         public string lsID { get; set; }
         public string lsN { get; set; }

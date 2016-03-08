@@ -1,10 +1,9 @@
-﻿using IM.Model.Entities;
+﻿using IM.Model.Classes;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using IM.BusinessRules.Enums;
 
 namespace IM.Base.Forms
 {
@@ -16,9 +15,15 @@ namespace IM.Base.Forms
   /// </history>
   public partial class frmInvitationBase : Window
   {
+    #region Atributos
 
-    private IM.BusinessRules.Enums.InvitationType _invitationType;
+    private InvitationType _invitationType;
     private UserData _user;
+
+    #endregion
+
+    #region Constructores y destructores
+
     public frmInvitationBase()
     {
       InitializeComponent();
@@ -30,6 +35,8 @@ namespace IM.Base.Forms
       _user = user;
       InitializeComponent();
     }
+
+    #endregion
 
     #region Métodos de la forma
 

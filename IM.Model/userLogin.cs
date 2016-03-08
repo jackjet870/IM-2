@@ -11,7 +11,7 @@ namespace IM.Model
 {
     using System;
     
-    public partial class userLogin
+    public partial class UserLogin
     {
         public string peID { get; set; }
         public string peN { get; set; }

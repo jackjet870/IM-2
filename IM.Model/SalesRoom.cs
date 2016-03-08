@@ -14,6 +14,21 @@ namespace IM.Model
     
     public partial class SalesRoom
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public SalesRoom()
+        {
+            this.Efficiencies = new HashSet<Efficiency>();
+            this.GiftsReceipts = new HashSet<GiftsReceipt>();
+            this.MealTicketFolios = new HashSet<MealTicketFolio>();
+            this.MealTickets = new HashSet<MealTicket>();
+            this.Sales = new HashSet<Sale>();
+            this.SalesLogs = new HashSet<SaleLog>();
+            this.SalesRoomsLogs = new HashSet<SalesRoomLog>();
+            this.TeamsSalesmen = new HashSet<TeamSalesmen>();
+            this.TourTimesBySalesRoomWeekDays = new HashSet<TourTimeBySalesRoomWeekDay>();
+            this.Banks = new HashSet<Bank>();
+        }
+    
         public string srID { get; set; }
         public string srN { get; set; }
         public short srHoursDif { get; set; }
@@ -35,6 +50,29 @@ namespace IM.Model
         public string srCECOID { get; set; }
         public string srCEBEID { get; set; }
     
+        public virtual Area Area { get; set; }
+        public virtual Currency Currency { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Efficiency> Efficiencies { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GiftsReceipt> GiftsReceipts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MealTicketFolio> MealTicketFolios { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MealTicket> MealTickets { get; set; }
         public virtual Personnel Personnel { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sale> Sales { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SaleLog> SalesLogs { get; set; }
+        public virtual Warehouse Warehouse { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SalesRoomLog> SalesRoomsLogs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TeamSalesmen> TeamsSalesmen { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TourTimeBySalesRoomWeekDay> TourTimesBySalesRoomWeekDays { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Bank> Banks { get; set; }
     }
 }

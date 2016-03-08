@@ -8,6 +8,8 @@ namespace IM.BusinessRules.BR
 {
   public class BRHelpers
   {
+    #region GetServerDate
+
     /// <summary>
     /// Obtiene la fecha y hora del servidor.
     /// </summary>
@@ -23,5 +25,7 @@ namespace IM.BusinessRules.BR
         return dQuery.AsEnumerable().First();
       }
     }
+
+    #endregion
   }
 }

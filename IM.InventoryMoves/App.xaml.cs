@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using IM.Model.Entities;
+using IM.Model.Classes;
 using IM.Base.Forms;
 using IM.Model.Enums;
 
@@ -25,7 +25,7 @@ namespace IM.InventoryMovements
       frmLogin frmLogin = new frmLogin(frmSplash, true, LoginType.Warehouse);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
-      if (frmLogin.isAuthenticated)
+      if (frmLogin.IsAuthenticated)
       {
         UserData userData = frmLogin.userData;
         frmInventoryMovements frmInvMovs = new frmInventoryMovements(userData);

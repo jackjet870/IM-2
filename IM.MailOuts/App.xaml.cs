@@ -1,5 +1,5 @@
 ﻿using IM.Base.Forms;
-using IM.Model.Entities;
+using IM.Model.Classes;
 using IM.Model.Enums;
 using System.Windows;
 using System;
@@ -54,7 +54,7 @@ namespace IM.MailOuts
       frmLogin frmLogin = new frmLogin(frmSplash, true, LoginType.Location, true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
-      if (frmLogin.isAuthenticated)
+      if (frmLogin.IsAuthenticated)
       {
         UserData userData = frmLogin.userData;
         frmMailOuts frmInvMovs = new frmMailOuts(userData);

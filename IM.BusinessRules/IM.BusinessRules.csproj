@@ -53,13 +53,14 @@
     <Compile Include="BR\BRCountries.cs" />
     <Compile Include="BR\BRGifts.cs" />
     <Compile Include="BR\BRGuests.cs" />
-    <Compile Include="BR\BRInvitationBase.cs" />
     <Compile Include="BR\BRHelpers.cs" />
     <Compile Include="BR\BRLanguages.cs" />
+    <Compile Include="BR\BRWarehouses.cs" />
+    <Compile Include="BR\BRLocations.cs" />
     <Compile Include="BR\BRMailOuts.cs" />
     <Compile Include="BR\BRMailOutTexts.cs" />
     <Compile Include="BR\BRPersonnel.cs" />
-    <Compile Include="BR\BRWhsMovs.cs" />
+    <Compile Include="BR\BRWarehouseMovements.cs" />
     <Compile Include="Classes\UserNormalLogin.cs" />
     <Compile Include="Enums\InvitationType.cs" />
     <Compile Include="BR\BRLeadSources.cs" />

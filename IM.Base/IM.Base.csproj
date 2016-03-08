@@ -61,7 +61,6 @@
       <DependentUpon>frmChangePassword.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmConsultaBase.xaml.cs" />
-    <Compile Include="Forms\frmInvitationBase.xaml.cs" />
     <Compile Include="Forms\frmLogin.xaml.cs">
       <DependentUpon>frmLogin.xaml</DependentUpon>
     </Compile>
@@ -101,10 +100,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\frmConsultaBase.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Forms\frmInvitationBase.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

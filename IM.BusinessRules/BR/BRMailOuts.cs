@@ -5,6 +5,8 @@ namespace IM.BusinessRules.BR
 {
   public class BRMailOuts
   {
+    #region ProcessMailOuts
+
     /// <summary>
     /// Procesa los MailOuts por la  Clave del Lead Source
     /// </summary>
@@ -15,10 +17,12 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void ProcessMailOuts(string leadSourceID, DateTime? date = null)
     {
-      using (var cn = new IMEntities())
+      using (var dbContext = new IMEntities())
       {
-        cn.spProcessMailOuts(leadSourceID, date);
+        dbContext.spProcessMailOuts(leadSourceID, date);
       }
     }
+
+    #endregion
   }
 }

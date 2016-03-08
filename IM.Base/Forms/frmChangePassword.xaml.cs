@@ -1,18 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using IM.Model.Entities;
 using IM.Model;
 using IM.BusinessRules.BR;
 
@@ -23,14 +10,27 @@ namespace IM.Base.Forms
   /// </summary>
   public partial class frmChangePassword : Window
   {
-    userLogin _userLogin;
-    DateTime _serverDate;
-    public frmChangePassword(userLogin UserLogin,DateTime serverDate)
+    #region Atributos
+
+    private UserLogin _userLogin;
+    private DateTime _serverDate;
+
+    #endregion
+
+    #region Constructores y destructores
+
+    public frmChangePassword(UserLogin userLogin, DateTime serverDate)
     {
       InitializeComponent();
-      _userLogin = UserLogin;
+      _userLogin = userLogin;
       _serverDate = serverDate;
     }
+
+    #endregion
+
+    #region Eventos del formulario
+
+    #region btnOK_Click
 
     private void btnOK_Click(object sender, RoutedEventArgs e)
     {
@@ -72,9 +72,17 @@ namespace IM.Base.Forms
       Close();
     }
 
+    #endregion
+
+    #region btnCancel_Click
+
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       Close();
     }
+
+    #endregion
+
+    #endregion
   }
 }

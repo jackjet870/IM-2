@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
-using IM.Model.Entities;
+using IM.Model.Classes;
 using IM.Model.Enums;
 
 namespace IM.BusinessRules.BR
 {
   public class BRPersonnel
   {
+    #region Login
+
     /// <summary>
     /// Método para obtener los datos del usuario
     /// como son datos principales, permisos, roles
@@ -21,28 +20,32 @@ namespace IM.BusinessRules.BR
     /// <param name="user"> Nombre de Usuario</param>
     /// <param name="place"> Nombre del lugar</param>
     /// <returns></returns>
-    public static UserData login(LoginType logintype, string user = "", string place = "")
+    public static UserData Login(LoginType logintype, string user = "", string place = "")
     {
-      UserData usrD = new UserData();
+      UserData userData = new UserData();
       using (var dbContext = new IMEntities())
       {
-        var _usr = dbContext.USP_OR_Login(Convert.ToByte(logintype), user, place);
-        usrD.User = _usr.FirstOrDefault();
-        var _roles = _usr.GetNextResult<rolesLogin>();
-        usrD.Roles = _roles.ToList();
-        var _permissions = _roles.GetNextResult<permissionsLogin>();
-        usrD.Permissions = _permissions.ToList();
-        var _salesroom = _permissions.GetNextResult<salesRoomLogin>();
-        usrD.SalesRoom = _salesroom.FirstOrDefault();
-        var _location = _salesroom.GetNextResult<locationLogin>();
-        usrD.Location = _location.FirstOrDefault();
-        var _leadsource = _location.GetNextResult<leadSourceLogin>();
-        usrD.LeadSource = _leadsource.FirstOrDefault();
-        var _warehouse = _leadsource.GetNextResult<warehouseLogin>();
-        usrD.Warehouse = _warehouse.FirstOrDefault();
+        var resUser = dbContext.USP_OR_Login(Convert.ToByte(logintype), user, place);
+        userData.User = resUser.FirstOrDefault();
+        var resRoles = resUser.GetNextResult<RoleLogin>();
+        userData.Roles = resRoles.ToList();
+        var resPermissions = resRoles.GetNextResult<PermissionLogin>();
+        userData.Permissions = resPermissions.ToList();
+        var resSalesroom = resPermissions.GetNextResult<SalesRoomLogin>();
+        userData.SalesRoom = resSalesroom.FirstOrDefault();
+        var resLocation = resSalesroom.GetNextResult<LocationLogin>();
+        userData.Location = resLocation.FirstOrDefault();
+        var resLeadSource = resLocation.GetNextResult<LeadSourceLogin>();
+        userData.LeadSource = resLeadSource.FirstOrDefault();
+        var resWarehouse = resLeadSource.GetNextResult<WarehouseLogin>();
+        userData.Warehouse = resWarehouse.FirstOrDefault();
       }
-      return usrD;
+      return userData;
     }
+
+    #endregion
+
+    #region ChangePassword
 
     public static bool ChangePassword(string user, string newPassword, DateTime serverDate)
     {
@@ -57,5 +60,7 @@ namespace IM.BusinessRules.BR
       }
       return Convert.ToBoolean(result);
     }
+
+    #endregion
   }
 }

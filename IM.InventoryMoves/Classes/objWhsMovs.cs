@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IM.Model;
 
 namespace IM.InventoryMovements.Clases
 {
-  public class objWhsMovs : Model.WhsMov, IDataErrorInfo
+  public class objWhsMovs : WarehouseMovement, IDataErrorInfo
   {
     public string Error
     {

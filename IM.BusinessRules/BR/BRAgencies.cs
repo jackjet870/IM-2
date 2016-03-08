@@ -1,32 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IM.Model;
 
 namespace IM.BusinessRules.BR
 {
   public class BRAgencies
   {
+    #region GetAgencies
+
     /// <summary>
-    /// Obtiene el catalogo de Agencies
+    /// Obtiene el catalogo de agencias
     /// </summary>
     /// <param name="status"> 0- Sin filtro, 1-Activos, 2. Inactivos </param>
-    /// <returns>List<Model.GetAgencies></returns>
-    public static List<Model.GetAgencies> GetAgencies(int status)
+    public static List<AgencyShort> GetAgencies(int status)
     {
-      try
+      using (var dbContext = new IMEntities())
       {
-        using (var model = new IM.Model.IMEntities())
-        {
-          return model.USP_OR_GetAgencies(Convert.ToByte(status)).ToList();
-        }
+        return dbContext.USP_OR_GetAgencies(Convert.ToByte(status)).ToList();
       }
-      catch (Exception ex)
-      {
-        throw ex;
-      }
-
     }
+
+    #endregion
   }
 }

@@ -10,10 +10,12 @@
 namespace IM.Model
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class assistanceStatus
+    public partial class AssistanceStatus
     {
         public string atID { get; set; }
         public string atN { get; set; }
+        public bool atA { get; set; }
     }
 }

@@ -10,12 +10,11 @@
 namespace IM.Model
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class dayOFF
+    public partial class DayOff
     {
         public string dope { get; set; }
-        public string peN { get; set; }
-        public string doList { get; set; }
         public bool doMonday { get; set; }
         public bool doTuesday { get; set; }
         public bool doWednesday { get; set; }
@@ -23,5 +22,8 @@ namespace IM.Model
         public bool doFriday { get; set; }
         public bool doSaturday { get; set; }
         public bool doSunday { get; set; }
+        public string doList { get; set; }
+    
+        public virtual Personnel Personnel { get; set; }
     }
 }

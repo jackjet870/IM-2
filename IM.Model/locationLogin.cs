@@ -11,7 +11,7 @@ namespace IM.Model
 {
     using System;
     
-    public partial class locationLogin
+    public partial class LocationLogin
     {
         public string loID { get; set; }
         public string loN { get; set; }

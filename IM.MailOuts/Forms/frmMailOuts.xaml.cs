@@ -5,7 +5,7 @@ using IM.MailOuts.Classes;
 using IM.MailOuts.Forms;
 using IM.MailOuts.Reports;
 using IM.Model;
-using IM.Model.Entities;
+using IM.Model.Classes;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -26,16 +26,17 @@ namespace IM.MailOuts
   /// </history>
   public partial class frmMailOuts : Window
   {
-    #region Variables
+    #region Atributos
 
     private DateTime _dtmServerdate = new DateTime();
     private List<GuestMailOutsText> _guestMailOutsText = new List<GuestMailOutsText>();
-    private leadSourceLogin _leadSourceLogin = new leadSourceLogin();
-    private List<GuestsMailOuts> _ltsGuestsMailOuts = new List<GuestsMailOuts>();
-    private List<GetLanguages> _ltsLanguages = new List<GetLanguages>();
-    private List<GetMailOutTextsByLeadSource> _ltsMailOutTextsByLeadSource = new List<GetMailOutTextsByLeadSource>();
+    private LeadSourceLogin _leadSourceLogin = new LeadSourceLogin();
+    private List<GuestMailOut> _ltsGuestsMailOuts = new List<GuestMailOut>();
+    private List<LanguageShort> _ltsLanguages = new List<LanguageShort>();
+    private List<MailOutTextByLeadSource> _ltsMailOutTextsByLeadSource = new List<MailOutTextByLeadSource>();
     private rptMailOuts _rptMailOuts = new rptMailOuts();
-    private userLogin _userLogin = new userLogin();
+    private UserLogin _userLogin = new UserLogin();
+
     #endregion Variables
 
     public frmMailOuts(UserData userData)
@@ -89,10 +90,10 @@ namespace IM.MailOuts
     /// </history>
     private void btnAssign_Click(object sender, RoutedEventArgs e)
     {
-      dtgDatos.SelectedItems.OfType<GuestsMailOuts>().ToList().ForEach(item =>
+      dtgDatos.SelectedItems.OfType<GuestMailOut>().ToList().ForEach(item =>
       {
-        item.gula = ((GetLanguages)ltsbLanguages.SelectedItem).laID;
-        item.gumo = ((GetMailOutTextsByLeadSource)ltsbMailOuts.SelectedItem).mtmoCode;
+        item.gula = ((LanguageShort)ltsbLanguages.SelectedItem).laID;
+        item.gumo = ((MailOutTextByLeadSource)ltsbMailOuts.SelectedItem).mtmoCode;
       });
 
       dtgDatos.Items.Refresh();
@@ -106,7 +107,7 @@ namespace IM.MailOuts
     /// </history>
     private void btnClear_Click(object sender, RoutedEventArgs e)
     {
-      dtgDatos.SelectedItems.OfType<GuestsMailOuts>().ToList().ForEach(item => item.gumo = null);
+      dtgDatos.SelectedItems.OfType<GuestMailOut>().ToList().ForEach(item => item.gumo = null);
 
       dtgDatos.Items.Refresh();
     }
@@ -119,7 +120,7 @@ namespace IM.MailOuts
     /// </history>
     private void btnClearAll_Click(object sender, RoutedEventArgs e)
     {
-      dtgDatos.Items.OfType<GuestsMailOuts>().ToList().ForEach(item => item.gumo = null);
+      dtgDatos.Items.OfType<GuestMailOut>().ToList().ForEach(item => item.gumo = null);
 
       dtgDatos.Items.Refresh();
     }
@@ -257,7 +258,7 @@ namespace IM.MailOuts
 
       string strPrintedBy = _userLogin.peID + " " + String.Format("{0:ddd dd MMM yy }", DateTime.Now) + " " + DateTime.Now.ToShortTimeString();
 
-      _guestMailOutsText = (from gmo in dtgDatos.Items.OfType<GuestsMailOuts>()
+      _guestMailOutsText = (from gmo in dtgDatos.Items.OfType<GuestMailOut>()
                             join mot in _ltsMailOutTextsByLeadSource on new { a = gmo.gumo, b = gmo.gula } equals new { a = mot.mtmoCode, b = mot.mtla }
                             where gmo.gumo != null && gmo.gula != null && gmo.gumoA
                             select new GuestMailOutsText
@@ -299,7 +300,7 @@ namespace IM.MailOuts
     {
       StaStart("Loading guests...");
       _dtmServerdate = BRHelpers.GetServerDate();
-      _ltsGuestsMailOuts = BRGuest.GetGuestsMailOuts(_leadSourceLogin.lsID, _dtmServerdate, _dtmServerdate.AddDays(1), _dtmServerdate.AddDays(2));
+      _ltsGuestsMailOuts = BRGuests.GetGuestsMailOuts(_leadSourceLogin.lsID, _dtmServerdate, _dtmServerdate.AddDays(1), _dtmServerdate.AddDays(2));
 
       List<ObjGuestsMailOuts> _ltsObjGuestsMailOuts = _ltsGuestsMailOuts.Select(parent => new ObjGuestsMailOuts(parent)).ToList();
 

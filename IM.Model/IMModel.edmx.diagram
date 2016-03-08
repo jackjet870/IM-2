@@ -4,40 +4,441 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="16c4c6fc7dc941da8451aa3147eb3931" Name="Diagram1" ZoomLevel="55">
-        <EntityTypeShape EntityType="IMModel.Guest" Width="1.5" PointX="3.375" PointY="0.75" />
-        <EntityTypeShape EntityType="IMModel.SalesRoom" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="IMModel.WhsMov" Width="1.5" PointX="5.375" PointY="0.75" />
-        <EntityTypeShape EntityType="IMModel.Personnel" Width="1.5" PointX="0.75" PointY="16" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Closer1" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Closer2" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Closer3" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_CloserCaptain1" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_EntryHost" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Exit1" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Exit2" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_ExitHost" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_GiftsHost" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Liner1" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Liner2" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_LinerCaptain1" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Podium" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PR1" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PR2" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PR3" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRAssign" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRAvail" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRCaptain1" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRCaptain2" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRCaptain3" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRContact" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRFollow" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRNoBook" />
-        <AssociationConnector Association="IMModel.FK_Guests_Personnel_VLO" />
-        <AssociationConnector Association="IMModel.FK_Personnel_Personnel_Liner" />
-        <AssociationConnector Association="IMModel.FK_SalesRooms_Personnel_Boss" />
-        <AssociationConnector Association="IMModel.FK_WhsMovs_Personnel" />
-        </Diagram>
+      <Diagram DiagramId="31ddec49921b4115aa52c29006090781" Name="Diagram1">
+        <EntityTypeShape EntityType="IMModel.Activity" Width="1.5" PointX="33" PointY="134.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Agency" Width="1.5" PointX="15" PointY="75.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Area" Width="1.5" PointX="0.75" PointY="98.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Assistance" Width="1.5" PointX="18.75" PointY="98.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.AssistanceStatus" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Bank" Width="1.5" PointX="0.75" PointY="101.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.BookingDeposit" Width="1.5" PointX="44.25" PointY="109.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.CECOCEBEType" Width="1.5" PointX="30.75" PointY="128" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ChargeCalculationType" Width="1.5" PointX="1.5" PointY="115.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ChargeTo" Width="1.5" PointX="3.75" PointY="114.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Club" Width="1.5" PointX="12.75" PointY="68" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Computer" Width="1.5" PointX="30.75" PointY="71.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Contract" Width="1.5" PointX="12.75" PointY="78.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Country" Width="1.5" PointX="12.75" PointY="74.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.CreditCardType" Width="1.5" PointX="42" PointY="114.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Currency" Width="1.5" PointX="0.75" PointY="111.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.CxCPayment" Width="1.5" PointX="8.25" PointY="111.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.DayOff" Width="1.5" PointX="18.75" PointY="103.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.AgesRange" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.DepositRefund" Width="1.5" PointX="36" PointY="109.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Dept" Width="1.5" PointX="14.25" PointY="101.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Desk" Width="1.5" PointX="28.5" PointY="71.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Efficiency" Width="1.5" PointX="8.25" PointY="105.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.EfficiencyType" Width="1.5" PointX="6" PointY="99.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ExchangeRate" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ExchangeRateLog" Width="1.5" PointX="3" PointY="111.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.FolioCXC" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.FolioCxCCancellation" Width="1.5" PointX="21.75" PointY="105.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.FolioCxCPR" Width="1.5" PointX="18.75" PointY="110" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.FolioInvitationOuthouse" Width="1.5" PointX="4.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.FolioInvitationOuthousePR" Width="1.5" PointX="18.75" PointY="112.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.FolioInvitationOuthousePRCancellation" Width="1.5" PointX="21.75" PointY="101.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Gift" Width="1.5" PointX="17.25" PointY="74.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GiftCategory" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GiftInventory" Width="1.5" PointX="19.5" PointY="88.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GiftLog" Width="1.5" PointX="21.75" PointY="109.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GiftPackageItem" Width="1.5" PointX="19.5" PointY="82.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GiftsReceipt" Width="1.5" PointX="6" PointY="105.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GiftsReceiptDetail" Width="1.5" PointX="11.25" PointY="109.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GiftsReceiptLog" Width="1.5" PointX="8.25" PointY="115" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GiftsReceiptPackageItem" Width="1.5" PointX="14.25" PointY="109.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GiftsReceiptPayment" Width="1.5" PointX="11.25" PointY="104.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Goal" Width="1.5" PointX="35.75" PointY="117" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Group" Width="1.5" PointX="30" PointY="118.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GuestLog" Width="1.5" PointX="24.75" PointY="100.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Guest" Width="1.5" PointX="27.75" PointY="81.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GuestCreditCard" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GuestsGroup" Width="1.5" PointX="30" PointY="121.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GuestMovement" Width="1.5" PointX="33" PointY="98.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GuestMovementType" Width="1.5" PointX="30.75" PointY="93.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GuestPromotion" Width="1.5" PointX="11.25" PointY="116.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GuestSisturPromotion" Width="1.5" PointX="8.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GuestStatus" Width="1.5" PointX="8.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GuestStatusType" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.HotelGroup" Width="1.5" PointX="26.25" PointY="75.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Hotel" Width="1.5" PointX="28.5" PointY="75.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Income" Width="1.5" PointX="30.75" PointY="131" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.InvitationGift" Width="1.5" PointX="14.25" PointY="104.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.InvitationText" Width="1.5" PointX="33" PointY="102.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Language" Width="1.5" PointX="10.5" PointY="70.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.LeadSource" Width="1.5" PointX="30.75" PointY="100.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Location" Width="1.5" PointX="19.5" PointY="77.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.LocationCategory" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.LoginLog" Width="1.5" PointX="21.75" PointY="97.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.MailOut" Width="1.5" PointX="33" PointY="106.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.MailOutText" Width="1.5" PointX="36" PointY="105.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Market" Width="1.5" PointX="12.75" PointY="81.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.MarketSegment" Width="1.5" PointX="30.75" PointY="133.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.MealTicketFolio" Width="1.5" PointX="5.25" PointY="102.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.MealTicket" Width="1.5" PointX="36" PointY="95.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.MealTicketType" Width="1.5" PointX="33.75" PointY="87.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.MembershipGroup" Width="1.5" PointX="34.5" PointY="122.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.MembershipType" Width="1.5" PointX="36.75" PointY="121.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.MaritalStatus" Width="1.5" PointX="2.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.NotBookingMotive" Width="1.5" PointX="25.5" PointY="89.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Notice" Width="1.5" PointX="33" PointY="112.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Configuration" Width="1.5" PointX="24.75" PointY="92.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.PaymentPlace" Width="1.5" PointX="42" PointY="117.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Payment" Width="1.5" PointX="10.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.PaymentSchema" Width="1.5" PointX="10.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.PaymentType" Width="1.5" PointX="25.5" PointY="121.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Period" Width="1.5" PointX="6" PointY="96" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Permission" Width="1.5" PointX="16.5" PointY="86.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.PermissionLevel" Width="1.5" PointX="16.5" PointY="121.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.PersonnelAccess" Width="1.5" PointX="24.75" PointY="114.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Personnel" Width="1.5" PointX="16.5" PointY="93.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.PersonnelPermission" Width="1.5" PointX="18.75" PointY="95.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.PersonnelStatus" Width="1.5" PointX="6.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.PlaceType" Width="1.5" PointX="22.5" PointY="122.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Post" Width="1.5" PointX="19.5" PointY="120.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.PostLog" Width="1.5" PointX="21.75" PointY="115.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.PRNote" Width="1.5" PointX="36" PointY="113.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Product" Width="1.5" PointX="15" PointY="89.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ProductLegend" Width="1.5" PointX="22.25" PointY="80.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Program" Width="1.5" PointX="28.5" PointY="132.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.RateType" Width="1.5" PointX="3" PointY="99.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ReasonCancellationFolio" Width="1.5" PointX="19.5" PointY="92.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.RefundType" Width="1.5" PointX="33.75" PointY="128.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Region" Width="1.5" PointX="1.5" PointY="94.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ReimpresionMotive" Width="1.5" PointX="22.5" PointY="119.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ReportText" Width="1.5" PointX="12.75" PointY="71" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Rep" Width="1.5" PointX="12.75" PointY="84.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Role" Width="1.5" PointX="18.75" PointY="221.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.RoomCharge" Width="1.5" PointX="33" PointY="115.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.RoomType" Width="1.5" PointX="25.5" PointY="124.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Sale" Width="1.5" PointX="39" PointY="97.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.SalesAmountRange" Width="1.5" PointX="10.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.SaleLog" Width="1.5" PointX="41.25" PointY="99.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.SalesmanChange" Width="1.5" PointX="41.25" PointY="156.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.SalesRoom" Width="1.5" PointX="3" PointY="102.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.SalesRoomLog" Width="1.5" PointX="18.75" PointY="116.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.SalesSalesman" Width="1.5" PointX="44.25" PointY="105.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.SaleType" Width="1.5" PointX="36.75" PointY="125.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.SaleTypeCategory" Width="1.5" PointX="34.5" PointY="125.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ScoreRule" Width="1.5" PointX="33.75" PointY="84.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ScoreRuleByLeadSource" Width="1.5" PointX="33" PointY="118.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ScoreRuleByLeadSourceDetail" Width="1.5" PointX="36" PointY="102.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ScoreRuleConcept" Width="1.5" PointX="33.75" PointY="91.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ScoreRuleDetail" Width="1.5" PointX="36" PointY="91.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ScoreRuleType" Width="1.5" PointX="11.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Season" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.SeasonDate" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.SegmentByAgency" Width="1.5" PointX="12.75" PointY="86.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.SegmentByLeadSource" Width="1.5" PointX="28.5" PointY="135" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.SegmentCategory" Width="1.5" PointX="2.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ShowProgram" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ShowProgramCategory" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.ShowSalesman" Width="1.5" PointX="33" PointY="94.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Society" Width="1.5" PointX="12.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.SourcePayment" Width="1.5" PointX="9" PointY="101.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.TeamGuestServices" Width="1.5" PointX="21.75" PointY="94.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.TeamLog" Width="1.5" PointX="30.75" PointY="96.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.TeamSalesmen" Width="1.5" PointX="24.75" PointY="117.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.TeamType" Width="1.5" PointX="28.5" PointY="78.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.TourTime" Width="1.5" PointX="12.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.TourTimeByDay" Width="1.5" PointX="12.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.TourTimeBySalesRoomWeekDay" Width="1.5" PointX="5.25" PointY="121.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.TourTimesSchema" Width="1.5" PointX="22.5" PointY="91.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.UnavailableMotive" Width="1.5" PointX="10.5" PointY="77.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.UnderPaymentMotive" Width="1.5" PointX="3.75" PointY="118.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Warehouse" Width="1.5" PointX="0.75" PointY="104.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.WeekDay" Width="1.5" PointX="10.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Wholesaler" Width="1.5" PointX="15" PointY="67.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.WarehouseMovement" Width="1.5" PointX="30.75" PointY="114.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.Zone" Width="1.5" PointX="28.5" PointY="138" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.GuestOpera" Width="1.5" PointX="30" PointY="146.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.IncomeCECOCEBEType" Width="1.5" PointX="33" PointY="132" IsExpanded="true" />
+        <EntityTypeShape EntityType="IMModel.MarketSegmentCECOCEBEType" Width="1.5" PointX="12.75" PointY="12.75" IsExpanded="true" />
+        <AssociationConnector Association="IMModel.FK_ACTIVITY_CECOTYPE" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Agencies_Clubs" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Agencies_Countries" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Agencies_Markets" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Agencies_Reps" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Agencies_SegmentsByAgency" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Agencies_UnavailMots" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Agencies" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_MealTickets_Agencies" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Areas_Regions" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Hotels_Areas" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_LeadSources_Areas" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesRooms_Areas" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Warehouses_Areas" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Assistance_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsPayments_Banks" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.fk_bookingdeposit_credittype" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_BookingDeposits_PaymentPlaces" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_BookingDeposits_PaymentTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_DepositsRefund_drID" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.fk_income_cecocebetypoe" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_ChargeTo_ChargeCalculationTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceipts_ChargeTo" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsC_ChargeTo" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsLog_ChargeTo" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_InvitsGifts_ChargeTo" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Clubs" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Wholesalers_Clubs" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Computers_Desks" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestsMovements_Computers" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Contracts_UnavailMots" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Countries_Languages" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Countries_UnavailMots" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Countries" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_ExchangeRateLog_Currencies" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceipts_Currencies_CxCDeposit" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceipts_Currencies_Deposit" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsLog_Currencies" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsPayments_Currencies" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesRooms_Currencies" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_CxCPayments_GiftsReceipts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_CxCPayments_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_DaysOff_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.fk_drrf" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_guid" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Personnel_Depts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Efficiency_EfficiencyTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Efficiency_Periods" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Efficiency_SalesRooms" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_ExchangeRateLog_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_FolioCxCCancellation_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_FolioCxCCancellation_ReasonCancellationFolios" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_FolioCxCPR_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.fk_peID" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.fk_FolioCnxReason" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.fk_FolioInvOutCnx_peID" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Gifts_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsInventory_Gifts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsLog_Gifts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsPacks_Gifts_Item" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsPacks_Gifts_Pack" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsC_Gifts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsPacks_Gifts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsPacks_Gifts_Pack" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestsPromotions_Gifts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_InvitsGifts_Gifts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_WhsMovs_Gifts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsInventory_Warehouses" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsLog_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftReceipts_Guest" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceipts_LeadSources" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceipts_Locations" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceipts_PaymentTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceipts_Personnel_AuthorizedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceipts_Personnel_Host" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceipts_Personnel_PR" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceipts_ReimpresionMotives" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceipts_SalesRooms" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceipts_UnderPaymentMotives" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceipts_Warehouses" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsC_GiftsReceipts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsLog_GiftsReceipts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsPacks_GiftsReceipts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsPayments_GiftsReceipts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestsPromotions_GiftsReceipts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_InvitsGifts_GiftsReceipts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsLog_PaymentTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsLog_Personnel_AuthorizedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsLog_Personnel_ChangedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsLog_Personnel_Host" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsLog_Personnel_PR" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsLog_ReimpresionMotives" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsLog_UnderPaymentMotives" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsPayments_PaymentTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsPayments_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GiftsReceiptsPayments_SourcePayments" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Goals_Periods" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Goals_PlaceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Groups_Guests" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_Personnel_ChangedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_Personnel_Closer1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_Personnel_Closer2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_Personnel_Closer3" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_Personnel_Exit1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_Personnel_Exit2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_Personnel_Liner1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_Personnel_Liner2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_Personnel_Podium" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_Personnel_PR1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_Personnel_PR2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_Personnel_PRAvail" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_Personnel_PRContact" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_Personnel_PRFollow" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_Personnel_VLO" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_ReimpresionMotives" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestLog_UnavailMots" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.fk_guest_guestopera" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_NotBookingMotives" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_PaymentTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Closer1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Closer2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Closer3" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_CloserCaptain1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_EntryHost" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Exit1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Exit2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_ExitHost" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_GiftsHost" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Liner1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Liner2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_LinerCaptain1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Podium" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PR1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PR2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PR3" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRAssign" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRAvail" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRCaptain1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRCaptain2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRCaptain3" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRContact" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRFollow" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_PRNoBook" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_VLO" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_ReimpresionMotives" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Guests_RoomTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestsMovements_Guests" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestsPromotions_Guests" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_InvitsGifts_Guests" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_MealTickets_Guests" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_PRNotes_Guests" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Guests" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Guests" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_ShowsSalesmen_Guests" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestsMovements_GuestsMovementsTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_GuestsMovements_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Hotels_HotelGroups" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_LeadSources_Hotels" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.fk_income_incometype" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.fk_incomes_program" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_InvitsTexts_Languages" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_InvitsTexts_LeadSources" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_MailOutTexts_Languages" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_ProductsLegends_Languages" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_ReportsTexts_Languages" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_LeadSources_Personnel_Boss" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_LeadSources_Programs" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_LeadSources_Regions" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_LeadSources_SegmentsByLeadSource" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_LeadSources_Zones" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_MailOuts_LeadSources" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_MailOutTexts_LeadSources" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_RoomCharges_LeadSources" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_LeadSources" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_LeadSources" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_ScoreRulesByLeadSource_LeadSources" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_ScoreRulesByLeadSourceDetail_LeadSources" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_LoginsLog_Locations" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Locations" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Locations" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_TeamsGuestServices_Locations" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_LoginsLog_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.fk_marketsgment_program" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_MealTicketFolios_RateTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_MealTicketFolios_SalesRooms1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_MealTickets_MealTicketTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_MealTickets_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_MealTickets_RateTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_MealTickets_SalesRooms" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_MembershipTypes_MembershipGroups" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_MembershipTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_MembershipTypes_Global" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_MembershipTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_osConfig_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_osConfig_Personnel_Boss" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_osConfig_TourTimesSchemas" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_PersonnelPermissions_Permissions" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_PersonnelPermissions_PermissionsLevels" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_PersLSSR_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_PersLSSR_PlaceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Personnel_Personnel_Liner" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_PersonnelPermissions_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_PostsLog_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_PostsLog_Personnel_ChangedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_PRNotes_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_Closer1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_Closer2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_Closer3" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_CloserCaptain" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_Exit1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_Exit2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_Liner1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_Liner2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_LinerCaptain1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_Podium" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_PR1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_PR2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_PR3" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_PRCaptain1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_PRCaptain2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_PRCaptain3" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_VLO" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_ChangedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_Closer1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_Closer2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_Closer3" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_CloserCaptain1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_Exit1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_Exit2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_Liner1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_Liner2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_LinerCaptain1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_Podium" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_PR1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_PR2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_PR3" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_PRCaptain1" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_PRCaptain2" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Personnel_VLO" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesmenChanges_Personnel_AuthorizedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesmenChanges_Personnel_MadeBy" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesmenChanges_Personnel_NewSalesman" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesmenChanges_Personnel_OldSalesman" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesRooms_Personnel_Boss" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesRoomsLog_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesSalesmen_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_ShowsSalesmen_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_TeamsGuestServices_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_TeamsLog_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_TeamsLog_Personnel_ChangedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_TeamsSalesmen_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_WhsMovs_Personnel" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_PostsLog_Posts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_ProductsLegends_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesmenChanges_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_Sales" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_SalesRooms" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_Sales_SaleTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Sales" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_Sales_Reference" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesmenChanges_Sales" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesSalesmen_Sales" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_SalesRooms" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesLog_SaleTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesRooms_Warehouses" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SalesRoomsLog_SalesRooms" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_TeamsSalesmen_SalesRooms" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_TourTimesBySalesRoomWeekDay_SalesRooms" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SaleTypes_SaleTypesCategories" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_ScoreRulesDetail_ScoreRules" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_ScoreRulesByLeadSourceDetail_ScoreRulesConcepts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_ScoreRulesDetail_ScoreRulesConcepts" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_SeasonsDates_Seasons" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_ShowPrograms_ShowProgramsCategories" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_TeamsLog_TeamsTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.FK_WhsMovs_Warehouses" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.EfficiencySalesmen" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.GiftsByAgencies" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.GiftsByLoc" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.GuestsAdditional" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.GuestsGroupsIntegrants" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.LeadSourcesByAgencies" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.NoticesByLeadSource" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.PersonnelRoles" ManuallyRouted="false" />
+        <AssociationConnector Association="IMModel.BanksBySalesRooms" ManuallyRouted="false" />
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
