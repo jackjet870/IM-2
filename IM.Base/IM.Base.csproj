@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Parametros.cs" />
+    <Compile Include="Enums\LevelPermision.cs" />
     <Compile Include="Enums\Modulo.cs" />
     <Compile Include="Forms\frmError.xaml.cs">
       <DependentUpon>frmError.xaml</DependentUpon>
@@ -64,12 +65,14 @@
     <Compile Include="Forms\frmLogin.xaml.cs">
       <DependentUpon>frmLogin.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\KeyboardHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Helpers\EncryptHelper.cs" />
     <Compile Include="Forms\frmSplash.xaml.cs">
       <DependentUpon>frmSplash.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\IniFileHelper.cs" />
+    <Compile Include="Helpers\ValidateHelper.cs" />
     <Compile Include="Interfaces\IMetodosPublicos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -127,6 +130,20 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Time.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Airplane.ico" />
+    <Resource Include="Images\Assistance.ico" />
+    <Resource Include="Images\btnEdit.png" />
+    <Resource Include="Images\btnSearch.png" />
+    <Resource Include="Images\button_add.png" />
+    <Resource Include="Images\button_cancel.png" />
+    <Resource Include="Images\button_delete.png" />
+    <Resource Include="Images\Charge_To.png" />
+    <Resource Include="Images\Contract.ico" />
+    <Resource Include="Images\Credit_Cards.png" />
+    <Resource Include="Images\currency.png" />
+    <Resource Include="Images\World.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

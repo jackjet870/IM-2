@@ -50,11 +50,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BR\BRAgencies.cs" />
+    <Compile Include="BR\BRAreas.cs" />
+    <Compile Include="BR\BRAssistancesStatus.cs" />
+    <Compile Include="BR\BRChargeCalculationTypes.cs" />
+    <Compile Include="BR\BRChargeTos.cs" />
+    <Compile Include="BR\BRContracts.cs" />
     <Compile Include="BR\BRCountries.cs" />
+    <Compile Include="BR\BRCreditCardTypes.cs" />
+    <Compile Include="BR\BRCurrencies.cs" />
     <Compile Include="BR\BRGifts.cs" />
     <Compile Include="BR\BRGuests.cs" />
     <Compile Include="BR\BRHelpers.cs" />
     <Compile Include="BR\BRLanguages.cs" />
+    <Compile Include="BR\BRRegions.cs" />
+    <Compile Include="BR\BRUnavailableMotives.cs" />
     <Compile Include="BR\BRWarehouses.cs" />
     <Compile Include="BR\BRLocations.cs" />
     <Compile Include="BR\BRMailOuts.cs" />

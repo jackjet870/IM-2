@@ -1,0 +1,44 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmAdmin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms"     
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Title="Administrator" Height="600" Width="600" Loaded="Window_Loaded" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Closed="Window_Closed">    
+    <Grid  Background="LightBlue" >        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="54"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>        
+        <StackPanel Grid.Row="0" Background="LightBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border Background="Transparent" BorderBrush="White" BorderThickness="1.5" Height="35" Margin="10,10,10,10">                
+                <Label x:Name="lblUser" Content="Bienvenido usuario" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+            </Border>
+        </StackPanel>
+        <ListView Grid.Row="1" Name="lstMenuAdm" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="7,3,7,10"  MouseDoubleClick="lstMenuAdm_MouseDoubleClick">
+            <ListView.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Gray">
+                </SolidColorBrush>
+            </ListView.Resources>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border Name="btnMenu" Uid="{Binding form}" Height="80" Width="80" Background="Transparent"  BorderBrush="Transparent" BorderThickness="0">
+                        <StackPanel Background="Transparent" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image Width="32" Height="32" Source="{Binding img}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <TextBlock Name="txtMenu" Text="{Binding nombre}" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>            
+        </ListView>
+    </Grid>
+</Window>
