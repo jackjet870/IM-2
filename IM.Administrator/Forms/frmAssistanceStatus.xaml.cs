@@ -24,6 +24,7 @@ namespace IM.Administrator.Forms
     }
 
     #region eventos de los controles
+    #region Loaded form
     /// <summary>
     /// carga los datos del formulario
     /// </summary>
@@ -35,36 +36,41 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       _blnEdit = Helpers.PermisionHelper.EditPermision("SALES");
-      btnAdd.IsEnabled = _blnEdit;    
+      btnAdd.IsEnabled = _blnEdit;
       LoadAssitance();
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
 
+    #endregion
+
+    #region KeyDown Form
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
       switch (e.Key)
       {
         case Key.Capital:
-        {
-          KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
             break;
-        }
+          }
         case Key.Insert:
-        {
-          KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
             break;
-        }
+          }
         case Key.NumLock:
-        {
-          KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
             break;
-        }
+          }
       }
     }
-   
+    #endregion
 
+
+    #region DoubleClick cell
     /// <summary>
     /// Muestra la ventana de AssistanceStatusDetail en modo preview
     /// </summary>
@@ -72,17 +78,20 @@ namespace IM.Administrator.Forms
     /// [emoguel] 27/Feb/2016 Created
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
-    {       
+    {
       DataGridRow row = sender as DataGridRow;
       AssistanceStatus Assistance = (AssistanceStatus)row.DataContext;
       frmAssistanceStatusDetail frmAssistanceDetail = new frmAssistanceStatusDetail();
       frmAssistanceDetail.assistance = Assistance;
       frmAssistanceDetail.Owner = this;
-      frmAssistanceDetail.mode = ModeOpen.preview;//Preview
-      frmAssistanceDetail.Show();
-        
-      }
+      frmAssistanceDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
+      frmAssistanceDetail.ShowDialog();
 
+    }
+
+    #endregion
+
+    #region Refresh grid
     /// <summary>
     /// Actualiza la lista de Status
     /// </summary>
@@ -95,7 +104,9 @@ namespace IM.Administrator.Forms
     {
       LoadAssitance();
     }
+    #endregion
 
+    #region Add
     /// <summary>
     /// Muestra la ventana de AssistanceStatusDetail para agregar un registro nuevo
     /// </summary>
@@ -104,34 +115,21 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
-     
+
       frmAssistanceStatusDetail frmAssistanceDetail = new frmAssistanceStatusDetail();
       frmAssistanceDetail.assistance = new AssistanceStatus();
       frmAssistanceDetail.Owner = this;
       frmAssistanceDetail.mode = ModeOpen.add;//insertar
-      if(frmAssistanceDetail.ShowDialog()==true)
+      if (frmAssistanceDetail.ShowDialog() == true)
       {
         LoadAssitance();
       }
-      
+
     }
 
-    /// <summary>
-    /// Muestra los detalles de la fila seleccionada
-    /// </summary>
-    /// <history>
-    /// [emoguel] 27/Feb/2016 Created
-    /// </history>
-    private void btnPrev_Click(object sender, RoutedEventArgs e)
-    {
-      AssistanceStatus Assistance = (AssistanceStatus)dgrAssitance.SelectedItem;
-      frmAssistanceStatusDetail frmAssistanceDetail = new frmAssistanceStatusDetail();
-      frmAssistanceDetail.assistance = Assistance;
-      frmAssistanceDetail.Owner = this;
-      frmAssistanceDetail.mode = ModeOpen.edit;//Edit
-      frmAssistanceDetail.ShowDialog();      
-    }
-
+    #endregion
+    
+    #region Search
     /// <summary>
     /// Abre la ventana de busqueda cargando 
     /// los datos de busqueda que ya se hayan realizado
@@ -148,7 +146,7 @@ namespace IM.Administrator.Forms
       frmSearch.sID = _assistanceFilter.atID;
       frmSearch.sDesc = _assistanceFilter.atN;
       frmSearch.Owner = this;
-      if(frmSearch.ShowDialog()==true)
+      if (frmSearch.ShowDialog() == true)
       {
         _nStatus = frmSearch.nStatus;
         _assistanceFilter.atID = frmSearch.sID;
@@ -158,6 +156,7 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
+    #endregion
 
     #region metodos
     /// <summary>
@@ -166,21 +165,18 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] 27/Feb/2016 Created
     /// </history>
+    #region Load Assistance
     protected void LoadAssitance()
     {
       List<AssistanceStatus> lstAssistance = BRAssistancesStatus.GetAssitanceStatus(_assistanceFilter, _nStatus);
       dgrAssitance.ItemsSource = lstAssistance;
       if (lstAssistance.Count > 0)
-      {
-        btnEdit.IsEnabled = _blnEdit;
+      {        
         dgrAssitance.SelectedIndex = 0;
       }
-      else
-      {
-        btnEdit.IsEnabled = false;
-      }
       StatusBarReg.Content = lstAssistance.Count + " Assistance Status.";
-    }
+    } 
+    #endregion
     #endregion
   }
 }

@@ -23,6 +23,7 @@ namespace IM.Administrator.Forms
     }
 
     #region metodos de los controles
+    #region Loaded
     /// <summary>
     /// Carga los datos del formulario
     /// </summary>
@@ -34,14 +35,16 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       _blnEdit = Helpers.PermisionHelper.EditPermision("LOCATIONS");
-      btnAdd.IsEnabled = _blnEdit;      
+      btnAdd.IsEnabled = _blnEdit;
       LoadAreas();
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
+    #endregion
 
 
+    #region KeyDown Form
     /// <summary>
     /// Valida que teclas fueron presionadas
     /// </summary>
@@ -55,23 +58,26 @@ namespace IM.Administrator.Forms
       switch (e.Key)
       {
         case Key.Capital:
-        {
-          KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
             break;
-        }
+          }
         case Key.Insert:
-        {
-          KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
             break;
-        }
+          }
         case Key.NumLock:
-        {
-          KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
             break;
-        }
+          }
       }
     }
-    
+
+    #endregion
+
+    #region Double Click Row
     /// <summary>
     /// Muestra la ventana de AreaDetalle en modo preview
     /// </summary>
@@ -80,15 +86,17 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-        DataGridRow row = sender as DataGridRow;
-        Area Area = (Area)row.DataContext;
-        frmAreaDetalle frmAreaDetalle = new frmAreaDetalle();
-        frmAreaDetalle.Owner = this;
-        frmAreaDetalle.area = Area;
-        frmAreaDetalle.mode = ModeOpen.preview;//Previeww
-        frmAreaDetalle.ShowDialog();      
+      DataGridRow row = sender as DataGridRow;
+      Area Area = (Area)row.DataContext;
+      frmAreaDetalle frmAreaDetalle = new frmAreaDetalle();
+      frmAreaDetalle.Owner = this;
+      frmAreaDetalle.area = Area;
+      frmAreaDetalle.mode = ((_blnEdit==true)?ModeOpen.edit: ModeOpen.preview);   
+      frmAreaDetalle.ShowDialog();      
     }
+    #endregion
 
+    #region Add 
     /// <summary>
     /// Muestra la ventana de AreaDetalle para agregar un registro nuevo
     /// </summary>
@@ -97,43 +105,34 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
-      
+
       frmAreaDetalle frmAreaDetalle = new frmAreaDetalle();
       frmAreaDetalle.area = new Area();
-      frmAreaDetalle.mode = ModeOpen.add;//Agregar
-      frmAreaDetalle.Owner = this;  
-      if(frmAreaDetalle.ShowDialog()==true)
-      {
-        LoadAreas();
-      }
-      
-    }
-
-    private void btnRef_Click(object sender, RoutedEventArgs e)
-    {
-      LoadAreas();
-    }
-
-    /// <summary>
-    /// Muestra los detalles de la fila seleccionada
-    /// </summary>
-    /// <history>
-    /// [emoguel] 26/Feb/2016 Created
-    /// </history>
-    private void btnProp_Click(object sender, RoutedEventArgs e)
-    {      
-      Area Area = (Area)dgrAreas.SelectedItem;
-      frmAreaDetalle frmAreaDetalle = new frmAreaDetalle();
-      frmAreaDetalle.area = Area;
       frmAreaDetalle.Owner = this;
-      frmAreaDetalle.mode = ModeOpen.edit;//Edit
+      frmAreaDetalle.mode = ModeOpen.add;//Agregar
       if (frmAreaDetalle.ShowDialog() == true)
       {
         LoadAreas();
       }
+
     }
 
+    #endregion
+    #region Refresh
 
+    /// <summary>
+    /// Recarga la lista de Areas
+    /// </summary>
+    /// <history>
+    /// [emoguel] 26/Feb/2016 Created
+    /// </history>
+    private void btnRef_Click(object sender, RoutedEventArgs e)
+    {
+      LoadAreas();
+    }
+    #endregion
+
+    #region Search
     /// <summary>
     /// Abre la ventana de busqueda cargando 
     /// los datos de busqueda que ya se hayan realizado
@@ -159,7 +158,8 @@ namespace IM.Administrator.Forms
         LoadAreas();
       }
 
-    }
+    } 
+    #endregion
     #endregion
     #region eventos de los controles
     /// <summary>
@@ -173,13 +173,8 @@ namespace IM.Administrator.Forms
       List<Area> lstAreas = BRAreas.GetAreas(_areaFiltro, _nStatus);
       dgrAreas.ItemsSource = lstAreas;
       if (lstAreas.Count > 0)
-      {
-        btnEdit.IsEnabled = _blnEdit;
+      {        
         dgrAreas.SelectedIndex = 0;
-      }
-      else
-      {
-        btnEdit.IsEnabled = false;
       }
       StatusBarReg.Content = lstAreas.Count + " Areas.";
 

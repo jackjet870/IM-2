@@ -32,6 +32,7 @@ namespace IM.Administrator.Forms
       InitializeComponent();
     }
     #region event controls
+    #region Refresh
     /// <summary>
     /// Recarga la lista de currencies
     /// </summary>
@@ -44,28 +45,9 @@ namespace IM.Administrator.Forms
     {
       LoadCurrencies();
     }
+    #endregion
 
-    /// <summary>
-    /// Abre la ventana de detalles en modo edición
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [Emoguel] created 08/03/2016
-    /// </history>
-    private void btnEdit_Click(object sender, RoutedEventArgs e)
-    {
-      Currency currency = (Currency)dgrCurrencies.SelectedItem;
-      frmCurrencyDetail frmCurrencyDetail = new frmCurrencyDetail();
-      frmCurrencyDetail.currency = currency;
-      frmCurrencyDetail.mode = ModeOpen.edit;
-      frmCurrencyDetail.Owner = this;
-      if(frmCurrencyDetail.ShowDialog()==true)
-      {
-        LoadCurrencies();
-      }
-    }
-
+    #region Search
     /// <summary>
     /// Abre la ventana de busqueda
     /// </summary>
@@ -81,15 +63,17 @@ namespace IM.Administrator.Forms
       frmSearch.sID = _currencyFilter.cuID;
       frmSearch.sDesc = _currencyFilter.cuN;
       frmSearch.Owner = this;
-      if(frmSearch.ShowDialog()==true)
+      if (frmSearch.ShowDialog() == true)
       {
         _nStatus = frmSearch.nStatus;
         _currencyFilter.cuID = frmSearch.sID;
         _currencyFilter.cuN = frmSearch.sDesc;
         LoadCurrencies();
       }
-    } 
-  
+    }
+    #endregion
+
+    #region Cell Double Click
     /// <summary>
     /// Muestra la ventada Charge To preview
     /// </summary>
@@ -101,12 +85,14 @@ namespace IM.Administrator.Forms
       Currency currency = (Currency)row.DataContext;
       frmCurrencyDetail frmCurrencyDetail = new frmCurrencyDetail();
       frmCurrencyDetail.Owner = this;
-      frmCurrencyDetail.mode = ModeOpen.preview;
+      frmCurrencyDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
       frmCurrencyDetail.currency = currency;
       frmCurrencyDetail.ShowDialog();
 
     }
+    #endregion
 
+    #region Loaded Form
     /// <summary>
     /// Llena los datos del formulario
     /// </summary>
@@ -123,7 +109,9 @@ namespace IM.Administrator.Forms
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
+    #endregion
 
+    #region KeyDownForm
     /// <summary>
     /// Valida los botones INS,MAYUSC,NUMLOCK
     /// </summary>
@@ -150,7 +138,9 @@ namespace IM.Administrator.Forms
           }
       }
     }
+    #endregion
 
+    #region Add
     /// <summary>
     /// Abre la ventana de detalles en modo add
     /// </summary>
@@ -164,14 +154,16 @@ namespace IM.Administrator.Forms
       frmCurrencyDetail frmCurrency = new frmCurrencyDetail();
       frmCurrency.Owner = this;
       frmCurrency.mode = ModeOpen.add;
-      if(frmCurrency.ShowDialog()==true)
+      if (frmCurrency.ShowDialog() == true)
       {
         LoadCurrencies();
       }
-    }
+    } 
+    #endregion
     #endregion
 
     #region métodos
+    #region Load Currencies
     /// <summary>
     /// Llena el grid de currencies aplicando los filtros que se tengan
     /// </summary>
@@ -183,18 +175,14 @@ namespace IM.Administrator.Forms
       List<Currency> lstCurrencies = BRCurrencies.GetCurrencies(_currencyFilter, _nStatus);
       dgrCurrencies.ItemsSource = lstCurrencies;
       if (lstCurrencies.Count > 0)
-      {
-        btnEdit.IsEnabled = _blnEdit;
+      {        
         dgrCurrencies.SelectedIndex = 0;
-      }
-      else
-      {
-        btnEdit.IsEnabled = false;
       }
 
       StatusBarReg.Content = lstCurrencies.Count + " Currencies.";
-    }
+    } 
     #endregion
-    
+    #endregion
+
   }
 }

@@ -34,6 +34,7 @@ namespace IM.Administrator.Forms
 
 
     #region Métodos
+    #region Load CreditCardType
     /// <summary>
     /// llena el datagrid de credit card types
     /// </summary>
@@ -42,22 +43,19 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void LoadCreditCardTypes()
     {
-      List<CreditCardType> lstCreditCardTypes = BRCreditCardTypes.GetCreditCardTypes(_creditCardTypeFilter,_nStatus);
-      if(lstCreditCardTypes.Count>0)
+      List<CreditCardType> lstCreditCardTypes = BRCreditCardTypes.GetCreditCardTypes(_creditCardTypeFilter, _nStatus);
+      if (lstCreditCardTypes.Count > 0)
       {
-        btnEdit.IsEnabled = _blnEdit;
         dgrCreditCard.SelectedIndex = 0;
-      }
-      else
-      {
-        btnEdit.IsEnabled = false;
       }
       dgrCreditCard.ItemsSource = lstCreditCardTypes;
       StatusBarReg.Content = lstCreditCardTypes.Count() + "  Credit Card Types.";
     }
     #endregion
+    #endregion
 
     #region eventos del formlario
+    #region Search
     /// <summary>
     /// Abre la ventana de busqueda
     /// </summary>
@@ -73,7 +71,7 @@ namespace IM.Administrator.Forms
       frmSearch.sID = _creditCardTypeFilter.ccID;
       frmSearch.sDesc = _creditCardTypeFilter.ccN;
       frmSearch.Owner = this;
-      if(frmSearch.ShowDialog()==true)
+      if (frmSearch.ShowDialog() == true)
       {
         _nStatus = frmSearch.nStatus;
         _creditCardTypeFilter.ccID = frmSearch.sID;
@@ -82,27 +80,9 @@ namespace IM.Administrator.Forms
       }
     }
 
-    /// <summary>
-    /// Abre la ventana de detalle en modo edición
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [Emoguel] created 07/03/2016
-    /// </history>
-    private void btnEdit_Click(object sender, RoutedEventArgs e)
-    {
-      CreditCardType creditCardType = (CreditCardType)dgrCreditCard.SelectedItem;
-      frmCreditCardTypesDetail frmCreditCard = new frmCreditCardTypesDetail();
-      frmCreditCard.Owner = this;
-      frmCreditCard.creditCardType = creditCardType;
-      frmCreditCard.mode = ModeOpen.edit;
-      if(frmCreditCard.ShowDialog()==true)
-      {
-        LoadCreditCardTypes();
-      }
-    }
+    #endregion
 
+    #region Add
     /// <summary>
     /// Abre la ventana de detalle en modo agregar
     /// </summary>
@@ -116,12 +96,14 @@ namespace IM.Administrator.Forms
       frmCreditCardTypesDetail frmCreditCard = new frmCreditCardTypesDetail();
       frmCreditCard.Owner = this;
       frmCreditCard.mode = ModeOpen.add;
-      if(frmCreditCard.ShowDialog()==true)
+      if (frmCreditCard.ShowDialog() == true)
       {
         LoadCreditCardTypes();
       }
-    }
+    } 
+    #endregion
 
+    #region refresh
     /// <summary>
     /// Evento del boton refresh---recarga los datos de la lista
     /// </summary>
@@ -131,7 +113,9 @@ namespace IM.Administrator.Forms
     {
       LoadCreditCardTypes();
     }
+    #endregion
 
+    #region Loaded Form
     /// <summary>
     /// llena los datos del formulario 
     /// </summary>
@@ -146,7 +130,9 @@ namespace IM.Administrator.Forms
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
+    #endregion
 
+    #region KeyDownForm
     /// <summary>
     /// Valida las teclas presionadas para cambiar la barra de estado
     /// </summary>
@@ -177,6 +163,8 @@ namespace IM.Administrator.Forms
       }
     }
 
+    #endregion
+    #region DoubleClick
     /// <summary>
     /// Muestra la ventada detalle en modo preview
     /// </summary>
@@ -191,10 +179,11 @@ namespace IM.Administrator.Forms
       CreditCardType creditCardType = (CreditCardType)row.DataContext;
       frmCreditCardTypesDetail frmCrediCard = new frmCreditCardTypesDetail();
       frmCrediCard.Owner = this;
-      frmCrediCard.mode = ModeOpen.preview;
+      frmCrediCard.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
       frmCrediCard.creditCardType = creditCardType;
       frmCrediCard.ShowDialog();
-    }
+    } 
+    #endregion
     #endregion
   }
 }

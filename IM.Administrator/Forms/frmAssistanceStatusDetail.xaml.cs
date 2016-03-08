@@ -18,6 +18,7 @@ namespace IM.Administrator.Forms
     }
 
     #region metodos
+    #region  Modo de la ventana
     /// <summary>
     /// Abre la ventana dependiendo del modo que elija el usuario
     /// Preview|Edit|Add
@@ -52,7 +53,9 @@ namespace IM.Administrator.Forms
       }
 
     }
+    #endregion
 
+    #region LockControls
     /// <summary>
     /// Bloquea|Desbloquea los botones dependiendo del modo en que se habra
     /// </summary>
@@ -62,12 +65,14 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void LockControls(bool blnValue)
     {
-      txtN.IsEnabled = blnValue;      
+      txtN.IsEnabled = blnValue;
       chkA.IsEnabled = blnValue;
     }
     #endregion
+    #endregion
 
     #region eventos de controles
+    #region Loaded
     /// <summary>
     /// Llena los datos del formulario
     /// </summary>
@@ -81,6 +86,8 @@ namespace IM.Administrator.Forms
       OpenMode();
     }
 
+    #endregion
+    #region Accept click
     /// <summary>
     /// Agrega o actualiza los registros del catalogo AssistantStatus
     /// </summary>
@@ -91,30 +98,30 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      
+
       string sMsj = "";
       int nRes = 0;
       #region validar campos
-      if(string.IsNullOrWhiteSpace(txtID.Text))
+      if (string.IsNullOrWhiteSpace(txtID.Text))
       {
         sMsj += "Specify the Assistance Status ID. \n";
       }
-      if(string.IsNullOrWhiteSpace(txtN.Text))
+      if (string.IsNullOrWhiteSpace(txtN.Text))
       {
         sMsj += "Specify the Assistance Status Description.";
       }
       #endregion
 
-      if(sMsj=="")//Validar si hay cmapos vacios
+      if (sMsj == "")//Validar si hay cmapos vacios
       {
-        switch(mode)
+        switch (mode)
         {
           #region insert
           case ModeOpen.add://add
             {
-              assistance = new AssistanceStatus { atID=txtID.Text,atN=txtN.Text,atA=chkA.IsChecked.Value };
+              assistance = new AssistanceStatus { atID = txtID.Text, atN = txtN.Text, atA = chkA.IsChecked.Value };
               nRes = BRAssistancesStatus.SaveAssitanceStatus(false, assistance);
-                
+
               break;
             }
           #endregion
@@ -122,7 +129,7 @@ namespace IM.Administrator.Forms
           case ModeOpen.edit://Edit
             {
               assistance = (AssistanceStatus)DataContext;
-              nRes = BRAssistancesStatus.SaveAssitanceStatus(true, assistance);               
+              nRes = BRAssistancesStatus.SaveAssitanceStatus(true, assistance);
               break;
             }
             #endregion
@@ -155,15 +162,21 @@ namespace IM.Administrator.Forms
       {
         MessageBox.Show(sMsj);
       }
-      
+
     }
 
+    #endregion
+
+
+    #region Cancel click
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      DialogResult = false;
+      this.DialogResult = false;
       this.Close();
     }
+    #endregion
 
+    #region KeyDown Form
     /// <summary>
     /// Cierra la ventana dependiendo del modo en el que fue abierta
     /// </summary>
@@ -174,7 +187,7 @@ namespace IM.Administrator.Forms
       if (e.Key == Key.Escape)
       {
         if (mode == ModeOpen.preview)
-        {          
+        {
           this.Close();
         }
         else
@@ -187,7 +200,8 @@ namespace IM.Administrator.Forms
           }
         }
       }
-    }
+    } 
+    #endregion
     #endregion
   }
 }

@@ -31,12 +31,6 @@
                     <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Add</TextBlock>
                 </StackPanel>
             </Button>
-            <Button  Name="btnEdit" Click="btnProp_Click" ToolTip="Edit an Area" IsEnabled="False">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/btnEdit.png" />
-                    <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Edit</TextBlock>
-                </StackPanel>
-            </Button>
             <Button Name="btnSearch" ToolTip="Search an Area" Click="btnSearch_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/btnSearch.png" />

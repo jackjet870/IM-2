@@ -24,6 +24,7 @@ namespace IM.Administrator.Forms
     }
 
     #region event controls
+    #region Loaded
     /// <summary>
     /// Carga los datos del formulario
     /// </summary>
@@ -42,6 +43,8 @@ namespace IM.Administrator.Forms
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
 
+    #endregion
+    #region KeyDown Form
     /// <summary>
     /// Valida la tecla presionada
     /// </summary>
@@ -69,25 +72,28 @@ namespace IM.Administrator.Forms
           }
       }
     }
-    
+
+    #endregion
+    #region Cell Double click
     /// <summary>
     /// Muestra la ventada Charge To preview
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void Cell_DoubleClick(object sender,RoutedEventArgs e)
+    private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-      
+
       DataGridRow row = sender as DataGridRow;
       ChargeTo chargeTo = (ChargeTo)row.DataContext;
       frmChargeToDetail frmChargeToDetail = new frmChargeToDetail();
       frmChargeToDetail.Owner = this;
-      frmChargeToDetail.mode = ModeOpen.preview;
+      frmChargeToDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
       frmChargeToDetail.chargeTo = chargeTo;
       frmChargeToDetail.ShowDialog();
-      
     }
 
+    #endregion
+    #region  Refresh
     /// <summary>
     /// Recarga los datos del datagrid
     /// </summary>
@@ -97,7 +103,9 @@ namespace IM.Administrator.Forms
     {
       LoadChargeTo();
     }
+    #endregion
 
+    #region Search
     /// <summary>
     /// Abre la ventana de busqueda o filtros
     /// </summary>
@@ -110,7 +118,7 @@ namespace IM.Administrator.Forms
       frmSearch.sDesc = _chargeToFilter.ctPrice.ToString();
       frmSearch.nStatus = _nStatus;
       frmSearch.sForm = "ChargeTo";
-      frmSearch.Owner= this;
+      frmSearch.Owner = this;
       //Abrir la ventana de Buscar y ver si decidió realizar algún filtro
       if (frmSearch.ShowDialog() == true)
       {
@@ -121,6 +129,8 @@ namespace IM.Administrator.Forms
       }
     }
 
+    #endregion
+    #region Add
     /// <summary>
     /// Muestra la ventana Detail ChargeTo para agregar un nuevo registro
     /// </summary>
@@ -137,27 +147,12 @@ namespace IM.Administrator.Forms
         LoadChargeTo();
       }
     }
-
-    /// <summary>
-    /// Abre la ventana Charge To en modo edición
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void btnEdit_Click(object sender, RoutedEventArgs e)
-    {
-      ChargeTo chargeTo = (ChargeTo)dgrChargeTo.SelectedItem;
-      frmChargeToDetail frmChargeToDetail = new frmChargeToDetail();
-      frmChargeToDetail.chargeTo = chargeTo;
-      frmChargeToDetail.Owner = this;
-      frmChargeToDetail.mode = ModeOpen.edit;
-      if (frmChargeToDetail.ShowDialog() == true)
-      {
-        LoadChargeTo();
-      }
-    }
+    #endregion
+    
     #endregion
 
     #region Metodos
+    #region LoadChargeTos
     /// <summary>
     /// Llena el dataset con la lista de chargeTo
     /// </summary>
@@ -166,20 +161,16 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void LoadChargeTo()
     {
-      List<ChargeTo> lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter,_nStatus);
+      List<ChargeTo> lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter, _nStatus);
       dgrChargeTo.ItemsSource = lstChargeTo;
       if (lstChargeTo.Count > 0)
       {
-        btnEdit.IsEnabled = _blnEdit;
         dgrChargeTo.SelectedIndex = 0;
       }
-      else
-      {
-        btnEdit.IsEnabled = false;
-      }
 
-      StatusBarReg.Content = lstChargeTo.Count+ " Charge To." ;
-    }
+      StatusBarReg.Content = lstChargeTo.Count + " Charge To.";
+    } 
+    #endregion
     #endregion
   }
 }

@@ -21,8 +21,9 @@ namespace IM.Administrator.Forms
     {
       InitializeComponent();
     }
-    
+
     #region event controls
+    #region KeyDown Form
     /// <summary>
     /// Valida las teclas presionadas para cambiar la barra de estado
     /// </summary>
@@ -53,6 +54,8 @@ namespace IM.Administrator.Forms
       }
     }
 
+    #endregion
+    #region Loade Form
     /// <summary>
     /// Se llenan los datos de la ventana al abrirla
     /// </summary>
@@ -70,7 +73,8 @@ namespace IM.Administrator.Forms
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
-
+    #endregion
+    #region Refresh
     /// <summary>
     /// Recarga el grid de contratos
     /// </summary>
@@ -80,7 +84,9 @@ namespace IM.Administrator.Forms
     {
       LoadContracts();
     }
+    #endregion
 
+    #region Cell Double Click
     /// <summary>
     /// Muestra la ventada Charge To preview
     /// </summary>
@@ -94,43 +100,35 @@ namespace IM.Administrator.Forms
       DataGridRow row = sender as DataGridRow;
       Contract contract = (Contract)row.DataContext;
       frmContractsDetail frmContractDetail = new frmContractsDetail();
-      frmContractDetail.mode = ModeOpen.preview;
+      frmContractDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
       frmContractDetail.contract = contract;
       frmContractDetail.Owner = this;
-      frmContractDetail.ShowDialog();     
+      frmContractDetail.ShowDialog();
     }
+    #endregion
+
+    #region Add
+    /// <summary>
+    /// Abre la ventana de detalle para agregar un nuevo registro
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created
+    /// </history>
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
       frmContractsDetail frmContractDetail = new frmContractsDetail();
       frmContractDetail.mode = ModeOpen.add;
       frmContractDetail.Owner = this;
-      if(frmContractDetail.ShowDialog()==true)
+      if (frmContractDetail.ShowDialog() == true)
       {
         LoadContracts();
       }
     }
+    #endregion
 
-    /// <summary>
-    /// Abre la ventana de detalles en modo edicion
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [Emoguel] created 03/03/2016
-    /// </history>
-    private void btnEdit_Click(object sender, RoutedEventArgs e)
-    {
-      Contract contract = (Contract)dgrContracts.SelectedItem;
-      frmContractsDetail frmContractDetail = new frmContractsDetail();
-      frmContractDetail.contract = contract;
-      frmContractDetail.mode = ModeOpen.edit;
-      frmContractDetail.Owner = this;
-      if(frmContractDetail.ShowDialog()==true)
-      {
-        LoadContracts();
-      }
-    }
-
+    #region Search
     /// <summary>
     /// Abre la ventana de 
     /// </summary>
@@ -143,14 +141,15 @@ namespace IM.Administrator.Forms
       frmSearch.sDesc = _contractFilter.cnN;
       frmSearch.sID = _contractFilter.cnID;
       frmSearch.Owner = this;
-      if(frmSearch.ShowDialog()==true)
+      if (frmSearch.ShowDialog() == true)
       {
         _contractFilter.cnID = frmSearch.sID;
         _contractFilter.cnN = frmSearch.sDesc;
         _nStatus = frmSearch.nStatus;
         LoadContracts();
       }
-    }
+    } 
+    #endregion
     #endregion
 
     #region Metodos
@@ -166,13 +165,8 @@ namespace IM.Administrator.Forms
       List<Contract> lstContracts = BRContracts.getContracts(_contractFilter,_nStatus);
       dgrContracts.ItemsSource = lstContracts;
       if(lstContracts.Count>0)
-      {
-        btnEdit.IsEnabled = _blnEdit;
+      {       
         dgrContracts.SelectedIndex = 0;        
-      }
-      else
-      {
-        btnEdit.IsEnabled = false;
       }
       StatusBarReg.Content = lstContracts.Count + " Contracts.";
     }

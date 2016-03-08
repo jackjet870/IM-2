@@ -47,8 +47,7 @@ namespace IM.Administrator.Forms
       {
         case ModeOpen.preview://show
           {
-            btnAccept.Visibility = Visibility.Hidden;
-            btnCancel.Content = "OK";
+            btnAccept.Visibility = Visibility.Hidden;            
             this.DataContext = area;
             break;
           }
@@ -86,7 +85,8 @@ namespace IM.Administrator.Forms
     #endregion
     #endregion
     #region evento botones
-    
+
+    #region Loaded
     /// <summary>
     /// Carga los controles al abrir la ventana
     /// </summary>
@@ -100,7 +100,9 @@ namespace IM.Administrator.Forms
       LoadRegions();
       OpenMode();
     }
-    
+    #endregion
+
+    #region Boton cancelar
     /// <summary>
     /// Cierra la ventana
     /// </summary>
@@ -114,7 +116,9 @@ namespace IM.Administrator.Forms
       DialogResult = false;
       this.Close();
     }
+    #endregion
 
+    #region Boton Aceptar
     /// <summary>
     /// Agrega o actualiza los registros del catalogo Areas
     /// </summary>
@@ -128,29 +132,29 @@ namespace IM.Administrator.Forms
       string sMsj = "";
       int nRes = 0;
       #region validar campos
-      if(string.IsNullOrWhiteSpace(txtID.Text))//ID
+      if (string.IsNullOrWhiteSpace(txtID.Text))//ID
       {
         sMsj += "Specify the Area ID. \n";
       }
-      if(string.IsNullOrWhiteSpace(txtN.Text))
+      if (string.IsNullOrWhiteSpace(txtN.Text))
       {
         sMsj += "Specify the Area Description. \n";
       }
-      if(cmbRegion.SelectedIndex<0)
+      if (cmbRegion.SelectedIndex < 0)
       {
         sMsj += "Specify the Region.";
       }
       #endregion
-      if (sMsj=="")
-      { 
-        switch(mode)
+      if (sMsj == "")
+      {        
+        switch (mode)
         {
           #region add
           case ModeOpen.add://add
             {
 
-              area = new Area {arID=txtID.Text, arN=txtN.Text,arrg=cmbRegion.SelectedValue.ToString(), arA = chkA.IsChecked.Value };
-                nRes = BRAreas.SaveArea(false, area);               
+              area = new Area { arID = txtID.Text, arN = txtN.Text, arrg = cmbRegion.SelectedValue.ToString(), arA = chkA.IsChecked.Value };
+              nRes = BRAreas.SaveArea(false, area);
               break;
             }
           #endregion
@@ -161,7 +165,7 @@ namespace IM.Administrator.Forms
               nRes = BRAreas.SaveArea(true, area);
               break;
             }
-          #endregion
+            #endregion
         }
 
         #region Respuesta
@@ -192,7 +196,9 @@ namespace IM.Administrator.Forms
         MessageBox.Show(sMsj);
       }
     }
+    #endregion
 
+    #region KeyDown
     /// <summary>
     /// Cierra la ventada detalle con el boton escape dependiendo del modo en que fue abierto
     /// </summary>
@@ -217,8 +223,9 @@ namespace IM.Administrator.Forms
           }
         }
       }
-    }
+    } 
     #endregion
-    
+    #endregion
+
   }
 }

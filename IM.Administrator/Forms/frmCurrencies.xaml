@@ -23,19 +23,13 @@
                     <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Refresh</TextBlock>
                 </StackPanel>
             </Button>
-            <Button ToolTip="Create a new Charge To" Name="btnAdd" IsEnabled="True" Click="btnAdd_Click">
+            <Button ToolTip="Create a new Currencie." Name="btnAdd" IsEnabled="True" Click="btnAdd_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/button_add.png" />
                     <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Add</TextBlock>
                 </StackPanel>
             </Button>
-            <Button  Name="btnEdit" ToolTip="Edit a Charge To" IsEnabled="False" Click="btnEdit_Click">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/btnEdit.png" />
-                    <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Edit</TextBlock>
-                </StackPanel>
-            </Button>
-            <Button Name="btnSearch" ToolTip="Search a Charge To" Click="btnSearch_Click">
+            <Button Name="btnSearch" ToolTip="Search a Currencie." Click="btnSearch_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/btnSearch.png" />
                     <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Search</TextBlock>

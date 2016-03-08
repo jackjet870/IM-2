@@ -39,11 +39,11 @@ namespace IM.Administrator.Forms
       if (AddCatalog("LOCATIONS")) { lstMenu.Add(new { nombre = "Areas", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmAreas" }); }
       if (AddCatalog("HOSTINVIT")){ lstMenu.Add(new { nombre = "Charge To", img = "pack://application:,,,/IM.Base;component/Images/Charge_To.png", form = "frmChargeTo" });}
       if (AddCatalog("CONTRACTS")) { lstMenu.Add(new { nombre = "Contracts", img = "pack://application:,,,/IM.Base;component/Images/Contract.ico", form = "frmContracts" }); }
-      //if(AddCatalog("AGENCIES"))
-      //{
-      //  lstMenu.Add(new { nombre = "Agencies", img = "pack://application:,,,/IM.Base;component/Images/Airplane.ico",form="frmAgencies" });
-      //}
-      if(AddCatalog("CURRENCIES"))
+      if (AddCatalog("AGENCIES"))
+      {
+        lstMenu.Add(new { nombre = "Agencies", img = "pack://application:,,,/IM.Base;component/Images/Airplane.ico", form = "frmAgencies" });
+      }
+      if (AddCatalog("CURRENCIES"))
       {
         lstMenu.Add(new { nombre = "Currencies", img = "pack://application:,,,/IM.Base;component/Images/currency.png", form = "frmCurrencies" });
       }
