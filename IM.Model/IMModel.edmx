@@ -1570,8 +1570,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Name="pppe" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="pppo" Type="varchar" MaxLength="10" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'OrigosVCPalace.dbo.Prefixes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PRNotes">
           <Key>
             <PropertyRef Name="pngu" />
@@ -2131,8 +2129,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.Prefixes' does not have a prima
           <Property Name="tcN" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="tcA" Type="bit" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'OrigosVCPalace.dbo.TransferMemberships' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="UnavailMots">
           <Key>
             <PropertyRef Name="umID" />
@@ -5783,6 +5779,10 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.TransferMemberships' does not h
         <Function Name="USP_OR_GetMarkets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetPersonnelDaysOff" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TeamType" Type="varchar" Mode="In" />
+          <Parameter Name="PlaceID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetPremanifest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
@@ -5815,6 +5815,15 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.TransferMemberships' does not h
           <Parameter Name="LoginType" Type="tinyint" Mode="In" />
           <Parameter Name="User" Type="varchar" Mode="In" />
           <Parameter Name="Place" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptPRStats" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar(max)" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Countries" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Agencies" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Markets" Type="varchar(max)" Mode="In" />
         </Function>
         <EntityContainer Name="IMModelStoreContainer">
           <EntitySet Name="Activities" EntityType="Self.Activities" Schema="dbo" store:Type="Tables" />
@@ -14576,7 +14585,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.TransferMemberships' does not h
             <Parameter Name="LoginType" Mode="In" Type="Byte" />
             <Parameter Name="User" Mode="In" Type="String" />
             <Parameter Name="Place" Mode="In" Type="String" />
-          </FunctionImport>
+            </FunctionImport>
           <FunctionImport Name="USP_OR_GetSalesRoomsByUser" ReturnType="Collection(IMModel.SalesRoomByUser)">
             <Parameter Name="User" Mode="In" Type="String" />
             <Parameter Name="Regions" Mode="In" Type="String" />
@@ -14598,6 +14607,19 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.TransferMemberships' does not h
           <FunctionImport Name="USP_OR_GetWarehousesByUser" ReturnType="Collection(IMModel.WarehouseByUser)">
             <Parameter Name="User" Mode="In" Type="String" />
             <Parameter Name="Regions" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetPersonnelDaysOff" ReturnType="Collection(IMModel.PersonnelDayOff)">
+            <Parameter Name="TeamType" Mode="In" Type="String" />
+            <Parameter Name="PlaceID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptPRStats" ReturnType="Collection(IMModel.RptPRStats)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+            <Parameter Name="Countries" Mode="In" Type="String" />
+            <Parameter Name="Agencies" Mode="In" Type="String" />
+            <Parameter Name="Markets" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -14940,6 +14962,53 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.TransferMemberships' does not h
           <Property Type="String" Name="whID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="whN" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="plpe" Nullable="false" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="PersonnelDayOff">
+          <Property Type="String" Name="dope" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="doList" Nullable="true" MaxLength="7" />
+          <Property Type="String" Name="poN" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="doMonday" Nullable="true" />
+          <Property Type="Boolean" Name="doTuesday" Nullable="true" />
+          <Property Type="Boolean" Name="doWednesday" Nullable="true" />
+          <Property Type="Boolean" Name="doThursday" Nullable="true" />
+          <Property Type="Boolean" Name="doFriday" Nullable="true" />
+          <Property Type="Boolean" Name="doSaturday" Nullable="true" />
+          <Property Type="Boolean" Name="doSunday" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="RptPRStats">
+          <Property Type="String" Name="PR_ID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR_NAME" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="Assign" Nullable="true" />
+          <Property Type="Decimal" Name="Conts" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="C_Factor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Avails" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="A_Factor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Bk" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Bk_Factor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Dep" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Dir" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Sh" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="IO" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Sh_Factor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="TSh" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SG" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Proc_Number" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Processable" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="OutP_Number" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Out_Pending" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="C_Number" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Cancelled" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Total_Number" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Total" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Proc_PR_Number" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Proc_PR" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Proc_SG_Number" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Proc_SG" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Eff" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Cl_Factor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Ca_Factor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Avg_Sale" Nullable="true" Precision="19" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -17630,6 +17699,61 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.TransferMemberships' does not h
                 <ScalarProperty Name="whID" ColumnName="whID" />
                 <ScalarProperty Name="whN" ColumnName="whN" />
                 <ScalarProperty Name="plpe" ColumnName="plpe" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetPersonnelDaysOff" FunctionName="IMModel.Store.USP_OR_GetPersonnelDaysOff">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.PersonnelDayOff">
+                <ScalarProperty Name="dope" ColumnName="dope" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="doList" ColumnName="doList" />
+                <ScalarProperty Name="poN" ColumnName="poN" />
+                <ScalarProperty Name="doMonday" ColumnName="doMonday" />
+                <ScalarProperty Name="doTuesday" ColumnName="doTuesday" />
+                <ScalarProperty Name="doWednesday" ColumnName="doWednesday" />
+                <ScalarProperty Name="doThursday" ColumnName="doThursday" />
+                <ScalarProperty Name="doFriday" ColumnName="doFriday" />
+                <ScalarProperty Name="doSaturday" ColumnName="doSaturday" />
+                <ScalarProperty Name="doSunday" ColumnName="doSunday" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptPRStats" FunctionName="IMModel.Store.USP_OR_RptPRStats">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptPRStats">
+                <ScalarProperty Name="PR_ID" ColumnName="PR_ID" />
+                <ScalarProperty Name="PR_NAME" ColumnName="PR_NAME" />
+                <ScalarProperty Name="Assign" ColumnName="Assign" />
+                <ScalarProperty Name="Conts" ColumnName="Conts" />
+                <ScalarProperty Name="C_Factor" ColumnName="C_Factor" />
+                <ScalarProperty Name="Avails" ColumnName="Avails" />
+                <ScalarProperty Name="A_Factor" ColumnName="A_Factor" />
+                <ScalarProperty Name="Bk" ColumnName="Bk" />
+                <ScalarProperty Name="Bk_Factor" ColumnName="Bk_Factor" />
+                <ScalarProperty Name="Dep" ColumnName="Dep" />
+                <ScalarProperty Name="Dir" ColumnName="Dir" />
+                <ScalarProperty Name="Sh" ColumnName="Sh" />
+                <ScalarProperty Name="IO" ColumnName="IO" />
+                <ScalarProperty Name="Sh_Factor" ColumnName="Sh_Factor" />
+                <ScalarProperty Name="TSh" ColumnName="TSh" />
+                <ScalarProperty Name="SG" ColumnName="SG" />
+                <ScalarProperty Name="Proc_Number" ColumnName="Proc_Number" />
+                <ScalarProperty Name="Processable" ColumnName="Processable" />
+                <ScalarProperty Name="OutP_Number" ColumnName="OutP_Number" />
+                <ScalarProperty Name="Out_Pending" ColumnName="Out_Pending" />
+                <ScalarProperty Name="C_Number" ColumnName="C_Number" />
+                <ScalarProperty Name="Cancelled" ColumnName="Cancelled" />
+                <ScalarProperty Name="Total_Number" ColumnName="Total_Number" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Proc_PR_Number" ColumnName="Proc_PR_Number" />
+                <ScalarProperty Name="Proc_PR" ColumnName="Proc_PR" />
+                <ScalarProperty Name="Proc_SG_Number" ColumnName="Proc_SG_Number" />
+                <ScalarProperty Name="Proc_SG" ColumnName="Proc_SG" />
+                <ScalarProperty Name="Eff" ColumnName="Eff" />
+                <ScalarProperty Name="Cl_Factor" ColumnName="Cl_Factor" />
+                <ScalarProperty Name="Ca_Factor" ColumnName="Ca_Factor" />
+                <ScalarProperty Name="Avg_Sale" ColumnName="Avg_Sale" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

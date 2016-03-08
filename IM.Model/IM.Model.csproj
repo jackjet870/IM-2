@@ -386,6 +386,9 @@
     <Compile Include="PersonnelAccess.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PersonnelDayOff.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="PersonnelPermission.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -445,6 +448,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RoomType.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptPRStats.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Sale.cs">

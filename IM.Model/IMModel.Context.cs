@@ -471,5 +471,51 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WarehouseByUser>("USP_OR_GetWarehousesByUser", userParameter, regionsParameter);
         }
+    
+        public virtual ObjectResult<PersonnelDayOff> USP_OR_GetPersonnelDaysOff(string teamType, string placeID)
+        {
+            var teamTypeParameter = teamType != null ?
+                new ObjectParameter("TeamType", teamType) :
+                new ObjectParameter("TeamType", typeof(string));
+    
+            var placeIDParameter = placeID != null ?
+                new ObjectParameter("PlaceID", placeID) :
+                new ObjectParameter("PlaceID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PersonnelDayOff>("USP_OR_GetPersonnelDaysOff", teamTypeParameter, placeIDParameter);
+        }
+    
+        public virtual ObjectResult<RptPRStats> USP_OR_RptPRStats(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string salesRooms, string countries, string agencies, string markets)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            var countriesParameter = countries != null ?
+                new ObjectParameter("Countries", countries) :
+                new ObjectParameter("Countries", typeof(string));
+    
+            var agenciesParameter = agencies != null ?
+                new ObjectParameter("Agencies", agencies) :
+                new ObjectParameter("Agencies", typeof(string));
+    
+            var marketsParameter = markets != null ?
+                new ObjectParameter("Markets", markets) :
+                new ObjectParameter("Markets", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptPRStats>("USP_OR_RptPRStats", dateFromParameter, dateToParameter, leadSourcesParameter, salesRoomsParameter, countriesParameter, agenciesParameter, marketsParameter);
+        }
     }
 }
