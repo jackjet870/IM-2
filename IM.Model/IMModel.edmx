@@ -8271,8 +8271,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Name="guPresentedInvitation" Type="Boolean" />
           <Property Name="guLastNameOriginal" Type="String" MaxLength="65" FixedLength="false" Unicode="false" />
           <Property Name="guFirstNameOriginal" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Name="guDespositRefund" Type="Boolean" />
-          <Property Name="guDepositsRefund" Type="Boolean" />
           <NavigationProperty Name="Agency" Relationship="Self.FK_Guests_Agencies" FromRole="Guests" ToRole="Agencies" />
           <NavigationProperty Name="Club" Relationship="Self.FK_Guests_Clubs" FromRole="Guests" ToRole="Clubs" />
           <NavigationProperty Name="Country" Relationship="Self.FK_Guests_Countries" FromRole="Guests" ToRole="Countries" />
