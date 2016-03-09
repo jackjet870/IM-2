@@ -140,7 +140,13 @@
     <Compile Include="ExchangeRate.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ExchangeRateData.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ExchangeRateLog.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExchangeRateLogData.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="FolioCXC.cs">
@@ -195,6 +201,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Goal.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GraphProductionByPRData.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Group.cs">
@@ -390,6 +399,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PersonnelPermission.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PersonnelShort.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PersonnelStatus.cs">
