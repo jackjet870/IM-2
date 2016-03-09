@@ -226,6 +226,9 @@
     <Compile Include="GuestLog.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="GuestLogData.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="GuestMailOut.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
