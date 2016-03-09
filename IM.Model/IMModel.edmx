@@ -5777,6 +5777,9 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="Locations" Type="varchar" Mode="In" />
           <Parameter Name="Status" Type="tinyint" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetGuestLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Guest" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetGuestsMailOuts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="guls" Type="varchar" Mode="In" />
           <Parameter Name="guCheckInD" Type="datetime" Mode="In" />
@@ -5872,6 +5875,11 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="Countries" Type="varchar(max)" Mode="In" />
           <Parameter Name="Agencies" Type="varchar(max)" Mode="In" />
           <Parameter Name="Markets" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_SaveLoginLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Location" Type="varchar" Mode="In" />
+          <Parameter Name="User" Type="varchar" Mode="In" />
+          <Parameter Name="ComputerName" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_SaveSalesRoomLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
@@ -14727,6 +14735,14 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="SalesRooms" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGuestLog" ReturnType="Collection(IMModel.GuestLogData)">
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_SaveLoginLog">
+            <Parameter Name="Location" Mode="In" Type="String" />
+            <Parameter Name="User" Mode="In" Type="String" />
+            <Parameter Name="ComputerName" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -15157,6 +15173,64 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="String" Name="BookType" Nullable="false" MaxLength="11" />
           <Property Type="String" Name="Time" Nullable="false" MaxLength="7" />
           <Property Type="Int32" Name="Books" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GuestLogData">
+          <Property Type="String" Name="glChangedBy" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ChangedByN" Nullable="true" MaxLength="40" />
+          <Property Type="DateTime" Name="glID" Nullable="false" Precision="23" />
+          <Property Type="String" Name="glsr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="glHReservID" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="glLastName1" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="glFirstName1" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glLastName2" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="glFirstName2" Nullable="true" MaxLength="40" />
+          <Property Type="Boolean" Name="glAvailBySystem" Nullable="false" />
+          <Property Type="Boolean" Name="glOriginAvail" Nullable="false" />
+          <Property Type="Boolean" Name="glAvail" Nullable="false" />
+          <Property Type="String" Name="umN" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="glPRAvail" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PRAvailN" Nullable="true" MaxLength="40" />
+          <Property Type="DateTime" Name="glInfoD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="glPRInfo" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PRInfoN" Nullable="true" MaxLength="40" />
+          <Property Type="DateTime" Name="glFollowD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="glPRFollow" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PRFollowN" Nullable="true" MaxLength="40" />
+          <Property Type="DateTime" Name="glBookD" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="glBookT" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="glReschD" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="glReschT" Nullable="true" Precision="23" />
+          <Property Type="String" Name="glPRInvit1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PRInvit1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glPRInvit2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PRInvit2N" Nullable="true" MaxLength="40" />
+          <Property Type="Boolean" Name="glBookCanc" Nullable="false" />
+          <Property Type="String" Name="glLiner1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glLiner2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glCloser1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glCloser2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glCloser3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer3N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glExit1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glExit2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glPodium" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PodiumN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="glVLO" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="VLON" Nullable="true" MaxLength="40" />
+          <Property Type="Boolean" Name="glShow" Nullable="false" />
+          <Property Type="DateTime" Name="glShowD" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="glQ" Nullable="false" />
+          <Property Type="Boolean" Name="glInOut" Nullable="false" />
+          <Property Type="Boolean" Name="glWalkOut" Nullable="false" />
+          <Property Type="Boolean" Name="glCTour" Nullable="false" />
+          <Property Type="Byte" Name="glReimpresion" Nullable="true" />
+          <Property Type="String" Name="rmN" Nullable="true" MaxLength="30" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -17976,6 +18050,69 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGuestLog" FunctionName="IMModel.Store.USP_OR_GetGuestLog">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GuestLogData">
+                <ScalarProperty Name="glChangedBy" ColumnName="glChangedBy" />
+                <ScalarProperty Name="ChangedByN" ColumnName="ChangedByN" />
+                <ScalarProperty Name="glID" ColumnName="glID" />
+                <ScalarProperty Name="glsr" ColumnName="glsr" />
+                <ScalarProperty Name="glHReservID" ColumnName="glHReservID" />
+                <ScalarProperty Name="glLastName1" ColumnName="glLastName1" />
+                <ScalarProperty Name="glFirstName1" ColumnName="glFirstName1" />
+                <ScalarProperty Name="glLastName2" ColumnName="glLastName2" />
+                <ScalarProperty Name="glFirstName2" ColumnName="glFirstName2" />
+                <ScalarProperty Name="glAvailBySystem" ColumnName="glAvailBySystem" />
+                <ScalarProperty Name="glOriginAvail" ColumnName="glOriginAvail" />
+                <ScalarProperty Name="glAvail" ColumnName="glAvail" />
+                <ScalarProperty Name="umN" ColumnName="umN" />
+                <ScalarProperty Name="glPRAvail" ColumnName="glPRAvail" />
+                <ScalarProperty Name="PRAvailN" ColumnName="PRAvailN" />
+                <ScalarProperty Name="glInfoD" ColumnName="glInfoD" />
+                <ScalarProperty Name="glPRInfo" ColumnName="glPRInfo" />
+                <ScalarProperty Name="PRInfoN" ColumnName="PRInfoN" />
+                <ScalarProperty Name="glFollowD" ColumnName="glFollowD" />
+                <ScalarProperty Name="glPRFollow" ColumnName="glPRFollow" />
+                <ScalarProperty Name="PRFollowN" ColumnName="PRFollowN" />
+                <ScalarProperty Name="glBookD" ColumnName="glBookD" />
+                <ScalarProperty Name="glBookT" ColumnName="glBookT" />
+                <ScalarProperty Name="glReschD" ColumnName="glReschD" />
+                <ScalarProperty Name="glReschT" ColumnName="glReschT" />
+                <ScalarProperty Name="glPRInvit1" ColumnName="glPRInvit1" />
+                <ScalarProperty Name="PRInvit1N" ColumnName="PRInvit1N" />
+                <ScalarProperty Name="glPRInvit2" ColumnName="glPRInvit2" />
+                <ScalarProperty Name="PRInvit2N" ColumnName="PRInvit2N" />
+                <ScalarProperty Name="glBookCanc" ColumnName="glBookCanc" />
+                <ScalarProperty Name="glLiner1" ColumnName="glLiner1" />
+                <ScalarProperty Name="Liner1N" ColumnName="Liner1N" />
+                <ScalarProperty Name="glLiner2" ColumnName="glLiner2" />
+                <ScalarProperty Name="Liner2N" ColumnName="Liner2N" />
+                <ScalarProperty Name="glCloser1" ColumnName="glCloser1" />
+                <ScalarProperty Name="Closer1N" ColumnName="Closer1N" />
+                <ScalarProperty Name="glCloser2" ColumnName="glCloser2" />
+                <ScalarProperty Name="Closer2N" ColumnName="Closer2N" />
+                <ScalarProperty Name="glCloser3" ColumnName="glCloser3" />
+                <ScalarProperty Name="Closer3N" ColumnName="Closer3N" />
+                <ScalarProperty Name="glExit1" ColumnName="glExit1" />
+                <ScalarProperty Name="Exit1N" ColumnName="Exit1N" />
+                <ScalarProperty Name="glExit2" ColumnName="glExit2" />
+                <ScalarProperty Name="Exit2N" ColumnName="Exit2N" />
+                <ScalarProperty Name="glPodium" ColumnName="glPodium" />
+                <ScalarProperty Name="PodiumN" ColumnName="PodiumN" />
+                <ScalarProperty Name="glVLO" ColumnName="glVLO" />
+                <ScalarProperty Name="VLON" ColumnName="VLON" />
+                <ScalarProperty Name="glShow" ColumnName="glShow" />
+                <ScalarProperty Name="glShowD" ColumnName="glShowD" />
+                <ScalarProperty Name="glQ" ColumnName="glQ" />
+                <ScalarProperty Name="glInOut" ColumnName="glInOut" />
+                <ScalarProperty Name="glWalkOut" ColumnName="glWalkOut" />
+                <ScalarProperty Name="glCTour" ColumnName="glCTour" />
+                <ScalarProperty Name="glReimpresion" ColumnName="glReimpresion" />
+                <ScalarProperty Name="rmN" ColumnName="rmN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_SaveLoginLog" FunctionName="IMModel.Store.USP_OR_SaveLoginLog" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
