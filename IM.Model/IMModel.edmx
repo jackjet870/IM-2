@@ -5831,6 +5831,9 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
         <Function Name="USP_OR_GetSalesRoom" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetSalesRoomLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetSalesRooms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
         </Function>
@@ -14717,6 +14720,9 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="PermissionLevel" Mode="In" Type="Int32" />
             <Parameter Name="Dept" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_GetSalesRoomLog" ReturnType="Collection(IMModel.SalesRoomLogData)">
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -15129,6 +15135,16 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="String" Name="peID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="deN" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SalesRoomLogData">
+          <Property Type="String" Name="sqChangedBy" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ChangedByN" Nullable="true" MaxLength="40" />
+          <Property Type="DateTime" Name="sqID" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="sqShowsCloseD" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="sqMealTicketsCloseD" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="sqSalesCloseD" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="sqGiftsRcptCloseD" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="sqCxCCloseD" Nullable="false" Precision="23" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -17921,6 +17937,20 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
                 <ScalarProperty Name="peID" ColumnName="peID" />
                 <ScalarProperty Name="peN" ColumnName="peN" />
                 <ScalarProperty Name="deN" ColumnName="deN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetSalesRoomLog" FunctionName="IMModel.Store.USP_OR_GetSalesRoomLog">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.SalesRoomLogData">
+                <ScalarProperty Name="sqChangedBy" ColumnName="sqChangedBy" />
+                <ScalarProperty Name="ChangedByN" ColumnName="ChangedByN" />
+                <ScalarProperty Name="sqID" ColumnName="sqID" />
+                <ScalarProperty Name="sqShowsCloseD" ColumnName="sqShowsCloseD" />
+                <ScalarProperty Name="sqMealTicketsCloseD" ColumnName="sqMealTicketsCloseD" />
+                <ScalarProperty Name="sqSalesCloseD" ColumnName="sqSalesCloseD" />
+                <ScalarProperty Name="sqGiftsRcptCloseD" ColumnName="sqGiftsRcptCloseD" />
+                <ScalarProperty Name="sqCxCCloseD" ColumnName="sqCxCCloseD" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

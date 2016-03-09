@@ -489,6 +489,9 @@
     <Compile Include="SalesRoomLog.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="SalesRoomLogData.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="SalesRoomLogin.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

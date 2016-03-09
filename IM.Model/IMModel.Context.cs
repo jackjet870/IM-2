@@ -676,5 +676,14 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PersonnelShort>("USP_OR_GetPersonnel", leadSourcesParameter, salesRoomsParameter, rolesParameter, statusParameter, permissionParameter, relationalOperatorParameter, permissionLevelParameter, deptParameter);
         }
+    
+        public virtual ObjectResult<SalesRoomLogData> USP_OR_GetSalesRoomLog(string salesRoom)
+        {
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SalesRoomLogData>("USP_OR_GetSalesRoomLog", salesRoomParameter);
+        }
     }
 }
