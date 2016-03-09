@@ -44,7 +44,7 @@ namespace IM.Launcher.Classes
       /// Contiene la lista de opciones con las que contará el menú
       /// </summary>
       /// <returns>Lista de strings</returns>
-      private IDictionary<int,string> ListOfButtons()
+      public IDictionary<int,string> ListOfButtons()
       {
           var lstMenus = new Dictionary<int, string>();
           int i = 0;

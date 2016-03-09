@@ -698,5 +698,31 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptBookingsBySalesRoomProgramTime>("USP_OR_RptBookingsBySalesRoomProgramTime", dateParameter, salesRoomsParameter);
         }
+    
+        public virtual ObjectResult<GuestLogData> USP_OR_GetGuestLog(Nullable<int> guest)
+        {
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestLogData>("USP_OR_GetGuestLog", guestParameter);
+        }
+    
+        public virtual int USP_OR_SaveLoginLog(string location, string user, string computerName)
+        {
+            var locationParameter = location != null ?
+                new ObjectParameter("Location", location) :
+                new ObjectParameter("Location", typeof(string));
+    
+            var userParameter = user != null ?
+                new ObjectParameter("User", user) :
+                new ObjectParameter("User", typeof(string));
+    
+            var computerNameParameter = computerName != null ?
+                new ObjectParameter("ComputerName", computerName) :
+                new ObjectParameter("ComputerName", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveLoginLog", locationParameter, userParameter, computerNameParameter);
+        }
     }
 }

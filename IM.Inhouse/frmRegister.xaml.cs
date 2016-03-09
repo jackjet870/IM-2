@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,19 +14,9 @@ namespace IM.Inhouse
   /// </summary>
   public partial class frmRegister : Window
   {
-    #region Constructores y destructores
-
-    public frmRegister(UserData userData)
-    {
-      InitializeComponent();
-      _userLogin = userData.User;
-      _locationLogin = userData.Location;
-    }
-
-    #endregion
-
     #region Atributos
 
+    private UserData _userData;
     private LocationLogin _locationLogin = new LocationLogin();
     private UserLogin _userLogin = new UserLogin();
     private CollectionViewSource _premanifestViewSource;
@@ -36,10 +24,22 @@ namespace IM.Inhouse
     private CollectionViewSource _availableViewSource;
     private DateTime _serverDate;
     private int _available, _invited, _onGroup, _info = 0;
-    private string _markets = "ALL", LeadSource = string.Empty;
+    private string _markets = "ALL", _LeadSource = string.Empty;
 
     #endregion
-    
+
+    #region Constructores y destructores
+
+    public frmRegister(UserData userData)
+    {
+      InitializeComponent();
+      _userData = userData;
+      _userLogin = userData.User;
+      _locationLogin = userData.Location;
+    }
+
+    #endregion
+
     #region Metodos
 
     #region EnabledCtrls
@@ -72,21 +72,21 @@ namespace IM.Inhouse
     /// </summary>
     private void LoadGrid()
     {
-      if (_guestArrivalViewSource != null && premanifestDataGrid != null && _availableViewSource != null)
+      if (_guestArrivalViewSource != null && _premanifestViewSource != null && _availableViewSource != null)
       {
         if (tabArrivals.IsSelected)
         {
-          _guestArrivalViewSource.Source = BRGuests.GetGuestsArrivals(_serverDate, "MPS", _markets, _available, _info, _invited, _onGroup);
+          _guestArrivalViewSource.Source = BRGuests.GetGuestsArrivals(_serverDate, _LeadSource, _markets, _available, _info, _invited, _onGroup);
         }
         else
         {
           if (tabAvailables.IsSelected)
           {
-            _availableViewSource.Source = BRGuests.GetGuestsAvailables(GetDateServer(), "MPS", _markets, _info, _invited, _onGroup);
+            _availableViewSource.Source = BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, _LeadSource, _markets, _info, _invited, _onGroup);
           }
           else
           {
-            _premanifestViewSource.Source = BRGuests.GetGuestsPremanifest(_serverDate, "MPS", _markets, _onGroup);
+            _premanifestViewSource.Source = BRGuests.GetGuestsPremanifest(_serverDate, _LeadSource, _markets, _onGroup);
           }
         }
       }
@@ -94,20 +94,15 @@ namespace IM.Inhouse
 
     #endregion
 
-    #region LoadGroupMarkets
+    #region LoadListMarkets
 
-    private void LoadGroupMarkets()
+    private void LoadListMarkets()
     {
-      List<MarketShort> Mercados = BRMarkets.GetMarkets(1);
-      listMarkets.ItemsSource = Mercados;
+      listMarkets.ItemsSource = BRMarkets.GetMarkets(1);
     }
 
     #endregion
-    private DateTime GetDateServer()
-    {
-      return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-    }
-
+    
     #endregion
 
     #region Eventos del formulario
@@ -116,16 +111,18 @@ namespace IM.Inhouse
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      //Le asignamos la fecha del servidor
-      LeadSource = _locationLogin.loID.ToString();
+
+      _LeadSource = _locationLogin.loID.ToString();
       txtUser.Text = _userLogin.peN.ToString();
       txtLocation.Text = _locationLogin.loN.ToString();
-      dtpDate.SelectedDate = GetDateServer();
+      //Le asignamos la fecha del servidor
+      dtpDate.SelectedDate = BRHelpers.GetServerDate().Date;
+      
       _guestArrivalViewSource = ((CollectionViewSource)(this.FindResource("guestArrivalViewSource")));
       _availableViewSource = ((CollectionViewSource)(this.FindResource("availableViewSource")));
       _premanifestViewSource = ((CollectionViewSource)(this.FindResource("premanifestViewSource")));
       LoadGrid();
-      LoadGroupMarkets();
+      LoadListMarkets();
     }
 
     #endregion
@@ -155,7 +152,6 @@ namespace IM.Inhouse
     private void tabArrivals_Clicked(object sender, MouseButtonEventArgs e)
     {
       EnabledCtrls(true, true, true, true);
-      LoadGrid();
     }
 
     #endregion
@@ -164,8 +160,7 @@ namespace IM.Inhouse
 
     private void tabAvailables_Clicked(object sender, MouseButtonEventArgs e)
     {
-      EnabledCtrls(true, true, true, true);
-      LoadGrid();
+      EnabledCtrls(false, false, true, true);
     }
 
     #endregion
@@ -174,10 +169,8 @@ namespace IM.Inhouse
 
     private void tabPremanifiest_Clicked(object sender, MouseButtonEventArgs e)
     {
-      EnabledCtrls(true, true, true, true);
-      LoadGrid();
+      EnabledCtrls(false, true, false, false);
     }
-
     #endregion
 
     #region dtpDate_SelectedDateChanged
@@ -185,120 +178,124 @@ namespace IM.Inhouse
     private void dtpDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
     {
       //Obtener el valor actual del que tiene el dtpDate
-      var picker = sender as DatePicker;
-      DateTime? date = picker.SelectedDate;
-      if (date == null)
+      var picker = sender as DatePicker;// DateTime? date = picker.SelectedDate;
+      if (!picker.SelectedDate.HasValue)
       {
         //Cuando el usuario ingresa una fecha invalida
         MessageBox.Show("Favor de ingresar una fecha valida", "Fecha Invalida", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         //Y le asignamos la fecha del servidor (la actual hora actual)
-        dtpDate.SelectedDate = GetDateServer();
+        dtpDate.SelectedDate = BRHelpers.GetServerDate();
       }
       else
       {
         //le asignamos el valor del dtpDate a la variable global para que otro control tenga acceso al valor actual del dtpDate
-        _serverDate = date.Value;
+        _serverDate = picker.SelectedDate.Value;// date.Value;
         //Cargamos el grid del tab que esta seleccionado
         LoadGrid();
         //gprInfo.BindingGroup.GetValue                 
       }
     }
 
-    #endregion
+    bool? guCheckIn = true;
 
-    #region rbAvailable_Checked
-
-    private void rbAvailable_Checked(object sender, RoutedEventArgs e)
+    private void CheckBox_Checked(object sender, RoutedEventArgs e)
     {
-      RadioButton ck = sender as RadioButton;
-      if (ck.Name == "rbYesAvailable")
-      {
-        _available = 1;
-      }
-      if (ck.Name == "rbNoAvailable")
-      {
-        _available = 0;
-      }
-      if (ck.Name == "rbBothAvailable")
-      {
-        _available = 2;
-      }
 
+    }
+
+    private void ChkguCheckIn_Click(object sender, RoutedEventArgs e)
+    {
+      var ChkguCheckIn = sender as CheckBox;
+      guCheckIn = ChkguCheckIn.IsChecked;
+    }
+    private void rb_Checked(object sender, RoutedEventArgs e)
+    {
+      var ck = sender as RadioButton;
+      switch (ck.Name)
+      {
+        case "rbYesAvailable":
+          _available = 1;
+          break;
+        case "rbNoAvailable":
+          _available = 0;
+          break;
+        case "rbBothAvailable":
+          _available = 2;
+          break;
+        case "rbYesInvited":
+          _invited = 1;
+          break;
+        case "rbNoInvited":
+          _invited = 0;
+          break;
+        case "rbBothInvited":
+          _invited = 2;
+          break;
+        case "rbYesOnGroup":
+          _onGroup = 1;
+          break;
+        case "rbNoOnGroup":
+          _onGroup = 0;
+          break;
+        case "rbBothOnGroup":
+          _onGroup = 2;
+          break;
+        case "rbYesInfo":
+          _info = 1;
+          break;
+        case "rbNoInfo":
+          _info = 0;
+          break;
+        case "rbBothInfo":
+          _info = 2;
+          break;
+      }
       LoadGrid();
+    }
+    private void ChkguAvail_Click(object sender, RoutedEventArgs e)
+    {
+      GuestArrival itema = dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
+      var chkguAvail = sender as CheckBox;
+      chkguAvail.IsChecked = itema.guAvail;
+
+      //bool? con = ck.IsChecked;      
+      if (!guCheckIn.Value)
+      {
+        MessageBox.Show(this, "Guest has not made Check-in.", "Check-in", MessageBoxButton.OK, MessageBoxImage.Exclamation, MessageBoxResult.OK);
+        chkguAvail.IsChecked = itema.guAvail;
+      }
+      else
+      {
+        if (_userData.HasPermission("AVAIL",Model.Enums.EnumPermisionLevel.ReadOnly))
+        {
+          frmAvailability _frmAvai = new frmAvailability(_userData);
+          _frmAvai.Owner = this;
+          _frmAvai.ShowDialog();
+
+        }
+        else
+          chkguAvail.IsChecked = itema.guAvail;
+      }
+      #region codigo 
+      GuestArrival item = dgGuestArrival.Items[dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)] as GuestArrival;
+      int Column = dgGuestArrival.CurrentCell.Column.DisplayIndex;
+      int CurrentColumn = dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentColumn);
+      int CurrentCell = dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentCell);
+      int CurrentItem = dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem);
+      #endregion
+    }
+    private void ChkguInfoColumn_Click(object sender, RoutedEventArgs e)
+    {
+      var chk = sender as CheckBox;    //bool? con = ck.IsChecked;
+      if (chk.IsChecked.Value)
+      {
+        frmContact _frmCont = new frmContact(_userData);
+        _frmCont.Owner = this;
+        _frmCont.ShowDialog();
+      }
     }
 
     #endregion
-
-    #region rbInvited_Checked
-
-    private void rbInvited_Checked(object sender, RoutedEventArgs e)
-    {
-      RadioButton ck = sender as RadioButton;
-      if (ck.Name == "rbYesInvited")
-      {
-        _invited = 1;
-      }
-      if (ck.Name == "rbNoInvited")
-      {
-        _invited = 0;
-      }
-      if (ck.Name == "rbBothInvited")
-      {
-        _invited = 2;
-      }
-
-      LoadGrid();
-    }
-
-    #endregion
-
-    #region rbOnGroup_Checked
-
-    private void rbOnGroup_Checked(object sender, RoutedEventArgs e)
-    {
-      RadioButton ck = sender as RadioButton;
-      if (ck.Name == "rbYesOnGroup")
-      {
-        _onGroup = 1;
-      }
-      if (ck.Name == "rbNoOnGroup")
-      {
-        _onGroup = 0;
-      }
-      if (ck.Name == "rbBothOnGroup")
-      {
-        _onGroup = 2;
-      }
-
-      LoadGrid();
-    }
-
-    #endregion
-
-    #region rbInfo_Checked
-
-    private void rbInfo_Checked(object sender, RoutedEventArgs e)
-    {
-      RadioButton ck = sender as RadioButton;
-      if (ck.Name == "rbYesInfo")
-      {
-        _info = 1;
-      }
-      if (ck.Name == "rbNoInfo")
-      {
-        _info = 0;
-      }
-      if (ck.Name == "rbBothInfo")
-      {
-        _info = 2;
-      }
-
-      LoadGrid();
-    }
-    #endregion
-
-    #endregion
-
   }
+  #endregion
 }
-        

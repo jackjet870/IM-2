@@ -54,7 +54,7 @@ namespace IM.Administrator
 
 
       frmSplash frmSplash = new frmSplash();
-      frmLogin frmLogin = new frmLogin(frmSplash, true, LoginType.Normal);
+      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Normal);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)

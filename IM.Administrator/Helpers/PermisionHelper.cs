@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IM.Model;
-using IM.Base.Enums;
+using IM.Model.Enums;
 using System.Windows.Controls;
 
 namespace IM.Administrator.Helpers
@@ -24,7 +24,7 @@ namespace IM.Administrator.Helpers
     {
       bool blnHavePer = false;
       PermissionLogin permision = App._lstPermision.Where(p => p.pppm == sPermision).FirstOrDefault();
-      if (permision != null && permision.pppl >= (int)LevelPermision.standard)//Permite Editar y Modificar
+      if (permision != null && permision.pppl >= (int)EnumPermisionLevel.Standard)//Permite Editar y Modificar
       {
         blnHavePer = true;    
       }
@@ -45,7 +45,7 @@ namespace IM.Administrator.Helpers
     {
       bool blnHavePer = false;
       PermissionLogin permision = App._lstPermision.Where(p => p.pppm == sPermision).FirstOrDefault();
-      if (permision != null && permision.pppl >= (int)LevelPermision.special)//Permite Eliminar
+      if (permision != null && permision.pppl >= (int)EnumPermisionLevel.Special)//Permite Eliminar
       {
         blnHavePer = true;
       }
@@ -65,7 +65,7 @@ namespace IM.Administrator.Helpers
     {
       bool blnHavePer = false;
       PermissionLogin permision = App._lstPermision.Where(p => p.pppm == sPermision).FirstOrDefault();
-      if (permision != null && permision.pppl >= (int)LevelPermision.superSpecial)//Permite Cambiar ID's
+      if (permision != null && permision.pppl >= (int)EnumPermisionLevel.SuperSpecial)//Permite Cambiar ID's
       {
         blnHavePer = true;
       }

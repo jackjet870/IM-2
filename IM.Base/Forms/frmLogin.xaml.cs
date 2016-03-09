@@ -17,7 +17,7 @@ namespace IM.Base.Forms
 
     protected Window _frmBase = null;
     protected bool _blnChangePassword;
-    protected LoginType _loginType;
+    protected EnumLoginType _loginType;
     protected bool _blnAutoSign;
     private IniFileHelper _iniFileHelper;
 
@@ -41,7 +41,7 @@ namespace IM.Base.Forms
     /// [edgrodriguez] 27/02/2016 Modified
     /// [edgrodriguez] 29/02/2016 Modified
     /// </history>
-    public frmLogin(Window pParentSplash = null, bool blnChangePassword = false, LoginType loginType = LoginType.Normal, bool blnAutoSign = false)
+    public frmLogin(Window pParentSplash = null, bool blnChangePassword = false, EnumLoginType loginType = EnumLoginType.Normal, bool blnAutoSign = false)
     {
       InitializeComponent();
       _frmBase = pParentSplash;
@@ -84,10 +84,10 @@ namespace IM.Base.Forms
         {
           switch (_loginType)
           {
-            case LoginType.Warehouse:
+            case EnumLoginType.Warehouse:
               UIHelper.ShowMessage("Specify the Warehouse.", MessageBoxImage.Warning);
               break;
-            case LoginType.Location:
+            case EnumLoginType.Location:
               UIHelper.ShowMessage("Specify the Location.", MessageBoxImage.Warning);
               break;
           }
@@ -113,7 +113,7 @@ namespace IM.Base.Forms
         txtPassword.Password = _iniFileHelper.readText("Login", "Password", "");
         switch (_loginType)
         {
-          case LoginType.Warehouse:
+          case EnumLoginType.Warehouse:
             if (cmbPlace.Visibility == Visibility.Visible)
             {
               txtUser_LostFocus(null, null);
@@ -121,7 +121,7 @@ namespace IM.Base.Forms
             }
             btnAceptar.Focus();
             break;
-          case LoginType.Location:
+          case EnumLoginType.Location:
             if (cmbPlace.Visibility == Visibility.Visible)
             {
               txtUser_LostFocus(null, null);
@@ -155,7 +155,7 @@ namespace IM.Base.Forms
       if (!Validate())
         return;
 
-      var user = BRPersonnel.Login(Model.Enums.LoginType.Normal, txtUser.Text);
+      var user = BRPersonnel.Login(EnumLoginType.Normal, txtUser.Text);
 
       userData = BRPersonnel.Login(_loginType, txtUser.Text, (cmbPlace.Visibility == Visibility.Visible) ? cmbPlace.SelectedValue.ToString() : "");
       string _encryptPassword = Helpers.EncryptHelper.Encrypt(txtPassword.Password);
@@ -196,7 +196,7 @@ namespace IM.Base.Forms
       }
       switch (_loginType)
       {
-        case LoginType.Warehouse://Almacen
+        case EnumLoginType.Warehouse://Almacen
 
           // validamos que el usuario tenga permiso
           if (!userData.Permissions.Exists(c => c.pppm == "GIFTSRCPTS" && c.pppl > 1))
@@ -206,7 +206,7 @@ namespace IM.Base.Forms
             return;
           }
           break;
-        case LoginType.Location: //Hotel 
+        case EnumLoginType.Location: //Hotel 
                                  // validamos que el usuario tenga permiso
           if (!userData.Permissions.Exists(c => c.pppm == "REGISTER" && c.pppl > 1))
           {
@@ -249,7 +249,7 @@ namespace IM.Base.Forms
     {
       switch (_loginType)
       {
-        case LoginType.Warehouse://Almacen
+        case EnumLoginType.Warehouse://Almacen
           List<WarehouseByUser> warehouses = BRWarehouses.GetWarehousesByUser(txtUser.Text, "ALL");
           if (warehouses.Count > 0)
           {
@@ -261,7 +261,7 @@ namespace IM.Base.Forms
           else
             cmbPlace.IsEnabled = false;
           break;
-        case LoginType.Location://Locacion
+        case EnumLoginType.Location://Locacion
           List<LocationByUser> locations = BRLocations.GetLocationsByUser(txtUser.Text, "IH");
           if (locations.Count > 0)
           {
@@ -294,15 +294,15 @@ namespace IM.Base.Forms
       //de la etiqueta lblPlace.
       switch (_loginType)
       {
-        case LoginType.Warehouse:
+        case EnumLoginType.Warehouse:
           lblPlace.Content = "Warehouse";
           break;
-        case LoginType.Normal:
+        case EnumLoginType.Normal:
           cmbPlace.Visibility = Visibility.Hidden;
           lblPlace.Visibility = Visibility.Hidden;
           Height = Height - 25;
           break;
-        case LoginType.Location: // Hotel
+        case EnumLoginType.Location: // Hotel
           lblPlace.Content = "Location";
           break;
       }

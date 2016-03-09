@@ -1,0 +1,74 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Inhouse"
+        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Inhouse.frmGuestLog"
+        mc:Ignorable="d"
+        Title="Guest Log" Height="300" Width="783.396" Loaded="Window_Loaded">
+    <Window.Resources>
+        <CollectionViewSource x:Key="uSP_OR_GetGuestLogViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:USP_OR_GetGuestLog}, CreateList=True}"/>
+    </Window.Resources>
+    <Grid DataContext="{StaticResource uSP_OR_GetGuestLogViewSource}">
+        <DataGrid x:Name="uSP_OR_GetGuestLogDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}"  RowDetailsVisibilityMode="VisibleWhenSelected">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="changedByNColumn" Binding="{Binding ChangedByN}" Header="Changed By N" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="closer1NColumn" Binding="{Binding Closer1N}" Header="Closer 1 N" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="closer2NColumn" Binding="{Binding Closer2N}" Header="Closer 2 N" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="closer3NColumn" Binding="{Binding Closer3N}" Header="Closer 3 N" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="exit1NColumn" Binding="{Binding Exit1N}" Header="Exit 1 N" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="exit2NColumn" Binding="{Binding Exit2N}" Header="Exit 2 N" Width="SizeToHeader"/>
+                <DataGridCheckBoxColumn x:Name="glAvailColumn" Binding="{Binding glAvail}" Header="gl Avail" Width="SizeToHeader"/>
+                <DataGridCheckBoxColumn x:Name="glAvailBySystemColumn" Binding="{Binding glAvailBySystem}" Header="gl Avail By System" Width="SizeToHeader"/>
+                <DataGridCheckBoxColumn x:Name="glBookCancColumn" Binding="{Binding glBookCanc}" Header="gl Book Canc" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glChangedByColumn" Binding="{Binding glChangedBy}" Header="gl Changed By" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glCloser1Column" Binding="{Binding glCloser1}" Header="gl Closer 1" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glCloser2Column" Binding="{Binding glCloser2}" Header="gl Closer 2" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glCloser3Column" Binding="{Binding glCloser3}" Header="gl Closer 3" Width="SizeToHeader"/>
+                <DataGridCheckBoxColumn x:Name="glCTourColumn" Binding="{Binding glCTour}" Header="gl CTour" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glExit1Column" Binding="{Binding glExit1}" Header="gl Exit 1" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glExit2Column" Binding="{Binding glExit2}" Header="gl Exit 2" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glFirstName1Column" Binding="{Binding glFirstName1}" Header="gl First Name 1" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glFirstName2Column" Binding="{Binding glFirstName2}" Header="gl First Name 2" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glHReservIDColumn" Binding="{Binding glHReservID}" Header="gl HReserv ID" Width="SizeToHeader"/>
+                <DataGridTemplateColumn x:Name="glIDColumn" Header="gl ID" Width="SizeToHeader">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding glID, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridCheckBoxColumn x:Name="glInOutColumn" Binding="{Binding glInOut}" Header="gl In Out" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glLastName1Column" Binding="{Binding glLastName1}" Header="gl Last Name 1" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glLastName2Column" Binding="{Binding glLastName2}" Header="gl Last Name 2" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glLiner1Column" Binding="{Binding glLiner1}" Header="gl Liner 1" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glLiner2Column" Binding="{Binding glLiner2}" Header="gl Liner 2" Width="SizeToHeader"/>
+                <DataGridCheckBoxColumn x:Name="glOriginAvailColumn" Binding="{Binding glOriginAvail}" Header="gl Origin Avail" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glPodiumColumn" Binding="{Binding glPodium}" Header="gl Podium" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glPRAvailColumn" Binding="{Binding glPRAvail}" Header="gl PRAvail" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glPRFollowColumn" Binding="{Binding glPRFollow}" Header="gl PRFollow" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glPRInfoColumn" Binding="{Binding glPRInfo}" Header="gl PRInfo" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glPRInvit1Column" Binding="{Binding glPRInvit1}" Header="gl PRInvit 1" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glPRInvit2Column" Binding="{Binding glPRInvit2}" Header="gl PRInvit 2" Width="SizeToHeader"/>
+                <DataGridCheckBoxColumn x:Name="glQColumn" Binding="{Binding glQ}" Header="gl Q" Width="SizeToHeader"/>
+                <DataGridCheckBoxColumn x:Name="glShowColumn" Binding="{Binding glShow}" Header="gl Show" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glsrColumn" Binding="{Binding glsr}" Header="glsr" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="glVLOColumn" Binding="{Binding glVLO}" Header="gl VLO" Width="SizeToHeader"/>
+                <DataGridCheckBoxColumn x:Name="glWalkOutColumn" Binding="{Binding glWalkOut}" Header="gl Walk Out" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="liner1NColumn" Binding="{Binding Liner1N}" Header="Liner 1 N" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="liner2NColumn" Binding="{Binding Liner2N}" Header="Liner 2 N" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="podiumNColumn" Binding="{Binding PodiumN}" Header="Podium N" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="pRAvailNColumn" Binding="{Binding PRAvailN}" Header="PRAvail N" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="pRFollowNColumn" Binding="{Binding PRFollowN}" Header="PRFollow N" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="pRInfoNColumn" Binding="{Binding PRInfoN}" Header="PRInfo N" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="pRInvit1NColumn" Binding="{Binding PRInvit1N}" Header="PRInvit 1 N" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="pRInvit2NColumn" Binding="{Binding PRInvit2N}" Header="PRInvit 2 N" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="rmNColumn" Binding="{Binding rmN}" Header="rm N" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="umNColumn" Binding="{Binding umN}" Header="um N" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="vLONColumn" Binding="{Binding VLON}" Header="VLON" Width="SizeToHeader"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Window>

@@ -20,7 +20,7 @@ namespace IM.Inhouse
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash();
-      frmLogin frmLogin = new frmLogin(frmSplash, true, LoginType.Location);
+      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)

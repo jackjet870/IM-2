@@ -51,7 +51,7 @@ namespace IM.MailOuts
       base.OnStartup(e);
 
       frmSplash frmSplash = new frmSplash();
-      frmLogin frmLogin = new frmLogin(frmSplash, true, LoginType.Location, true);
+      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
