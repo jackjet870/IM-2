@@ -11,10 +11,12 @@ namespace IM.Model
 {
     using System;
     
-    public partial class LeadSourceByUser
+    public partial class RptBookingsBySalesRoomProgramTime
     {
-        public string lsID { get; set; }
-        public string lsN { get; set; }
-        public string lspg { get; set; }
+        public string SalesRoom { get; set; }
+        public string Program { get; set; }
+        public string BookType { get; set; }
+        public string Time { get; set; }
+        public Nullable<int> Books { get; set; }
     }
 }

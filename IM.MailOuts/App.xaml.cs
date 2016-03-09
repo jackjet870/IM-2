@@ -2,8 +2,8 @@
 using IM.Model.Classes;
 using IM.Model.Enums;
 using System.Windows;
-using System;
 using System.Windows.Threading;
+using IM.MailOuts.Forms;
 
 namespace IM.MailOuts
 {

@@ -676,5 +676,27 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PersonnelShort>("USP_OR_GetPersonnel", leadSourcesParameter, salesRoomsParameter, rolesParameter, statusParameter, permissionParameter, relationalOperatorParameter, permissionLevelParameter, deptParameter);
         }
+    
+        public virtual ObjectResult<SalesRoomLogData> USP_OR_GetSalesRoomLog(string salesRoom)
+        {
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SalesRoomLogData>("USP_OR_GetSalesRoomLog", salesRoomParameter);
+        }
+    
+        public virtual ObjectResult<RptBookingsBySalesRoomProgramTime> USP_OR_RptBookingsBySalesRoomProgramTime(Nullable<System.DateTime> date, string salesRooms)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptBookingsBySalesRoomProgramTime>("USP_OR_RptBookingsBySalesRoomProgramTime", dateParameter, salesRoomsParameter);
+        }
     }
 }

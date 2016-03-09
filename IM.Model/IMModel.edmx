@@ -929,8 +929,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.GuestOpera' does not have a pri
           <Property Name="guPresentedInvitation" Type="bit" />
           <Property Name="guLastNameOriginal" Type="varchar" MaxLength="65" />
           <Property Name="guFirstNameOriginal" Type="varchar" MaxLength="40" />
-          <Property Name="guDespositRefund" Type="bit" />
-          <Property Name="guDepositsRefund" Type="bit" />
         </EntityType>
         <EntityType Name="GuestsAdditional">
           <Key>
@@ -5831,6 +5829,9 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
         <Function Name="USP_OR_GetSalesRoom" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetSalesRoomLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetSalesRooms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
         </Function>
@@ -5858,6 +5859,10 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="LoginType" Type="tinyint" Mode="In" />
           <Parameter Name="User" Type="varchar" Mode="In" />
           <Parameter Name="Place" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptBookingsBySalesRoomProgramTime" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_RptPRStats" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -8266,8 +8271,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Name="guPresentedInvitation" Type="Boolean" />
           <Property Name="guLastNameOriginal" Type="String" MaxLength="65" FixedLength="false" Unicode="false" />
           <Property Name="guFirstNameOriginal" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Name="guDespositRefund" Type="Boolean" />
-          <Property Name="guDepositsRefund" Type="Boolean" />
           <NavigationProperty Name="Agency" Relationship="Self.FK_Guests_Agencies" FromRole="Guests" ToRole="Agencies" />
           <NavigationProperty Name="Club" Relationship="Self.FK_Guests_Clubs" FromRole="Guests" ToRole="Clubs" />
           <NavigationProperty Name="Country" Relationship="Self.FK_Guests_Countries" FromRole="Guests" ToRole="Countries" />
@@ -14717,6 +14720,13 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="PermissionLevel" Mode="In" Type="Int32" />
             <Parameter Name="Dept" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_GetSalesRoomLog" ReturnType="Collection(IMModel.SalesRoomLogData)">
+          <Parameter Name="SalesRoom" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptBookingsBySalesRoomProgramTime" ReturnType="Collection(IMModel.RptBookingsBySalesRoomProgramTime)">
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -14968,6 +14978,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
         <ComplexType Name="LeadSourceByUser">
           <Property Type="String" Name="lsID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="lsN" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="lspg" Nullable="false" MaxLength="10" />
         </ComplexType>
         <ComplexType Name="MailOutTextByLeadSource">
           <Property Type="String" Name="mtmoCode" Nullable="false" MaxLength="10" />
@@ -15129,6 +15140,23 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="String" Name="peID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="deN" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SalesRoomLogData">
+          <Property Type="String" Name="sqChangedBy" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ChangedByN" Nullable="true" MaxLength="40" />
+          <Property Type="DateTime" Name="sqID" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="sqShowsCloseD" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="sqMealTicketsCloseD" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="sqSalesCloseD" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="sqGiftsRcptCloseD" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="sqCxCCloseD" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="RptBookingsBySalesRoomProgramTime">
+          <Property Type="String" Name="SalesRoom" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Program" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="BookType" Nullable="false" MaxLength="11" />
+          <Property Type="String" Name="Time" Nullable="false" MaxLength="7" />
+          <Property Type="Int32" Name="Books" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -16030,9 +16058,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
                 <ScalarProperty Name="guPresentedInvitation" ColumnName="guPresentedInvitation" />
                 <ScalarProperty Name="guLastNameOriginal" ColumnName="guLastNameOriginal" />
                 <ScalarProperty Name="guFirstNameOriginal" ColumnName="guFirstNameOriginal" />
-                <ScalarProperty Name="guDespositRefund" ColumnName="guDespositRefund" />
-                <ScalarProperty Name="guDepositsRefund" ColumnName="guDepositsRefund" />
-              </MappingFragment>
+                </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GuestsCreditCards">
@@ -17680,6 +17706,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
               <ComplexTypeMapping TypeName="IMModel.LeadSourceByUser">
                 <ScalarProperty Name="lsID" ColumnName="lsID" />
                 <ScalarProperty Name="lsN" ColumnName="lsN" />
+                <ScalarProperty Name="lspg" ColumnName="lspg" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -17921,6 +17948,31 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
                 <ScalarProperty Name="peID" ColumnName="peID" />
                 <ScalarProperty Name="peN" ColumnName="peN" />
                 <ScalarProperty Name="deN" ColumnName="deN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetSalesRoomLog" FunctionName="IMModel.Store.USP_OR_GetSalesRoomLog">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.SalesRoomLogData">
+                <ScalarProperty Name="sqChangedBy" ColumnName="sqChangedBy" />
+                <ScalarProperty Name="ChangedByN" ColumnName="ChangedByN" />
+                <ScalarProperty Name="sqID" ColumnName="sqID" />
+                <ScalarProperty Name="sqShowsCloseD" ColumnName="sqShowsCloseD" />
+                <ScalarProperty Name="sqMealTicketsCloseD" ColumnName="sqMealTicketsCloseD" />
+                <ScalarProperty Name="sqSalesCloseD" ColumnName="sqSalesCloseD" />
+                <ScalarProperty Name="sqGiftsRcptCloseD" ColumnName="sqGiftsRcptCloseD" />
+                <ScalarProperty Name="sqCxCCloseD" ColumnName="sqCxCCloseD" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptBookingsBySalesRoomProgramTime" FunctionName="IMModel.Store.USP_OR_RptBookingsBySalesRoomProgramTime">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptBookingsBySalesRoomProgramTime">
+                <ScalarProperty Name="SalesRoom" ColumnName="SalesRoom" />
+                <ScalarProperty Name="Program" ColumnName="Program" />
+                <ScalarProperty Name="BookType" ColumnName="BookType" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Books" ColumnName="Books" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

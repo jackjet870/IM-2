@@ -2,7 +2,6 @@
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.MailOuts.Classes;
-using IM.MailOuts.Forms;
 using IM.MailOuts.Reports;
 using IM.Model;
 using IM.Model.Classes;
@@ -16,7 +15,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace IM.MailOuts
+namespace IM.MailOuts.Forms
 {
   /// <summary>
   /// Foumulario que muestra y asigna los Mail Outs
@@ -36,8 +35,13 @@ namespace IM.MailOuts
     private List<MailOutTextByLeadSource> _ltsMailOutTextsByLeadSource = new List<MailOutTextByLeadSource>();
     private rptMailOuts _rptMailOuts = new rptMailOuts();
     private UserLogin _userLogin = new UserLogin();
+    private CollectionViewSource _languageShortViewSource;
+    private CollectionViewSource _mailOutTextByLeadSourceViewSource;
+    private CollectionViewSource _objGuestsMailOutsViewSource;
 
-    #endregion Variables
+    #endregion Atributos
+
+    #region Constructores y destructores
 
     public frmMailOuts(UserData userData)
     {
@@ -46,8 +50,9 @@ namespace IM.MailOuts
       _leadSourceLogin = userData.LeadSource;
     }
 
-    #region Métodos de la forma
+    #endregion Constructores y destructores
 
+    #region Métodos de la forma
 
     /// <summary>
     /// Activa los StatusBarItem CAP, NUM, INS
@@ -59,17 +64,18 @@ namespace IM.MailOuts
     {
       if (e.Key == Key.Capital)
       {
-        CkeckKeysPress(StatusBarCap, Key.Capital);
+        KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       }
       else if (e.Key == Key.Insert)
       {
-        CkeckKeysPress(StatusBarIns, Key.Insert);
+        KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       }
       else if (e.Key == Key.NumLock)
       {
-        CkeckKeysPress(StatusBarNum, Key.NumLock);
+        KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
       }
     }
+
     /// <summary>
     /// Despliega el formulario de acerca de
     /// </summary>
@@ -133,7 +139,6 @@ namespace IM.MailOuts
     /// </history>
     private void btnPreview_Click(object sender, RoutedEventArgs e)
     {
-
       if (!dtgDatos.Items.IsEmpty)
       {
         StaStart("Loading preview...");
@@ -184,23 +189,34 @@ namespace IM.MailOuts
     /// </history>
     private void frmMailOuts_Loaded(object sender, RoutedEventArgs e)
     {
-      CkeckKeysPress(StatusBarCap, Key.Capital);
-      CkeckKeysPress(StatusBarIns, Key.Insert);
-      CkeckKeysPress(StatusBarNum, Key.NumLock);
+      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
       txtUser.Text = _userLogin.peN;
       txtLocation.Text = _leadSourceLogin.lsN;
+      _objGuestsMailOutsViewSource = ((CollectionViewSource)(this.FindResource("objGuestsMailOutsViewSource")));
+      _languageShortViewSource = ((CollectionViewSource)(this.FindResource("languageShortViewSource")));
+      _mailOutTextByLeadSourceViewSource = ((CollectionViewSource)(this.FindResource("mailOutTextByLeadSourceViewSource")));
+    }
 
+    /// <summary>
+    /// Carga el formulario
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 09/03/2016 Created
+    /// </history>
+    private void frmMailOuts_ContentRendered(object sender, EventArgs e)
+    {
       //armamos la lista del combo de idiomas
       StaStart("Loading languages...");
       _ltsLanguages = BRLanguages.GetLanguages(0);
-      CollectionViewSource getLanguagesViewSource = ((CollectionViewSource)(this.FindResource("getLanguagesViewSource")));
-      getLanguagesViewSource.Source = _ltsLanguages;
+      _languageShortViewSource.Source = _ltsLanguages;
 
       //cargamos los mail outs
       StaStart("Loading mail outs...");
       _ltsMailOutTextsByLeadSource = BRMailOutTexts.GetMailOutTextsByLeadSource(_leadSourceLogin.lsID, true);
-      CollectionViewSource getMailOutTextsByLeadSourceViewSource = ((CollectionViewSource)(this.FindResource("getMailOutTextsByLeadSourceViewSource")));
-      getMailOutTextsByLeadSourceViewSource.Source = _ltsMailOutTextsByLeadSource.Where(x => x.mtla == "EN");
+
+      _mailOutTextByLeadSourceViewSource.Source = _ltsMailOutTextsByLeadSource.Where(x => x.mtla == "EN");
 
       // procesamos los huespedes para asignarle automaticamente un mail out en base a los criterios definidos
       BRMailOuts.ProcessMailOuts(_leadSourceLogin.lsID);
@@ -221,30 +237,22 @@ namespace IM.MailOuts
       StatusBarReg.Content = string.Format("{0}/{1}", dtgDatos.Items.IndexOf(dtgDatos.CurrentItem) + 1, dtgDatos.Items.Count);
     }
 
+    /// <summary>
+    /// Verifica si los botones estan activos
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 09/03/2016 Created
+    /// </history>
+    private void frmMailOuts_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+    }
+
     #endregion Métodos de la forma
 
     #region Métodos privados
-
-    /// <summary>
-    /// Verifica que la tecla se encuentre activa/inactiva, para cambiar el estilo de los StatusBarItem.
-    /// </summary>
-    /// <history>
-    /// [aalcocer] 18/Feb/2016 Created
-    /// </history>
-    private void CkeckKeysPress(System.Windows.Controls.Primitives.StatusBarItem statusBar, Key key)
-    {
-      var keyPess = Keyboard.GetKeyStates(key).ToString();
-
-      if (keyPess.Contains("Toggled")) //si está activo el Bloq Mayús
-      {
-        statusBar.FontWeight = FontWeights.Bold;
-        statusBar.Foreground = Brushes.Black;
-      }
-      else
-      {
-        KeyDefault(statusBar);
-      }
-    }
 
     /// <summary>
     /// Agrega los campos del reporte
@@ -264,8 +272,8 @@ namespace IM.MailOuts
                             select new GuestMailOutsText
                             {
                               mtRTF = mot.mtRTF.Replace("<LastName1>", gmo.guLastName1).Replace("<FirstName1>", gmo.guFirstName1).
-                              Replace("<BookTime>",  gmo.guBookT.HasValue ? gmo.guBookT.Value.ToShortTimeString(): "<BookTime>").
-                              Replace("<PickUp>",gmo.guPickUpT.HasValue ? gmo.guPickUpT.Value.ToShortTimeString(): "<PickUp>").
+                              Replace("<BookTime>", gmo.guBookT.HasValue ? gmo.guBookT.Value.ToShortTimeString() : "<BookTime>").
+                              Replace("<PickUp>", gmo.guPickUpT.HasValue ? gmo.guPickUpT.Value.ToShortTimeString() : "<PickUp>").
                               Replace("<Agency>", gmo.guag).Replace("<RoomNum>", gmo.guRoomNum).Replace("<PRCode>", gmo.guPRInvit1).Replace("<PRName>", gmo.peN).
                               Replace("<PrintedBy>", strPrintedBy),
                               MrMrs = mot.laMrMrs,
@@ -278,18 +286,6 @@ namespace IM.MailOuts
     }
 
     /// <summary>
-    /// Configuracion inicial de los StatusBarItem.
-    /// </summary>
-    /// <history>
-    /// [aalcocer] 18/Feb/2016 Created
-    /// </history>
-    private void KeyDefault(System.Windows.Controls.Primitives.StatusBarItem statusBar)
-    {
-      statusBar.FontWeight = FontWeights.Normal;
-      statusBar.Foreground = Brushes.Gray;
-    }
-
-    /// <summary>
     /// Carga los huespedes
     /// </summary>
     /// </summary>
@@ -299,14 +295,13 @@ namespace IM.MailOuts
     private void LoadGrid()
     {
       StaStart("Loading guests...");
+
       _dtmServerdate = BRHelpers.GetServerDate();
       _ltsGuestsMailOuts = BRGuests.GetGuestsMailOuts(_leadSourceLogin.lsID, _dtmServerdate, _dtmServerdate.AddDays(1), _dtmServerdate.AddDays(2));
 
       List<ObjGuestsMailOuts> _ltsObjGuestsMailOuts = _ltsGuestsMailOuts.Select(parent => new ObjGuestsMailOuts(parent)).ToList();
 
-      CollectionViewSource _ObjGuestsMailOutsSourceViewSource = ((CollectionViewSource)(this.FindResource("objGuestsMailOutsSourceViewSource")));
-
-      _ObjGuestsMailOutsSourceViewSource.Source = _ltsObjGuestsMailOuts;
+      _objGuestsMailOutsViewSource.Source = _ltsObjGuestsMailOuts;
       dtgDatos.SelectedItem = null;
       StaEnd();
     }
@@ -320,6 +315,7 @@ namespace IM.MailOuts
       lblStatusBarMessage.Content = message;
       imgStatusBarMessage.Visibility = Visibility.Visible;
       this.Cursor = Cursors.Wait;
+      UIHelper.ForceUIToUpdate();
     }
 
     /// <summary>
@@ -330,9 +326,9 @@ namespace IM.MailOuts
       lblStatusBarMessage.Content = null;
       imgStatusBarMessage.Visibility = Visibility.Hidden;
       this.Cursor = null;
+      UIHelper.ForceUIToUpdate();
     }
+
     #endregion Métodos privados
-
-
   }
 }
