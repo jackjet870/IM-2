@@ -236,8 +236,6 @@ namespace IM.Model
         public Nullable<bool> guPresentedInvitation { get; set; }
         public string guLastNameOriginal { get; set; }
         public string guFirstNameOriginal { get; set; }
-        public Nullable<bool> guDespositRefund { get; set; }
-        public Nullable<bool> guDepositsRefund { get; set; }
     
         public virtual Agency Agency { get; set; }
         public virtual Club Club { get; set; }
