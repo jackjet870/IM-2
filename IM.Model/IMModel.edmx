@@ -929,8 +929,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.GuestOpera' does not have a pri
           <Property Name="guPresentedInvitation" Type="bit" />
           <Property Name="guLastNameOriginal" Type="varchar" MaxLength="65" />
           <Property Name="guFirstNameOriginal" Type="varchar" MaxLength="40" />
-          <Property Name="guDespositRefund" Type="bit" />
-          <Property Name="guDepositsRefund" Type="bit" />
         </EntityType>
         <EntityType Name="GuestsAdditional">
           <Key>
@@ -16062,9 +16060,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
                 <ScalarProperty Name="guPresentedInvitation" ColumnName="guPresentedInvitation" />
                 <ScalarProperty Name="guLastNameOriginal" ColumnName="guLastNameOriginal" />
                 <ScalarProperty Name="guFirstNameOriginal" ColumnName="guFirstNameOriginal" />
-                <ScalarProperty Name="guDespositRefund" ColumnName="guDespositRefund" />
-                <ScalarProperty Name="guDepositsRefund" ColumnName="guDepositsRefund" />
-              </MappingFragment>
+                </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GuestsCreditCards">
