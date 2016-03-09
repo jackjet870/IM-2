@@ -35,19 +35,19 @@ namespace IM.Base.Forms
 
       switch (parametros.Modulo)
       {
-        case Modulo.InHouse:
+        case EnumModule.InHouse:
           this._titleForm = "In House";
           break;
-        case Modulo.OutHouse:
+        case EnumModule.OutHouse:
           this._titleForm = "Out House";
           break;
-        case Modulo.Host:
+        case EnumModule.Host:
           this._titleForm = "Host";
           break;
-        case Modulo.Animation:
+        case EnumModule.Animation:
           this._titleForm = "Animation";
           break;
-        case Modulo.Regen:
+        case EnumModule.Regen:
           this._titleForm = "Regen";
           break;
       }

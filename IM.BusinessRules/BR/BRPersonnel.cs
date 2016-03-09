@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using IM.Model;
 using IM.Model.Classes;
 using IM.Model.Enums;
+
 
 namespace IM.BusinessRules.BR
 {
@@ -20,7 +22,7 @@ namespace IM.BusinessRules.BR
     /// <param name="user"> Nombre de Usuario</param>
     /// <param name="place"> Nombre del lugar</param>
     /// <returns></returns>
-    public static UserData Login(LoginType logintype, string user = "", string place = "")
+    public static UserData Login(EnumLoginType logintype, string user = "", string place = "")
     {
       UserData userData = new UserData();
       using (var dbContext = new IMEntities())
@@ -49,7 +51,7 @@ namespace IM.BusinessRules.BR
 
     public static bool ChangePassword(string user, string newPassword, DateTime serverDate)
     {
-      int result;      
+      int result;
       using (var dbContext = new IMEntities())
       {
         Personnel _personnel = dbContext.Personnels.Where(c => c.peID == user).FirstOrDefault();
@@ -59,6 +61,18 @@ namespace IM.BusinessRules.BR
         result = dbContext.SaveChanges();
       }
       return Convert.ToBoolean(result);
+    }
+
+    #endregion
+
+    #region GetPersonnel
+
+    public static List<PersonnelShort> GetPersonnel(string leadSource)
+    {
+      using (var dbContext = new IMEntities())
+      {
+        return dbContext.USP_OR_GetPersonnel(leadSource, "ALL", "PR", 1, "ALL", "=", 0, "ALL").ToList();
+      }
     }
 
     #endregion

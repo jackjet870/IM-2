@@ -4,7 +4,7 @@ namespace IM.Base.Entities
 {
   public class Parametros
   {
-    public Modulo Modulo { get; set; }
+    public EnumModule Modulo { get; set; }
 
     public string UserName { get; set; }
 

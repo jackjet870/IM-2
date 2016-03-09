@@ -19,10 +19,8 @@ namespace IM.InventoryMovements
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-
-
       frmSplash frmSplash = new frmSplash();
-      frmLogin frmLogin = new frmLogin(frmSplash, true, LoginType.Warehouse);
+      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Warehouse);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)

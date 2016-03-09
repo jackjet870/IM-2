@@ -1,7 +1,6 @@
-﻿
-namespace IM.Base.Enums
+﻿namespace IM.Base.Enums
 {
-  public enum Modulo
+  public enum EnumModule
   {
     InHouse,
     OutHouse,
@@ -9,5 +8,4 @@ namespace IM.Base.Enums
     Animation,
     Regen
   }
-
 }

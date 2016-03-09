@@ -52,8 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Parametros.cs" />
-    <Compile Include="Enums\LevelPermision.cs" />
-    <Compile Include="Enums\Modulo.cs" />
     <Compile Include="Forms\frmError.xaml.cs">
       <DependentUpon>frmError.xaml</DependentUpon>
     </Compile>

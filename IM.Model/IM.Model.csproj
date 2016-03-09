@@ -136,7 +136,9 @@
     <Compile Include="EfficiencyType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Enums\LoginType.cs" />
+    <Compile Include="Enums\EnumLoginType.cs" />
+    <Compile Include="Enums\EnumModule.cs" />
+    <Compile Include="Enums\EnumPermisionLevel.cs" />
     <Compile Include="ExchangeRate.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
