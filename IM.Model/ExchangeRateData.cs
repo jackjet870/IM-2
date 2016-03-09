@@ -11,10 +11,11 @@ namespace IM.Model
 {
     using System;
     
-    public partial class LeadSourceByUser
+    public partial class ExchangeRateData
     {
-        public string lsID { get; set; }
-        public string lsN { get; set; }
-        public string lspg { get; set; }
+        public System.DateTime exD { get; set; }
+        public string excu { get; set; }
+        public decimal exExchRate { get; set; }
+        public Nullable<decimal> RatePesos { get; set; }
     }
 }

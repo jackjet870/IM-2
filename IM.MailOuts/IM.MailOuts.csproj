@@ -126,7 +126,6 @@
       <DependentUpon>rptMailOuts.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Settings.cs" />
     <Page Include="Forms\frmMailOuts.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -167,9 +166,9 @@
       <LastGenOutput>rptMailOuts.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
-    <None Include="Properties\DataSources\IM.MailOuts.Clases.GuestMailOutsText.datasource" />
-    <None Include="Properties\DataSources\IM.Model.GetLanguages.datasource" />
-    <None Include="Properties\DataSources\IM.Model.GetMailOutTextsByLeadSource.datasource" />
+    <None Include="Properties\DataSources\IM.MailOuts.Classes.ObjGuestsMailOuts.datasource" />
+    <None Include="Properties\DataSources\IM.Model.LanguageShort.datasource" />
+    <None Include="Properties\DataSources\IM.Model.MailOutTextByLeadSource.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

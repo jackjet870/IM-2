@@ -517,5 +517,186 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptPRStats>("USP_OR_RptPRStats", dateFromParameter, dateToParameter, leadSourcesParameter, salesRoomsParameter, countriesParameter, agenciesParameter, marketsParameter);
         }
+    
+        public virtual int USP_OR_ActualizarFechasTemporadas(Nullable<int> currentYear)
+        {
+            var currentYearParameter = currentYear.HasValue ?
+                new ObjectParameter("CurrentYear", currentYear) :
+                new ObjectParameter("CurrentYear", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_ActualizarFechasTemporadas", currentYearParameter);
+        }
+    
+        public virtual int USP_OR_CloseGiftsReceipts(string salesRoom, Nullable<System.DateTime> date)
+        {
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CloseGiftsReceipts", salesRoomParameter, dateParameter);
+        }
+    
+        public virtual int USP_OR_CloseMealTickets(string salesRoom, Nullable<System.DateTime> date)
+        {
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CloseMealTickets", salesRoomParameter, dateParameter);
+        }
+    
+        public virtual int USP_OR_CloseSales(string salesRoom, Nullable<System.DateTime> date)
+        {
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CloseSales", salesRoomParameter, dateParameter);
+        }
+    
+        public virtual int USP_OR_CloseShows(string salesRoom, Nullable<System.DateTime> date)
+        {
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CloseShows", salesRoomParameter, dateParameter);
+        }
+    
+        public virtual ObjectResult<ExchangeRateLogData> USP_OR_GetExchangeRateLog(string currency)
+        {
+            var currencyParameter = currency != null ?
+                new ObjectParameter("Currency", currency) :
+                new ObjectParameter("Currency", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ExchangeRateLogData>("USP_OR_GetExchangeRateLog", currencyParameter);
+        }
+    
+        public virtual ObjectResult<ExchangeRateData> USP_OR_GetExchangeRatesWithPesosByDate(Nullable<System.DateTime> date)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ExchangeRateData>("USP_OR_GetExchangeRatesWithPesosByDate", dateParameter);
+        }
+    
+        public virtual ObjectResult<GraphProductionByPRData> USP_OR_GraphProductionByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GraphProductionByPRData>("USP_OR_GraphProductionByPR", dateFromParameter, dateToParameter, leadSourceParameter);
+        }
+    
+        public virtual int USP_OR_InsertExchangeRate(Nullable<System.DateTime> currentDate)
+        {
+            var currentDateParameter = currentDate.HasValue ?
+                new ObjectParameter("CurrentDate", currentDate) :
+                new ObjectParameter("CurrentDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_InsertExchangeRate", currentDateParameter);
+        }
+    
+        public virtual int USP_OR_SaveSalesRoomLog(string salesRoom, Nullable<short> hoursDif, string changedBy)
+        {
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var hoursDifParameter = hoursDif.HasValue ?
+                new ObjectParameter("HoursDif", hoursDif) :
+                new ObjectParameter("HoursDif", typeof(short));
+    
+            var changedByParameter = changedBy != null ?
+                new ObjectParameter("ChangedBy", changedBy) :
+                new ObjectParameter("ChangedBy", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveSalesRoomLog", salesRoomParameter, hoursDifParameter, changedByParameter);
+        }
+    
+        public virtual ObjectResult<PersonnelShort> USP_OR_GetPersonnel(string leadSources, string salesRooms, string roles, Nullable<byte> status, string permission, string relationalOperator, Nullable<int> permissionLevel, string dept)
+        {
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            var rolesParameter = roles != null ?
+                new ObjectParameter("Roles", roles) :
+                new ObjectParameter("Roles", typeof(string));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(byte));
+    
+            var permissionParameter = permission != null ?
+                new ObjectParameter("Permission", permission) :
+                new ObjectParameter("Permission", typeof(string));
+    
+            var relationalOperatorParameter = relationalOperator != null ?
+                new ObjectParameter("RelationalOperator", relationalOperator) :
+                new ObjectParameter("RelationalOperator", typeof(string));
+    
+            var permissionLevelParameter = permissionLevel.HasValue ?
+                new ObjectParameter("PermissionLevel", permissionLevel) :
+                new ObjectParameter("PermissionLevel", typeof(int));
+    
+            var deptParameter = dept != null ?
+                new ObjectParameter("Dept", dept) :
+                new ObjectParameter("Dept", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PersonnelShort>("USP_OR_GetPersonnel", leadSourcesParameter, salesRoomsParameter, rolesParameter, statusParameter, permissionParameter, relationalOperatorParameter, permissionLevelParameter, deptParameter);
+        }
+    
+        public virtual ObjectResult<SalesRoomLogData> USP_OR_GetSalesRoomLog(string salesRoom)
+        {
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SalesRoomLogData>("USP_OR_GetSalesRoomLog", salesRoomParameter);
+        }
+    
+        public virtual ObjectResult<RptBookingsBySalesRoomProgramTime> USP_OR_RptBookingsBySalesRoomProgramTime(Nullable<System.DateTime> date, string salesRooms)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptBookingsBySalesRoomProgramTime>("USP_OR_RptBookingsBySalesRoomProgramTime", dateParameter, salesRoomsParameter);
+        }
     }
 }

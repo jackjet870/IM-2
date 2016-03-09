@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:IM.MailOuts.Forms"
           xmlns:my="clr-namespace:SAPBusinessObjects.WPF.Viewer;assembly=SAPBusinessObjects.WPF.Viewer"
         mc:Ignorable="d"      
-        Title="frmViewer" Height="600" Width="800" Loaded="Window_Loaded" WindowState="Maximized" ShowInTaskbar="False" Topmost="True"  >
+        Title="ReportViewer" Height="600" Width="800" Loaded="Window_Loaded" WindowState="Maximized" ShowInTaskbar="False" Topmost="True"  >
     <Grid>
-        <my:CrystalReportsViewer  Name="crystalReportsViewer1"   />
+        <my:CrystalReportsViewer  Name="crystalReportsViewer1" ToggleSidePanel="None" ShowToggleSidePanelButton="False"  />
     </Grid>
 </Window>

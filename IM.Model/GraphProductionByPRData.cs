@@ -11,10 +11,11 @@ namespace IM.Model
 {
     using System;
     
-    public partial class LeadSourceByUser
+    public partial class GraphProductionByPRData
     {
-        public string lsID { get; set; }
-        public string lsN { get; set; }
-        public string lspg { get; set; }
+        public string PR { get; set; }
+        public Nullable<decimal> Books { get; set; }
+        public Nullable<decimal> Shows { get; set; }
+        public Nullable<decimal> Sales { get; set; }
     }
 }

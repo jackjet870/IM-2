@@ -11,10 +11,10 @@ namespace IM.Model
 {
     using System;
     
-    public partial class LeadSourceByUser
+    public partial class PersonnelShort
     {
-        public string lsID { get; set; }
-        public string lsN { get; set; }
-        public string lspg { get; set; }
+        public string peID { get; set; }
+        public string peN { get; set; }
+        public string deN { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace IM.Base.Helpers
 {
@@ -34,15 +35,18 @@ namespace IM.Base.Helpers
           if (String.IsNullOrEmpty(title))
             title = "Error";
           break;
+
         case MessageBoxImage.Warning:
           if (String.IsNullOrEmpty(title))
             title = "Warning";
           break;
+
         case MessageBoxImage.Question:
           if (String.IsNullOrEmpty(title))
             title = "Question";
           button = MessageBoxButton.YesNo;
           break;
+
         default:
           if (String.IsNullOrEmpty(title))
             title = "Information";
@@ -52,8 +56,31 @@ namespace IM.Base.Helpers
       return MessageBox.Show(message, title, button, image);
     }
 
-    #endregion
+    #endregion ShowMessage
 
-    #endregion
+    #region ForceUIToUpdate
+
+    /// <summary>
+    /// Forza la actualizacion del UI mientra se cargan datos
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 08/Mar/16 Created
+    /// </history>
+    public static void ForceUIToUpdate()
+    {
+      DispatcherFrame frame = new DispatcherFrame();
+
+      Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Render, new DispatcherOperationCallback(delegate (object parameter)
+      {
+        frame.Continue = false;
+        return null;
+      }), null);
+
+      Dispatcher.PushFrame(frame);
+    }
+
+    #endregion ForceUIToUpdate
+
+    #endregion Metodos
   }
 }
