@@ -3,19 +3,18 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:local="clr-namespace:IM.MailOuts"
-		xmlns:Classes="clr-namespace:IM.MailOuts.Classes"
-		xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="IM.MailOuts.frmMailOuts"
+        xmlns:local="clr-namespace:IM.MailOuts.Forms"
+        xmlns:Classes="clr-namespace:IM.MailOuts.Classes" x:Class="IM.MailOuts.Forms.frmMailOuts"
+        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" xmlns:System="clr-namespace:System;assembly=mscorlib"
 		mc:Ignorable="d"
 		Title="MailOuts" Height="440" Width="1150" WindowState="Maximized" WindowStartupLocation="CenterScreen"
-		Loaded="frmMailOuts_Loaded"
-		KeyDown="frmMailOuts_KeyDown">
+		KeyDown="frmMailOuts_KeyDown" ContentRendered="frmMailOuts_ContentRendered" Loaded="frmMailOuts_Loaded" IsKeyboardFocusedChanged="frmMailOuts_IsKeyboardFocusedChanged">
 
     <Window.Resources>
         <!--#region ViewSource-->
-        <CollectionViewSource x:Key="getLanguagesViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GetLanguages}, CreateList=True}" />
-        <CollectionViewSource x:Key="getMailOutTextsByLeadSourceViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GetMailOutTextsByLeadSource}, CreateList=True}" />
-        <CollectionViewSource x:Key="objGuestsMailOutsSourceViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestsMailOuts}, CreateList=True}" />
+        <CollectionViewSource x:Key="languageShortViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:LanguageShort}, CreateList=True}" />
+        <CollectionViewSource x:Key="mailOutTextByLeadSourceViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:MailOutTextByLeadSource}, CreateList=True}" />
+        <CollectionViewSource x:Key="objGuestsMailOutsViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestsMailOuts}, CreateList=True}" />
         <!--#endregion-->
     </Window.Resources>
     <Grid>
@@ -24,7 +23,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
-        <!-- **************************************** MENU **************************************** -->
+        <!--#region **************************************** MENU ****************************************-->
         <Grid x:Name="grdPanel"  VerticalAlignment="Top" Background="SkyBlue">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="10" />
@@ -41,7 +40,7 @@
                     <Button x:Name="btnReload" HorizontalAlignment="Left" Margin="5,3,0,0" VerticalAlignment="Top" Width="65" Click="btnReload_Click">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Refresh.png" Width="24" Height="24" HorizontalAlignment="Center" />
-                            <TextBlock Text="Reload"  />
+                            <TextBlock Text="Reload" />
                         </StackPanel>
                     </Button>
                     <Button x:Name="btnPrint" HorizontalAlignment="Left" Margin="5,3,0,0" VerticalAlignment="Top" Width="65" Background="White" Click="btnPrint_Click">
@@ -70,15 +69,15 @@
                     </Button>
                 </StackPanel>
             </GroupBox>
-            <!--#endregion -->
+            <!--#endregion-->
             <!--#region Lista de Mailt Outs Text y Languages-->
             <GroupBox x:Name="grbMailOuts" Grid.Column="2">
                 <StackPanel Orientation="Horizontal">
-                    <StackPanel Width="150"  Margin="5,0,0,0" DataContext="{StaticResource getMailOutTextsByLeadSourceViewSource}">
+                    <StackPanel Width="150"  Margin="5,0,0,0" DataContext="{StaticResource mailOutTextByLeadSourceViewSource}">
                         <TextBlock Text="Mail Outs" HorizontalAlignment="Center" />
                         <ListBox x:Name="ltsbMailOuts"  ItemsSource="{Binding}" Height="60" DisplayMemberPath="mtmoCode" SelectedValuePath="mtmoCode" />
                     </StackPanel>
-                    <StackPanel Width="150" Margin="5,0,0,0"  DataContext="{StaticResource getLanguagesViewSource}">
+                    <StackPanel Width="150" Margin="5,0,0,0"  DataContext="{StaticResource languageShortViewSource}">
                         <TextBlock Text="Languages" HorizontalAlignment="Center" />
                         <ListBox  x:Name="ltsbLanguages" DisplayMemberPath="laN" SelectedValuePath="laID" ItemsSource="{Binding}" Height="60" />
                     </StackPanel>
@@ -123,8 +122,10 @@
             </GroupBox>
             <!--#endregion-->
         </Grid>
+        <!--#endregion-->
+
         <!--#region DATA GRID-->
-        <DataGrid x:Name="dtgDatos" Grid.Row="1" DataContext="{StaticResource objGuestsMailOutsSourceViewSource}" ItemsSource="{Binding}" AutoGenerateColumns="False" CanUserAddRows="False" SelectionChanged="dtgDatos_SelectionChanged">
+        <DataGrid x:Name="dtgDatos" Grid.Row="1" DataContext="{StaticResource objGuestsMailOutsViewSource}" AutoGenerateColumns="False" CanUserAddRows="False" SelectionChanged="dtgDatos_SelectionChanged" ItemsSource="{Binding}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding guStatus}" Header="St" IsReadOnly="True" Foreground="Magenta">
                     <DataGridTextColumn.HeaderStyle>
@@ -133,7 +134,7 @@
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
+                        <Style TargetType="{x:Type DataGridCell}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
                             <Setter Property="ToolTip" Value="{Binding toolTip}" />
                             <Setter Property="Background" Value="{Binding color}" />
@@ -191,15 +192,14 @@
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridComboBoxColumn Header="Mail Out" SelectedValueBinding="{Binding gumo}" SelectedValuePath="mtmoCode" DisplayMemberPath="mtmoCode"
-						ItemsSource="{Binding Source={StaticResource getMailOutTextsByLeadSourceViewSource}}" />
+					ItemsSource="{Binding Source={StaticResource mailOutTextByLeadSourceViewSource}}" />
                 <DataGridComboBoxColumn Header="Language" SelectedValueBinding="{Binding gula}" SelectedValuePath="laID" DisplayMemberPath="laN"
-						ItemsSource="{Binding Source={StaticResource getLanguagesViewSource}}" />
+					ItemsSource="{Binding Source={StaticResource languageShortViewSource}}" />
                 <DataGridCheckBoxColumn Header="Print" Binding="{Binding gumoA}" />
                 <DataGridTextColumn Header="Comments" Binding="{Binding guComments}"  IsReadOnly="True" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
         <!--#endregion-->
-
         <!--#region PIE DE LA FORMA -->
         <StatusBar x:Name="stbStatusBar" Grid.Row="2">
             <StatusBarItem x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
