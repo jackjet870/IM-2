@@ -584,6 +584,9 @@
     <Compile Include="TourTime.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="TourTimeAvailable.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="TourTimeByDay.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

@@ -803,5 +803,34 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_GetPRsAssigned", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter, pRGuestsParameter, pRMembersParameter);
         }
+    
+        public virtual ObjectResult<TourTimeAvailable> USP_OR_GetTourTimesAvailables(string leadSource, string salesRoom, Nullable<System.DateTime> date, Nullable<System.DateTime> dateOriginal, Nullable<System.DateTime> timeOriginal, Nullable<System.DateTime> currentDate)
+        {
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var dateOriginalParameter = dateOriginal.HasValue ?
+                new ObjectParameter("DateOriginal", dateOriginal) :
+                new ObjectParameter("DateOriginal", typeof(System.DateTime));
+    
+            var timeOriginalParameter = timeOriginal.HasValue ?
+                new ObjectParameter("TimeOriginal", timeOriginal) :
+                new ObjectParameter("TimeOriginal", typeof(System.DateTime));
+    
+            var currentDateParameter = currentDate.HasValue ?
+                new ObjectParameter("CurrentDate", currentDate) :
+                new ObjectParameter("CurrentDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TourTimeAvailable>("USP_OR_GetTourTimesAvailables", leadSourceParameter, salesRoomParameter, dateParameter, dateOriginalParameter, timeOriginalParameter, currentDateParameter);
+        }
     }
 }
