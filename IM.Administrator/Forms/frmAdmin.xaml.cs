@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using IM.Model;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -13,13 +13,19 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmAdmin : Window
   {
-    private List<PermissionLogin> _lstPermisions;
+    #region Constructores y destructores
+
     public frmAdmin()
     {
       InitializeComponent();      
     }
-    #region metodos
-    #region crear el menu del admin
+
+    #endregion
+
+    #region Metodos
+
+    #region CreateMenu
+
     /// <summary>
     /// Crea la lista del Menu
     /// </summary>
@@ -29,7 +35,7 @@ namespace IM.Administrator.Forms
     protected void CreateMenu()
     {
       
-      lblUser.Content = App._userLogin.peN;                        
+      lblUser.Content = App.User.User.peN;                        
       var lstMenu = new List<object>();
       if (AddCatalog("SALES"))
       {
@@ -57,6 +63,7 @@ namespace IM.Administrator.Forms
     }
 
     #endregion
+
     #region AddCatalog
     /// <summary>
     /// Validar si cuenta con el permiso para visualizar el catalogo
@@ -69,7 +76,7 @@ namespace IM.Administrator.Forms
     protected bool AddCatalog(string sNameCat)
     {
 
-      if (_lstPermisions.Exists(p => p.pppm == sNameCat))//Si tiene permiso
+      if (App.User.HasPermission(sNameCat, EnumPermisionLevel.ReadOnly))//Si tiene permiso
       {
         return true;
       }
@@ -79,25 +86,27 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
+
     #endregion
-    #region eventos del formulario
-    #region WIndowLoaded
+
+    #region Eventos del formulario
+
+    #region Window_Loaded
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _lstPermisions = App._lstPermision;
       CreateMenu();
     }
     #endregion
 
-    #region closeWindow
+    #region Window_Closed
     private void Window_Closed(object sender, EventArgs e)
     {
       Application.Current.Shutdown();
     }
     #endregion
-    
 
-    #region evento click de la lista
+    #region lstMenuAdm_MouseDoubleClick
+
     /// <summary>
     /// Abre la ventana de 
     /// </summary>
@@ -132,11 +141,9 @@ namespace IM.Administrator.Forms
         wd.Activate();
         //wd.Focus();
       }
-
-
-
     }
     #endregion
+
     #endregion
   }
 }

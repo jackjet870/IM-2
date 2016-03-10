@@ -10,7 +10,7 @@
 
     <Canvas x:Name="ContentMain">
         <TextBlock x:Name="txtTitle" HorizontalAlignment="Left" Margin="252,10,0,0" TextWrapping="Wrap" Text="Intelligence Marketing " VerticalAlignment="Top" Height="34" Width="312" FontSize="21.333"/>
-        <TextBlock x:Name="txtVersion" HorizontalAlignment="Left" Margin="252,49,0,0" TextWrapping="Wrap" Text="Version v1.1.0" VerticalAlignment="Top" Height="34" Width="312" FontSize="16"/>
+        <TextBlock x:Name="txtVersion" HorizontalAlignment="Left" Margin="252,49,0,0" TextWrapping="Wrap" Text="Version 1.0.0" VerticalAlignment="Top" Height="34" Width="312" FontSize="16"/>
         <Image x:Name="imgLogo" HorizontalAlignment="Left" Height="205" VerticalAlignment="Top" Width="225" Source="../Images/IM.png" Canvas.Left="10" Canvas.Top="25"/>
         <Label x:Name="lblServer" Content="lblServer" HorizontalAlignment="Left" Margin="80,235,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblDB" Content="lblDB" HorizontalAlignment="Left" Margin="80,263,0,0" VerticalAlignment="Top"/>

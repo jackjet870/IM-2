@@ -1,38 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using IM.Model.Classes;
 using IM.Base.Forms;
 using IM.Model.Enums;
-using IM.Model;
+using IM.Administrator.Forms;
 
 namespace IM.Administrator
 {
-  
+
   /// <summary>
   /// Interaction logic for App.xaml
   /// </summary>
   public partial class App : Application
   {
-    public static UserLogin _userLogin = new UserLogin();
-    public static List<PermissionLogin> _lstPermision = new List<PermissionLogin>();
-    #region constructores y desctructores
+    #region Propiedades
+
+    public static UserData User;
+
+    #endregion
+
+    #region Constructores y desctructores
     public App():base()
     {
       this.Dispatcher.UnhandledException += App_UnhandledException;
     }
     #endregion
 
+    #region Metodos
+
+    #region App_UnhandledException
+
     /// <summary>
     /// Sirve para el manejo de excepciones no controladas
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    #region Metodos
     private void App_UnhandledException(object sender,System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
@@ -41,30 +40,30 @@ namespace IM.Administrator
       {
         Application.Current.Shutdown();
       }
-
     }
+
+    #endregion
+
+    #region OnStartup
 
     /// <summary>
     /// LLama a la ventana de login 
     /// </summary>
-    /// <param name="e"></param>
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
 
-
-      frmSplash frmSplash = new frmSplash();
+      frmSplash frmSplash = new frmSplash("Administrator");
       frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Normal);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
         UserData userData = frmLogin.userData;
-        if (userData.Roles.Exists(r => r.prro == "MANAGER" || r.prro == "ADMIN"))
+        if (userData.HasRole("MANAGER") || userData.HasRole("ADMIN"))
         {
-          Forms.frmAdmin frmAdm = new Forms.frmAdmin();
-          _userLogin = userData.User;
-          _lstPermision = userData.Permissions;
+          frmAdmin frmAdm = new frmAdmin();
+          User = userData;
           frmAdm.ShowDialog();
           frmSplash.Close();
         }
@@ -75,6 +74,9 @@ namespace IM.Administrator
         }
       }
     }
+
+    #endregion
+
     #endregion
   }
 }

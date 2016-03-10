@@ -26,6 +26,9 @@ namespace IM.MailOuts
     #endregion
 
     #region Metodos
+
+    #region App_UnhandledException
+
     /// <summary>
     /// Despliega los mensajes de error de la aplicacion
     /// </summary>
@@ -43,6 +46,10 @@ namespace IM.MailOuts
       }
     }
 
+    #endregion
+
+    #region OnStartup
+
     /// <summary>
     /// Inicializa el modulo con el Login y el Splash
     /// </summary>
@@ -50,7 +57,7 @@ namespace IM.MailOuts
     {
       base.OnStartup(e);
 
-      frmSplash frmSplash = new frmSplash();
+      frmSplash frmSplash = new frmSplash("Mail Outs");
       frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
@@ -62,6 +69,9 @@ namespace IM.MailOuts
         frmSplash.Close();
       }
     }
+
+    #endregion
+
     #endregion
   }
 }

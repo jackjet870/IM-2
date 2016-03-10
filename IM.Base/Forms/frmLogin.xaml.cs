@@ -7,7 +7,6 @@ using IM.BusinessRules.BR;
 using IM.Model.Enums;
 using System.IO;
 using IM.Base.Helpers;
-using IM.BusinessRules.BR;
 
 namespace IM.Base.Forms
 {

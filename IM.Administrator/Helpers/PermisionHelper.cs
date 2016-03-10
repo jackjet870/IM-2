@@ -1,76 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IM.Model;
-using IM.Model.Enums;
-using System.Windows.Controls;
+﻿using IM.Model.Enums;
 
 namespace IM.Administrator.Helpers
 {
   public class PermisionHelper
   {
-    #region permiso para editar
+    #region EditPermision
     /// <summary>
     /// Valida si tienes minimo permiso para editar|agregar
     /// </summary>
     /// <param name="sPermision">Nombre del permiso</param>
     /// <returns>true. si se cuenta con el permiso | false. si no se cuenta con el permiso</returns>
     /// <history>
-    /// [Emoguel] created 04/03/2016
+    /// [emoguel] 04/03/2016 Created
+    /// [wtorres] 10/03/2016 Modified. Simplifique el metodo. Ahora utiliza el metodo HasPermission
     /// </history>
     public static bool EditPermision(string sPermision)
     {
-      bool blnHavePer = false;
-      PermissionLogin permision = App._lstPermision.Where(p => p.pppm == sPermision).FirstOrDefault();
-      if (permision != null && permision.pppl >= (int)EnumPermisionLevel.Standard)//Permite Editar y Modificar
-      {
-        blnHavePer = true;    
-      }
-      return blnHavePer;
+      return App.User.HasPermission(sPermision, EnumPermisionLevel.Standard);
     }
 
     #endregion
-    #region permiso para eliminar
+
+    #region DeletePermision
+
     /// <summary>
     /// Valida si tienes permiso para eliminar
     /// </summary>
     /// <param name="sPermision">Nombre del permiso</param>
     /// <returns>true. si se cuenta con el permiso | false. si no se cuenta con el permiso</returns>
     /// <history>
-    /// [Emoguel] created 04/03/2016
+    /// [emoguel] 04/03/2016 Created
+    /// [wtorres] 10/03/2016 Modified. Simplifique el metodo. Ahora utiliza el metodo HasPermission
     /// </history>
-    public static bool DelPermision(string sPermision)
+    public static bool DeletePermision(string sPermision)
     {
-      bool blnHavePer = false;
-      PermissionLogin permision = App._lstPermision.Where(p => p.pppm == sPermision).FirstOrDefault();
-      if (permision != null && permision.pppl >= (int)EnumPermisionLevel.Special)//Permite Eliminar
-      {
-        blnHavePer = true;
-      }
-      return blnHavePer;
+      return App.User.HasPermission(sPermision, EnumPermisionLevel.Special);
     }
+
     #endregion
-    #region permiso para cambiar ID
+
+    #region ChangeIdPermision
+
     /// <summary>
-    /// Valida si tienes permiso para CambiarID
+    /// Valida si tienes permiso para Cambiar ID
     /// </summary>
     /// <param name="sPermision">Nombre del permiso</param>
     /// <returns>true. si se cuenta con el permiso | false. si no se cuenta con el permiso</returns>
     /// <history>
-    /// [Emoguel] created 04/03/2016
+    /// [emoguel] 04/03/2016 Created
+    /// [wtorres] 10/03/2016 Modified. Simplifique el metodo. Ahora utiliza el metodo HasPermission
     /// </history>
     public static bool ChangeIdPermision(string sPermision)
     {
-      bool blnHavePer = false;
-      PermissionLogin permision = App._lstPermision.Where(p => p.pppm == sPermision).FirstOrDefault();
-      if (permision != null && permision.pppl >= (int)EnumPermisionLevel.SuperSpecial)//Permite Cambiar ID's
-      {
-        blnHavePer = true;
-      }
-      return blnHavePer;
+      return App.User.HasPermission(sPermision, EnumPermisionLevel.SuperSpecial);
     }
+
     #endregion
   }
 }

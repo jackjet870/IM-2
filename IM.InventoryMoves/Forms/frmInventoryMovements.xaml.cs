@@ -136,18 +136,10 @@ namespace IM.InventoryMovements
     {
       if (_dtmcurrent != dtpDate.SelectedDate)
       {
-        try
-        {
-          whsMovViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("whsMovViewSource")));
-          // Load data by setting the CollectionViewSource.Source property:
-          whsMovViewSource.Source =  BRWarehouseMovements.GetWarehouseMovements(_warehouseLogin.whID, dtpDate.SelectedDate.Value);
-          StatusBarReg.Content=string.Format("{0}/{1}",grd.SelectedItems.Count,whsMovViewSource.View.SourceCollection.Cast<WarehouseMovementShort>().Count());
-
-        }
-        catch (Exception ex)
-        {
-
-        }
+        whsMovViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("whsMovViewSource")));
+        // Load data by setting the CollectionViewSource.Source property:
+        whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(_warehouseLogin.whID, dtpDate.SelectedDate.Value);
+        StatusBarReg.Content = string.Format("{0}/{1}", grd.SelectedItems.Count, whsMovViewSource.View.SourceCollection.Cast<WarehouseMovementShort>().Count());
       }
       _dtmcurrent = dtpDate.SelectedDate;
     }
@@ -186,7 +178,7 @@ namespace IM.InventoryMovements
             });
 
             List<WarehouseMovement> lstWhsMov = _lstobjWhsMovs.Select(c => new WarehouseMovement
-            {              
+            {
               wmComments = c.wmComments,
               wmD = c.wmD,
               wmgi = c.wmgi,
@@ -211,7 +203,7 @@ namespace IM.InventoryMovements
     /// </history>
     private void btnAbout_Click(object sender, RoutedEventArgs e)
     {
-    frmAbout frmAbout = new frmAbout();
+      frmAbout frmAbout = new frmAbout();
       frmAbout.ShowDialog();
     }
 
@@ -305,7 +297,7 @@ namespace IM.InventoryMovements
       getGiftsViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("getGiftsViewSource")));
       // Load data by setting the CollectionViewSource.Source property:
       getGiftsViewSource.Source = BRGifts.GetGifts(_warehouseLogin.whID, 1);
-    }    
+    }
     #endregion
   }
 }

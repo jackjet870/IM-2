@@ -12,8 +12,8 @@
         Loaded="frmInventoryMovements_Loaded" KeyDown="frmInventoryMovements_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
   <Window.Resources>
     <CollectionViewSource x:Key="objWhsMovsViewSource" d:DesignSource="{d:DesignInstance {x:Type Clases:objWhsMovs}, CreateList=True}"/>
-    <CollectionViewSource x:Key="getGiftsViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GetGifts}, CreateList=True}"/>
-    <CollectionViewSource x:Key="whsMovViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:WhsMov}, CreateList=True}"/>
+    <CollectionViewSource x:Key="getGiftsViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GiftShort}, CreateList=True}"/>
+    <CollectionViewSource x:Key="whsMovViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:WarehouseMovement}, CreateList=True}"/>
   </Window.Resources>  
   <Grid>
     <Grid Height="540" VerticalAlignment="Top">

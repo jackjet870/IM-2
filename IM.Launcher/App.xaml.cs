@@ -26,6 +26,8 @@ namespace IM.Launcher
 
     #region Metodos
 
+    #region App_UnhandledException
+
     /// <summary>
     /// Despliega los mensajes de error de la aplicacion
     /// </summary>
@@ -42,6 +44,8 @@ namespace IM.Launcher
         Application.Current.Shutdown();
       }
     }
+
+    #endregion
 
     #endregion
   }
