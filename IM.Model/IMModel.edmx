@@ -5780,11 +5780,25 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
         <Function Name="USP_OR_GetGuestLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Guest" Type="int" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetGuestsAssigned" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSource" Type="varchar" Mode="In" />
+          <Parameter Name="PRs" Type="varchar" Mode="In" />
+          <Parameter Name="Markets" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetGuestsMailOuts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="guls" Type="varchar" Mode="In" />
           <Parameter Name="guCheckInD" Type="datetime" Mode="In" />
           <Parameter Name="guCheckOutD" Type="datetime" Mode="In" />
           <Parameter Name="guBookD" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetGuestsUnassigned" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSource" Type="varchar" Mode="In" />
+          <Parameter Name="Markets" Type="varchar" Mode="In" />
+          <Parameter Name="OnlyAvailables" Type="bit" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetLanguages" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
@@ -5828,6 +5842,14 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
         <Function Name="USP_OR_GetPremanifestHost" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetPRsAssigned" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSource" Type="varchar" Mode="In" />
+          <Parameter Name="Markets" Type="varchar" Mode="In" />
+          <Parameter Name="PRGuests" Type="bit" Mode="In" />
+          <Parameter Name="PRMembers" Type="bit" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetSalesRoom" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
@@ -14736,12 +14758,34 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="SalesRooms" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGuestLog" ReturnType="Collection(IMModel.GuestLogData)">
-            <Parameter Name="Guest" Mode="In" Type="Int32" />
+          <Parameter Name="Guest" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_SaveLoginLog">
             <Parameter Name="Location" Mode="In" Type="String" />
             <Parameter Name="User" Mode="In" Type="String" />
             <Parameter Name="ComputerName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGuestsAssigned" ReturnType="Collection(IMModel.GuestAssigned)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSource" Mode="In" Type="String" />
+            <Parameter Name="PRs" Mode="In" Type="String" />
+            <Parameter Name="Markets" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGuestsUnassigned" ReturnType="Collection(IMModel.GuestUnassigned)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSource" Mode="In" Type="String" />
+            <Parameter Name="Markets" Mode="In" Type="String" />
+            <Parameter Name="OnlyAvailables" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetPRsAssigned">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSource" Mode="In" Type="String" />
+            <Parameter Name="Markets" Mode="In" Type="String" />
+            <Parameter Name="PRGuests" Mode="In" Type="Boolean" />
+            <Parameter Name="PRMembers" Mode="In" Type="Boolean" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -15231,6 +15275,27 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="Boolean" Name="glCTour" Nullable="false" />
           <Property Type="Byte" Name="glReimpresion" Nullable="true" />
           <Property Type="String" Name="rmN" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="GuestAssigned">
+          <Property Type="Int32" Name="guID" Nullable="false" />
+          <Property Type="String" Name="guRoomNum" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="guag" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="agN" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="guMemberShipNum" Nullable="true" MaxLength="15" />
+          <Property Type="Boolean" Name="guAvail" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GuestUnassigned">
+          <Property Type="Int32" Name="guID" Nullable="false" />
+          <Property Type="DateTime" Name="guCheckInD" Nullable="false" Precision="23" />
+          <Property Type="Boolean" Name="guCheckIn" Nullable="false" />
+          <Property Type="String" Name="guRoomNum" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="guag" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="agN" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="guMemberShipNum" Nullable="true" MaxLength="15" />
+          <Property Type="Boolean" Name="guAvail" Nullable="false" />
+          <Property Type="String" Name="guComments" Nullable="true" MaxLength="100" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -18113,6 +18178,36 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_SaveLoginLog" FunctionName="IMModel.Store.USP_OR_SaveLoginLog" />
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGuestsAssigned" FunctionName="IMModel.Store.USP_OR_GetGuestsAssigned">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GuestAssigned">
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="guRoomNum" ColumnName="guRoomNum" />
+                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
+                <ScalarProperty Name="guag" ColumnName="guag" />
+                <ScalarProperty Name="agN" ColumnName="agN" />
+                <ScalarProperty Name="guMemberShipNum" ColumnName="guMemberShipNum" />
+                <ScalarProperty Name="guAvail" ColumnName="guAvail" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGuestsUnassigned" FunctionName="IMModel.Store.USP_OR_GetGuestsUnassigned">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GuestUnassigned">
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="guCheckInD" ColumnName="guCheckInD" />
+                <ScalarProperty Name="guCheckIn" ColumnName="guCheckIn" />
+                <ScalarProperty Name="guRoomNum" ColumnName="guRoomNum" />
+                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
+                <ScalarProperty Name="guag" ColumnName="guag" />
+                <ScalarProperty Name="agN" ColumnName="agN" />
+                <ScalarProperty Name="guMemberShipNum" ColumnName="guMemberShipNum" />
+                <ScalarProperty Name="guAvail" ColumnName="guAvail" />
+                <ScalarProperty Name="guComments" ColumnName="guComments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetPRsAssigned" FunctionName="IMModel.Store.USP_OR_GetPRsAssigned" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

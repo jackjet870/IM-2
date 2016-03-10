@@ -724,5 +724,84 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveLoginLog", locationParameter, userParameter, computerNameParameter);
         }
+    
+        public virtual ObjectResult<GuestAssigned> USP_OR_GetGuestsAssigned(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string pRs, string markets)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var pRsParameter = pRs != null ?
+                new ObjectParameter("PRs", pRs) :
+                new ObjectParameter("PRs", typeof(string));
+    
+            var marketsParameter = markets != null ?
+                new ObjectParameter("Markets", markets) :
+                new ObjectParameter("Markets", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestAssigned>("USP_OR_GetGuestsAssigned", dateFromParameter, dateToParameter, leadSourceParameter, pRsParameter, marketsParameter);
+        }
+    
+        public virtual ObjectResult<GuestUnassigned> USP_OR_GetGuestsUnassigned(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets, Nullable<bool> onlyAvailables)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var marketsParameter = markets != null ?
+                new ObjectParameter("Markets", markets) :
+                new ObjectParameter("Markets", typeof(string));
+    
+            var onlyAvailablesParameter = onlyAvailables.HasValue ?
+                new ObjectParameter("OnlyAvailables", onlyAvailables) :
+                new ObjectParameter("OnlyAvailables", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestUnassigned>("USP_OR_GetGuestsUnassigned", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter, onlyAvailablesParameter);
+        }
+    
+        public virtual int USP_OR_GetPRsAssigned(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets, Nullable<bool> pRGuests, Nullable<bool> pRMembers)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var marketsParameter = markets != null ?
+                new ObjectParameter("Markets", markets) :
+                new ObjectParameter("Markets", typeof(string));
+    
+            var pRGuestsParameter = pRGuests.HasValue ?
+                new ObjectParameter("PRGuests", pRGuests) :
+                new ObjectParameter("PRGuests", typeof(bool));
+    
+            var pRMembersParameter = pRMembers.HasValue ?
+                new ObjectParameter("PRMembers", pRMembers) :
+                new ObjectParameter("PRMembers", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_GetPRsAssigned", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter, pRGuestsParameter, pRMembersParameter);
+        }
     }
 }

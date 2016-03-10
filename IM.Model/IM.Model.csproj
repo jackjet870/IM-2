@@ -217,6 +217,9 @@
     <Compile Include="GuestArrival.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="GuestAssigned.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="GuestAvailable.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -260,6 +263,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="GuestStatusType.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GuestUnassigned.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Hotel.cs">
