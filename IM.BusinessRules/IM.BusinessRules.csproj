@@ -63,6 +63,7 @@
     <Compile Include="BR\BRGuests.cs" />
     <Compile Include="BR\BRHelpers.cs" />
     <Compile Include="BR\BRLanguages.cs" />
+    <Compile Include="BR\BRPersonnelDayOff.cs" />
     <Compile Include="BR\BRRegions.cs" />
     <Compile Include="BR\BRUnavailableMotives.cs" />
     <Compile Include="BR\BRWarehouses.cs" />

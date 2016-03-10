@@ -203,7 +203,13 @@ namespace IM.Inhouse
 
     }
 
-    private void ChkguCheckIn_Click(object sender, RoutedEventArgs e)
+        private void btnDaysOff_Click(object sender, RoutedEventArgs e)
+        {
+            Forms.frmDaysOff frmDaysOff = new Forms.frmDaysOff(_userData, Model.Enums.TeamType.teamPRs);
+            frmDaysOff.Show();
+        }
+
+        private void ChkguCheckIn_Click(object sender, RoutedEventArgs e)
     {
       var ChkguCheckIn = sender as CheckBox;
       guCheckIn = ChkguCheckIn.IsChecked;
@@ -296,6 +302,8 @@ namespace IM.Inhouse
     }
 
     #endregion
+
+
   }
   #endregion
 }

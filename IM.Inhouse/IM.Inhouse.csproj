@@ -86,6 +86,9 @@
     <Compile Include="frmGuestLog.xaml.cs">
       <DependentUpon>frmGuestLog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmDaysOff.xaml.cs">
+      <DependentUpon>frmDaysOff.xaml</DependentUpon>
+    </Compile>
     <Compile Include="frmRegister.xaml.cs">
       <DependentUpon>frmRegister.xaml</DependentUpon>
     </Compile>
@@ -112,6 +115,7 @@
     <None Include="Properties\DataSources\IM.Model.GetGuestsPremanifest.datasource" />
     <None Include="Properties\DataSources\IM.Model.GetMarkets.datasource" />
     <None Include="Properties\DataSources\IM.Model.GuestArrival.datasource" />
+    <None Include="Properties\DataSources\IM.Model.PersonnelDayOff.datasource" />
     <None Include="Properties\DataSources\IM.Model.Premanifest.datasource" />
     <None Include="Properties\DataSources\IM.Model.USP_OR_GetGuestLog1.datasource" />
     <None Include="Properties\Settings.settings">
@@ -142,6 +146,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmDaysOff.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="frmRegister.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -163,6 +171,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\IM.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="About.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
