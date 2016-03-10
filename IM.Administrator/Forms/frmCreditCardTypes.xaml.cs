@@ -126,12 +126,25 @@ namespace IM.Administrator.Forms
       _blnEdit = PermisionHelper.EditPermision("SALES");
       btnAdd.IsEnabled = _blnEdit;
       LoadCreditCardTypes();
+    }
+    #endregion
+    #region KeyboardFocusChange
+    /// <summary>
+    /// verfica que teclas están presionadas
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 09/03/2016
+    /// </history>
+    private void Window_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
     #endregion
-
     #region KeyDownForm
     /// <summary>
     /// Valida las teclas presionadas para cambiar la barra de estado
@@ -182,8 +195,11 @@ namespace IM.Administrator.Forms
       frmCrediCard.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
       frmCrediCard.creditCardType = creditCardType;
       frmCrediCard.ShowDialog();
-    } 
+    }
     #endregion
+
     #endregion
+
+    
   }
 }

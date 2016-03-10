@@ -105,9 +105,6 @@ namespace IM.Administrator.Forms
     {
       _blnEdit = PermisionHelper.EditPermision("CURRENCIES");
       LoadCurrencies();
-      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
-      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
-      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
     #endregion
 
@@ -137,6 +134,23 @@ namespace IM.Administrator.Forms
             break;
           }
       }
+    }
+    #endregion
+
+    #region KeyBoardFocusChage
+    /// <summary>
+    /// Verfica que teclas están presionadas
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 09/03/2016
+    /// </history>
+    private void Window_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
     #endregion
 
@@ -180,9 +194,11 @@ namespace IM.Administrator.Forms
       }
 
       StatusBarReg.Content = lstCurrencies.Count + " Currencies.";
-    } 
-    #endregion
+    }
     #endregion
 
+    #endregion
+
+    
   }
 }

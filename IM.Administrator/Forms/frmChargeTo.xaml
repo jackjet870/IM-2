@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms"
-        mc:Ignorable="d" Uid="frmChargeTo" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" Uid="frmChargeTo" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
         Title="Charge To" Height="307" Width="370" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->

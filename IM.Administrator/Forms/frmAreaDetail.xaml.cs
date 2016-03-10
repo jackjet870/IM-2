@@ -13,7 +13,7 @@ namespace IM.Administrator.Forms
   {
 
     public Area area;//Variable que recibe la entidad
-    public ModeOpen mode;//Modo en el que se abrirá la ventana    
+    public ModeOpen mode;//Modo en el que se abrirá la ventana        
     public frmAreaDetalle()
     {
       InitializeComponent();
@@ -223,9 +223,9 @@ namespace IM.Administrator.Forms
           }
         }
       }
-    } 
-    #endregion
+    }
     #endregion
 
+    #endregion    
   }
 }

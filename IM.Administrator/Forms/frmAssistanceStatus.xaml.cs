@@ -37,12 +37,26 @@ namespace IM.Administrator.Forms
     {
       _blnEdit = Helpers.PermisionHelper.EditPermision("SALES");
       btnAdd.IsEnabled = _blnEdit;
-      LoadAssitance();
+      LoadAssitance();      
+    }
+
+    #endregion
+
+    #region KeyBoardChage
+    /// <summary>
+    /// Verifica teclas oprimidas
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel created 09/03/2016
+    /// </history>
+    private void Window_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
-
     #endregion
 
     #region KeyDown Form
@@ -175,8 +189,10 @@ namespace IM.Administrator.Forms
         dgrAssitance.SelectedIndex = 0;
       }
       StatusBarReg.Content = lstAssistance.Count + " Assistance Status.";
-    } 
+    }
     #endregion
+
     #endregion
+    
   }
 }

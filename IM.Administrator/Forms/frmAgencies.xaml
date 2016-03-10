@@ -2,8 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.Administrator.Forms" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" ResizeMode="NoResize"
         mc:Ignorable="d" Uid="frmAgencies" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner"
         Title="Agencies" Height="307" Width="340">
     <DockPanel LastChildFill="True">
@@ -12,7 +12,7 @@
             <StatusBarItem Grid.Column="0" x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
             <StatusBarItem Grid.Column="1" x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>
             <StatusBarItem Grid.Column="2" x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
-            <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0 Charge To." HorizontalAlignment="Right" Width="75"/>
+            <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0 Agencies." HorizontalAlignment="Right" Width="75"/>
         </StatusBar>
         <!--#endregion-->
         <!--#region toolbar -->
@@ -27,12 +27,6 @@
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/button_add.png" />
                     <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Add</TextBlock>
-                </StackPanel>
-            </Button>
-            <Button  Name="btnEdit" ToolTip="Edit an Agency." IsEnabled="False" Click="btnEdit_Click">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/btnEdit.png" />
-                    <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Edit</TextBlock>
                 </StackPanel>
             </Button>
             <Button Name="btnSearch" ToolTip="Search an Agency. " Click="btnSearch_Click">

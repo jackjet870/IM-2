@@ -48,6 +48,20 @@ namespace IM.Administrator.Forms
       _blnEdit = PermisionHelper.EditPermision("AGENCIES");
       LoadAgencies();
       btnAdd.IsEnabled = _blnEdit;
+    }
+    #endregion
+
+    #region keyboardFocusChage
+    /// <summary>
+    /// Verifica que teclas están presionadas
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 09/03/2016
+    /// </history>
+    private void Window_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
@@ -100,19 +114,10 @@ namespace IM.Administrator.Forms
 
     #region Boton agregar
     private void btnAdd_Click(object sender, RoutedEventArgs e)
-    {
-
+    {      
     }
     #endregion
-
-    #region Boton editar
-
-    private void btnEdit_Click(object sender, RoutedEventArgs e)
-    {
-
-    }
-    #endregion
-
+    
     #region Boton Buscar
 
     private void btnSearch_Click(object sender, RoutedEventArgs e)
@@ -134,14 +139,9 @@ namespace IM.Administrator.Forms
       dgrAgencies.ItemsSource = lstAgencies;
       if(lstAgencies.Count>0)
       {
-        btnEdit.IsEnabled = _blnEdit;
         dgrAgencies.SelectedIndex = 0;
       }
-      else
-      {
-        btnEdit.IsEnabled = false;
-      }
-
+      StatusBarReg.Content = lstAgencies.Count + " Agencies.";
     }
     #endregion
 

@@ -38,9 +38,6 @@ namespace IM.Administrator.Forms
       _blnEdit = Helpers.PermisionHelper.EditPermision("HOSTINVIT");
       btnAdd.IsEnabled = _blnEdit;
       LoadChargeTo();
-      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
-      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
-      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
 
     #endregion
@@ -104,7 +101,23 @@ namespace IM.Administrator.Forms
       LoadChargeTo();
     }
     #endregion
+    #region KeyBoardChange
+    /// <summary>
+    /// Verifica que teclas están oprimidas
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created
+    /// </history>
+    private void Window_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
 
+      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+    }
+    #endregion
     #region Search
     /// <summary>
     /// Abre la ventana de busqueda o filtros
@@ -169,8 +182,10 @@ namespace IM.Administrator.Forms
       }
 
       StatusBarReg.Content = lstChargeTo.Count + " Charge To.";
-    } 
+    }
     #endregion
+
     #endregion
+    
   }
 }

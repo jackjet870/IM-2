@@ -22,7 +22,7 @@ namespace IM.Administrator.Forms
       InitializeComponent();
     }
 
-    #region metodos de los controles
+    #region eventos de los controles
     #region Loaded
     /// <summary>
     /// Carga los datos del formulario
@@ -36,13 +36,25 @@ namespace IM.Administrator.Forms
     {
       _blnEdit = Helpers.PermisionHelper.EditPermision("LOCATIONS");
       btnAdd.IsEnabled = _blnEdit;
-      LoadAreas();
+      LoadAreas();      
+    }
+    #endregion
+    #region KeyBoardFocusChaged
+    /// <summary>
+    /// Verifica teclas activas
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 09/03/2016
+    /// </history>
+    private void Window_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
     #endregion
-
 
     #region KeyDown Form
     /// <summary>
@@ -161,7 +173,7 @@ namespace IM.Administrator.Forms
     } 
     #endregion
     #endregion
-    #region eventos de los controles
+    #region METODOS
     /// <summary>
     /// carga la lista de Areas
     /// </summary>
@@ -181,5 +193,6 @@ namespace IM.Administrator.Forms
     }
 
     #endregion
+    
   }
 }
