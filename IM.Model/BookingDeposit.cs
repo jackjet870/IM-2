@@ -31,9 +31,9 @@ namespace IM.Model
         public Nullable<System.DateTime> bdEntryDCXC { get; set; }
         public string bdExpD { get; set; }
     
-        public virtual CreditCardType CreditCardType { get; set; }
-        public virtual PaymentPlace PaymentPlace { get; set; }
-        public virtual PaymentType PaymentType { get; set; }
-        public virtual DepositRefund DepositsRefund { get; set; }
+        public virtual CreditCardType CreditCardType { internal get; set; }
+        public virtual PaymentPlace PaymentPlace { internal get; set; }
+        public virtual PaymentType PaymentType { internal get; set; }
+        public virtual DepositRefund DepositsRefund { internal get; set; }
     }
 }

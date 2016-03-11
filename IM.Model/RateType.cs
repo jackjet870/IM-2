@@ -26,8 +26,8 @@ namespace IM.Model
         public bool raA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MealTicketFolio> MealTicketFolios { get; set; }
+        public virtual ICollection<MealTicketFolio> MealTicketFolios { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MealTicket> MealTickets { get; set; }
+        public virtual ICollection<MealTicket> MealTickets { internal get; set; }
     }
 }

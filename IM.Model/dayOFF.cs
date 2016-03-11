@@ -24,6 +24,6 @@ namespace IM.Model
         public bool doSunday { get; set; }
         public string doList { get; set; }
     
-        public virtual Personnel Personnel { get; set; }
+        public virtual Personnel Personnel { internal get; set; }
     }
 }

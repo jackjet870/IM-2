@@ -18,7 +18,7 @@ namespace IM.Model
         public CECOCEBEType()
         {
             this.Activities = new HashSet<Activity>();
-            this.IncomesCECOCEBETYpes = new HashSet<IncomeCECOCEBEType>();
+            this.IncomesCECOCEBETypes = new HashSet<IncomeCECOCEBEType>();
         }
     
         public string ceID { get; set; }
@@ -26,8 +26,8 @@ namespace IM.Model
         public string ceType { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Activity> Activities { get; set; }
+        public virtual ICollection<Activity> Activities { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<IncomeCECOCEBEType> IncomesCECOCEBETYpes { get; set; }
+        public virtual ICollection<IncomeCECOCEBEType> IncomesCECOCEBETypes { internal get; set; }
     }
 }

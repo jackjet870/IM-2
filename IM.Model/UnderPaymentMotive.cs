@@ -26,8 +26,8 @@ namespace IM.Model
         public bool upA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceipt> GiftsReceipts { get; set; }
+        public virtual ICollection<GiftsReceipt> GiftsReceipts { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceiptLog> GiftsReceiptsLogs { get; set; }
+        public virtual ICollection<GiftsReceiptLog> GiftsReceiptsLogs { internal get; set; }
     }
 }

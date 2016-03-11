@@ -25,6 +25,6 @@ namespace IM.Model
         public bool mgA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MembershipType> MembershipTypes { get; set; }
+        public virtual ICollection<MembershipType> MembershipTypes { internal get; set; }
     }
 }

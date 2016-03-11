@@ -18,7 +18,7 @@ namespace IM.Model
         public MembershipType()
         {
             this.Sales = new HashSet<Sale>();
-            this.Sales1 = new HashSet<Sale>();
+            this.Sales_MembershipTypeGlobal = new HashSet<Sale>();
             this.SalesLogs = new HashSet<SaleLog>();
         }
     
@@ -30,12 +30,12 @@ namespace IM.Model
         public decimal mtFrom { get; set; }
         public decimal mtTo { get; set; }
     
-        public virtual MembershipGroup MembershipGroup { get; set; }
+        public virtual MembershipGroup MembershipGroup { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sale> Sales { get; set; }
+        public virtual ICollection<Sale> Sales { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sale> Sales1 { get; set; }
+        public virtual ICollection<Sale> Sales_MembershipTypeGlobal { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SaleLog> SalesLogs { get; set; }
+        public virtual ICollection<SaleLog> SalesLogs { internal get; set; }
     }
 }

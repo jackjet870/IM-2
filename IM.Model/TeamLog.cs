@@ -22,8 +22,8 @@ namespace IM.Model
         public string tlPlaceID { get; set; }
         public string tlTeam { get; set; }
     
-        public virtual Personnel Personnel { get; set; }
-        public virtual Personnel Personnel1 { get; set; }
-        public virtual TeamType TeamsType { get; set; }
+        public virtual Personnel Personnel { internal get; set; }
+        public virtual Personnel Personnel_ChangedBy { internal get; set; }
+        public virtual TeamType TeamsType { internal get; set; }
     }
 }

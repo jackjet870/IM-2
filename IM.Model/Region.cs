@@ -26,8 +26,8 @@ namespace IM.Model
         public bool rgA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Area> Areas { get; set; }
+        public virtual ICollection<Area> Areas { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LeadSource> LeadSources { get; set; }
+        public virtual ICollection<LeadSource> LeadSources { internal get; set; }
     }
 }

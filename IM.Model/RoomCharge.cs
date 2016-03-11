@@ -18,6 +18,6 @@ namespace IM.Model
         public string rhFolio { get; set; }
         public int rhConsecutive { get; set; }
     
-        public virtual LeadSource LeadSource { get; set; }
+        public virtual LeadSource LeadSource { internal get; set; }
     }
 }

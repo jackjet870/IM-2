@@ -18,7 +18,7 @@ namespace IM.Model
         public byte sjsp { get; set; }
         public decimal sjScore { get; set; }
     
-        public virtual LeadSource LeadSource { get; set; }
-        public virtual ScoreRuleConcept ScoreRulesConcept { get; set; }
+        public virtual LeadSource LeadSource { internal get; set; }
+        public virtual ScoreRuleConcept ScoreRuleConcept { internal get; set; }
     }
 }

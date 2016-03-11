@@ -19,7 +19,7 @@ namespace IM.Model
         public string mfFolio { get; set; }
         public int mfra { get; set; }
     
-        public virtual RateType RateType { get; set; }
-        public virtual SalesRoom SalesRoom { get; set; }
+        public virtual RateType RateType { internal get; set; }
+        public virtual SalesRoom SalesRoom { internal get; set; }
     }
 }

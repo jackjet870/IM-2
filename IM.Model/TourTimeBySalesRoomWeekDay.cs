@@ -20,6 +20,6 @@ namespace IM.Model
         public System.DateTime ttPickUpT { get; set; }
         public byte ttMaxBooks { get; set; }
     
-        public virtual SalesRoom SalesRoom { get; set; }
+        public virtual SalesRoom SalesRoom { internal get; set; }
     }
 }

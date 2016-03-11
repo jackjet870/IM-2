@@ -19,6 +19,6 @@ namespace IM.Model
         public string mksCode { get; set; }
         public string mkspg { get; set; }
     
-        public virtual Program Program { get; set; }
+        public virtual Program Program { internal get; set; }
     }
 }

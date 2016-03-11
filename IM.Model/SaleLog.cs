@@ -57,30 +57,30 @@ namespace IM.Model
         public Nullable<decimal> slOverPack { get; set; }
         public string slChangedBy { get; set; }
     
-        public virtual Guest Guest { get; set; }
-        public virtual LeadSource LeadSource { get; set; }
-        public virtual Location Location { get; set; }
-        public virtual MembershipType MembershipType { get; set; }
-        public virtual Personnel Personnel { get; set; }
-        public virtual Personnel Personnel1 { get; set; }
-        public virtual Personnel Personnel2 { get; set; }
-        public virtual Personnel Personnel3 { get; set; }
-        public virtual Personnel Personnel4 { get; set; }
-        public virtual Personnel Personnel5 { get; set; }
-        public virtual Personnel Personnel6 { get; set; }
-        public virtual Personnel Personnel7 { get; set; }
-        public virtual Personnel Personnel8 { get; set; }
-        public virtual Personnel Personnel9 { get; set; }
-        public virtual Personnel Personnel10 { get; set; }
-        public virtual Personnel Personnel11 { get; set; }
-        public virtual Personnel Personnel12 { get; set; }
-        public virtual Personnel Personnel13 { get; set; }
-        public virtual Personnel Personnel14 { get; set; }
-        public virtual Personnel Personnel15 { get; set; }
-        public virtual Personnel Personnel16 { get; set; }
-        public virtual Sale Sale { get; set; }
-        public virtual Sale Sale1 { get; set; }
-        public virtual SalesRoom SalesRoom { get; set; }
-        public virtual SaleType SaleType { get; set; }
+        public virtual Guest Guest { internal get; set; }
+        public virtual LeadSource LeadSource { internal get; set; }
+        public virtual Location Location { internal get; set; }
+        public virtual MembershipType MembershipType { internal get; set; }
+        public virtual Personnel Personnel { internal get; set; }
+        public virtual Personnel Personnel_Closer1 { internal get; set; }
+        public virtual Personnel Personnel_Closer2 { internal get; set; }
+        public virtual Personnel Personnel_Closer3 { internal get; set; }
+        public virtual Personnel Personnel_CloserCaptain1 { internal get; set; }
+        public virtual Personnel Personnel_Exit1 { internal get; set; }
+        public virtual Personnel Personnel_Exit2 { internal get; set; }
+        public virtual Personnel Personnel_Liner1 { internal get; set; }
+        public virtual Personnel Personnel_Liner2 { internal get; set; }
+        public virtual Personnel Personnel_LinerCaptain1 { internal get; set; }
+        public virtual Personnel Personnel_Podium { internal get; set; }
+        public virtual Personnel Personnel_PR1 { internal get; set; }
+        public virtual Personnel Personnel_PR2 { internal get; set; }
+        public virtual Personnel Personnel_PR3 { internal get; set; }
+        public virtual Personnel Personnel_PRCaptain1 { internal get; set; }
+        public virtual Personnel Personnel_PRCaptain2 { internal get; set; }
+        public virtual Personnel Personnel_VLO { internal get; set; }
+        public virtual Sale Sale { internal get; set; }
+        public virtual Sale Sale_Reference { internal get; set; }
+        public virtual SalesRoom SalesRoom { internal get; set; }
+        public virtual SaleType SaleType { internal get; set; }
     }
 }

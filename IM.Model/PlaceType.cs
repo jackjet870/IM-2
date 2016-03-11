@@ -18,7 +18,7 @@ namespace IM.Model
         public PlaceType()
         {
             this.Goals = new HashSet<Goal>();
-            this.PersLSSRs = new HashSet<PersonnelAccess>();
+            this.PersonnelAccess = new HashSet<PersonnelAccess>();
         }
     
         public string pyID { get; set; }
@@ -26,8 +26,8 @@ namespace IM.Model
         public bool pyA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Goal> Goals { get; set; }
+        public virtual ICollection<Goal> Goals { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PersonnelAccess> PersLSSRs { get; set; }
+        public virtual ICollection<PersonnelAccess> PersonnelAccess { internal get; set; }
     }
 }

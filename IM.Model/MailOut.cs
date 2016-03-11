@@ -38,6 +38,6 @@ namespace IM.Model
         public string moCCountry { get; set; }
         public bool moA { get; set; }
     
-        public virtual LeadSource LeadSource { get; set; }
+        public virtual LeadSource LeadSource { internal get; set; }
     }
 }

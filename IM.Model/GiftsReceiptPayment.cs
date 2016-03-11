@@ -23,11 +23,11 @@ namespace IM.Model
         public string gype { get; set; }
         public string gybk { get; set; }
     
-        public virtual Bank Bank { get; set; }
-        public virtual Currency Currency { get; set; }
-        public virtual GiftsReceipt GiftsReceipt { get; set; }
-        public virtual PaymentType PaymentType { get; set; }
-        public virtual Personnel Personnel { get; set; }
-        public virtual SourcePayment SourcePayment { get; set; }
+        public virtual Bank Bank { internal get; set; }
+        public virtual Currency Currency { internal get; set; }
+        public virtual GiftsReceipt GiftsReceipt { internal get; set; }
+        public virtual PaymentType PaymentType { internal get; set; }
+        public virtual Personnel Personnel { internal get; set; }
+        public virtual SourcePayment SourcePayment { internal get; set; }
     }
 }

@@ -37,8 +37,8 @@ namespace IM.Model
         public decimal gkPriceAdult { get; set; }
         public decimal gkPriceExtraAdult { get; set; }
     
-        public virtual Gift Gift { get; set; }
-        public virtual Gift Gift1 { get; set; }
-        public virtual GiftsReceipt GiftsReceipt { get; set; }
+        public virtual Gift Gift_Item { internal get; set; }
+        public virtual Gift Gift_Package { internal get; set; }
+        public virtual GiftsReceipt GiftsReceipt { internal get; set; }
     }
 }

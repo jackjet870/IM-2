@@ -19,14 +19,14 @@ namespace IM.Model
         {
             this.GiftsInventories = new HashSet<GiftInventory>();
             this.GiftsLogs = new HashSet<GiftLog>();
-            this.GiftsPacks = new HashSet<GiftPackageItem>();
-            this.GiftsPacks1 = new HashSet<GiftPackageItem>();
-            this.GiftsReceiptsCs = new HashSet<GiftsReceiptDetail>();
-            this.GiftsReceiptsPacks = new HashSet<GiftsReceiptPackageItem>();
-            this.GiftsReceiptsPacks1 = new HashSet<GiftsReceiptPackageItem>();
+            this.GiftsPackagesItems = new HashSet<GiftPackageItem>();
+            this.GiftsPackages = new HashSet<GiftPackageItem>();
+            this.GiftsReceiptsDetails = new HashSet<GiftsReceiptDetail>();
+            this.GiftsReceiptsPackagesItems = new HashSet<GiftsReceiptPackageItem>();
+            this.GiftsReceiptsPackages = new HashSet<GiftsReceiptPackageItem>();
             this.GuestsPromotions = new HashSet<GuestPromotion>();
-            this.InvitsGifts = new HashSet<InvitationGift>();
-            this.WhsMovs = new HashSet<WarehouseMovement>();
+            this.InvitationsGifts = new HashSet<InvitationGift>();
+            this.WarehouseMovements = new HashSet<WarehouseMovement>();
             this.Agencies = new HashSet<Agency>();
             this.Locations = new HashSet<Location>();
         }
@@ -65,30 +65,30 @@ namespace IM.Model
         public int giQty { get; set; }
         public Nullable<bool> giDiscount { get; set; }
     
-        public virtual Product Product { get; set; }
+        public virtual Product Product { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftInventory> GiftsInventories { get; set; }
+        public virtual ICollection<GiftInventory> GiftsInventories { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftLog> GiftsLogs { get; set; }
+        public virtual ICollection<GiftLog> GiftsLogs { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftPackageItem> GiftsPacks { get; set; }
+        public virtual ICollection<GiftPackageItem> GiftsPackagesItems { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftPackageItem> GiftsPacks1 { get; set; }
+        public virtual ICollection<GiftPackageItem> GiftsPackages { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceiptDetail> GiftsReceiptsCs { get; set; }
+        public virtual ICollection<GiftsReceiptDetail> GiftsReceiptsDetails { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceiptPackageItem> GiftsReceiptsPacks { get; set; }
+        public virtual ICollection<GiftsReceiptPackageItem> GiftsReceiptsPackagesItems { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceiptPackageItem> GiftsReceiptsPacks1 { get; set; }
+        public virtual ICollection<GiftsReceiptPackageItem> GiftsReceiptsPackages { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GuestPromotion> GuestsPromotions { get; set; }
+        public virtual ICollection<GuestPromotion> GuestsPromotions { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InvitationGift> InvitsGifts { get; set; }
+        public virtual ICollection<InvitationGift> InvitationsGifts { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<WarehouseMovement> WhsMovs { get; set; }
+        public virtual ICollection<WarehouseMovement> WarehouseMovements { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Agency> Agencies { get; set; }
+        public virtual ICollection<Agency> Agencies { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Location> Locations { get; set; }
+        public virtual ICollection<Location> Locations { internal get; set; }
     }
 }

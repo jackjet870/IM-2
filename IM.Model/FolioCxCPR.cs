@@ -19,6 +19,6 @@ namespace IM.Model
         public int fcpFrom { get; set; }
         public int fcpTo { get; set; }
     
-        public virtual Personnel Personnel { get; set; }
+        public virtual Personnel Personnel { internal get; set; }
     }
 }

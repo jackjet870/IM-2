@@ -18,6 +18,6 @@ namespace IM.Model
         public decimal wsCompany { get; set; }
         public string wsApplication { get; set; }
     
-        public virtual Club Club { get; set; }
+        public virtual Club Club { internal get; set; }
     }
 }

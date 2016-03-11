@@ -18,6 +18,6 @@ namespace IM.Model
         public System.DateTime sdStartD { get; set; }
         public System.DateTime sdEndD { get; set; }
     
-        public virtual Season Season { get; set; }
+        public virtual Season Season { internal get; set; }
     }
 }

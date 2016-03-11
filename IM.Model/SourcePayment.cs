@@ -25,6 +25,6 @@ namespace IM.Model
         public bool sbA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceiptPayment> GiftsReceiptsPayments { get; set; }
+        public virtual ICollection<GiftsReceiptPayment> GiftsReceiptsPayments { internal get; set; }
     }
 }

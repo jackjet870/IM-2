@@ -28,12 +28,12 @@ namespace IM.Model
         public bool umA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Agency> Agencies { get; set; }
+        public virtual ICollection<Agency> Agencies { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contract> Contracts { get; set; }
+        public virtual ICollection<Contract> Contracts { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Country> Countries { get; set; }
+        public virtual ICollection<Country> Countries { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GuestLog> GuestLogs { get; set; }
+        public virtual ICollection<GuestLog> GuestLogs { internal get; set; }
     }
 }

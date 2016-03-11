@@ -21,6 +21,6 @@ namespace IM.Model
         public bool reIsSection { get; set; }
         public string reText { get; set; }
     
-        public virtual Language Language { get; set; }
+        public virtual Language Language { internal get; set; }
     }
 }

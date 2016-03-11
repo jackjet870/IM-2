@@ -23,11 +23,11 @@ namespace IM.Model
         public string schOldSalesman { get; set; }
         public string schNewSalesman { get; set; }
     
-        public virtual Personnel Personnel { get; set; }
-        public virtual Personnel Personnel1 { get; set; }
-        public virtual Personnel Personnel2 { get; set; }
-        public virtual Personnel Personnel3 { get; set; }
-        public virtual Role Role { get; set; }
-        public virtual Sale Sale { get; set; }
+        public virtual Personnel Personnel_AuthorizedBy { internal get; set; }
+        public virtual Personnel Personnel_MadeBy { internal get; set; }
+        public virtual Personnel Personnel_NewSalesman { internal get; set; }
+        public virtual Personnel Personnel_OldSalesman { internal get; set; }
+        public virtual Role Role { internal get; set; }
+        public virtual Sale Sale { internal get; set; }
     }
 }

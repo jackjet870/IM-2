@@ -30,9 +30,9 @@ namespace IM.Model
         public decimal igPriceMinor { get; set; }
         public decimal igPriceExtraAdult { get; set; }
     
-        public virtual ChargeTo ChargeTo { get; set; }
-        public virtual Gift Gift { get; set; }
-        public virtual GiftsReceipt GiftsReceipt { get; set; }
-        public virtual Guest Guest { get; set; }
+        public virtual ChargeTo ChargeTo { internal get; set; }
+        public virtual Gift Gift { internal get; set; }
+        public virtual GiftsReceipt GiftsReceipt { internal get; set; }
+        public virtual Guest Guest { internal get; set; }
     }
 }

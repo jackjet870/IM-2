@@ -18,7 +18,7 @@ namespace IM.Model
         public Language()
         {
             this.Countries = new HashSet<Country>();
-            this.InvitsTexts = new HashSet<InvitationText>();
+            this.InvitationsTexts = new HashSet<InvitationText>();
             this.MailOutTexts = new HashSet<MailOutText>();
             this.ProductsLegends = new HashSet<ProductLegend>();
             this.ReportsTexts = new HashSet<ReportText>();
@@ -47,14 +47,14 @@ namespace IM.Model
         public string laExtraInfo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Country> Countries { get; set; }
+        public virtual ICollection<Country> Countries { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InvitationText> InvitsTexts { get; set; }
+        public virtual ICollection<InvitationText> InvitationsTexts { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MailOutText> MailOutTexts { get; set; }
+        public virtual ICollection<MailOutText> MailOutTexts { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductLegend> ProductsLegends { get; set; }
+        public virtual ICollection<ProductLegend> ProductsLegends { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReportText> ReportsTexts { get; set; }
+        public virtual ICollection<ReportText> ReportsTexts { internal get; set; }
     }
 }

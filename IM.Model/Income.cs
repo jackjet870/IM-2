@@ -17,7 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Income()
         {
-            this.IncomesCECOCEBETYpes = new HashSet<IncomeCECOCEBEType>();
+            this.IncomesCECOCEBETypes = new HashSet<IncomeCECOCEBEType>();
         }
     
         public string icID { get; set; }
@@ -25,7 +25,7 @@ namespace IM.Model
         public string icpg { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<IncomeCECOCEBEType> IncomesCECOCEBETYpes { get; set; }
-        public virtual Program Program { get; set; }
+        public virtual ICollection<IncomeCECOCEBEType> IncomesCECOCEBETypes { internal get; set; }
+        public virtual Program Program { internal get; set; }
     }
 }

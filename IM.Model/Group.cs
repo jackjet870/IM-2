@@ -18,6 +18,6 @@ namespace IM.Model
         public string gbN { get; set; }
         public int gbgu { get; set; }
     
-        public virtual Guest Guest { get; set; }
+        public virtual Guest Guest { internal get; set; }
     }
 }

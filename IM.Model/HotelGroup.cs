@@ -25,6 +25,6 @@ namespace IM.Model
         public bool hgA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Hotel> Hotels { get; set; }
+        public virtual ICollection<Hotel> Hotels { internal get; set; }
     }
 }

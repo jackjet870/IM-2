@@ -32,7 +32,7 @@ namespace IM.Model
         public decimal ggPriceMinors { get; set; }
         public decimal ggPriceExtraAdults { get; set; }
     
-        public virtual Gift Gift { get; set; }
-        public virtual Personnel Personnel { get; set; }
+        public virtual Gift Gift { internal get; set; }
+        public virtual Personnel Personnel { internal get; set; }
     }
 }

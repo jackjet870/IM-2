@@ -18,7 +18,7 @@ namespace IM.Model
         public string iccic { get; set; }
         public string iccCEBEID { get; set; }
     
-        public virtual CECOCEBEType CECOCEBEType { get; set; }
-        public virtual Income Income { get; set; }
+        public virtual CECOCEBEType CECOCEBEType { internal get; set; }
+        public virtual Income Income { internal get; set; }
     }
 }

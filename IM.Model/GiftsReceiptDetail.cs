@@ -42,8 +42,8 @@ namespace IM.Model
         public decimal gePriceExtraAdult { get; set; }
         public bool geSale { get; set; }
     
-        public virtual ChargeTo ChargeTo { get; set; }
-        public virtual Gift Gift { get; set; }
-        public virtual GiftsReceipt GiftsReceipt { get; set; }
+        public virtual ChargeTo ChargeTo { internal get; set; }
+        public virtual Gift Gift { internal get; set; }
+        public virtual GiftsReceipt GiftsReceipt { internal get; set; }
     }
 }

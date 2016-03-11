@@ -18,7 +18,7 @@ namespace IM.Model
         public LeadSource()
         {
             this.GiftsReceipts = new HashSet<GiftsReceipt>();
-            this.InvitsTexts = new HashSet<InvitationText>();
+            this.InvitationsTexts = new HashSet<InvitationText>();
             this.MailOuts = new HashSet<MailOut>();
             this.MailOutTexts = new HashSet<MailOutText>();
             this.RoomCharges = new HashSet<RoomCharge>();
@@ -73,33 +73,33 @@ namespace IM.Model
         public string lsPropertyOpera { get; set; }
         public string lsCECOID { get; set; }
     
-        public virtual Area Area { get; set; }
+        public virtual Area Area { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceipt> GiftsReceipts { get; set; }
-        public virtual Hotel Hotel { get; set; }
+        public virtual ICollection<GiftsReceipt> GiftsReceipts { internal get; set; }
+        public virtual Hotel Hotel { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InvitationText> InvitsTexts { get; set; }
-        public virtual Personnel Personnel { get; set; }
-        public virtual Program Program { get; set; }
-        public virtual Region Region { get; set; }
-        public virtual SegmentByLeadSource SegmentsByLeadSource { get; set; }
-        public virtual Zone Zone { get; set; }
+        public virtual ICollection<InvitationText> InvitationsTexts { internal get; set; }
+        public virtual Personnel Personnel { internal get; set; }
+        public virtual Program Program { internal get; set; }
+        public virtual Region Region { internal get; set; }
+        public virtual SegmentByLeadSource SegmentByLeadSource { internal get; set; }
+        public virtual Zone Zone { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MailOut> MailOuts { get; set; }
+        public virtual ICollection<MailOut> MailOuts { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MailOutText> MailOutTexts { get; set; }
+        public virtual ICollection<MailOutText> MailOutTexts { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RoomCharge> RoomCharges { get; set; }
+        public virtual ICollection<RoomCharge> RoomCharges { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sale> Sales { get; set; }
+        public virtual ICollection<Sale> Sales { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SaleLog> SalesLogs { get; set; }
-        public virtual ScoreRuleByLeadSource ScoreRulesByLeadSource { get; set; }
+        public virtual ICollection<SaleLog> SalesLogs { internal get; set; }
+        public virtual ScoreRuleByLeadSource ScoreRuleByLeadSource { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ScoreRuleByLeadSourceDetail> ScoreRulesByLeadSourceDetails { get; set; }
+        public virtual ICollection<ScoreRuleByLeadSourceDetail> ScoreRulesByLeadSourceDetails { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Agency> Agencies { get; set; }
+        public virtual ICollection<Agency> Agencies { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Notice> Notices { get; set; }
+        public virtual ICollection<Notice> Notices { internal get; set; }
     }
 }

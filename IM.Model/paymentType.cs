@@ -29,14 +29,14 @@ namespace IM.Model
         public bool ptA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BookingDeposit> BookingDeposits { get; set; }
+        public virtual ICollection<BookingDeposit> BookingDeposits { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceipt> GiftsReceipts { get; set; }
+        public virtual ICollection<GiftsReceipt> GiftsReceipts { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceiptLog> GiftsReceiptsLogs { get; set; }
+        public virtual ICollection<GiftsReceiptLog> GiftsReceiptsLogs { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceiptPayment> GiftsReceiptsPayments { get; set; }
+        public virtual ICollection<GiftsReceiptPayment> GiftsReceiptsPayments { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Guest> Guests { get; set; }
+        public virtual ICollection<Guest> Guests { internal get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ChargeCalculationType()
         {
-            this.ChargeToes = new HashSet<ChargeTo>();
+            this.ChargeTos = new HashSet<ChargeTo>();
         }
     
         public string caID { get; set; }
@@ -25,6 +25,6 @@ namespace IM.Model
         public bool caA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ChargeTo> ChargeToes { get; set; }
+        public virtual ICollection<ChargeTo> ChargeTos { internal get; set; }
     }
 }

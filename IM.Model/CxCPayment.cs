@@ -23,7 +23,7 @@ namespace IM.Model
         public System.DateTime cxD { get; set; }
         public Nullable<int> cxSeq { get; set; }
     
-        public virtual GiftsReceipt GiftsReceipt { get; set; }
-        public virtual Personnel Personnel { get; set; }
+        public virtual GiftsReceipt GiftsReceipt { internal get; set; }
+        public virtual Personnel Personnel { internal get; set; }
     }
 }

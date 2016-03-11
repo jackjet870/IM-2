@@ -23,7 +23,7 @@ namespace IM.Model
         public Nullable<System.DateTime> sqMealTicketsCloseD { get; set; }
         public Nullable<System.DateTime> sqSalesCloseD { get; set; }
     
-        public virtual Personnel Personnel { get; set; }
-        public virtual SalesRoom SalesRoom { get; set; }
+        public virtual Personnel Personnel { internal get; set; }
+        public virtual SalesRoom SalesRoom { internal get; set; }
     }
 }

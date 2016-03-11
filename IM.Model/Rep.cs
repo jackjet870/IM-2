@@ -24,6 +24,6 @@ namespace IM.Model
         public bool rpA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Agency> Agencies { get; set; }
+        public virtual ICollection<Agency> Agencies { internal get; set; }
     }
 }

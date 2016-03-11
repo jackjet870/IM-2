@@ -25,6 +25,6 @@ namespace IM.Model
         public bool deA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Personnel> Personnels { get; set; }
+        public virtual ICollection<Personnel> Personnels { internal get; set; }
     }
 }

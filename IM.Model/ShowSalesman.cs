@@ -18,7 +18,7 @@ namespace IM.Model
         public string shpe { get; set; }
         public bool shUp { get; set; }
     
-        public virtual Guest Guest { get; set; }
-        public virtual Personnel Personnel { get; set; }
+        public virtual Guest Guest { internal get; set; }
+        public virtual Personnel Personnel { internal get; set; }
     }
 }

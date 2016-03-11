@@ -26,6 +26,6 @@ namespace IM.Model
         public string pmToolTipText { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PersonnelPermission> PersonnelPermissions { get; set; }
+        public virtual ICollection<PersonnelPermission> PersonnelPermissions { internal get; set; }
     }
 }

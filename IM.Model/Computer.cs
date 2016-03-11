@@ -25,8 +25,8 @@ namespace IM.Model
         public string cpIPAddress { get; set; }
         public Nullable<int> cpdk { get; set; }
     
-        public virtual Desk Desk { get; set; }
+        public virtual Desk Desk { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GuestMovement> GuestsMovements { get; set; }
+        public virtual ICollection<GuestMovement> GuestsMovements { internal get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TourTimesSchema()
         {
-            this.osConfigs = new HashSet<Configuration>();
+            this.Configuration = new HashSet<Configuration>();
         }
     
         public int tcID { get; set; }
@@ -25,6 +25,6 @@ namespace IM.Model
         public bool tcA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Configuration> osConfigs { get; set; }
+        public virtual ICollection<Configuration> Configuration { internal get; set; }
     }
 }

@@ -25,6 +25,6 @@ namespace IM.Model
         public bool stcA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SaleType> SaleTypes { get; set; }
+        public virtual ICollection<SaleType> SaleTypes { internal get; set; }
     }
 }

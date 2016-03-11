@@ -26,8 +26,8 @@ namespace IM.Model
         public bool spA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ScoreRuleByLeadSourceDetail> ScoreRulesByLeadSourceDetails { get; set; }
+        public virtual ICollection<ScoreRuleByLeadSourceDetail> ScoreRulesByLeadSourceDetails { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ScoreRuleDetail> ScoreRulesDetails { get; set; }
+        public virtual ICollection<ScoreRuleDetail> ScoreRulesDetails { internal get; set; }
     }
 }

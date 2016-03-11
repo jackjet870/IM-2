@@ -21,6 +21,6 @@ namespace IM.Model
         public string acCECOID { get; set; }
         public string acCEBEID { get; set; }
     
-        public virtual CECOCEBEType CECOCEBEType { get; set; }
+        public virtual CECOCEBEType CECOCEBEType { internal get; set; }
     }
 }

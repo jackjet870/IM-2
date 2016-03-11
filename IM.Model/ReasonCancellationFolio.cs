@@ -17,8 +17,8 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ReasonCancellationFolio()
         {
-            this.FolioCxCCancellations = new HashSet<FolioCxCCancellation>();
-            this.FolioInvitationsOutsidePRCancellations = new HashSet<FolioInvitationOuthousePRCancellation>();
+            this.FoliosCxCCancellations = new HashSet<FolioCxCCancellation>();
+            this.FoliosInvitationsOuthouseByPRCancellations = new HashSet<FolioInvitationOuthousePRCancellation>();
         }
     
         public string rcfID { get; set; }
@@ -26,8 +26,8 @@ namespace IM.Model
         public bool rcfA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<FolioCxCCancellation> FolioCxCCancellations { get; set; }
+        public virtual ICollection<FolioCxCCancellation> FoliosCxCCancellations { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<FolioInvitationOuthousePRCancellation> FolioInvitationsOutsidePRCancellations { get; set; }
+        public virtual ICollection<FolioInvitationOuthousePRCancellation> FoliosInvitationsOuthouseByPRCancellations { internal get; set; }
     }
 }

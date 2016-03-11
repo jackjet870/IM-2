@@ -26,10 +26,10 @@ namespace IM.Model
         public string pgN { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Income> Incomes { get; set; }
+        public virtual ICollection<Income> Incomes { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LeadSource> LeadSources { get; set; }
+        public virtual ICollection<LeadSource> LeadSources { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MarketSegment> MarketSegments { get; set; }
+        public virtual ICollection<MarketSegment> MarketSegments { internal get; set; }
     }
 }

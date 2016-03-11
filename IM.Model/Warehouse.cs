@@ -20,7 +20,7 @@ namespace IM.Model
             this.GiftsInventories = new HashSet<GiftInventory>();
             this.GiftsReceipts = new HashSet<GiftsReceipt>();
             this.SalesRooms = new HashSet<SalesRoom>();
-            this.WhsMovs = new HashSet<WarehouseMovement>();
+            this.WarehouseMovements = new HashSet<WarehouseMovement>();
         }
     
         public string whID { get; set; }
@@ -30,12 +30,12 @@ namespace IM.Model
     
         public virtual Area Area { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftInventory> GiftsInventories { get; set; }
+        public virtual ICollection<GiftInventory> GiftsInventories { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceipt> GiftsReceipts { get; set; }
+        public virtual ICollection<GiftsReceipt> GiftsReceipts { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SalesRoom> SalesRooms { get; set; }
+        public virtual ICollection<SalesRoom> SalesRooms { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<WarehouseMovement> WhsMovs { get; set; }
+        public virtual ICollection<WarehouseMovement> WarehouseMovements { internal get; set; }
     }
 }

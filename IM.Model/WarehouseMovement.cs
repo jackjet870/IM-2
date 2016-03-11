@@ -22,8 +22,8 @@ namespace IM.Model
         public string wmComments { get; set; }
         public string wmpe { get; set; }
     
-        public virtual Gift Gift { get; set; }
-        public virtual Personnel Personnel { get; set; }
-        public virtual Warehouse Warehouse { get; set; }
+        public virtual Gift Gift { internal get; set; }
+        public virtual Personnel Personnel { internal get; set; }
+        public virtual Warehouse Warehouse { internal get; set; }
     }
 }

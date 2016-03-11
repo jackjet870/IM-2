@@ -18,7 +18,7 @@ namespace IM.Model
         public string pxla { get; set; }
         public string pxText { get; set; }
     
-        public virtual Language Language { get; set; }
-        public virtual Product Product { get; set; }
+        public virtual Language Language { internal get; set; }
+        public virtual Product Product { internal get; set; }
     }
 }

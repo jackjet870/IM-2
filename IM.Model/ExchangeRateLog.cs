@@ -20,7 +20,7 @@ namespace IM.Model
         public string elChangedBy { get; set; }
         public decimal elExchangeRate { get; set; }
     
-        public virtual Currency Currency { get; set; }
-        public virtual Personnel Personnel { get; set; }
+        public virtual Currency Currency { internal get; set; }
+        public virtual Personnel Personnel { internal get; set; }
     }
 }

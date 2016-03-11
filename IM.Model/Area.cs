@@ -28,14 +28,14 @@ namespace IM.Model
         public bool arA { get; set; }
         public string arrg { get; set; }
     
-        public virtual Region Region { get; set; }
+        public virtual Region Region { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Hotel> Hotels { get; set; }
+        public virtual ICollection<Hotel> Hotels { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LeadSource> LeadSources { get; set; }
+        public virtual ICollection<LeadSource> LeadSources { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SalesRoom> SalesRooms { get; set; }
+        public virtual ICollection<SalesRoom> SalesRooms { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Warehouse> Warehouses { get; set; }
+        public virtual ICollection<Warehouse> Warehouses { internal get; set; }
     }
 }

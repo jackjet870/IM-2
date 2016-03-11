@@ -20,8 +20,8 @@ namespace IM.Model
         public string pppe { get; set; }
         public string pppo { get; set; }
     
-        public virtual Personnel Personnel { get; set; }
-        public virtual Personnel Personnel1 { get; set; }
-        public virtual Post Post { get; set; }
+        public virtual Personnel Personnel { internal get; set; }
+        public virtual Personnel Personnel_ChangedBy { internal get; set; }
+        public virtual Post Post { internal get; set; }
     }
 }

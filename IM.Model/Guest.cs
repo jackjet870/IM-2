@@ -22,13 +22,13 @@ namespace IM.Model
             this.Groups = new HashSet<Group>();
             this.GuestsMovements = new HashSet<GuestMovement>();
             this.GuestsPromotions = new HashSet<GuestPromotion>();
-            this.InvitsGifts = new HashSet<InvitationGift>();
+            this.InvitationsGifts = new HashSet<InvitationGift>();
             this.MealTickets = new HashSet<MealTicket>();
             this.PRNotes = new HashSet<PRNote>();
             this.Sales = new HashSet<Sale>();
             this.SalesLogs = new HashSet<SaleLog>();
             this.ShowsSalesmen = new HashSet<ShowSalesman>();
-            this.Guests1 = new HashSet<Guest>();
+            this.GuestsAdditional = new HashSet<Guest>();
             this.Guests = new HashSet<Guest>();
             this.GuestsGroups = new HashSet<GuestsGroup>();
         }
@@ -237,66 +237,66 @@ namespace IM.Model
         public string guLastNameOriginal { get; set; }
         public string guFirstNameOriginal { get; set; }
     
-        public virtual Agency Agency { get; set; }
-        public virtual Club Club { get; set; }
-        public virtual Country Country { get; set; }
+        public virtual Agency Agency { internal get; set; }
+        public virtual Club Club { internal get; set; }
+        public virtual Country Country { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DepositRefund> DepositsRefunds { get; set; }
+        public virtual ICollection<DepositRefund> DepositsRefunds { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceipt> GiftsReceipts { get; set; }
+        public virtual ICollection<GiftsReceipt> GiftsReceipts { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Group> Groups { get; set; }
-        public virtual GuestOpera GuestOpera { get; set; }
-        public virtual NotBookingMotive NotBookingMotive { get; set; }
-        public virtual PaymentType PaymentType { get; set; }
-        public virtual Personnel Personnel { get; set; }
-        public virtual Personnel Personnel1 { get; set; }
-        public virtual Personnel Personnel2 { get; set; }
-        public virtual Personnel Personnel3 { get; set; }
-        public virtual Personnel Personnel4 { get; set; }
-        public virtual Personnel Personnel5 { get; set; }
-        public virtual Personnel Personnel6 { get; set; }
-        public virtual Personnel Personnel7 { get; set; }
-        public virtual Personnel Personnel8 { get; set; }
-        public virtual Personnel Personnel9 { get; set; }
-        public virtual Personnel Personnel10 { get; set; }
-        public virtual Personnel Personnel11 { get; set; }
-        public virtual Personnel Personnel12 { get; set; }
-        public virtual Personnel Personnel13 { get; set; }
-        public virtual Personnel Personnel14 { get; set; }
-        public virtual Personnel Personnel15 { get; set; }
-        public virtual Personnel Personnel16 { get; set; }
-        public virtual Personnel Personnel17 { get; set; }
-        public virtual Personnel Personnel18 { get; set; }
-        public virtual Personnel Personnel19 { get; set; }
-        public virtual Personnel Personnel20 { get; set; }
-        public virtual Personnel Personnel21 { get; set; }
-        public virtual Personnel Personnel22 { get; set; }
-        public virtual Personnel Personnel23 { get; set; }
-        public virtual Personnel Personnel24 { get; set; }
-        public virtual ReimpresionMotive ReimpresionMotive { get; set; }
-        public virtual RoomType RoomType { get; set; }
+        public virtual ICollection<Group> Groups { internal get; set; }
+        public virtual GuestOpera GuestOpera { internal get; set; }
+        public virtual NotBookingMotive NotBookingMotive { internal get; set; }
+        public virtual PaymentType PaymentType { internal get; set; }
+        public virtual Personnel Personnel_Closer1 { internal get; set; }
+        public virtual Personnel Personnel_Closer2 { internal get; set; }
+        public virtual Personnel Personnel_Closer3 { internal get; set; }
+        public virtual Personnel Personnel_CloserCaptain1 { internal get; set; }
+        public virtual Personnel Personnel_EntryHost { internal get; set; }
+        public virtual Personnel Personnel_Exit1 { internal get; set; }
+        public virtual Personnel Personnel_Exit2 { internal get; set; }
+        public virtual Personnel Personnel_ExitHost { internal get; set; }
+        public virtual Personnel Personnel_GiftsHost { internal get; set; }
+        public virtual Personnel Personnel_Liner1 { internal get; set; }
+        public virtual Personnel Personnel_Liner2 { internal get; set; }
+        public virtual Personnel Personnel_LinerCaptain1 { internal get; set; }
+        public virtual Personnel Personnel_Podium { internal get; set; }
+        public virtual Personnel Personnel_PR1 { internal get; set; }
+        public virtual Personnel Personnel_PR2 { internal get; set; }
+        public virtual Personnel Personnel_PR3 { internal get; set; }
+        public virtual Personnel Personnel_PRAssign { internal get; set; }
+        public virtual Personnel Personnel_PRAvailability { internal get; set; }
+        public virtual Personnel Personnel_PRCaptain1 { internal get; set; }
+        public virtual Personnel Personnel_PRCaptain2 { internal get; set; }
+        public virtual Personnel Personnel_PRCaptain3 { internal get; set; }
+        public virtual Personnel Personnel_PRContact { internal get; set; }
+        public virtual Personnel Personnel_PRFollow { internal get; set; }
+        public virtual Personnel Personnel_PRNoBook { internal get; set; }
+        public virtual Personnel Personnel_VLO { internal get; set; }
+        public virtual ReimpresionMotive ReimpresionMotive { internal get; set; }
+        public virtual RoomType RoomType { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GuestMovement> GuestsMovements { get; set; }
+        public virtual ICollection<GuestMovement> GuestsMovements { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GuestPromotion> GuestsPromotions { get; set; }
+        public virtual ICollection<GuestPromotion> GuestsPromotions { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InvitationGift> InvitsGifts { get; set; }
+        public virtual ICollection<InvitationGift> InvitationsGifts { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MealTicket> MealTickets { get; set; }
+        public virtual ICollection<MealTicket> MealTickets { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PRNote> PRNotes { get; set; }
+        public virtual ICollection<PRNote> PRNotes { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sale> Sales { get; set; }
+        public virtual ICollection<Sale> Sales { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SaleLog> SalesLogs { get; set; }
+        public virtual ICollection<SaleLog> SalesLogs { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ShowSalesman> ShowsSalesmen { get; set; }
+        public virtual ICollection<ShowSalesman> ShowsSalesmen { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Guest> Guests1 { get; set; }
+        public virtual ICollection<Guest> GuestsAdditional { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Guest> Guests { get; set; }
+        public virtual ICollection<Guest> Guests { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GuestsGroup> GuestsGroups { get; set; }
+        public virtual ICollection<GuestsGroup> GuestsGroups { internal get; set; }
     }
 }

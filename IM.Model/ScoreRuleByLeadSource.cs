@@ -17,6 +17,6 @@ namespace IM.Model
         public string sbls { get; set; }
         public bool sbA { get; set; }
     
-        public virtual LeadSource LeadSource { get; set; }
+        public virtual LeadSource LeadSource { internal get; set; }
     }
 }

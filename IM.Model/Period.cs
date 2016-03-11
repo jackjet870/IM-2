@@ -26,8 +26,8 @@ namespace IM.Model
         public bool pdA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Efficiency> Efficiencies { get; set; }
+        public virtual ICollection<Efficiency> Efficiencies { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Goal> Goals { get; set; }
+        public virtual ICollection<Goal> Goals { internal get; set; }
     }
 }

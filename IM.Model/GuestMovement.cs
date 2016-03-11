@@ -21,9 +21,9 @@ namespace IM.Model
         public string gmcp { get; set; }
         public string gmIpAddress { get; set; }
     
-        public virtual Computer Computer { get; set; }
-        public virtual Guest Guest { get; set; }
-        public virtual GuestMovementType GuestsMovementsType { get; set; }
-        public virtual Personnel Personnel { get; set; }
+        public virtual Computer Computer { internal get; set; }
+        public virtual Guest Guest { internal get; set; }
+        public virtual GuestMovementType GuestsMovementsType { internal get; set; }
+        public virtual Personnel Personnel { internal get; set; }
     }
 }

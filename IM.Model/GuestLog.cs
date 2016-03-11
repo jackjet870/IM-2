@@ -61,22 +61,22 @@ namespace IM.Model
         public string glLastName2 { get; set; }
         public string glFirstName2 { get; set; }
     
-        public virtual Personnel Personnel { get; set; }
-        public virtual Personnel Personnel1 { get; set; }
-        public virtual Personnel Personnel2 { get; set; }
-        public virtual Personnel Personnel3 { get; set; }
-        public virtual Personnel Personnel4 { get; set; }
-        public virtual Personnel Personnel5 { get; set; }
-        public virtual Personnel Personnel6 { get; set; }
-        public virtual Personnel Personnel7 { get; set; }
-        public virtual Personnel Personnel8 { get; set; }
-        public virtual Personnel Personnel9 { get; set; }
-        public virtual Personnel Personnel10 { get; set; }
-        public virtual Personnel Personnel11 { get; set; }
-        public virtual Personnel Personnel12 { get; set; }
-        public virtual Personnel Personnel13 { get; set; }
-        public virtual Personnel Personnel14 { get; set; }
-        public virtual ReimpresionMotive ReimpresionMotive { get; set; }
-        public virtual UnavailableMotive UnavailMot { get; set; }
+        public virtual Personnel Personnel_ChangedBy { internal get; set; }
+        public virtual Personnel Personnel_Closer1 { internal get; set; }
+        public virtual Personnel Personnel_Closer2 { internal get; set; }
+        public virtual Personnel Personnel_Closer3 { internal get; set; }
+        public virtual Personnel Personnel_Exit1 { internal get; set; }
+        public virtual Personnel Personnel_Exit2 { internal get; set; }
+        public virtual Personnel Personnel_Liner1 { internal get; set; }
+        public virtual Personnel Personnel_Liner2 { internal get; set; }
+        public virtual Personnel Personnel_Podium { internal get; set; }
+        public virtual Personnel Personnel_PR1 { internal get; set; }
+        public virtual Personnel Personnel_PR2 { internal get; set; }
+        public virtual Personnel Personnel_PRAvailability { internal get; set; }
+        public virtual Personnel Personnel_PRContact { internal get; set; }
+        public virtual Personnel Personnel_PRFollow { internal get; set; }
+        public virtual Personnel Personnel_VLO { internal get; set; }
+        public virtual ReimpresionMotive ReimpresionMotive { internal get; set; }
+        public virtual UnavailableMotive UnavailableMotive { internal get; set; }
     }
 }

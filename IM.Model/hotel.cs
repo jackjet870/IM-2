@@ -25,9 +25,9 @@ namespace IM.Model
         public string hoar { get; set; }
         public bool hoA { get; set; }
     
-        public virtual Area Area { get; set; }
-        public virtual HotelGroup HotelGroup { get; set; }
+        public virtual Area Area { internal get; set; }
+        public virtual HotelGroup HotelGroup { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LeadSource> LeadSources { get; set; }
+        public virtual ICollection<LeadSource> LeadSources { internal get; set; }
     }
 }

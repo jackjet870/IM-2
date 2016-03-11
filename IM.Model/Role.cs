@@ -27,8 +27,8 @@ namespace IM.Model
         public string roToolTipText { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SalesmanChange> SalesmenChanges { get; set; }
+        public virtual ICollection<SalesmanChange> SalesmenChanges { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Personnel> Personnels { get; set; }
+        public virtual ICollection<Personnel> Personnels { internal get; set; }
     }
 }

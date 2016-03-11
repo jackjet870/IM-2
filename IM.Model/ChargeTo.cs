@@ -18,9 +18,9 @@ namespace IM.Model
         public ChargeTo()
         {
             this.GiftsReceipts = new HashSet<GiftsReceipt>();
-            this.GiftsReceiptsCs = new HashSet<GiftsReceiptDetail>();
+            this.GiftsReceiptsDetails = new HashSet<GiftsReceiptDetail>();
             this.GiftsReceiptsLogs = new HashSet<GiftsReceiptLog>();
-            this.InvitsGifts = new HashSet<InvitationGift>();
+            this.InvitationsGifts = new HashSet<InvitationGift>();
         }
     
         public string ctID { get; set; }
@@ -28,14 +28,14 @@ namespace IM.Model
         public string ctCalcType { get; set; }
         public bool ctIsCxC { get; set; }
     
-        public virtual ChargeCalculationType ChargeCalculationType { get; set; }
+        public virtual ChargeCalculationType ChargeCalculationType { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceipt> GiftsReceipts { get; set; }
+        public virtual ICollection<GiftsReceipt> GiftsReceipts { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceiptDetail> GiftsReceiptsCs { get; set; }
+        public virtual ICollection<GiftsReceiptDetail> GiftsReceiptsDetails { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceiptLog> GiftsReceiptsLogs { get; set; }
+        public virtual ICollection<GiftsReceiptLog> GiftsReceiptsLogs { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InvitationGift> InvitsGifts { get; set; }
+        public virtual ICollection<InvitationGift> InvitationsGifts { internal get; set; }
     }
 }

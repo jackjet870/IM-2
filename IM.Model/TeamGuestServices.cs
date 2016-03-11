@@ -20,7 +20,7 @@ namespace IM.Model
         public string tgLeader { get; set; }
         public bool tgA { get; set; }
     
-        public virtual Location Location { get; set; }
-        public virtual Personnel Personnel { get; set; }
+        public virtual Location Location { internal get; set; }
+        public virtual Personnel Personnel { internal get; set; }
     }
 }

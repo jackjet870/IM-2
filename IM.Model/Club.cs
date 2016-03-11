@@ -27,10 +27,10 @@ namespace IM.Model
         public bool clA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Agency> Agencies { get; set; }
+        public virtual ICollection<Agency> Agencies { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Guest> Guests { get; set; }
+        public virtual ICollection<Guest> Guests { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Wholesaler> Wholesalers { get; set; }
+        public virtual ICollection<Wholesaler> Wholesalers { internal get; set; }
     }
 }

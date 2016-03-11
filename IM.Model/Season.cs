@@ -26,6 +26,6 @@ namespace IM.Model
         public decimal ssClosingFactor { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SeasonDate> SeasonsDates { get; set; }
+        public virtual ICollection<SeasonDate> SeasonsDates { internal get; set; }
     }
 }

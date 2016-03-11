@@ -25,6 +25,6 @@ namespace IM.Model
         public Nullable<bool> rfA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DepositRefund> DepositsRefunds { get; set; }
+        public virtual ICollection<DepositRefund> DepositsRefunds { internal get; set; }
     }
 }

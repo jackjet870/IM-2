@@ -28,9 +28,9 @@ namespace IM.Model
         public string ststc { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sale> Sales { get; set; }
+        public virtual ICollection<Sale> Sales { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SaleLog> SalesLogs { get; set; }
-        public virtual SaleTypeCategory SaleTypesCategory { get; set; }
+        public virtual ICollection<SaleLog> SalesLogs { internal get; set; }
+        public virtual SaleTypeCategory SaleTypesCategory { internal get; set; }
     }
 }

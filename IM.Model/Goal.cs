@@ -21,7 +21,7 @@ namespace IM.Model
         public string gopd { get; set; }
         public decimal goGoal { get; set; }
     
-        public virtual Period Period { get; set; }
-        public virtual PlaceType PlaceType { get; set; }
+        public virtual Period Period { internal get; set; }
+        public virtual PlaceType PlaceType { internal get; set; }
     }
 }

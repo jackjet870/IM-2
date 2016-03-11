@@ -25,6 +25,6 @@ namespace IM.Model
         public bool poA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PostLog> PostsLogs { get; set; }
+        public virtual ICollection<PostLog> PostsLogs { internal get; set; }
     }
 }

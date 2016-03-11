@@ -20,7 +20,7 @@ namespace IM.Model
         public decimal smSaleAmountWith { get; set; }
         public bool smSale { get; set; }
     
-        public virtual Personnel Personnel { get; set; }
-        public virtual Sale Sale { get; set; }
+        public virtual Personnel Personnel { internal get; set; }
+        public virtual Sale Sale { internal get; set; }
     }
 }

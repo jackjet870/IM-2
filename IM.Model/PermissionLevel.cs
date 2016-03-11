@@ -25,6 +25,6 @@ namespace IM.Model
         public bool plA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PersonnelPermission> PersonnelPermissions { get; set; }
+        public virtual ICollection<PersonnelPermission> PersonnelPermissions { internal get; set; }
     }
 }

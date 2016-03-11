@@ -20,6 +20,6 @@ namespace IM.Model
         public int fipFrom { get; set; }
         public int fipTo { get; set; }
     
-        public virtual Personnel Personnel { get; set; }
+        public virtual Personnel Personnel { internal get; set; }
     }
 }

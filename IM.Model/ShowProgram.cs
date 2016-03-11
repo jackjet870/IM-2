@@ -19,6 +19,6 @@ namespace IM.Model
         public bool skA { get; set; }
         public string sksg { get; set; }
     
-        public virtual ShowProgramCategory ShowProgramsCategory { get; set; }
+        public virtual ShowProgramCategory ShowProgramCategory { internal get; set; }
     }
 }

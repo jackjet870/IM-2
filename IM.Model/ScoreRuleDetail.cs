@@ -18,7 +18,7 @@ namespace IM.Model
         public byte sisp { get; set; }
         public decimal siScore { get; set; }
     
-        public virtual ScoreRule ScoreRule { get; set; }
-        public virtual ScoreRuleConcept ScoreRulesConcept { get; set; }
+        public virtual ScoreRule ScoreRule { internal get; set; }
+        public virtual ScoreRuleConcept ScoreRulesConcept { internal get; set; }
     }
 }

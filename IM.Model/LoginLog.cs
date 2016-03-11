@@ -19,7 +19,7 @@ namespace IM.Model
         public string llpe { get; set; }
         public string llPCName { get; set; }
     
-        public virtual Location Location { get; set; }
-        public virtual Personnel Personnel { get; set; }
+        public virtual Location Location { internal get; set; }
+        public virtual Personnel Personnel { internal get; set; }
     }
 }

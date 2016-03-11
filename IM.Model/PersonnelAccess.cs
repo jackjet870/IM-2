@@ -18,7 +18,7 @@ namespace IM.Model
         public string plLSSR { get; set; }
         public string plLSSRID { get; set; }
     
-        public virtual Personnel Personnel { get; set; }
-        public virtual PlaceType PlaceType { get; set; }
+        public virtual Personnel Personnel { internal get; set; }
+        public virtual PlaceType PlaceType { internal get; set; }
     }
 }

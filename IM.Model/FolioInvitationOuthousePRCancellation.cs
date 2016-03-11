@@ -21,7 +21,7 @@ namespace IM.Model
         public int ficTo { get; set; }
         public string ficrcf { get; set; }
     
-        public virtual ReasonCancellationFolio ReasonCancellationFolio { get; set; }
-        public virtual Personnel Personnel { get; set; }
+        public virtual ReasonCancellationFolio ReasonCancellationFolio { internal get; set; }
+        public virtual Personnel Personnel { internal get; set; }
     }
 }

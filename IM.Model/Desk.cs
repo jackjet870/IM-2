@@ -25,6 +25,6 @@ namespace IM.Model
         public bool dkA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Computer> Computers { get; set; }
+        public virtual ICollection<Computer> Computers { internal get; set; }
     }
 }

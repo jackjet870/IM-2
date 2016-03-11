@@ -38,15 +38,15 @@ namespace IM.Model
         public Nullable<int> goup { get; set; }
         public Nullable<System.DateTime> goCancelD { get; set; }
     
-        public virtual ChargeTo ChargeTo { get; set; }
-        public virtual Currency Currency { get; set; }
-        public virtual GiftsReceipt GiftsReceipt { get; set; }
-        public virtual PaymentType PaymentType { get; set; }
-        public virtual Personnel Personnel { get; set; }
-        public virtual Personnel Personnel1 { get; set; }
-        public virtual Personnel Personnel2 { get; set; }
-        public virtual Personnel Personnel3 { get; set; }
-        public virtual ReimpresionMotive ReimpresionMotive { get; set; }
-        public virtual UnderPaymentMotive UnderPaymentMotive { get; set; }
+        public virtual ChargeTo ChargeTo { internal get; set; }
+        public virtual Currency Currency { internal get; set; }
+        public virtual GiftsReceipt GiftsReceipt { internal get; set; }
+        public virtual PaymentType PaymentType { internal get; set; }
+        public virtual Personnel Personnel_AuthorizedBy { internal get; set; }
+        public virtual Personnel Personnel_ChangedBy { internal get; set; }
+        public virtual Personnel Personnel_Host { internal get; set; }
+        public virtual Personnel Personnel_PR { internal get; set; }
+        public virtual ReimpresionMotive ReimpresionMotive { internal get; set; }
+        public virtual UnderPaymentMotive UnderPaymentMotive { internal get; set; }
     }
 }

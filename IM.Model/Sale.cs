@@ -19,7 +19,7 @@ namespace IM.Model
         {
             this.Sales1 = new HashSet<Sale>();
             this.SalesLogs = new HashSet<SaleLog>();
-            this.SalesLogs1 = new HashSet<SaleLog>();
+            this.SalesLogs_Reference = new HashSet<SaleLog>();
             this.SalesmenChanges = new HashSet<SalesmanChange>();
             this.SalesSalesmen = new HashSet<SalesSalesman>();
         }
@@ -89,40 +89,40 @@ namespace IM.Model
         public decimal saGrossAmountWithVAT { get; set; }
         public Nullable<decimal> saVATRate { get; set; }
     
-        public virtual Guest Guest { get; set; }
-        public virtual LeadSource LeadSource { get; set; }
-        public virtual Location Location { get; set; }
-        public virtual MembershipType MembershipType { get; set; }
-        public virtual MembershipType MembershipType1 { get; set; }
-        public virtual Personnel Personnel { get; set; }
-        public virtual Personnel Personnel1 { get; set; }
-        public virtual Personnel Personnel2 { get; set; }
-        public virtual Personnel Personnel3 { get; set; }
-        public virtual Personnel Personnel4 { get; set; }
-        public virtual Personnel Personnel5 { get; set; }
-        public virtual Personnel Personnel6 { get; set; }
-        public virtual Personnel Personnel7 { get; set; }
-        public virtual Personnel Personnel8 { get; set; }
-        public virtual Personnel Personnel9 { get; set; }
-        public virtual Personnel Personnel10 { get; set; }
-        public virtual Personnel Personnel11 { get; set; }
-        public virtual Personnel Personnel12 { get; set; }
-        public virtual Personnel Personnel13 { get; set; }
-        public virtual Personnel Personnel14 { get; set; }
-        public virtual Personnel Personnel15 { get; set; }
-        public virtual Personnel Personnel16 { get; set; }
+        public virtual Guest Guest { internal get; set; }
+        public virtual LeadSource LeadSource { internal get; set; }
+        public virtual Location Location { internal get; set; }
+        public virtual MembershipType MembershipType { internal get; set; }
+        public virtual MembershipType MembershipType_Global { internal get; set; }
+        public virtual Personnel Personnel_Closer1 { internal get; set; }
+        public virtual Personnel Personnel_Closer2 { internal get; set; }
+        public virtual Personnel Personnel_Closer3 { internal get; set; }
+        public virtual Personnel Personnel_CloserCaptain { internal get; set; }
+        public virtual Personnel Personnel_Exit1 { internal get; set; }
+        public virtual Personnel Personnel_Exit2 { internal get; set; }
+        public virtual Personnel Personnel_Liner1 { internal get; set; }
+        public virtual Personnel Personnel_Liner2 { internal get; set; }
+        public virtual Personnel Personnel_LinerCaptain1 { internal get; set; }
+        public virtual Personnel Personnel_Podium { get; set; }
+        public virtual Personnel Personnel_PR1 { internal get; set; }
+        public virtual Personnel Personnel_PR2 { internal get; set; }
+        public virtual Personnel Personnel_PR3 { internal get; set; }
+        public virtual Personnel Personnel_PRCaptain1 { internal get; set; }
+        public virtual Personnel Personnel_PRCaptain2 { internal get; set; }
+        public virtual Personnel Personnel_PRCaptain3 { internal get; set; }
+        public virtual Personnel Personnel_VLO { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sale> Sales1 { get; set; }
-        public virtual Sale Sale1 { get; set; }
-        public virtual SalesRoom SalesRoom { get; set; }
-        public virtual SaleType SaleType { get; set; }
+        public virtual ICollection<Sale> Sales1 { internal get; set; }
+        public virtual Sale Sale1 { internal get; set; }
+        public virtual SalesRoom SalesRoom { internal get; set; }
+        public virtual SaleType SaleType { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SaleLog> SalesLogs { get; set; }
+        public virtual ICollection<SaleLog> SalesLogs { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SaleLog> SalesLogs1 { get; set; }
+        public virtual ICollection<SaleLog> SalesLogs_Reference { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SalesmanChange> SalesmenChanges { get; set; }
+        public virtual ICollection<SalesmanChange> SalesmenChanges { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SalesSalesman> SalesSalesmen { get; set; }
+        public virtual ICollection<SalesSalesman> SalesSalesmen { internal get; set; }
     }
 }

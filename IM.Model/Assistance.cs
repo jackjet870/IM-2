@@ -28,6 +28,6 @@ namespace IM.Model
         public string asSunday { get; set; }
         public Nullable<byte> asNum { get; set; }
     
-        public virtual Personnel Personnel { get; set; }
+        public virtual Personnel Personnel { internal get; set; }
     }
 }

@@ -18,8 +18,8 @@ namespace IM.Model
         public Currency()
         {
             this.ExchangeRateLogs = new HashSet<ExchangeRateLog>();
+            this.GiftsReceipts_CxC = new HashSet<GiftsReceipt>();
             this.GiftsReceipts = new HashSet<GiftsReceipt>();
-            this.GiftsReceipts1 = new HashSet<GiftsReceipt>();
             this.GiftsReceiptsLogs = new HashSet<GiftsReceiptLog>();
             this.GiftsReceiptsPayments = new HashSet<GiftsReceiptPayment>();
             this.SalesRooms = new HashSet<SalesRoom>();
@@ -30,15 +30,15 @@ namespace IM.Model
         public bool cuA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExchangeRateLog> ExchangeRateLogs { get; set; }
+        public virtual ICollection<ExchangeRateLog> ExchangeRateLogs { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceipt> GiftsReceipts { get; set; }
+        public virtual ICollection<GiftsReceipt> GiftsReceipts_CxC { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceipt> GiftsReceipts1 { get; set; }
+        public virtual ICollection<GiftsReceipt> GiftsReceipts { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceiptLog> GiftsReceiptsLogs { get; set; }
+        public virtual ICollection<GiftsReceiptLog> GiftsReceiptsLogs { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GiftsReceiptPayment> GiftsReceiptsPayments { get; set; }
+        public virtual ICollection<GiftsReceiptPayment> GiftsReceiptsPayments { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SalesRoom> SalesRooms { get; set; }
     }

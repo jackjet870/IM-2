@@ -19,7 +19,7 @@ namespace IM.Model
         public string gvgi { get; set; }
         public int gvQty { get; set; }
     
-        public virtual Gift Gift { get; set; }
-        public virtual Warehouse Warehouse { get; set; }
+        public virtual Gift Gift { internal get; set; }
+        public virtual Warehouse Warehouse { internal get; set; }
     }
 }

@@ -38,19 +38,19 @@ namespace IM.Model
         public string agN { get; set; }
         public Nullable<int> agcl { get; set; }
     
-        public virtual Club Club { get; set; }
-        public virtual Country Country { get; set; }
-        public virtual Market Market { get; set; }
-        public virtual Rep Rep { get; set; }
-        public virtual SegmentByAgency SegmentsByAgency { get; set; }
-        public virtual UnavailableMotive UnavailMot { get; set; }
+        public virtual Club Club { internal get; set; }
+        public virtual Country Country { internal get; set; }
+        public virtual Market Market { internal get; set; }
+        public virtual Rep Rep { internal get; set; }
+        public virtual SegmentByAgency SegmentsByAgency { internal get; set; }
+        public virtual UnavailableMotive UnavailableMotive { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Guest> Guests { get; set; }
+        public virtual ICollection<Guest> Guests { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MealTicket> MealTickets { get; set; }
+        public virtual ICollection<MealTicket> MealTickets { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Gift> Gifts { get; set; }
+        public virtual ICollection<Gift> Gifts { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LeadSource> LeadSources { get; set; }
+        public virtual ICollection<LeadSource> LeadSources { internal get; set; }
     }
 }

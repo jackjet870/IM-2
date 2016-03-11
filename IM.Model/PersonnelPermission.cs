@@ -18,8 +18,8 @@ namespace IM.Model
         public string pppm { get; set; }
         public int pppl { get; set; }
     
-        public virtual Permission Permission { get; set; }
-        public virtual PermissionLevel PermissionsLevel { get; set; }
-        public virtual Personnel Personnel { get; set; }
+        public virtual Permission Permission { internal get; set; }
+        public virtual PermissionLevel PermissionLevel { internal get; set; }
+        public virtual Personnel Personnel { internal get; set; }
     }
 }

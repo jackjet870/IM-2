@@ -27,8 +27,8 @@ namespace IM.Model
         public string drrf { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BookingDeposit> BookingDeposits { get; set; }
-        public virtual RefundType RefundType { get; set; }
-        public virtual Guest Guest { get; set; }
+        public virtual ICollection<BookingDeposit> BookingDeposits { internal get; set; }
+        public virtual RefundType RefundType { internal get; set; }
+        public virtual Guest Guest { internal get; set; }
     }
 }

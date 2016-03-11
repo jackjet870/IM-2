@@ -26,6 +26,6 @@ namespace IM.Model
         public string goCountry { get; set; }
         public string goTerritory { get; set; }
     
-        public virtual Guest Guest { get; set; }
+        public virtual Guest Guest { internal get; set; }
     }
 }

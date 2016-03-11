@@ -39,8 +39,8 @@ namespace IM.Model
         public decimal ocVATRate { get; set; }
         public Nullable<System.DateTime> ocInvitationsCloseD { get; set; }
     
-        public virtual Personnel Personnel { get; set; }
-        public virtual Personnel Personnel1 { get; set; }
-        public virtual TourTimesSchema TourTimesSchema { get; set; }
+        public virtual Personnel Personnel_Administrator { internal get; set; }
+        public virtual Personnel Personnel_Boss { internal get; set; }
+        public virtual TourTimesSchema TourTimesSchema { internal get; set; }
     }
 }

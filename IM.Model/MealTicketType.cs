@@ -29,6 +29,6 @@ namespace IM.Model
         public decimal myCollaboratorWithoutCost { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MealTicket> MealTickets { get; set; }
+        public virtual ICollection<MealTicket> MealTickets { internal get; set; }
     }
 }

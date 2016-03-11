@@ -18,7 +18,7 @@ namespace IM.Model
         public string gpgi { get; set; }
         public int gpQty { get; set; }
     
-        public virtual Gift Gift { get; set; }
-        public virtual Gift Gift1 { get; set; }
+        public virtual Gift GiftItem { internal get; set; }
+        public virtual Gift GiftPackage { internal get; set; }
     }
 }

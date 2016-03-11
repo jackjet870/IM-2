@@ -20,7 +20,7 @@ namespace IM.Model
         public string itRTFHeader { get; set; }
         public string itRTFFooter { get; set; }
     
-        public virtual Language Language { get; set; }
-        public virtual LeadSource LeadSource { get; set; }
+        public virtual Language Language { internal get; set; }
+        public virtual LeadSource LeadSource { internal get; set; }
     }
 }

@@ -34,11 +34,11 @@ namespace IM.Model
         public string merep { get; set; }
         public string meAuthorizedBy { get; set; }
     
-        public virtual Agency Agency { get; set; }
-        public virtual Guest Guest { get; set; }
-        public virtual MealTicketType MealTicketType { get; set; }
-        public virtual Personnel Personnel { get; set; }
-        public virtual RateType RateType { get; set; }
-        public virtual SalesRoom SalesRoom { get; set; }
+        public virtual Agency Agency { internal get; set; }
+        public virtual Guest Guest { internal get; set; }
+        public virtual MealTicketType MealTicketType { internal get; set; }
+        public virtual Personnel Personnel { internal get; set; }
+        public virtual RateType RateType { internal get; set; }
+        public virtual SalesRoom SalesRoom { internal get; set; }
     }
 }

@@ -26,6 +26,6 @@ namespace IM.Model
         public bool ccIsCreditCard { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BookingDeposit> BookingDeposits { get; set; }
+        public virtual ICollection<BookingDeposit> BookingDeposits { internal get; set; }
     }
 }
