@@ -35,7 +35,7 @@ namespace IM.Administrator
     private void App_UnhandledException(object sender,System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
-      var frmError = new IM.Base.Forms.frmError(e.Exception.Message);
+      var frmError = new IM.Base.Forms.frmError(e.Exception);
       if(frmError.DialogResult.HasValue && !frmError.DialogResult.Value)
       {
         Application.Current.Shutdown();

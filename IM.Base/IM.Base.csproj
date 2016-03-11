@@ -52,6 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Parametros.cs" />
+    <Compile Include="Forms\frmInnerException.xaml.cs">
+      <DependentUpon>frmInnerException.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmError.xaml.cs">
       <DependentUpon>frmError.xaml</DependentUpon>
     </Compile>
@@ -92,6 +95,10 @@
     <Resource Include="Images\User.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Forms\frmInnerException.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Forms\frmError.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -149,6 +156,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\DaysOff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Link.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

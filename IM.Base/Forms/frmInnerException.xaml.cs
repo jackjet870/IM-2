@@ -4,12 +4,12 @@ using System.Windows;
 namespace IM.Base.Forms
 {
   /// <summary>
-  /// Interaction logic for ErrorMessage.xaml
+  /// Formulario para desplegar una excepcion anidada
   /// </summary>
   /// <history>
-  /// [lchairez] 11/Feb/2016 Created
+  /// [wtorres] 11/Mar/2016 Created
   /// </history>
-  public partial class frmError : Window
+  public partial class frmInnerException : Window
   {
     #region Atributos
 
@@ -24,10 +24,9 @@ namespace IM.Base.Forms
     /// </summary>
     /// <param name="exception">Excepcion</param>
     /// <history>
-    ///  [lchairez] 11/Feb/2016 Created
-    ///  [wtorres]  11/Mar/2016 Modified. Ahora despliega el Stack Trace y la excepcion anidada
+    /// [wtorres]  11/Mar/2016 Created
     /// </history>
-    public frmError(Exception exception)
+    public frmInnerException(Exception exception)
     {
       InitializeComponent();
 
@@ -45,29 +44,14 @@ namespace IM.Base.Forms
     #region btnYes_Click
 
     /// <summary>
-    /// Evento del botón YES
+    /// Cierra el formulario
     /// </summary>
     /// <history>
-    /// [lchairez] 11/feb/2016 Created
+    /// [wtorres]  11/Mar/2016 Created
     /// </history>
-    private void btnYes_Click(object sender, RoutedEventArgs e)
+    private void btnOK_Click(object sender, RoutedEventArgs e)
     {
       DialogResult = true;
-    }
-
-    #endregion
-
-    #region btnNo_Click
-
-    /// <summary>
-    /// Evento del botón NO
-    /// </summary>
-    /// <history>
-    /// [lchairez] 11/feb/2016 Created
-    /// </history>
-    private void btnNo_Click(object sender, RoutedEventArgs e)
-    {
-      DialogResult = false;
     }
 
     #endregion

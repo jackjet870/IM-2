@@ -1,0 +1,18 @@
+﻿<Window x:Class="IM.Base.Forms.frmInnerException"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                Title="Inner Exception" Height="350.764" Width="453" Background="SkyBlue" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" Icon="/IM.Base;component/Images/Error.png">
+  <Grid>
+    <Label Content="Message:" Margin="10,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+    <TextBox x:Name="txtMessage" Margin="10,36,10,0" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.CanContentScroll="True" Height="83" VerticalAlignment="Top"/>
+    <Button x:Name="btnOK" Content="OK" Width="80" Height="40" Margin="0,0,10,10" Background="White" FontWeight="Bold" Click="btnOK_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+    <Label Content="Stack Trace:" Margin="10,124,0,0" Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" Width="82"/>
+    <TextBox x:Name="txtStackTrace" Margin="10,147,10,62" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.CanContentScroll="True"/>
+    <Button x:Name="btnInnerException" Height="40" Margin="0,0,95,10" Background="White" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="btnInnerException_Click" Width="131" >
+      <StackPanel Orientation="Horizontal">
+        <Image Source="/IM.Base;component/Images/Link.png" Width="24" Height="24"/>
+        <TextBlock Text="Inner Exception" VerticalAlignment="Center"/>
+      </StackPanel>
+    </Button>
+  </Grid>
+</Window>
