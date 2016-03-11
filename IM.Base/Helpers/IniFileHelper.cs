@@ -230,6 +230,7 @@ namespace IM.Base.Helpers
     /// <returns>DateTime</returns>
     /// <history>
     /// [aalcocer]  10/03/2016 Modified. Se agrega el tipo de formato para obtener del texto a la fecha
+    /// [aalcocer]  11/03/2016 Modified. Se asigna la fecha Default cuando el texto de la fecha no es valida
     /// </history>
     public DateTime readDate(string Section, string Key, DateTime Default)
     {
@@ -237,10 +238,8 @@ namespace IM.Base.Helpers
       string Text = "";
 
       Text = readText(Section, Key, "");
-      if (Text == "")
+      if (string.IsNullOrWhiteSpace(Text) || !DateTime.TryParse(Text, out Value))
         Value = Default;
-      else
-        Value = DateTime.ParseExact(Text, "yyyy-dd-MM", System.Globalization.CultureInfo.InvariantCulture);
 
       return Value;
     }
