@@ -1,21 +1,15 @@
-﻿using IM.Launcher.Classes;
+﻿using IM.Base.Helpers;
+using IM.Launcher.Classes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace IM.Launcher
 {
@@ -158,67 +152,67 @@ namespace IM.Launcher
       switch (option)
       {
         case EnumMenu.InHouse:
-          System.Diagnostics.Process.Start(String.Format("{0}\\IM.Inhouse.exe", path));
+          Process.Start(String.Format("{0}\\IM.Inhouse.exe", path));
           break;
         case EnumMenu.Assignment:
-          //llamar módulo
+          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.MailOuts:
-          System.Diagnostics.Process.Start(String.Format("{0}\\IM.MailOuts.exe", path));
+          Process.Start(String.Format("{0}\\IM.MailOuts.exe", path));
           break;
         case EnumMenu.Animation:
-          //llamar módulo
+          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.Regen:
-          //llamar módulo
+          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.Outhouse:
-          //llamar módulo
+          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.Host:
-          System.Diagnostics.Process.Start(String.Format("{0}\\IM.Host.exe", path));
+          Process.Start(String.Format("{0}\\IM.Host.exe", path));
           break;
         case EnumMenu.InventoryMovs:
-          System.Diagnostics.Process.Start(String.Format("{0}\\IM.InventoryMovements.exe", path));
+          Process.Start(String.Format("{0}\\IM.InventoryMovements.exe", path));
           break;
         case EnumMenu.ProcessorINH:
-          //llamar módulo
+          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.ProcessorOUT:
-          //llamar módulo
+          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.ProcessorGRAL:
-          //llamar módulo
+          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.ProcessorSales:
-          //llamar módulo
+          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.PRStatistics:
-          //llamar módulo
+          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.Graph:
-          //llamar módulo
+          Process.Start(String.Format("{0}\\IM.Graph.exe", path));
           break;
         case EnumMenu.GuestsByPR:
-          //llamar módulo
+          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.SalesByPR:
-          //llamar módulo
+          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.SalesByLiner:
-          //llamar módulo
+          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.SalesByCloser:
-          //llamar módulo
+          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.Administrator:
-          System.Diagnostics.Process.Start(String.Format("{0}\\IM.Administrator.exe", path));
+          Process.Start(String.Format("{0}\\IM.Administrator.exe", path));
           break;
         case EnumMenu.MailOutsConfig:
-          //llamar módulo
+          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.InvitationsConfig:
-          //llamar módulo
+          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.PrinterConfig:
           var printer = new PrinterCfg();

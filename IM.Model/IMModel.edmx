@@ -5904,6 +5904,18 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="Agencies" Type="varchar(max)" Mode="In" />
           <Parameter Name="Markets" Type="varchar(max)" Mode="In" />
         </Function>
+        <Function Name="USP_OR_SaveGuestLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Guest" Type="int" Mode="In" />
+          <Parameter Name="HoursDif" Type="smallint" Mode="In" />
+          <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_SaveGuestMovement" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Guest" Type="int" Mode="In" />
+          <Parameter Name="GuestMovementType" Type="varchar" Mode="In" />
+          <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
+          <Parameter Name="ComputerName" Type="varchar" Mode="In" />
+          <Parameter Name="IPAddress" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_SaveLoginLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Location" Type="varchar" Mode="In" />
           <Parameter Name="User" Type="varchar" Mode="In" />
@@ -14796,6 +14808,18 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="TimeOriginal" Mode="In" Type="DateTime" />
             <Parameter Name="CurrentDate" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_SaveGuestLog">
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="HoursDif" Mode="In" Type="Int16" />
+            <Parameter Name="ChangedBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_SaveGuestMovement">
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="GuestMovementType" Mode="In" Type="String" />
+            <Parameter Name="ChangedBy" Mode="In" Type="String" />
+            <Parameter Name="ComputerName" Mode="In" Type="String" />
+            <Parameter Name="IPAddress" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -18231,6 +18255,8 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_SaveGuestLog" FunctionName="IMModel.Store.USP_OR_SaveGuestLog" />
+          <FunctionImportMapping FunctionImportName="USP_OR_SaveGuestMovement" FunctionName="IMModel.Store.USP_OR_SaveGuestMovement" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -832,5 +832,47 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TourTimeAvailable>("USP_OR_GetTourTimesAvailables", leadSourceParameter, salesRoomParameter, dateParameter, dateOriginalParameter, timeOriginalParameter, currentDateParameter);
         }
+    
+        public virtual int USP_OR_SaveGuestLog(Nullable<int> guest, Nullable<short> hoursDif, string changedBy)
+        {
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            var hoursDifParameter = hoursDif.HasValue ?
+                new ObjectParameter("HoursDif", hoursDif) :
+                new ObjectParameter("HoursDif", typeof(short));
+    
+            var changedByParameter = changedBy != null ?
+                new ObjectParameter("ChangedBy", changedBy) :
+                new ObjectParameter("ChangedBy", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveGuestLog", guestParameter, hoursDifParameter, changedByParameter);
+        }
+    
+        public virtual int USP_OR_SaveGuestMovement(Nullable<int> guest, string guestMovementType, string changedBy, string computerName, string iPAddress)
+        {
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            var guestMovementTypeParameter = guestMovementType != null ?
+                new ObjectParameter("GuestMovementType", guestMovementType) :
+                new ObjectParameter("GuestMovementType", typeof(string));
+    
+            var changedByParameter = changedBy != null ?
+                new ObjectParameter("ChangedBy", changedBy) :
+                new ObjectParameter("ChangedBy", typeof(string));
+    
+            var computerNameParameter = computerName != null ?
+                new ObjectParameter("ComputerName", computerName) :
+                new ObjectParameter("ComputerName", typeof(string));
+    
+            var iPAddressParameter = iPAddress != null ?
+                new ObjectParameter("IPAddress", iPAddress) :
+                new ObjectParameter("IPAddress", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveGuestMovement", guestParameter, guestMovementTypeParameter, changedByParameter, computerNameParameter, iPAddressParameter);
+        }
     }
 }
