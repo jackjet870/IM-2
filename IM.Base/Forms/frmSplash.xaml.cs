@@ -7,6 +7,12 @@ namespace IM.Base.Forms
   /// </summary>
   public partial class frmSplash : Window
   {
+    #region Atributos
+
+    private Window _frmWindow;
+
+    #endregion Atributos
+
     #region Constructores y destructores
 
     /// <summary>
@@ -23,7 +29,7 @@ namespace IM.Base.Forms
       this.Title = title;
     }
 
-    #endregion
+    #endregion Constructores y destructores
 
     #region Metodos
 
@@ -35,20 +41,50 @@ namespace IM.Base.Forms
     /// <param name="pParent"> Instancia del frmLogin segun sea el tipo </param>
     /// <history>
     /// [vipacheco] 2-26-2016 Created
+    /// [aalcocer]  10/03/2016 Modified. se pasa el contenido a una funcion
     /// </history>
     public void ShowLogin(ref frmLogin frmLogin)
     {
-      frmLogin.WindowStyle = WindowStyle.None;
-      frmLogin.ShowInTaskbar = false;
-      frmLogin.Owner = this;
-
-      frmLogin.Left = this.Left + 240;
-      frmLogin.Top = this.Top + 83;
-      frmLogin.ShowDialog();
+      _frmWindow = frmLogin;
+      ShowWindow();
     }
 
-    #endregion
+    /// <summary>
+    /// Función para ejecutar la ventana sobre el Splash
+    /// </summary>
+    /// <param name="pChildLogin"> Instancia la ventana </param>
+    /// <history>
+    /// [aalcocer] 10/03/2016 Created
+    /// </history>
+    public void ShowLogin(ref Window pChildLogin)
+    {
+      _frmWindow = pChildLogin;
+      ShowWindow();
+    }
 
-    #endregion
+    #endregion ShowLogin
+
+    #region ShowWindow
+
+    /// <summary>
+    /// Ajusta la ventana o el frmLogin al Splash
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 10/03/2016 Created
+    /// </history>
+    private void ShowWindow()
+    {
+      _frmWindow.WindowStyle = WindowStyle.None;
+      _frmWindow.ShowInTaskbar = false;
+      _frmWindow.Owner = this;
+
+      _frmWindow.Left = this.Left + 240;
+      _frmWindow.Top = this.Top + 83;
+      _frmWindow.ShowDialog();
+    }
+
+    #endregion ShowWindow
+
+    #endregion Metodos
   }
 }
