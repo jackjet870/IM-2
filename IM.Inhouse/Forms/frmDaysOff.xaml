@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Inhouse.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Inhouse.Forms.frmDaysOff"
         mc:Ignorable="d"
-        Title="Days Off" Height="600" Width="800" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown">
+        Title="Days Off" Height="600" Width="800" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" ShowInTaskbar="False">
     <Window.Resources>
 
         <CollectionViewSource x:Key="personnelDayOffViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelDayOff}, CreateList=True}"/>

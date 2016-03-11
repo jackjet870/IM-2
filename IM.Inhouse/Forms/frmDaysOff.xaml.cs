@@ -284,7 +284,8 @@ namespace IM.Inhouse.Forms
                 daysOff.doFriday = chkFriday.IsChecked.Value;
                 daysOff.doSaturday = chkSaturday.IsChecked.Value;
                 daysOff.doSunday = chkSunday.IsChecked.Value;
-                nRes = BRPersonnelDayOff.SavePersonnelDayOff(true, daysOff);
+              
+                nRes = BRPersonnelDayOff.SavePersonnelDayOff(daysOff);
                 CleanControls();
                 LoadGrid();
                 EnableControls(0);

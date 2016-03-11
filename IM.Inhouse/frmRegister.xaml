@@ -75,7 +75,7 @@
                     </Button>
                     <Button x:Name="btnDaysOff" HorizontalAlignment="Left" Margin="388,3,0,0" VerticalAlignment="Top" Width="55" Background="White" Click="btnDaysOff_Click" >
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Airplane.ico" Width="24" Height="24" HorizontalAlignment="Center"/>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/DaysOff.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                             <TextBlock Text="DaysOff" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
