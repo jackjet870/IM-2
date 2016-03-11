@@ -21,6 +21,7 @@ namespace IM.Base.Helpers
         int nSize,             // size of return buffer
         string lpFileName         // address of initialization filename
     );
+
     // Leer una sección completa
     [DllImport("Kernel32.dll", CharSet = CharSet.Auto)]
     public static extern int GetPrivateProfileSection(
@@ -29,6 +30,7 @@ namespace IM.Base.Helpers
         int nSize,             // size of return buffer
         string lpFileName         // address of initialization filename
     );
+
     // Leer una clave de un fichero INI
     [DllImport("Kernel32.dll", CharSet = CharSet.Auto)]
     public static extern int GetPrivateProfileString(
@@ -39,6 +41,7 @@ namespace IM.Base.Helpers
         int nSize,            // size of destination buffer
         string lpFileName        // points to initialization filename
     );
+
     [DllImport("Kernel32.dll", CharSet = CharSet.Auto)]
     public static extern int GetPrivateProfileString(
         string lpAppName,        // points to section name
@@ -48,6 +51,7 @@ namespace IM.Base.Helpers
         int nSize,            // size of destination buffer
         string lpFileName        // points to initialization filename
         );
+
     // Escribir una clave de un fichero INI (también para borrar claves y secciones)
     [DllImport("Kernel32.dll", CharSet = CharSet.Auto)]
     public static extern int WritePrivateProfileString(
@@ -56,6 +60,7 @@ namespace IM.Base.Helpers
         string lpString,   // pointer to string to add
         string lpFileName  // pointer to initialization filename
     );
+
     [DllImport("Kernel32.dll", CharSet = CharSet.Auto)]
     public static extern int WritePrivateProfileString(
         string lpAppName,  // pointer to section name
@@ -63,6 +68,7 @@ namespace IM.Base.Helpers
         int lpString,   // pointer to string to add
         string lpFileName  // pointer to initialization filename
         );
+
     [DllImport("Kernel32.dll", CharSet = CharSet.Auto)]
     public static extern int WritePrivateProfileString(
         string lpAppName,  // pointer to section name
@@ -79,7 +85,7 @@ namespace IM.Base.Helpers
     public void IniDeleteKey(string sIniFile, string sSection, string sKey)
     {
       //--------------------------------------------------------------------------
-      // Borrar una clave o entrada de un fichero INI                  
+      // Borrar una clave o entrada de un fichero INI
       // Si no se indica sKey, se borrará la sección indicada en sSection
       // En otro caso, se supone que es la entrada (clave) lo que se quiere borrar
       //
@@ -96,18 +102,20 @@ namespace IM.Base.Helpers
         WritePrivateProfileString(sSection, sKey, 0, sIniFile);
       }
     }
+
     public void IniDeleteSection(string sIniFile, string sSection)
     {
       //--------------------------------------------------------------------------
-      // Borrar una sección de un fichero INI                          
+      // Borrar una sección de un fichero INI
       // Borrar una sección
       WritePrivateProfileString(sSection, 0, 0, sIniFile);
     }
+
     public string[] IniGetSection(string sFileName, string sSection)
     {
       //--------------------------------------------------------------------------
-      // Lee una sección entera de un fichero INI                      
-      // Adaptada para devolver un array de string                     
+      // Lee una sección entera de un fichero INI
+      // Adaptada para devolver un array de string
       //
       // Esta función devolverá un array de índice cero
       // con las claves y valores de la sección
@@ -146,11 +154,12 @@ namespace IM.Base.Helpers
       // Devolver el array
       return aSeccion;
     }
+
     public string[] IniGetSections(string sFileName)
     {
       //--------------------------------------------------------------------------
-      // Devuelve todas las secciones de un fichero INI                
-      // Adaptada para devolver un array de string                     
+      // Devuelve todas las secciones de un fichero INI
+      // Adaptada para devolver un array de string
       //
       // Esta función devolverá un array con todas las secciones del fichero
       //
@@ -184,6 +193,7 @@ namespace IM.Base.Helpers
     }
 
     #region Get/Set StringValue
+
     public string readText(string Section, string Key, string Default)
     {
       int ret;
@@ -206,8 +216,21 @@ namespace IM.Base.Helpers
     {
       WritePrivateProfileString(Section, Key, Value, mstrPath);
     }
-    #endregion
+
+    #endregion Get/Set StringValue
+
     #region Get/Set DateValue
+
+    /// <summary>
+    /// Lee una fecha de una clave de una seccion de un archivo de configuracion
+    /// </summary>
+    /// <param name="Section">Section</param>
+    /// <param name="Key">Key</param>
+    /// <param name="Default">Valor a retornar si la Key es nulo en el archivo</param>
+    /// <returns>DateTime</returns>
+    /// <history>
+    /// [aalcocer]  10/03/2016 Modified. Se agrega el tipo de formato para obtener del texto a la fecha
+    /// </history>
     public DateTime readDate(string Section, string Key, DateTime Default)
     {
       DateTime Value = new DateTime();
@@ -217,7 +240,7 @@ namespace IM.Base.Helpers
       if (Text == "")
         Value = Default;
       else
-        Value = Convert.ToDateTime(Text);
+        Value = DateTime.ParseExact(Text, "yyyy-dd-MM", System.Globalization.CultureInfo.InvariantCulture);
 
       return Value;
     }
@@ -226,8 +249,11 @@ namespace IM.Base.Helpers
     {
       WritePrivateProfileString(Section, Key, Value.ToString("dd mmm yyyy hh:mm:ss"), mstrPath);
     }
-    #endregion
+
+    #endregion Get/Set DateValue
+
     #region Get/Set IntValue
+
     public int readInteger(string Section, string Key, int Default)
     {
       int Value;
@@ -246,8 +272,11 @@ namespace IM.Base.Helpers
     {
       WritePrivateProfileString(Section, Key, Value.ToString(), mstrPath);
     }
-    #endregion
+
+    #endregion Get/Set IntValue
+
     #region Get/Set DoubleValue
+
     public double readDouble(string Section, string Key, double Default)
     {
       double Value;
@@ -266,8 +295,11 @@ namespace IM.Base.Helpers
     {
       WritePrivateProfileString(Section, Key, Value.ToString(), mstrPath);
     }
-    #endregion
+
+    #endregion Get/Set DoubleValue
+
     #region Get/Set BooleanValue
+
     public bool readBool(string Section, string Key, bool Default)
     {
       bool Value;
@@ -286,6 +318,7 @@ namespace IM.Base.Helpers
     {
       WritePrivateProfileString(Section, Key, Value.ToString(), mstrPath);
     }
-    #endregion
+
+    #endregion Get/Set BooleanValue
   }
-}   
+}

@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.MailOuts", "IM.MailOuts\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Administrator", "IM.Administrator\IM.Administrator.csproj", "{6680C30E-05E8-46E9-90D8-E29102688AFD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Graph", "IM.Graph\IM.Graph.csproj", "{B812C53F-CD30-4244-A1FB-D3905765FBE6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,14 @@ Global
 		{6680C30E-05E8-46E9-90D8-E29102688AFD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6680C30E-05E8-46E9-90D8-E29102688AFD}.Release|x86.ActiveCfg = Release|Any CPU
 		{6680C30E-05E8-46E9-90D8-E29102688AFD}.Release|x86.Build.0 = Release|Any CPU
+		{B812C53F-CD30-4244-A1FB-D3905765FBE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B812C53F-CD30-4244-A1FB-D3905765FBE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B812C53F-CD30-4244-A1FB-D3905765FBE6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B812C53F-CD30-4244-A1FB-D3905765FBE6}.Debug|x86.Build.0 = Debug|Any CPU
+		{B812C53F-CD30-4244-A1FB-D3905765FBE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B812C53F-CD30-4244-A1FB-D3905765FBE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B812C53F-CD30-4244-A1FB-D3905765FBE6}.Release|x86.ActiveCfg = Release|Any CPU
+		{B812C53F-CD30-4244-A1FB-D3905765FBE6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
