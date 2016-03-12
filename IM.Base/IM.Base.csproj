@@ -70,6 +70,7 @@
     <Compile Include="Forms\frmLogin.xaml.cs">
       <DependentUpon>frmLogin.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\GridHelper.cs" />
     <Compile Include="Helpers\KeyboardHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Helpers\EncryptHelper.cs" />
