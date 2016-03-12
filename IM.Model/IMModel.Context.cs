@@ -874,5 +874,26 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveGuestMovement", guestParameter, guestMovementTypeParameter, changedByParameter, computerNameParameter, iPAddressParameter);
         }
+    
+        public virtual int USP_OR_SaveExchangeRateLog(string currency, Nullable<System.DateTime> date, Nullable<short> hoursDif, string changedBy)
+        {
+            var currencyParameter = currency != null ?
+                new ObjectParameter("Currency", currency) :
+                new ObjectParameter("Currency", typeof(string));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var hoursDifParameter = hoursDif.HasValue ?
+                new ObjectParameter("HoursDif", hoursDif) :
+                new ObjectParameter("HoursDif", typeof(short));
+    
+            var changedByParameter = changedBy != null ?
+                new ObjectParameter("ChangedBy", changedBy) :
+                new ObjectParameter("ChangedBy", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveExchangeRateLog", currencyParameter, dateParameter, hoursDifParameter, changedByParameter);
+        }
     }
 }
