@@ -15,6 +15,11 @@ namespace IM.BusinessRules.BR
     /// <param name="user">Usuario </param>
     /// <param name="programs"> Programa o default('ALL') </param>
     /// <param name="regions">Region o default('ALL') </param>
+    /// <returns>List<LeadSourceByUser></returns>
+    /// <hystory>
+    /// [erosado] 08/03/2016  created
+    /// </hystory>
+
     public static List<LeadSourceByUser> GetLeadSourcesByUser(string user, string programs, string regions)
     {
       using (var dbContext = new IMEntities())

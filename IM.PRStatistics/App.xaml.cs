@@ -1,20 +1,21 @@
-﻿using System.Windows;
-using IM.Base.Forms;
+﻿using IM.Base.Forms;
+using IM.Model.Classes;
+using IM.Model.Enums;
+using System.Windows;
+using IM.PRStatistics.Forms;
 
-namespace IM.Host
+namespace IM.PRStatistics
 {
   /// <summary>
   /// Interaction logic for App.xaml
   /// </summary>
   public partial class App : Application
   {
-    #region Constructores y destructores
-
     /// <summary>
     /// Constructor de la aplicacion
     /// </summary>
     /// <history>
-    ///   [wtorres]  09/Mar/2016 Created
+    ///   [erosado]  09/Mar/2016 Created
     /// </history>
     public App()
       : base()
@@ -22,30 +23,27 @@ namespace IM.Host
       this.Dispatcher.UnhandledException += App_UnhandledException;
     }
 
-    #endregion
-
     #region Metodos
 
     #region OnStartUp
-
+    /// <summary>
+    /// Inicializa el modulo con el Login y el Splash
+    /// </summary>
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      /*
-      //Creamos el Splash Base!
-      frmSplash mfrmSplash = new frmSplash(); 
 
-      //Creamos el tipo de login que se necesita!
-      frmLoginPlace fr = new frmLoginPlace(mfrmSplash);
-
-      //Mostramos el Splash
-      mfrmSplash.Show();
-
-      //Mandamos llamar el Login
-      mfrmSplash.ShowLogin(fr);
-      */
-      frmHost mfrmHost = new frmHost();
-      mfrmHost.ShowDialog();
+      frmSplash frmSplash = new frmSplash("PR Statistics");
+      frmLogin frmLogin = new frmLogin(frmSplash,true);
+      frmSplash.Show();
+      frmSplash.ShowLogin(ref frmLogin);
+      if (frmLogin.IsAuthenticated)
+      {
+        UserData userData = frmLogin.userData;
+        frmPRStatistics frmPrStatistics = new frmPRStatistics(userData);
+        frmPrStatistics.ShowDialog();
+        frmSplash.Close();
+      }
     }
 
     #endregion
@@ -56,7 +54,7 @@ namespace IM.Host
     /// Despliega los mensajes de error de la aplicacion
     /// </summary>
     /// <history>
-    ///   [wtorres]  09/Mar/2016 Created
+    ///  [erosado]  09/Mar/2016 Created
     /// </history>
     private void App_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
     {

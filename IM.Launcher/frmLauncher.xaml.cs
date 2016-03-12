@@ -188,7 +188,7 @@ namespace IM.Launcher
           UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.PRStatistics:
-          UIHelper.ShowMessage("Coming soon..");
+          Process.Start(String.Format("{0}\\IM.PRStatistics.exe", path));
           break;
         case EnumMenu.Graph:
           Process.Start(String.Format("{0}\\IM.Graph.exe", path));

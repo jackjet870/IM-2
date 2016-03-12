@@ -16,7 +16,7 @@ namespace IM.Base.Helpers
     /// <history>
     /// [erosado] 12/03/2016  Created.
     /// </history>
-    public static DataTable GetDataTableFromObjectList<T>(List<T> lst)
+    public static DataTable GetDataTableFromGrid<T>(List<T> lst)
     {
       PropertyDescriptorCollection properties =
            TypeDescriptor.GetProperties(typeof(T));

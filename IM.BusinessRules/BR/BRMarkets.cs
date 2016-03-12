@@ -13,6 +13,11 @@ namespace IM.BusinessRules.BR
     /// Obtiene el catalogo de mercados
     /// </summary>
     /// <param name="status"> 0- Sin filtro, 1-Activos, 2. Inactivos </param>
+    /// <returns>List<MarketShort></returns>
+    /// <hystory>
+    /// [erosado] 08/03/2016  created
+    /// </hystory>
+
     public static List<MarketShort> GetMarkets(int status)
     {
       using (var dbContext = new IM.Model.IMEntities())
