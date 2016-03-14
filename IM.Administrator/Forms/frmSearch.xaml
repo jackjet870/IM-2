@@ -4,33 +4,36 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" 
-        mc:Ignorable="d" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
-        Title="Search" Height="218" Width="338" ResizeMode="NoResize" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Loaded="Window_Loaded">
+        mc:Ignorable="d" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" SizeToContent="WidthAndHeight"
+        Title="Search" ResizeMode="NoResize" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Loaded="Window_Loaded">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="71"/>
-            <ColumnDefinition Width="81*"/>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="75*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="44"/>
-            <RowDefinition Height="44"/>
-            <RowDefinition Height="44"/>
-            <RowDefinition Height="44"/>
-        </Grid.RowDefinitions>
+        <Grid.RowDefinitions>            
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>        
         <!--#endregion-->
         <!--#region títulos-->
         <Label Name="lblID" Grid.Column="0" Grid.Row="0">ID</Label>
         <Label Name="lblDes" Grid.Column="0" Grid.Row="1">Description</Label>
-        <Label Name="lblSta" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2">Status</Label>
+        <Label Name="lblSta" Grid.Column="0" Grid.Row="2" >Status</Label>
+        <Label Name="lblSegment" Visibility="Collapsed" Grid.Column="0" Grid.Row="3">Segment</Label>
         <!--#endregion-->
         <!--#region Datos-->
-        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" CharacterCasing="Upper" IsEnabled="True"/>
-        <TextBox Name="txtD" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" IsEnabled="True" />
-        <ComboBox Name="cmbStatus" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" IsEnabled="True" DisplayMemberPath="sName" SelectedValuePath="sValue"/>        
+        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Margin="0,0,0,10" Height="27" Width="235" VerticalAlignment="Top" CharacterCasing="Upper" IsEnabled="True"/>
+        <TextBox Name="txtD" Grid.Column="1" Grid.Row="1" Margin="0,0,0,10" Height="27" VerticalAlignment="Top" IsEnabled="True" Width="235"/>
+        <ComboBox Name="cmbStatus" Grid.Column="1" Grid.Row="2" Margin="0,0,0,10" Height="27" VerticalAlignment="Top" IsEnabled="True" DisplayMemberPath="sName" SelectedValuePath="sValue" Width="235"/>
+        <ComboBox Name="cmbSegment" Visibility="Collapsed" Grid.Column="1" Grid.Row="3" Margin="0,0,0,10" Height="27" VerticalAlignment="Top" IsEnabled="True" DisplayMemberPath="seN" SelectedValuePath="seID" Width="235"/>
 
-        <Button Name="btnAccept" Width="60" Height="30" Content="Accept" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" />
-        <Button Name="btnCancel" Width="60" Height="30" Content="Cancel" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" />
+        <Button Name="btnAccept" Width="60" Height="30" Content="Accept" Grid.Column="1" Grid.Row="5" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" />
+        <Button Name="btnCancel" Width="60" Height="30" Content="Cancel" Grid.Column="1" Grid.Row="5" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" />
         <!--#endregion-->
     </Grid>
 </Window>

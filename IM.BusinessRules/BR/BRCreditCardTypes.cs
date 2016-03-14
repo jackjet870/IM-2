@@ -39,7 +39,7 @@ namespace IM.BusinessRules.BR
           query = query.Where(cct => cct.ccN == creditCardType.ccN);
         }
 
-        return query.ToList();
+        return query.OrderBy(cct=>cct.ccN).ToList();
       }
     }
     #endregion

@@ -54,6 +54,7 @@
     <Compile Include="BR\BRAssistancesStatus.cs" />
     <Compile Include="BR\BRChargeCalculationTypes.cs" />
     <Compile Include="BR\BRChargeTos.cs" />
+    <Compile Include="BR\BRClubs.cs" />
     <Compile Include="BR\BRContracts.cs" />
     <Compile Include="BR\BRCountries.cs" />
     <Compile Include="BR\BRCreditCardTypes.cs" />
@@ -66,6 +67,8 @@
     <Compile Include="BR\BRPersonnelDayOff.cs" />
     <Compile Include="BR\BRPrStats.cs" />
     <Compile Include="BR\BRRegions.cs" />
+    <Compile Include="BR\BRReps.cs" />
+    <Compile Include="BR\BRSegmentsByAgency.cs" />
     <Compile Include="BR\BRUnavailableMotives.cs" />
     <Compile Include="BR\BRWarehouses.cs" />
     <Compile Include="BR\BRLocations.cs" />
@@ -78,6 +81,7 @@
     <Compile Include="BR\BRLeadSources.cs" />
     <Compile Include="BR\BRMarkets.cs" />
     <Compile Include="BR\BRSalesRooms.cs" />
+    <Compile Include="Enums\PlaceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

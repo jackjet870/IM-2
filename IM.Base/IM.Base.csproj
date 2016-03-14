@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Parametros.cs" />
+    <Compile Include="Classes\StrToEnum.cs" />
     <Compile Include="Forms\frmInnerException.xaml.cs">
       <DependentUpon>frmInnerException.xaml</DependentUpon>
     </Compile>
@@ -77,6 +78,7 @@
     <Compile Include="Helpers\EpplusHelper.cs" />
     <Compile Include="Helpers\GridHelper.cs" />
     <Compile Include="Helpers\KeyboardHelper.cs" />
+    <Compile Include="Helpers\ObjectHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Helpers\EncryptHelper.cs" />
     <Compile Include="Forms\frmSplash.xaml.cs">

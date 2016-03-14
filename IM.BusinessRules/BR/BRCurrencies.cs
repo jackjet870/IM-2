@@ -40,7 +40,7 @@ namespace IM.BusinessRules.BR
           query = query.Where(c=>c.cuN==currency.cuN);
         }
 
-        return query.ToList();
+        return query.OrderBy(c=>c.cuN).ToList();
       }
     }
     #endregion

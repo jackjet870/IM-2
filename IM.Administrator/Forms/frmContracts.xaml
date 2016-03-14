@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" WindowStartupLocation="CenterOwner"
         mc:Ignorable="d" Uid="frmContracts" ResizeMode="NoResize" ShowInTaskbar="False" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
-        Title="Contracts" Height="307" Width="370" KeyDown="Window_KeyDown" Loaded="Window_Loaded"  Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" >
+        Title="Contracts" Height="407" Width="470" KeyDown="Window_KeyDown" Loaded="Window_Loaded"  Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" >
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->
         <StatusBar DockPanel.Dock="Bottom" >

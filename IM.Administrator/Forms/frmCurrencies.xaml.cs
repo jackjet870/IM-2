@@ -14,7 +14,6 @@ using System.Windows.Shapes;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using IM.Administrator.Helpers;
 using IM.Administrator.Enums;
 
 namespace IM.Administrator.Forms
@@ -86,8 +85,11 @@ namespace IM.Administrator.Forms
       frmCurrencyDetail frmCurrencyDetail = new frmCurrencyDetail();
       frmCurrencyDetail.Owner = this;
       frmCurrencyDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
-      frmCurrencyDetail.currency = currency;
-      frmCurrencyDetail.ShowDialog();
+      ObjectHelper.CopyProperties(frmCurrencyDetail.currency,currency);
+      if(frmCurrencyDetail.ShowDialog()==true)
+      {
+        LoadCurrencies();
+      }
 
     }
     #endregion
@@ -103,7 +105,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = PermisionHelper.EditPermision("CURRENCIES");
+      _blnEdit = App.User.HasPermission("CURRENCIES",Model.Enums.EnumPermisionLevel.Standard);
       LoadCurrencies();
     }
     #endregion

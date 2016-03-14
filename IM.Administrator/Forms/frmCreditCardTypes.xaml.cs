@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using IM.Administrator.Enums;
-using IM.Administrator.Helpers;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
@@ -123,7 +122,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = PermisionHelper.EditPermision("SALES");
+      _blnEdit = App.User.HasPermission("SALES",Model.Enums.EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadCreditCardTypes();
     }
@@ -193,8 +192,11 @@ namespace IM.Administrator.Forms
       frmCreditCardTypesDetail frmCrediCard = new frmCreditCardTypesDetail();
       frmCrediCard.Owner = this;
       frmCrediCard.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
-      frmCrediCard.creditCardType = creditCardType;
-      frmCrediCard.ShowDialog();
+      ObjectHelper.CopyProperties(frmCrediCard.creditCardType,creditCardType);
+      if(frmCrediCard.ShowDialog()==true)
+      {
+        LoadCreditCardTypes();
+      }
     }
     #endregion
 

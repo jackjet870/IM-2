@@ -1,9 +1,9 @@
 ﻿<Window x:Class="IM.Administrator.Forms.frmAgencyDetail"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.Administrator.Forms"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"        
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False"
         mc:Ignorable="d" WindowStartupLocation="CenterOwner" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" ResizeMode="NoResize"
         Title="Agency Detail" Height="360" Width="600" DataContext="{Binding agency}" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
     <Grid >
@@ -44,11 +44,11 @@
             <!--#region Datos-->
             <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding agID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="10"/>
             <TextBox Name="txtN" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding agN}"  IsEnabled="False" MaxLength="20"/>
-            <ComboBox Name="cmbUnavMot" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" SelectedValue="{Binding agum}" IsEnabled="False"/>
-            <ComboBox Name="cmbMarket" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" SelectedValue="{Binding agmk}" IsEnabled="False"/>
-            <TextBox Name="txShowPay" Grid.Column="1" Grid.Row="4" Height="27" VerticalAlignment="Top" Text="{Binding agShowPay}"  IsEnabled="False" MaxLength="18"/>
-            <TextBox Name="txSalePay" Grid.Column="1" Grid.Row="5" Height="27" VerticalAlignment="Top" Text="{Binding agSalePay}"  IsEnabled="False" MaxLength="18"/>
-            <!--#endregion-->
+            <ComboBox Name="cmbUnavMot" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" SelectedValuePath="umID" DisplayMemberPath="umN" SelectedValue="{Binding agum}" IsEnabled="False"/>
+            <ComboBox Name="cmbMarket" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" SelectedValuePath="mkID" DisplayMemberPath="mkN" SelectedValue="{Binding agmk}" IsEnabled="False"/>
+            <TextBox Name="txtShowPay" Grid.Column="1" Grid.Row="4" Height="27"  VerticalAlignment="Top"  Text="{Binding agShowPay,StringFormat={}{0:C}}" LostFocus="txt_LostFocus"  IsEnabled="False" MaxLength="14" GotFocus="txt_GotFocus" PreviewTextInput="txt_PreviewTextInput"/>            
+            <TextBox Name="txtSalePay" Grid.Column="1" Grid.Row="5" Height="27" VerticalAlignment="Top" Text="{Binding agSalePay,StringFormat={}{0:C}}" LostFocus="txt_LostFocus"  IsEnabled="False" MaxLength="14" GotFocus="txt_GotFocus" PreviewTextInput="txt_PreviewTextInput"/>
+            <!--#endregion--> 
         </Grid>
         <!--#endregion-->
         <!--#region Controles de la derecha-->
@@ -70,13 +70,13 @@
             <Label Grid.Column="0" Grid.Row="0">Rep</Label>
             <Label Grid.Column="0" Grid.Row="1">Segment</Label>
             <Label Grid.Column="0" Grid.Row="2">Club</Label>
-            <Label Grid.Column="0" Grid.Row="3">Countri</Label>
+            <Label Grid.Column="0" Grid.Row="3">Country</Label>
             <!--#endregion-->
             <!--#region Data-->            
-            <ComboBox Name="cmbRep" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" SelectedValue="{Binding agrp}" IsEnabled="False"/>
-            <ComboBox Name="cmbSegment" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" SelectedValue="{Binding agse}" IsEnabled="False"/>
-            <ComboBox Name="cmbClub" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" SelectedValue="{Binding agcl}" IsEnabled="False"/>
-            <ComboBox Name="cmbCountri" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" SelectedValue="{Binding agco}" IsEnabled="False"/>
+            <ComboBox Name="cmbRep" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" SelectedValuePath="rpID" DisplayMemberPath="rpID" SelectedValue="{Binding agrp}" IsEnabled="False"/>
+            <ComboBox Name="cmbSegment" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" SelectedValuePath="seID" DisplayMemberPath="seN" SelectedValue="{Binding agse}" IsEnabled="False"/>
+            <ComboBox Name="cmbClub" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" SelectedValuePath="clID" DisplayMemberPath="clN" SelectedValue="{Binding agcl}" IsEnabled="False"/>
+            <ComboBox Name="cmbCountri" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" SelectedValuePath="coID" DisplayMemberPath="coN" SelectedValue="{Binding agco}" IsEnabled="False"/>
             <Grid Grid.Column="1" Grid.Row="4" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20*"/>

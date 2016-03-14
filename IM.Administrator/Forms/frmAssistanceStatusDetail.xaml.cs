@@ -11,7 +11,7 @@ namespace IM.Administrator.Forms
   public partial class frmAssistanceStatusDetail : Window
   {
     public ModeOpen mode;
-    public AssistanceStatus assistance;
+    public AssistanceStatus assistance=new AssistanceStatus();
     public frmAssistanceStatusDetail()
     {
       InitializeComponent();
@@ -28,13 +28,12 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void OpenMode()
     {
+      DataContext = assistance;
       switch (mode)
       {
         case ModeOpen.preview://show
           {
-            btnAccept.Visibility = Visibility.Hidden;
-            btnCancel.Content = "OK";
-            this.DataContext = assistance;
+            btnAccept.Visibility = Visibility.Hidden;            
             break;
           }
         case ModeOpen.add://add
@@ -47,7 +46,6 @@ namespace IM.Administrator.Forms
           {
             txtID.IsEnabled = false;
             LockControls(true);
-            this.DataContext = assistance;
             break;
           }
       }
@@ -118,8 +116,7 @@ namespace IM.Administrator.Forms
         {
           #region insert
           case ModeOpen.add://add
-            {
-              assistance = new AssistanceStatus { atID = txtID.Text, atN = txtN.Text, atA = chkA.IsChecked.Value };
+            { 
               nRes = BRAssistancesStatus.SaveAssitanceStatus(false, assistance);
 
               break;
@@ -128,7 +125,6 @@ namespace IM.Administrator.Forms
           #region edit
           case ModeOpen.edit://Edit
             {
-              assistance = (AssistanceStatus)DataContext;
               nRes = BRAssistancesStatus.SaveAssitanceStatus(true, assistance);
               break;
             }
@@ -160,7 +156,7 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        MessageBox.Show(sMsj);
+        MessageBox.Show(sMsj.TrimEnd('\n'),"Inteligense Marketing");
       }
 
     }
@@ -186,19 +182,8 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        if (mode == ModeOpen.preview)
-        {
-          this.Close();
-        }
-        else
-        {
-          MessageBoxResult msgResult = MessageBox.Show("Are you sure close this window?", "Close confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-          if (msgResult == MessageBoxResult.Yes)
-          {
-            DialogResult = false;
-            this.Close();
-          }
-        }
+        DialogResult = false;
+        Close();        
       }
     } 
     #endregion

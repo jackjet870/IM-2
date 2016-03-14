@@ -7,7 +7,7 @@
         mc:Ignorable="d" 
         Uid="frmAreas"  KeyDown="Window_KeyDown" ShowInTaskbar="False"
         ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
-        Title="Areas" Height="307" Width="370" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Loaded="Window_Loaded" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged">
+        Title="Areas" Height="407" Width="470" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Loaded="Window_Loaded" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->
         <StatusBar DockPanel.Dock="Bottom" >

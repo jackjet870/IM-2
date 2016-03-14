@@ -76,14 +76,8 @@ namespace IM.Administrator.Forms
     protected bool AddCatalog(string sNameCat)
     {
 
-      if (App.User.HasPermission(sNameCat, EnumPermisionLevel.ReadOnly))//Si tiene permiso
-      {
-        return true;
-      }
-      else//No tiene permiso
-      {
-        return false;
-      }
+      return App.User.HasPermission(sNameCat, EnumPermisionLevel.ReadOnly);
+      
     }
     #endregion
 

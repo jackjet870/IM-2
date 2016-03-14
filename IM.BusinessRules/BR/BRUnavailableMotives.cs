@@ -31,7 +31,7 @@ namespace IM.BusinessRules.BR
           query = query.Where(um=>um.umA==blnStatus);
         }
 
-        lstUnavailMot = query.ToList();
+        lstUnavailMot = query.OrderBy(um=>um.umN).ToList();
       }
 
       return lstUnavailMot;      

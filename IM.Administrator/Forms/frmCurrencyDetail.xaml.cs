@@ -22,7 +22,7 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmCurrencyDetail : Window
   {
-    public Currency currency;//objeto para agrear|actualizar
+    public Currency currency=new Currency();//objeto para agrear|actualizar
     public ModeOpen mode;//modo en el que se abrirá la ventana add|preview|edit 
     public frmCurrencyDetail()
     {
@@ -30,8 +30,9 @@ namespace IM.Administrator.Forms
     }
 
     #region event controls
+    #region WindowKeyDown
     /// <summary>
-    /// Cierra la ventana con el boton escape dependiendo del modo en el que se abrió
+    /// Cierra la ventana con el boton escape 
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -42,23 +43,14 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        if (mode == ModeOpen.preview)
-        {
-          DialogResult = false;
-          this.Close();
-        }
-        else
-        {
-          MessageBoxResult msgResult = MessageBox.Show("Are you sure close this window?", "Close confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-          if (msgResult == MessageBoxResult.Yes)
-          {
-            DialogResult = false;
-            this.Close();
-          }
-        }
+        DialogResult = false;
+        Close();
+
       }
     }
+    #endregion
 
+    #region Loaded
     /// <summary>
     /// llena los datos del formulario
     /// </summary>
@@ -71,6 +63,8 @@ namespace IM.Administrator.Forms
     {
       OpenMode();
     }
+    #endregion
+    #region Accept
 
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
@@ -94,16 +88,13 @@ namespace IM.Administrator.Forms
           #region insert
           case ModeOpen.add://add
             {
-              currency = new Currency { cuID = txtID.Text, cuN = txtN.Text, cuA = chkA.IsChecked.Value };
               nRes = BRCurrencies.saveCurrency(currency, false);
-
               break;
             }
           #endregion
           #region edit
           case ModeOpen.edit://Edit
-            {
-              currency = (Currency)DataContext;
+            {              
               nRes = BRCurrencies.saveCurrency(currency, true);
               break;
             }
@@ -135,19 +126,23 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        MessageBox.Show(sMsj);
+        MessageBox.Show(sMsj.TrimEnd('\n'),"Intelligense Marketing");
       }
 
     }
 
+    #endregion
+    #region Cancel
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       DialogResult = false;
-      this.Close();
-    }
+      Close();
+    } 
+    #endregion
     #endregion
 
     #region metods
+    #region OpenMode
     /// <summary>
     /// Abre la ventana dependiendo del modo que elija el usuario
     /// Preview|Edit|Add
@@ -157,13 +152,12 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void OpenMode()
     {
+      DataContext = currency;
       switch (mode)
       {
         case ModeOpen.preview://show
           {
             btnAccept.Visibility = Visibility.Hidden;
-            btnCancel.Content = "OK";
-            this.DataContext = currency;
             break;
           }
         case ModeOpen.add://add
@@ -176,13 +170,14 @@ namespace IM.Administrator.Forms
           {
             txtID.IsEnabled = false;
             LockControls(true);
-            this.DataContext = currency;
             break;
           }
       }
 
     }
 
+    #endregion
+    #region LockControls
     /// <summary>
     /// Bloquea|Desbloquea los botones dependiendo del modo en que se habra
     /// </summary>
@@ -194,7 +189,8 @@ namespace IM.Administrator.Forms
     {
       txtN.IsEnabled = blnValue;
       chkA.IsEnabled = blnValue;
-    }
+    } 
+    #endregion
     #endregion
   }
 }

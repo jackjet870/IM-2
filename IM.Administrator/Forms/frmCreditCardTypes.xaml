@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
         mc:Ignorable="d" Uid="frmCreditCardTypes" WindowStartupLocation="CenterOwner" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="Credit Card Types" Height="307" Width="370" Loaded="Window_Loaded" KeyDown="Window_KeyDown">
+        Title="Credit Card Types" Height="407" Width="470" Loaded="Window_Loaded" KeyDown="Window_KeyDown">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->
         <StatusBar DockPanel.Dock="Bottom" >

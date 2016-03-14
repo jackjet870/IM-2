@@ -34,7 +34,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = Helpers.PermisionHelper.EditPermision("LOCATIONS");
+      _blnEdit = App.User.HasPermission("LOCATIONS",Model.Enums.EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadAreas();      
     }
@@ -102,9 +102,12 @@ namespace IM.Administrator.Forms
       Area Area = (Area)row.DataContext;
       frmAreaDetalle frmAreaDetalle = new frmAreaDetalle();
       frmAreaDetalle.Owner = this;
-      frmAreaDetalle.area = Area;
+      ObjectHelper.CopyProperties(frmAreaDetalle.area, Area);
       frmAreaDetalle.mode = ((_blnEdit==true)?ModeOpen.edit: ModeOpen.preview);   
-      frmAreaDetalle.ShowDialog();      
+      if(frmAreaDetalle.ShowDialog()==true)
+      {
+        LoadAreas();
+      }      
     }
     #endregion
 

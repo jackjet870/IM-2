@@ -35,7 +35,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = Helpers.PermisionHelper.EditPermision("SALES");
+      _blnEdit = App.User.HasPermission("SALES",Model.Enums.EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadAssitance();      
     }
@@ -96,10 +96,13 @@ namespace IM.Administrator.Forms
       DataGridRow row = sender as DataGridRow;
       AssistanceStatus Assistance = (AssistanceStatus)row.DataContext;
       frmAssistanceStatusDetail frmAssistanceDetail = new frmAssistanceStatusDetail();
-      frmAssistanceDetail.assistance = Assistance;
+      ObjectHelper.CopyProperties(frmAssistanceDetail.assistance,Assistance);
       frmAssistanceDetail.Owner = this;
       frmAssistanceDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
-      frmAssistanceDetail.ShowDialog();
+      if(frmAssistanceDetail.ShowDialog()==true)
+      {
+        LoadAssitance();
+      }
 
     }
 

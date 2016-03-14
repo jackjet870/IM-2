@@ -42,7 +42,7 @@ namespace IM.BusinessRules.BR
         {
           query = query.Where(ast=>ast.atN==assistanceStatus.atN);
         }
-        lstAssitanceStatus = query.ToList();
+        lstAssitanceStatus = query.OrderBy(a=>a.atN).ToList();
       }
 
       return lstAssitanceStatus;
