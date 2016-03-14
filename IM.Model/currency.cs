@@ -40,6 +40,6 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GiftsReceiptPayment> GiftsReceiptsPayments { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SalesRoom> SalesRooms { get; set; }
+        public virtual ICollection<SalesRoom> SalesRooms { internal get; set; }
     }
 }

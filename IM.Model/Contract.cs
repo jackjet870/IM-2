@@ -20,6 +20,6 @@ namespace IM.Model
         public int cnMinDaysTours { get; set; }
         public byte cnum { get; set; }
     
-        public virtual UnavailableMotive UnavailableMotive { get; set; }
+        public virtual UnavailableMotive UnavailableMotive { internal get; set; }
     }
 }

@@ -7482,7 +7482,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Name="cnA" Type="Boolean" Nullable="false" />
           <Property Name="cnMinDaysTours" Type="Int32" Nullable="false" />
           <Property Name="cnum" Type="Byte" Nullable="false" />
-          <NavigationProperty Name="UnavailableMotive" Relationship="Self.FK_Contracts_UnavailMots" FromRole="Contracts" ToRole="UnavailMots" />
+          <NavigationProperty Name="UnavailableMotive" Relationship="Self.FK_Contracts_UnavailMots" FromRole="Contracts" ToRole="UnavailMots" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -7522,7 +7522,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <NavigationProperty Name="GiftsReceipts" Relationship="Self.FK_GiftsReceipts_Currencies_Deposit" FromRole="Currencies" ToRole="GiftsReceipts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GiftsReceiptsLogs" Relationship="Self.FK_GiftsReceiptsLog_Currencies" FromRole="Currencies" ToRole="GiftsReceiptsLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GiftsReceiptsPayments" Relationship="Self.FK_GiftsReceiptsPayments_Currencies" FromRole="Currencies" ToRole="GiftsReceiptsPayments" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="SalesRooms" Relationship="Self.FK_SalesRooms_Currencies" FromRole="Currencies" ToRole="SalesRooms" />
+          <NavigationProperty Name="SalesRooms" Relationship="Self.FK_SalesRooms_Currencies" FromRole="Currencies" ToRole="SalesRooms" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="CxCPayment">
           <Key>
