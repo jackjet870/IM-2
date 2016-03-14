@@ -14798,7 +14798,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Markets" Mode="In" Type="String" />
             <Parameter Name="OnlyAvailables" Mode="In" Type="Boolean" />
           </FunctionImport>
-          <FunctionImport Name="USP_OR_GetPRsAssigned">
+          <FunctionImport Name="USP_OR_GetPRsAssigned" ReturnType="Collection(IMModel.PRAssigned)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="LeadSource" Mode="In" Type="String" />
@@ -15346,6 +15346,11 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="DateTime" Name="Tour" Nullable="false" Precision="23" />
           <Property Type="DateTime" Name="PickUp" Nullable="false" Precision="23" />
           <Property Type="String" Name="Text" Nullable="true" MaxLength="13" />
+        </ComplexType>
+        <ComplexType Name="PRAssigned">
+          <Property Type="String" Name="peID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="Assigned" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -18257,7 +18262,15 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="USP_OR_GetPRsAssigned" FunctionName="IMModel.Store.USP_OR_GetPRsAssigned" />
+          <FunctionImportMapping FunctionImportName="USP_OR_GetPRsAssigned" FunctionName="IMModel.Store.USP_OR_GetPRsAssigned" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.PRAssigned">
+                <ScalarProperty Name="peID" ColumnName="peID" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="Assigned" ColumnName="Assigned" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_GetTourTimesAvailables" FunctionName="IMModel.Store.USP_OR_GetTourTimesAvailables">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.TourTimeAvailable">

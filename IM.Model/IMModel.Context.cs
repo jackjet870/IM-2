@@ -775,7 +775,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestUnassigned>("USP_OR_GetGuestsUnassigned", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter, onlyAvailablesParameter);
         }
     
-        public virtual int USP_OR_GetPRsAssigned(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets, Nullable<bool> pRGuests, Nullable<bool> pRMembers)
+        public virtual ObjectResult<PRAssigned> USP_OR_GetPRsAssigned(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets, Nullable<bool> pRGuests, Nullable<bool> pRMembers)
         {
             var dateFromParameter = dateFrom.HasValue ?
                 new ObjectParameter("DateFrom", dateFrom) :
@@ -801,7 +801,7 @@ namespace IM.Model
                 new ObjectParameter("PRMembers", pRMembers) :
                 new ObjectParameter("PRMembers", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_GetPRsAssigned", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter, pRGuestsParameter, pRMembersParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PRAssigned>("USP_OR_GetPRsAssigned", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter, pRGuestsParameter, pRMembersParameter);
         }
     
         public virtual ObjectResult<TourTimeAvailable> USP_OR_GetTourTimesAvailables(string leadSource, string salesRoom, Nullable<System.DateTime> date, Nullable<System.DateTime> dateOriginal, Nullable<System.DateTime> timeOriginal, Nullable<System.DateTime> currentDate)

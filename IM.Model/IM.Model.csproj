@@ -429,6 +429,9 @@
     <Compile Include="PostLog.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PRAssigned.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="PRNote.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
