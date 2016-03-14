@@ -14,7 +14,7 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmContractsDetail : Window
   {
-    public Contract contract;//Objeto que se muestra en la ventana
+    public Contract contract=new Contract();//Objeto que se muestra en la ventana
     public ModeOpen mode;//Modo en el que se abrirá la ventana
     public frmContractsDetail()
     {
@@ -23,47 +23,48 @@ namespace IM.Administrator.Forms
 
 
     #region event controls
+    #region Cancel
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       DialogResult = false;
       this.Close();
     }
+    #endregion
 
+    #region Accept
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       string sMsj = "";
       #region validar campos
-      if(string.IsNullOrWhiteSpace(txtID.Text))
+      if (string.IsNullOrWhiteSpace(txtID.Text))
       {
         sMsj += "Specify the Contract ID. \n";
       }
 
-      if(string.IsNullOrWhiteSpace(txtN.Text))
+      if (string.IsNullOrWhiteSpace(txtN.Text))
       {
         sMsj += "Specify the Contract Description. \n";
       }
 
-      if(cmbUnvMot.SelectedIndex<0)
+      if (cmbUnvMot.SelectedIndex < 0)
       {
         sMsj += "Specify the Contract unavailable motive . \n";
       }
 
-      if(string.IsNullOrWhiteSpace(txtMinDays.Text))
+      if (string.IsNullOrWhiteSpace(txtMinDays.Text))
       {
         sMsj += "Specify the Contract Min Days for Included Tours. \n";
       }
 
       #endregion
       int nRes = 0;
-      if(sMsj=="")//Todos los campos estan llenos
+      if (sMsj == "")//Todos los campos estan llenos
       {
-        switch(mode)
+        switch (mode)
         {
           case ModeOpen.add://Agregar
             {
-              
-              contract = new Contract {cnID=txtID.Text,cnN=txtN.Text,cnA=chkA.IsChecked.Value,cnMinDaysTours=Convert.ToInt32(txtMinDays.Text),cnum=Convert.ToByte(cmbUnvMot.SelectedValue) };
-              nRes = BRContracts.SaveContract(contract, false);              
+              nRes = BRContracts.SaveContract(contract, false);
               break;
             }
           case ModeOpen.edit://Editar
@@ -98,10 +99,12 @@ namespace IM.Administrator.Forms
       }
       else
       {//Hace falta llenar campos
-        MessageBox.Show(sMsj);
+        MessageBox.Show(sMsj.TrimEnd('\n'),"Intelligense Marketing");
       }
     }
 
+    #endregion
+    #region LoadedWindow
     /// <summary>
     /// Llama eventos predeterminados al abrir la ventana
     /// </summary>
@@ -112,7 +115,9 @@ namespace IM.Administrator.Forms
       openMode();
       LoadUnvMotive();
     }
+    #endregion
 
+    #region PreviewtextInput
     /// <summary>
     /// Valida que el textbox solamente acepte números
     /// </summary>
@@ -122,7 +127,9 @@ namespace IM.Administrator.Forms
     {
       e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
     }
+    #endregion
 
+    #region WinKeyDown
     /// <summary>
     /// Cierra la ventana con el boton escape dependiendo del modo en que se esté visualizando la ventana
     /// </summary>
@@ -133,27 +140,17 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
-      if(e.Key==Key.Escape)
+      if (e.Key == Key.Escape)
       {
-        if(mode== ModeOpen.preview)
-        {
-          DialogResult = false;
-          this.Close();
-        }
-        else
-        {
-          MessageBoxResult msgResult = MessageBox.Show("Are you sure close this window?","Close confirmation",MessageBoxButton.YesNo,MessageBoxImage.Question);
-          if(msgResult==MessageBoxResult.Yes)
-          {
-            DialogResult = false;
-            this.Close();
-          }
-        }
+        DialogResult = false;
+        Close();
       }
     }
     #endregion
+    #endregion
 
     #region Metodos
+    #region  OpenMode
     /// <summary>
     /// Abre la ventana dependiendo del modo que elija el usuario
     /// Preview|Edit|Add
@@ -163,13 +160,12 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void openMode()
     {
+      DataContext = contract;
       switch (mode)
       {
         case ModeOpen.preview://show
           {
-            btnAccept.Visibility = Visibility.Hidden;
-            btnCancel.Content = "OK";
-            this.DataContext = contract;
+            btnAccept.Visibility = Visibility.Hidden;                        
             break;
           }
         case ModeOpen.add://add
@@ -181,14 +177,15 @@ namespace IM.Administrator.Forms
         case ModeOpen.edit://Edit
           {
             txtID.IsEnabled = false;
-            LockControls(true);
-            this.DataContext = contract;
+            LockControls(true);            
             break;
           }
       }
 
     }
 
+    #endregion
+    #region LockControls
     /// <summary>
     /// Bloquea|Desbloquea los botones dependiendo del modo en que se habra
     /// </summary>
@@ -203,12 +200,15 @@ namespace IM.Administrator.Forms
       chkA.IsEnabled = blnValue;
       txtMinDays.IsEnabled = blnValue;
     }
+    #endregion
 
+    #region LoadUnavailableMotives
     protected void LoadUnvMotive()
     {
       List<UnavailableMotive> lstUnaVailMots = BRUnavailableMotives.GetUnavailableMotives();
       cmbUnvMot.ItemsSource = lstUnaVailMots;
-    }
+    } 
+    #endregion
     #endregion
 
   }

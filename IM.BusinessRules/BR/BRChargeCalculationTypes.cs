@@ -47,7 +47,7 @@ namespace IM.BusinessRules.BR
           query = query.Where(cct=>cct.caN==chargeCalTyp.caN);
         }
 
-        lstCharge = query.ToList();
+        lstCharge = query.OrderBy(cct=>cct.caN).ToList();
       }
       return lstCharge;
       

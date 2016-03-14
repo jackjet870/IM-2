@@ -12,7 +12,7 @@ namespace IM.Administrator.Forms
   public partial class frmAreaDetalle : Window
   {
 
-    public Area area;//Variable que recibe la entidad
+    public Area area=new Area();//Variable que recibe la entidad
     public ModeOpen mode;//Modo en el que se abrirá la ventana        
     public frmAreaDetalle()
     {
@@ -29,7 +29,7 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void LoadRegions()
     {
-      List<Region> lstRegions = BRRegions.GetRegions(1);
+      List<Region> lstRegions = BRRegions.GetRegions(new Region(),1);
       cmbRegion.ItemsSource = lstRegions;
     }
     #endregion
@@ -43,12 +43,12 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void OpenMode()
     {
+      this.DataContext = area;
       switch (mode)
       {
         case ModeOpen.preview://show
           {
             btnAccept.Visibility = Visibility.Hidden;            
-            this.DataContext = area;
             break;
           }
         case ModeOpen.add://add
@@ -60,8 +60,7 @@ namespace IM.Administrator.Forms
         case ModeOpen.edit://Edit
           {
             txtID.IsEnabled = false;
-            LockControls(true);
-            this.DataContext = area;
+            LockControls(true);            
             break;
           }
       }
@@ -152,8 +151,6 @@ namespace IM.Administrator.Forms
           #region add
           case ModeOpen.add://add
             {
-
-              area = new Area { arID = txtID.Text, arN = txtN.Text, arrg = cmbRegion.SelectedValue.ToString(), arA = chkA.IsChecked.Value };
               nRes = BRAreas.SaveArea(false, area);
               break;
             }
@@ -161,7 +158,6 @@ namespace IM.Administrator.Forms
           #region Edit
           case ModeOpen.edit://edit
             {
-              area = (Area)this.DataContext;
               nRes = BRAreas.SaveArea(true, area);
               break;
             }
@@ -193,7 +189,7 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        MessageBox.Show(sMsj);
+        MessageBox.Show(sMsj.TrimEnd('\n'),"Intelligense Marketing");
       }
     }
     #endregion
@@ -208,20 +204,9 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        if (mode == ModeOpen.preview)
-        {
           DialogResult = false;
-          this.Close();
-        }
-        else
-        {
-          MessageBoxResult msgResult = MessageBox.Show("Are you sure close this window?", "Close confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-          if (msgResult == MessageBoxResult.Yes)
-          {
-            DialogResult = false;
-            this.Close();
-          }
-        }
+          Close();
+        
       }
     }
     #endregion

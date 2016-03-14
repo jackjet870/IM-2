@@ -66,7 +66,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = Helpers.PermisionHelper.EditPermision("CONTRACTS");
+      _blnEdit = App.User.HasPermission("CONTRACTS",Model.Enums.EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadContracts();      
     }
@@ -114,9 +114,12 @@ namespace IM.Administrator.Forms
       Contract contract = (Contract)row.DataContext;
       frmContractsDetail frmContractDetail = new frmContractsDetail();
       frmContractDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
-      frmContractDetail.contract = contract;
+      ObjectHelper.CopyProperties(frmContractDetail.contract,contract);
       frmContractDetail.Owner = this;
-      frmContractDetail.ShowDialog();
+      if(frmContractDetail.ShowDialog()==true)
+      {
+        LoadContracts();
+      }
     }
     #endregion
 

@@ -15,12 +15,13 @@ namespace IM.Administrator.Forms
   public partial class frmChargeToDetail : Window
   {
     public ModeOpen mode;
-    public ChargeTo chargeTo;
+    public ChargeTo chargeTo=new ChargeTo();
     public frmChargeToDetail()
     {
       InitializeComponent();
     }
     #region metodos
+    #region LoadChargeType
     /// <summary>
     /// Llena el combobox de Charge Type
     /// </summary>
@@ -31,8 +32,10 @@ namespace IM.Administrator.Forms
     {
       List<ChargeCalculationType> lstChargeType = BRChargeCalculationTypes.GetChargeCalculationTypes(new ChargeCalculationType(), 1);
       cmbCalTyp.ItemsSource = lstChargeType;
-    }
+    } 
+    #endregion
 
+    #region OpenMode
     /// <summary>
     /// Abre la ventana dependiendo del modo que elija el usuario
     /// Preview|Edit|Add
@@ -42,13 +45,12 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void OpenMode()
     {
+      DataContext = chargeTo;
       switch (mode)
       {
         case ModeOpen.preview://show
           {
-            btnAccept.Visibility = Visibility.Hidden;
-            btnCancel.Content = "OK";
-            this.DataContext = chargeTo;
+            btnAccept.Visibility = Visibility.Hidden;            
             break;
           }
         case ModeOpen.add://add
@@ -62,26 +64,29 @@ namespace IM.Administrator.Forms
           {
             txtID.IsEnabled = false;
             LockControls(true);
-            this.DataContext = chargeTo;
             break;
           }
       }
 
     }
 
+    #endregion
+    #region LockControls
     /// <summary>
     /// Bloquea controles dependiendo del modo en que se visualize la ventana
     /// </summary>
     /// <param name="blnValue"></param>
     protected void LockControls(bool blnValue)
     {
-      txtPri.IsEnabled = blnValue;      
+      txtPri.IsEnabled = blnValue;
       cmbCalTyp.IsEnabled = blnValue;
       chkCxC.IsEnabled = blnValue;
     }
     #endregion
+    #endregion
 
     #region eventos de los controles
+    #region Accept
     /// <summary>
     /// Guarda o actuliza un registro en la BD dependiendo del modo en que se haya abierto la ventana
     /// </summary>
@@ -123,17 +128,14 @@ namespace IM.Administrator.Forms
           #region add
           case ModeOpen.add://add
             {
-
-              chargeTo = new ChargeTo { ctID = txtID.Text, ctPrice=Convert.ToByte(txtPri.Text),ctCalcType=cmbCalTyp.SelectedValue.ToString(),ctIsCxC=chkCxC.IsChecked.Value };
-              nRes = BRChargeTos.SaveChargeTo(chargeTo,false);               
+              nRes = BRChargeTos.SaveChargeTo(chargeTo, false);
               break;
             }
           #endregion
           #region Edit
           case ModeOpen.edit://edit
             {
-              chargeTo = (ChargeTo)this.DataContext;
-              nRes = BRChargeTos.SaveChargeTo(chargeTo, true);                
+              nRes = BRChargeTos.SaveChargeTo(chargeTo, true);
               break;
             }
             #endregion
@@ -164,11 +166,13 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        MessageBox.Show(sMsj);
+        MessageBox.Show(sMsj.TrimEnd('\n'),"Intelligense Marketing");
       }
-      
+
     }
-  
+
+    #endregion
+    #region Cancel
     /// <summary>
     /// Cierra la ventana detalle
     /// </summary>
@@ -180,6 +184,8 @@ namespace IM.Administrator.Forms
       this.Close();
     }
 
+    #endregion
+    #region LoadFrom
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       LoadChargeType();
@@ -192,6 +198,8 @@ namespace IM.Administrator.Forms
         + "Z - No charge.";
     }
 
+    #endregion
+    #region PreviewKeyInput
     /// <summary>
     /// Valida que unicamente se inserten numeros
     /// </summary>
@@ -202,6 +210,8 @@ namespace IM.Administrator.Forms
       e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
     }
 
+    #endregion
+    #region WindowKeyDown
     /// <summary>
     /// Cierra la ventana detalle con la tecla escape
     /// </summary>
@@ -209,23 +219,13 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
-      if(e.Key==Key.Escape)
+      if (e.Key == Key.Escape)
       {
-        if(mode== ModeOpen.preview)
-        {
-          this.Close();
-        }
-        else
-        {
-          MessageBoxResult msgResult = MessageBox.Show("Are you sure close this window?","Close confirmation",MessageBoxButton.YesNo,MessageBoxImage.Question);
-          if(msgResult==MessageBoxResult.Yes)
-          {
-            DialogResult = false;
-            this.Close();
-          }
-        }
+        DialogResult = false;
+        Close();
       }
-    }
+    } 
+    #endregion
     #endregion
   }
 }

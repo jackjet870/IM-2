@@ -56,7 +56,6 @@ namespace IM.BusinessRules.BR
         {
           query = query.Where(mkt=>mkt.mkN==market.mkN);
         }
-
         return query.ToList();
       }
     }

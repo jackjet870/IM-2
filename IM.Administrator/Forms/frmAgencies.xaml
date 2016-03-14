@@ -4,15 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
         xmlns:local="clr-namespace:IM.Administrator.Forms" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" ResizeMode="NoResize"
-        mc:Ignorable="d" Uid="frmAgencies" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner"
-        Title="Agencies" Height="307" Width="340">
+        mc:Ignorable="d" Uid="frmAgencies" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Title="Agencies" Height="407" Width="440">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->
         <StatusBar DockPanel.Dock="Bottom" >
             <StatusBarItem Grid.Column="0" x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
             <StatusBarItem Grid.Column="1" x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>
             <StatusBarItem Grid.Column="2" x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
-            <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0 Agencies." HorizontalAlignment="Right" Width="75"/>
+            <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0 Agencies." HorizontalAlignment="Right" Width="85"/>
         </StatusBar>
         <!--#endregion-->
         <!--#region toolbar -->
@@ -40,11 +40,11 @@
         <!--#region DataGrid de Agencies-->
         <DataGrid x:Name="dgrAgencies" Margin="6,6,6,6" AutoGenerateColumns="False" DataContext="{Binding lstAgencies}" IsReadOnly="True"
                  SelectionMode="Single" >
-            <!--<DataGrid.Resources>
+            <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseDoubleClick" Handler="Cell_DoubleClick"/>
                 </Style>
-            </DataGrid.Resources>-->
+            </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Width="35*" Binding="{Binding agID}"/>
                 <DataGridTextColumn Header="Agency" Width="65*" Binding="{Binding agN}"/>

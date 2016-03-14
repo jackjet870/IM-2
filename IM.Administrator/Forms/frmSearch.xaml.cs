@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
 
 namespace IM.Administrator.Forms
 {
@@ -20,16 +22,21 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmSearch : Window
   {
+    #region Variables
     public string sID;//Id a filtrar
     public string sDesc;//Descripcion a filtrar
     public int nStatus;//Estatus a filtrar
-    public string sForm="Default";//Formulario desde el que se utiliza
+    public string sForm = "Default";//Formulario desde el que se utiliza
+    public string sSegment;//Sement by agency para cuando se abra desde agency 
+    #endregion
+
     public frmSearch()
     {
       InitializeComponent();
     }
 
     #region eventos de los controles
+    #region Boton cancelar
     /// <summary>
     /// Cierra la ventana de busqueda sin guardar cambios en el formulario
     /// </summary>
@@ -44,6 +51,8 @@ namespace IM.Administrator.Forms
       this.Close();
     }
 
+    #endregion
+    #region Botton aceptar
     /// <summary>
     /// Cierra la ventana de busqueda guardando los filtros de la busqueda a realizar
     /// </summary>
@@ -55,8 +64,10 @@ namespace IM.Administrator.Forms
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       SetData();
-    }
+    } 
+    #endregion
 
+    #region Loaded
     /// <summary>
     /// Muestra los datos del filtro actual del formulario
     /// </summary>
@@ -68,22 +79,12 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       LoadStatus();
-      LoadForm();      
+      LoadForm();
     }
 
-    /// <summary>
-    /// Valida que texbox de descripción acepte sólo números cuando se abre desde chargeTo
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created
-    /// </history>
-    private void txtD_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
-    }
+    #endregion
 
+    #region KeyDown
     /// <summary>
     /// Cierra la ventana con el boton escape
     /// </summary>
@@ -100,7 +101,24 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
+
+    #region ChargeTo TextInput
+    /// <summary>
+    /// Valida que texbox de descripción acepte sólo números cuando se abre desde chargeTo
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created
+    /// </history>
+    private void txtD_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
+    }    
+    #endregion
+    #endregion
     #region metodos
+    #region LoadStatus
     /// <summary>
     /// Llena la lista de estatus
     /// </summary>
@@ -112,13 +130,15 @@ namespace IM.Administrator.Forms
     protected void LoadStatus()
     {
       List<object> lstStatus = new List<object>();
-      lstStatus.Add(new {sName="All",sValue=-1 });      
+      lstStatus.Add(new { sName = "All", sValue = -1 });
       lstStatus.Add(new { sName = "Inactive", sValue = 0 });
       lstStatus.Add(new { sName = "Active", sValue = 1 });
 
       cmbStatus.ItemsSource = lstStatus;
     }
 
+    #endregion
+    #region LoadForm
     /// <summary>
     /// Llena el formulario dependiendo de la ventana que lo utilice
     /// </summary>
@@ -127,7 +147,7 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void LoadForm()
     {
-      txtID.Text = sID;      
+      txtID.Text = sID;
       cmbStatus.SelectedValue = nStatus;
       switch (sForm)
       {
@@ -141,12 +161,12 @@ namespace IM.Administrator.Forms
 
         #region ChargeTo
         case "ChargeTo":
-          {            
+          {
             txtD.PreviewTextInput += new TextCompositionEventHandler(txtD_PreviewTextInput);
             txtD.MaxLength = 3;
             lblDes.Content = "Price";
             lblSta.Content = "CxC";
-            
+
             if (Convert.ToInt32(sDesc) > 0)
             {
               txtD.Text = sDesc;
@@ -157,11 +177,24 @@ namespace IM.Administrator.Forms
             }
             break;
           }
-          #endregion
+        #endregion
+
+        #region Agency
+        case "Agency":
+          {
+            cmbSegment.Visibility = Visibility.Visible;
+            lblSegment.Visibility = Visibility.Visible;
+            loadSegments();
+            cmbSegment.SelectedValue = sSegment;
+            break;
+          }
+        #endregion
       }
 
     }
 
+    #endregion
+    #region setData
     /// <summary>
     /// Llena los datos de busqueda dependiendo del formulario que  llame a la función
     /// </summary>
@@ -169,15 +202,15 @@ namespace IM.Administrator.Forms
     /// [Emoguel] created 02/03/2016
     /// </history>
     protected void SetData()
-    { 
+    {
       nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
+      sID = txtID.Text;
       switch (sForm)
       {
         #region Default
         case "Default":
-          {            
-            sDesc = txtD.Text;
-            sID = txtID.Text;
+          {
+            sDesc = txtD.Text;            
             DialogResult = true;
             this.Close();
             break;
@@ -185,12 +218,11 @@ namespace IM.Administrator.Forms
         #endregion
         #region ChargeTo
         case "ChargeTo":
-          {
-            sID = txtD.Text;
+          {            
             if (!string.IsNullOrWhiteSpace(txtD.Text))//Si el campo price tiene algún valor
-            {              
+            {
               int nPrice = Convert.ToInt32(txtD.Text);
-              if (nPrice>0 && nPrice< 256)//Se valida que el número esté en el rango de tipo byte
+              if (nPrice > 0 && nPrice < 256)//Se valida que el número esté en el rango de tipo byte
               {
                 sDesc = txtD.Text;
                 DialogResult = true;
@@ -198,7 +230,7 @@ namespace IM.Administrator.Forms
               }
               else
               {
-                txtD.Text = ((nPrice==0)?"":nPrice.ToString());
+                txtD.Text = ((nPrice == 0) ? "" : nPrice.ToString());
                 MessageBox.Show("The price must be higher than 0 \n and must be smaller than 255");
               }
             }
@@ -209,9 +241,37 @@ namespace IM.Administrator.Forms
             }
             break;
           }
+        #endregion
+        #region Agency
+        case "Agency":
+          {
+            sSegment = cmbSegment.SelectedValue.ToString();
+            DialogResult = true;
+            Close();
+            break;
+          }
           #endregion
       }
     }
-    #endregion    
+    #endregion
+
+    #region Agency
+
+    #region LoadSegments
+    /// <summary>
+    /// Llena el combobox de segment cuando se abre desde agency
+    /// </summary>
+    /// <history>
+    /// [emoguel] created 14/03/2016
+    /// </history>
+    protected void loadSegments()
+    {
+      List<SegmentByAgency> lstSegmentsByAgency = BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());
+      lstSegmentsByAgency.Insert(0,new SegmentByAgency { seID = "", seN = "" });
+      cmbSegment.ItemsSource = lstSegmentsByAgency;
+    } 
+    #endregion
+    #endregion
+    #endregion
   }
 }

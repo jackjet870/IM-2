@@ -14,7 +14,6 @@ using System.Windows.Shapes;
 using IM.Administrator.Enums;
 using IM.Model;
 using IM.BusinessRules.BR;
-using IM.Administrator.Helpers;
 using IM.Base.Helpers;
 
 namespace IM.Administrator.Forms
@@ -45,7 +44,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = PermisionHelper.EditPermision("AGENCIES");
+      _blnEdit = App.User.HasPermission("AGENCIES",Model.Enums.EnumPermisionLevel.Standard);
       LoadAgencies();
       btnAdd.IsEnabled = _blnEdit;
     }
@@ -113,8 +112,20 @@ namespace IM.Administrator.Forms
     #endregion
 
     #region Boton agregar
+    /// <summary>
+    /// Abre la ventana detalle en modo agregar
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void btnAdd_Click(object sender, RoutedEventArgs e)
-    {      
+    {
+      frmAgencyDetail frmAgencyDetail = new frmAgencyDetail();
+      frmAgencyDetail.mode = ModeOpen.add;
+      frmAgencyDetail.Owner = this;
+      if(frmAgencyDetail.ShowDialog()==true)
+      {
+        LoadAgencies();
+      }     
     }
     #endregion
     
@@ -122,7 +133,44 @@ namespace IM.Administrator.Forms
 
     private void btnSearch_Click(object sender, RoutedEventArgs e)
     {
-
+      frmSearch frmSearch = new frmSearch();
+      frmSearch.sID = _agencyFilter.agID;
+      frmSearch.sDesc = _agencyFilter.agN;
+      frmSearch.nStatus = _nStatus;
+      frmSearch.sSegment = _agencyFilter.agse;
+      frmSearch.sForm = "Agency";
+      frmSearch.Owner = this;
+      if(frmSearch.ShowDialog()==true)
+      {
+        _nStatus = frmSearch.nStatus;
+        _agencyFilter.agID = frmSearch.sID;
+        _agencyFilter.agN = frmSearch.sDesc;
+        _agencyFilter.agse = frmSearch.sSegment;
+        LoadAgencies();
+      }
+    }
+    #endregion
+    #region DobleClic Grid
+    /// <summary>
+    /// Abre la ventana detalle en modo "detalle" o "edición" dependiendo de sus permisos
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 11/03/2016
+    /// </history>
+    private void Cell_DoubleClick(object sender, RoutedEventArgs e)
+    {
+      DataGridRow row = sender as DataGridRow;
+      Agency agency = (Agency)row.DataContext;
+      frmAgencyDetail frmAgencyDetail = new frmAgencyDetail();
+      ObjectHelper.CopyProperties(frmAgencyDetail.agency,agency); 
+      frmAgencyDetail.Owner = this;
+      frmAgencyDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
+      if(frmAgencyDetail.ShowDialog()==true)
+      {
+        LoadAgencies();
+      }
     } 
     #endregion
     #endregion

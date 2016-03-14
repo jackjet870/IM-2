@@ -45,7 +45,7 @@ namespace IM.BusinessRules.BR
           query = query.Where(c=>c.cnN==contract.cnN);
         }
 
-        lstContracts = query.ToList();
+        lstContracts = query.OrderBy(c=>c.cnN).ToList();
       }
       return lstContracts;
     }

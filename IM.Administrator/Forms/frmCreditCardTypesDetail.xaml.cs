@@ -23,13 +23,14 @@ namespace IM.Administrator.Forms
   public partial class frmCreditCardTypesDetail : Window
   {
     public ModeOpen mode;
-    public CreditCardType creditCardType;
+    public CreditCardType creditCardType=new CreditCardType();
     public frmCreditCardTypesDetail()
     {
       InitializeComponent();
     }
 
     #region métodos
+    #region OpenMode
     /// <summary>
     /// Abre la ventana dependiendo del modo que elija el usuario
     /// Preview|Edit|Add
@@ -39,13 +40,12 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void OpenMode()
     {
+      DataContext = creditCardType;
       switch (mode)
       {
         case ModeOpen.preview://preview
           {
             btnAccept.Visibility = Visibility.Hidden;
-            btnCancel.Content = "OK";
-            DataContext = creditCardType;
             break;
           }
         case ModeOpen.add://add
@@ -58,13 +58,14 @@ namespace IM.Administrator.Forms
           {
             txtID.IsEnabled = false;
             LockControls(true);
-            DataContext = creditCardType;
             break;
           }
       }
 
     }
 
+    #endregion
+    #region LockControls
     /// <summary>
     /// Bloquea|Desbloquea los botones dependiendo del modo en que se habra
     /// </summary>
@@ -76,11 +77,13 @@ namespace IM.Administrator.Forms
     {
       txtN.IsEnabled = blnValue;
       chkIsCC.IsEnabled = blnValue;
-      chkA.IsEnabled = blnValue;      
+      chkA.IsEnabled = blnValue;
     }
 
     #endregion
+    #endregion
     #region eventos de los controles
+    #region windowLoaded
     /// <summary>
     /// Llena los datos del formulario
     /// </summary>
@@ -90,9 +93,11 @@ namespace IM.Administrator.Forms
     {
       OpenMode();
     }
+    #endregion
 
+    #region WindowKeyDown
     /// <summary>
-    /// Cierra la ventana con el boton escape dependiendo del modo en que abrio
+    /// Cierra la ventana con el boton escape 
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -101,24 +106,15 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
-      if(e.Key==Key.Escape)
+      if (e.Key == Key.Escape)
       {
-        if(mode==ModeOpen.preview)
-        {          
-          this.Close();
-        }
-        else
-        {
-          MessageBoxResult msgResult = MessageBox.Show("Are you sure close this window?","Close confirmation",MessageBoxButton.OKCancel,MessageBoxImage.Question);
-          if(msgResult==MessageBoxResult.OK)
-          {
-            DialogResult = false;
-            this.Close();
-          }
-        }
+        DialogResult = false;
+        Close();
       }
     }
+    #endregion
 
+    #region Accept
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       string sMsj = "";
@@ -140,9 +136,7 @@ namespace IM.Administrator.Forms
         switch (mode)
         {
           case ModeOpen.add://Agregar
-            {
-
-              creditCardType = new CreditCardType {ccID=txtID.Text,ccN=txtN.Text,ccA=chkA.IsChecked.Value,ccIsCreditCard=chkIsCC.IsChecked.Value };
+            { 
               nRes = BRCreditCardTypes.SaveCreditCardType(creditCardType, false);
               break;
             }
@@ -178,15 +172,18 @@ namespace IM.Administrator.Forms
       }
       else
       {//Hace falta llenar campos
-        MessageBox.Show(sMsj);
+        MessageBox.Show(sMsj.TrimEnd('\n'),"Intelligense Marketing");
       }
     }
 
+    #endregion
+    #region Cancel
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       DialogResult = false;
-      this.Close();
-    }
+      Close();
+    } 
+    #endregion
     #endregion
 
   }

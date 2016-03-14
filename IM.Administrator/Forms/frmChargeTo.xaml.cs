@@ -35,7 +35,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = Helpers.PermisionHelper.EditPermision("HOSTINVIT");
+      _blnEdit = App.User.HasPermission("HOSTINVIT",Model.Enums.EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadChargeTo();
     }
@@ -85,8 +85,11 @@ namespace IM.Administrator.Forms
       frmChargeToDetail frmChargeToDetail = new frmChargeToDetail();
       frmChargeToDetail.Owner = this;
       frmChargeToDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
-      frmChargeToDetail.chargeTo = chargeTo;
-      frmChargeToDetail.ShowDialog();
+      ObjectHelper.CopyProperties(frmChargeToDetail.chargeTo,chargeTo);
+      if(frmChargeToDetail.ShowDialog()==true)
+      {
+        LoadChargeTo();
+      }
     }
 
     #endregion

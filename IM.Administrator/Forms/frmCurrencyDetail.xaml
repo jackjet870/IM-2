@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.Administrator.Forms" ResizeMode="NoResize"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ResizeMode="NoResize" ShowInTaskbar="False"
         mc:Ignorable="d" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
         Title="Currency Detail" Height="208" DataContext="{Binding currency}" Loaded="Window_Loaded" Width="338">
     <Grid Margin="10,10,14,2" >

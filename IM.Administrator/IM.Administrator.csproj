@@ -185,7 +185,6 @@
     <Compile Include="Forms\frmSearch.xaml.cs">
       <DependentUpon>frmSearch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\PermisionHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -232,6 +231,7 @@
       <Name>IM.Model</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

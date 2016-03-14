@@ -20,8 +20,7 @@ namespace IM.BusinessRules.BR
     /// [emoguel] 26/Feb/2016 Created
     /// </history>
     public static List<Area> GetAreas(Area area,int nStatus=-1)
-    {      
-      List<Area> lstAreas = new List<Area>();
+    { 
       using (var dbContext = new IMEntities())
       {
         var query = from areas in dbContext.Areas
@@ -42,11 +41,9 @@ namespace IM.BusinessRules.BR
           query = query.Where(a=>a.arN!=area.arN);
         }
                     
-        lstAreas = query.ToList();//pasar el resultado a la lista
+       return query.OrderBy(a=>a.arN).ToList();//pasar el resultado a la lista
           
       }
-        
-      return lstAreas;
 
     }
     #endregion

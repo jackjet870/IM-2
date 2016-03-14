@@ -45,7 +45,7 @@ namespace IM.BusinessRules.BR
           query = query.Where(c=>c.ctPrice==chargeTo.ctPrice);
         }
 
-        lstCharge = query.ToList();
+        lstCharge = query.OrderBy(c=>c.ctID).ToList();
       }
       return lstCharge;
       
