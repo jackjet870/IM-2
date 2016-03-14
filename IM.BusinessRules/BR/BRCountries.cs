@@ -26,6 +26,42 @@ namespace IM.BusinessRules.BR
       }
     }
 
+
+    /// <summary>
+    /// Devuelve una lista de tipo country con todos sus datos
+    /// </summary>
+    /// <param name="country">Objeto con los filtros adicionales</param>
+    /// <param name="nStatus">-1. Todos los registros | 0. registros inactivos | 1.Registros Activos</param>
+    /// <returns>Devuelve una lista de tipo country</returns>
+    /// <history>
+    /// [emoguel] created 14/03/2016
+    /// </history>
+    public static List<Country> GetCountries(Country country,int nStatus=-1)
+    {
+      using (var dbContext = new IMEntities())
+      {
+        var query = from ct in dbContext.Countries
+                    select ct;
+
+        if(nStatus!=-1)//Filtro por status
+        {
+          bool blnStatus = Convert.ToBoolean(nStatus);
+          query = query.Where(ct=>ct.coA==blnStatus);
+        }
+
+        if(!string.IsNullOrWhiteSpace(country.coID))//Filtro por ID
+        {
+          query = query.Where(ct => ct.coID == country.coID);
+        }
+
+        if(!string.IsNullOrWhiteSpace(country.coN))//Filtro por descripcion(Nombre)
+        {
+          query.Where(ct=>ct.coN==country.coN);
+        }
+
+        return query.OrderBy(ct => ct.coN).ToList();
+      }
+    }
     #endregion
   }
 }

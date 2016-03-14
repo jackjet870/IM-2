@@ -120,11 +120,19 @@ namespace IM.Administrator.Forms
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
       frmAgencyDetail frmAgencyDetail = new frmAgencyDetail();
-      frmAgencyDetail.mode = ModeOpen.add;
+      frmAgencyDetail.mode = ModeOpen.add;//Insertar
       frmAgencyDetail.Owner = this;
+
       if(frmAgencyDetail.ShowDialog()==true)
       {
-        LoadAgencies();
+        List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;//cateamos el itemsource
+        lstAgencies.Add(frmAgencyDetail.agency);//Agregamos el registro nuevo
+        lstAgencies.Sort((x, y) => string.Compare(x.agN, y.agN));//ordenamos la lista
+        int nIndex = lstAgencies.IndexOf(frmAgencyDetail.agency);//obtenemos el index del registro nuevo        
+        dgrAgencies.Items.Refresh();//Refrescamos la lista
+        dgrAgencies.SelectedIndex = nIndex;//selecionamos el registor nuevo
+        dgrAgencies.ScrollIntoView(dgrAgencies.Items[nIndex]);//movemos el foco hacía el registro nuevo
+        StatusBarReg.Content = lstAgencies.Count+" Agencies.";//Actualizamos el contador
       }     
     }
     #endregion
@@ -169,12 +177,12 @@ namespace IM.Administrator.Forms
       frmAgencyDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
       if(frmAgencyDetail.ShowDialog()==true)
       {
-        LoadAgencies();
+        ObjectHelper.CopyProperties(agency, frmAgencyDetail.agency);        
       }
     } 
     #endregion
     #endregion
-    #region metodos
+    #region métodos
     /// <summary>
     /// Llena el grid de Agencies dependiendo de los filtros seleccionados
     /// </summary>

@@ -97,7 +97,14 @@ namespace IM.Administrator.Forms
       frmCreditCard.mode = ModeOpen.add;
       if (frmCreditCard.ShowDialog() == true)
       {
-        LoadCreditCardTypes();
+        List<CreditCardType> lstCreditCradTypes = (List<CreditCardType>)dgrCreditCard.ItemsSource;
+        lstCreditCradTypes.Add(frmCreditCard.creditCardType);//Agregamos el registro nuevo
+        lstCreditCradTypes.Sort((x, y) => string.Compare(x.ccN, y.ccN));//Ordenamos la lista
+        int nIndex = lstCreditCradTypes.IndexOf(frmCreditCard.creditCardType);//Obtenemos el index del registro nuevo
+        dgrCreditCard.Items.Refresh();//refrescamos la lista
+        dgrCreditCard.SelectedIndex = nIndex;//seleccionamos el registro nuevo
+        dgrCreditCard.ScrollIntoView(dgrCreditCard.Items[nIndex]);//Movemos el foco hacía el registro nuevo
+        StatusBarReg.Content = lstCreditCradTypes.Count + " Credit Card Types.";
       }
     } 
     #endregion
@@ -195,7 +202,7 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(frmCrediCard.creditCardType,creditCardType);
       if(frmCrediCard.ShowDialog()==true)
       {
-        LoadCreditCardTypes();
+        ObjectHelper.CopyProperties(creditCardType, frmCrediCard.creditCardType);
       }
     }
     #endregion

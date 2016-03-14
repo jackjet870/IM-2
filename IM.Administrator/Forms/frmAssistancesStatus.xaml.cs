@@ -13,12 +13,12 @@ namespace IM.Administrator.Forms
   /// <summary>
   /// Interaction logic for frmAssistanceStatus.xaml
   /// </summary>
-  public partial class frmAssistanceStatus : Window
+  public partial class frmAssistancesStatus : Window
   {
     private AssistanceStatus _assistanceFilter = new AssistanceStatus();//Objeto a filtrar en el grid
     private int _nStatus = -1;//Estatus de los registros que se muestran en el grid
     private bool _blnEdit = false;//Boleano para saber si se tiene permisos para editar|agregar
-    public frmAssistanceStatus()
+    public frmAssistancesStatus()
     {
       InitializeComponent();
     }
@@ -101,7 +101,7 @@ namespace IM.Administrator.Forms
       frmAssistanceDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
       if(frmAssistanceDetail.ShowDialog()==true)
       {
-        LoadAssitance();
+        ObjectHelper.CopyProperties(Assistance, frmAssistanceDetail.assistance);
       }
 
     }
@@ -139,7 +139,14 @@ namespace IM.Administrator.Forms
       frmAssistanceDetail.mode = ModeOpen.add;//insertar
       if (frmAssistanceDetail.ShowDialog() == true)
       {
-        LoadAssitance();
+        List<AssistanceStatus> lstAssistancesStatus = (List<AssistanceStatus>)dgrAssitances.ItemsSource;
+        lstAssistancesStatus.Add(frmAssistanceDetail.assistance);//Agregamos el registro nuevo
+        lstAssistancesStatus.Sort((x, y) => string.Compare(x.atN, y.atN));//ordenamos la lista
+        int nIndex = lstAssistancesStatus.IndexOf(frmAssistanceDetail.assistance);//Obtenemos el index del registro nuevo
+        dgrAssitances.Items.Refresh();//regrescamos el grid
+        dgrAssitances.SelectedIndex = nIndex;//seleccionamos el registro nuevo
+        dgrAssitances.ScrollIntoView(dgrAssitances.Items[nIndex]);//movemos el foco hacía el registro nuevo
+        StatusBarReg.Content = lstAssistancesStatus.Count+ " Assistances Status.";//Actualizamos el contador
       }
 
     }
@@ -186,10 +193,10 @@ namespace IM.Administrator.Forms
     protected void LoadAssitance()
     {
       List<AssistanceStatus> lstAssistance = BRAssistancesStatus.GetAssitanceStatus(_assistanceFilter, _nStatus);
-      dgrAssitance.ItemsSource = lstAssistance;
+      dgrAssitances.ItemsSource = lstAssistance;
       if (lstAssistance.Count > 0)
       {        
-        dgrAssitance.SelectedIndex = 0;
+        dgrAssitances.SelectedIndex = 0;
       }
       StatusBarReg.Content = lstAssistance.Count + " Assistance Status.";
     }

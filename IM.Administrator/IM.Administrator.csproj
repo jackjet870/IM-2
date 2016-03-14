@@ -72,6 +72,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmCountries.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmCurrencyDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -92,7 +96,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Forms\frmAssistanceStatus.xaml">
+    <Page Include="Forms\frmAssistancesStatus.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -140,6 +144,9 @@
     <Compile Include="Forms\frmAgencyDetail.xaml.cs">
       <DependentUpon>frmAgencyDetail.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmCountries.xaml.cs">
+      <DependentUpon>frmCountries.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmCurrencyDetail.xaml.cs">
       <DependentUpon>frmCurrencyDetail.xaml</DependentUpon>
     </Compile>
@@ -155,8 +162,8 @@
     <Compile Include="Forms\frmAreas.xaml.cs">
       <DependentUpon>frmAreas.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmAssistanceStatus.xaml.cs">
-      <DependentUpon>frmAssistanceStatus.xaml</DependentUpon>
+    <Compile Include="Forms\frmAssistancesStatus.xaml.cs">
+      <DependentUpon>frmAssistancesStatus.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmAssistanceStatusDetail.xaml.cs">
       <DependentUpon>frmAssistanceStatusDetail.xaml</DependentUpon>

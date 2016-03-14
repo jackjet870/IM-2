@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
-        xmlns:local="clr-namespace:IM.Administrator.Forms" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" ResizeMode="NoResize"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
         mc:Ignorable="d" Uid="frmAgencies" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         Title="Agencies" Height="407" Width="440">
     <DockPanel LastChildFill="True">
@@ -23,13 +23,13 @@
                     <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Refresh</TextBlock>
                 </StackPanel>
             </Button>
-            <Button ToolTip="Create an new Agency." Name="btnAdd" IsEnabled="True" Click="btnAdd_Click">
+            <Button ToolTip="Create new Agency." Name="btnAdd" IsEnabled="True" Click="btnAdd_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/button_add.png" />
                     <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Add</TextBlock>
                 </StackPanel>
             </Button>
-            <Button Name="btnSearch" ToolTip="Search an Agency. " Click="btnSearch_Click">
+            <Button Name="btnSearch" ToolTip="Search Agencies. " Click="btnSearch_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/btnSearch.png" />
                     <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Search</TextBlock>

@@ -39,7 +39,7 @@ namespace IM.Administrator.Forms
       var lstMenu = new List<object>();
       if (AddCatalog("SALES"))
       {
-        lstMenu.Add(new { nombre = "Assitance Status", img = "pack://application:,,,/IM.Base;component/Images/Assistance.ico", form = "frmAssistanceStatus" });
+        lstMenu.Add(new { nombre = "Assitances Status", img = "pack://application:,,,/IM.Base;component/Images/Assistance.ico", form = "frmAssistancesStatus" });
         lstMenu.Add(new { nombre = "Credit Card Types", img = "pack://application:,,,/IM.Base;component/Images/Credit_Cards.png", form = "frmCreditCardTypes" });
       }
       if (AddCatalog("LOCATIONS")) { lstMenu.Add(new { nombre = "Areas", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmAreas" }); }

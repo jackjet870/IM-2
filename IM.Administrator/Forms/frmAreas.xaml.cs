@@ -106,7 +106,7 @@ namespace IM.Administrator.Forms
       frmAreaDetalle.mode = ((_blnEdit==true)?ModeOpen.edit: ModeOpen.preview);   
       if(frmAreaDetalle.ShowDialog()==true)
       {
-        LoadAreas();
+        ObjectHelper.CopyProperties(Area, frmAreaDetalle.area);
       }      
     }
     #endregion
@@ -126,8 +126,15 @@ namespace IM.Administrator.Forms
       frmAreaDetalle.Owner = this;
       frmAreaDetalle.mode = ModeOpen.add;//Agregar
       if (frmAreaDetalle.ShowDialog() == true)
-      {
-        LoadAreas();
+      { 
+        List<Area> lstAreas= (List<Area>)dgrAreas.ItemsSource;        
+        lstAreas.Add(frmAreaDetalle.area);//Agregamos el registro nuevo
+        lstAreas.Sort((x, y) => string.Compare(x.arN, y.arN));//Ordenamos la lista
+        int nIndex = lstAreas.IndexOf(frmAreaDetalle.area);//Obetenemos el index nuevo
+        dgrAreas.Items.Refresh();//Refrescamos la lista
+        dgrAreas.SelectedIndex = nIndex;//Selecionamos el index nuevo
+        dgrAreas.ScrollIntoView(dgrAreas.Items[nIndex]);//Movemos el foco hacía el registro nuevo
+        StatusBarReg.Content =lstAreas.Count+" Areas.";//Actualizamos el contador
       }
 
     }

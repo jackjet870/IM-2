@@ -88,7 +88,7 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(frmCurrencyDetail.currency,currency);
       if(frmCurrencyDetail.ShowDialog()==true)
       {
-        LoadCurrencies();
+        ObjectHelper.CopyProperties(currency, frmCurrencyDetail.currency);
       }
 
     }
@@ -167,12 +167,19 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
-      frmCurrencyDetail frmCurrency = new frmCurrencyDetail();
-      frmCurrency.Owner = this;
-      frmCurrency.mode = ModeOpen.add;
-      if (frmCurrency.ShowDialog() == true)
+      frmCurrencyDetail frmCurrencyDetail = new frmCurrencyDetail();
+      frmCurrencyDetail.Owner = this;
+      frmCurrencyDetail.mode = ModeOpen.add;
+      if (frmCurrencyDetail.ShowDialog() == true)
       {
-        LoadCurrencies();
+        List<Currency> lstCurrencies = (List<Currency>)dgrCurrencies.ItemsSource;
+        lstCurrencies.Add(frmCurrencyDetail.currency);//Agregamos el registro nuevo
+        lstCurrencies.Sort((x, y) => string.Compare(x.cuN, y.cuN));//ordenamos la lista
+        int nIndex = lstCurrencies.IndexOf(frmCurrencyDetail.currency);//obtenemos el index del registro nuevo
+        dgrCurrencies.Items.Refresh();//refrescamos la lista
+        dgrCurrencies.SelectedIndex = nIndex;//seleccionamos el registro nuevo
+        dgrCurrencies.ScrollIntoView(dgrCurrencies.Items[nIndex]);//movemos el foco hacía el registro nuevo
+        StatusBarReg.Content = lstCurrencies.Count + " Currencies.";//Actualizamos el contador
       }
     } 
     #endregion

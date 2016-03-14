@@ -88,7 +88,7 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(frmChargeToDetail.chargeTo,chargeTo);
       if(frmChargeToDetail.ShowDialog()==true)
       {
-        LoadChargeTo();
+        ObjectHelper.CopyProperties(chargeTo, frmChargeToDetail.chargeTo);
       }
     }
 
@@ -157,10 +157,18 @@ namespace IM.Administrator.Forms
       frmChargeToDetail frmChargeToDetail = new frmChargeToDetail();
       frmChargeToDetail.chargeTo = new ChargeTo();
       frmChargeToDetail.Owner = this;
-      frmChargeToDetail.mode = ModeOpen.add;
+      frmChargeToDetail.mode = ModeOpen.add;//insertar
+
       if (frmChargeToDetail.ShowDialog() == true)
       {
-        LoadChargeTo();
+        List<ChargeTo> lstCargeTos = (List<ChargeTo>)dgrChargeTo.ItemsSource;
+        lstCargeTos.Add(frmChargeToDetail.chargeTo);//Agregamos el nuevo registro
+        lstCargeTos.Sort((x,y)=>string.Compare(x.ctID,y.ctID));//Ordenamos la lista
+        int nIndex = lstCargeTos.IndexOf(frmChargeToDetail.chargeTo);//Obtenemos el index
+        dgrChargeTo.Items.Refresh();//Refrescamos el grid
+        dgrChargeTo.SelectedIndex = nIndex;//Selecionamos el registro nuevo
+        dgrChargeTo.ScrollIntoView(dgrChargeTo.Items[nIndex]);//Movemos el foco hacia el registro nuevo
+        StatusBarReg.Content = lstCargeTos.Count + " Carge Tos.";
       }
     }
     #endregion

@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" x:Class="IM.Administrator.Forms.frmAreas"
         mc:Ignorable="d" 
-        Uid="frmAreas"  KeyDown="Window_KeyDown" ShowInTaskbar="False"
-        ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        Uid="frmAreas"  KeyDown="Window_KeyDown" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         Title="Areas" Height="407" Width="470" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Loaded="Window_Loaded" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->
@@ -25,13 +24,13 @@
                     <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Refresh</TextBlock>
                 </StackPanel>
             </Button>
-            <Button ToolTip="Create a new Area." Name="btnAdd" Click="btnAdd_Click" IsEnabled="False">
+            <Button ToolTip="Create new Area." Name="btnAdd" Click="btnAdd_Click" IsEnabled="False">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/button_add.png" />
                     <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Add</TextBlock>
                 </StackPanel>
             </Button>
-            <Button Name="btnSearch" ToolTip="Search an Area" Click="btnSearch_Click">
+            <Button Name="btnSearch" ToolTip="Search Areas" Click="btnSearch_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/btnSearch.png" />
                     <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Search</TextBlock>

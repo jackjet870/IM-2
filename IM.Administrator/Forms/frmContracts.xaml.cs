@@ -118,7 +118,7 @@ namespace IM.Administrator.Forms
       frmContractDetail.Owner = this;
       if(frmContractDetail.ShowDialog()==true)
       {
-        LoadContracts();
+        ObjectHelper.CopyProperties(contract,frmContractDetail.contract);
       }
     }
     #endregion
@@ -139,7 +139,14 @@ namespace IM.Administrator.Forms
       frmContractDetail.Owner = this;
       if (frmContractDetail.ShowDialog() == true)
       {
-        LoadContracts();
+        List<Contract> lstContracts = (List<Contract>)dgrContracts.ItemsSource;
+        lstContracts.Add(frmContractDetail.contract);//Agregamos el registro nuevo
+        lstContracts.Sort((x, y) => string.Compare(x.cnID, y.cnID));//ordenamos la lista        
+        int nIndex = lstContracts.IndexOf(frmContractDetail.contract);//obtenemos el index del registro nuevo
+        dgrContracts.Items.Refresh();//refrescamos la lista
+        dgrContracts.SelectedIndex = nIndex;//Seleccionamos el registro nuevo
+        dgrContracts.ScrollIntoView(dgrContracts.Items[nIndex]);//Movemos el foco hacía el registro nuevo
+        StatusBarReg.Content = lstContracts.Count + " Contracts.";
       }
     }
     #endregion
