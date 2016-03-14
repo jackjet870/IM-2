@@ -8,14 +8,14 @@ using System.Windows.Media;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.PRStatistics.Utilities;
-using OfficeOpenXml;
-using OfficeOpenXml.Drawing;
+using OfficeOpenXml.Style;
 using System.IO;
 using System.Diagnostics;
 using System.Data;
 using IM.Model.Classes;
 using IM.Base.Forms;
 using IM.Base.Helpers;
+using IM.Model.Enums;
 
 namespace IM.PRStatistics.Forms
 {
@@ -26,13 +26,21 @@ namespace IM.PRStatistics.Forms
   {
     #region Propiedades y Atributos
     List<Tuple<string,string>> filterTuple= null;
+    public UserData userData { get; set; }
 
     #endregion
 
     #region Constructores y  Destructores
     public frmPRStatistics(UserData userData)
     {
+      this.userData = userData;
       InitializeComponent();
+    }
+    #endregion
+
+    #region Eventos de la ventana
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
       //Inicializamos los catalogos
       DoGetLeadSources(userData.User.peID);
       DoGetSalesRooms(userData.User.peID);
@@ -40,9 +48,6 @@ namespace IM.PRStatistics.Forms
       DoGetAgencies();
       DoGetMarkets();
     }
-    #endregion
-
-    #region Eventos de la ventana
     /// <summary>
     /// Evento que se encarga de generar las estadisticas
     /// </summary>
@@ -55,8 +60,10 @@ namespace IM.PRStatistics.Forms
               && lsbxCountries.SelectedItems.Count > 0 && lsbxAgencies.SelectedItems.Count > 0
               && lsbxMarkets.SelectedItems.Count > 0)
       {
+
         filterTuple = new List<Tuple<string, string>>();
         StaStart("Loading Report...");
+        imgButtonOk.IsEnabled = false;
 
         filterTuple.Add(new Tuple<string, string>("LeadSource", chbxLeadSources.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxLeadSources)));
         filterTuple.Add(new Tuple<string, string>("SalesRooms", chbxSalesRooms.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxSalesRooms)));
@@ -65,6 +72,9 @@ namespace IM.PRStatistics.Forms
         filterTuple.Add(new Tuple<string, string>("Markets", chbxMarkets.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxMarkets)));
     
         DoGetRptPrStats(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, filterTuple);
+
+        Process[] localAll3 = Process.GetProcesses();
+
       }
       else
       {
@@ -86,7 +96,7 @@ namespace IM.PRStatistics.Forms
         FileInfo templatePath = new FileInfo(string.Concat(Directory.GetCurrentDirectory(), "\\ReportTemplate\\RptPRStatistics.xlsx"));
         DataTable dt = GridHelper.GetDataTableFromGrid<RptPRStats>(lstRptStats);
         Tuple<string, string> nombreReporte = new Tuple<string, string>("PR Statistics", dateRange);
-        FileInfo finfo = IM.Base.Helpers.EpplusHelper.CreateRptExcelWithOutTemplate(filterTuple, dt, nombreReporte);
+        FileInfo finfo = IM.Base.Helpers.EpplusHelper.CreateRptExcelWithOutTemplate(filterTuple, dt, nombreReporte, UsefulMethods.getExcelFormatTable());
         if (finfo != null)
         {
           Process.Start(finfo.FullName);
@@ -185,6 +195,7 @@ namespace IM.PRStatistics.Forms
       lblStatusBarMessage.Content = message;
       imgStatusBarMessage.Visibility = Visibility.Visible;
       this.Cursor = Cursors.Wait;
+      
     }
 
     /// <summary>
@@ -237,6 +248,7 @@ namespace IM.PRStatistics.Forms
         {
           if (task1.IsCompleted)
           {
+            task1.Wait(1000);
             List<LeadSourceByUser> data = task1.Result;
             if (data.Count > 0)
             {
@@ -271,6 +283,7 @@ namespace IM.PRStatistics.Forms
         {
           if (task1.IsCompleted)
           {
+            task1.Wait(1000);
             List<SalesRoomByUser> data = task1.Result;
             if (data.Count > 0)
             {
@@ -305,6 +318,7 @@ namespace IM.PRStatistics.Forms
         {
           if (task1.IsCompleted)
           {
+            task1.Wait(1000);
             List<CountryShort> data = task1.Result;
             if (data.Count > 0)
             {
@@ -340,6 +354,7 @@ namespace IM.PRStatistics.Forms
         {
           if (task1.IsCompleted)
           {
+            task1.Wait(1000);
             List<AgencyShort> data = task1.Result;
             if (data.Count > 0)
             {
@@ -374,6 +389,7 @@ namespace IM.PRStatistics.Forms
         {
           if (task1.IsCompleted)
           {
+            task1.Wait(1000);
             List<MarketShort> data = task1.Result;
             if (data.Count > 0)
             {
@@ -404,6 +420,7 @@ namespace IM.PRStatistics.Forms
         {
           UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
           StaEnd();
+          imgButtonOk.IsEnabled = true;
           return false;
         }
         else
@@ -415,12 +432,14 @@ namespace IM.PRStatistics.Forms
             {
               dtgr.DataContext = data;
               StatusBarReg.Content = string.Format("{0}/{1}", (dtgr.SelectedIndex + 1).ToString(), dtgr.Items.Count.ToString());
+              
             }
             else
             {
               UIHelper.ShowMessage("There is no data");
             }
             StaEnd();
+            imgButtonOk.IsEnabled = true;
           }
           return false;
         }
@@ -578,6 +597,7 @@ namespace IM.PRStatistics.Forms
     }
 
     #endregion
+
 
   }
 }

@@ -73,9 +73,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Forms\pruebaReporte.xaml.cs">
-      <DependentUpon>pruebaReporte.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Utilities\UsefulMethods.cs" />
     <Page Include="Forms\frmPRStatistics.xaml">
       <SubType>Designer</SubType>
@@ -88,10 +85,6 @@
     <Compile Include="Forms\frmPRStatistics.xaml.cs">
       <DependentUpon>frmPRStatistics.xaml</DependentUpon>
     </Compile>
-    <Page Include="Forms\pruebaReporte.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Styles\General.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -7,12 +7,26 @@
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" 
         mc:Ignorable="d"
        Title="PR Statistics"
-    Height="650" Width="850" WindowStartupLocation="CenterScreen" WindowState="Normal"
-    ResizeMode="CanMinimize"  Icon="/IM.PRStatistics;component/Images/IM.ico" WindowStyle="SingleBorderWindow"
-    KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged">
-    <Canvas >
+    d:Height="768" d:Width="1024" WindowStartupLocation="CenterScreen" 
+    Icon="/IM.PRStatistics;component/Images/IM.ico" WindowState="Maximized" WindowStyle="SingleBorderWindow"
+    KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">
+    
+    <Grid x:Name="layout" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" MinHeight="220"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <!--#region Barra decoracion -->
+        <Border Background="#147F79" Height="32" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="0" Margin="0,0,0,0"/>
+        <!--#endregion-->
+
         <!--#region Barra de opciones y botones -->
-        <Border x:Name="brdDateRange" Canvas.Left="18" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Height="55" Width="800" Canvas.Top="37">
+        <Border x:Name="brdDateRange" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Margin="10,5,10,0">
             <StackPanel >
                 <TextBlock Text="Date Range" Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" Height="40">
@@ -58,8 +72,8 @@
         <!--#endregion-->
 
         <!--#region Listas de catalogos para filtrar -->
-        <StackPanel Orientation="Horizontal" Canvas.Left="18" Canvas.Top="93" Width="800" Height="180">
-            <Border Style="{StaticResource brdLists}" Margin="0,0,0,0">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Margin="10,5,10,0" >
+            <Border Style="{StaticResource brdLists}">
                 <StackPanel>
                     <TextBlock Text="Lead Sources" Style="{StaticResource HeadersList}"/>
                     <ListBox x:Name="lsbxLeadSources" ItemsSource="{Binding}" TextSearch.TextPath="lsN" SelectionChanged="lsbxLeadSources_SelectionChanged">
@@ -80,7 +94,7 @@
                         <CheckBox x:Name="chbxLeadSources" Content="All Lead Sources" 
 						Style="{StaticResource ResourceKey=SelectAllLists}" 
 						TextSearch.Text="lsN" Checked="chbx_Checked" Unchecked="chbx_Unchecked"/>
-                        <TextBlock Name="txtbLSSelected" Margin="5,5,0,0" />
+                        <TextBlock Name="txtbLSSelected" Margin="2,5,0,0" />
                     </StackPanel>
 
                 </StackPanel>
@@ -108,7 +122,7 @@
                         <CheckBox x:Name="chbxSalesRooms" Content="All Sales Rooms" 
 						Style="{StaticResource ResourceKey=SelectAllLists}" 
 						Margin="3,5,0,5" Checked="chbx_Checked" Unchecked="chbx_Unchecked"/>
-                        <TextBlock Name="txtbSRSelected" Margin="5,5,0,0" />
+                        <TextBlock Name="txtbSRSelected" Margin="2,5,0,0" />
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -135,7 +149,7 @@
                         <CheckBox x:Name="chbxCountries" Content="All Countries"
 						Style="{StaticResource ResourceKey=SelectAllLists}" 
 						Checked="chbx_Checked" Unchecked="chbx_Unchecked" />
-                        <TextBlock Name="txtbCOSelected" Margin="5,5,0,0" />
+                        <TextBlock Name="txtbCOSelected" Margin="2,5,0,0" />
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -161,12 +175,12 @@
                         <CheckBox x:Name="chbxAgencies" Content="All Agencies"
 						Style="{StaticResource ResourceKey=SelectAllLists}" 
 						Checked="chbx_Checked" Unchecked="chbx_Unchecked" />
-                        <TextBlock Name="txtbAGSelected" Margin="5,5,0,0" />
+                        <TextBlock Name="txtbAGSelected" Margin="2,5,0,0" />
                     </StackPanel>
                 </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource brdLists}" Margin="20,0,0,0">
+            <Border Style="{StaticResource brdLists}">
                 <StackPanel >
                     <TextBlock Text="Markets" Style="{StaticResource HeadersList}"/>
                     <ListBox x:Name="lsbxMarkets" ItemsSource="{Binding}" TextSearch.TextPath="mkN" Loaded="chbx_Checked" SelectionChanged="lsbxMarkets_SelectionChanged">
@@ -187,7 +201,7 @@
                         <CheckBox x:Name="chbxMarkets" Content="All Markets" 
 						Style="{StaticResource ResourceKey=SelectAllLists}" 
 						Checked="chbx_Checked" Unchecked="chbx_Unchecked" />
-                        <TextBlock Name="txtbMKSelected" Margin="5,5,0,0" />
+                        <TextBlock Name="txtbMKSelected" Margin="2,5,0,0" />
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -195,42 +209,42 @@
         <!--#endregion-->
 
         <!--#region  DataGrid Principal-->
-        <Border CornerRadius="5" Width="800" Height="300" Canvas.Left="18" Canvas.Top="278" Padding="5" BorderThickness="1" BorderBrush="Black">
+        <Border CornerRadius="5" Padding="5" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="3" Margin="10,5,10,0">
             <DataGrid Name="dtgr" BorderThickness="0" BorderBrush="Transparent" RowDetailsVisibilityMode="VisibleWhenSelected" ItemsSource="{Binding}" 
                       EnableRowVirtualization="True" AutoGenerateColumns="False" CanUserAddRows="False" AlternatingRowBackground="LightGray" SelectionChanged="dtgr_SelectionChanged">
                 <DataGrid.Columns>
-                    <DataGridTextColumn x:Name="prId" Width="SizeToHeader" Header="Pr Id" Binding="{Binding PR_ID}" />
-                    <DataGridTextColumn x:Name="prName" Width="SizeToHeader" Header="Pr Name" Binding="{Binding PR_NAME}"/>
-                    <DataGridTextColumn x:Name="assign" Width="SizeToHeader" Header="Assign" Binding="{Binding Assign}"/>
-                    <DataGridTextColumn x:Name="conts" Width="SizeToHeader" Header="PR Conts" Binding="{Binding Conts}"/>
-                    <DataGridTextColumn x:Name="cFactor" Width="SizeToHeader" Header="C%" Binding="{Binding C_Factor}"/>
-                    <DataGridTextColumn x:Name="avails" Width="SizeToHeader" Header="Avails" Binding="{Binding Avails}"/>
-                    <DataGridTextColumn x:Name="aFactor" Width="SizeToHeader" Header="A%" Binding="{Binding A_Factor}"/>
-                    <DataGridTextColumn x:Name="bk" Width="SizeToHeader" Header="Bk" Binding="{Binding Bk}"/>
-                    <DataGridTextColumn x:Name="bkFactor" Width="SizeToHeader" Header="Bk%" Binding="{Binding Bk_Factor}"/>
-                    <DataGridTextColumn x:Name="dep" Width="SizeToHeader" Header="Dep" Binding="{Binding Dep}"/>
-                    <DataGridTextColumn x:Name="dir" Width="SizeToHeader" Header="Dir" Binding="{Binding Dir}"/>
-                    <DataGridTextColumn x:Name="sh" Width="SizeToHeader" Header="Sh" Binding="{Binding Sh}"/>
-                    <DataGridTextColumn x:Name="io" Width="SizeToHeader" Header="Io" Binding="{Binding IO}"/>
-                    <DataGridTextColumn x:Name="shFactor" Width="SizeToHeader" Header="Sh%" Binding="{Binding Sh_Factor}"/>
-                    <DataGridTextColumn x:Name="tSh" Width="SizeToHeader" Header="T Sh" Binding="{Binding TSh}"/>
-                    <DataGridTextColumn x:Name="sg" Width="SizeToHeader" Header="SG" Binding="{Binding SG}"/>
-                    <DataGridTextColumn x:Name="procNumber" Width="SizeToHeader" Header="P#" Binding="{Binding Proc_Number}"/>
-                    <DataGridTextColumn x:Name="processables" Width="SizeToHeader" Header="Processable" Binding="{Binding Processable}"/>
-                    <DataGridTextColumn x:Name="outPNumber" Width="SizeToHeader" Header="OP#" Binding="{Binding OutP_Number}"/>
-                    <DataGridTextColumn x:Name="outPending" Width="SizeToHeader" Header="Out Pending" Binding="{Binding Out_Pending}"/>
-                    <DataGridTextColumn x:Name="cNumber" Width="SizeToHeader" Header="C#" Binding="{Binding C_Number}"/>
-                    <DataGridTextColumn x:Name="cancelled" Width="SizeToHeader" Header="Cancelled" Binding="{Binding Cancelled}"/>
-                    <DataGridTextColumn x:Name="totalNumber" Width="SizeToHeader" Header="T#" Binding="{Binding Total_Number}"/>
-                    <DataGridTextColumn x:Name="total" Width="SizeToHeader" Header="Total" Binding="{Binding Total}"/>
-                    <DataGridTextColumn x:Name="procPrNumber" Width="SizeToHeader" Header="Proc PR#" Binding="{Binding Proc_PR_Number}"/>
-                    <DataGridTextColumn x:Name="procPR" Width="SizeToHeader" Header="Proc PR" Binding="{Binding Proc_PR}"/>
-                    <DataGridTextColumn x:Name="procSgNumber" Width="SizeToHeader" Header="Proc SG#" Binding="{Binding Proc_SG_Number}"/>
-                    <DataGridTextColumn x:Name="procSg" Width="SizeToHeader" Header="Proc SG" Binding="{Binding Proc_SG}"/>
-                    <DataGridTextColumn x:Name="eff" Width="SizeToHeader" Header="Eff" Binding="{Binding Eff}"/>
-                    <DataGridTextColumn x:Name="ciFactor" Width="SizeToHeader" Header="Cl%" Binding="{Binding Cl_Factor}"/>
-                    <DataGridTextColumn x:Name="caFactor" Width="SizeToHeader" Header="Ca%" Binding="{Binding Ca_Factor}"/>
-                    <DataGridTextColumn x:Name="avgSales" Width="SizeToHeader" Header="Avg Sale" Binding="{Binding Avg_Sale}"/>
+                    <DataGridTextColumn x:Name="prId2" Width="Auto" Header="PR Id" Binding="{Binding PR_ID}"/>
+                    <DataGridTextColumn x:Name="prName2" Width="Auto" Header="PR Name" Binding="{Binding PR_NAME}" />
+                    <DataGridTextColumn x:Name="assign" Width="Auto" Header="Assign" Binding="{Binding Assign}"/>
+                    <DataGridTextColumn x:Name="conts" Width="Auto" Header="Conts" Binding="{Binding Conts}"/>
+                    <DataGridTextColumn x:Name="cFactor" Width="Auto" Header="C%" Binding="{Binding C_Factor}"/>
+                    <DataGridTextColumn x:Name="avails" Width="Auto" Header="Avails" Binding="{Binding Avails}"/>
+                    <DataGridTextColumn x:Name="aFactor" Width="Auto" Header="A%" Binding="{Binding A_Factor}"/>
+                    <DataGridTextColumn x:Name="bk" Width="Auto" Header="Bk" Binding="{Binding Bk}"/>
+                    <DataGridTextColumn x:Name="bkFactor" Width="Auto" Header="Bk%" Binding="{Binding Bk_Factor}"/>
+                    <DataGridTextColumn x:Name="dep" Width="Auto" Header="Dep" Binding="{Binding Dep}"/>
+                    <DataGridTextColumn x:Name="dir" Width="Auto" Header="Dir" Binding="{Binding Dir}"/>
+                    <DataGridTextColumn x:Name="sh" Width="Auto" Header="Sh" Binding="{Binding Sh}"/>
+                    <DataGridTextColumn x:Name="io" Width="Auto" Header="Io" Binding="{Binding IO}"/>
+                    <DataGridTextColumn x:Name="shFactor" Width="Auto" Header="Sh%" Binding="{Binding Sh_Factor}"/>
+                    <DataGridTextColumn x:Name="tSh" Width="Auto" Header="T Sh" Binding="{Binding TSh}"/>
+                    <DataGridTextColumn x:Name="sg" Width="Auto" Header="SG" Binding="{Binding SG}"/>
+                    <DataGridTextColumn x:Name="procNumber" Width="Auto" Header="P#" Binding="{Binding Proc_Number}"/>
+                    <DataGridTextColumn x:Name="processables" Width="Auto" Header="Processable" Binding="{Binding Processable}"/>
+                    <DataGridTextColumn x:Name="outPNumber" Width="Auto" Header="OP#" Binding="{Binding OutP_Number}"/>
+                    <DataGridTextColumn x:Name="outPending" Width="Auto" Header="Out Pending" Binding="{Binding Out_Pending}"/>
+                    <DataGridTextColumn x:Name="cNumber" Width="Auto" Header="C#" Binding="{Binding C_Number}"/>
+                    <DataGridTextColumn x:Name="cancelled" Width="Auto" Header="Cancelled" Binding="{Binding Cancelled}"/>
+                    <DataGridTextColumn x:Name="totalNumber" Width="Auto" Header="T#" Binding="{Binding Total_Number}"/>
+                    <DataGridTextColumn x:Name="total" Width="Auto" Header="Total" Binding="{Binding Total}"/>
+                    <DataGridTextColumn x:Name="procPrNumber" Width="Auto" Header="Proc PR#" Binding="{Binding Proc_PR_Number}"/>
+                    <DataGridTextColumn x:Name="procPR" Width="Auto" Header="Proc PR" Binding="{Binding Proc_PR}"/>
+                    <DataGridTextColumn x:Name="procSgNumber" Width="Auto" Header="Proc SG#" Binding="{Binding Proc_SG_Number}"/>
+                    <DataGridTextColumn x:Name="procSg" Width="Auto" Header="Proc SG" Binding="{Binding Proc_SG}"/>
+                    <DataGridTextColumn x:Name="eff" Width="Auto" Header="Eff" Binding="{Binding Eff}"/>
+                    <DataGridTextColumn x:Name="ciFactor" Width="Auto" Header="Cl%" Binding="{Binding Cl_Factor}"/>
+                    <DataGridTextColumn x:Name="caFactor" Width="Auto" Header="Ca%" Binding="{Binding Ca_Factor}"/>
+                    <DataGridTextColumn x:Name="avgSales" Width="Auto" Header="Avg Sale" Binding="{Binding Avg_Sale}"/>
 
                 </DataGrid.Columns>
             </DataGrid>
@@ -238,24 +252,21 @@
         <!--#endregion-->
 
         <!--#region  Estatus Bar-->
-        <StatusBar x:Name="stbStatusBar" Canvas.Top="591" Width="844" Height="30" >
-            <StatusBarItem x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
-            <StatusBarItem x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center" />
-            <StatusBarItem x:Name="StatusBarIns" Content="INS" Width="50" HorizontalContentAlignment="Center" />
+        <StatusBar x:Name="stbStatusBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Row="4" Margin="10,0,10,0" >
+            <StatusBarItem x:Name="StatusBarCap" Content="CAP"  HorizontalContentAlignment="Stretch" />
+            <StatusBarItem x:Name="StatusBarNum" Content="NUM"  HorizontalContentAlignment="Stretch" />
+            <StatusBarItem x:Name="StatusBarIns" Content="INS"  HorizontalContentAlignment="Stretch" />
             <Separator />
             <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
                 <StackPanel Orientation="Horizontal">
-                    <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Width="12" Height="12" Visibility="Hidden" />
-                    <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" />
+                    <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico"  Height="12" Visibility="Hidden" />
+                    <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0"/>
                 </StackPanel>
             </StatusBarItem>
             <StatusBarItem x:Name="StatusBarReg" Content="0/0" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
         </StatusBar>
         <!--#endregion-->
 
-        <!--#region Barra decoracion -->
-        <Border Background="#147F79" Height="32"  Width="850" Canvas.Top="-1"/>
-        <!--#endregion-->
-    </Canvas>
+    </Grid>
 </Window>
 

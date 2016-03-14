@@ -38,6 +38,10 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EPPlus, Version=4.0.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.0.5\lib\net20\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
@@ -90,6 +94,7 @@
     <Compile Include="ChargeTo.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Classes\ExcelFormatTable.cs" />
     <Compile Include="Classes\StrToEnums.cs" />
     <Compile Include="Classes\UserData.cs" />
     <Compile Include="Club.cs">
@@ -137,6 +142,7 @@
     <Compile Include="EfficiencyType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Enums\EnumFormatTypeExcel.cs" />
     <Compile Include="Enums\EnumLoginType.cs" />
     <Compile Include="Enums\EnumModule.cs" />
     <Compile Include="Enums\EnumPermisionLevel.cs" />
