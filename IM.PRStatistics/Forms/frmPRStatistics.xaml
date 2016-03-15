@@ -216,36 +216,36 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="prId2" Width="Auto" Header="PR Id" Binding="{Binding PR_ID}"/>
                     <DataGridTextColumn x:Name="prName2" Width="Auto" Header="PR Name" Binding="{Binding PR_NAME}" />
-                    <DataGridTextColumn x:Name="assign" Width="Auto" Header="Assign" Binding="{Binding Assign}"/>
-                    <DataGridTextColumn x:Name="conts" Width="Auto" Header="Conts" Binding="{Binding Conts}"/>
-                    <DataGridTextColumn x:Name="cFactor" Width="Auto" Header="C%" Binding="{Binding C_Factor}"/>
-                    <DataGridTextColumn x:Name="avails" Width="Auto" Header="Avails" Binding="{Binding Avails}"/>
-                    <DataGridTextColumn x:Name="aFactor" Width="Auto" Header="A%" Binding="{Binding A_Factor}"/>
-                    <DataGridTextColumn x:Name="bk" Width="Auto" Header="Bk" Binding="{Binding Bk}"/>
-                    <DataGridTextColumn x:Name="bkFactor" Width="Auto" Header="Bk%" Binding="{Binding Bk_Factor}"/>
-                    <DataGridTextColumn x:Name="dep" Width="Auto" Header="Dep" Binding="{Binding Dep}"/>
-                    <DataGridTextColumn x:Name="dir" Width="Auto" Header="Dir" Binding="{Binding Dir}"/>
-                    <DataGridTextColumn x:Name="sh" Width="Auto" Header="Sh" Binding="{Binding Sh}"/>
-                    <DataGridTextColumn x:Name="io" Width="Auto" Header="Io" Binding="{Binding IO}"/>
-                    <DataGridTextColumn x:Name="shFactor" Width="Auto" Header="Sh%" Binding="{Binding Sh_Factor}"/>
-                    <DataGridTextColumn x:Name="tSh" Width="Auto" Header="T Sh" Binding="{Binding TSh}"/>
-                    <DataGridTextColumn x:Name="sg" Width="Auto" Header="SG" Binding="{Binding SG}"/>
-                    <DataGridTextColumn x:Name="procNumber" Width="Auto" Header="P#" Binding="{Binding Proc_Number}"/>
-                    <DataGridTextColumn x:Name="processables" Width="Auto" Header="Processable" Binding="{Binding Processable}"/>
-                    <DataGridTextColumn x:Name="outPNumber" Width="Auto" Header="OP#" Binding="{Binding OutP_Number}"/>
-                    <DataGridTextColumn x:Name="outPending" Width="Auto" Header="Out Pending" Binding="{Binding Out_Pending}"/>
-                    <DataGridTextColumn x:Name="cNumber" Width="Auto" Header="C#" Binding="{Binding C_Number}"/>
-                    <DataGridTextColumn x:Name="cancelled" Width="Auto" Header="Cancelled" Binding="{Binding Cancelled}"/>
-                    <DataGridTextColumn x:Name="totalNumber" Width="Auto" Header="T#" Binding="{Binding Total_Number}"/>
-                    <DataGridTextColumn x:Name="total" Width="Auto" Header="Total" Binding="{Binding Total}"/>
-                    <DataGridTextColumn x:Name="procPrNumber" Width="Auto" Header="Proc PR#" Binding="{Binding Proc_PR_Number}"/>
-                    <DataGridTextColumn x:Name="procPR" Width="Auto" Header="Proc PR" Binding="{Binding Proc_PR}"/>
-                    <DataGridTextColumn x:Name="procSgNumber" Width="Auto" Header="Proc SG#" Binding="{Binding Proc_SG_Number}"/>
-                    <DataGridTextColumn x:Name="procSg" Width="Auto" Header="Proc SG" Binding="{Binding Proc_SG}"/>
-                    <DataGridTextColumn x:Name="eff" Width="Auto" Header="Eff" Binding="{Binding Eff}"/>
-                    <DataGridTextColumn x:Name="ciFactor" Width="Auto" Header="Cl%" Binding="{Binding Cl_Factor}"/>
-                    <DataGridTextColumn x:Name="caFactor" Width="Auto" Header="Ca%" Binding="{Binding Ca_Factor}"/>
-                    <DataGridTextColumn x:Name="avgSales" Width="Auto" Header="Avg Sale" Binding="{Binding Avg_Sale}"/>
+                    <DataGridTextColumn x:Name="assign" Width="Auto" Header="Assign" Binding="{Binding Assign,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="conts" Width="Auto" Header="Conts" Binding="{Binding Conts,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="cFactor" Width="Auto" Header="C%" Binding="{Binding C_Factor,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="avails" Width="Auto" Header="Avails" Binding="{Binding Avails,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="aFactor" Width="Auto" Header="A%" Binding="{Binding A_Factor,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="bk" Width="Auto" Header="Bk" Binding="{Binding Bk,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="bkFactor" Width="Auto" Header="Bk%" Binding="{Binding Bk_Factor,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="dep" Width="Auto" Header="Dep" Binding="{Binding Dep,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="dir" Width="Auto" Header="Dir" Binding="{Binding Dir,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="sh" Width="Auto" Header="Sh" Binding="{Binding Sh,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="IO" Width="Auto" Header="IO" Binding="{Binding IO,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="shFactor" Width="Auto" Header="Sh%" Binding="{Binding Sh_Factor,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="tSh" Width="Auto" Header="T Sh" Binding="{Binding TSh,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="sg" Width="Auto" Header="SG" Binding="{Binding SG,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="procNumber" Width="Auto" Header="P#" Binding="{Binding Proc_Number,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="processables" Width="Auto" Header="Processable" Binding="{Binding Processable,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="outPNumber" Width="Auto" Header="OP#" Binding="{Binding OutP_Number,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="outPending" Width="Auto" Header="Out Pending" Binding="{Binding Out_Pending,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="cNumber" Width="Auto" Header="C#" Binding="{Binding C_Number,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="cancelled" Width="Auto" Header="Cancelled" Binding="{Binding Cancelled,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="totalNumber" Width="Auto" Header="T#" Binding="{Binding Total_Number,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="total" Width="Auto" Header="Total" Binding="{Binding Total,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="procPrNumber" Width="Auto" Header="Proc PR#" Binding="{Binding Proc_PR_Number,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="procPR" Width="Auto" Header="Proc PR" Binding="{Binding Proc_PR,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="procSgNumber" Width="Auto" Header="Proc SG#" Binding="{Binding Proc_SG_Number,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="procSg" Width="Auto" Header="Proc SG" Binding="{Binding Proc_SG,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="eff" Width="Auto" Header="Eff" Binding="{Binding Eff,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="ciFactor" Width="Auto" Header="Cl%" Binding="{Binding Cl_Factor,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="caFactor" Width="Auto" Header="Ca%" Binding="{Binding Ca_Factor,StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="avgSales" Width="Auto" Header="Avg Sale" Binding="{Binding Avg_Sale,StringFormat={}{0:n2}}"/>
 
                 </DataGrid.Columns>
             </DataGrid>

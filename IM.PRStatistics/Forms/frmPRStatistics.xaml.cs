@@ -48,7 +48,7 @@ namespace IM.PRStatistics.Forms
       DoGetAgencies();
       DoGetMarkets();
       //Seleccionamos los días en el datapicker 
-      dtpkFrom.SelectedDate = DateTime.Now.AddDays(-7);
+      dtpkFrom.SelectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
       dtpkTo.SelectedDate = DateTime.Now;
     }
     /// <summary>
