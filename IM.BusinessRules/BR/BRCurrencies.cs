@@ -13,11 +13,14 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="currency">objeto con filtros adicionales</param>
     /// <param name="nStatus">-1. todos los registros | 0. registros inactivos | 1. registros activos</param>
+    /// <param name="exceptCurrencyID"> lista de currencies ID a excluir, incluido US</param>
     /// <returns>lista de tipo currency</returns>
     /// <history>
     /// [Emoguel] created 07/03/2016
+    /// [vipacheco] 10/03/2016 Modified --> Se agregó validacion de Object Currency vacía.
+    /// [vipacheco] 11/03/2016 Modified --> Se agregó parametro nuevo para excluir alguna lista currencies en especifico por su ID
     /// </history>
-    public static List<Currency> GetCurrencies(Currency currency,int nStatus=-1)
+    public static List<Currency> GetCurrencies(Currency currency, int nStatus=-1, List<string> exceptCurrencyID = null)
     {
       using (var dbContext = new IMEntities())
       {
@@ -27,17 +30,28 @@ namespace IM.BusinessRules.BR
         if(nStatus!=-1)//filtro por estatus
         {
           bool blnEstatus = Convert.ToBoolean(nStatus);
-          query = query.Where(c=>c.cuA==blnEstatus);
+
+          if (exceptCurrencyID != null) // Verifica si se desea excluir alguna currency en especifico
+          {
+            query = query.Where(c => !exceptCurrencyID.Contains(c.cuID) && c.cuID != "US" && c.cuA == blnEstatus);
+          }
+          else
+          {
+            query = query.Where(c => c.cuA == blnEstatus);
+          }
         }
 
-        if(!string.IsNullOrWhiteSpace(currency.cuID))//Filtro por ID
+        if (currency != null) // Verifica si se mando algun objeto de Currency.
         {
-          query = query.Where(c=>c.cuID==currency.cuID);
-        }
+          if (!string.IsNullOrWhiteSpace(currency.cuID))//Filtro por ID
+          {
+            query = query.Where(c => c.cuID == currency.cuID);
+          }
 
-        if(!string.IsNullOrWhiteSpace(currency.cuN))//filtro por nombre
-        {
-          query = query.Where(c=>c.cuN==currency.cuN);
+          if (!string.IsNullOrWhiteSpace(currency.cuN))//filtro por nombre
+          {
+            query = query.Where(c => c.cuN == currency.cuN);
+          }
         }
 
         return query.OrderBy(c=>c.cuN).ToList();

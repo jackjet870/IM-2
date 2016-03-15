@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Input;
 using IM.Model;
 using IM.Model.Classes;
 using IM.BusinessRules.BR;
@@ -62,6 +63,7 @@ namespace IM.Base.Forms
     /// <history>
     /// [lchairez] 24/Feb/2016 Created
     /// [jorcanche] 01/03/2016 Modified (Se agrega el "Case" Location)
+    /// [vipacheco] 07/03/2016 Modified --> se agrego case para Sales Room
     /// </history>
     private bool Validate()
     {
@@ -89,6 +91,9 @@ namespace IM.Base.Forms
             case EnumLoginType.Location:
               UIHelper.ShowMessage("Specify the Location.", MessageBoxImage.Warning);
               break;
+            case EnumLoginType.SalesRoom:
+              UIHelper.ShowMessage("Specify the Sales Room.", MessageBoxImage.Warning);
+              break;
           }
 
           res = false;
@@ -102,6 +107,13 @@ namespace IM.Base.Forms
 
     #region LoadFromFile
 
+    /// <summary>
+    /// Funcion encargado de cargar los datos desde el archivo de configuracion
+    /// </summary>
+    /// <history>
+    /// 
+    /// [vipacheco] 08/03/2016 Modified --> se agrego case para sales room
+    /// </history>
     private void LoadFromFile()
     {
       string strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
@@ -128,8 +140,16 @@ namespace IM.Base.Forms
             }
             btnAceptar.Focus();
             break;
+          case EnumLoginType.SalesRoom:
+            if (cmbPlace.Visibility == Visibility.Visible)
+            {
+              txtUser_LostFocus(null, null);
+              cmbPlace.SelectedValue = _iniFileHelper.readText("Login", "Sales Room", "");
         }
+            btnAceptar.Focus();
+            break;
       }
+    }
     }
 
     #endregion
@@ -148,13 +168,12 @@ namespace IM.Base.Forms
     /// [edgrodriguez] 27/02/2016 Modified
     /// [edgrodriguez] 29/02/2016 Modified
     /// [jorcanche] 01/03/2016 Modified (Se agrega el "Case" Location)
+    /// [vipacheco] 01/03/2016 Modified --> Se agrego validacion case para Sales Room
     /// </history>
     private void btnAceptar_Click(object sender, RoutedEventArgs e)
     {
       if (!Validate())
         return;
-
-      var user = BRPersonnel.Login(EnumLoginType.Normal, txtUser.Text);
 
       userData = BRPersonnel.Login(_loginType, txtUser.Text, (cmbPlace.Visibility == Visibility.Visible) ? cmbPlace.SelectedValue.ToString() : "");
       string _encryptPassword = Helpers.EncryptHelper.Encrypt(txtPassword.Password);
@@ -214,6 +233,16 @@ namespace IM.Base.Forms
             return;
           }
           break;
+        case EnumLoginType.SalesRoom://Sales Room - HOST
+
+          // validamos que el usuario tenga permiso
+          if (!userData.Permissions.Exists(c => c.pppm == "HOST" && c.pppl >= 1))
+          {
+            UIHelper.ShowMessage("User doesn't have access");
+            btnCancelar_Click(null, null);
+            return;
+      }
+          break;
       }
       IsAuthenticated = true;
       Close();
@@ -243,6 +272,7 @@ namespace IM.Base.Forms
     /// [vipacheco] 2-26-2016 Created
     /// [edgrodriguez] 27/02/2016 Modified
     /// [jorcanche] 01/03/2016 Modified (Se agrega el "Case" Location)
+    /// [vipacheco] 01/03/2016 Modified --> Se agrego case Sales Room
     /// </history>
     private void txtUser_LostFocus(object sender, RoutedEventArgs e)
     {
@@ -272,7 +302,22 @@ namespace IM.Base.Forms
           else
             cmbPlace.IsEnabled = false;
           break;
+        case EnumLoginType.SalesRoom://Sales Room
+          List<SalesRoomByUser> salesRooms = BRSalesRooms.GetSalesRoomsByUser(txtUser.Text, "ALL");
+
+          if (salesRooms.Count > 0)
+          {
+            cmbPlace.ItemsSource = salesRooms;
+            cmbPlace.SelectedValuePath = "srID";
+            cmbPlace.DisplayMemberPath = "srN";
+            cmbPlace.IsEnabled = true;
+
+            cmbPlace.SelectedItem = salesRooms[0];
       }
+          else
+            cmbPlace.IsEnabled = false;
+          break;
+    }
     }
 
     #endregion
@@ -286,6 +331,7 @@ namespace IM.Base.Forms
     /// [edgrodriguez] 29/02/2016 Created
     /// [edgrodriguez] 29/02/2016 Modified
     /// [jorcanche] 01/03/2016 Modified (Se agrega el "Case" Location)
+    /// [vipacheco] 01/03/2016 Modified --> Se agrego case para Sales Room
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
@@ -304,6 +350,9 @@ namespace IM.Base.Forms
         case EnumLoginType.Location: // Hotel
           lblPlace.Content = "Location";
           break;
+        case EnumLoginType.SalesRoom:
+          lblPlace.Content = "Sales Room";
+          break;
       }
 
       //Se verifican las banderas de ChangePassword y AutoSign
@@ -314,6 +363,25 @@ namespace IM.Base.Forms
 
     #endregion
 
+    #region Login_KeyDown
+    /// <summary>
+    /// Función que evalua cuando se pulsa Ctrl + F4 para cerrar la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 03/09/2016 Created
+    /// </history>
+    private void Login_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+    {
+      if (e.Key == Key.System && e.SystemKey == Key.F4)
+      {
+        _frmBase.Close();
+      }
+    }
     #endregion    
+
+    #endregion
+
   }
 }

@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using IM.Base.Forms;
+using IM.Model.Classes;
+using IM.Model.Enums;
 
 namespace IM.Host
 {
@@ -31,22 +33,27 @@ namespace IM.Host
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      /*
+      
       //Creamos el Splash Base!
-      frmSplash mfrmSplash = new frmSplash(); 
+      frmSplash frmSplash = new frmSplash("Host");
 
       //Creamos el tipo de login que se necesita!
-      frmLoginPlace fr = new frmLoginPlace(mfrmSplash);
+      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.SalesRoom);
 
       //Mostramos el Splash
-      mfrmSplash.Show();
+      frmSplash.Show();
 
       //Mandamos llamar el Login
-      mfrmSplash.ShowLogin(fr);
-      */
-      frmHost mfrmHost = new frmHost();
+      frmSplash.ShowLogin(ref frmLogin);
+
+      if (frmLogin.IsAuthenticated)
+      {
+        UserData userData = frmLogin.userData;
+        frmHost mfrmHost = new frmHost(userData);
       mfrmHost.ShowDialog();
+        frmSplash.Close();
     }
+	}
 
     #endregion
 

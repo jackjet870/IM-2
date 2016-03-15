@@ -15118,7 +15118,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="String" Name="srID" Nullable="false" />
           <Property Type="String" Name="srN" Nullable="false" />
           <Property Type="String" Name="srcu" Nullable="false" />
-          <Property Type="Int32" Name="srHoursDif" Nullable="false" />
+          <Property Type="Int16" Name="srHoursDif" Nullable="false" />
           <Property Type="String" Name="srAddOut" Nullable="false" />
         </ComplexType>
         <ComplexType Name="LocationLogin">

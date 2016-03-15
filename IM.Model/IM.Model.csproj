@@ -148,6 +148,7 @@
     <Compile Include="Enums\EnumLoginType.cs" />
     <Compile Include="Enums\EnumModule.cs" />
     <Compile Include="Enums\EnumPermisionLevel.cs" />
+    <Compile Include="Enums\EnumSalesRoomType.cs" />
     <Compile Include="Enums\EnumTeamType.cs" />
     <Compile Include="ExchangeRate.cs">
       <DependentUpon>IMModel.tt</DependentUpon>

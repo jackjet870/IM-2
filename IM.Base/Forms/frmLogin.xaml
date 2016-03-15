@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Base.Forms"
         mc:Ignorable="d"
         Title="Login" Height="203" Width="290" ResizeMode="NoResize"
-        Background="White" BorderThickness="5" BorderBrush="AliceBlue" WindowStartupLocation="Manual" Loaded="Window_Loaded">
+        Background="White" BorderThickness="5" BorderBrush="AliceBlue" WindowStartupLocation="Manual" Loaded="Window_Loaded" KeyDown="Login_KeyDown">
 
   <Grid Background="SkyBlue">
     <Grid.ColumnDefinitions>
