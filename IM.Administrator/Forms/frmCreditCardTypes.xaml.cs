@@ -15,6 +15,7 @@ using IM.Administrator.Enums;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -129,7 +130,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = App.User.HasPermission("SALES",Model.Enums.EnumPermisionLevel.Standard);
+      _blnEdit = App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadCreditCardTypes();
     }

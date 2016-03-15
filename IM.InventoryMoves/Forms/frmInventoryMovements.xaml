@@ -1,4 +1,4 @@
-﻿<Window
+﻿<Window xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -75,8 +75,9 @@
         </Button>
         <GroupBox x:Name="fraDate" Grid.Column="2" Header="_Date" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Height="75" Width="200" FontWeight="Bold">
           <Grid>
-            <DatePicker x:Name="dtpDate" HorizontalAlignment="Left" VerticalAlignment="Center" Width="140" DisplayDate="" SelectedDate="{x:Static sys:DateTime.Today}" Height="25" Margin="10,15,10,10" SelectedDateChanged="dtpDate_SelectedDateChanged" />
-            <ScrollBar x:Name="upd" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,10,10" Scroll="upd_Scroll" Maximum="99999" Minimum="-99999"/>
+              <xctk:DateTimePicker Name="dtpDate" VerticalAlignment="Center" Value="{x:Static sys:DateTime.Today}" Height="25" Format="ShortDate" Margin="5 0 5 0" ValueChanged="dtpDate_SelectedDateChanged" />
+            <!--<DatePicker x:Name="dtpDate" HorizontalAlignment="Left" VerticalAlignment="Center" Width="140" DisplayDate="" SelectedDate="{x:Static sys:DateTime.Today}" Height="25" Margin="10,15,10,10" SelectedDateChanged="dtpDate_SelectedDateChanged" />
+            <ScrollBar x:Name="upd" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,10,10" Scroll="upd_Scroll" Maximum="99999" Minimum="-99999"/>-->
           </Grid>
         </GroupBox>
         <Label x:Name="lblCloseDate" Content="CloseDate" Grid.Column="2" Margin="215,10,205,52" Grid.Row="1" HorizontalContentAlignment="Center" Height="25" FontWeight="Bold"/>

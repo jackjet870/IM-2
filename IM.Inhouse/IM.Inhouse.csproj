@@ -74,22 +74,22 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmContact.xaml.cs">
+    <Compile Include="Forms\frmContact.xaml.cs">
       <DependentUpon>frmContact.xaml</DependentUpon>
     </Compile>
-    <Compile Include="frmAvailability.xaml.cs">
+    <Compile Include="Forms\frmAvailability.xaml.cs">
       <DependentUpon>frmAvailability.xaml</DependentUpon>
     </Compile>
-    <Compile Include="frmFollowUp.xaml.cs">
+    <Compile Include="Forms\frmFollowUp.xaml.cs">
       <DependentUpon>frmFollowUp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="frmGuestLog.xaml.cs">
+    <Compile Include="Forms\frmGuestLog.xaml.cs">
       <DependentUpon>frmGuestLog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmDaysOff.xaml.cs">
       <DependentUpon>frmDaysOff.xaml</DependentUpon>
     </Compile>
-    <Compile Include="frmRegister.xaml.cs">
+    <Compile Include="Forms\frmRegister.xaml.cs">
       <DependentUpon>frmRegister.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -130,19 +130,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="frmContact.xaml">
+    <Page Include="Forms\frmContact.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="frmAvailability.xaml">
+    <Page Include="Forms\frmAvailability.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="frmFollowUp.xaml">
+    <Page Include="Forms\frmFollowUp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="frmGuestLog.xaml">
+    <Page Include="Forms\frmGuestLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -150,7 +150,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="frmRegister.xaml">
+    <Page Include="Forms\frmRegister.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -171,9 +171,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\IM.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="About.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

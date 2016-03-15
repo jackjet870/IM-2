@@ -10,9 +10,9 @@ namespace IM.Model.Enums
     /// Enumera un Equipo, teamPRr = GS
     /// teamSalesmen = SA
     /// </summary>
-    public enum TeamType
+    public enum EnumTeamType
     {
-        teamSalesmen,
-        teamPRs
+        TeamSalesmen,
+        TeamPRs
     }
 }

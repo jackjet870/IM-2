@@ -29,9 +29,9 @@ namespace IM.Inhouse.Forms
     /// </history>
     public partial class frmDaysOff : Window
     {
-        #region Variables
+        #region Atributos
         //Tipo de equipo
-        private TeamType teamType;
+        private EnumTeamType teamType;
         //Clave del Lugar
         private string placeID;
         private CollectionViewSource cvsPersonnelDaysOff;
@@ -201,16 +201,15 @@ namespace IM.Inhouse.Forms
         /// <summary>
         /// Carga e Inicializa el Formulario
         /// </summary>
-        /// <param name="userData">Datos de Usuariol del Formulario</param>
         /// <param name="_teamType">El Tipo de equipo de Trabajo PRs o Salesmen</param>
-        public frmDaysOff(UserData userData, Model.Enums.TeamType _teamType)
+        public frmDaysOff(Model.Enums.EnumTeamType _teamType)
         {
             InitializeComponent();
             teamType = _teamType;
-            if (teamType == TeamType.teamPRs)
-                placeID = userData.LeadSource.lsID;
+            if (teamType == EnumTeamType.TeamPRs)
+                placeID = App.User.LeadSource.lsID;
             else
-                placeID = userData.SalesRoom.srID;
+                placeID = App.User.SalesRoom.srID;
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)

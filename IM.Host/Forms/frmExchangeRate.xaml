@@ -1,0 +1,95 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Host.Forms"
+        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmExchangeRate"
+        mc:Ignorable="d"
+        Title="Exchange Rate" Height="353" Width="735" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded">
+
+    <!--#region RECURSOS WINDOW-->
+    <Window.Resources>
+        <CollectionViewSource x:Key="cvsExchangeRates" d:DesignSource="{d:DesignInstance {x:Type Model:ExchangeRateData}, CreateList=True}"/>
+        <CollectionViewSource x:Key="currencyViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:Currency}, CreateList=True}"/>
+        <!--#region ESTILOS DEL DATAGRID-->
+        <Style TargetType="{x:Type DataGridRow}">
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
+            </Style.Resources>
+        </Style>
+        <!--#endregion-->
+
+    </Window.Resources>
+    <!--#endregion-->
+
+    <!--#region GRID PRINCIPAL-->
+    <Grid >
+        <!--#region DEFINICION DE COLUMN's y ROW's-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="100" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="43" />
+            <RowDefinition Height="190" />
+            <RowDefinition Height="72" />
+        </Grid.RowDefinitions>
+        <!--#endregion-->
+
+        <!--#region CALENDARIO-->
+        <Viewbox Stretch="Uniform" Margin="0,0,0,0" Grid.RowSpan="3">
+            <Calendar x:Name="calDate" Height="170" Width="177" SelectedDatesChanged="calDate_SelectedDatesChanged" Loaded="calDate_Loaded"/>
+        </Viewbox>
+        <!--#endregion-->
+
+        <!--#region TEXBOX RANGE-->
+        <Grid Grid.Column="1" Margin="0,5,-287,181" Grid.RowSpan="2" >
+            <TextBlock x:Name="txtRange" Text="RANGE DATE" Margin="10,0,10,29" Width="Auto" TextAlignment="Center" FontSize="13" FontWeight="Bold"/>
+            <TextBlock x:Name="txtDate" Text="DATE: DAYOFWEEK DAY" Margin="10,23,10,7" Width="Auto" TextAlignment="Center" FontSize="15" FontStyle="Normal" FontWeight="Bold"/>
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region GRID-->
+        <Grid  Grid.Column="1" Grid.Row="1" Margin="0,10,-287,56" Grid.RowSpan="2" >
+            <DataGrid x:Name="dgExchangeRates" DataContext="{StaticResource cvsExchangeRates}" AutoGenerateColumns="False" ItemsSource="{Binding}" Margin="1" SelectionChanged="dgExchangeRates_SelectionChanged" CanUserAddRows="False">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="Cell_DoubleClick"/>
+                    </Style>
+                </DataGrid.Resources>
+                
+                <DataGrid.Columns>
+                    <!--<DataGridTextColumn x:Name="exDColumn" Binding="{Binding exD, StringFormat={}{0: dddd d}}" Header="Date" Width="Auto" IsReadOnly="True"/>-->
+                    <DataGridComboBoxColumn Header="Currency" Width="*" SelectedValueBinding="{Binding excu}" SelectedValuePath="cuID" DisplayMemberPath="cuN"
+						ItemsSource="{Binding Source={StaticResource currencyViewSource}}" IsReadOnly="True" />
+                    <DataGridTextColumn x:Name="exExchRateColumn" Binding="{Binding exExchRate, StringFormat={}{0:$ 0.00000000}}" Header="Rate" Width="Auto" IsReadOnly="True" />
+                    <DataGridTextColumn x:Name="RatePesosColumn" Binding="{Binding RatePesos, StringFormat={}{0:$ 0.00000000}}" Header="Pesos" Width="Auto" IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region OPCIONES DE BOTONES-->
+        <Grid Grid.Column="1" Grid.Row="2" Margin="0,22,-287,-12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="38" />
+                <RowDefinition Height="62" />
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Width="378" >
+                <Button x:Name="btnEdit" Content="Edit" Margin="73,10,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="btnEdit_Click"/>
+                <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Height="20" IsEnabled="False" Click="btnCancel_Click"/>
+                <Button x:Name="btnAdd" Content="Add" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="btnAdd_Click"/>
+
+            </StackPanel>
+            <Button x:Name="btnLog" Grid.Row="1" Content="Log" HorizontalAlignment="Center" Margin="10,5,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="btnLog_Click"/>
+        </Grid>
+        <!--#endregion-->
+
+    </Grid>
+    <!--#endregion-->
+
+</Window>

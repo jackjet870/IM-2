@@ -54,10 +54,9 @@ namespace IM.BusinessRules.BR
       int result;
       using (var dbContext = new IMEntities())
       {
-        Personnel _personnel = dbContext.Personnels.Where(c => c.peID == user).FirstOrDefault();
-        _personnel.pePwd = newPassword;
-        _personnel.pePwdD = serverDate.Date;
-
+        Personnel personnel = GetPersonnelById(user);
+        personnel.pePwd = newPassword;
+        personnel.pePwdD = serverDate.Date;
         result = dbContext.SaveChanges();
       }
       return Convert.ToBoolean(result);
@@ -67,11 +66,49 @@ namespace IM.BusinessRules.BR
 
     #region GetPersonnel
 
-    public static List<PersonnelShort> GetPersonnel(string leadSource)
+    /// <summary>
+    /// Obtiene un listado de personal
+    /// </summary>
+    /// <param name="leadSources">Lead Sources</param>
+    /// <param name="salesRooms">Salas de ventas</param>
+    /// <param name="roles">Roles</param>
+    /// <param name="status">Estatus.
+    /// -1  Todos
+    /// 0 Inactivos
+    /// 1 Activos
+    /// </param>
+    /// <param name="permission">Permiso</param>
+    /// <param name="relationalOperator">Operador logico</param>
+    /// <param name="level">Nivel</param>
+    /// <param name="dept">Departamento</param>
+    /// <history>
+    /// [jorcanche]  12/Mar/2016 Created
+    /// </history>
+    public static List<PersonnelShort> GetPersonnel(string leadSources = "ALL", string salesRooms = "ALL",
+      string roles = "ALL", int status = 1, string permission = "ALL", 
+      string relationalOperator = "=", EnumPermisionLevel level = EnumPermisionLevel.None, string dept = "ALL" )
     {
       using (var dbContext = new IMEntities())
       {
-        return dbContext.USP_OR_GetPersonnel(leadSource, "ALL", "PR", 1, "ALL", "=", 0, "ALL").ToList();
+        return dbContext.USP_OR_GetPersonnel(leadSources, salesRooms, roles,((byte)status), permission, relationalOperator,((int)level), dept).ToList();
+      }
+    }
+    #endregion
+
+    #region GetPersonnelById
+
+    /// <summary>
+    /// Obtiene un personal dada su clave
+    /// </summary>
+    /// <param name="id">Clave</param>
+    /// <history>
+    /// [jorcanche]  12/Mar/2016 Created
+    /// </history>
+    public static Personnel GetPersonnelById(string id)
+    {
+      using (var dbContext = new IMEntities())
+      {
+        return dbContext.Personnels.Where(p => p.peID == id).FirstOrDefault();
       }
     }
 

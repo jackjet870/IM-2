@@ -14,11 +14,11 @@
             <Button x:Name="btnLog" Content="Log" FontSize="17" Width="80" Margin="9" Click="btnLog_Click"/>
         </StackPanel>
         <Label x:Name="lblUserName"  Background="AliceBlue" Content="Nombre de Usuario" FontSize="20" Width="400" Height="50"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="26,15,26,43"/>
-        <Label x:Name="lblguPRAvail" Content="PR:" FontSize="17"  HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="2" Canvas.Left="36" Canvas.Top="130"/>
-        <Label x:Name="lblguInfoD" Content="Date:" FontSize="17"  HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom" Canvas.Left="20" Canvas.Top="77"/>
-        <TextBox x:Name="txtguPRInfo" FontSize="17" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="30" Grid.RowSpan="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="131" Canvas.Left="86" Canvas.Top="134" IsReadOnly="True"/>
-        <TextBox x:Name="txtguInfoD" FontSize="17" HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" VerticalAlignment="Top" Width="123" Grid.Row="1" Canvas.Left="96" Canvas.Top="81" IsReadOnly="True"/>
-        <ComboBox x:Name="cboguPRInfo" HorizontalAlignment="Left" VerticalAlignment="Top" Width="205" Height="29" Canvas.Left="227" Canvas.Top="135" SelectionChanged="cboguPRInfo_SelectionChanged"  IsReadOnly="True" />
-        <CheckBox x:Name="chkguInfo" FontSize="17" Content="Contact" Canvas.Left="37" Canvas.Top="179"/>
+        <Label x:Name="lblguPRFollow" Content="PR:" FontSize="17"  HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="2" Canvas.Left="36" Canvas.Top="130"/>
+        <Label x:Name="lblguFollow" Content="Date:" FontSize="17"  HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom" Canvas.Left="20" Canvas.Top="77"/>
+        <TextBox x:Name="txtguPRFollow" FontSize="17" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="30" Grid.RowSpan="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="131" Canvas.Left="86" Canvas.Top="134" IsReadOnly="True"/>
+        <TextBox x:Name="txtguFollowD" FontSize="17" HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" VerticalAlignment="Top" Width="123" Grid.Row="1" Canvas.Left="96" Canvas.Top="81" IsReadOnly="True"/>
+        <ComboBox x:Name="cboguPRFollow" HorizontalAlignment="Left" VerticalAlignment="Top" Width="205" Height="29" Canvas.Left="227" Canvas.Top="135" SelectionChanged="cboguPRInfo_SelectionChanged"  IsEnabled="False" SelectedValuePath="peID" DisplayMemberPath="peN" />
+        <CheckBox x:Name="chkguFollow" FontSize="17" Content="Follow Up" Canvas.Left="37" Canvas.Top="179" IsEnabled="False"/>
     </Canvas>
 </Window>

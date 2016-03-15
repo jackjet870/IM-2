@@ -10,6 +10,12 @@ namespace IM.Inhouse
   /// </summary>
   public partial class App : Application
     {
+    #region Propiedades
+
+    public static UserData User;
+
+    #endregion
+
     #region Constructores y destructores
 
     /// <summary>
@@ -39,8 +45,8 @@ namespace IM.Inhouse
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        UserData userData = frmLogin.userData;
-        frmRegister frmRegis = new frmRegister(userData);
+        User = frmLogin.userData;
+        frmRegister frmRegis = new frmRegister();
         frmRegis.ShowDialog();
         frmSplash.Close();
       }

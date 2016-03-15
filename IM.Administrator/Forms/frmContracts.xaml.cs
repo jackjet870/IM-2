@@ -6,6 +6,7 @@ using IM.Administrator.Enums;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Base.Helpers;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -66,7 +67,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = App.User.HasPermission("CONTRACTS",Model.Enums.EnumPermisionLevel.Standard);
+      _blnEdit = App.User.HasPermission(EnumPermission.Contracts, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadContracts();      
     }

@@ -1,0 +1,21 @@
+﻿<Window 
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Host.Forms"
+        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmExchangeRateEdit"
+        mc:Ignorable="d"
+        Title="Edit Exchange Rate" Height="305.66" Width="278.491" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <TextBlock x:Name="textCurrency" HorizontalAlignment="Center" Margin="0,21,0,0" TextWrapping="Wrap" Text="Currency ID" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" />
+        <TextBox x:Name="txtCurrency" HorizontalAlignment="Center" Height="23" Margin="33,40,33,0" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalAlignment="Top" Width="204" IsEnabled="False" Text="{Binding excu}" />
+        <TextBlock x:Name="textRate" HorizontalAlignment="Center" Margin="0,84,0,0" TextWrapping="Wrap" Text="Rate" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" />
+        <TextBox x:Name="txtRate" HorizontalAlignment="Center" Height="23" Margin="33,102,33,0" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalAlignment="Top" Width="204" Text="{Binding exExchRate}"/>
+        <TextBlock x:Name="textPesos" HorizontalAlignment="Center" Margin="117,144,117,0" TextWrapping="Wrap" Text="Pesos" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" Height="19" />
+        <TextBox x:Name="txtPesos" HorizontalAlignment="Center" Height="23" Margin="33,163,33,0" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalAlignment="Top" Width="204" IsEnabled="False" Text="{Binding RatePesos}"/>
+        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="33,223,0,0" VerticalAlignment="Top" Width="75" Click="btnSave_Click"/>
+        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="162,223,0,0" VerticalAlignment="Top" Width="75" Click="btnCancel_Click"/>
+
+    </Grid>
+</Window>

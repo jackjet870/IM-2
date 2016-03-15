@@ -37,19 +37,19 @@ namespace IM.Administrator.Forms
       
       lblUser.Content = App.User.User.peN;                        
       var lstMenu = new List<object>();
-      if (AddCatalog("SALES"))
+      if (AddCatalog(EnumPermission.Sales))
       {
         lstMenu.Add(new { nombre = "Assitances Status", img = "pack://application:,,,/IM.Base;component/Images/Assistance.ico", form = "frmAssistancesStatus" });
         lstMenu.Add(new { nombre = "Credit Card Types", img = "pack://application:,,,/IM.Base;component/Images/Credit_Cards.png", form = "frmCreditCardTypes" });
       }
-      if (AddCatalog("LOCATIONS")) { lstMenu.Add(new { nombre = "Areas", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmAreas" }); }
-      if (AddCatalog("HOSTINVIT")){ lstMenu.Add(new { nombre = "Charge To", img = "pack://application:,,,/IM.Base;component/Images/Charge_To.png", form = "frmChargeTo" });}
-      if (AddCatalog("CONTRACTS")) { lstMenu.Add(new { nombre = "Contracts", img = "pack://application:,,,/IM.Base;component/Images/Contract.ico", form = "frmContracts" }); }
-      if (AddCatalog("AGENCIES"))
+      if (AddCatalog(EnumPermission.Locations)) { lstMenu.Add(new { nombre = "Areas", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmAreas" }); }
+      if (AddCatalog(EnumPermission.HostInvitations)){ lstMenu.Add(new { nombre = "Charge To", img = "pack://application:,,,/IM.Base;component/Images/Charge_To.png", form = "frmChargeTo" });}
+      if (AddCatalog(EnumPermission.Contracts)) { lstMenu.Add(new { nombre = "Contracts", img = "pack://application:,,,/IM.Base;component/Images/Contract.ico", form = "frmContracts" }); }
+      if (AddCatalog(EnumPermission.Agencies))
       {
         lstMenu.Add(new { nombre = "Agencies", img = "pack://application:,,,/IM.Base;component/Images/Airplane.ico", form = "frmAgencies" });
       }
-      if (AddCatalog("CURRENCIES"))
+      if (AddCatalog(EnumPermission.Currencies))
       {
         lstMenu.Add(new { nombre = "Currencies", img = "pack://application:,,,/IM.Base;component/Images/currency.png", form = "frmCurrencies" });
       }
@@ -73,7 +73,7 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] 03/03/2016
     /// </history>
-    protected bool AddCatalog(string sNameCat)
+    protected bool AddCatalog(EnumPermission sNameCat)
     {
 
       return App.User.HasPermission(sNameCat, EnumPermisionLevel.ReadOnly);

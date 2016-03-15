@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
+using IM.Model.Classes;
 
 namespace IM.BusinessRules.BR
 {
@@ -110,5 +111,82 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion
+
+    #region GetGuestLog
+
+    /// <summary>
+    /// Obtiene log del Guest Ingresado
+    /// </summary>
+    /// <param name="IdGuest">Id del Guest</param>
+    /// <history>[jorcanche] 09/03/2016</history>
+    public static List<GuestLogData> GetGuestLog(int IdGuest)
+    {
+      using (var dbContext = new IMEntities())
+      {
+        return dbContext.USP_OR_GetGuestLog(IdGuest).ToList();
+      }
+    }
+    #endregion
+
+    #region SaveGuestLog
+
+    /// <summary>
+    /// Guarda los cambios del log del Guest
+    /// </summary>
+    ///<param name="IdGuest"></param>
+    /// <param name="changedBy"></param>
+    /// <param name="changedBy"></param>
+    /// <history>[jorcanche] 11/03/2016</history>
+    public static void SaveGuestLog(int IdGuest, short lsHoursDif, string changedBy)
+    {
+      using (var dbContext = new IMEntities())
+      {
+        dbContext.USP_OR_SaveGuestLog(IdGuest, lsHoursDif, changedBy);
+      }
+    }
+    #endregion
+
+    #region GetGuest
+    /// <summary>
+    /// get a Guest
+    /// </summary>
+    /// <param name="guId">Id a Guest</param>
+    /// <returns>Guest</returns>
+    /// <history>
+    /// [jorcanche] created 10/03/2016
+    /// </history>
+    public static Guest GetGuest(int guId)
+    {
+      using (var dbContext = new IMEntities())
+      {
+        return (from gu in dbContext.Guests where gu.guID == guId select gu).Single();
+      }
+    }
+
+
+    #region SaveGuestAvailability
+    /// <summary>
+    /// Guardam los datos de disponibilidad del Guest
+    /// </summary>
+    /// <param name="guId">Id a Guest</param>
+    /// <returns>Guest</returns>
+    /// <history>
+    /// [jorcanche] created 14/03/2016
+    /// </history>
+    public static int SaveGuestAvailability(Guest gu)
+    {
+      int nRes = 0;
+      using (var dbContext = new IMEntities())
+      {
+        dbContext.Entry(gu).State = System.Data.Entity.EntityState.Modified;
+       return nRes = dbContext.SaveChanges();
+       
+      }
+    }
+    #endregion
   }
+  #endregion
 }
+
+
+

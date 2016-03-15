@@ -100,18 +100,18 @@ namespace IM.InventoryMovements
     /// <history>
     /// [edgrodriguez] 18/Feb/2016 Created
     /// </history>
-    private void upd_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
-    {
-      switch (e.ScrollEventType)
-      {
-        case System.Windows.Controls.Primitives.ScrollEventType.SmallIncrement:
-          dtpDate.SelectedDate = dtpDate.SelectedDate.Value.AddDays(-1);
-          break;
-        case System.Windows.Controls.Primitives.ScrollEventType.SmallDecrement:
-          dtpDate.SelectedDate = dtpDate.SelectedDate.Value.AddDays(1);
-          break;
-      }
-    }
+    //private void upd_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+    //{
+      //switch (e.ScrollEventType)
+      //{
+      //  case System.Windows.Controls.Primitives.ScrollEventType.SmallIncrement:
+      //    dtpDate.SelectedDate = dtpDate.SelectedDate.Value.AddDays(-1);
+      //    break;
+      //  case System.Windows.Controls.Primitives.ScrollEventType.SmallDecrement:
+      //    dtpDate.SelectedDate = dtpDate.SelectedDate.Value.AddDays(1);
+      //    break;
+      //}
+    //}
 
     /// <summary>
     /// Cierra el formulario.
@@ -132,16 +132,20 @@ namespace IM.InventoryMovements
     /// <history>
     /// [edgrodriguez] 19/Feb/2016 Created
     /// </history>
-    private void dtpDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+    private void dtpDate_SelectedDateChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
-      if (_dtmcurrent != dtpDate.SelectedDate)
+      if (_dtmcurrent != dtpDate.Value.Value)
       {
-        whsMovViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("whsMovViewSource")));
-        // Load data by setting the CollectionViewSource.Source property:
-        whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(_warehouseLogin.whID, dtpDate.SelectedDate.Value);
-        StatusBarReg.Content = string.Format("{0}/{1}", grd.SelectedItems.Count, whsMovViewSource.View.SourceCollection.Cast<WarehouseMovementShort>().Count());
+        if (_warehouseLogin.whID != null)
+        {
+
+          whsMovViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("whsMovViewSource")));
+          // Load data by setting the CollectionViewSource.Source property:
+          whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(_warehouseLogin.whID, dtpDate.Value.Value);
+          StatusBarReg.Content = string.Format("{0}/{1}", grd.SelectedItems.Count, whsMovViewSource.View.SourceCollection.Cast<WarehouseMovementShort>().Count());
+        }
       }
-      _dtmcurrent = dtpDate.SelectedDate;
+      _dtmcurrent = dtpDate.Value.Value;
     }
 
     /// <summary>
@@ -171,7 +175,7 @@ namespace IM.InventoryMovements
           {
             _lstobjWhsMovs.ForEach(c =>
             {
-              c.wmD = dtpDate.SelectedDate.Value;
+              c.wmD = dtpDate.Value.Value;
               c.wmwh = _warehouseLogin.whID;
               c.wmpe = _userLogin.peID;
 
@@ -189,7 +193,7 @@ namespace IM.InventoryMovements
             }).ToList();
             BRWarehouseMovements.SaveWarehouseMovements(ref lstWhsMov);
             InicializarGrdNew();
-            grd.ItemsSource = BRWarehouseMovements.GetWarehouseMovements(_warehouseLogin.whID, dtpDate.SelectedDate.Value);
+            grd.ItemsSource = BRWarehouseMovements.GetWarehouseMovements(_warehouseLogin.whID, dtpDate.Value.Value);
           }
         }
       }
@@ -266,16 +270,16 @@ namespace IM.InventoryMovements
     {
       bool blnValid = true;
       DateTime dtmsrGiftsRcptCloseD = _salesRoom.srGiftsRcptCloseD;
-      if (dtmsrGiftsRcptCloseD >= dtpDate.SelectedDate.Value)
+      if (dtmsrGiftsRcptCloseD >= dtpDate.Value.Value)
       {
         MessageBox.Show("Date already close. New movements can not be added.", "Caution", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        dtpDate.SelectedDate = dtmsrGiftsRcptCloseD.AddDays(1);
+        dtpDate.Value = dtmsrGiftsRcptCloseD.AddDays(1);
         blnValid = false;
       }
-      else if (dtpDate.SelectedDate.Value > _dtmServerdate)
+      else if (dtpDate.Value.Value > _dtmServerdate)
       {
         MessageBox.Show("Date can not be greater than today.", "Caution", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        dtpDate.SelectedDate = _dtmServerdate;
+        dtpDate.Value = _dtmServerdate;
         blnValid = false;
       }
 

@@ -11,24 +11,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using IM.PRStatistics.Utilities;
 
-namespace IM.PRStatistics.Forms
+namespace IM.Host.Forms
 {
   /// <summary>
-  /// Interaction logic for pruebaReporte.xaml
+  /// Interaction logic for frmShow.xaml
   /// </summary>
-  public partial class pruebaReporte : Window
+  public partial class frmShow : Window
   {
-    public pruebaReporte()
+    public frmShow()
     {
       InitializeComponent();
-    }
-
-    private void button_Click(object sender, RoutedEventArgs e)
-    {
-      
-      
     }
   }
 }

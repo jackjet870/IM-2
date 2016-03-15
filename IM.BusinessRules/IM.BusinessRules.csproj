@@ -59,14 +59,17 @@
     <Compile Include="BR\BRCountries.cs" />
     <Compile Include="BR\BRCreditCardTypes.cs" />
     <Compile Include="BR\BRCurrencies.cs" />
+    <Compile Include="BR\BRExchangeRate.cs" />
     <Compile Include="BR\BRGifts.cs" />
     <Compile Include="BR\BRGraph.cs" />
     <Compile Include="BR\BRGuests.cs" />
+    <Compile Include="BR\BRGuestsLogs.cs" />
     <Compile Include="BR\BRHelpers.cs" />
     <Compile Include="BR\BRLanguages.cs" />
     <Compile Include="BR\BRPersonnelDayOff.cs" />
     <Compile Include="BR\BRPrStats.cs" />
     <Compile Include="BR\BRRegions.cs" />
+    <Compile Include="BR\BRSeasons.cs" />
     <Compile Include="BR\BRReps.cs" />
     <Compile Include="BR\BRSegmentsByAgency.cs" />
     <Compile Include="BR\BRUnavailableMotives.cs" />

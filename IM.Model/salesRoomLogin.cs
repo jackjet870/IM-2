@@ -16,7 +16,7 @@ namespace IM.Model
         public string srID { get; set; }
         public string srN { get; set; }
         public string srcu { get; set; }
-        public int srHoursDif { get; set; }
+        public short srHoursDif { get; set; }
         public string srAddOut { get; set; }
     }
 }

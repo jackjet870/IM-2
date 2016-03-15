@@ -6,6 +6,7 @@ using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Administrator.Enums;
 using IM.Base.Helpers;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -34,7 +35,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = App.User.HasPermission("LOCATIONS",Model.Enums.EnumPermisionLevel.Standard);
+      _blnEdit = App.User.HasPermission(EnumPermission.Locations, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadAreas();      
     }
