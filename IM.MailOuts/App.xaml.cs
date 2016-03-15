@@ -12,6 +12,12 @@ namespace IM.MailOuts
   /// </summary>
   public partial class App : Application
   {
+    #region Propiedades
+
+    public static UserData User;
+
+    #endregion
+
     #region Constructores y destructores
     /// <summary>
     /// Constructor de la aplicacion
@@ -63,8 +69,8 @@ namespace IM.MailOuts
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        UserData userData = frmLogin.userData;
-        frmMailOuts frmInvMovs = new frmMailOuts(userData);
+        User = frmLogin.userData;
+        frmMailOuts frmInvMovs = new frmMailOuts();
         frmInvMovs.ShowDialog();
         frmSplash.Close();
       }

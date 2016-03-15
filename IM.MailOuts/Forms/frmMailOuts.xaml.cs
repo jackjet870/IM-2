@@ -29,12 +29,10 @@ namespace IM.MailOuts.Forms
 
     private DateTime _dtmServerdate = new DateTime();
     private List<GuestMailOutsText> _guestMailOutsText = new List<GuestMailOutsText>();
-    private LeadSourceLogin _leadSourceLogin = new LeadSourceLogin();
     private List<GuestMailOut> _ltsGuestsMailOuts = new List<GuestMailOut>();
     private List<LanguageShort> _ltsLanguages = new List<LanguageShort>();
     private List<MailOutTextByLeadSource> _ltsMailOutTextsByLeadSource = new List<MailOutTextByLeadSource>();
     private rptMailOuts _rptMailOuts = new rptMailOuts();
-    private UserLogin _userLogin = new UserLogin();
     private CollectionViewSource _languageShortViewSource;
     private CollectionViewSource _mailOutTextByLeadSourceViewSource;
     private CollectionViewSource _objGuestsMailOutsViewSource;
@@ -43,11 +41,15 @@ namespace IM.MailOuts.Forms
 
     #region Constructores y destructores
 
-    public frmMailOuts(UserData userData)
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <history>
+    /// [wtorres]  15/Mar/2016 Modified. Elimine el parametro userData
+    /// </history>
+    public frmMailOuts()
     {
       InitializeComponent();
-      _userLogin = userData.User;
-      _leadSourceLogin = userData.LeadSource;
     }
 
     #endregion Constructores y destructores
@@ -192,8 +194,8 @@ namespace IM.MailOuts.Forms
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
-      txtUser.Text = _userLogin.peN;
-      txtLocation.Text = _leadSourceLogin.lsN;
+      txtUser.Text = App.User.User.peN;
+      txtLocation.Text = App.User.LeadSource.lsN;
       _objGuestsMailOutsViewSource = ((CollectionViewSource)(this.FindResource("objGuestsMailOutsViewSource")));
       _languageShortViewSource = ((CollectionViewSource)(this.FindResource("languageShortViewSource")));
       _mailOutTextByLeadSourceViewSource = ((CollectionViewSource)(this.FindResource("mailOutTextByLeadSourceViewSource")));
@@ -214,12 +216,12 @@ namespace IM.MailOuts.Forms
 
       //cargamos los mail outs
       StaStart("Loading mail outs...");
-      _ltsMailOutTextsByLeadSource = BRMailOutTexts.GetMailOutTextsByLeadSource(_leadSourceLogin.lsID, true);
+      _ltsMailOutTextsByLeadSource = BRMailOutTexts.GetMailOutTextsByLeadSource(App.User.LeadSource.lsID, true);
 
       _mailOutTextByLeadSourceViewSource.Source = _ltsMailOutTextsByLeadSource.Where(x => x.mtla == "EN");
 
       // procesamos los huespedes para asignarle automaticamente un mail out en base a los criterios definidos
-      BRMailOuts.ProcessMailOuts(_leadSourceLogin.lsID);
+      BRMailOuts.ProcessMailOuts(App.User.LeadSource.lsID);
 
       //cargamos los huespedes
       LoadGrid();
@@ -264,7 +266,7 @@ namespace IM.MailOuts.Forms
     {
       Thread.CurrentThread.CurrentCulture = new CultureInfo("es-MX");
 
-      string strPrintedBy = _userLogin.peID + " " + String.Format("{0:ddd dd MMM yy }", DateTime.Now) + " " + DateTime.Now.ToShortTimeString();
+      string strPrintedBy = App.User.User.peID + " " + String.Format("{0:ddd dd MMM yy }", DateTime.Now) + " " + DateTime.Now.ToShortTimeString();
 
       _guestMailOutsText = (from gmo in dtgDatos.Items.OfType<GuestMailOut>()
                             join mot in _ltsMailOutTextsByLeadSource on new { a = gmo.gumo, b = gmo.gula } equals new { a = mot.mtmoCode, b = mot.mtla }
@@ -297,7 +299,7 @@ namespace IM.MailOuts.Forms
       StaStart("Loading guests...");
 
       _dtmServerdate = BRHelpers.GetServerDate();
-      _ltsGuestsMailOuts = BRGuests.GetGuestsMailOuts(_leadSourceLogin.lsID, _dtmServerdate, _dtmServerdate.AddDays(1), _dtmServerdate.AddDays(2));
+      _ltsGuestsMailOuts = BRGuests.GetGuestsMailOuts(App.User.LeadSource.lsID, _dtmServerdate, _dtmServerdate.AddDays(1), _dtmServerdate.AddDays(2));
 
       List<ObjGuestsMailOuts> _ltsObjGuestsMailOuts = _ltsGuestsMailOuts.Select(parent => new ObjGuestsMailOuts(parent)).ToList();
 

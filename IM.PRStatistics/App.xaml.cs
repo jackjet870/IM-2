@@ -11,6 +11,14 @@ namespace IM.PRStatistics
   /// </summary>
   public partial class App : Application
   {
+    #region Propiedades
+
+    public static UserData User;
+
+    #endregion
+
+    #region Constructores y destructores
+
     /// <summary>
     /// Constructor de la aplicacion
     /// </summary>
@@ -22,6 +30,8 @@ namespace IM.PRStatistics
     {
       this.Dispatcher.UnhandledException += App_UnhandledException;
     }
+
+    #endregion
 
     #region Metodos
 
@@ -39,8 +49,8 @@ namespace IM.PRStatistics
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        UserData userData = frmLogin.userData;
-        frmPRStatistics frmPrStatistics = new frmPRStatistics(userData);
+        User = frmLogin.userData;
+        frmPRStatistics frmPrStatistics = new frmPRStatistics();
         frmPrStatistics.ShowDialog();
         frmSplash.Close();
       }

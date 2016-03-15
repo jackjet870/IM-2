@@ -59,11 +59,10 @@ namespace IM.Administrator
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        UserData userData = frmLogin.userData;
-        if (userData.HasRole(EnumRole.Manager) || userData.HasRole(EnumRole.Administrator))
+        User = frmLogin.userData;
+        if (User.HasRole(EnumRole.Manager) || User.HasRole(EnumRole.Administrator))
         {
           frmAdmin frmAdm = new frmAdmin();
-          User = userData;
           frmAdm.ShowDialog();
           frmSplash.Close();
         }

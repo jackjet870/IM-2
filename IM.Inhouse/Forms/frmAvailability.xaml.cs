@@ -294,7 +294,7 @@ namespace IM.Inhouse
           cboguum.IsEnabled = !_guest.guAvail;
           txtguum.IsReadOnly = _guest.guAvail;
           chkguAvail.IsEnabled = true;                             
-          if (log.userData.HasRole(EnumRole.PRCaptain))
+          if (_user.HasRole(EnumRole.PRCaptain))
           {
             chkguOriginAvail.IsEnabled = true;
           }

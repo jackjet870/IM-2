@@ -30,9 +30,7 @@ namespace IM.InventoryMovements
     #region Atributos
 
     private DateTime? _dtmcurrent = null; //Variable para manejar un problema del control DatePicker
-    private WarehouseLogin _warehouseLogin = new WarehouseLogin();
     private List<objWhsMovs> _lstobjWhsMovs = null;//Lista para nuevos registros de WhsMovs
-    private UserLogin _userLogin = new UserLogin();
     private SalesRoomCloseDates _salesRoom = new SalesRoomCloseDates();
     private DateTime _dtmServerdate = new DateTime();
     CollectionViewSource objWhsMovsViewSource;
@@ -42,11 +40,15 @@ namespace IM.InventoryMovements
 
     #region Constructores y destructores
 
-    public frmInventoryMovements(UserData userData)
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <history>
+    /// [wtorres]  14/Mar/2016 Modified. Elimine el parametro userData
+    /// </history>
+    public frmInventoryMovements()
     {
       InitializeComponent();
-      _userLogin = userData.User;
-      _warehouseLogin = userData.Warehouse;
     }
 
     #endregion
@@ -60,12 +62,12 @@ namespace IM.InventoryMovements
     /// </history>
     private void frmInventoryMovements_Loaded(object sender, RoutedEventArgs e)
     {
-      _salesRoom = BRSalesRooms.GetSalesRoom(_warehouseLogin.whID);
+      _salesRoom = BRSalesRooms.GetSalesRoom(App.User.Warehouse.whID);
       CkeckKeysPress(StatusBarCap, Key.Capital);
       CkeckKeysPress(StatusBarIns, Key.Insert);
       CkeckKeysPress(StatusBarNum, Key.NumLock);
-      lblUserName.Content = _userLogin.peN;
-      lblWareHouse.Content = _warehouseLogin.whN;
+      lblUserName.Content = App.User.User.peN;
+      lblWareHouse.Content = App.User.Warehouse.whN;
       lblCloseDate.Content = "Close Receipts Date: " + _salesRoom.srGiftsRcptCloseD.ToString("dd/MMM/yyyy");
       InicializarGrdNew();
       _dtmServerdate = BRHelpers.GetServerDate();
@@ -102,15 +104,15 @@ namespace IM.InventoryMovements
     /// </history>
     //private void upd_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
     //{
-      //switch (e.ScrollEventType)
-      //{
-      //  case System.Windows.Controls.Primitives.ScrollEventType.SmallIncrement:
-      //    dtpDate.SelectedDate = dtpDate.SelectedDate.Value.AddDays(-1);
-      //    break;
-      //  case System.Windows.Controls.Primitives.ScrollEventType.SmallDecrement:
-      //    dtpDate.SelectedDate = dtpDate.SelectedDate.Value.AddDays(1);
-      //    break;
-      //}
+    //switch (e.ScrollEventType)
+    //{
+    //  case System.Windows.Controls.Primitives.ScrollEventType.SmallIncrement:
+    //    dtpDate.SelectedDate = dtpDate.SelectedDate.Value.AddDays(-1);
+    //    break;
+    //  case System.Windows.Controls.Primitives.ScrollEventType.SmallDecrement:
+    //    dtpDate.SelectedDate = dtpDate.SelectedDate.Value.AddDays(1);
+    //    break;
+    //}
     //}
 
     /// <summary>
@@ -134,16 +136,15 @@ namespace IM.InventoryMovements
     /// </history>
     private void dtpDate_SelectedDateChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
+      // [wtorres] 15/Mar/2016 validamos que el formulario ya se haya inicializado
+      if (!this.IsInitialized) return;
+
       if (_dtmcurrent != dtpDate.Value.Value)
       {
-        if (_warehouseLogin.whID != null)
-        {
-
-          whsMovViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("whsMovViewSource")));
-          // Load data by setting the CollectionViewSource.Source property:
-          whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(_warehouseLogin.whID, dtpDate.Value.Value);
-          StatusBarReg.Content = string.Format("{0}/{1}", grd.SelectedItems.Count, whsMovViewSource.View.SourceCollection.Cast<WarehouseMovementShort>().Count());
-        }
+        whsMovViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("whsMovViewSource")));
+        // Load data by setting the CollectionViewSource.Source property:
+        whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(App.User.Warehouse.whID, dtpDate.Value.Value);
+        StatusBarReg.Content = string.Format("{0}/{1}", grd.SelectedItems.Count, whsMovViewSource.View.SourceCollection.Cast<WarehouseMovementShort>().Count());
       }
       _dtmcurrent = dtpDate.Value.Value;
     }
@@ -176,8 +177,8 @@ namespace IM.InventoryMovements
             _lstobjWhsMovs.ForEach(c =>
             {
               c.wmD = dtpDate.Value.Value;
-              c.wmwh = _warehouseLogin.whID;
-              c.wmpe = _userLogin.peID;
+              c.wmwh = App.User.Warehouse.whID;
+              c.wmpe = App.User.User.peID;
 
             });
 
@@ -193,7 +194,7 @@ namespace IM.InventoryMovements
             }).ToList();
             BRWarehouseMovements.SaveWarehouseMovements(ref lstWhsMov);
             InicializarGrdNew();
-            grd.ItemsSource = BRWarehouseMovements.GetWarehouseMovements(_warehouseLogin.whID, dtpDate.Value.Value);
+            grd.ItemsSource = BRWarehouseMovements.GetWarehouseMovements(App.User.Warehouse.whID, dtpDate.Value.Value);
           }
         }
       }
@@ -300,7 +301,7 @@ namespace IM.InventoryMovements
       objWhsMovsViewSource.Source = _lstobjWhsMovs;
       getGiftsViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("getGiftsViewSource")));
       // Load data by setting the CollectionViewSource.Source property:
-      getGiftsViewSource.Source = BRGifts.GetGifts(_warehouseLogin.whID, 1);
+      getGiftsViewSource.Source = BRGifts.GetGifts(App.User.Warehouse.whID, 1);
     }
     #endregion
   }

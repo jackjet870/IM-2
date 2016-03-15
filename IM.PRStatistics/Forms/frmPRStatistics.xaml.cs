@@ -26,14 +26,19 @@ namespace IM.PRStatistics.Forms
   {
     #region Propiedades y Atributos
     List<Tuple<string,string>> filterTuple= null; // Agrega los filtros de busqueda
-    public UserData userData { get; set; } // Contiene la informacion del usuario logeado
 
     #endregion
 
     #region Constructores y  Destructores
-    public frmPRStatistics(UserData userData)
+
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <history>
+    /// [wtorres]  15/Mar/2016 Modified. Elimine el parametro userData
+    /// </history>
+    public frmPRStatistics()
     {
-      this.userData = userData;
       InitializeComponent();
     }
     #endregion
@@ -42,8 +47,8 @@ namespace IM.PRStatistics.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       //Inicializamos los catalogos
-      DoGetLeadSources(userData.User.peID);
-      DoGetSalesRooms(userData.User.peID);
+      DoGetLeadSources(App.User.User.peID);
+      DoGetSalesRooms(App.User.User.peID);
       DoGetCountries();
       DoGetAgencies();
       DoGetMarkets();

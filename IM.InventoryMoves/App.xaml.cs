@@ -10,6 +10,11 @@ namespace IM.InventoryMovements
   /// </summary>
   public partial class App : Application
     {
+    #region Propiedades
+
+    public static UserData User;
+
+    #endregion
 
     #region Constructores y destructores
 
@@ -40,8 +45,8 @@ namespace IM.InventoryMovements
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        UserData userData = frmLogin.userData;
-        frmInventoryMovements frmInvMovs = new frmInventoryMovements(userData);
+        User = frmLogin.userData;
+        frmInventoryMovements frmInvMovs = new frmInventoryMovements();
         frmInvMovs.ShowDialog();
         frmSplash.Close();
       }
