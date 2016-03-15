@@ -2,9 +2,10 @@
 {
   public enum EnumPermisionLevel
   {
-    ReadOnly=1,
+    None,
+    ReadOnly,
     Standard,
     Special,
-    SuperSpecial,
+    SuperSpecial
   }
 }

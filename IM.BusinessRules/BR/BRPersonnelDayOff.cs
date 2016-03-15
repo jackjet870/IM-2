@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
-
+using IM.Model.Classes;
+using IM.Model.Enums;
 
 namespace IM.BusinessRules.BR
 {
-    public class BRPersonnelDayOff
+  public class BRPersonnelDayOff
     {
         /// <summary>
         /// Obtiene el listado de dias libres del personal 
@@ -17,12 +15,11 @@ namespace IM.BusinessRules.BR
         /// <param name="teamType"></param>
         /// <returns></returns>
         /// <history>[ECANUL] 09-08-2016 Created</history>
-        public static List<PersonnelDayOff> GetPersonnelDaysOff(string placeID, Model.Enums.TeamType teamType )
+        public static List<PersonnelDayOff> GetPersonnelDaysOff(string placeID, EnumTeamType teamType )
         {
             using (var dbContext = new IMEntities())
             {
-                Model.Classes.StrToEnums strTeamType = new Model.Classes.StrToEnums();
-                string _teamType = strTeamType.EnumTeamTypeToString(teamType);
+                string _teamType = StrToEnums.EnumTeamTypeToString(teamType);
                 return dbContext.USP_OR_GetPersonnelDaysOff( _teamType, placeID).ToList();
             }
         }

@@ -143,6 +143,8 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Enums\EnumFormatTypeExcel.cs" />
+    <Compile Include="Enums\EnumPermission.cs" />
+    <Compile Include="Enums\EnumRole.cs"/> 
     <Compile Include="Enums\EnumLoginType.cs" />
     <Compile Include="Enums\EnumModule.cs" />
     <Compile Include="Enums\EnumPermisionLevel.cs" />

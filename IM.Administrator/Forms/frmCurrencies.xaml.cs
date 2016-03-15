@@ -15,6 +15,7 @@ using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Administrator.Enums;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -105,7 +106,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = App.User.HasPermission("CURRENCIES",Model.Enums.EnumPermisionLevel.Standard);
+      _blnEdit = App.User.HasPermission(EnumPermission.Currencies, EnumPermisionLevel.Standard);
       LoadCurrencies();
     }
     #endregion

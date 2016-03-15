@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using IM.BusinessRules.BR;
 
 namespace IM.Inhouse
 {
@@ -19,16 +20,17 @@ namespace IM.Inhouse
   /// </summary>
   public partial class frmGuestLog : Window
   {
-    public frmGuestLog()
+     private int _idGuest;
+    public frmGuestLog(int idGuest)
     {
       InitializeComponent();
+      _idGuest = idGuest;
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      System.Windows.Data.CollectionViewSource uSP_OR_GetGuestLogViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("uSP_OR_GetGuestLogViewSource")));
-      // Load data by setting the CollectionViewSource.Source property:
-      // uSP_OR_GetGuestLogViewSource.Source = [generic data source]
+      CollectionViewSource GuestLogViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("GuestLogViewSource")));
+      dgGuestLog.DataContext = BRGuests.GetGuestLog(_idGuest);
     }
   }
 }

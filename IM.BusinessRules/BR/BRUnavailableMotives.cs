@@ -7,7 +7,7 @@ namespace IM.BusinessRules.BR
 {
   public class BRUnavailableMotives
   {
-    #region getUnavailableMotives
+    #region GetUnavailableMotives
     /// <summary>
     /// Devuelve la lista de UnavailMots
     /// </summary>
@@ -36,6 +36,26 @@ namespace IM.BusinessRules.BR
 
       return lstUnavailMot;      
     }
+    #endregion
+
+    #region GetUnavailableMotive
+
+    /// <summary>
+    /// Obtiene un motivo de indisponibilidad dada su clave
+    /// </summary>
+    /// <param name="id">Clave</param>
+    /// <param name="nStatus">false: Registros inactivos | true: Registros Activos</param>
+    /// <history>
+    /// [jorcanche]  12/Mar/2016 Created
+    /// </history>
+    public static UnavailableMotive GetUnavailableMotive(int id, bool nStatus)
+    {
+      using (var dbContext = new IMEntities())
+      {
+        return dbContext.UnavailableMotives.Where(u => u.umID == id && u.umA == nStatus).FirstOrDefault();
+      }
+    }
+
     #endregion
   }
 }

@@ -15,6 +15,7 @@ using IM.Administrator.Enums;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -44,7 +45,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = App.User.HasPermission("AGENCIES",Model.Enums.EnumPermisionLevel.Standard);
+      _blnEdit = App.User.HasPermission(EnumPermission.Agencies, EnumPermisionLevel.Standard);
       LoadAgencies();
       btnAdd.IsEnabled = _blnEdit;
     }

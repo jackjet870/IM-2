@@ -60,7 +60,7 @@ namespace IM.Administrator
       if (frmLogin.IsAuthenticated)
       {
         UserData userData = frmLogin.userData;
-        if (userData.HasRole("MANAGER") || userData.HasRole("ADMIN"))
+        if (userData.HasRole(EnumRole.Manager) || userData.HasRole(EnumRole.Administrator))
         {
           frmAdmin frmAdm = new frmAdmin();
           User = userData;
