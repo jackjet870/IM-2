@@ -145,10 +145,26 @@
     <Compile Include="Enums\EnumFormatTypeExcel.cs" />
     <Compile Include="Enums\EnumPermission.cs" />
     <Compile Include="Enums\EnumRole.cs"/> 
+    <Compile Include="Enums\EnumBasedOnArrival.cs" />
+    <Compile Include="Enums\EnumBasedOnBooking.cs" />
+    <Compile Include="Enums\EnumDetailGifts.cs" />
+    <Compile Include="Enums\EnumExternalInvitation.cs" />
+    <Compile Include="Enums\EnumFilterDateType.cs" />
+    <Compile Include="Enums\EnumGiftSale.cs" />
+    <Compile Include="Enums\EnumGiftsReceiptType.cs" />
     <Compile Include="Enums\EnumLoginType.cs" />
     <Compile Include="Enums\EnumModule.cs" />
+    <Compile Include="Enums\EnumPeriod.cs" />
     <Compile Include="Enums\EnumPermisionLevel.cs" />
     <Compile Include="Enums\EnumSalesRoomType.cs" />
+    <Compile Include="Enums\EnumPredefinedDate.cs" />
+    <Compile Include="Enums\EnumPredefinedDateMonthly.cs" />
+    <Compile Include="Enums\EnumPrintDevice.cs" />
+    <Compile Include="Enums\EnumPrograms.cs" />
+    <Compile Include="Enums\EnumQuinellas.cs" />
+    <Compile Include="Enums\EnumSalesByMembershipType.cs" />
+    <Compile Include="Enums\EnumSaveCourtesyTours.cs" />
+    <Compile Include="Enums\EnumStatus.cs" />
     <Compile Include="Enums\EnumTeamType.cs" />
     <Compile Include="ExchangeRate.cs">
       <DependentUpon>IMModel.tt</DependentUpon>

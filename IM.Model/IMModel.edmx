@@ -14618,10 +14618,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <FunctionImport Name="USP_OR_GetAgencies" ReturnType="Collection(IMModel.AgencyShort)">
           <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
-          <FunctionImport Name="USP_OR_GetGifts" ReturnType="Collection(IMModel.GiftShort)">
-            <Parameter Name="Locations" Mode="In" Type="String" />
-            <Parameter Name="Status" Mode="In" Type="Byte" />
-          </FunctionImport>
           <FunctionImport Name="USP_OR_GetArrivals" ReturnType="Collection(IMModel.GuestArrival)">
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="LeadSource" Mode="In" Type="String" />
@@ -14707,6 +14703,10 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <FunctionImport Name="USP_OR_GetWarehousesByUser" ReturnType="Collection(IMModel.WarehouseByUser)">
             <Parameter Name="User" Mode="In" Type="String" />
             <Parameter Name="Regions" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGifts" ReturnType="Collection(IMModel.GiftShort)">
+            <Parameter Name="Locations" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetPersonnelDaysOff" ReturnType="Collection(IMModel.PersonnelDayOff)">
             <Parameter Name="TeamType" Mode="In" Type="String" />
@@ -14840,11 +14840,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
         <ComplexType Name="AgencyShort">
           <Property Type="String" Name="agID" Nullable="false" MaxLength="35" />
           <Property Type="String" Name="agN" Nullable="false" MaxLength="100" />
-        </ComplexType>
-        <ComplexType Name="GiftShort">
-          <Property Type="String" Name="giID" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="giN" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="gigc" Nullable="false" MaxLength="10" />
         </ComplexType>
         <ComplexType Name="GuestArrival">
           <Property Type="String" Name="guStatus" Nullable="true" MaxLength="1" />
@@ -15174,6 +15169,11 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="String" Name="whID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="whN" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="plpe" Nullable="false" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="GiftShort">
+          <Property Type="String" Name="giID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="giN" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="gigc" Nullable="false" MaxLength="10" />
         </ComplexType>
         <ComplexType Name="PersonnelDayOff">
           <Property Type="String" Name="dope" Nullable="false" MaxLength="10" />
@@ -17628,15 +17628,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="USP_OR_GetGifts" FunctionName="IMModel.Store.USP_OR_GetGifts">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.GiftShort">
-                <ScalarProperty Name="giID" ColumnName="giID" />
-                <ScalarProperty Name="giN" ColumnName="giN" />
-                <ScalarProperty Name="gigc" ColumnName="gigc" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_GetArrivals" FunctionName="IMModel.Store.USP_OR_GetArrivals">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.GuestArrival">
@@ -18040,6 +18031,15 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
                 <ScalarProperty Name="whID" ColumnName="whID" />
                 <ScalarProperty Name="whN" ColumnName="whN" />
                 <ScalarProperty Name="plpe" ColumnName="plpe" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGifts" FunctionName="IMModel.Store.USP_OR_GetGifts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GiftShort">
+                <ScalarProperty Name="giID" ColumnName="giID" />
+                <ScalarProperty Name="giN" ColumnName="giN" />
+                <ScalarProperty Name="gigc" ColumnName="gigc" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

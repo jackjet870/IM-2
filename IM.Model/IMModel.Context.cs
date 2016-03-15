@@ -194,19 +194,6 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AgencyShort>("USP_OR_GetAgencies", statusParameter);
         }
     
-        public virtual ObjectResult<GiftShort> USP_OR_GetGifts(string locations, Nullable<byte> status)
-        {
-            var locationsParameter = locations != null ?
-                new ObjectParameter("Locations", locations) :
-                new ObjectParameter("Locations", typeof(string));
-    
-            var statusParameter = status.HasValue ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(byte));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftShort>("USP_OR_GetGifts", locationsParameter, statusParameter);
-        }
-    
         public virtual ObjectResult<GuestArrival> USP_OR_GetArrivals(Nullable<System.DateTime> date, string leadSource, string markets, Nullable<int> available, Nullable<int> contacted, Nullable<int> invited, Nullable<int> onGroup)
         {
             var dateParameter = date.HasValue ?
@@ -470,6 +457,19 @@ namespace IM.Model
                 new ObjectParameter("Regions", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WarehouseByUser>("USP_OR_GetWarehousesByUser", userParameter, regionsParameter);
+        }
+    
+        public virtual ObjectResult<GiftShort> USP_OR_GetGifts(string locations, Nullable<byte> status)
+        {
+            var locationsParameter = locations != null ?
+                new ObjectParameter("Locations", locations) :
+                new ObjectParameter("Locations", typeof(string));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftShort>("USP_OR_GetGifts", locationsParameter, statusParameter);
         }
     
         public virtual ObjectResult<PersonnelDayOff> USP_OR_GetPersonnelDaysOff(string teamType, string placeID)
