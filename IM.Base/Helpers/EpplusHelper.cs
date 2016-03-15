@@ -126,7 +126,11 @@ namespace IM.Base.Helpers
             break;
         }
         ws.Column(contColum).Style.HorizontalAlignment = item.Alignment;
+        ws.Cells[filterNumber + 2, contColum].Style.Font.Bold= true;
+        ws.Cells[filterNumber + 2, contColum].Style.Font.Size =14;
       }
+      //Borde de rango de columnas (titulos de la tabla)
+      ws.Cells[filterNumber + 2, 1, filterNumber + 2,dtColumnsNumber].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Hair);
 
       //Agregamos el contenido empezando en la fila 8
       ws.Cells[filterNumber + 3, 1].LoadFromDataTable(dt, false, OfficeOpenXml.Table.TableStyles.Medium2);

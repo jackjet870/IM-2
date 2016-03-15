@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.PRStatistics.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" 
+        xmlns:sys="clr-namespace:System;assembly=mscorlib" 
         mc:Ignorable="d"
        Title="PR Statistics"
     d:Height="768" d:Width="1024" WindowStartupLocation="CenterScreen" 
@@ -31,7 +32,7 @@
                 <TextBlock Text="Date Range" Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" Height="40">
                     <TextBlock  Text="From" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
-                    <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=DateRange}"/>
+                    <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=DateRange}"/> 
                     <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
                     <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=DateRange}"/>
                     <Border x:Name="imgButtonOk" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonOk_MouseLeftButtonDown">

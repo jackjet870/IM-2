@@ -9,9 +9,7 @@
         <Setter Property="Height" Value="25"/>
         <Setter Property="ToolTip" Value="Select a date"/>
         <Setter Property="Margin" Value="10,0,0,0"/>
-        <Setter Property="SelectedDate" Value="{x:Static sys:DateTime.Now}"/>
     </Style>
-
     <!--Texto que acompañan los datepicker -->
     <Style TargetType="TextBlock" x:Key="txtDateRangeText">
         <Setter Property="TextAlignment" Value="Left"/>
