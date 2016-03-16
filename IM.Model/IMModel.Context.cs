@@ -1034,5 +1034,47 @@ namespace IM.Model
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGifts>("USP_OR_RptGifts");
         }
+    
+        public virtual ObjectResult<AssistanceData> USP_OR_GetAssistance(string placeType, string place, Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo)
+        {
+            var placeTypeParameter = placeType != null ?
+                new ObjectParameter("PlaceType", placeType) :
+                new ObjectParameter("PlaceType", typeof(string));
+    
+            var placeParameter = place != null ?
+                new ObjectParameter("Place", place) :
+                new ObjectParameter("Place", typeof(string));
+    
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AssistanceData>("USP_OR_GetAssistance", placeTypeParameter, placeParameter, dateFromParameter, dateToParameter);
+        }
+    
+        public virtual ObjectResult<PersonnelAssistance> USP_OR_GetPersonnelAssistance(string placeType, string place, Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo)
+        {
+            var placeTypeParameter = placeType != null ?
+                new ObjectParameter("PlaceType", placeType) :
+                new ObjectParameter("PlaceType", typeof(string));
+    
+            var placeParameter = place != null ?
+                new ObjectParameter("Place", place) :
+                new ObjectParameter("Place", typeof(string));
+    
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PersonnelAssistance>("USP_OR_GetPersonnelAssistance", placeTypeParameter, placeParameter, dateFromParameter, dateToParameter);
+        }
     }
 }
