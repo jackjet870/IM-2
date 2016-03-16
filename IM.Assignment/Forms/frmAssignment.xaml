@@ -1,0 +1,110 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Assignment"
+        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Assignment.frmAssignment"
+        mc:Ignorable="d"
+        Title="Assignment" Height="564.25" Width="813.25" Loaded="Window_Loaded">
+    <Window.Resources>
+        <CollectionViewSource x:Key="marketShortViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:MarketShort}, CreateList=True}"/>
+        <CollectionViewSource x:Key="guestUnassignedViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GuestUnassigned}, CreateList=True}"/>
+        <CollectionViewSource x:Key="pRAssignedViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:PRAssigned}, CreateList=True}"/>
+        <CollectionViewSource x:Key="guestAssignedViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GuestAssigned}, CreateList=True}"/>
+    </Window.Resources>
+    <Grid DataContext="{StaticResource guestUnassignedViewSource}" Height="509" VerticalAlignment="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0*"/>
+        </Grid.ColumnDefinitions>
+        <Frame x:Name="fraReports" Content="" HorizontalAlignment="Left" Height="48" Margin="10,451,0,0" VerticalAlignment="Top" Width="486" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+        <Frame x:Name="frame" Content="" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" VerticalAlignment="Top" Width="257" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+        <Label x:Name="lblWeek" Content="lblWeek" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Width="257" FontWeight="Bold" Height="23"/>
+        <Frame x:Name="frame2" Content="" HorizontalAlignment="Left" Height="25" Margin="10,40,0,0" VerticalAlignment="Top" Width="257" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+        <Frame x:Name="frame3" Content="" HorizontalAlignment="Left" Height="25" Margin="10,70,0,0" VerticalAlignment="Top" Width="257" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+        <Label x:Name="lblDataRange" Content="lblDataRange" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="257" FontWeight="Bold" Height="23"/>
+        <Label x:Name="lblTotalW" Content="9999" HorizontalAlignment="Left" Margin="88,71,0,0" VerticalAlignment="Top" FontWeight="Bold" Height="23" Width="38"/>
+        <Label x:Name="label1" Content="Total Week" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" FontWeight="Bold" Height="23" Width="72"/>
+        <Label x:Name="label2" Content="Assign&#xA;" HorizontalAlignment="Left" Margin="147,71,0,0" VerticalAlignment="Top" Height="24" FontWeight="Bold" Width="46"/>
+        <Label x:Name="lblTotalAssign" Content="9999&#xA;" HorizontalAlignment="Left" Margin="214,71,0,0" VerticalAlignment="Top" Height="24" FontWeight="Bold" Width="38"/>
+        <Button x:Name="btnBack" Content="Back" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Width="75" Height="31" Click="btnBack_Click"/>
+        <Button x:Name="btnNext" Content="Next" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="192,109,0,0" VerticalAlignment="Top" Width="75" Height="31" Click="btnNext_Click"/>
+        <CheckBox x:Name="chkGuestsPRs" Content="Guest PRs" HorizontalAlignment="Left" Margin="407,12,0,0" VerticalAlignment="Top" Height="13" Width="64" Click="chkGuestsPRs_Click"/>
+        <CheckBox x:Name="chkMemberPRs" Content="Member PRs" HorizontalAlignment="Left" Margin="407,30,0,0" VerticalAlignment="Top" Height="13" Width="76" Click="chkMemberPRs_Click"/>
+        <Frame x:Name="framActions" Content="" HorizontalAlignment="Left" Height="48" Margin="501,451,0,0" VerticalAlignment="Top" Width="294" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+        <CheckBox x:Name="chkShowOnlyAvail" Content="Only Availables" HorizontalAlignment="Left" Margin="299,117,0,0" VerticalAlignment="Top" Height="13" Width="88" Click="chkShowOnlyAvail_Click"/>
+
+        <ListView  Margin="299,8,418,416" FontSize="9" Padding="0" x:Name="grdListMarkets" Background="DarkSeaGreen" SelectionChanged="grdListMarkets_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style>
+                            <Setter Property="UIElement.Visibility" Value="Collapsed"/>
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
+                    <!--<GridViewColumn x:Name="mkIDColumn" Width="80" Header="mk ID" DisplayMemberBinding="{Binding mkID}"  />-->
+                    <GridViewColumn x:Name="mkNColumn" Width="80" Header="Markets"  DisplayMemberBinding="{Binding mkN}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <DataGrid x:Name="grdGuestUnassigned"  SelectionUnit ="FullRow" SelectionMode="Extended"  IsReadOnly="True" CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False" Margin="10,147,309,63" SelectionChanged="grdGuestUnassigned_SelectionChanged">
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkGray"/>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn x:Name="guCheckInDColumn" Header="Check-In D" Width="1.2*" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding guCheckInD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridCheckBoxColumn x:Name="guCheckInColumn" Binding="{Binding guCheckIn}" Header="In"  Width=".5*"/>
+                <DataGridTextColumn x:Name="guRoomNumColumn" Binding="{Binding guRoomNum}" Header="Room" Width="1*"/>
+                <DataGridTextColumn x:Name="guLastName1Column" Binding="{Binding guLastName1}" Header="Last Name" Width="1.5*"/>
+                <DataGridTextColumn x:Name="agNColumn" Binding="{Binding agN}" Header="Agency" Width="1*"/>
+                <DataGridTextColumn x:Name="guMemberShipNumColumn" Binding="{Binding guMemberShipNum}" Header="Member" Width="1*"/>
+                <DataGridCheckBoxColumn x:Name="guAvailColumn" Binding="{Binding guAvail}" Header="Avl" Width=".5*"/>
+                <DataGridTextColumn x:Name="guCommentsColumn" Binding="{Binding guComments}" Header="Comments" Width="1.2*"/>
+                <!--<DataGridTextColumn x:Name="guagColumn" Binding="{Binding guag}" Header="guag" Width="SizeToHeader"/>-->
+                <!--<DataGridTextColumn x:Name="guIDColumn" Binding="{Binding guID}" Header="gu ID" Width="SizeToHeader"/>-->
+            </DataGrid.Columns>
+        </DataGrid>
+        <StatusBar HorizontalAlignment="Left" Background="Gray" Height="25" Margin="10,512,0,-28" VerticalAlignment="Top" Width="785"/>
+        <DataGrid x:Name="grdPRAssigned" IsReadOnly="True" CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AutoGenerateColumns="False"  ItemsSource="{Binding Source={StaticResource pRAssignedViewSource}}" Margin="501,10,10,369"  SelectionChanged="grdPRAssigned_SelectionChanged">
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkGray"/>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="peIDColumn" Binding="{Binding peID}" Header="PR" Width="1*"/>
+                <DataGridTextColumn x:Name="peNColumn" Binding="{Binding peN}" Header="Name" Width="*"/>
+                <DataGridTextColumn x:Name="peAssignedColumn" Binding="{Binding Assigned}" Header="Assigned" Width="1*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid x:Name="grdGuestAssigned" IsReadOnly="True" CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource guestAssignedViewSource}}" Margin="501,147,10,63" SelectionChanged="grdGuestAssigned_SelectionChanged">
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkGray"/>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="guRoomNumColumn1" Binding="{Binding guRoomNum}" Header="Room" Width=".7*"/>
+                <DataGridTextColumn x:Name="guLastName1Column1" Binding="{Binding guLastName1}" Header="Last Name" Width="1*"/>
+                <DataGridTextColumn x:Name="agNColumn1" Binding="{Binding agN}" Header="Agency" Width="1*"/>
+                <!--<DataGridTextColumn x:Name="guagColumn" Binding="{Binding guag}" Header="guag" Width="SizeToHeader"/>-->
+                <DataGridTextColumn x:Name="guMemberShipNumColumn1" Binding="{Binding guMemberShipNum}" Header="Member" Width="1*"/>
+                <DataGridCheckBoxColumn x:Name="guAvailColumn1" Binding="{Binding guAvail}" Header="Avl" Width=".5*"/>
+                <!--<DataGridTextColumn x:Name="guIDColumn" Binding="{Binding guID}" Header="gu ID" Width="SizeToHeader"/>-->
+
+
+
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="btnAssign" Content="Assign" HorizontalAlignment="Left" Margin="538,456,0,0" VerticalAlignment="Top" Width="75" Height="37" Click="btnAssign_Click"/>
+        <Button x:Name="btnRemove" Content="Remove" HorizontalAlignment="Left" Margin="670,456,0,0" VerticalAlignment="Top" Width="76" Height="37" Click="btnRemove_Click"/>
+        <RadioButton x:Name="rbtnPrint" Content="Print" HorizontalAlignment="Left" Margin="27,460,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnAssignmentByPR" Content="Assignment By PR" HorizontalAlignment="Left" Margin="102,460,0,0" VerticalAlignment="Top" Width="134" Height="33"/>
+        <RadioButton x:Name="rbtnPreview" Content="Preview" HorizontalAlignment="Left" Margin="27,480,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnArrivals" Content="Arrivals" HorizontalAlignment="Left" Margin="400,460,0,0" VerticalAlignment="Top" Width="75" Height="33"/>
+        <Button x:Name="btnGeneralAssignment" Content="General Assignment" HorizontalAlignment="Left" Margin="248,459,0,0" VerticalAlignment="Top" Width="146" Height="34"/>
+    </Grid>
+</Window>
