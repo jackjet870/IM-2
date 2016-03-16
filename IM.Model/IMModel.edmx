@@ -5754,6 +5754,12 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="Invited" Type="int" Mode="In" />
           <Parameter Name="OnGroup" Type="int" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetAssistance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PlaceType" Type="varchar" Mode="In" />
+          <Parameter Name="Place" Type="varchar" Mode="In" />
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetAvailables" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CurrentDate" Type="datetime" Mode="In" />
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
@@ -5848,6 +5854,12 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="RelationalOperator" Type="varchar" Mode="In" />
           <Parameter Name="PermissionLevel" Type="int" Mode="In" />
           <Parameter Name="Dept" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetPersonnelAssistance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PlaceType" Type="varchar" Mode="In" />
+          <Parameter Name="Place" Type="varchar" Mode="In" />
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetPersonnelDaysOff" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TeamType" Type="varchar" Mode="In" />
@@ -14908,6 +14920,18 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="GuestID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_RptGifts" ReturnType="Collection(IMModel.RptGifts)" />
+          <FunctionImport Name="USP_OR_GetAssistance" ReturnType="Collection(IMModel.AssistanceData)">
+            <Parameter Name="PlaceType" Mode="In" Type="String" />
+            <Parameter Name="Place" Mode="In" Type="String" />
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetPersonnelAssistance" ReturnType="Collection(IMModel.PersonnelAssistance)">
+            <Parameter Name="PlaceType" Mode="In" Type="String" />
+            <Parameter Name="Place" Mode="In" Type="String" />
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -15575,6 +15599,38 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="Boolean" Name="giWFolio" Nullable="false" />
           <Property Type="Boolean" Name="giWPax" Nullable="false" />
           <Property Type="Boolean" Name="giA" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="AssistanceData">
+          <Property Type="String" Name="asPlaceType" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="asPlaceID" Nullable="false" MaxLength="10" />
+          <Property Type="DateTime" Name="asStartD" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="asEndD" Nullable="false" Precision="23" />
+          <Property Type="String" Name="aspe" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="asMonday" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="asTuesday" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="asWednesday" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="asThursday" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="asFriday" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="asSaturday" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="asSunday" Nullable="false" MaxLength="10" />
+          <Property Type="Byte" Name="asNum" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="PersonnelAssistance">
+          <Property Type="String" Name="asPlaceType" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="asPlaceID" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="asStartD" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="asEndD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="aspe" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="asMonday" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="asTuesday" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="asWednesday" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="asThursday" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="asFriday" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="asSaturday" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="asSunday" Nullable="false" MaxLength="1" />
+          <Property Type="Int32" Name="asNum" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -18674,6 +18730,46 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
                 <ScalarProperty Name="giWFolio" ColumnName="giWFolio" />
                 <ScalarProperty Name="giWPax" ColumnName="giWPax" />
                 <ScalarProperty Name="giA" ColumnName="giA" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetAssistance" FunctionName="IMModel.Store.USP_OR_GetAssistance">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.AssistanceData">
+                <ScalarProperty Name="asPlaceType" ColumnName="asPlaceType" />
+                <ScalarProperty Name="asPlaceID" ColumnName="asPlaceID" />
+                <ScalarProperty Name="asStartD" ColumnName="asStartD" />
+                <ScalarProperty Name="asEndD" ColumnName="asEndD" />
+                <ScalarProperty Name="aspe" ColumnName="aspe" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="asMonday" ColumnName="asMonday" />
+                <ScalarProperty Name="asTuesday" ColumnName="asTuesday" />
+                <ScalarProperty Name="asWednesday" ColumnName="asWednesday" />
+                <ScalarProperty Name="asThursday" ColumnName="asThursday" />
+                <ScalarProperty Name="asFriday" ColumnName="asFriday" />
+                <ScalarProperty Name="asSaturday" ColumnName="asSaturday" />
+                <ScalarProperty Name="asSunday" ColumnName="asSunday" />
+                <ScalarProperty Name="asNum" ColumnName="asNum" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetPersonnelAssistance" FunctionName="IMModel.Store.USP_OR_GetPersonnelAssistance">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.PersonnelAssistance">
+                <ScalarProperty Name="asPlaceType" ColumnName="asPlaceType" />
+                <ScalarProperty Name="asPlaceID" ColumnName="asPlaceID" />
+                <ScalarProperty Name="asStartD" ColumnName="asStartD" />
+                <ScalarProperty Name="asEndD" ColumnName="asEndD" />
+                <ScalarProperty Name="aspe" ColumnName="aspe" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="asMonday" ColumnName="asMonday" />
+                <ScalarProperty Name="asTuesday" ColumnName="asTuesday" />
+                <ScalarProperty Name="asWednesday" ColumnName="asWednesday" />
+                <ScalarProperty Name="asThursday" ColumnName="asThursday" />
+                <ScalarProperty Name="asFriday" ColumnName="asFriday" />
+                <ScalarProperty Name="asSaturday" ColumnName="asSaturday" />
+                <ScalarProperty Name="asSunday" ColumnName="asSunday" />
+                <ScalarProperty Name="asNum" ColumnName="asNum" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

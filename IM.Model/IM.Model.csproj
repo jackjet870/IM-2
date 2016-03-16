@@ -76,6 +76,9 @@
     <Compile Include="Assistance.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="AssistanceData.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="AssistanceStatus.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -438,6 +441,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PersonnelAccess.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PersonnelAssistance.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PersonnelDayOff.cs">
