@@ -1029,5 +1029,10 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("USP_OR_ValidateFolioReservation", leadSourceParameter, folioParameter, guestIDParameter);
         }
+    
+        public virtual ObjectResult<RptGifts> USP_OR_RptGifts()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGifts>("USP_OR_RptGifts");
+        }
     }
 }

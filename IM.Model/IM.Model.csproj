@@ -515,6 +515,9 @@
     <Compile Include="RptBookingsBySalesRoomProgramTime.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptGifts.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptPersonnel.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
