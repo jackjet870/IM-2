@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.PRStatistics", "IM.PRSta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.ProcessorGeneral", "IM.ProcessorGeneral\IM.ProcessorGeneral.csproj", "{8B027A23-12CF-4B93-AEC3-BDA71842F3F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Assignment", "IM.Assignment\IM.Assignment.csproj", "{258A3C0F-0775-47F3-9A8D-9BB99236CD27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +133,14 @@ Global
 		{8B027A23-12CF-4B93-AEC3-BDA71842F3F6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8B027A23-12CF-4B93-AEC3-BDA71842F3F6}.Release|x86.ActiveCfg = Release|Any CPU
 		{8B027A23-12CF-4B93-AEC3-BDA71842F3F6}.Release|x86.Build.0 = Release|Any CPU
+		{258A3C0F-0775-47F3-9A8D-9BB99236CD27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{258A3C0F-0775-47F3-9A8D-9BB99236CD27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{258A3C0F-0775-47F3-9A8D-9BB99236CD27}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{258A3C0F-0775-47F3-9A8D-9BB99236CD27}.Debug|x86.Build.0 = Debug|Any CPU
+		{258A3C0F-0775-47F3-9A8D-9BB99236CD27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{258A3C0F-0775-47F3-9A8D-9BB99236CD27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{258A3C0F-0775-47F3-9A8D-9BB99236CD27}.Release|x86.ActiveCfg = Release|Any CPU
+		{258A3C0F-0775-47F3-9A8D-9BB99236CD27}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

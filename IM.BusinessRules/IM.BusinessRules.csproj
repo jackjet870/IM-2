@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="BR\BRAgencies.cs" />
     <Compile Include="BR\BRAreas.cs" />
+    <Compile Include="BR\BRAssignment.cs" />
     <Compile Include="BR\BRAssistancesStatus.cs" />
     <Compile Include="BR\BRChargeCalculationTypes.cs" />
     <Compile Include="BR\BRChargeTos.cs" />
@@ -92,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\IM.Model.GuestUnassigned.datasource" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IM.Model\IM.Model.csproj">
