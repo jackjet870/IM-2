@@ -144,7 +144,7 @@
     </Compile>
     <Compile Include="Enums\EnumFormatTypeExcel.cs" />
     <Compile Include="Enums\EnumPermission.cs" />
-    <Compile Include="Enums\EnumRole.cs"/> 
+    <Compile Include="Enums\EnumRole.cs" />
     <Compile Include="Enums\EnumBasedOnArrival.cs" />
     <Compile Include="Enums\EnumBasedOnBooking.cs" />
     <Compile Include="Enums\EnumDetailGifts.cs" />
@@ -250,6 +250,9 @@
     <Compile Include="GuestAvailable.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="GuestByPR.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="GuestCreditCard.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -278,6 +281,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="GuestPromotion.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GuestSearched.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="GuestsGroup.cs">
@@ -503,7 +509,13 @@
     <Compile Include="RoomType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptBookingsBySalesRoomProgramLeadSourceTime.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptBookingsBySalesRoomProgramTime.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptPersonnel.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptPRStats.cs">

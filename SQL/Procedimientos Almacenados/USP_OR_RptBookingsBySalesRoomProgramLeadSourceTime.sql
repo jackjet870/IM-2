@@ -43,7 +43,7 @@ where
 	and (@SalesRooms = 'ALL' or G.gusr in (select item from split(@SalesRooms, ',')))
 	-- Booking no cancelado
 	and G.guBookCanc = 0
-group by S.srN, P.pgN, G.guBookT, G.guRef
+group by S.srN, P.pgN, L.lsN, G.guBookT, G.guRef
 
 -- Reschedules
 -- =============================================
@@ -66,8 +66,8 @@ where
 	and (@SalesRooms = 'ALL' or G.gusr in (select item from split(@SalesRooms, ',')))
 	-- Booking no cancelado
 	and G.guBookCanc = 0
-group by S.srN, P.pgN, G.guReschT
-order by SalesRoom, Program, BookType, [Time]
+group by S.srN, P.pgN, L.lsN, G.guReschT
+order by SalesRoom, Program, LeadSource, BookType, [Time]
 
 -- Datos del reporte
 select * from #tblData

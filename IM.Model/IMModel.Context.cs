@@ -895,5 +895,139 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveExchangeRateLog", currencyParameter, dateParameter, hoursDifParameter, changedByParameter);
         }
+    
+        public virtual ObjectResult<GuestByPR> USP_OR_GetGuestsByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string pR, Nullable<bool> considerAssign, Nullable<bool> considerContact, Nullable<bool> considerFollowUp, Nullable<bool> considerInvit, Nullable<bool> considerShow, Nullable<bool> considerSale, Nullable<bool> basedOnArrival)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var pRParameter = pR != null ?
+                new ObjectParameter("PR", pR) :
+                new ObjectParameter("PR", typeof(string));
+    
+            var considerAssignParameter = considerAssign.HasValue ?
+                new ObjectParameter("ConsiderAssign", considerAssign) :
+                new ObjectParameter("ConsiderAssign", typeof(bool));
+    
+            var considerContactParameter = considerContact.HasValue ?
+                new ObjectParameter("ConsiderContact", considerContact) :
+                new ObjectParameter("ConsiderContact", typeof(bool));
+    
+            var considerFollowUpParameter = considerFollowUp.HasValue ?
+                new ObjectParameter("ConsiderFollowUp", considerFollowUp) :
+                new ObjectParameter("ConsiderFollowUp", typeof(bool));
+    
+            var considerInvitParameter = considerInvit.HasValue ?
+                new ObjectParameter("ConsiderInvit", considerInvit) :
+                new ObjectParameter("ConsiderInvit", typeof(bool));
+    
+            var considerShowParameter = considerShow.HasValue ?
+                new ObjectParameter("ConsiderShow", considerShow) :
+                new ObjectParameter("ConsiderShow", typeof(bool));
+    
+            var considerSaleParameter = considerSale.HasValue ?
+                new ObjectParameter("ConsiderSale", considerSale) :
+                new ObjectParameter("ConsiderSale", typeof(bool));
+    
+            var basedOnArrivalParameter = basedOnArrival.HasValue ?
+                new ObjectParameter("BasedOnArrival", basedOnArrival) :
+                new ObjectParameter("BasedOnArrival", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestByPR>("USP_OR_GetGuestsByPR", dateFromParameter, dateToParameter, leadSourceParameter, pRParameter, considerAssignParameter, considerContactParameter, considerFollowUpParameter, considerInvitParameter, considerShowParameter, considerSaleParameter, basedOnArrivalParameter);
+        }
+    
+        public virtual ObjectResult<GuestSearched> USP_OR_GetGuests(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string name, string roomNumber, string reservation, Nullable<int> guestID)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var roomNumberParameter = roomNumber != null ?
+                new ObjectParameter("RoomNumber", roomNumber) :
+                new ObjectParameter("RoomNumber", typeof(string));
+    
+            var reservationParameter = reservation != null ?
+                new ObjectParameter("Reservation", reservation) :
+                new ObjectParameter("Reservation", typeof(string));
+    
+            var guestIDParameter = guestID.HasValue ?
+                new ObjectParameter("GuestID", guestID) :
+                new ObjectParameter("GuestID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestSearched>("USP_OR_GetGuests", dateFromParameter, dateToParameter, leadSourceParameter, nameParameter, roomNumberParameter, reservationParameter, guestIDParameter);
+        }
+    
+        public virtual ObjectResult<RptBookingsBySalesRoomProgramLeadSourceTime> USP_OR_RptBookingsBySalesRoomProgramLeadSourceTime(Nullable<System.DateTime> date, string salesRooms)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptBookingsBySalesRoomProgramLeadSourceTime>("USP_OR_RptBookingsBySalesRoomProgramLeadSourceTime", dateParameter, salesRoomsParameter);
+        }
+    
+        public virtual ObjectResult<RptPersonnel> USP_OR_RptPersonnel()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptPersonnel>("USP_OR_RptPersonnel");
+        }
+    
+        public virtual ObjectResult<string> USP_OR_ValidateFolioInvitationOutside(string serie, Nullable<int> number, Nullable<int> guestID)
+        {
+            var serieParameter = serie != null ?
+                new ObjectParameter("Serie", serie) :
+                new ObjectParameter("Serie", typeof(string));
+    
+            var numberParameter = number.HasValue ?
+                new ObjectParameter("Number", number) :
+                new ObjectParameter("Number", typeof(int));
+    
+            var guestIDParameter = guestID.HasValue ?
+                new ObjectParameter("GuestID", guestID) :
+                new ObjectParameter("GuestID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("USP_OR_ValidateFolioInvitationOutside", serieParameter, numberParameter, guestIDParameter);
+        }
+    
+        public virtual ObjectResult<string> USP_OR_ValidateFolioReservation(string leadSource, string folio, Nullable<int> guestID)
+        {
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var folioParameter = folio != null ?
+                new ObjectParameter("Folio", folio) :
+                new ObjectParameter("Folio", typeof(string));
+    
+            var guestIDParameter = guestID.HasValue ?
+                new ObjectParameter("GuestID", guestID) :
+                new ObjectParameter("GuestID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("USP_OR_ValidateFolioReservation", leadSourceParameter, folioParameter, guestIDParameter);
+        }
     }
 }
