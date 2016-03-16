@@ -126,7 +126,11 @@ namespace IM.Base.Helpers
             break;
         }
         ws.Column(contColum).Style.HorizontalAlignment = item.Alignment;
+        ws.Cells[filterNumber + 2, contColum].Style.Font.Bold= true;
+        ws.Cells[filterNumber + 2, contColum].Style.Font.Size =14;
       }
+      //Borde de rango de columnas (titulos de la tabla)
+      ws.Cells[filterNumber + 2, 1, filterNumber + 2,dtColumnsNumber].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Hair);
 
       //Agregamos el contenido empezando en la fila 8
       ws.Cells[filterNumber + 3, 1].LoadFromDataTable(dt, false, OfficeOpenXml.Table.TableStyles.Medium2);
@@ -157,6 +161,109 @@ namespace IM.Base.Helpers
       {
         return null;
       }
+    }
+
+    /// <summary>
+    /// Crea un reporte en excel que tiene Filtros, Nombre de reporte, contenido, datos de impresion, nombre del sistema y una tabla dinamica para realizar un pivot.
+    /// </summary>
+    /// <param name="filtros">Filtros que se aplicarán al reporte.</param>
+    /// <param name="dtContenido">Datatable con los datos.</param>
+    /// <param name="nombreReporte">Nombre del reporte con fecha.</param>
+    /// <param name="pivotColums">Columnas a las cuales se le aplicará el pivote.</param>
+    /// <param name="pivotRows">Filas que se mostrarán en el reporte.</param>
+    /// <param name="pivotValue">Valores que se mostrarán en las columnas que resultaron despues de aplicar el pivote.</param>
+    /// <param name="pivotColumnsCount">Columnas totales que se obtuvo del pivote.</param>
+    /// <returns>FileInfo</returns>
+    /// <history>
+    /// [erosado] 14/03/2016  Created.
+    /// </history>
+    public static bool CreatePivotRptExcel(List<Tuple<string, string>> filtros, DataTable dtContenido, Tuple<string, string> nombreReporte, List<string> pivotColums, List<string> pivotRows, List<string> pivotValue, int pivotColumnsCount=0)
+    {
+      FileInfo pathFinalFile = null;
+      ExcelPackage pk = new ExcelPackage();
+      //Preparamos la hoja donde escribiremos
+      //la tabla dinamica.
+      ExcelWorksheet wsPivot = pk.Workbook.Worksheets.Add(nombreReporte.Item1);
+      ExcelWorksheet wsData = pk.Workbook.Worksheets.Add("Hoja0");
+      wsData.Hidden = eWorkSheetHidden.VeryHidden;
+
+      //Numero de filtros
+      int filterNumber = filtros.Count + 2;
+
+      //Numero de Columnas del contenido del datatable
+      int dtColumnsNumber = pivotColumnsCount;
+      
+      //Insertamos etiqueta de filtros
+      wsPivot.Cells[1, 1].Value = "Filters";
+      wsPivot.Cells[1, 1].Style.Font.Bold = true;
+      wsPivot.Cells[1, 1].Style.Font.Size = 14;
+
+      //Insertamos las filas que necesitamos para los filtros
+      wsPivot.InsertRow(2, filtros.Count + 2);
+
+      int cFiltros = 1;
+      foreach (Tuple<string, string> item in filtros)
+      {
+        cFiltros++;
+        wsPivot.Cells[string.Concat("A", cFiltros)].Value = item.Item1;
+        wsPivot.Cells[string.Concat("A", cFiltros)].Style.Font.Bold = true;
+        wsPivot.Cells[string.Concat("B", cFiltros)].Value = item.Item2;
+      }
+
+      //Agregamos los datos de impresion
+      wsPivot.Cells[string.Concat("A", cFiltros + 1)].Value = "Date Print";
+      wsPivot.Cells[string.Concat("A", cFiltros + 1)].Style.Font.Bold = true;
+      wsPivot.Cells[string.Concat("B", cFiltros + 1)].Value = string.Format(DateTime.Now.ToShortDateString(), "yyyy-MM-dd");
+      wsPivot.Cells[string.Concat("A", cFiltros + 2)].Value = "Time Print";
+      wsPivot.Cells[string.Concat("A", cFiltros + 2)].Style.Font.Bold = true;
+      wsPivot.Cells[string.Concat("B", cFiltros + 2)].Value = string.Format(DateTime.Now.ToShortTimeString(), "hh:mm:ss");
+
+
+      //Nombre del reporte y rango de fecha
+      wsPivot.Cells[1, dtColumnsNumber].Value = nombreReporte.Item1;
+      wsPivot.Cells[1, dtColumnsNumber].Style.Font.Bold = true;
+      wsPivot.Cells[1, dtColumnsNumber].Style.Font.Size = 14;
+      wsPivot.Cells[1, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+      wsPivot.Cells[2, dtColumnsNumber].Value = "Intelligence Marketing";
+      wsPivot.Cells[2, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+      wsPivot.Cells[3, dtColumnsNumber].Value = nombreReporte.Item2;
+      wsPivot.Cells[3, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+
+      //Agregamos el contenido
+      wsPivot.InsertRow(filterNumber + 2, dtContenido.Rows.Count * 2);
+
+      //Cargamos los datos en la hoja0.
+      wsData.Cells["A1"].LoadFromDataTable(dtContenido, true, OfficeOpenXml.Table.TableStyles.Medium2);
+      //Ocultamos la hoja0.
+      wsData.Hidden = eWorkSheetHidden.VeryHidden;
+
+      //Cargamos la tabla dinamica.
+      var pivotTable = wsPivot.PivotTables.Add(wsPivot.Cells[filterNumber + 5, 1], wsData.Cells[1, 1, wsData.Dimension.End.Row, wsData.Dimension.End.Column], nombreReporte.Item1);
+      
+      //Asignamos que columnas y filas seran datos o encabezados.
+      pivotTable.ShowHeaders = true;
+      //Asignamos las columnas para realizar el pivote
+      pivotColums.ForEach(col => pivotTable.ColumnFields.Add(pivotTable.Fields[col]));
+      
+      //Asignamos las filas que se mostraran.
+      pivotRows.ForEach(row => pivotTable.RowFields.Add(pivotTable.Fields[row]));
+      pivotTable.DataOnRows = false;
+
+      //Asignamos el valor que se mostrara en las columnas.
+      pivotValue.ForEach(value => pivotTable.DataFields.Add(pivotTable.Fields[value]));
+      pivotTable.ColumGrandTotals = true;
+      pivotTable.RowGrandTotals = true;
+
+
+      //wsPivot.Cells[1, 1, (filterNumber + 3 + dtRowsNumber + 4), dtColumnsNumber].AutoFitColumns(); //Auto Ajuste de columnas de acuerdo a los headers
+
+      string suggestedFilaName = string.Concat(nombreReporte.Item1, "_", DateTime.Now.ToString("ddmmyyyyhhmmss"));
+      pathFinalFile = SaveExcel(pk, suggestedFilaName);
+
+      return (pathFinalFile != null || pathFinalFile.Exists);     
     }
   }
 }

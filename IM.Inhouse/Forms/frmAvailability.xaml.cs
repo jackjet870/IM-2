@@ -90,7 +90,7 @@ namespace IM.Inhouse
       // validamos que el motivo de indisponibilidad exista
       if (!chkguAvail.IsChecked.Value)
       {
-        UnavailableMotive motive = BRUnavailableMotives.GetUnavailableMotive(Convert.ToInt16(txtguum.Text),true);
+        UnavailableMotive motive = BRUnavailableMotives.GetUnavailableMotive(Convert.ToInt16(txtguum.Text), true);
         if (motive == null)
         {
           UIHelper.ShowMessage("The unavailable motive does not exist");
@@ -167,15 +167,14 @@ namespace IM.Inhouse
     #region cboguum_SelectionChanged
     private void cboguum_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-    
-        if (cboguum.SelectedIndex != -1 || txtguum.Text == string.Empty)
-        {
+      if (cboguum.SelectedIndex != -1 || txtguum.Text == string.Empty)
+      {
         if (!chkguAvail.IsChecked.Value)
         {
           if (cboguum.SelectedValue != null)
           {
             if (!_searchUmByTxt)
-            {              
+            {
               txtguum.Text = cboguum.SelectedValue.ToString();
             }
           }
@@ -192,8 +191,8 @@ namespace IM.Inhouse
     {
       _searchUmByTxt = true;
       int umid;
-      if (txtguum.Text != string.Empty)       
-      {          
+      if (txtguum.Text != string.Empty)
+      {
         //validosmos q no ingrese datos numericos    
         if (!int.TryParse(txtguum.Text, out umid))
         {
@@ -209,7 +208,7 @@ namespace IM.Inhouse
           {
             UIHelper.ShowMessage("The unavailable motive does not exist");
             txtguum.Text = string.Empty;
-            txtguum.Focus();           
+            txtguum.Focus();
           }
           else
           {
@@ -233,7 +232,7 @@ namespace IM.Inhouse
       if (_guest != null)
       {
         cboguum.SelectedValue = _guest.guum;
-        txtguum.Text = _guest.guum == 0?string.Empty: _guest.guum.ToString();
+        txtguum.Text = _guest.guum == 0 ? string.Empty : _guest.guum.ToString();
       }
     }
     #endregion
@@ -257,14 +256,15 @@ namespace IM.Inhouse
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
       if (Validate())
-      {        
+      {
         _guest.guum = Convert.ToByte(txtguum.Text);
         _guest.guOriginAvail = chkguOriginAvail.IsChecked.Value;
         _guest.guAvail = chkguAvail.IsChecked.Value;
         _guest.guPRAvail = txtguPRAvail.Text;
-        BRGuests.SaveGuestAvailability(_guest);
+        BRGuests.SaveGuest(_guest);
         //Se guarda el Log del Guest 
         BRGuests.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);
+        this.Close();
       }
     }
     #endregion
@@ -293,8 +293,8 @@ namespace IM.Inhouse
           cboguum.IsReadOnly = _guest.guAvail;
           cboguum.IsEnabled = !_guest.guAvail;
           txtguum.IsReadOnly = _guest.guAvail;
-          chkguAvail.IsEnabled = true;                             
-          if (log.userData.HasRole(EnumRole.PRCaptain))
+          chkguAvail.IsEnabled = true;
+          if (_user.HasRole(EnumRole.PRCaptain))
           {
             chkguOriginAvail.IsEnabled = true;
           }
@@ -309,15 +309,5 @@ namespace IM.Inhouse
     #endregion
 
     #endregion
-
-    private void TextBlock_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-    {
-      this.DragMove();
-    }
-
-    private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-    {
-           //this.DragMove();
-    }
   }
 }

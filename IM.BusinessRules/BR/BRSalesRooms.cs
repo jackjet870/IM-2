@@ -36,7 +36,11 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [erosado] 08/03/2016  created
     /// </hystory>
-    public static List<SalesRoomByUser> GetSalesRoomsByUser(string user, string regions)
+    /// <history>
+    /// [edgrodriguez] 29/Feb/2016 Created
+    /// [edgrodriguez] 04/Mar/2016 Modified //Se agregarón los valores default.
+    /// </history>
+    public static List<SalesRoomByUser> GetSalesRoomsByUser(string user = "ALL", string regions = "ALL")
     {
       using (var dbContext = new IMEntities())
       {

@@ -8,6 +8,8 @@ using IM.BusinessRules.BR;
 using IM.Model.Classes;
 using IM.Base.Helpers;
 using IM.Model.Enums;
+using System.Net;
+using System.Net.NetworkInformation;
 
 namespace IM.Inhouse
 {
@@ -24,6 +26,7 @@ namespace IM.Inhouse
     private DateTime _serverDate;
     private int _available, _invited, _onGroup, _info = 0;
     private string _markets = "ALL";
+    bool? guCheckIn = true;   
 
     #endregion
 
@@ -68,26 +71,22 @@ namespace IM.Inhouse
     /// </summary>
     private void LoadGrid()
     {
-      if (_guestArrivalViewSource != null && _premanifestViewSource != null && _availableViewSource != null)
+      if(_guestArrivalViewSource != null && _premanifestViewSource != null && _availableViewSource != null)
       {
-        if (tabArrivals.IsSelected)
+        if (ccArrivals.Visibility.Equals(Visibility.Visible))
         {
           _guestArrivalViewSource.Source = BRGuests.GetGuestsArrivals(_serverDate, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup);
         }
-        else
+        if(ccAvailables.Visibility.Equals(Visibility.Visible))
         {
-          if (tabAvailables.IsSelected)
-          {
-            _availableViewSource.Source = BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup);
-          }
-          else
-          {
-            _premanifestViewSource.Source = BRGuests.GetGuestsPremanifest(_serverDate, App.User.LeadSource.lsID, _markets, _onGroup);
-          }
+          _availableViewSource.Source = BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup);
+        }
+        if(ccPremanifest.Visibility.Equals(Visibility.Visible))
+        {
+          _premanifestViewSource.Source = BRGuests.GetGuestsPremanifest(_serverDate, App.User.LeadSource.lsID, _markets, _onGroup);
         }
       }
     }
-
     #endregion
 
     #region LoadListMarkets
@@ -117,6 +116,9 @@ namespace IM.Inhouse
       _premanifestViewSource = ((CollectionViewSource)(this.FindResource("premanifestViewSource")));
       LoadGrid();
       LoadListMarkets();
+      System.Windows.Data.CollectionViewSource guestSearchedViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("guestSearchedViewSource")));
+      // Load data by setting the CollectionViewSource.Source property:
+      // guestSearchedViewSource.Source = [generic data source]
     }
 
     #endregion
@@ -141,35 +143,6 @@ namespace IM.Inhouse
 
     #endregion
 
-    #region tabArrivals_Clicked
-
-    private void tabArrivals_Clicked(object sender, MouseButtonEventArgs e)
-    {
-      EnabledCtrls(true, true, true, true);
-      LoadGrid();
-    }
-
-    #endregion
-
-    #region tabAvailables_Clicked
-
-    private void tabAvailables_Clicked(object sender, MouseButtonEventArgs e)
-    {
-      EnabledCtrls(false, false, true, true);
-      LoadGrid();
-    }
-
-    #endregion
-
-    #region tabPremanifiest_Clicked
-
-    private void tabPremanifiest_Clicked(object sender, MouseButtonEventArgs e)
-    {
-      EnabledCtrls(false, true, false, false);
-      LoadGrid();
-    }
-    #endregion
-
     #region dtpDate_SelectedDateChanged
 
     private void dtpDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -191,9 +164,7 @@ namespace IM.Inhouse
         //gprInfo.BindingGroup.GetValue                 
       }
     }
-    #endregion
-
-    bool? guCheckIn = true;
+    #endregion   
 
     #region btnDaysOff_Click
     private void btnDaysOff_Click(object sender, RoutedEventArgs e)
@@ -206,7 +177,17 @@ namespace IM.Inhouse
     #region btnSearchGuest_Click
     private void btnSearchGuest_Click(object sender, RoutedEventArgs e)
     {
-
+      IPHostEntry host;
+      string localIP = "";
+      host = Dns.GetHostEntry(Dns.GetHostName());
+      foreach (IPAddress ip in host.AddressList)
+      {
+        if (ip.AddressFamily.ToString() == "InterNetwork")
+        {
+          localIP = ip.ToString();
+        }
+      }
+      MessageBox.Show("Tú IP Local Es: " + localIP);
     }
     #endregion
 
@@ -263,6 +244,8 @@ namespace IM.Inhouse
       var ChkguCheckIn = sender as CheckBox;
       guCheckIn = ChkguCheckIn.IsChecked;
     }
+
+ 
     #endregion
 
     #region ChkFollow_Click
@@ -312,7 +295,7 @@ namespace IM.Inhouse
     }
     #endregion
 
-    #region
+    #region ChkguInfo_Click
     private void ChkguInfo_Click(object sender, RoutedEventArgs e)
     {
       GuestArrival itema = dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
@@ -325,11 +308,50 @@ namespace IM.Inhouse
         LoadGrid();
       }
     }
+
+    private void rbNoInfo_GiveFeedback(object sender, GiveFeedbackEventArgs e)
+    {
+
+    }
+    #endregion
+
+    public void DataGridVisibility(Visibility ccArrivals, Visibility ccAvailables, Visibility ccPremanifest)
+    {
+       this.ccArrivals.Visibility = ccArrivals;
+       this.ccPremanifest.Visibility = ccPremanifest;
+       this.ccAvailables.Visibility = ccAvailables;
+    }
+
+    #region btnArrivals_Clicked
+    private void btnArrivals_Clicked(object sender, RoutedEventArgs e)
+    {
+      EnabledCtrls(true, true, true, true);
+      DataGridVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Hidden);
+      LoadGrid();
+    }
+    #endregion
+
+    #region btnAvailables_Clicked
+    private void btnAvailables_Clicked(object sender, RoutedEventArgs e)
+    {
+      EnabledCtrls(false, false, true, true);
+      DataGridVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
+      LoadGrid();
+    }
+    #endregion
+
+    #region btnPremanifiest_Click
+    private void btnPremanifiest_Click(object sender, RoutedEventArgs e)
+    {
+      EnabledCtrls(false, true, false, false);
+      DataGridVisibility(Visibility.Hidden, Visibility.Hidden, Visibility.Visible);
+      LoadGrid();
+    }
     #endregion
 
     #endregion
-
   }
 
 }
+
 

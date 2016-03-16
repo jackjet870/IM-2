@@ -1,5 +1,5 @@
 ﻿using IM.Model;
-using IM.Model.Entities;
+using IM.Model.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;

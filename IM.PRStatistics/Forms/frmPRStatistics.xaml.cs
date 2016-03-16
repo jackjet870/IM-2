@@ -25,15 +25,20 @@ namespace IM.PRStatistics.Forms
   public partial class frmPRStatistics : Window
   {
     #region Propiedades y Atributos
-    List<Tuple<string,string>> filterTuple= null;
-    public UserData userData { get; set; }
+    List<Tuple<string,string>> filterTuple= null; // Agrega los filtros de busqueda
 
     #endregion
 
     #region Constructores y  Destructores
-    public frmPRStatistics(UserData userData)
+
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <history>
+    /// [wtorres]  15/Mar/2016 Modified. Elimine el parametro userData
+    /// </history>
+    public frmPRStatistics()
     {
-      this.userData = userData;
       InitializeComponent();
     }
     #endregion
@@ -42,11 +47,14 @@ namespace IM.PRStatistics.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       //Inicializamos los catalogos
-      DoGetLeadSources(userData.User.peID);
-      DoGetSalesRooms(userData.User.peID);
+      DoGetLeadSources(App.User.User.peID);
+      DoGetSalesRooms(App.User.User.peID);
       DoGetCountries();
       DoGetAgencies();
       DoGetMarkets();
+      //Seleccionamos los días en el datapicker 
+      dtpkFrom.SelectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+      dtpkTo.SelectedDate = DateTime.Now;
     }
     /// <summary>
     /// Evento que se encarga de generar las estadisticas
@@ -64,7 +72,6 @@ namespace IM.PRStatistics.Forms
         filterTuple = new List<Tuple<string, string>>();
         StaStart("Loading Report...");
         imgButtonOk.IsEnabled = false;
-
         filterTuple.Add(new Tuple<string, string>("LeadSource", chbxLeadSources.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxLeadSources)));
         filterTuple.Add(new Tuple<string, string>("SalesRooms", chbxSalesRooms.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxSalesRooms)));
         filterTuple.Add(new Tuple<string, string>("Countries", chbxCountries.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxCountries)));
@@ -72,9 +79,6 @@ namespace IM.PRStatistics.Forms
         filterTuple.Add(new Tuple<string, string>("Markets", chbxMarkets.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxMarkets)));
     
         DoGetRptPrStats(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, filterTuple);
-
-        Process[] localAll3 = Process.GetProcesses();
-
       }
       else
       {
@@ -90,9 +94,9 @@ namespace IM.PRStatistics.Forms
     private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       List<RptPRStats> lstRptStats = dtgr.DataContext as List<RptPRStats>;
-      if (lstRptStats != null)
+      if (lstRptStats != null )
       {
-        string dateRange = string.Concat(dtpkFrom.SelectedDate.Value.ToString("yyyy-MM-dd"), " - ", dtpkTo.SelectedDate.Value.ToString("yyyy-MM-dd"));
+        string dateRange = DateHelper.DateRange(dtpkFrom.SelectedDate.Value,dtpkTo.SelectedDate.Value);
         FileInfo templatePath = new FileInfo(string.Concat(Directory.GetCurrentDirectory(), "\\ReportTemplate\\RptPRStatistics.xlsx"));
         DataTable dt = GridHelper.GetDataTableFromGrid<RptPRStats>(lstRptStats);
         Tuple<string, string> nombreReporte = new Tuple<string, string>("PR Statistics", dateRange);
@@ -101,6 +105,10 @@ namespace IM.PRStatistics.Forms
         {
           Process.Start(finfo.FullName);
         }
+      }
+      else
+      {
+        UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
       }
     }
     /// <summary>

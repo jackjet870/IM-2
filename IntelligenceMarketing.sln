@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Graph", "IM.Graph\IM.Gra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.PRStatistics", "IM.PRStatistics\IM.PRStatistics.csproj", "{ABB2DC92-18FA-4727-824E-B604D16605A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.ProcessorGeneral", "IM.ProcessorGeneral\IM.ProcessorGeneral.csproj", "{8B027A23-12CF-4B93-AEC3-BDA71842F3F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,14 @@ Global
 		{ABB2DC92-18FA-4727-824E-B604D16605A2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ABB2DC92-18FA-4727-824E-B604D16605A2}.Release|x86.ActiveCfg = Release|Any CPU
 		{ABB2DC92-18FA-4727-824E-B604D16605A2}.Release|x86.Build.0 = Release|Any CPU
+		{8B027A23-12CF-4B93-AEC3-BDA71842F3F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B027A23-12CF-4B93-AEC3-BDA71842F3F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B027A23-12CF-4B93-AEC3-BDA71842F3F6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8B027A23-12CF-4B93-AEC3-BDA71842F3F6}.Debug|x86.Build.0 = Debug|Any CPU
+		{8B027A23-12CF-4B93-AEC3-BDA71842F3F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B027A23-12CF-4B93-AEC3-BDA71842F3F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B027A23-12CF-4B93-AEC3-BDA71842F3F6}.Release|x86.ActiveCfg = Release|Any CPU
+		{8B027A23-12CF-4B93-AEC3-BDA71842F3F6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

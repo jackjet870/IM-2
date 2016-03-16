@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Classes;
+using IM.Model.Enums;
 
 namespace IM.BusinessRules.BR
 {
@@ -155,37 +156,56 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche] created 10/03/2016
     /// </history>
-    public static Guest GetGuest(int guId)
+    public static Guest GetGuest(int guestId)
     {
       using (var dbContext = new IMEntities())
       {
-        return (from gu in dbContext.Guests where gu.guID == guId select gu).Single();
+        return (from gu in dbContext.Guests where gu.guID == guestId select gu).Single();
       }
     }
 
-
-    #region SaveGuestAvailability
+    #region SaveGuest
     /// <summary>
-    /// Guardam los datos de disponibilidad del Guest
+    /// Guarda los datos del Guest
     /// </summary>
-    /// <param name="guId">Id a Guest</param>
     /// <returns>Guest</returns>
     /// <history>
     /// [jorcanche] created 14/03/2016
     /// </history>
-    public static int SaveGuestAvailability(Guest gu)
+    public static int SaveGuest(Guest guest)
     {
       int nRes = 0;
       using (var dbContext = new IMEntities())
       {
-        dbContext.Entry(gu).State = System.Data.Entity.EntityState.Modified;
+        dbContext.Entry(guest).State = System.Data.Entity.EntityState.Modified;
        return nRes = dbContext.SaveChanges();
        
       }
     }
     #endregion
+
+    #region SaveGuestMovement
+    /// <summary>
+    /// Guarda los moviemientos del Guest
+    /// </summary>
+    /// <param name="guestId"></param>
+    /// <param name="guestMovementType"></param>
+    /// <param name="changedBy"></param>
+    /// <param name="computerName"></param>
+    /// <param name="iPAddress"></param>
+    /// <history>
+    /// [jorcanche] created 15/03/2016
+    /// </history>
+    public static void SaveGuestMovement(int guestId, EnumGuestsMovementsType guestMovementType, string changedBy, string computerName, string iPAddress)
+    {
+       using (var dbContext = new IMEntities())
+      {
+        dbContext.USP_OR_SaveGuestMovement(guestId, StrToEnums.EumGuestsMovementsTypeToString(guestMovementType), changedBy, computerName, iPAddress);
+      }
+    }
+    #endregion
+    #endregion
   }
-  #endregion
 }
 
 

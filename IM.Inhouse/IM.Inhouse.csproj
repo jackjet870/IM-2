@@ -92,6 +92,9 @@
     <Compile Include="Forms\frmRegister.xaml.cs">
       <DependentUpon>frmRegister.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmSearchGuests.xaml.cs">
+      <DependentUpon>frmSearchGuests.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -115,6 +118,7 @@
     <None Include="Properties\DataSources\IM.Model.GetGuestsPremanifest.datasource" />
     <None Include="Properties\DataSources\IM.Model.GetMarkets.datasource" />
     <None Include="Properties\DataSources\IM.Model.GuestArrival.datasource" />
+    <None Include="Properties\DataSources\IM.Model.GuestSearched.datasource" />
     <None Include="Properties\DataSources\IM.Model.PersonnelDayOff.datasource" />
     <None Include="Properties\DataSources\IM.Model.Premanifest.datasource" />
     <None Include="Properties\DataSources\IM.Model.USP_OR_GetGuestLog1.datasource" />
@@ -151,6 +155,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\frmRegister.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmSearchGuests.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

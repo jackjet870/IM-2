@@ -1,0 +1,58 @@
+﻿<Window x:Class="IM.Inhouse.Forms.frmSearchGuests"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Inhouse.Forms"
+        mc:Ignorable="d"
+        Title="Search Guests" SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="17"/>
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="FontSize" Value="17"/>
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="FontSize" Value="17"/>
+        </Style>
+        
+    </Window.Resources>
+    <Grid>
+        <GroupBox  Header="Search Criteria" Margin="5" FontSize="17" >
+            <StackPanel Orientation="Horizontal"> 
+                <StackPanel Margin="7">
+                    <TextBlock>Name</TextBlock>
+                    <TextBox Width="130"></TextBox>
+                </StackPanel>
+                <StackPanel Margin="7">
+                    <TextBlock>Room</TextBlock>
+                    <TextBox Width="90"></TextBox>
+                </StackPanel>
+                <StackPanel Margin="7">
+                    <TextBlock>Reservation</TextBlock>
+                    <TextBox Width="95"></TextBox>
+                </StackPanel>
+                <StackPanel Margin="7">
+                    <TextBlock>GUID</TextBlock>
+                    <TextBox Width="95"></TextBox>
+                </StackPanel >
+                <StackPanel Margin="7">
+                    <TextBlock>Arrival Date From</TextBlock>
+                    <DatePicker></DatePicker>
+                </StackPanel>
+                <StackPanel Margin="7">
+                    <TextBlock>Arrival Date To</TextBlock>
+                    <DatePicker></DatePicker>
+                </StackPanel>
+                <StackPanel Margin="7" VerticalAlignment="Center">
+                    <Button Content="Search" FontSize="17" Width="100" Name="btnSearch" Click="btnSearch_Click"></Button>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</Window>

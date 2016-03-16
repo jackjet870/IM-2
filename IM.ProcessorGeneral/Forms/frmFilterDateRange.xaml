@@ -1,0 +1,235 @@
+﻿<Window xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"  x:Class="IM.ProcessorGeneral.Forms.frmFilterDateRange"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:IM.ProcessorGeneral.Forms"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="DateRange" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+    <Window.Resources>
+        <Style TargetType="{x:Type DataGrid}">
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{x:Static SystemColors.HighlightColor}"/>
+            </Style.Resources>
+            <Setter Property="AlternatingRowBackground" Value="LightGray"></Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="270"/>
+        </Grid.ColumnDefinitions>
+        <!--#region Grid SalesRooms -->
+        <StackPanel Orientation="Vertical" Name="pnlSalesRoom" Width="auto" Height="auto" Grid.Column="0" Visibility="Visible">
+            <CheckBox Name="chkAllSalesRoom" Content="All Sales Rooms" VerticalAlignment="Top" Margin="10" Checked="chkAllSalesRoom_Checked" Unchecked="chkAllSalesRoom_Checked"/>
+            <DataGrid Name="grdSalesRoom" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdSalesRoom_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding srN}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Content" Value="Sales Rooms"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StatusBar Height="30" Width="200" VerticalAlignment="Bottom">
+                <StatusBarItem x:Name="StatusBarNumSR" Content="" Width="200" HorizontalContentAlignment="Left" />
+            </StatusBar>
+        </StackPanel>
+        <!--#endregion-->
+        <!--#region Grid Categories -->
+        <StackPanel Orientation="Vertical" Name="pnlCategories" Width="auto" Height="auto" Grid.Column="1" Visibility="Visible">
+            <CheckBox Name="chkAllCategories" Content="All Categories" VerticalAlignment="Top" Margin="10" Checked="chkCategories_Checked" Unchecked="chkCategories_Checked"/>
+            <DataGrid Name="grdCategories" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdCategories_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding gcN}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Content" Value="Categories"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StatusBar Height="30" Width="200" VerticalAlignment="Bottom">
+                <StatusBarItem x:Name="StatusBarNumCat" Content="" Width="200" HorizontalContentAlignment="Left" />
+            </StatusBar>
+        </StackPanel>
+        <!--#endregion-->
+        <!--#region Grid Gifts -->
+        <StackPanel Orientation="Vertical" Name="pnlGifts" Width="auto" Height="auto" Grid.Column="2" Visibility="Visible">
+            <CheckBox Name="chkAllGifts" Content="All Gifts" VerticalAlignment="Top" Margin="10" Checked="chkGifts_Checked" Unchecked="chkGifts_Checked"/>
+            <DataGrid Name="grdGifts" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdGifts_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding giN}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Content" Value="Gifts"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StatusBar Height="30" Width="200" VerticalAlignment="Bottom">
+                <StatusBarItem x:Name="StatusBarNumGifts" Content="" Width="200" HorizontalContentAlignment="Left" />
+            </StatusBar>
+        </StackPanel>
+        <!--#endregion-->
+        <!--#region Grid RateTypes -->
+        <StackPanel Orientation="Vertical" Name="pnlRateTypes" Width="auto" Height="auto" Grid.Column="3" Visibility="Visible">
+            <CheckBox Name="chkAllRatetypes" Content="All Ratetypes" VerticalAlignment="Top" Margin="10" Checked="chkAllRatetypes_Checked" Unchecked="chkAllRatetypes_Checked"/>
+            <DataGrid Name="grdRatetypes" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdRatetypes_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding raN}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Content" Value="RateTypes"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StatusBar Height="30" Width="200" VerticalAlignment="Bottom">
+                <StatusBarItem x:Name="StatusBarNumRateT" Content="" Width="200" HorizontalContentAlignment="Left" />
+            </StatusBar>
+        </StackPanel>
+        <!--#endregion-->
+        <!--#region Grid Programs -->
+        <StackPanel Orientation="Vertical" Name="pnlPrograms" Width="auto" Height="auto" Grid.Column="4" Visibility="Visible">
+            <CheckBox Name="chkAllPrograms" Content="All Programs" VerticalAlignment="Top" Margin="10" Checked="chkPrograms_Checked" Unchecked="chkPrograms_Checked"/>
+            <DataGrid Name="grdPrograms" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdPrograms_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding pgN}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Content" Value="Programs"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StatusBar Height="30" Width="200" VerticalAlignment="Bottom">
+                <StatusBarItem x:Name="StatusBarNumProgs" Content="" Width="200" HorizontalContentAlignment="Left" />
+            </StatusBar>
+        </StackPanel>
+        <!--#endregion-->
+        <!--#region Grid LeadSource -->
+        <StackPanel Name="pnlLeadSource" Width="auto" Height="auto" Grid.Column="5" Visibility="Visible">
+            <CheckBox Name="chkAllLeadSources" Content="All LeadSources" VerticalAlignment="Top" Margin="10" Checked="chkLeadSources_Checked" Unchecked="chkLeadSources_Checked"/>
+            <DataGrid Name="grdLeadSources" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdLeadSources_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding lsN}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Content" Value="LeadSources"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StatusBar Height="30" Width="200" VerticalAlignment="Bottom">
+                <StatusBarItem x:Name="StatusBarNumLS" Content="" Width="200" HorizontalContentAlignment="Left" />
+            </StatusBar>
+        </StackPanel>
+        <!--#endregion-->
+        <!--#region Filtros -->
+        <Grid Grid.Column="7">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <!--#region Fechas-->
+            <Grid Margin="20 20 20 5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Border BorderThickness="1" BorderBrush="Gray" Grid.ColumnSpan="2" Grid.RowSpan="3" />
+                <ComboBox Name="cboDate" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="21" Margin="10 5 10 5" SelectionChanged="cboDate_SelectionChanged"></ComboBox>
+                <Label Grid.Row="1" VerticalAlignment="Center" Content="From" HorizontalContentAlignment="Right"></Label>
+                <Grid Name="pnlDtmStart" Grid.Row="1" Grid.Column="1">
+                    <!--<DatePicker Name="dtmStart" HorizontalAlignment="Left" VerticalAlignment="Center" Width="180" DisplayDate="" SelectedDate="{x:Static sys:DateTime.Today}" Height="26" SelectedDateFormat="Long" />-->
+                    <!--<ScrollBar Name="updStart" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,5,10,5" Scroll="upd_Scroll" Maximum="99999" Minimum="-99999"/>-->
+                    <xctk:DateTimePicker Name="dtmStart" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" Value="{x:Static sys:DateTime.Today}" Format="LongDate"/>
+                </Grid>
+                <Label Grid.Row="2" VerticalAlignment="Center" Content="To" HorizontalContentAlignment="Right" ></Label>
+                <Grid Name="pnlDtmEnd"  Grid.Row="2" Grid.Column="1">
+                    <xctk:DateTimePicker Name="dtmEnd" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" Value="{x:Static sys:DateTime.Today}" Format="LongDate"/>
+                    <!--<DatePicker Name="dtmEnd" HorizontalAlignment="Left" VerticalAlignment="Center" Width="180" DisplayDate="" SelectedDate="{x:Static sys:DateTime.Today}" Height="26" SelectedDateFormat="Long" />-->
+                    <!--<ScrollBar Name="updEnd" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,5,10,5" Scroll="upd_Scroll" Maximum="99999" Minimum="-99999"/>-->
+                </Grid>
+            </Grid>
+            <!--#endregion-->
+            <!--#region Checkboxs -->
+            <StackPanel Name="pnlCheckBox" Grid.Row="1" Margin="20 5 20 5">
+                <CheckBox Name="chkBasedOnArrival" Margin="5" Content="Based on arrival date"/>
+                <CheckBox Name="chkBasedOnBooking" Margin="5" Content="Based on booking date"/>
+                <CheckBox Name="chkQuinellas" Margin="5" Content="Consider Quinellas"/>
+                <CheckBox Name="chkDetailGifts" Margin="5" Content="Details Gifts"/>
+                <CheckBox Name="chkSalesByMembershipType" Margin="5" Content="Detail the Sales by Membership Type"/>
+            </StackPanel>
+            <!--#endregion-->
+            <!--#region Combobox Guest-Gifts -->
+            <Grid Name="pnlFiltrosGuestGift" Grid.Row="2" Margin="20 5 20 5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Label Name="lblStatus" Content="Status" VerticalAlignment="Center" HorizontalContentAlignment="Right"></Label>
+                <ComboBox Name="cboStatus" Grid.Column="1" VerticalAlignment="Center" Margin="10 0 10 0" DisplayMemberPath="Value" SelectedValuePath="Key"></ComboBox>
+                <Label Name="lblGiftReceiptType" Content="Type" Grid.Row="1" VerticalAlignment="Center" HorizontalContentAlignment="Right"></Label>
+                <ComboBox Name="cboGiftsReceiptType" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="10 0 10 0" DisplayMemberPath="Value" SelectedValuePath="Key"></ComboBox>
+                <Label Name="lblGuestID" Content="Guest ID" Grid.Row="2" VerticalAlignment="Center" HorizontalContentAlignment="Right"></Label>
+                <TextBox Name="txtGuestID" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="10 0 10 0"></TextBox>
+                <Label Name="lblGiftSale" Content="Gift Sale" Grid.Row="3" VerticalAlignment="Center" HorizontalContentAlignment="Right"></Label>
+                <ComboBox Name="cboGiftSale" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="10 0 10 0" DisplayMemberPath="Value" SelectedValuePath="Key"></ComboBox>
+                <ComboBox Name="cboSaveCourtesyTours" Grid.Row="4" Grid.ColumnSpan="2" Margin="10 0 10 0" DisplayMemberPath="Value" SelectedValuePath="Key" Height="21" VerticalAlignment="Top"></ComboBox>
+                <ComboBox Name="cboExternal" Grid.Row="5" Grid.ColumnSpan="2" Margin="10 0 10 0" DisplayMemberPath="Value" SelectedValuePath="Key"></ComboBox>
+            </Grid>
+            <!--#endregion -->
+            <!--#region Botones -->
+            <StackPanel Grid.Row="4" Orientation="Vertical" Margin="20 5 20 5">
+                <Button Name="btnOK" Content="_OK" Width="100" HorizontalAlignment="Left" Margin="10" Click="btnOK_Click"></Button>
+                <Button Name="btnCancel" Content="_Cancel" Width="100" HorizontalAlignment="Left" Margin="10" Click="btnCancel_Click"></Button>
+            </StackPanel>
+            <!--#endregion-->
+        </Grid>
+        <!--#endregion-->
+    </Grid>
+</Window>

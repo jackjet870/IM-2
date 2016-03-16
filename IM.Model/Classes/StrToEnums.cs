@@ -222,5 +222,37 @@ namespace IM.Model.Classes
     }
 
     #endregion
+
+    #region EnumGuestsMovementsTypeToString
+
+    /// <summary>
+    /// Convierte un Enumerado tipo EnumRole a String
+    /// </summary>
+    /// <param name="str">Cadena</param>
+    /// <history>
+    /// [jorcanche] 12/Mar/2016 Created
+    /// </history>
+    public static string EumGuestsMovementsTypeToString(EnumGuestsMovementsType MovementsType)
+    {
+      string str = string.Empty;
+      switch (MovementsType)
+      {
+        case EnumGuestsMovementsType.Contact:
+           str = "CN";
+          break;
+        case EnumGuestsMovementsType.Booking:
+            str = "BK";
+          break;
+        case EnumGuestsMovementsType.Show:
+            str = "SH";
+          break;
+        case EnumGuestsMovementsType.Sale:
+            str = "SL";
+          break;
+        }
+      return str;
+    }
+
+    #endregion
   }
 }
