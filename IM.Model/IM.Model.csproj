@@ -152,6 +152,7 @@
     <Compile Include="Enums\EnumFilterDateType.cs" />
     <Compile Include="Enums\EnumGiftSale.cs" />
     <Compile Include="Enums\EnumGiftsReceiptType.cs" />
+    <Compile Include="Enums\EnumGuestsMovementsType.cs" />
     <Compile Include="Enums\EnumLoginType.cs" />
     <Compile Include="Enums\EnumModule.cs" />
     <Compile Include="Enums\EnumPeriod.cs" />
@@ -683,6 +684,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>IMModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="GuestSearched.datasource" />
     <None Include="IMModel.edmx.diagram">
       <DependentUpon>IMModel.edmx</DependentUpon>
     </None>

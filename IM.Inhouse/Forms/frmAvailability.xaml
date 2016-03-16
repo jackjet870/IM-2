@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Inhouse"
         mc:Ignorable="d"       
-        WindowStyle="ToolWindow"  ShowInTaskbar="False"  WindowStartupLocation="CenterOwner" 
-        Title="frmAvail" Height="347.547" Width="459.623" Loaded="Window_Loaded" >
+        ShowInTaskbar="False"  WindowStartupLocation="CenterOwner" 
+        Title="Availability" Height="347.547" Width="459.623" Loaded="Window_Loaded" >
     <Canvas>
 
         <Label Content=""/>

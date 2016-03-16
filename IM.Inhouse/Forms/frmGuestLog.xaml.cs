@@ -20,17 +20,27 @@ namespace IM.Inhouse
   /// </summary>
   public partial class frmGuestLog : Window
   {
-     private int _idGuest;
+
+    #region Atributos
+    private int _idGuest;
+    #endregion
+
+    #region Constructores y destructores
     public frmGuestLog(int idGuest)
     {
       InitializeComponent();
       _idGuest = idGuest;
     }
+    #endregion
 
+    #region Eventos del formulario
+    #region Window_Loaded
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       CollectionViewSource GuestLogViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("GuestLogViewSource")));
       dgGuestLog.DataContext = BRGuests.GetGuestLog(_idGuest);
     }
+    #endregion 
+    #endregion
   }
 }
