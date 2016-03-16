@@ -84,6 +84,29 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
+    #region Row KeyDown
+    /// <summary>
+    /// abre la ventana detalle con el boton enter
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Row_KeyDown(object sender, KeyEventArgs e)
+    {
+      bool blnHandled = false;
+      switch (e.Key)
+      {
+        case Key.Enter:
+          {
+            Cell_DoubleClick(null, null);
+            blnHandled = true;
+            break;
+          }
+      }
+
+      e.Handled = blnHandled;
+    }
+
+    #endregion
 
     #region DoubleClick cell
     /// <summary>
@@ -94,8 +117,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-      DataGridRow row = sender as DataGridRow;
-      AssistanceStatus Assistance = (AssistanceStatus)row.DataContext;
+      AssistanceStatus Assistance = (AssistanceStatus)dgrAssitances.SelectedItem;
       frmAssistanceStatusDetail frmAssistanceDetail = new frmAssistanceStatusDetail();
       ObjectHelper.CopyProperties(frmAssistanceDetail.assistance,Assistance);
       frmAssistanceDetail.Owner = this;
@@ -145,8 +167,7 @@ namespace IM.Administrator.Forms
         lstAssistancesStatus.Sort((x, y) => string.Compare(x.atN, y.atN));//ordenamos la lista
         int nIndex = lstAssistancesStatus.IndexOf(frmAssistanceDetail.assistance);//Obtenemos el index del registro nuevo
         dgrAssitances.Items.Refresh();//regrescamos el grid
-        dgrAssitances.SelectedIndex = nIndex;//seleccionamos el registro nuevo
-        dgrAssitances.ScrollIntoView(dgrAssitances.Items[nIndex]);//movemos el foco hacía el registro nuevo
+        GridHelper.SelectRow(dgrAssitances, nIndex);
         StatusBarReg.Content = lstAssistancesStatus.Count+ " Assistances Status.";//Actualizamos el contador
       }
 
@@ -184,20 +205,21 @@ namespace IM.Administrator.Forms
     #endregion
 
     #region metodos
+    #region Load Assistance
     /// <summary>
     /// carga la lista de Assistance Status
     /// </summary>
     /// <history>
     /// [emoguel] 27/Feb/2016 Created
-    /// </history>
-    #region Load Assistance
+    /// </history>    
     protected void LoadAssitance()
     {
       List<AssistanceStatus> lstAssistance = BRAssistancesStatus.GetAssitanceStatus(_assistanceFilter, _nStatus);
       dgrAssitances.ItemsSource = lstAssistance;
       if (lstAssistance.Count > 0)
-      {        
-        dgrAssitances.SelectedIndex = 0;
+      {
+        dgrAssitances.Focus();
+        GridHelper.SelectRow(dgrAssitances, 0);        
       }
       StatusBarReg.Content = lstAssistance.Count + " Assistance Status.";
     }

@@ -72,7 +72,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmComputerDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmComputers.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Forms\frmCountries.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmCountryDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -144,8 +156,17 @@
     <Compile Include="Forms\frmAgencyDetail.xaml.cs">
       <DependentUpon>frmAgencyDetail.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmComputerDetail.xaml.cs">
+      <DependentUpon>frmComputerDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmComputers.xaml.cs">
+      <DependentUpon>frmComputers.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmCountries.xaml.cs">
       <DependentUpon>frmCountries.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmCountryDetail.xaml.cs">
+      <DependentUpon>frmCountryDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmCurrencyDetail.xaml.cs">
       <DependentUpon>frmCurrencyDetail.xaml</DependentUpon>

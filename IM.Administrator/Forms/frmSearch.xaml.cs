@@ -36,22 +36,7 @@ namespace IM.Administrator.Forms
     }
 
     #region eventos de los controles
-    #region Boton cancelar
-    /// <summary>
-    /// Cierra la ventana de busqueda sin guardar cambios en el formulario
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] 3/Mar/2016 Created
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      DialogResult = false;
-      this.Close();
-    }
-
-    #endregion
+    
     #region Botton aceptar
     /// <summary>
     /// Cierra la ventana de busqueda guardando los filtros de la busqueda a realizar
@@ -189,6 +174,15 @@ namespace IM.Administrator.Forms
             break;
           }
         #endregion
+
+        #region Computer
+        case "Computer":
+          {
+            cmbStatus.Visibility = Visibility.Collapsed;
+            lblSta.Visibility = Visibility.Collapsed;            
+            break;
+          } 
+          #endregion
       }
 
     }
@@ -212,7 +206,7 @@ namespace IM.Administrator.Forms
           {
             sDesc = txtD.Text;            
             DialogResult = true;
-            this.Close();
+            Close();
             break;
           }
         #endregion
@@ -245,12 +239,22 @@ namespace IM.Administrator.Forms
         #region Agency
         case "Agency":
           {
-            sSegment = cmbSegment.SelectedValue.ToString();
+            if (cmbSegment.SelectedValue != null)
+            {
+              sSegment = cmbSegment.SelectedValue.ToString();
+            }
             DialogResult = true;
             Close();
             break;
           }
-          #endregion
+        #endregion
+        default:
+          {
+            sDesc = txtD.Text;
+            DialogResult = true;
+            Close();
+            break;
+          }
       }
     }
     #endregion

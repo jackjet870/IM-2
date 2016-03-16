@@ -6,6 +6,7 @@ using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Administrator.Enums;
+using IM.Base.Helpers;
 
 namespace IM.Administrator.Forms
 {
@@ -123,42 +124,27 @@ namespace IM.Administrator.Forms
       #endregion
       if (sMsj == "")
       {
-        switch (mode)
-        {
-          #region add
-          case ModeOpen.add://add
-            {
-              nRes = BRChargeTos.SaveChargeTo(chargeTo, false);
-              break;
-            }
-          #endregion
-          #region Edit
-          case ModeOpen.edit://edit
-            {
-              nRes = BRChargeTos.SaveChargeTo(chargeTo, true);
-              break;
-            }
-            #endregion
-        }
+
+        nRes = BRChargeTos.SaveChargeTo(chargeTo, (mode==ModeOpen.edit));        
 
         #region validacion respuesta
         switch (nRes)
         {
           case 0:
             {
-              MessageBox.Show("Charge To not saved", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+              UIHelper.ShowMessage("Charge To not saved");
               break;
             }
           case 1:
             {
-              MessageBox.Show("Charge To successfully saved", "", MessageBoxButton.OK, MessageBoxImage.Information);
+              UIHelper.ShowMessage("Charge To successfully saved");
               DialogResult = true;
               this.Close();
               break;
             }
           case 2:
             {
-              MessageBox.Show("Charge To ID already exist please select another one", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+              UIHelper.ShowMessage("Charge To ID already exist please select another one");
               break;
             }
         }
@@ -166,25 +152,13 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        MessageBox.Show(sMsj.TrimEnd('\n'),"Intelligense Marketing");
+        UIHelper.ShowMessage(sMsj.TrimEnd('\n'));
       }
 
     }
 
     #endregion
-    #region Cancel
-    /// <summary>
-    /// Cierra la ventana detalle
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      DialogResult = false;
-      this.Close();
-    }
-
-    #endregion
+    
     #region LoadFrom
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {

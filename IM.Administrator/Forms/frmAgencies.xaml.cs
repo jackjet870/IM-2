@@ -68,7 +68,7 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    #region keyDown
+    #region window keyDown
     /// <summary>
     /// Valida las teclas INS|MAYSU|LOCKNUM
     /// </summary>
@@ -100,6 +100,30 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
+    #region Row KeyDown
+    /// <summary>
+    /// abre la ventana detalle con el boton enter
+    /// cambia de fila con el boton tab
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Row_KeyDown(object sender, KeyEventArgs e)
+    {
+      bool blnHandled = false;
+      switch (e.Key)
+      {
+        case Key.Enter:
+          {
+            Cell_DoubleClick(null, null);
+            blnHandled = true;
+            break;
+          }
+      }
+
+      e.Handled = blnHandled;
+    }
+
+    #endregion
     #region refresh
     /// <summary>
     /// Recarga los datos del grid
@@ -131,8 +155,7 @@ namespace IM.Administrator.Forms
         lstAgencies.Sort((x, y) => string.Compare(x.agN, y.agN));//ordenamos la lista
         int nIndex = lstAgencies.IndexOf(frmAgencyDetail.agency);//obtenemos el index del registro nuevo        
         dgrAgencies.Items.Refresh();//Refrescamos la lista
-        dgrAgencies.SelectedIndex = nIndex;//selecionamos el registor nuevo
-        dgrAgencies.ScrollIntoView(dgrAgencies.Items[nIndex]);//movemos el foco hacía el registro nuevo
+        GridHelper.SelectRow(dgrAgencies, nIndex);
         StatusBarReg.Content = lstAgencies.Count+" Agencies.";//Actualizamos el contador
       }     
     }
@@ -170,8 +193,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-      DataGridRow row = sender as DataGridRow;
-      Agency agency = (Agency)row.DataContext;
+      Agency agency = (Agency)dgrAgencies.SelectedItem;      
       frmAgencyDetail frmAgencyDetail = new frmAgencyDetail();
       ObjectHelper.CopyProperties(frmAgencyDetail.agency,agency); 
       frmAgencyDetail.Owner = this;
@@ -180,10 +202,11 @@ namespace IM.Administrator.Forms
       {
         ObjectHelper.CopyProperties(agency, frmAgencyDetail.agency);        
       }
-    } 
+    }
     #endregion
     #endregion
     #region métodos
+    #region Load Agencies
     /// <summary>
     /// Llena el grid de Agencies dependiendo de los filtros seleccionados
     /// </summary>
@@ -194,13 +217,16 @@ namespace IM.Administrator.Forms
     {
       List<Agency> lstAgencies = BRAgencies.GetAgencies(_agencyFilter, _nStatus);
       dgrAgencies.ItemsSource = lstAgencies;
-      if(lstAgencies.Count>0)
-      {
-        dgrAgencies.SelectedIndex = 0;
+      if (lstAgencies.Count > 0)
+      {        
+        dgrAgencies.Focus();
+        GridHelper.SelectRow(dgrAgencies,0);                
       }
       StatusBarReg.Content = lstAgencies.Count + " Agencies.";
     }
     #endregion
 
+    #endregion
+    
   }
 }

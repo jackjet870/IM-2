@@ -98,9 +98,8 @@ namespace IM.Administrator.Forms
     /// [emoguel] 26/Feb/2016 Created
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
-    {
-      DataGridRow row = sender as DataGridRow;
-      Area Area = (Area)row.DataContext;
+    {      
+      Area Area = (Area)dgrAreas.SelectedItem;
       frmAreaDetalle frmAreaDetalle = new frmAreaDetalle();
       frmAreaDetalle.Owner = this;
       ObjectHelper.CopyProperties(frmAreaDetalle.area, Area);
@@ -133,8 +132,7 @@ namespace IM.Administrator.Forms
         lstAreas.Sort((x, y) => string.Compare(x.arN, y.arN));//Ordenamos la lista
         int nIndex = lstAreas.IndexOf(frmAreaDetalle.area);//Obetenemos el index nuevo
         dgrAreas.Items.Refresh();//Refrescamos la lista
-        dgrAreas.SelectedIndex = nIndex;//Selecionamos el index nuevo
-        dgrAreas.ScrollIntoView(dgrAreas.Items[nIndex]);//Movemos el foco hacía el registro nuevo
+        GridHelper.SelectRow(dgrAreas, nIndex);
         StatusBarReg.Content =lstAreas.Count+" Areas.";//Actualizamos el contador
       }
 
@@ -153,6 +151,31 @@ namespace IM.Administrator.Forms
     {
       LoadAreas();
     }
+    #endregion
+
+    #region Row KeyDown
+    /// <summary>
+    /// abre la ventana detalle con el boton enter
+    /// cambia de fila con el boton tab
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Row_KeyDown(object sender, KeyEventArgs e)
+    {
+      bool blnHandled = false;
+      switch (e.Key)
+      {
+        case Key.Enter:
+          {
+            Cell_DoubleClick(null, null);
+            blnHandled = true;
+            break;
+          }
+      }
+
+      e.Handled = blnHandled;
+    }
+
     #endregion
 
     #region Search
@@ -196,8 +219,9 @@ namespace IM.Administrator.Forms
       List<Area> lstAreas = BRAreas.GetAreas(_areaFiltro, _nStatus);
       dgrAreas.ItemsSource = lstAreas;
       if (lstAreas.Count > 0)
-      {        
-        dgrAreas.SelectedIndex = 0;
+      {
+        dgrAreas.Focus();
+        GridHelper.SelectRow(dgrAreas, 0);
       }
       StatusBarReg.Content = lstAreas.Count + " Areas.";
 

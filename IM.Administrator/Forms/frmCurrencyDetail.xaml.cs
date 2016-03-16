@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Administrator.Enums;
 using IM.BusinessRules.BR;
 using IM.Model;
+using IM.Base.Helpers;
 
 namespace IM.Administrator.Forms
 {
@@ -83,42 +73,27 @@ namespace IM.Administrator.Forms
 
       if (sMsj == "")//Validar si hay cmapos vacios
       {
-        switch (mode)
-        {
-          #region insert
-          case ModeOpen.add://add
-            {
-              nRes = BRCurrencies.saveCurrency(currency, false);
-              break;
-            }
-          #endregion
-          #region edit
-          case ModeOpen.edit://Edit
-            {              
-              nRes = BRCurrencies.saveCurrency(currency, true);
-              break;
-            }
-            #endregion
-        }
 
+        nRes = BRCurrencies.saveCurrency(currency, (mode==ModeOpen.edit));
+        
         #region respuesta
         switch (nRes)
         {
           case 0:
             {
-              MessageBox.Show("Currency not saved", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+              UIHelper.ShowMessage("Currency not saved");
               break;
             }
           case 1:
             {
-              MessageBox.Show("Currency successfully saved", "", MessageBoxButton.OK, MessageBoxImage.Information);
+              UIHelper.ShowMessage("Currency successfully saved");
               DialogResult = true;
               this.Close();
               break;
             }
           case 2:
             {
-              MessageBox.Show("Currency ID already exist please select another one", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+             UIHelper.ShowMessage("Currency ID already exist please select another one");
               break;
             }
         }
@@ -126,19 +101,13 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        MessageBox.Show(sMsj.TrimEnd('\n'),"Intelligense Marketing");
+       UIHelper.ShowMessage(sMsj.TrimEnd('\n'));
       }
 
     }
 
     #endregion
-    #region Cancel
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      DialogResult = false;
-      Close();
-    } 
-    #endregion
+    
     #endregion
 
     #region metods

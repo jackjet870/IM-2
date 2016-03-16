@@ -19,7 +19,7 @@
                 <Label x:Name="lblUser" Content="Bienvenido usuario" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
             </Border>
         </StackPanel>
-        <ListView Grid.Row="1" Name="lstMenuAdm" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="7,3,7,10"  MouseDoubleClick="lstMenuAdm_MouseDoubleClick">
+        <ListView Grid.Row="1" Name="lstMenuAdm" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="7,3,7,10" KeyDown="lstMenuAdm_KeyDown"  MouseDoubleClick="lstMenuAdm_MouseDoubleClick">
             <ListView.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Gray">
                 </SolidColorBrush>

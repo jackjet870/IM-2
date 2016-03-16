@@ -80,9 +80,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-
-      DataGridRow row = sender as DataGridRow;
-      ChargeTo chargeTo = (ChargeTo)row.DataContext;
+      ChargeTo chargeTo = (ChargeTo)dgrChargeTo.SelectedItem;
       frmChargeToDetail frmChargeToDetail = new frmChargeToDetail();
       frmChargeToDetail.Owner = this;
       frmChargeToDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
@@ -167,13 +165,34 @@ namespace IM.Administrator.Forms
         lstCargeTos.Sort((x,y)=>string.Compare(x.ctID,y.ctID));//Ordenamos la lista
         int nIndex = lstCargeTos.IndexOf(frmChargeToDetail.chargeTo);//Obtenemos el index
         dgrChargeTo.Items.Refresh();//Refrescamos el grid
-        dgrChargeTo.SelectedIndex = nIndex;//Selecionamos el registro nuevo
-        dgrChargeTo.ScrollIntoView(dgrChargeTo.Items[nIndex]);//Movemos el foco hacia el registro nuevo
+        GridHelper.SelectRow(dgrChargeTo, nIndex);
         StatusBarReg.Content = lstCargeTos.Count + " Carge Tos.";
       }
     }
     #endregion
-    
+    #region Row KeyDown
+    /// <summary>
+    /// abre la ventana detalle con el boton enter
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Row_KeyDown(object sender, KeyEventArgs e)
+    {
+      bool blnHandled = false;
+      switch (e.Key)
+      {
+        case Key.Enter:
+          {
+            Cell_DoubleClick(null, null);
+            blnHandled = true;
+            break;
+          }
+      }
+
+      e.Handled = blnHandled;
+    }
+
+    #endregion
     #endregion
 
     #region Metodos
@@ -190,7 +209,8 @@ namespace IM.Administrator.Forms
       dgrChargeTo.ItemsSource = lstChargeTo;
       if (lstChargeTo.Count > 0)
       {
-        dgrChargeTo.SelectedIndex = 0;
+        dgrChargeTo.Focus();
+        GridHelper.SelectRow(dgrChargeTo, 0);
       }
 
       StatusBarReg.Content = lstChargeTo.Count + " Charge To.";

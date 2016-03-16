@@ -102,7 +102,7 @@ namespace IM.Administrator.Forms
 
     #region Cell Double Click
     /// <summary>
-    /// Muestra la ventada Charge To preview
+    /// Muestra la ventana Detalle
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -111,8 +111,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-      DataGridRow row = sender as DataGridRow;
-      Contract contract = (Contract)row.DataContext;
+      Contract contract = (Contract)dgrContracts.SelectedItem;
       frmContractsDetail frmContractDetail = new frmContractsDetail();
       frmContractDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
       ObjectHelper.CopyProperties(frmContractDetail.contract,contract);
@@ -145,8 +144,7 @@ namespace IM.Administrator.Forms
         lstContracts.Sort((x, y) => string.Compare(x.cnID, y.cnID));//ordenamos la lista        
         int nIndex = lstContracts.IndexOf(frmContractDetail.contract);//obtenemos el index del registro nuevo
         dgrContracts.Items.Refresh();//refrescamos la lista
-        dgrContracts.SelectedIndex = nIndex;//Seleccionamos el registro nuevo
-        dgrContracts.ScrollIntoView(dgrContracts.Items[nIndex]);//Movemos el foco hacía el registro nuevo
+        GridHelper.SelectRow(dgrContracts, nIndex);
         StatusBarReg.Content = lstContracts.Count + " Contracts.";
       }
     }
@@ -172,11 +170,36 @@ namespace IM.Administrator.Forms
         _nStatus = frmSearch.nStatus;
         LoadContracts();
       }
-    } 
+    }
+    #endregion
+
+    #region Row KeyDown
+    /// <summary>
+    /// abre la ventana detalle con el boton enter
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Row_KeyDown(object sender, KeyEventArgs e)
+    {
+      bool blnHandled = false;
+      switch (e.Key)
+      {
+        case Key.Enter:
+          {
+            Cell_DoubleClick(null, null);
+            blnHandled = true;
+            break;
+          }
+      }
+
+      e.Handled = blnHandled;
+    }
+
     #endregion
     #endregion
 
     #region Metodos
+    #region LoadContracts
     /// <summary>
     /// Llena el grid de contratos
     /// </summary>
@@ -185,17 +208,19 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void LoadContracts()
     {
-      
-      List<Contract> lstContracts = BRContracts.getContracts(_contractFilter,_nStatus);
+
+      List<Contract> lstContracts = BRContracts.getContracts(_contractFilter, _nStatus);
       dgrContracts.ItemsSource = lstContracts;
-      if(lstContracts.Count>0)
-      {       
-        dgrContracts.SelectedIndex = 0;        
+      if (lstContracts.Count > 0)
+      {
+        dgrContracts.Focus();
+        GridHelper.SelectRow(dgrContracts, 0);
       }
       StatusBarReg.Content = lstContracts.Count + " Contracts.";
-    }
+    } 
+    #endregion
     #endregion
 
-    
+
   }
 }

@@ -81,8 +81,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-      DataGridRow row = sender as DataGridRow;
-      Currency currency = (Currency)row.DataContext;
+      Currency currency = (Currency)dgrCurrencies.SelectedItem;
       frmCurrencyDetail frmCurrencyDetail = new frmCurrencyDetail();
       frmCurrencyDetail.Owner = this;
       frmCurrencyDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
@@ -178,11 +177,34 @@ namespace IM.Administrator.Forms
         lstCurrencies.Sort((x, y) => string.Compare(x.cuN, y.cuN));//ordenamos la lista
         int nIndex = lstCurrencies.IndexOf(frmCurrencyDetail.currency);//obtenemos el index del registro nuevo
         dgrCurrencies.Items.Refresh();//refrescamos la lista
-        dgrCurrencies.SelectedIndex = nIndex;//seleccionamos el registro nuevo
-        dgrCurrencies.ScrollIntoView(dgrCurrencies.Items[nIndex]);//movemos el foco hacía el registro nuevo
+        GridHelper.SelectRow(dgrCurrencies, nIndex);
         StatusBarReg.Content = lstCurrencies.Count + " Currencies.";//Actualizamos el contador
       }
-    } 
+    }
+    #endregion
+
+    #region Row KeyDown
+    /// <summary>
+    /// abre la ventana detalle con el boton enter
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Row_KeyDown(object sender, KeyEventArgs e)
+    {
+      bool blnHandled = false;
+      switch (e.Key)
+      {
+        case Key.Enter:
+          {
+            Cell_DoubleClick(null, null);
+            blnHandled = true;
+            break;
+          }
+      }
+
+      e.Handled = blnHandled;
+    }
+
     #endregion
     #endregion
 
@@ -199,8 +221,9 @@ namespace IM.Administrator.Forms
       List<Currency> lstCurrencies = BRCurrencies.GetCurrencies(_currencyFilter, _nStatus);
       dgrCurrencies.ItemsSource = lstCurrencies;
       if (lstCurrencies.Count > 0)
-      {        
-        dgrCurrencies.SelectedIndex = 0;
+      {
+        dgrCurrencies.Focus();
+        GridHelper.SelectRow(dgrCurrencies,0);
       }
 
       StatusBarReg.Content = lstCurrencies.Count + " Currencies.";

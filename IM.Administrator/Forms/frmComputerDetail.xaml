@@ -1,0 +1,43 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmComputerDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms"
+        mc:Ignorable="d" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" DataContext="{Binding computer}"
+        Title="Computer Detail" Height="248" Width="338" ResizeMode="NoResize" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
+    <Grid Margin="10,10,14,2" >
+        <!--#region Formato del grid-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="71"/>
+            <ColumnDefinition Width="81*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="34"/>
+            <RowDefinition Height="44"/>
+        </Grid.RowDefinitions>
+        <!--#endregion-->
+        <!--#region títulos-->
+        <Label Grid.Column="0" Grid.Row="0">ID</Label>
+        <Label Grid.Column="0" Grid.Row="1">Description</Label>
+        <Label Grid.Column="0" Grid.Row="2" Content="IP Address"/>
+        <Label Grid.Column="0" Grid.Row="3" Content="Desk"/>
+        <!--#endregion-->
+        <!--#region Datos-->
+        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding cpID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="53"/>
+        <TextBox Name="txtN" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding cpN}" CharacterCasing="Upper"  MaxLength="50"/>
+        <TextBox Name="txtAd" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" Text="{Binding cpIpAddress}"  IsEnabled="False" MaxLength="100"/>
+        <ComboBox Name="cmbDesk" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" DisplayMemberPath="dkN" SelectedValuePath="dkID" SelectedValue="{Binding cpdk}"/>        
+        
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Command="{Binding btnAccept_Click}">
+            <AccessText Text="_Accept"/>
+        </Button>
+        <Button Name="btnCancel" Width="60" IsCancel="True" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right">
+            <AccessText Text="_Cancel"/>
+        </Button>
+        <!--#endregion-->
+    </Grid>
+</Window>

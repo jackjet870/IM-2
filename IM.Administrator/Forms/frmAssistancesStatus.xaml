@@ -17,33 +17,34 @@
         </StatusBar>
         <!--#endregion-->
         <!--#region toolbar -->
-        <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch">
-            <Button ToolTip="Refresh list" Name="btnRef" Click="btnRef_Click">
+        <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch" KeyboardNavigation.TabNavigation="Continue">
+            <Button ToolTip="Refresh list" Name="btnRef" Click="btnRef_Click" Command="{Binding btnRef_Click}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/Refresh.png" />
-                    <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Refresh</TextBlock>
+                    <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Refresh"/>
                 </StackPanel>
             </Button>
-            <Button ToolTip="Create new Asistance Status" Name="btnAdd" Click="btnAdd_Click" IsEnabled="False" >
+            <Button ToolTip="Create new Asistance Status" Name="btnAdd" Click="btnAdd_Click" IsEnabled="False" Command="{Binding btnAdd_Click}" >
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/button_add.png" />
-                    <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Add</TextBlock>
+                    <AccessText Text="_Add" Margin="3,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
-            <Button Name="btnSearch" ToolTip="Search Assistances Status" Click="btnSearch_Click">
+            <Button Name="btnSearch" ToolTip="Search Assistances Status" Click="btnSearch_Click" Command="{Binding btnSearch_Click}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/btnSearch.png" />
-                    <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Search</TextBlock>
+                    <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Search"/>
                 </StackPanel>
             </Button>
         </ToolBar>
         <!--#endregion-->
         <!--#region DataGrid de Assiatnce Status-->
         <DataGrid x:Name="dgrAssitances" Margin="6,6,6,6" AutoGenerateColumns="False" DataContext="{Binding lstAssistance}" IsReadOnly="True"
-                 SelectionMode="Single" >
+                 SelectionMode="Single" Focusable="True" >
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseDoubleClick" Handler="Cell_DoubleClick"/>
+                    <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>

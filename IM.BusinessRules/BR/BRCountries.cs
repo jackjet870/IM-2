@@ -63,5 +63,36 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
+
+    #region saveCountry
+
+    public static int saveCountry(Country country,bool blnUpdate)
+    {
+      int nRes = 0;
+      using (var dbContext = new IMEntities())
+      {
+        if(blnUpdate)//Si es actualizar
+        {
+          dbContext.Entry(country).State = System.Data.Entity.EntityState.Modified;
+          nRes = dbContext.SaveChanges();
+        }
+        else//Si es insertar
+        {
+          Country countryValid = dbContext.Countries.Where(co => co.coID == country.coID).FirstOrDefault<Country>();
+          if (countryValid != null)//Existe un registro con el mismo ID
+          {
+            nRes = 2;
+          }
+          else
+          {
+            dbContext.Countries.Add(country);
+            nRes = dbContext.SaveChanges();
+          }
+        }
+      }
+
+      return nRes;
+    }
+    #endregion
   }
 }
