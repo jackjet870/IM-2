@@ -28,8 +28,8 @@ namespace IM.Model
             this.Sales = new HashSet<Sale>();
             this.SalesLogs = new HashSet<SaleLog>();
             this.ShowsSalesmen = new HashSet<ShowSalesman>();
+            this.GuestMain = new HashSet<Guest>();
             this.GuestsAdditional = new HashSet<Guest>();
-            this.Guests = new HashSet<Guest>();
             this.GuestsGroups = new HashSet<GuestsGroup>();
         }
     
@@ -293,9 +293,9 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ShowSalesman> ShowsSalesmen { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Guest> GuestsAdditional { internal get; set; }
+        public virtual ICollection<Guest> GuestMain { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Guest> Guests { internal get; set; }
+        public virtual ICollection<Guest> GuestsAdditional { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GuestsGroup> GuestsGroups { internal get; set; }
     }
