@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False"
-        mc:Ignorable="d" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" 
         Title="Contract Detail" Height="238" Width="338" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" DataContext="{Binding contract}">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
@@ -35,13 +35,17 @@
                 <ColumnDefinition Width="50*" />
                 <ColumnDefinition Width="50*"/>
             </Grid.ColumnDefinitions>
-            <CheckBox Name="chkA" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" IsChecked="{Binding cnA}" Height="13" IsEnabled="False">Active</CheckBox>            
+            <CheckBox Name="chkA" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding cnA}" Height="13" IsEnabled="False">Active</CheckBox>            
             <TextBox Name="txtMinDays" Grid.Column="0" IsEnabled="False" Text="{Binding cnMinDaysTours}" PreviewTextInput="txtMinDays_PreviewTextInput" MaxLength="10"/>
         </Grid>
-        
 
-        <Button Name="btnAccept" Width="60" Height="30" Content="Accept" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click"/>
-        <Button Name="btnCancel" Width="60" Height="30" Content="Cancel" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" />
+
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Command="{Binding btnAccept_Click}">
+            <AccessText Text="_Accept"/>
+        </Button>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" IsCancel="True">
+            <AccessText Text="_Cancel"/>
+        </Button>
         <!--#endregion-->
     </Grid>
 </Window>

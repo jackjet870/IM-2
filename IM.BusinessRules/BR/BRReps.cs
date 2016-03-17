@@ -14,7 +14,10 @@ namespace IM.BusinessRules.BR
     /// <param name="rep">Entidad con filtros adicionales</param>
     /// <param name="nStatus">-1. Todos los registros | 0. Registros inactivos | 1.Registros Activos</param>
     /// <returns>Lista de reps</returns>
+    /// <history>
     /// [Emoguel] created 11/03/2016
+    /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto 
+    /// </history>
     public static List<Rep> GetReps(Rep rep,int nStatus=-1)
     {
       using (var dbContext = new IMEntities())
@@ -27,9 +30,12 @@ namespace IM.BusinessRules.BR
           query = query.Where(r=>r.rpA==blnStatus);
         }
 
-        if(!string.IsNullOrWhiteSpace(rep.rpID))//Filtro por ID
+        if (rep != null)//Valida si se tiene un objeto
         {
-          query = query.Where(r=>r.rpID==rep.rpID);
+          if (!string.IsNullOrWhiteSpace(rep.rpID))//Filtro por ID
+          {
+            query = query.Where(r => r.rpID == rep.rpID);
+          }
         }
 
         return query.OrderBy(r=>r.rpID).ToList();

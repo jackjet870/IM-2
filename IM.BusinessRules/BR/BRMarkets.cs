@@ -34,8 +34,9 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de markets</returns>
     /// <history>
     /// [emoguel]created 09/03/2016
+    /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
     /// </history>
-    public static List<Market> GetMarkets(Market market,int nStatus=-1)    
+    public static List<Market> GetMarkets(Market market=null,int nStatus=-1)    
     {
       using (var dbContext = new IMEntities())
       {
@@ -47,14 +48,17 @@ namespace IM.BusinessRules.BR
           query = query.Where(mkt => mkt.mkA == market.mkA);
         }
 
-        if(!string.IsNullOrWhiteSpace(market.mkID))//Filtro por ID
+        if (market != null)//Valida si se tiene un objeto
         {
-          query = query.Where(mkt=>mkt.mkID==market.mkID);
-        }
+          if (!string.IsNullOrWhiteSpace(market.mkID))//Filtro por ID
+          {
+            query = query.Where(mkt => mkt.mkID == market.mkID);
+          }
 
-        if(!string.IsNullOrWhiteSpace(market.mkN))//Filtro por Nombre(Descripcion)
-        {
-          query = query.Where(mkt=>mkt.mkN==market.mkN);
+          if (!string.IsNullOrWhiteSpace(market.mkN))//Filtro por Nombre(Descripcion)
+          {
+            query = query.Where(mkt => mkt.mkN.Contains(market.mkN));
+          }
         }
         return query.ToList();
       }

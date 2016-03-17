@@ -55,10 +55,12 @@
     <Compile Include="BR\BRChargeCalculationTypes.cs" />
     <Compile Include="BR\BRChargeTos.cs" />
     <Compile Include="BR\BRClubs.cs" />
+    <Compile Include="BR\BRComputers.cs" />
     <Compile Include="BR\BRContracts.cs" />
     <Compile Include="BR\BRCountries.cs" />
     <Compile Include="BR\BRCreditCardTypes.cs" />
     <Compile Include="BR\BRCurrencies.cs" />
+    <Compile Include="BR\BRDesks.cs" />
     <Compile Include="BR\BRExchangeRate.cs" />
     <Compile Include="BR\BRGifts.cs" />
     <Compile Include="BR\BRGraph.cs" />

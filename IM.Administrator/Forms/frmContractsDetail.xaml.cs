@@ -23,14 +23,6 @@ namespace IM.Administrator.Forms
 
 
     #region event controls
-    #region Cancel
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      DialogResult = false;
-      this.Close();
-    }
-    #endregion
-
     #region Accept
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
@@ -60,38 +52,26 @@ namespace IM.Administrator.Forms
       int nRes = 0;
       if (sMsj == "")//Todos los campos estan llenos
       {
-        switch (mode)
-        {
-          case ModeOpen.add://Agregar
-            {
-              nRes = BRContracts.SaveContract(contract, false);
-              break;
-            }
-          case ModeOpen.edit://Editar
-            {
-              nRes = BRContracts.SaveContract(contract, true);
-              break;
-            }
-        }
+        nRes = BRContracts.SaveContract(contract, (mode==ModeOpen.edit));      
 
         #region respuesta
         switch (nRes)//Se valida la respuesta de la operacion
         {
           case 0:
             {
-              MessageBox.Show("Contract not saved", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+              UIHelper.ShowMessage("Contract not saved");
               break;
             }
           case 1:
             {
-              MessageBox.Show("Contract successfully saved", "", MessageBoxButton.OK, MessageBoxImage.Information);
+              UIHelper.ShowMessage("Contract successfully saved");
               DialogResult = true;
               this.Close();
               break;
             }
           case 2:
             {
-              MessageBox.Show("Contract ID already exist please select another one", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+              UIHelper.ShowMessage("Contract ID already exist please select another one");
               break;
             }
         }
@@ -99,7 +79,7 @@ namespace IM.Administrator.Forms
       }
       else
       {//Hace falta llenar campos
-        MessageBox.Show(sMsj.TrimEnd('\n'),"Intelligense Marketing");
+        UIHelper.ShowMessage(sMsj.TrimEnd('\n'));
       }
     }
 

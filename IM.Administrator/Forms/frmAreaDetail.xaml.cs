@@ -4,6 +4,8 @@ using System.Windows.Input;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Administrator.Enums;
+using IM.Base.Helpers;
+
 namespace IM.Administrator.Forms
 {
   /// <summary>
@@ -100,23 +102,7 @@ namespace IM.Administrator.Forms
       OpenMode();
     }
     #endregion
-
-    #region Boton cancelar
-    /// <summary>
-    /// Cierra la ventana
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] 26/Feb/2016 Created
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      DialogResult = false;
-      this.Close();
-    }
-    #endregion
-
+    
     #region Boton Aceptar
     /// <summary>
     /// Agrega o actualiza los registros del catalogo Areas
@@ -145,43 +131,27 @@ namespace IM.Administrator.Forms
       }
       #endregion
       if (sMsj == "")
-      {        
-        switch (mode)
-        {
-          #region add
-          case ModeOpen.add://add
-            {
-              nRes = BRAreas.SaveArea(false, area);
-              break;
-            }
-          #endregion
-          #region Edit
-          case ModeOpen.edit://edit
-            {
-              nRes = BRAreas.SaveArea(true, area);
-              break;
-            }
-            #endregion
-        }
+      {
+        nRes = BRAreas.SaveArea((mode==ModeOpen.edit), area);        
 
         #region Respuesta
         switch (nRes)//Se valida la repuesta
         {
           case 0:
             {
-              MessageBox.Show("Area not saved", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+              UIHelper.ShowMessage("Area not saved");
               break;
             }
           case 1:
             {
-              MessageBox.Show("Area successfully saved", "", MessageBoxButton.OK, MessageBoxImage.Information);
+              UIHelper.ShowMessage("Area successfully saved");
               DialogResult = true;
               this.Close();
               break;
             }
           case 2:
             {
-              MessageBox.Show("Area ID already exist please select another one", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+              UIHelper.ShowMessage("Area ID already exist please select another one");
               break;
             }
         }
@@ -189,7 +159,7 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        MessageBox.Show(sMsj.TrimEnd('\n'),"Intelligense Marketing");
+        UIHelper.ShowMessage(sMsj.TrimEnd('\n'));
       }
     }
     #endregion

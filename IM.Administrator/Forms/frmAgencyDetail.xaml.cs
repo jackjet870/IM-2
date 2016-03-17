@@ -1,23 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Model;
 using IM.Administrator.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using System.Globalization;
-using System.Reflection;
-using System.ComponentModel;
 
 namespace IM.Administrator.Forms
 {
@@ -118,6 +108,8 @@ namespace IM.Administrator.Forms
 
       if(sMsj=="")
       {
+        agency.agcl = ((agency.agcl == -1) ? null : agency.agcl);
+        agency.agse = ((agency.agse == "-1") ? null : agency.agse);
         int nRes = 0;
         #region Operacion
         switch (mode)
@@ -128,7 +120,7 @@ namespace IM.Administrator.Forms
               break;
             }
           case ModeOpen.edit:
-            {
+            {                    
               bool blnMarkets = ((agency.agmk.ToString() != _Market) ? true : false);
               bool blnUnMot = ((agency.agum.ToString() != _unavailableMotive) ? true : false);
               nRes = BRAgencies.SaveAgency(agency, true,blnUnMot,blnMarkets);
@@ -142,19 +134,19 @@ namespace IM.Administrator.Forms
         {
           case 0:
             {
-              MessageBox.Show("Agency not saved", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+              UIHelper.ShowMessage("Agency not saved");
               break;
             }
           case 1:
             {
-              MessageBox.Show("Agency successfully saved", "", MessageBoxButton.OK, MessageBoxImage.Information);
+              UIHelper.ShowMessage("Agency successfully saved");
               DialogResult = true;
               this.Close();
               break;
             }
           case 2:
             {
-              MessageBox.Show("Agency ID already exist please select another one", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+              UIHelper.ShowMessage("Agency ID already exist please select another one");
               break;
             }
         }
@@ -162,26 +154,11 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        MessageBox.Show(sMsj.TrimEnd('\n'),"Intelligense Marketing");
+        UIHelper.ShowMessage(sMsj.TrimEnd('\n'));
       }
     }
     #endregion
-
-    #region Cancel
-    /// <summary>
-    /// cierra la ventana 
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 09/03/2016
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      DialogResult = false;
-      Close();
-    }
-    #endregion
+    
 
     #region Texbox Sólo Numeros
     /// <summary>
@@ -274,7 +251,7 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void LoadReps()
     {
-      List<Rep> lstReps = BRReps.GetReps(new Rep(), 1);
+      List<Rep> lstReps = BRReps.GetReps(new Rep(), 1);      
       cmbRep.ItemsSource = lstReps;
     }
     #endregion
@@ -288,7 +265,11 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void LoadSegments()
     {
-      List<SegmentByAgency> lstSegmentsByAgencies = BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());
+      List<SegmentByAgency> lstSegmentsByAgencies = BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());    
+      if(lstSegmentsByAgencies.Count>0)
+      {
+        lstSegmentsByAgencies.Insert(0, new SegmentByAgency { seID = "-1", seN = "" });
+      }
       cmbSegment.ItemsSource = lstSegmentsByAgencies;
     }
 
@@ -304,6 +285,10 @@ namespace IM.Administrator.Forms
     protected void LoadClubs()
     {
       List<Club> lstClubs = BRClubs.GetClubs(new Club());
+      if (lstClubs.Count > 0)
+      {
+        lstClubs.Insert(0, new Club { clID = -1, clN = "" });
+      }
       cmbClub.ItemsSource = lstClubs;
     }
     #endregion

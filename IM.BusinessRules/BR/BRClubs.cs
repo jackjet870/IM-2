@@ -18,8 +18,9 @@ namespace IM.BusinessRules.BR
     /// <returns>Devuelve Lista de Clubs</returns>
     /// <history>
     /// [emoguel] created 03/11/2016
+    /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
     /// </history>
-    public static List<Club> GetClubs(Club club, int nStatus = -1)
+    public static List<Club> GetClubs(Club club=null, int nStatus = -1)
     {
       using (var dbContext = new IMEntities())
       {
@@ -32,14 +33,17 @@ namespace IM.BusinessRules.BR
           query = query.Where(cb => cb.clA == blnEstatus);
         }
 
-        if (club.clID > 0)//Filtro por ID
+        if (club != null)//Si se tiene un objeto
         {
-          query = query.Where(cb => cb.clID == club.clID);
-        }
+          if (club.clID > 0)//Filtro por ID
+          {
+            query = query.Where(cb => cb.clID == club.clID);
+          }
 
-        if (!string.IsNullOrWhiteSpace(club.clN))//Filtro por nombre
-        {
-          query = query.Where(cb => cb.clN == club.clN);
+          if (!string.IsNullOrWhiteSpace(club.clN))//Filtro por nombre
+          {
+            query = query.Where(cb => cb.clN == club.clN);
+          }
         }
 
         return query.OrderBy(cb=>cb.clN).ToList();

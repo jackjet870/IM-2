@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Inhouse"
         mc:Ignorable="d"
-        Title="frnContact" Height="301.547" Width="459.623" Loaded="Window_Loaded">
+        Title="Contact" Height="301.547" Width="459.623" Loaded="Window_Loaded">
     <Canvas>
         <StackPanel Grid.ColumnSpan="4" Grid.Row="2" Orientation="Horizontal" Height="50" HorizontalAlignment="Center" Canvas.Left="30" Canvas.Top="211" >
             <Button x:Name="btnEdit" Content="Edit" FontSize="17" Width="80" Margin="9" Click="btnEdit_Click" IsEnabled="True"/>
@@ -16,7 +16,7 @@
         <Label x:Name="lblUserName"  Background="AliceBlue" Content="Nombre de Usuario" FontSize="20" Width="400" Height="50"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="26,15,26,43"/>
         <Label x:Name="lblguPRAvail" Content="PR:" FontSize="17"  HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="2" Canvas.Left="36" Canvas.Top="130"/>
         <Label x:Name="lblguInfoD" Content="Date:" FontSize="17"  HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom" Canvas.Left="20" Canvas.Top="77"/>
-        <TextBox x:Name="txtguPRInfo" FontSize="17" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="30" Grid.RowSpan="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="131" Canvas.Left="86" Canvas.Top="134" IsReadOnly="True"/>
+        <TextBox x:Name="txtguPRInfo" FontSize="17" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="30" Grid.RowSpan="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="131" Canvas.Left="86" Canvas.Top="134" IsReadOnly="True" LostFocus="txtguPRInfo_LostFocus"/>
         <TextBox x:Name="txtguInfoD" FontSize="17" HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" VerticalAlignment="Top" Width="123" Grid.Row="1" Canvas.Left="96" Canvas.Top="81" IsReadOnly="True"/>
         <ComboBox x:Name="cboguPRInfo" HorizontalAlignment="Left" VerticalAlignment="Top" Width="205" Height="29" Canvas.Left="227" Canvas.Top="135" SelectionChanged="cboguPRInfo_SelectionChanged"  IsReadOnly="True" IsEnabled="False" SelectedValuePath="peID" DisplayMemberPath="peN" />
         <CheckBox x:Name="chkguInfo" FontSize="17" Content="Contact" Canvas.Left="37" Canvas.Top="179" IsEnabled="False"/>

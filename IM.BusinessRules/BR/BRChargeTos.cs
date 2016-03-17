@@ -13,13 +13,14 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Devuelve la lista de chargeTo
     /// </summary>
-    /// <param name="chargeTo">Entidad que contiene los filtros adicionales</param>
+    /// <param name="chargeTo">Entidad que contiene los filtros adicionales, puede ser null</param>
     /// <param name="nCxC">-1.Todos | 0. CxC=falso | 1. CxC=true</param>
     /// <returns>Lista de Charge To</returns>
     /// <history>
     /// [Emoguel] created 01/03/2016
+    /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto
     /// </history>
-    public static List<ChargeTo> GetChargeTos(ChargeTo chargeTo, int nCxC)
+    public static List<ChargeTo> GetChargeTos(ChargeTo chargeTo=null, int nCxC=-1)
     {
       
       List<ChargeTo> lstCharge = new List<ChargeTo>();
@@ -35,15 +36,19 @@ namespace IM.BusinessRules.BR
           query = query.Where(c=>c.ctIsCxC==blnCxc);
         }
 
-        if(!string.IsNullOrWhiteSpace(chargeTo.ctID))//Filtra por ID
+        if (chargeTo != null)//Si se recibió objeto
         {
-          query = query.Where(c=>c.ctID==chargeTo.ctID);
+          if (!string.IsNullOrWhiteSpace(chargeTo.ctID))//Filtra por ID
+          {
+            query = query.Where(c => c.ctID == chargeTo.ctID);
+          }
+
+          if (chargeTo.ctPrice > 0)//Filtra por Price
+          {
+            query = query.Where(c => c.ctPrice == chargeTo.ctPrice);
+          }
         }
 
-        if(chargeTo.ctPrice>0)//Filtra por Price
-        {
-          query = query.Where(c=>c.ctPrice==chargeTo.ctPrice);
-        }
 
         lstCharge = query.OrderBy(c=>c.ctID).ToList();
       }

@@ -18,8 +18,9 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de contratc</returns>
     /// <history>
     /// [Emoguel] created 01/03/2016
+    /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
     /// </history>
-    public static List<Contract> getContracts(Contract contract, int nStatus=-1)
+    public static List<Contract> getContracts(Contract contract=null, int nStatus=-1)
     {
       
       List<Contract> lstContracts = new List<Contract>();
@@ -35,14 +36,17 @@ namespace IM.BusinessRules.BR
           query = query.Where(c=>c.cnA==blnStatus);
         }
 
-        if(!string.IsNullOrWhiteSpace(contract.cnID))//Filtra por ID
+        if (contract != null)//valida si se tiene objeto
         {
-          query.Where(c=>c.cnID==contract.cnID);
-        }
+          if (!string.IsNullOrWhiteSpace(contract.cnID))//Filtra por ID
+          {
+            query=query.Where(c => c.cnID == contract.cnID);
+          }
 
-        if(!string.IsNullOrWhiteSpace(contract.cnN))//Filtra por Descripción
-        {
-          query = query.Where(c=>c.cnN==contract.cnN);
+          if (!string.IsNullOrWhiteSpace(contract.cnN))//Filtra por Descripción
+          {
+            query = query.Where(c => c.cnN.Contains( contract.cnN));
+          }
         }
 
         lstContracts = query.OrderBy(c=>c.cnN).ToList();

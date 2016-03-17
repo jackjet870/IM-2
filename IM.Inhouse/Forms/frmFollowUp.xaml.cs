@@ -31,15 +31,11 @@ namespace IM.Inhouse
       lblUserName.Content = App.User.User.peN;
       cboguPRFollow.ItemsSource = BRPersonnel.GetPersonnel(App.User.Location.loID, "PR");
     }
-
     #endregion
 
-    private void btnSave_Click(object sender, RoutedEventArgs e)
-    {
-      chkguFollow.IsChecked = true;
-      BRGuests.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);
-    }
+    #region Eventos del formulario    
 
+    #region Window_Loaded
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       cboguPRFollow.ItemsSource = BRPersonnel.GetPersonnel(App.User.Location.loID, "ALL", "PR");
@@ -50,8 +46,19 @@ namespace IM.Inhouse
       }
       cboguPRFollow.SelectedValue = _guest.guPRInfo;
       chkguFollow.IsChecked = _guest.guInfo;
+
       cboguPRFollow.IsEnabled = txtguPRFollow.IsEnabled = false;
     }
+    #endregion
+
+    #region cboguPRInfo_SelectionChanged
+    private void cboguPRInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      txtguPRFollow.Text = ((PersonnelShort)cboguPRFollow.SelectedItem).peID;
+    }
+    #endregion 
+
+    #region btnEdit_Click
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
       frmLogin log = new frmLogin(null, false, EnumLoginType.Normal, false);
@@ -59,7 +66,7 @@ namespace IM.Inhouse
       if (log.IsAuthenticated)
       {
         if (log.userData.HasPermission(EnumPermission.Register, EnumPermisionLevel.ReadOnly))
-        {         
+        {
           _user = log.userData;
           txtguFollowD.Text = BRHelpers.GetServerDate().Date.ToString();
           btnSave.IsEnabled = cboguPRFollow.IsEnabled = true;
@@ -70,20 +77,32 @@ namespace IM.Inhouse
         }
       }
     }
+    #endregion
+
+    #region btnLog_Click
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
       frmGuestLog frmGuestLog = new frmGuestLog(_guestID);
       frmGuestLog.ShowDialog();
     }
 
+    #endregion
+
+    #region btnCancel_Click
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       this.Close();
     }
+    #endregion
 
-    private void cboguPRInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    #region btnSave_Click
+    private void btnSave_Click(object sender, RoutedEventArgs e)
     {
-      txtguPRFollow.Text = ((PersonnelShort)cboguPRFollow.SelectedItem).peID;
+      chkguFollow.IsChecked = true;
+      BRGuests.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);
     }
+    #endregion
+    
+    #endregion
   }
 }

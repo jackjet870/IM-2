@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.ComponentModel;
+using System.Windows.Controls;
 using System.Linq.Expressions;
 using System.Linq;
 using System.Dynamic;
@@ -206,6 +207,24 @@ Func<IEnumerable<T>, TData> dataSelector)
       }
       return eo;
     } 
+    #endregion
+
+    #region SelectRow
+    /// <summary>
+    /// Selecciona un registro del grid
+    /// </summary>
+    /// <param name="grid">Grid para seleccionar el registro</param>
+    /// <param name="nIndex">index del registro</param>
+    /// <history>
+    /// [emoguel] created 15/03/2016
+    /// </history>
+    public static void SelectRow(DataGrid grid, int nIndex)
+    {
+      grid.Focus();
+      grid.SelectedIndex = nIndex;
+      grid.ScrollIntoView(grid.SelectedItem);
+      grid.CurrentCell = new DataGridCellInfo(grid.SelectedItem, grid.Columns[0]);
+    }
     #endregion
   }
 }

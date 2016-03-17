@@ -44,11 +44,12 @@ namespace IM.Administrator.Forms
     protected void LoadCreditCardTypes()
     {
       List<CreditCardType> lstCreditCardTypes = BRCreditCardTypes.GetCreditCardTypes(_creditCardTypeFilter, _nStatus);
+      dgrCreditCard.ItemsSource = lstCreditCardTypes;
       if (lstCreditCardTypes.Count > 0)
       {
-        dgrCreditCard.SelectedIndex = 0;
-      }
-      dgrCreditCard.ItemsSource = lstCreditCardTypes;
+        dgrCreditCard.Focus();
+        GridHelper.SelectRow(dgrCreditCard, 0);
+      }      
       StatusBarReg.Content = lstCreditCardTypes.Count() + "  Credit Card Types.";
     }
     #endregion
@@ -98,7 +99,13 @@ namespace IM.Administrator.Forms
       frmCreditCard.mode = ModeOpen.add;
       if (frmCreditCard.ShowDialog() == true)
       {
-        LoadCreditCardTypes();
+        List<CreditCardType> lstCreditCradTypes = (List<CreditCardType>)dgrCreditCard.ItemsSource;
+        lstCreditCradTypes.Add(frmCreditCard.creditCardType);//Agregamos el registro nuevo
+        lstCreditCradTypes.Sort((x, y) => string.Compare(x.ccN, y.ccN));//Ordenamos la lista
+        int nIndex = lstCreditCradTypes.IndexOf(frmCreditCard.creditCardType);//Obtenemos el index del registro nuevo
+        dgrCreditCard.Items.Refresh();//refrescamos la lista
+        GridHelper.SelectRow(dgrCreditCard, nIndex);
+        StatusBarReg.Content = lstCreditCradTypes.Count + " Credit Card Types.";
       }
     } 
     #endregion
@@ -188,21 +195,42 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-      DataGridRow row = sender as DataGridRow;
-      CreditCardType creditCardType = (CreditCardType)row.DataContext;
+      CreditCardType creditCardType = (CreditCardType)dgrCreditCard.SelectedItem;
       frmCreditCardTypesDetail frmCrediCard = new frmCreditCardTypesDetail();
       frmCrediCard.Owner = this;
       frmCrediCard.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
       ObjectHelper.CopyProperties(frmCrediCard.creditCardType,creditCardType);
       if(frmCrediCard.ShowDialog()==true)
       {
-        LoadCreditCardTypes();
+        ObjectHelper.CopyProperties(creditCardType, frmCrediCard.creditCardType);
       }
     }
     #endregion
+    #region Row KeyDown
+    /// <summary>
+    /// abre la ventana detalle con el boton enter
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Row_KeyDown(object sender, KeyEventArgs e)
+    {
+      bool blnHandled = false;
+      switch (e.Key)
+      {
+        case Key.Enter:
+          {
+            Cell_DoubleClick(null, null);
+            blnHandled = true;
+            break;
+          }
+      }
+
+      e.Handled = blnHandled;
+    }
 
     #endregion
+    #endregion
 
-    
+
   }
 }

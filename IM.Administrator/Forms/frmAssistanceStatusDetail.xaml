@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False"
-        mc:Ignorable="d" ResizeMode="NoResize" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        mc:Ignorable="d" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
         Title="Assistance Status Detail" DataContext="{Binding Assistance}" Height="208" Width="338" Loaded="Window_Loaded">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
@@ -28,8 +28,12 @@
         <TextBox Name="txtN" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding atN}"  IsEnabled="False" MaxLength="30"/>        
         <CheckBox Name="chkA" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" IsChecked="{Binding atA}" Height="13" IsEnabled="False">Active</CheckBox>
 
-        <Button Name="btnAccept" Width="60" Height="30" Content="Accept" Grid.Column="1" Grid.Row="3" Margin="0,7,75,7" Click="btnAccept_Click"  HorizontalAlignment="Right"/>
-        <Button Name="btnCancel" Width="60" Height="30" Content="Cancel" Grid.Column="1" Grid.Row="3" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" />
+        <Button Name="btnAccept" Width="60" Height="30"  Grid.Column="1" Grid.Row="3" Margin="0,7,75,7" Click="btnAccept_Click" Command="{Binding btnAccept_Click}"  HorizontalAlignment="Right">
+            <AccessText Text="_Accept"/>
+        </Button>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="3" Margin="0,7"  HorizontalAlignment="Right" IsCancel="True">
+            <AccessText Text="_Cancel"/>
+        </Button>
 
         <!--#endregion-->
 

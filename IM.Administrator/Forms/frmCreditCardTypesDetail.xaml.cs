@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Administrator.Enums;
 using IM.Model;
 using IM.BusinessRules.BR;
+using IM.Base.Helpers;
 
 namespace IM.Administrator.Forms
 {
@@ -152,19 +142,19 @@ namespace IM.Administrator.Forms
         {
           case 0:
             {
-              MessageBox.Show("Credit Card Type not saved", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+              UIHelper.ShowMessage("Credit Card Type not saved");
               break;
             }
           case 1:
             {
-              MessageBox.Show("Credit Card Type successfully saved", "", MessageBoxButton.OK, MessageBoxImage.Information);
+              UIHelper.ShowMessage("Credit Card Type successfully saved");
               DialogResult = true;
               this.Close();
               break;
             }
           case 2:
             {
-              MessageBox.Show("Credit Card Type ID already exist please select another one", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+              UIHelper.ShowMessage("Credit Card Type ID already exist please select another one");
               break;
             }
         }
@@ -172,7 +162,7 @@ namespace IM.Administrator.Forms
       }
       else
       {//Hace falta llenar campos
-        MessageBox.Show(sMsj.TrimEnd('\n'),"Intelligense Marketing");
+        UIHelper.ShowMessage(sMsj.TrimEnd('\n'));
       }
     }
 

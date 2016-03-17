@@ -23,11 +23,11 @@ namespace IM.Administrator.Forms
   public partial class frmSearch : Window
   {
     #region Variables
-    public string sID;//Id a filtrar
-    public string sDesc;//Descripcion a filtrar
+    public string sID="";//Id a filtrar
+    public string sDesc="";//Descripcion a filtrar
     public int nStatus;//Estatus a filtrar
     public string sForm = "Default";//Formulario desde el que se utiliza
-    public string sSegment;//Sement by agency para cuando se abra desde agency 
+    public string sSegment="";//Sement by agency para cuando se abra desde agency 
     #endregion
 
     public frmSearch()
@@ -36,22 +36,7 @@ namespace IM.Administrator.Forms
     }
 
     #region eventos de los controles
-    #region Boton cancelar
-    /// <summary>
-    /// Cierra la ventana de busqueda sin guardar cambios en el formulario
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] 3/Mar/2016 Created
-    /// </history>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {
-      DialogResult = false;
-      this.Close();
-    }
-
-    #endregion
+    
     #region Botton aceptar
     /// <summary>
     /// Cierra la ventana de busqueda guardando los filtros de la busqueda a realizar
@@ -149,15 +134,9 @@ namespace IM.Administrator.Forms
     {
       txtID.Text = sID;
       cmbStatus.SelectedValue = nStatus;
+      txtD.Text = sDesc;
       switch (sForm)
-      {
-        #region Default
-        case "Default":
-          {
-            txtD.Text = sDesc;
-            break;
-          }
-        #endregion
+      { 
 
         #region ChargeTo
         case "ChargeTo":
@@ -173,7 +152,7 @@ namespace IM.Administrator.Forms
             }
             else
             {
-              txtID.Text = "";
+              txtD.Text = "";
             }
             break;
           }
@@ -185,10 +164,19 @@ namespace IM.Administrator.Forms
             cmbSegment.Visibility = Visibility.Visible;
             lblSegment.Visibility = Visibility.Visible;
             loadSegments();
-            cmbSegment.SelectedValue = sSegment;
+            cmbSegment.SelectedValue = sSegment;            
             break;
           }
         #endregion
+
+        #region Computer
+        case "Computer":
+          {
+            cmbStatus.Visibility = Visibility.Collapsed;
+            lblSta.Visibility = Visibility.Collapsed;            
+            break;
+          } 
+          #endregion
       }
 
     }
@@ -205,17 +193,10 @@ namespace IM.Administrator.Forms
     {
       nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
       sID = txtID.Text;
+      sDesc = txtD.Text;
       switch (sForm)
       {
-        #region Default
-        case "Default":
-          {
-            sDesc = txtD.Text;            
-            DialogResult = true;
-            this.Close();
-            break;
-          }
-        #endregion
+        
         #region ChargeTo
         case "ChargeTo":
           {            
@@ -236,6 +217,7 @@ namespace IM.Administrator.Forms
             }
             else
             {
+              sDesc = "0";
               DialogResult = true;
               this.Close();
             }
@@ -245,12 +227,22 @@ namespace IM.Administrator.Forms
         #region Agency
         case "Agency":
           {
-            sSegment = cmbSegment.SelectedValue.ToString();
+            if (cmbSegment.SelectedValue != null)
+            {
+              sSegment = cmbSegment.SelectedValue.ToString();
+            }
+            sDesc = txtD.Text;
             DialogResult = true;
             Close();
             break;
           }
-          #endregion
+        #endregion
+        default:
+          {            
+            DialogResult = true;
+            Close();
+            break;
+          }
       }
     }
     #endregion

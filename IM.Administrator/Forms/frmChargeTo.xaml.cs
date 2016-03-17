@@ -80,16 +80,14 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-
-      DataGridRow row = sender as DataGridRow;
-      ChargeTo chargeTo = (ChargeTo)row.DataContext;
+      ChargeTo chargeTo = (ChargeTo)dgrChargeTo.SelectedItem;
       frmChargeToDetail frmChargeToDetail = new frmChargeToDetail();
       frmChargeToDetail.Owner = this;
       frmChargeToDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
       ObjectHelper.CopyProperties(frmChargeToDetail.chargeTo,chargeTo);
       if(frmChargeToDetail.ShowDialog()==true)
       {
-        LoadChargeTo();
+        ObjectHelper.CopyProperties(chargeTo, frmChargeToDetail.chargeTo);
       }
     }
 
@@ -158,14 +156,43 @@ namespace IM.Administrator.Forms
       frmChargeToDetail frmChargeToDetail = new frmChargeToDetail();
       frmChargeToDetail.chargeTo = new ChargeTo();
       frmChargeToDetail.Owner = this;
-      frmChargeToDetail.mode = ModeOpen.add;
+      frmChargeToDetail.mode = ModeOpen.add;//insertar
+
       if (frmChargeToDetail.ShowDialog() == true)
       {
-        LoadChargeTo();
+        List<ChargeTo> lstCargeTos = (List<ChargeTo>)dgrChargeTo.ItemsSource;
+        lstCargeTos.Add(frmChargeToDetail.chargeTo);//Agregamos el nuevo registro
+        lstCargeTos.Sort((x,y)=>string.Compare(x.ctID,y.ctID));//Ordenamos la lista
+        int nIndex = lstCargeTos.IndexOf(frmChargeToDetail.chargeTo);//Obtenemos el index
+        dgrChargeTo.Items.Refresh();//Refrescamos el grid
+        GridHelper.SelectRow(dgrChargeTo, nIndex);
+        StatusBarReg.Content = lstCargeTos.Count + " Carge Tos.";
       }
     }
     #endregion
-    
+    #region Row KeyDown
+    /// <summary>
+    /// abre la ventana detalle con el boton enter
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Row_KeyDown(object sender, KeyEventArgs e)
+    {
+      bool blnHandled = false;
+      switch (e.Key)
+      {
+        case Key.Enter:
+          {
+            Cell_DoubleClick(null, null);
+            blnHandled = true;
+            break;
+          }
+      }
+
+      e.Handled = blnHandled;
+    }
+
+    #endregion
     #endregion
 
     #region Metodos
@@ -182,7 +209,8 @@ namespace IM.Administrator.Forms
       dgrChargeTo.ItemsSource = lstChargeTo;
       if (lstChargeTo.Count > 0)
       {
-        dgrChargeTo.SelectedIndex = 0;
+        dgrChargeTo.Focus();
+        GridHelper.SelectRow(dgrChargeTo, 0);
       }
 
       StatusBarReg.Content = lstChargeTo.Count + " Charge To.";

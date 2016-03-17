@@ -2,9 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Uid="frmCurrencies"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Uid="frmCurrencies" ShowInTaskbar="False"
         xmlns:local="clr-namespace:IM.Administrator.Forms" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
-        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" WindowStartupLocation="CenterOwner"
         Title="Currencies" Height="407" Width="470" Loaded="Window_Loaded" KeyDown="Window_KeyDown">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->
@@ -16,23 +16,23 @@
         </StatusBar>
         <!--#endregion-->
         <!--#region toolbar -->
-        <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch">
-            <Button ToolTip="Refresh list." Name="btnRef" BorderBrush="Transparent" BorderThickness="1" Click="btnRef_Click">
+        <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch" KeyboardNavigation.TabNavigation="Continue">
+            <Button ToolTip="Refresh list." Name="btnRef" Click="btnRef_Click" Command="{Binding btnRef_Click}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/Refresh.png" />
-                    <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Refresh</TextBlock>
+                    <AccessText Text="_Refresh" Margin="3,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
-            <Button ToolTip="Create a new Currencie." Name="btnAdd" IsEnabled="True" Click="btnAdd_Click">
+            <Button ToolTip="Create new Currency." Name="btnAdd" IsEnabled="True" Click="btnAdd_Click" Command="{Binding btnAdd_Click}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/button_add.png" />
-                    <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Add</TextBlock>
+                    <AccessText Text="_Add" Margin="3,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
-            <Button Name="btnSearch" ToolTip="Search a Currencie." Click="btnSearch_Click">
+            <Button Name="btnSearch" ToolTip="Search a Currencies." Click="btnSearch_Click" Command="{Binding btnSearch_Click}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/btnSearch.png" />
-                    <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Search</TextBlock>
+                    <AccessText Text="_Search" Margin="3,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
         </ToolBar>
@@ -43,6 +43,7 @@
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseDoubleClick" Handler="Cell_DoubleClick"/>
+                    <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
