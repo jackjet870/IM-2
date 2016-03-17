@@ -15,22 +15,26 @@ namespace IM.BusinessRules.BR
     /// <returns>Devuelve una lista de tipo computer</returns>
     /// <history>
     /// [emoguel] created 16/03/2016
+    /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
     /// </history>
-    public static List<Computer> GetComputers(Computer computer)
+    public static List<Computer> GetComputers(Computer computer=null)
     {
       using (var dbContext = new IMEntities())
       {
         var query = from cp in dbContext.Computers
                     select cp;
 
-        if(!string.IsNullOrWhiteSpace(computer.cpID))//Filtro por ID
+        if (computer != null)//Si se tiene objeto
         {
-          query = query.Where(cp=>cp.cpID==computer.cpID);
-        }
+          if (!string.IsNullOrWhiteSpace(computer.cpID))//Filtro por ID
+          {
+            query = query.Where(cp => cp.cpID == computer.cpID);
+          }
 
-        if(!string.IsNullOrWhiteSpace(computer.cpN))//Filtro por descripcion (Nombre)
-        {
-          query = query.Where(cp=>cp.cpN==computer.cpN);
+          if (!string.IsNullOrWhiteSpace(computer.cpN))//Filtro por descripcion (Nombre)
+          {
+            query = query.Where(cp => cp.cpN.Contains(computer.cpN));
+          }
         }
 
         return query.OrderBy(cp => cp.cpN).ToList();

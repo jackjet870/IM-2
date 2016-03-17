@@ -23,11 +23,11 @@ namespace IM.Administrator.Forms
   public partial class frmSearch : Window
   {
     #region Variables
-    public string sID;//Id a filtrar
-    public string sDesc;//Descripcion a filtrar
+    public string sID="";//Id a filtrar
+    public string sDesc="";//Descripcion a filtrar
     public int nStatus;//Estatus a filtrar
     public string sForm = "Default";//Formulario desde el que se utiliza
-    public string sSegment;//Sement by agency para cuando se abra desde agency 
+    public string sSegment="";//Sement by agency para cuando se abra desde agency 
     #endregion
 
     public frmSearch()
@@ -134,15 +134,9 @@ namespace IM.Administrator.Forms
     {
       txtID.Text = sID;
       cmbStatus.SelectedValue = nStatus;
+      txtD.Text = sDesc;
       switch (sForm)
-      {
-        #region Default
-        case "Default":
-          {
-            txtD.Text = sDesc;
-            break;
-          }
-        #endregion
+      { 
 
         #region ChargeTo
         case "ChargeTo":
@@ -158,7 +152,7 @@ namespace IM.Administrator.Forms
             }
             else
             {
-              txtID.Text = "";
+              txtD.Text = "";
             }
             break;
           }
@@ -170,7 +164,7 @@ namespace IM.Administrator.Forms
             cmbSegment.Visibility = Visibility.Visible;
             lblSegment.Visibility = Visibility.Visible;
             loadSegments();
-            cmbSegment.SelectedValue = sSegment;
+            cmbSegment.SelectedValue = sSegment;            
             break;
           }
         #endregion
@@ -199,17 +193,10 @@ namespace IM.Administrator.Forms
     {
       nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
       sID = txtID.Text;
+      sDesc = txtD.Text;
       switch (sForm)
       {
-        #region Default
-        case "Default":
-          {
-            sDesc = txtD.Text;            
-            DialogResult = true;
-            Close();
-            break;
-          }
-        #endregion
+        
         #region ChargeTo
         case "ChargeTo":
           {            
@@ -230,6 +217,7 @@ namespace IM.Administrator.Forms
             }
             else
             {
+              sDesc = "0";
               DialogResult = true;
               this.Close();
             }
@@ -243,14 +231,14 @@ namespace IM.Administrator.Forms
             {
               sSegment = cmbSegment.SelectedValue.ToString();
             }
+            sDesc = txtD.Text;
             DialogResult = true;
             Close();
             break;
           }
         #endregion
         default:
-          {
-            sDesc = txtD.Text;
+          {            
             DialogResult = true;
             Close();
             break;

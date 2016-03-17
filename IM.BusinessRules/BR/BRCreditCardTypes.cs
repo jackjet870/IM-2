@@ -16,8 +16,9 @@ namespace IM.BusinessRules.BR
     /// <returns>lista de credit card types</returns>
     /// <history>
     /// [Emoguel] created 07/03/2016
+    /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
     /// </history>
-    public static List<CreditCardType> GetCreditCardTypes(CreditCardType creditCardType, int nStatus = -1)
+    public static List<CreditCardType> GetCreditCardTypes(CreditCardType creditCardType=null, int nStatus = -1)
     {
       using (var dbContext = new IMEntities())
       {
@@ -29,14 +30,17 @@ namespace IM.BusinessRules.BR
           query = query.Where(cct => cct.ccA == blnEstatus);
         }
 
-        if (!string.IsNullOrWhiteSpace(creditCardType.ccID))//Validación por ID
+        if (creditCardType != null)//Valida si se tiene un obejto
         {
-          query = query.Where(cct => cct.ccID == creditCardType.ccID);
-        }
+          if (!string.IsNullOrWhiteSpace(creditCardType.ccID))//Validación por ID
+          {
+            query = query.Where(cct => cct.ccID == creditCardType.ccID);
+          }
 
-        if (!string.IsNullOrWhiteSpace(creditCardType.ccN))//Validación por nombre/Descripción
-        {
-          query = query.Where(cct => cct.ccN == creditCardType.ccN);
+          if (!string.IsNullOrWhiteSpace(creditCardType.ccN))//Validación por nombre/Descripción
+          {
+            query = query.Where(cct => cct.ccN.Contains(creditCardType.ccN));
+          }
         }
 
         return query.OrderBy(cct=>cct.ccN).ToList();

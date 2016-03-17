@@ -144,6 +144,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmDesks.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmSearch.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -209,6 +213,10 @@
     </Compile>
     <Compile Include="Forms\frmCurrencies.xaml.cs">
       <DependentUpon>frmCurrencies.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmDesks.xaml.cs">
+      <DependentUpon>frmDesks.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Forms\frmSearch.xaml.cs">
       <DependentUpon>frmSearch.xaml</DependentUpon>

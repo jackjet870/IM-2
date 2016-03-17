@@ -37,7 +37,7 @@ namespace IM.BusinessRules.BR
 
         if(!string.IsNullOrWhiteSpace(desk.dkN))//Filtro por Nombre Descripcion
         {
-          query = query.Where(dk=>dk.dkN==desk.dkN);
+          query = query.Where(dk=>dk.dkN.Contains(desk.dkN));
         }
 
         return query.OrderBy(dk => dk.dkN).ToList();

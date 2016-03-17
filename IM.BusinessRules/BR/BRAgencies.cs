@@ -25,13 +25,14 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene el catalogo de agencias con todas sus columnas
     /// </summary>
-    /// <param name="agency">Objeto con filtros extra</param>
+    /// <param name="agency">Objeto con filtros extra, puede ser null</param>
     /// <param name="nStatus">-1. Todos los registros | 0.- Registros inactivos | 1. Registros Activos</param>
     /// <returns>Devuelve una lista de Agency</returns>
     /// <history>
     /// [emoguel] created 08/03/2016
+    /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
     /// </history>
-    public static List<Agency> GetAgencies(Agency agency, int nStatus = -1)
+    public static List<Agency> GetAgencies(Agency agency=null, int nStatus = -1)
     {
       using (var dbContext = new IMEntities())
       {
@@ -44,21 +45,23 @@ namespace IM.BusinessRules.BR
           query = query.Where(ag => ag.agA == blnStatus);
         }
 
-        if (!string.IsNullOrWhiteSpace(agency.agID))//Filtro por ID
+        if (agency != null)//Validacion del objeto
         {
-          query = query.Where(ag => ag.agID == agency.agID);
-        }
+          if (!string.IsNullOrWhiteSpace(agency.agID))//Filtro por ID
+          {
+            query = query.Where(ag => ag.agID == agency.agID);
+          }
 
-        if (!string.IsNullOrWhiteSpace(agency.agN))//Filtro por Nombre(Descripcion)
-        {
-          query = query.Where(ag => ag.agN == agency.agN);
-        }
+          if (!string.IsNullOrWhiteSpace(agency.agN))//Filtro por Nombre(Descripcion)
+          {
+            query = query.Where(ag => ag.agN.Contains(agency.agN));
+          }
 
-        if(!string.IsNullOrWhiteSpace(agency.agse))//Filtro segment by agency
-        {
-          query = query.Where(ag => ag.agse == agency.agse);
+          if (!string.IsNullOrWhiteSpace(agency.agse))//Filtro segment by agency
+          {
+            query = query.Where(ag => ag.agse == agency.agse);
+          }
         }
-
         return query.OrderBy(ag => ag.agN).ToList();
 
       }

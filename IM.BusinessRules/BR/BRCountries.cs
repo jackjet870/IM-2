@@ -35,8 +35,9 @@ namespace IM.BusinessRules.BR
     /// <returns>Devuelve una lista de tipo country</returns>
     /// <history>
     /// [emoguel] created 14/03/2016
+    /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
     /// </history>
-    public static List<Country> GetCountries(Country country,int nStatus=-1)
+    public static List<Country> GetCountries(Country country=null,int nStatus=-1)
     {
       using (var dbContext = new IMEntities())
       {
@@ -49,23 +50,33 @@ namespace IM.BusinessRules.BR
           query = query.Where(ct=>ct.coA==blnStatus);
         }
 
-        if(!string.IsNullOrWhiteSpace(country.coID))//Filtro por ID
+        if (country != null)//Valida si se tiene un objeto
         {
-          query = query.Where(ct => ct.coID == country.coID);
-        }
+          if (!string.IsNullOrWhiteSpace(country.coID))//Filtro por ID
+          {
+            query = query.Where(ct => ct.coID == country.coID);
+          }
 
-        if(!string.IsNullOrWhiteSpace(country.coN))//Filtro por descripcion(Nombre)
-        {
-          query.Where(ct=>ct.coN==country.coN);
+          if (!string.IsNullOrWhiteSpace(country.coN))//Filtro por descripcion(Nombre)
+          {
+            query=query.Where(ct => ct.coN.Contains(country.coN));
+          }
         }
-
         return query.OrderBy(ct => ct.coN).ToList();
       }
     }
     #endregion
 
     #region saveCountry
-
+    /// <summary>
+    /// Agrega|actualiza un registro en el catalogo countries
+    /// </summary>
+    /// <param name="country">Objeto a guardar en la BD</param>
+    /// <param name="blnUpdate">True. Actualiza | False. Agrega</param>
+    /// <returns>0. No se guardó | 1. Guardado correctamente | 2.Se tiene un objeto con el mismo ID</returns>
+    /// <history>
+    /// [emoguel] created 16/03/2016
+    /// </history>
     public static int saveCountry(Country country,bool blnUpdate)
     {
       int nRes = 0;
