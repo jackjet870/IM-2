@@ -76,9 +76,9 @@ namespace IM.Base.Helpers
       //Numero de Columnas del contenido del datatable
       int dtColumnsNumber = dt.Columns.Count;
       //Insertamos etiqueta de filtros
-      ws.Cells[1, 1].Value = "Filters";
-      ws.Cells[1, 1].Style.Font.Bold = true;
-      ws.Cells[1, 1].Style.Font.Size = 14;
+      ws.Cells[1, dtColumnsNumber].Value = "Filters";
+      ws.Cells[1, dtColumnsNumber].Style.Font.Bold = true;
+      ws.Cells[1, dtColumnsNumber].Style.Font.Size = 14;
       //Insertamos las filas que necesitamos para los filtros
       ws.InsertRow(2, filter.Count);
 
@@ -86,20 +86,21 @@ namespace IM.Base.Helpers
       foreach (Tuple<string, string> item in filter)
       {
         cFiltros++;
-        ws.Cells[string.Concat("A", cFiltros)].Value = item.Item1;
-        ws.Cells[string.Concat("A", cFiltros)].Style.Font.Bold = true;
-        ws.Cells[string.Concat("B", cFiltros)].Value = item.Item2;
+
+        ws.Cells[1, dtColumnsNumber - 1].Value = item.Item1;
+        ws.Cells[1, dtColumnsNumber - 1].Style.Font.Bold = true;
+        ws.Cells[1, dtColumnsNumber].Value = item.Item2;
+
       }
 
-      //Nombre del reporte y rango de fecha
-      ws.Cells[1, dtColumnsNumber].Value = reportName.Item1;
-      ws.Cells[1, dtColumnsNumber].Style.Font.Bold = true;
-      ws.Cells[1, dtColumnsNumber].Style.Font.Size = 14;
-      ws.Cells[1, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-      ws.Cells[2, dtColumnsNumber].Value = reportName.Item2;
-      ws.Cells[1, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-      ws.Cells[1, dtColumnsNumber, 2, dtColumnsNumber].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Double);
-      
+      ws.Cells[1, 1].Value = reportName.Item1;
+      ws.Cells[1, 1].Style.Font.Bold = true;
+      ws.Cells[1, 1].Style.Font.Size = 14;
+      ws.Cells[1,1,1,1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+      ws.Cells[2, 1].Value = reportName.Item2;
+      ws.Cells[2, 1,2,1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+      ws.Cells[1, 1, 1, 1].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Double;
+
       //Insertamos las filas que vamos a necesitar empezando en la fila 7
       ws.InsertRow(filterNumber + 2, dt.Rows.Count+1);
 

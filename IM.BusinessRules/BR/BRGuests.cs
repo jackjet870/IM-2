@@ -163,6 +163,7 @@ namespace IM.BusinessRules.BR
         return (from gu in dbContext.Guests where gu.guID == guestId select gu).Single();
       }
     }
+    #endregion
 
     #region SaveGuest
     /// <summary>
@@ -204,9 +205,25 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
+
+    #region GetGuestByPR
+    /// <summary>
+    /// Obtiene Guests por PR
+    /// </summary>
+    /// <param name="dateFrom"></param>
+    /// <param name="dateTo"></param>
+    /// <param name="leadSources"></param>
+    /// <param name="PR"></param>
+    /// <param name="filtros"></param>
+    /// <returns></returns>
+    public static List<GuestByPR> GetGuestsByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, List<bool> filtros)
+    {
+      using (var dbContext = new IM.Model.IMEntities())
+      {
+        return dbContext.USP_OR_GetGuestsByPR(dateFrom, dateTo, leadSources, PR, filtros[0], filtros[1], filtros[2], filtros[3], filtros[4], filtros[5], filtros[6]).ToList();
+      }
+    }
+
     #endregion
-  }
+  } 
 }
-
-
-
