@@ -13,12 +13,14 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Devuelve el catalogo de AssistanceSatatus
     /// </summary>
+    /// <param name="assistanceStatus">objeto con filtros extra, puede ser null</param>
     /// <param name="nStatus">-1. Sin filtro| 0. Inactivos| 1. Activos</param>
     /// <returns>Lista de AssitanceStatus</returns>
     /// <history>
     /// [emoguel] 27/Feb/2016 Created
+    /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
     /// </history>
-    public static List<AssistanceStatus> GetAssitanceStatus(AssistanceStatus assistanceStatus, int nStatus=-1)
+    public static List<AssistanceStatus> GetAssitanceStatus(AssistanceStatus assistanceStatus=null, int nStatus=-1)
     {
       
       List<AssistanceStatus> lstAssitanceStatus = new List<AssistanceStatus>();
@@ -33,15 +35,19 @@ namespace IM.BusinessRules.BR
           query = query.Where(ast => ast.atA == bStat);
         }
 
-        if(!string.IsNullOrWhiteSpace(assistanceStatus.atID))//Filtra por ID
+        if (assistanceStatus != null)//validacion del objeto
         {
-          query = query.Where(ast=>ast.atID==assistanceStatus.atID);
+          if (!string.IsNullOrWhiteSpace(assistanceStatus.atID))//Filtra por ID
+          {
+            query = query.Where(ast => ast.atID == assistanceStatus.atID);
+          }
+
+          if (!string.IsNullOrWhiteSpace(assistanceStatus.atN))//Filtra por Descripción
+          {
+            query = query.Where(ast => ast.atN.Contains(assistanceStatus.atN));
+          }
         }
 
-        if(!string.IsNullOrWhiteSpace(assistanceStatus.atN))//Filtra por Descripción
-        {
-          query = query.Where(ast=>ast.atN==assistanceStatus.atN);
-        }
         lstAssitanceStatus = query.OrderBy(a=>a.atN).ToList();
       }
 

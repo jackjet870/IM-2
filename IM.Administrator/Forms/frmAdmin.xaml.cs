@@ -37,50 +37,108 @@ namespace IM.Administrator.Forms
       
       lblUser.Content = App.User.User.peN;                        
       var lstMenu = new List<object>();
-      if (AddCatalog(EnumPermission.Sales))
+      #region Sales permision
+      if (App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.ReadOnly))
       {
-        lstMenu.Add(new { nombre = "Assitance Status", img = "pack://application:,,,/IM.Base;component/Images/Assistance.ico", form = "frmAssistanceStatus" });
+        lstMenu.Add(new { nombre = "Assitances Status", img = "pack://application:,,,/IM.Base;component/Images/Assistance.ico", form = "frmAssistancesStatus" });
         lstMenu.Add(new { nombre = "Credit Card Types", img = "pack://application:,,,/IM.Base;component/Images/Credit_Cards.png", form = "frmCreditCardTypes" });
       }
-      if (AddCatalog(EnumPermission.Locations)) { lstMenu.Add(new { nombre = "Areas", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmAreas" }); }
-      if (AddCatalog(EnumPermission.HostInvitations)){ lstMenu.Add(new { nombre = "Charge To", img = "pack://application:,,,/IM.Base;component/Images/Charge_To.png", form = "frmChargeTo" });}
-      if (AddCatalog(EnumPermission.Contracts)) { lstMenu.Add(new { nombre = "Contracts", img = "pack://application:,,,/IM.Base;component/Images/Contract.ico", form = "frmContracts" }); }
-      if (AddCatalog(EnumPermission.Agencies))
+      #endregion
+
+      #region Location Permision
+      if (App.User.HasPermission(EnumPermission.Locations, EnumPermisionLevel.ReadOnly))
+      {
+        lstMenu.Add(new { nombre = "Areas", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmAreas" });
+      }
+      #endregion
+
+      #region HostInvitations Permision
+      if (App.User.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.ReadOnly))
+      {
+        lstMenu.Add(new { nombre = "Charge To", img = "pack://application:,,,/IM.Base;component/Images/Charge_To.png", form = "frmChargeTo" });
+      }
+      #endregion
+
+      #region Contracts Permision
+      if (App.User.HasPermission(EnumPermission.Contracts, EnumPermisionLevel.ReadOnly))
+      {
+        lstMenu.Add(new { nombre = "Contracts", img = "pack://application:,,,/IM.Base;component/Images/Contract.ico", form = "frmContracts" });
+      }
+      #endregion
+
+      #region Agencies permision
+      if (App.User.HasPermission(EnumPermission.Agencies, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add(new { nombre = "Agencies", img = "pack://application:,,,/IM.Base;component/Images/Airplane.ico", form = "frmAgencies" });
+        lstMenu.Add(new { nombre = "Countries", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmCountries" });
       }
-      if (AddCatalog(EnumPermission.Currencies))
+      #endregion
+
+      #region Currencies Permision
+      if (App.User.HasPermission(EnumPermission.Currencies, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add(new { nombre = "Currencies", img = "pack://application:,,,/IM.Base;component/Images/currency.png", form = "frmCurrencies" });
-      }
-      lstMenuAdm.ItemsSource = lstMenu;
+      } 
+      #endregion
 
+      #region Catalogos para Tipo Administrador
+      if(App.User.HasRole(EnumRole.Administrator))//Si se tiene permiso como administrador
+      {
+        lstMenu.Add(new { nombre = "Computers", img = "pack://application:,,,/IM.Base;component/Images/computer.png", form = "frmComputers" });
+      }
+      #endregion
+      lstMenuAdm.ItemsSource = lstMenu;
+     
+      #region Catalogos default
+      
+      #endregion
+      
       #region sort list
       CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lstMenuAdm.ItemsSource);
       view.SortDescriptions.Add(new System.ComponentModel.SortDescription("nombre", System.ComponentModel.ListSortDirection.Ascending));
       #endregion
-      
+
+      lstMenuAdm.SelectedIndex = 0;
+      lstMenuAdm.Focus();
     }
 
     #endregion
 
-    #region AddCatalog
+    #region Open Window
     /// <summary>
-    /// Validar si cuenta con el permiso para visualizar el catalogo
+    /// Abre la ventana seleccionada
     /// </summary>
-    /// <param name="sNameCat">Nombre del permiso a Agregar</param>
-    /// <returns>true. tiene permiso | false. no tiene permiso</returns>
-    /// <history>
-    /// [emoguel] 03/03/2016
-    /// </history>
-    protected bool AddCatalog(EnumPermission sNameCat)
+    private void OpenWindow()
     {
+      dynamic item = lstMenuAdm.SelectedItem;//Obtenemos el seleccionado de la lista
+      string strNombreForm = "IM.Administrator.Forms." + item.form;//Obtenemos el nombre del formulario
 
-      return App.User.HasPermission(sNameCat, EnumPermisionLevel.ReadOnly);
-      
+      //Verificar si la ventana está abierta
+      Window wd = Application.Current.Windows.OfType<Window>().Where(x => x.Uid == item.form).FirstOrDefault();
+
+      if (wd == null)//Se crea la ventana
+      {
+        Type type = System.Reflection.Assembly.GetExecutingAssembly().GetType(strNombreForm);
+        if (type != null)//Verificar si la ventana existe
+        {
+          System.Runtime.Remoting.ObjectHandle handle = Activator.CreateInstance(null, strNombreForm);
+          Window wdwWindow = (Window)handle.Unwrap();
+          wdwWindow.Owner = this;
+          wdwWindow.Show();
+        }
+        else
+        {
+          string sNombre = item.nombre;
+          MessageBox.Show("could not show the window " + sNombre);
+        }
+      }
+      else//Se pone el foco en la ventana
+      {
+        wd.Activate();
+        //wd.Focus();
+      }
     }
     #endregion
-
     #endregion
 
     #region Eventos del formulario
@@ -108,36 +166,29 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void lstMenuAdm_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-      dynamic item = lstMenuAdm.SelectedItem;//Obtenemos el seleccionado de la lista
-      string strNombreForm = "IM.Administrator.Forms."+ item.form;//Obtenemos el nombre del formulario
-
-      //Verificar si la ventana está abierta
-      Window wd = Application.Current.Windows.OfType<Window>().Where(x => x.Uid == item.form).FirstOrDefault();
-
-      if (wd == null)//Se crea la ventana
-      {
-        Type type = System.Reflection.Assembly.GetExecutingAssembly().GetType(strNombreForm);
-        if (type!=null)//Verificar si la ventana existe
-        {
-          System.Runtime.Remoting.ObjectHandle handle = Activator.CreateInstance(null, strNombreForm);
-          Window wdwWindow = (Window)handle.Unwrap();
-          wdwWindow.Owner = this;       
-          wdwWindow.Show();
-        }
-        else
-        {          
-          string sNombre = item.nombre;
-          MessageBox.Show("could not show the window " + sNombre);
-        }
-      }
-      else//Se pone el foco en la ventana
-      {
-        wd.Activate();
-        //wd.Focus();
-      }
+      OpenWindow();
     }
     #endregion
 
+    #region KeyDown
+    /// <summary>
+    /// Abre la ventana seleccionada
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [created] emoguel 15/03/2016
+    /// </history>
+    private void lstMenuAdm_KeyDown(object sender, KeyEventArgs e)
+    {
+      if(e.Key==Key.Enter)
+      {
+        OpenWindow();
+      }
+    }
     #endregion
+    #endregion
+
+
   }
 }

@@ -50,7 +50,7 @@ namespace IM.BusinessRules.BR
 
           if (!string.IsNullOrWhiteSpace(currency.cuN))//filtro por nombre
           {
-            query = query.Where(c => c.cuN == currency.cuN);
+            query = query.Where(c => c.cuN.Contains(currency.cuN));
           }
         }
 

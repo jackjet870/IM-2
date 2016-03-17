@@ -29,10 +29,14 @@
         <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding arID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="10"/>
         <TextBox Name="txtN" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding arN}"  IsEnabled="False" MaxLength="20"/>
         <ComboBox Name="cmbRegion" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" DisplayMemberPath="rgN" SelectedValuePath="rgID" SelectedValue="{Binding arrg}" IsEnabled="False"/>        
-        <CheckBox Name="chkA" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" IsChecked="{Binding arA}" Height="13" IsEnabled="False">Active</CheckBox>        
+        <CheckBox Name="chkA" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" IsChecked="{Binding arA}" Height="13" IsEnabled="False">Active</CheckBox>
 
-        <Button Name="btnAccept" Width="60" Height="30" Content="Accept" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" />
-        <Button Name="btnCancel" Width="60" Height="30" Content="Cancel" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" />
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Command="{Binding btnAccept_Click}" >
+            <AccessText Text="_Accept"/>
+        </Button>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" IsCancel="True">
+            <AccessText Text="_Cancel"/>
+        </Button>
         <!--#endregion-->
     </Grid>    
 </Window>

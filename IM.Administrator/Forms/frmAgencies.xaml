@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
-        xmlns:local="clr-namespace:IM.Administrator.Forms" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" ResizeMode="NoResize"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
         mc:Ignorable="d" Uid="frmAgencies" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         Title="Agencies" Height="407" Width="440">
     <DockPanel LastChildFill="True">
@@ -16,33 +16,34 @@
         </StatusBar>
         <!--#endregion-->
         <!--#region toolbar -->
-        <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch">
-            <Button ToolTip="Refresh list." Name="btnRef" BorderBrush="Transparent" BorderThickness="1" Click="btnRef_Click">
+        <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch" KeyboardNavigation.TabNavigation="Continue">
+            <Button ToolTip="Refresh list." Name="btnRef" BorderBrush="Transparent" BorderThickness="1" Click="btnRef_Click" Command="{Binding btnRef_Click}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/Refresh.png" />
-                    <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Refresh</TextBlock>
+                    <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Refresh"/>
                 </StackPanel>
             </Button>
-            <Button ToolTip="Create an new Agency." Name="btnAdd" IsEnabled="True" Click="btnAdd_Click">
+            <Button ToolTip="Create new Agency." Name="btnAdd" IsEnabled="True" Click="btnAdd_Click" Command="{Binding btnAdd_Click}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/button_add.png" />
-                    <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Add</TextBlock>
+                    <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Add"/>
                 </StackPanel>
             </Button>
-            <Button Name="btnSearch" ToolTip="Search an Agency. " Click="btnSearch_Click">
+            <Button Name="btnSearch" ToolTip="Search Agencies. " Click="btnSearch_Click" Command="{Binding btnSearch_Click}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/btnSearch.png" />
-                    <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Search</TextBlock>
+                    <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Search"/>
                 </StackPanel>
             </Button>
         </ToolBar>
         <!--#endregion-->
         <!--#region DataGrid de Agencies-->
         <DataGrid x:Name="dgrAgencies" Margin="6,6,6,6" AutoGenerateColumns="False" DataContext="{Binding lstAgencies}" IsReadOnly="True"
-                 SelectionMode="Single" >
+                 SelectionMode="Single" Focusable="True" >
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseDoubleClick" Handler="Cell_DoubleClick"/>
+                    <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>

@@ -1,45 +1,46 @@
-﻿<Window x:Class="IM.Administrator.Forms.frmCurrencies"
+﻿<Window x:Class="IM.Administrator.Forms.frmAssistancesStatus"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Uid="frmCurrencies" ShowInTaskbar="False"
-        xmlns:local="clr-namespace:IM.Administrator.Forms" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
-        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" WindowStartupLocation="CenterOwner"
-        Title="Currencies" Height="407" Width="470" Loaded="Window_Loaded" KeyDown="Window_KeyDown">
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms"
+        mc:Ignorable="d" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        Uid="frmAssistancesStatus" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
+        Title="Assistances Status" Height="407" Width="470" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->
         <StatusBar DockPanel.Dock="Bottom" >
             <StatusBarItem Grid.Column="0" x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
             <StatusBarItem Grid.Column="1" x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>
             <StatusBarItem Grid.Column="2" x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
-            <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0 Currencies." HorizontalAlignment="Right" Width="75"/>
+            <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0 Assistances Status." HorizontalAlignment="Right" Width="110"/>
         </StatusBar>
         <!--#endregion-->
         <!--#region toolbar -->
         <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch" KeyboardNavigation.TabNavigation="Continue">
-            <Button ToolTip="Refresh list." Name="btnRef" Click="btnRef_Click" Command="{Binding btnRef_Click}">
+            <Button ToolTip="Refresh list" Name="btnRef" Click="btnRef_Click" Command="{Binding btnRef_Click}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/Refresh.png" />
-                    <AccessText Text="_Refresh" Margin="3,0,0,0" VerticalAlignment="Center"/>
+                    <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Refresh"/>
                 </StackPanel>
             </Button>
-            <Button ToolTip="Create new Currency." Name="btnAdd" IsEnabled="True" Click="btnAdd_Click" Command="{Binding btnAdd_Click}">
+            <Button ToolTip="Create new Asistance Status" Name="btnAdd" Click="btnAdd_Click" IsEnabled="False" Command="{Binding btnAdd_Click}" >
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/button_add.png" />
                     <AccessText Text="_Add" Margin="3,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
-            <Button Name="btnSearch" ToolTip="Search a Currencies." Click="btnSearch_Click" Command="{Binding btnSearch_Click}">
+            <Button Name="btnSearch" ToolTip="Search Assistances Status" Click="btnSearch_Click" Command="{Binding btnSearch_Click}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/btnSearch.png" />
-                    <AccessText Text="_Search" Margin="3,0,0,0" VerticalAlignment="Center"/>
+                    <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Search"/>
                 </StackPanel>
             </Button>
         </ToolBar>
         <!--#endregion-->
-        <!--#region DataGrid de Currencies-->
-        <DataGrid x:Name="dgrCurrencies" Margin="6,6,6,6" AutoGenerateColumns="False" DataContext="{Binding lstCurrencies}" IsReadOnly="True"
-                 SelectionMode="Single" >
+        <!--#region DataGrid de Assiatnce Status-->
+        <DataGrid x:Name="dgrAssitances" Margin="6,6,6,6" AutoGenerateColumns="False" DataContext="{Binding lstAssistance}" IsReadOnly="True"
+                 SelectionMode="Single" Focusable="True" >
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseDoubleClick" Handler="Cell_DoubleClick"/>
@@ -47,8 +48,8 @@
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Width="30*" Binding="{Binding cuID}"/>
-                <DataGridTextColumn Header="Currency" Width="70*" Binding="{Binding cuN}"/>
+                <DataGridTextColumn Header="ID" Width="30*" Binding="{Binding atID}"/>
+                <DataGridTextColumn Header="Assitance Status" Width="70*" Binding="{Binding atN}"/>
             </DataGrid.Columns>
         </DataGrid>
         <!--#endregion-->

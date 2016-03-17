@@ -11,6 +11,7 @@ namespace IM.Base.Helpers
 {
   public class EpplusHelper
   {
+    #region SaveExcel
     /// <summary>
     /// Guarda un ExcelPackage en una ruta escogida por el usuario
     /// </summary>
@@ -41,20 +42,23 @@ namespace IM.Base.Helpers
       }
     }
 
+    #endregion
+
+    #region CreateRptExcelWithOutTemplate
     /// <summary>
     /// Crea un reporte en excel que tiene Filtros, Nombre de reporte, contenido, datos de impresion y nombre del sistema
     /// </summary>
-    /// <param name="filter">
-    /// item1=nombre_Filtro
-    /// item2=lista_filtros
+    /// <param name="filter">Tupla de filtros: item1 = Nombre del filtro - item2 =filtros separados por comas (bp,mbp)
+    /// si seleccionan todos poner en item2 =ALL
     /// </param>
-    /// <param name="dt">DataTable</param>
-    /// <param name="reportName">Nombre del Reporte</param>
-    /// <param name="formatColumns">Lista de ExcelFormatTable </param>
-    /// <returns>FileInfo ruta para abrir el archivo excel</returns>
+    /// <param name="dt">DataTable con la informacion del reporte</param>
+    /// <param name="reportName">Tupla que contiene item1=Nombre del reporte Item2= IM.Base.DateHelper.DateRange </param>
+    /// <param name="formatColumns">Lista de ExcelFormatTable donde definimos ("Titulo de la columna",IM.Model.Enums.EnumFormatTypeExcel, OfficeOpenXml.Style.Enum.ExcelHorizontalAlignment) </param>
+    /// <returns>FileInfo con el path para abrir el excel</returns>
     /// <history>
-    /// [erosado] 12/03/2016  Created.
-    /// [erosado] 14/03/2016  Modified  Se agrego el parametro formatColumns.
+    /// [erosado] 12/Mar/2016  Created.
+    /// [erosado] 14/Mar/2016  Modified  Se Agrego el parametro formatColumns.
+    /// [erosado] 17/Mar/2016  Modified  Se Agrego que permite tipos Boleanos y Date formateados
     /// </history>
     public static FileInfo CreateRptExcelWithOutTemplate(List<Tuple<string, string>> filter, DataTable dt, Tuple<string, string> reportName,
       List<ExcelFormatTable> formatColumns)
@@ -122,6 +126,13 @@ namespace IM.Base.Helpers
           case EnumFormatTypeExcel.DecimalNumber:
             ws.Column(contColum).Style.Numberformat.Format = "0.00";
             break;
+          case EnumFormatTypeExcel.Boolean:
+            
+            ws.Cells[filterNumber + 3, contColum, filterNumber + 3 + dtRowsNumber, contColum].Style.Font.Name = "Wingdings";
+            break;
+          case EnumFormatTypeExcel.Date:
+            ws.Column(contColum).Style.Numberformat.Format = "dd/MM/yyyy";
+            break;
           default:
             break;
         }
@@ -153,7 +164,7 @@ namespace IM.Base.Helpers
       string suggestedFilaName = string.Concat(reportName.Item1, "_", reportName.Item2);
       pathFinalFile = SaveExcel(pk, suggestedFilaName);
 
-      if (pathFinalFile != null || pathFinalFile.Exists)
+      if (pathFinalFile != null)
       {
         return pathFinalFile;
       }
@@ -163,6 +174,9 @@ namespace IM.Base.Helpers
       }
     }
 
+    #endregion
+
+    #region CreatePivotRptExcel
     /// <summary>
     /// Crea un reporte en excel que tiene Filtros, Nombre de reporte, contenido, datos de impresion, nombre del sistema y una tabla dinamica para realizar un pivot.
     /// </summary>
@@ -265,5 +279,6 @@ namespace IM.Base.Helpers
 
       return (pathFinalFile != null || pathFinalFile.Exists);     
     }
+    #endregion
   }
 }

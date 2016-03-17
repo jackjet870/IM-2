@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.ComponentModel;
+using System.Windows.Controls;
 using System.Linq.Expressions;
 using System.Linq;
 using System.Dynamic;
@@ -11,30 +12,103 @@ namespace IM.Base.Helpers
   public static class GridHelper
   {
     #region GetDatatableFromGrid
+
     /// <summary>
-    /// Convierte una lista tipada a un dataTable
+    /// Convierte una lista tipada a un DataTable
     /// </summary>
-    /// <typeparam name="T">Tipo de objeto de la lista</typeparam>
+    /// <typeparam name="T">Tipo de dato de la lista</typeparam>
+    /// <param name="changeDataTypeBoolToString">true : Cambia las columnas boleanas a string - false: las deja como boleanas</param>
     /// <param name="lst">Lista tipada</param>
     /// <returns>DataTable</returns>
     /// <history>
-    /// [erosado] 12/03/2016  Created.
+    /// [erosado] 12/Mar/2016  Created.
+    /// [erosado] 17/Mar/2016  Se agrego la opcion para cambiar los tipos de datos de la Boolean a string, 
+    ///                        esto nos sirve para que en el reporte se muestren palomitas en lugar de la palabra "VERDADERO"
     /// </history>
-    public static DataTable GetDataTableFromGrid<T>(List<T> lst)
+    public static DataTable GetDataTableFromGrid<T>(bool changeDataTypeBoolToString, List<T> lst)
     {
-      PropertyDescriptorCollection properties =
-           TypeDescriptor.GetProperties(typeof(T));
-      DataTable table = new DataTable();
-      foreach (PropertyDescriptor prop in properties)
-        table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
-      foreach (T item in lst)
+      if (changeDataTypeBoolToString)
       {
-        DataRow row = table.NewRow();
+        #region Covertimos lista tipada en DataTable
+        PropertyDescriptorCollection properties =
+            TypeDescriptor.GetProperties(typeof(T));
+        DataTable table = new DataTable();
         foreach (PropertyDescriptor prop in properties)
-          row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
-        table.Rows.Add(row);
+          table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+                
+        foreach (T item in lst)
+        {
+          DataRow row = table.NewRow();
+          foreach (PropertyDescriptor prop in properties)
+            row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+          table.Rows.Add(row);
+        }
+        #endregion
+
+        #region Cambio de DataType Clonedt
+        //Copiamos la estructura de table y le cambiamos los DataType Boolean a string
+        List<int> columnsChanged = new List<int>();
+        DataTable cloneDt = table.Clone();
+        int contColumn = 0;
+        foreach (DataColumn item in table.Columns)
+        {
+          if (item.DataType == typeof(Boolean))
+          {
+            cloneDt.Columns[contColumn].DataType = typeof(string);
+            columnsChanged.Add(contColumn);
+          }
+          contColumn++;
+        }
+        #endregion
+
+        #region Agregamos la informacion de Table a Clonedt
+        //LLenamos CLonedt Con la informacion de table
+        foreach (DataRow tableRows in table.Rows)
+        {
+          cloneDt.ImportRow(tableRows);
+        }
+
+        #endregion
+
+        #region Cambiamos los valores True y False 
+        //Recorremos Clonedt buscando cambiar todos los true por "ü" y los false y nulls por ""
+        foreach (int item in columnsChanged)
+        {
+          for (int i = 0; i < cloneDt.Rows.Count; i++)
+          {
+            if (cloneDt.Rows[i][item].ToString() == "True")
+            {
+              cloneDt.Rows[i][item] = "ü";
+            }
+            else
+            {
+              cloneDt.Rows[i][item] = "";
+            }
+          }
+        }
+        #endregion
+
+        return cloneDt; //Regresamos el nuevo DataTable con su nueva estructura.
       }
-      return table;
+      else
+      {
+        #region Convertimos lista tipada en DataTable
+        PropertyDescriptorCollection properties =
+            TypeDescriptor.GetProperties(typeof(T));
+        DataTable table = new DataTable();
+        foreach (PropertyDescriptor prop in properties)
+          table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+        foreach (T item in lst)
+        {
+          DataRow row = table.NewRow();
+          foreach (PropertyDescriptor prop in properties)
+            row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+          table.Rows.Add(row);
+        }
+        #endregion
+
+        return table;
+      }
     }
     #endregion
 
@@ -133,6 +207,24 @@ Func<IEnumerable<T>, TData> dataSelector)
       }
       return eo;
     } 
+    #endregion
+
+    #region SelectRow
+    /// <summary>
+    /// Selecciona un registro del grid
+    /// </summary>
+    /// <param name="grid">Grid para seleccionar el registro</param>
+    /// <param name="nIndex">index del registro</param>
+    /// <history>
+    /// [emoguel] created 15/03/2016
+    /// </history>
+    public static void SelectRow(DataGrid grid, int nIndex)
+    {
+      grid.Focus();
+      grid.SelectedIndex = nIndex;
+      grid.ScrollIntoView(grid.SelectedItem);
+      grid.CurrentCell = new DataGridCellInfo(grid.SelectedItem, grid.Columns[0]);
+    }
     #endregion
   }
 }
