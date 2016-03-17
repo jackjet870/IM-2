@@ -8414,8 +8414,8 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <NavigationProperty Name="Sales" Relationship="Self.FK_Sales_Guests" FromRole="Guests" ToRole="Sales" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="SalesLogs" Relationship="Self.FK_SalesLog_Guests" FromRole="Guests" ToRole="SalesLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="ShowsSalesmen" Relationship="Self.FK_ShowsSalesmen_Guests" FromRole="Guests" ToRole="ShowsSalesmen" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="GuestsAdditional" Relationship="Self.GuestsAdditional" FromRole="Guests" ToRole="Guests1" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="Guests" Relationship="Self.GuestsAdditional" FromRole="Guests1" ToRole="Guests" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="GuestMain" Relationship="Self.GuestsAdditional" FromRole="Guests" ToRole="Guests1" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="GuestsAdditional" Relationship="Self.GuestsAdditional" FromRole="Guests1" ToRole="Guests" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GuestsGroups" Relationship="Self.GuestsGroupsIntegrants" FromRole="Guests" ToRole="GuestsGroups" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="GuestCreditCard">
