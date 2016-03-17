@@ -25,7 +25,7 @@ namespace IM.Base.Helpers
     /// [erosado] 17/Mar/2016  Se agrego la opcion para cambiar los tipos de datos de la Boolean a string, 
     ///                        esto nos sirve para que en el reporte se muestren palomitas en lugar de la palabra "VERDADERO"
     /// </history>
-    public static DataTable GetDataTableFromGrid<T>(bool changeDataTypeBoolToString, List<T> lst)
+    public static DataTable GetDataTableFromGrid<T>(List<T> lst, bool changeDataTypeBoolToString = false)
     {
       if (changeDataTypeBoolToString)
       {
