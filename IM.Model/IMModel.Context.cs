@@ -1076,5 +1076,72 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PersonnelAssistance>("USP_OR_GetPersonnelAssistance", placeTypeParameter, placeParameter, dateFromParameter, dateToParameter);
         }
+    
+        public virtual ObjectResult<RptAssignment> USP_OR_RptAssignment(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var marketsParameter = markets != null ?
+                new ObjectParameter("Markets", markets) :
+                new ObjectParameter("Markets", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptAssignment>("USP_OR_RptAssignment", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter);
+        }
+    
+        public virtual ObjectResult<RptAssignmentArrivals> USP_OR_RptAssignmentArrivals(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var marketsParameter = markets != null ?
+                new ObjectParameter("Markets", markets) :
+                new ObjectParameter("Markets", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptAssignmentArrivals>("USP_OR_RptAssignmentArrivals", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter);
+        }
+    
+        public virtual ObjectResult<RptAssignmentByPR> USP_OR_RptAssignmentByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets, string pR)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var marketsParameter = markets != null ?
+                new ObjectParameter("Markets", markets) :
+                new ObjectParameter("Markets", typeof(string));
+    
+            var pRParameter = pR != null ?
+                new ObjectParameter("PR", pR) :
+                new ObjectParameter("PR", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptAssignmentByPR>("USP_OR_RptAssignmentByPR", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter, pRParameter);
+        }
     }
 }

@@ -516,6 +516,15 @@
     <Compile Include="RoomType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptAssignment.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptAssignmentArrivals.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptAssignmentByPR.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptBookingsBySalesRoomProgramLeadSourceTime.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -690,7 +699,6 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>IMModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="GuestSearched.datasource" />
     <None Include="IMModel.edmx.diagram">
       <DependentUpon>IMModel.edmx</DependentUpon>
     </None>
