@@ -155,7 +155,7 @@ namespace IM.Launcher
           Process.Start(String.Format("{0}\\IM.Inhouse.exe", path));
           break;
         case EnumMenu.Assignment:
-          UIHelper.ShowMessage("Coming soon..");
+          Process.Start(String.Format("{0}\\IM.Assignment.exe", path));
           break;
         case EnumMenu.MailOuts:
           Process.Start(String.Format("{0}\\IM.MailOuts.exe", path));
@@ -182,7 +182,7 @@ namespace IM.Launcher
           UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.ProcessorGRAL:
-          UIHelper.ShowMessage("Coming soon..");
+          Process.Start(String.Format("{0}\\IM.ProcessorGeneral.exe", path));
           break;
         case EnumMenu.ProcessorSales:
           UIHelper.ShowMessage("Coming soon..");
