@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Administrator.Enums;
 using IM.Base.Helpers;
 using IM.Model.Enums;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -19,7 +19,7 @@ namespace IM.Administrator.Forms
     private int _nStatus = -1;//Status a filtrar en la lista
     private bool _blnEdit = false;//boleano para saber si se tiene minimo permiso para editar|agregar 
     public frmAreas()
-    {      
+    {
       InitializeComponent();
     }
 
@@ -37,7 +37,7 @@ namespace IM.Administrator.Forms
     {
       _blnEdit = App.User.HasPermission(EnumPermission.Locations, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
-      LoadAreas();      
+      LoadAreas();
     }
     #endregion
     #region KeyBoardFocusChaged
@@ -98,16 +98,31 @@ namespace IM.Administrator.Forms
     /// [emoguel] 26/Feb/2016 Created
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
-    {      
+    {
       Area Area = (Area)dgrAreas.SelectedItem;
       frmAreaDetalle frmAreaDetalle = new frmAreaDetalle();
       frmAreaDetalle.Owner = this;
       ObjectHelper.CopyProperties(frmAreaDetalle.area, Area);
-      frmAreaDetalle.mode = ((_blnEdit==true)?ModeOpen.edit: ModeOpen.preview);   
-      if(frmAreaDetalle.ShowDialog()==true)
-      {
-        ObjectHelper.CopyProperties(Area, frmAreaDetalle.area);
-      }      
+      frmAreaDetalle.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
+      if (frmAreaDetalle.ShowDialog() == true)
+      { 
+        List<Area> lstAreas = (List<Area>)dgrAreas.ItemsSource;
+        int nIndex = 0;
+        if (!ValidateFilters(frmAreaDetalle.area))//VAlidamos si cumple con los filtros
+        {
+          lstAreas.Remove(Area);//quitamos el registro de la lista
+        }
+        else
+        {
+          ObjectHelper.CopyProperties(Area, frmAreaDetalle.area);
+          lstAreas.Sort((x, y) => string.Compare(x.arN, y.arN));//Ordenamos la lista    
+          nIndex = lstAreas.IndexOf(Area);
+        }
+            
+        dgrAreas.Items.Refresh();//Refrescamos la lista
+        GridHelper.SelectRow(dgrAreas, nIndex);
+        StatusBarReg.Content = lstAreas.Count + " Areas.";//Actualizamos el contador
+      }
     }
     #endregion
 
@@ -126,14 +141,17 @@ namespace IM.Administrator.Forms
       frmAreaDetalle.Owner = this;
       frmAreaDetalle.mode = ModeOpen.add;//Agregar
       if (frmAreaDetalle.ShowDialog() == true)
-      { 
-        List<Area> lstAreas= (List<Area>)dgrAreas.ItemsSource;        
-        lstAreas.Add(frmAreaDetalle.area);//Agregamos el registro nuevo
-        lstAreas.Sort((x, y) => string.Compare(x.arN, y.arN));//Ordenamos la lista
-        int nIndex = lstAreas.IndexOf(frmAreaDetalle.area);//Obetenemos el index nuevo
-        dgrAreas.Items.Refresh();//Refrescamos la lista
-        GridHelper.SelectRow(dgrAreas, nIndex);
-        StatusBarReg.Content =lstAreas.Count+" Areas.";//Actualizamos el contador
+      {
+        if (ValidateFilters(frmAreaDetalle.area))//Validamos si cumple con los filtros
+        {
+          List<Area> lstAreas = (List<Area>)dgrAreas.ItemsSource;
+          lstAreas.Add(frmAreaDetalle.area);//Agregamos el registro nuevo
+          lstAreas.Sort((x, y) => string.Compare(x.arN, y.arN));//Ordenamos la lista
+          int nIndex = lstAreas.IndexOf(frmAreaDetalle.area);//Obetenemos el index nuevo
+          dgrAreas.Items.Refresh();//Refrescamos la lista
+          GridHelper.SelectRow(dgrAreas, nIndex);
+          StatusBarReg.Content = lstAreas.Count + " Areas.";//Actualizamos el contador
+        }
       }
 
     }
@@ -204,10 +222,11 @@ namespace IM.Administrator.Forms
         LoadAreas();
       }
 
-    } 
+    }
     #endregion
     #endregion
     #region METODOS
+    #region LoadAreas
     /// <summary>
     /// carga la lista de Areas
     /// </summary>
@@ -226,8 +245,48 @@ namespace IM.Administrator.Forms
       StatusBarReg.Content = lstAreas.Count + " Areas.";
 
     }
+    #endregion
+
+    #region Validate Filters
+    /// <summary>
+    /// Valida si una entidad de tipo Area coincide con los filtros
+    /// </summary>
+    /// <param name="newArea">Objeto a validar</param>
+    /// <returns>true. Si se muestra | false. Nose muestra</returns>
+    /// <history>
+    /// [emoguel] created 18/03/2016
+    /// </history>
+    private bool ValidateFilters(Area newArea)
+    {
+      if (_nStatus != -1)
+      {
+        if (newArea.arA != Convert.ToBoolean(_nStatus))
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_areaFiltro.arID))
+      {
+        if (_areaFiltro.arID != newArea.arID)
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_areaFiltro.arN))
+      {
+        if (!newArea.arN.Contains(_areaFiltro.arN))
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
+    #endregion
 
     #endregion
-    
+
   }
 }

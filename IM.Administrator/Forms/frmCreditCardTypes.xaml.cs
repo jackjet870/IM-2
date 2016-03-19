@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Administrator.Enums;
 using IM.Model;
 using IM.BusinessRules.BR;
@@ -51,6 +43,45 @@ namespace IM.Administrator.Forms
         GridHelper.SelectRow(dgrCreditCard, 0);
       }      
       StatusBarReg.Content = lstCreditCardTypes.Count() + "  Credit Card Types.";
+    }
+    #endregion
+
+    #region Validate Filters
+    /// <summary>
+    /// Valida si una entidad de tipo CreditCardType coincide con los filtros
+    /// </summary>
+    /// <param name="newCreditCard">Objeto a validar</param>
+    /// <returns>true. Si se muestra | false. Nose muestra</returns>
+    /// <history>
+    /// [emoguel] created 18/03/2016
+    /// </history>
+    private bool ValidateFilters(CreditCardType newCreditCard)
+    {
+      if (_nStatus != -1)
+      {
+        if (newCreditCard.ccA != Convert.ToBoolean(_nStatus))
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_creditCardTypeFilter.ccID))
+      {
+        if (_creditCardTypeFilter.ccID != newCreditCard.ccID)
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_creditCardTypeFilter.ccN))
+      {
+        if (!newCreditCard.ccN.Contains(_creditCardTypeFilter.ccN))
+        {
+          return false;
+        }
+      }
+
+      return true;
     }
     #endregion
     #endregion
@@ -99,13 +130,16 @@ namespace IM.Administrator.Forms
       frmCreditCard.mode = ModeOpen.add;
       if (frmCreditCard.ShowDialog() == true)
       {
-        List<CreditCardType> lstCreditCradTypes = (List<CreditCardType>)dgrCreditCard.ItemsSource;
-        lstCreditCradTypes.Add(frmCreditCard.creditCardType);//Agregamos el registro nuevo
-        lstCreditCradTypes.Sort((x, y) => string.Compare(x.ccN, y.ccN));//Ordenamos la lista
-        int nIndex = lstCreditCradTypes.IndexOf(frmCreditCard.creditCardType);//Obtenemos el index del registro nuevo
-        dgrCreditCard.Items.Refresh();//refrescamos la lista
-        GridHelper.SelectRow(dgrCreditCard, nIndex);
-        StatusBarReg.Content = lstCreditCradTypes.Count + " Credit Card Types.";
+        if (ValidateFilters(frmCreditCard.creditCardType))//Validamos que cumpla con los filtros
+        {
+          List<CreditCardType> lstCreditCradTypes = (List<CreditCardType>)dgrCreditCard.ItemsSource;
+          lstCreditCradTypes.Add(frmCreditCard.creditCardType);//Agregamos el registro nuevo
+          lstCreditCradTypes.Sort((x, y) => string.Compare(x.ccN, y.ccN));//Ordenamos la lista
+          int nIndex = lstCreditCradTypes.IndexOf(frmCreditCard.creditCardType);//Obtenemos el index del registro nuevo
+          dgrCreditCard.Items.Refresh();//refrescamos la lista
+          GridHelper.SelectRow(dgrCreditCard, nIndex);
+          StatusBarReg.Content = lstCreditCradTypes.Count + " Credit Card Types.";
+        }
       }
     } 
     #endregion
@@ -202,7 +236,21 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(frmCrediCard.creditCardType,creditCardType);
       if(frmCrediCard.ShowDialog()==true)
       {
-        ObjectHelper.CopyProperties(creditCardType, frmCrediCard.creditCardType);
+        int nIndex = 0;
+        List<CreditCardType> lstCreditCradTypes = (List<CreditCardType>)dgrCreditCard.ItemsSource;
+        if(!ValidateFilters(frmCrediCard.creditCardType))//Validamos si cumple con los registros
+        {
+          lstCreditCradTypes.Remove(creditCardType);//Quitamos el registro de la lista
+        }        
+        else
+        {
+          ObjectHelper.CopyProperties(creditCardType, frmCrediCard.creditCardType);
+          lstCreditCradTypes.Sort((x, y) => string.Compare(x.ccN, y.ccN));//Ordenamos la lista   
+          nIndex = lstCreditCradTypes.IndexOf(creditCardType);
+        }             
+        dgrCreditCard.Items.Refresh();//refrescamos la lista
+        GridHelper.SelectRow(dgrCreditCard, nIndex);
+        StatusBarReg.Content = lstCreditCradTypes.Count + " Credit Card Types.";
       }
     }
     #endregion

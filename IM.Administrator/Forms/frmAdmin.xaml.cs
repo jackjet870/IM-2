@@ -78,13 +78,21 @@ namespace IM.Administrator.Forms
       if (App.User.HasPermission(EnumPermission.Currencies, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add(new { nombre = "Currencies", img = "pack://application:,,,/IM.Base;component/Images/currency.png", form = "frmCurrencies" });
-      } 
+      }
+      #endregion
+      
+      #region Sale Permision
+      if(App.User.HasPermission(EnumPermission.Sales,EnumPermisionLevel.Standard))
+      {
+        lstMenu.Add(new { nombre = "Efficiency Types", img = "pack://application:,,,/IM.Base;component/Images/positioning.png", form = "frmEfficiencyTypes" });
+      }
       #endregion
 
       #region Catalogos para Tipo Administrador
-      if(App.User.HasRole(EnumRole.Administrator))//Si se tiene permiso como administrador
+      if (App.User.HasRole(EnumRole.Administrator))//Si se tiene permiso como administrador
       {
         lstMenu.Add(new { nombre = "Computers", img = "pack://application:,,,/IM.Base;component/Images/computer.png", form = "frmComputers" });
+        lstMenu.Add(new { nombre = "Desks", img = "pack://application:,,,/IM.Base;component/Images/desk.png", form = "frmDesks" });
       }
       #endregion
       lstMenuAdm.ItemsSource = lstMenu;

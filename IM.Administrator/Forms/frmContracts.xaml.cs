@@ -7,6 +7,7 @@ using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.Model.Enums;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -118,7 +119,21 @@ namespace IM.Administrator.Forms
       frmContractDetail.Owner = this;
       if(frmContractDetail.ShowDialog()==true)
       {
-        ObjectHelper.CopyProperties(contract,frmContractDetail.contract);
+        List<Contract> lstContracts = (List<Contract>)dgrContracts.ItemsSource;
+        int nIndex = 0;
+        if (!ValidateFilters(frmContractDetail.contract))//Validamos si cumple con los filtros
+        {
+          lstContracts.Remove(frmContractDetail.contract);//lo quitamos de la lista
+        }
+        else
+        {
+          ObjectHelper.CopyProperties(contract, frmContractDetail.contract);
+          lstContracts.Sort((x, y) => string.Compare(x.cnID, y.cnID));//ordenamos la lista        
+          nIndex = lstContracts.IndexOf(contract);  
+        }
+        dgrContracts.Items.Refresh();
+        GridHelper.SelectRow(dgrContracts, nIndex);
+        StatusBarReg.Content = lstContracts.Count + " Contracts.";
       }
     }
     #endregion
@@ -139,13 +154,16 @@ namespace IM.Administrator.Forms
       frmContractDetail.Owner = this;
       if (frmContractDetail.ShowDialog() == true)
       {
-        List<Contract> lstContracts = (List<Contract>)dgrContracts.ItemsSource;
-        lstContracts.Add(frmContractDetail.contract);//Agregamos el registro nuevo
-        lstContracts.Sort((x, y) => string.Compare(x.cnID, y.cnID));//ordenamos la lista        
-        int nIndex = lstContracts.IndexOf(frmContractDetail.contract);//obtenemos el index del registro nuevo
-        dgrContracts.Items.Refresh();//refrescamos la lista
-        GridHelper.SelectRow(dgrContracts, nIndex);
-        StatusBarReg.Content = lstContracts.Count + " Contracts.";
+        if (ValidateFilters(frmContractDetail.contract))//Validamos que cumpla con los filtros actuales
+        {
+          List<Contract> lstContracts = (List<Contract>)dgrContracts.ItemsSource;
+          lstContracts.Add(frmContractDetail.contract);//Agregamos el registro nuevo
+          lstContracts.Sort((x, y) => string.Compare(x.cnID, y.cnID));//ordenamos la lista        
+          int nIndex = lstContracts.IndexOf(frmContractDetail.contract);//obtenemos el index del registro nuevo
+          dgrContracts.Items.Refresh();//refrescamos la lista
+          GridHelper.SelectRow(dgrContracts, nIndex);
+          StatusBarReg.Content = lstContracts.Count + " Contracts.";
+        }
       }
     }
     #endregion
@@ -217,7 +235,46 @@ namespace IM.Administrator.Forms
         GridHelper.SelectRow(dgrContracts, 0);
       }
       StatusBarReg.Content = lstContracts.Count + " Contracts.";
-    } 
+    }
+    #endregion
+
+    #region Validate Filters
+    /// <summary>
+    /// Valida si una entidad de tipo Contract coincide con los filtros
+    /// </summary>
+    /// <param name="newContract">Objeto a validar</param>
+    /// <returns>true. Si se muestra | false. Nose muestra</returns>
+    /// <history>
+    /// [emoguel] created 18/03/2016
+    /// </history>
+    private bool ValidateFilters(Contract newContract)
+    {
+      if (_nStatus != -1)
+      {
+        if (newContract.cnA != Convert.ToBoolean(_nStatus))
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_contractFilter.cnID))
+      {
+        if (_contractFilter.cnID != newContract.cnID)
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_contractFilter.cnN))
+      {
+        if (!newContract.cnN.Contains(_contractFilter.cnN))
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
     #endregion
     #endregion
 

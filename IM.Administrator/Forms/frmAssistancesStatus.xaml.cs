@@ -8,6 +8,7 @@ using IM.BusinessRules.BR;
 using IM.Administrator.Enums;
 using IM.Base.Helpers;
 using IM.Model.Enums;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -38,7 +39,7 @@ namespace IM.Administrator.Forms
     {
       _blnEdit = App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
-      LoadAssitance();      
+      LoadAssitance();
     }
 
     #endregion
@@ -119,12 +120,26 @@ namespace IM.Administrator.Forms
     {
       AssistanceStatus Assistance = (AssistanceStatus)dgrAssitances.SelectedItem;
       frmAssistanceStatusDetail frmAssistanceDetail = new frmAssistanceStatusDetail();
-      ObjectHelper.CopyProperties(frmAssistanceDetail.assistance,Assistance);
+      ObjectHelper.CopyProperties(frmAssistanceDetail.assistance, Assistance);
       frmAssistanceDetail.Owner = this;
       frmAssistanceDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
-      if(frmAssistanceDetail.ShowDialog()==true)
+      if (frmAssistanceDetail.ShowDialog() == true)
       {
-        ObjectHelper.CopyProperties(Assistance, frmAssistanceDetail.assistance);
+        List<AssistanceStatus> lstAssistancesStatus = (List<AssistanceStatus>)dgrAssitances.ItemsSource;
+        int nIndex = 0;
+        if(!ValidateFilters(frmAssistanceDetail.assistance))//Validamos si cumple con los filtros
+        {
+          lstAssistancesStatus.Remove(Assistance);//Quitamos el registro
+        }
+        else
+        {
+          ObjectHelper.CopyProperties(Assistance, frmAssistanceDetail.assistance);
+          lstAssistancesStatus.Sort((x, y) => string.Compare(x.atN, y.atN));//ordenamos la lista        
+          nIndex = lstAssistancesStatus.IndexOf(Assistance);
+        }        
+        dgrAssitances.Items.Refresh();//regrescamos el grid
+        GridHelper.SelectRow(dgrAssitances, nIndex);
+        StatusBarReg.Content = lstAssistancesStatus.Count + " Assistances Status.";//Actualizamos el contador
       }
 
     }
@@ -162,19 +177,22 @@ namespace IM.Administrator.Forms
       frmAssistanceDetail.mode = ModeOpen.add;//insertar
       if (frmAssistanceDetail.ShowDialog() == true)
       {
-        List<AssistanceStatus> lstAssistancesStatus = (List<AssistanceStatus>)dgrAssitances.ItemsSource;
-        lstAssistancesStatus.Add(frmAssistanceDetail.assistance);//Agregamos el registro nuevo
-        lstAssistancesStatus.Sort((x, y) => string.Compare(x.atN, y.atN));//ordenamos la lista
-        int nIndex = lstAssistancesStatus.IndexOf(frmAssistanceDetail.assistance);//Obtenemos el index del registro nuevo
-        dgrAssitances.Items.Refresh();//regrescamos el grid
-        GridHelper.SelectRow(dgrAssitances, nIndex);
-        StatusBarReg.Content = lstAssistancesStatus.Count+ " Assistances Status.";//Actualizamos el contador
+        if (ValidateFilters(frmAssistanceDetail.assistance))//Validamos si cumple con los filtros
+        {
+          List<AssistanceStatus> lstAssistancesStatus = (List<AssistanceStatus>)dgrAssitances.ItemsSource;
+          lstAssistancesStatus.Add(frmAssistanceDetail.assistance);//Agregamos el registro nuevo
+          lstAssistancesStatus.Sort((x, y) => string.Compare(x.atN, y.atN));//ordenamos la lista
+          int nIndex = lstAssistancesStatus.IndexOf(frmAssistanceDetail.assistance);//Obtenemos el index del registro nuevo
+          dgrAssitances.Items.Refresh();//regrescamos el grid
+          GridHelper.SelectRow(dgrAssitances, nIndex);
+          StatusBarReg.Content = lstAssistancesStatus.Count + " Assistances Status.";//Actualizamos el contador
+        }
       }
 
     }
 
     #endregion
-    
+
     #region Search
     /// <summary>
     /// Abre la ventana de busqueda cargando 
@@ -219,13 +237,50 @@ namespace IM.Administrator.Forms
       if (lstAssistance.Count > 0)
       {
         dgrAssitances.Focus();
-        GridHelper.SelectRow(dgrAssitances, 0);        
+        GridHelper.SelectRow(dgrAssitances, 0);
       }
       StatusBarReg.Content = lstAssistance.Count + " Assistance Status.";
     }
     #endregion
 
+    #region Validate Filters
+    /// <summary>
+    /// Valida si una entidad de tipo Area coincide con los filtros
+    /// </summary>
+    /// <param name="newAssistance">Objeto a validar</param>
+    /// <returns>true. Si se muestra | false. Nose muestra</returns>
+    /// <history>
+    /// [emoguel] created 18/03/2016
+    /// </history>
+    private bool ValidateFilters(AssistanceStatus newAssistance)
+    {
+      if (_nStatus != -1)
+      {
+        if (newAssistance.atA != Convert.ToBoolean(_nStatus))
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_assistanceFilter.atID))
+      {
+        if (_assistanceFilter.atID != newAssistance.atID)
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_assistanceFilter.atN))
+      {
+        if (!newAssistance.atN.Contains(_assistanceFilter.atN))
+        {
+          return false;
+        }
+      }
+      return true;
+    }
     #endregion
-    
+    #endregion
+
   }
 }

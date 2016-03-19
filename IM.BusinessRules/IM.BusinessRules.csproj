@@ -62,6 +62,7 @@
     <Compile Include="BR\BRCreditCardTypes.cs" />
     <Compile Include="BR\BRCurrencies.cs" />
     <Compile Include="BR\BRDesks.cs" />
+    <Compile Include="BR\BREfficiencyTypes.cs" />
     <Compile Include="BR\BRExchangeRate.cs" />
     <Compile Include="BR\BRGifts.cs" />
     <Compile Include="BR\BRGraph.cs" />

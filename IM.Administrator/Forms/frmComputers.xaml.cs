@@ -117,13 +117,16 @@ namespace IM.Administrator.Forms
       frmComputerDetail.mode = Enums.ModeOpen.add;
       if (frmComputerDetail.ShowDialog() == true)
       {
-        List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
-        lstComputers.Add(frmComputerDetail.computer);//Agregamos el registro nuevo
-        lstComputers.Sort((x, y) => string.Compare(x.cpN, y.cpN));//ordenamos la lista        
-        int nIndex = lstComputers.IndexOf(frmComputerDetail.computer);//obtenemos el index del registro nuevo
-        dgrComputers.Items.Refresh();//refrescamos la lista        
-        GridHelper.SelectRow(dgrComputers, nIndex);
-        StatusBarReg.Content = lstComputers.Count + " Computers.";
+        if (ValidateFilters(frmComputerDetail.computer))//Validamos que cumpla con los filtros
+        {
+          List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
+          lstComputers.Add(frmComputerDetail.computer);//Agregamos el registro nuevo
+          lstComputers.Sort((x, y) => string.Compare(x.cpN, y.cpN));//ordenamos la lista        
+          int nIndex = lstComputers.IndexOf(frmComputerDetail.computer);//obtenemos el index del registro nuevo
+          dgrComputers.Items.Refresh();//refrescamos la lista        
+          GridHelper.SelectRow(dgrComputers, nIndex);
+          StatusBarReg.Content = lstComputers.Count + " Computers.";
+        }
       }
     }
     #endregion
@@ -170,9 +173,23 @@ namespace IM.Administrator.Forms
       frmComputerDetail.Owner = this;
       frmComputerDetail.mode = Enums.ModeOpen.edit;
       ObjectHelper.CopyProperties(frmComputerDetail.computer, computer);
-      if(frmComputerDetail.ShowDialog()==true)
-      {
-        ObjectHelper.CopyProperties(computer, frmComputerDetail.computer);
+      if (frmComputerDetail.ShowDialog() == true)
+      {        
+        List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
+        int nIndex = 0;        
+        if (!ValidateFilters(frmComputerDetail.computer))//Validamos que cumpla con los filtros
+        {
+          lstComputers.Remove(computer);//Quitamos el registro de la lista
+        }
+        else
+        {
+          ObjectHelper.CopyProperties(computer, frmComputerDetail.computer);
+          lstComputers.Sort((x, y) => string.Compare(x.cpN, y.cpN));//ordenamos la lista     
+          nIndex = lstComputers.IndexOf(computer);
+        }                   
+        dgrComputers.Items.Refresh();//refrescamos la lista        
+        GridHelper.SelectRow(dgrComputers, nIndex);
+        StatusBarReg.Content = lstComputers.Count + " Computers.";
       }
 
     }
@@ -223,6 +240,37 @@ namespace IM.Administrator.Forms
         GridHelper.SelectRow(dgrComputers, 0);
       }
       StatusBarReg.Content = lstComputers.Count+" Computers.";
+    }
+    #endregion
+
+    #region Validate Filters
+    /// <summary>
+    /// Valida si una entidad de tipo Computer coincide con los filtros
+    /// </summary>
+    /// <param name="newComputer">Objeto a validar</param>
+    /// <returns>true. Si se muestra | false. Nose muestra</returns>
+    /// <history>
+    /// [emoguel] created 18/03/2016
+    /// </history>
+    private bool ValidateFilters(Computer newComputer)
+    {
+
+      if (!string.IsNullOrWhiteSpace(_computerFilter.cpID))
+      {
+        if (_computerFilter.cpID != newComputer.cpID)
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_computerFilter.cpN))
+      {
+        if (!newComputer.cpN.Contains(_computerFilter.cpN))
+        {
+          return false;
+        }
+      }
+      return true;
     }
     #endregion
     #endregion

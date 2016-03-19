@@ -1,16 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
@@ -88,7 +79,21 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(frmCurrencyDetail.currency,currency);
       if(frmCurrencyDetail.ShowDialog()==true)
       {
-        ObjectHelper.CopyProperties(currency, frmCurrencyDetail.currency);
+        List<Currency> lstCurrencies = (List<Currency>)dgrCurrencies.ItemsSource;
+        int nIndex = 0;
+        if (!ValidateFilters(frmCurrencyDetail.currency))//Verificar si cumple con los filtros
+        {
+          lstCurrencies.Remove(currency);//se quita el registro
+        }
+        else
+        {
+          ObjectHelper.CopyProperties(currency, frmCurrencyDetail.currency);
+          lstCurrencies.Sort((x, y) => string.Compare(x.cuN, y.cuN));//ordenamos la lista  
+          nIndex = lstCurrencies.IndexOf(currency);
+        }              
+        dgrCurrencies.Items.Refresh();//refrescamos la lista
+        GridHelper.SelectRow(dgrCurrencies, nIndex);
+        StatusBarReg.Content = lstCurrencies.Count + " Currencies.";//Actualizamos el contador
       }
 
     }
@@ -172,13 +177,16 @@ namespace IM.Administrator.Forms
       frmCurrencyDetail.mode = ModeOpen.add;
       if (frmCurrencyDetail.ShowDialog() == true)
       {
-        List<Currency> lstCurrencies = (List<Currency>)dgrCurrencies.ItemsSource;
-        lstCurrencies.Add(frmCurrencyDetail.currency);//Agregamos el registro nuevo
-        lstCurrencies.Sort((x, y) => string.Compare(x.cuN, y.cuN));//ordenamos la lista
-        int nIndex = lstCurrencies.IndexOf(frmCurrencyDetail.currency);//obtenemos el index del registro nuevo
-        dgrCurrencies.Items.Refresh();//refrescamos la lista
-        GridHelper.SelectRow(dgrCurrencies, nIndex);
-        StatusBarReg.Content = lstCurrencies.Count + " Currencies.";//Actualizamos el contador
+        if (ValidateFilters(frmCurrencyDetail.currency))//valida que cumpla con los filtros
+        {
+          List<Currency> lstCurrencies = (List<Currency>)dgrCurrencies.ItemsSource;
+          lstCurrencies.Add(frmCurrencyDetail.currency);//Agregamos el registro nuevo
+          lstCurrencies.Sort((x, y) => string.Compare(x.cuN, y.cuN));//ordenamos la lista
+          int nIndex = lstCurrencies.IndexOf(frmCurrencyDetail.currency);//obtenemos el index del registro nuevo
+          dgrCurrencies.Items.Refresh();//refrescamos la lista
+          GridHelper.SelectRow(dgrCurrencies, nIndex);
+          StatusBarReg.Content = lstCurrencies.Count + " Currencies.";//Actualizamos el contador
+        }
       }
     }
     #endregion
@@ -230,8 +238,46 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
+    #region Validate Filters
+    /// <summary>
+    /// Valida si una entidad de tipo Currency coincide con los filtros
+    /// </summary>
+    /// <param name="newCurrency">Objeto a validar</param>
+    /// <returns>true. Si se muestra | false. Nose muestra</returns>
+    /// <history>
+    /// [emoguel] created 18/03/2016
+    /// </history>
+    private bool ValidateFilters(Currency newCurrency)
+    {
+      if (_nStatus != -1)
+      {
+        if (newCurrency.cuA != Convert.ToBoolean(_nStatus))
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_currencyFilter.cuID))
+      {
+        if (_currencyFilter.cuID != newCurrency.cuID)
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_currencyFilter.cuN))
+      {
+        if (!newCurrency.cuN.Contains(_currencyFilter.cuN))
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
+    #endregion
     #endregion
 
-    
+
   }
 }

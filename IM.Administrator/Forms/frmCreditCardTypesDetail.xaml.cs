@@ -123,19 +123,7 @@ namespace IM.Administrator.Forms
       int nRes = 0;
       if (sMsj == "")//Todos los campos estan llenos
       {
-        switch (mode)
-        {
-          case ModeOpen.add://Agregar
-            { 
-              nRes = BRCreditCardTypes.SaveCreditCardType(creditCardType, false);
-              break;
-            }
-          case ModeOpen.edit://Editar
-            {
-              nRes = BRCreditCardTypes.SaveCreditCardType(creditCardType, true);
-              break;
-            }
-        }
+        nRes = BRCreditCardTypes.SaveCreditCardType(creditCardType, (mode==ModeOpen.edit));
 
         #region respuesta
         switch (nRes)//Se valida la respuesta de la operacion

@@ -17,27 +17,30 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 16/03/2016
     /// </history>
-    public static List<Desk> GetDesks(Desk desk,int nStatus=-1)
+    public static List<Desk> GetDesks(Desk desk = null, int nStatus = -1)
     {
       using (var dbContext = new IMEntities())
       {
         var query = from dk in dbContext.Desks
                     select dk;
 
-        if(nStatus!=-1)//Filtro por estatus
+        if (nStatus != -1)//Filtro por estatus
         {
           bool blnEstatus = Convert.ToBoolean(nStatus);
-          query = query.Where(dk=>dk.dkA==desk.dkA);
+          query = query.Where(dk => dk.dkA == blnEstatus);
         }
 
-        if(desk.dkID>0)//Filtro por ID
+        if (desk != null)//validacion de si hay objeto
         {
-          query = query.Where(dk=>dk.dkID==desk.dkID);
-        }
+          if (desk.dkID > 0)//Filtro por ID
+          {
+            query = query.Where(dk => dk.dkID == desk.dkID);
+          }
 
-        if(!string.IsNullOrWhiteSpace(desk.dkN))//Filtro por Nombre Descripcion
-        {
-          query = query.Where(dk=>dk.dkN.Contains(desk.dkN));
+          if (!string.IsNullOrWhiteSpace(desk.dkN))//Filtro por Nombre Descripcion
+          {
+            query = query.Where(dk => dk.dkN.Contains(desk.dkN));
+          }
         }
 
         return query.OrderBy(dk => dk.dkN).ToList();
@@ -51,31 +54,77 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="desk">Objeto a guardar en la BD</param>
     /// <param name="blnUpdate">True. Actualiza un registro | False. Agrega un registro</param>
-    /// <returns>0. No se puedo guardar | 1. Se guardó correctamente | 2. Existe un registro con el mismo ID</returns>
+    /// <param name="lstIdsComputers">id's de computers a relacionar</param>
+    /// <returns>0. No se puedo guardar | > 0 . Se guardó correctamente | 2. Existe un registro con el mismo ID (Sólo cuando es insertar)</returns>
     /// <history>
     /// [emoguel] created 16/03/2016
     /// </history>
-    public static int SaveDesk(Desk desk,bool blnUpdate)
+    public static int SaveDesk(Desk desk, bool blnUpdate, List<string> lstIdsComputers)
     {
+      int nRes = 0;
       using (var dbContext = new IMEntities())
       {
-        if(blnUpdate)//Si es actualizar
+        using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
         {
-          dbContext.Entry(desk).State = System.Data.Entity.EntityState.Modified;
-        }
-        else//Si es guardar
-        {
-          Desk deskVal = dbContext.Desks.Where(dk => dk.dkID == desk.dkID).FirstOrDefault();
-          if(deskVal==null)//No existe registro con el ID
+          try
           {
-            dbContext.Desks.Add(desk);
+            #region Actualizar
+            if (blnUpdate)//Si es actualizar
+            {
+              dbContext.Entry(desk).State = System.Data.Entity.EntityState.Modified;
+            }
+            #endregion
+            #region Agregar
+            else//Si es guardar
+            {
+              Desk deskVal = dbContext.Desks.Where(dk => dk.dkID == desk.dkID).FirstOrDefault();
+              if (deskVal == null)//No existe registro con el ID
+              {
+                dbContext.Desks.Add(desk);
+              }
+              else//Existe un registro con el mismo ID
+              {
+                nRes = 2;
+              }
+            }
+            #endregion
+
+            #region Actualizar Computers
+            if (nRes != 2)
+            {
+
+              #region Desaignar
+              var lstComputersDes = (from cmp in dbContext.Computers
+                                     where !lstIdsComputers.Contains(cmp.cpID)
+                                     && cmp.cpdk == desk.dkID
+                                     select cmp).ToList();//Buscamos todas las computers asigndas que ya no estan en la lista
+
+              lstComputersDes.ForEach(cmp => cmp.cpdk = null);//Des-relacionamos las computers que no esten en la nueva lista
+
+              #endregion
+
+              #region Desaignar
+              var lstComputersAsi = (from cmp in dbContext.Computers
+                                     where lstIdsComputers.Contains(cmp.cpID)
+                                     select cmp).ToList();//Buscamos todas las computers que se van a asignar
+
+              lstComputersAsi.ForEach(cmp => cmp.cpdk = desk.dkID);//Des-relacionamos las computers que no esten en la nueva lista
+
+              #endregion
+
+            }
+            #endregion
+
+            nRes = dbContext.SaveChanges();
+            transacction.Commit();
           }
-          else//Existe un registro con el mismo ID
+          catch
           {
-            return 2;
+            transacction.Rollback();
+            nRes = 0;
           }
         }
-        return dbContext.SaveChanges();
+        return nRes;
       }
     }
     #endregion

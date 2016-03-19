@@ -6,6 +6,7 @@ using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Administrator.Enums;
 using System.Windows.Controls;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -126,6 +127,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
+      
       frmCountryDetail frmCountryDetail = new frmCountryDetail();
       frmCountryDetail.mode = ModeOpen.add;
       frmCountryDetail.Owner = this;
@@ -133,12 +135,16 @@ namespace IM.Administrator.Forms
       frmCountryDetail.country = country;
       if(frmCountryDetail.ShowDialog()==true)
       {
-        List<Country> lstCountry = (List<Country>)dgrCountries.ItemsSource;
-        lstCountry.Add(country);//Agregamos el nuevo registro
-        lstCountry.Sort((x, y) => string.Compare(x.coN,y.coN));//Ordenamos la lista
-        int nIndex = lstCountry.IndexOf(country);//Buscamos el index del nuevo registro
-        dgrCountries.Items.Refresh();//refrescamos la lista
-        GridHelper.SelectRow(dgrCountries, nIndex);//Seleccionamos el registro en la lista        
+        if (ValidateFilters(country))//Validamos que cumpla con los filtros actuales
+        {
+          List<Country> lstCountry = (List<Country>)dgrCountries.ItemsSource;
+          lstCountry.Add(country);//Agregamos el nuevo registro
+          lstCountry.Sort((x, y) => string.Compare(x.coN, y.coN));//Ordenamos la lista
+          int nIndex = lstCountry.IndexOf(country);//Buscamos el index del nuevo registro
+          dgrCountries.Items.Refresh();//refrescamos la lista
+          GridHelper.SelectRow(dgrCountries, nIndex);//Seleccionamos el registro en la lista    
+          StatusBarReg.Content =lstCountry.Count+ " Countries";    
+        }
       }
     } 
     #endregion
@@ -174,8 +180,22 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(frmCountryDetail.country, country);
       frmCountryDetail.mode = ((_blnEdit==true)?ModeOpen.edit:ModeOpen.preview);
       if (frmCountryDetail.ShowDialog() == true)
-      {
-        ObjectHelper.CopyProperties(country, frmCountryDetail.country);
+      {        
+        List<Country> lstCountry = (List<Country>)dgrCountries.ItemsSource;
+        int nIndex = 0;
+        if (!ValidateFilters(frmCountryDetail.country))
+        {
+          lstCountry.Remove(country);//Quitamos el registro de la lista
+        }
+        else
+        {
+          ObjectHelper.CopyProperties(country, frmCountryDetail.country);
+          lstCountry.Sort((x, y) => string.Compare(x.coN, y.coN));//Ordenamos la lista
+          nIndex = lstCountry.IndexOf(country);
+        }        
+        dgrCountries.Items.Refresh();//refrescamos la lista
+        GridHelper.SelectRow(dgrCountries, nIndex);//Seleccionamos el registro en la lista 
+        StatusBarReg.Content = lstCountry.Count + " Countries";//Actualizamos el contador
       }
     }
     #endregion
@@ -224,7 +244,46 @@ namespace IM.Administrator.Forms
         GridHelper.SelectRow(dgrCountries, 0);
       }
       StatusBarReg.Content = lstCountries.Count + " Countries.";
-    } 
+    }
+    #endregion
+
+    #region Validate Filters
+    /// <summary>
+    /// Valida si una entidad de tipo Country coincide con los filtros
+    /// </summary>
+    /// <param name="newCountry">Objeto a validar</param>
+    /// <returns>true. Si se muestra | false. Nose muestra</returns>
+    /// <history>
+    /// [emoguel] created 18/03/2016
+    /// </history>
+    private bool ValidateFilters(Country newCountry)
+    {
+      if (_nStatus != -1)
+      {
+        if (newCountry.coA != Convert.ToBoolean(_nStatus))
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_countryFilter.coID))
+      {
+        if (_countryFilter.coID != newCountry.coID)
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_countryFilter.coN))
+      {
+        if (!newCountry.coN.Contains(_countryFilter.coN))
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
     #endregion
     #endregion
   }

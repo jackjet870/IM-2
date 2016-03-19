@@ -1,16 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Administrator.Enums;
 using IM.Model;
 using IM.BusinessRules.BR;
@@ -145,18 +136,21 @@ namespace IM.Administrator.Forms
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
       frmAgencyDetail frmAgencyDetail = new frmAgencyDetail();
-      frmAgencyDetail.mode = ModeOpen.add;//Insertar
+      frmAgencyDetail.enumMode = ModeOpen.add;//Insertar
       frmAgencyDetail.Owner = this;
 
       if(frmAgencyDetail.ShowDialog()==true)
       {
-        List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;//cateamos el itemsource
-        lstAgencies.Add(frmAgencyDetail.agency);//Agregamos el registro nuevo
-        lstAgencies.Sort((x, y) => string.Compare(x.agN, y.agN));//ordenamos la lista
-        int nIndex = lstAgencies.IndexOf(frmAgencyDetail.agency);//obtenemos el index del registro nuevo        
-        dgrAgencies.Items.Refresh();//Refrescamos la lista
-        GridHelper.SelectRow(dgrAgencies, nIndex);
-        StatusBarReg.Content = lstAgencies.Count+" Agencies.";//Actualizamos el contador
+        if (ValidateFilters(frmAgencyDetail.agency))//Validamos si el nuevo registro cumple con los requisitos
+        {
+          List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;//cateamos el itemsource
+          lstAgencies.Add(frmAgencyDetail.agency);//Agregamos el registro nuevo
+          lstAgencies.Sort((x, y) => string.Compare(x.agN, y.agN));//ordenamos la lista
+          int nIndex = lstAgencies.IndexOf(frmAgencyDetail.agency);//obtenemos el index del registro nuevo        
+          dgrAgencies.Items.Refresh();//Refrescamos la lista
+          GridHelper.SelectRow(dgrAgencies, nIndex);
+          StatusBarReg.Content = lstAgencies.Count + " Agencies.";//Actualizamos el contador
+        }
       }     
     }
     #endregion
@@ -197,10 +191,25 @@ namespace IM.Administrator.Forms
       frmAgencyDetail frmAgencyDetail = new frmAgencyDetail();
       ObjectHelper.CopyProperties(frmAgencyDetail.agency,agency); 
       frmAgencyDetail.Owner = this;
-      frmAgencyDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
+      frmAgencyDetail.enumMode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
       if(frmAgencyDetail.ShowDialog()==true)
       {
-        ObjectHelper.CopyProperties(agency, frmAgencyDetail.agency);        
+        int nIndex = 0;
+        List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;//cateamos el itemsource
+        if (!ValidateFilters(frmAgencyDetail.agency))
+        {
+          lstAgencies.Remove(agency);//quitamos el registro de la lista          
+        }
+        else
+        {
+          ObjectHelper.CopyProperties(agency, frmAgencyDetail.agency);
+          lstAgencies.Sort((x, y) => string.Compare(x.agN, y.agN));//ordenamos la lista    
+          nIndex = lstAgencies.IndexOf(agency);
+        }
+        
+        dgrAgencies.Items.Refresh();
+        StatusBarReg.Content = lstAgencies.Count + " Agencies.";//Actualizamos el contador
+        GridHelper.SelectRow(dgrAgencies, nIndex);
       }
     }
     #endregion
@@ -226,7 +235,46 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
+    #region Validate Filters
+    /// <summary>
+    /// Valida si una entidad de tipo Agency coincide con los filtros
+    /// </summary>
+    /// <param name="newAgency">Objeto a validar</param>
+    /// <returns>true. Si se muestra | false. Nose muestra</returns>
+    /// <history>
+    /// [emoguel] created 18/03/2016
+    /// </history>
+    private bool ValidateFilters(Agency newAgency)
+    {
+
+      if (_nStatus != -1)
+      {
+        if (newAgency.agA != Convert.ToBoolean(_nStatus))
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_agencyFilter.agID))
+      {
+        if (_agencyFilter.agID != newAgency.agID)
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_agencyFilter.agN))
+      {
+        if (!newAgency.agN.Contains(_agencyFilter.agN))
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
     #endregion
-    
+    #endregion
+
   }
 }

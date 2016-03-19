@@ -19,7 +19,7 @@ namespace IM.Administrator.Forms
     public Agency agency = new Agency();//Objeto para llenar el formulario
     private string _unavailableMotive;
     private string _Market;
-    public ModeOpen mode;
+    public ModeOpen enumMode;
     public frmAgencyDetail()
     {
       InitializeComponent();      
@@ -112,7 +112,7 @@ namespace IM.Administrator.Forms
         agency.agse = ((agency.agse == "-1") ? null : agency.agse);
         int nRes = 0;
         #region Operacion
-        switch (mode)
+        switch (enumMode)
         {
           case ModeOpen.add:
             {
@@ -141,12 +141,21 @@ namespace IM.Administrator.Forms
             {
               UIHelper.ShowMessage("Agency successfully saved");
               DialogResult = true;
-              this.Close();
+              Close();
               break;
             }
           case 2:
             {
-              UIHelper.ShowMessage("Agency ID already exist please select another one");
+              if (enumMode != ModeOpen.edit)
+              {
+                UIHelper.ShowMessage("Agency ID already exist please select another one");
+              }
+              else
+              {
+                UIHelper.ShowMessage("Agency successfully saved");
+                DialogResult = true;
+                Close();
+              }
               break;
             }
         }
@@ -313,7 +322,7 @@ namespace IM.Administrator.Forms
     protected void OpenMode()
     {
       this.DataContext = agency;
-      switch (mode)
+      switch (enumMode)
       {        
         case ModeOpen.preview://show
           {

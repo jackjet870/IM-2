@@ -1,16 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
@@ -96,7 +87,7 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created
     /// </history>
-    private void txtD_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    private void PreviewTextInputNumber(object sender, TextCompositionEventArgs e)
     {
       e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
     }    
@@ -141,7 +132,7 @@ namespace IM.Administrator.Forms
         #region ChargeTo
         case "ChargeTo":
           {
-            txtD.PreviewTextInput += new TextCompositionEventHandler(txtD_PreviewTextInput);
+            txtD.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
             txtD.MaxLength = 3;
             lblDes.Content = "Price";
             lblSta.Content = "CxC";
@@ -175,8 +166,16 @@ namespace IM.Administrator.Forms
             cmbStatus.Visibility = Visibility.Collapsed;
             lblSta.Visibility = Visibility.Collapsed;            
             break;
-          } 
-          #endregion
+          }
+        #endregion
+
+        #region Desks
+        case "Desks":
+          {
+            txtID.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
+            break;
+          }
+        #endregion
       }
 
     }
@@ -192,8 +191,8 @@ namespace IM.Administrator.Forms
     protected void SetData()
     {
       nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
-      sID = txtID.Text;
-      sDesc = txtD.Text;
+      sID = txtID.Text.Trim();
+      sDesc = txtD.Text.Trim();
       switch (sForm)
       {
         
@@ -212,14 +211,14 @@ namespace IM.Administrator.Forms
               else
               {
                 txtD.Text = ((nPrice == 0) ? "" : nPrice.ToString());
-                MessageBox.Show("The price must be higher than 0 \n and must be smaller than 255");
+                UIHelper.ShowMessage("The price must be higher than 0 \n and must be smaller than 255");
               }
             }
             else
             {
               sDesc = "0";
               DialogResult = true;
-              this.Close();
+              Close();
             }
             break;
           }
@@ -237,12 +236,40 @@ namespace IM.Administrator.Forms
             break;
           }
         #endregion
+        #region Desks
+        case "Desks":
+          {
+            if (!string.IsNullOrWhiteSpace(txtID.Text))
+            {
+              if (Convert.ToInt32(txtID.Text.Trim()) > 0)
+              {
+                sID = txtID.Text.Trim();
+                DialogResult = true;
+                Close();
+              }
+              else
+              {
+                UIHelper.ShowMessage("The ID must be higher than 0");
+                txtID.Text = "0";
+              }
+            }
+            else
+            {
+              sID = "0";
+              DialogResult = true;
+              Close();
+            }
+            break;
+          }
+        #endregion
+        #region Default
         default:
-          {            
+          {
             DialogResult = true;
             Close();
             break;
-          }
+          } 
+          #endregion
       }
     }
     #endregion

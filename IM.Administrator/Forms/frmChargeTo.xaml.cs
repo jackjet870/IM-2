@@ -87,7 +87,21 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(frmChargeToDetail.chargeTo,chargeTo);
       if(frmChargeToDetail.ShowDialog()==true)
       {
-        ObjectHelper.CopyProperties(chargeTo, frmChargeToDetail.chargeTo);
+        List<ChargeTo> lstCargeTos = (List<ChargeTo>)dgrChargeTo.ItemsSource;
+        int nIndex = 0;
+        if(!ValidateFilters(frmChargeToDetail.chargeTo))
+        {
+          lstCargeTos.Remove(chargeTo);//quitamos el registro de la lista
+        }
+        else
+        {
+          ObjectHelper.CopyProperties(chargeTo, frmChargeToDetail.chargeTo);
+          lstCargeTos.Sort((x, y) => string.Compare(x.ctID, y.ctID));//Ordenamos la lista   
+          nIndex = lstCargeTos.IndexOf(chargeTo);
+        }             
+        dgrChargeTo.Items.Refresh();//Refrescamos el grid
+        GridHelper.SelectRow(dgrChargeTo, nIndex);
+        StatusBarReg.Content = lstCargeTos.Count + " Carge Tos.";
       }
     }
 
@@ -160,13 +174,16 @@ namespace IM.Administrator.Forms
 
       if (frmChargeToDetail.ShowDialog() == true)
       {
-        List<ChargeTo> lstCargeTos = (List<ChargeTo>)dgrChargeTo.ItemsSource;
-        lstCargeTos.Add(frmChargeToDetail.chargeTo);//Agregamos el nuevo registro
-        lstCargeTos.Sort((x,y)=>string.Compare(x.ctID,y.ctID));//Ordenamos la lista
-        int nIndex = lstCargeTos.IndexOf(frmChargeToDetail.chargeTo);//Obtenemos el index
-        dgrChargeTo.Items.Refresh();//Refrescamos el grid
-        GridHelper.SelectRow(dgrChargeTo, nIndex);
-        StatusBarReg.Content = lstCargeTos.Count + " Carge Tos.";
+        if (ValidateFilters(frmChargeToDetail.chargeTo))//Valida si cumple con los filtros actuales
+        {
+          List<ChargeTo> lstCargeTos = (List<ChargeTo>)dgrChargeTo.ItemsSource;
+          lstCargeTos.Add(frmChargeToDetail.chargeTo);//Agregamos el nuevo registro
+          lstCargeTos.Sort((x, y) => string.Compare(x.ctID, y.ctID));//Ordenamos la lista
+          int nIndex = lstCargeTos.IndexOf(frmChargeToDetail.chargeTo);//Obtenemos el index
+          dgrChargeTo.Items.Refresh();//Refrescamos el grid
+          GridHelper.SelectRow(dgrChargeTo, nIndex);
+          StatusBarReg.Content = lstCargeTos.Count + " Carge Tos.";
+        }
       }
     }
     #endregion
@@ -217,7 +234,44 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
+    #region Validate Filters
+    /// <summary>
+    /// Valida si una entidad de tipo ChargeTo coincide con los filtros
+    /// </summary>
+    /// <param name="newChargeTo">Objeto a validar</param>
+    /// <returns>true. Si se muestra | false. Nose muestra</returns>
+    /// <history>
+    /// [emoguel] created 18/03/2016
+    /// </history>
+    private bool ValidateFilters(ChargeTo newChargeTo)
+    {
+      if (_nStatus != -1)
+      {
+        if (newChargeTo.ctIsCxC !=Convert.ToBoolean(_nStatus))
+        {
+          return false;
+        }
+      }
+
+      if (!string.IsNullOrWhiteSpace(_chargeToFilter.ctID))
+      {
+        if (_chargeToFilter.ctID != newChargeTo.ctID)
+        {
+          return false;
+        }
+      }
+
+      if (_chargeToFilter.ctPrice>0)
+      {
+        if (newChargeTo.ctPrice==_chargeToFilter.ctPrice)
+        {
+          return false;
+        }
+      }
+      return true;
+    }
     #endregion
-    
+    #endregion
+
   }
 }

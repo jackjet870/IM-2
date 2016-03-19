@@ -35,6 +35,11 @@ namespace IM.BusinessRules.BR
           {
             query = query.Where(cp => cp.cpN.Contains(computer.cpN));
           }
+
+          if(computer.cpdk!=null)
+          {
+            query = query.Where(cp => cp.cpdk == computer.cpdk);
+          }
         }
 
         return query.OrderBy(cp => cp.cpN).ToList();
