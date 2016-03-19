@@ -26,6 +26,58 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    #region RptAssignmentByPR
+    /// <summary>
+    /// Obtiene los datos para el reporte de huespedes asignados por PR
+    /// </summary>
+    /// <param name="dateFrom">Fecha desde</param>
+    /// <param name="dateTo">Fecha hasta</param>
+    /// <param name="leadSource">Clave del LeadSource</param>
+    /// <param name="markets">Claves de Mercados</param>
+    /// <param name="PR">Clave del PR</param>
+    public static List<RptAssignmentByPR> RptAssignmentByPR(DateTime dateFrom, DateTime dateTo, String leadSource, String markets, String PR)
+    {
+      using (var dbContext = new IMEntities())
+      {
+        return dbContext.USP_OR_RptAssignmentByPR(dateFrom, dateTo, leadSource, markets, PR).ToList();
+      }
+    }
+    #endregion
+
+    #region RptAssignment
+    /// <summary>
+    /// Obtiene los datos para el reporte de huespedes asignados
+    /// </summary>
+    /// <param name="dateFrom">Fecha desde</param>
+    /// <param name="dateTo">Fecha hasta</param>
+    /// <param name="leadSource">Clave del LeadSource</param>
+    /// <param name="markets">Claves de Mercados</param>
+    public static List<RptAssignment> RptAssignment(DateTime dateFrom, DateTime dateTo, String leadSource, String markets)
+    {
+      using (var dbContext = new IMEntities())
+      {
+        return dbContext.USP_OR_RptAssignment(dateFrom, dateTo, leadSource, markets).ToList();
+      }
+    }
+    #endregion
+
+    #region RtpAssignmentArrivals
+    /// <summary>
+    /// Obtiene los datos para el reporte de llegadas y su asignacion
+    /// </summary>
+    /// <param name="dateFrom">Fecha desde</param>
+    /// <param name="dateTo">Fecha hasta</param>
+    /// <param name="leadSource">Clave del LeadSource</param>
+    /// <param name="markets">Claves de Mercados</param>
+    public static List<RptAssignmentArrivals> RptAssignmetArrivals(DateTime dateFrom, DateTime dateTo, String leadSource, String markets)
+    {
+      using (var dbContext = new IMEntities())
+      {
+        return dbContext.USP_OR_RptAssignmentArrivals(dateFrom, dateTo, leadSource, markets).ToList();
+      }
+    }
+    #endregion
+
     #region GetPRsAssigned
     /// <summary>
     /// Obtiene los PRs que tienen asignado al menos a un huesped

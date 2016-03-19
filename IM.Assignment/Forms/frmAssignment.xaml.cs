@@ -14,8 +14,15 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Globalization;
 using IM.Model;
+using IM.Model.Enums;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Classes;
+using System.Data;
+using OfficeOpenXml.Style;
+using System.IO;
+using System.Diagnostics;
+
 namespace IM.Assignment
 {
   /// <summary>
@@ -29,17 +36,22 @@ namespace IM.Assignment
   {
 
     #region Atributos
-   
-    private string _markets = "ALL", _LeadSource = string.Empty, _strgPRs = string.Empty;
-  
-    List<int> _strgGuestUnassigned = new List<int>();
-    List<int> _strgGuestAssigned = new List<int>();
 
+    private string _markets = "ALL", _LeadSource = string.Empty, _strgPRs = string.Empty, _strgNamePR = string.Empty;
+
+    private List<int> _strgGuestUnassigned = new List<int>();
+    private List<int> _strgGuestAssigned = new List<int>();
     private List<MarketShort> lstMarkets;
+
     private DateTime mdtmDate;
+
     private CollectionViewSource _guestUnassignedViewSource;
     private CollectionViewSource _pRAssignedViewSource;
     private CollectionViewSource _guestAssignedViewSource;
+
+    private List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
+    private DataTable dt = new DataTable();
+    private Tuple<string, string> rptName;
 
     #endregion
 
@@ -237,6 +249,8 @@ namespace IM.Assignment
     }
     #endregion
 
+    #endregion
+
     #region Eventos
 
     #region Window_Loaded
@@ -326,6 +340,111 @@ namespace IM.Assignment
    }
     #endregion
 
+    #region btnAssignmentByPR_Click
+    //Genera el reporte de huespedes asignados por PR
+    private void btnAssignmentByPR_Click(object sender, RoutedEventArgs e)
+    {
+      //validamos el PR
+      if (ValidatePR()) {
+        filters.Add(Tuple.Create("Lead Source", _LeadSource));
+        filters.Add(Tuple.Create(_strgPRs, _strgNamePR));
+        List<RptAssignmentByPR> lstAssignmentByPR = BRAssignment.RptAssignmentByPR(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, _strgPRs);
+        if (lstAssignmentByPR.Count > 0)
+        {
+          dt = GridHelper.GetDataTableFromGrid(lstAssignmentByPR, true);
+          rptName = new Tuple<string, string>("Assignment by PR", lblWeek.Content + " " + lblDataRange.Content);
+          List<ExcelFormatTable> format = new List<ExcelFormatTable>();
+          format.Add(new ExcelFormatTable() { Title = "In", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
+          format.Add(new ExcelFormatTable() { Title = "Out", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
+          format.Add(new ExcelFormatTable() { Title = "Room", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+          format.Add(new ExcelFormatTable() { Title = "Last Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+          format.Add(new ExcelFormatTable() { Title = "First Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+          format.Add(new ExcelFormatTable() { Title = "Agency ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+          format.Add(new ExcelFormatTable() { Title = "Agency", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+          format.Add(new ExcelFormatTable() { Title = "Member #", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+          format.Add(new ExcelFormatTable() { Title = "01", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+          format.Add(new ExcelFormatTable() { Title = "Comments", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+          format.Add(new ExcelFormatTable() { Title = "PR ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+          format.Add(new ExcelFormatTable() { Title = "PR N Assigned", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+          format.Add(new ExcelFormatTable() { Title = "Pax", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+          EpplusHelper.CreateRptExcelWithOutTemplate(filters, dt, rptName, format);
+        }
+        else
+        {
+          MessageBox.Show("There is no date.", "Intelligence Marketing Assignment", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+      }
+    }
+    #endregion
+
+    #region btnGeneralAssignment_Click
+    private void btnGeneralAssignment_Click(object sender, RoutedEventArgs e)
+    {
+      filters.Add(Tuple.Create("Lead Source", _LeadSource));
+      List<RptAssignment> lstAssignment = BRAssignment.RptAssignment(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets) ;
+      if (lstAssignment.Count > 0)
+      {
+        dt = GridHelper.GetDataTableFromGrid(lstAssignment, true);
+        rptName = new Tuple<string, string>("General Assignment", ""+lblDataRange.Content);
+        List<ExcelFormatTable> format = new List<ExcelFormatTable>();
+        format.Add(new ExcelFormatTable() { Title = "ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Check In D", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "In", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Room", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Last Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "First Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "PR ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "PR N Assigned", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Agency ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Agency", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Member #", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Gross", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "PR", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Liner", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Closer", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        EpplusHelper.CreateRptExcelWithOutTemplate(filters, dt, rptName, format);
+      }
+      else
+      {
+        MessageBox.Show("There is no date.", "Intelligence Marketing Assignment", MessageBoxButton.OK, MessageBoxImage.Information);
+      }
+    }
+    #endregion
+
+    #region btnAssignmentArrivals
+    private void btnAssignmentArrivals_Click(object sender, RoutedEventArgs e)
+    {
+      filters.Add(Tuple.Create("Lead Source", _LeadSource));
+      List<RptAssignmentArrivals> lstAssignmentArrivals = BRAssignment.RptAssignmetArrivals(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets);
+      if (lstAssignmentArrivals.Count > 0)
+      {
+        dt = GridHelper.GetDataTableFromGrid(lstAssignmentArrivals, true);
+        rptName = new Tuple<string, string>("Arrivals", "" + lblDataRange.Content);
+        List<ExcelFormatTable> format = new List<ExcelFormatTable>();
+        format.Add(new ExcelFormatTable() { Title = "ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Check In D", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "In", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Room", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Last Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "First Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "PR ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "PR N Assigned", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Agency ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Agency", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Member #", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Gross", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "PR", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Liner", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Closer", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        EpplusHelper.CreateRptExcelWithOutTemplate(filters, dt, rptName, format);
+      }
+      else
+      {
+        MessageBox.Show("There is no date.", "Intelligence Marketing Assignment", MessageBoxButton.OK, MessageBoxImage.Information);
+      }
+    }
+    #region
+
     #region btnAssign_Click
     private void btnAssign_Click(object sender, RoutedEventArgs e)
     {
@@ -369,15 +488,17 @@ namespace IM.Assignment
     #region grdPRAssigned_SelectionChanged
     private void grdPRAssigned_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      int cont = 0; _strgPRs = string.Empty;
+      int cont = 0; _strgPRs = string.Empty; _strgNamePR = string.Empty;
       var selectedItems = grdPRAssigned.SelectedItems;
       foreach (PRAssigned selectedItem in selectedItems)
       {
         cont = cont + 1;
         _strgPRs += selectedItem.peID.ToString();
+        _strgNamePR = selectedItem.peN;
         if (selectedItems.Count > 1 && cont < selectedItems.Count)
         {
           _strgPRs = _strgPRs + ",";
+          _strgNamePR = _strgNamePR + ",";
         }
       }
       LoadListGuestsAssigned();
@@ -407,6 +528,8 @@ namespace IM.Assignment
         _strgGuestAssigned.Add(selectedItem.guID);
       }
     }
+    #endregion
+
     #endregion
 
     #endregion
