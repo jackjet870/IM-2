@@ -19,76 +19,57 @@ namespace IM.Base.Helpers
     /// <typeparam name="T">Tipo de dato de la lista</typeparam>
     /// <param name="changeDataTypeBoolToString">true : Cambia las columnas boleanas a string - false: las deja como boleanas</param>
     /// <param name="lst">Lista tipada</param>
+    /// <param name="showCheckMark"> false: Cambia las columnas booleanas a string y convierte la palabra </param>
     /// <returns>DataTable</returns>
     /// <history>
     /// [erosado] 12/Mar/2016  Created.
     /// [erosado] 17/Mar/2016  Se agrego la opcion para cambiar los tipos de datos de la Boolean a string, 
     ///                        esto nos sirve para que en el reporte se muestren palomitas en lugar de la palabra "VERDADERO"
+    /// [edgrodriguez] 19/Mar/2016 Modified. Opcion para cambiar los tipos de datos de Boolean a string
+    ///                                      cambiando la palabra "True" por la palabra "Yes".
+    ///                                      Se hizo modificaciones en el proceso de creacion del datatable.
     /// </history>
-    public static DataTable GetDataTableFromGrid<T>(List<T> lst, bool changeDataTypeBoolToString = false)
-    {
+    public static DataTable GetDataTableFromGrid<T>(List<T> lst, bool changeDataTypeBoolToString = false, bool showCheckMark=true)
+    {      
       if (changeDataTypeBoolToString)
       {
-        #region Covertimos lista tipada en DataTable
-        PropertyDescriptorCollection properties =
-            TypeDescriptor.GetProperties(typeof(T));
-        DataTable table = new DataTable();
-        foreach (PropertyDescriptor prop in properties)
-          table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
-                
-        foreach (T item in lst)
-        {
-          DataRow row = table.NewRow();
-          foreach (PropertyDescriptor prop in properties)
-            row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
-          table.Rows.Add(row);
-        }
-        #endregion
-
-        #region Cambio de DataType Clonedt
-        //Copiamos la estructura de table y le cambiamos los DataType Boolean a string
+        List<PropertyDescriptor> properties =
+            TypeDescriptor.GetProperties(typeof(T)).Cast<PropertyDescriptor>().ToList();
         List<int> columnsChanged = new List<int>();
-        DataTable cloneDt = table.Clone();
-        int contColumn = 0;
-        foreach (DataColumn item in table.Columns)
+        DataTable table = new DataTable();
+        properties.ForEach(c =>
         {
-          if (item.DataType == typeof(Boolean))
+          var type = Nullable.GetUnderlyingType(c.PropertyType) ?? c.PropertyType;
+          if (type == typeof(bool) || type == typeof(bool?))
           {
-            cloneDt.Columns[contColumn].DataType = typeof(string);
-            columnsChanged.Add(contColumn);
+            table.Columns.Add(c.Name, typeof(string));
+            columnsChanged.Add(properties.IndexOf(c));
           }
-          contColumn++;
-        }
-        #endregion
-
-        #region Agregamos la informacion de Table a Clonedt
-        //LLenamos CLonedt Con la informacion de table
-        foreach (DataRow tableRows in table.Rows)
-        {
-          cloneDt.ImportRow(tableRows);
-        }
-
-        #endregion
-
-        #region Cambiamos los valores True y False 
-        //Recorremos Clonedt buscando cambiar todos los true por "ü" y los false y nulls por ""
-        foreach (int item in columnsChanged)
-        {
-          for (int i = 0; i < cloneDt.Rows.Count; i++)
+          else
           {
-            if (cloneDt.Rows[i][item].ToString() == "True")
-            {
-              cloneDt.Rows[i][item] = "ü";
-            }
+            if (type == typeof(string))
+              table.Columns.Add(new DataColumn { ColumnName = c.Name, DataType = type, DefaultValue = (showCheckMark) ? "" : "-" });
             else
-            {
-              cloneDt.Rows[i][item] = "";
-            }
+              table.Columns.Add(c.Name, type);
           }
-        }
-        #endregion
+        });
 
-        return cloneDt; //Regresamos el nuevo DataTable con su nueva estructura.
+        lst.ForEach(c =>
+        {
+          DataRow newRow = table.NewRow();
+          var values = properties.Select(v => v.GetValue(c)).ToArray();
+          columnsChanged.ForEach(col =>
+          {
+            if (showCheckMark)
+              values[col] = (values[col].ToString().ToLower() == "true") ? "ü" : "";
+            else
+              values[col] = (values[col].ToString().ToLower() == "true") ? "Yes" : " ";
+          });
+          newRow.ItemArray = values;
+          table.Rows.Add(newRow);
+        });
+
+        return table;
       }
       else
       {

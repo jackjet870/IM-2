@@ -142,7 +142,7 @@
             </Grid>
             <!--#endregion-->
             <!--#region Grid Reporte General -->
-            <DataGrid Name="grdrptGeneral" Grid.Row="3" AutoGenerateColumns="False" GridLinesVisibility="None">
+            <DataGrid Name="grdrptGeneral" Grid.Row="3" AutoGenerateColumns="False" GridLinesVisibility="None" SelectionChanged="grdrptGeneral_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding rptNombre}" IsReadOnly="True" Width="*">
                         <DataGridTextColumn.HeaderStyle>
@@ -154,6 +154,12 @@
                         </DataGridTextColumn.HeaderStyle>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="grdrptGeneral_dblClick"/>
+                        <EventSetter Event="PreviewKeyDown" Handler="grdrptGeneral_PreviewKeyDown"/>
+                    </Style>
+                </DataGrid.Resources>
             </DataGrid>
             <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
