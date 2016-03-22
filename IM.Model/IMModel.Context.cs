@@ -1143,5 +1143,26 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptAssignmentByPR>("USP_OR_RptAssignmentByPR", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter, pRParameter);
         }
+    
+        public virtual ObjectResult<Nullable<bool>> USP_OR_ValidateFolioCXC(Nullable<int> numberFrom, Nullable<int> numberTo, Nullable<bool> active, Nullable<int> action)
+        {
+            var numberFromParameter = numberFrom.HasValue ?
+                new ObjectParameter("NumberFrom", numberFrom) :
+                new ObjectParameter("NumberFrom", typeof(int));
+    
+            var numberToParameter = numberTo.HasValue ?
+                new ObjectParameter("NumberTo", numberTo) :
+                new ObjectParameter("NumberTo", typeof(int));
+    
+            var activeParameter = active.HasValue ?
+                new ObjectParameter("Active", active) :
+                new ObjectParameter("Active", typeof(bool));
+    
+            var actionParameter = action.HasValue ?
+                new ObjectParameter("Action", action) :
+                new ObjectParameter("Action", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<bool>>("USP_OR_ValidateFolioCXC", numberFromParameter, numberToParameter, activeParameter, actionParameter);
+        }
     }
 }
