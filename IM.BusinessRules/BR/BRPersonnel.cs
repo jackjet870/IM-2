@@ -48,7 +48,18 @@ namespace IM.BusinessRules.BR
     #endregion
 
     #region ChangePassword
-
+    /// <summary>
+    /// Cambia el password del usuario.
+    /// </summary>
+    /// <param name="user">UserName</param>
+    /// <param name="newPassword">New Password</param>
+    /// <param name="serverDate">Server Date</param>
+    /// <returns>bool</returns>
+    /// <history>
+    /// [edgrodriguez] 03/Mar/2016 Created
+    /// [edgrodriguez] 22/Mar/2016 Modified. Se agregó el dbContext.Entry. Ya que el usuario
+    ///                            lo obtiene desde otro método.
+    /// </history>
     public static bool ChangePassword(string user, string newPassword, DateTime serverDate)
     {
       int result;
@@ -57,6 +68,7 @@ namespace IM.BusinessRules.BR
         Personnel personnel = GetPersonnelById(user);
         personnel.pePwd = newPassword;
         personnel.pePwdD = serverDate.Date;
+        dbContext.Entry(personnel).State = System.Data.Entity.EntityState.Modified;
         result = dbContext.SaveChanges();
       }
       return Convert.ToBoolean(result);
