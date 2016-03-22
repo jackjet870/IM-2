@@ -5952,6 +5952,26 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_RptCxC" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptCxCDeposits" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptCxCGifts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptCxCNotAuthorized" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_RptGifts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_RptPersonnel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_RptPRStats" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -14982,6 +15002,26 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Active" Mode="In" Type="Boolean" />
             <Parameter Name="Action" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_RptCxC" ReturnType="Collection(IMModel.RptCxC)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptCxCDeposits" ReturnType="Collection(IMModel.RptCxCDeposits)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptCxCGifts" ReturnType="Collection(IMModel.RptCxCGifts)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptCxCNotAuthorized" ReturnType="Collection(IMModel.RptCxCNotAuthorized)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -15730,6 +15770,92 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="String" Name="guPRAssign" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
           <Property Type="Decimal" Name="guPax" Nullable="false" Precision="4" Scale="1" />
+        </ComplexType>
+        <ComplexType Name="RptCxC">
+          <Property Type="String" Name="grGroup" Nullable="true" MaxLength="11" />
+          <Property Type="String" Name="grpe" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="grID" Nullable="false" />
+          <Property Type="String" Name="grNum" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="grD" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="grgu" Nullable="true" />
+          <Property Type="String" Name="grGuest" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="geQty" Nullable="false" />
+          <Property Type="String" Name="giN" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="geAdults" Nullable="false" />
+          <Property Type="Int32" Name="geMinors" Nullable="false" />
+          <Property Type="String" Name="geFolios" Nullable="true" MaxLength="100" />
+          <Property Type="Decimal" Name="TotalGift" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="grCxCGifts" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="grCxCAdj" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="grCxCPRDeposit" Nullable="false" Precision="19" />
+          <Property Type="String" Name="grcuCxCPRDeposit" Nullable="false" MaxLength="10" />
+          <Property Type="Decimal" Name="ExchRateDeposit" Nullable="false" Precision="12" Scale="8" />
+          <Property Type="Decimal" Name="CxCDepositUS" Nullable="true" Precision="32" Scale="12" />
+          <Property Type="Decimal" Name="CxCDepositMN" Nullable="true" Precision="38" Scale="10" />
+          <Property Type="Decimal" Name="grCxCTaxiOut" Nullable="false" Precision="19" />
+          <Property Type="String" Name="grcuCxCTaxiOut" Nullable="false" MaxLength="10" />
+          <Property Type="Decimal" Name="ExchRateTaxiOut" Nullable="false" Precision="12" Scale="8" />
+          <Property Type="Decimal" Name="CxCTaxiOutUS" Nullable="true" Precision="32" Scale="12" />
+          <Property Type="Decimal" Name="CxCTaxiOutMN" Nullable="true" Precision="38" Scale="10" />
+          <Property Type="Decimal" Name="TotalCxC" Nullable="true" Precision="34" Scale="12" />
+          <Property Type="Decimal" Name="CxCPaidUS" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="CxCPaidMN" Nullable="true" Precision="38" Scale="15" />
+          <Property Type="Decimal" Name="ExchRateSalesRoom" Nullable="false" Precision="12" Scale="8" />
+          <Property Type="String" Name="grCxCComments" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="grComments" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="RptCxCNotAuthorized">
+          <Property Type="Int32" Name="grID" Nullable="false" />
+          <Property Type="String" Name="grNum" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="grls" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="grgu" Nullable="true" />
+          <Property Type="String" Name="grGuest" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="grD" Nullable="false" Precision="23" />
+          <Property Type="String" Name="grpe" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="Decimal" Name="grCxCGifts" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="grCxCPRDeposit" Nullable="true" Precision="32" Scale="12" />
+          <Property Type="Decimal" Name="grCxCTaxiOut" Nullable="true" Precision="32" Scale="12" />
+          <Property Type="Decimal" Name="CxC" Nullable="true" Precision="34" Scale="12" />
+        </ComplexType>
+        <ComplexType Name="RptCxCDeposits">
+          <Property Type="Int32" Name="grID" Nullable="false" />
+          <Property Type="String" Name="grNum" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="grD" Nullable="false" Precision="23" />
+          <Property Type="String" Name="grls" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="grgu" Nullable="true" />
+          <Property Type="String" Name="grGuest" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="grHotel" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="grpe" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="grHost" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="HostN" Nullable="true" MaxLength="40" />
+          <Property Type="Decimal" Name="grCxCPRDeposit" Nullable="false" Precision="19" />
+          <Property Type="String" Name="grcuCxCPRDeposit" Nullable="false" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="RptCxCGifts">
+          <Property Type="Int32" Name="grID" Nullable="false" />
+          <Property Type="String" Name="grNum" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="grpe" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="grlo" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="grHost" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="HostN" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="grgu" Nullable="true" />
+          <Property Type="String" Name="grGuest" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Gift" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="Quantity" Nullable="false" />
+          <Property Type="Int32" Name="Adults" Nullable="false" />
+          <Property Type="Int32" Name="Minors" Nullable="false" />
+          <Property Type="String" Name="Folios" Nullable="false" MaxLength="100" />
+          <Property Type="Decimal" Name="Cost" Nullable="false" Precision="19" />
+          <Property Type="DateTime" Name="grD" Nullable="false" Precision="23" />
+          <Property Type="Decimal" Name="CostUS" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="exExchRate" Nullable="false" Precision="12" Scale="8" />
+          <Property Type="Decimal" Name="CostMX" Nullable="true" Precision="38" Scale="15" />
+          <Property Type="String" Name="grMemberNum" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="grCxCComments" Nullable="true" MaxLength="50" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -18934,6 +19060,108 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_ValidateFolioCXC" FunctionName="IMModel.Store.USP_OR_ValidateFolioCXC" />
+          <FunctionImportMapping FunctionImportName="USP_OR_RptCxC" FunctionName="IMModel.Store.USP_OR_RptCxC">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptCxC">
+                <ScalarProperty Name="grGroup" ColumnName="grGroup" />
+                <ScalarProperty Name="grpe" ColumnName="grpe" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="grID" ColumnName="grID" />
+                <ScalarProperty Name="grNum" ColumnName="grNum" />
+                <ScalarProperty Name="grD" ColumnName="grD" />
+                <ScalarProperty Name="grgu" ColumnName="grgu" />
+                <ScalarProperty Name="grGuest" ColumnName="grGuest" />
+                <ScalarProperty Name="geQty" ColumnName="geQty" />
+                <ScalarProperty Name="giN" ColumnName="giN" />
+                <ScalarProperty Name="geAdults" ColumnName="geAdults" />
+                <ScalarProperty Name="geMinors" ColumnName="geMinors" />
+                <ScalarProperty Name="geFolios" ColumnName="geFolios" />
+                <ScalarProperty Name="TotalGift" ColumnName="TotalGift" />
+                <ScalarProperty Name="grCxCGifts" ColumnName="grCxCGifts" />
+                <ScalarProperty Name="grCxCAdj" ColumnName="grCxCAdj" />
+                <ScalarProperty Name="grCxCPRDeposit" ColumnName="grCxCPRDeposit" />
+                <ScalarProperty Name="grcuCxCPRDeposit" ColumnName="grcuCxCPRDeposit" />
+                <ScalarProperty Name="ExchRateDeposit" ColumnName="ExchRateDeposit" />
+                <ScalarProperty Name="CxCDepositUS" ColumnName="CxCDepositUS" />
+                <ScalarProperty Name="CxCDepositMN" ColumnName="CxCDepositMN" />
+                <ScalarProperty Name="grCxCTaxiOut" ColumnName="grCxCTaxiOut" />
+                <ScalarProperty Name="grcuCxCTaxiOut" ColumnName="grcuCxCTaxiOut" />
+                <ScalarProperty Name="ExchRateTaxiOut" ColumnName="ExchRateTaxiOut" />
+                <ScalarProperty Name="CxCTaxiOutUS" ColumnName="CxCTaxiOutUS" />
+                <ScalarProperty Name="CxCTaxiOutMN" ColumnName="CxCTaxiOutMN" />
+                <ScalarProperty Name="TotalCxC" ColumnName="TotalCxC" />
+                <ScalarProperty Name="CxCPaidUS" ColumnName="CxCPaidUS" />
+                <ScalarProperty Name="CxCPaidMN" ColumnName="CxCPaidMN" />
+                <ScalarProperty Name="ExchRateSalesRoom" ColumnName="ExchRateSalesRoom" />
+                <ScalarProperty Name="grCxCComments" ColumnName="grCxCComments" />
+                <ScalarProperty Name="grComments" ColumnName="grComments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptCxCDeposits" FunctionName="IMModel.Store.USP_OR_RptCxCDeposits" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptCxCDeposits">
+                <ScalarProperty Name="grID" ColumnName="grID" />
+                <ScalarProperty Name="grNum" ColumnName="grNum" />
+                <ScalarProperty Name="grD" ColumnName="grD" />
+                <ScalarProperty Name="grls" ColumnName="grls" />
+                <ScalarProperty Name="grgu" ColumnName="grgu" />
+                <ScalarProperty Name="grGuest" ColumnName="grGuest" />
+                <ScalarProperty Name="grHotel" ColumnName="grHotel" />
+                <ScalarProperty Name="grpe" ColumnName="grpe" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="grHost" ColumnName="grHost" />
+                <ScalarProperty Name="HostN" ColumnName="HostN" />
+                <ScalarProperty Name="grCxCPRDeposit" ColumnName="grCxCPRDeposit" />
+                <ScalarProperty Name="grcuCxCPRDeposit" ColumnName="grcuCxCPRDeposit" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptCxCGifts" FunctionName="IMModel.Store.USP_OR_RptCxCGifts" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptCxCGifts">
+                <ScalarProperty Name="grID" ColumnName="grID" />
+                <ScalarProperty Name="grNum" ColumnName="grNum" />
+                <ScalarProperty Name="grpe" ColumnName="grpe" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="grlo" ColumnName="grlo" />
+                <ScalarProperty Name="grHost" ColumnName="grHost" />
+                <ScalarProperty Name="HostN" ColumnName="HostN" />
+                <ScalarProperty Name="grgu" ColumnName="grgu" />
+                <ScalarProperty Name="grGuest" ColumnName="grGuest" />
+                <ScalarProperty Name="Gift" ColumnName="Gift" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Adults" ColumnName="Adults" />
+                <ScalarProperty Name="Minors" ColumnName="Minors" />
+                <ScalarProperty Name="Folios" ColumnName="Folios" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="grD" ColumnName="grD" />
+                <ScalarProperty Name="CostUS" ColumnName="CostUS" />
+                <ScalarProperty Name="exExchRate" ColumnName="exExchRate" />
+                <ScalarProperty Name="CostMX" ColumnName="CostMX" />
+                <ScalarProperty Name="grMemberNum" ColumnName="grMemberNum" />
+                <ScalarProperty Name="grCxCComments" ColumnName="grCxCComments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptCxCNotAuthorized" FunctionName="IMModel.Store.USP_OR_RptCxCNotAuthorized">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptCxCNotAuthorized">
+                <ScalarProperty Name="grID" ColumnName="grID" />
+                <ScalarProperty Name="grNum" ColumnName="grNum" />
+                <ScalarProperty Name="grls" ColumnName="grls" />
+                <ScalarProperty Name="grgu" ColumnName="grgu" />
+                <ScalarProperty Name="grGuest" ColumnName="grGuest" />
+                <ScalarProperty Name="grD" ColumnName="grD" />
+                <ScalarProperty Name="grpe" ColumnName="grpe" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="grCxCGifts" ColumnName="grCxCGifts" />
+                <ScalarProperty Name="grCxCPRDeposit" ColumnName="grCxCPRDeposit" />
+                <ScalarProperty Name="grCxCTaxiOut" ColumnName="grCxCTaxiOut" />
+                <ScalarProperty Name="CxC" ColumnName="CxC" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
