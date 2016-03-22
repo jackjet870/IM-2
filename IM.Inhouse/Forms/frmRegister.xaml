@@ -30,49 +30,55 @@
             </Grid.ColumnDefinitions>
             <GroupBox x:Name="grbMenu" Grid.Column="0" Header="Options"  VerticalAlignment="Top" Height="70" FontWeight="Bold" Width="485" Margin="3,6,6,0"  >
                 <Grid x:Name="grdOpciones" VerticalAlignment="Top">
-                    <Button x:Name="btnLogin" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="55" Background="White" >
+                    <Button x:Name="btnLogin" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="50" Background="White" >
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Login.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                             <TextBlock Text="Login" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnRefresh" HorizontalAlignment="Left" Margin="58,3,0,0" VerticalAlignment="Top" Width="55" Background="White">
+                    <Button x:Name="btnRefresh" HorizontalAlignment="Left" Margin="53,3,0,0" VerticalAlignment="Top" Width="50" Background="White">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/refresh.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                             <TextBlock Text="Refresh" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnPrint" HorizontalAlignment="Left" Margin="113,3,0,0" VerticalAlignment="Top" Width="55" Background="White" >
+                    <Button x:Name="btnPrint" HorizontalAlignment="Left" Margin="103,3,0,0" VerticalAlignment="Top" Width="50" Background="White" >
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                             <TextBlock Text="Print" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnPreview" HorizontalAlignment="Left" Margin="168,3,0,0" VerticalAlignment="Top" Width="55" Background="White">
+                    <Button x:Name="btnPreview" HorizontalAlignment="Left" Margin="153,3,0,0" VerticalAlignment="Top" Width="50" Background="White">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                             <TextBlock Text="Preview" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnReport" HorizontalAlignment="Left" Margin="223,3,0,0" VerticalAlignment="Top" Width="55" Background="White">
+                    <Button x:Name="btnReport" HorizontalAlignment="Left" Margin="203,3,0,0" VerticalAlignment="Top" Width="50" Background="White">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Report.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                             <TextBlock Text="Rpt Dsg" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnLayout" HorizontalAlignment="Left" Margin="278,3,0,0" VerticalAlignment="Top" Width="55" Background="White">
+                    <Button x:Name="btnLayout" HorizontalAlignment="Left" Margin="253,3,0,0" VerticalAlignment="Top" Width="50" Background="White">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Layout.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                             <TextBlock Text="Layouts" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnAbout" HorizontalAlignment="Left" Margin="333,3,0,0" VerticalAlignment="Top" Width="55" Background="White" >
+                    <Button x:Name="btnAbout" HorizontalAlignment="Left" Margin="303,3,0,0" VerticalAlignment="Top" Width="50" Background="White" >
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/About.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                             <TextBlock Text="About" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnDaysOff" HorizontalAlignment="Left" Margin="388,3,0,0" VerticalAlignment="Top" Width="55" Background="White" Click="btnDaysOff_Click" >
+                    <Button x:Name="btnAssistance" HorizontalAlignment="Left" Margin="353,3,0,0" VerticalAlignment="Top" Width="50" Background="White" Click="btnAssistance_Click" >
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/Assistance.ico" Width="24" Height="24" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Assist" HorizontalAlignment="Center" FontWeight="Bold" ForceCursor="True"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="btnDaysOff" HorizontalAlignment="Left" Margin="413,3,0,0" VerticalAlignment="Top" Width="50" Background="White" Click="btnDaysOff_Click" >
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/DaysOff.png" Width="24" Height="24" HorizontalAlignment="Center"/>
                             <TextBlock Text="DaysOff" HorizontalAlignment="Center"/>

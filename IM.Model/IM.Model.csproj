@@ -147,6 +147,7 @@
     </Compile>
     <Compile Include="Enums\EnumFormatTypeExcel.cs" />
     <Compile Include="Enums\EnumPermission.cs" />
+    <Compile Include="Enums\EnumPlaceType.cs" />
     <Compile Include="Enums\EnumRole.cs" />
     <Compile Include="Enums\EnumBasedOnArrival.cs" />
     <Compile Include="Enums\EnumBasedOnBooking.cs" />

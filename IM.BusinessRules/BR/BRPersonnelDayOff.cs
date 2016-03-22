@@ -30,6 +30,7 @@ namespace IM.BusinessRules.BR
         /// <param name="action">true para actualizar| false para agregar</param>
         /// <returns>0- Registro no guardado | 1- Registro Guardado 
         /// <history>[ECANUL] 10-03-2016 Created</history>
+        /// <history>[ECANUL] 11-03-2016 Modificated</history>
         public static int SavePersonnelDayOff( Model.DayOff personnelDaysOf)
         {
             int nRes = 0;

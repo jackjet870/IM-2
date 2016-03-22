@@ -245,7 +245,11 @@ namespace IM.Inhouse
       guCheckIn = ChkguCheckIn.IsChecked;
     }
 
- 
+    private void btnAssistance_Click(object sender, RoutedEventArgs e)
+    {
+      Forms.frmAssistance frmAssistance = new Forms.frmAssistance(EnumPlaceType.LeadSource );
+      frmAssistance.Show();
+    }
     #endregion
 
     #region ChkFollow_Click

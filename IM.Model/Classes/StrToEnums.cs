@@ -254,5 +254,32 @@ namespace IM.Model.Classes
     }
 
     #endregion
+
+    #region EnumPalaceTypeToString
+    /// <summary>
+    /// Convierte un enumerado EnumPalaceType a String
+    /// </summary>
+    /// <param name="palaceType">Enumerado PalaceType</param>
+    /// <returns>Valor del enumerado en string</returns>
+    /// <history>[ECANUL] 16-03-2016 Created</history>
+    public static string EnumPalaceTypeToSting(EnumPlaceType palaceType)
+    {
+      string str = string.Empty;
+      switch(palaceType)
+      {
+        case EnumPlaceType.LeadSource:
+          str = "LS";
+        break;
+        case EnumPlaceType.SalesRoom:
+          str = "SR";
+          break;
+        case EnumPlaceType.Warehouse:
+          str = "WH";
+          break;
+      }
+      return str;
+    }
+
+    #endregion
   }
 }
