@@ -1232,5 +1232,93 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptCxCNotAuthorized>("USP_OR_RptCxCNotAuthorized", dateFromParameter, dateToParameter, salesRoomParameter);
         }
+    
+        public virtual ObjectResult<SaleByCloser> USP_OR_GetSalesByCloser(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string closer)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var closerParameter = closer != null ?
+                new ObjectParameter("Closer", closer) :
+                new ObjectParameter("Closer", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleByCloser>("USP_OR_GetSalesByCloser", dateFromParameter, dateToParameter, salesRoomParameter, closerParameter);
+        }
+    
+        public virtual ObjectResult<SaleByLiner> USP_OR_GetSalesByLiner(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string liner)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var linerParameter = liner != null ?
+                new ObjectParameter("Liner", liner) :
+                new ObjectParameter("Liner", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleByLiner>("USP_OR_GetSalesByLiner", dateFromParameter, dateToParameter, salesRoomParameter, linerParameter);
+        }
+    
+        public virtual ObjectResult<SaleByPR> USP_OR_GetSalesByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string pR)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var pRParameter = pR != null ?
+                new ObjectParameter("PR", pR) :
+                new ObjectParameter("PR", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleByPR>("USP_OR_GetSalesByPR", dateFromParameter, dateToParameter, leadSourceParameter, pRParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<bool>> USP_OR_ValidateFolioInvitationsOutside(string serie, Nullable<int> numberFrom, Nullable<int> numberTo, Nullable<bool> active, Nullable<int> action)
+        {
+            var serieParameter = serie != null ?
+                new ObjectParameter("Serie", serie) :
+                new ObjectParameter("Serie", typeof(string));
+    
+            var numberFromParameter = numberFrom.HasValue ?
+                new ObjectParameter("NumberFrom", numberFrom) :
+                new ObjectParameter("NumberFrom", typeof(int));
+    
+            var numberToParameter = numberTo.HasValue ?
+                new ObjectParameter("NumberTo", numberTo) :
+                new ObjectParameter("NumberTo", typeof(int));
+    
+            var activeParameter = active.HasValue ?
+                new ObjectParameter("Active", active) :
+                new ObjectParameter("Active", typeof(bool));
+    
+            var actionParameter = action.HasValue ?
+                new ObjectParameter("Action", action) :
+                new ObjectParameter("Action", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<bool>>("USP_OR_ValidateFolioInvitationsOutside", serieParameter, numberFromParameter, numberToParameter, activeParameter, actionParameter);
+        }
     }
 }

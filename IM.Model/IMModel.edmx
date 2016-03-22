@@ -5883,6 +5883,24 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="PRGuests" Type="bit" Mode="In" />
           <Parameter Name="PRMembers" Type="bit" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetSalesByCloser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="Closer" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetSalesByLiner" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="Liner" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetSalesByPR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSource" Type="varchar" Mode="In" />
+          <Parameter Name="PR" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetSalesRoom" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
         </Function>
@@ -6021,6 +6039,13 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="Serie" Type="varchar" Mode="In" />
           <Parameter Name="Number" Type="int" Mode="In" />
           <Parameter Name="GuestID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_ValidateFolioInvitationsOutside" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Serie" Type="varchar" Mode="In" />
+          <Parameter Name="NumberFrom" Type="int" Mode="In" />
+          <Parameter Name="NumberTo" Type="int" Mode="In" />
+          <Parameter Name="Active" Type="bit" Mode="In" />
+          <Parameter Name="Action" Type="int" Mode="In" />
         </Function>
         <Function Name="USP_OR_ValidateFolioReservation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
@@ -15022,6 +15047,31 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_GetSalesByCloser" ReturnType="Collection(IMModel.SaleByCloser)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="Closer" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetSalesByLiner" ReturnType="Collection(IMModel.SaleByLiner)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="Liner" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetSalesByPR" ReturnType="Collection(IMModel.SaleByPR)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSource" Mode="In" Type="String" />
+            <Parameter Name="PR" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_ValidateFolioInvitationsOutside" ReturnType="Collection(Boolean)">
+            <Parameter Name="Serie" Mode="In" Type="String" />
+            <Parameter Name="NumberFrom" Mode="In" Type="Int32" />
+            <Parameter Name="NumberTo" Mode="In" Type="Int32" />
+            <Parameter Name="Active" Mode="In" Type="Boolean" />
+            <Parameter Name="Action" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -15856,6 +15906,69 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="Decimal" Name="CostMX" Nullable="true" Precision="38" Scale="15" />
           <Property Type="String" Name="grMemberNum" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="grCxCComments" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SaleByCloser">
+          <Property Type="Int32" Name="saID" Nullable="false" />
+          <Property Type="String" Name="sals" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="sasr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="saMembershipNum" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="stN" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="saD" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="saProcD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="saLastName1" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="saCloser1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="saCloser2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="saCloser3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer3N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="saExit1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="saExit2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit2N" Nullable="true" MaxLength="40" />
+          <Property Type="Decimal" Name="saGrossAmount" Nullable="false" Precision="19" />
+          <Property Type="Boolean" Name="saCancel" Nullable="false" />
+          <Property Type="DateTime" Name="saCancelD" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="SaleByLiner">
+          <Property Type="Int32" Name="saID" Nullable="false" />
+          <Property Type="String" Name="sals" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="sasr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="saMembershipNum" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="stN" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="saD" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="saProcD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="saLastName1" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="saLiner1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="saLiner2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner2N" Nullable="true" MaxLength="40" />
+          <Property Type="Decimal" Name="saGrossAmount" Nullable="false" Precision="19" />
+          <Property Type="Boolean" Name="saCancel" Nullable="false" />
+          <Property Type="DateTime" Name="saCancelD" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="SaleByPR">
+          <Property Type="Int32" Name="saID" Nullable="false" />
+          <Property Type="String" Name="sals" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="sasr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="saMembershipNum" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="stN" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="saD" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="saProcD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="saLastName1" Nullable="false" MaxLength="25" />
+          <Property Type="DateTime" Name="guCheckOutD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="guag" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="agN" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="saPR1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="saPR2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="saPR3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR3N" Nullable="true" MaxLength="40" />
+          <Property Type="Boolean" Name="guQ" Nullable="true" />
+          <Property Type="Decimal" Name="saGrossAmount" Nullable="false" Precision="19" />
+          <Property Type="Boolean" Name="saCancel" Nullable="false" />
+          <Property Type="DateTime" Name="saCancelD" Nullable="true" Precision="23" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -19162,6 +19275,82 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetSalesByCloser" FunctionName="IMModel.Store.USP_OR_GetSalesByCloser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.SaleByCloser">
+                <ScalarProperty Name="saID" ColumnName="saID" />
+                <ScalarProperty Name="sals" ColumnName="sals" />
+                <ScalarProperty Name="sasr" ColumnName="sasr" />
+                <ScalarProperty Name="saMembershipNum" ColumnName="saMembershipNum" />
+                <ScalarProperty Name="stN" ColumnName="stN" />
+                <ScalarProperty Name="saD" ColumnName="saD" />
+                <ScalarProperty Name="saProcD" ColumnName="saProcD" />
+                <ScalarProperty Name="saLastName1" ColumnName="saLastName1" />
+                <ScalarProperty Name="saCloser1" ColumnName="saCloser1" />
+                <ScalarProperty Name="Closer1N" ColumnName="Closer1N" />
+                <ScalarProperty Name="saCloser2" ColumnName="saCloser2" />
+                <ScalarProperty Name="Closer2N" ColumnName="Closer2N" />
+                <ScalarProperty Name="saCloser3" ColumnName="saCloser3" />
+                <ScalarProperty Name="Closer3N" ColumnName="Closer3N" />
+                <ScalarProperty Name="saExit1" ColumnName="saExit1" />
+                <ScalarProperty Name="Exit1N" ColumnName="Exit1N" />
+                <ScalarProperty Name="saExit2" ColumnName="saExit2" />
+                <ScalarProperty Name="Exit2N" ColumnName="Exit2N" />
+                <ScalarProperty Name="saGrossAmount" ColumnName="saGrossAmount" />
+                <ScalarProperty Name="saCancel" ColumnName="saCancel" />
+                <ScalarProperty Name="saCancelD" ColumnName="saCancelD" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetSalesByLiner" FunctionName="IMModel.Store.USP_OR_GetSalesByLiner">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.SaleByLiner">
+                <ScalarProperty Name="saID" ColumnName="saID" />
+                <ScalarProperty Name="sals" ColumnName="sals" />
+                <ScalarProperty Name="sasr" ColumnName="sasr" />
+                <ScalarProperty Name="saMembershipNum" ColumnName="saMembershipNum" />
+                <ScalarProperty Name="stN" ColumnName="stN" />
+                <ScalarProperty Name="saD" ColumnName="saD" />
+                <ScalarProperty Name="saProcD" ColumnName="saProcD" />
+                <ScalarProperty Name="saLastName1" ColumnName="saLastName1" />
+                <ScalarProperty Name="saLiner1" ColumnName="saLiner1" />
+                <ScalarProperty Name="Liner1N" ColumnName="Liner1N" />
+                <ScalarProperty Name="saLiner2" ColumnName="saLiner2" />
+                <ScalarProperty Name="Liner2N" ColumnName="Liner2N" />
+                <ScalarProperty Name="saGrossAmount" ColumnName="saGrossAmount" />
+                <ScalarProperty Name="saCancel" ColumnName="saCancel" />
+                <ScalarProperty Name="saCancelD" ColumnName="saCancelD" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetSalesByPR" FunctionName="IMModel.Store.USP_OR_GetSalesByPR">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.SaleByPR">
+                <ScalarProperty Name="saID" ColumnName="saID" />
+                <ScalarProperty Name="sals" ColumnName="sals" />
+                <ScalarProperty Name="sasr" ColumnName="sasr" />
+                <ScalarProperty Name="saMembershipNum" ColumnName="saMembershipNum" />
+                <ScalarProperty Name="stN" ColumnName="stN" />
+                <ScalarProperty Name="saD" ColumnName="saD" />
+                <ScalarProperty Name="saProcD" ColumnName="saProcD" />
+                <ScalarProperty Name="saLastName1" ColumnName="saLastName1" />
+                <ScalarProperty Name="guCheckOutD" ColumnName="guCheckOutD" />
+                <ScalarProperty Name="guag" ColumnName="guag" />
+                <ScalarProperty Name="agN" ColumnName="agN" />
+                <ScalarProperty Name="saPR1" ColumnName="saPR1" />
+                <ScalarProperty Name="PR1N" ColumnName="PR1N" />
+                <ScalarProperty Name="saPR2" ColumnName="saPR2" />
+                <ScalarProperty Name="PR2N" ColumnName="PR2N" />
+                <ScalarProperty Name="saPR3" ColumnName="saPR3" />
+                <ScalarProperty Name="PR3N" ColumnName="PR3N" />
+                <ScalarProperty Name="guQ" ColumnName="guQ" />
+                <ScalarProperty Name="saGrossAmount" ColumnName="saGrossAmount" />
+                <ScalarProperty Name="saCancel" ColumnName="saCancel" />
+                <ScalarProperty Name="saCancelD" ColumnName="saCancelD" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_ValidateFolioInvitationsOutside" FunctionName="IMModel.Store.USP_OR_ValidateFolioInvitationsOutside" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
