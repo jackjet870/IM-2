@@ -8,6 +8,7 @@ using IM.BusinessRules.BR;
 using IM.Model.Enums;
 using System.IO;
 using IM.Base.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.Base.Forms
 {
@@ -145,11 +146,11 @@ namespace IM.Base.Forms
             {
               txtUser_LostFocus(null, null);
               cmbPlace.SelectedValue = _iniFileHelper.readText("Login", "Sales Room", "");
-        }
+            }
             btnAceptar.Focus();
             break;
+        }
       }
-    }
     }
 
     #endregion
@@ -169,6 +170,7 @@ namespace IM.Base.Forms
     /// [edgrodriguez] 29/02/2016 Modified
     /// [jorcanche] 01/03/2016 Modified (Se agrega el "Case" Location)
     /// [vipacheco] 01/03/2016 Modified --> Se agrego validacion case para Sales Room
+    /// [erosado] 19/Mar/2016 Validamos que el _frmBase no sea null
     /// </history>
     private void btnAceptar_Click(object sender, RoutedEventArgs e)
     {
@@ -225,7 +227,7 @@ namespace IM.Base.Forms
           }
           break;
         case EnumLoginType.Location: //Hotel 
-                                 // validamos que el usuario tenga permiso
+                                     // validamos que el usuario tenga permiso
           if (!userData.Permissions.Exists(c => c.pppm == "REGISTER" && c.pppl > 1))
           {
             UIHelper.ShowMessage("User doesn't have access");
@@ -241,23 +243,33 @@ namespace IM.Base.Forms
             UIHelper.ShowMessage("User doesn't have access");
             btnCancelar_Click(null, null);
             return;
-      }
+          }
           break;
       }
+      if ((bool)chkAutoSign.IsChecked)
+      {
+        this.userData.AutoSign = true;
+      }
+
       IsAuthenticated = true;
       Close();
-
-      if (_frmBase != null)
-        _frmBase.Hide();
+      _frmBase?.Hide();
     }
 
     #endregion
 
     #region btnCancelar_Click
 
+    /// <summary>
+    /// Cierra el formulario padre y despues cierra el frmLogin
+    /// </summary>
+    ///<history>
+    ///[edgar]  29/Feb/2016 Created
+    ///[erosado]  19/Mar/2016 Se valido que el _frmBase No sea null
+    /// </history>
     private void btnCancelar_Click(object sender, RoutedEventArgs e)
     {
-      _frmBase.Close();
+      _frmBase?.Close();
       Close();
     }
 
@@ -273,51 +285,22 @@ namespace IM.Base.Forms
     /// [edgrodriguez] 27/02/2016 Modified
     /// [jorcanche] 01/03/2016 Modified (Se agrega el "Case" Location)
     /// [vipacheco] 01/03/2016 Modified --> Se agrego case Sales Room
+    /// [erosado] 19/Mar/2016 Se agregaron metodos Asincronos para que no se trabe la interfaz.
     /// </history>
     private void txtUser_LostFocus(object sender, RoutedEventArgs e)
     {
       switch (_loginType)
       {
         case EnumLoginType.Warehouse://Almacen
-          List<WarehouseByUser> warehouses = BRWarehouses.GetWarehousesByUser(txtUser.Text, "ALL");
-          if (warehouses.Count > 0)
-          {
-            cmbPlace.ItemsSource = warehouses;
-            cmbPlace.SelectedValuePath = "whID";
-            cmbPlace.DisplayMemberPath = "whN";
-            cmbPlace.IsEnabled = true;
-          }
-          else
-            cmbPlace.IsEnabled = false;
+          DoGetWareHousesByUser(txtUser.Text.Trim());
           break;
         case EnumLoginType.Location://Locacion
-          List<LocationByUser> locations = BRLocations.GetLocationsByUser(txtUser.Text, "IH");
-          if (locations.Count > 0)
-          {
-            cmbPlace.ItemsSource = locations;
-            cmbPlace.SelectedValuePath = "loID";
-            cmbPlace.DisplayMemberPath = "loN";
-            cmbPlace.IsEnabled = true;
-          }
-          else
-            cmbPlace.IsEnabled = false;
+          DoGetLocationsByUser(txtUser.Text.Trim());
           break;
         case EnumLoginType.SalesRoom://Sales Room
-          List<SalesRoomByUser> salesRooms = BRSalesRooms.GetSalesRoomsByUser(txtUser.Text, "ALL");
-
-          if (salesRooms.Count > 0)
-          {
-            cmbPlace.ItemsSource = salesRooms;
-            cmbPlace.SelectedValuePath = "srID";
-            cmbPlace.DisplayMemberPath = "srN";
-            cmbPlace.IsEnabled = true;
-
-            cmbPlace.SelectedItem = salesRooms[0];
-      }
-          else
-            cmbPlace.IsEnabled = false;
+          DoGetSalesRoomsByUser(txtUser.Text.Trim());
           break;
-    }
+      }
     }
 
     #endregion
@@ -359,10 +342,20 @@ namespace IM.Base.Forms
       chkAutoSign.Visibility = (_blnAutoSign) ? Visibility.Visible : Visibility.Hidden;
       chkChangePwd.Visibility = (_blnChangePassword) ? Visibility.Visible : Visibility.Hidden;
       LoadFromFile();
+      if (userData != null)
+      {
+        if (userData.AutoSign)
+        {
+          DoGetLocationsByUser(this.userData.User.peID, true);
+          txtUser.Text = this.userData.User.peID;
+          txtPassword.Password = this.userData.User.pePwd;
+         
+        }
+      }
     }
 
     #endregion
-
+        
     #region Login_KeyDown
     /// <summary>
     /// Función que evalua cuando se pulsa Ctrl + F4 para cerrar la ventana
@@ -379,8 +372,171 @@ namespace IM.Base.Forms
         _frmBase.Close();
       }
     }
-    #endregion    
+    #endregion
 
+    #endregion
+
+    #region Async Methods
+    /// <summary>
+    /// Obtiene la lista de WareHouses dependiendo el IdUsuraio y TODAS LAS REGIONES
+    /// </summary>
+    /// <history>
+    /// [erosado] 19/Mar/2016 Created
+    /// </history>
+    public void DoGetWareHousesByUser(string IdUsuario, bool AutoAsignLogin = false)
+    {
+      Task.Factory.StartNew(() => BRWarehouses.GetWarehousesByUser(IdUsuario, "ALL"))
+      .ContinueWith(
+      (task1) =>
+      {
+        if (task1.IsFaulted)
+        {
+          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          return false;
+        }
+        else
+        {
+          if (task1.IsCompleted)
+          {
+            List<WarehouseByUser> data = task1.Result;
+            if (data.Count > 0)
+            {
+              cmbPlace.ItemsSource = data;
+              cmbPlace.SelectedValuePath = "whID";
+              cmbPlace.DisplayMemberPath = "whN";
+              cmbPlace.IsEnabled = true;
+
+              if (AutoAsignLogin)
+              {
+                List<WarehouseByUser> lstPS = cmbPlace.ItemsSource as List<WarehouseByUser>;
+                int index = lstPS.FindIndex(x => x.whN.Equals(this.userData.Warehouse.whN));
+                cmbPlace.SelectedIndex = index;
+              }
+              else
+              {
+                cmbPlace.SelectedItem = 0;
+              }
+            }
+            else
+            {
+              cmbPlace.IsEnabled = false;
+              cmbPlace.Text = "No data found";
+            }
+          }
+          return false;
+        }
+      },
+      TaskScheduler.FromCurrentSynchronizationContext()
+      );
+    }
+    /// <summary>
+    /// Obtiene la lista de Location dependiendo el IdUsuario y PROGRAMAS IH
+    /// </summary>
+    /// <history>
+    /// [erosado] 19/Mar/2016 Created
+    /// </history>
+    public void DoGetLocationsByUser(string IdUsuario, bool AutoAsignLogin = false)
+    {
+      Task.Factory.StartNew(() => BRLocations.GetLocationsByUser(IdUsuario, "IH"))
+      .ContinueWith(
+      (task1) =>
+      {
+        if (task1.IsFaulted)
+        {
+          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          return false;
+        }
+        else
+        {
+          if (task1.IsCompleted)
+          {
+            List<LocationByUser> data = task1.Result;
+            if (data.Count > 0)
+            {
+                cmbPlace.ItemsSource = data;
+                cmbPlace.SelectedValuePath = "loID";
+                cmbPlace.DisplayMemberPath = "loN";
+                cmbPlace.IsEnabled = true;
+                cmbPlace.SelectedIndex = 0;
+
+              if (AutoAsignLogin)
+              {
+                List<LocationByUser> lstPS = cmbPlace.ItemsSource as List<LocationByUser>;
+                int index = lstPS.FindIndex(x => x.loN.Equals(this.userData.Location.loN));
+                cmbPlace.SelectedIndex = index;
+              }
+              else
+              {
+                cmbPlace.SelectedItem = 0;
+              }
+
+            }
+            else
+            {
+              cmbPlace.IsEnabled = false;
+              cmbPlace.Text = "No data found";
+            }
+
+          }
+          return false;
+        }
+      },
+      TaskScheduler.FromCurrentSynchronizationContext()
+      );
+    }
+    /// <summary>
+    /// Obtiene la lista de SalesRooms dependiendo el IDUsuario y TODAS LAS REGIONES
+    /// </summary>
+    /// <history>
+    /// [erosado] 19/Mar/2016 Created
+    /// </history>
+    public void DoGetSalesRoomsByUser(string IdUsuario, bool AutoAsignLogin = false)
+    {
+      Task.Factory.StartNew(() => BRSalesRooms.GetSalesRoomsByUser(IdUsuario, "ALL"))
+      .ContinueWith(
+      (task1) =>
+      {
+        if (task1.IsFaulted)
+        {
+          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          return false;
+        }
+        else
+        {
+          if (task1.IsCompleted)
+          {
+            List<SalesRoomByUser> data = task1.Result;
+            if (data.Count > 0)
+            {
+              cmbPlace.ItemsSource = data;
+              cmbPlace.SelectedValuePath = "srID";
+              cmbPlace.DisplayMemberPath = "srN";
+              cmbPlace.IsEnabled = true;
+              cmbPlace.SelectedIndex = 0;
+
+              if (AutoAsignLogin)
+              {
+                List<SalesRoomByUser> lstPS = cmbPlace.ItemsSource as List<SalesRoomByUser>;
+                int index = lstPS.FindIndex(x => x.srN.Equals(this.userData.SalesRoom.srN));
+                cmbPlace.SelectedIndex = index;
+              }
+              else
+              {
+                cmbPlace.SelectedItem = 0;
+              }
+            }
+            else
+            {
+              cmbPlace.IsEnabled = false;
+              cmbPlace.Text = "No data found";
+            }
+          }
+          return false;
+        }
+      },
+      TaskScheduler.FromCurrentSynchronizationContext()
+      );
+    }
     #endregion
 
   }

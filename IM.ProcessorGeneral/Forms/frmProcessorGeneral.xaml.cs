@@ -456,7 +456,7 @@ namespace IM.ProcessorGeneral.Forms
           {
             dtData = GridHelper.GetDataTableFromGrid(lstRptGift, changeDataTypeBoolToString: true, showCheckMark: true);
             Tuple<string, string> Reportname = new Tuple<string, string>(Regex.Replace(strReport, "[^a-zA-Z0-9_]+", " "), "");
-            finfo = EpplusHelper.CreateRptExcelWithOutTemplate(filters, dtData, Reportname, clsFormatReport.rptGifts());
+            finfo = EpplusHelper.CreateGeneralRptExcel(filters, dtData, Reportname, clsFormatReport.rptGifts());
 
             if (finfo != null)
             {

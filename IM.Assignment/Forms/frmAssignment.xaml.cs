@@ -367,7 +367,7 @@ namespace IM.Assignment
           format.Add(new ExcelFormatTable() { Title = "PR ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
           format.Add(new ExcelFormatTable() { Title = "PR N Assigned", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
           format.Add(new ExcelFormatTable() { Title = "Pax", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-          EpplusHelper.CreateRptExcelWithOutTemplate(filters, dt, rptName, format);
+          EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, format);
         }
         else
         {
@@ -402,7 +402,7 @@ namespace IM.Assignment
         format.Add(new ExcelFormatTable() { Title = "PR", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Liner", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Closer", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        EpplusHelper.CreateRptExcelWithOutTemplate(filters, dt, rptName, format);
+        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, format);
       }
       else
       {
@@ -436,7 +436,7 @@ namespace IM.Assignment
         format.Add(new ExcelFormatTable() { Title = "PR", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Liner", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Closer", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        EpplusHelper.CreateRptExcelWithOutTemplate(filters, dt, rptName, format);
+        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, format);
       }
       else
       {

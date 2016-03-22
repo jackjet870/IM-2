@@ -23,6 +23,7 @@ namespace IM.Model.Classes
     public LocationLogin Location { get; set; }
     public LeadSourceLogin LeadSource { get; set; }
     public WarehouseLogin Warehouse { get; set; }
+    public bool AutoSign { get; set; }
 
     #endregion
 

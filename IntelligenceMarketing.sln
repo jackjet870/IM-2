@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.ProcessorGeneral", "IM.P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Assignment", "IM.Assignment\IM.Assignment.csproj", "{258A3C0F-0775-47F3-9A8D-9BB99236CD27}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.GuestsPR", "IM.GuestsPR\IM.GuestsPR.csproj", "{E1341657-8E03-4E10-80DE-F39DFA38A231}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,6 +143,14 @@ Global
 		{258A3C0F-0775-47F3-9A8D-9BB99236CD27}.Release|Any CPU.Build.0 = Release|Any CPU
 		{258A3C0F-0775-47F3-9A8D-9BB99236CD27}.Release|x86.ActiveCfg = Release|Any CPU
 		{258A3C0F-0775-47F3-9A8D-9BB99236CD27}.Release|x86.Build.0 = Release|Any CPU
+		{E1341657-8E03-4E10-80DE-F39DFA38A231}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1341657-8E03-4E10-80DE-F39DFA38A231}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1341657-8E03-4E10-80DE-F39DFA38A231}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E1341657-8E03-4E10-80DE-F39DFA38A231}.Debug|x86.Build.0 = Debug|Any CPU
+		{E1341657-8E03-4E10-80DE-F39DFA38A231}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1341657-8E03-4E10-80DE-F39DFA38A231}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1341657-8E03-4E10-80DE-F39DFA38A231}.Release|x86.ActiveCfg = Release|Any CPU
+		{E1341657-8E03-4E10-80DE-F39DFA38A231}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

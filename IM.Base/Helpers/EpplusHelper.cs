@@ -48,7 +48,7 @@ namespace IM.Base.Helpers
 
     #endregion
 
-    #region CreateRptExcelWithOutTemplate
+    #region CreateGeneralRptExcel
     /// <summary>
     /// Crea un reporte en excel que tiene Filtros, Nombre de reporte, contenido, datos de impresion y nombre del sistema
     /// </summary>
@@ -60,13 +60,16 @@ namespace IM.Base.Helpers
     /// <param name="formatColumns">Lista de ExcelFormatTable donde definimos ("Titulo de la columna",IM.Model.Enums.EnumFormatTypeExcel, OfficeOpenXml.Style.Enum.ExcelHorizontalAlignment) </param>
     /// <returns>FileInfo con el path para abrir el excel</returns>
     /// <history>
-    /// [erosado] 12/Mar/2016  Created.
-    /// [erosado] 14/Mar/2016  Modified  Se Agrego el parametro formatColumns.
-    /// [erosado] 17/Mar/2016  Modified  Se Agrego que permite tipos Boleanos y Date formateados
+    /// [erosado] 12/Mar/2016 Created.
+    /// [erosado] 14/Mar/2016 Modified  Se Agrego el parametro formatColumns.
+    /// [erosado] 17/Mar/2016 Modified  Se Agrego que permite tipos Boleanos y Date formateados
+    /// [erosado] 18/Mar/2016 Modified  Se cambio el formato del reporte  se cambio de posicion el titulo del reporte y los filtros
+    /// [erosado] 22/Mar/2016 Modified  Se agrego la validacion si tiene filtro los reportes o si no tiene.
     /// </history>
-    public static FileInfo CreateRptExcelWithOutTemplate(List<Tuple<string, string>> filter, DataTable dt, Tuple<string, string> reportName,
+    public static FileInfo CreateGeneralRptExcel(List<Tuple<string, string>> filter, DataTable dt, Tuple<string, string> reportName,
       List<ExcelFormatTable> formatColumns)
     {
+      #region Variables Atributos, Propiedades
       FileInfo pathFinalFile = null;
       ExcelPackage pk = new ExcelPackage();
       //Preparamos la hoja donde escribiremos
@@ -79,51 +82,71 @@ namespace IM.Base.Helpers
       int dtRowsNumber = dt.Rows.Count;
       //Numero de Columnas del contenido del datatable
       int dtColumnsNumber = dt.Columns.Count;
+      #endregion
 
+      #region Titulo del reporte
+      //Agregamos el Nombre del reporte y combinamos la columna A:C en la fila 1
+      ws.Cells[1, 1, 1, 3].Merge = true;
+      ws.Cells[1, 1, 1, 3].Value = reportName.Item1;
+      ws.Cells[1, 1, 1, 3].Style.Font.Bold = true;
+      ws.Cells[1, 1, 1, 3].Style.Font.Size = 14;
+      ws.Cells[1, 1, 1, 3].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Double;
+      //Agregamos la etiqueda DateRange centrada y combinamos la columna A:B en la fila 2
+      ws.Cells[2, 1, 2, 3].Merge = true;
+      ws.Cells[2, 1, 2, 3].Value = reportName.Item2;
+      #endregion
+
+      #region Filtros
+      //Validamos que el reporte tenga filtros
       if (filter.Count > 0)
       {
-        //Insertamos etiqueta de filtros
-        ws.Cells[1, dtColumnsNumber].Value = "Filters";
-        ws.Cells[1, dtColumnsNumber].Style.Font.Bold = true;
-        ws.Cells[1, dtColumnsNumber].Style.Font.Size = 14;
-        //Insertamos las filas que necesitamos para los filtros
-        ws.InsertRow(2, filter.Count);
+        //Insertamos etiqueta de filtros en la fila uno y las columnas combinadas la ultima y la penultima
+        ws.Cells[1, dtColumnsNumber - 1, 1, dtColumnsNumber].Merge = true;
+        ws.Cells[1, dtColumnsNumber - 1, 1, dtColumnsNumber].Value = "Filters";
+        ws.Cells[1, dtColumnsNumber - 1, 1, dtColumnsNumber].Style.Font.Bold = true;
+        ws.Cells[1, dtColumnsNumber - 1, 1, dtColumnsNumber].Style.Font.Size = 14;
+        //Insertamos las etiquetas debajo de filters
+        ws.Cells[2, dtColumnsNumber - 1].Value = "Name";
+        ws.Cells[2, dtColumnsNumber - 1].Style.Font.Bold = true;
+        ws.Cells[2, dtColumnsNumber - 1].Style.Font.Size = 12;
 
-        int cFiltros = 1;
+        ws.Cells[2, dtColumnsNumber].Value = "IDs";
+        ws.Cells[2, dtColumnsNumber].Style.Font.Bold = true;
+        ws.Cells[2, dtColumnsNumber].Style.Font.Size = 12;
+        //Insertamos las filas que necesitamos para los filtros apartir de la fila 3
+        ws.InsertRow(3, filter.Count);
+        int cFiltros = 3;
         foreach (Tuple<string, string> item in filter)
         {
+          ws.Cells[cFiltros, dtColumnsNumber - 1].Value = item.Item1;
+          ws.Cells[cFiltros, dtColumnsNumber - 1].Style.Font.Bold = true;
+          ws.Cells[cFiltros, dtColumnsNumber].Value = item.Item2;
           cFiltros++;
-
           ws.Cells[1, dtColumnsNumber - 1].Value = item.Item1;
           ws.Cells[1, dtColumnsNumber - 1].Style.Font.Bold = true;
           ws.Cells[1, dtColumnsNumber].Value = item.Item2;
 
         }
       }
-      ws.Cells[1, 1].Value = reportName.Item1;
-      ws.Cells[1, 1].Style.Font.Bold = true;
-      ws.Cells[1, 1].Style.Font.Size = 14;
-      ws.Cells[1,1,1,1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-      ws.Cells[2, 1].Value = reportName.Item2;
-      ws.Cells[2, 1,2,1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-      ws.Cells[1, 1, 1, 1].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Double;
+      #endregion
 
-      //Insertamos las filas que vamos a necesitar empezando en la fila 7
-      ws.InsertRow(filterNumber + 2, dt.Rows.Count+1);
+      #region Contenido del reporte
+      //Insertamos las filas que vamos a necesitar empezando en la fila  (4 + filter.Count)
+      ws.InsertRow(filterNumber + 4, dt.Rows.Count + 1);
 
       //Agregamos los Headers de la Tabla
       int contColum = 0;
       foreach (ExcelFormatTable item in formatColumns)
       {
         contColum++;
-        ws.Cells[filterNumber + 2, contColum].Value = item.Title;
+        ws.Cells[filterNumber + 4, contColum].Value = item.Title;
 
         switch (item.Format)
         {
           case EnumFormatTypeExcel.General:
-          break;
+            break;
           case EnumFormatTypeExcel.Percent:
-            ws.Column(contColum).Style.Numberformat.Format="0.0 %";
+            ws.Column(contColum).Style.Numberformat.Format = "0.0 %";
             break;
           case EnumFormatTypeExcel.Currency:
             ws.Column(contColum).Style.Numberformat.Format = "$#,##0.00";
@@ -135,8 +158,7 @@ namespace IM.Base.Helpers
             ws.Column(contColum).Style.Numberformat.Format = "0.00";
             break;
           case EnumFormatTypeExcel.Boolean:
-            
-            ws.Cells[filterNumber + 3, contColum, filterNumber + 3 + dtRowsNumber, contColum].Style.Font.Name = "Wingdings";
+            ws.Cells[filterNumber + 5, contColum, filterNumber + 5 + dtRowsNumber, contColum].Style.Font.Name = "Wingdings"; //Posicion de los headers de la tabla
             break;
           case EnumFormatTypeExcel.Date:
             ws.Column(contColum).Style.Numberformat.Format = "dd/MM/yyyy";
@@ -145,31 +167,56 @@ namespace IM.Base.Helpers
             break;
         }
         ws.Column(contColum).Style.HorizontalAlignment = item.Alignment;
-        ws.Cells[filterNumber + 2, contColum].Style.Font.Bold= true;
-        ws.Cells[filterNumber + 2, contColum].Style.Font.Size =14;
+        ws.Cells[filterNumber + 4, contColum].Style.Font.Bold = true;
+        ws.Cells[filterNumber + 4, contColum].Style.Font.Size = 14;
       }
       //Borde de rango de columnas (titulos de la tabla)
-      ws.Cells[filterNumber + 2, 1, filterNumber + 2,dtColumnsNumber].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Hair);
+      ws.Cells[filterNumber + 4, 1, filterNumber + 4, dtColumnsNumber].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Hair);
 
-      //Agregamos el contenido empezando en la fila 8
-      ws.Cells[filterNumber + 3, 1].LoadFromDataTable(dt, false, OfficeOpenXml.Table.TableStyles.Medium2);
+      //Agregamos el contenido empezando en la fila  (filterNumber + 3
+      ws.Cells[filterNumber + 5, 1].LoadFromDataTable(dt, false, OfficeOpenXml.Table.TableStyles.Medium2);
 
+      #endregion
+
+      #region Datos de la impresion
       //Agregamos los datos de impresion
-      ws.Cells[filterNumber + 3 + dtRowsNumber + 1, 1].Value = "Date Print";
-      ws.Cells[filterNumber + 3 + dtRowsNumber + 1, 1].Style.Font.Bold = true;
-      ws.Cells[filterNumber + 3 + dtRowsNumber + 1, 2].Value = string.Format(DateTime.Now.ToShortDateString(), "yyyy-MM-dd");
-      ws.Cells[filterNumber + 3 + dtRowsNumber + 2, 1].Value = "Time Print";
-      ws.Cells[filterNumber + 3 + dtRowsNumber + 2, 1].Style.Font.Bold = true;
-      ws.Cells[filterNumber + 3 + dtRowsNumber + 2, 2].Value = string.Format(DateTime.Now.ToShortTimeString(), "hh:mm:ss");
+      ws.Cells[filterNumber + 4 + dtRowsNumber + 2, 1].Value = "Date Print";
+      ws.Cells[filterNumber + 4 + dtRowsNumber + 2, 1].Style.Font.Bold = true;
+      ws.Cells[filterNumber + 4 + dtRowsNumber + 2, 2].Value = string.Format(DateTime.Now.ToShortDateString(), "dd-MM-yyyy");
+      ws.Cells[filterNumber + 4 + dtRowsNumber + 3, 1].Value = "Time Print";
+      ws.Cells[filterNumber + 4 + dtRowsNumber + 3, 1].Style.Font.Bold = true;
+      ws.Cells[filterNumber + 4 + dtRowsNumber + 3, 2].Value = string.Format(DateTime.Now.ToShortTimeString(), "hh:mm:ss");
+      #endregion
 
+      #region Nombre del sistema
       //Agregamos el nombre del sistema
-      ws.Cells[filterNumber + 3 + dtRowsNumber + 1, dtColumnsNumber].Value = "Intelligence Marketing";
-      ws.Cells[filterNumber + 3 + dtRowsNumber + 1, dtColumnsNumber].Style.Font.Bold = true;
-      ws.Cells[filterNumber + 3 + dtRowsNumber + 1, dtColumnsNumber].Style.Font.Size = 14;
+      ws.Cells[filterNumber + 4 + dtRowsNumber + 2, dtColumnsNumber].Value = "Intelligence Marketing";
+      ws.Cells[filterNumber + 4 + dtRowsNumber + 2, dtColumnsNumber].Style.Font.Bold = true;
+      ws.Cells[filterNumber + 4 + dtRowsNumber + 2, dtColumnsNumber].Style.Font.Size = 14;
 
-      ws.Cells[1, 1, (filterNumber + 3 + dtRowsNumber + 4), dtColumnsNumber].AutoFitColumns(); //Auto Ajuste de columnas de acuerdo a los headers
+      #endregion
 
-      string suggestedFilaName = string.Concat(reportName.Item1, "_", reportName.Item2);
+      #region Formato de columnas Centrar y AutoAjustar
+      //Auto Ajuste de columnas de  acuerdo a su contenido
+      ws.Cells[1, 1, (filterNumber + 4 + dtRowsNumber + 4), dtColumnsNumber].AutoFitColumns();
+      //Centramos el titulo del reporte     
+      ws.Cells[1, 1, 1, 3].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+      //Centramos DateRange
+      ws.Cells[2, 1, 2, 3].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+      //Centramos la etiqueta Filter
+      ws.Cells[1, dtColumnsNumber - 1, 1, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+      //Centramos las Etiquetas Name y IDs de filter
+      ws.Cells[2, dtColumnsNumber - 1, 2, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+      //Alineamos a la izquierda los Filters IDs
+      ws.Cells[3, dtColumnsNumber, filterNumber + 2, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+      //Centramos Los Headers de la tabla de contenido
+      ws.Cells[filterNumber + 4, 1, filterNumber + 4, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+      string suggestedFilaName = string.Concat(reportName.Item1, " ", reportName.Item2);
+
+      #endregion
+
+      #region Generamos y Retornamos la ruta del archivo EXCEL
       pathFinalFile = SaveExcel(pk, suggestedFilaName);
 
       if (pathFinalFile != null)
@@ -180,6 +227,7 @@ namespace IM.Base.Helpers
       {
         return null;
       }
+      #endregion
     }
 
     #endregion

@@ -100,7 +100,7 @@ namespace IM.PRStatistics.Forms
         FileInfo templatePath = new FileInfo(string.Concat(Directory.GetCurrentDirectory(), "\\ReportTemplate\\RptPRStatistics.xlsx"));
         DataTable dt = GridHelper.GetDataTableFromGrid<RptPRStats>(lstRptStats);
         Tuple<string, string> nombreReporte = new Tuple<string, string>("PR Statistics", dateRange);
-        FileInfo finfo = IM.Base.Helpers.EpplusHelper.CreateRptExcelWithOutTemplate(filterTuple, dt, nombreReporte, UsefulMethods.getExcelFormatTable());
+        FileInfo finfo = IM.Base.Helpers.EpplusHelper.CreateGeneralRptExcel(filterTuple, dt, nombreReporte, UsefulMethods.getExcelFormatTable());
         if (finfo != null)
         {
           Process.Start(finfo.FullName);
