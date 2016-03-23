@@ -77,7 +77,7 @@ namespace IM.PRStatistics.Forms
         filterTuple.Add(new Tuple<string, string>("Countries", chbxCountries.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxCountries)));
         filterTuple.Add(new Tuple<string, string>("Agencies", chbxAgencies.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxAgencies)));
         filterTuple.Add(new Tuple<string, string>("Markets", chbxMarkets.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxMarkets)));
-    
+
         DoGetRptPrStats(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, filterTuple);
       }
       else

@@ -236,7 +236,10 @@ namespace IM.BusinessRules.BR
     /// <param name="leadSources"></param>
     /// <param name="PR"></param>
     /// <param name="filtros"></param>
-    /// <returns></returns>
+    /// <returns>List<GuestByPR></returns>
+    /// <history>
+    /// [erosado] 18/Mar/2016
+    /// </history>
     public static List<GuestByPR> GetGuestsByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, List<bool> filtros)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
