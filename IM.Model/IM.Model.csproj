@@ -556,6 +556,15 @@
     <Compile Include="Sale.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="SaleByCloser.cs">
+	  <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SaleByLiner.cs">
+	  <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SaleByPR.cs">
+	  <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="SaleLog.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
