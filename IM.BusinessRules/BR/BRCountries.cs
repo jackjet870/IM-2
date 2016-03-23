@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -20,13 +21,14 @@ namespace IM.BusinessRules.BR
 
     public static List<CountryShort> GetCountries(int status)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetCountries(Convert.ToByte(status)).ToList();
       }
     }
+    #endregion
 
-
+    #region GetCountries
     /// <summary>
     /// Devuelve una lista de tipo country con todos sus datos
     /// </summary>
@@ -39,7 +41,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<Country> GetCountries(Country country=null,int nStatus=-1)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from ct in dbContext.Countries
                     select ct;
@@ -67,7 +69,7 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
-    #region saveCountry
+    #region SaveCountry
     /// <summary>
     /// Agrega|actualiza un registro en el catalogo countries
     /// </summary>
@@ -77,10 +79,10 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 16/03/2016
     /// </history>
-    public static int saveCountry(Country country,bool blnUpdate)
+    public static int SaveCountry(Country country,bool blnUpdate)
     {
       int nRes = 0;
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         if(blnUpdate)//Si es actualizar
         {

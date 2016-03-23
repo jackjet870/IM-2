@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
   public class BRComputers
   {
-
     #region GetComputers
     /// <summary>
     /// Obtiene registros del catalogo Computer
@@ -19,7 +19,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<Computer> GetComputers(Computer computer=null)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from cp in dbContext.Computers
                     select cp;
@@ -46,8 +46,7 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-
+    
     #region SaveComputer
     /// <summary>
     /// Agrega|Actualiza un registro al catalogo Computers
@@ -56,7 +55,7 @@ namespace IM.BusinessRules.BR
     /// <returns>0. No se guardo | 1. Guardado correctamente | 2. Existe un registro con el mismo ID</returns>
     public static int SaveComputer(Computer computer,bool blnUpdate)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         if (blnUpdate)//Si es actualizar
         {

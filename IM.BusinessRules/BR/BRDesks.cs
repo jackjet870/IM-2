@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -19,7 +20,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<Desk> GetDesks(Desk desk = null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from dk in dbContext.Desks
                     select dk;
@@ -62,7 +63,7 @@ namespace IM.BusinessRules.BR
     public static int SaveDesk(Desk desk, bool blnUpdate, List<string> lstIdsComputers)
     {
       int nRes = 0;
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
         {

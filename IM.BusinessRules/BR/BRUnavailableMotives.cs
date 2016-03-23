@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -20,7 +21,7 @@ namespace IM.BusinessRules.BR
     {
       List<UnavailableMotive> lstUnavailMot = new List<UnavailableMotive>();
 
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from um in dbContext.UnavailableMotives
                     select um;
@@ -50,7 +51,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static UnavailableMotive GetUnavailableMotive(int id, bool nStatus)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.UnavailableMotives.Where(u => u.umID == id && u.umA == nStatus).FirstOrDefault();
       }

@@ -21,8 +21,9 @@ GO
 ** [lormartinez]	15/Sep/2014 Modified. Se agrega parametro opcional UserName, este sera para filtrar por leadSource
 **								Se agregan fechas From y To como parametro de filtro
 **								Se agrega PR y LeadSource como parametro de filtro
-** [lormartinez]	13/Jul/2015	Se cambia la columan grAmountPaid por grAmountToPaid
+** [lormartinez]	13/Jul/2015	Modified. Se cambia la columan grAmountPaid por grAmountToPaid
 **								Se agregan las columnas grAmountPaid y grBalance	
+** [wtorres]		22/Mar/2016 Modified. Correccion de error. Estaba mal el filtro por PR
 */		
 create procedure [dbo].[USP_OR_GetCxC]
 	@Authorized bit,					-- Indica si se desean las CxC autorizadas
@@ -37,7 +38,8 @@ set nocount on
 
 declare @LeadSources table (
 	lsID varchar(10), 
-	lsNm varchar(60)
+	lsNm varchar(60),
+	lspg varchar(10)
 )
 				  
 insert into @LeadSources
@@ -94,7 +96,7 @@ where
 	-- Lead Source del recibo
 	and (@LeadSource = 'ALL' or (@LeadSource <> '' and R.grls = @LeadSource))	 
 	-- PR
-	and (@PR =' ALL' or (@PR <> '' and R.grpe = @PR))
+	and (@PR = 'ALL' or (@PR <> '' and R.grpe = @PR))
 order by PR.peN, R.grD
 
 -- Fecha de cierre de CxC

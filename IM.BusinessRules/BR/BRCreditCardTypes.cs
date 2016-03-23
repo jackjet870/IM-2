@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -20,7 +21,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<CreditCardType> GetCreditCardTypes(CreditCardType creditCardType=null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from cct in dbContext.CreditCardTypes select cct;
 
@@ -47,6 +48,7 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
+
     #region SaveCreditCarType
     /// <summary>
     /// Agrega | actualiza un regsitro en el catalogo de Credit card types
@@ -60,7 +62,7 @@ namespace IM.BusinessRules.BR
     public static int SaveCreditCardType(CreditCardType creditCardType, bool blnUpd)
     {
       int nRes = 0;
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         if (blnUpd)//Si es alctualizar
         {

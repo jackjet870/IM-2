@@ -51,7 +51,6 @@
   <ItemGroup>
     <Compile Include="BR\BRAgencies.cs" />
     <Compile Include="BR\BRAreas.cs" />
-
     <Compile Include="BR\BRAssignment.cs" />
     <Compile Include="BR\BRAssistance.cs" />
     <Compile Include="BR\BRAssistancesStatus.cs" />
@@ -65,6 +64,7 @@
     <Compile Include="BR\BRCurrencies.cs" />
     <Compile Include="BR\BRDesks.cs" />
     <Compile Include="BR\BREfficiencyTypes.cs" />
+    <Compile Include="BR\BRExchangeRatesLogs.cs" />
     <Compile Include="BR\BRExchangeRate.cs" />
     <Compile Include="BR\BRGeneralReports.cs" />
     <Compile Include="BR\BRGifts.cs" />
@@ -77,6 +77,7 @@
     <Compile Include="BR\BRPersonnelDayOff.cs" />
     <Compile Include="BR\BRPrStats.cs" />
     <Compile Include="BR\BRRegions.cs" />
+    <Compile Include="BR\BRSalesRoomsLogs.cs" />
     <Compile Include="BR\BRSeasons.cs" />
     <Compile Include="BR\BRReps.cs" />
     <Compile Include="BR\BRSegmentsByAgency.cs" />

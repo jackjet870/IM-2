@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -22,7 +21,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<Club> GetClubs(Club club=null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from cb in dbContext.Clubs
                     select cb;

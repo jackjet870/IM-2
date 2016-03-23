@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -21,7 +20,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<EfficiencyType> GetEfficiencyTypes(EfficiencyType efficiencyType = null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from eft in dbContext.EfficiencyTypes
                     select eft;
@@ -59,7 +58,7 @@ namespace IM.BusinessRules.BR
     /// <returns></returns>
     public static int SaveEfficiencyType(EfficiencyType efficiencyType,bool blnUpdate)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         if (blnUpdate)//Si es actualizar
         {

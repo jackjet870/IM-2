@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
   public class BRPrograms
   {
-    #region getPrograms
+    #region GetPrograms
     /// <summary>
     /// Obtiene una lista de Programas
     /// </summary>
@@ -17,9 +15,9 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 07/03/2016 Created
     /// </history>
-    public static List<Program> getPrograms()
+    public static List<Program> GetPrograms()
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.Programs.ToList();
       }

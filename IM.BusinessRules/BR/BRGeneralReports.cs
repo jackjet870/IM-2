@@ -1,42 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
-{  
+{
   public class BRGeneralReports
   {
+    #region GetRptPersonnel
     /// <summary>
-    /// Obtiene el reporte de Bookings por Sala de Venta,Programa y Locaciones.
+    /// Obtiene el reporte de personal.
     /// </summary>
     /// <returns> List<RptBookingsBySalesRoomProgramLeadSourceTime> </returns>
     /// <history>
     /// [edgrodriguez] 16/Mar/2016 Created
     /// </history>
-    public static List<RptPersonnel> getRptPersonnel()
+    public static List<RptPersonnel> GetRptPersonnel()
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_RptPersonnel().ToList();
       }
-    }
+    } 
+    #endregion
 
+    #region GetRptGifts
     /// <summary>
-    /// Obtiene el reporte de Bookings por Sala de Venta,Programa y Locaciones.
+    /// Obtiene el reporte de regalos.
     /// </summary>
     /// <returns> List<RptBookingsBySalesRoomProgramLeadSourceTime> </returns>
     /// <history>
     /// [edgrodriguez] 16/Mar/2016 Created
     /// </history>
-    public static List<RptGifts> getRptGifts()
+    public static List<RptGifts> GetRptGifts()
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_RptGifts().ToList();
       }
-    }
+    } 
+    #endregion
   }
 }

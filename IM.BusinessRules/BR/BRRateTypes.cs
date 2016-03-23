@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
   public class BRRateTypes
   {
-    #region getRateType
+    #region GetRateType
     /// <summary>
     /// 
     /// </summary>
@@ -19,9 +18,9 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 08/03/2016 Created
     /// </history>
-    public static List<RateType> getRateType(int? raID = null, bool? raA = null)
+    public static List<RateType> GetRateType(int? raID = null, bool? raA = null)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var lstRateTypes = dbContext.RateTypes.ToList();
         if (raID != null && raID >= 0)

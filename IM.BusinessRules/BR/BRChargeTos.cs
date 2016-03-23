@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -25,7 +24,7 @@ namespace IM.BusinessRules.BR
       
       List<ChargeTo> lstCharge = new List<ChargeTo>();
 
-      using (var dbContext=new IMEntities())
+      using (var dbContext=new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from c in dbContext.ChargeTos
                     select c;
@@ -56,6 +55,7 @@ namespace IM.BusinessRules.BR
       
     }
     #endregion
+
     #region SaveChargeTo
     /// <summary>
     /// Funcion que guarda|actualiza un registro en el catalogo ChargeTo
@@ -70,7 +70,7 @@ namespace IM.BusinessRules.BR
     {
       
       int nRes = 0;
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         if (blnUpd)//Actualizar
         {

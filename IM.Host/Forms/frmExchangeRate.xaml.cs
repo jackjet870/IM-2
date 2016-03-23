@@ -73,7 +73,7 @@ namespace IM.Host.Forms
       txtDate.Text = String.Format("Date: {0} {1}", calDate.SelectedDate.Value.DayOfWeek, calDate.SelectedDate.Value.Day);
 
       //Cargamos la información con las nuevas fechas!
-      _listExchageRateData = BRExchangeRate.getGetExchangeRatesWithPesosByDate(calDate.SelectedDate.Value.Date);
+      _listExchageRateData = BRExchangeRate.GetGetExchangeRatesWithPesosByDate(calDate.SelectedDate.Value.Date);
       _exchangeRateMEX = _listExchageRateData.Where(x => x.excu == "MEX").Select(s => s.exExchRate).First();
       _dsExchangeRates.Source = _listExchageRateData;
 

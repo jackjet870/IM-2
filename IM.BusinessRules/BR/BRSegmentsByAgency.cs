@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
   public class BRSegmentsByAgency
   {
-
     #region GetSegmentsByAgecy
     /// <summary>
     /// Devuelve la lista de SegmentByAgcy
@@ -21,7 +21,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<SegmentByAgency> GetSegMentsByAgency(SegmentByAgency segmentByAgency=null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from sba in dbContext.SegmentsByAgencies
                     select sba;

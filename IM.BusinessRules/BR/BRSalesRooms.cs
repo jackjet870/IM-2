@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Enums;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,7 +18,7 @@ namespace IM.BusinessRules.BR
     /// <returns>List<Model.GetSalesRooms></returns>
     public static List<SalesRoomShort> GetSalesRooms(int status)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetSalesRooms(Convert.ToByte(status)).ToList();
       }
@@ -42,7 +43,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<SalesRoomByUser> GetSalesRoomsByUser(string user = "ALL", string regions = "ALL")
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetSalesRoomsByUser(user, regions).ToList();
       }
@@ -63,7 +64,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static SalesRoomCloseDates GetSalesRoom(string salesRoom)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetSalesRoom(salesRoom).FirstOrDefault();
       }
@@ -71,6 +72,7 @@ namespace IM.BusinessRules.BR
 
     #endregion
 
+    #region SetCloseSalesRoom
     /// <summary>
     /// Funcion para cerrar una entidad de la sala de ventas
     /// </summary>
@@ -80,74 +82,25 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void SetCloseSalesRoom(EnumSalesRoomType salesRoomType, string salesRoom, DateTime? dateClose)
     {
-      using (var model = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         switch (salesRoomType)
         {
           case EnumSalesRoomType.Shows:
-            model.USP_OR_CloseShows(salesRoom, dateClose);
+            dbContext.USP_OR_CloseShows(salesRoom, dateClose);
             break;
           case EnumSalesRoomType.MealTickets:
-            model.USP_OR_CloseMealTickets(salesRoom, dateClose);
+            dbContext.USP_OR_CloseMealTickets(salesRoom, dateClose);
             break;
           case EnumSalesRoomType.Sales:
-            model.USP_OR_CloseSales(salesRoom, dateClose);
+            dbContext.USP_OR_CloseSales(salesRoom, dateClose);
             break;
           case EnumSalesRoomType.GiftsReceipts:
-            model.USP_OR_CloseGiftsReceipts(salesRoom, dateClose);
+            dbContext.USP_OR_CloseGiftsReceipts(salesRoom, dateClose);
             break;
         }
       }
     }
-
-    /// <summary>
-    /// Función que se encarga de guarda el historico de cambios realizados
-    /// </summary>
-    /// <param name="SalesRoomID"> Clave de la sala de ventas </param>
-    /// <param name="HoursDif"> Horas de diferencia </param>
-    /// <param name="ChangedBy"> Clave del usuario que esta haciendo el cambio </param>
-    /// <history>
-    /// [vipacheco] 02/03/2016 Created
-    /// </history>
-    public static void SaveSalesRoomLog(string SalesRoomID, Int16 HoursDif, string ChangedBy)
-    {
-      using (var model = new IMEntities())
-      {
-        model.USP_OR_SaveSalesRoomLog(SalesRoomID, HoursDif, ChangedBy);
-      }
-    }
-
-    /// <summary>
-    /// Función para obtener el log de Sales Room
-    /// </summary>
-    /// <param name="salesRoom"></param>
-    /// <returns></returns>
-    /// <history>
-    /// [vipacheco] 22/02/2016 Created
-    /// </history>
-    public static List<SalesRoomLogData> GetSalesRoomLog(string salesRoom)
-    {
-      using (var model = new IMEntities())
-      {
-        return model.USP_OR_GetSalesRoomLog(salesRoom).ToList();
-      }
-    }
-
-    /// <summary>
-    /// Función para obtener el manifestHost
-    /// </summary>
-    /// <param name="currentDate"></param>
-    /// <param name="salesRoomID"></param>
-    /// <returns></returns>
-    /// <history>
-    /// [vipacheco] 22/02/2016 Created
-    /// </history>
-    public static List<GuestPremanifestHost> GetPremanifestHost(DateTime? currentDate, string salesRoomID)
-    {
-      using (var model = new IMEntities())
-      {
-        return model.USP_OR_GetPremanifestHost(currentDate, salesRoomID).ToList();
-      }
-    }
+    #endregion
   }
 }

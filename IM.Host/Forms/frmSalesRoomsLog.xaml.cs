@@ -28,7 +28,7 @@ namespace IM.Host.Forms
       // Load data by setting the CollectionViewSource.Source property:
       // salesRoomLogViewSource.Source = [generic data source]
 
-      _salesRoomLog.Source = BRSalesRooms.GetSalesRoomLog(_userData.SalesRoom.srID);
+      _salesRoomLog.Source = BRSalesRoomsLogs.GetSalesRoomLog(_userData.SalesRoom.srID);
 
       CkeckKeysPress(StatusBarCap, Key.Capital);
       CkeckKeysPress(StatusBarIns, Key.Insert);

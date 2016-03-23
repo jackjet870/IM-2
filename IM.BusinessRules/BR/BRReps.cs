@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -20,7 +21,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<Rep> GetReps(Rep rep,int nStatus=-1)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from r in dbContext.Reps select r;
 

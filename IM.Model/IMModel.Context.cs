@@ -9,1316 +9,1327 @@
 
 namespace IM.Model
 {
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Infrastructure;
-    using System.Data.Entity.Core.Objects;
-    using System.Linq;
-    
-    public partial class IMEntities : DbContext
+  using System;
+  using System.Data.Entity;
+  using System.Data.Entity.Infrastructure;
+  using System.Data.Entity.Core.Objects;
+
+  public partial class IMEntities : DbContext
+  {
+
+    #region Constructores y destructores
+
+    /// <summary>
+    /// Constructor que permite utilizar una cadena de conexion
+    /// </summary>
+    /// <param name="connectionString">Cadena de conexion</param>
+    /// <history>
+    /// [wtorres]  23/Mar/2016 Created
+    /// </history>
+    public IMEntities(string connectionString)
+      : base(connectionString)
     {
-        public IMEntities()
-            : base("name=IMEntities")
-        {
-        }
-    
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            throw new UnintentionalCodeFirstException();
-        }
-    
-        public virtual DbSet<Activity> Activities { get; set; }
-        public virtual DbSet<Agency> Agencies { get; set; }
-        public virtual DbSet<Area> Areas { get; set; }
-        public virtual DbSet<Assistance> Assistances { get; set; }
-        public virtual DbSet<AssistanceStatus> AssistancesStatus { get; set; }
-        public virtual DbSet<Bank> Banks { get; set; }
-        public virtual DbSet<BookingDeposit> BookingDeposits { get; set; }
-        public virtual DbSet<CECOCEBEType> CECOCEBETypes { get; set; }
-        public virtual DbSet<ChargeCalculationType> ChargeCalculationTypes { get; set; }
-        public virtual DbSet<ChargeTo> ChargeTos { get; set; }
-        public virtual DbSet<Club> Clubs { get; set; }
-        public virtual DbSet<Computer> Computers { get; set; }
-        public virtual DbSet<Contract> Contracts { get; set; }
-        public virtual DbSet<Country> Countries { get; set; }
-        public virtual DbSet<CreditCardType> CreditCardTypes { get; set; }
-        public virtual DbSet<Currency> Currencies { get; set; }
-        public virtual DbSet<CxCPayment> CxCPayments { get; set; }
-        public virtual DbSet<DayOff> DaysOffs { get; set; }
-        public virtual DbSet<AgesRange> AgesRanges { get; set; }
-        public virtual DbSet<DepositRefund> DepositsRefunds { get; set; }
-        public virtual DbSet<Dept> Depts { get; set; }
-        public virtual DbSet<Desk> Desks { get; set; }
-        public virtual DbSet<Efficiency> Efficiencies { get; set; }
-        public virtual DbSet<EfficiencyType> EfficiencyTypes { get; set; }
-        public virtual DbSet<ExchangeRate> ExchangeRates { get; set; }
-        public virtual DbSet<ExchangeRateLog> ExchangeRatesLogs { get; set; }
-        public virtual DbSet<FolioCXC> FoliosCXC { get; set; }
-        public virtual DbSet<FolioCxCCancellation> FoliosCxCCancellation { get; set; }
-        public virtual DbSet<FolioCxCPR> FoliosCxCPR { get; set; }
-        public virtual DbSet<FolioInvitationOuthouse> FoliosInvitationsOuthouse { get; set; }
-        public virtual DbSet<FolioInvitationOuthousePR> FoliosInvitationsOuthousePR { get; set; }
-        public virtual DbSet<FolioInvitationOuthousePRCancellation> FoliosInvitationsOuthousePRCancellation { get; set; }
-        public virtual DbSet<Gift> Gifts { get; set; }
-        public virtual DbSet<GiftCategory> GiftsCategories { get; set; }
-        public virtual DbSet<GiftInventory> GiftsInventories { get; set; }
-        public virtual DbSet<GiftLog> GiftsLogs { get; set; }
-        public virtual DbSet<GiftPackageItem> GiftsPackagesItems { get; set; }
-        public virtual DbSet<GiftsReceipt> GiftsReceipts { get; set; }
-        public virtual DbSet<GiftsReceiptDetail> GiftsReceiptsDetails { get; set; }
-        public virtual DbSet<GiftsReceiptLog> GiftsReceiptsLogs { get; set; }
-        public virtual DbSet<GiftsReceiptPackageItem> GiftsReceiptsPackagesItems { get; set; }
-        public virtual DbSet<GiftsReceiptPayment> GiftsReceiptsPayments { get; set; }
-        public virtual DbSet<Goal> Goals { get; set; }
-        public virtual DbSet<Group> Groups { get; set; }
-        public virtual DbSet<GuestLog> GuestsLogs { get; set; }
-        public virtual DbSet<Guest> Guests { get; set; }
-        public virtual DbSet<GuestCreditCard> GuestsCreditCards { get; set; }
-        public virtual DbSet<GuestsGroup> GuestsGroups { get; set; }
-        public virtual DbSet<GuestMovement> GuestsMovements { get; set; }
-        public virtual DbSet<GuestMovementType> GuestsMovementsTypes { get; set; }
-        public virtual DbSet<GuestPromotion> GuestsPromotions { get; set; }
-        public virtual DbSet<GuestSisturPromotion> GuestsSisturPromotions { get; set; }
-        public virtual DbSet<GuestStatus> GuestsStatus { get; set; }
-        public virtual DbSet<GuestStatusType> GuestsStatusTypes { get; set; }
-        public virtual DbSet<HotelGroup> HotelsGroups { get; set; }
-        public virtual DbSet<Hotel> Hotels { get; set; }
-        public virtual DbSet<Income> Incomes { get; set; }
-        public virtual DbSet<InvitationGift> InvitationsGifts { get; set; }
-        public virtual DbSet<InvitationText> InvitationsTexts { get; set; }
-        public virtual DbSet<Language> Languages { get; set; }
-        public virtual DbSet<LeadSource> LeadSources { get; set; }
-        public virtual DbSet<Location> Locations { get; set; }
-        public virtual DbSet<LocationCategory> LocationsCategories { get; set; }
-        public virtual DbSet<LoginLog> LoginsLogs { get; set; }
-        public virtual DbSet<MailOut> MailOuts { get; set; }
-        public virtual DbSet<MailOutText> MailOutTexts { get; set; }
-        public virtual DbSet<Market> Markets { get; set; }
-        public virtual DbSet<MarketSegment> MarketsSegments { get; set; }
-        public virtual DbSet<MealTicketFolio> MealTicketsFolios { get; set; }
-        public virtual DbSet<MealTicket> MealTickets { get; set; }
-        public virtual DbSet<MealTicketType> MealTicketTypes { get; set; }
-        public virtual DbSet<MembershipGroup> MembershipsGroups { get; set; }
-        public virtual DbSet<MembershipType> MembershipTypes { get; set; }
-        public virtual DbSet<MaritalStatus> MaritalStatusList { get; set; }
-        public virtual DbSet<NotBookingMotive> NotBookingMotives { get; set; }
-        public virtual DbSet<Notice> Notices { get; set; }
-        public virtual DbSet<Configuration> Configurations { get; set; }
-        public virtual DbSet<PaymentPlace> PaymentPlaces { get; set; }
-        public virtual DbSet<Payment> Payments { get; set; }
-        public virtual DbSet<PaymentSchema> PaymentSchemas { get; set; }
-        public virtual DbSet<PaymentType> PaymentTypes { get; set; }
-        public virtual DbSet<Period> Periods { get; set; }
-        public virtual DbSet<Permission> Permissions { get; set; }
-        public virtual DbSet<PermissionLevel> PermissionsLevels { get; set; }
-        public virtual DbSet<PersonnelAccess> PersonnelAccessList { get; set; }
-        public virtual DbSet<Personnel> Personnels { get; set; }
-        public virtual DbSet<PersonnelPermission> PersonnelPermissions { get; set; }
-        public virtual DbSet<PersonnelStatus> PersonnelStatusList { get; set; }
-        public virtual DbSet<PlaceType> PlaceTypes { get; set; }
-        public virtual DbSet<Post> Posts { get; set; }
-        public virtual DbSet<PostLog> PostsLogs { get; set; }
-        public virtual DbSet<PRNote> PRNotes { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<ProductLegend> ProductsLegends { get; set; }
-        public virtual DbSet<Program> Programs { get; set; }
-        public virtual DbSet<RateType> RateTypes { get; set; }
-        public virtual DbSet<ReasonCancellationFolio> ReasonsCancellationFolios { get; set; }
-        public virtual DbSet<RefundType> RefundTypes { get; set; }
-        public virtual DbSet<Region> Regions { get; set; }
-        public virtual DbSet<ReimpresionMotive> ReimpresionMotives { get; set; }
-        public virtual DbSet<ReportText> ReportTexts { get; set; }
-        public virtual DbSet<Rep> Reps { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<RoomCharge> RoomCharges { get; set; }
-        public virtual DbSet<RoomType> RoomTypes { get; set; }
-        public virtual DbSet<Sale> Sales { get; set; }
-        public virtual DbSet<SalesAmountRange> SalesAmountRanges { get; set; }
-        public virtual DbSet<SaleLog> SalesLogs { get; set; }
-        public virtual DbSet<SalesmanChange> SalesmenChanges { get; set; }
-        public virtual DbSet<SalesRoom> SalesRooms { get; set; }
-        public virtual DbSet<SalesRoomLog> SalesRoomsLogs { get; set; }
-        public virtual DbSet<SalesSalesman> SalesSalesmen { get; set; }
-        public virtual DbSet<SaleType> SaleTypes { get; set; }
-        public virtual DbSet<SaleTypeCategory> SaleTypesCategories { get; set; }
-        public virtual DbSet<ScoreRule> ScoreRules { get; set; }
-        public virtual DbSet<ScoreRuleByLeadSource> ScoreRulesByLeadSources { get; set; }
-        public virtual DbSet<ScoreRuleByLeadSourceDetail> ScoreRulesByLeadSourceDetails { get; set; }
-        public virtual DbSet<ScoreRuleConcept> ScoreRulesConcepts { get; set; }
-        public virtual DbSet<ScoreRuleDetail> ScoreRulesDetails { get; set; }
-        public virtual DbSet<ScoreRuleType> ScoreRulesTypes { get; set; }
-        public virtual DbSet<Season> Seasons { get; set; }
-        public virtual DbSet<SeasonDate> SeasonsDates { get; set; }
-        public virtual DbSet<SegmentByAgency> SegmentsByAgencies { get; set; }
-        public virtual DbSet<SegmentByLeadSource> SegmentsByLeadSources { get; set; }
-        public virtual DbSet<SegmentCategory> SegmentsCategories { get; set; }
-        public virtual DbSet<ShowProgram> ShowPrograms { get; set; }
-        public virtual DbSet<ShowProgramCategory> ShowProgramsCategories { get; set; }
-        public virtual DbSet<ShowSalesman> ShowsSalesmen { get; set; }
-        public virtual DbSet<Society> Societies { get; set; }
-        public virtual DbSet<SourcePayment> SourcePayments { get; set; }
-        public virtual DbSet<TeamGuestServices> TeamsGuestServices { get; set; }
-        public virtual DbSet<TeamLog> TeamsLogs { get; set; }
-        public virtual DbSet<TeamSalesmen> TeamsSalesmen { get; set; }
-        public virtual DbSet<TeamType> TeamsTypes { get; set; }
-        public virtual DbSet<TourTime> TourTimes { get; set; }
-        public virtual DbSet<TourTimeByDay> TourTimesByDay { get; set; }
-        public virtual DbSet<TourTimeBySalesRoomWeekDay> TourTimesBySalesRoomWeekDay { get; set; }
-        public virtual DbSet<TourTimesSchema> TourTimesSchemas { get; set; }
-        public virtual DbSet<UnavailableMotive> UnavailableMotives { get; set; }
-        public virtual DbSet<UnderPaymentMotive> UnderPaymentMotives { get; set; }
-        public virtual DbSet<Warehouse> Warehouses { get; set; }
-        public virtual DbSet<WeekDay> WeekDays { get; set; }
-        public virtual DbSet<Wholesaler> Wholesalers { get; set; }
-        public virtual DbSet<WarehouseMovement> WarehouseMovements { get; set; }
-        public virtual DbSet<Zone> Zones { get; set; }
-        public virtual DbSet<GuestOpera> GuestsOpera { get; set; }
-        public virtual DbSet<IncomeCECOCEBEType> IncomesCECOCEBETypes { get; set; }
-        public virtual DbSet<MarketSegmentCECOCEBEType> MarketsSegmentsCECOCEBETypes { get; set; }
-    
-        public virtual ObjectResult<CountryShort> USP_OR_GetCountries(Nullable<byte> status)
-        {
-            var statusParameter = status.HasValue ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(byte));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CountryShort>("USP_OR_GetCountries", statusParameter);
-        }
-    
-        public virtual ObjectResult<AgencyShort> USP_OR_GetAgencies(Nullable<byte> status)
-        {
-            var statusParameter = status.HasValue ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(byte));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AgencyShort>("USP_OR_GetAgencies", statusParameter);
-        }
-    
-        public virtual ObjectResult<GuestArrival> USP_OR_GetArrivals(Nullable<System.DateTime> date, string leadSource, string markets, Nullable<int> available, Nullable<int> contacted, Nullable<int> invited, Nullable<int> onGroup)
-        {
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var marketsParameter = markets != null ?
-                new ObjectParameter("Markets", markets) :
-                new ObjectParameter("Markets", typeof(string));
-    
-            var availableParameter = available.HasValue ?
-                new ObjectParameter("Available", available) :
-                new ObjectParameter("Available", typeof(int));
-    
-            var contactedParameter = contacted.HasValue ?
-                new ObjectParameter("Contacted", contacted) :
-                new ObjectParameter("Contacted", typeof(int));
-    
-            var invitedParameter = invited.HasValue ?
-                new ObjectParameter("Invited", invited) :
-                new ObjectParameter("Invited", typeof(int));
-    
-            var onGroupParameter = onGroup.HasValue ?
-                new ObjectParameter("OnGroup", onGroup) :
-                new ObjectParameter("OnGroup", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestArrival>("USP_OR_GetArrivals", dateParameter, leadSourceParameter, marketsParameter, availableParameter, contactedParameter, invitedParameter, onGroupParameter);
-        }
-    
-        public virtual ObjectResult<GuestAvailable> USP_OR_GetAvailables(Nullable<System.DateTime> currentDate, string leadSource, string markets, Nullable<int> contacted, Nullable<int> invited, Nullable<int> onGroup)
-        {
-            var currentDateParameter = currentDate.HasValue ?
-                new ObjectParameter("CurrentDate", currentDate) :
-                new ObjectParameter("CurrentDate", typeof(System.DateTime));
-    
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var marketsParameter = markets != null ?
-                new ObjectParameter("Markets", markets) :
-                new ObjectParameter("Markets", typeof(string));
-    
-            var contactedParameter = contacted.HasValue ?
-                new ObjectParameter("Contacted", contacted) :
-                new ObjectParameter("Contacted", typeof(int));
-    
-            var invitedParameter = invited.HasValue ?
-                new ObjectParameter("Invited", invited) :
-                new ObjectParameter("Invited", typeof(int));
-    
-            var onGroupParameter = onGroup.HasValue ?
-                new ObjectParameter("OnGroup", onGroup) :
-                new ObjectParameter("OnGroup", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestAvailable>("USP_OR_GetAvailables", currentDateParameter, leadSourceParameter, marketsParameter, contactedParameter, invitedParameter, onGroupParameter);
-        }
-    
-        public virtual ObjectResult<GuestPremanifest> USP_OR_GetPremanifest(Nullable<System.DateTime> date, string leadSource, string markets, Nullable<int> onGroup)
-        {
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var marketsParameter = markets != null ?
-                new ObjectParameter("Markets", markets) :
-                new ObjectParameter("Markets", typeof(string));
-    
-            var onGroupParameter = onGroup.HasValue ?
-                new ObjectParameter("OnGroup", onGroup) :
-                new ObjectParameter("OnGroup", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestPremanifest>("USP_OR_GetPremanifest", dateParameter, leadSourceParameter, marketsParameter, onGroupParameter);
-        }
-    
-        public virtual ObjectResult<GuestPremanifestHost> USP_OR_GetPremanifestHost(Nullable<System.DateTime> date, string salesRoom)
-        {
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
-            var salesRoomParameter = salesRoom != null ?
-                new ObjectParameter("SalesRoom", salesRoom) :
-                new ObjectParameter("SalesRoom", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestPremanifestHost>("USP_OR_GetPremanifestHost", dateParameter, salesRoomParameter);
-        }
-    
-        public virtual ObjectResult<GuestMailOut> USP_OR_GetGuestsMailOuts(string guls, Nullable<System.DateTime> guCheckInD, Nullable<System.DateTime> guCheckOutD, Nullable<System.DateTime> guBookD)
-        {
-            var gulsParameter = guls != null ?
-                new ObjectParameter("guls", guls) :
-                new ObjectParameter("guls", typeof(string));
-    
-            var guCheckInDParameter = guCheckInD.HasValue ?
-                new ObjectParameter("guCheckInD", guCheckInD) :
-                new ObjectParameter("guCheckInD", typeof(System.DateTime));
-    
-            var guCheckOutDParameter = guCheckOutD.HasValue ?
-                new ObjectParameter("guCheckOutD", guCheckOutD) :
-                new ObjectParameter("guCheckOutD", typeof(System.DateTime));
-    
-            var guBookDParameter = guBookD.HasValue ?
-                new ObjectParameter("guBookD", guBookD) :
-                new ObjectParameter("guBookD", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestMailOut>("USP_OR_GetGuestsMailOuts", gulsParameter, guCheckInDParameter, guCheckOutDParameter, guBookDParameter);
-        }
-    
-        public virtual ObjectResult<LanguageShort> USP_OR_GetLanguages(Nullable<byte> status)
-        {
-            var statusParameter = status.HasValue ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(byte));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<LanguageShort>("USP_OR_GetLanguages", statusParameter);
-        }
-    
-        public virtual ObjectResult<LeadSourceByUser> USP_OR_GetLeadSourcesByUser(string user, string programs, string regions)
-        {
-            var userParameter = user != null ?
-                new ObjectParameter("User", user) :
-                new ObjectParameter("User", typeof(string));
-    
-            var programsParameter = programs != null ?
-                new ObjectParameter("Programs", programs) :
-                new ObjectParameter("Programs", typeof(string));
-    
-            var regionsParameter = regions != null ?
-                new ObjectParameter("Regions", regions) :
-                new ObjectParameter("Regions", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<LeadSourceByUser>("USP_OR_GetLeadSourcesByUser", userParameter, programsParameter, regionsParameter);
-        }
-    
-        public virtual int spProcessMailOuts(string leadSource, Nullable<System.DateTime> date)
-        {
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spProcessMailOuts", leadSourceParameter, dateParameter);
-        }
-    
-        public virtual ObjectResult<MailOutTextByLeadSource> USP_OR_GetMailOutTextsByLeadSource(string mtls, Nullable<bool> mtA)
-        {
-            var mtlsParameter = mtls != null ?
-                new ObjectParameter("mtls", mtls) :
-                new ObjectParameter("mtls", typeof(string));
-    
-            var mtAParameter = mtA.HasValue ?
-                new ObjectParameter("mtA", mtA) :
-                new ObjectParameter("mtA", typeof(bool));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MailOutTextByLeadSource>("USP_OR_GetMailOutTextsByLeadSource", mtlsParameter, mtAParameter);
-        }
-    
-        public virtual ObjectResult<MarketShort> USP_OR_GetMarkets(Nullable<byte> status)
-        {
-            var statusParameter = status.HasValue ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(byte));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MarketShort>("USP_OR_GetMarkets", statusParameter);
-        }
-    
-        public virtual ObjectResult<UserLogin> USP_OR_Login(Nullable<byte> loginType, string user, string place)
-        {
-            var loginTypeParameter = loginType.HasValue ?
-                new ObjectParameter("LoginType", loginType) :
-                new ObjectParameter("LoginType", typeof(byte));
-    
-            var userParameter = user != null ?
-                new ObjectParameter("User", user) :
-                new ObjectParameter("User", typeof(string));
-    
-            var placeParameter = place != null ?
-                new ObjectParameter("Place", place) :
-                new ObjectParameter("Place", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<UserLogin>("USP_OR_Login", loginTypeParameter, userParameter, placeParameter);
-        }
-    
-        public virtual ObjectResult<SalesRoomByUser> USP_OR_GetSalesRoomsByUser(string user, string regions)
-        {
-            var userParameter = user != null ?
-                new ObjectParameter("User", user) :
-                new ObjectParameter("User", typeof(string));
-    
-            var regionsParameter = regions != null ?
-                new ObjectParameter("Regions", regions) :
-                new ObjectParameter("Regions", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SalesRoomByUser>("USP_OR_GetSalesRoomsByUser", userParameter, regionsParameter);
-        }
-    
-        public virtual ObjectResult<SalesRoomCloseDates> USP_OR_GetSalesRoom(string salesRoom)
-        {
-            var salesRoomParameter = salesRoom != null ?
-                new ObjectParameter("SalesRoom", salesRoom) :
-                new ObjectParameter("SalesRoom", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SalesRoomCloseDates>("USP_OR_GetSalesRoom", salesRoomParameter);
-        }
-    
-        public virtual ObjectResult<SalesRoomShort> USP_OR_GetSalesRooms(Nullable<byte> status)
-        {
-            var statusParameter = status.HasValue ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(byte));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SalesRoomShort>("USP_OR_GetSalesRooms", statusParameter);
-        }
-    
-        public virtual ObjectResult<WarehouseMovementShort> USP_OR_GetWhsMovs(string wmwh, Nullable<System.DateTime> wmD)
-        {
-            var wmwhParameter = wmwh != null ?
-                new ObjectParameter("wmwh", wmwh) :
-                new ObjectParameter("wmwh", typeof(string));
-    
-            var wmDParameter = wmD.HasValue ?
-                new ObjectParameter("wmD", wmD) :
-                new ObjectParameter("wmD", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WarehouseMovementShort>("USP_OR_GetWhsMovs", wmwhParameter, wmDParameter);
-        }
-    
-        public virtual ObjectResult<LocationByUser> USP_OR_GetLocationsByUser(string user, string program)
-        {
-            var userParameter = user != null ?
-                new ObjectParameter("User", user) :
-                new ObjectParameter("User", typeof(string));
-    
-            var programParameter = program != null ?
-                new ObjectParameter("Program", program) :
-                new ObjectParameter("Program", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<LocationByUser>("USP_OR_GetLocationsByUser", userParameter, programParameter);
-        }
-    
-        public virtual ObjectResult<WarehouseByUser> USP_OR_GetWarehousesByUser(string user, string regions)
-        {
-            var userParameter = user != null ?
-                new ObjectParameter("User", user) :
-                new ObjectParameter("User", typeof(string));
-    
-            var regionsParameter = regions != null ?
-                new ObjectParameter("Regions", regions) :
-                new ObjectParameter("Regions", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WarehouseByUser>("USP_OR_GetWarehousesByUser", userParameter, regionsParameter);
-        }
-    
-        public virtual ObjectResult<GiftShort> USP_OR_GetGifts(string locations, Nullable<byte> status)
-        {
-            var locationsParameter = locations != null ?
-                new ObjectParameter("Locations", locations) :
-                new ObjectParameter("Locations", typeof(string));
-    
-            var statusParameter = status.HasValue ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(byte));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftShort>("USP_OR_GetGifts", locationsParameter, statusParameter);
-        }
-    
-        public virtual ObjectResult<PersonnelDayOff> USP_OR_GetPersonnelDaysOff(string teamType, string placeID)
-        {
-            var teamTypeParameter = teamType != null ?
-                new ObjectParameter("TeamType", teamType) :
-                new ObjectParameter("TeamType", typeof(string));
-    
-            var placeIDParameter = placeID != null ?
-                new ObjectParameter("PlaceID", placeID) :
-                new ObjectParameter("PlaceID", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PersonnelDayOff>("USP_OR_GetPersonnelDaysOff", teamTypeParameter, placeIDParameter);
-        }
-    
-        public virtual ObjectResult<RptPRStats> USP_OR_RptPRStats(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string salesRooms, string countries, string agencies, string markets)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var leadSourcesParameter = leadSources != null ?
-                new ObjectParameter("LeadSources", leadSources) :
-                new ObjectParameter("LeadSources", typeof(string));
-    
-            var salesRoomsParameter = salesRooms != null ?
-                new ObjectParameter("SalesRooms", salesRooms) :
-                new ObjectParameter("SalesRooms", typeof(string));
-    
-            var countriesParameter = countries != null ?
-                new ObjectParameter("Countries", countries) :
-                new ObjectParameter("Countries", typeof(string));
-    
-            var agenciesParameter = agencies != null ?
-                new ObjectParameter("Agencies", agencies) :
-                new ObjectParameter("Agencies", typeof(string));
-    
-            var marketsParameter = markets != null ?
-                new ObjectParameter("Markets", markets) :
-                new ObjectParameter("Markets", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptPRStats>("USP_OR_RptPRStats", dateFromParameter, dateToParameter, leadSourcesParameter, salesRoomsParameter, countriesParameter, agenciesParameter, marketsParameter);
-        }
-    
-        public virtual int USP_OR_ActualizarFechasTemporadas(Nullable<int> currentYear)
-        {
-            var currentYearParameter = currentYear.HasValue ?
-                new ObjectParameter("CurrentYear", currentYear) :
-                new ObjectParameter("CurrentYear", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_ActualizarFechasTemporadas", currentYearParameter);
-        }
-    
-        public virtual int USP_OR_CloseGiftsReceipts(string salesRoom, Nullable<System.DateTime> date)
-        {
-            var salesRoomParameter = salesRoom != null ?
-                new ObjectParameter("SalesRoom", salesRoom) :
-                new ObjectParameter("SalesRoom", typeof(string));
-    
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CloseGiftsReceipts", salesRoomParameter, dateParameter);
-        }
-    
-        public virtual int USP_OR_CloseMealTickets(string salesRoom, Nullable<System.DateTime> date)
-        {
-            var salesRoomParameter = salesRoom != null ?
-                new ObjectParameter("SalesRoom", salesRoom) :
-                new ObjectParameter("SalesRoom", typeof(string));
-    
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CloseMealTickets", salesRoomParameter, dateParameter);
-        }
-    
-        public virtual int USP_OR_CloseSales(string salesRoom, Nullable<System.DateTime> date)
-        {
-            var salesRoomParameter = salesRoom != null ?
-                new ObjectParameter("SalesRoom", salesRoom) :
-                new ObjectParameter("SalesRoom", typeof(string));
-    
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CloseSales", salesRoomParameter, dateParameter);
-        }
-    
-        public virtual int USP_OR_CloseShows(string salesRoom, Nullable<System.DateTime> date)
-        {
-            var salesRoomParameter = salesRoom != null ?
-                new ObjectParameter("SalesRoom", salesRoom) :
-                new ObjectParameter("SalesRoom", typeof(string));
-    
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CloseShows", salesRoomParameter, dateParameter);
-        }
-    
-        public virtual ObjectResult<ExchangeRateLogData> USP_OR_GetExchangeRateLog(string currency)
-        {
-            var currencyParameter = currency != null ?
-                new ObjectParameter("Currency", currency) :
-                new ObjectParameter("Currency", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ExchangeRateLogData>("USP_OR_GetExchangeRateLog", currencyParameter);
-        }
-    
-        public virtual ObjectResult<ExchangeRateData> USP_OR_GetExchangeRatesWithPesosByDate(Nullable<System.DateTime> date)
-        {
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ExchangeRateData>("USP_OR_GetExchangeRatesWithPesosByDate", dateParameter);
-        }
-    
-        public virtual ObjectResult<GraphProductionByPRData> USP_OR_GraphProductionByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GraphProductionByPRData>("USP_OR_GraphProductionByPR", dateFromParameter, dateToParameter, leadSourceParameter);
-        }
-    
-        public virtual int USP_OR_InsertExchangeRate(Nullable<System.DateTime> currentDate)
-        {
-            var currentDateParameter = currentDate.HasValue ?
-                new ObjectParameter("CurrentDate", currentDate) :
-                new ObjectParameter("CurrentDate", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_InsertExchangeRate", currentDateParameter);
-        }
-    
-        public virtual int USP_OR_SaveSalesRoomLog(string salesRoom, Nullable<short> hoursDif, string changedBy)
-        {
-            var salesRoomParameter = salesRoom != null ?
-                new ObjectParameter("SalesRoom", salesRoom) :
-                new ObjectParameter("SalesRoom", typeof(string));
-    
-            var hoursDifParameter = hoursDif.HasValue ?
-                new ObjectParameter("HoursDif", hoursDif) :
-                new ObjectParameter("HoursDif", typeof(short));
-    
-            var changedByParameter = changedBy != null ?
-                new ObjectParameter("ChangedBy", changedBy) :
-                new ObjectParameter("ChangedBy", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveSalesRoomLog", salesRoomParameter, hoursDifParameter, changedByParameter);
-        }
-    
-        public virtual ObjectResult<PersonnelShort> USP_OR_GetPersonnel(string leadSources, string salesRooms, string roles, Nullable<byte> status, string permission, string relationalOperator, Nullable<int> permissionLevel, string dept)
-        {
-            var leadSourcesParameter = leadSources != null ?
-                new ObjectParameter("LeadSources", leadSources) :
-                new ObjectParameter("LeadSources", typeof(string));
-    
-            var salesRoomsParameter = salesRooms != null ?
-                new ObjectParameter("SalesRooms", salesRooms) :
-                new ObjectParameter("SalesRooms", typeof(string));
-    
-            var rolesParameter = roles != null ?
-                new ObjectParameter("Roles", roles) :
-                new ObjectParameter("Roles", typeof(string));
-    
-            var statusParameter = status.HasValue ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(byte));
-    
-            var permissionParameter = permission != null ?
-                new ObjectParameter("Permission", permission) :
-                new ObjectParameter("Permission", typeof(string));
-    
-            var relationalOperatorParameter = relationalOperator != null ?
-                new ObjectParameter("RelationalOperator", relationalOperator) :
-                new ObjectParameter("RelationalOperator", typeof(string));
-    
-            var permissionLevelParameter = permissionLevel.HasValue ?
-                new ObjectParameter("PermissionLevel", permissionLevel) :
-                new ObjectParameter("PermissionLevel", typeof(int));
-    
-            var deptParameter = dept != null ?
-                new ObjectParameter("Dept", dept) :
-                new ObjectParameter("Dept", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PersonnelShort>("USP_OR_GetPersonnel", leadSourcesParameter, salesRoomsParameter, rolesParameter, statusParameter, permissionParameter, relationalOperatorParameter, permissionLevelParameter, deptParameter);
-        }
-    
-        public virtual ObjectResult<SalesRoomLogData> USP_OR_GetSalesRoomLog(string salesRoom)
-        {
-            var salesRoomParameter = salesRoom != null ?
-                new ObjectParameter("SalesRoom", salesRoom) :
-                new ObjectParameter("SalesRoom", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SalesRoomLogData>("USP_OR_GetSalesRoomLog", salesRoomParameter);
-        }
-    
-        public virtual ObjectResult<RptBookingsBySalesRoomProgramTime> USP_OR_RptBookingsBySalesRoomProgramTime(Nullable<System.DateTime> date, string salesRooms)
-        {
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
-            var salesRoomsParameter = salesRooms != null ?
-                new ObjectParameter("SalesRooms", salesRooms) :
-                new ObjectParameter("SalesRooms", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptBookingsBySalesRoomProgramTime>("USP_OR_RptBookingsBySalesRoomProgramTime", dateParameter, salesRoomsParameter);
-        }
-    
-        public virtual ObjectResult<GuestLogData> USP_OR_GetGuestLog(Nullable<int> guest)
-        {
-            var guestParameter = guest.HasValue ?
-                new ObjectParameter("Guest", guest) :
-                new ObjectParameter("Guest", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestLogData>("USP_OR_GetGuestLog", guestParameter);
-        }
-    
-        public virtual int USP_OR_SaveLoginLog(string location, string user, string computerName)
-        {
-            var locationParameter = location != null ?
-                new ObjectParameter("Location", location) :
-                new ObjectParameter("Location", typeof(string));
-    
-            var userParameter = user != null ?
-                new ObjectParameter("User", user) :
-                new ObjectParameter("User", typeof(string));
-    
-            var computerNameParameter = computerName != null ?
-                new ObjectParameter("ComputerName", computerName) :
-                new ObjectParameter("ComputerName", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveLoginLog", locationParameter, userParameter, computerNameParameter);
-        }
-    
-        public virtual ObjectResult<GuestAssigned> USP_OR_GetGuestsAssigned(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string pRs, string markets)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var pRsParameter = pRs != null ?
-                new ObjectParameter("PRs", pRs) :
-                new ObjectParameter("PRs", typeof(string));
-    
-            var marketsParameter = markets != null ?
-                new ObjectParameter("Markets", markets) :
-                new ObjectParameter("Markets", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestAssigned>("USP_OR_GetGuestsAssigned", dateFromParameter, dateToParameter, leadSourceParameter, pRsParameter, marketsParameter);
-        }
-    
-        public virtual ObjectResult<GuestUnassigned> USP_OR_GetGuestsUnassigned(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets, Nullable<bool> onlyAvailables)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var marketsParameter = markets != null ?
-                new ObjectParameter("Markets", markets) :
-                new ObjectParameter("Markets", typeof(string));
-    
-            var onlyAvailablesParameter = onlyAvailables.HasValue ?
-                new ObjectParameter("OnlyAvailables", onlyAvailables) :
-                new ObjectParameter("OnlyAvailables", typeof(bool));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestUnassigned>("USP_OR_GetGuestsUnassigned", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter, onlyAvailablesParameter);
-        }
-    
-        public virtual ObjectResult<PRAssigned> USP_OR_GetPRsAssigned(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets, Nullable<bool> pRGuests, Nullable<bool> pRMembers)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var marketsParameter = markets != null ?
-                new ObjectParameter("Markets", markets) :
-                new ObjectParameter("Markets", typeof(string));
-    
-            var pRGuestsParameter = pRGuests.HasValue ?
-                new ObjectParameter("PRGuests", pRGuests) :
-                new ObjectParameter("PRGuests", typeof(bool));
-    
-            var pRMembersParameter = pRMembers.HasValue ?
-                new ObjectParameter("PRMembers", pRMembers) :
-                new ObjectParameter("PRMembers", typeof(bool));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PRAssigned>("USP_OR_GetPRsAssigned", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter, pRGuestsParameter, pRMembersParameter);
-        }
-    
-        public virtual ObjectResult<TourTimeAvailable> USP_OR_GetTourTimesAvailables(string leadSource, string salesRoom, Nullable<System.DateTime> date, Nullable<System.DateTime> dateOriginal, Nullable<System.DateTime> timeOriginal, Nullable<System.DateTime> currentDate)
-        {
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var salesRoomParameter = salesRoom != null ?
-                new ObjectParameter("SalesRoom", salesRoom) :
-                new ObjectParameter("SalesRoom", typeof(string));
-    
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
-            var dateOriginalParameter = dateOriginal.HasValue ?
-                new ObjectParameter("DateOriginal", dateOriginal) :
-                new ObjectParameter("DateOriginal", typeof(System.DateTime));
-    
-            var timeOriginalParameter = timeOriginal.HasValue ?
-                new ObjectParameter("TimeOriginal", timeOriginal) :
-                new ObjectParameter("TimeOriginal", typeof(System.DateTime));
-    
-            var currentDateParameter = currentDate.HasValue ?
-                new ObjectParameter("CurrentDate", currentDate) :
-                new ObjectParameter("CurrentDate", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TourTimeAvailable>("USP_OR_GetTourTimesAvailables", leadSourceParameter, salesRoomParameter, dateParameter, dateOriginalParameter, timeOriginalParameter, currentDateParameter);
-        }
-    
-        public virtual int USP_OR_SaveGuestLog(Nullable<int> guest, Nullable<short> hoursDif, string changedBy)
-        {
-            var guestParameter = guest.HasValue ?
-                new ObjectParameter("Guest", guest) :
-                new ObjectParameter("Guest", typeof(int));
-    
-            var hoursDifParameter = hoursDif.HasValue ?
-                new ObjectParameter("HoursDif", hoursDif) :
-                new ObjectParameter("HoursDif", typeof(short));
-    
-            var changedByParameter = changedBy != null ?
-                new ObjectParameter("ChangedBy", changedBy) :
-                new ObjectParameter("ChangedBy", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveGuestLog", guestParameter, hoursDifParameter, changedByParameter);
-        }
-    
-        public virtual int USP_OR_SaveGuestMovement(Nullable<int> guest, string guestMovementType, string changedBy, string computerName, string iPAddress)
-        {
-            var guestParameter = guest.HasValue ?
-                new ObjectParameter("Guest", guest) :
-                new ObjectParameter("Guest", typeof(int));
-    
-            var guestMovementTypeParameter = guestMovementType != null ?
-                new ObjectParameter("GuestMovementType", guestMovementType) :
-                new ObjectParameter("GuestMovementType", typeof(string));
-    
-            var changedByParameter = changedBy != null ?
-                new ObjectParameter("ChangedBy", changedBy) :
-                new ObjectParameter("ChangedBy", typeof(string));
-    
-            var computerNameParameter = computerName != null ?
-                new ObjectParameter("ComputerName", computerName) :
-                new ObjectParameter("ComputerName", typeof(string));
-    
-            var iPAddressParameter = iPAddress != null ?
-                new ObjectParameter("IPAddress", iPAddress) :
-                new ObjectParameter("IPAddress", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveGuestMovement", guestParameter, guestMovementTypeParameter, changedByParameter, computerNameParameter, iPAddressParameter);
-        }
-    
-        public virtual int USP_OR_SaveExchangeRateLog(string currency, Nullable<System.DateTime> date, Nullable<short> hoursDif, string changedBy)
-        {
-            var currencyParameter = currency != null ?
-                new ObjectParameter("Currency", currency) :
-                new ObjectParameter("Currency", typeof(string));
-    
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
-            var hoursDifParameter = hoursDif.HasValue ?
-                new ObjectParameter("HoursDif", hoursDif) :
-                new ObjectParameter("HoursDif", typeof(short));
-    
-            var changedByParameter = changedBy != null ?
-                new ObjectParameter("ChangedBy", changedBy) :
-                new ObjectParameter("ChangedBy", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveExchangeRateLog", currencyParameter, dateParameter, hoursDifParameter, changedByParameter);
-        }
-    
-        public virtual ObjectResult<GuestByPR> USP_OR_GetGuestsByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string pR, Nullable<bool> considerAssign, Nullable<bool> considerContact, Nullable<bool> considerFollowUp, Nullable<bool> considerInvit, Nullable<bool> considerShow, Nullable<bool> considerSale, Nullable<bool> basedOnArrival)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var pRParameter = pR != null ?
-                new ObjectParameter("PR", pR) :
-                new ObjectParameter("PR", typeof(string));
-    
-            var considerAssignParameter = considerAssign.HasValue ?
-                new ObjectParameter("ConsiderAssign", considerAssign) :
-                new ObjectParameter("ConsiderAssign", typeof(bool));
-    
-            var considerContactParameter = considerContact.HasValue ?
-                new ObjectParameter("ConsiderContact", considerContact) :
-                new ObjectParameter("ConsiderContact", typeof(bool));
-    
-            var considerFollowUpParameter = considerFollowUp.HasValue ?
-                new ObjectParameter("ConsiderFollowUp", considerFollowUp) :
-                new ObjectParameter("ConsiderFollowUp", typeof(bool));
-    
-            var considerInvitParameter = considerInvit.HasValue ?
-                new ObjectParameter("ConsiderInvit", considerInvit) :
-                new ObjectParameter("ConsiderInvit", typeof(bool));
-    
-            var considerShowParameter = considerShow.HasValue ?
-                new ObjectParameter("ConsiderShow", considerShow) :
-                new ObjectParameter("ConsiderShow", typeof(bool));
-    
-            var considerSaleParameter = considerSale.HasValue ?
-                new ObjectParameter("ConsiderSale", considerSale) :
-                new ObjectParameter("ConsiderSale", typeof(bool));
-    
-            var basedOnArrivalParameter = basedOnArrival.HasValue ?
-                new ObjectParameter("BasedOnArrival", basedOnArrival) :
-                new ObjectParameter("BasedOnArrival", typeof(bool));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestByPR>("USP_OR_GetGuestsByPR", dateFromParameter, dateToParameter, leadSourceParameter, pRParameter, considerAssignParameter, considerContactParameter, considerFollowUpParameter, considerInvitParameter, considerShowParameter, considerSaleParameter, basedOnArrivalParameter);
-        }
-    
-        public virtual ObjectResult<GuestSearched> USP_OR_GetGuests(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string name, string roomNumber, string reservation, Nullable<int> guestID)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var nameParameter = name != null ?
-                new ObjectParameter("Name", name) :
-                new ObjectParameter("Name", typeof(string));
-    
-            var roomNumberParameter = roomNumber != null ?
-                new ObjectParameter("RoomNumber", roomNumber) :
-                new ObjectParameter("RoomNumber", typeof(string));
-    
-            var reservationParameter = reservation != null ?
-                new ObjectParameter("Reservation", reservation) :
-                new ObjectParameter("Reservation", typeof(string));
-    
-            var guestIDParameter = guestID.HasValue ?
-                new ObjectParameter("GuestID", guestID) :
-                new ObjectParameter("GuestID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestSearched>("USP_OR_GetGuests", dateFromParameter, dateToParameter, leadSourceParameter, nameParameter, roomNumberParameter, reservationParameter, guestIDParameter);
-        }
-    
-        public virtual ObjectResult<RptBookingsBySalesRoomProgramLeadSourceTime> USP_OR_RptBookingsBySalesRoomProgramLeadSourceTime(Nullable<System.DateTime> date, string salesRooms)
-        {
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
-            var salesRoomsParameter = salesRooms != null ?
-                new ObjectParameter("SalesRooms", salesRooms) :
-                new ObjectParameter("SalesRooms", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptBookingsBySalesRoomProgramLeadSourceTime>("USP_OR_RptBookingsBySalesRoomProgramLeadSourceTime", dateParameter, salesRoomsParameter);
-        }
-    
-        public virtual ObjectResult<RptPersonnel> USP_OR_RptPersonnel()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptPersonnel>("USP_OR_RptPersonnel");
-        }
-    
-        public virtual ObjectResult<string> USP_OR_ValidateFolioInvitationOutside(string serie, Nullable<int> number, Nullable<int> guestID)
-        {
-            var serieParameter = serie != null ?
-                new ObjectParameter("Serie", serie) :
-                new ObjectParameter("Serie", typeof(string));
-    
-            var numberParameter = number.HasValue ?
-                new ObjectParameter("Number", number) :
-                new ObjectParameter("Number", typeof(int));
-    
-            var guestIDParameter = guestID.HasValue ?
-                new ObjectParameter("GuestID", guestID) :
-                new ObjectParameter("GuestID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("USP_OR_ValidateFolioInvitationOutside", serieParameter, numberParameter, guestIDParameter);
-        }
-    
-        public virtual ObjectResult<string> USP_OR_ValidateFolioReservation(string leadSource, string folio, Nullable<int> guestID)
-        {
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var folioParameter = folio != null ?
-                new ObjectParameter("Folio", folio) :
-                new ObjectParameter("Folio", typeof(string));
-    
-            var guestIDParameter = guestID.HasValue ?
-                new ObjectParameter("GuestID", guestID) :
-                new ObjectParameter("GuestID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("USP_OR_ValidateFolioReservation", leadSourceParameter, folioParameter, guestIDParameter);
-        }
-    
-        public virtual ObjectResult<RptGifts> USP_OR_RptGifts()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGifts>("USP_OR_RptGifts");
-        }
-    
-        public virtual ObjectResult<AssistanceData> USP_OR_GetAssistance(string placeType, string place, Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo)
-        {
-            var placeTypeParameter = placeType != null ?
-                new ObjectParameter("PlaceType", placeType) :
-                new ObjectParameter("PlaceType", typeof(string));
-    
-            var placeParameter = place != null ?
-                new ObjectParameter("Place", place) :
-                new ObjectParameter("Place", typeof(string));
-    
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AssistanceData>("USP_OR_GetAssistance", placeTypeParameter, placeParameter, dateFromParameter, dateToParameter);
-        }
-    
-        public virtual ObjectResult<PersonnelAssistance> USP_OR_GetPersonnelAssistance(string placeType, string place, Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo)
-        {
-            var placeTypeParameter = placeType != null ?
-                new ObjectParameter("PlaceType", placeType) :
-                new ObjectParameter("PlaceType", typeof(string));
-    
-            var placeParameter = place != null ?
-                new ObjectParameter("Place", place) :
-                new ObjectParameter("Place", typeof(string));
-    
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PersonnelAssistance>("USP_OR_GetPersonnelAssistance", placeTypeParameter, placeParameter, dateFromParameter, dateToParameter);
-        }
-    
-        public virtual ObjectResult<RptAssignment> USP_OR_RptAssignment(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var marketsParameter = markets != null ?
-                new ObjectParameter("Markets", markets) :
-                new ObjectParameter("Markets", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptAssignment>("USP_OR_RptAssignment", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter);
-        }
-    
-        public virtual ObjectResult<RptAssignmentArrivals> USP_OR_RptAssignmentArrivals(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var marketsParameter = markets != null ?
-                new ObjectParameter("Markets", markets) :
-                new ObjectParameter("Markets", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptAssignmentArrivals>("USP_OR_RptAssignmentArrivals", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter);
-        }
-    
-        public virtual ObjectResult<RptAssignmentByPR> USP_OR_RptAssignmentByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets, string pR)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var marketsParameter = markets != null ?
-                new ObjectParameter("Markets", markets) :
-                new ObjectParameter("Markets", typeof(string));
-    
-            var pRParameter = pR != null ?
-                new ObjectParameter("PR", pR) :
-                new ObjectParameter("PR", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptAssignmentByPR>("USP_OR_RptAssignmentByPR", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter, pRParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<bool>> USP_OR_ValidateFolioCXC(Nullable<int> numberFrom, Nullable<int> numberTo, Nullable<bool> active, Nullable<int> action)
-        {
-            var numberFromParameter = numberFrom.HasValue ?
-                new ObjectParameter("NumberFrom", numberFrom) :
-                new ObjectParameter("NumberFrom", typeof(int));
-    
-            var numberToParameter = numberTo.HasValue ?
-                new ObjectParameter("NumberTo", numberTo) :
-                new ObjectParameter("NumberTo", typeof(int));
-    
-            var activeParameter = active.HasValue ?
-                new ObjectParameter("Active", active) :
-                new ObjectParameter("Active", typeof(bool));
-    
-            var actionParameter = action.HasValue ?
-                new ObjectParameter("Action", action) :
-                new ObjectParameter("Action", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<bool>>("USP_OR_ValidateFolioCXC", numberFromParameter, numberToParameter, activeParameter, actionParameter);
-        }
-    
-        public virtual ObjectResult<RptCxC> USP_OR_RptCxC(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var salesRoomParameter = salesRoom != null ?
-                new ObjectParameter("SalesRoom", salesRoom) :
-                new ObjectParameter("SalesRoom", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptCxC>("USP_OR_RptCxC", dateFromParameter, dateToParameter, salesRoomParameter);
-        }
-    
-        public virtual ObjectResult<RptCxCDeposits> USP_OR_RptCxCDeposits(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var salesRoomsParameter = salesRooms != null ?
-                new ObjectParameter("SalesRooms", salesRooms) :
-                new ObjectParameter("SalesRooms", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptCxCDeposits>("USP_OR_RptCxCDeposits", dateFromParameter, dateToParameter, salesRoomsParameter);
-        }
-    
-        public virtual ObjectResult<RptCxCGifts> USP_OR_RptCxCGifts(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var salesRoomsParameter = salesRooms != null ?
-                new ObjectParameter("SalesRooms", salesRooms) :
-                new ObjectParameter("SalesRooms", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptCxCGifts>("USP_OR_RptCxCGifts", dateFromParameter, dateToParameter, salesRoomsParameter);
-        }
-    
-        public virtual ObjectResult<RptCxCNotAuthorized> USP_OR_RptCxCNotAuthorized(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var salesRoomParameter = salesRoom != null ?
-                new ObjectParameter("SalesRoom", salesRoom) :
-                new ObjectParameter("SalesRoom", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptCxCNotAuthorized>("USP_OR_RptCxCNotAuthorized", dateFromParameter, dateToParameter, salesRoomParameter);
-        }
-    
-        public virtual ObjectResult<SaleByCloser> USP_OR_GetSalesByCloser(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string closer)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var salesRoomParameter = salesRoom != null ?
-                new ObjectParameter("SalesRoom", salesRoom) :
-                new ObjectParameter("SalesRoom", typeof(string));
-    
-            var closerParameter = closer != null ?
-                new ObjectParameter("Closer", closer) :
-                new ObjectParameter("Closer", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleByCloser>("USP_OR_GetSalesByCloser", dateFromParameter, dateToParameter, salesRoomParameter, closerParameter);
-        }
-    
-        public virtual ObjectResult<SaleByLiner> USP_OR_GetSalesByLiner(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string liner)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var salesRoomParameter = salesRoom != null ?
-                new ObjectParameter("SalesRoom", salesRoom) :
-                new ObjectParameter("SalesRoom", typeof(string));
-    
-            var linerParameter = liner != null ?
-                new ObjectParameter("Liner", liner) :
-                new ObjectParameter("Liner", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleByLiner>("USP_OR_GetSalesByLiner", dateFromParameter, dateToParameter, salesRoomParameter, linerParameter);
-        }
-    
-        public virtual ObjectResult<SaleByPR> USP_OR_GetSalesByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string pR)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var leadSourceParameter = leadSource != null ?
-                new ObjectParameter("LeadSource", leadSource) :
-                new ObjectParameter("LeadSource", typeof(string));
-    
-            var pRParameter = pR != null ?
-                new ObjectParameter("PR", pR) :
-                new ObjectParameter("PR", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleByPR>("USP_OR_GetSalesByPR", dateFromParameter, dateToParameter, leadSourceParameter, pRParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<bool>> USP_OR_ValidateFolioInvitationsOutside(string serie, Nullable<int> numberFrom, Nullable<int> numberTo, Nullable<bool> active, Nullable<int> action)
-        {
-            var serieParameter = serie != null ?
-                new ObjectParameter("Serie", serie) :
-                new ObjectParameter("Serie", typeof(string));
-    
-            var numberFromParameter = numberFrom.HasValue ?
-                new ObjectParameter("NumberFrom", numberFrom) :
-                new ObjectParameter("NumberFrom", typeof(int));
-    
-            var numberToParameter = numberTo.HasValue ?
-                new ObjectParameter("NumberTo", numberTo) :
-                new ObjectParameter("NumberTo", typeof(int));
-    
-            var activeParameter = active.HasValue ?
-                new ObjectParameter("Active", active) :
-                new ObjectParameter("Active", typeof(bool));
-    
-            var actionParameter = action.HasValue ?
-                new ObjectParameter("Action", action) :
-                new ObjectParameter("Action", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<bool>>("USP_OR_ValidateFolioInvitationsOutside", serieParameter, numberFromParameter, numberToParameter, activeParameter, actionParameter);
-        }
     }
+
+    #endregion
+
+    protected override void OnModelCreating(DbModelBuilder modelBuilder)
+    {
+      throw new UnintentionalCodeFirstException();
+    }
+
+    public virtual DbSet<Activity> Activities { get; set; }
+    public virtual DbSet<Agency> Agencies { get; set; }
+    public virtual DbSet<Area> Areas { get; set; }
+    public virtual DbSet<Assistance> Assistances { get; set; }
+    public virtual DbSet<AssistanceStatus> AssistancesStatus { get; set; }
+    public virtual DbSet<Bank> Banks { get; set; }
+    public virtual DbSet<BookingDeposit> BookingDeposits { get; set; }
+    public virtual DbSet<CECOCEBEType> CECOCEBETypes { get; set; }
+    public virtual DbSet<ChargeCalculationType> ChargeCalculationTypes { get; set; }
+    public virtual DbSet<ChargeTo> ChargeTos { get; set; }
+    public virtual DbSet<Club> Clubs { get; set; }
+    public virtual DbSet<Computer> Computers { get; set; }
+    public virtual DbSet<Contract> Contracts { get; set; }
+    public virtual DbSet<Country> Countries { get; set; }
+    public virtual DbSet<CreditCardType> CreditCardTypes { get; set; }
+    public virtual DbSet<Currency> Currencies { get; set; }
+    public virtual DbSet<CxCPayment> CxCPayments { get; set; }
+    public virtual DbSet<DayOff> DaysOffs { get; set; }
+    public virtual DbSet<AgesRange> AgesRanges { get; set; }
+    public virtual DbSet<DepositRefund> DepositsRefunds { get; set; }
+    public virtual DbSet<Dept> Depts { get; set; }
+    public virtual DbSet<Desk> Desks { get; set; }
+    public virtual DbSet<Efficiency> Efficiencies { get; set; }
+    public virtual DbSet<EfficiencyType> EfficiencyTypes { get; set; }
+    public virtual DbSet<ExchangeRate> ExchangeRates { get; set; }
+    public virtual DbSet<ExchangeRateLog> ExchangeRatesLogs { get; set; }
+    public virtual DbSet<FolioCXC> FoliosCXC { get; set; }
+    public virtual DbSet<FolioCxCCancellation> FoliosCxCCancellation { get; set; }
+    public virtual DbSet<FolioCxCPR> FoliosCxCPR { get; set; }
+    public virtual DbSet<FolioInvitationOuthouse> FoliosInvitationsOuthouse { get; set; }
+    public virtual DbSet<FolioInvitationOuthousePR> FoliosInvitationsOuthousePR { get; set; }
+    public virtual DbSet<FolioInvitationOuthousePRCancellation> FoliosInvitationsOuthousePRCancellation { get; set; }
+    public virtual DbSet<Gift> Gifts { get; set; }
+    public virtual DbSet<GiftCategory> GiftsCategories { get; set; }
+    public virtual DbSet<GiftInventory> GiftsInventories { get; set; }
+    public virtual DbSet<GiftLog> GiftsLogs { get; set; }
+    public virtual DbSet<GiftPackageItem> GiftsPackagesItems { get; set; }
+    public virtual DbSet<GiftsReceipt> GiftsReceipts { get; set; }
+    public virtual DbSet<GiftsReceiptDetail> GiftsReceiptsDetails { get; set; }
+    public virtual DbSet<GiftsReceiptLog> GiftsReceiptsLogs { get; set; }
+    public virtual DbSet<GiftsReceiptPackageItem> GiftsReceiptsPackagesItems { get; set; }
+    public virtual DbSet<GiftsReceiptPayment> GiftsReceiptsPayments { get; set; }
+    public virtual DbSet<Goal> Goals { get; set; }
+    public virtual DbSet<Group> Groups { get; set; }
+    public virtual DbSet<GuestLog> GuestsLogs { get; set; }
+    public virtual DbSet<Guest> Guests { get; set; }
+    public virtual DbSet<GuestCreditCard> GuestsCreditCards { get; set; }
+    public virtual DbSet<GuestsGroup> GuestsGroups { get; set; }
+    public virtual DbSet<GuestMovement> GuestsMovements { get; set; }
+    public virtual DbSet<GuestMovementType> GuestsMovementsTypes { get; set; }
+    public virtual DbSet<GuestPromotion> GuestsPromotions { get; set; }
+    public virtual DbSet<GuestSisturPromotion> GuestsSisturPromotions { get; set; }
+    public virtual DbSet<GuestStatus> GuestsStatus { get; set; }
+    public virtual DbSet<GuestStatusType> GuestsStatusTypes { get; set; }
+    public virtual DbSet<HotelGroup> HotelsGroups { get; set; }
+    public virtual DbSet<Hotel> Hotels { get; set; }
+    public virtual DbSet<Income> Incomes { get; set; }
+    public virtual DbSet<InvitationGift> InvitationsGifts { get; set; }
+    public virtual DbSet<InvitationText> InvitationsTexts { get; set; }
+    public virtual DbSet<Language> Languages { get; set; }
+    public virtual DbSet<LeadSource> LeadSources { get; set; }
+    public virtual DbSet<Location> Locations { get; set; }
+    public virtual DbSet<LocationCategory> LocationsCategories { get; set; }
+    public virtual DbSet<LoginLog> LoginsLogs { get; set; }
+    public virtual DbSet<MailOut> MailOuts { get; set; }
+    public virtual DbSet<MailOutText> MailOutTexts { get; set; }
+    public virtual DbSet<Market> Markets { get; set; }
+    public virtual DbSet<MarketSegment> MarketsSegments { get; set; }
+    public virtual DbSet<MealTicketFolio> MealTicketsFolios { get; set; }
+    public virtual DbSet<MealTicket> MealTickets { get; set; }
+    public virtual DbSet<MealTicketType> MealTicketTypes { get; set; }
+    public virtual DbSet<MembershipGroup> MembershipsGroups { get; set; }
+    public virtual DbSet<MembershipType> MembershipTypes { get; set; }
+    public virtual DbSet<MaritalStatus> MaritalStatusList { get; set; }
+    public virtual DbSet<NotBookingMotive> NotBookingMotives { get; set; }
+    public virtual DbSet<Notice> Notices { get; set; }
+    public virtual DbSet<Configuration> Configurations { get; set; }
+    public virtual DbSet<PaymentPlace> PaymentPlaces { get; set; }
+    public virtual DbSet<Payment> Payments { get; set; }
+    public virtual DbSet<PaymentSchema> PaymentSchemas { get; set; }
+    public virtual DbSet<PaymentType> PaymentTypes { get; set; }
+    public virtual DbSet<Period> Periods { get; set; }
+    public virtual DbSet<Permission> Permissions { get; set; }
+    public virtual DbSet<PermissionLevel> PermissionsLevels { get; set; }
+    public virtual DbSet<PersonnelAccess> PersonnelAccessList { get; set; }
+    public virtual DbSet<Personnel> Personnels { get; set; }
+    public virtual DbSet<PersonnelPermission> PersonnelPermissions { get; set; }
+    public virtual DbSet<PersonnelStatus> PersonnelStatusList { get; set; }
+    public virtual DbSet<PlaceType> PlaceTypes { get; set; }
+    public virtual DbSet<Post> Posts { get; set; }
+    public virtual DbSet<PostLog> PostsLogs { get; set; }
+    public virtual DbSet<PRNote> PRNotes { get; set; }
+    public virtual DbSet<Product> Products { get; set; }
+    public virtual DbSet<ProductLegend> ProductsLegends { get; set; }
+    public virtual DbSet<Program> Programs { get; set; }
+    public virtual DbSet<RateType> RateTypes { get; set; }
+    public virtual DbSet<ReasonCancellationFolio> ReasonsCancellationFolios { get; set; }
+    public virtual DbSet<RefundType> RefundTypes { get; set; }
+    public virtual DbSet<Region> Regions { get; set; }
+    public virtual DbSet<ReimpresionMotive> ReimpresionMotives { get; set; }
+    public virtual DbSet<ReportText> ReportTexts { get; set; }
+    public virtual DbSet<Rep> Reps { get; set; }
+    public virtual DbSet<Role> Roles { get; set; }
+    public virtual DbSet<RoomCharge> RoomCharges { get; set; }
+    public virtual DbSet<RoomType> RoomTypes { get; set; }
+    public virtual DbSet<Sale> Sales { get; set; }
+    public virtual DbSet<SalesAmountRange> SalesAmountRanges { get; set; }
+    public virtual DbSet<SaleLog> SalesLogs { get; set; }
+    public virtual DbSet<SalesmanChange> SalesmenChanges { get; set; }
+    public virtual DbSet<SalesRoom> SalesRooms { get; set; }
+    public virtual DbSet<SalesRoomLog> SalesRoomsLogs { get; set; }
+    public virtual DbSet<SalesSalesman> SalesSalesmen { get; set; }
+    public virtual DbSet<SaleType> SaleTypes { get; set; }
+    public virtual DbSet<SaleTypeCategory> SaleTypesCategories { get; set; }
+    public virtual DbSet<ScoreRule> ScoreRules { get; set; }
+    public virtual DbSet<ScoreRuleByLeadSource> ScoreRulesByLeadSources { get; set; }
+    public virtual DbSet<ScoreRuleByLeadSourceDetail> ScoreRulesByLeadSourceDetails { get; set; }
+    public virtual DbSet<ScoreRuleConcept> ScoreRulesConcepts { get; set; }
+    public virtual DbSet<ScoreRuleDetail> ScoreRulesDetails { get; set; }
+    public virtual DbSet<ScoreRuleType> ScoreRulesTypes { get; set; }
+    public virtual DbSet<Season> Seasons { get; set; }
+    public virtual DbSet<SeasonDate> SeasonsDates { get; set; }
+    public virtual DbSet<SegmentByAgency> SegmentsByAgencies { get; set; }
+    public virtual DbSet<SegmentByLeadSource> SegmentsByLeadSources { get; set; }
+    public virtual DbSet<SegmentCategory> SegmentsCategories { get; set; }
+    public virtual DbSet<ShowProgram> ShowPrograms { get; set; }
+    public virtual DbSet<ShowProgramCategory> ShowProgramsCategories { get; set; }
+    public virtual DbSet<ShowSalesman> ShowsSalesmen { get; set; }
+    public virtual DbSet<Society> Societies { get; set; }
+    public virtual DbSet<SourcePayment> SourcePayments { get; set; }
+    public virtual DbSet<TeamGuestServices> TeamsGuestServices { get; set; }
+    public virtual DbSet<TeamLog> TeamsLogs { get; set; }
+    public virtual DbSet<TeamSalesmen> TeamsSalesmen { get; set; }
+    public virtual DbSet<TeamType> TeamsTypes { get; set; }
+    public virtual DbSet<TourTime> TourTimes { get; set; }
+    public virtual DbSet<TourTimeByDay> TourTimesByDay { get; set; }
+    public virtual DbSet<TourTimeBySalesRoomWeekDay> TourTimesBySalesRoomWeekDay { get; set; }
+    public virtual DbSet<TourTimesSchema> TourTimesSchemas { get; set; }
+    public virtual DbSet<UnavailableMotive> UnavailableMotives { get; set; }
+    public virtual DbSet<UnderPaymentMotive> UnderPaymentMotives { get; set; }
+    public virtual DbSet<Warehouse> Warehouses { get; set; }
+    public virtual DbSet<WeekDay> WeekDays { get; set; }
+    public virtual DbSet<Wholesaler> Wholesalers { get; set; }
+    public virtual DbSet<WarehouseMovement> WarehouseMovements { get; set; }
+    public virtual DbSet<Zone> Zones { get; set; }
+    public virtual DbSet<GuestOpera> GuestsOpera { get; set; }
+    public virtual DbSet<IncomeCECOCEBEType> IncomesCECOCEBETypes { get; set; }
+    public virtual DbSet<MarketSegmentCECOCEBEType> MarketsSegmentsCECOCEBETypes { get; set; }
+
+    public virtual ObjectResult<CountryShort> USP_OR_GetCountries(Nullable<byte> status)
+    {
+      var statusParameter = status.HasValue ?
+          new ObjectParameter("Status", status) :
+          new ObjectParameter("Status", typeof(byte));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CountryShort>("USP_OR_GetCountries", statusParameter);
+    }
+
+    public virtual ObjectResult<AgencyShort> USP_OR_GetAgencies(Nullable<byte> status)
+    {
+      var statusParameter = status.HasValue ?
+          new ObjectParameter("Status", status) :
+          new ObjectParameter("Status", typeof(byte));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AgencyShort>("USP_OR_GetAgencies", statusParameter);
+    }
+
+    public virtual ObjectResult<GuestArrival> USP_OR_GetArrivals(Nullable<System.DateTime> date, string leadSource, string markets, Nullable<int> available, Nullable<int> contacted, Nullable<int> invited, Nullable<int> onGroup)
+    {
+      var dateParameter = date.HasValue ?
+          new ObjectParameter("Date", date) :
+          new ObjectParameter("Date", typeof(System.DateTime));
+
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      var marketsParameter = markets != null ?
+          new ObjectParameter("Markets", markets) :
+          new ObjectParameter("Markets", typeof(string));
+
+      var availableParameter = available.HasValue ?
+          new ObjectParameter("Available", available) :
+          new ObjectParameter("Available", typeof(int));
+
+      var contactedParameter = contacted.HasValue ?
+          new ObjectParameter("Contacted", contacted) :
+          new ObjectParameter("Contacted", typeof(int));
+
+      var invitedParameter = invited.HasValue ?
+          new ObjectParameter("Invited", invited) :
+          new ObjectParameter("Invited", typeof(int));
+
+      var onGroupParameter = onGroup.HasValue ?
+          new ObjectParameter("OnGroup", onGroup) :
+          new ObjectParameter("OnGroup", typeof(int));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestArrival>("USP_OR_GetArrivals", dateParameter, leadSourceParameter, marketsParameter, availableParameter, contactedParameter, invitedParameter, onGroupParameter);
+    }
+
+    public virtual ObjectResult<GuestAvailable> USP_OR_GetAvailables(Nullable<System.DateTime> currentDate, string leadSource, string markets, Nullable<int> contacted, Nullable<int> invited, Nullable<int> onGroup)
+    {
+      var currentDateParameter = currentDate.HasValue ?
+          new ObjectParameter("CurrentDate", currentDate) :
+          new ObjectParameter("CurrentDate", typeof(System.DateTime));
+
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      var marketsParameter = markets != null ?
+          new ObjectParameter("Markets", markets) :
+          new ObjectParameter("Markets", typeof(string));
+
+      var contactedParameter = contacted.HasValue ?
+          new ObjectParameter("Contacted", contacted) :
+          new ObjectParameter("Contacted", typeof(int));
+
+      var invitedParameter = invited.HasValue ?
+          new ObjectParameter("Invited", invited) :
+          new ObjectParameter("Invited", typeof(int));
+
+      var onGroupParameter = onGroup.HasValue ?
+          new ObjectParameter("OnGroup", onGroup) :
+          new ObjectParameter("OnGroup", typeof(int));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestAvailable>("USP_OR_GetAvailables", currentDateParameter, leadSourceParameter, marketsParameter, contactedParameter, invitedParameter, onGroupParameter);
+    }
+
+    public virtual ObjectResult<GuestPremanifest> USP_OR_GetPremanifest(Nullable<System.DateTime> date, string leadSource, string markets, Nullable<int> onGroup)
+    {
+      var dateParameter = date.HasValue ?
+          new ObjectParameter("Date", date) :
+          new ObjectParameter("Date", typeof(System.DateTime));
+
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      var marketsParameter = markets != null ?
+          new ObjectParameter("Markets", markets) :
+          new ObjectParameter("Markets", typeof(string));
+
+      var onGroupParameter = onGroup.HasValue ?
+          new ObjectParameter("OnGroup", onGroup) :
+          new ObjectParameter("OnGroup", typeof(int));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestPremanifest>("USP_OR_GetPremanifest", dateParameter, leadSourceParameter, marketsParameter, onGroupParameter);
+    }
+
+    public virtual ObjectResult<GuestPremanifestHost> USP_OR_GetPremanifestHost(Nullable<System.DateTime> date, string salesRoom)
+    {
+      var dateParameter = date.HasValue ?
+          new ObjectParameter("Date", date) :
+          new ObjectParameter("Date", typeof(System.DateTime));
+
+      var salesRoomParameter = salesRoom != null ?
+          new ObjectParameter("SalesRoom", salesRoom) :
+          new ObjectParameter("SalesRoom", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestPremanifestHost>("USP_OR_GetPremanifestHost", dateParameter, salesRoomParameter);
+    }
+
+    public virtual ObjectResult<GuestMailOut> USP_OR_GetGuestsMailOuts(string guls, Nullable<System.DateTime> guCheckInD, Nullable<System.DateTime> guCheckOutD, Nullable<System.DateTime> guBookD)
+    {
+      var gulsParameter = guls != null ?
+          new ObjectParameter("guls", guls) :
+          new ObjectParameter("guls", typeof(string));
+
+      var guCheckInDParameter = guCheckInD.HasValue ?
+          new ObjectParameter("guCheckInD", guCheckInD) :
+          new ObjectParameter("guCheckInD", typeof(System.DateTime));
+
+      var guCheckOutDParameter = guCheckOutD.HasValue ?
+          new ObjectParameter("guCheckOutD", guCheckOutD) :
+          new ObjectParameter("guCheckOutD", typeof(System.DateTime));
+
+      var guBookDParameter = guBookD.HasValue ?
+          new ObjectParameter("guBookD", guBookD) :
+          new ObjectParameter("guBookD", typeof(System.DateTime));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestMailOut>("USP_OR_GetGuestsMailOuts", gulsParameter, guCheckInDParameter, guCheckOutDParameter, guBookDParameter);
+    }
+
+    public virtual ObjectResult<LanguageShort> USP_OR_GetLanguages(Nullable<byte> status)
+    {
+      var statusParameter = status.HasValue ?
+          new ObjectParameter("Status", status) :
+          new ObjectParameter("Status", typeof(byte));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<LanguageShort>("USP_OR_GetLanguages", statusParameter);
+    }
+
+    public virtual ObjectResult<LeadSourceByUser> USP_OR_GetLeadSourcesByUser(string user, string programs, string regions)
+    {
+      var userParameter = user != null ?
+          new ObjectParameter("User", user) :
+          new ObjectParameter("User", typeof(string));
+
+      var programsParameter = programs != null ?
+          new ObjectParameter("Programs", programs) :
+          new ObjectParameter("Programs", typeof(string));
+
+      var regionsParameter = regions != null ?
+          new ObjectParameter("Regions", regions) :
+          new ObjectParameter("Regions", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<LeadSourceByUser>("USP_OR_GetLeadSourcesByUser", userParameter, programsParameter, regionsParameter);
+    }
+
+    public virtual int spProcessMailOuts(string leadSource, Nullable<System.DateTime> date)
+    {
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      var dateParameter = date.HasValue ?
+          new ObjectParameter("Date", date) :
+          new ObjectParameter("Date", typeof(System.DateTime));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spProcessMailOuts", leadSourceParameter, dateParameter);
+    }
+
+    public virtual ObjectResult<MailOutTextByLeadSource> USP_OR_GetMailOutTextsByLeadSource(string mtls, Nullable<bool> mtA)
+    {
+      var mtlsParameter = mtls != null ?
+          new ObjectParameter("mtls", mtls) :
+          new ObjectParameter("mtls", typeof(string));
+
+      var mtAParameter = mtA.HasValue ?
+          new ObjectParameter("mtA", mtA) :
+          new ObjectParameter("mtA", typeof(bool));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MailOutTextByLeadSource>("USP_OR_GetMailOutTextsByLeadSource", mtlsParameter, mtAParameter);
+    }
+
+    public virtual ObjectResult<MarketShort> USP_OR_GetMarkets(Nullable<byte> status)
+    {
+      var statusParameter = status.HasValue ?
+          new ObjectParameter("Status", status) :
+          new ObjectParameter("Status", typeof(byte));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MarketShort>("USP_OR_GetMarkets", statusParameter);
+    }
+
+    public virtual ObjectResult<UserLogin> USP_OR_Login(Nullable<byte> loginType, string user, string place)
+    {
+      var loginTypeParameter = loginType.HasValue ?
+          new ObjectParameter("LoginType", loginType) :
+          new ObjectParameter("LoginType", typeof(byte));
+
+      var userParameter = user != null ?
+          new ObjectParameter("User", user) :
+          new ObjectParameter("User", typeof(string));
+
+      var placeParameter = place != null ?
+          new ObjectParameter("Place", place) :
+          new ObjectParameter("Place", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<UserLogin>("USP_OR_Login", loginTypeParameter, userParameter, placeParameter);
+    }
+
+    public virtual ObjectResult<SalesRoomByUser> USP_OR_GetSalesRoomsByUser(string user, string regions)
+    {
+      var userParameter = user != null ?
+          new ObjectParameter("User", user) :
+          new ObjectParameter("User", typeof(string));
+
+      var regionsParameter = regions != null ?
+          new ObjectParameter("Regions", regions) :
+          new ObjectParameter("Regions", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SalesRoomByUser>("USP_OR_GetSalesRoomsByUser", userParameter, regionsParameter);
+    }
+
+    public virtual ObjectResult<SalesRoomCloseDates> USP_OR_GetSalesRoom(string salesRoom)
+    {
+      var salesRoomParameter = salesRoom != null ?
+          new ObjectParameter("SalesRoom", salesRoom) :
+          new ObjectParameter("SalesRoom", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SalesRoomCloseDates>("USP_OR_GetSalesRoom", salesRoomParameter);
+    }
+
+    public virtual ObjectResult<SalesRoomShort> USP_OR_GetSalesRooms(Nullable<byte> status)
+    {
+      var statusParameter = status.HasValue ?
+          new ObjectParameter("Status", status) :
+          new ObjectParameter("Status", typeof(byte));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SalesRoomShort>("USP_OR_GetSalesRooms", statusParameter);
+    }
+
+    public virtual ObjectResult<WarehouseMovementShort> USP_OR_GetWhsMovs(string wmwh, Nullable<System.DateTime> wmD)
+    {
+      var wmwhParameter = wmwh != null ?
+          new ObjectParameter("wmwh", wmwh) :
+          new ObjectParameter("wmwh", typeof(string));
+
+      var wmDParameter = wmD.HasValue ?
+          new ObjectParameter("wmD", wmD) :
+          new ObjectParameter("wmD", typeof(System.DateTime));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WarehouseMovementShort>("USP_OR_GetWhsMovs", wmwhParameter, wmDParameter);
+    }
+
+    public virtual ObjectResult<LocationByUser> USP_OR_GetLocationsByUser(string user, string program)
+    {
+      var userParameter = user != null ?
+          new ObjectParameter("User", user) :
+          new ObjectParameter("User", typeof(string));
+
+      var programParameter = program != null ?
+          new ObjectParameter("Program", program) :
+          new ObjectParameter("Program", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<LocationByUser>("USP_OR_GetLocationsByUser", userParameter, programParameter);
+    }
+
+    public virtual ObjectResult<WarehouseByUser> USP_OR_GetWarehousesByUser(string user, string regions)
+    {
+      var userParameter = user != null ?
+          new ObjectParameter("User", user) :
+          new ObjectParameter("User", typeof(string));
+
+      var regionsParameter = regions != null ?
+          new ObjectParameter("Regions", regions) :
+          new ObjectParameter("Regions", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WarehouseByUser>("USP_OR_GetWarehousesByUser", userParameter, regionsParameter);
+    }
+
+    public virtual ObjectResult<GiftShort> USP_OR_GetGifts(string locations, Nullable<byte> status)
+    {
+      var locationsParameter = locations != null ?
+          new ObjectParameter("Locations", locations) :
+          new ObjectParameter("Locations", typeof(string));
+
+      var statusParameter = status.HasValue ?
+          new ObjectParameter("Status", status) :
+          new ObjectParameter("Status", typeof(byte));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftShort>("USP_OR_GetGifts", locationsParameter, statusParameter);
+    }
+
+    public virtual ObjectResult<PersonnelDayOff> USP_OR_GetPersonnelDaysOff(string teamType, string placeID)
+    {
+      var teamTypeParameter = teamType != null ?
+          new ObjectParameter("TeamType", teamType) :
+          new ObjectParameter("TeamType", typeof(string));
+
+      var placeIDParameter = placeID != null ?
+          new ObjectParameter("PlaceID", placeID) :
+          new ObjectParameter("PlaceID", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PersonnelDayOff>("USP_OR_GetPersonnelDaysOff", teamTypeParameter, placeIDParameter);
+    }
+
+    public virtual ObjectResult<RptPRStats> USP_OR_RptPRStats(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string salesRooms, string countries, string agencies, string markets)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var leadSourcesParameter = leadSources != null ?
+          new ObjectParameter("LeadSources", leadSources) :
+          new ObjectParameter("LeadSources", typeof(string));
+
+      var salesRoomsParameter = salesRooms != null ?
+          new ObjectParameter("SalesRooms", salesRooms) :
+          new ObjectParameter("SalesRooms", typeof(string));
+
+      var countriesParameter = countries != null ?
+          new ObjectParameter("Countries", countries) :
+          new ObjectParameter("Countries", typeof(string));
+
+      var agenciesParameter = agencies != null ?
+          new ObjectParameter("Agencies", agencies) :
+          new ObjectParameter("Agencies", typeof(string));
+
+      var marketsParameter = markets != null ?
+          new ObjectParameter("Markets", markets) :
+          new ObjectParameter("Markets", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptPRStats>("USP_OR_RptPRStats", dateFromParameter, dateToParameter, leadSourcesParameter, salesRoomsParameter, countriesParameter, agenciesParameter, marketsParameter);
+    }
+
+    public virtual int USP_OR_ActualizarFechasTemporadas(Nullable<int> currentYear)
+    {
+      var currentYearParameter = currentYear.HasValue ?
+          new ObjectParameter("CurrentYear", currentYear) :
+          new ObjectParameter("CurrentYear", typeof(int));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_ActualizarFechasTemporadas", currentYearParameter);
+    }
+
+    public virtual int USP_OR_CloseGiftsReceipts(string salesRoom, Nullable<System.DateTime> date)
+    {
+      var salesRoomParameter = salesRoom != null ?
+          new ObjectParameter("SalesRoom", salesRoom) :
+          new ObjectParameter("SalesRoom", typeof(string));
+
+      var dateParameter = date.HasValue ?
+          new ObjectParameter("Date", date) :
+          new ObjectParameter("Date", typeof(System.DateTime));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CloseGiftsReceipts", salesRoomParameter, dateParameter);
+    }
+
+    public virtual int USP_OR_CloseMealTickets(string salesRoom, Nullable<System.DateTime> date)
+    {
+      var salesRoomParameter = salesRoom != null ?
+          new ObjectParameter("SalesRoom", salesRoom) :
+          new ObjectParameter("SalesRoom", typeof(string));
+
+      var dateParameter = date.HasValue ?
+          new ObjectParameter("Date", date) :
+          new ObjectParameter("Date", typeof(System.DateTime));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CloseMealTickets", salesRoomParameter, dateParameter);
+    }
+
+    public virtual int USP_OR_CloseSales(string salesRoom, Nullable<System.DateTime> date)
+    {
+      var salesRoomParameter = salesRoom != null ?
+          new ObjectParameter("SalesRoom", salesRoom) :
+          new ObjectParameter("SalesRoom", typeof(string));
+
+      var dateParameter = date.HasValue ?
+          new ObjectParameter("Date", date) :
+          new ObjectParameter("Date", typeof(System.DateTime));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CloseSales", salesRoomParameter, dateParameter);
+    }
+
+    public virtual int USP_OR_CloseShows(string salesRoom, Nullable<System.DateTime> date)
+    {
+      var salesRoomParameter = salesRoom != null ?
+          new ObjectParameter("SalesRoom", salesRoom) :
+          new ObjectParameter("SalesRoom", typeof(string));
+
+      var dateParameter = date.HasValue ?
+          new ObjectParameter("Date", date) :
+          new ObjectParameter("Date", typeof(System.DateTime));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CloseShows", salesRoomParameter, dateParameter);
+    }
+
+    public virtual ObjectResult<ExchangeRateLogData> USP_OR_GetExchangeRateLog(string currency)
+    {
+      var currencyParameter = currency != null ?
+          new ObjectParameter("Currency", currency) :
+          new ObjectParameter("Currency", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ExchangeRateLogData>("USP_OR_GetExchangeRateLog", currencyParameter);
+    }
+
+    public virtual ObjectResult<ExchangeRateData> USP_OR_GetExchangeRatesWithPesosByDate(Nullable<System.DateTime> date)
+    {
+      var dateParameter = date.HasValue ?
+          new ObjectParameter("Date", date) :
+          new ObjectParameter("Date", typeof(System.DateTime));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ExchangeRateData>("USP_OR_GetExchangeRatesWithPesosByDate", dateParameter);
+    }
+
+    public virtual ObjectResult<GraphProductionByPRData> USP_OR_GraphProductionByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GraphProductionByPRData>("USP_OR_GraphProductionByPR", dateFromParameter, dateToParameter, leadSourceParameter);
+    }
+
+    public virtual int USP_OR_InsertExchangeRate(Nullable<System.DateTime> currentDate)
+    {
+      var currentDateParameter = currentDate.HasValue ?
+          new ObjectParameter("CurrentDate", currentDate) :
+          new ObjectParameter("CurrentDate", typeof(System.DateTime));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_InsertExchangeRate", currentDateParameter);
+    }
+
+    public virtual int USP_OR_SaveSalesRoomLog(string salesRoom, Nullable<short> hoursDif, string changedBy)
+    {
+      var salesRoomParameter = salesRoom != null ?
+          new ObjectParameter("SalesRoom", salesRoom) :
+          new ObjectParameter("SalesRoom", typeof(string));
+
+      var hoursDifParameter = hoursDif.HasValue ?
+          new ObjectParameter("HoursDif", hoursDif) :
+          new ObjectParameter("HoursDif", typeof(short));
+
+      var changedByParameter = changedBy != null ?
+          new ObjectParameter("ChangedBy", changedBy) :
+          new ObjectParameter("ChangedBy", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveSalesRoomLog", salesRoomParameter, hoursDifParameter, changedByParameter);
+    }
+
+    public virtual ObjectResult<PersonnelShort> USP_OR_GetPersonnel(string leadSources, string salesRooms, string roles, Nullable<byte> status, string permission, string relationalOperator, Nullable<int> permissionLevel, string dept)
+    {
+      var leadSourcesParameter = leadSources != null ?
+          new ObjectParameter("LeadSources", leadSources) :
+          new ObjectParameter("LeadSources", typeof(string));
+
+      var salesRoomsParameter = salesRooms != null ?
+          new ObjectParameter("SalesRooms", salesRooms) :
+          new ObjectParameter("SalesRooms", typeof(string));
+
+      var rolesParameter = roles != null ?
+          new ObjectParameter("Roles", roles) :
+          new ObjectParameter("Roles", typeof(string));
+
+      var statusParameter = status.HasValue ?
+          new ObjectParameter("Status", status) :
+          new ObjectParameter("Status", typeof(byte));
+
+      var permissionParameter = permission != null ?
+          new ObjectParameter("Permission", permission) :
+          new ObjectParameter("Permission", typeof(string));
+
+      var relationalOperatorParameter = relationalOperator != null ?
+          new ObjectParameter("RelationalOperator", relationalOperator) :
+          new ObjectParameter("RelationalOperator", typeof(string));
+
+      var permissionLevelParameter = permissionLevel.HasValue ?
+          new ObjectParameter("PermissionLevel", permissionLevel) :
+          new ObjectParameter("PermissionLevel", typeof(int));
+
+      var deptParameter = dept != null ?
+          new ObjectParameter("Dept", dept) :
+          new ObjectParameter("Dept", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PersonnelShort>("USP_OR_GetPersonnel", leadSourcesParameter, salesRoomsParameter, rolesParameter, statusParameter, permissionParameter, relationalOperatorParameter, permissionLevelParameter, deptParameter);
+    }
+
+    public virtual ObjectResult<SalesRoomLogData> USP_OR_GetSalesRoomLog(string salesRoom)
+    {
+      var salesRoomParameter = salesRoom != null ?
+          new ObjectParameter("SalesRoom", salesRoom) :
+          new ObjectParameter("SalesRoom", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SalesRoomLogData>("USP_OR_GetSalesRoomLog", salesRoomParameter);
+    }
+
+    public virtual ObjectResult<RptBookingsBySalesRoomProgramTime> USP_OR_RptBookingsBySalesRoomProgramTime(Nullable<System.DateTime> date, string salesRooms)
+    {
+      var dateParameter = date.HasValue ?
+          new ObjectParameter("Date", date) :
+          new ObjectParameter("Date", typeof(System.DateTime));
+
+      var salesRoomsParameter = salesRooms != null ?
+          new ObjectParameter("SalesRooms", salesRooms) :
+          new ObjectParameter("SalesRooms", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptBookingsBySalesRoomProgramTime>("USP_OR_RptBookingsBySalesRoomProgramTime", dateParameter, salesRoomsParameter);
+    }
+
+    public virtual ObjectResult<GuestLogData> USP_OR_GetGuestLog(Nullable<int> guest)
+    {
+      var guestParameter = guest.HasValue ?
+          new ObjectParameter("Guest", guest) :
+          new ObjectParameter("Guest", typeof(int));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestLogData>("USP_OR_GetGuestLog", guestParameter);
+    }
+
+    public virtual int USP_OR_SaveLoginLog(string location, string user, string computerName)
+    {
+      var locationParameter = location != null ?
+          new ObjectParameter("Location", location) :
+          new ObjectParameter("Location", typeof(string));
+
+      var userParameter = user != null ?
+          new ObjectParameter("User", user) :
+          new ObjectParameter("User", typeof(string));
+
+      var computerNameParameter = computerName != null ?
+          new ObjectParameter("ComputerName", computerName) :
+          new ObjectParameter("ComputerName", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveLoginLog", locationParameter, userParameter, computerNameParameter);
+    }
+
+    public virtual ObjectResult<GuestAssigned> USP_OR_GetGuestsAssigned(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string pRs, string markets)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      var pRsParameter = pRs != null ?
+          new ObjectParameter("PRs", pRs) :
+          new ObjectParameter("PRs", typeof(string));
+
+      var marketsParameter = markets != null ?
+          new ObjectParameter("Markets", markets) :
+          new ObjectParameter("Markets", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestAssigned>("USP_OR_GetGuestsAssigned", dateFromParameter, dateToParameter, leadSourceParameter, pRsParameter, marketsParameter);
+    }
+
+    public virtual ObjectResult<GuestUnassigned> USP_OR_GetGuestsUnassigned(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets, Nullable<bool> onlyAvailables)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      var marketsParameter = markets != null ?
+          new ObjectParameter("Markets", markets) :
+          new ObjectParameter("Markets", typeof(string));
+
+      var onlyAvailablesParameter = onlyAvailables.HasValue ?
+          new ObjectParameter("OnlyAvailables", onlyAvailables) :
+          new ObjectParameter("OnlyAvailables", typeof(bool));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestUnassigned>("USP_OR_GetGuestsUnassigned", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter, onlyAvailablesParameter);
+    }
+
+    public virtual ObjectResult<PRAssigned> USP_OR_GetPRsAssigned(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets, Nullable<bool> pRGuests, Nullable<bool> pRMembers)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      var marketsParameter = markets != null ?
+          new ObjectParameter("Markets", markets) :
+          new ObjectParameter("Markets", typeof(string));
+
+      var pRGuestsParameter = pRGuests.HasValue ?
+          new ObjectParameter("PRGuests", pRGuests) :
+          new ObjectParameter("PRGuests", typeof(bool));
+
+      var pRMembersParameter = pRMembers.HasValue ?
+          new ObjectParameter("PRMembers", pRMembers) :
+          new ObjectParameter("PRMembers", typeof(bool));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PRAssigned>("USP_OR_GetPRsAssigned", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter, pRGuestsParameter, pRMembersParameter);
+    }
+
+    public virtual ObjectResult<TourTimeAvailable> USP_OR_GetTourTimesAvailables(string leadSource, string salesRoom, Nullable<System.DateTime> date, Nullable<System.DateTime> dateOriginal, Nullable<System.DateTime> timeOriginal, Nullable<System.DateTime> currentDate)
+    {
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      var salesRoomParameter = salesRoom != null ?
+          new ObjectParameter("SalesRoom", salesRoom) :
+          new ObjectParameter("SalesRoom", typeof(string));
+
+      var dateParameter = date.HasValue ?
+          new ObjectParameter("Date", date) :
+          new ObjectParameter("Date", typeof(System.DateTime));
+
+      var dateOriginalParameter = dateOriginal.HasValue ?
+          new ObjectParameter("DateOriginal", dateOriginal) :
+          new ObjectParameter("DateOriginal", typeof(System.DateTime));
+
+      var timeOriginalParameter = timeOriginal.HasValue ?
+          new ObjectParameter("TimeOriginal", timeOriginal) :
+          new ObjectParameter("TimeOriginal", typeof(System.DateTime));
+
+      var currentDateParameter = currentDate.HasValue ?
+          new ObjectParameter("CurrentDate", currentDate) :
+          new ObjectParameter("CurrentDate", typeof(System.DateTime));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TourTimeAvailable>("USP_OR_GetTourTimesAvailables", leadSourceParameter, salesRoomParameter, dateParameter, dateOriginalParameter, timeOriginalParameter, currentDateParameter);
+    }
+
+    public virtual int USP_OR_SaveGuestLog(Nullable<int> guest, Nullable<short> hoursDif, string changedBy)
+    {
+      var guestParameter = guest.HasValue ?
+          new ObjectParameter("Guest", guest) :
+          new ObjectParameter("Guest", typeof(int));
+
+      var hoursDifParameter = hoursDif.HasValue ?
+          new ObjectParameter("HoursDif", hoursDif) :
+          new ObjectParameter("HoursDif", typeof(short));
+
+      var changedByParameter = changedBy != null ?
+          new ObjectParameter("ChangedBy", changedBy) :
+          new ObjectParameter("ChangedBy", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveGuestLog", guestParameter, hoursDifParameter, changedByParameter);
+    }
+
+    public virtual int USP_OR_SaveGuestMovement(Nullable<int> guest, string guestMovementType, string changedBy, string computerName, string iPAddress)
+    {
+      var guestParameter = guest.HasValue ?
+          new ObjectParameter("Guest", guest) :
+          new ObjectParameter("Guest", typeof(int));
+
+      var guestMovementTypeParameter = guestMovementType != null ?
+          new ObjectParameter("GuestMovementType", guestMovementType) :
+          new ObjectParameter("GuestMovementType", typeof(string));
+
+      var changedByParameter = changedBy != null ?
+          new ObjectParameter("ChangedBy", changedBy) :
+          new ObjectParameter("ChangedBy", typeof(string));
+
+      var computerNameParameter = computerName != null ?
+          new ObjectParameter("ComputerName", computerName) :
+          new ObjectParameter("ComputerName", typeof(string));
+
+      var iPAddressParameter = iPAddress != null ?
+          new ObjectParameter("IPAddress", iPAddress) :
+          new ObjectParameter("IPAddress", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveGuestMovement", guestParameter, guestMovementTypeParameter, changedByParameter, computerNameParameter, iPAddressParameter);
+    }
+
+    public virtual int USP_OR_SaveExchangeRateLog(string currency, Nullable<System.DateTime> date, Nullable<short> hoursDif, string changedBy)
+    {
+      var currencyParameter = currency != null ?
+          new ObjectParameter("Currency", currency) :
+          new ObjectParameter("Currency", typeof(string));
+
+      var dateParameter = date.HasValue ?
+          new ObjectParameter("Date", date) :
+          new ObjectParameter("Date", typeof(System.DateTime));
+
+      var hoursDifParameter = hoursDif.HasValue ?
+          new ObjectParameter("HoursDif", hoursDif) :
+          new ObjectParameter("HoursDif", typeof(short));
+
+      var changedByParameter = changedBy != null ?
+          new ObjectParameter("ChangedBy", changedBy) :
+          new ObjectParameter("ChangedBy", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveExchangeRateLog", currencyParameter, dateParameter, hoursDifParameter, changedByParameter);
+    }
+
+    public virtual ObjectResult<GuestByPR> USP_OR_GetGuestsByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string pR, Nullable<bool> considerAssign, Nullable<bool> considerContact, Nullable<bool> considerFollowUp, Nullable<bool> considerInvit, Nullable<bool> considerShow, Nullable<bool> considerSale, Nullable<bool> basedOnArrival)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      var pRParameter = pR != null ?
+          new ObjectParameter("PR", pR) :
+          new ObjectParameter("PR", typeof(string));
+
+      var considerAssignParameter = considerAssign.HasValue ?
+          new ObjectParameter("ConsiderAssign", considerAssign) :
+          new ObjectParameter("ConsiderAssign", typeof(bool));
+
+      var considerContactParameter = considerContact.HasValue ?
+          new ObjectParameter("ConsiderContact", considerContact) :
+          new ObjectParameter("ConsiderContact", typeof(bool));
+
+      var considerFollowUpParameter = considerFollowUp.HasValue ?
+          new ObjectParameter("ConsiderFollowUp", considerFollowUp) :
+          new ObjectParameter("ConsiderFollowUp", typeof(bool));
+
+      var considerInvitParameter = considerInvit.HasValue ?
+          new ObjectParameter("ConsiderInvit", considerInvit) :
+          new ObjectParameter("ConsiderInvit", typeof(bool));
+
+      var considerShowParameter = considerShow.HasValue ?
+          new ObjectParameter("ConsiderShow", considerShow) :
+          new ObjectParameter("ConsiderShow", typeof(bool));
+
+      var considerSaleParameter = considerSale.HasValue ?
+          new ObjectParameter("ConsiderSale", considerSale) :
+          new ObjectParameter("ConsiderSale", typeof(bool));
+
+      var basedOnArrivalParameter = basedOnArrival.HasValue ?
+          new ObjectParameter("BasedOnArrival", basedOnArrival) :
+          new ObjectParameter("BasedOnArrival", typeof(bool));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestByPR>("USP_OR_GetGuestsByPR", dateFromParameter, dateToParameter, leadSourceParameter, pRParameter, considerAssignParameter, considerContactParameter, considerFollowUpParameter, considerInvitParameter, considerShowParameter, considerSaleParameter, basedOnArrivalParameter);
+    }
+
+    public virtual ObjectResult<GuestSearched> USP_OR_GetGuests(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string name, string roomNumber, string reservation, Nullable<int> guestID)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      var nameParameter = name != null ?
+          new ObjectParameter("Name", name) :
+          new ObjectParameter("Name", typeof(string));
+
+      var roomNumberParameter = roomNumber != null ?
+          new ObjectParameter("RoomNumber", roomNumber) :
+          new ObjectParameter("RoomNumber", typeof(string));
+
+      var reservationParameter = reservation != null ?
+          new ObjectParameter("Reservation", reservation) :
+          new ObjectParameter("Reservation", typeof(string));
+
+      var guestIDParameter = guestID.HasValue ?
+          new ObjectParameter("GuestID", guestID) :
+          new ObjectParameter("GuestID", typeof(int));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestSearched>("USP_OR_GetGuests", dateFromParameter, dateToParameter, leadSourceParameter, nameParameter, roomNumberParameter, reservationParameter, guestIDParameter);
+    }
+
+    public virtual ObjectResult<RptBookingsBySalesRoomProgramLeadSourceTime> USP_OR_RptBookingsBySalesRoomProgramLeadSourceTime(Nullable<System.DateTime> date, string salesRooms)
+    {
+      var dateParameter = date.HasValue ?
+          new ObjectParameter("Date", date) :
+          new ObjectParameter("Date", typeof(System.DateTime));
+
+      var salesRoomsParameter = salesRooms != null ?
+          new ObjectParameter("SalesRooms", salesRooms) :
+          new ObjectParameter("SalesRooms", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptBookingsBySalesRoomProgramLeadSourceTime>("USP_OR_RptBookingsBySalesRoomProgramLeadSourceTime", dateParameter, salesRoomsParameter);
+    }
+
+    public virtual ObjectResult<RptPersonnel> USP_OR_RptPersonnel()
+    {
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptPersonnel>("USP_OR_RptPersonnel");
+    }
+
+    public virtual ObjectResult<string> USP_OR_ValidateFolioInvitationOutside(string serie, Nullable<int> number, Nullable<int> guestID)
+    {
+      var serieParameter = serie != null ?
+          new ObjectParameter("Serie", serie) :
+          new ObjectParameter("Serie", typeof(string));
+
+      var numberParameter = number.HasValue ?
+          new ObjectParameter("Number", number) :
+          new ObjectParameter("Number", typeof(int));
+
+      var guestIDParameter = guestID.HasValue ?
+          new ObjectParameter("GuestID", guestID) :
+          new ObjectParameter("GuestID", typeof(int));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("USP_OR_ValidateFolioInvitationOutside", serieParameter, numberParameter, guestIDParameter);
+    }
+
+    public virtual ObjectResult<string> USP_OR_ValidateFolioReservation(string leadSource, string folio, Nullable<int> guestID)
+    {
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      var folioParameter = folio != null ?
+          new ObjectParameter("Folio", folio) :
+          new ObjectParameter("Folio", typeof(string));
+
+      var guestIDParameter = guestID.HasValue ?
+          new ObjectParameter("GuestID", guestID) :
+          new ObjectParameter("GuestID", typeof(int));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("USP_OR_ValidateFolioReservation", leadSourceParameter, folioParameter, guestIDParameter);
+    }
+
+    public virtual ObjectResult<RptGifts> USP_OR_RptGifts()
+    {
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGifts>("USP_OR_RptGifts");
+    }
+
+    public virtual ObjectResult<AssistanceData> USP_OR_GetAssistance(string placeType, string place, Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo)
+    {
+      var placeTypeParameter = placeType != null ?
+          new ObjectParameter("PlaceType", placeType) :
+          new ObjectParameter("PlaceType", typeof(string));
+
+      var placeParameter = place != null ?
+          new ObjectParameter("Place", place) :
+          new ObjectParameter("Place", typeof(string));
+
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AssistanceData>("USP_OR_GetAssistance", placeTypeParameter, placeParameter, dateFromParameter, dateToParameter);
+    }
+
+    public virtual ObjectResult<PersonnelAssistance> USP_OR_GetPersonnelAssistance(string placeType, string place, Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo)
+    {
+      var placeTypeParameter = placeType != null ?
+          new ObjectParameter("PlaceType", placeType) :
+          new ObjectParameter("PlaceType", typeof(string));
+
+      var placeParameter = place != null ?
+          new ObjectParameter("Place", place) :
+          new ObjectParameter("Place", typeof(string));
+
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PersonnelAssistance>("USP_OR_GetPersonnelAssistance", placeTypeParameter, placeParameter, dateFromParameter, dateToParameter);
+    }
+
+    public virtual ObjectResult<RptAssignment> USP_OR_RptAssignment(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      var marketsParameter = markets != null ?
+          new ObjectParameter("Markets", markets) :
+          new ObjectParameter("Markets", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptAssignment>("USP_OR_RptAssignment", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter);
+    }
+
+    public virtual ObjectResult<RptAssignmentArrivals> USP_OR_RptAssignmentArrivals(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      var marketsParameter = markets != null ?
+          new ObjectParameter("Markets", markets) :
+          new ObjectParameter("Markets", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptAssignmentArrivals>("USP_OR_RptAssignmentArrivals", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter);
+    }
+
+    public virtual ObjectResult<RptAssignmentByPR> USP_OR_RptAssignmentByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string markets, string pR)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      var marketsParameter = markets != null ?
+          new ObjectParameter("Markets", markets) :
+          new ObjectParameter("Markets", typeof(string));
+
+      var pRParameter = pR != null ?
+          new ObjectParameter("PR", pR) :
+          new ObjectParameter("PR", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptAssignmentByPR>("USP_OR_RptAssignmentByPR", dateFromParameter, dateToParameter, leadSourceParameter, marketsParameter, pRParameter);
+    }
+
+    public virtual ObjectResult<Nullable<bool>> USP_OR_ValidateFolioCXC(Nullable<int> numberFrom, Nullable<int> numberTo, Nullable<bool> active, Nullable<int> action)
+    {
+      var numberFromParameter = numberFrom.HasValue ?
+          new ObjectParameter("NumberFrom", numberFrom) :
+          new ObjectParameter("NumberFrom", typeof(int));
+
+      var numberToParameter = numberTo.HasValue ?
+          new ObjectParameter("NumberTo", numberTo) :
+          new ObjectParameter("NumberTo", typeof(int));
+
+      var activeParameter = active.HasValue ?
+          new ObjectParameter("Active", active) :
+          new ObjectParameter("Active", typeof(bool));
+
+      var actionParameter = action.HasValue ?
+          new ObjectParameter("Action", action) :
+          new ObjectParameter("Action", typeof(int));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<bool>>("USP_OR_ValidateFolioCXC", numberFromParameter, numberToParameter, activeParameter, actionParameter);
+    }
+
+    public virtual ObjectResult<RptCxC> USP_OR_RptCxC(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var salesRoomParameter = salesRoom != null ?
+          new ObjectParameter("SalesRoom", salesRoom) :
+          new ObjectParameter("SalesRoom", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptCxC>("USP_OR_RptCxC", dateFromParameter, dateToParameter, salesRoomParameter);
+    }
+
+    public virtual ObjectResult<RptCxCDeposits> USP_OR_RptCxCDeposits(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var salesRoomsParameter = salesRooms != null ?
+          new ObjectParameter("SalesRooms", salesRooms) :
+          new ObjectParameter("SalesRooms", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptCxCDeposits>("USP_OR_RptCxCDeposits", dateFromParameter, dateToParameter, salesRoomsParameter);
+    }
+
+    public virtual ObjectResult<RptCxCGifts> USP_OR_RptCxCGifts(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var salesRoomsParameter = salesRooms != null ?
+          new ObjectParameter("SalesRooms", salesRooms) :
+          new ObjectParameter("SalesRooms", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptCxCGifts>("USP_OR_RptCxCGifts", dateFromParameter, dateToParameter, salesRoomsParameter);
+    }
+
+    public virtual ObjectResult<RptCxCNotAuthorized> USP_OR_RptCxCNotAuthorized(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var salesRoomParameter = salesRoom != null ?
+          new ObjectParameter("SalesRoom", salesRoom) :
+          new ObjectParameter("SalesRoom", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptCxCNotAuthorized>("USP_OR_RptCxCNotAuthorized", dateFromParameter, dateToParameter, salesRoomParameter);
+    }
+
+    public virtual ObjectResult<SaleByCloser> USP_OR_GetSalesByCloser(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string closer)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var salesRoomParameter = salesRoom != null ?
+          new ObjectParameter("SalesRoom", salesRoom) :
+          new ObjectParameter("SalesRoom", typeof(string));
+
+      var closerParameter = closer != null ?
+          new ObjectParameter("Closer", closer) :
+          new ObjectParameter("Closer", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleByCloser>("USP_OR_GetSalesByCloser", dateFromParameter, dateToParameter, salesRoomParameter, closerParameter);
+    }
+
+    public virtual ObjectResult<SaleByLiner> USP_OR_GetSalesByLiner(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string liner)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var salesRoomParameter = salesRoom != null ?
+          new ObjectParameter("SalesRoom", salesRoom) :
+          new ObjectParameter("SalesRoom", typeof(string));
+
+      var linerParameter = liner != null ?
+          new ObjectParameter("Liner", liner) :
+          new ObjectParameter("Liner", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleByLiner>("USP_OR_GetSalesByLiner", dateFromParameter, dateToParameter, salesRoomParameter, linerParameter);
+    }
+
+    public virtual ObjectResult<SaleByPR> USP_OR_GetSalesByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string pR)
+    {
+      var dateFromParameter = dateFrom.HasValue ?
+          new ObjectParameter("DateFrom", dateFrom) :
+          new ObjectParameter("DateFrom", typeof(System.DateTime));
+
+      var dateToParameter = dateTo.HasValue ?
+          new ObjectParameter("DateTo", dateTo) :
+          new ObjectParameter("DateTo", typeof(System.DateTime));
+
+      var leadSourceParameter = leadSource != null ?
+          new ObjectParameter("LeadSource", leadSource) :
+          new ObjectParameter("LeadSource", typeof(string));
+
+      var pRParameter = pR != null ?
+          new ObjectParameter("PR", pR) :
+          new ObjectParameter("PR", typeof(string));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleByPR>("USP_OR_GetSalesByPR", dateFromParameter, dateToParameter, leadSourceParameter, pRParameter);
+    }
+
+    public virtual ObjectResult<Nullable<bool>> USP_OR_ValidateFolioInvitationsOutside(string serie, Nullable<int> numberFrom, Nullable<int> numberTo, Nullable<bool> active, Nullable<int> action)
+    {
+      var serieParameter = serie != null ?
+          new ObjectParameter("Serie", serie) :
+          new ObjectParameter("Serie", typeof(string));
+
+      var numberFromParameter = numberFrom.HasValue ?
+          new ObjectParameter("NumberFrom", numberFrom) :
+          new ObjectParameter("NumberFrom", typeof(int));
+
+      var numberToParameter = numberTo.HasValue ?
+          new ObjectParameter("NumberTo", numberTo) :
+          new ObjectParameter("NumberTo", typeof(int));
+
+      var activeParameter = active.HasValue ?
+          new ObjectParameter("Active", active) :
+          new ObjectParameter("Active", typeof(bool));
+
+      var actionParameter = action.HasValue ?
+          new ObjectParameter("Action", action) :
+          new ObjectParameter("Action", typeof(int));
+
+      return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<bool>>("USP_OR_ValidateFolioInvitationsOutside", serieParameter, numberFromParameter, numberToParameter, activeParameter, actionParameter);
+    }
+  }
 }

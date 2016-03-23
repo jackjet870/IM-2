@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
-  public class BRPrStats
+  public class BRPRStats
   {
 
     /// <summary>
@@ -25,12 +25,12 @@ namespace IM.BusinessRules.BR
     /// <History>
     /// [erosado] 08/03/2016  created
     /// </History> 
-    public static List<Model.RptPRStats> GetPrStats(DateTime dateFrom, DateTime dateTo, List<Tuple<string, string>> filtros)
+    public static List<Model.RptPRStats> GetPRStats(DateTime dateFrom, DateTime dateTo, List<Tuple<string, string>> filtros)
     {
-        using (var model = new IM.Model.IMEntities())
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          model.Database.CommandTimeout = 120;
-          return model.USP_OR_RptPRStats(dateFrom, dateTo, filtros[0].Item2,filtros[1].Item2, filtros[2].Item2, filtros[3].Item2, filtros[4].Item2).ToList();
+          dbContext.Database.CommandTimeout = 120;
+          return dbContext.USP_OR_RptPRStats(dateFrom, dateTo, filtros[0].Item2,filtros[1].Item2, filtros[2].Item2, filtros[3].Item2, filtros[4].Item2).ToList();
         }
     }
   }

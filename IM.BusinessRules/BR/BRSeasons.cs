@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IM.Model;
+﻿using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -15,7 +11,7 @@ namespace IM.BusinessRules.BR
   /// </history>
   public class BRSeasons
   {
-
+    #region UpdateSeasonDates
     /// <summary>
     /// Función encargada de actualizar las fechas de temporada hasta el año ingresado
     /// </summary>
@@ -25,10 +21,11 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void UpdateSeasonDates(int yearServer)
     {
-      using (var model = new IMEntities())
+      using (var model = new IMEntities(ConnectionHelper.ConnectionString))
       {
         model.USP_OR_ActualizarFechasTemporadas(yearServer);
       }
-    }
+    } 
+    #endregion
   }
 }

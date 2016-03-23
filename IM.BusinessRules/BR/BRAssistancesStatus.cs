@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -25,7 +24,7 @@ namespace IM.BusinessRules.BR
       
       List<AssistanceStatus> lstAssitanceStatus = new List<AssistanceStatus>();
 
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from ast in dbContext.AssistancesStatus
                     select ast;
@@ -71,7 +70,7 @@ namespace IM.BusinessRules.BR
       
       int nRes = 0;
         
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         if (bUpd == true)//Actualizar
         {

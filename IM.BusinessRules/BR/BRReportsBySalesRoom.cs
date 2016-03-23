@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
-using System.Dynamic;
-using System.Linq.Expressions;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -22,7 +19,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<RptBookingsBySalesRoomProgramTime> getRptBookingsBySalesRoomProgramTime(DateTime dtmStart,string SalesRooms)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_RptBookingsBySalesRoomProgramTime(dtmStart, SalesRooms).ToList();
       }
@@ -39,7 +36,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<RptBookingsBySalesRoomProgramLeadSourceTime> getRptBookingsBySalesRoomProgramLeadSourceTime(DateTime dtmStart, string SalesRooms)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_RptBookingsBySalesRoomProgramLeadSourceTime(dtmStart, SalesRooms).ToList();
       }

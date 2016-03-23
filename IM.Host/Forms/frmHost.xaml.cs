@@ -167,7 +167,7 @@ namespace IM.Host
         _dtpCurrent = dtpDate.SelectedDate.Value.Date;
 
         _guestHost = ((CollectionViewSource)(this.FindResource("dsPremanifestHost")));
-        _guestHost.Source = BRSalesRooms.GetPremanifestHost(_dtpCurrent, _salesRoomLogin.srID);
+        _guestHost.Source = BRGuests.GetPremanifestHost(_dtpCurrent, _salesRoomLogin.srID);
       }
     }
 

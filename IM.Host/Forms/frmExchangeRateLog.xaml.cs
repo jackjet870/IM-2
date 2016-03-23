@@ -24,7 +24,7 @@ namespace IM.Host.Forms
       _cvsExchangeRate = ((CollectionViewSource)(this.FindResource("dsExchangeRateLog")));
 
       // Obtenemos el historico del currency
-      _cvsExchangeRate.Source = BRExchangeRate.GetExchangeRateLog(_currency);
+      _cvsExchangeRate.Source = BRExchangeRatesLogs.GetExchangeRateLog(_currency);
     }
   }
 }

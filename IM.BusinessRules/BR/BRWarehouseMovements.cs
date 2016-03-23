@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -22,7 +21,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<WarehouseMovementShort> GetWarehouseMovements(string wmwh, DateTime wmD)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetWhsMovs(wmwh, wmD).ToList();
       }
@@ -42,7 +41,7 @@ namespace IM.BusinessRules.BR
     public static void SaveWarehouseMovements(ref List<WarehouseMovement> lstWhsMovs)
     {
       IEnumerable<WarehouseMovement> lstResult;
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         lstResult = dbContext.WarehouseMovements.AddRange(lstWhsMovs);
         dbContext.SaveChanges();

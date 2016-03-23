@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -22,7 +23,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<Currency> GetCurrencies(Currency currency, int nStatus=-1, List<string> exceptCurrencyID = null)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from c in dbContext.Currencies
                     select c;
@@ -58,6 +59,7 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
+
     #region SaveCurrency
     /// <summary>
     /// Actualiza|agrega un registro al catalogo de currencies
@@ -71,7 +73,7 @@ namespace IM.BusinessRules.BR
     public static int saveCurrency(Currency currency,bool blnUpd)
     {
       int nRes = 0;
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         if(blnUpd)//Actualizar
         {

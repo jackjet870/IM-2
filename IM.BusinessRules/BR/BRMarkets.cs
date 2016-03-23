@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,14 +18,16 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [erosado] 08/03/2016  created
     /// </hystory>
-
     public static List<MarketShort> GetMarkets(int status)
     {
-      using (var dbContext = new IM.Model.IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetMarkets(Convert.ToByte(status)).ToList();
       }
     }
+    #endregion
+
+    #region GetMarkets
 
     /// <summary>
     ///Devuelve una lista de markets con todos sus datos incluyendo el status
@@ -38,7 +41,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<Market> GetMarkets(Market market=null,int nStatus=-1)    
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from mkt in dbContext.Markets
                     select mkt;

@@ -96,7 +96,7 @@ namespace IM.Administrator.Forms
 
       if(sMsj=="")
       {
-        nRes = BRCountries.saveCountry(country, (mode==ModeOpen.edit));        
+        nRes = BRCountries.SaveCountry(country, (mode==ModeOpen.edit));        
 
         #region respuesta
         switch (nRes)//Se valida la respuesta de la operacion

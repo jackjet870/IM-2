@@ -1,7 +1,7 @@
-﻿using IM.Model;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -22,7 +22,7 @@ namespace IM.BusinessRules.BR
 
     public static List<LeadSourceByUser> GetLeadSourcesByUser(string user, string programs, string regions)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetLeadSourcesByUser(user, programs, regions).ToList();
       }
@@ -42,7 +42,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<LeadSource> GetLeadSources(int status = 0)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.LeadSources.
           Where(ls => status.Equals(1) ? ls.lsA : status.Equals(2) ? !ls.lsA : true).

@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
   public class BRChargeCalculationTypes
   {
-
     #region GetChargeCalculatioTypes
 
     /// <summary>
@@ -27,7 +25,7 @@ namespace IM.BusinessRules.BR
       
       List<ChargeCalculationType> lstCharge = new List<ChargeCalculationType>();
 
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from cct in dbContext.ChargeCalculationTypes
                     select cct;

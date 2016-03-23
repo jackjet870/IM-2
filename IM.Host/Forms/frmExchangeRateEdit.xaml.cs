@@ -17,8 +17,6 @@ namespace IM.Host.Forms
   {
     private ExchangeRateData _exchangeRateRow;
     List<Currency> _listCurrencies = new List<Currency>();
-    CollectionViewSource currencyViewSource;
-
 
     #region CONTRUCTOR
 
@@ -68,7 +66,7 @@ namespace IM.Host.Forms
       BRExchangeRate.SaveExchangeRate(false, _exchangeRate);
 
       //Guadarmos el Log del cambio.
-      BRExchangeRate.SaveExchangeRateLog(_exchangeRateRow.excu, frmHost._dtpServerDate.Date, frmHost._userData.SalesRoom.srHoursDif, frmHost._userData.User.peID);
+      BRExchangeRatesLogs.SaveExchangeRateLog(_exchangeRateRow.excu, frmHost._dtpServerDate.Date, frmHost._userData.SalesRoom.srHoursDif, frmHost._userData.User.peID);
 
       Close();
     }

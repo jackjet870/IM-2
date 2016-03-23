@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
   public class BRAgencies
   {
-    #region GetAgenciesShort
+    #region GetAgencies
 
     /// <summary>
     /// Obtiene el catalogo de agencias
@@ -15,12 +16,14 @@ namespace IM.BusinessRules.BR
     /// <param name="status"> 0- Sin filtro, 1-Activos, 2. Inactivos </param>
     public static List<AgencyShort> GetAgencies(int status)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetAgencies(Convert.ToByte(status)).ToList();
       }
     }
+    #endregion
 
+    #region GetAgencies
 
     /// <summary>
     /// Obtiene el catalogo de agencias con todas sus columnas
@@ -34,7 +37,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<Agency> GetAgencies(Agency agency=null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from ag in dbContext.Agencies
                     select ag;
@@ -68,7 +71,7 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
-    #region saveAgency
+    #region SaveAgency
 
     /// <summary>
     /// Guarda o actualiza un registro del catalogo Agencies
@@ -84,7 +87,7 @@ namespace IM.BusinessRules.BR
     public static int SaveAgency(Agency agency, bool blnUpd, bool blnUnavailMots = false, bool blnMarket = false)
     {
       int nRes = 0;
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         if (blnUpd)//Actualizar
         {

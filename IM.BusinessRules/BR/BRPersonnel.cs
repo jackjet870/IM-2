@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using IM.Model;
 using IM.Model.Classes;
 using IM.Model.Enums;
-
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
     public static UserData Login(EnumLoginType logintype, string user = "", string place = "")
     {
       UserData userData = new UserData();
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var resUser = dbContext.USP_OR_Login(Convert.ToByte(logintype), user, place);
         userData.User = resUser.FirstOrDefault();
@@ -63,7 +63,7 @@ namespace IM.BusinessRules.BR
     public static bool ChangePassword(string user, string newPassword, DateTime serverDate)
     {
       int result;
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         Personnel personnel = GetPersonnelById(user);
         personnel.pePwd = newPassword;
@@ -97,12 +97,12 @@ namespace IM.BusinessRules.BR
     /// [jorcanche]  12/Mar/2016 Created
     /// </history>
     public static List<PersonnelShort> GetPersonnel(string leadSources = "ALL", string salesRooms = "ALL",
-      string roles = "ALL", int status = 1, string permission = "ALL", 
-      string relationalOperator = "=", EnumPermisionLevel level = EnumPermisionLevel.None, string dept = "ALL" )
+      string roles = "ALL", int status = 1, string permission = "ALL",
+      string relationalOperator = "=", EnumPermisionLevel level = EnumPermisionLevel.None, string dept = "ALL")
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.USP_OR_GetPersonnel(leadSources, salesRooms, roles,((byte)status), permission, relationalOperator,((int)level), dept).ToList();
+        return dbContext.USP_OR_GetPersonnel(leadSources, salesRooms, roles, ((byte)status), permission, relationalOperator, ((int)level), dept).ToList();
       }
     }
     #endregion
@@ -118,7 +118,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static Personnel GetPersonnelById(string id)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.Personnels.Where(p => p.peID == id).FirstOrDefault();
       }

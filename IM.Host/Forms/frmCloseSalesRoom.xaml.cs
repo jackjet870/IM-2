@@ -152,7 +152,7 @@ namespace IM.Host.Forms
       BRSalesRooms.SetCloseSalesRoom(_closeType, _userData.SalesRoom.srID, _dateClose.SelectedDate);
 
       //Guardamos la accion en el historico de sala de ventas
-      BRSalesRooms.SaveSalesRoomLog(_userData.SalesRoom.srID, Convert.ToInt16(_userData.SalesRoom.srHoursDif), _userData.User.peID);
+      BRSalesRoomsLogs.SaveSalesRoomLog(_userData.SalesRoom.srID, Convert.ToInt16(_userData.SalesRoom.srHoursDif), _userData.User.peID);
 
       //Actualizamos datos de UI
       updateDate(_closeType, _dateClose.SelectedDate);

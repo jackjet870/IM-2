@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Classes;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
   public class BRAssistance
   {
+    #region GetAssistance
     /// <summary>
     /// Obtiene el de asistencia del personal de un sitio y que existe un registro previo en base de datos
     /// </summary>
@@ -22,13 +22,15 @@ namespace IM.BusinessRules.BR
     /// <history>[ECANUL] 17-03-2016 Created</history>
     public static List<AssistanceData> GetAssistance(EnumPlaceType palaceType, string PalaceID, DateTime dateStart, DateTime DateEnd)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         string strPalaceType = StrToEnums.EnumPalaceTypeToSting(palaceType);
         return dbContext.USP_OR_GetAssistance(strPalaceType, PalaceID, dateStart, DateEnd).ToList();
       }
     }
+    #endregion
 
+    #region GetPersonnelAssistance
     /// <summary>
     /// Obtiene la lista de empleados En un periodo de fechas establecido y que NO ha sido registrado en la base de datos
     /// NO REGISTRA SOLO HACE UNA CONSULTA
@@ -41,13 +43,15 @@ namespace IM.BusinessRules.BR
     /// <history>[ECANUL] 19-03-2016 CREATED</history>
     public static List<PersonnelAssistance> GetPersonnelAssistance(EnumPlaceType palaceType, string PalaceID, DateTime dateStart, DateTime DateEnd)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         string strPalaceType = StrToEnums.EnumPalaceTypeToSting(palaceType);
         return dbContext.USP_OR_GetPersonnelAssistance(strPalaceType, PalaceID, dateStart, DateEnd).ToList();
       }
     }
+    #endregion
 
+    #region SaveAssistanceList
     /// <summary>
     /// Guarda La asistencia del personal del lugar
     /// </summary>
@@ -57,7 +61,7 @@ namespace IM.BusinessRules.BR
     public static int SaveAssistanceList(Assistance assist)
     {
       int res;
-      using (var dbcontext = new IMEntities())
+      using (var dbcontext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         try
         {
@@ -70,7 +74,8 @@ namespace IM.BusinessRules.BR
           res = dbcontext.SaveChanges();
         }
       }
-      return res; 
-    }
+      return res;
+    } 
+    #endregion
   }
 }

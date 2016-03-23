@@ -49,11 +49,11 @@ namespace IM.ProcessorGeneral.Forms
     {
       InitializeComponent();
       _lstGifts = BRGifts.GetGifts();
-      _lstGiftsCate = BRGifts.getGiftCategory();
+      _lstGiftsCate = BRGifts.GetGiftsCategories();
       _lstSalesRoom = BRSalesRooms.GetSalesRoomsByUser(App.userData.User.peID);
-      _lstPrograms = BRPrograms.getPrograms();
+      _lstPrograms = BRPrograms.GetPrograms();
       _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.userData.User.peID, "ALL", "ALL");
-      _lstRateTypes = BRRateTypes.getRateType();
+      _lstRateTypes = BRRateTypes.GetRateType();
 
       cboStatus.ItemsSource = EnumToListHelper.GetList<EnumStatus>();
       cboSaveCourtesyTours.ItemsSource = EnumToListHelper.GetList<EnumSaveCourtesyTours>();

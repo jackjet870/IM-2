@@ -420,7 +420,7 @@ namespace IM.PRStatistics.Forms
     /// </history>
     public void DoGetRptPrStats(DateTime dateFrom, DateTime dateTo, List<Tuple<string, string>> filtros)
     {
-      Task.Factory.StartNew(() => BRPrStats.GetPrStats(dateFrom, dateTo, filtros))
+      Task.Factory.StartNew(() => BRPRStats.GetPRStats(dateFrom, dateTo, filtros))
       .ContinueWith(
       (task1) =>
       {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
+using IM.Model.Helpers;
+
 namespace IM.BusinessRules.BR
 {
   public class BRAssignment
@@ -19,7 +19,7 @@ namespace IM.BusinessRules.BR
     /// <param name="onlyAvail">Indica si solo se desean los huespedes disponibles</param>
     public static List<GuestUnassigned> GetGuestUnassigned(DateTime dateFrom, DateTime dateTo, String leadSource, String markets,  Boolean onlyAvail)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetGuestsUnassigned(dateFrom, dateTo, leadSource, markets, onlyAvail).OrderBy(o => o.guCheckInD).ToList();
       }
@@ -37,7 +37,7 @@ namespace IM.BusinessRules.BR
     /// <param name="PR">Clave del PR</param>
     public static List<RptAssignmentByPR> RptAssignmentByPR(DateTime dateFrom, DateTime dateTo, String leadSource, String markets, String PR)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_RptAssignmentByPR(dateFrom, dateTo, leadSource, markets, PR).ToList();
       }
@@ -54,7 +54,7 @@ namespace IM.BusinessRules.BR
     /// <param name="markets">Claves de Mercados</param>
     public static List<RptAssignment> RptAssignment(DateTime dateFrom, DateTime dateTo, String leadSource, String markets)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_RptAssignment(dateFrom, dateTo, leadSource, markets).ToList();
       }
@@ -71,7 +71,7 @@ namespace IM.BusinessRules.BR
     /// <param name="markets">Claves de Mercados</param>
     public static List<RptAssignmentArrivals> RptAssignmetArrivals(DateTime dateFrom, DateTime dateTo, String leadSource, String markets)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_RptAssignmentArrivals(dateFrom, dateTo, leadSource, markets).ToList();
       }
@@ -90,7 +90,7 @@ namespace IM.BusinessRules.BR
     /// <param name="mbrPRs">Indica si se desean los PRs de socios</param>
     public static List<PRAssigned> GetPRsAssigned(DateTime dateFrom, DateTime dateTo, String leadSource, String markets, Boolean guPRs, Boolean mbrPRs)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetPRsAssigned(dateFrom, dateTo, leadSource, markets, guPRs, mbrPRs).OrderByDescending(o => o.Assigned).ToList();
 
@@ -111,7 +111,7 @@ namespace IM.BusinessRules.BR
     /// <param name="markets">Claves de Mercados</param>
     public static List<GuestAssigned> GetGuestAssigned(DateTime dateFrom, DateTime dateTo, String leadSource, String PRs, String markets)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetGuestsAssigned(dateFrom, dateTo, leadSource, PRs, markets).ToList();
       }
@@ -122,7 +122,7 @@ namespace IM.BusinessRules.BR
     public static int SaveGuetsPRAssign(List<int> listguID, String idPR)
     {
       int res = 0;
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var guests = dbContext.Guests.Where(Guest => listguID.Contains(Guest.guID)).ToList();
         guests.ForEach(g => g.guPRAssign = idPR);
@@ -136,7 +136,7 @@ namespace IM.BusinessRules.BR
     public static int SaveGuestUnassign(List<int> listguID, String idPR)
     {
       int res = 0;
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var guests = dbContext.Guests.Where(Guest => listguID.Contains(Guest.guID)).ToList();
         guests.ForEach(g => g.guPRAssign = null);

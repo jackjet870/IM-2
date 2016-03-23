@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -19,7 +18,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static DateTime GetServerDate()
     {
-      using (var dbContext = new Model.IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var dQuery = dbContext.Database.SqlQuery<DateTime>("SELECT GETDATE()");
         return dQuery.AsEnumerable().First();

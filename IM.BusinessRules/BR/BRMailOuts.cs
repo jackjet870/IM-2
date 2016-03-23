@@ -1,5 +1,6 @@
-﻿using IM.Model;
-using System;
+﻿using System;
+using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,7 +18,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void ProcessMailOuts(string leadSourceID, DateTime? date = null)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         dbContext.spProcessMailOuts(leadSourceID, date);
       }

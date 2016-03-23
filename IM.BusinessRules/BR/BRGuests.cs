@@ -4,6 +4,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Classes;
 using IM.Model.Enums;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -23,7 +24,7 @@ namespace IM.BusinessRules.BR
     /// <param name="OnGroup">OnGroup</param>
     public static List<GuestArrival> GetGuestsArrivals(DateTime Date, string LeadSource, string Markets, int Available, int Contacted, int Invited, int OnGroup)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetArrivals(Date, LeadSource, Markets, Available, Contacted, Invited, OnGroup).ToList();
       }
@@ -44,7 +45,7 @@ namespace IM.BusinessRules.BR
     /// <param name="OnGroup">OnGroup</param>
     public static List<GuestAvailable> GetGuestsAvailables(DateTime Date, string LeadSource, string Markets, int Contacted, int Invited, int OnGroup)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetAvailables(Date, LeadSource, Markets, Contacted, Invited, OnGroup).ToList();
       }
@@ -63,12 +64,32 @@ namespace IM.BusinessRules.BR
     /// <param name="OnGroup">OnGroup</param>
     public static List<GuestPremanifest> GetGuestsPremanifest(DateTime Date, string LeadSource, string Markets, int OnGroup)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetPremanifest(Date, LeadSource, Markets, OnGroup).ToList();
       }
     }
 
+    #endregion
+
+    #region GetPremanifestHost
+    /// <summary>
+    /// Función para obtener el manifestHost
+    /// </summary>
+    /// <param name="currentDate"></param>
+    /// <param name="salesRoomID"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 22/02/2016 Created
+    /// [wtorres]   23/03/2016 Modified. Movido desde BRSalesRooms
+    /// </history>
+    public static List<GuestPremanifestHost> GetPremanifestHost(DateTime? currentDate, string salesRoomID)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_GetPremanifestHost(currentDate, salesRoomID).ToList();
+      }
+    }
     #endregion
 
     #region GetGuestsMailOuts
@@ -85,7 +106,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GuestMailOut> GetGuestsMailOuts(string leadSourceID, DateTime guCheckInD, DateTime guCheckOutD, DateTime guBookD)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetGuestsMailOuts(leadSourceID, guCheckInD, guCheckOutD, guBookD).ToList();
       }
@@ -105,7 +126,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GuestPremanifestHost> GetGuestsPremanifestHost(DateTime Date, string salesRoom)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetPremanifestHost(Date, salesRoom).ToList();
       }
@@ -122,7 +143,7 @@ namespace IM.BusinessRules.BR
     /// <history>[jorcanche] 09/03/2016</history>
     public static List<GuestLogData> GetGuestLog(int IdGuest)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetGuestLog(IdGuest).ToList();
       }
@@ -140,7 +161,7 @@ namespace IM.BusinessRules.BR
     /// <history>[jorcanche] 11/03/2016</history>
     public static void SaveGuestLog(int IdGuest, short lsHoursDif, string changedBy)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         dbContext.USP_OR_SaveGuestLog(IdGuest, lsHoursDif, changedBy);
       }
@@ -158,7 +179,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static Guest GetGuest(int guestId)
     {
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return (from gu in dbContext.Guests where gu.guID == guestId select gu).Single();
       }
@@ -176,7 +197,7 @@ namespace IM.BusinessRules.BR
     public static int SaveGuest(Guest guest)
     {
       int nRes = 0;
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         dbContext.Entry(guest).State = System.Data.Entity.EntityState.Modified;
        return nRes = dbContext.SaveChanges();
@@ -199,7 +220,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void SaveGuestMovement(int guestId, EnumGuestsMovementsType guestMovementType, string changedBy, string computerName, string iPAddress)
     {
-       using (var dbContext = new IMEntities())
+       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         dbContext.USP_OR_SaveGuestMovement(guestId, StrToEnums.EumGuestsMovementsTypeToString(guestMovementType), changedBy, computerName, iPAddress);
       }
@@ -218,7 +239,7 @@ namespace IM.BusinessRules.BR
     /// <returns></returns>
     public static List<GuestByPR> GetGuestsByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, List<bool> filtros)
     {
-      using (var dbContext = new IM.Model.IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_GetGuestsByPR(dateFrom, dateTo, leadSources, PR, filtros[0], filtros[1], filtros[2], filtros[3], filtros[4], filtros[5], filtros[6]).ToList();
       }

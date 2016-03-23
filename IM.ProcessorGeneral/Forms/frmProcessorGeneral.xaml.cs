@@ -440,7 +440,7 @@ namespace IM.ProcessorGeneral.Forms
       switch (strReport)
       {
         case "Personnel":
-          List<RptPersonnel> lstRptPersonnel = BRGeneralReports.getRptPersonnel();
+          List<RptPersonnel> lstRptPersonnel = BRGeneralReports.GetRptPersonnel();
           if (lstRptPersonnel.Count > 0)
           {
             dtData = GridHelper.GetDataTableFromGrid(lstRptPersonnel, changeDataTypeBoolToString: true, showCheckMark: false);
@@ -451,7 +451,7 @@ namespace IM.ProcessorGeneral.Forms
             UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           break;
         case "Gifts":
-          List<RptGifts> lstRptGift = BRGeneralReports.getRptGifts();
+          List<RptGifts> lstRptGift = BRGeneralReports.GetRptGifts();
           if (lstRptGift.Count > 0)
           {
             dtData = GridHelper.GetDataTableFromGrid(lstRptGift, changeDataTypeBoolToString: true, showCheckMark: true);

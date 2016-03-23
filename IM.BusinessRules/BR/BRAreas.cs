@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -22,7 +21,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<Area> GetAreas(Area area=null,int nStatus=-1)
     { 
-      using (var dbContext = new IMEntities())
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from areas in dbContext.Areas
                     select areas ;
@@ -50,6 +49,7 @@ namespace IM.BusinessRules.BR
 
     }
     #endregion
+
     #region SaveArea
     /// <summary>
     /// Actualiza|Agrega un registro al catalogo de Areas
@@ -64,7 +64,7 @@ namespace IM.BusinessRules.BR
     {
       
       int nRes = 0;       
-          using (var dbContext = new IMEntities())
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
           {
             if (!bUpd)//insertar
             {
