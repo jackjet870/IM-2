@@ -6042,6 +6042,14 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="HoursDif" Type="smallint" Mode="In" />
           <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_ValidateChangedBy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varchar" Mode="In" />
+          <Parameter Name="PlaceType" Type="varchar" Mode="In" />
+          <Parameter Name="PlaceID" Type="varchar" Mode="In" />
+          <Parameter Name="UserType" Type="varchar" Mode="In" />
+          <Parameter Name="PR" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_ValidateFolioCXC" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NumberFrom" Type="int" Mode="In" />
           <Parameter Name="NumberTo" Type="int" Mode="In" />
@@ -15098,6 +15106,14 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="ConsiderQuinellas" Mode="In" Type="Boolean" />
             <Parameter Name="DetailGifts" Mode="In" Type="Boolean" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_ValidateChangedBy" ReturnType="Collection(IMModel.ValidationData)">
+            <Parameter Name="ChangedBy" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="PlaceType" Mode="In" Type="String" />
+            <Parameter Name="PlaceID" Mode="In" Type="String" />
+            <Parameter Name="UserType" Mode="In" Type="String" />
+            <Parameter Name="PR" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -16012,6 +16028,10 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="Decimal" Name="Shows" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="TotalCost" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AverageCost" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="ValidationData">
+          <Property Type="String" Name="Focus" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Message" Nullable="true" MaxLength="100" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -19416,6 +19436,14 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
                 <ScalarProperty Name="Shows" ColumnName="Shows" />
                 <ScalarProperty Name="TotalCost" ColumnName="TotalCost" />
                 <ScalarProperty Name="AverageCost" ColumnName="AverageCost" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_ValidateChangedBy" FunctionName="IMModel.Store.USP_OR_ValidateChangedBy">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.ValidationData">
+                <ScalarProperty Name="Focus" ColumnName="Focus" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

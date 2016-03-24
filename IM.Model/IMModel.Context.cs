@@ -13,6 +13,7 @@ namespace IM.Model
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class IMEntities : DbContext
     {
@@ -1376,6 +1377,35 @@ namespace IM.Model
                 new ObjectParameter("DetailGifts", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptCostByPRWithDetailGifts>("USP_OR_RptCostByPRWithDetailGifts", dateFromParameter, dateToParameter, leadSourcesParameter, considerQuinellasParameter, detailGiftsParameter);
+        }
+    
+        public virtual ObjectResult<ValidationData> USP_OR_ValidateChangedBy(string changedBy, string password, string placeType, string placeID, string userType, string pR)
+        {
+            var changedByParameter = changedBy != null ?
+                new ObjectParameter("ChangedBy", changedBy) :
+                new ObjectParameter("ChangedBy", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("Password", password) :
+                new ObjectParameter("Password", typeof(string));
+    
+            var placeTypeParameter = placeType != null ?
+                new ObjectParameter("PlaceType", placeType) :
+                new ObjectParameter("PlaceType", typeof(string));
+    
+            var placeIDParameter = placeID != null ?
+                new ObjectParameter("PlaceID", placeID) :
+                new ObjectParameter("PlaceID", typeof(string));
+    
+            var userTypeParameter = userType != null ?
+                new ObjectParameter("UserType", userType) :
+                new ObjectParameter("UserType", typeof(string));
+    
+            var pRParameter = pR != null ?
+                new ObjectParameter("PR", pR) :
+                new ObjectParameter("PR", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ValidationData>("USP_OR_ValidateChangedBy", changedByParameter, passwordParameter, placeTypeParameter, placeIDParameter, userTypeParameter, pRParameter);
         }
     }
 }

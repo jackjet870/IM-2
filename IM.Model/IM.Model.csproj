@@ -703,6 +703,9 @@
     <Compile Include="UserLogin.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ValidationData.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Warehouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

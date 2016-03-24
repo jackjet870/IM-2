@@ -197,7 +197,7 @@ namespace IM.Launcher
           Process.Start(String.Format("{0}\\IM.GuestsPR.exe", path));
           break;
         case EnumMenu.SalesByPR:
-          UIHelper.ShowMessage("Coming soon..");
+          Process.Start(String.Format("{0}\\IM.SalesPR.exe", path));
           break;
         case EnumMenu.SalesByLiner:
           UIHelper.ShowMessage("Coming soon..");
