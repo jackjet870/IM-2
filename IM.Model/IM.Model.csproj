@@ -541,6 +541,12 @@
     <Compile Include="RptBookingsBySalesRoomProgramTime.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptCostByPR.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptCostByPRWithDetailGifts.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptCxC.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -566,13 +572,13 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="SaleByCloser.cs">
-	  <DependentUpon>IMModel.tt</DependentUpon>
+      <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="SaleByLiner.cs">
-	  <DependentUpon>IMModel.tt</DependentUpon>
+      <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="SaleByPR.cs">
-	  <DependentUpon>IMModel.tt</DependentUpon>
+      <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="SaleLog.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
@@ -695,6 +701,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserLogin.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ValidationData.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Warehouse.cs">
