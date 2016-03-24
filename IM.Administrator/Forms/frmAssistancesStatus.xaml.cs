@@ -122,7 +122,7 @@ namespace IM.Administrator.Forms
       frmAssistanceStatusDetail frmAssistanceDetail = new frmAssistanceStatusDetail();
       ObjectHelper.CopyProperties(frmAssistanceDetail.assistance, Assistance);
       frmAssistanceDetail.Owner = this;
-      frmAssistanceDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
+      frmAssistanceDetail.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
       if (frmAssistanceDetail.ShowDialog() == true)
       {
         List<AssistanceStatus> lstAssistancesStatus = (List<AssistanceStatus>)dgrAssitances.ItemsSource;
@@ -157,7 +157,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadAssitance();
+      LoadAssitance(dgrAssitances.SelectedIndex);
     }
     #endregion
 
@@ -174,7 +174,7 @@ namespace IM.Administrator.Forms
       frmAssistanceStatusDetail frmAssistanceDetail = new frmAssistanceStatusDetail();
       frmAssistanceDetail.assistance = new AssistanceStatus();
       frmAssistanceDetail.Owner = this;
-      frmAssistanceDetail.mode = ModeOpen.add;//insertar
+      frmAssistanceDetail.mode = EnumMode.add;//insertar
       if (frmAssistanceDetail.ShowDialog() == true)
       {
         if (ValidateFilters(frmAssistanceDetail.assistance))//Validamos si cumple con los filtros
@@ -207,14 +207,14 @@ namespace IM.Administrator.Forms
     {
       frmSearch frmSearch = new frmSearch();
       frmSearch.nStatus = _nStatus;
-      frmSearch.sID = _assistanceFilter.atID;
-      frmSearch.sDesc = _assistanceFilter.atN;
+      frmSearch.strID = _assistanceFilter.atID;
+      frmSearch.strDesc = _assistanceFilter.atN;
       frmSearch.Owner = this;
       if (frmSearch.ShowDialog() == true)
       {
         _nStatus = frmSearch.nStatus;
-        _assistanceFilter.atID = frmSearch.sID;
-        _assistanceFilter.atN = frmSearch.sDesc;
+        _assistanceFilter.atID = frmSearch.strID;
+        _assistanceFilter.atN = frmSearch.strDesc;
 
         LoadAssitance();
       }
@@ -230,15 +230,11 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] 27/Feb/2016 Created
     /// </history>    
-    protected void LoadAssitance()
+    protected void LoadAssitance(int nIndex=0)
     {
       List<AssistanceStatus> lstAssistance = BRAssistancesStatus.GetAssitanceStatus(_assistanceFilter, _nStatus);
       dgrAssitances.ItemsSource = lstAssistance;
-      if (lstAssistance.Count > 0)
-      {
-        dgrAssitances.Focus();
-        GridHelper.SelectRow(dgrAssitances, 0);
-      }
+      GridHelper.SelectRow(dgrAssitances, nIndex);
       StatusBarReg.Content = lstAssistance.Count + " Assistance Status.";
     }
     #endregion

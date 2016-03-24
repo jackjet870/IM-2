@@ -97,7 +97,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadComputers();
+      LoadComputers(dgrComputers.SelectedIndex);
     }
     #endregion
 
@@ -114,7 +114,7 @@ namespace IM.Administrator.Forms
     {
       frmComputerDetail frmComputerDetail = new frmComputerDetail();
       frmComputerDetail.Owner = this;
-      frmComputerDetail.mode = Enums.ModeOpen.add;
+      frmComputerDetail.mode = Enums.EnumMode.add;
       if (frmComputerDetail.ShowDialog() == true)
       {
         if (ValidateFilters(frmComputerDetail.computer))//Validamos que cumpla con los filtros
@@ -143,15 +143,15 @@ namespace IM.Administrator.Forms
     private void btnSearch_Click(object sender, RoutedEventArgs e)
     {
       frmSearch frmSearch = new frmSearch();
-      frmSearch.sForm = "Computer";
+      frmSearch.strForm = "Computer";
       frmSearch.Owner = this;
-      frmSearch.sID = _computerFilter.cpID;
-      frmSearch.sDesc = _computerFilter.cpN;
+      frmSearch.strID = _computerFilter.cpID;
+      frmSearch.strDesc = _computerFilter.cpN;
 
       if(frmSearch.ShowDialog()==true)
       {
-        _computerFilter.cpID = frmSearch.sID;
-        _computerFilter.cpN = frmSearch.sDesc;
+        _computerFilter.cpID = frmSearch.strID;
+        _computerFilter.cpN = frmSearch.strDesc;
         LoadComputers();
       }
     }
@@ -171,7 +171,7 @@ namespace IM.Administrator.Forms
       Computer computer = (Computer)dgrComputers.SelectedItem;
       frmComputerDetail frmComputerDetail = new frmComputerDetail();
       frmComputerDetail.Owner = this;
-      frmComputerDetail.mode = Enums.ModeOpen.edit;
+      frmComputerDetail.mode = Enums.EnumMode.edit;
       ObjectHelper.CopyProperties(frmComputerDetail.computer, computer);
       if (frmComputerDetail.ShowDialog() == true)
       {        
@@ -231,14 +231,11 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 16/03/2016
     /// </history>
-    private void LoadComputers()
+    private void LoadComputers(int nIndex=0)
     {
       List<Computer> lstComputers = BRComputers.GetComputers(_computerFilter);
-      dgrComputers.ItemsSource = lstComputers;
-      if(lstComputers.Count>0)
-      {
-        GridHelper.SelectRow(dgrComputers, 0);
-      }
+      dgrComputers.ItemsSource = lstComputers;      
+      GridHelper.SelectRow(dgrComputers, nIndex);
       StatusBarReg.Content = lstComputers.Count+" Computers.";
     }
     #endregion

@@ -123,7 +123,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadAgencies();
+      LoadAgencies(dgrAgencies.SelectedIndex);
     }
     #endregion
 
@@ -136,7 +136,7 @@ namespace IM.Administrator.Forms
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
       frmAgencyDetail frmAgencyDetail = new frmAgencyDetail();
-      frmAgencyDetail.enumMode = ModeOpen.add;//Insertar
+      frmAgencyDetail.enumMode = EnumMode.add;//Insertar
       frmAgencyDetail.Owner = this;
 
       if(frmAgencyDetail.ShowDialog()==true)
@@ -160,17 +160,17 @@ namespace IM.Administrator.Forms
     private void btnSearch_Click(object sender, RoutedEventArgs e)
     {
       frmSearch frmSearch = new frmSearch();
-      frmSearch.sID = _agencyFilter.agID;
-      frmSearch.sDesc = _agencyFilter.agN;
+      frmSearch.strID = _agencyFilter.agID;
+      frmSearch.strDesc = _agencyFilter.agN;
       frmSearch.nStatus = _nStatus;
       frmSearch.sSegment = _agencyFilter.agse;
-      frmSearch.sForm = "Agency";
+      frmSearch.strForm = "Agency";
       frmSearch.Owner = this;
       if(frmSearch.ShowDialog()==true)
       {
         _nStatus = frmSearch.nStatus;
-        _agencyFilter.agID = frmSearch.sID;
-        _agencyFilter.agN = frmSearch.sDesc;
+        _agencyFilter.agID = frmSearch.strID;
+        _agencyFilter.agN = frmSearch.strDesc;
         _agencyFilter.agse = frmSearch.sSegment;
         LoadAgencies();
       }
@@ -191,7 +191,7 @@ namespace IM.Administrator.Forms
       frmAgencyDetail frmAgencyDetail = new frmAgencyDetail();
       ObjectHelper.CopyProperties(frmAgencyDetail.agency,agency); 
       frmAgencyDetail.Owner = this;
-      frmAgencyDetail.enumMode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
+      frmAgencyDetail.enumMode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
       if(frmAgencyDetail.ShowDialog()==true)
       {
         int nIndex = 0;
@@ -222,14 +222,14 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 08/03/2016
     /// </history>
-    protected void LoadAgencies()
+    protected void LoadAgencies(int nIndex=0)
     {
       List<Agency> lstAgencies = BRAgencies.GetAgencies(_agencyFilter, _nStatus);
       dgrAgencies.ItemsSource = lstAgencies;
       if (lstAgencies.Count > 0)
       {        
         dgrAgencies.Focus();
-        GridHelper.SelectRow(dgrAgencies,0);                
+        GridHelper.SelectRow(dgrAgencies,nIndex);                
       }
       StatusBarReg.Content = lstAgencies.Count + " Agencies.";
     }

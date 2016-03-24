@@ -17,19 +17,19 @@
         <!--#endregion-->
         <!--#region toolbar -->
         <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch" KeyboardNavigation.TabNavigation="Continue">
-            <Button ToolTip="Refresh list." Name="btnRef" BorderBrush="Transparent" BorderThickness="1" Click="btnRef_Click" Command="{Binding btnRef_Click}">
+            <Button ToolTip="Refresh list." Name="btnRef" BorderBrush="Transparent" BorderThickness="1" Click="btnRef_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/Refresh.png" />
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Refresh"/>
                 </StackPanel>
             </Button>
-            <Button ToolTip="Create new Agency." Name="btnAdd" IsEnabled="True" Click="btnAdd_Click" Command="{Binding btnAdd_Click}">
+            <Button ToolTip="Create new Agency." Name="btnAdd" IsEnabled="True" Click="btnAdd_Click" >
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/button_add.png" />
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Add"/>
                 </StackPanel>
             </Button>
-            <Button Name="btnSearch" ToolTip="Search Agencies. " Click="btnSearch_Click" Command="{Binding btnSearch_Click}">
+            <Button Name="btnSearch" ToolTip="Search Agencies." Click="btnSearch_Click" >
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/btnSearch.png" />
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Search"/>

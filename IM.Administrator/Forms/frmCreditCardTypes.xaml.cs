@@ -33,15 +33,11 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [Emoguel] created 07/003/2016
     /// </history>
-    protected void LoadCreditCardTypes()
+    protected void LoadCreditCardTypes(int nIndex=0)
     {
       List<CreditCardType> lstCreditCardTypes = BRCreditCardTypes.GetCreditCardTypes(_creditCardTypeFilter, _nStatus);
       dgrCreditCard.ItemsSource = lstCreditCardTypes;
-      if (lstCreditCardTypes.Count > 0)
-      {
-        dgrCreditCard.Focus();
-        GridHelper.SelectRow(dgrCreditCard, 0);
-      }      
+      GridHelper.SelectRow(dgrCreditCard, nIndex);      
       StatusBarReg.Content = lstCreditCardTypes.Count() + "  Credit Card Types.";
     }
     #endregion
@@ -100,14 +96,14 @@ namespace IM.Administrator.Forms
     {
       frmSearch frmSearch = new frmSearch();
       frmSearch.nStatus = _nStatus;
-      frmSearch.sID = _creditCardTypeFilter.ccID;
-      frmSearch.sDesc = _creditCardTypeFilter.ccN;
+      frmSearch.strID = _creditCardTypeFilter.ccID;
+      frmSearch.strDesc = _creditCardTypeFilter.ccN;
       frmSearch.Owner = this;
       if (frmSearch.ShowDialog() == true)
       {
         _nStatus = frmSearch.nStatus;
-        _creditCardTypeFilter.ccID = frmSearch.sID;
-        _creditCardTypeFilter.ccN = frmSearch.sDesc;
+        _creditCardTypeFilter.ccID = frmSearch.strID;
+        _creditCardTypeFilter.ccN = frmSearch.strDesc;
         LoadCreditCardTypes();
       }
     }
@@ -127,7 +123,7 @@ namespace IM.Administrator.Forms
     {
       frmCreditCardTypesDetail frmCreditCard = new frmCreditCardTypesDetail();
       frmCreditCard.Owner = this;
-      frmCreditCard.mode = ModeOpen.add;
+      frmCreditCard.mode = EnumMode.add;
       if (frmCreditCard.ShowDialog() == true)
       {
         if (ValidateFilters(frmCreditCard.creditCardType))//Validamos que cumpla con los filtros
@@ -152,7 +148,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadCreditCardTypes();
+      LoadCreditCardTypes(dgrCreditCard.SelectedIndex);
     }
     #endregion
 
@@ -232,7 +228,7 @@ namespace IM.Administrator.Forms
       CreditCardType creditCardType = (CreditCardType)dgrCreditCard.SelectedItem;
       frmCreditCardTypesDetail frmCrediCard = new frmCreditCardTypesDetail();
       frmCrediCard.Owner = this;
-      frmCrediCard.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
+      frmCrediCard.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
       ObjectHelper.CopyProperties(frmCrediCard.creditCardType,creditCardType);
       if(frmCrediCard.ShowDialog()==true)
       {

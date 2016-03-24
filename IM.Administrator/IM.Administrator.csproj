@@ -160,6 +160,30 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmFolioCXCDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmFoliosCXC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmFolioInvitationOuthouseDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmFoliosInvitationsOuthouse.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\frmGiftCategoryDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmGiftsCategories.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmSearch.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -168,7 +192,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Enums\ModeOpen.cs" />
+    <Compile Include="Enums\EnumMode.cs" />
     <Compile Include="Forms\frmAgencyDetail.xaml.cs">
       <DependentUpon>frmAgencyDetail.xaml</DependentUpon>
     </Compile>
@@ -238,6 +262,24 @@
     </Compile>
     <Compile Include="Forms\frmEfficiencyTypes.xaml.cs">
       <DependentUpon>frmEfficiencyTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmFolioCXCDetail.xaml.cs">
+      <DependentUpon>frmFolioCXCDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmFoliosCXC.xaml.cs">
+      <DependentUpon>frmFoliosCXC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmFolioInvitationOuthouseDetail.xaml.cs">
+      <DependentUpon>frmFolioInvitationOuthouseDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmFoliosInvitationsOuthouse.xaml.cs">
+      <DependentUpon>frmFoliosInvitationsOuthouse.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmGiftCategoryDetail.xaml.cs">
+      <DependentUpon>frmGiftCategoryDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmGiftsCategories.xaml.cs">
+      <DependentUpon>frmGiftsCategories.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSearch.xaml.cs">
       <DependentUpon>frmSearch.xaml</DependentUpon>

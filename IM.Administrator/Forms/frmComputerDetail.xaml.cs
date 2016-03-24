@@ -14,7 +14,7 @@ namespace IM.Administrator.Forms
   public partial class frmComputerDetail : Window
   {
     public Computer computer = new Computer();
-    public ModeOpen mode;
+    public EnumMode mode;
     public frmComputerDetail()
     {
       InitializeComponent();
@@ -34,7 +34,7 @@ namespace IM.Administrator.Forms
     {
       LoadDesks();
       DataContext = computer;
-      if(mode==ModeOpen.add)
+      if(mode==EnumMode.add)
       {
         txtID.IsEnabled = true;
       }      
@@ -86,7 +86,7 @@ namespace IM.Administrator.Forms
       #endregion
       if(sMsj=="")
       {
-        nRes = BRComputers.SaveComputer(computer, ((mode == ModeOpen.edit)));
+        nRes = BRComputers.SaveComputer(computer, ((mode == EnumMode.edit)));
 
         #region respuesta
         switch (nRes)//Se valida la respuesta de la operacion

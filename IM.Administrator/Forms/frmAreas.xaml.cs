@@ -103,7 +103,7 @@ namespace IM.Administrator.Forms
       frmAreaDetalle frmAreaDetalle = new frmAreaDetalle();
       frmAreaDetalle.Owner = this;
       ObjectHelper.CopyProperties(frmAreaDetalle.area, Area);
-      frmAreaDetalle.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
+      frmAreaDetalle.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
       if (frmAreaDetalle.ShowDialog() == true)
       { 
         List<Area> lstAreas = (List<Area>)dgrAreas.ItemsSource;
@@ -139,7 +139,7 @@ namespace IM.Administrator.Forms
       frmAreaDetalle frmAreaDetalle = new frmAreaDetalle();
       frmAreaDetalle.area = new Area();
       frmAreaDetalle.Owner = this;
-      frmAreaDetalle.mode = ModeOpen.add;//Agregar
+      frmAreaDetalle.mode = EnumMode.add;//Agregar
       if (frmAreaDetalle.ShowDialog() == true)
       {
         if (ValidateFilters(frmAreaDetalle.area))//Validamos si cumple con los filtros
@@ -167,7 +167,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadAreas();
+      LoadAreas(dgrAreas.SelectedIndex);
     }
     #endregion
 
@@ -209,15 +209,15 @@ namespace IM.Administrator.Forms
     private void btnSearch_Click(object sender, RoutedEventArgs e)
     {
       frmSearch frmSearch = new frmSearch();
-      frmSearch.sID = _areaFiltro.arID;
-      frmSearch.sDesc = _areaFiltro.arN;
+      frmSearch.strID = _areaFiltro.arID;
+      frmSearch.strDesc = _areaFiltro.arN;
       frmSearch.nStatus = _nStatus;
       frmSearch.Owner = this;
       //Abrir la ventana de Buscar y ver si decidió realizar algún filtro
       if (frmSearch.ShowDialog() == true)
       {
-        _areaFiltro.arID = frmSearch.sID;
-        _areaFiltro.arN = frmSearch.sDesc;
+        _areaFiltro.arID = frmSearch.strID;
+        _areaFiltro.arN = frmSearch.strDesc;
         _nStatus = frmSearch.nStatus;
         LoadAreas();
       }
@@ -233,15 +233,11 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] 26/Feb/2016 Created
     /// </history>
-    protected void LoadAreas()
+    protected void LoadAreas(int nIndex=0)
     {
       List<Area> lstAreas = BRAreas.GetAreas(_areaFiltro, _nStatus);
-      dgrAreas.ItemsSource = lstAreas;
-      if (lstAreas.Count > 0)
-      {
-        dgrAreas.Focus();
-        GridHelper.SelectRow(dgrAreas, 0);
-      }
+      dgrAreas.ItemsSource = lstAreas;      
+      GridHelper.SelectRow(dgrAreas, nIndex);
       StatusBarReg.Content = lstAreas.Count + " Areas.";
 
     }

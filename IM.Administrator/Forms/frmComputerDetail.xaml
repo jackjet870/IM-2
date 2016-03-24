@@ -30,14 +30,10 @@
         <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding cpID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="53"/>
         <TextBox Name="txtN" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding cpN}" CharacterCasing="Upper"  MaxLength="50"/>
         <TextBox Name="txtAd" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" Text="{Binding cpIpAddress}"  IsEnabled="False" MaxLength="100"/>
-        <ComboBox Name="cmbDesk" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" DisplayMemberPath="dkN" SelectedValuePath="dkID" SelectedValue="{Binding cpdk}"/>        
-        
-        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Command="{Binding btnAccept_Click}">
-            <AccessText Text="_Accept"/>
-        </Button>
-        <Button Name="btnCancel" Width="60" IsCancel="True" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right">
-            <AccessText Text="_Cancel"/>
-        </Button>
+        <ComboBox Name="cmbDesk" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" DisplayMemberPath="dkN" SelectedValuePath="dkID" SelectedValue="{Binding cpdk}"/>
+
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Command="{Binding btnAccept_Click}" Content="_Accept"/>
+        <Button Name="btnCancel" Width="60" IsCancel="True" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>
 </Window>

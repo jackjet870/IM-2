@@ -15,7 +15,7 @@ namespace IM.Administrator.Forms
   public partial class frmContractsDetail : Window
   {
     public Contract contract=new Contract();//Objeto que se muestra en la ventana
-    public ModeOpen mode;//Modo en el que se abrirá la ventana
+    public EnumMode mode;//Modo en el que se abrirá la ventana
     public frmContractsDetail()
     {
       InitializeComponent();
@@ -52,7 +52,7 @@ namespace IM.Administrator.Forms
       int nRes = 0;
       if (sMsj == "")//Todos los campos estan llenos
       {
-        nRes = BRContracts.SaveContract(contract, (mode==ModeOpen.edit));      
+        nRes = BRContracts.SaveContract(contract, (mode==EnumMode.edit));      
 
         #region respuesta
         switch (nRes)//Se valida la respuesta de la operacion
@@ -143,18 +143,18 @@ namespace IM.Administrator.Forms
       DataContext = contract;
       switch (mode)
       {
-        case ModeOpen.preview://show
+        case EnumMode.preview://show
           {
             btnAccept.Visibility = Visibility.Hidden;                        
             break;
           }
-        case ModeOpen.add://add
+        case EnumMode.add://add
           {
             txtID.IsEnabled = true;
             LockControls(true);
             break;
           }
-        case ModeOpen.edit://Edit
+        case EnumMode.edit://Edit
           {
             txtID.IsEnabled = false;
             LockControls(true);            

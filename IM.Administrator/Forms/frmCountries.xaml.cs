@@ -102,14 +102,14 @@ namespace IM.Administrator.Forms
     {
       frmSearch frmSearch = new frmSearch();
       frmSearch.Owner = this;
-      frmSearch.sDesc = _countryFilter.coN;
-      frmSearch.sID = _countryFilter.coID;
+      frmSearch.strDesc = _countryFilter.coN;
+      frmSearch.strID = _countryFilter.coID;
       frmSearch.nStatus = _nStatus;
       if (frmSearch.ShowDialog() == true)
       {
         _nStatus = frmSearch.nStatus;
-        _countryFilter.coID = frmSearch.sID;
-        _countryFilter.coN = frmSearch.sDesc;
+        _countryFilter.coID = frmSearch.strID;
+        _countryFilter.coN = frmSearch.strDesc;
         loadCountries();
 
       }
@@ -129,7 +129,7 @@ namespace IM.Administrator.Forms
     {
       
       frmCountryDetail frmCountryDetail = new frmCountryDetail();
-      frmCountryDetail.mode = ModeOpen.add;
+      frmCountryDetail.mode = EnumMode.add;
       frmCountryDetail.Owner = this;
       Country country = new Country();
       frmCountryDetail.country = country;
@@ -159,7 +159,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      loadCountries();
+      loadCountries(dgrCountries.SelectedIndex);
     } 
     #endregion
     #region Double Click
@@ -178,7 +178,7 @@ namespace IM.Administrator.Forms
       frmCountryDetail frmCountryDetail = new frmCountryDetail();
       frmCountryDetail.Owner = this;
       ObjectHelper.CopyProperties(frmCountryDetail.country, country);
-      frmCountryDetail.mode = ((_blnEdit==true)?ModeOpen.edit:ModeOpen.preview);
+      frmCountryDetail.mode = ((_blnEdit==true)?EnumMode.edit:EnumMode.preview);
       if (frmCountryDetail.ShowDialog() == true)
       {        
         List<Country> lstCountry = (List<Country>)dgrCountries.ItemsSource;
@@ -234,15 +234,11 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [Emoguel] created 14/03/2016
     /// </history>
-    private void loadCountries()
+    private void loadCountries(int nIndex=0)
     {
       List<Country> lstCountries = BRCountries.GetCountries(_countryFilter, _nStatus);
       dgrCountries.ItemsSource = lstCountries;
-      if (lstCountries.Count > 0)
-      {        
-        dgrCountries.Focus();
-        GridHelper.SelectRow(dgrCountries, 0);
-      }
+      GridHelper.SelectRow(dgrCountries, nIndex);
       StatusBarReg.Content = lstCountries.Count + " Countries.";
     }
     #endregion

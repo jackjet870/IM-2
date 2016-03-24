@@ -16,7 +16,7 @@ namespace IM.Administrator.Forms
   public partial class frmDeskDetail : Window
   {
     public Desk desk = new Desk();//Objeto a edita o agregar
-    public ModeOpen enumMode;//modo en que se mostrará la ventana    
+    public EnumMode enumMode;//modo en que se mostrará la ventana    
     public frmDeskDetail()
     {
       InitializeComponent();
@@ -35,7 +35,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       DataContext = desk;
-      txtID.Text = ((enumMode == ModeOpen.edit) ? desk.dkID.ToString() : "");      
+      txtID.Text = ((enumMode == EnumMode.edit) ? desk.dkID.ToString() : "");      
       LoadGridComputers();
       LoadCmbComputers();
     } 
@@ -79,7 +79,7 @@ namespace IM.Administrator.Forms
       {
         List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
         List<string> lstIdsComputers = lstComputers.Select(cmp => cmp.cpID).ToList();
-        nRes = BRDesks.SaveDesk(desk,(enumMode==ModeOpen.edit), lstIdsComputers);
+        nRes = BRDesks.SaveDesk(desk,(enumMode==EnumMode.edit), lstIdsComputers);
 
         #region respuesta
         switch (nRes)//Se valida la respuesta de la operacion
@@ -87,20 +87,6 @@ namespace IM.Administrator.Forms
           case 0:
             {
               UIHelper.ShowMessage("Desk not saved");
-              break;
-            }          
-          case 2:
-            {
-              if (enumMode == ModeOpen.add)
-              {
-                UIHelper.ShowMessage("Desk ID already exist please select another one");
-              }
-              else
-              {
-                UIHelper.ShowMessage("Desk successfully saved");
-                DialogResult = true;
-                Close();
-              }
               break;
             }
           default:
@@ -169,7 +155,7 @@ namespace IM.Administrator.Forms
     {
       Computer computer = new Computer();
       List<Computer> lstComputers = new List<Computer>();
-      if (enumMode == ModeOpen.edit)
+      if (enumMode == EnumMode.edit)
       {
         computer.cpdk = desk.dkID;
         lstComputers= BRComputers.GetComputers(computer);

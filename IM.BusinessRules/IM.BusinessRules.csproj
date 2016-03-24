@@ -66,8 +66,11 @@
     <Compile Include="BR\BREfficiencyTypes.cs" />
     <Compile Include="BR\BRExchangeRatesLogs.cs" />
     <Compile Include="BR\BRExchangeRate.cs" />
+    <Compile Include="BR\BRFoliosInvitationsOuthouse.cs" />
     <Compile Include="BR\BRGeneralReports.cs" />
+    <Compile Include="BR\BRFoliosCXC.cs" />
     <Compile Include="BR\BRGifts.cs" />
+    <Compile Include="BR\BRGiftsCategories.cs" />
     <Compile Include="BR\BRGraph.cs" />
     <Compile Include="BR\BRGuestsAdditional.cs" />
     <Compile Include="BR\BRGuests.cs" />

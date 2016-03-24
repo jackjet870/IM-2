@@ -82,9 +82,30 @@ namespace IM.Administrator.Forms
       #endregion
       
       #region Sale Permision
-      if(App.User.HasPermission(EnumPermission.Sales,EnumPermisionLevel.Standard))
+      if(App.User.HasPermission(EnumPermission.Sales,EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add(new { nombre = "Efficiency Types", img = "pack://application:,,,/IM.Base;component/Images/positioning.png", form = "frmEfficiencyTypes" });
+      }
+      #endregion
+
+      #region Folios CxC
+      if(App.User.HasPermission(EnumPermission.FolioCXC,EnumPermisionLevel.ReadOnly))
+      {
+        lstMenu.Add(new { nombre = "Folios CXC", img = "pack://application:,,,/IM.Base;component/Images/Reports.ico", form = "frmFoliosCXC" });
+      }
+      #endregion
+
+      #region Folio InvitationsOutHouse
+      if(App.User.HasPermission(EnumPermission.FolioInvitationsOuthouse,EnumPermisionLevel.ReadOnly))
+      {
+        lstMenu.Add(new { nombre = "Folios Invitations Outhouse", img = "pack://application:,,,/IM.Base;component/Images/Reports.ico", form = "frmFoliosInvitationsOuthouse" });
+      }
+      #endregion
+
+      #region Gifts
+      if(App.User.HasPermission(EnumPermission.Gifts,EnumPermisionLevel.ReadOnly))
+      {
+        lstMenu.Add(new { nombre = "Gifts Categories", img = "pack://application:,,,/IM.Base;component/Images/GiftCategory.png", form = "frmGiftsCategories" });
       }
       #endregion
 
@@ -95,11 +116,8 @@ namespace IM.Administrator.Forms
         lstMenu.Add(new { nombre = "Desks", img = "pack://application:,,,/IM.Base;component/Images/desk.png", form = "frmDesks" });
       }
       #endregion
+
       lstMenuAdm.ItemsSource = lstMenu;
-     
-      #region Catalogos default
-      
-      #endregion
       
       #region sort list
       CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lstMenuAdm.ItemsSource);

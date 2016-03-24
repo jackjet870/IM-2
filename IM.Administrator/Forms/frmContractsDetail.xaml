@@ -40,12 +40,8 @@
         </Grid>
 
 
-        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Command="{Binding btnAccept_Click}">
-            <AccessText Text="_Accept"/>
-        </Button>
-        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" IsCancel="True">
-            <AccessText Text="_Cancel"/>
-        </Button>
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" IsCancel="True" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>
 </Window>

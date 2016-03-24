@@ -14,11 +14,16 @@ namespace IM.Administrator.Forms
   public partial class frmSearch : Window
   {
     #region Variables
-    public string sID="";//Id a filtrar
-    public string sDesc="";//Descripcion a filtrar
-    public int nStatus;//Estatus a filtrar
-    public string sForm = "Default";//Formulario desde el que se utiliza
+    public string strID="";//Id a filtrar
+    public string strDesc="";//Descripcion a filtrar
+    public int nStatus=-1;//Estatus a filtrar
+    public string strForm = "Default";//Formulario desde el que se utiliza
+    #region Agency
     public string sSegment="";//Sement by agency para cuando se abra desde agency 
+    #endregion
+    #region FolioInvitationOutHouse
+    public string strSerie = "";//Serie a filtrar
+    #endregion
     #endregion
 
     public frmSearch()
@@ -78,9 +83,9 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    #region ChargeTo TextInput
+    #region Textbox OnlyNumber
     /// <summary>
-    /// Valida que texbox de descripción acepte sólo números cuando se abre desde chargeTo
+    /// Valida que un texbox acepte solo números
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -90,8 +95,27 @@ namespace IM.Administrator.Forms
     private void PreviewTextInputNumber(object sender, TextCompositionEventArgs e)
     {
       e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
-    }    
+    }
     #endregion
+
+    #region TextBox OnlyLetter
+    /// <summary>
+    /// Valida que un texbox acepte sólo letras
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 23/03/2016
+    /// </history>
+    private void PreviewTextInputLetter(object sender, TextCompositionEventArgs e)
+    {
+      if (!(char.IsNumber(Convert.ToChar(e.Text))))
+      {
+        e.Handled = true;
+      }
+    } 
+    #endregion
+
     #endregion
     #region metodos
     #region LoadStatus
@@ -114,6 +138,7 @@ namespace IM.Administrator.Forms
     }
 
     #endregion
+
     #region LoadForm
     /// <summary>
     /// Llena el formulario dependiendo de la ventana que lo utilice
@@ -123,10 +148,10 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void LoadForm()
     {
-      txtID.Text = sID;
+      txtID.Text = strID;
       cmbStatus.SelectedValue = nStatus;
-      txtD.Text = sDesc;
-      switch (sForm)
+      txtD.Text = strDesc;
+      switch (strForm)
       { 
 
         #region ChargeTo
@@ -137,9 +162,9 @@ namespace IM.Administrator.Forms
             lblDes.Content = "Price";
             lblSta.Content = "CxC";
 
-            if (Convert.ToInt32(sDesc) > 0)
+            if (Convert.ToInt32(strDesc) > 0)
             {
-              txtD.Text = sDesc;
+              txtD.Text = strDesc;
             }
             else
             {
@@ -176,11 +201,41 @@ namespace IM.Administrator.Forms
             break;
           }
         #endregion
+
+        #region FoliosCXC
+        case "FoliosCXC":
+          {
+            txtD.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
+            txtID.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
+            lblID.Content = "From ";
+            lblDes.Content = "To";
+            if (strID == "0") { txtID.Text = ""; }
+            if (strDesc == "0") { txtD.Text = ""; }
+            break;
+          }
+        #endregion
+
+        #region FolioInvOut
+        case "FolioInvOut":
+          {
+            txtSerie.Visibility = Visibility.Visible;
+            lblSerie.Visibility = Visibility.Visible;
+            txtSerie.Text = strSerie;
+            txtD.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
+            txtID.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
+            lblID.Content = "From ";
+            lblDes.Content = "To";
+            if (strID == "0") { txtID.Text = ""; }
+            if (strDesc == "0") { txtD.Text = ""; }
+            break;
+          }
+        #endregion
       }
 
     }
 
     #endregion
+   
     #region setData
     /// <summary>
     /// Llena los datos de busqueda dependiendo del formulario que  llame a la función
@@ -191,9 +246,9 @@ namespace IM.Administrator.Forms
     protected void SetData()
     {
       nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
-      sID = txtID.Text.Trim();
-      sDesc = txtD.Text.Trim();
-      switch (sForm)
+      strID = txtID.Text.Trim();
+      strDesc = txtD.Text.Trim();
+      switch (strForm)
       {
         
         #region ChargeTo
@@ -204,19 +259,19 @@ namespace IM.Administrator.Forms
               int nPrice = Convert.ToInt32(txtD.Text);
               if (nPrice > 0 && nPrice < 256)//Se valida que el número esté en el rango de tipo byte
               {
-                sDesc = txtD.Text;
+                strDesc = txtD.Text;
                 DialogResult = true;
                 this.Close();
               }
               else
               {
                 txtD.Text = ((nPrice == 0) ? "" : nPrice.ToString());
-                UIHelper.ShowMessage("The price must be higher than 0 \n and must be smaller than 255");
+                UIHelper.ShowMessage("The price must be higher than 0 \n and must be smaller than 255.");
               }
             }
             else
             {
-              sDesc = "0";
+              strDesc = "0";
               DialogResult = true;
               Close();
             }
@@ -230,7 +285,7 @@ namespace IM.Administrator.Forms
             {
               sSegment = cmbSegment.SelectedValue.ToString();
             }
-            sDesc = txtD.Text;
+            strDesc = txtD.Text;
             DialogResult = true;
             Close();
             break;
@@ -243,24 +298,111 @@ namespace IM.Administrator.Forms
             {
               if (Convert.ToInt32(txtID.Text.Trim()) > 0)
               {
-                sID = txtID.Text.Trim();
+                strID = txtID.Text.Trim();
                 DialogResult = true;
                 Close();
               }
               else
               {
-                UIHelper.ShowMessage("The ID must be higher than 0");
+                UIHelper.ShowMessage("The ID must be higher than 0.");
                 txtID.Text = "0";
               }
             }
             else
             {
-              sID = "0";
+              strID = "0";
               DialogResult = true;
               Close();
             }
             break;
           }
+        #endregion
+        #region FoliosCXC
+        case "FoliosCXC":
+          { 
+            int nFrom = 0;
+            int nTo = 0;
+            bool blnDialogResult = true;
+            if (!string.IsNullOrWhiteSpace(txtID.Text) && string.IsNullOrWhiteSpace(txtD.Text))
+            {
+              UIHelper.ShowMessage("Specify the end number.");
+              blnDialogResult = false;
+            }
+            else if (!string.IsNullOrWhiteSpace(txtD.Text) && string.IsNullOrWhiteSpace(txtID.Text))
+            {
+              UIHelper.ShowMessage("Specify the StartNumber.");
+              blnDialogResult = false;
+            }
+            else if (!string.IsNullOrWhiteSpace(txtID.Text) && !string.IsNullOrWhiteSpace(txtD.Text))
+            {
+              nFrom = Convert.ToInt32(txtID.Text);
+              nTo = Convert.ToInt32(txtD.Text);
+              if (nFrom == 0 || nTo == 0)
+              {
+                UIHelper.ShowMessage("Start number and end number can not be 0.");
+                blnDialogResult = false;
+              }
+              else if (nTo > nFrom)
+              {
+                UIHelper.ShowMessage("Start Number can not be greater than End Number.");
+                blnDialogResult = false;
+              }
+
+            }
+            
+            if(blnDialogResult==true)
+            {
+              DialogResult = true;
+              strID = nFrom.ToString();
+              strDesc = nTo.ToString();
+              Close();
+            }
+            break;
+          }
+        #endregion
+        #region FolioInvOutHouse
+        case "FolioInvOut":
+          {
+            int nFrom = 0;
+            int nTo = 0;
+            bool blnDialogResult = true;
+            if (!string.IsNullOrWhiteSpace(txtID.Text) && string.IsNullOrWhiteSpace(txtD.Text))
+            {
+              UIHelper.ShowMessage("Specify the end number.");
+              blnDialogResult = false;
+            }
+            else if (!string.IsNullOrWhiteSpace(txtD.Text) && string.IsNullOrWhiteSpace(txtID.Text))
+            {
+              UIHelper.ShowMessage("Specify the StartNumber.");
+              blnDialogResult = false;
+            }
+            else if (!string.IsNullOrWhiteSpace(txtID.Text) && !string.IsNullOrWhiteSpace(txtD.Text))
+            {
+              nFrom = Convert.ToInt32(txtID.Text);
+              nTo = Convert.ToInt32(txtD.Text);
+              if (nFrom == 0 || nTo == 0)
+              {
+                UIHelper.ShowMessage("Start number and end number can not be 0.");
+                blnDialogResult = false;
+              }
+              else if (nTo > nFrom)
+              {
+                UIHelper.ShowMessage("Start Number can not be greater than End Number.");
+                blnDialogResult = false;
+              }
+
+            }
+
+            if (blnDialogResult == true)
+            {
+              DialogResult = true;
+              strID = nFrom.ToString();
+              strDesc = nTo.ToString();
+              strSerie = txtSerie.Text;
+              Close();
+            }
+            break;
+          } 
         #endregion
         #region Default
         default:

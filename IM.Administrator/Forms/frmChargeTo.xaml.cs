@@ -83,7 +83,7 @@ namespace IM.Administrator.Forms
       ChargeTo chargeTo = (ChargeTo)dgrChargeTo.SelectedItem;
       frmChargeToDetail frmChargeToDetail = new frmChargeToDetail();
       frmChargeToDetail.Owner = this;
-      frmChargeToDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
+      frmChargeToDetail.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
       ObjectHelper.CopyProperties(frmChargeToDetail.chargeTo,chargeTo);
       if(frmChargeToDetail.ShowDialog()==true)
       {
@@ -114,7 +114,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadChargeTo();
+      LoadChargeTo(dgrChargeTo.SelectedIndex);
     }
     #endregion
     #region KeyBoardChange
@@ -143,16 +143,16 @@ namespace IM.Administrator.Forms
     private void btnSearch_Click(object sender, RoutedEventArgs e)
     {
       frmSearch frmSearch = new frmSearch();
-      frmSearch.sID = _chargeToFilter.ctID;
-      frmSearch.sDesc = _chargeToFilter.ctPrice.ToString();
+      frmSearch.strID = _chargeToFilter.ctID;
+      frmSearch.strDesc = _chargeToFilter.ctPrice.ToString();
       frmSearch.nStatus = _nStatus;
-      frmSearch.sForm = "ChargeTo";
+      frmSearch.strForm = "ChargeTo";
       frmSearch.Owner = this;
       //Abrir la ventana de Buscar y ver si decidió realizar algún filtro
       if (frmSearch.ShowDialog() == true)
       {
-        _chargeToFilter.ctID = frmSearch.sID;
-        _chargeToFilter.ctPrice = Convert.ToByte(frmSearch.sDesc);
+        _chargeToFilter.ctID = frmSearch.strID;
+        _chargeToFilter.ctPrice = Convert.ToByte(frmSearch.strDesc);
         _nStatus = frmSearch.nStatus;
         LoadChargeTo();
       }
@@ -170,7 +170,7 @@ namespace IM.Administrator.Forms
       frmChargeToDetail frmChargeToDetail = new frmChargeToDetail();
       frmChargeToDetail.chargeTo = new ChargeTo();
       frmChargeToDetail.Owner = this;
-      frmChargeToDetail.mode = ModeOpen.add;//insertar
+      frmChargeToDetail.mode = EnumMode.add;//insertar
 
       if (frmChargeToDetail.ShowDialog() == true)
       {
@@ -220,16 +220,11 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [Emoguel] created 02/03/2016
     /// </history>
-    protected void LoadChargeTo()
+    protected void LoadChargeTo(int nIndex=0)
     {
       List<ChargeTo> lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter, _nStatus);
-      dgrChargeTo.ItemsSource = lstChargeTo;
-      if (lstChargeTo.Count > 0)
-      {
-        dgrChargeTo.Focus();
-        GridHelper.SelectRow(dgrChargeTo, 0);
-      }
-
+      dgrChargeTo.ItemsSource = lstChargeTo;      
+      GridHelper.SelectRow(dgrChargeTo, nIndex);
       StatusBarReg.Content = lstChargeTo.Count + " Charge To.";
     }
     #endregion

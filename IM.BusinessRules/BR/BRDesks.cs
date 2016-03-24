@@ -78,42 +78,30 @@ namespace IM.BusinessRules.BR
             #region Agregar
             else//Si es guardar
             {
-              Desk deskVal = dbContext.Desks.Where(dk => dk.dkID == desk.dkID).FirstOrDefault();
-              if (deskVal == null)//No existe registro con el ID
-              {
                 dbContext.Desks.Add(desk);
-              }
-              else//Existe un registro con el mismo ID
-              {
-                nRes = 2;
-              }
             }
             #endregion
 
-            #region Actualizar Computers
-            if (nRes != 2)
-            {
+            #region Actualizar Computers            
 
-              #region Desaignar
-              var lstComputersDes = (from cmp in dbContext.Computers
-                                     where !lstIdsComputers.Contains(cmp.cpID)
-                                     && cmp.cpdk == desk.dkID
-                                     select cmp).ToList();//Buscamos todas las computers asigndas que ya no estan en la lista
+            #region Desaignar
+            var lstComputersDes = (from cmp in dbContext.Computers
+                                    where !lstIdsComputers.Contains(cmp.cpID)
+                                    && cmp.cpdk == desk.dkID
+                                    select cmp).ToList();//Buscamos todas las computers asigndas que ya no estan en la lista
 
-              lstComputersDes.ForEach(cmp => cmp.cpdk = null);//Des-relacionamos las computers que no esten en la nueva lista
+            lstComputersDes.ForEach(cmp => cmp.cpdk = null);//Des-relacionamos las computers que no esten en la nueva lista
 
-              #endregion
+            #endregion
 
-              #region Desaignar
-              var lstComputersAsi = (from cmp in dbContext.Computers
-                                     where lstIdsComputers.Contains(cmp.cpID)
-                                     select cmp).ToList();//Buscamos todas las computers que se van a asignar
+            #region Desaignar
+            var lstComputersAsi = (from cmp in dbContext.Computers
+                                    where lstIdsComputers.Contains(cmp.cpID)
+                                    select cmp).ToList();//Buscamos todas las computers que se van a asignar
 
-              lstComputersAsi.ForEach(cmp => cmp.cpdk = desk.dkID);//Des-relacionamos las computers que no esten en la nueva lista
+            lstComputersAsi.ForEach(cmp => cmp.cpdk = desk.dkID);//Des-relacionamos las computers que no esten en la nueva lista
 
-              #endregion
-
-            }
+            #endregion
             #endregion
 
             nRes = dbContext.SaveChanges();

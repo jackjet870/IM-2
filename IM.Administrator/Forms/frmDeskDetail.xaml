@@ -33,8 +33,8 @@
         <Label Grid.Column="0" Grid.Row="1">Description</Label>
         <!--#endregion-->
         <!--#region Datos-->
-        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding dkID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="10"/>
-        <TextBox Name="txtN" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding dkN}" MaxLength="50"/>
+        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding dkID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="20"/>
+        <TextBox Name="txtN" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding dkN}" MaxLength="10"/>
         <!--#region Grid Computers-->
         <DataGrid Name="dgrComputers" Grid.Row="2" CellEditEnding="dgrComputers_CellEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Grid.Column="1" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CanUserAddRows="True" >
             <DataGrid.Columns>

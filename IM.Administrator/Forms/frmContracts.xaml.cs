@@ -97,7 +97,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadContracts();
+      LoadContracts(dgrContracts.SelectedIndex);
     }
     #endregion
 
@@ -114,7 +114,7 @@ namespace IM.Administrator.Forms
     {
       Contract contract = (Contract)dgrContracts.SelectedItem;
       frmContractsDetail frmContractDetail = new frmContractsDetail();
-      frmContractDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
+      frmContractDetail.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
       ObjectHelper.CopyProperties(frmContractDetail.contract,contract);
       frmContractDetail.Owner = this;
       if(frmContractDetail.ShowDialog()==true)
@@ -150,7 +150,7 @@ namespace IM.Administrator.Forms
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
       frmContractsDetail frmContractDetail = new frmContractsDetail();
-      frmContractDetail.mode = ModeOpen.add;
+      frmContractDetail.mode = EnumMode.add;
       frmContractDetail.Owner = this;
       if (frmContractDetail.ShowDialog() == true)
       {
@@ -178,13 +178,13 @@ namespace IM.Administrator.Forms
     {
       frmSearch frmSearch = new frmSearch();
       frmSearch.nStatus = _nStatus;
-      frmSearch.sDesc = _contractFilter.cnN;
-      frmSearch.sID = _contractFilter.cnID;
+      frmSearch.strDesc = _contractFilter.cnN;
+      frmSearch.strID = _contractFilter.cnID;
       frmSearch.Owner = this;
       if (frmSearch.ShowDialog() == true)
       {
-        _contractFilter.cnID = frmSearch.sID;
-        _contractFilter.cnN = frmSearch.sDesc;
+        _contractFilter.cnID = frmSearch.strID;
+        _contractFilter.cnN = frmSearch.strDesc;
         _nStatus = frmSearch.nStatus;
         LoadContracts();
       }
@@ -224,16 +224,11 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [Emoguel] created 03/03/2016
     /// </history>
-    protected void LoadContracts()
+    protected void LoadContracts(int nIndex=0)
     {
-
       List<Contract> lstContracts = BRContracts.getContracts(_contractFilter, _nStatus);
       dgrContracts.ItemsSource = lstContracts;
-      if (lstContracts.Count > 0)
-      {
-        dgrContracts.Focus();
-        GridHelper.SelectRow(dgrContracts, 0);
-      }
+      GridHelper.SelectRow(dgrContracts, nIndex);      
       StatusBarReg.Content = lstContracts.Count + " Contracts.";
     }
     #endregion

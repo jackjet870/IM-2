@@ -13,7 +13,7 @@ namespace IM.Administrator.Forms
   public partial class frmEfficiencyTypeDetail : Window
   { 
     public EfficiencyType efficiencyType = new EfficiencyType();
-    public ModeOpen enumMode;//Modo en que se abre la ventana;
+    public EnumMode enumMode;//Modo en que se abre la ventana;
 
     public frmEfficiencyTypeDetail()
     {
@@ -78,7 +78,7 @@ namespace IM.Administrator.Forms
       #endregion
       if(strMsj=="")
       {
-        nRes = BREfficiencyTypes.SaveEfficiencyType(efficiencyType, (enumMode == ModeOpen.edit));
+        nRes = BREfficiencyTypes.SaveEfficiencyType(efficiencyType, (enumMode == EnumMode.edit));
 
         #region respuesta
         switch (nRes)//Se valida la respuesta de la operacion
@@ -126,13 +126,13 @@ namespace IM.Administrator.Forms
       switch (enumMode)
       {
 
-        case ModeOpen.edit:
+        case EnumMode.edit:
           {
             txtN.IsEnabled = true;
             chkA.IsEnabled = true;
             break;
           }
-        case ModeOpen.add:
+        case EnumMode.add:
           {
             txtID.IsEnabled = true;
             txtN.IsEnabled = true;

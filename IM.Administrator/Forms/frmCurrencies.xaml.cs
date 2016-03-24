@@ -34,7 +34,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadCurrencies();
+      LoadCurrencies(dgrCurrencies.SelectedIndex);
     }
     #endregion
 
@@ -51,14 +51,14 @@ namespace IM.Administrator.Forms
     {
       frmSearch frmSearch = new frmSearch();
       frmSearch.nStatus = _nStatus;
-      frmSearch.sID = _currencyFilter.cuID;
-      frmSearch.sDesc = _currencyFilter.cuN;
+      frmSearch.strID = _currencyFilter.cuID;
+      frmSearch.strDesc = _currencyFilter.cuN;
       frmSearch.Owner = this;
       if (frmSearch.ShowDialog() == true)
       {
         _nStatus = frmSearch.nStatus;
-        _currencyFilter.cuID = frmSearch.sID;
-        _currencyFilter.cuN = frmSearch.sDesc;
+        _currencyFilter.cuID = frmSearch.strID;
+        _currencyFilter.cuN = frmSearch.strDesc;
         LoadCurrencies();
       }
     }
@@ -75,7 +75,7 @@ namespace IM.Administrator.Forms
       Currency currency = (Currency)dgrCurrencies.SelectedItem;
       frmCurrencyDetail frmCurrencyDetail = new frmCurrencyDetail();
       frmCurrencyDetail.Owner = this;
-      frmCurrencyDetail.mode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
+      frmCurrencyDetail.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
       ObjectHelper.CopyProperties(frmCurrencyDetail.currency,currency);
       if(frmCurrencyDetail.ShowDialog()==true)
       {
@@ -174,7 +174,7 @@ namespace IM.Administrator.Forms
     {
       frmCurrencyDetail frmCurrencyDetail = new frmCurrencyDetail();
       frmCurrencyDetail.Owner = this;
-      frmCurrencyDetail.mode = ModeOpen.add;
+      frmCurrencyDetail.mode = EnumMode.add;
       if (frmCurrencyDetail.ShowDialog() == true)
       {
         if (ValidateFilters(frmCurrencyDetail.currency))//valida que cumpla con los filtros
@@ -224,16 +224,11 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [Emoguel] created 08/03/2016
     /// </history>
-    protected void LoadCurrencies()
+    protected void LoadCurrencies(int nIndex=0)
     {
       List<Currency> lstCurrencies = BRCurrencies.GetCurrencies(_currencyFilter, _nStatus);
       dgrCurrencies.ItemsSource = lstCurrencies;
-      if (lstCurrencies.Count > 0)
-      {
-        dgrCurrencies.Focus();
-        GridHelper.SelectRow(dgrCurrencies,0);
-      }
-
+      GridHelper.SelectRow(dgrCurrencies,nIndex);
       StatusBarReg.Content = lstCurrencies.Count + " Currencies.";
     }
     #endregion

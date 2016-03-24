@@ -15,7 +15,7 @@ namespace IM.Administrator.Forms
   {
 
     public Area area=new Area();//Variable que recibe la entidad
-    public ModeOpen mode;//Modo en el que se abrirá la ventana        
+    public EnumMode mode;//Modo en el que se abrirá la ventana        
     public frmAreaDetalle()
     {
       InitializeComponent();
@@ -48,18 +48,18 @@ namespace IM.Administrator.Forms
       this.DataContext = area;
       switch (mode)
       {
-        case ModeOpen.preview://show
+        case EnumMode.preview://show
           {
             btnAccept.Visibility = Visibility.Hidden;            
             break;
           }
-        case ModeOpen.add://add
+        case EnumMode.add://add
           {
             txtID.IsEnabled = true;
             LockControls(true);
             break;
           }
-        case ModeOpen.edit://Edit
+        case EnumMode.edit://Edit
           {
             txtID.IsEnabled = false;
             LockControls(true);            
@@ -132,7 +132,7 @@ namespace IM.Administrator.Forms
       #endregion
       if (sMsj == "")
       {
-        nRes = BRAreas.SaveArea((mode==ModeOpen.edit), area);        
+        nRes = BRAreas.SaveArea((mode==EnumMode.edit), area);        
 
         #region Respuesta
         switch (nRes)//Se valida la repuesta

@@ -14,7 +14,7 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmChargeToDetail : Window
   {
-    public ModeOpen mode;
+    public EnumMode mode;
     public ChargeTo chargeTo=new ChargeTo();
     public frmChargeToDetail()
     {
@@ -48,19 +48,19 @@ namespace IM.Administrator.Forms
       DataContext = chargeTo;
       switch (mode)
       {
-        case ModeOpen.preview://show
+        case EnumMode.preview://show
           {
             btnAccept.Visibility = Visibility.Hidden;            
             break;
           }
-        case ModeOpen.add://add
+        case EnumMode.add://add
           {
             txtID.IsEnabled = true;
             LockControls(true);
 
             break;
           }
-        case ModeOpen.edit://Edit
+        case EnumMode.edit://Edit
           {
             txtID.IsEnabled = false;
             LockControls(true);
@@ -124,7 +124,7 @@ namespace IM.Administrator.Forms
       if (sMsj == "")
       {
 
-        nRes = BRChargeTos.SaveChargeTo(chargeTo, (mode==ModeOpen.edit));        
+        nRes = BRChargeTos.SaveChargeTo(chargeTo, (mode==EnumMode.edit));        
 
         #region validacion respuesta
         switch (nRes)

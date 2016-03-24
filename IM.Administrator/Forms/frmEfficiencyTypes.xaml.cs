@@ -112,14 +112,14 @@ namespace IM.Administrator.Forms
     {
       frmSearch frmSearch = new frmSearch();
       frmSearch.Owner = this;
-      frmSearch.sID = _efficiencyTypeFilter.etID;
-      frmSearch.sDesc = _efficiencyTypeFilter.etN;
+      frmSearch.strID = _efficiencyTypeFilter.etID;
+      frmSearch.strDesc = _efficiencyTypeFilter.etN;
       frmSearch.nStatus = _nStatus;
       if(frmSearch.ShowDialog()==true)
       {
         _nStatus = frmSearch.nStatus;
-        _efficiencyTypeFilter.etID = frmSearch.sID;
-        _efficiencyTypeFilter.etN = frmSearch.sDesc;
+        _efficiencyTypeFilter.etID = frmSearch.strID;
+        _efficiencyTypeFilter.etN = frmSearch.strDesc;
         LoadEfficiencyTypes();
       }
     }
@@ -138,7 +138,7 @@ namespace IM.Administrator.Forms
     { 
       frmEfficiencyTypeDetail frmEfyTypeDetail = new frmEfficiencyTypeDetail();
       frmEfyTypeDetail.Owner = this;
-      frmEfyTypeDetail.enumMode = ModeOpen.add;     
+      frmEfyTypeDetail.enumMode = EnumMode.add;     
       if(frmEfyTypeDetail.ShowDialog()==true)
       {
         EfficiencyType efficiencyType = frmEfyTypeDetail.efficiencyType;
@@ -167,7 +167,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadEfficiencyTypes();
+      LoadEfficiencyTypes(dgrEfcyTypes.SelectedIndex);
     }
     #endregion
 
@@ -185,7 +185,7 @@ namespace IM.Administrator.Forms
       EfficiencyType efficiencyType = (EfficiencyType)dgrEfcyTypes.SelectedItem;
       frmEfficiencyTypeDetail frmEfyTypeDetail = new frmEfficiencyTypeDetail();
       frmEfyTypeDetail.Owner = this;
-      frmEfyTypeDetail.enumMode = ((_blnEdit == true) ? ModeOpen.edit : ModeOpen.preview);
+      frmEfyTypeDetail.enumMode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
       ObjectHelper.CopyProperties(frmEfyTypeDetail.efficiencyType, efficiencyType);
 
       if (frmEfyTypeDetail.ShowDialog() == true)
@@ -247,14 +247,11 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 18/03/2016
     /// </history>
-    private void LoadEfficiencyTypes()
+    private void LoadEfficiencyTypes(int nIndex=0)
     {
       List<EfficiencyType> lstEfcyTypes = BREfficiencyTypes.GetEfficiencyTypes(_efficiencyTypeFilter, _nStatus);
       dgrEfcyTypes.ItemsSource = lstEfcyTypes;
-      if (lstEfcyTypes.Count > 0)
-      {
-        GridHelper.SelectRow(dgrEfcyTypes, 0);
-      }
+      GridHelper.SelectRow(dgrEfcyTypes, nIndex);
       StatusBarReg.Content = lstEfcyTypes.Count + " Efficiency Types.";
 
     }

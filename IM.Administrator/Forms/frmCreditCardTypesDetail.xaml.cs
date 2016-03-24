@@ -12,7 +12,7 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmCreditCardTypesDetail : Window
   {
-    public ModeOpen mode;
+    public EnumMode mode;
     public CreditCardType creditCardType=new CreditCardType();
     public frmCreditCardTypesDetail()
     {
@@ -33,18 +33,18 @@ namespace IM.Administrator.Forms
       DataContext = creditCardType;
       switch (mode)
       {
-        case ModeOpen.preview://preview
+        case EnumMode.preview://preview
           {
             btnAccept.Visibility = Visibility.Hidden;
             break;
           }
-        case ModeOpen.add://add
+        case EnumMode.add://add
           {
             txtID.IsEnabled = true;
             LockControls(true);
             break;
           }
-        case ModeOpen.edit://Edit
+        case EnumMode.edit://Edit
           {
             txtID.IsEnabled = false;
             LockControls(true);
@@ -123,7 +123,7 @@ namespace IM.Administrator.Forms
       int nRes = 0;
       if (sMsj == "")//Todos los campos estan llenos
       {
-        nRes = BRCreditCardTypes.SaveCreditCardType(creditCardType, (mode==ModeOpen.edit));
+        nRes = BRCreditCardTypes.SaveCreditCardType(creditCardType, (mode==EnumMode.edit));
 
         #region respuesta
         switch (nRes)//Se valida la respuesta de la operacion

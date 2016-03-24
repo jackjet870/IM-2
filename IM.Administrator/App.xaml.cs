@@ -3,6 +3,8 @@ using IM.Model.Classes;
 using IM.Base.Forms;
 using IM.Model.Enums;
 using IM.Administrator.Forms;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace IM.Administrator
 {
@@ -25,7 +27,7 @@ namespace IM.Administrator
     }
     #endregion
 
-    #region Metodos
+    #region Methods
 
     #region App_UnhandledException
 
@@ -63,6 +65,7 @@ namespace IM.Administrator
         User = frmLogin.userData;
         if (User.HasRole(EnumRole.Manager))
         {
+          EventManager.RegisterClassHandler(typeof(AccessText), AccessKeyManager.AccessKeyPressedEvent, new RoutedEventHandler(keyManager_keyPressed));
           frmAdmin frmAdm = new frmAdmin();
           frmAdm.ShowDialog();
           frmSplash.Close();
@@ -76,7 +79,23 @@ namespace IM.Administrator
     }
 
     #endregion
-
+    #region KeyManager
+    /// <summary>
+    /// Verifica que los accesText sólo se ejecuten en combinacion con ALtLeft
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 24/03/2016
+    /// </history>
+    void keyManager_keyPressed(object sender, RoutedEventArgs e)
+    {
+      if (!Keyboard.IsKeyDown(Key.LeftAlt))
+      {
+        e.Handled = true;
+      }
+    } 
+    #endregion
     #endregion
   }
 }

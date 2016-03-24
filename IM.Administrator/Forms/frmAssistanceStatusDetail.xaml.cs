@@ -12,7 +12,7 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmAssistanceStatusDetail : Window
   {
-    public ModeOpen mode;
+    public EnumMode mode;
     public AssistanceStatus assistance=new AssistanceStatus();
     public frmAssistanceStatusDetail()
     {
@@ -33,18 +33,18 @@ namespace IM.Administrator.Forms
       DataContext = assistance;
       switch (mode)
       {
-        case ModeOpen.preview://show
+        case EnumMode.preview://show
           {
             btnAccept.Visibility = Visibility.Hidden;            
             break;
           }
-        case ModeOpen.add://add
+        case EnumMode.add://add
           {
             txtID.IsEnabled = true;
             LockControls(true);
             break;
           }
-        case ModeOpen.edit://Edit
+        case EnumMode.edit://Edit
           {
             txtID.IsEnabled = false;
             LockControls(true);
@@ -114,7 +114,7 @@ namespace IM.Administrator.Forms
 
       if (sMsj == "")//Validar si hay cmapos vacios
       {
-        nRes = BRAssistancesStatus.SaveAssitanceStatus((mode==ModeOpen.edit), assistance);        
+        nRes = BRAssistancesStatus.SaveAssitanceStatus((mode==EnumMode.edit), assistance);        
 
         #region respuesta
         switch (nRes)

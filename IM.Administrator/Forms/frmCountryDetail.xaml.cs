@@ -13,7 +13,7 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmCountryDetail : Window
   {
-    public ModeOpen mode;//modo en el que se abrirá la ventana
+    public EnumMode mode;//modo en el que se abrirá la ventana
     public Country country = new Country();//objeto con los datos del formulario
 
     public frmCountryDetail()
@@ -96,7 +96,7 @@ namespace IM.Administrator.Forms
 
       if(sMsj=="")
       {
-        nRes = BRCountries.SaveCountry(country, (mode==ModeOpen.edit));        
+        nRes = BRCountries.SaveCountry(country, (mode==EnumMode.edit));        
 
         #region respuesta
         switch (nRes)//Se valida la respuesta de la operacion
@@ -171,21 +171,21 @@ namespace IM.Administrator.Forms
       DataContext = country;
       switch(mode)
       {
-        case ModeOpen.add:
+        case EnumMode.add:
           {
             txtID.IsEnabled = true;
             cmbUnvMot.SelectedIndex = -1;
             lockControls(true);
             break;
           }
-        case ModeOpen.edit:
+        case EnumMode.edit:
           {
             txtID.IsEnabled = false;
             lockControls(true);
             break;
           }
 
-        case ModeOpen.preview:
+        case EnumMode.preview:
           {
             btnAccept.Visibility = Visibility.Hidden;
             break;

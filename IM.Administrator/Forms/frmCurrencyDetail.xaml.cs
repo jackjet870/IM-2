@@ -13,7 +13,7 @@ namespace IM.Administrator.Forms
   public partial class frmCurrencyDetail : Window
   {
     public Currency currency=new Currency();//objeto para agrear|actualizar
-    public ModeOpen mode;//modo en el que se abrirá la ventana add|preview|edit 
+    public EnumMode mode;//modo en el que se abrirá la ventana add|preview|edit 
     public frmCurrencyDetail()
     {
       InitializeComponent();
@@ -74,7 +74,7 @@ namespace IM.Administrator.Forms
       if (sMsj == "")//Validar si hay cmapos vacios
       {
 
-        nRes = BRCurrencies.saveCurrency(currency, (mode==ModeOpen.edit));
+        nRes = BRCurrencies.saveCurrency(currency, (mode==EnumMode.edit));
         
         #region respuesta
         switch (nRes)
@@ -124,18 +124,18 @@ namespace IM.Administrator.Forms
       DataContext = currency;
       switch (mode)
       {
-        case ModeOpen.preview://show
+        case EnumMode.preview://show
           {
             btnAccept.Visibility = Visibility.Hidden;
             break;
           }
-        case ModeOpen.add://add
+        case EnumMode.add://add
           {
             txtID.IsEnabled = true;
             LockControls(true);
             break;
           }
-        case ModeOpen.edit://Edit
+        case EnumMode.edit://Edit
           {
             txtID.IsEnabled = false;
             LockControls(true);

@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace IM.Administrator.Enums
 {
-  public enum ModeOpen
+  public enum EnumMode
   {
     preview =1,
     add,
-    edit,
-    search
+    edit
   }
 }
