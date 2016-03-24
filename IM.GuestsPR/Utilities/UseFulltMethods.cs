@@ -79,19 +79,5 @@ namespace IM.GuestsPR.Utilities
       return formatColumns;
     }
 
-
-
-    public static string LeadSourceLoginListInToStringSplitByComma(List<LeadSourceLogin> lista)
-    {
-      string lstArraySplitByComa = string.Empty;
-      if (lista.Count > 0)
-      {
-        foreach (LeadSourceLogin item in lista)
-        {
-          lstArraySplitByComa += string.Concat(item.lsID, ",");
-        }
-      }
-      return lstArraySplitByComa;
-    }
   }
 }

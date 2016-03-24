@@ -30,7 +30,7 @@
         <!--#region Grid SalesRooms -->
         <StackPanel Orientation="Vertical" Name="pnlSalesRoom" Width="auto" Height="auto" Grid.Column="0" Visibility="Visible">
             <CheckBox Name="chkAllSalesRoom" Content="All Sales Rooms" VerticalAlignment="Top" Margin="10" Checked="chkAllSalesRoom_Checked" Unchecked="chkAllSalesRoom_Checked"/>
-            <DataGrid Name="grdSalesRoom" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdSalesRoom_SelectionChanged">
+            <DataGrid Name="grdSalesRoom" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdSalesRoom_SelectionChanged" CanUserSortColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Binding="{Binding srN}">
                         <DataGridTextColumn.HeaderStyle>
@@ -51,7 +51,7 @@
         <!--#region Grid Categories -->
         <StackPanel Orientation="Vertical" Name="pnlCategories" Width="auto" Height="auto" Grid.Column="1" Visibility="Visible">
             <CheckBox Name="chkAllCategories" Content="All Categories" VerticalAlignment="Top" Margin="10" Checked="chkCategories_Checked" Unchecked="chkCategories_Checked"/>
-            <DataGrid Name="grdCategories" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdCategories_SelectionChanged">
+            <DataGrid Name="grdCategories" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdCategories_SelectionChanged" CanUserSortColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Binding="{Binding gcN}">
                         <DataGridTextColumn.HeaderStyle>
@@ -72,7 +72,7 @@
         <!--#region Grid Gifts -->
         <StackPanel Orientation="Vertical" Name="pnlGifts" Width="auto" Height="auto" Grid.Column="2" Visibility="Visible">
             <CheckBox Name="chkAllGifts" Content="All Gifts" VerticalAlignment="Top" Margin="10" Checked="chkGifts_Checked" Unchecked="chkGifts_Checked"/>
-            <DataGrid Name="grdGifts" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdGifts_SelectionChanged">
+            <DataGrid Name="grdGifts" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdGifts_SelectionChanged" CanUserSortColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Binding="{Binding giN}">
                         <DataGridTextColumn.HeaderStyle>
@@ -93,7 +93,7 @@
         <!--#region Grid RateTypes -->
         <StackPanel Orientation="Vertical" Name="pnlRateTypes" Width="auto" Height="auto" Grid.Column="3" Visibility="Visible">
             <CheckBox Name="chkAllRatetypes" Content="All Ratetypes" VerticalAlignment="Top" Margin="10" Checked="chkAllRatetypes_Checked" Unchecked="chkAllRatetypes_Checked"/>
-            <DataGrid Name="grdRatetypes" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdRatetypes_SelectionChanged">
+            <DataGrid Name="grdRatetypes" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdRatetypes_SelectionChanged" CanUserSortColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Binding="{Binding raN}">
                         <DataGridTextColumn.HeaderStyle>
@@ -114,7 +114,7 @@
         <!--#region Grid Programs -->
         <StackPanel Orientation="Vertical" Name="pnlPrograms" Width="auto" Height="auto" Grid.Column="4" Visibility="Visible">
             <CheckBox Name="chkAllPrograms" Content="All Programs" VerticalAlignment="Top" Margin="10" Checked="chkPrograms_Checked" Unchecked="chkPrograms_Checked"/>
-            <DataGrid Name="grdPrograms" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdPrograms_SelectionChanged">
+            <DataGrid Name="grdPrograms" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdPrograms_SelectionChanged" CanUserSortColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Binding="{Binding pgN}">
                         <DataGridTextColumn.HeaderStyle>
@@ -135,7 +135,7 @@
         <!--#region Grid LeadSource -->
         <StackPanel Name="pnlLeadSource" Width="auto" Height="auto" Grid.Column="5" Visibility="Visible">
             <CheckBox Name="chkAllLeadSources" Content="All LeadSources" VerticalAlignment="Top" Margin="10" Checked="chkLeadSources_Checked" Unchecked="chkLeadSources_Checked"/>
-            <DataGrid Name="grdLeadSources" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdLeadSources_SelectionChanged">
+            <DataGrid Name="grdLeadSources" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdLeadSources_SelectionChanged" CanUserSortColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Binding="{Binding lsN}">
                         <DataGridTextColumn.HeaderStyle>

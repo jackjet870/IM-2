@@ -203,12 +203,27 @@ namespace IM.Base.Forms
       DateTime _serverDate = BRHelpers.GetServerDate();
       if (_serverDate > _expireDate || (bool)chkChangePwd.IsChecked)
       {
-        frmChangePassword changePwd = new frmChangePassword(userData.User, _serverDate);
+        frmChangePassword changePwd = new frmChangePassword();
+        changePwd.userLogin = userData.User;
+        changePwd.serverDate = _serverDate;
         changePwd.ShowDialog();
+        if (changePwd.blnOk)
+        {
+          userData.User = changePwd.userLogin;
+          _encryptPassword = changePwd.userLogin.pePwd;
+        }
+        else
+        {
+          if (_serverDate > _expireDate)
+          {
+            UIHelper.ShowMessage("Password expired.");
+            return;
+          }
+        }
       }
 
       // validamos las contraseña
-      if (!_encryptPassword.Equals(userData.User.pePwd))
+      if (!_encryptPassword.Equals(userData.User.pePwd) )
       {
         UIHelper.ShowMessage("Invalid password.");
         txtPassword.Focus();

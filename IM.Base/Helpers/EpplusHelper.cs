@@ -65,6 +65,7 @@ namespace IM.Base.Helpers
     /// [erosado] 17/Mar/2016 Modified  Se Agrego que permite tipos Boleanos y Date formateados
     /// [erosado] 18/Mar/2016 Modified  Se cambio el formato del reporte  se cambio de posicion el titulo del reporte y los filtros
     /// [erosado] 22/Mar/2016 Modified  Se agrego la validacion si tiene filtro los reportes o si no tiene.
+    /// [edgrodriguez] 23/Mar/2016 Modified. Se cambió el formateo de columnas. Ahora lo realiza desde un método.
     /// </history>
     public static FileInfo CreateGeneralRptExcel(List<Tuple<string, string>> filter, DataTable dt, Tuple<string, string> reportName,
       List<ExcelFormatTable> formatColumns)
@@ -133,45 +134,9 @@ namespace IM.Base.Helpers
       #region Contenido del reporte
       //Insertamos las filas que vamos a necesitar empezando en la fila  (4 + filter.Count)
       ws.InsertRow(filterNumber + 4, dt.Rows.Count + 1);
-
-      //Agregamos los Headers de la Tabla
-      int contColum = 0;
-      foreach (ExcelFormatTable item in formatColumns)
-      {
-        contColum++;
-        ws.Cells[filterNumber + 4, contColum].Value = item.Title;
-
-        switch (item.Format)
-        {
-          case EnumFormatTypeExcel.General:
-            break;
-          case EnumFormatTypeExcel.Percent:
-            ws.Column(contColum).Style.Numberformat.Format = "0.0 %";
-            break;
-          case EnumFormatTypeExcel.Currency:
-            ws.Column(contColum).Style.Numberformat.Format = "$#,##0.00";
-            break;
-          case EnumFormatTypeExcel.Number:
-            ws.Column(contColum).Style.Numberformat.Format = "#";
-            break;
-          case EnumFormatTypeExcel.DecimalNumber:
-            ws.Column(contColum).Style.Numberformat.Format = "0.00";
-            break;
-          case EnumFormatTypeExcel.Boolean:
-            ws.Cells[filterNumber + 5, contColum, filterNumber + 5 + dtRowsNumber, contColum].Style.Font.Name = "Wingdings"; //Posicion de los headers de la tabla
-            break;
-          case EnumFormatTypeExcel.Date:
-            ws.Column(contColum).Style.Numberformat.Format = "dd/MM/yyyy";
-            break;
-          default:
-            break;
-        }
-        ws.Column(contColum).Style.HorizontalAlignment = item.Alignment;
-        ws.Cells[filterNumber + 4, contColum].Style.Font.Bold = true;
-        ws.Cells[filterNumber + 4, contColum].Style.Font.Size = 14;
-      }
-      //Borde de rango de columnas (titulos de la tabla)
-      ws.Cells[filterNumber + 4, 1, filterNumber + 4, dtColumnsNumber].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Hair);
+      
+      //Formateamos las columnas.      
+      SetFormatColumns(formatColumns, ref ws, filterNumber, dtRowsNumber, dtColumnsNumber, false);
 
       //Agregamos el contenido empezando en la fila  (filterNumber + 3
       ws.Cells[filterNumber + 5, 1].LoadFromDataTable(dt, false, OfficeOpenXml.Table.TableStyles.Medium2);
@@ -207,11 +172,13 @@ namespace IM.Base.Helpers
       ws.Cells[1, dtColumnsNumber - 1, 1, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
       //Centramos las Etiquetas Name y IDs de filter
       ws.Cells[2, dtColumnsNumber - 1, 2, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-      //Alineamos a la izquierda los Filters IDs
-      ws.Cells[3, dtColumnsNumber, filterNumber + 2, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
-      //Centramos Los Headers de la tabla de contenido
-      ws.Cells[filterNumber + 4, 1, filterNumber + 4, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-
+      if (filterNumber > 0)
+      {
+        //Alineamos a la izquierda los Filters IDs
+        ws.Cells[3, dtColumnsNumber, filterNumber + 2, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+        //Centramos Los Headers de la tabla de contenido
+        ws.Cells[filterNumber + 4, 1, filterNumber + 4, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+      }
       string suggestedFilaName = string.Concat(reportName.Item1, " ", reportName.Item2);
 
       #endregion
@@ -249,6 +216,8 @@ namespace IM.Base.Helpers
     /// [erosado] 14/03/2016  Created.
     /// [edgrodriguez] 15/03/2016 Modified. Se agregáron los parametros pivotColumns,pivotRows,pivotValue,pivotColumnsCount
     /// [edgrodriguez] 17/03/2016 Modified. Se agregó el parametros IsPivot, para indicar si se obtendra una tabla simple o una tabla de tipo pivot. 
+    /// [edgrodriguez] 23/03/2016 Modified. Se agregó validaciones para reportes con varios campos Valor, se hizo un cambio en la edición del pivot desde el xml.
+    ///                                     se cambio el formateo de columnas desde un método.
     /// </history>
     public static FileInfo CreatePivotRptExcel(bool IsPivot, List<Tuple<string, string>> filters, DataTable dtData, Tuple<string, string> reportName, List<string> pivotColums, List<string> pivotRows, List<string> pivotValue, List<ExcelFormatTable> formatColumns, int pivotColumnsCount = 0)
     {
@@ -258,7 +227,7 @@ namespace IM.Base.Helpers
       //la tabla dinamica.
       ExcelWorksheet wsPivot = pk.Workbook.Worksheets.Add(reportName.Item1);
       ExcelWorksheet wsData = pk.Workbook.Worksheets.Add("Hoja0");
-      wsData.Hidden = eWorkSheetHidden.VeryHidden;
+      wsData.Hidden = eWorkSheetHidden.Hidden;
 
       //Numero de filtros
       int filterNumber = filters.Count + 2;
@@ -280,6 +249,7 @@ namespace IM.Base.Helpers
 
         foreach (Tuple<string, string> item in filters)
         {
+          //Insertamos los filtros.
           cFiltros++;
           wsPivot.Cells[string.Concat("A", cFiltros)].Value = item.Item1;
           wsPivot.Cells[string.Concat("A", cFiltros)].Style.Font.Bold = true;
@@ -287,6 +257,7 @@ namespace IM.Base.Helpers
         }
       }
       else
+        //Si no se enviaron filtros. Se insertan 2 filas en blanco.
         wsPivot.InsertRow(2, filters.Count + 2);
 
       //Agregamos los datos de impresion
@@ -304,9 +275,11 @@ namespace IM.Base.Helpers
       wsPivot.Cells[1, dtColumnsNumber].Style.Font.Size = 14;
       wsPivot.Cells[1, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
 
+      //Nombre del sistema.
       wsPivot.Cells[2, dtColumnsNumber].Value = "Intelligence Marketing";
       wsPivot.Cells[2, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
 
+      //Filtros de Fecha
       wsPivot.Cells[3, dtColumnsNumber].Value = reportName.Item2;
       wsPivot.Cells[3, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
 
@@ -314,21 +287,130 @@ namespace IM.Base.Helpers
       //Agregamos el contenido
       wsPivot.InsertRow(filterNumber + 2, dtRowsNumber * 2);
 
+      //Renombramos las columnas.
       dtData.Columns.Cast<DataColumn>().ToList().ForEach(c =>
       {
         c.ColumnName = formatColumns[dtData.Columns.IndexOf(c)].Title;
       });
 
+      //Formateamos los campos.
+      SetFormatColumns(formatColumns, ref wsData, filterNumber, dtRowsNumber, dtColumnsNumber, true);
+
       //Cargamos los datos en la hoja0.      
-      //var table= wsData.Tables.Add(wsData.Cells["A1"], "Data");
       wsData.Cells["A1"].LoadFromDataTable(dtData, true, OfficeOpenXml.Table.TableStyles.None);
 
+      //Cargamos la tabla dinamica.
+      var pivotTable = wsPivot.PivotTables.Add(wsPivot.Cells[filterNumber + 5, 1], wsData.Cells[1, 1, wsData.Dimension.End.Row, wsData.Dimension.End.Column], reportName.Item1);
+
+      if (IsPivot)
+      {
+        #region Formato Esquematico
+        //Mostrar Encabezados
+        pivotTable.ShowHeaders = true;
+        //Mostrar Totales por Columna
+        pivotTable.ColumGrandTotals = true;
+        //Mostrar Totales por Fila
+        pivotTable.RowGrandTotals = true;
+        #endregion
+      }
+      else
+      {
+        #region Formato Tabular
+        //Se maneja en formato XML ya el Epplus no cuenta con la propiedad para modificarlo.
+        pivotTable.PivotTableXml.DocumentElement.LastChild.Attributes["showRowHeaders"].Value = "0";
+        pivotTable.Compact = false;
+        pivotTable.CompactData = true;
+        pivotTable.Outline = false;
+        pivotTable.OutlineData = false;
+        pivotTable.Indent = 0;
+        pivotTable.ShowMemberPropertyTips = false;
+        pivotTable.DataOnRows = false;
+        pivotTable.RowGrandTotals = (pivotValue.Count > 0) ? true : false; ;
+        pivotTable.ShowDrill = false;
+        pivotTable.EnableDrill = false;
+        pivotTable.ColumGrandTotals = (pivotValue.Count > 0) ? true : false;
+        pivotTable.MultipleFieldFilters = true;
+        pivotTable.GridDropZones = false;
+        pivotTable.TableStyle = OfficeOpenXml.Table.TableStyles.Medium13;
+        #endregion
+      }
+
+      //Asignamos las columnas para realizar el pivote
+      pivotColums.ForEach(col => { var datacol = pivotTable.ColumnFields.Add(pivotTable.Fields[col]); });
+
+      //Asignamos las filas que se mostraran.
+      pivotRows.ForEach(row =>
+     {
+       //Lo Agregamos a la lista de Filas.
+       var ptfField = pivotTable.RowFields.Add(pivotTable.Fields[row]);
+
+       if (!IsPivot)//Si se va manejar el formato tabular.
+       {
+         ptfField.Outline = false;
+         ptfField.Compact = false;
+         ptfField.ShowAll = false;
+         ptfField.SubtotalTop = false;
+         ptfField.SubTotalFunctions = eSubTotalFunctions.None;
+       }
+     }
+      );
+
+      //Asignamos el valor que se mostrara en las columnas.
+      pivotValue.ForEach(value =>
+      {
+        var valueField = pivotTable.DataFields.Add(pivotTable.Fields[value]);
+        if (!IsPivot)
+        {
+          valueField.BaseField = 0;
+          valueField.BaseItem = 0;
+          valueField.Format = GetFormat(formatColumns.First(c => c.Title == value));
+        }
+      });
+
+
+      string suggestedFilaName = string.Concat(reportName.Item1, "_", DateTime.Now.ToString("yyyymmddhhmmss"));
+      try
+      {
+        pathFinalFile = SaveExcel(pk, suggestedFilaName);
+      }
+      catch (Exception ex)
+      {
+
+      }
+
+      if (pathFinalFile != null)
+      {
+        return pathFinalFile;
+      }
+      else
+      {
+        return null;
+      }
+    }
+    #endregion
+
+    #region SetFormatColumns
+    /// <summary>
+    /// Se aplica el formato a las columnas de la tabla.
+    /// </summary>
+    /// <param name="formatColumns">Lista de Formatos de columna del reporte.</param>
+    /// <param name="wsData">Hoja de Excel.</param>
+    /// <param name="filterNumber">Cantidad de Filtros.</param>
+    /// <param name="dtRowsNumber">Cantidad de Filas</param>
+    /// <param name="dtColumnsNumber">Cantidad de Columnas.</param>
+    /// <param name="isPivot">Bandera para distinguir desde que método se hace referencia.</param>
+    /// <history>
+    /// [edgrodriguez] 24/03/2016  Created.
+    /// </history>
+    private static void SetFormatColumns(List<ExcelFormatTable> formatColumns, ref ExcelWorksheet wsData, int filterNumber, int dtRowsNumber, int dtColumnsNumber, bool isPivot)
+    {
       //Agregamos los Headers de la Tabla
       int contColum = 0;
       foreach (ExcelFormatTable item in formatColumns)
       {
         contColum++;
-        //wsData.Cells[filterNumber + 6, contColum].Value = item.Title;
+        if (!isPivot)
+          wsData.Cells[filterNumber + 4, contColum].Value = item.Title;
 
         switch (item.Format)
         {
@@ -347,7 +429,10 @@ namespace IM.Base.Helpers
             wsData.Column(contColum).Style.Numberformat.Format = "0.00";
             break;
           case EnumFormatTypeExcel.Boolean:
-            wsData.Cells[2, contColum, dtRowsNumber + 1, contColum].Style.Font.Name = "Wingdings";
+            if (!isPivot)
+              wsData.Cells[filterNumber + 5, contColum, filterNumber + 5 + dtRowsNumber, contColum].Style.Font.Name = "Wingdings"; //Posicion de los headers de la tabla
+            else
+              wsData.Cells[2, contColum, dtRowsNumber + 1, contColum].Style.Font.Name = "Wingdings";
             break;
           case EnumFormatTypeExcel.Date:
             wsData.Column(contColum).Style.Numberformat.Format = "dd/MM/yyyy";
@@ -356,105 +441,57 @@ namespace IM.Base.Helpers
             break;
         }
         wsData.Column(contColum).Style.HorizontalAlignment = item.Alignment;
-      }
-      //Borde de rango de columnas(titulos de la tabla)
-      wsData.Cells[1, 1, dtRowsNumber + 1, dtColumnsNumber].AutoFitColumns();
-
-      //Cargamos la tabla dinamica.
-      var pivotTable = wsPivot.PivotTables.Add(wsPivot.Cells[filterNumber + 5, 1], wsData.Cells[1, 1, wsData.Dimension.End.Row, wsData.Dimension.End.Column], reportName.Item1);
-      if (IsPivot)
-      {
-        //Mostrar Encabezados
-        pivotTable.ShowHeaders = true;
-        //Mostrar Totales por Columna
-        pivotTable.ColumGrandTotals = true;
-        //Mostrar Totales por Fila
-        pivotTable.RowGrandTotals = true;
-      }
-      else
-      {
-        pivotTable.Compact = false;
-        pivotTable.CompactData = true;
-        pivotTable.Outline = false;
-        pivotTable.OutlineData = false;
-        pivotTable.Indent = 0;        
-        pivotTable.ShowMemberPropertyTips = false;
-        pivotTable.DataOnRows = false;
-        pivotTable.RowGrandTotals = false;
-        pivotTable.ShowDrill = false;
-        pivotTable.EnableDrill = false;
-        pivotTable.RowGrandTotals = false;
-        pivotTable.ColumGrandTotals = false;
-        pivotTable.MultipleFieldFilters = true;
-        pivotTable.GridDropZones = false;
-        pivotTable.TableStyle = OfficeOpenXml.Table.TableStyles.Medium13;
-      }      
-
-      //Asignamos las columnas para realizar el pivote
-      pivotColums.ForEach(col => pivotTable.ColumnFields.Add(pivotTable.Fields[col]));
-
-      //Asignamos las filas que se mostraran.
-      pivotRows.ForEach(row =>
-      {
-        ExcelPivotTableField ptfField = pivotTable.Fields[row];
-        pivotTable.RowFields.Add(ptfField);
-
-        if (!IsPivot)
+        if (!isPivot)
         {
-          ptfField.Outline = false;
-          ptfField.Compact = false;
-          ptfField.ShowAll = false;
-          ptfField.SubtotalTop = false;
-          ptfField.SubTotalFunctions =eSubTotalFunctions.None;
+          wsData.Cells[filterNumber + 4, contColum].Style.Font.Bold = true;
+          wsData.Cells[filterNumber + 4, contColum].Style.Font.Size = 14;
         }
       }
-      );
-
-      //Asignamos el valor que se mostrara en las columnas.
-      pivotValue.ForEach(value => pivotTable.DataFields.Add(pivotTable.Fields[value]));
-
-      XDocument xdoc = new XDocument();
-      using (var nodeReader = new XmlNodeReader(pivotTable.PivotTableXml))
+      if (!isPivot)
       {
-        nodeReader.MoveToContent();
-        xdoc = XDocument.Load(nodeReader);
-      }
-      var xd = xdoc.Descendants().ToList();
-      xdoc.Root.Descendants().ToList().ForEach(c => {
-        switch (c.Name.LocalName) {
-          //case "pivotTableDefinition":
-          //  c.Attribute("useAutoFormatting").SetValue("1");
-          //  c.Attribute("applyNumberFormats").SetValue("1");
-          //  c.Attribute("applyFontFormats ").SetValue("1");
-          //  c.Attribute("applyPatternFormats").SetValue("1");
-          //  c.Attribute("applyWidthHeightFormats").SetValue("1");
-          //  c.Attribute("applyAlignmentFormats").SetValue("1");
-          //  break;
-          case "pivotTableStyleInfo":
-            c.Attribute("showRowHeaders").SetValue("0");
-
-            break;
-        }
-      }
-      );
-
-      using (var xmlReader = xdoc.CreateReader())
-      {
-        pivotTable.PivotTableXml.Load(xmlReader);
-      }
-
-      string suggestedFilaName = string.Concat(reportName.Item1, "_", DateTime.Now.ToString("ddmmyyyyhhmmss"));
-      pathFinalFile = SaveExcel(pk, suggestedFilaName);
-
-      if (pathFinalFile != null)
-      {
-        return pathFinalFile;
+        wsData.Cells[filterNumber + 4, 1, filterNumber + 4, dtColumnsNumber].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Hair);
       }
       else
+        wsData.Cells[1, 1, dtRowsNumber + 1, dtColumnsNumber].AutoFitColumns();
+
+    } 
+    #endregion
+
+    #region GetFormat
+    /// <summary>
+    /// Se obtiene el formato de la columna.
+    /// </summary>
+    /// <param name="item">Formato de Excel.</param>
+    /// <returns>string</returns>
+    /// <history>
+    /// [edgrodriguez] 24/03/2016  Created.
+    /// </history>
+    private static string GetFormat(ExcelFormatTable item)
+    {
+      string format = "";
+      switch (item.Format)
       {
-        return null;
+        case EnumFormatTypeExcel.General:
+          break;
+        case EnumFormatTypeExcel.Percent:
+          format = "0.0 %";
+          break;
+        case EnumFormatTypeExcel.Currency:
+          format = "$#,##0.00";
+          break;
+        case EnumFormatTypeExcel.Number:
+          format = "#";
+          break;
+        case EnumFormatTypeExcel.DecimalNumber:
+          format = "0.00";
+          break;
+        case EnumFormatTypeExcel.Date:
+          format = "dd/MM/yyyy";
+          break;
       }
-    }
+
+      return format;
+    } 
     #endregion
   }
 }

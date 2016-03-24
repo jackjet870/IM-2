@@ -268,9 +268,15 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void btnOK_Click(object sender, RoutedEventArgs e)
     {
-      _blnOK = true;
-      saveFrmFilterValues();
-      Close();
+      string message = ValidateFields();
+      if (message == "")
+      {
+        _blnOK = true;
+        SaveFrmFilterValues();
+        Close();
+      }
+      else
+        UIHelper.ShowMessage(message);
     }
     #endregion
 
@@ -285,7 +291,7 @@ namespace IM.ProcessorGeneral.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       _blnOK = false;
-      saveFrmFilterValues();
+      SaveFrmFilterValues();
       Close();
     }
     #endregion
@@ -480,29 +486,30 @@ namespace IM.ProcessorGeneral.Forms
       EnumSalesByMemberShipType enumSalesByMemberShipType = EnumSalesByMemberShipType.sbmNoDetail, EnumBasedOnBooking enumBasedOnBooking = EnumBasedOnBooking.bobNoBasedOnBooking,
       EnumExternalInvitation? enumExternalInvitation = null, bool blncbStatus = false, bool blnGiftReceiptType = false, bool blnGuestID = false, bool blnGiftSale = false)
     {
-      ConfigurarFechas(blnOneDate, enumPeriod);
+      ConfigureDates(blnOneDate, enumPeriod);
       #region Configuracion de Grids.
-      ConfigurarPanelesGrids(blnSalesRoom, blnGifts, blnCategories, blnPrograms, blnRatetypes, blnLeadSources);
-      ConfigurarSeleccion(blnOnlyOneRegister);
-      ConfigurarCheckboxSelectAll(blnOnlyOneRegister, blnAllSalesRoom, blnAllCategories, blnAllGifts, blnAllLeadSources, blnAllPrograms, blnAllRatetypes);
+      ConfigureGridPanels(blnSalesRoom, blnGifts, blnCategories, blnPrograms, blnRatetypes, blnLeadSources);
+      ConfigureSelection(blnOnlyOneRegister);
+      ConfigureCheckboxSelectAll(blnOnlyOneRegister, blnAllSalesRoom, blnAllCategories, blnAllGifts, blnAllLeadSources, blnAllPrograms, blnAllRatetypes);
       #endregion
-      ConfigurarFiltros(enumBasedOnArrival, enumQuinellas, enumDetailGifts, enumSaveCourtesyTours,
+      ConfigureFilters(enumBasedOnArrival, enumQuinellas, enumDetailGifts, enumSaveCourtesyTours,
         enumSalesByMemberShipType, enumBasedOnBooking, enumExternalInvitation, blncbStatus, blnGiftReceiptType,
         blnGuestID, blnGiftSale);
       LoadUserFilters();
     }
-    
+
     #endregion
 
     #region Métodos Privados
 
+    #region ConfigureFilters
     /// <summary>
     /// Configura los controles que sirven para filtrar los reportes.
     /// </summary>
     /// <history>
     /// [edgrodriguez] 07/03/2016 Created
     /// </history>
-    private void ConfigurarFiltros(EnumBasedOnArrival enumBasedOnArrival, EnumQuinellas enumQuinellas, EnumDetailGifts enumDetailGifts,
+    private void ConfigureFilters(EnumBasedOnArrival enumBasedOnArrival, EnumQuinellas enumQuinellas, EnumDetailGifts enumDetailGifts,
       EnumSaveCourtesyTours? enumSaveCourtesyTours, EnumSalesByMemberShipType? enumSalesMemberShipType, EnumBasedOnBooking enumBasedOnBooking,
       EnumExternalInvitation? enumExternalInvitation, bool blncbStatus, bool blnGiftReceiptType, bool blnGuestID, bool blnGiftSale)
     {
@@ -521,14 +528,16 @@ namespace IM.ProcessorGeneral.Forms
       cboSaveCourtesyTours.Visibility = (enumSaveCourtesyTours != null) ? Visibility.Visible : Visibility.Collapsed;
       cboExternal.Visibility = (enumExternalInvitation != null) ? Visibility.Visible : Visibility.Collapsed;
     }
+    #endregion
 
+    #region ConfigureGridPanels
     /// <summary>
     /// Configura los grids.
     /// </summary>
     /// <history>
     /// [edgrodriguez] 05/Mar/2016 Created
     /// </history>
-    private void ConfigurarPanelesGrids(bool blnSalesRoom, bool blnGifts, bool blnCategories,
+    private void ConfigureGridPanels(bool blnSalesRoom, bool blnGifts, bool blnCategories,
       bool blnPrograms, bool blnRatetypes, bool blnLeadSources)
     {
       pnlCategories.Visibility = (blnCategories) ? Visibility.Visible : Visibility.Collapsed;
@@ -552,7 +561,9 @@ namespace IM.ProcessorGeneral.Forms
       StatusBarNumLS.Content = (blnLeadSources) ? string.Format("{0}/{1} Selected LeadSources", 0, _lstLeadSources.Count) : "";
       StatusBarNumRateT.Content = (blnRatetypes) ? string.Format("{0}/{1} Selected Ratetypes", 0, _lstRateTypes.Count) : "";
     }
+    #endregion
 
+    #region ConfigureSelection
     /// <summary>
     /// Configura el modo de seleccion de los grids(Multiseleccion ó Solo un registro).
     /// Activa o desactiva los controles checkbox dependiendo el modo de seleccion configurado.
@@ -560,7 +571,7 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 05/Mar/2016 Created
     /// </history>
-    private void ConfigurarSeleccion(bool blnOnlyOneRegister)
+    private void ConfigureSelection(bool blnOnlyOneRegister)
     {
       grdCategories.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       grdGifts.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
@@ -569,14 +580,16 @@ namespace IM.ProcessorGeneral.Forms
       grdRatetypes.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       grdSalesRoom.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
     }
+    #endregion
 
+    #region ConfigureDates
     /// <summary>
     /// Configura los controles de fecha.
     /// </summary>
     /// <history>
     /// [edgrodriguez] 05/Mar/2016 Created
     /// </history>
-    private void ConfigurarFechas(bool blnOneDate, EnumPeriod enumPeriod)
+    private void ConfigureDates(bool blnOneDate, EnumPeriod enumPeriod)
     {
       //Si es un rango de fechas.
       if (!blnOneDate)
@@ -627,15 +640,17 @@ namespace IM.ProcessorGeneral.Forms
         cboDate.IsEnabled = false;
         pnlDtmEnd.IsEnabled = false;
       }
-    }
+    } 
+    #endregion
 
+    #region ConfigureCheckboxSelectAll
     /// <summary>
     /// Valida los checkbox para seleccionar todos los registros de los grids.
     /// </summary>
     /// <history>
     /// [edgrodriguez] 07/Mar/2016 Created
     /// </history>
-    private void ConfigurarCheckboxSelectAll(bool blnOnlyOneRegister, bool blnAllSalesRoom, bool blnAllCategories, bool blnAllGifts,
+    private void ConfigureCheckboxSelectAll(bool blnOnlyOneRegister, bool blnAllSalesRoom, bool blnAllCategories, bool blnAllGifts,
       bool blnAllLeadSources, bool blnAllPrograms, bool blnAllRatetypes)
     {
       chkAllSalesRoom.IsChecked = blnAllSalesRoom;
@@ -651,15 +666,17 @@ namespace IM.ProcessorGeneral.Forms
       chkAllLeadSources.IsEnabled = (blnOnlyOneRegister) ? false : true;
       chkAllPrograms.IsEnabled = (blnOnlyOneRegister) ? false : true;
       chkAllRatetypes.IsEnabled = (blnOnlyOneRegister) ? false : true;
-    }
+    } 
+    #endregion
 
+    #region SaveFrmFilterValues
     /// <summary>
     /// Guarda los datos seleccionados por el usuario.
     /// </summary>
     /// <history>
     /// [edgrodriguez] 15/Mar/2016 Created
     /// </history>
-    private void saveFrmFilterValues()
+    private void SaveFrmFilterValues()
     {
       if (!chkAllSalesRoom.IsChecked.Value)
         frmPG._lstSalesRoom = grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => grdSalesRoom.Items.IndexOf(c)).ToList();
@@ -688,8 +705,10 @@ namespace IM.ProcessorGeneral.Forms
       frmPG._enumSaveCourtesyTours = ((KeyValuePair<EnumSaveCourtesyTours, string>)cboSaveCourtesyTours.SelectedItem).Key;
       frmPG._enumExternalInvitation = ((KeyValuePair<EnumExternalInvitation, string>)cboExternal.SelectedItem).Key;
 
-    }
+    } 
+    #endregion
 
+    #region LoadUserFilters
     /// <summary>
     /// Obtiene los filtros que el usuario habiá seleccionado
     /// y los aplica al formulario.
@@ -702,11 +721,12 @@ namespace IM.ProcessorGeneral.Forms
       var xd = grdSalesRoom;
 
       if (!chkAllSalesRoom.IsChecked.Value)
-        frmPG._lstSalesRoom.ForEach(c => {
+        frmPG._lstSalesRoom.ForEach(c =>
+        {
           grdSalesRoom.SelectedItems.Add(grdSalesRoom.Items.GetItemAt(c));
         });
-      if(!chkAllCategories.IsChecked.Value)
-      frmPG._lstGiftsCate.ForEach(c => grdCategories.SelectedItems.Add(c));
+      if (!chkAllCategories.IsChecked.Value)
+        frmPG._lstGiftsCate.ForEach(c => grdCategories.SelectedItems.Add(c));
       if (!chkAllGifts.IsChecked.Value)
         frmPG._lstGifts.ForEach(c => grdGifts.SelectedItems.Add(c));
       if (!chkAllRatetypes.IsChecked.Value)
@@ -731,6 +751,37 @@ namespace IM.ProcessorGeneral.Forms
       cboSaveCourtesyTours.SelectedValue = frmPG._enumSaveCourtesyTours;
       cboExternal.SelectedValue = frmPG._enumExternalInvitation;
     }
+    #endregion
+
+    #region ValidateFields
+    /// <summary>
+    /// Valida si los grid tienen al menos un elemento seleccionado.
+    /// </summary>
+    /// <returns>Message/Empty</returns>
+    /// <history>
+    /// [edgrodriguez] 24/Mar/2016 Created
+    /// </history>
+    private string ValidateFields()
+    {
+      if (pnlSalesRoom.Visibility == Visibility.Visible && grdSalesRoom.SelectedItems.Count == 0)
+        return "No sales room is selected";
+      if (pnlRateTypes.Visibility == Visibility.Visible && grdRatetypes.SelectedItems.Count == 0)
+        return "No Rate types is selected.";
+      if (pnlPrograms.Visibility == Visibility.Visible && grdPrograms.SelectedItems.Count == 0)
+        return "No program is selected.";
+      if (pnlLeadSource.Visibility == Visibility.Visible && grdLeadSources.SelectedItems.Count == 0)
+        return "No lead source is selected.";
+      if (pnlGifts.Visibility == Visibility.Visible && grdGifts.SelectedItems.Count == 0)
+        return "No gift is selected.";
+      if (pnlCategories.Visibility == Visibility.Visible && grdCategories.SelectedItems.Count == 0)
+        return "No category is selected.";
+      if(pnlDtmEnd.IsEnabled==true && dtmEnd.Value.Value<dtmStart.Value.Value)
+        return "End date must be greater than start date.";
+      else
+        return "";
+    } 
+    #endregion
+
     #endregion
 
   }

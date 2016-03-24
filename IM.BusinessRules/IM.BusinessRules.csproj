@@ -78,6 +78,7 @@
     <Compile Include="BR\BRPrStats.cs" />
     <Compile Include="BR\BRRegions.cs" />
     <Compile Include="BR\BRSalesRoomsLogs.cs" />
+    <Compile Include="BR\BRSales.cs" />
     <Compile Include="BR\BRSeasons.cs" />
     <Compile Include="BR\BRReps.cs" />
     <Compile Include="BR\BRSegmentsByAgency.cs" />

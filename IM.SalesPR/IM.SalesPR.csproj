@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E1341657-8E03-4E10-80DE-F39DFA38A231}</ProjectGuid>
+    <ProjectGuid>{49A5909E-6EB6-4CBE-9179-E23215E73659}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IM.GuestsPR</RootNamespace>
-    <AssemblyName>IM.GuestsPR</AssemblyName>
+    <RootNamespace>IM.SalesPR</RootNamespace>
+    <AssemblyName>IM.SalesPR</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -72,18 +71,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Utilities\UseFulltMethods.cs" />
-    <Page Include="Forms\frmGuestsPR.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Forms\frmGuestsPR.xaml.cs">
-      <DependentUpon>frmGuestsPR.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Utilities\UseFulltMethods.cs" />
+    <Page Include="Forms\frmSalesPR.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\ComboBoxTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -94,6 +90,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\frmSalesPR.xaml.cs">
+      <DependentUpon>frmSalesPR.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -125,10 +124,12 @@
   <ItemGroup>
     <Resource Include="Images\BAbout.png" />
     <Resource Include="Images\BExit.png" />
+    <Resource Include="Images\BKey.png" />
     <Resource Include="Images\BPrinter.png" />
     <Resource Include="Images\BSearch.png" />
     <Resource Include="Images\BUser.png" />
     <Resource Include="Images\IM.ico" />
+    <Resource Include="Images\WKey.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IM.Base\IM.Base.csproj">
@@ -143,12 +144,6 @@
       <Project>{4d0c8faf-7eeb-4a36-9826-e190a0d9fe72}</Project>
       <Name>IM.Model</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\BKey.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\WKey.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
