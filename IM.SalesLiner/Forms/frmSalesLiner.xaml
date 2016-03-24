@@ -1,13 +1,13 @@
-﻿<Window x:Class="IM.SalesPR.Forms.frmSalesPR"
+﻿<Window x:Class="IM.SalesLiner.Forms.frmSalesLiner"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.SalesPR.Forms"
-         mc:Ignorable="d"
-         Title="Sales By PR"
+        xmlns:local="clr-namespace:IM.SalesLiner.Forms"
+        mc:Ignorable="d"
+         Title="Sales By Liner"
     d:Height="768" d:Width="1024" WindowStartupLocation="CenterScreen" 
-    Icon="/IM.SalesPR;component/Images/IM.ico" WindowState="Maximized" WindowStyle="SingleBorderWindow"
+    Icon="/IM.SalesLiner;component/Images/IM.ico" WindowState="Maximized" WindowStyle="SingleBorderWindow"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">
     <Grid x:Name="layout" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
@@ -32,7 +32,7 @@
                 </Grid.RowDefinitions>
 
                 <Viewbox Stretch="Uniform" Height="24" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0">
-                    <Image x:Name="image" Source="pack://application:,,,/IM.SalesPR;component/Images/BUser.png"/>
+                    <Image x:Name="image" Source="pack://application:,,,/IM.SalesLiner;component/Images/BUser.png"/>
                 </Viewbox>
                 <TextBlock x:Name="txtbUserName" VerticalAlignment="Center"
                            Foreground="White" Grid.Column="1" Grid.Row="0"/>
@@ -61,7 +61,7 @@
                     <Border x:Name="imgButtonOk" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonOk_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image Source="pack://application:,,,/IM.SalesPR;component/Images/BSearch.png"/>
+                                <Image Source="pack://application:,,,/IM.SalesLiner;component/Images/BSearch.png"/>
                             </Viewbox>
                             <TextBlock Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -69,7 +69,7 @@
                     <Border x:Name="imgButtonPrint" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonPrint_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image Source="pack://application:,,,/IM.SalesPR;component/Images/BPrinter.png"/>
+                                <Image Source="pack://application:,,,/IM.SalesLiner;component/Images/BPrinter.png"/>
                             </Viewbox>
                             <TextBlock Text="Print" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
@@ -77,7 +77,7 @@
                     <Border x:Name="imgButtonAbout" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonAbout_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image x:Name="imageUser" Source="pack://application:,,,/IM.SalesPR;component/Images/BAbout.png"/>
+                                <Image x:Name="imageUser" Source="pack://application:,,,/IM.SalesLiner;component/Images/BAbout.png"/>
                             </Viewbox>
                             <TextBlock Text="About" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
@@ -85,15 +85,11 @@
                     <Border x:Name="imgButtonExit" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonExit_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image Source="pack://application:,,,/IM.SalesPR;component/Images/BExit.png"/>
+                                <Image Source="pack://application:,,,/IM.SalesLiner;component/Images/BExit.png"/>
                             </Viewbox>
                             <TextBlock Text="Exit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                </StackPanel>
-                <TextBlock Text="Filters" Margin="10,0,0,0"/>
-                <StackPanel Orientation="Horizontal" Margin="5">
-                    <CheckBox x:Name="chkLeadSource"  Content="Lead Sources" Margin="5"/>
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -110,17 +106,12 @@
                     <DataGridTextColumn x:Name="membNumber" Width="Auto" Header="Memb.#" Binding="{Binding saMembershipNum}"/>
                     <DataGridTextColumn x:Name="saleType" Width="Auto" Header="Sale Type" Binding="{Binding stN}"/>
                     <DataGridTextColumn x:Name="date" Width="Auto" Header="Date" Binding="{Binding saD, StringFormat={}{0:dd/MM/yyyy}}"/>
+                    <DataGridTextColumn x:Name="Procdate" Width="Auto" Header="Proc Date" Binding="{Binding saProcD, StringFormat={}{0:dd/MM/yyyy}}"/>
                     <DataGridTextColumn x:Name="lastName" Width="Auto" Header="Last Name" Binding="{Binding saLastName1}"/>
-                    <DataGridTextColumn x:Name="chkOutD" Width="Auto" Header="Chk-Out D" Binding="{Binding guCheckOutD, StringFormat={}{0:dd/MM/yyyy}}"/>
-                    <DataGridTextColumn x:Name="ag" Width="Auto" Header="Agency ID" Binding="{Binding guag}"/>
-                    <DataGridTextColumn x:Name="agN" Width="Auto" Header="Agency" Binding="{Binding agN}"/>
-                    <DataGridTextColumn x:Name="pr" Width="Auto" Header="PR" Binding="{Binding saPR1}"/>
-                    <DataGridTextColumn x:Name="prName" Width="Auto" Header="PR Name" Binding="{Binding PR1N}"/>
-                    <DataGridTextColumn x:Name="pr2" Width="Auto" Header="PR 2" Binding="{Binding saPR2}"/>
-                    <DataGridTextColumn x:Name="prName2" Width="Auto" Header="PR Name 2" Binding="{Binding PR2N}"/>
-                    <DataGridTextColumn x:Name="pr3" Width="Auto" Header="PR 3" Binding="{Binding saPR3}"/>
-                    <DataGridTextColumn x:Name="prName3" Width="Auto" Header="PR Name 3" Binding="{Binding PR3N}"/>
-                    <DataGridCheckBoxColumn x:Name="q" Width="Auto" Header="Q" Binding="{Binding guQ}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="liner" Width="Auto" Header="Liner" Binding="{Binding saLiner1}"/>
+                    <DataGridTextColumn x:Name="linerName" Width="Auto" Header="Liner Name" Binding="{Binding Liner1N}"/>
+                    <DataGridTextColumn x:Name="liner2" Width="Auto" Header="Liner" Binding="{Binding saLiner2}"/>
+                    <DataGridTextColumn x:Name="linerName2" Width="Auto" Header="Liner Name" Binding="{Binding Liner2N}"/>
                     <DataGridTextColumn x:Name="amount" Width="Auto" Header="Amount" Binding="{Binding saGrossAmount, StringFormat={}{0:n2}}"/>
                     <DataGridCheckBoxColumn x:Name="cxld" Width="Auto" Header="Cxld" Binding="{Binding saCancel}" IsReadOnly="True"/>
                     <DataGridTextColumn x:Name="cancelD" Width="Auto" Header="Cancel D" Binding="{Binding saCancelD, StringFormat={}{0:dd/MM/yyyy}}"/>
@@ -147,4 +138,3 @@
 
     </Grid>
 </Window>
-

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace IM.GuestsPR.Utilities
 {
-  public class UseFulltMethods
+  public class UseFulMethods
   {
     /// <summary>
     /// Genera las columnas que necesito en el reporte RPTStatistics

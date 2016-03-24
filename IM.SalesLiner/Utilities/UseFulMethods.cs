@@ -4,9 +4,9 @@ using IM.Model.Enums;
 using OfficeOpenXml.Style;
 using System.Collections.Generic;
 
-namespace IM.SalesPR.Utilities
+namespace IM.SalesLiner.Utilities
 {
-  public class UseFulltMethods
+  public class UseFulMethods
   {
     /// <summary>
     /// Genera las columnas que necesito en el reporte RPTStatistics
@@ -26,16 +26,10 @@ namespace IM.SalesPR.Utilities
       formatColumns.Add(new ExcelFormatTable() { Title = "Date", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });//Date
       formatColumns.Add(new ExcelFormatTable() { Title = "Proc Date", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });//Date
       formatColumns.Add(new ExcelFormatTable() { Title = "Last Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Chk-Out D", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });//Date
-      formatColumns.Add(new ExcelFormatTable() { Title = "Agency ID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Agency", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "PR", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "PR Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left }); 
-      formatColumns.Add(new ExcelFormatTable() { Title = "PR2", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "PR2 Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left }); 
-      formatColumns.Add(new ExcelFormatTable() { Title = "PR3", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "PR3 Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      formatColumns.Add(new ExcelFormatTable() { Title = "Q", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });//Boolean
+      formatColumns.Add(new ExcelFormatTable() { Title = "Liner", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+      formatColumns.Add(new ExcelFormatTable() { Title = "Liner Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+      formatColumns.Add(new ExcelFormatTable() { Title = "Liner 2", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+      formatColumns.Add(new ExcelFormatTable() { Title = "Liner 2 Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });    
       formatColumns.Add(new ExcelFormatTable() { Title = "Amount", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left });//Currency
       formatColumns.Add(new ExcelFormatTable() { Title = "Cxld", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });//Boolean
       formatColumns.Add(new ExcelFormatTable() { Title = "Cancel D", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });//Date

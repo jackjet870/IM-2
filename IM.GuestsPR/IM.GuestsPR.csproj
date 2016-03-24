@@ -72,7 +72,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Utilities\UseFulltMethods.cs" />
+    <Compile Include="Utilities\UseFulMethods.cs" />
     <Page Include="Forms\frmGuestsPR.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

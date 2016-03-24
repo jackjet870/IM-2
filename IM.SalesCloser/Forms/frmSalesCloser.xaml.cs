@@ -11,23 +11,22 @@ using IM.BusinessRules.BR;
 using System.Data;
 using System.IO;
 using System.Diagnostics;
-using IM.GuestsPR.Utilities;
 using IM.Base.Forms;
 using IM.Model.Enums;
+using IM.Model.Classes;
 
-namespace IM.GuestsPR.Forms
+namespace IM.SalesCloser.Forms
 {
   /// <summary>
-  /// Interaction logic for frmGuestsPR.xaml
+  /// Interaction logic for frmSalesCloser.xaml
   /// </summary>
-  public partial class frmGuestsPR : Window
+  public partial class frmSalesCloser : Window
   {
     #region Propiedades, Atributos
     List<bool> filtersBool = null;
     List<Tuple<string, string>> filtersReport = null;
     #endregion
-
-    public frmGuestsPR()
+    public frmSalesCloser()
     {
       InitializeComponent();
     }
@@ -37,12 +36,12 @@ namespace IM.GuestsPR.Forms
     /// Evento que se lanza al iniciar la aplicacion
     /// </summary>
     /// <history>
-    /// [erosado] 17/Mar/2016 Created
+    /// [erosado] 22/Mar/2016 Created
     /// </history>   
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       StaStart("Loading personnel...");
-      DoGetPersonnel(App.User.LeadSource.lsID, Model.Classes.StrToEnums.EnumRoleToString(Model.Enums.EnumRole.PR));
+      DoGetPersonnel(App.User.SalesRoom.srID, StrToEnums.EnumRoleToString(EnumRole.Closer));
       //Seleccionamos los días en el datapicker 
       dtpkFrom.SelectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
       dtpkTo.SelectedDate = DateTime.Now;
@@ -53,53 +52,36 @@ namespace IM.GuestsPR.Forms
     /// Evento que se lanza cuando realizamos la consulta boton Search
     /// </summary>
     /// <history>
-    /// [erosado] 17/Mar/2016 Created
+    /// [erosado] 22/Mar/2016 Created
     /// </history>
     private void imgButtonOk_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       StaStart("Loading data...");
       imgButtonOk.IsEnabled = false;
       filtersBool = new List<bool>();
-      string leadSource =(chkLeadSource.IsChecked == true ? "ALL": App.User.LeadSource.lsID);
-      PersonnelShort pr = cbxPersonnel.SelectedValue as PersonnelShort;
-      #region Check Filter for Report
+      PersonnelShort closer = cbxPersonnel.SelectedValue as PersonnelShort;
       filtersReport = new List<Tuple<string, string>>();
+      filtersReport.Add(new Tuple<string, string>("Closer", string.Concat(closer.peID, " - ", closer.peN)));
 
-      filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", App.User.LeadSource.lsID));
-      filtersReport.Add(chkContact.IsChecked == true ? new Tuple<string, string>("Contacts", "YES") : new Tuple<string, string>("Contacts", "ALL"));
-      filtersReport.Add(chkFollowUp.IsChecked == true ? new Tuple<string, string>("Follow Up", "YES") : new Tuple<string, string>("Follow Up", "ALL"));
-      filtersReport.Add(chkInvitation.IsChecked == true ? new Tuple<string, string>("Invitation", "YES") : new Tuple<string, string>("Invitation", "ALL"));
-      filtersReport.Add(chkShows.IsChecked == true ? new Tuple<string, string>("Shows","YES"):new Tuple<string, string>("Shows", "ALL"));
-      filtersReport.Add(chkWithSale.IsChecked == true ? new Tuple<string, string>("With Sale", "YES") : new Tuple<string, string>("With Sale", "ALL"));
-      filtersReport.Add(chkBasedOnArrival.IsChecked == true ? new Tuple<string, string>("Based On Arrival Date", "YES") : new Tuple<string, string>("Based On Arrival Date", "ALL"));
-
-      filtersBool.Add(chkAssign.IsChecked == true ? true : false);
-      filtersBool.Add(chkContact.IsChecked == true ? true : false);
-      filtersBool.Add(chkFollowUp.IsChecked == true ? true : false);
-      filtersBool.Add(chkInvitation.IsChecked == true ? true : false);
-      filtersBool.Add(chkShows.IsChecked == true ? true : false);
-      filtersBool.Add(chkWithSale.IsChecked == true ? true : false);
-      filtersBool.Add(chkBasedOnArrival.IsChecked == true ? true : false);
-      #endregion
-      DoGetGuestsByPR(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, leadSource, pr.peID, filtersBool);
+      DoGetSalesByCloser(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, App.User.SalesRoom.srID, closer.peID);
     }
     /// <summary>
     /// Evento que se lanza cuando generamos nuestro reporte boton Print
     /// </summary>
     /// <history>
-    /// [erosado] 17/Mar/2016 Created
+    /// [erosado] 23/Mar/2016 Created
     /// </history>
     private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      List<GuestByPR> listaGuestByPR = dtgr.DataContext as List<GuestByPR>;
-      if (listaGuestByPR != null)
+      List<SaleByCloser> listaSaleByCloser = dtgr.DataContext as List<SaleByCloser>;
+      if (listaSaleByCloser != null)
       {
         //Obtenemos dateRange
         string dateRange = DateHelper.DateRange(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
         //Obtenemos el nombre del reporte y el dateRange
-        Tuple<string, string> rptName = new Tuple<string, string>("GuestsPR", dateRange);
+        Tuple<string, string> rptName = new Tuple<string, string>("Sales By Closer", dateRange);
         //Obtenemos el dataTable con la lista formateada
-        DataTable dt = GridHelper.GetDataTableFromGrid<GuestByPR>(listaGuestByPR,true);
+        DataTable dt = GridHelper.GetDataTableFromGrid<SaleByCloser>(listaSaleByCloser, true);
         //Creamos el reporte
         FileInfo fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName, Utilities.UseFulMethods.getExcelFormatTable());
 
@@ -117,18 +99,18 @@ namespace IM.GuestsPR.Forms
     /// Evento que se lanza cuando abrimos la ventana About boton About
     /// </summary>
     /// <history>
-    /// [erosado] 17/Mar/2016 Created
+    /// [erosado] 23/Mar/2016 Created
     /// </history>
     private void imgButtonAbout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      IM.Base.Forms.frmAbout formAbout = new Base.Forms.frmAbout();
+      frmAbout formAbout = new frmAbout();
       formAbout.ShowDialog();
     }
     /// <summary>
     /// Evento que se lanza cuando queremos salir de la aplicacion boton exit
     /// </summary>
     /// <history>
-    /// [erosado] 17/Mar/2016 Created
+    /// [erosado] 23/Mar/2016 Created
     /// </history>
     private void imgButtonExit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
@@ -139,11 +121,11 @@ namespace IM.GuestsPR.Forms
     /// Evento de dispara cuando el usuario cambia de sesion en el modulo.
     /// </summary>
     /// <history>
-    /// [erosado] 19/Mar/2016 Created
+    /// [erosado] 23/Mar/2016 Created
     /// </history>
     private void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      frmLogin frmlogin = new frmLogin(blnChangePassword: true, loginType: EnumLoginType.Location, blnAutoSign: true);
+      frmLogin frmlogin = new frmLogin(blnChangePassword: true, loginType: EnumLoginType.SalesRoom, blnAutoSign: true);
       if (App.User.AutoSign)
       {
         frmlogin.userData = App.User;
@@ -154,7 +136,8 @@ namespace IM.GuestsPR.Forms
       {
         App.User = frmlogin.userData;
         StaStart("Loading personnel...");
-        DoGetPersonnel(App.User.LeadSource.lsID, Model.Classes.StrToEnums.EnumRoleToString(Model.Enums.EnumRole.PR));
+        DoGetPersonnel(App.User.SalesRoom.srID, Model.Classes.StrToEnums.EnumRoleToString(EnumRole.Closer));
+
       }
 
     }
@@ -165,7 +148,7 @@ namespace IM.GuestsPR.Forms
     /// Evento que se dispara cada que el usuario preciona el mouse sobre una fila del datagrid
     /// </summary>
     /// <history>
-    /// [erosado] 16/Mar/2016 Created
+    /// [erosado] 23/Mar/2016 Created
     /// </history>
     private void dtgr_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -177,11 +160,15 @@ namespace IM.GuestsPR.Forms
     /// <summary>
     /// Obtiene la lista del personal
     /// </summary>
-    /// <param name="leadSources">filtro leadsources</param>
+    /// <param name="salerRooms">filtro leadsources</param>
     /// <param name="roles">rol del usuario loggeado</param>
-    public void DoGetPersonnel(string leadSources, string roles)
+    /// <history>
+    /// [erosado] 24/Mar/2016 Created
+    /// </history>
+
+    public void DoGetPersonnel(string salesRooms, string roles)
     {
-      Task.Factory.StartNew(() => BRPersonnel.GetPersonnel(leadSources,"ALL",roles,1))
+      Task.Factory.StartNew(() => BRPersonnel.GetPersonnel("ALL", salesRooms, roles, 1))
       .ContinueWith(
       (task1) =>
       {
@@ -194,7 +181,6 @@ namespace IM.GuestsPR.Forms
         {
           if (task1.IsCompleted)
           {
-            task1.Wait(1000);
             List<PersonnelShort> data = task1.Result;
             if (data.Count > 0)
             {
@@ -211,19 +197,18 @@ namespace IM.GuestsPR.Forms
     }
 
     /// <summary>
-    /// Obtiene los Guests By PR
+    /// Obtiene los Sales by Closer
     /// </summary>
     /// <param name="dateFrom">fecha inicial</param>
     /// <param name="dateTo">fecha final</param>
-    /// <param name="leadSources">LeadoSource</param>
-    /// <param name="PR">Pr</param>
-    /// <param name="filters">Filters</param>
+    /// <param name="saleRooms">SalesRooms</param>
+    /// <param name="closer">closer</param>
     /// <history>
-    /// [erosado] 16/Mar/2016 Created
+    /// [erosado] 24/Mar/2016 Created
     /// </history>
-    public void DoGetGuestsByPR(DateTime dateFrom,DateTime dateTo,string leadSources, string PR, List<bool> filters)
+    public void DoGetSalesByCloser(DateTime dateFrom, DateTime dateTo, string salesRoom, string closer)
     {
-      Task.Factory.StartNew(() => BRGuests.GetGuestsByPR(dateFrom,dateTo,leadSources,PR,filters))
+      Task.Factory.StartNew(() => BRSales.GetSalesByCloser(dateFrom, dateTo, salesRoom, closer))
       .ContinueWith(
       (task1) =>
       {
@@ -237,8 +222,8 @@ namespace IM.GuestsPR.Forms
           if (task1.IsCompleted)
           {
             task1.Wait(1000);
-            List<GuestByPR> data = task1.Result;
-            
+            List<SaleByCloser> data = task1.Result;
+
             if (data.Count > 0)
             {
               dtgr.DataContext = data;
@@ -267,7 +252,7 @@ namespace IM.GuestsPR.Forms
     /// Activa los StatusBarItem CAP, NUM, INS
     /// </summary>
     /// <history>
-    /// [erosado] 15/Mar/2016 Created
+    /// [erosado] 23/Mar/2016 Created
     /// </history>
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
@@ -289,7 +274,7 @@ namespace IM.GuestsPR.Forms
     /// Verifica que la tecla se encuentre activa/inactiva, para cambiar el estilo de los StatusBarItem.
     /// </summary>
     /// <history>
-    /// [erosado] 15/Mar/2016 Created
+    /// [erosado] 23/Mar/2016 Created
     /// </history>
     private void CkeckKeysPress(System.Windows.Controls.Primitives.StatusBarItem statusBar, Key key)
     {
@@ -310,7 +295,7 @@ namespace IM.GuestsPR.Forms
     /// Configuracion inicial de los StatusBarItem.
     /// </summary>
     /// <history>
-    /// [erosado] 15/Mar/2016 Created
+    /// [erosado] 23/Mar/2016 Created
     /// </history>
     private void KeyDefault(System.Windows.Controls.Primitives.StatusBarItem statusBar)
     {
@@ -322,7 +307,7 @@ namespace IM.GuestsPR.Forms
     /// Indica en la barra de estado que se inicio un proceso
     /// </summary>
     /// <history>
-    /// [erosado] 15/Mar/2016 Created
+    /// [erosado] 23/Mar/2016 Created
     /// </history>
     /// <param name="message">mensaje</param>
     private void StaStart(String message)
@@ -337,7 +322,7 @@ namespace IM.GuestsPR.Forms
     /// Indica en la barra de estado que se termina un proceso
     /// </summary>
     /// <history>
-    /// [erosado] 15/Mar/2016 Created
+    /// [erosado] 23/Mar/2016 Created
     /// </history>
     /// <param name="message">mensaje</param>
     private void StaEnd()
@@ -351,7 +336,7 @@ namespace IM.GuestsPR.Forms
     /// Verifica si los botones estan activos
     /// </summary>
     /// <history>
-    /// [erosado] 15/Mar/2016 Created
+    /// [erosado] 23/Mar/2016 Created
     /// </history>
     private void Window_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
@@ -366,48 +351,35 @@ namespace IM.GuestsPR.Forms
     /// Este metodo se encarga de validar y actualizar los permisos del usuario logeado sobre el sistema
     /// </summary>
     /// <history>
-    /// [erosado] 19/Mar/2016 Created
+    /// [erosado] 23/Mar/2016 Created
     /// </history>
     public void setNewUserLogin()
     {
       //Agregamos la informacion del usuario en la interfaz
       txtbUserName.Text = App.User.User.peN;
-      txtbLocation.Text = App.User.Location.loN;
+      txtbLocation.Text = App.User.SalesRoom.srN;
       //Validamos permisos y restricciones para el combobox
+      cbxPersonnel.IsEnabled = true;
 
-      if (App.User.HasPermission(Model.Enums.EnumPermission.PRInvitations, Model.Enums.EnumPermisionLevel.Special))
+      if (cbxPersonnel.Items.Count > 0)
       {
-        cbxPersonnel.IsEnabled = true;
-        if (cbxPersonnel.Items.Count > 0)
+        List<PersonnelShort> lstPS = cbxPersonnel.ItemsSource as List<PersonnelShort>;
+        int index = lstPS.FindIndex(x => x.peID.Equals(App.User.User.peID));
+        if (index != -1)
         {
-          List<PersonnelShort> lstPS = cbxPersonnel.ItemsSource as List<PersonnelShort>;
-          int index = lstPS.FindIndex(x => x.peID.Equals(App.User.User.peID));
           cbxPersonnel.SelectedIndex = index;
         }
         else
         {
-          cbxPersonnel.Text = "No data found";
+          cbxPersonnel.SelectedIndex = 0;
         }
       }
       else
       {
-        cbxPersonnel.IsEnabled = false;
-        if (cbxPersonnel.Items.Count>0)
-        {
-          List<PersonnelShort> lstPS = cbxPersonnel.ItemsSource as List<PersonnelShort>;
-          int index = lstPS.FindIndex(x => x.peID.Equals(App.User.User.peID));
-          cbxPersonnel.SelectedIndex = index;
-        }
-        else
-        {
-          cbxPersonnel.Text = "No data found";
-        }
-        
+        cbxPersonnel.Text = "No data found";
       }
 
-    
     }
-
     #endregion
   }
 }

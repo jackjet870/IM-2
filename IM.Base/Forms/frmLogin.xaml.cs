@@ -361,10 +361,21 @@ namespace IM.Base.Forms
       {
         if (userData.AutoSign)
         {
-          DoGetLocationsByUser(this.userData.User.peID, true);
           txtUser.Text = this.userData.User.peID;
           txtPassword.Password = this.userData.User.pePwd;
-         
+
+          if (userData.Warehouse != null)
+          {
+            DoGetWareHousesByUser(this.userData.User.peID, true);
+          }
+          if (userData.Location != null)
+          {
+            DoGetLocationsByUser(this.userData.User.peID, true);
+          }
+          if (userData.SalesRoom != null)
+          {
+            DoGetSalesRoomsByUser(this.userData.User.peID, true);
+          }
         }
       }
     }
