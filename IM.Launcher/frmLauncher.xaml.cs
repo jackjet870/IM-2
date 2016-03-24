@@ -200,10 +200,10 @@ namespace IM.Launcher
           Process.Start(String.Format("{0}\\IM.SalesPR.exe", path));
           break;
         case EnumMenu.SalesByLiner:
-          UIHelper.ShowMessage("Coming soon..");
+          Process.Start(String.Format("{0}\\IM.SalesLiner.exe", path));
           break;
         case EnumMenu.SalesByCloser:
-          UIHelper.ShowMessage("Coming soon..");
+          Process.Start(String.Format("{0}\\IM.SalesCloser.exe", path));
           break;
         case EnumMenu.Administrator:
           Process.Start(String.Format("{0}\\IM.Administrator.exe", path));
