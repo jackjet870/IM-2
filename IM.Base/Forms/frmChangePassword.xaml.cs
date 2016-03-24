@@ -12,18 +12,23 @@ namespace IM.Base.Forms
   {
     #region Atributos
 
-    private UserLogin _userLogin;
-    private DateTime _serverDate;
+    public UserLogin userLogin{ get; set; }
+    public DateTime serverDate { get; set; }
+    public bool blnOk = false;
 
     #endregion
 
     #region Constructores y destructores
 
-    public frmChangePassword(UserLogin userLogin, DateTime serverDate)
+    /// <summary>
+    /// Constructor de la clase frmChangePassword.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 22/03/2016 Modified. Se quitaron los parámetros de entrada. Y se pusieron como Propiedades- 
+    /// </history>
+    public frmChangePassword()
     {
-      InitializeComponent();
-      _userLogin = userLogin;
-      _serverDate = serverDate;
+      InitializeComponent();    
     }
 
     #endregion
@@ -35,7 +40,8 @@ namespace IM.Base.Forms
     private void btnOK_Click(object sender, RoutedEventArgs e)
     {
       //Si los textbox se encuentran vacios.
-      if (txtNewPwd.Password == string.Empty) {
+      if (txtNewPwd.Password == string.Empty)
+      {
         MessageBox.Show("Specify the NewPassword.", "Intelligence Marketing", MessageBoxButton.OK, MessageBoxImage.Information);
         return;
       }
@@ -54,21 +60,26 @@ namespace IM.Base.Forms
 
       string _encryptPass = Helpers.EncryptHelper.Encrypt(txtNewPwd.Password);
       //Si la nueva contraseña es igual a la anterior.
-      if (_userLogin.pePwd.Equals(_encryptPass))
+      if (userLogin.pePwd.Equals(_encryptPass))
       {
+        blnOk = false;
         Close();
         return;
       }
 
       //Si ocurrio un error al cambiar el password.
-      if (!BRPersonnel.ChangePassword(_userLogin.peID, _encryptPass, _serverDate))
+      if (!BRPersonnel.ChangePassword(userLogin.peID, _encryptPass, serverDate))
       {
         MessageBox.Show("Could not change password", "Intelligence Marketing", MessageBoxButton.OK, MessageBoxImage.Information);
+        blnOk = false;
         return;
       }
-      else
+      else {
+        blnOk = true;
+        userLogin.pePwd = _encryptPass;
+        userLogin.pePwdD = serverDate.Date;
         MessageBox.Show("Your password was changed succesfully.", "Intelligence Marketing", MessageBoxButton.OK, MessageBoxImage.Information);
-
+      }
       Close();
     }
 
@@ -78,6 +89,7 @@ namespace IM.Base.Forms
 
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      blnOk = false;
       Close();
     }
 

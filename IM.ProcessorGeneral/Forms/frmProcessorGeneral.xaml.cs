@@ -361,115 +361,7 @@ namespace IM.ProcessorGeneral.Forms
       AbrirFilterDateRangeSR(strReport);
     }
     #endregion
-
-    #region PrepareGeneralReport
-    /// <summary>
-    /// Prepara un reporte general.
-    /// </summary>
-    /// <history>
-    /// [edgrodriguez] 16/Mar/2016 Created
-    /// </history>
-    private void PrepareGeneralReport()
-    {
-      string strReport = "";
-      //Validamos que haya un reporte seleccionado.
-      if (grdrptGeneral.SelectedIndex < 0)
-        return;
-      
-      //Obtenemos el nombre del reporte.
-      strReport = ((dynamic)grdrptGeneral.SelectedItem).rptNombre;
-
-      _blnOneDate = false;
-
-      switch (strReport)
-      {
-        //Reportes que solo deben permitir selecionar un registro
-        case "Gifts Kardex":
-        case "Warehouse Movements":
-          _blnOnlyOneRegister = true;
-          break;
-
-        //Reportes que permiten selecionar mas de un registro
-        default:
-          _blnOnlyOneRegister = false;
-          break;
-      }
-
-      //desplegamos el filtro de fechas
-      switch (strReport)
-      {
-        case "Gifts Kardex":
-        case "Warehouse Movements":
-          //blnOK = ShowDateRangeWH
-          break;
-        case "Sales By Program, Lead Source & Market":
-          //blnOK = ShowDateRangeSin()
-          break;
-        case "Production Referral":
-          //blnOK = ShowDateRangeSin(pdMonthly)
-          break;
-        case "Gifts Given In Kind Electronic Purse":
-          //basDB.LoadTable rs, "Gifts", "gi", True, False, "giProductGiftsCard is not null and giMonetary = 0"
-          //strGifts = basString.RecordsetToStr(rs, "giID", , "'")
-          //blnOK = ShowDateRangeGifts(strGifts, "giN, giProductGiftsCard", "Gift, Product E-Purse", "giProductGiftsCard")
-          break;
-        case "Production by Lead Source & Market (Monthly)":
-          //blnOK = ShowDateRangeSin(pdMonthly, True, True, True)
-          break;
-        default:
-          WaitMessage(true, "Loading Report...");
-          showGeneralReport(strReport);
-          WaitMessage(false);
-          break;
-      }
-    } 
-    #endregion
-
-    #region showGeneralReport
-    /// <summary>
-    /// Muestra el reporte seleccionado.
-    /// </summary>
-    /// <history>
-    /// [edgrodriguez] 16/Mar/2016 Created
-    /// </history>
-    private void showGeneralReport(string strReport)
-    {
-      DataTable dtData = new DataTable();
-      FileInfo finfo;
-      List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
-      switch (strReport)
-      {
-        case "Personnel":
-          List<RptPersonnel> lstRptPersonnel = BRGeneralReports.GetRptPersonnel();
-          if (lstRptPersonnel.Count > 0)
-          {
-            dtData = GridHelper.GetDataTableFromGrid(lstRptPersonnel, changeDataTypeBoolToString: true, showCheckMark: false);
-            Tuple<string, string> Reportname = new Tuple<string, string>(Regex.Replace(strReport, "[^a-zA-Z0-9_]+", " "), "");
-            finfo = EpplusHelper.CreatePivotRptExcel(false, filters, dtData, Reportname, new List<string>(), clsFormatReport.rptPersonnel().Select(c => c.Title).ToList(), new List<string>(), clsFormatReport.rptPersonnel(), dtData.Columns.Count);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-        case "Gifts":
-          List<RptGifts> lstRptGift = BRGeneralReports.GetRptGifts();
-          if (lstRptGift.Count > 0)
-          {
-            dtData = GridHelper.GetDataTableFromGrid(lstRptGift, changeDataTypeBoolToString: true, showCheckMark: true);
-            Tuple<string, string> Reportname = new Tuple<string, string>(Regex.Replace(strReport, "[^a-zA-Z0-9_]+", " "), "");
-            finfo = EpplusHelper.CreateGeneralRptExcel(filters, dtData, Reportname, clsFormatReport.rptGifts());
-
-            if (finfo != null)
-            {
-              Process.Start(finfo.FullName);
-            }
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-      }
-    }
-    #endregion
-
+     
     #region AbrirFilterDateRangeSR
     /// <summary>
     /// Abre la ventana frmFilterDateRange configurando
@@ -562,6 +454,10 @@ namespace IM.ProcessorGeneral.Forms
         showSalesRoomReport(strReport);
         _frmFilter.Close();
       }
+      else {
+        _frmFilter.Close();
+        _frmFilter = null;
+      }
       #endregion
     }
     #endregion
@@ -575,14 +471,16 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void showSalesRoomReport(string strReport)
     {
-      FileInfo finfo;
+      FileInfo finfo = null;
       string dateRange = (_blnOneDate) ? _frmFilter.dtmStart.Value.Value.ToLongDateString() : string.Concat(_frmFilter.dtmStart.Value.Value.ToLongDateString(), " - ", _frmFilter.dtmEnd.Value.Value.ToLongDateString());
       DataTable dtData = new DataTable();
+      Tuple<string, string> Reportname;
       List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
       switch (strReport)
-      {    
+      {
+        #region Bookings By Sales Room, Program & Time
         case "Bookings By Sales Room, Program & Time":
-          List<RptBookingsBySalesRoomProgramTime> lstRptBBSalesRoom = BRReportsBySalesRoom.getRptBookingsBySalesRoomProgramTime(_frmFilter.dtmStart.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
+          List<RptBookingsBySalesRoomProgramTime> lstRptBBSalesRoom = BRReportsBySalesRoom.GetRptBookingsBySalesRoomProgramTime(_frmFilter.dtmStart.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
           if (lstRptBBSalesRoom.Count > 0)
           {
             dtData = GridHelper.GetDataTableFromGrid(lstRptBBSalesRoom).AsEnumerable().OrderBy(c => TimeSpan.Parse(c["Time"].ToString())).CopyToDataTable();
@@ -590,19 +488,17 @@ namespace IM.ProcessorGeneral.Forms
               c => c.Time,
               c => new { c.SalesRoom, c.Program, c.BookType },
               c => c.Any() ? c.Sum(b => b.Books) : 0);
-            Tuple<string, string> Reportname = new Tuple<string, string>(Regex.Replace(strReport, "[^a-zA-Z0-9_]+", " "), dateRange);
+            Reportname = new Tuple<string, string>(Regex.Replace(strReport, "[^a-zA-Z0-9_]+", " "), dateRange);
             filters.Add(new Tuple<string, string>("Sales Room", _frmFilter.chkAllSalesRoom.IsChecked == true ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = EpplusHelper.CreatePivotRptExcel(true, filters, dtData, Reportname, new List<string> { "Time" }, new List<string> { "Sales Room", "Program", "Book Type" }, new List<string> { "Books" }, clsFormatReport.rptBookingsBySalesRoomProgramTime(), ((ExpandoObject)pivot[0]).Select(c => c.Key).Count());
-            if (finfo != null)
-            {
-              Process.Start(finfo.FullName);
-            }
           }
           else
             UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           break;
+        #endregion
+        #region Bookings By Sales Room, Program, Lead Source & Time
         case "Bookings By Sales Room, Program, Lead Source & Time":
-          List<RptBookingsBySalesRoomProgramLeadSourceTime> lstRptBBSalesRoomPLST = BRReportsBySalesRoom.getRptBookingsBySalesRoomProgramLeadSourceTime(_frmFilter.dtmStart.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
+          List<RptBookingsBySalesRoomProgramLeadSourceTime> lstRptBBSalesRoomPLST = BRReportsBySalesRoom.GetRptBookingsBySalesRoomProgramLeadSourceTime(_frmFilter.dtmStart.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
           if (lstRptBBSalesRoomPLST.Count > 0)
           {
             dtData = GridHelper.GetDataTableFromGrid(lstRptBBSalesRoomPLST).AsEnumerable().OrderBy(c => TimeSpan.Parse(c["Time"].ToString())).CopyToDataTable();
@@ -610,9 +506,152 @@ namespace IM.ProcessorGeneral.Forms
               c => c.Time,
               c => new { c.SalesRoom, c.Program, c.LeadSource, c.BookType },
               c => c.Any() ? c.Sum(b => b.Books) : 0);
-            Tuple<string, string> Reportname = new Tuple<string, string>(Regex.Replace(strReport, "[^a-zA-Z0-9_]+", " "), dateRange);
+            Reportname = new Tuple<string, string>(Regex.Replace(strReport, "[^a-zA-Z0-9_]+", " "), dateRange);
             filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.chkAllSalesRoom.IsChecked == true ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = EpplusHelper.CreatePivotRptExcel(true, filters, dtData, Reportname, new List<string> { "Time" }, new List<string> { "Sales Room", "Program", "Lead Source", "Book Type" }, new List<string> { "Books" }, clsFormatReport.rptBookingsBySalesRoomProgramLeadSourceTime(), ((ExpandoObject)pivot[0]).Select(c => c.Key).Count());
+          }
+          else
+            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
+          break;
+        #endregion
+        #region CxC
+        case "CxC":
+          List<RptCxC> lstRptCxC = BRReportsBySalesRoom.GetRptCxC(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
+          if (lstRptCxC.Count > 0)
+          {
+            dtData = GridHelper.GetDataTableFromGrid(lstRptCxC, changeDataTypeBoolToString:true, showCheckMark: false);
+            Reportname = new Tuple<string, string>(Regex.Replace(strReport, "[^a-zA-Z0-9_]+", " "), dateRange);
+            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.chkAllSalesRoom.IsChecked == true ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
+            var cxcFormat = clsFormatReport.rptCxC();
+            finfo = EpplusHelper.CreatePivotRptExcel(false, filters, dtData, Reportname, new List<string> { }, cxcFormat.Where(c => c.Format != EnumFormatTypeExcel.Currency && c.Format != EnumFormatTypeExcel.DecimalNumber).Select(c => c.Title).ToList(),
+              cxcFormat.Where(c => c.Format == EnumFormatTypeExcel.Currency || c.Format == EnumFormatTypeExcel.DecimalNumber).Select(c => c.Title).ToList(), cxcFormat);
+          }
+          else
+            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
+          break;
+        #endregion
+        #region CxC Deposits
+        case "CxC Deposits":
+          List<RptCxCDeposits> lstRptCxCDeposits = BRReportsBySalesRoom.GetRptCxCDeposits(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
+          if (lstRptCxCDeposits.Count > 0)
+          {
+            dtData = GridHelper.GetDataTableFromGrid(lstRptCxCDeposits, changeDataTypeBoolToString: true, showCheckMark: false);
+            Reportname = new Tuple<string, string>(Regex.Replace(strReport, "[^a-zA-Z0-9_]+", " "), dateRange);
+            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.chkAllSalesRoom.IsChecked == true ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
+            var cxcDepFormat = clsFormatReport.rptCxCDeposits();
+            finfo = EpplusHelper.CreatePivotRptExcel(false, filters, dtData, Reportname, new List<string> { }, cxcDepFormat.Where(c => c.Format != EnumFormatTypeExcel.Currency && c.Format != EnumFormatTypeExcel.DecimalNumber).Select(c => c.Title).ToList(),
+              cxcDepFormat.Where(c => c.Format == EnumFormatTypeExcel.Currency || c.Format == EnumFormatTypeExcel.DecimalNumber).Select(c => c.Title).ToList(), cxcDepFormat);
+          }
+          else
+            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
+          break; 
+          #endregion
+      }
+
+      if (finfo != null)
+      {
+        Process.Start(finfo.FullName);
+      }
+    }
+    #endregion
+
+    #region PrepareGeneralReport
+    /// <summary>
+    /// Prepara un reporte general.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 16/Mar/2016 Created
+    /// </history>
+    private void PrepareGeneralReport()
+    {
+      string strReport = "";
+      //Validamos que haya un reporte seleccionado.
+      if (grdrptGeneral.SelectedIndex < 0)
+        return;
+
+      //Obtenemos el nombre del reporte.
+      strReport = ((dynamic)grdrptGeneral.SelectedItem).rptNombre;
+
+      _blnOneDate = false;
+
+      switch (strReport)
+      {
+        //Reportes que solo deben permitir selecionar un registro
+        case "Gifts Kardex":
+        case "Warehouse Movements":
+          _blnOnlyOneRegister = true;
+          break;
+
+        //Reportes que permiten selecionar mas de un registro
+        default:
+          _blnOnlyOneRegister = false;
+          break;
+      }
+
+      //desplegamos el filtro de fechas
+      switch (strReport)
+      {
+        case "Gifts Kardex":
+        case "Warehouse Movements":
+          //blnOK = ShowDateRangeWH
+          break;
+        case "Sales By Program, Lead Source & Market":
+          //blnOK = ShowDateRangeSin()
+          break;
+        case "Production Referral":
+          //blnOK = ShowDateRangeSin(pdMonthly)
+          break;
+        case "Gifts Given In Kind Electronic Purse":
+          //basDB.LoadTable rs, "Gifts", "gi", True, False, "giProductGiftsCard is not null and giMonetary = 0"
+          //strGifts = basString.RecordsetToStr(rs, "giID", , "'")
+          //blnOK = ShowDateRangeGifts(strGifts, "giN, giProductGiftsCard", "Gift, Product E-Purse", "giProductGiftsCard")
+          break;
+        case "Production by Lead Source & Market (Monthly)":
+          //blnOK = ShowDateRangeSin(pdMonthly, True, True, True)
+          break;
+        default:
+          WaitMessage(true, "Loading Report...");
+          showGeneralReport(strReport);
+          WaitMessage(false);
+          break;
+      }
+    }
+    #endregion
+
+    #region showGeneralReport
+    /// <summary>
+    /// Muestra el reporte seleccionado.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 16/Mar/2016 Created
+    /// </history>
+    private void showGeneralReport(string strReport)
+    {
+      DataTable dtData = new DataTable();
+      FileInfo finfo;
+      List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
+      switch (strReport)
+      {
+        case "Personnel":
+          List<RptPersonnel> lstRptPersonnel = BRGeneralReports.GetRptPersonnel();
+          if (lstRptPersonnel.Count > 0)
+          {
+            dtData = GridHelper.GetDataTableFromGrid(lstRptPersonnel, changeDataTypeBoolToString: true, showCheckMark: false);
+            Tuple<string, string> Reportname = new Tuple<string, string>(Regex.Replace(strReport, "[^a-zA-Z0-9_]+", " "), "");
+            var formatPersonnel = clsFormatReport.rptPersonnel();
+            finfo = EpplusHelper.CreatePivotRptExcel(false, filters, dtData, Reportname, new List<string>(), formatPersonnel.Select(c => c.Title).ToList(),
+              new List<string>(), formatPersonnel, dtData.Columns.Count);
+          }
+          else
+            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
+          break;
+        case "Gifts":
+          List<RptGifts> lstRptGift = BRGeneralReports.GetRptGifts();
+          if (lstRptGift.Count > 0)
+          {
+            dtData = GridHelper.GetDataTableFromGrid(lstRptGift, changeDataTypeBoolToString: true, showCheckMark: true);
+            Tuple<string, string> Reportname = new Tuple<string, string>(Regex.Replace(strReport, "[^a-zA-Z0-9_]+", " "), "");
+            finfo = EpplusHelper.CreateGeneralRptExcel(filters, dtData, Reportname, clsFormatReport.rptGifts());
             if (finfo != null)
             {
               Process.Start(finfo.FullName);
