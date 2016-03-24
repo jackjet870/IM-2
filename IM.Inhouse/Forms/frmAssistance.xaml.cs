@@ -43,7 +43,7 @@ namespace IM.Inhouse.Forms
     //Para el Excel
     private List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
     private DataTable dt = new DataTable();
-    private Tuple<string, string> rptName;
+    private string rptName;
     #endregion Atributos
 
     #region Constructores y destructores
@@ -369,10 +369,10 @@ namespace IM.Inhouse.Forms
       if(listAssistData.Count>0)
       {
         dt = GridHelper.GetDataTableFromGrid(listAssistData, true);
-        string dates = dtpStart.SelectedDate.Value.Day + "_" + dtpStart.SelectedDate.Value.Month + "_" + dtpStart.SelectedDate.Value.Year;
-        dates += "-" + dtpEnd.SelectedDate.Value.Day + "_" + dtpEnd.SelectedDate.Value.Month + "_" + dtpEnd.SelectedDate.Value.Year;
-        
-        rptName = new Tuple<string, string>("Assistance " + palaceId, dates);
+        rptName = "Assistance " + palaceId;
+        string dateRange = DateHelper.DateRange(dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
+        string dateRangeFileName = DateHelper.DateRangeFileName(dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
+
         List<ExcelFormatTable> format = new List<ExcelFormatTable>();
         format.Add(new ExcelFormatTable() { Title = "Palace Type", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Palace ID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
@@ -388,7 +388,7 @@ namespace IM.Inhouse.Forms
         format.Add(new ExcelFormatTable() { Title = "Saturday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Sunday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "#Assistence", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, format);
+        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName,dateRange,dateRangeFileName, format);
         MessageBox.Show("Generated Report", "Generated", MessageBoxButton.OK, MessageBoxImage.Exclamation);
       }
       StaEnd();

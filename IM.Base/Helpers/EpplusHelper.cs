@@ -67,14 +67,14 @@ namespace IM.Base.Helpers
     /// [erosado] 22/Mar/2016 Modified  Se agrego la validacion si tiene filtro los reportes o si no tiene.
     /// [edgrodriguez] 23/Mar/2016 Modified. Se cambió el formateo de columnas. Ahora lo realiza desde un método.
     /// </history>
-    public static FileInfo CreateGeneralRptExcel(List<Tuple<string, string>> filter, DataTable dt, Tuple<string, string> reportName,
+    public static FileInfo CreateGeneralRptExcel(List<Tuple<string, string>> filter, DataTable dt, string reportName, string DateRangeReport, string DateRangeFileName,
       List<ExcelFormatTable> formatColumns)
     {
       #region Variables Atributos, Propiedades
       FileInfo pathFinalFile = null;
       ExcelPackage pk = new ExcelPackage();
       //Preparamos la hoja donde escribiremos
-      ExcelWorksheet ws = pk.Workbook.Worksheets.Add(reportName.Item1);
+      ExcelWorksheet ws = pk.Workbook.Worksheets.Add(reportName);
 
       //Numero de filtros
       int filterNumber = filter.Count;
@@ -88,13 +88,13 @@ namespace IM.Base.Helpers
       #region Titulo del reporte
       //Agregamos el Nombre del reporte y combinamos la columna A:C en la fila 1
       ws.Cells[1, 1, 1, 3].Merge = true;
-      ws.Cells[1, 1, 1, 3].Value = reportName.Item1;
+      ws.Cells[1, 1, 1, 3].Value = reportName;
       ws.Cells[1, 1, 1, 3].Style.Font.Bold = true;
       ws.Cells[1, 1, 1, 3].Style.Font.Size = 14;
       ws.Cells[1, 1, 1, 3].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Double;
       //Agregamos la etiqueda DateRange centrada y combinamos la columna A:B en la fila 2
       ws.Cells[2, 1, 2, 3].Merge = true;
-      ws.Cells[2, 1, 2, 3].Value = reportName.Item2;
+      ws.Cells[2, 1, 2, 3].Value =DateRangeReport;
       #endregion
 
       #region Filtros
@@ -179,7 +179,7 @@ namespace IM.Base.Helpers
         //Centramos Los Headers de la tabla de contenido
         ws.Cells[filterNumber + 4, 1, filterNumber + 4, dtColumnsNumber].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
       }
-      string suggestedFilaName = string.Concat(reportName.Item1, " ", reportName.Item2);
+      string suggestedFilaName = string.Concat(reportName, " ", DateRangeFileName);
 
       #endregion
 

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.GuestsPR.Forms"
         mc:Ignorable="d"
-         Title="GuestsPR"
+         Title="Guests By PR"
     d:Height="768" d:Width="1024" WindowStartupLocation="CenterScreen" 
     Icon="/IM.GuestsPR;component/Images/IM.ico" WindowState="Maximized" WindowStyle="SingleBorderWindow"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">

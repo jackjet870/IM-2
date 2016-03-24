@@ -650,8 +650,8 @@ namespace IM.ProcessorGeneral.Forms
           if (lstRptGift.Count > 0)
           {
             dtData = GridHelper.GetDataTableFromGrid(lstRptGift, changeDataTypeBoolToString: true, showCheckMark: true);
-            Tuple<string, string> Reportname = new Tuple<string, string>(Regex.Replace(strReport, "[^a-zA-Z0-9_]+", " "), "");
-            finfo = EpplusHelper.CreateGeneralRptExcel(filters, dtData, Reportname, clsFormatReport.rptGifts());
+            string  Reportname = Regex.Replace(strReport, "[^a-zA-Z0-9_]+", " ");
+            finfo = EpplusHelper.CreateGeneralRptExcel(filters, dtData, Reportname,"","", clsFormatReport.rptGifts());
             if (finfo != null)
             {
               Process.Start(finfo.FullName);

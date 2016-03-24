@@ -51,7 +51,8 @@ namespace IM.Assignment
 
     private List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
     private DataTable dt = new DataTable();
-    private Tuple<string, string> rptName;
+    private string rptName;
+    
 
     #endregion
 
@@ -352,7 +353,11 @@ namespace IM.Assignment
         if (lstAssignmentByPR.Count > 0)
         {
           dt = GridHelper.GetDataTableFromGrid(lstAssignmentByPR, true);
-          rptName = new Tuple<string, string>("Assignment by PR", lblWeek.Content + " " + lblDataRange.Content);
+          rptName = "Assignment by PR";
+
+          string dateRange = lblDataRange.Content.ToString();
+
+         
           List<ExcelFormatTable> format = new List<ExcelFormatTable>();
           format.Add(new ExcelFormatTable() { Title = "In", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
           format.Add(new ExcelFormatTable() { Title = "Out", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
@@ -367,7 +372,7 @@ namespace IM.Assignment
           format.Add(new ExcelFormatTable() { Title = "PR ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
           format.Add(new ExcelFormatTable() { Title = "PR N Assigned", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
           format.Add(new ExcelFormatTable() { Title = "Pax", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-          EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, format);
+          EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRange,dateRange, format);
         }
         else
         {
@@ -385,7 +390,11 @@ namespace IM.Assignment
       if (lstAssignment.Count > 0)
       {
         dt = GridHelper.GetDataTableFromGrid(lstAssignment, true);
-        rptName = new Tuple<string, string>("General Assignment", ""+lblDataRange.Content);
+        rptName = "General Assignment";
+        
+        string dateRange = lblDataRange.Content.ToString();
+
+
         List<ExcelFormatTable> format = new List<ExcelFormatTable>();
         format.Add(new ExcelFormatTable() { Title = "ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Check In D", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
@@ -402,7 +411,7 @@ namespace IM.Assignment
         format.Add(new ExcelFormatTable() { Title = "PR", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Liner", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Closer", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, format);
+        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRange,dateRange, format);
       }
       else
       {
@@ -419,7 +428,9 @@ namespace IM.Assignment
       if (lstAssignmentArrivals.Count > 0)
       {
         dt = GridHelper.GetDataTableFromGrid(lstAssignmentArrivals, true);
-        rptName = new Tuple<string, string>("Arrivals", "" + lblDataRange.Content);
+        rptName = "Arrivals";
+        string dateRange = lblDataRange.Content.ToString();
+
         List<ExcelFormatTable> format = new List<ExcelFormatTable>();
         format.Add(new ExcelFormatTable() { Title = "ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Check In D", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
@@ -436,7 +447,7 @@ namespace IM.Assignment
         format.Add(new ExcelFormatTable() { Title = "PR", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Liner", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Closer", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, format);
+        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName,dateRange,dateRange, format);
       }
       else
       {

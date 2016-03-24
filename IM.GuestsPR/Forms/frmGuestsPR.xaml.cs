@@ -96,12 +96,13 @@ namespace IM.GuestsPR.Forms
       {
         //Obtenemos dateRange
         string dateRange = DateHelper.DateRange(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
+        string dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
         //Obtenemos el nombre del reporte y el dateRange
-        Tuple<string, string> rptName = new Tuple<string, string>("GuestsPR", dateRange);
+        string rptName = "Guests By PR";
         //Obtenemos el dataTable con la lista formateada
         DataTable dt = GridHelper.GetDataTableFromGrid<GuestByPR>(listaGuestByPR,true);
         //Creamos el reporte
-        FileInfo fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName, Utilities.UseFulMethods.getExcelFormatTable());
+        FileInfo fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName,dateRange,dateRangeFileName, UseFulMethods.getExcelFormatTable());
 
         if (fi != null)
         {
