@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
+using IM.BusinessRules.Classes;
 using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
@@ -32,6 +33,7 @@ namespace IM.BusinessRules.BR
       return lstgetGifs;
     }
 
+       
     #endregion
 
     #region GetGiftsCategories
@@ -59,7 +61,93 @@ namespace IM.BusinessRules.BR
           default:
             return lstGiftsCateg.ToList();
         }
-      } 
+      }
+    }
+    #endregion
+
+    #region GetGiftsByGuest
+
+    /// <summary>
+    /// Método para obtener una lista de Regalos por invitado
+    /// </summary>
+    /// <param name="guestID">Indetificador del invitado</param>
+    /// <history>
+    /// [lchairez] 10/Mar/2016 Created
+    /// </history>
+    public static List<InvitationGift> GetGiftsByGuest(int guestID)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.InvitationsGifts.Where(i => i.iggu == guestID).ToList();
+      }
+    }
+
+    #endregion
+
+    #region GetGiftsInvitation
+    /// <summary>
+    /// Obtiene una lista especifica para cargar el grid de regalos de una invitación.
+    /// </summary>
+    /// <param name="guestId">Identificador del cliente</param>
+    /// <returns>Lista de la clase GiftInvitation</returns>
+    /// <history>
+    /// [lchairez] 23/Mar/2016 Created
+    /// </history>
+    public static List<GiftInvitation> GetGiftsInvitation(int guestId)
+    {
+      var gifts = GetGiftsByGuest(guestId);
+
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var giftsInvit = (from gi in gifts
+                          join g in dbContext.Gifts on gi.iggi equals g.giID
+                          select new GiftInvitation
+                          {
+                            iggu = gi.iggu,
+                            igQty = gi.igQty,
+                            iggi = gi.iggi,
+                            Gift = g.giN,
+                            igAdults = gi.igAdults,
+                            igMinors = gi.igMinors,
+                            igExtraAdults = gi.igExtraAdults,
+                            igPriceA = gi.igPriceA,
+                            igPriceAdult =gi.igPriceAdult,
+                            igPriceExtraAdult = gi.igPriceExtraAdult,
+                            igPriceM = gi.igPriceM,
+                            igPriceMinor = gi.igPriceMinor,
+                            igct = gi.igct
+                          }).ToList();
+        return giftsInvit;
+      }
+    }
+    #endregion
+
+    #region GetGiftId
+    /// <summary>
+    /// Obtiene un regalo específico por si ID
+    /// </summary>
+    /// <param name="giftId">Identificador del regalo</param>
+    /// <returns>Gifts</returns>
+    /// <history>
+    /// [lchairez] 23/03/2016 Created.
+    /// </history>
+    public static Gift GetGiftId(string giftId)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.Gifts.Where(g => g.giID == giftId).SingleOrDefault();
+      }
+    }
+    #endregion
+
+    #region GetInventationGift
+
+    public static InvitationGift GetInventationGift(int guestId, string gift)
+    {
+      using(var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.InvitationsGifts.SingleOrDefault(g=> g.iggu == guestId && g.iggi == gift);
+      }
     }
     #endregion
   }

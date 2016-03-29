@@ -28,7 +28,7 @@ namespace IM.BusinessRules.BR
       {
         return (from g in dbContext.Guests
                 from a in g.GuestsAdditional
-                where a.guID == guestId
+                where g.guID == guestId
                 select a).ToList();
       }
     }

@@ -161,7 +161,7 @@ namespace IM.Launcher
           Process.Start(String.Format("{0}\\IM.MailOuts.exe", path));
           break;
         case EnumMenu.Animation:
-          UIHelper.ShowMessage("Coming soon..");
+          
           break;
         case EnumMenu.Regen:
           UIHelper.ShowMessage("Coming soon..");

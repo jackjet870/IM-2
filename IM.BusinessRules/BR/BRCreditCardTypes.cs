@@ -43,7 +43,7 @@ namespace IM.BusinessRules.BR
             query = query.Where(cct => cct.ccN.Contains(creditCardType.ccN));
           }
         }
-
+        
         return query.OrderBy(cct=>cct.ccN).ToList();
       }
     }
@@ -84,6 +84,24 @@ namespace IM.BusinessRules.BR
         }
       }
       return nRes;
+    }
+    #endregion
+
+    #region GetCreditCardTypeId
+    /// <summary>
+    /// Obtiene una tarjeta de crédito por su ID
+    /// </summary>
+    /// <param name="creditcardId">Identificador de la tarjeta</param>
+    /// <returns>CreditCardType</returns>
+    /// <history>
+    /// [lchairez] 23/03/2016 Created.
+    /// </history>
+    public static CreditCardType GetCreditCardTypeId(string creditcardId)
+    {
+      using(var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.CreditCardTypes.Where(c => c.ccID == creditcardId).SingleOrDefault();
+      }
     }
     #endregion
   }

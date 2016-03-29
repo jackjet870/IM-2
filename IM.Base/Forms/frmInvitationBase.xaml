@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Base.Forms"
         mc:Ignorable="d"
-        Title="Invitation Base" Height="700" Width="700" Loaded="frmInvitationBase_Loaded">
+        Title="Invitation Base" Height="720" Width="700" Loaded="frmInvitationBase_Loaded">
     <Grid Background="SkyBlue" Name="grdGeneral"
           ScrollViewer.CanContentScroll="True"
           ScrollViewer.VerticalScrollBarVisibility="Visible">
@@ -86,7 +86,7 @@
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0" Name="lblLanguage" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Top">Language</Label>
-                        <ComboBox Grid.Row="1" Name="cmbLanguage" FontSize="10" SelectionChanged="cmbLanguage_SelectionChanged"/>
+                        <ComboBox Grid.Row="1" Name="cmbLanguage" FontSize="10"/>
                     </Grid>
 
                 </GroupBox>
@@ -97,7 +97,7 @@
 
         <!--#region ROW 2: INFO INVITADO-->
         <Grid Grid.Row="2" Grid.Column="1" Height="45" VerticalAlignment="Top">
-            <GroupBox>
+            <GroupBox Name="grbGuestInfo">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
@@ -115,36 +115,37 @@
 
                     <!--#region GUID-->
                     <Label Grid.Column="0" Grid.Row="0" Name="lblGuid" HorizontalAlignment="Center" FontSize="10">GUID</Label>
-                    <TextBox Grid.Column="0" Grid.Row="1" Name="txtGuid" FontSize="10"/>
+                    <TextBox Grid.Column="0" Grid.Row="1" Name="txtGuid" FontSize="10" TextAlignment="Center" IsEnabled="False"/>
                     <!--#endregion-->
 
                     <!--#region NÚMERO DE RESERVACIÓN-->
                     <Label Grid.Column="1" Grid.Row="0" Name="lblReservationNumber" HorizontalAlignment="Center" FontSize="10">Rsrv Num.</Label>
-                    <TextBox Grid.Column="1" Grid.Row="1" Name="txtReservationNumber" FontSize="10"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Name="txtReservationNumber" FontSize="10" TextAlignment="Center" IsEnabled="False"/>
                     <!--#endregion-->
 
                     <!--#region BOTÓN BUSCAR-->
-                    <Button Grid.Column="2" Grid.Row="1" Width="80" Name="btnSearch" Click="btnSearch_Click" FontSize="10">Search</Button>
+                    <Button Grid.Column="2" Grid.Row="1" Width="80" Name="btnSearch" Click="btnSearch_Click" FontSize="10" IsEnabled="False">Search</Button>
                     <!--#endregion-->
 
                     <!--#region OUT. INVIT .-->
                     <Label Grid.Column="3" Grid.Row="0" Name="lblOutInvitation" FontSize="10" HorizontalAlignment="Center">Out Invit.</Label>
-                    <TextBox Grid.Column="3" Grid.Row="1" Name="txtOutInvitation" FontSize="10"/>
+                    <TextBox Grid.Column="3" Grid.Row="1" Name="txtOutInvitation" FontSize="10" Height="19" VerticalAlignment="Top" TextAlignment="Center" IsEnabled="False"/>
+
                     <!--#endregion-->
 
                     <!--#region REBOOK REF.-->
                     <Label Grid.Column="4" Grid.Row="0" Name="lblRebookRef" FontSize="10" HorizontalAlignment="Center">Rebook Ref.</Label>
-                    <TextBox Grid.Column="4" Grid.Row="1" Name="txtRebookRef" FontSize="10"/>
+                    <TextBox Grid.Column="4" Grid.Row="1" Name="txtRebookRef" FontSize="10" TextAlignment="Center" IsEnabled="False"/>
                     <!--#endregion-->
 
                     <!--#region DATE-->
                     <Label Grid.Column="5" Grid.Row="0" Name="lblDate" FontSize="10" HorizontalAlignment="Center">Date</Label>
-                    <TextBox Grid.Column="5" Grid.Row="1" Name="txtDate" FontSize="10"/>
+                    <TextBox Grid.Column="5" Grid.Row="1" Name="txtDate" FontSize="10" TextAlignment="Center" IsEnabled="False"/>
                     <!--#endregion-->
 
                     <!--#region TIME-->
                     <Label Grid.Column="6" Grid.Row="0" Name="lblTime" FontSize="10" HorizontalAlignment="Center">Time</Label>
-                    <TextBox Grid.Column="6" Grid.Row="1" Name="txtTime" FontSize="10"/>
+                    <TextBox Grid.Column="6" Grid.Row="1" Name="txtTime" FontSize="10" TextAlignment="Center" IsEnabled="False"/>
                     <!--#endregion-->
                 </Grid>
             </GroupBox>
@@ -154,7 +155,7 @@
 
         <!--#region ROW 3: PÉRFIL DE OPERA-->
         <Grid Grid.Column="1" Grid.Row="3" Height="45" VerticalAlignment="Top">
-            <GroupBox>
+            <GroupBox  IsEnabled="False" Name="grbOperaInfo">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
@@ -188,7 +189,7 @@
             </Grid.ColumnDefinitions>
 
             <!--#region GUEST 1-->
-            <GroupBox Grid.Column="0" Header="Guest 1">
+            <GroupBox Grid.Column="0" Header="Guest 1" Name="grbGuest1">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="60"></ColumnDefinition>
@@ -213,10 +214,10 @@
                     <TextBox  Grid.ColumnSpan="2" Grid.Row="3" Name="txtFirstNameGuest1" FontSize="10"/>
 
                     <Label Grid.Column="0"  Grid.Row="4" FontSize="10">Age</Label>
-                    <TextBox  Grid.Column="0" Grid.Row="5" Name="txtAgeGuest1" FontSize="10"/>
+                    <TextBox  Grid.Column="0" Grid.Row="5" Name="txtAgeGuest1" FontSize="10" PreviewTextInput="PreviewTextInput"/>
 
                     <Label Grid.Column="1" Grid.Row="4" FontSize="10">Marital Status</Label>
-                    <ComboBox Grid.Column="2" Grid.Row="5" Name="cmbMaritalStatusGuest1" FontSize="10" SelectionChanged="cmbMaritalStatusGuest1_SelectionChanged"/>
+                    <ComboBox Grid.Column="2" Grid.Row="5" Name="cmbMaritalStatusGuest1" FontSize="10"/>
 
                     <Label Grid.ColumnSpan="2" Grid.Row="6" FontSize="10">Ocuppation</Label>
                     <TextBox  Grid.ColumnSpan="2" Grid.Row="7" Name="txtOcuppationGuest1" FontSize="10"/>
@@ -228,7 +229,7 @@
             <!--#endregion-->
 
             <!--#region GUEST 2-->
-            <GroupBox Grid.Column="1" Header="Guest 2">
+            <GroupBox Grid.Column="1" Header="Guest 2" Name="grbGuest2">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="60"></ColumnDefinition>
@@ -253,10 +254,10 @@
                     <TextBox  Grid.ColumnSpan="2" Grid.Row="3" Name="txtFirstNameGuest2" FontSize="10"/>
 
                     <Label Grid.Column="0"  Grid.Row="4" FontSize="10">Age</Label>
-                    <TextBox  Grid.Column="0" Grid.Row="5" Name="txtAgeGuest2" FontSize="10"/>
+                    <TextBox  Grid.Column="0" Grid.Row="5" Name="txtAgeGuest2" FontSize="10" PreviewTextInput="PreviewTextInput"/>
 
                     <Label Grid.Column="1" Grid.Row="4" FontSize="10">Marital Status</Label>
-                    <ComboBox Grid.Column="2" Grid.Row="5" Name="cmbMaritalStatusGuest2" FontSize="10" SelectionChanged="cmbMaritalStatusGuest2_SelectionChanged"/>
+                    <ComboBox Grid.Column="2" Grid.Row="5" Name="cmbMaritalStatusGuest2" FontSize="10"/>
 
                     <Label Grid.ColumnSpan="2" Grid.Row="6" FontSize="10">Ocuppation</Label>
                     <TextBox  Grid.ColumnSpan="2" Grid.Row="7" Name="txtOcuppationGuest2" FontSize="10"/>
@@ -268,29 +269,81 @@
             <!--#endregion-->
 
             <!--#region GIFTS-->
-            <GroupBox Grid.Column="2" Header="Gifts">
-                <Grid >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="150"></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid Grid.ColumnSpan="3" Grid.Row="0" Name="dtgGifts"></DataGrid>
+            <GroupBox Grid.Column="2" Header="Gifts" Name="grbGifts">
+                <Grid>
+                    <TabControl Background="SkyBlue">
+                        <TabItem Header="Gift List" Name="tbiGiftsList" Height="25" VerticalAlignment="Top">
+                            <Grid >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="110"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <DataGrid Grid.ColumnSpan="3" Grid.Row="0" Name="dtgGifts"  AutoGenerateColumns="False" MouseDoubleClick="dtgGifts_MouseDoubleClick" IsReadOnly="True">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding igQty}" Header="Qty"/>
+                                        <DataGridTextColumn Binding="{Binding iggi}" Header="iggi" Visibility="Hidden"/>
+                                        <DataGridTextColumn Binding="{Binding Gift}" Header="Gift" Width="150" />
+                                        <DataGridTextColumn Binding="{Binding igAdults}"  Header="Adults" />
+                                        <DataGridTextColumn Binding="{Binding igMinors}" Header="Minors" />
+                                        <DataGridTextColumn Binding="{Binding igExtraAdults}" Header="E.Adults" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
 
-                    <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" FontSize="10">Max Auth.</Label>
-                    <TextBox Grid.Column="0" Grid.Row="2" Name="txtMaxAuth" FontSize="10"/>
+                                <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" FontSize="10">Max Auth.</Label>
+                                <TextBox Grid.Column="0" Grid.Row="2" Name="txtMaxAuth" FontSize="10"/>
 
-                    <Label Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" FontSize="10">Total Cost.</Label>
-                    <TextBox Grid.Column="1" Grid.Row="2" Name="txtTotalCost" FontSize="10"/>
+                                <Label Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" FontSize="10">Total Cost.</Label>
+                                <TextBox Grid.Column="1" Grid.Row="2" Name="txtTotalCost" FontSize="10"/>
 
-                    <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" FontSize="10">Total Price.</Label>
-                    <TextBox Grid.Column="2" Grid.Row="2" Name="txtTotalPrice" FontSize="10"/>
+                                <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" FontSize="10">Total Price.</Label>
+                                <TextBox Grid.Column="2" Grid.Row="2" Name="txtTotalPrice" FontSize="10"/>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="New Gift" Name="tbiNewGift">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25"/>
+                                    <RowDefinition Height="25"/>
+                                    <RowDefinition Height="25"/>
+                                    <RowDefinition Height="25"/>
+                                    <RowDefinition Height="25"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label HorizontalAlignment="Right" VerticalAlignment="Center">Qty:</Label>
+                                <TextBox Grid.Column="1" Width="50" Name="txtQtyGift" FontSize="10" HorizontalAlignment="Left" PreviewTextInput="PreviewTextInput"></TextBox>
+
+                                <Label Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center">Gift:</Label>
+                                <ComboBox Grid.Row="1" Grid.Column="1" Name="cmbGifts" ItemsSource="{Binding}" SelectedValuePath="giID" DisplayMemberPath="giN"></ComboBox>
+
+                                <Label Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center">Adults:</Label>
+                                <TextBox Grid.Row="2" Grid.Column="1" Width="50" Name="txtAdultGift" FontSize="10" HorizontalAlignment="Left" PreviewTextInput="PreviewTextInput" Text="0"></TextBox>
+
+                                <Label Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center">Minors:</Label>
+                                <TextBox Grid.Row="3" Grid.Column="1" Width="50" Name="txtMinortGift" FontSize="10" HorizontalAlignment="Left" PreviewTextInput="PreviewTextInput" Text="0"></TextBox>
+
+                                <Label Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center">E. Adults:</Label>
+                                <TextBox Grid.Row="4" Grid.Column="1" Width="50" Name="txtEAdultGift" FontSize="10" HorizontalAlignment="Left" PreviewTextInput="PreviewTextInput" Text="0"></TextBox>
+
+                                <Button Grid.Row="5" Grid.Column="1" Name="btnAddGift" Width="70" HorizontalAlignment="Right" Click="btnAddGift_Click">Add</Button>
+                            </Grid>
+                        </TabItem>
+
+                    </TabControl>
                 </Grid>
+
+
+
             </GroupBox>
 
             <!--#endregion-->
@@ -312,7 +365,7 @@
                         </Grid.ColumnDefinitions>
 
                         <!--#region INFORMACION DEL PR-->
-                        <GroupBox Header="" Grid.ColumnSpan="2">
+                        <GroupBox Header="" Grid.ColumnSpan="2" Name="grbPrInfo">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -335,7 +388,7 @@
 
                                 <!--#region PR CONTRAC-->
                                 <Label Grid.Column="1" Grid.Row="0" FontSize="10">PR Contract</Label>
-                                <TextBox Grid.Column="1" Grid.Row="1" Name="txtPRContract" FontSize="10"/>
+                                <TextBox Grid.Column="1" Grid.Row="1" Name="txtPRContract" FontSize="10" LostFocus="txtPRContract_LostFocus" CharacterCasing="Upper"/>
                                 <ComboBox Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" Name="cmbPRContract" FontSize="10" SelectionChanged="cmbPRContract_SelectionChanged"/>
                                 <!--#endregion-->
 
@@ -346,7 +399,7 @@
 
                                 <!--#region CONTROLES PR / BOTON RESCHEDULE -->
                                 <Button Grid.Column="0" Grid.Row="3" Name="btnReschedule" Click="btnReschedule_Click">Reschedule</Button>
-                                <TextBox Grid.Column="1" Grid.Row="3" Name="txtPR"/>
+                                <TextBox Grid.Column="1" Grid.Row="3" Name="txtPR" LostFocus="txtPR_LostFocus" CharacterCasing="Upper"/>
                                 <ComboBox Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="3" Name="cmbPR" SelectionChanged="cmbPR_SelectionChanged"/>
                                 <!--#endregion-->
 
@@ -354,8 +407,8 @@
                                 <Button Grid.Column="0" Grid.Row="4" Name="btnRebook" Click="btnRebook_Click" FontSize="10">Rebook</Button>
                                 <Label Grid.Column="1" Grid.Row="4" Name="lblSalesRoom" FontSize="10">Sales</Label>
                                 <Label Grid.Column="1" Grid.Row="4" Name="lblLocation" Visibility="Hidden" FontSize="10">Location</Label>
-                                <TextBox Grid.Column="1" Grid.Row="5" Name="txtSalesRoom" FontSize="10"/>
-                                <TextBox Grid.Column="1" Grid.Row="5" Name="txtLocation" Visibility="Hidden" FontSize="10"/>
+                                <TextBox Grid.Column="1" Grid.Row="5" Name="txtSalesRoom" FontSize="10" CharacterCasing="Upper" LostFocus="txtSalesRoom_LostFocus"/>
+                                <TextBox Grid.Column="1" Grid.Row="5" Name="txtLocation" Visibility="Hidden" FontSize="10" LostFocus="txtLocation_LostFocus" CharacterCasing="Upper"/>
                                 <ComboBox Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" Name="cmbSalesRoom" FontSize="10" SelectionChanged="cmbSalesRoom_SelectionChanged"/>
                                 <ComboBox Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="5" Name="cmbLocation" Visibility="Hidden" FontSize="10" SelectionChanged="cmbLocation_SelectionChanged"/>
                                 <!--#endregion-->
@@ -369,7 +422,7 @@
                                 <!--#region CONTROLES BEFORE IN & OUT / BOOKING DATE/TIME /DIRECT  Before In& Out-->
                                 <CheckBox Grid.Column="0" Grid.Row="7" Name="chkBeforeInOut" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <DatePicker Grid.Column="1" Grid.Row="7" Name="txtBookingDate" FontSize="10"></DatePicker>
-                                <ComboBox Grid.Column="2" Grid.Row="7" Name="cmbBookingTime" FontSize="10" SelectionChanged="cmbBookingTime_SelectionChanged"/>
+                                <ComboBox Grid.Column="2" Grid.Row="7" Name="cmbBookingTime" FontSize="10" SelectionChanged="cmbBookingTime_SelectionChanged" DropDownOpened="cmbBookingTime_DropDownOpened"/>
                                 <CheckBox Grid.Column="3" Grid.Row="7" Name="chkDirect" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10"/>
                                 <!--#endregion-->
 
@@ -378,23 +431,23 @@
                                 <Label Grid.Column="0" Grid.Row="8" Name="lblSalesRoom2" Visibility="Hidden" FontSize="10">Sales Room</Label>
                                 <Label Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="8" Name="lblReschedule" FontSize="10">Reschedule Date and Time</Label>
                                 <Label Grid.Column="2" Grid.Row="8" Name="lblFlightNumber" Visibility="Hidden" FontSize="10">Flight Number</Label>
-                                <Label Grid.Column="3" Grid.Row="8" Name="lblRefresh" FontSize="10">Refresh</Label>
+                                <Label Grid.Column="3" Grid.Row="8" Name="lblResch" FontSize="10">Resh</Label>
                                 <!--#endregion-->
 
                                 <!--#region CONTROLES LOCATION / RESCHEDULE / FLIGHT #-->
-                                <TextBox Grid.Column="0" Grid.Row="9" Name="txtLocation2" FontSize="10"/>
+                                <TextBox Grid.Column="0" Grid.Row="9" Name="txtLocation2" FontSize="10" Height="22" VerticalAlignment="Top" IsEnabled="False"/>
                                 <TextBox Grid.Column="0" Grid.Row="9" Name="txtSalesRoom2" Visibility="Hidden" FontSize="10"/>
                                 <DatePicker Grid.Column="1" Grid.Row="9" Name="txtRescheduleDate" FontSize="10"/>
-                                <ComboBox Grid.Column="2" Grid.Row="9" Name="cmbRescheduleTime" FontSize="10" SelectionChanged="cmbRescheduleTime_SelectionChanged"/>
+                                <ComboBox Grid.Column="2" Grid.Row="9" Name="cmbRescheduleTime" FontSize="10" SelectionChanged="cmbRescheduleTime_SelectionChanged" DropDownOpened="cmbRescheduleTime_DropDownOpened"/>
                                 <TextBox Grid.Column="2" Grid.Row="9" Name="txtFlightNumber" FontSize="10" Visibility="Hidden"/>
-                                <CheckBox Grid.Column="3" Grid.Row="9" Name="chkRefresh" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10"/>
+                                <CheckBox Grid.Column="3" Grid.Row="9" Name="chkResch" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10"/>
                                 <!--#endregion-->
                             </Grid>
                         </GroupBox>
                         <!--#endregion-->
 
                         <!--#region OTRA INFORMACION-->
-                        <GroupBox Grid.Column="2" Header="Other Information">
+                        <GroupBox Grid.Column="2" Header="Other Information" Name="grbOtherInfo">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -432,7 +485,7 @@
                                 <!--#endregion-->
 
                                 <!--#region CONTROLES AGENCY-->
-                                <TextBox Grid.Column="0" Grid.Row="4" Name="txtAgency" FontSize="10"/>
+                                <TextBox Grid.Column="0" Grid.Row="4" Name="txtAgency" FontSize="10" LostFocus="txtAgency_LostFocus" CharacterCasing="Upper"/>
                                 <ComboBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4" Name="cmbAgency" FontSize="10" SelectionChanged="cmbAgency_SelectionChanged"/>
                                 <!--#endregion-->
 
@@ -441,7 +494,7 @@
                                 <!--#endregion-->
 
                                 <!--#region CONTROLES COUNTRY-->
-                                <TextBox Grid.Column="0" Grid.Row="6" Name="txtCountry" FontSize="10"/>
+                                <TextBox Grid.Column="0" Grid.Row="6" Name="txtCountry" FontSize="10" LostFocus="txtCountry_LostFocus" CharacterCasing="Upper"/>
                                 <ComboBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="6" Name="cmbCountry" FontSize="10" SelectionChanged="cmbCountry_SelectionChanged"/>
                                 <!--#endregion-->
 
@@ -452,9 +505,9 @@
                                 <!--#endregion-->
 
                                 <!--#region CONTROLES PAX 7 ARRIVAL / DEPARTURE-->
-                                <TextBox Grid.Column="0" Grid.Row="8" Name="txtPax"/>
-                                <TextBox Grid.Column="1" Grid.Row="8" Name="txtArrival"/>
-                                <TextBox Grid.Column="2" Grid.Row="8" Name="txtDeparture"/>
+                                <TextBox Grid.Column="0" Grid.Row="8" Name="txtPax" PreviewTextInput="PreviewTextInput"/>
+                                <DatePicker Grid.Column="1" Grid.Row="8" Name="txtArrival"/>
+                                <DatePicker Grid.Column="2" Grid.Row="8" Name="txtDeparture"/>
                                 <!--#endregion-->
                             </Grid>
                         </GroupBox>
@@ -476,125 +529,322 @@
                         </Grid.RowDefinitions>
 
                         <!--#region DEPOSITS-->
-                        <GroupBox Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Header="Deposits">
+                        <GroupBox Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Header="Deposits" Name="grbDeposits">
                             <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition></RowDefinition>
-                                    <RowDefinition></RowDefinition>
-                                    <RowDefinition></RowDefinition>
-                                    <RowDefinition Height="25"></RowDefinition>
-                                    <RowDefinition Height="25"></RowDefinition>
-                                    <RowDefinition Height="25"></RowDefinition>
-                                </Grid.RowDefinitions>
+                                <TabControl>
+                                    <TabItem Header="Deposit List" Name="tbiDepositList" Height="25" VerticalAlignment="Top" Margin="-2,2,-2,-2">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition></ColumnDefinition>
+                                                <ColumnDefinition></ColumnDefinition>
+                                                <ColumnDefinition></ColumnDefinition>
+                                                <ColumnDefinition></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition Height="25"></RowDefinition>
+                                                <RowDefinition Height="25"></RowDefinition>
+                                                <RowDefinition Height="25"></RowDefinition>
+                                            </Grid.RowDefinitions>
 
-                                <!--#region GRID DEPOSITOS-->
-                                <DataGrid Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="3" Name="dtgDeposits"></DataGrid>
-                                <!--#endregion-->
+                                            <!--#region GRID DEPOSITOS-->
+                                            <DataGrid Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="3" Name="dtgDeposits" AutoGenerateColumns="False" IsReadOnly="True" MouseDoubleClick="dtgDeposits_MouseDoubleClick">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="Deposits" Binding="{Binding bdAmount}"/>
+                                                    <DataGridTextColumn Header="Received" Binding="{Binding bdReceived}"/>
+                                                    <DataGridTextColumn Header="CxC"/>
+                                                    <DataGridTextColumn Header="bdcu" Binding="{Binding bdcu}" Visibility="Hidden"/>
+                                                    <DataGridTextColumn Header="Currency" Binding="{Binding Currency}"/>
+                                                    <DataGridTextColumn Header="bdpt" Binding="{Binding bdpt}" Visibility="Hidden"/>
+                                                    <DataGridTextColumn Header="Payment Type" Binding="{Binding PaymentType}"/>
+                                                    <DataGridTextColumn Header="Refund Places" Binding="{Binding bdpc}"/>
+                                                    <DataGridTextColumn Header="bdcc" Binding="{Binding bdcc}" Visibility="Hidden"/>
+                                                    <DataGridTextColumn Header="Credit Card" Binding="{Binding CreditCard}"/>
+                                                    <DataGridTextColumn Header="Card Number" Binding="{Binding bdCardNum}"/>
+                                                    <DataGridTextColumn Header="Expiration" Binding="{Binding bdExpD}"/>
+                                                    <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth}"/>
+                                                    <DataGridTextColumn Header="Folio CxC" Binding="{Binding bdFolioCXC}"/>
+                                                    <DataGridTextColumn Header="User CxC" Binding="{Binding bdUserCXC}"/>
+                                                    <DataGridTextColumn Header="Entry CxC" Binding="{Binding bdEntryDCXC}"/>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                            <!--#endregion-->
 
-                                <!--#region BURNED / CURRENCY-->
-                                <Label Grid.Column="0" Grid.Row="3" FontSize="10" HorizontalAlignment="Right">Burned</Label>
-                                <TextBox Grid.Column="1" Grid.Row="3" Name="txtBurned"/>
-                                <Label Grid.Column="2" Grid.Row="3" FontSize="10" HorizontalAlignment="Right">Currency</Label>
-                                <ComboBox Grid.Column="3" Grid.Row="3" Name="cmbCurrency" FontSize="10" SelectionChanged="ComboBox_SelectionChanged"/>
-                                <!--#endregion-->
+                                            <!--#region BURNED / CURRENCY-->
+                                            <Label Grid.Column="0" Grid.Row="3" FontSize="10" HorizontalAlignment="Right">Burned</Label>
+                                            <TextBox Grid.Column="1" Grid.Row="3" Name="txtBurned" PreviewTextInput="PreviewTextInput"/>
+                                            <Label Grid.Column="2" Grid.Row="3" FontSize="10" HorizontalAlignment="Right">Currency</Label>
+                                            <ComboBox Grid.Column="3" Grid.Row="3" Name="cmbCurrency" FontSize="10" />
+                                            <!--#endregion-->
 
-                                <!--#region PAYMENT TYPE-->
-                                <Label Grid.Column="0" Grid.Row="4" FontSize="10" HorizontalAlignment="Right">Payment Type</Label>
-                                <ComboBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4" Name="cmbPaymentType" FontSize="10" SelectionChanged="cmbPaymentType_SelectionChanged"/>
-                                <!--#endregion-->
+                                            <!--#region PAYMENT TYPE-->
+                                            <Label Grid.Column="0" Grid.Row="4" FontSize="10" HorizontalAlignment="Right">Payment Type</Label>
+                                            <ComboBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4" Name="cmbPaymentType" FontSize="10"/>
+                                            <!--#endregion-->
 
-                                <!--#region RESORT-->
-                                <Label Grid.Column="0" Grid.Row="5" FontSize="10" HorizontalAlignment="Right">Resort</Label>
-                                <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="5" Name="cmbResort" FontSize="10" SelectionChanged="cmbResort_SelectionChanged"/>
-                                <!--#endregion-->
+                                            <!--#region RESORT-->
+                                            <Label Grid.Column="0" Grid.Row="5" FontSize="10" HorizontalAlignment="Right">Resort</Label>
+                                            <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="5" Name="cmbResort" FontSize="10"/>
+                                            <!--#endregion-->
 
+                                        </Grid>
+                                    </TabItem>
+                                    <TabItem Header="New Deposit" Name="tbiNewDeposit">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="25"/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            
+                                            <!--#region ROW 0 Deposit/Received-->
+                                            <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="10">Deposit</Label>
+                                            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Name="txtDeposit" FontSize="10" PreviewTextInput="PreviewTextInput" Text="0.0"></TextBox>
+
+                                            <Label Grid.Row="0" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="10">Received</Label>
+                                            <TextBox Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" Name="txtReceived" FontSize="10" PreviewTextInput="PreviewTextInput" Text="0.0"></TextBox>
+                                            <!--#endregion-->
+                                            
+                                            <!--#region ROW 1 Currency/Payment Type-->
+                                            <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="10">Currency</Label>
+                                            <ComboBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Name="cmbCurrencyDeposit"></ComboBox>
+
+                                            <Label Grid.Row="1" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="10">Payment</Label>
+                                            <ComboBox Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Name="cmbPaymentTypeDeposit" SelectionChanged="cmbPaymentTypeDeposit_SelectionChanged"></ComboBox>
+                                            <!--#endregion-->
+                                            
+                                            <!--#region ROW 3-->
+                                            <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="10" ToolTip="Refund Places">Refund Pl.</Label>
+                                            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Name="txtRefundPlace" FontSize="10"></TextBox>
+
+                                            <Label Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="10" ToolTip="Credit Card Type">Credit C.</Label>
+                                            <ComboBox Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" Name="cmbCreditCardDeposit" IsEnabled="False"></ComboBox>
+                                            <!--#endregion-->
+                                            
+                                            <!--#region ROW 4 CardNumber/Expiration-->
+                                            <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="10" ToolTip="Card Number"># Card</Label>
+                                            <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Name="txtCardNumberDeposit" FontSize="10" PreviewTextInput="PreviewTextInput" IsEnabled="False"></TextBox>
+
+                                            <Label Grid.Row="3" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="10">Expiration</Label>
+                                            <TextBox Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2"  Name="txtExpirationCard" FontSize="10" IsEnabled="False"></TextBox>
+                                            <!--#endregion-->
+                                            
+                                            <!--#region ROW 5 Authorizathion ID/FolioCxC-->
+                                            <Label Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="10" ToolTip="Authorizathion ID">Auth. ID</Label>
+                                            <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Name="txtAuthorizathionId" FontSize="10" PreviewTextInput="PreviewTextInput" IsEnabled="False"></TextBox>
+
+                                            <Label Grid.Row="4" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="10">Folio CxC</Label>
+                                            <TextBox Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="2" Name="txtFolioCxC" FontSize="10" PreviewTextInput="PreviewTextInput"></TextBox>
+                                            <!--#endregion-->
+
+                                            <Button Grid.Row="5" Grid.Column="4" Grid.ColumnSpan="2" Width="70" Name="btnAddDeposit" Click="btnAddDeposit_Click">Add</Button>
+                                        </Grid>
+                                    </TabItem>
+                                </TabControl>
                             </Grid>
+
                         </GroupBox>
                         <!--#endregion-->
 
                         <!--#region GUEST STATUS-->
-                        <GroupBox Grid.Column="1" Grid.Row="0" Header="Guest Status">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="70"></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="35"></RowDefinition>
-                                    <RowDefinition></RowDefinition>
-                                </Grid.RowDefinitions>
+                        <GroupBox Grid.Column="1" Grid.Row="0" Header="Guest Status" Name="grbGuestStatus">
+                            <TabControl>
+                                <TabItem Header="Guest status List" Name="tbiGuestStatusList">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70"></ColumnDefinition>
+                                            <ColumnDefinition></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="35"></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                        </Grid.RowDefinitions>
 
-                                <!--#region GUEST STATUS-->
-                                <Label Grid.Column="0" Grid.Row="0" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Center">Guest Status</Label>
-                                <TextBox Grid.Column="1" Grid.Row="0" Name="txtGuestStatus" FontSize="10" Width="100" Height="30" HorizontalAlignment="Left"/>
-                                <!--#endregion-->
+                                        <!--#region GUEST STATUS-->
+                                        <Label Grid.Column="0" Grid.Row="0" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Center">Guest Status</Label>
+                                        <TextBox Grid.Column="1" Grid.Row="0" Name="txtGuestStatus" FontSize="10" Width="100" Height="30" HorizontalAlignment="Left"/>
+                                        <!--#endregion-->
 
-                                <!--#region GRID GUEST STATUS-->
-                                <DataGrid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Name="dtgGuestStatus"></DataGrid>
-                                <!--#endregion-->
-                            </Grid>
+                                        <!--#region GRID GUEST STATUS-->
+                                        <DataGrid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Name="dtgGuestStatus" AutoGenerateColumns="False" IsReadOnly="True" MouseDoubleClick="dtgGuestStatus_MouseDoubleClick">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Qty" Binding="{Binding gsQty}" Width="40"/>
+                                                <DataGridTextColumn Header="gsID" Binding="{Binding gsID}" Width="100" Visibility="Hidden"/>
+                                                <DataGridTextColumn Header="Status" Binding="{Binding GuestStatus}" Width="*"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                        <!--#endregion-->
+                                    </Grid>
+                                </TabItem>
+                                <TabItem Header="New Guest Status" Name="tbiNewGuestStatus">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="25"/>
+                                            <RowDefinition Height="25"/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">Qty:</Label>
+                                        <TextBox Grid.Column="1" Grid.Row="0" Name="txtQtyGuestStatus" Width="50" HorizontalAlignment="Left" PreviewTextInput="PreviewTextInput"></TextBox>
+
+                                        <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right">Guest Status:</Label>
+                                        <ComboBox Grid.Column="1" Grid.Row="1" Name="cmbGuestStatus" ItemsSource="{Binding}"></ComboBox>
+
+                                        <Button Grid.Row="2" Grid.Column="1" Width="60" Height="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Name="btnAddGuestStatus" Click="btnAddGuestStatus_Click">Add</Button>
+                                    </Grid>
+                                </TabItem>
+                            </TabControl>
+                            
+                            
                         </GroupBox>
                         <!--#endregion-->
 
                         <!--#region ROOMS QUANTITY-->
                         <GroupBox Grid.Column="1" Grid.Row="1" Header="Rooms Quantity" Name="grbRoomQuantity">
-                            <TextBox Name="txtRoomQuantity" Width="100" Height="35" HorizontalAlignment="Center"></TextBox>
+                            <TextBox Name="txtRoomQuantity" Width="100" Height="35" HorizontalAlignment="Center" PreviewTextInput="PreviewTextInput"></TextBox>
                         </GroupBox>
                         <!--#endregion-->
 
                     </Grid>
                     <!--#endregion-->
                 </TabItem>
-                <TabItem Header=" Additional Information" Background="White">
+                <TabItem Header=" Additional Information / Credit Card" Background="White" Height="25" VerticalAlignment="Top">
                     <!--#region ADDITIONAL INFORMATION / ELECTRONIC PURSE / CREDIT CARDS-->
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition Name="colElectronicPurseCreditCard"></ColumnDefinition>
+                            <ColumnDefinition Width="295*"></ColumnDefinition>
+                            <ColumnDefinition Width="41*"/>
+                            <ColumnDefinition Name="colElectronicPurseCreditCard" Width="336*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="170"></RowDefinition>
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
 
                         <!--#region GRID ADDITIONAL INFORMATION-->
-                        <GroupBox Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Header="Additional Infomation">
-                            <DataGrid Name="dtgAdditInform"></DataGrid>
+                        <GroupBox Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Header="Additional Infomation" Name="grbAdditionalInfo" Grid.ColumnSpan="2" MouseDoubleClick="grbAdditionalInfo_MouseDoubleClick">
+                            <TabControl>
+                                <TabItem Header="Additional Information List" Name="tbiAdditionalList">
+                                    <DataGrid Name="dtgAdditInform" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding}"> 
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="GUID" Binding="{Binding guID}"/>
+                                            <DataGridTextColumn Header="Last Name" Binding="{Binding guLastName1}"/>
+                                            <DataGridTextColumn Header="Firts Name" Binding="{Binding guFirstName1}"/>
+                                            <DataGridTextColumn Header="Details" Width="*"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </TabItem>
+                                <TabItem Header="New Additional" Name="tbiNewAdditional">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="25"/>
+                                            <RowDefinition Height="25"/>
+                                            <RowDefinition Height="25"/>
+                                            <RowDefinition Height="*"/>
+                                            
+                                        </Grid.RowDefinitions>
+
+                                        <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right">GUID:</Label>
+                                        <TextBox Grid.Row="0" Grid.Column="1" Name="txtGuidAdditional" FontSize="10" PreviewTextInput="PreviewTextInput" LostFocus="txtGuidAdditional_LostFocus"></TextBox>
+
+                                        <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right">Last Name:</Label>
+                                        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Name="txtLastNameAdditional" FontSize="10" IsReadOnly="True"></TextBox>
+
+                                        <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right">First Name:</Label>
+                                        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Name="txtFirstNameAdditional" FontSize="10" IsReadOnly="True"></TextBox>
+
+                                        <Button Grid.Row="3" Grid.Column="3" VerticalAlignment="Bottom" Height="30" Name="btnAddAdditional" Click="btnAddAdditional_Click">Add</Button>
+                                    </Grid>
+                                </TabItem>
+                            </TabControl>
+                            
                         </GroupBox>
                         <!--#endregion-->
 
                         <!--#region CREDIT CARD-->
-                        <GroupBox Grid.Column="1" Grid.Row="0" Header="Credit Card">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="75"></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"></RowDefinition>
-                                    <RowDefinition></RowDefinition>
-                                </Grid.RowDefinitions>
+                        <GroupBox Grid.Column="2" Grid.Row="0" Header="Credit Card" Name="grbCreditCards">
+                            <TabControl>
+                                <TabItem Header="Credit Card List" Name="tbiCreditCardList">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="75"></ColumnDefinition>
+                                            <ColumnDefinition></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="30"></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                        </Grid.RowDefinitions>
 
-                                <!--#region CREDIT CARD COMPANY-->
-                                <Label Grid.Column="0" Grid.Row="0" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Center">CC Company</Label>
-                                <TextBox Grid.Column="1" Grid.Row="0" Name="txtxCCCompany" FontSize="10" Width="100" HorizontalAlignment="Left"/>
-                                <!--#endregion-->
+                                        <!--#region CREDIT CARD COMPANY-->
+                                        <Label Grid.Column="0" Grid.Row="0" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Center">CC Company</Label>
+                                        <TextBox Grid.Column="1" Grid.Row="0" Name="txtCCCompany" FontSize="10" Width="100" HorizontalAlignment="Left"/>
+                                        <!--#endregion-->
 
-                                <!--#region GRID CREDIT CARD COMPANY-->
-                                <DataGrid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Name="dtgCCCompany"></DataGrid>
-                                <!--#endregion-->
-                            </Grid>
+                                        <!--#region GRID CREDIT CARD COMPANY-->
+                                        <DataGrid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Name="dtgCCCompany" AutoGenerateColumns="False" IsReadOnly="True" MouseDoubleClick="dtgCCCompany_MouseDoubleClick">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Qty" Binding="{Binding ccQty}" Width="40"/>
+                                                <DataGridTextColumn Header="gdcc" Binding="{Binding ccID}" Visibility="Hidden"/>
+                                                <DataGridTextColumn Header="Credit Card" Binding="{Binding CreditCard}" Width="*"/>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                        <!--#endregion-->
+                                    </Grid>
+                                </TabItem>
+                                <TabItem Header="New Credit Card" Name="tbiNewCreditCard">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition Width="50"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="25"/>
+                                            <RowDefinition Height="25"/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+
+                                        <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" FontSize="10">Qty:</Label>
+                                        <TextBox Grid.Row="0" Grid.Column="1" FontSize="10" Name="txtQtyCreditCard" PreviewTextInput="PreviewTextInput"></TextBox>
+
+                                        <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" FontSize="10">Credit Card:</Label>
+                                        <ComboBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" FontSize="10" Name="cmbCreditCards" PreviewTextInput="PreviewTextInput"></ComboBox>
+
+                                        <Button Grid.Row="3" Grid.Column="2" Width="70" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="30" Name="btnAddCreditCard" Click="btnAddCreditCard_Click">Add</Button>
+                                    </Grid>
+                                </TabItem>
+                            </TabControl>
+                            
                         </GroupBox>
                         <!--#endregion-->
 
                         <!--#region ELECTRONIC PURSE-->
-                        <GroupBox Grid.Column="1" Grid.Row="1"  Name="grbElectronicPurse" Header="Electronic Purse" Height="50" VerticalAlignment="Top">
+                        <GroupBox Grid.Column="2" Grid.Row="1"  Name="grbElectronicPurse" Header="Electronic Purse" Height="50" VerticalAlignment="Top">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="50"></ColumnDefinition>
@@ -629,10 +879,10 @@
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="35"></RowDefinition>
+                        <RowDefinition Height="40"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Button Grid.Column="1" Name="btnEdit" Click="btnEdit_Click">Edit</Button>
-                    <Button Grid.Column="2" Name="bntPrint" Click="bntPrint_Click">Print</Button>
+                    <Button Grid.Column="2" Name="btnPrint" Click="btnPrint_Click">Print</Button>
                     <Button Grid.Column="3" Name="btnSave" Click="btnSave_Click">Save</Button>
                     <Button Grid.Column="4" Name="btnCancel" Click="btnCancel_Click">Cancel</Button>
                     <Button Grid.Column="5" Name="btnLog" Click="btnLog_Click">Log</Button>

@@ -42,7 +42,7 @@ namespace IM.BusinessRules.BR
           }
         }
 
-        if (currency != null) // Verifica si se mando algun objeto de Currency.
+        if(currency != null)
         {
           if (!string.IsNullOrWhiteSpace(currency.cuID))//Filtro por ID
           {
@@ -54,10 +54,11 @@ namespace IM.BusinessRules.BR
             query = query.Where(c => c.cuN.Contains(currency.cuN));
           }
         }
-
+        
         return query.OrderBy(c=>c.cuN).ToList();
       }
     }
+        
     #endregion
 
     #region SaveCurrency
@@ -95,6 +96,24 @@ namespace IM.BusinessRules.BR
         }
       }
       return nRes;
+    }
+    #endregion
+
+    #region GetCurrencyId
+    /// <summary>
+    /// Obtiene una moneda en específico
+    /// </summary>
+    /// <param name="currencyId">Identificador de la moneda</param>
+    /// <returns>Currency</returns>
+    /// <history>
+    /// [lchairez] 23/03/2016 Created.
+    /// </history>
+    public static Currency GetCurrencyId(string currencyId)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.Currencies.Where(c => c.cuID == currencyId).SingleOrDefault();
+      }
     }
     #endregion
   }

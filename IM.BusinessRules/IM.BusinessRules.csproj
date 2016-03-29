@@ -54,9 +54,11 @@
     <Compile Include="BR\BRAssignment.cs" />
     <Compile Include="BR\BRAssistance.cs" />
     <Compile Include="BR\BRAssistancesStatus.cs" />
+    <Compile Include="BR\BRBookingDeposits.cs" />
     <Compile Include="BR\BRChargeCalculationTypes.cs" />
     <Compile Include="BR\BRChargeTos.cs" />
     <Compile Include="BR\BRClubs.cs" />
+    <Compile Include="BR\BRConfiguration.cs" />
     <Compile Include="BR\BRComputers.cs" />
     <Compile Include="BR\BRContracts.cs" />
     <Compile Include="BR\BRCountries.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="BR\BRExchangeRatesLogs.cs" />
     <Compile Include="BR\BRExchangeRate.cs" />
     <Compile Include="BR\BRFoliosInvitationsOuthouse.cs" />
+    <Compile Include="BR\BRFolios.cs" />
     <Compile Include="BR\BRGeneralReports.cs" />
     <Compile Include="BR\BRFoliosCXC.cs" />
     <Compile Include="BR\BRGifts.cs" />
@@ -76,10 +79,14 @@
     <Compile Include="BR\BRGuests.cs" />
     <Compile Include="BR\BRGuestsLogs.cs" />
     <Compile Include="BR\BRHelpers.cs" />
+    <Compile Include="BR\BRHotels.cs" />
     <Compile Include="BR\BRLanguages.cs" />
+    <Compile Include="BR\BRMaritalStatus.cs" />
+    <Compile Include="BR\BRPaymentTypes.cs" />
     <Compile Include="BR\BRPersonnelDayOff.cs" />
     <Compile Include="BR\BRPrStats.cs" />
     <Compile Include="BR\BRRegions.cs" />
+    <Compile Include="BR\BRTourTimesAvailables.cs" />
     <Compile Include="BR\BRSalesRoomsLogs.cs" />
     <Compile Include="BR\BRSales.cs" />
     <Compile Include="BR\BRSeasons.cs" />
@@ -95,6 +102,12 @@
     <Compile Include="BR\BRMailOutTexts.cs" />
     <Compile Include="BR\BRPersonnel.cs" />
     <Compile Include="BR\BRWarehouseMovements.cs" />
+    <Compile Include="Classes\BookingDepositInvitation.cs" />
+    <Compile Include="Classes\GiftInvitation.cs" />
+    <Compile Include="Classes\GuestAdditionalInvitation.cs" />
+    <Compile Include="Classes\GuestStatusInvitation.cs" />
+    <Compile Include="Classes\GuestCreditCardInvitation.cs" />
+    <Compile Include="Classes\GuestStatusTypeInvit.cs" />
     <Compile Include="Classes\UserNormalLogin.cs" />
     <Compile Include="Enums\InvitationType.cs" />
     <Compile Include="BR\BRLeadSources.cs" />

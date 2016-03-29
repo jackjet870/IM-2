@@ -252,9 +252,15 @@
                         </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guFollowDColumn" IsReadOnly="True" Binding="{Binding guFollowD}" Header="Follow D" Width="auto"/>
                         <DataGridTextColumn x:Name="guPRFollowColumn" IsReadOnly="True" Binding="{Binding guPRFollow}" Header="PR Follow" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guInvitColumn" IsReadOnly="False" Binding="{Binding guInvit}" Header="Invit" Width="auto"/>
+                        
                         <DataGridTextColumn x:Name="guBookDColumn" IsReadOnly="True" Binding="{Binding guBookD}" Header="Book D" Width="auto"/>
-                        <DataGridTextColumn x:Name="guPRInvit1Column" IsReadOnly="True" Binding="{Binding guPRInvit1}" Header="PR B" Width="auto"/>
+                        <DataGridTemplateColumn x:Name="guInvitColumn" IsReadOnly="False" Header="Invit" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guInvit}" Click="ChkInvit_Click" HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="gunbColumn" IsReadOnly="True" Binding="{Binding gunb}" Header="NB" Width="auto"/>
                         <DataGridTextColumn x:Name="guNoBookDColumn" IsReadOnly="True" Binding="{Binding guNoBookD}" Header="NB D" Width="auto"/>
                         <DataGridTextColumn x:Name="guPRNoBookColumn" IsReadOnly="True" Binding="{Binding guPRNoBook}" Header="PR NB" Width="auto"/>

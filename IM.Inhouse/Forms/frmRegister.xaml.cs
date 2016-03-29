@@ -319,12 +319,24 @@ namespace IM.Inhouse
     }
     #endregion
 
+    #region ChkInvit_Click
+    private void ChkInvit_Click(object sender, RoutedEventArgs e)
+    {
+      GuestArrival itema = dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
+      var chk = sender as CheckBox;    //bool? con = ck.IsChecked;
+      var userData = IM.BusinessRules.BR.BRPersonnel.Login(Model.Enums.EnumLoginType.Location, App.User.User.peID, App.User.Location.loID);
+      var invit = new IM.Base.Forms.frmInvitationBase(IM.BusinessRules.Enums.InvitationType.InHouse, userData, itema.guID, chk.IsChecked.Value ? Model.Enums.EnumInvitationMode.modOnlyRead : Model.Enums.EnumInvitationMode.modAdd); 
+      invit.ShowDialog();
+    }
+    #endregion
     public void DataGridVisibility(Visibility ccArrivals, Visibility ccAvailables, Visibility ccPremanifest)
     {
        this.ccArrivals.Visibility = ccArrivals;
        this.ccPremanifest.Visibility = ccPremanifest;
        this.ccAvailables.Visibility = ccAvailables;
     }
+
+    
 
     #region btnArrivals_Clicked
     private void btnArrivals_Clicked(object sender, RoutedEventArgs e)
