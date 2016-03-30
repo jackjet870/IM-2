@@ -22,6 +22,28 @@ namespace IM.Inhouse
     private UserData _user;
     private Guest _guest;
     private bool _searchUmByTxt;
+    public bool _wasSaved = false;
+    public byte guum
+    {
+      get
+      {
+        return txtguum.Text != string.Empty ? Convert.ToByte(txtguum.Text) : (byte)0;
+      }
+    }
+    public string guPRAvail
+    {
+      get
+      {
+        return txtguPRAvail.Text;
+      }
+    }
+    public bool Avail
+    {
+      get
+      {
+        return chkguAvail.IsChecked.Value;
+      }
+    }
 
     #endregion
 
@@ -30,7 +52,6 @@ namespace IM.Inhouse
     public frmAvailability(int guestID)
     {
       InitializeComponent();
-
       _guestID = guestID;
       lblUserName.Content = App.User.User.peN;
     }
@@ -250,22 +271,26 @@ namespace IM.Inhouse
     {
       this.Close();
     }
-    #endregion
+    #endregion  
 
     #region btnSave_Click
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
       if (Validate())
       {
-        _guest.guum = Convert.ToByte(txtguum.Text);
+        //Modificamos las variable indicando que si se guardo la variable
+        _wasSaved = true;
+        //guardamos la informacion de contacto
+        _guest.guum = txtguum.Text != string.Empty ? Convert.ToByte(txtguum.Text) : (byte) 0;
         _guest.guOriginAvail = chkguOriginAvail.IsChecked.Value;
         _guest.guAvail = chkguAvail.IsChecked.Value;
         _guest.guPRAvail = txtguPRAvail.Text;
         BRGuests.SaveGuest(_guest);
         //Se guarda el Log del Guest 
-        BRGuests.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);
+        BRGuestsLogs.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);
         this.Close();
       }
+      else { MessageBox.Show("don´t save"); }
     }
     #endregion
 

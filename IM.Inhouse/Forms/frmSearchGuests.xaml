@@ -4,53 +4,50 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Inhouse.Forms"
-        mc:Ignorable="d"
-        Title="Search Guests" SizeToContent="WidthAndHeight">
+        mc:Ignorable="d" ShowInTaskbar="False" ResizeMode="NoResize" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        Title="Search Guests" SizeToContent="WidthAndHeight" WindowStyle="ToolWindow" Loaded="Window_Loaded" Closing="Window_Closing" WindowStartupLocation="CenterScreen" Background="Beige">
     <Window.Resources>
         <Style TargetType="TextBlock">
-            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="FontSize" Value="14"/>
             <Setter Property="Margin" Value="0,0,8,0"/>
         </Style>
         <Style TargetType="TextBox">
-            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="FontSize" Value="14"/>
         </Style>
         <Style TargetType="DatePicker">
-            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="FontSize" Value="14"/>
         </Style>
-        <Style TargetType="DatePicker">
-            <Setter Property="FontSize" Value="17"/>
-        </Style>
-        
+
     </Window.Resources>
     <Grid>
-        <GroupBox  Header="Search Criteria" Margin="5" FontSize="17" >
+        <GroupBox  Header="Search Criteria" Margin="5" FontSize="14" Background="Bisque">
             <StackPanel Orientation="Horizontal"> 
                 <StackPanel Margin="7">
                     <TextBlock>Name</TextBlock>
-                    <TextBox Width="130"></TextBox>
+                    <TextBox Name="txtName" Width="130"></TextBox>
                 </StackPanel>
                 <StackPanel Margin="7">
                     <TextBlock>Room</TextBlock>
-                    <TextBox Width="90"></TextBox>
+                    <TextBox Name="txtRoomNum" Width="90"></TextBox>
                 </StackPanel>
                 <StackPanel Margin="7">
                     <TextBlock>Reservation</TextBlock>
-                    <TextBox Width="95"></TextBox>
+                    <TextBox Name="txtReservation" Width="95"></TextBox>
                 </StackPanel>
                 <StackPanel Margin="7">
                     <TextBlock>GUID</TextBlock>
-                    <TextBox Width="95"></TextBox>
+                    <TextBox Name="txtguID" Width="95" KeyDown="txtguID_KeyDown"></TextBox>
                 </StackPanel >
                 <StackPanel Margin="7">
                     <TextBlock>Arrival Date From</TextBlock>
-                    <DatePicker></DatePicker>
+                    <DatePicker Name="dtpStart" SelectedDateChanged="dtpStart_SelectedDateChanged"></DatePicker>
                 </StackPanel>
                 <StackPanel Margin="7">
                     <TextBlock>Arrival Date To</TextBlock>
-                    <DatePicker></DatePicker>
+                    <DatePicker Name="dtpEnd" SelectedDateChanged="dtpEnd_SelectedDateChanged"></DatePicker>
                 </StackPanel>
                 <StackPanel Margin="7" VerticalAlignment="Center">
-                    <Button Content="Search" FontSize="17" Width="100" Name="btnSearch" Click="btnSearch_Click"></Button>
+                    <Button Content="Search" FontSize="14" Width="100"  Name="btnSearch" Click="btnSearch_Click"></Button>
                 </StackPanel>
             </StackPanel>
         </GroupBox>

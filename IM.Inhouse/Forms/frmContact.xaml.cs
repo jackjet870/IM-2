@@ -33,6 +33,25 @@ namespace IM.Inhouse
     private Guest _guest;
     private UserData _user;
     private bool _searchPRByTxt;
+    public bool _wasSave;
+
+    public string PRInfo
+    {
+      get
+      {
+        return txtguPRInfo.Text;
+      }
+    }
+    public DateTime InfoD
+    {
+      get
+      {
+        return Convert.ToDateTime(txtguInfoD.Text).Date;
+      }
+    }
+
+   
+
 
     #endregion
 
@@ -97,10 +116,9 @@ namespace IM.Inhouse
       log.ShowDialog();
       if (log.IsAuthenticated)
       {
-          if (log.userData.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard))
-        {
-          _guest.guInfo = true;
-          if (_guest.guInfo == true && (log.userData.HasRole(EnumRole.PRCaptain) || log.userData.HasRole(EnumRole.PRSupervisor)))
+        if (log.userData.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard))
+        {         
+          if (_guest.guInfo == false || (log.userData.HasRole(EnumRole.PRCaptain) || log.userData.HasRole(EnumRole.PRSupervisor)))
           {
             _user = log.userData;
             txtguInfoD.Text = BRHelpers.GetServerDate().Date.ToString();
@@ -149,7 +167,7 @@ namespace IM.Inhouse
       if (txtguPRInfo.Text != string.Empty)
       {
         // validamos que el motivo de indisponibilidad exista en los activos
-        Personnel PR = BRPersonnel.GetPersonnelById(_guest.guPRAvail);
+        Personnel PR = BRPersonnel.GetPersonnelById(txtguPRInfo.Text);
         if (PR == null)
         {
           UIHelper.ShowMessage("The PR not exist");
@@ -209,6 +227,8 @@ namespace IM.Inhouse
     {
       if (Validate())
       {
+        //Modificamos las variable indicando que si se guardo la variable
+        _wasSave = true;
         //guardamos la informacion de contacto
         _guest.guloInfo = _user.User.peID;
         _guest.guPRInfo = txtguPRInfo.Text;
@@ -217,7 +237,7 @@ namespace IM.Inhouse
         BRGuests.SaveGuest(_guest);
 
         //guardamos la informacion de contacto
-        BRGuests.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);
+        BRGuestsLogs.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);
 
         //guardamos el movimiento de contactacion del huesped
         BRGuests.SaveGuestMovement(_guestID, EnumGuestsMovementsType.Contact, _user.User.peID, Environment.MachineName.ToString(), GetIPMachine());

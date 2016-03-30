@@ -4,30 +4,42 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Inhouse"
-        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Inhouse.frmRegister"
-        mc:Ignorable="d"
+        xmlns:Classes="clr-namespace:IM.Inhouse.Classes"
+        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
+        x:Class="IM.Inhouse.frmRegister"
+        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
         Title="InHouse"  Width="1366" Height="768"  WindowState="Maximized" Loaded="Window_Loaded">
     <Window.Resources>
-        <CollectionViewSource x:Key="guestArrivalViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GuestArrival}, CreateList=True}"/>
-        <CollectionViewSource x:Key="availableViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GuestAvailable}, CreateList=True}"/>
-        <CollectionViewSource x:Key="premanifestViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GuestPremanifest}, CreateList=True}"/>
-        <CollectionViewSource x:Key="guestSearchedViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GuestSearched}, CreateList=True}"/>
+        <CollectionViewSource x:Key="guestArrivalViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestArrival}, CreateList=True}"/>
+        <CollectionViewSource x:Key="guestAvailableViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestAvailable }, CreateList=True}"/>
+        <CollectionViewSource x:Key="guestPremanifestViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestPremanifest}, CreateList=True}"/>
+        <CollectionViewSource x:Key="guestSearchedViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestSearched}, CreateList=True}"/>
+
     </Window.Resources>
 
     <Grid>
+        <!--#region Configuración del Grid Principal -->
         <Grid.RowDefinitions>
             <RowDefinition Height="83"/>
             <RowDefinition Height="86*"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
+        <!--#endregion-->
+
+        <!--#region Controles principales del formulario-->
         <Grid Grid.Row="0" x:Name="grdPanel" Background="SkyBlue">
             <Grid.ColumnDefinitions>
+                <!--Botenes del Formulario Principal-->
                 <ColumnDefinition Width="30*"/>
-                <!--Fecha-->
+                <!--Fecha y Boton de Buscar-->
                 <ColumnDefinition Width="6*"/>
+                <!--Grupos Available, Contacted, Invited, On Group y Markets -->
                 <ColumnDefinition Width="26*"/>
+                <!--Informacion del Usuario-->
                 <ColumnDefinition Width="17*"/>
             </Grid.ColumnDefinitions>
+
+            <!--#region Botones-->
             <GroupBox x:Name="grbMenu" Grid.Column="0" Header="Options"  VerticalAlignment="Top" Height="70" FontWeight="Bold" Width="485" Margin="3,6,6,0"  >
                 <Grid x:Name="grdOpciones" VerticalAlignment="Top">
                     <Button x:Name="btnLogin" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="50" Background="White" >
@@ -86,6 +98,9 @@
                     </Button>
                 </Grid>
             </GroupBox>
+            <!--#endregion-->
+
+            <!--#region Fecha y Boton de Busca-->
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50*"/>
@@ -95,11 +110,12 @@
                 <DatePicker Grid.Row="0" x:Name="dtpDate" Margin="2,0,2,0" VerticalAlignment="Bottom"  SelectedDateChanged="dtpDate_SelectedDateChanged"/>
                 <!--   </GroupBox>-->
                 <!-- <GroupBox Grid.Row="1" Margin="5,3,5,3" >-->
-                <Button Grid.Row="1" x:Name="btnSearchGuest"  Background="White" Margin="2,5,2,5" VerticalAlignment="Top" Click="btnSearchGuest_Click" >
-                    <TextBlock Text="Search Guest"/>
-                </Button>
+                <Button Grid.Row="1" x:Name="btnSearchGuest" Content="Search Guest"  Background="White" Margin="2,5,0,0" VerticalAlignment="Top" Click="btnSearchGuest_Click" HorizontalAlignment="Left" Width="99" />
                 <!--   </GroupBox>-->
             </Grid>
+            <!--#endregion-->
+
+            <!--#region Grupos Available, Contacted, Invited, On Group y Markets-->
             <Grid Grid.Column="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -117,7 +133,7 @@
                 </GroupBox>
                 <GroupBox Grid.Column="1" Header ="Contacted" Margin="5" x:Name="gprInfo">
                     <StackPanel Orientation="Vertical">
-                        <RadioButton Checked="rb_Checked" TabIndex="1" GiveFeedback="rbNoInfo_GiveFeedback" x:Name="rbNoInfo" Content="  No"  Margin="2.5"/>
+                        <RadioButton Checked="rb_Checked" TabIndex="1" x:Name="rbNoInfo" Content="  No"  Margin="2.5"/>
                         <RadioButton Checked="rb_Checked" TabIndex="2" x:Name="rbYesInfo" Content="  Yes" Margin="2.5"/>
                         <RadioButton Checked="rb_Checked" TabIndex="3" x:Name="rbBothInfo" Content="  Both" IsChecked="True" Margin="2.5"/>
                     </StackPanel>
@@ -151,6 +167,9 @@
                     </ListView.View>
                 </ListView>
             </Grid>
+            <!--#endregion-->
+
+            <!--#region Informacion del Usuario -->
             <GroupBox x:Name="grbInfUser" Grid.Column="3" Header="Informartion User" FontWeight="Bold"  Margin="10,0,10,5">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -168,28 +187,43 @@
                     <TextBlock Grid.Column="1" Grid.Row="2" x:Name="txtOccupancy" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"  Width="220"><Run Text="OCCUPANCY 0:00%"/></TextBlock>
                 </Grid>
             </GroupBox>
-        </Grid>
+            <!--#endregion-->
 
-        <!--#region Data Grids-->
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region DataGrids y Botones de los grids-->
+
         <Grid Grid.Row="1" x:Name="tcgrid">
+            <!--#region Configuracion del Grid que contiene los dataGrids -->
             <Grid.RowDefinitions>
-                <RowDefinition Height="29"/>
+                <RowDefinition Height="33"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            <!--#endregion -->
+
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Name="btnArrivals" Click="btnArrivals_Clicked" Background="#FFCDF9CB">Arrivals</Button>
-                <Button Grid.Column="1" Name="btnAvailables" Click="btnAvailables_Clicked" Background="#FFB8EAB5">Availables</Button>
-                <Button Grid.Column="2" Name="btnPremanifiest" Click="btnPremanifiest_Click" Background="#FFCDF9CB" >Premanifest</Button>
+                <Button Grid.Column="0" Name="btnArrivals" Click="btnArrivals_Clicked" FontSize="15" Background="#FFCDF9CB">Arrivals</Button>
+                <Button Grid.Column="1" Name="btnAvailables" Click="btnAvailables_Clicked" FontSize="15" Background="#FFB8EAB5">Availables</Button>
+                <Button Grid.Column="2" Name="btnPremanifiest" Click="btnPremanifiest_Click" FontSize="15" Background="#FFCDF9CB" >Premanifest</Button>
             </Grid>
-            <ContentControl x:Name="ccArrivals" Grid.Row="1" Visibility="Visible" DataContext="{Binding Source={StaticResource guestArrivalViewSource}}">
+            <ContentControl x:Name="ccArrivals" Grid.Row="1" Visibility="Visible" DataContext="{StaticResource guestArrivalViewSource}">
                 <DataGrid x:Name="dgGuestArrival"  SelectionUnit ="FullRow"  SelectionMode="Single"  CanUserAddRows="False" AlternatingRowBackground="Gainsboro"  AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False" >
                     <DataGrid.Columns>
-                        <DataGridTextColumn x:Name="guStatusColumn" IsReadOnly="True" Binding="{Binding guStatus}" Header="St" Width="auto"/>
+                        <DataGridTextColumn x:Name="guStatusColumn"  Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style  TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="Background" Value="{Binding ColorColumn}" />
+                                    <Setter Property="Width" Value="15" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTextColumn x:Name="guIDColumn" IsReadOnly="True" Binding="{Binding guID}" Header="GUID" Width="auto"/>
                         <DataGridTextColumn x:Name="gulsOriginalColumn" IsReadOnly="True" Binding="{Binding gulsOriginal}" Header="LS Orig" ToolTipService.ToolTip="Lead Source Original" Width="auto"/>
                         <DataGridTemplateColumn x:Name="guHReservIDColumn" IsReadOnly="false"  Header="Reserv. #" >
@@ -205,15 +239,15 @@
                         <DataGridTemplateColumn x:Name="guCheckInColumn" IsReadOnly="False"  Header="In" Width="auto" >
                             <DataGridTemplateColumn.CellTemplate >
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding guCheckIn}"  Click="ChkguCheckIn_Click"  HorizontalAlignment="Center" />
+                                    <CheckBox IsChecked="{Binding guCheckIn, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkguCheckInArrival_Click"  HorizontalAlignment="Center" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guRoomNumColumn" IsReadOnly="True"  Binding="{Binding guRoomNum}" Header="Room" Width="auto"/>
                         <DataGridTextColumn x:Name="guLastName1Column" IsReadOnly="True" Binding="{Binding guLastName1}" Header="Last Name" Width="auto"/>
                         <DataGridTextColumn x:Name="guFirstName1Column" IsReadOnly="True"  Binding="{Binding guFirstName1}" Header="First Name" Width="auto"/>
-                        <DataGridTextColumn x:Name="guCheckInDColumn" IsReadOnly="True"  Binding="{Binding guCheckInD}" Header="Chk-In D" Width="auto"/>
-                        <DataGridTextColumn x:Name="guCheckOutDColumn" IsReadOnly="True"  Binding="{Binding guCheckOutD}" Header="Chk-Out D" Width="auto"/>
+                        <DataGridTextColumn x:Name="guCheckInDColumn" IsReadOnly="True"  Binding="{Binding guCheckInD, StringFormat=dd/MM/yyyy}" Header="Chk-In D" Width="auto"/>
+                        <DataGridTextColumn x:Name="guCheckOutDColumn" IsReadOnly="True"  Binding="{Binding guCheckOutD, StringFormat=dd/MM/yyyy}" Header="Chk-Out D" Width="auto"/>
                         <DataGridTextColumn x:Name="gucoColumn" IsReadOnly="True"  Binding="{Binding guco}" Header="Country ID" Width="auto"/>
                         <DataGridTextColumn x:Name="coNColumn" IsReadOnly="True"  Binding="{Binding coN}" Header="Country" Width="auto"/>
                         <DataGridTextColumn x:Name="guagColumn" IsReadOnly="True"  Binding="{Binding guag}" Header="Agency ID" Width="auto"/>
@@ -228,7 +262,7 @@
                         <DataGridTemplateColumn x:Name="guAvailColumn" IsReadOnly="False"  Header="Avl" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding guAvail}" Click="ChkguAvail_Click"  HorizontalAlignment="Center" />
+                                    <CheckBox IsChecked="{Binding guAvail,NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChkguAvailArrival_Click"  HorizontalAlignment="Center" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -237,23 +271,23 @@
                         <DataGridTemplateColumn x:Name="guInfoColumn" IsReadOnly="False" Header="Cont" Width="auto">
                             <DataGridTemplateColumn.CellTemplate >
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding guInfo}" Click="ChkguInfo_Click" HorizontalAlignment="Center" />
+                                    <CheckBox IsChecked="{Binding guInfo, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChkguInfoArrival_Click" HorizontalAlignment="Center" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn x:Name="guInfoDColumn" IsReadOnly="True" Binding="{Binding guInfoD}" Header="Cont D" Width="auto"/>
+                        <DataGridTextColumn x:Name="guInfoDColumn" IsReadOnly="True" Binding="{Binding guInfoD, StringFormat=dd/MM/yyyy}" Header="Cont D" Width="auto"/>
                         <DataGridTextColumn x:Name="guPRInfoColumn" IsReadOnly="True" Binding="{Binding guPRInfo}" Header="PR Cont" Width="auto"/>
                         <DataGridTemplateColumn x:Name="guFollowColumn" IsReadOnly="false"  Header="FU" Width="auto">
                             <DataGridTemplateColumn.CellTemplate >
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding guFollow}" Click="ChkFollow_Click"  HorizontalAlignment="Center" />
+                                    <CheckBox IsChecked="{Binding guFollow, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChkFollowArrival_Click"  HorizontalAlignment="Center" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn x:Name="guFollowDColumn" IsReadOnly="True" Binding="{Binding guFollowD}" Header="Follow D" Width="auto"/>
+                        <DataGridTextColumn x:Name="guFollowDColumn" IsReadOnly="True" Binding="{Binding guFollowD, StringFormat=dd/MM/yyyy}" Header="Follow D" Width="auto"/>
                         <DataGridTextColumn x:Name="guPRFollowColumn" IsReadOnly="True" Binding="{Binding guPRFollow}" Header="PR Follow" Width="auto"/>
                         
-                        <DataGridTextColumn x:Name="guBookDColumn" IsReadOnly="True" Binding="{Binding guBookD}" Header="Book D" Width="auto"/>
+                        <DataGridTextColumn x:Name="guBookDColumn" IsReadOnly="True" Binding="{Binding guBookD, StringFormat=dd/MM/yyyy}" Header="Book D" Width="auto"/>
                         <DataGridTemplateColumn x:Name="guInvitColumn" IsReadOnly="False" Header="Invit" Width="auto">
                             <DataGridTemplateColumn.CellTemplate >
                                 <DataTemplate>
@@ -262,13 +296,19 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="gunbColumn" IsReadOnly="True" Binding="{Binding gunb}" Header="NB" Width="auto"/>
-                        <DataGridTextColumn x:Name="guNoBookDColumn" IsReadOnly="True" Binding="{Binding guNoBookD}" Header="NB D" Width="auto"/>
+                        <DataGridTextColumn x:Name="guNoBookDColumn" IsReadOnly="True" Binding="{Binding guNoBookD, StringFormat=dd/MM/yyyy}" Header="NB D" Width="auto"/>
                         <DataGridTextColumn x:Name="guPRNoBookColumn" IsReadOnly="True" Binding="{Binding guPRNoBook}" Header="PR NB" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guQuinellaColumn" IsReadOnly="False" Binding="{Binding guQuinella}" Header="Quinella" Width="auto"/>
                         <DataGridTextColumn x:Name="gaguColumn" IsReadOnly="True" Binding="{Binding gagu}" Header="Main Inv" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guGroupColumn" IsReadOnly="False" Binding="{Binding guGroup}" Header="Grp" Width="auto"/>
                         <DataGridTextColumn x:Name="groupNColumn" IsReadOnly="True" Binding="{Binding GroupN}" Header="Grp Name" Width="auto"/>
-                        <DataGridTextColumn x:Name="equityColumn" IsReadOnly="True" Binding="{Binding Equity}" Header="Equity" Width="auto"/>
+                        <DataGridTemplateColumn x:Name="equityColumn" IsReadOnly="True"  Header="Equity" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding EquityColumn}" Width="17" Height="17"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guclColumn" IsReadOnly="True" Binding="{Binding gucl}" Header="Club ID" Width="auto"/>
                         <DataGridTextColumn x:Name="clNColumn" IsReadOnly="True"  Binding="{Binding clN}" Header="Club" Width="auto"/>
                         <DataGridTextColumn x:Name="guCompanyColumn" IsReadOnly="True" Binding="{Binding guCompany}" Header="Company" Width="auto"/>
@@ -277,31 +317,66 @@
                         <DataGridTemplateColumn x:Name="guBookCancColumn" IsReadOnly="false"  Header="C.Bk" Width="auto">
                             <DataGridTemplateColumn.CellTemplate >
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding guBookCanc}"   HorizontalAlignment="Center" />
+                                    <CheckBox IsChecked="{Binding guBookCanc, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkBookCancArrival_Click"   HorizontalAlignment="Center" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridCheckBoxColumn x:Name="guShowColumn" IsReadOnly="False" Binding="{Binding guShow}" Header="Show Up" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guLWColumn" IsReadOnly="False" Binding="{Binding guLW}" Header="LW" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guPRNoteColumn" IsReadOnly="False" Binding="{Binding guPRNote}" Header="Notes" Width="auto"/>
-                        <DataGridTextColumn x:Name="notesColumn" IsReadOnly="True" Binding="{Binding Notes}" Header="Notes" Width="auto"/>
+                        <DataGridCheckBoxColumn x:Name="guPRNoteColumn" IsReadOnly="False" Binding="{Binding guPRNote}"   Header="Notes" Width="auto" Visibility="Hidden"/>
+                        <DataGridTemplateColumn x:Name="notesColumn" IsReadOnly="True" Header="Notes" Width="auto"  >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Height="18"   MouseLeftButtonUp="NotesArrival_MouseLeftButtonUp">
+                                        <InlineUIContainer>
+                                            <Image Source="{Binding SourceImage}" Height="18" >
+                                                  <!--Este Triggers se ejecutara cuando es la primera vez que se le agrega la nota al guest y la muestra enseguida depues de cerrar el formulario de notas -->
+                                               <Image.Style>
+                                                  <Style TargetType="{x:Type Image}">
+                                                     <Style.Triggers>
+                                                          <DataTrigger Binding="{Binding  guPRNote}" Value="true">
+                                                              <Setter Property="Source" Value="{Binding SourceImage}"/>
+                                                          </DataTrigger>                                                        
+                                                       </Style.Triggers>
+                                                  </Style>
+                                               </Image.Style>  
+                                            </Image>
+                                        </InlineUIContainer>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guCommentsColumn" IsReadOnly="True" Binding="{Binding guComments}" Header="Comments" Width="auto"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </ContentControl>
-
-            <ContentControl x:Name="ccAvailables" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource availableViewSource}}">
+         
+            <ContentControl x:Name="ccAvailables" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource guestAvailableViewSource}}">
                 <DataGrid x:Name="dgGuestAvailable" CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  CanUserSortColumns="True" AutoGenerateColumns="False" Grid.ColumnSpan="2" Grid.Column="1" EnableRowVirtualization="True"  RowDetailsVisibilityMode="VisibleWhenSelected" >
                     <DataGrid.Columns>
-                        <DataGridTextColumn x:Name="guStatusColumn1" IsReadOnly="True" Binding="{Binding guStatus}" Header="St" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guCheckInColumn1" IsReadOnly="True" Binding="{Binding guCheckIn}" Header="In" Width="auto"/>
+                        <DataGridTextColumn x:Name="guStatusColumn1" Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style  TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="Background" Value="{Binding ColorColumn}" />
+                                    <Setter Property="Width" Value="15" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTemplateColumn x:Name="guCheckInColumn1" IsReadOnly="False"  Header="In" Width="auto" Visibility="Hidden">
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guCheckIn, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkguCheckInAvailables_Click"  HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guIDColumn1" IsReadOnly="True" Binding="{Binding guID}" Header="GUID" Width="auto"/>
                         <DataGridTextColumn x:Name="guIdProfileOperaColumn1" IsReadOnly="True" Binding="{Binding guIdProfileOpera}" Header="Opera Id" Width="auto"/>
                         <DataGridTextColumn x:Name="guRoomNumColumn1" IsReadOnly="True" Binding="{Binding guRoomNum}" Header="Room" Width="auto"/>
                         <DataGridTextColumn x:Name="guLastName1Column1" IsReadOnly="True" Binding="{Binding guLastName1}" Header="Last Name" Width="auto"/>
                         <DataGridTextColumn x:Name="guFirstName1Column1" IsReadOnly="True" Binding="{Binding guFirstName1}" Header="First Name" Width="auto"/>
-                        <DataGridTextColumn x:Name="guCheckInDColumn1" IsReadOnly="True" Binding="{Binding guCheckInD}" Header="Check-In D" Width="auto"/>
-                        <DataGridTextColumn x:Name="guCheckOutDColumn1" IsReadOnly="True" Binding="{Binding guCheckOutD}" Header="Check-Out D" Width="auto"/>
+                        <DataGridTextColumn x:Name="guCheckInDColumn1" IsReadOnly="True" Binding="{Binding guCheckInD, StringFormat=dd/MM/yyyy}" Header="Check-In D" Width="auto"/>
+                        <DataGridTextColumn x:Name="guCheckOutDColumn1" IsReadOnly="True" Binding="{Binding guCheckOutD, StringFormat=dd/MM/yyyy}" Header="Check-Out D" Width="auto"/>
                         <DataGridTextColumn x:Name="gucoColumn1" IsReadOnly="True" Binding="{Binding guco}" Header="Country ID" Width="auto"/>
                         <DataGridTextColumn x:Name="coNColumn1" IsReadOnly="True" Binding="{Binding coN}" Header="Country" Width="auto"/>
                         <DataGridTextColumn x:Name="guagColumn1" IsReadOnly="True" Binding="{Binding guag}" Header="Agency ID" Width="auto"/>
@@ -310,14 +385,32 @@
                         <DataGridTextColumn x:Name="guPaxColumn1" IsReadOnly="True" Binding="{Binding guPax}" Header="Pax" Width="auto"/>
                         <DataGridTextColumn x:Name="guCCTypeColumn1" IsReadOnly="True" Binding="{Binding guCCType}" Header="C.C." Width="auto"/>
                         <DataGridTextColumn x:Name="guPRAssignColumn1"  IsReadOnly="True" Binding="{Binding guPRAssign}" Header="PR A" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guAvailColumn1" IsReadOnly="True" Binding="{Binding guAvail}" Header="Avl" Width="auto"/>
+                        <DataGridTemplateColumn x:Name="guAvailColumn1" IsReadOnly="False"  Header="Avl" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guAvail,NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChkguAvailAvailable_Click"  HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guPRAvailColumn1" IsReadOnly="True" Binding="{Binding guPRAvail}" Header="PR Avl" Width="auto"/>
                         <DataGridTextColumn x:Name="guumColumn1" IsReadOnly="True" Binding="{Binding guum}" Header="UM" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guInfoColumn1" IsReadOnly="True" Binding="{Binding guInfo}" Header="Cont" Width="auto"/>
-                        <DataGridTextColumn x:Name="guInfoDColumn1" IsReadOnly="True" Binding="{Binding guInfoD}" Header="Cont D" Width="auto"/>
+                        <DataGridTemplateColumn x:Name="guInfoColumn1" IsReadOnly="False" Header="Cont" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guInfo, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChkguInfoAvailable_Click" HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn x:Name="guInfoDColumn1" IsReadOnly="True" Binding="{Binding guInfoD, StringFormat=dd/MM/yyyy}" Header="Cont D" Width="auto"/>
                         <DataGridTextColumn x:Name="guPRInfoColumn1" IsReadOnly="True" Binding="{Binding guPRInfo}" Header="PR Cont" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guFollowColumn1" IsReadOnly="True" Binding="{Binding guFollow}" Header="FU" Width="auto"/>
-                        <DataGridTextColumn x:Name="guFollowDColumn1" IsReadOnly="True" Binding="{Binding guFollowD}" Header="Follow D" Width="auto"/>
+                        <DataGridTemplateColumn x:Name="guFollowColumn1" IsReadOnly="false"  Header="FU" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guFollow, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChkFollowAvailable_Click"  HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn x:Name="guFollowDColumn1" IsReadOnly="True" Binding="{Binding guFollowD, StringFormat=dd/MM/yyyy}" Header="Follow D" Width="auto"/>
                         <DataGridTextColumn x:Name="guPRFollowColumn1" IsReadOnly="True" Binding="{Binding guPRFollow}" Header="PR Follow" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guInvitColumn1" IsReadOnly="True" Binding="{Binding guInvit}" Header="Invit" Width="auto"/>
                         <DataGridTextColumn x:Name="guBookDColumn1" IsReadOnly="True" Binding="{Binding guBookD}" Header="Book D" Width="auto"/>
@@ -328,34 +421,87 @@
                         <DataGridCheckBoxColumn x:Name="guQuinellaColumn1" IsReadOnly="True" Binding="{Binding guQuinella}" Header="Qui" Width="auto"/>
                         <DataGridTextColumn x:Name="gaguColumn1" IsReadOnly="True" Binding="{Binding gagu}" Header="Main Inv" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guGroupColumn1" IsReadOnly="True" Binding="{Binding guGroup}" Header="Grp" Width="auto"/>
-                        <DataGridTextColumn x:Name="equityColumn1" IsReadOnly="True" Binding="{Binding Equity}" Header="Equity" Width="auto"/>
+                        <!--<DataGridTextColumn x:Name="equityColumn1" IsReadOnly="True" Binding="{Binding Equity}" Header="Equity" Width="auto"/>-->
+                        <DataGridTemplateColumn x:Name="equityColumn1" IsReadOnly="True"  Header="Equity" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding EquityColumn}" Width="17" Height="17"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guclColumn1" IsReadOnly="True" Binding="{Binding gucl}" Header="Club Id" Width="auto"/>
                         <DataGridTextColumn x:Name="clNColumn1" IsReadOnly="True" Binding="{Binding clN}" Header="Club" Width="auto"/>
                         <DataGridTextColumn x:Name="guCompanyColumn1" IsReadOnly="True" Binding="{Binding guCompany}" Header="Company" Width="auto"/>
                         <DataGridTextColumn x:Name="guMembershipNumColumn1" IsReadOnly="True" Binding="{Binding guMembershipNum}" Header="Member" Width="auto"/>
                         <DataGridTextColumn x:Name="mtNColumn1" IsReadOnly="True" Binding="{Binding mtN}" Header="M type" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guBookCancColumn1" IsReadOnly="True" Binding="{Binding guBookCanc}" Header="C. Bk" Width="auto"/>
+                        <DataGridTemplateColumn x:Name="guBookCancColumn1" IsReadOnly="True"  Header="C. Bk" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guBookCanc, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkBookCancAvailable_Click"   HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridCheckBoxColumn x:Name="guShowColumn1" IsReadOnly="True" Binding="{Binding guShow}" Header="Sh" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guLWColumn1" IsReadOnly="True" Binding="{Binding guLW}" Header="LW" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guPRNoteColumn1" IsReadOnly="True" Binding="{Binding guPRNote}" Header="Notes" Width="auto"/>
-                        <DataGridTextColumn x:Name="notesColumn1" IsReadOnly="True" Binding="{Binding Notes}" Header="Notes" Width="auto"/>
+                        <DataGridCheckBoxColumn x:Name="guPRNoteColumn1" IsReadOnly="True" Binding="{Binding guPRNote,  NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" Header="Notes" Width="auto" Visibility="Hidden"/>
+                        <!--<DataGridTextColumn x:Name="notesColumn1" IsReadOnly="True" Binding="{Binding Notes}" Header="Notes" Width="auto"/>-->
+                        <DataGridTemplateColumn x:Name="notesColumn1" IsReadOnly="True" Header="Notes" Width="auto" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Height="18"  MouseLeftButtonUp="NotesAvailable_MouseLeftButtonUp">
+                                        <InlineUIContainer>
+                                            <Image Source="{Binding SourceImage}" Height="18" >
+                                                <!--Este Triggers se ejecutara cuando es la primera vez que se le agrega la nota al guest y la muestra enseguida depues de cerrar el formulario de notas -->
+                                               <Image.Style>
+                                                  <Style TargetType="{x:Type Image}">
+                                                     <Style.Triggers>
+                                                          <DataTrigger Binding="{Binding  guPRNote}" Value="true">
+                                                              <Setter Property="Source" Value="{Binding SourceImage}"/>
+                                                          </DataTrigger>                                                        
+                                                       </Style.Triggers>
+                                                  </Style>
+                                               </Image.Style>                           
+                                            </Image>
+                                        </InlineUIContainer>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+
                         <DataGridTextColumn x:Name="guCommentsColumn1" IsReadOnly="True" Binding="{Binding guComments}" Header="Comments" Width="auto"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </ContentControl>
 
-            <ContentControl x:Name="ccPremanifest" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource premanifestViewSource}}">
+            <ContentControl x:Name="ccPremanifest" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource guestPremanifestViewSource}}">
                 <DataGrid x:Name="dgGuestPremanifest"  CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"  EnableRowVirtualization="True"   RowDetailsVisibilityMode="VisibleWhenSelected">
                     <DataGrid.Columns>
-                        <DataGridTextColumn x:Name="guStatusColumn2" IsReadOnly="True" Binding="{Binding guStatus}" Header="St" Width="auto"/>
+                        <DataGridTextColumn x:Name="guStatusColumn2" Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style  TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="Background" Value="{Binding ColorColumn}" />
+                                    <Setter Property="Width" Value="15" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+
                         <DataGridTextColumn x:Name="guIDColumn2" IsReadOnly="True" Binding="{Binding guID}" Header="GUID" Width="auto"/>
                         <DataGridTextColumn x:Name="guIdProfileOperaColumn2" IsReadOnly="True" Binding="{Binding guIdProfileOpera}" Header="Opera Id" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guCheckInColumn2" IsReadOnly="False" Binding="{Binding guCheckIn}" Header="In" Width="auto"/>
+                        <DataGridTemplateColumn x:Name="guCheckInColumn2" IsReadOnly="False"  Header="In" Width="auto" >
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guCheckIn, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkguCheckInPremanifest_Click"  HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guRoomNumColumn2" IsReadOnly="True" Binding="{Binding guRoomNum}" Header="Room" Width="auto"/>
                         <DataGridTextColumn x:Name="guLastName1Column2" IsReadOnly="True" Binding="{Binding guLastName1}" Header="Last Name" Width="auto"/>
                         <DataGridTextColumn x:Name="guFirstName1Column2" IsReadOnly="True" Binding="{Binding guFirstName1}" Header="First Name" Width="auto"/>
-                        <DataGridTextColumn x:Name="guCheckInDColumn2" IsReadOnly="True" Header="Check-In D" Binding="{Binding guCheckInD}" Width="auto"/>
-                        <DataGridTextColumn x:Name="guCheckOutDColumn2" IsReadOnly="True" Header="Check-Out D" Binding="{Binding guCheckOutD}" Width="auto"/>
+                        <DataGridTextColumn x:Name="guCheckInDColumn2" IsReadOnly="True" Header="Check-In D" Binding="{Binding guCheckInD, StringFormat=dd/MM/yyyy}" Width="auto"/>
+                        <DataGridTextColumn x:Name="guCheckOutDColumn2" IsReadOnly="True" Header="Check-Out D" Binding="{Binding guCheckOutD, StringFormat=dd/MM/yyyy}" Width="auto"/>
                         <DataGridTextColumn x:Name="gucoColumn2" IsReadOnly="True" Binding="{Binding guco}" Header="Country ID" Width="auto"/>
                         <DataGridTextColumn x:Name="coNColumn2" IsReadOnly="True" Binding="{Binding coN}" Header="Country" Width="auto"/>
                         <DataGridTextColumn x:Name="guagColumn2" IsReadOnly="True" Binding="{Binding guag}" Header="Agency ID" Width="auto"/>
@@ -365,26 +511,51 @@
                         <DataGridTextColumn x:Name="guO2Column2" IsReadOnly="True" Binding="{Binding guO2}" Header="G T" Width="auto"/>
                         <DataGridTextColumn x:Name="guCCTypeColumn2" IsReadOnly="True" Binding="{Binding guCCType}" Header="C.C." Width="auto"/>
                         <DataGridTextColumn x:Name="guPRAssignColumn2" IsReadOnly="True" Binding="{Binding guPRAssign}" Header="PR A" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guAvailColumn2" IsReadOnly="False" Binding="{Binding guAvail}" Header="Avl" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guInfoColumn2" IsReadOnly="false"  Binding="{Binding guInfo}" Header="Cont" Width="auto"/>
+                        <DataGridTemplateColumn x:Name="guAvailColumn2" IsReadOnly="False"  Header="Avl" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guAvail,NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChkguAvailPremanifest_Click"  HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn x:Name="guInfoColumn2" IsReadOnly="False" Header="Cont" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guInfo, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChkguInfoPremanifest_Click" HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guPRInfoColumn2" IsReadOnly="True" Binding="{Binding guPRInfo}" Header="PR Cont" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guFollowColumn2" IsReadOnly="false" Binding="{Binding guFollow}" Header="FU" Width="auto"/>
-                        <DataGridTextColumn x:Name="guFollowDColumn2" IsReadOnly="True" Header="Follow D" Binding="{Binding guFollowD}" Width="auto"/>
+                        <DataGridTemplateColumn x:Name="guFollowColumn2" IsReadOnly="false"  Header="FU" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guFollow, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChkguFollowPremanifest_Click"  HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn x:Name="guFollowDColumn2" IsReadOnly="True" Header="Follow D" Binding="{Binding guFollowD, StringFormat=dd/MM/yyyy}" Width="auto"/>
                         <DataGridTextColumn x:Name="guPRFollowColumn2" IsReadOnly="True" Binding="{Binding guPRFollow}" Header="PR Follow" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guInvitColumn2" IsReadOnly="false" Binding="{Binding guInvit}" Header="Invit" Width="auto"/>
-                        <DataGridTextColumn x:Name="guInvitDColumn" IsReadOnly="True" Binding="{Binding guInvitD}" Header="Invit D" Width="auto"/>
+                        <DataGridTextColumn x:Name="guInvitDColumn" IsReadOnly="True" Binding="{Binding guInvitD, StringFormat=dd/MM/yyyy}" Header="Invit D" Width="auto"/>
                         <DataGridTextColumn x:Name="guInvitTColumn" IsReadOnly="True" Binding="{Binding guInvitT}" Header="Invit T" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guReschColumn" IsReadOnly="False" Binding="{Binding guResch}" Header="Rsch" Width="auto"/>
                         <DataGridTextColumn x:Name="guBookDColumn2" IsReadOnly="True" Header="Book D" Binding="{Binding guBookD}" Width="auto"/>
                         <DataGridTextColumn x:Name="guBookTColumn" IsReadOnly="True" Header="Book T" Binding="{Binding guBookT}" Width="auto"/>
                         <DataGridTextColumn x:Name="guPRInvit1Column2" IsReadOnly="True" Binding="{Binding guPRInvit1}" Header="PR B" Width="auto"/>
                         <DataGridTextColumn x:Name="gunbColumn2" IsReadOnly="True" Binding="{Binding gunb}" Header="NB" Width="auto"/>
-                        <DataGridTextColumn x:Name="guNoBookDColumn2" IsReadOnly="True" Header="NB D" Binding="{Binding guNoBookD}" Width="auto"/>
+                        <DataGridTextColumn x:Name="guNoBookDColumn2" IsReadOnly="True" Header="NB D" Binding="{Binding guNoBookD, StringFormat=dd/MM/yyyy}" Width="auto"/>
                         <DataGridTextColumn x:Name="guPRNoBookColumn2" IsReadOnly="True" Binding="{Binding guPRNoBook}" Header="PR NB" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guQuinellaColumn2" IsReadOnly="False" Binding="{Binding guQuinella}" Header="Qui" Width="auto"/>
                         <DataGridTextColumn x:Name="gaguColumn2" IsReadOnly="True" Binding="{Binding gagu}" Header="Main Inv" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guGroupColumn2" IsReadOnly="false" Binding="{Binding guGroup}" Header="Grp" Width="auto"/>
-                        <DataGridTextColumn x:Name="equityColumn2" IsReadOnly="True" Binding="{Binding Equity}" Header="Equity" Width="auto"/>
+                       <!-- <DataGridTextColumn x:Name="equityColumn2" IsReadOnly="True" Binding="{Binding Equity}" Header="Equity" Width="auto"/>-->
+                        <DataGridTemplateColumn x:Name="equityColumn2" IsReadOnly="True"  Header="Equity" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding EquityColumn}" Width="17" Height="17"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guclColumn2" IsReadOnly="True" Binding="{Binding gucl}" Header="Club ID" Width="auto"/>
                         <DataGridTextColumn x:Name="clNColumn2" IsReadOnly="True" Binding="{Binding clN}" Header="Club Name" Width="auto"/>
                         <DataGridTextColumn x:Name="guCompanyColumn2" IsReadOnly="True" Binding="{Binding guCompany}" Header="Company" Width="auto"/>
@@ -392,99 +563,170 @@
                         <DataGridTextColumn x:Name="mtNColumn2" IsReadOnly="True" Binding="{Binding mtN}" Header="M Type" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guShowColumn2" IsReadOnly="false" Binding="{Binding guShow}" Header="Sh" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guTourColumn" IsReadOnly="false" Binding="{Binding guTour}" Header="Tour" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guBookCancColumn2" IsReadOnly="false" Binding="{Binding guBookCanc}" Header="C.Bk" Width="auto"/>
+                        <DataGridTemplateColumn x:Name="guBookCancColumn2" IsReadOnly="false" Header="C.Bk" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guBookCanc, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkBookCancPremanifest_Click"   HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridCheckBoxColumn x:Name="guSaleColumn" IsReadOnly="false" Binding="{Binding guSale}" Header="Sale" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guLWColumn2" IsReadOnly="false" Binding="{Binding guLW}" Header="LW" Width="auto"/>
-                        <DataGridCheckBoxColumn x:Name="guPRNoteColumn2" IsReadOnly="False" Binding="{Binding guPRNote}" Header="Notes" Width="auto"/>
-                        <DataGridTextColumn x:Name="notesColumn2" IsReadOnly="True" Binding="{Binding Notes}" Header="Notes" Width="auto"/>
+                        <DataGridCheckBoxColumn x:Name="guPRNoteColumn2" IsReadOnly="False" Binding="{Binding guPRNote}" Header="Notes" Width="auto" Visibility="Hidden"/>
+                        <!--<DataGridTextColumn x:Name="notesColumn2" IsReadOnly="True" Binding="{Binding Notes}" Header="Notes" Width="auto"/>-->
+                        <DataGridTemplateColumn x:Name="notesColumn2" IsReadOnly="True" Header="Notes" Width="auto" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Height="18" MouseLeftButtonUp="NotesPremanifest_MouseLeftButtonUp" >
+                                        <InlineUIContainer>
+                                            <Image Source="{Binding SourceImage}" Height="18" >
+                                                  <!--Este Triggers se ejecutara cuando es la primera vez que se le agrega la nota al guest y la muestra enseguida depues de cerrar el formulario de notas -->
+                                               <Image.Style>
+                                                  <Style TargetType="{x:Type Image}">
+                                                     <Style.Triggers>
+                                                          <DataTrigger Binding="{Binding guPRNote}" Value="true">
+                                                              <Setter Property="Source" Value="{Binding SourceImage}"/>
+                                                          </DataTrigger>                                                        
+                                                       </Style.Triggers>
+                                                  </Style>
+                                               </Image.Style>  
+                                            </Image>                                            
+                                        </InlineUIContainer>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guCommentsColumn2" IsReadOnly="True" Binding="{Binding guComments}" Header="Comments" Width="auto"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </ContentControl>
-
-            <ContentControl x:Name="ccGuetGuest" Grid.Row="1" Visibility="Hidden" DataContext="{StaticResource guestSearchedViewSource}">
+            
+            <ContentControl x:Name="ccGetGuest" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource guestSearchedViewSource}}">
                 <DataGrid x:Name="guestSearchedDataGrid" CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"  EnableRowVirtualization="True"   RowDetailsVisibilityMode="VisibleWhenSelected">
                     <DataGrid.Columns>
-                        <DataGridTextColumn x:Name="guStatusColumn3" Binding="{Binding guStatus}" Header="gu Status" Width="SizeToHeader"/>
-                        <DataGridCheckBoxColumn x:Name="guCheckInColumn3" Binding="{Binding guCheckIn}" Header="gu Check In" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guIDColumn3" Binding="{Binding guID}" Header="gu ID" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guHReservIDColumn1" Binding="{Binding guHReservID}" Header="gu HReserv ID" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guIdProfileOperaColumn3" Binding="{Binding guIdProfileOpera}" Header="gu Id Profile Opera" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guRoomNumColumn3" Binding="{Binding guRoomNum}" Header="gu Room Num" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guLastName1Column3" Binding="{Binding guLastName1}" Header="gu Last Name 1" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guFirstName1Column3" Binding="{Binding guFirstName1}" Header="gu First Name 1" Width="SizeToHeader"/>
-                        <DataGridTemplateColumn x:Name="guCheckInDColumn3" Header="gu Check In D" Width="SizeToHeader">
-                            <DataGridTemplateColumn.CellTemplate>
+                        <DataGridTextColumn x:Name="guStatusColumn3" Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style  TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="Background" Value="{Binding ColorColumn}" />
+                                    <Setter Property="Width" Value="15" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTemplateColumn x:Name="guCheckInColumn3" IsReadOnly="False"  Header="In" Width="auto" >
+                            <DataGridTemplateColumn.CellTemplate >
                                 <DataTemplate>
-                                    <DatePicker SelectedDate="{Binding guCheckInD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                                    <CheckBox IsChecked="{Binding guCheckIn, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkguCheckInGetGuest_Click"  HorizontalAlignment="Center" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn x:Name="guCheckOutDColumn3" Header="gu Check Out D" Width="SizeToHeader">
+                        <DataGridTextColumn x:Name="guIDColumn3" Binding="{Binding guID}" Header="GUID" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guHReservIDColumn1" Binding="{Binding guHReservID}" Header="Reserv. #" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guIdProfileOperaColumn3" Binding="{Binding guIdProfileOpera}" Header="Opera ID" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guRoomNumColumn3" Binding="{Binding guRoomNum}" Header="Room" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guLastName1Column3" Binding="{Binding guLastName1}" Header="Last Name" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guFirstName1Column3" Binding="{Binding guFirstName1}" Header="First Name" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guCheckInDColumn3" Header="Chk-In D" Binding="{Binding guCheckInD, StringFormat=dd/MM/yyyy}" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guCheckOutDColumn3" Header="Chk-Out D"  Binding="{Binding guCheckOutD, StringFormat=dd/MM/yyyy}" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="gucoColumn3" Binding="{Binding guco}" Header="Country ID" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="coNColumn3" Binding="{Binding coN}" Header="Country" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guagColumn3" Binding="{Binding guag}" Header="Agency ID" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="agNColumn3" Binding="{Binding agN}" Header="Agency" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="agclColumn3" Binding="{Binding agcl}" Header="Club" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guPaxColumn3" Binding="{Binding guPax}" Header="Pax" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guO1Column1" Binding="{Binding guO1}" Header="Contract" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guCCTypeColumn3" Binding="{Binding guCCType}" Header="C.C." Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guPRAssignColumn3" Binding="{Binding guPRAssign}" Header="PR A" Width="auto" IsReadOnly="True"/>
+                        <DataGridTemplateColumn x:Name="guAvailColumn3" IsReadOnly="False"  Header="Avl" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <DatePicker SelectedDate="{Binding guCheckOutD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                                    <CheckBox IsChecked="{Binding guAvail,NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChkguAvailGetGuest_Click"  HorizontalAlignment="Center" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn x:Name="gucoColumn3" Binding="{Binding guco}" Header="guco" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="coNColumn3" Binding="{Binding coN}" Header="co N" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guagColumn3" Binding="{Binding guag}" Header="guag" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="agNColumn3" Binding="{Binding agN}" Header="ag N" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="agclColumn3" Binding="{Binding agcl}" Header="agcl" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guPaxColumn3" Binding="{Binding guPax}" Header="gu Pax" Width="SizeToHeader"/>
-                        
-
-                        
-                        
-
-
-
-                        <DataGridTextColumn x:Name="clNColumn3" Binding="{Binding clN}" Header="cl N" Width="SizeToHeader"/>
-                        
-                        <DataGridTextColumn x:Name="equityColumn3" Binding="{Binding Equity}" Header="Equity" Width="SizeToHeader"/>
-                        
-                        <DataGridCheckBoxColumn x:Name="guAvailColumn3" Binding="{Binding guAvail}" Header="gu Avail" Width="SizeToHeader"/>
-                        <DataGridCheckBoxColumn x:Name="guBookCancColumn3" Binding="{Binding guBookCanc}" Header="gu Book Canc" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guCCTypeColumn3" Binding="{Binding guCCType}" Header="gu CCType" Width="SizeToHeader"/>
-                        
-                        
-                       
-                        
-                        <DataGridTextColumn x:Name="guCommentsColumn3" Binding="{Binding guComments}" Header="gu Comments" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guCompanyColumn3" Binding="{Binding guCompany}" Header="gu Company" Width="SizeToHeader"/>
-                        
-                        <DataGridCheckBoxColumn x:Name="guFollowColumn3" Binding="{Binding guFollow}" Header="gu Follow" Width="SizeToHeader"/>
-                        <DataGridCheckBoxColumn x:Name="guGroupColumn3" Binding="{Binding guGroup}" Header="gu Group" Width="SizeToHeader"/>
-                        
-                        
-                        <DataGridCheckBoxColumn x:Name="guInfoColumn3" Binding="{Binding guInfo}" Header="gu Info" Width="SizeToHeader"/>
-                        <DataGridCheckBoxColumn x:Name="guInvitColumn3" Binding="{Binding guInvit}" Header="gu Invit" Width="SizeToHeader"/>
-                        
-                        <DataGridCheckBoxColumn x:Name="guLWColumn3" Binding="{Binding guLW}" Header="gu LW" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guMembershipNumColumn3" Binding="{Binding guMembershipNum}" Header="gu Membership Num" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guO1Column1" Binding="{Binding guO1}" Header="gu O 1" Width="SizeToHeader"/>
-                        
-                        <DataGridTextColumn x:Name="guPRAssignColumn3" Binding="{Binding guPRAssign}" Header="gu PRAssign" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guPRAvailColumn2" Binding="{Binding guPRAvail}" Header="gu PRAvail" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guPRFollowColumn3" Binding="{Binding guPRFollow}" Header="gu PRFollow" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guPRInfoColumn3" Binding="{Binding guPRInfo}" Header="gu PRInfo" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guPRInvit1Column3" Binding="{Binding guPRInvit1}" Header="gu PRInvit 1" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="guPRNoBookColumn3" Binding="{Binding guPRNoBook}" Header="gu PRNo Book" Width="SizeToHeader"/>
-                        <DataGridCheckBoxColumn x:Name="guPRNoteColumn3" Binding="{Binding guPRNote}" Header="gu PRNote" Width="SizeToHeader"/>
-                        <DataGridCheckBoxColumn x:Name="guQuinellaColumn3" Binding="{Binding guQuinella}" Header="gu Quinella" Width="SizeToHeader"/>
-                        
-                        <DataGridCheckBoxColumn x:Name="guSaleColumn1" Binding="{Binding guSale}" Header="gu Sale" Width="SizeToHeader"/>
-                        <DataGridCheckBoxColumn x:Name="guShowColumn3" Binding="{Binding guShow}" Header="gu Show" Width="SizeToHeader"/>
-                        
-                        <DataGridTextColumn x:Name="guumColumn2" Binding="{Binding guum}" Header="guum" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="mtNColumn3" Binding="{Binding mtN}" Header="mt N" Width="SizeToHeader"/>
-                        <DataGridTextColumn x:Name="notesColumn3" Binding="{Binding Notes}" Header="Notes" Width="SizeToHeader"/>
+                        <DataGridTextColumn x:Name="guPRAvailColumn2" Binding="{Binding guPRAvail}" Header="PR Avail" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guumColumn2" Binding="{Binding guum}" Header="UM" Width="auto" IsReadOnly="True"/>
+                        <DataGridTemplateColumn x:Name="guInfoColumn3" IsReadOnly="False" Header="Cont" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guInfo, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChkguInfoGetGuest_Click" HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridCheckBoxColumn x:Name="guInfoDColumn3" Binding="{Binding guInfoD, StringFormat=dd/MM/yyyy}" Header="Cont D" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guPRInfoColumn3" Binding="{Binding guPRInfo}" Header="PR Cont" Width="auto" IsReadOnly="True"/>
+                        <DataGridTemplateColumn x:Name="guFollowColumn3" IsReadOnly="false"  Header="FU" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guFollow, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChkguFollowGetGuest_Click"  HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridCheckBoxColumn x:Name="guFollowDColumn3" Binding="{Binding guFollowD, StringFormat=dd/MM/yyyy}" Header="Follow D" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guPRFollowColumn3" Binding="{Binding guPRFollow}" Header="PR Follow" Width="auto" IsReadOnly="True"/>
+                        <DataGridCheckBoxColumn x:Name="guInvitColumn3" Binding="{Binding guInvit}" Header="Invit" Width="auto" IsReadOnly="True"/>
+                        <DataGridCheckBoxColumn x:Name="guBookDColumn3" Binding="{Binding guBookD, StringFormat=dd/MM/yyyy}" Header="Book D" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guPRInvit1Column3" Binding="{Binding guPRInvit1}" Header="PR B" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="gunbColumn3" Binding="{Binding gunb}" Header="NB" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guNoBookDColumn3" Binding="{Binding guNoBookD, StringFormat=dd/MM/yyyy}" Header="NB D" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guPRNoBookColumn3" Binding="{Binding guPRNoBook}" Header="PR NB" Width="auto" IsReadOnly="True"/>
+                        <DataGridCheckBoxColumn x:Name="guQuinellaColumn3" Binding="{Binding guQuinella}" Header="Qui" Width="auto" IsReadOnly="True"/>
+                        <DataGridCheckBoxColumn x:Name="gaguColumn3" Binding="{Binding gagu}" Header="Main Inv" Width="auto" IsReadOnly="True"/>
+                        <DataGridCheckBoxColumn x:Name="guGroupColumn3" Binding="{Binding guGroup}" Header="Grp" Width="auto" IsReadOnly="True"/>
+                        <!-- <DataGridTextColumn x:Name="equityColumn3" Binding="{Binding Equity}" Header="Equity" Width="auto" IsReadOnly="True"/>-->
+                        <DataGridTemplateColumn x:Name="equityColumn3" IsReadOnly="True"  Header="Equity" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding EquityColumn}" Width="17" Height="17"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn x:Name="guclColumn3" IsReadOnly="True" Binding="{Binding gucl}" Header="Club ID" Width="auto"/>
+                        <DataGridTextColumn x:Name="clNColumn3" Binding="{Binding clN}" Header="Club Name" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guCompanyColumn3" Binding="{Binding guCompany}" Header="Company" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guMembershipNumColumn3" Binding="{Binding guMembershipNum}" Header="Member" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="mtNColumn3" Binding="{Binding mtN}" Header="'M Type" Width="auto" IsReadOnly="True"/>
+                        <DataGridTemplateColumn x:Name="guBookCancColumn3" Header="C.Bk" Width="auto" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding guBookCanc, NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="ChkBookCancSearched_Click"   HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridCheckBoxColumn x:Name="guShowColumn3" Binding="{Binding guShow}" Header="Sh" Width="auto" IsReadOnly="True"/>
+                        <DataGridCheckBoxColumn x:Name="guSaleColumn1" Binding="{Binding guSale}" Header="Sale" Width="auto" IsReadOnly="True"/>
+                        <DataGridCheckBoxColumn x:Name="guLWColumn3" Binding="{Binding guLW}" Header="LW" Width="auto" IsReadOnly="True"/>
+                        <DataGridCheckBoxColumn x:Name="guPRNoteColumn3" Binding="{Binding guPRNote}" Header="Notes" Width="auto" IsReadOnly="True" Visibility="Hidden"/>
+                       <!-- <DataGridTextColumn x:Name="notesColumn3" Binding="{Binding Notes}" Header="Notes" Width="auto" IsReadOnly="True"/>-->
+                        <DataGridTemplateColumn x:Name="notesColumn3" IsReadOnly="True" Header="Notes" Width="auto" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Height="18"  MouseLeftButtonUp="NotesSearched_MouseLeftButtonUp">
+                                        <InlineUIContainer>
+                                            <Image Source="{Binding SourceImage}" Height="18" >
+                                                  <!--Este Triggers se ejecutara cuando es la primera vez que se le agrega la nota al guest y la muestra enseguida depues de cerrar el formulario de notas -->
+                                               <Image.Style>
+                                                  <Style TargetType="{x:Type Image}">
+                                                     <Style.Triggers>
+                                                          <DataTrigger Binding="{Binding  guPRNote}" Value="true">
+                                                              <Setter Property="Source" Value="{Binding SourceImage}"/>
+                                                          </DataTrigger>                                                        
+                                                       </Style.Triggers>
+                                                  </Style>
+                                               </Image.Style>  
+                                            </Image>
+                                        </InlineUIContainer>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn x:Name="guCommentsColumn3" Binding="{Binding guComments}" Header="Comments" Width="auto" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </ContentControl>
         </Grid>
         <!--#endregion-->
+
         <!--#region StatusBar -->
         <StatusBar Grid.Row="2" Background="Gray"  x:Name="stbStatusBar" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
             <StatusBarItem Grid.Column="0" x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />

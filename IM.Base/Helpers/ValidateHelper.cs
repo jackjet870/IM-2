@@ -75,6 +75,7 @@ namespace IM.Base.Helpers
     /// <param name="control">Control</param>
     /// <history>
     /// [jorcanche]  12/Mar/2016 Created
+    /// [jorcanche]  24/03/2016 Modificado
     /// </history>
     public static string GetValue(Control control)
     {
@@ -84,10 +85,77 @@ namespace IM.Base.Helpers
       {
         value = ((TextBox)control).Text;
       }
-
+      else
+      {
+        if (control is PasswordBox)
+        {
+          value = ((PasswordBox)control).Password;
+        }
+      }
       return value;
     }
-
     #endregion
+
+    #region ValidateChangedBy
+    /// <summary>
+    /// Valida que se ingrese quien hizo el cambio y su contraseña
+    /// </summary>
+    /// <param name="ptxtChangedBy">Control de tipo TextBox en donde se ingresa el usuario</param>
+    /// <param name="ptxtPwd">Control de tipo PaswordBox en donde se ingresa el password del usuario</param>
+    /// <param name="pstrUserType">Cadena en donde se ingresa el tipo de usuario por ejemplo "PR"</param>
+    /// <hitory> [jorcanche] 24/03/2016 </hitory>
+    /// <returns></returns>
+
+    public static bool ValidateChangedBy(TextBox ptxtChangedBy, PasswordBox ptxtPwd, string pstrUserType = "")
+    {
+      string strDescription = string.Empty;
+      string strMessage = string.Empty;
+      //establecemos el mensaje de error de quin hizo el cambio
+      if (pstrUserType == "")
+      {
+        UIHelper.ShowMessage("Specify who is making the change.");
+        return false;
+      }
+      else
+      {
+        strDescription = pstrUserType;
+      }
+      //validamos quien hizo el cambio
+      if (!ValidateRequired(ptxtChangedBy, strDescription, strMessage))
+      {
+        ptxtChangedBy.Focus();
+        return false;
+      }
+      //Validamos la contraseña de quin hizo el cambio
+      if (!ValidateRequired(ptxtPwd, "Specify your password."))
+      {
+        ptxtPwd.Focus();
+        return false;    
+      }
+      return true;
+    }
+    #endregion
+
+    /// <summary>
+    /// Valida que los datos de quien hizo el cambio y su contraseña existan
+    /// </summary>
+    /// <param name="ptxtChangedBy"></param>
+    /// <param name="ptxtPwd"></param>
+    /// <param name="pstrLeadSource"></param>
+    /// <param name="pstrUserType"></param>
+    /// <param name="ptxtPR"></param>
+    /// <returns></returns>   
+    public bool ValidateChangedByExist(TextBox ptxtChangedBy, PasswordBox ptxtPwd, string pstrLeadSource,
+                                        string pstrUserType = "Changed By", TextBox ptxtPR = null)
+    {
+      //si se desea validar el PR
+      if (ptxtPR != null)
+      {
+
+
+      }
+      return true;
+    }
+
   }
 }

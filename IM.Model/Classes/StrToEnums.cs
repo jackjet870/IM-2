@@ -96,7 +96,6 @@ namespace IM.Model.Classes
           str = "VLO";
           break;
       }
-
       return str;
     }
 

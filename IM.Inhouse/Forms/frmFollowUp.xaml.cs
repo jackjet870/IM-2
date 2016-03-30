@@ -6,6 +6,7 @@ using IM.Model;
 using IM.Base.Forms;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
+using System;
 
 namespace IM.Inhouse
 {
@@ -18,7 +19,24 @@ namespace IM.Inhouse
 
     private int _guestID;
     private UserData _user;
-
+    private Guest _guest;
+    private bool _searchPRbyTxt;
+    public DateTime FollowD
+    {
+      get
+      {
+        return Convert.ToDateTime(txtguFollowD.Text).Date;
+      }
+    }
+    public string PRFollow
+    {
+      get
+      {
+        return txtguPRFollow.Text;
+      }
+    }
+    public bool _wasSaved = false;
+    string guPRAvail { get; set; }
     #endregion
 
     #region Constructores y destructores
@@ -26,11 +44,34 @@ namespace IM.Inhouse
     public frmFollowUp(int guestID)
     {
       InitializeComponent();
-
       _guestID = guestID;
       lblUserName.Content = App.User.User.peN;
-      cboguPRFollow.ItemsSource = BRPersonnel.GetPersonnel(App.User.Location.loID, "PR");
+      _guest = BRGuests.GetGuest(_guestID);
+      //cboguPRFollow.ItemsSource = BRPersonnel.GetPersonnel(App.User.Location.loID, "PR");
     }
+    #endregion
+
+    #region Metodos
+
+    #region Validate
+    public bool Validate()
+    {
+      // validamos el PR
+      if (!ValidateHelper.ValidateRequired(txtguPRFollow, "Unavailable PR", condition: true)) return false;
+
+      // validamos que el motivo de indisponibilidad exista      
+      Personnel PR = BRPersonnel.GetPersonnelById(txtguPRFollow.Text);
+      if (PR == null)
+      {
+        UIHelper.ShowMessage("The PR not exist");
+        txtguPRFollow.Focus();
+        return false;
+      }
+      return true;
+    }
+
+    #endregion
+
     #endregion
 
     #region Eventos del formulario    
@@ -40,23 +81,65 @@ namespace IM.Inhouse
     {
       cboguPRFollow.ItemsSource = BRPersonnel.GetPersonnel(App.User.Location.loID, "ALL", "PR");
       Guest _guest = BRGuests.GetGuest(_guestID);
-      if (_guest.guInfoD.HasValue)
-      {
-        txtguFollowD.Text = _guest.guInfoD.Value.Date.ToString();
+      if (_guest.guFollowD.HasValue)
+      {//txtguFollowD
+        txtguFollowD.Text = _guest.guFollowD.Value.Date.ToString();
       }
-      cboguPRFollow.SelectedValue = _guest.guPRInfo;
-      chkguFollow.IsChecked = _guest.guInfo;
-
-      cboguPRFollow.IsEnabled = txtguPRFollow.IsEnabled = false;
+      if (_guest.guPRFollow != string.Empty)
+      {
+        cboguPRFollow.SelectedValue = _guest.guPRFollow;
+        txtguPRFollow.Text = _guest.guPRFollow;
+      }
+      chkguFollow.IsChecked = _guest.guFollow;
     }
     #endregion
 
-    #region cboguPRInfo_SelectionChanged
-    private void cboguPRInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    #region cboguPRFollow_SelectionChanged
+    private void cboguPRFollow_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      txtguPRFollow.Text = ((PersonnelShort)cboguPRFollow.SelectedItem).peID;
+      if (cboguPRFollow.SelectedIndex != -1 || txtguPRFollow.Text == string.Empty)
+      {
+        if (cboguPRFollow.SelectedValue != null)
+        {
+          if (!_searchPRbyTxt)
+          {
+            txtguPRFollow.Text = ((PersonnelShort)cboguPRFollow.SelectedItem).peID;
+          }
+        }
+        else
+        {
+          txtguPRFollow.Text = string.Empty;
+        }
+      }
     }
-    #endregion 
+    #endregion
+
+    #region txtguPRFollow_LostFocus
+    private void txtguPRFollow_LostFocus(object sender, RoutedEventArgs e)
+    {
+      _searchPRbyTxt = true;
+      if (txtguPRFollow.Text != string.Empty)
+      {
+        // validamos que el motivo de indisponibilidad exista en los activos
+        Personnel PR = BRPersonnel.GetPersonnelById(txtguPRFollow.Text);
+        if (PR == null)
+        {
+          UIHelper.ShowMessage("The PR not exist");
+          txtguPRFollow.Text = string.Empty;
+          txtguPRFollow.Focus();
+        }
+        else
+        {
+          cboguPRFollow.SelectedValue = txtguPRFollow.Text;
+        }
+      }
+      else
+      {
+        cboguPRFollow.SelectedIndex = -1;
+      }
+      _searchPRbyTxt = false;
+    } 
+    #endregion
 
     #region btnEdit_Click
     private void btnEdit_Click(object sender, RoutedEventArgs e)
@@ -65,15 +148,23 @@ namespace IM.Inhouse
       log.ShowDialog();
       if (log.IsAuthenticated)
       {
-        if (log.userData.HasPermission(EnumPermission.Register, EnumPermisionLevel.ReadOnly))
+        if (log.userData.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard))
         {
-          _user = log.userData;
-          txtguFollowD.Text = BRHelpers.GetServerDate().Date.ToString();
-          btnSave.IsEnabled = cboguPRFollow.IsEnabled = true;
+          if (_guest.guFollow == false || (log.userData.HasRole(EnumRole.PRCaptain) || log.userData.HasRole(EnumRole.PRSupervisor)))
+          {
+            _user = log.userData;
+            txtguFollowD.Text = BRHelpers.GetServerDate().Date.ToString();
+            btnSave.IsEnabled = cboguPRFollow.IsEnabled = true;
+            txtguPRFollow.IsReadOnly = false;
+          }
+          else
+          {
+            UIHelper.ShowMessage("You do not have sufficient permissions to modify the follow up's information", MessageBoxImage.Asterisk, "Permissions");
+          }
         }
         else
         {
-          UIHelper.ShowMessage("You do not have sufficient permissions to modify the contact's information", MessageBoxImage.Asterisk, "Permissions");
+          UIHelper.ShowMessage("You do not have sufficient permissions to modify the follow up's information", MessageBoxImage.Asterisk, "Permissions");
         }
       }
     }
@@ -98,11 +189,28 @@ namespace IM.Inhouse
     #region btnSave_Click
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
-      chkguFollow.IsChecked = true;
-      BRGuests.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);
+      if (Validate())
+      {
+        _wasSaved = true;
+        //guardamos la informacion del seguimiento
+        _guest.guPRFollow = txtguPRFollow.Text;
+        _guest.guFollowD = Convert.ToDateTime(txtguFollowD.Text).Date;
+        _guest.guFollow = true;
+        BRGuests.SaveGuest(_guest);
+
+        //guardamos la informacion de contacto
+        BRGuestsLogs.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);
+
+        chkguFollow.IsChecked = true;
+        this.Close();
+      }
     }
+
     #endregion
+
+    #endregion
+
     
-    #endregion
   }
 }
+

@@ -35,11 +35,13 @@ namespace IM.Inhouse
 
     #region Eventos del formulario
     #region Window_Loaded
+
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       CollectionViewSource GuestLogViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("GuestLogViewSource")));
-      dgGuestLog.DataContext = BRGuests.GetGuestLog(_idGuest);
+      dgGuestLog.DataContext = BRGuestsLogs.GetGuestLog(_idGuest);
     }
+
     #endregion 
     #endregion
   }

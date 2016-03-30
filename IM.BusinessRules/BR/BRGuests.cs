@@ -5,6 +5,7 @@ using IM.Model;
 using IM.BusinessRules.Classes;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using IM.Model.Classes;
 
 namespace IM.BusinessRules.BR
 {
@@ -167,39 +168,6 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
-    #region GetGuestLog
-
-    /// <summary>
-    /// Obtiene log del Guest Ingresado
-    /// </summary>
-    /// <param name="IdGuest">Id del Guest</param>
-    /// <history>[jorcanche] 09/03/2016</history>
-    public static List<GuestLogData> GetGuestLog(int IdGuest)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        return dbContext.USP_OR_GetGuestLog(IdGuest).ToList();
-      }
-    }
-    #endregion
-
-    #region SaveGuestLog
-
-    /// <summary>
-    /// Guarda los cambios del log del Guest
-    /// </summary>
-    ///<param name="IdGuest"></param>
-    /// <param name="changedBy"></param>
-    /// <param name="changedBy"></param>
-    /// <history>[jorcanche] 11/03/2016</history>
-    public static void SaveGuestLog(int IdGuest, short lsHoursDif, string changedBy)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        dbContext.USP_OR_SaveGuestLog(IdGuest, lsHoursDif, changedBy);
-      }
-    }
-    #endregion
 
     #region GetGuest
     /// <summary>
@@ -215,6 +183,27 @@ namespace IM.BusinessRules.BR
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return (from gu in dbContext.Guests where gu.guID == guestId select gu).Single();
+      }
+    }
+    #endregion
+
+    #region SaveGuestMovement
+    /// <summary>
+    /// Guarda los moviemientos del Guest
+    /// </summary>
+    /// <param name="guestId"></param>
+    /// <param name="guestMovementType"></param>
+    /// <param name="changedBy"></param>
+    /// <param name="computerName"></param>
+    /// <param name="iPAddress"></param>
+    /// <history>
+    /// [jorcanche] created 15/03/2016
+    /// </history>
+    public static void SaveGuestMovement(int guestId, EnumGuestsMovementsType guestMovementType, string changedBy, string computerName, string iPAddress)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.USP_OR_SaveGuestMovement(guestId, StrToEnums.EumGuestsMovementsTypeToString(guestMovementType), changedBy, computerName, iPAddress);
       }
     }
     #endregion
@@ -493,23 +482,20 @@ namespace IM.BusinessRules.BR
 
     #endregion
 
-    #region SaveGuestMovement
+    #region GetGuests
     /// <summary>
-    /// Guarda los moviemientos del Guest
+    /// Devuelve uno o varios Guest dependiento de los filtros de busqueda 
     /// </summary>
-    /// <param name="guestId"></param>
-    /// <param name="guestMovementType"></param>
-    /// <param name="changedBy"></param>
-    /// <param name="computerName"></param>
-    /// <param name="iPAddress"></param>
+    /// <returns>Guests</returns>
     /// <history>
-    /// [jorcanche] created 15/03/2016
+    /// [jorcanche] created 16/03/2016
     /// </history>
-    public static void SaveGuestMovement(int guestId, EnumGuestsMovementsType guestMovementType, string changedBy, string computerName, string iPAddress)
+    public static List<GuestSearched> GetGuests(DateTime dateFrom, DateTime dateTo, string leadSource, string name = "ALL", 
+                                                string roomNumber = "ALL", string reservation = "ALL", int guestID = 0)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        dbContext.USP_OR_SaveGuestMovement(guestId, IM.Model.Classes.StrToEnums.EumGuestsMovementsTypeToString(guestMovementType), changedBy, computerName, iPAddress);
+      {      
+        return dbContext.USP_OR_GetGuests(dateFrom, dateTo, leadSource, name, roomNumber, reservation, guestID).ToList();
       }
     }
     #endregion

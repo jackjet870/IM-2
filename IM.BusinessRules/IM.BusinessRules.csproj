@@ -84,6 +84,7 @@
     <Compile Include="BR\BRLanguages.cs" />
     <Compile Include="BR\BRMaritalStatus.cs" />
     <Compile Include="BR\BRPaymentTypes.cs" />
+    <Compile Include="BR\BRNotes.cs" />
     <Compile Include="BR\BRPersonnelDayOff.cs" />
     <Compile Include="BR\BRPrStats.cs" />
     <Compile Include="BR\BRRegions.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Classes\GuestStatusInvitation.cs" />
     <Compile Include="Classes\GuestCreditCardInvitation.cs" />
     <Compile Include="Classes\GuestStatusTypeInvit.cs" />
+    <Compile Include="Classes\NoteGuest.cs" />
     <Compile Include="Classes\UserNormalLogin.cs" />
     <Compile Include="Enums\InvitationType.cs" />
     <Compile Include="BR\BRLeadSources.cs" />
