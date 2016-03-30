@@ -46,7 +46,8 @@ namespace IM.BusinessRules.BR
       {
         var depInivt = (from d in dep
                         join cu in dbContext.Currencies on d.bdcu equals cu.cuID
-                        join cc in dbContext.CreditCardTypes on d.bdcc equals cc.ccID
+                        join cc in dbContext.CreditCardTypes on d.bdcc equals cc.ccID into tmpCC
+                        from cccTmp in tmpCC.DefaultIfEmpty()
                         join pt in dbContext.PaymentTypes on d.bdpt equals pt.ptID
                         select new BookingDepositInvitation
                         {
@@ -61,14 +62,13 @@ namespace IM.BusinessRules.BR
                           Currency = cu.cuN,
                           bdCardNum = d.bdCardNum,
                           bdcc = d.bdcc,
-                          CreditCard = cc.ccN,
+                          CreditCard = cccTmp != null ?cccTmp.ccN :String.Empty,
                           bdpc = d.bdpc,
                           bdpt = d.bdpt,
                           PaymentType = pt.ptN,
                           bdReceived = d.bdReceived,
                           bdUserCXC = d.bdUserCXC
                         }).ToList();
-
         return depInivt;
       }
     }

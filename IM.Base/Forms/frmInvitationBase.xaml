@@ -296,13 +296,13 @@
                                 </DataGrid>
 
                                 <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" FontSize="10">Max Auth.</Label>
-                                <TextBox Grid.Column="0" Grid.Row="2" Name="txtMaxAuth" FontSize="10"/>
+                                <TextBox Grid.Column="0" Grid.Row="2" Name="txtMaxAuth" FontSize="10" IsReadOnly="True" TextAlignment="Center"/>
 
                                 <Label Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" FontSize="10">Total Cost.</Label>
-                                <TextBox Grid.Column="1" Grid.Row="2" Name="txtTotalCost" FontSize="10"/>
+                                <TextBox Grid.Column="1" Grid.Row="2" Name="txtTotalCost" FontSize="10" IsReadOnly="True" TextAlignment="Center"/>
 
                                 <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" FontSize="10">Total Price.</Label>
-                                <TextBox Grid.Column="2" Grid.Row="2" Name="txtTotalPrice" FontSize="10"/>
+                                <TextBox Grid.Column="2" Grid.Row="2" Name="txtTotalPrice" FontSize="10" IsReadOnly="True" TextAlignment="Center"/>
                             </Grid>
                         </TabItem>
                         <TabItem Header="New Gift" Name="tbiNewGift">
@@ -516,7 +516,7 @@
                     </Grid>
                     <!--#endregion-->
                 </TabItem>
-                <TabItem Header="Deposits/ Guest Sstatus/ Room Quantity" Background="White">
+                <TabItem Header="Deposits/ Guest Sstatus/ Room Quantity" Background="White" Name="tbi">
                     <!--#region DEPOSITS / GUEST STATUS / ROOM QUANTITY-->
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -552,8 +552,8 @@
                                             <!--#region GRID DEPOSITOS-->
                                             <DataGrid Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="3" Name="dtgDeposits" AutoGenerateColumns="False" IsReadOnly="True" MouseDoubleClick="dtgDeposits_MouseDoubleClick">
                                                 <DataGrid.Columns>
-                                                    <DataGridTextColumn Header="Deposits" Binding="{Binding bdAmount}"/>
-                                                    <DataGridTextColumn Header="Received" Binding="{Binding bdReceived}"/>
+                                                    <DataGridTextColumn Header="Deposits" Binding="{Binding bdAmount, StringFormat='#.00'}"/>
+                                                    <DataGridTextColumn Header="Received" Binding="{Binding bdReceived,StringFormat='#.00'}"/>
                                                     <DataGridTextColumn Header="CxC"/>
                                                     <DataGridTextColumn Header="bdcu" Binding="{Binding bdcu}" Visibility="Hidden"/>
                                                     <DataGridTextColumn Header="Currency" Binding="{Binding Currency}"/>
@@ -726,7 +726,7 @@
                     </Grid>
                     <!--#endregion-->
                 </TabItem>
-                <TabItem Header=" Additional Information / Credit Card" Background="White" Height="25" VerticalAlignment="Top">
+                <TabItem Header=" Additional Information / Credit Card" Background="White" Height="25" VerticalAlignment="Top" Name="tbiAdditionalCreditCard">
                     <!--#region ADDITIONAL INFORMATION / ELECTRONIC PURSE / CREDIT CARDS-->
                     <Grid>
                         <Grid.ColumnDefinitions>

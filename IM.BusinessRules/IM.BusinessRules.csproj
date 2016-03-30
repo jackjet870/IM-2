@@ -78,6 +78,7 @@
     <Compile Include="BR\BRGuestsAdditional.cs" />
     <Compile Include="BR\BRGuests.cs" />
     <Compile Include="BR\BRGuestsLogs.cs" />
+    <Compile Include="BR\BRGuestStatusType.cs" />
     <Compile Include="BR\BRHelpers.cs" />
     <Compile Include="BR\BRHotels.cs" />
     <Compile Include="BR\BRLanguages.cs" />

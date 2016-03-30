@@ -40,5 +40,15 @@ namespace IM.BusinessRules.Classes
     public bool isUpdate { get; set; }
 
     public string iggiPrevious { get; set; }
+
+    public decimal costAdults { get; set; }
+
+    public decimal costMinors { get; set; }
+
+    public decimal priceAdults { get; set; }
+
+    public decimal priceMinor { get; set; }
+
+    public decimal priceExtraAdults { get; set; }
   }
 }

@@ -24,6 +24,7 @@ namespace IM.Base.Forms
     #region Atributos
 
     #region Listas
+    List<GiftInvitation> gifts = new List<GiftInvitation>();
     List<IM.Model.InvitationGift> _lstGifts = new List<Model.InvitationGift>();
     List<IM.Model.BookingDeposit> _lstDeposits = new List<Model.BookingDeposit>();
     List<IM.Model.GuestStatus> _lstGuestStatus = new List<Model.GuestStatus>();
@@ -1311,6 +1312,7 @@ namespace IM.Base.Forms
       txtSalesRoom2.Visibility = Visibility.Hidden;
       colElectronicPurseCreditCard.Width = new GridLength(0);
       rowRoomQuantity.Height = new GridLength(0);
+      tbiAdditionalCreditCard.Header = "Additional Information";
     }
 
     /// <summary>
@@ -1855,7 +1857,7 @@ namespace IM.Base.Forms
     /// <returns>GiftInvitation</returns>
     private GiftInvitation ConvertInvitationGiftToGiftInvitationObject(IM.Model.InvitationGift gift, bool isNew, string previousID = null)
     {
-      var g =new  GiftInvitation();
+      var g = new GiftInvitation();
       g.igAdults = gift.igAdults;
       g.igct = gift.igct;
       g.igExtraAdults = gift.igExtraAdults;
@@ -1871,6 +1873,7 @@ namespace IM.Base.Forms
       g.isNew = isNew;
       g.isUpdate = !isNew;
       g.iggiPrevious = !isNew ? previousID : null;
+
       return g;
     }
 
@@ -2150,6 +2153,7 @@ namespace IM.Base.Forms
     {
       var guest = IM.BusinessRules.BR.BRGuests.GetGuestById(_guestID);
 
+      if (guest == null) return;
       #region Tipos de invitacion
       chkQuiniella.IsChecked = guest.guQuinella;
       chkShow.IsChecked = guest.guShow;
@@ -2277,14 +2281,14 @@ namespace IM.Base.Forms
       txtAgency.Text = guest.guag;
       cmbCountry.SelectedValue = guest.guco;
       txtCountry.Text = guest.guco;
-      txtPax.Text = guest.guPax.ToString();
+      txtPax.Text = guest.guPax.ToString("#.00");
       txtArrival.Text = guest.guCheckInD.ToString("dd/MM/yyyy");
       txtDeparture.Text = guest.guCheckOutD.ToString("dd/MM/yyyy");
 
       #endregion
 
       #region Deposits
-      txtBurned.Text = guest.guDepositTwisted.ToString();
+      txtBurned.Text = guest.guDepositTwisted.ToString("#.00");
       cmbPaymentType.SelectedValue = guest.gupt;
       cmbCurrency.SelectedValue = guest.gucu;
       cmbResort.SelectedValue = guest.guHotelB;
@@ -2339,8 +2343,11 @@ namespace IM.Base.Forms
     /// </history>
     private void LoadOutHouseControls()
     {
+      var personnels = IM.BusinessRules.BR.BRPersonnel.GetPersonnel(_user.LeadSource.lsID);
+      LoadComboBox(personnels, cmbPRContract, "pe");
 
-      //LoadComboBox(catalog.SalesRooms, cmbSalesRoom, "sr");
+      var salesRooms = IM.BusinessRules.BR.BRSalesRooms.GetSalesRooms(0);
+      LoadComboBox(salesRooms, cmbSalesRoom, "sr");
 
     }
 
@@ -2449,9 +2456,8 @@ namespace IM.Base.Forms
     /// </summary>
     private void LoadGiftGrid()
     {
-      var gifts = new List<BusinessRules.Classes.GiftInvitation>();
-
-      if(!_lstGifts.Any())//sino tiene registros cargamos por primera vez el grid
+      
+      if(!dtgGifts.HasItems && !_lstGifts.Any())//sino tiene registros cargamos por primera vez el grid
       {
         gifts = IM.BusinessRules.BR.BRGifts.GetGiftsInvitation(_guestID);
 
@@ -2476,6 +2482,7 @@ namespace IM.Base.Forms
       }
       else //si tiene registros y se le añaden depositos se convierte la lista de InvitationGift a GiftInvitation para recargar el grid
       {
+        gifts.Clear();
         //unimos la lista de gift que se encuentran en la base de datos con los nuevos y actualizados
         gifts = (from g in _lstGifts
                  select new GiftInvitation
@@ -2493,6 +2500,7 @@ namespace IM.Base.Forms
                     igPriceM = g.igPriceM,
                     igPriceMinor = g.igPriceMinor,
                     igct = g.igct
+                    
                  }).ToList().Union(
                   from g in _lstNewGifts
                   select new GiftInvitation
@@ -2515,19 +2523,9 @@ namespace IM.Base.Forms
 
       dtgGifts.ItemsSource = gifts;
 
-      txtMaxAuth.Text = "0.0";
-      txtTotalPrice.Text = (
-          (gifts.Sum(g => g.igPriceAdult) * gifts.Sum(g => g.igAdults)) +
-          (gifts.Sum(g => g.igPriceMinor) * gifts.Sum(g => g.igMinors)) +
-          (gifts.Sum(g => g.igPriceExtraAdult) * gifts.Sum(g => g.igExtraAdults))
-      ).ToString();
-
-      txtTotalCost.Text = (
-          (gifts.Sum(g => g.igPriceAdult) * gifts.Sum(g => g.igAdults)) +
-          (gifts.Sum(g => g.igPriceMinor) * gifts.Sum(g => g.igMinors)) +
-          (gifts.Sum(g => g.igPriceExtraAdult) * gifts.Sum(g => g.igExtraAdults))
-      ).ToString();
-
+      CalculateCostsPrices();
+      CalculateTotalGifts();
+      
     }
 
     /// <summary>
@@ -2573,7 +2571,7 @@ namespace IM.Base.Forms
 
       txtGuestStatus.Text = guestStatus!= null && guestStatus.Any() ? guestStatus.Single().gsID: String.Empty;
 
-    
+      CalculateMaxAuthGifts();
     }
 
     /// <summary>
@@ -3559,6 +3557,101 @@ namespace IM.Base.Forms
 
 
 
+    #endregion
+
+    #region Métodos para calcular los costos de los regalos
+
+    /// <summary>
+    /// Calcula los costos y precios de adultos y menores de un regalo
+    /// </summary>
+    /// <param name="useCxCCost">Indica si se utilizará el costo del empleado</param>
+    private void CalculateCostsPrices(bool useCxCCost = false)
+    {
+      decimal costAdult, costMinor, priceAdult, priceMinor, priceExtraAdult, quantity;
+      
+      foreach(var row in gifts)
+      {
+        var gift = IM.BusinessRules.BR.BRGifts.GetGiftId(row.iggi);
+        if(gift != null)
+        {
+          // Costos
+          // si se va a usar el costo de empleado
+          if (useCxCCost)
+          {
+            costAdult = gift.giPrice1;
+            costMinor = gift.giPrice4;
+          }
+          else // se va a usar el cosrto al público
+          {
+            costAdult = gift.giPrice1;
+            costMinor = gift.giPrice2;
+          }
+
+          // Precios
+          priceAdult = gift.giPublicPrice;
+          priceMinor = gift.giPriceMinor;
+          priceExtraAdult = gift.giPriceExtraAdult;
+          quantity = row.igQty;
+
+          // Total del costo adultos
+          row.costAdults = quantity * (row.igAdults + row.igExtraAdults) * costAdult;
+          // Total del costo de menores
+          row.costMinors = quantity * row.igMinors * costMinor;
+          // Total del precio adultos
+          row.priceAdults = quantity * row.igAdults * priceAdult;
+          //Total del precio de menores
+          row.priceMinor = quantity * row.igMinors * priceMinor;
+          // Total del precio de adultos extra
+          row.priceExtraAdults = quantity * row.igExtraAdults * priceExtraAdult;
+        }
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="onlyCancellled"></param>
+    /// <param name="cancel"></param>
+    private void CalculateTotalGifts(bool onlyCancellled = false, string cancel = "")
+    {
+      decimal cost, price, totalCost = 0, totalPrice = 0;
+
+      foreach(var row in gifts)
+      {
+        // calculamos el costo del regalo
+        cost = row.costAdults + row.costMinors;
+
+        //calculamos el precio del regalo
+        price = row.priceAdults + row.priceMinor + row.priceExtraAdults;
+
+        //si se desean todos los regalos
+        if(!onlyCancellled)
+        {
+          totalCost += cost;
+          totalPrice += price;
+        }
+       
+
+      }
+      txtTotalCost.Text = totalCost.ToString("$#,##0.00;$(#,##0.00)");
+      txtTotalPrice.Text = totalPrice.ToString("$#,##0.00;$(#,##0.00)");
+    }
+
+    /// <summary>
+    /// Calcula el monto maximo de regalos
+    /// </summary>
+    private void CalculateMaxAuthGifts()
+    {
+      decimal maxAuthGifts = 0;
+
+      foreach(GuestStatusInvitation row in dtgGuestStatus.Items)
+      {
+        var guestStatusType = IM.BusinessRules.BR.BRGuestStatusType.GetGuestStatusTypeById(row.gsID);
+        maxAuthGifts += row.gsQty * guestStatusType.gsMaxAuthGifts;
+      }
+
+      txtMaxAuth.Text = maxAuthGifts.ToString("$#,##0.00;$(#,##0.00)");
+    }
     #endregion
 
     #endregion
