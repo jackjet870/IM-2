@@ -17,6 +17,24 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Language()
         {
+            this.laMrMrs = "";
+            this.laRoom = "";
+            this.laMember = "";
+            this.laDate = "";
+            this.laTime = "";
+            this.laName = "";
+            this.laMaritalSt = "";
+            this.laAge = "";
+            this.laOccupation = "";
+            this.laCountry = "";
+            this.laAgency = "";
+            this.laHotel = "";
+            this.laPax = "";
+            this.laDesposit = "";
+            this.laGift = "";
+            this.laLocation = "";
+            this.laPR = "";
+            this.laExtraInfo = "";
             this.Countries = new HashSet<Country>();
             this.InvitationsTexts = new HashSet<InvitationText>();
             this.MailOutTexts = new HashSet<MailOutText>();

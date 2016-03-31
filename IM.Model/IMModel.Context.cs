@@ -1407,5 +1407,26 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ValidationData>("USP_OR_ValidateChangedBy", changedByParameter, passwordParameter, placeTypeParameter, placeIDParameter, userTypeParameter, pRParameter);
         }
+    
+        public virtual int USP_OR_UpdateMealTicketFolio(string salesRoom, string mealTicketType, string folio, Nullable<int> rateType)
+        {
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var mealTicketTypeParameter = mealTicketType != null ?
+                new ObjectParameter("MealTicketType", mealTicketType) :
+                new ObjectParameter("MealTicketType", typeof(string));
+    
+            var folioParameter = folio != null ?
+                new ObjectParameter("Folio", folio) :
+                new ObjectParameter("Folio", typeof(string));
+    
+            var rateTypeParameter = rateType.HasValue ?
+                new ObjectParameter("RateType", rateType) :
+                new ObjectParameter("RateType", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateMealTicketFolio", salesRoomParameter, mealTicketTypeParameter, folioParameter, rateTypeParameter);
+        }
     }
 }

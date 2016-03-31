@@ -6042,6 +6042,12 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="HoursDif" Type="smallint" Mode="In" />
           <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_UpdateMealTicketFolio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="MealTicketType" Type="varchar" Mode="In" />
+          <Parameter Name="Folio" Type="varchar" Mode="In" />
+          <Parameter Name="RateType" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_ValidateChangedBy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
           <Parameter Name="Password" Type="varchar" Mode="In" />
@@ -8687,24 +8693,24 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Name="laID" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="laN" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="laA" Type="Boolean" Nullable="false" />
-          <Property Name="laMrMrs" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laRoom" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laMember" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laDate" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laMaritalSt" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laAge" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laOccupation" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laCountry" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laAgency" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laHotel" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laPax" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laDesposit" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laGift" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laLocation" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laPR" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="laExtraInfo" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="laMrMrs" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laRoom" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laMember" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laDate" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laTime" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laMaritalSt" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laAge" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laOccupation" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laCountry" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laAgency" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laHotel" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laPax" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laDesposit" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laGift" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laLocation" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laPR" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
+          <Property Name="laExtraInfo" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" DefaultValue="" />
           <NavigationProperty Name="Countries" Relationship="Self.FK_Countries_Languages" FromRole="Languages" ToRole="Countries" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="InvitationsTexts" Relationship="Self.FK_InvitsTexts_Languages" FromRole="Languages" ToRole="InvitsTexts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="MailOutTexts" Relationship="Self.FK_MailOutTexts_Languages" FromRole="Languages" ToRole="MailOutTexts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -15114,6 +15120,12 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="UserType" Mode="In" Type="String" />
             <Parameter Name="PR" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateMealTicketFolio">
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="MealTicketType" Mode="In" Type="String" />
+            <Parameter Name="Folio" Mode="In" Type="String" />
+            <Parameter Name="RateType" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -19447,6 +19459,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateMealTicketFolio" FunctionName="IMModel.Store.USP_OR_UpdateMealTicketFolio" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
