@@ -1,0 +1,84 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Host.Forms"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmMealTickets"
+        mc:Ignorable="d"
+        Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        Title="Meal Tickets" Height="346.008" Width="873.379" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <Window.Resources>
+        <CollectionViewSource x:Key="dsRateType" d:DesignSource="{d:DesignInstance {x:Type Model:RateType}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsMealTicket" d:DesignSource="{d:DesignInstance {x:Type Model:MealTicket}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsPersonnel" d:DesignSource="{d:DesignInstance {x:Type Model:Personnel}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsMealTicketType" d:DesignSource="{d:DesignInstance {x:Type Model:MealTicketType}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsAgency" d:DesignSource="{d:DesignInstance {x:Type Model:Agency}, CreateList=True}"/>
+
+        <!--#region ESTILOS DEL DATAGRID-->
+        <Style TargetType="{x:Type DataGridRow}">
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
+            </Style.Resources>
+        </Style>
+        <!--#endregion-->
+    </Window.Resources>
+    <Grid>
+        <GroupBox x:Name="grbSelectionCriteria" Header="Selection Criteria" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="787" Height="72" >
+            <Canvas>
+                <TextBlock x:Name="lblMtID" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Meal Ticket ID" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="7"/>
+                <TextBox x:Name="txtMealTicket" Height="23" Canvas.Left="14" AcceptsReturn="False" Canvas.Top="21" Width="100"/>
+                <TextBlock x:Name="lblmkFolio" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Meal Ticket ID" VerticalAlignment="Top" Canvas.Left="132" Canvas.Top="7"/>
+                <TextBox x:Name="txtFolio" Height="23" Canvas.Left="132" AcceptsReturn="False" Canvas.Top="21" Width="100"/>
+                <TextBlock x:Name="lblRateType" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Rate Type" VerticalAlignment="Top" Canvas.Left="263" Canvas.Top="9" Width="59"/>
+                <ComboBox x:Name="cboRateType"  DataContext="{StaticResource dsRateType}" Canvas.Left="263" Canvas.Top="23" Width="145" SelectedValuePath="raID" ItemsSource="{Binding}" DisplayMemberPath="raN" SelectionChanged="cboRateType_SelectionChanged"/>
+                <TextBlock x:Name="lblFrom" HorizontalAlignment="Left" TextWrapping="Wrap" Text="From" VerticalAlignment="Top" Canvas.Left="443" Canvas.Top="7" />
+                <xctk:DateTimePicker x:Name="dtpFrom" Canvas.Left="473" Canvas.Top="3" Width="141" Format="LongDate" TextAlignment="Left" />
+                <TextBlock x:Name="lblTo" HorizontalAlignment="Left" TextWrapping="Wrap" Text="To" VerticalAlignment="Top" Canvas.Left="444" Canvas.Top="35" />
+                <xctk:DateTimePicker x:Name="dtpTo" Canvas.Left="474" Canvas.Top="31" Width="140" Format="LongDate" TextAlignment="Left" />
+                <Button x:Name="btnSearch" Content="Search" Canvas.Left="677" Canvas.Top="15" Width="75" Click="btnSearch_Click"/>
+            </Canvas>
+        </GroupBox>
+        <Separator HorizontalAlignment="Left" Height="12" Margin="10,262,0,0" VerticalAlignment="Top" Width="845"/>
+        <Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Left" Margin="657,282,0,0" VerticalAlignment="Top" Width="75" Click="btnAdd_Click"/>
+        <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left" Margin="768,282,0,0" VerticalAlignment="Top" Width="75" Click="btnClose_Click"/>
+        <Button x:Name="btnPrint" Content="Print" HorizontalAlignment="Left" Margin="40,282,0,0" VerticalAlignment="Top" Width="75"/>
+        <CheckBox x:Name="chkTicket" Content="Con o Sin Ticket" HorizontalAlignment="Left" Margin="305,285,0,0" VerticalAlignment="Top"/>
+        <DataGrid x:Name="dgMealTicket" DataContext="{StaticResource dsMealTicket}" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="10,88,10,57" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" >
+            <DataGrid.Resources>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="MouseDoubleClick" Handler="Cell_DoubleClick"/>
+                    <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="meIDColumn" Binding="{Binding meID}" Header="ID" Width="Auto"/>
+                <DataGridComboBoxColumn x:Name="meraColumn" Header="Rate Type" Width="Auto" SelectedValueBinding="{Binding mera}" SelectedValuePath="raID" DisplayMemberPath="raN"
+						ItemsSource="{Binding Source={StaticResource dsRateType}}" />
+                <DataGridComboBoxColumn x:Name="mepeColumn" Header="Collaborator" Width="Auto" SelectedValueBinding="{Binding mepe}" SelectedValuePath="peID" DisplayMemberPath="peN"
+						ItemsSource="{Binding Source={StaticResource dsPersonnel}}" />
+                <DataGridComboBoxColumn x:Name="meagColumn" Header="Agency" Width="Auto" SelectedValueBinding="{Binding meag}" SelectedValuePath="agID" DisplayMemberPath="agN"
+						ItemsSource="{Binding Source={StaticResource dsAgency}}" />
+                <DataGridTextColumn x:Name="merepColumn" Binding="{Binding merep}" Header="Representative" Width="Auto"/>
+                <DataGridTextColumn x:Name="mesrColumn" Binding="{Binding mesr}" Header="SR" Width="Auto"/>
+                <DataGridTextColumn x:Name="meDColumn" Binding="{Binding meD, StringFormat=d}" Header="Date" Width="Auto"/>
+                <DataGridTextColumn x:Name="meQtyColumn" Binding="{Binding meQty}" Header="Qty" Width="Auto"/>
+                <DataGridComboBoxColumn Header="Type" Width="Auto" SelectedValueBinding="{Binding meType}" SelectedValuePath="myID" DisplayMemberPath="myN"
+						ItemsSource="{Binding Source={StaticResource dsMealTicketType}}" IsReadOnly="True" />
+                <DataGridTextColumn x:Name="meAdultsColumn" Binding="{Binding meAdults}" Header="Adults" Width="Auto"/>
+                <DataGridTextColumn x:Name="meMinorsColumn" Binding="{Binding meMinors}" Header="Minors" Width="Auto"/>
+                <DataGridTextColumn x:Name="meFoliosColumn" Binding="{Binding meFolios}" Header="Folios" Width="Auto"/>
+                <DataGridTextColumn x:Name="meTAdultsColumn" Binding="{Binding meTAdults, StringFormat={}{0:$0.00}}" Header="T. Adults" Width="Auto"/>
+                <DataGridTextColumn x:Name="meTMinorsColumn" Binding="{Binding meTMinors, StringFormat={}{0:$0.00}}" Header="T. Minors" Width="Auto"/>
+                <DataGridTextColumn x:Name="meCommentsColumn" Binding="{Binding meComments}" Header="Comments" Width="200"/>
+                <DataGridCheckBoxColumn x:Name="meCancColumn" Binding="{Binding meCanc}" Header="Cancel" Width="Auto"/>
+                <DataGridCheckBoxColumn x:Name="mePrintedColumn" Binding="{Binding mePrinted}" Header="Printed" Width="Auto"/>
+                <DataGridTextColumn x:Name="meAuthorizedByColumn" Binding="{Binding meAuthorizedBy}" Header="Authorized By" Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Window>
