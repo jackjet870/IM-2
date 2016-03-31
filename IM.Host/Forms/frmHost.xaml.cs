@@ -10,6 +10,9 @@ using IM.Model;
 using IM.Host.Forms;
 using IM.Model.Classes;
 using IM.BusinessRules.BR;
+using IM.Base.Helpers;
+using IM.Model.Enums;
+using IM.Host.Enums;
 
 namespace IM.Host
 {
@@ -21,21 +24,19 @@ namespace IM.Host
   {
     private DateTime? _dtpCurrent = null;
     public static DateTime _dtpServerDate = new DateTime();
-    private SalesRoomLogin _salesRoomLogin = new SalesRoomLogin();
+    //private SalesRoomLogin _salesRoomLogin = new SalesRoomLogin();
     private UserLogin _userLogin = new UserLogin();
-    public static UserData _userData;
     CollectionViewSource _guestHost;
 
-    public frmHost(UserData userData)
+    public frmHost()
     {
-      _userData = userData;
-      _salesRoomLogin = userData.SalesRoom;
-      _userLogin = userData.User;
+      //_salesRoomLogin = App.User.SalesRoom;
+      _userLogin = App.User.User;
 
       InitializeComponent();
 
-      txtUser.Text = userData.User.peN.ToString();
-      txtSalesRoom.Text = userData.SalesRoom.srN.ToString();
+      txtUser.Text = App.User.User.peN.ToString();
+      txtSalesRoom.Text = App.User.SalesRoom.srN.ToString();
     }
 
     #region Métodos de controles en el formulario
@@ -55,7 +56,7 @@ namespace IM.Host
       _dtpServerDate = BRHelpers.GetServerDate();
 
       // Se verifica que el tipo de permiso del usuario para habilitar y/o deshabilitar opciones necesarias.
-      if (_userData.Permissions.Exists(c => c.pppm == "HOST" && c.pppl == 1))
+      if (App.User.HasPermission(EnumPermission.Host, EnumPermisionLevel.ReadOnly))//  .Permissions.Exists(c => c.pppm == "HOST" && c.pppl == 1))
       {
         guShowSeqColumn.IsReadOnly = true;
         guQuinellaColumn.IsReadOnly = true;
@@ -167,7 +168,7 @@ namespace IM.Host
         _dtpCurrent = dtpDate.SelectedDate.Value.Date;
 
         _guestHost = ((CollectionViewSource)(this.FindResource("dsPremanifestHost")));
-        _guestHost.Source = BRGuests.GetPremanifestHost(_dtpCurrent, _salesRoomLogin.srID);
+        _guestHost.Source = BRGuests.GetPremanifestHost(_dtpCurrent, App.User.SalesRoom.srID);
       }
     }
 
@@ -182,14 +183,14 @@ namespace IM.Host
     private void btnCloseSalesRoom_Click(object sender, RoutedEventArgs e)
     {
       // Validamos que tenga permiso de lectura de cierre de sala de ventas
-      if (!_userData.Permissions.Exists(c => c.pppm == "CLOSESR" && c.pppl >= 1))
+      if (!App.User.HasPermission(EnumPermission.CloseSalesRoom, EnumPermisionLevel.ReadOnly)) //  _userData.Permissions.Exists(c => c.pppm == "CLOSESR" && c.pppl >= 1))
       {
         MessageBox.Show("Access denied.", "Close Sales Room");
         return;
       }
 
       // Mostramos el formulario Close Sales Room
-      frmCloseSalesRoom mfrCloseSalesRoom = new frmCloseSalesRoom(this, _userData, _dtpServerDate);
+      frmCloseSalesRoom mfrCloseSalesRoom = new frmCloseSalesRoom(this, _dtpServerDate);
       mfrCloseSalesRoom.ShowInTaskbar = false;
       mfrCloseSalesRoom.Owner = this;
       AplicarEfecto(this);
@@ -361,13 +362,13 @@ namespace IM.Host
     private void btnExtRate_Click(object sender, RoutedEventArgs e)
     {
       //Verificamos si el usuario cuenta con los permisos suficientes
-      if (!_userData.Permissions.Exists(c => c.pppm == "EXCHRATES" && c.pppl >= 1))
+      if (!App.User.HasPermission(EnumPermission.ExchangeRates, EnumPermisionLevel.ReadOnly)) // _userData.Permissions.Exists(c => c.pppm == "EXCHRATES" && c.pppl >= 1))
       {
         MessageBox.Show("User doesn't have access", "Exchange Rate");
         return;
       }
 
-      frmExchangeRate _frExtChangeRate = new frmExchangeRate(_dtpServerDate, _userData);
+      frmExchangeRate _frExtChangeRate = new frmExchangeRate(_dtpServerDate);
       _frExtChangeRate.ShowInTaskbar = false;
       _frExtChangeRate.Owner = this;
       _frExtChangeRate.ShowDialog();
@@ -376,14 +377,121 @@ namespace IM.Host
     private void ChkguShow_Click(object sender, RoutedEventArgs e)
     {
       // Obtenemos el row seleccionado!
+
       DataGridRow row = sender as DataGridRow;
+      CheckBox _chekedValue = sender as CheckBox;
+      GuestPremanifestHost guestHost = (GuestPremanifestHost)_chekedValue.DataContext;
 
+      //CheckBox _chekedValue = sender as CheckBox;
 
+      //Validamos que sea un invitado valido
+      if (ValidateGuest(guestHost, EnumPermission.Show, "guShow"))
+      {
+        // Desplegamos el formulario Show
+        frmShow _frmShow = new frmShow();
+        _frmShow.ShowInTaskbar = false;
+        _frmShow.Owner = this;
+        _frmShow.ShowDialog();
+
+        // Verificamos si se cambio el status de show
+
+      }
+      else
+      {
+        if (!guestHost.guShow)
+        {
+          _chekedValue.IsChecked = false;
+        }
+      }
     }
 
-    private bool ValidateGuest()
+    /// <summary>
+    /// Función encargada de validar que sea un usuario valido con sus respectivos permisos
+    /// </summary>
+    /// <param name="guestHost"></param>
+    /// <returns> true - user valid | false - user no valid </returns>
+    /// <history>
+    /// [vipacheco] 02/15/2016 Created
+    /// </history>
+    private bool ValidateGuest(GuestPremanifestHost guestHost, EnumPermission permission, string strField)
     {
-      return false;
+      if (guestHost.guBookCanc) // Validamos que no sea un booking cancelado
+      {
+        UIHelper.ShowMessage("Cancelled booking.", MessageBoxImage.Exclamation);
+        return false;
+      }
+      else if (!App.User.HasPermission(permission, EnumPermisionLevel.ReadOnly)) // validamos los permisos del usuario - SIN PERMISOS
+      {
+        UIHelper.ShowMessage("Access denied.", MessageBoxImage.Exclamation);
+        return false;
+      }
+      else if (!App.User.HasPermission(permission, EnumPermisionLevel.Standard)) // PERMISO - Solo Lectura
+      {
+        if (!guestHost.guMealTicket)
+        {
+          UIHelper.ShowMessage("You have read access.", MessageBoxImage.Exclamation);
+          return false;
+        }
+      }
+      else if (guestHost.guShow == false && (strField == "guMealTicket" || strField == "guSale"))
+      {
+        UIHelper.ShowMessage("This option should have a show marked.", MessageBoxImage.Exclamation);
+        return false;
+      }
+      return true;
+    }
+
+    /// <summary>
+    /// Función para madar ejecutar el formulario Gifts Receipts
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 03/17/2016 Created
+    /// </history>
+    private void btnGiftsReceipts_Click(object sender, RoutedEventArgs e)
+    {
+      frmGiftsReceipts _frmGiftsReceipts = new frmGiftsReceipts();
+      _frmGiftsReceipts.ShowInTaskbar = false;
+      _frmGiftsReceipts.Owner = this;
+      _frmGiftsReceipts.ShowDialog();
+    }
+
+    private void btnMealTickets_Click(object sender, RoutedEventArgs e)
+    {
+      // Se verifica si el usuario tiene permisos de edicion!
+      bool modeEdit = App.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard);
+
+      // Se invoca el formulario de acuerdo al permiso del usuario!
+      frmMealTickets _frmMealTickets = new frmMealTickets();
+      _frmMealTickets.ShowInTaskbar = false;
+      _frmMealTickets.modeOpen = ((modeEdit == true) ? EnumModeOpen.Edit : EnumModeOpen.Search);
+      _frmMealTickets.Owner = this;
+      _frmMealTickets.ShowDialog();
+    }
+
+    private void guMealTickets_Click(object sender, RoutedEventArgs e)
+    {
+      // Obtenemos el row seleccionado!
+      CheckBox _chekedValue = sender as CheckBox;
+      GuestPremanifestHost guestHost = (GuestPremanifestHost)_chekedValue.DataContext;
+
+      //Validamos que sea un invitado valido
+      if (ValidateGuest(guestHost, EnumPermission.MealTicket, "guMealTickets"))
+      {
+        // Desplegamos el formulario Show
+        frmMealTickets _frmMealTickets = new frmMealTickets(guestHost.guID);
+        _frmMealTickets.ShowInTaskbar = false;
+
+        if (guestHost.guMealTicket)
+          _frmMealTickets.modeOpen = EnumModeOpen.Preview;
+        else
+          _frmMealTickets.modeOpen = EnumModeOpen.Edit;
+
+        _frmMealTickets.Owner = this;
+        _frmMealTickets.ShowDialog();
+
+      }
     }
   }
 

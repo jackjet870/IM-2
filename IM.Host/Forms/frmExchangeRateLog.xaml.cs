@@ -26,5 +26,23 @@ namespace IM.Host.Forms
       // Obtenemos el historico del currency
       _cvsExchangeRate.Source = BRExchangeRatesLogs.GetExchangeRateLog(_currency);
     }
+    
+    /// <summary>
+    /// Función para contabilizar los recordset obtenidos
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 14/03/2016 Created
+    /// </history>
+    private void getExchangeRateLogDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+      if (getExchangeRateLogDataGrid.Items.Count == 0)
+      {
+        StatusBarReg.Content = "No Records";
+        return;
+      }
+      StatusBarReg.Content = string.Format("{0}/{1}", getExchangeRateLogDataGrid.Items.IndexOf(getExchangeRateLogDataGrid.CurrentItem) + 1, getExchangeRateLogDataGrid.Items.Count);
+    }
   }
 }

@@ -82,6 +82,9 @@
     <Compile Include="BR\BRHelpers.cs" />
     <Compile Include="BR\BRHotels.cs" />
     <Compile Include="BR\BRLanguages.cs" />
+    <Compile Include="BR\BRMealTicketFolios.cs" />
+    <Compile Include="BR\BRMealTickets.cs" />
+    <Compile Include="BR\BRMealTicketTypes.cs" />
     <Compile Include="BR\BRMaritalStatus.cs" />
     <Compile Include="BR\BRPaymentTypes.cs" />
     <Compile Include="BR\BRNotes.cs" />

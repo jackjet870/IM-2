@@ -21,7 +21,7 @@ namespace IM.BusinessRules.BR
     /// [vipacheco] 10/03/2016 Modified --> Se agregó validacion de Object Currency vacía.
     /// [vipacheco] 11/03/2016 Modified --> Se agregó parametro nuevo para excluir alguna lista currencies en especifico por su ID
     /// </history>
-    public static List<Currency> GetCurrencies(Currency currency, int nStatus=-1, List<string> exceptCurrencyID = null)
+    public static List<Currency> GetCurrencies(Currency currency=null, int nStatus=-1, List<string> exceptCurrencyID = null)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {

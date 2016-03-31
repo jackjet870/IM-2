@@ -10,6 +10,7 @@
         Title="Intelligence Marketing Host" 
         Height="400.189" Width="1584.012" 
         WindowStartupLocation="CenterScreen" WindowState="Maximized"
+        Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
         KeyDown="frmHost_KeyDown"
         Loaded="frmHost_Loaded">
 
@@ -94,10 +95,22 @@
                         </StackPanel>
                     </Button>
                     -->
-                    <Button x:Name="btnExRate" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="112" Background="White" Height="43" Click="btnExtRate_Click">
+                    <Button x:Name="btnGiftsReceipts" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="112" Background="White" Height="43" Click="btnGiftsReceipts_Click">
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/CloseSalesRoom.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Gifts Receipts" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="btnMealTickets" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="112" Background="White" Height="43" Click="btnMealTickets_Click">
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/CloseSalesRoom.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Meal Tickets" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="btnExRate" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="112" Background="White" Height="43" Click="btnExtRate_Click" >
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/ExchangeRate.png" Width="24" Height="24" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Exch. Rate" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Exchange Rate" HorizontalAlignment="Center" />
                         </StackPanel>
                     </Button>
                     <Button x:Name="btnCloseSalesRoom" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="112" Background="White" Height="43" Click="btnCloseSalesRoom_Click">
@@ -151,7 +164,7 @@
 
         <!--#region DATAGRID-->
         <Grid Grid.Row="1" DataContext="{StaticResource dsPremanifestHost}" >
-            <DataGrid Name="dtgPremanifestHost"  AutoGenerateColumns="False" ItemsSource="{Binding}" Margin="10,11,10,9" Height="Auto" Width="Auto" SelectionChanged="dtgPremanifestHost_SelectionChanged" CanUserAddRows="False" SelectionMode="Single">
+            <DataGrid Name="dtgPremanifestHost"  AutoGenerateColumns="False" ItemsSource="{Binding}" Margin="10,11,10,9" Height="Auto" Width="Auto" SelectionChanged="dtgPremanifestHost_SelectionChanged" CanUserAddRows="False" >
                 <DataGrid.Columns>
                     <!--#region DEFAULT COLUMN-->
                     <DataGridTextColumn x:Name="guShowSeqColumn" Binding="{Binding guShowSeq}" Header="Seq" Width="SizeToHeader" >
@@ -276,13 +289,25 @@
                             </Style>
                         </DataGridCheckBoxColumn.HeaderStyle>
                     </DataGridCheckBoxColumn>
-                    <DataGridCheckBoxColumn x:Name="guMealTicketColumn" Binding="{Binding guMealTicket}" Header="M T" Width="SizeToHeader">
+                    <!--<DataGridCheckBoxColumn x:Name="guMealTicketColumn" Binding="{Binding guMealTicket}" Header="M T" Width="SizeToHeader">
                         <DataGridCheckBoxColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="ToolTip" Value="Meal Ticket"/>
                             </Style>
                         </DataGridCheckBoxColumn.HeaderStyle>
-                    </DataGridCheckBoxColumn>
+                    </DataGridCheckBoxColumn>-->
+                    <DataGridTemplateColumn x:Name="guMealTicketColumn" IsReadOnly="False"  Header="M T" Width="SizeToHeader" >
+                        <DataGridTemplateColumn.CellTemplate >
+                            <DataTemplate>
+                                <CheckBox x:Name="guMealTickets" IsChecked="{Binding guMealTicket}"  Click="guMealTickets_Click"  HorizontalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="ToolTip" Value="Meal Ticket"/>
+                            </Style>
+                        </DataGridTemplateColumn.HeaderStyle>
+                    </DataGridTemplateColumn>
                     <DataGridCheckBoxColumn x:Name="guSaleColumn" Binding="{Binding guSale}" Header="Sale" Width="SizeToHeader">
                         <DataGridCheckBoxColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">

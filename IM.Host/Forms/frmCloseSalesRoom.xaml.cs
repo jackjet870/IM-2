@@ -17,7 +17,7 @@ namespace IM.Host.Forms
   {
     #region VARIABLES
     private Window _frmHost = null;
-    private UserData _userData;
+    //private UserData _userData;
     private DateTime _serverDate;
     #endregion
 
@@ -30,20 +30,20 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 27/02/2106 Created
     /// </history>
-    public frmCloseSalesRoom(Window pHost, UserData userData, DateTime serverDate)
+    public frmCloseSalesRoom(Window pHost, DateTime serverDate)
     {
-      _userData = userData;
+      //_userData = userData;
       _serverDate = serverDate;
 
       InitializeComponent();
       _frmHost = pHost;
-      validateUserPermissions(_userData);
+      validateUserPermissions(App.User);
     }
 
     #region EVENTOS DE TIPO WINDOW
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      var _getSalesRoom = BRSalesRooms.GetSalesRoom(_userData.SalesRoom.srID);
+      var _getSalesRoom = BRSalesRooms.GetSalesRoom(App.User.SalesRoom.srID);
 
       //Se agrega Binding a los controles correspondientes
       dtpCloseShowsLast.SelectedDate = _getSalesRoom.srShowsCloseD;
@@ -97,7 +97,7 @@ namespace IM.Host.Forms
     /// </history>
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
-      frmSalesRoomsLog mfrmSalesRoomsLog = new frmSalesRoomsLog(_userData);
+      frmSalesRoomsLog mfrmSalesRoomsLog = new frmSalesRoomsLog();
       mfrmSalesRoomsLog.ShowInTaskbar = false;
       mfrmSalesRoomsLog.Owner = this;
       mfrmSalesRoomsLog.ShowDialog();
@@ -149,10 +149,10 @@ namespace IM.Host.Forms
         return;
 
       //Realizamos el cierre
-      BRSalesRooms.SetCloseSalesRoom(_closeType, _userData.SalesRoom.srID, _dateClose.SelectedDate);
+      BRSalesRooms.SetCloseSalesRoom(_closeType, App.User.SalesRoom.srID, _dateClose.SelectedDate);
 
       //Guardamos la accion en el historico de sala de ventas
-      BRSalesRoomsLogs.SaveSalesRoomLog(_userData.SalesRoom.srID, Convert.ToInt16(_userData.SalesRoom.srHoursDif), _userData.User.peID);
+      BRSalesRoomsLogs.SaveSalesRoomLog(App.User.SalesRoom.srID, Convert.ToInt16(App.User.SalesRoom.srHoursDif), App.User.User.peID);
 
       //Actualizamos datos de UI
       updateDate(_closeType, _dateClose.SelectedDate);

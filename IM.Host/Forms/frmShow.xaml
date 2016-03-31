@@ -1,39 +1,338 @@
-﻿<Window x:Class="IM.Host.Forms.frmShow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Host.Forms"
+        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmShow"
         mc:Ignorable="d"
-        Title="frmShow" Height="636.226" Width="653.207" WindowStartupLocation="CenterScreen">
+        Title="frmShow" Height="708.976" Width="625.707" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <Window.Resources>
+        <CollectionViewSource x:Key="guestViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:Guest}, CreateList=True}"/>
+    </Window.Resources>
     <Grid>
-        <TabControl x:Name="tabControl" HorizontalAlignment="Left" VerticalAlignment="Top" Height="600" Width="645">
+        <TabControl x:Name="tabControl" HorizontalAlignment="Left" VerticalAlignment="Top" Height="682" Width="618">
             <TabItem Header="General">
-                <Grid Background="#FFE5E5E5" Margin="0,0,0,-5">
-
-                </Grid>
-            </TabItem>
-            <TabItem Header="Other Info, Gifts, Credit Cards, Status &amp; Comments">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-            <TabItem Header="Deposits &amp; Salesmen">
-                <Grid Background="#FFE5E5E5">
-
-                </Grid>
-            </TabItem>
-            <TabItem Header="Hidden">
-                <Grid Background="#FFE5E5E5">
-                    <GroupBox x:Name="groupBox" Header="Hidden" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="108" Width="615">
-                        <StackPanel>
-                            <TextBox x:Name="txtgumk" HorizontalAlignment="Left" Height="23" Margin="0,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-                            <TextBox x:Name="textBox" Height="23" TextWrapping="Wrap" Text="TextBox"/>
-
+                <Grid Background="#FFE5E5E5" Margin="0,0,0,0">
+                    <GroupBox x:Name="groupBox1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="37" Width="588">
+                        <StackPanel Orientation="Horizontal" DataContext="{StaticResource guestViewSource}">
+                            <TextBlock x:Name="txbguID" HorizontalAlignment="Left" Margin="4,10,0,0" TextWrapping="Wrap" Text="GUID" VerticalAlignment="Top"/>
+                            <TextBox x:Name="txtguID" Height="22" TextWrapping="Wrap" AcceptsReturn="False" Margin="10,4,0,5" Width="103" Text="{Binding guID, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguHReservID" Margin="10,10,0,0" TextWrapping="Wrap" Text="Rsrv. Num."/>
+                            <TextBox x:Name="txtguHReservID" Height="22" AcceptsReturn="False" Margin="10,4,0,5" Width="103" Text="{Binding guHReservID, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <Button x:Name="btnSearchReservation" Content="Search" Width="76" Height="22" Margin="10,4,0,5"/>
+                            <TextBlock x:Name="txbguOutInvitNum" HorizontalAlignment="Left" Margin="4,10,0,0" TextWrapping="Wrap" Text="Out. Invit." VerticalAlignment="Top"/>
+                            <TextBox x:Name="txtguOutInvitNum" Height="22" AcceptsReturn="False" Margin="10,4,0,5" Width="103" Text="{Binding guOutInvitNum, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
                         </StackPanel>
+                    </GroupBox>
+                    <GroupBox x:Name="grbProfileOpera" Header="Profile Opera" HorizontalAlignment="Left" Margin="10,52,0,0" VerticalAlignment="Top" Height="58" Width="480">
+                        <Canvas DataContext="{StaticResource guestViewSource}">
+                            <TextBlock x:Name="txbguIdProfileOpera"  Text="ID" Canvas.Left="10" Canvas.Top="5" />
+                            <TextBox x:Name="txtguIdProfileOpera" Height="23" AcceptsReturn="False" Canvas.Top="18" Width="120" Text="{Binding guIdProfileOpera, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguLastNameOriginal"  Text="Last Name" Canvas.Left="141" Canvas.Top="5" />
+                            <TextBox x:Name="txtguLastNameOriginal" Height="23" AcceptsReturn="False" Canvas.Top="18" Width="155" Canvas.Left="135" Text="{Binding guLastNameOriginal, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguFirstNameOriginal"  Text="First Name" Canvas.Left="309" Canvas.Top="5" />
+                            <TextBox x:Name="txtguFirstNameOriginal" Height="23" AcceptsReturn="False" Canvas.Top="18" Width="155" Canvas.Left="303" Text="{Binding guFirstNameOriginal, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                        </Canvas>
+                    </GroupBox>
+                    <GroupBox x:Name="grb3" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" Height="242" Width="237">
+                        <Canvas DataContext="{StaticResource guestViewSource}">
+                            <CheckBox x:Name="chkguShow" Content="Shows" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.033,-7.404" Canvas.Left="9" Canvas.Top="13" IsChecked="{Binding guShow, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBox x:Name="txtguShowD" HorizontalAlignment="Left" Height="23" Margin="60,10,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="60" Text="{Binding guShowD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguBookD" Canvas.Left="127" TextWrapping="Wrap" Text="Book" Canvas.Top="13"/>
+                            <TextBox x:Name="txtguBookD" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="60" Canvas.Left="157" Canvas.Top="10" Text="{Binding guBookD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <CheckBox x:Name="chkguPresentedInvitation" Content="Presented Invitation" Canvas.Left="10" Canvas.Top="40" IsChecked="{Binding guPresentedInvitation, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" IsEnabled="True"/>
+                            <Separator Height="7" Canvas.Left="10" Margin="0" Canvas.Top="54" Width="207"/>
+                            <CheckBox x:Name="chkguDirect" Content="Direct" Canvas.Left="10" Canvas.Top="66" IsChecked="{Binding guDirect, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <CheckBox x:Name="chkguQuinella" Content="Quinella" Canvas.Left="70" Canvas.Top="66" IsChecked="{Binding guQuinella, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <CheckBox x:Name="chkguQuinellaSplit" Content="Quinella Split" Canvas.Left="138" Canvas.Top="66" IsChecked="{Binding guQuinellaSplit, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguMainInvit" Canvas.Left="10" TextWrapping="Wrap" Text="Main Invit." Canvas.Top="88"/>
+                            <TextBox x:Name="txtguMainInvit" Height="23" Canvas.Left="67" AcceptsReturn="False" Canvas.Top="83" Width="53" Text="{Binding guMainInvit, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBox x:Name="txtMainInvitName" Height="23" Canvas.Left="125" AcceptsReturn="False" Canvas.Top="83" Width="91"/>
+                            <CheckBox x:Name="chkguAntesIO" Content="Before In &amp; Out" Canvas.Left="10" Canvas.Top="109" IsChecked="{Binding guAntesIO, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <Separator Height="8" Canvas.Left="10" Margin="0" Canvas.Top="122" Width="207"/>
+                            <RadioButton x:Name="optguTour" Content="Tour" Canvas.Left="10" Canvas.Top="135" IsChecked="{Binding guTour, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <RadioButton x:Name="optguCTour" Content="CT" Canvas.Left="10" Canvas.Top="152" IsChecked="{Binding guCTour, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <RadioButton x:Name="optguInOut" Content="In &amp; Out" Canvas.Left="66" Canvas.Top="135" IsChecked="{Binding guInOut, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <RadioButton x:Name="optguSaveProgram" Content="Save" Canvas.Left="66" Canvas.Top="152" IsChecked="{Binding guSaveProgram, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <RadioButton x:Name="optguWalkOut" Content="Walk Out" Canvas.Left="134" Canvas.Top="135" IsChecked="{Binding guWalkOut, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <RadioButton x:Name="optguWithQuinella" Content="WQ" Canvas.Left="134" Canvas.Top="152" IsChecked="{Binding guWithQuinella, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <Separator Height="7" Canvas.Left="10" Margin="0" Canvas.Top="166" Width="207"/>
+                            <TextBlock x:Name="txbguTimeInT" Canvas.Left="12" TextWrapping="Wrap" Text="Time In" Canvas.Top="179"/>
+                            <Button x:Name="btnIn" Canvas.Left="53" Canvas.Top="178" Width="20" Height="15" Background="LightGreen"/>
+                            <TextBox x:Name="txtguTimeInT" Height="22" Canvas.Left="75" AcceptsReturn="False" Canvas.Top="175" Width="38" Text="{Binding guTimeInT, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguTimeOutT" Canvas.Left="115" TextWrapping="Wrap" Text="Time Out" Canvas.Top="179"/>
+                            <Button x:Name="btnOut" Canvas.Left="160" Canvas.Top="178" Width="20" Height="15" Background="Red"/>
+                            <TextBox x:Name="txtguTimeOutT" Height="22" Canvas.Left="182" AcceptsReturn="False" Canvas.Top="175" Width="38" Text="{Binding guTimeOutT, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <Separator Height="9" Canvas.Left="10" Margin="0" Canvas.Top="197" Width="207"/>
+                            <TextBlock x:Name="txbguCheckInD" Canvas.Left="9" TextWrapping="Wrap" Text="Arrival" Canvas.Top="211"/>
+                            <TextBox x:Name="txtguCheckInD" Height="23" Canvas.Left="42" AcceptsReturn="False" Canvas.Top="208" Width="58" Text="{Binding guCheckInD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguCheckOutD" Canvas.Left="103" TextWrapping="Wrap" Text="Departure" Canvas.Top="211"/>
+                            <TextBox x:Name="txtguCheckOutD" Height="23" Canvas.Left="154" AcceptsReturn="False" Canvas.Top="208" Width="63" Text="{Binding guCheckOutD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <Separator Height="56" Canvas.Left="-13" Margin="0" Canvas.Top="454" Width="598"/>
+                        </Canvas>
+                    </GroupBox>
+                    <GroupBox x:Name="groupBox4" Header="Guest 1" HorizontalAlignment="Left" Margin="264,115,0,0" VerticalAlignment="Top" Height="181" Width="333">
+                        <Canvas DataContext="{StaticResource guestViewSource}">
+                            <TextBlock x:Name="txbguLastName1" HorizontalAlignment="Left" Text="Last Name" VerticalAlignment="Top" Canvas.Left="22" Canvas.Top="10"/>
+                            <TextBox x:Name="txtguLastName1" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="5" Width="229" Text="{Binding guLastName1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguFirstName1" HorizontalAlignment="Left" Text="First Name" VerticalAlignment="Top" Canvas.Left="22" Canvas.Top="36"/>
+                            <TextBox x:Name="txtguFirstName1" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="31" Width="229" Text="{Binding guFirstName1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguAge1" HorizontalAlignment="Left" Text="Age" VerticalAlignment="Top" Canvas.Left="50" Canvas.Top="63"/>
+                            <TextBox x:Name="txtguAge1" Height="24" Canvas.Left="81" AcceptsReturn="False" Canvas.Top="58" Width="71" Text="{Binding guAge1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="textBlock9_Copy2" HorizontalAlignment="Left" Text="Marital Status" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="91"/>
+                            <ComboBox x:Name="cbogums1" Canvas.Left="82" Canvas.Top="85" Width="229" DisplayMemberPath="gums1" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbguOccup1" HorizontalAlignment="Left" Text="Occupation" VerticalAlignment="Top" Canvas.Left="22" Canvas.Top="115"/>
+                            <TextBox x:Name="txtguOccup1" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="110" Width="229" Text="{Binding guOccup1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguEmail1" HorizontalAlignment="Left" Text="Email" VerticalAlignment="Top" Canvas.Left="47" Canvas.Top="141"/>
+                            <TextBox x:Name="txtguEmail1" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="136" Width="229" Text="{Binding guEmail1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                        </Canvas>
+                    </GroupBox>
+                    <GroupBox x:Name="groupBox5" Header="Guest 2" HorizontalAlignment="Left" Margin="264,302,0,0" VerticalAlignment="Top" Height="181" Width="333">
+                        <Canvas DataContext="{StaticResource guestViewSource}">
+                            <TextBlock x:Name="txbguLastName2" HorizontalAlignment="Left" Text="Last Name" VerticalAlignment="Top" Canvas.Left="22" Canvas.Top="10"/>
+                            <TextBox x:Name="txtguLastName2" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="5" Width="229" Text="{Binding guLastname2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguFirstName2" HorizontalAlignment="Left" Text="First Name" VerticalAlignment="Top" Canvas.Left="22" Canvas.Top="36"/>
+                            <TextBox x:Name="txtguFirstName2" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="31" Width="229" Text="{Binding guFirstName2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguAge2" HorizontalAlignment="Left" Text="Age" VerticalAlignment="Top" Canvas.Left="50" Canvas.Top="63"/>
+                            <TextBox x:Name="txtguAge2" Height="24" Canvas.Left="81" AcceptsReturn="False" Canvas.Top="58" Width="71" Text="{Binding guAge2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="textBlock10_Copy2" HorizontalAlignment="Left" Text="Marital Status" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="91"/>
+                            <ComboBox x:Name="comboBox2" Canvas.Left="82" Canvas.Top="85" Width="229" DisplayMemberPath="gums2" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbguOccup2" HorizontalAlignment="Left" Text="Occupation" VerticalAlignment="Top" Canvas.Left="22" Canvas.Top="115"/>
+                            <TextBox x:Name="txtguOccup2" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="110" Width="229" Text="{Binding guOccup2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguEmail2" HorizontalAlignment="Left" Text="Email" VerticalAlignment="Top" Canvas.Left="47" Canvas.Top="141"/>
+                            <TextBox x:Name="txtguEmail2" Height="24" Canvas.Left="82" AcceptsReturn="False" Canvas.Top="136" Width="229" Text="{Binding guEmail2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                        </Canvas>
+                    </GroupBox>
+                    <GroupBox x:Name="groupBox6" Header="Additional Guest" HorizontalAlignment="Left" Margin="264,488,0,0" VerticalAlignment="Top" Height="99" Width="333"/>
+                    <GroupBox x:Name="groupBox8" HorizontalAlignment="Left" Margin="10,365,0,0" VerticalAlignment="Top" Height="118" Width="249">
+                        <Canvas DataContext="{StaticResource guestViewSource}">
+                            <TextBlock x:Name="txbguTaxiIn" Canvas.Left="40" Text="Taxi In" Canvas.Top="10" Width="35"/>
+                            <TextBox x:Name="txtguTaxiIn" Height="23" AcceptsReturn="False" Canvas.Top="24" Width="86" Canvas.Left="15" Text="{Binding guTaxiIn, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguTaxiIngr" Canvas.Left="141" Text="Taxi In Rcpt." Canvas.Top="10" Width="67" Height="13"/>
+                            <TextBox x:Name="txtguTaxiIngr" Height="23" Canvas.Left="133" AcceptsReturn="False" Canvas.Top="24" Width="80" Text="{Binding guTaxiIngr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguTaxiOut" Canvas.Left="40" Text="Taxi Out" Canvas.Top="51" Width="45" Height="14"/>
+                            <TextBox x:Name="txtguTaxiOut" Height="23" AcceptsReturn="False" Canvas.Top="65" Width="86" Canvas.Left="15" Text="{Binding guTaxiOut, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguTaxiOutgr" Canvas.Left="141" Text="Taxi Out Rcpt." Canvas.Top="51" Width="67" Height="13"/>
+                            <TextBox x:Name="txtguTaxiOutgr" Height="23" Canvas.Left="133" AcceptsReturn="False" Canvas.Top="65" Width="80" Text="{Binding guTaxiOutgr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+
+                        </Canvas>
+                    </GroupBox>
+                    <GroupBox x:Name="groupBox9" HorizontalAlignment="Left" Margin="10,488,0,0" VerticalAlignment="Top" Height="99" Width="249">
+                        <Canvas DataContext="{StaticResource guestViewSource}">
+                            <TextBlock x:Name="txguls" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Lead Source" VerticalAlignment="Top" Canvas.Left="19" Canvas.Top="10"/>
+                            <TextBox x:Name="txtguls" Height="23" Canvas.Left="10" AcceptsReturn="False" Canvas.Top="24" Width="91" Text="{Binding guls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguloInvit" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Location" VerticalAlignment="Top" Canvas.Left="150" Canvas.Top="10"/>
+                            <TextBox x:Name="txtguloInvit" Height="23" Canvas.Left="130" AcceptsReturn="False" Canvas.Top="23" Width="91" Text="{Binding guloInvit, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbtxtgusr" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Sales Room" VerticalAlignment="Top" Canvas.Left="85" Canvas.Top="52"/>
+                            <TextBox x:Name="txtgusr" Height="23" Canvas.Left="70" AcceptsReturn="False" Canvas.Top="66" Width="91" Text="{Binding gusr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                        </Canvas>
                     </GroupBox>
 
                 </Grid>
             </TabItem>
+            <TabItem Header="Other Info, Gifts, Credit Cards, Status &amp; Comments">
+                <Grid Background="#FFE5E5E5">
+                    <GroupBox x:Name="grpOtherInformation" Header="Other Information" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="180" Width="588">
+                        <Canvas DataContext="{StaticResource guestViewSource}">
+                            <TextBlock x:Name="txbguMembershipNum" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Member #" VerticalAlignment="Top"/>
+                            <TextBox x:Name="txtguMembershipNum" Height="23" Canvas.Left="74" AcceptsReturn="False" Canvas.Top="6" Width="200" Text="{Binding guMembershipNum, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguCity" HorizontalAlignment="Left" TextWrapping="Wrap" Text="City" VerticalAlignment="Top" Canvas.Left="299" Canvas.Top="10"/>
+                            <TextBox x:Name="txtguCity" Height="23" Canvas.Left="335" AcceptsReturn="False" Canvas.Top="6" Width="228" Text="{Binding guCity, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguO1" HorizontalAlignment="Left" TextWrapping="Wrap" Text="C. Code" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="36"/>
+                            <TextBox x:Name="txtguO1" Height="23" Canvas.Left="74" AcceptsReturn="False" Canvas.Top="32" Width="80" Text="{Binding guO1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguState" HorizontalAlignment="Left" TextWrapping="Wrap" Text="State" VerticalAlignment="Top" Canvas.Left="299" Canvas.Top="36"/>
+                            <TextBox x:Name="txtguState" Height="23" Canvas.Left="335" AcceptsReturn="False" Canvas.Top="32" Width="228" Text="{Binding guState, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguChildren" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Children" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="61"/>
+                            <TextBox x:Name="txtguChildren" Height="23" Canvas.Left="74" AcceptsReturn="False" Canvas.Top="57" Width="56" Text="{Binding guChildren, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguco" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Country" VerticalAlignment="Top" Canvas.Left="293" Canvas.Top="61"/>
+                            <TextBox x:Name="txtguco" Height="23" Canvas.Left="335" AcceptsReturn="False" Canvas.Top="57" Width="75" Text="{Binding guco, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguag" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Agency" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="87"/>
+                            <TextBox x:Name="txtguag" Height="23" Canvas.Left="74" AcceptsReturn="False" Canvas.Top="83" Width="80" Text="{Binding guag, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbgula" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Languaje" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="111"/>
+                            <TextBox x:Name="txtguRoomNum" Height="23" Canvas.Left="333" AcceptsReturn="False" Canvas.Top="133" Width="48" Text="{Binding guRoomNum, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="textBlock_Copy8" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Hotel" VerticalAlignment="Top" Canvas.Left="301" Canvas.Top="111"/>
+                            <TextBlock x:Name="txbguChildrenAges" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Age(s)" VerticalAlignment="Top" Canvas.Left="150" Canvas.Top="61"/>
+                            <TextBox x:Name="txtguChildrenAges" Height="23" Canvas.Left="190" AcceptsReturn="False" Canvas.Top="57" Width="81" RenderTransformOrigin="0.5,0.5" Text="{Binding guChildrenAges, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}">
+                                <TextBox.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="-0.699"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </TextBox.RenderTransform>
+                            </TextBox>
+                            <ComboBox x:Name="cboguco" Canvas.Left="416" Canvas.Top="57" Width="147" DisplayMemberPath="guco" ItemsSource="{Binding}"/>
+                            <ComboBox x:Name="cboguag" Canvas.Left="159" Canvas.Top="83" Width="251" DisplayMemberPath="guag" ItemsSource="{Binding}"/>
+                            <ComboBox x:Name="cbogula" Canvas.Left="74" Canvas.Top="109" Width="188" DisplayMemberPath="gula" ItemsSource="{Binding}"/>
+                            <ComboBox x:Name="cboguHotel" Canvas.Left="333" Canvas.Top="109" Width="230" DisplayMemberPath="guHotel" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbguRoomNum" HorizontalAlignment="Left" Text="Room" VerticalAlignment="Top" Canvas.Left="300" Canvas.Top="136"/>
+                            <TextBox x:Name="txtguRoomsQty" Height="23" Canvas.Left="412" AcceptsReturn="False" Canvas.Top="133" Width="26" Text="{Binding guRoomsQty, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="textBlock_Copy10" HorizontalAlignment="Left" Text="Books" VerticalAlignment="Top" Canvas.Left="381" Canvas.Top="136"/>
+                            <TextBox x:Name="txtguShowsQty" Height="23" Canvas.Left="473" AcceptsReturn="False" Canvas.Top="133" Width="26" Text="{Binding guShowsQty, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguShowsQty" HorizontalAlignment="Left" Text="Shows" VerticalAlignment="Top" Canvas.Left="442" Canvas.Top="136"/>
+                            <TextBox x:Name="txtguPax" Height="23" Canvas.Left="527" AcceptsReturn="False" Canvas.Top="133" Width="33" Text="{Binding guPax, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguPax" HorizontalAlignment="Left" Text="Pax" VerticalAlignment="Top" Canvas.Left="505" Canvas.Top="136"/>
+                            <CheckBox x:Name="checkBox" Content="Family" Canvas.Left="10" Canvas.Top="136" IsChecked="{Binding guFamily, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <CheckBox x:Name="checkBox_Copy" Content="Identification" Canvas.Left="69" Canvas.Top="136" IsChecked="{Binding guIdentification, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <CheckBox x:Name="checkBox_Copy1" Content="Interval" Canvas.Left="162" Canvas.Top="136" IsChecked="{Binding guInterval, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                        </Canvas>
+                    </GroupBox>
+                    <GroupBox x:Name="grpGifts" Header="Gifts" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top" Height="173" Width="588">
+                        <Canvas>
+                            <TextBlock x:Name="txbMaxAuthGiftsCaption" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Max Auth" VerticalAlignment="Top" Canvas.Left="221" Canvas.Top="135"/>
+                            <TextBox x:Name="txbMaxAuthGifts" Height="22" AcceptsReturn="False" Canvas.Left="271" Canvas.Top="131" Width="60" />
+                            <TextBlock x:Name="txbTotalPriceCaption" HorizontalAlignment="Left" Text="Total Price" VerticalAlignment="Top" Canvas.Left="455" Canvas.Top="135"/>
+                            <TextBox x:Name="txbTotalPrice" Height="22" AcceptsReturn="False" Canvas.Left="510" Canvas.Top="131" Width="60" />
+                            <TextBlock x:Name="txbTotalCostCaption" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Total Cost" VerticalAlignment="Top" Canvas.Left="337" Canvas.Top="135"/>
+                            <TextBox x:Name="txbTotalCost" Height="22" Canvas.Left="388" AcceptsReturn="False" Canvas.Top="131" Width="60" />
+                        </Canvas>
+                    </GroupBox>
+                    <GroupBox x:Name="groupBox_Copy" Header="Comments" HorizontalAlignment="Left" Margin="10,497,0,0" VerticalAlignment="Top" Height="94" Width="588">
+                        <Canvas DataContext="{StaticResource guestViewSource}">
+                            <TextBlock x:Name="txbguExtraInfo" HorizontalAlignment="Left" Text="PR Comments" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="10"/>
+                            <TextBox x:Name="txtguExtraInfo" Height="23" Canvas.Left="133" AcceptsReturn="False" Canvas.Top="5" Width="434" Text="{Binding guExtraInfo, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguWComments" HorizontalAlignment="Left" Text="Hostess Comments" VerticalAlignment="Top" Canvas.Left="11" Canvas.Top="33"/>
+                            <TextBox x:Name="txtguWComments" Height="23" Canvas.Left="133" AcceptsReturn="False" Canvas.Top="28" Width="433" Text="{Binding guWComments, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguEComments" HorizontalAlignment="Left" Text="Exit Hostess Comments" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="56"/>
+                            <TextBox x:Name="txtguEComments" Height="23" Canvas.Left="133" AcceptsReturn="False" Canvas.Top="52" Width="433" Text="{Binding guEComments, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                        </Canvas>
+                    </GroupBox>
+                    <GroupBox x:Name="groupBox_Copy1" Header="Credit Cards" HorizontalAlignment="Left" Margin="10,373,0,0" VerticalAlignment="Top" Height="119" Width="280">
+                        <Canvas DataContext="{StaticResource guestViewSource}">
+                            <TextBlock x:Name="txbguCCType" HorizontalAlignment="Left" Text="CC Company" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="10"/>
+                            <TextBox x:Name="txtguCCType" Height="23" Canvas.Left="77" AcceptsReturn="False" Canvas.Top="7" Width="181" Text="{Binding guCCType, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                        </Canvas>
+                    </GroupBox>
+                    <GroupBox x:Name="groupBox_Copy2" Header="Guests Status" HorizontalAlignment="Left" Margin="311,373,0,0" VerticalAlignment="Top" Height="119" Width="286">
+                        <Canvas DataContext="{StaticResource guestViewSource}">
+                            <TextBlock x:Name="txbguGStatus" HorizontalAlignment="Left" Text="Guest Status" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="10"/>
+                            <TextBox x:Name="txtguGStatus" Height="23" Canvas.Left="77" AcceptsReturn="False" Canvas.Top="7" Width="181" Text="{Binding guGStatus, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                        </Canvas>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Deposits &amp; Salesmen">
+                <Grid Background="#FFE5E5E5">
+                    <GroupBox x:Name="grbDeposits" Header="Deposits" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="260" Width="287">
+                        <Canvas DataContext="{StaticResource guestViewSource}">
+                            <TextBlock x:Name="txbguDepositTwisted" HorizontalAlignment="Left" Text="Burned" VerticalAlignment="Top" Canvas.Left="5" Canvas.Top="164"/>
+                            <TextBox x:Name="txtguDepositTwisted" Height="23" Canvas.Left="43" AcceptsReturn="False" Canvas.Top="161" Width="65" Text="{Binding guDepositTwisted, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbgucu" Canvas.Left="118" TextWrapping="Wrap" Text="Currency" Canvas.Top="164"/>
+                            <ComboBox x:Name="cbogucu" Canvas.Left="166" Canvas.Top="164" Width="109" DisplayMemberPath="gucu" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbgupt" Canvas.Left="5" Text="Payment Type" Canvas.Top="193"/>
+                            <ComboBox x:Name="cbogupt" Canvas.Left="79" Canvas.Top="189" Width="196" DisplayMemberPath="gupt" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbguHotelB" Canvas.Left="5" Text="Resort" Canvas.Top="223"/>
+                            <ComboBox x:Name="cboguHotelB" Canvas.Left="43" Canvas.Top="216" Width="120" DisplayMemberPath="guHotelB" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbguDepositgr" Canvas.Left="184" Text="Rcpt." Canvas.Top="223"/>
+                            <TextBox x:Name="txtguDepositgr" Height="23" Canvas.Left="210" AcceptsReturn="False" Canvas.Top="215" Width="65" Text="{Binding guDepositgr, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                        </Canvas>
+                    </GroupBox>
+                    <GroupBox x:Name="grbSalesmen" Header="Salesmzen" HorizontalAlignment="Left" Margin="311,10,0,0" VerticalAlignment="Top" Height="546" Width="287">
+                        <Canvas DataContext="{StaticResource guestViewSource}">
+                            <CheckBox x:Name="chkguSelfGen" Content="SELF GEN" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="76" Canvas.Top="9" IsChecked="{Binding guSelfGen, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <CheckBox x:Name="chkguOverflow" Content="Overflow" Canvas.Left="174" Canvas.Top="9" IsChecked="{Binding guOverflow, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguts" TextWrapping="Wrap" Text="Team" Canvas.Top="31" Canvas.Left="9"/>
+                            <ComboBox x:Name="cboguts" Canvas.Left="73" Canvas.Top="27" Width="188" DisplayMemberPath="guts" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbguPRInvit1" Text="PR 1" Canvas.Top="56" Canvas.Left="12"/>
+                            <TextBox x:Name="txtguPRInvit1" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="51" Width="45" Text="{Binding guPRInvit1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <ComboBox x:Name="cboguPRInvit1" Canvas.Left="118" Canvas.Top="51" Width="143" DisplayMemberPath="guPRInvit1" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbguPRInvit2" Text="PR 2" Canvas.Top="80" Canvas.Left="12"/>
+                            <TextBox x:Name="txtguPRInvit2" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="75" Width="45" Text="{Binding guPRInvit2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <ComboBox x:Name="cboguPRInvit2" Canvas.Left="118" Canvas.Top="75" Width="143" DisplayMemberPath="guPRInvit2" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbguPRInvit3" Text="PR 3" Canvas.Top="104" Canvas.Left="12"/>
+                            <TextBox x:Name="txtguPRInvit3" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="99" Width="45" Text="{Binding guPRInvit3, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <ComboBox x:Name="cboguPRInvit3" Canvas.Left="118" Canvas.Top="99" Width="143" DisplayMemberPath="guPRInvit3" ItemsSource="{Binding}"/>
+                            <RadioButton x:Name="optguLiner1Type" Content="Line" Canvas.Left="20" Canvas.Top="146" IsChecked="{Binding guLiner1Type, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <RadioButton x:Name="optguLiner2Type" Content="Front to Middle" Canvas.Left="75" Canvas.Top="146" IsChecked="{Binding guLiner1Type, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+                            <RadioButton x:Name="optguLiner3Type" Content="Front to Back" Canvas.Left="181" Canvas.Top="146" IsChecked="{Binding guLiner1Type, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+                            <TextBlock x:Name="txbguLiner1" Canvas.Left="20" Text="Liner 1" Canvas.Top="172"/>
+                            <TextBox x:Name="txtguLiner1" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="167" Width="45" Text="{Binding guLiner1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <ComboBox x:Name="cboguLiner1" Canvas.Left="118" Canvas.Top="167" Width="143" DisplayMemberPath="guLiner1" ItemsSource="{Binding}"/>
+
+                            <TextBlock x:Name="txbguLiner2" Text="Liner 2" Canvas.Top="212" Canvas.Left="12"/>
+                            <TextBox x:Name="txtguLiner2" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="207" Width="45" Text="{Binding guLiner2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <ComboBox x:Name="cboguLiner2" Canvas.Left="118" Canvas.Top="207" Width="143" DisplayMemberPath="guLiner2" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbguCloser1" Text="Closer 1" Canvas.Top="236" Canvas.Left="12"/>
+                            <TextBox x:Name="txtguCloser1" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="231" Width="45" Text="{Binding guCloser1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <ComboBox x:Name="cboguCloser1" Canvas.Left="118" Canvas.Top="231" Width="143" DisplayMemberPath="guCloser1" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbguCloser2" Text="Closer 2" Canvas.Top="259" Canvas.Left="12"/>
+                            <TextBox x:Name="txtguCloser2" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="254" Width="45" Text="{Binding guCloser2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <ComboBox x:Name="cboguCloser2" Canvas.Left="118" Canvas.Top="254" Width="143" DisplayMemberPath="guCloser2" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbguCloser3" Text="Closer 3" Canvas.Top="283" Canvas.Left="12"/>
+                            <TextBox x:Name="txtguCloser3" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="278" Width="45" Text="{Binding guCloser3, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <ComboBox x:Name="cboguCloser3" Canvas.Left="118" Canvas.Top="278" Width="143" DisplayMemberPath="guCloser3" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="lblguExit1" Text="Exit 1" Canvas.Top="307" Canvas.Left="12"/>
+                            <TextBox x:Name="txtguExit1" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="302" Width="45" Text="{Binding guExit1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <ComboBox x:Name="cboguExit1" Canvas.Left="118" Canvas.Top="302" Width="143" DisplayMemberPath="guExit1" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="lblguExit2" Text="Exit 2" Canvas.Top="330" Canvas.Left="12"/>
+                            <TextBox x:Name="txtguExit2" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="325" Width="45" Text="{Binding guExit2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <ComboBox x:Name="cboguExit2" Canvas.Left="118" Canvas.Top="325" Width="143" DisplayMemberPath="guExit2" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbguPodium" Text="Podium" Canvas.Top="353" Canvas.Left="12"/>
+                            <TextBox x:Name="txtguPodium" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="348" Width="45" Text="{Binding guPodium, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <ComboBox x:Name="cboguPodium" Canvas.Left="118" Canvas.Top="348" Width="143" DisplayMemberPath="guPodium" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbguVLO" Text="VLO" Canvas.Top="377" Canvas.Left="12"/>
+                            <TextBox x:Name="txtguVLO" Height="23" Canvas.Left="73" AcceptsReturn="False" Canvas.Top="372" Width="45" Text="{Binding guVLO, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <ComboBox x:Name="cboguVLO" Canvas.Left="118" Canvas.Top="372" Width="143" DisplayMemberPath="guVLO" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbguEntryHost" Text="Hostess" Canvas.Top="414" Canvas.Left="12"/>
+                            <TextBox x:Name="txtguEntryHost" Height="23" Canvas.Left="75" AcceptsReturn="False" Canvas.Top="409" Width="43" Text="{Binding guEntryHost, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <ComboBox x:Name="cboguEntryHost" Canvas.Left="118" Canvas.Top="409" Width="143" DisplayMemberPath="guEntryHost" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="txbguGiftsHost" Text="Gifts Hostess" Canvas.Top="438" Canvas.Left="12"/>
+                            <TextBox x:Name="txtguGiftsHost" Height="23" Canvas.Left="75" AcceptsReturn="False" Canvas.Top="433" Width="43" Text="{Binding guGiftsHost, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <ComboBox x:Name="cboguGiftsHost" Canvas.Left="118" Canvas.Top="433" Width="143" DisplayMemberPath="guGiftsHost" ItemsSource="{Binding}"/>
+                            <TextBlock x:Name="lblguExitHost" Text="Exit Hostess" Canvas.Top="463" Canvas.Left="12"/>
+                            <TextBox x:Name="txtguExitHost" Height="23" Canvas.Left="75" AcceptsReturn="False" Canvas.Top="458" Width="43" Text="{Binding guExitHost, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <ComboBox x:Name="cboguExitHost" Canvas.Left="118" Canvas.Top="458" Width="143" DisplayMemberPath="guExitHost" ItemsSource="{Binding}"/>
+                            <Button x:Name="btnShowsSalesmen" Content="Salesmen" Canvas.Left="100" Canvas.Top="498" Width="75"/>
+                            <Separator Height="3" Canvas.Left="12" Margin="0" Canvas.Top="195" Width="249" RenderTransformOrigin="0.5,0.5">
+                                <Separator.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleY="-1"/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Separator.RenderTransform>
+                            </Separator>
+                            <Separator Height="3" Canvas.Left="12" Margin="0" Canvas.Top="132" Width="249" RenderTransformOrigin="0.5,0.5">
+                                <Separator.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleY="-1"/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Separator.RenderTransform>
+                            </Separator>
+                        </Canvas>
+                    </GroupBox>
+                    <GroupBox x:Name="grbDepositSale" Header="GroupBox" HorizontalAlignment="Left" Margin="10,275,0,0" VerticalAlignment="Top" Width="287" Height="84">
+                        <Canvas DataContext="{StaticResource guestViewSource}">
+                            <TextBlock x:Name="txbguDepositSaleD" HorizontalAlignment="Left" Text="Date" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="11"/>
+                            <TextBox x:Name="txtguDepositSaleD" Height="23" Canvas.Left="52" AcceptsReturn="False" Canvas.Top="8" Width="71" Text="{Binding guDepositSaleD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguDepositSaleNum" HorizontalAlignment="Left" Text="Consecutive" VerticalAlignment="Top" Canvas.Left="126" Canvas.Top="11"/>
+                            <TextBox x:Name="txtguDepositSaleD_Copy" Height="23" Canvas.Left="186" AcceptsReturn="False" Canvas.Top="8" Width="85" Text="{Binding guDepositSaleNum, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            <TextBlock x:Name="txbguDepSale" HorizontalAlignment="Left" Text="Amount" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="40"/>
+                            <TextBox x:Name="txtguDepSale" Height="23" Canvas.Left="52" AcceptsReturn="False" Canvas.Top="37" Width="71" Text="{Binding guDepSale, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                        </Canvas>
+                    </GroupBox>
+
+                </Grid>
+            </TabItem>
+
         </TabControl>
+        <GroupBox x:Name="grbChangedBy" Header="Changed By" HorizontalAlignment="Left" Margin="6,625,0,0" VerticalAlignment="Top" Height="49" Width="297">
+            <Canvas>
+                <TextBox x:Name="txtChangedBy" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="99" Canvas.Left="12" Canvas.Top="3"/>
+                <TextBox x:Name="txtPwd" HorizontalAlignment="Left" Height="23" AcceptsReturn="False" VerticalAlignment="Top" Width="99" Canvas.Left="120" Canvas.Top="3"/>
+                <Button x:Name="btnLog" Content="Log" Canvas.Left="230" Canvas.Top="6" Width="45"/>
+            </Canvas>
+        </GroupBox>
+        <TextBox x:Name="txtCopies" HorizontalAlignment="Left" Height="23" Margin="319,644,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="35"/>
+        <Button x:Name="btnPrint" Content="Print" HorizontalAlignment="Left" Margin="363,644,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btnSave" Content="Save and Exit" HorizontalAlignment="Left" Margin="444,644,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left" Margin="526,644,0,0" VerticalAlignment="Top" Width="75"/>
 
     </Grid>
 </Window>

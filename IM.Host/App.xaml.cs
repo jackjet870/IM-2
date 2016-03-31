@@ -10,6 +10,9 @@ namespace IM.Host
   /// </summary>
   public partial class App : Application
   {
+
+    public static UserData User;
+
     #region Constructores y destructores
 
     /// <summary>
@@ -48,11 +51,12 @@ namespace IM.Host
 
       if (frmLogin.IsAuthenticated)
       {
-        UserData userData = frmLogin.userData;
-        frmHost mfrmHost = new frmHost(userData);
-      mfrmHost.ShowDialog();
+        //UserData userData = frmLogin.userData;
+        User = frmLogin.userData;
+        frmHost mfrmHost = new frmHost();
+        mfrmHost.ShowDialog();
         frmSplash.Close();
-    }
+      }
 	}
 
     #endregion

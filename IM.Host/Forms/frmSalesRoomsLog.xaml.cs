@@ -12,11 +12,11 @@ namespace IM.Host.Forms
   /// </summary>
   public partial class frmSalesRoomsLog : Window
   {
-    private UserData _userData;
+    //private UserData _userData;
 
-    public frmSalesRoomsLog(UserData userData)
+    public frmSalesRoomsLog()
     {
-      _userData = userData;
+      //_userData = userData;
 
       InitializeComponent();
     }
@@ -28,7 +28,7 @@ namespace IM.Host.Forms
       // Load data by setting the CollectionViewSource.Source property:
       // salesRoomLogViewSource.Source = [generic data source]
 
-      _salesRoomLog.Source = BRSalesRoomsLogs.GetSalesRoomLog(_userData.SalesRoom.srID);
+      _salesRoomLog.Source = BRSalesRoomsLogs.GetSalesRoomLog(App.User.SalesRoom.srID);
 
       CkeckKeysPress(StatusBarCap, Key.Capital);
       CkeckKeysPress(StatusBarIns, Key.Insert);

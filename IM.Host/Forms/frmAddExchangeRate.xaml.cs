@@ -84,7 +84,7 @@ namespace IM.Host.Forms
         BRExchangeRate.SaveExchangeRate(true,_exchangeRate);
 
         //Guadarmos el Log del cambio.
-        BRExchangeRatesLogs.SaveExchangeRateLog(_exD.cuID, frmHost._dtpServerDate.Date, frmHost._userData.SalesRoom.srHoursDif, frmHost._userData.User.peID);
+        BRExchangeRatesLogs.SaveExchangeRateLog(_exD.cuID, frmHost._dtpServerDate.Date, App.User.SalesRoom.srHoursDif, App.User.User.peID);
 
         // Cerramos la ventana
         Close();

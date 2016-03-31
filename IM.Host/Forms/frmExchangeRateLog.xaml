@@ -17,7 +17,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid DataContext="{StaticResource dsExchangeRateLog}">
-            <DataGrid x:Name="getExchangeRateLogDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="10,10,10,10" ItemsSource="{Binding}" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalContentAlignment="Stretch" IsReadOnly="True">
+            <DataGrid x:Name="getExchangeRateLogDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="10,10,10,10" ItemsSource="{Binding}" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalContentAlignment="Stretch" IsReadOnly="True" SelectionChanged="getExchangeRateLogDataGrid_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="elChangedByColumn" Width="Auto" Header="By" Binding="{Binding elChangedBy}"/>
                     <DataGridTextColumn x:Name="changedByNColumn" Width="*" Header="Name" Binding="{Binding ChangedByN}"/>

@@ -10,6 +10,8 @@
   public enum EnumModeOpen
   {
     Add = 1,
-    Edit 
+    Edit,
+    Preview,
+    Search
   }
 }

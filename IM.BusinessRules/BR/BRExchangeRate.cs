@@ -45,7 +45,19 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        dbContext.USP_OR_InsertExchangeRate(serverDate);
+        #region Transaction
+        using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        {
+          try
+          {
+            dbContext.USP_OR_InsertExchangeRate(serverDate);
+          }
+          catch
+          {
+            transaction.Rollback();
+          }
+        }
+        #endregion
       }
     }
     #endregion

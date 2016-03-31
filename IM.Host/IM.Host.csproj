@@ -105,6 +105,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Forms\frmGiftsReceipts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmMealTickets.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmMealTicketsDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmSales.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmSalesRoomsLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -133,6 +149,18 @@
     </Compile>
     <Compile Include="Forms\frmExchangeRateLog.xaml.cs">
       <DependentUpon>frmExchangeRateLog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmGiftsReceipts.xaml.cs">
+      <DependentUpon>frmGiftsReceipts.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMealTickets.xaml.cs">
+      <DependentUpon>frmMealTickets.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMealTicketsDetail.xaml.cs">
+      <DependentUpon>frmMealTicketsDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSales.xaml.cs">
+      <DependentUpon>frmSales.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSalesRoomsLog.xaml.cs">
       <DependentUpon>frmSalesRoomsLog.xaml</DependentUpon>
@@ -171,9 +199,15 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\IM.Model.Agency.datasource" />
     <None Include="Properties\DataSources\IM.Model.Currency.datasource" />
     <None Include="Properties\DataSources\IM.Model.ExchangeRateData.datasource" />
+    <None Include="Properties\DataSources\IM.Model.Guest.datasource" />
     <None Include="Properties\DataSources\IM.Model.GuestPremanifestHost.datasource" />
+    <None Include="Properties\DataSources\IM.Model.MealTicket.datasource" />
+    <None Include="Properties\DataSources\IM.Model.MealTicketType.datasource" />
+    <None Include="Properties\DataSources\IM.Model.Personnel2.datasource" />
+    <None Include="Properties\DataSources\IM.Model.RateType.datasource" />
     <None Include="Properties\DataSources\IM.Model.SalesRoomLog.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

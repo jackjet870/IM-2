@@ -33,7 +33,7 @@ namespace IM.Host.Forms
     #endregion
 
     #region CONSTRUCTORES
-    public frmExchangeRate(DateTime? dtServer, UserData userData)
+    public frmExchangeRate(DateTime? dtServer)
     {
       _dtServer = dtServer;
 
@@ -51,7 +51,7 @@ namespace IM.Host.Forms
       _dayCurrent = calDate.SelectedDate.Value.Day;
 
       //Validamos permisos del usuario
-      validateUserPermissions(userData);
+      validateUserPermissions(App.User);
     }
     #endregion
     
@@ -94,10 +94,10 @@ namespace IM.Host.Forms
 
       //Obtenemos el Date
       txtDate.Text = String.Format("Date: {0} {1}", calDate.SelectedDate.Value.DayOfWeek, calDate.SelectedDate.Value.Day);
-      
+
       //Agregamos el rango de dias disponibleas.
-      calDate.DisplayDateStart = Convert.ToDateTime(String.Format("{0}/{1}/{2}", calDate.SelectedDate.Value.Month, 01, 1990));
-      calDate.DisplayDateEnd = Convert.ToDateTime(String.Format("{0}/{1}/{2}", calDate.SelectedDate.Value.Month, calDate.SelectedDate.Value.Day, calDate.SelectedDate.Value.Year));
+      calDate.DisplayDateStart = new DateTime(1990, calDate.SelectedDate.Value.Month, 1); //   Convert.ToDateTime(String.Format("{0}/{1}/{2}", calDate.SelectedDate.Value.Month, 01, 1990));
+      calDate.DisplayDateEnd = new DateTime(calDate.SelectedDate.Value.Year, calDate.SelectedDate.Value.Month, calDate.SelectedDate.Value.Day); // Convert.ToDateTime(String.Format("{0}/{1}/{2}", calDate.SelectedDate.Value.Month, calDate.SelectedDate.Value.Day, calDate.SelectedDate.Value.Year));
     }
 
     /// <summary>
