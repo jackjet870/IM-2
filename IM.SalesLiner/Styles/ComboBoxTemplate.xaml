@@ -11,7 +11,7 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="15"/>
-                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
                     <Viewbox Width="16" Stretch="Uniform" >

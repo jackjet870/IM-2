@@ -166,7 +166,6 @@ namespace IM.SalesLiner.Forms
     /// <history>
     /// [erosado] 23/Mar/2016 Created
     /// </history>
-
     public void DoGetPersonnel(string salesRooms, string roles)
     {
       Task.Factory.StartNew(() => BRPersonnel.GetPersonnel("ALL", salesRooms, roles, 1))
@@ -185,6 +184,7 @@ namespace IM.SalesLiner.Forms
             List<PersonnelShort> data = task1.Result;
             if (data.Count > 0)
             {
+              data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
               cbxPersonnel.ItemsSource = data;
             }
             setNewUserLogin();
@@ -216,6 +216,8 @@ namespace IM.SalesLiner.Forms
         if (task1.IsFaulted)
         {
           UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          StaEnd();
+          imgButtonOk.IsEnabled = true;
           return false;
         }
         else
@@ -224,7 +226,6 @@ namespace IM.SalesLiner.Forms
           {
             task1.Wait(1000);
             List<SaleByLiner> data = task1.Result;
-
             if (data.Count > 0)
             {
               dtgr.DataContext = data;
@@ -237,7 +238,6 @@ namespace IM.SalesLiner.Forms
             }
             StaEnd();
             imgButtonOk.IsEnabled = true;
-
           }
 
           return false;

@@ -23,7 +23,25 @@
         </Grid.RowDefinitions>
 
         <!--#region Barra decoracion -->
-        <Border Background="#147F79" Height="32" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="0" Margin="0,0,0,0"/>
+        <Border Background="#147F79" Height="32" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="0" Margin="0,0,0,0">
+           <Grid HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,0,10,0" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="21"/>
+                    <RowDefinition Height="21"/>
+                </Grid.RowDefinitions>
+                <Viewbox Stretch="Uniform" Height="24" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0">
+                    <Image x:Name="imageUser" Source="pack://application:,,,/IM.PRStatistics;component/Images/BUser.png"/>
+                </Viewbox>
+                <TextBlock x:Name="txtbUserName" VerticalAlignment="Center"
+                           Foreground="White" Grid.Column="1" Grid.Row="0"/>
+                <TextBlock x:Name="txtbLocation" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="White" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
+            </Grid>
+        </Border>
         <!--#endregion-->
 
         <!--#region Barra de opciones y botones -->

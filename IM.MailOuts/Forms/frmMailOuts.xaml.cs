@@ -4,7 +4,6 @@ using IM.BusinessRules.BR;
 using IM.MailOuts.Classes;
 using IM.MailOuts.Reports;
 using IM.Model;
-using IM.Model.Classes;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,7 +12,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace IM.MailOuts.Forms
 {
@@ -274,8 +272,8 @@ namespace IM.MailOuts.Forms
                             select new GuestMailOutsText
                             {
                               mtRTF = mot.mtRTF.Replace("<LastName1>", gmo.guLastName1).Replace("<FirstName1>", gmo.guFirstName1).
-                              Replace("<BookTime>", gmo.guBookT.HasValue ? gmo.guBookT.Value.ToShortTimeString() : "<BookTime>").
-                              Replace("<PickUp>", gmo.guPickUpT.HasValue ? gmo.guPickUpT.Value.ToShortTimeString() : "<PickUp>").
+                              Replace("<BookTime>", gmo.guBookT?.ToShortTimeString() ?? "<BookTime>").
+                              Replace("<PickUp>", gmo.guPickUpT?.ToShortTimeString() ?? "<PickUp>").
                               Replace("<Agency>", gmo.guag).Replace("<RoomNum>", gmo.guRoomNum).Replace("<PRCode>", gmo.guPRInvit1).Replace("<PRName>", gmo.peN).
                               Replace("<PrintedBy>", strPrintedBy),
                               MrMrs = mot.laMrMrs,
@@ -289,7 +287,6 @@ namespace IM.MailOuts.Forms
 
     /// <summary>
     /// Carga los huespedes
-    /// </summary>
     /// </summary>
     /// <history>
     /// [aalcocer] 24/02/2016 Created

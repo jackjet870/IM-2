@@ -185,6 +185,7 @@ namespace IM.SalesCloser.Forms
             List<PersonnelShort> data = task1.Result;
             if (data.Count > 0)
             {
+              data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
               cbxPersonnel.ItemsSource = data;
             }
             setNewUserLogin();
@@ -216,6 +217,8 @@ namespace IM.SalesCloser.Forms
         if (task1.IsFaulted)
         {
           UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          StaEnd();
+          imgButtonOk.IsEnabled = true;
           return false;
         }
         else

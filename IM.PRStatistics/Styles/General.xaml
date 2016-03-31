@@ -5,11 +5,17 @@
 
     <!--Estilo para el datepicker -->
     <Style TargetType="DatePicker" x:Key="DateRange">
+        <Style.Triggers>
+            <Trigger Property="DatePicker.IsMouseOver" Value="True">
+                <Setter Property="Cursor" Value="Hand" />
+            </Trigger>
+        </Style.Triggers>
         <Setter Property="Width" Value="100"/>
         <Setter Property="Height" Value="25"/>
         <Setter Property="ToolTip" Value="Select a date"/>
         <Setter Property="Margin" Value="10,0,0,0"/>
     </Style>
+    
     <!--Texto que acompañan los datepicker -->
     <Style TargetType="TextBlock" x:Key="txtDateRangeText">
         <Setter Property="TextAlignment" Value="Left"/>
@@ -18,18 +24,14 @@
         <Setter Property="Margin" Value="5,0,0,0"/>
     </Style>
 
-    <!--Botones de opciones -->
-    <Style TargetType="Button" x:Key="btnDateRangeIn">
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="5,0,0,0"/>
-        <Setter Property="Width" Value="60"/>
-        <Setter Property="Height" Value="25"/>
-    </Style>
-
+    <!-- Estilo de botones Principales -->
     <Style TargetType="Border" x:Key="brdImageButtons">
         <Style.Triggers>
             <Trigger Property="Border.IsMouseOver" Value="True">
                 <Setter Property="Border.Background" Value="#147F79"/>
+            </Trigger>
+            <Trigger Property="Border.IsMouseOver" Value="True">
+                <Setter Property="Cursor" Value="Hand" />
             </Trigger>
         </Style.Triggers>
         <Setter Property="VerticalAlignment" Value="Center"/>
