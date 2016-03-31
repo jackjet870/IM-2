@@ -4,6 +4,11 @@
 
     <!--Estilo para el datepicker -->
     <Style TargetType="DatePicker" x:Key="DateRange">
+        <Style.Triggers>
+            <Trigger Property="DatePicker.IsMouseOver" Value="True">
+                <Setter Property="Cursor" Value="Hand" />
+            </Trigger>
+        </Style.Triggers>
         <Setter Property="Width" Value="100"/>
         <Setter Property="Height" Value="25"/>
         <Setter Property="ToolTip" Value="Select a date"/>
@@ -17,19 +22,14 @@
         <Setter Property="Margin" Value="5,0,0,0"/>
     </Style>
 
-    <!--Botones de opciones -->
-    <Style TargetType="Button" x:Key="btnDateRangeIn">
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="5,0,0,0"/>
-        <Setter Property="Width" Value="60"/>
-        <Setter Property="Height" Value="25"/>
-    </Style>
-
-    <!-- Estilo de botones -->
+    <!-- Estilo de botones Principales -->
     <Style TargetType="Border" x:Key="brdImageButtons">
         <Style.Triggers>
             <Trigger Property="Border.IsMouseOver" Value="True">
                 <Setter Property="Border.Background" Value="#147F79"/>
+            </Trigger>
+            <Trigger Property="Border.IsMouseOver" Value="True">
+                <Setter Property="Cursor" Value="Hand" />
             </Trigger>
         </Style.Triggers>
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -51,6 +51,24 @@
             <Trigger Property="Image.IsMouseOver" Value="True">
                 <Setter Property="Image.Source" Value="pack://application:,,,/IM.SalesCloser;component/Images/WKey.png"/>
             </Trigger>
+            <Trigger Property="Image.IsMouseOver" Value="True">
+                <Setter Property="Cursor" Value="Hand" />
+            </Trigger>
         </Style.Triggers>
+    </Style>
+
+    <!--Estilo del Combobox Personnel -->
+    <Style TargetType="ComboBox" x:Key="cbxPersonnel">
+        <Style.Triggers>
+            <Trigger Property="ComboBox.IsMouseOver" Value="True">
+                <Setter Property="Cursor" Value="Hand" />
+            </Trigger>
+        </Style.Triggers>
+        <Setter Property="Width" Value="200"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Margin" Value="10,0,0,0"/>
+        <Setter Property="IsEditable" Value="True"/>
+        <Setter Property="IsEnabled" Value="False"/>
     </Style>
 </ResourceDictionary>

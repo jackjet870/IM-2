@@ -55,6 +55,9 @@ namespace IM.PRStatistics.Forms
       //Seleccionamos los días en el datapicker 
       dtpkFrom.SelectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
       dtpkTo.SelectedDate = DateTime.Now;
+
+      //Agregamos la informacion del usuario en la interfaz
+      txtbUserName.Text = App.User.User.peN;
     }
     /// <summary>
     /// Evento que se encarga de generar las estadisticas

@@ -23,7 +23,7 @@
             <Grid HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,0,10,0" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="24"/>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -53,7 +53,7 @@
                     <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=DateRange}"/>
                     <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
                     <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=DateRange}"/>
-                    <ComboBox x:Name="cbxPersonnel"  Width="200" Height="32" BorderThickness="0" Margin="10,0,0,0" IsEditable="True" TextSearch.TextPath="peN" IsEnabled="False">
+                    <ComboBox x:Name="cbxPersonnel" Style="{StaticResource cbxPersonnel}" TextSearch.TextPath="peN">
                         <ComboBox.ItemTemplate>
                             <StaticResource ResourceKey="comboBoxTemplate"/>
                         </ComboBox.ItemTemplate>
@@ -93,7 +93,7 @@
                 </StackPanel>
                 <TextBlock Text="Filters" Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <CheckBox x:Name="chkLeadSource"  Content="Lead Sources" Margin="5"/>
+                    <CheckBox x:Name="chkLeadSource"  Content="All Lead Sources" Margin="5"/>
                 </StackPanel>
             </StackPanel>
         </Border>
