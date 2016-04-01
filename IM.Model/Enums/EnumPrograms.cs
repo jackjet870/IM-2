@@ -7,19 +7,21 @@ using System.Threading.Tasks;
 
 namespace IM.Model.Enums
 {
-  /// <summary>
-  /// Enumerador para el manejo de los diferentes programas.
-  /// </summary>
-  /// <history>
-  /// [edgrodriguez] 05/Mar/2016 Created
-  /// </history>
-  public enum EnumPrograms
-  {
-    [Description("All Programs")]
-    pgAll,
-    [Description("Inhouse")]
-    pgInhouse,
-    [Description("Outhouse")]
-    pgOuthouse
-  }
+    /// <summary>
+    /// Enumerador para el manejo de los diferentes programas.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 05/Mar/2016 Created
+    /// </history>
+    public enum EnumPrograms
+    {
+        [Description("ALL")]
+        pgAll,
+
+        [Description("IH")]
+        pgInhouse,
+
+        [Description("OUT")]
+        pgOuthouse
+    }
 }

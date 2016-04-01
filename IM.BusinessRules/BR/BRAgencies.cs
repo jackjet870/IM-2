@@ -1,8 +1,8 @@
-﻿using System;
+﻿using IM.Model;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using IM.Model;
-using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -21,7 +21,8 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_GetAgencies(Convert.ToByte(status)).ToList();
       }
     }
-    #endregion
+
+    #endregion GetAgencies
 
     #region GetAgencies
 
@@ -35,7 +36,7 @@ namespace IM.BusinessRules.BR
     /// [emoguel] created 08/03/2016
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
     /// </history>
-    public static List<Agency> GetAgencies(Agency agency=null, int nStatus = -1)
+    public static List<Agency> GetAgencies(Agency agency = null, int nStatus = -1)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -66,10 +67,10 @@ namespace IM.BusinessRules.BR
           }
         }
         return query.OrderBy(ag => ag.agN).ToList();
-
       }
     }
-    #endregion
+
+    #endregion GetAgencies
 
     #region SaveAgency
 
@@ -92,9 +93,11 @@ namespace IM.BusinessRules.BR
         if (blnUpd)//Actualizar
         {
           #region actualizar
+
           if (blnMarket || blnUnavailMots)//Si es necesario abrir la transaccion
           {
             #region Transacction
+
             using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
             {
               try
@@ -102,18 +105,20 @@ namespace IM.BusinessRules.BR
                 dbContext.Entry(agency).State = System.Data.Entity.EntityState.Modified;//Se modifica agency
 
                 #region unavailableMotives
+
                 if (blnUnavailMots)
                 {
                   #region Disponibilidad de huespedes
+
                   //actualizamos el motivo de indisponibilidad de los huespedes,
                   //la disponibilidad y la disponibilidad de origen de los huespedes
                   var lstGuestUM = (from guest in dbContext.Guests
-                                     join agen in dbContext.Agencies
-                                     on guest.guag equals agen.agID
-                                     where agen.agID == agency.agID
-                                     && guest.guPRAvail == null
-                                     && guest.guInfo == false
-                                     select new { guest, agen }).ToList();//Buscamos los huspedes a cambiar el motivo
+                                    join agen in dbContext.Agencies
+                                    on guest.guag equals agen.agID
+                                    where agen.agID == agency.agID
+                                    && guest.guPRAvail == null
+                                    && guest.guInfo == false
+                                    select new { guest, agen }).ToList();//Buscamos los huspedes a cambiar el motivo
                   //Actualizamos los registros
                   lstGuestUM.ForEach(guest =>
                   {
@@ -121,22 +126,28 @@ namespace IM.BusinessRules.BR
                     guest.guest.guAvail = (guest.guest.guCheckIn == true && guest.agen.agum == 0);
                     guest.guest.guOriginAvail = (guest.guest.guCheckIn == true && guest.agen.agum == 0);
                   });
-                  #endregion
+
+                  #endregion Disponibilidad de huespedes
 
                   #region Disponibilidad por sistema de huespedes
+
                   //Listamos los huespedes a actualizar
                   var lstGuestBS = (from guest in dbContext.Guests
                                     join agen in dbContext.Agencies
                                     on guest.guag equals agen.agID
-                                    where agen.agID==agency.agID
-                                    select new { guest,agen}).ToList();
+                                    where agen.agID == agency.agID
+                                    select new { guest, agen }).ToList();
 
                   //Actualizamos la lista de huespedes
-                  lstGuestBS.ForEach(guest=> guest.guest.guAvailBySystem=(guest.guest.guCheckIn == true && guest.agen.agum==0));
-                  #endregion
+                  lstGuestBS.ForEach(guest => guest.guest.guAvailBySystem = (guest.guest.guCheckIn == true && guest.agen.agum == 0));
+
+                  #endregion Disponibilidad por sistema de huespedes
                 }
-                #endregion
+
+                #endregion unavailableMotives
+
                 #region Markets
+
                 if (blnMarket)
                 {
                   var lstGuestMkt = (from guest in dbContext.Guests
@@ -144,10 +155,11 @@ namespace IM.BusinessRules.BR
                                      on guest.guag equals agen.agID
                                      where agen.agID == agency.agID
                                      && guest.gumk != agen.agmk
-                                     select guest).ToList();//Recuperamos los registros relacionados de guest                  
+                                     select guest).ToList();//Recuperamos los registros relacionados de guest
                   lstGuestMkt.ForEach(guest => guest.gumk = agency.agmk);//Actualizamos su valor
                 }
-                #endregion
+
+                #endregion Markets
 
                 nRes = dbContext.SaveChanges();//Guardar cambios
                 transaction.Commit();//se hace el commit
@@ -158,18 +170,21 @@ namespace IM.BusinessRules.BR
                 nRes = 0;
               }
             }
-            #endregion
+
+            #endregion Transacction
           }
           else
           {//No es necesario iniciar la transaccion
             dbContext.Entry(agency).State = System.Data.Entity.EntityState.Modified;
             nRes = dbContext.SaveChanges();
           }
-          #endregion
+
+          #endregion actualizar
         }
         else//Insertar
         {
           #region Insertar
+
           Agency agencyVal = dbContext.Agencies.Where(ag => ag.agID == agency.agID).FirstOrDefault();
           if (agencyVal != null)//Se valida que no exista un registro con el mismo ID
           {
@@ -180,11 +195,45 @@ namespace IM.BusinessRules.BR
             dbContext.Agencies.Add(agency);
             nRes = dbContext.SaveChanges();
           }
-          #endregion
+
+          #endregion Insertar
         }
         return nRes;
       }
     }
-    #endregion
+
+    #endregion SaveAgency
+
+    #region GetAgenciesShortById
+
+    /// <summary>
+    ///Método para obtener una lista de Agencias por id.
+    /// </summary>
+    /// <param name="agIDList">Lista de id de Agency</param>
+    /// <returns>List<AgencyShort></returns>
+    /// <history>
+    /// [aalcocer] 23/03/2016 Created
+    /// </history>
+    public static List<AgencyShort> GetAgenciesShortById(IEnumerable<string> agIDList)
+    {
+      List<AgencyShort> lstgetAgencies;
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        lstgetAgencies = dbContext.Agencies.Where(x => agIDList.Contains(x.agID)).
+          Select(x => new
+          {
+            x.agID,
+            x.agN
+          }).AsEnumerable().
+          Select(x => new AgencyShort
+          {
+            agID = x.agID,
+            agN = x.agN
+          }).ToList();
+      }
+      return lstgetAgencies;
+    }
+
+    #endregion GetAgenciesShortById
   }
 }

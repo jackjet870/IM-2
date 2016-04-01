@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using IM.Model;
+﻿using IM.Model;
 using IM.Model.Helpers;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,9 +18,10 @@ namespace IM.BusinessRules.BR
     /// <returns>List<LeadSourceByUser></returns>
     /// <hystory>
     /// [erosado] 08/03/2016  created
+    /// [aalcocer] 17/03/2016 Modified. Agregado parametros por default
     /// </hystory>
 
-    public static List<LeadSourceByUser> GetLeadSourcesByUser(string user, string programs, string regions)
+    public static List<LeadSourceByUser> GetLeadSourcesByUser(string user, string programs = "ALL", string regions = "ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {

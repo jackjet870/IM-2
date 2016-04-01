@@ -1,9 +1,9 @@
-﻿using System;
+﻿using IM.BusinessRules.Classes;
+using IM.Model;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using IM.Model;
-using IM.BusinessRules.Classes;
-using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
@@ -33,10 +33,10 @@ namespace IM.BusinessRules.BR
       return lstgetGifs;
     }
 
-       
-    #endregion
+    #endregion GetGifts
 
     #region GetGiftsCategories
+
     /// <summary>
     /// Método para obtener una lista de categorias de regalo.
     /// </summary>
@@ -56,14 +56,17 @@ namespace IM.BusinessRules.BR
         {
           case 1:
             return lstGiftsCateg.Where(c => c.gcA == true).ToList();
+
           case 2:
             return lstGiftsCateg.Where(c => c.gcA == false).ToList();
+
           default:
             return lstGiftsCateg.ToList();
         }
       }
     }
-    #endregion
+
+    #endregion GetGiftsCategories
 
     #region GetGiftsByGuest
 
@@ -82,9 +85,10 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion
+    #endregion GetGiftsByGuest
 
     #region GetGiftsInvitation
+
     /// <summary>
     /// Obtiene una lista especifica para cargar el grid de regalos de una invitación.
     /// </summary>
@@ -111,7 +115,7 @@ namespace IM.BusinessRules.BR
                             igMinors = gi.igMinors,
                             igExtraAdults = gi.igExtraAdults,
                             igPriceA = gi.igPriceA,
-                            igPriceAdult =gi.igPriceAdult,
+                            igPriceAdult = gi.igPriceAdult,
                             igPriceExtraAdult = gi.igPriceExtraAdult,
                             igPriceM = gi.igPriceM,
                             igPriceMinor = gi.igPriceMinor,
@@ -120,9 +124,11 @@ namespace IM.BusinessRules.BR
         return giftsInvit;
       }
     }
-    #endregion
+
+    #endregion GetGiftsInvitation
 
     #region GetGiftId
+
     /// <summary>
     /// Obtiene un regalo específico por si ID
     /// </summary>
@@ -138,17 +144,53 @@ namespace IM.BusinessRules.BR
         return dbContext.Gifts.Where(g => g.giID == giftId).SingleOrDefault();
       }
     }
-    #endregion
+
+    #endregion GetGiftId
 
     #region GetInventationGift
 
     public static InvitationGift GetInventationGift(int guestId, string gift)
     {
-      using(var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.InvitationsGifts.SingleOrDefault(g=> g.iggu == guestId && g.iggi == gift);
+        return dbContext.InvitationsGifts.SingleOrDefault(g => g.iggu == guestId && g.iggi == gift);
       }
     }
-    #endregion
+
+    #endregion GetInventationGift
+
+    #region GetGiftsShortById
+
+    /// <summary>
+    ///Método para obtener una lista de Regalos por id.
+    /// </summary>
+    /// <param name="giIDList">Lista de id de Gits</param>
+    /// <returns>List<GiftShort></returns>
+    /// <history>
+    /// [aalcocer] 23/03/2016 Created
+    /// </history>
+    public static List<GiftShort> GetGiftsShortById(IEnumerable<string> giIDList)
+    {
+      List<GiftShort> lstgetGifs;
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        lstgetGifs = dbContext.Gifts.Where(x => giIDList.Contains(x.giID)).
+          Select(x => new
+          {
+            x.giID,
+            x.giN,
+            x.gigc
+          }).AsEnumerable().
+          Select(x => new GiftShort
+          {
+            giID = x.giID,
+            giN = x.giN,
+            gigc = x.gigc
+          }).ToList();
+      }
+      return lstgetGifs;
+    }
+
+    #endregion GetGiftsShortById
   }
 }
