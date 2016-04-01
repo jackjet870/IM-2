@@ -221,21 +221,27 @@
                                     <Setter Property="HorizontalAlignment" Value="Center" />
                                     <Setter Property="Background" Value="{Binding ColorColumn}" />
                                     <Setter Property="Width" Value="15" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding guCheckIn}" Value="true">
+                                            <Setter Property="Text"  Value="{Binding StatusColumn}" />
+                                            <Setter Property="Background"  Value="{Binding ColorColumn}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn x:Name="guIDColumn" IsReadOnly="True" Binding="{Binding guID}" Header="GUID" Width="auto"/>
                         <DataGridTextColumn x:Name="gulsOriginalColumn" IsReadOnly="True" Binding="{Binding gulsOriginal}" Header="LS Orig" ToolTipService.ToolTip="Lead Source Original" Width="auto"/>
-                        <DataGridTemplateColumn x:Name="guHReservIDColumn" IsReadOnly="false"  Header="Reserv. #" >
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Image Height="18" Source="pack://application:,,,/IM.Base;component/Images/Report.png" />
-                                    <!-- Binding="{Binding guHReservID}"-->
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        <DataGridTextColumn x:Name="guHReservIDColumn" Binding="{Binding guHReservID}" IsReadOnly="false"  Header="Reserv. #" />
                         <DataGridTextColumn x:Name="guIdProfileOperaColumn" IsReadOnly="True" Binding="{Binding guIdProfileOpera}" Header="Opera ID" Width="auto"/>
-                        <DataGridTextColumn x:Name="reservationColumn"  IsReadOnly="True" Binding="{Binding Reservation}" Header="Rsv" Width="auto"/>
+                        <DataGridTemplateColumn x:Name="reservationColumn"   IsReadOnly="True"  Header="Rsv" Width="auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                    <Image Height="18" Source="pack://application:,,,/IM.Base;component/Images/Report.png" MouseLeftButtonUp="ReservationArrival_MouseLeftButtonUp" />
+
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn x:Name="guCheckInColumn" IsReadOnly="False"  Header="In" Width="auto" >
                             <DataGridTemplateColumn.CellTemplate >
                                 <DataTemplate>
@@ -640,7 +646,7 @@
                         <DataGridTemplateColumn x:Name="guAvailColumn3" IsReadOnly="False"  Header="Avl" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding guAvail,NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChkguAvailGetGuest_Click"  HorizontalAlignment="Center" />
+                                    <CheckBox IsChecked="{Binding guAvail,NotifyOnTargetUpdated=True,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   Click="ChkguAvailGetGuest_Click"  HorizontalAlignment="Center" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

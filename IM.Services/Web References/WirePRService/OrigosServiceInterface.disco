@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="http://svr-2000-web2:8087/WireServiceInterface/OrigosServiceInterface.asmx?wsdl" docRef="http://svr-2000-web2:8087/WireServiceInterface/OrigosServiceInterface.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="http://svr-2000-web2:8087/WireServiceInterface/OrigosServiceInterface.asmx" xmlns:q1="http://localhost/pr_xmlschemas/wirepr/" binding="q1:OrigosServiceInterfaceSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="http://svr-2000-web2:8087/WireServiceInterface/OrigosServiceInterface.asmx" xmlns:q2="http://localhost/pr_xmlschemas/wirepr/" binding="q2:OrigosServiceInterfaceSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>

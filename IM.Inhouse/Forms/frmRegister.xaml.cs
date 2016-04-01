@@ -4,18 +4,16 @@ using IM.BusinessRules.BR;
 using IM.Inhouse.Classes;
 using IM.Inhouse.Forms;
 using IM.Model;
-using IM.Model.Classes;
 using IM.Model.Enums;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
+using IM.Services.Helpers;
+using IM.Services.WirePRService;
 
 namespace IM.Inhouse
 {
@@ -34,11 +32,6 @@ namespace IM.Inhouse
     private DateTime _serverDate, _guestdateFrom, _guestDateTo;
     private int _available, _invited, _onGroup, _info, _guestGuid = 0;
     private string _markets = "ALL", _guestName, _guestRoom, _guestReservation;
-
-    //private GuestArrival _GuestArrival;
-    //private GuestAvailable _GuestAvailable;
-    //private GuestPremanifest _GuestPremanifest;
-    //private GuestSearched _GuestSearched;
 
     #endregion
 
@@ -115,6 +108,7 @@ namespace IM.Inhouse
         //GuestSearched
         if (ccGetGuest.Visibility.Equals(Visibility.Visible))
         {
+
           _guestSearchedViewSource.Source =
             (List<ObjGuestSearched>)BRGuests.GetGuests(_guestdateFrom, _guestDateTo, App.User.LeadSource.lsID, _guestName, _guestRoom, _guestReservation, _guestGuid)
             .Select(parent => new ObjGuestSearched(parent)).ToList();
@@ -254,44 +248,44 @@ namespace IM.Inhouse
     /// <summary>
     /// Valida todas los parametros para abrir el formulario de FolloUp
     /// </summary>
-    /// <param name="CheckIn"></param>
-    /// <param name="FollowUp"></param>
-    /// <param name="Avail"></param>
-    /// <param name="Contact"></param>
-    /// <param name="Invit"></param>
-    /// <param name="CheckOutD"></param>
+    /// <param name="checkIn"></param>
+    /// <param name="followUp"></param>
+    /// <param name="avail"></param>
+    /// <param name="contact"></param>
+    /// <param name="invit"></param>
+    /// <param name="checkOutD"></param>
     /// <history>[jorcanche] 12/03/2016</history>
     /// <returns></returns>
-    private bool ValidateFollowUp(bool CheckIn, bool FollowUp, bool Avail, bool Contact, bool Invit, DateTime CheckOutD)
+    private bool ValidateFollowUp(bool checkIn, bool followUp, bool avail, bool contact, bool invit, DateTime checkOutD)
     {
       //Validamos que el huesped haya hecho Check In
-      if (!CheckIn)
+      if (!checkIn)
       {
         UIHelper.ShowMessage("Guest has not made Check-in.", MessageBoxImage.Asterisk);
         return false;
       }
       //validamos que el huesped no haya hecho Check Out
-      if (!FollowUp && CheckOutD < BRHelpers.GetServerDate().Date)
+      if (!followUp && checkOutD < BRHelpers.GetServerDate().Date)
       {
         UIHelper.ShowMessage("Guest already made Check-out.", MessageBoxImage.Asterisk);
         return false;
       }
       //Validamos que el huesped este disponible
-      if (!FollowUp && !Avail)
+      if (!followUp && !avail)
       {
         UIHelper.ShowMessage("Guest is not available.", MessageBoxImage.Asterisk);
         return false;
       }
       //Validamos que el huesped este contactado
-      if (!FollowUp && !Contact)
+      if (!followUp && !contact)
       {
-        UIHelper.ShowMessage("Guest is not available.", MessageBoxImage.Asterisk);
+        UIHelper.ShowMessage("Guest is not contacted.",  MessageBoxImage.Asterisk);
         return false;
       }
       //Validamos que el Huesped no este invitado
-      if (!FollowUp && Invit)
+      if (!followUp && invit)
       {
-        UIHelper.ShowMessage("Guest is not available.", MessageBoxImage.Asterisk);
+        UIHelper.ShowMessage("Guest is invited.", MessageBoxImage.Asterisk);
         return false;
       }
       //Validamos que el usuario tenga permisos de lectura
@@ -309,31 +303,39 @@ namespace IM.Inhouse
     /// Valida el tipo de guest y determina si el husped debe estar como disponible
     /// </summary>
     /// <history>[jorcanche] 15/03/2016 </history>
-    /// <param name="Guest"></param>
-    /// <param name="TypeGuest"></param>
-    public void CheckIn(object Guest, int TypeGuest)
+    /// <param name="guest"></param>
+    /// <param name="typeGuest"></param>
+    public bool CheckIn(object guest, int typeGuest)
     {
-      switch (TypeGuest)
+      switch (typeGuest)
       {
         case 1:
-          var itemGuestArrival = Guest as GuestArrival;
+          //Determinamos el caso 
+          var itemGuestArrival = guest as GuestArrival;
+          //Validamos
           if (ValidateCheckIn(itemGuestArrival.guCheckIn, itemGuestArrival.guCheckInD, itemGuestArrival.guCheckOutD))
           {
             //determinamos si el huesped debe estar como disponible
             if (itemGuestArrival.guum == 0)
             {
-              dgGuestArrival.SelectedItems.OfType<GuestArrival>().ToList().ForEach(item => item.guAvail = true);
+              dgGuestArrival.SelectedItems.OfType<GuestArrival>().ToList().ForEach(item => { item.guAvail = true; });
               dgGuestArrival.Items.Refresh();
             }
             else
+            {
               SaveAvailGuest(itemGuestArrival.guID);
+            }
+            //Si no hubo problema en las validaciones mandamos el valor que obtuvo al hacer click en el checkbox          
+            return itemGuestArrival.guCheckIn;
           }
-          break;
-        case 2:
-          var itemGuestAvailable = Guest as GuestAvailable;
-          break;
+          else
+          {
+            //despalomeamos el checkbox porque no se pude hacer el checkin
+            return false;
+          }
+       
         case 3:
-          var itemGuestPremanifest = Guest as GuestPremanifest;
+          var itemGuestPremanifest = guest as GuestPremanifest;
           if (ValidateCheckIn(itemGuestPremanifest.guCheckIn, itemGuestPremanifest.guCheckInD, itemGuestPremanifest.guCheckOutD))
           {
             //determinamos si el huesped debe estar como disponible   
@@ -343,11 +345,19 @@ namespace IM.Inhouse
               dgGuestPremanifest.Items.Refresh();
             }
             else
+            {
               SaveAvailGuest(itemGuestPremanifest.guID);
+            }
+            //Si no hubo problema en las validaciones mandamos el valor que obtuvo al hacer click en el checkbox          
+            return itemGuestPremanifest.guCheckIn;
           }
-          break;
+          else
+          {
+            //despalomeamos el checkbox porque no se pude hacer el checkin
+            return false;
+          }
         default:
-          var itemGuestSearched = Guest as GuestSearched;
+          var itemGuestSearched = guest as GuestSearched;
           if (ValidateCheckIn(itemGuestSearched.guCheckIn, itemGuestSearched.guCheckInD, itemGuestSearched.guCheckOutD))
           {
             //determinamos si el huesped debe estar como disponible
@@ -357,9 +367,17 @@ namespace IM.Inhouse
               guestSearchedDataGrid.Items.Refresh();
             }
             else
+            {
               SaveAvailGuest(itemGuestSearched.guID);
+            }
+            //Si no hubo problema en las validaciones mandamos el valor que obtuvo al hacer click en el checkbox          
+            return itemGuestSearched.guCheckIn;
           }
-          break;
+          else
+          {
+            //despalomeamos el checkbox porque no se pude hacer el checkin
+            return false;
+          }
       }
     }
     #endregion
@@ -601,7 +619,12 @@ namespace IM.Inhouse
     /// <history>[jorcanche] 09/01/2015</history>
     private void ChkguCheckInArrival_Click(object sender, RoutedEventArgs e)
     {
-      CheckIn((dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem))), 1);
+      //Se debe igualar el valor del check al valor que arroje las validaciones
+      var chk = sender as CheckBox;
+      if (chk.IsChecked.Value)
+      {
+        chk.IsChecked = CheckIn((dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem))), 1);
+      }
     }
     #endregion  
 
@@ -750,8 +773,19 @@ namespace IM.Inhouse
     }
     #endregion
 
+    #region ReservationArrival_MouseLeftButtonUp
+    private void ReservationArrival_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+      var arrival = dgGuestArrival.Items[dgGuestArrival.Items.CurrentPosition] as GuestArrival;
+      if (!string.IsNullOrEmpty(arrival.gulsOriginal) && !string.IsNullOrEmpty(arrival.guHReservID))
+      {
+       RptReservationOrigos reservation = 
+         WirePRHelper.GetRptReservationOrigos(arrival.gulsOriginal, arrival.guHReservID);
+      }
+    } 
     #endregion
 
+    #endregion
 
     #region 2.- Availables
 
@@ -899,8 +933,12 @@ namespace IM.Inhouse
     #region ChkguCheckInPremanifest_Click
     private void ChkguCheckInPremanifest_Click(object sender, RoutedEventArgs e)
     {
-      //si los datos son validos
-      CheckIn(dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)), 3);
+      //Se debe igualar el valor del check al valor que arroje las validaciones
+      var chk = sender as CheckBox;
+      if (chk.IsChecked.Value)
+      {
+        chk.IsChecked = CheckIn(dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)), 3);
+      }
     }
 
     #endregion
@@ -1040,7 +1078,13 @@ namespace IM.Inhouse
     #region ChkguCheckInGetGuest_Click
     private void ChkguCheckInGetGuest_Click(object sender, RoutedEventArgs e)
     {
-      CheckIn(dgGuestAvailable.Items.GetItemAt(dgGuestAvailable.Items.IndexOf(dgGuestAvailable.CurrentItem)), 4);
+      //Se debe igualar el valor del check al valor que arroje las validaciones
+      var chk = sender as CheckBox;
+      if (chk.IsChecked.Value)
+      {
+        chk.IsChecked = CheckIn(dgGuestAvailable.Items[dgGuestAvailable.Items.CurrentPosition], 4);
+      }
+
     }
     #endregion
 
@@ -1123,6 +1167,8 @@ namespace IM.Inhouse
         }
       }
     }
+
+  
     #endregion
 
     #region NotesSearched_MouseLeftButtonUp
@@ -1143,6 +1189,11 @@ namespace IM.Inhouse
           }
         }
       }
+    }
+
+    private void Image_MouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)
+    {
+
     }
     #endregion
 
@@ -1221,7 +1272,7 @@ namespace IM.Inhouse
     #region btnDaysOff_Click
     private void btnDaysOff_Click(object sender, RoutedEventArgs e)
     {
-      Forms.frmDaysOff frmDaysOff = new Forms.frmDaysOff(Model.Enums.EnumTeamType.TeamPRs);
+      frmDaysOff frmDaysOff = new frmDaysOff(EnumTeamType.TeamPRs);
       frmDaysOff.Show();
     }
     #endregion
@@ -1282,7 +1333,10 @@ namespace IM.Inhouse
     #endregion
 
     #endregion
-    
+
+  
+
+  
   }
 
 }

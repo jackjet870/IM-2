@@ -494,7 +494,8 @@ namespace IM.BusinessRules.BR
                                                 string roomNumber = "ALL", string reservation = "ALL", int guestID = 0)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {      
+      {
+        dbContext.Database.CommandTimeout = 120;        
         return dbContext.USP_OR_GetGuests(dateFrom, dateTo, leadSource, name, roomNumber, reservation, guestID).ToList();
       }
     }

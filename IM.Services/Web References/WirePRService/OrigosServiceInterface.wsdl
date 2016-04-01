@@ -1,0 +1,1052 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s30="http://localhost/pr_xmlschemas/hotel/01-03-2006/IntegerResponse.xsd" xmlns:s4="http://webservices.micros.com/og/4.3/Name/" xmlns:s27="http://localhost/pr_xmlschemas/wirepr/origos_reservas_ficticiasRequest.xsd" xmlns:s3="http://webservices.micros.com/og/4.3/Common/" xmlns:s28="http://localhost/pr_xmlschemas/hotel/01-03-2006/origos_reservas_ficticiasRequest.xsd" xmlns:s29="http://localhost/pr_xmlschemas/wirepr/origos_reservas_ficticias.xsd" xmlns:s8="http://localhost/pr_xmlschemas/hotel/01-03-2006/CargoHabitacionRequest.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:s6="http://localhost/pr_xmlschemas/wirepr/UpdateNameRequest.xsd" xmlns:s26="http://localhost/pr_xmlschemas/wirepr/TransactionTypesResponse.xsd" xmlns:s13="http://localhost/pr_xmlschemas/wirepr//RptReservationOrigosRequest.xsd" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s14="http://localhost/pr_xmlschemas/wirepr//RptReservationOrigos.xsd" xmlns:s15="http://localhost/pr_xmlschemas/wirepr/RptReservationOrigosResponse.xsd" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s1="http://localhost/pr_xmlschemas/wirepr/RegisterNameRequest.xsd" xmlns:s10="http://localhost/pr_xmlschemas/hotel/01-03-2006/RmmsttrnRow.xsd" xmlns:s11="http://localhost/pr_xmlschemas/hotel/01-03-2006/ExceptionInfo.xsd" xmlns:s12="http://localhost/pr_xmlschemas/wirepr/RptReservationOrigosRequest.xsd" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s9="http://localhost/pr_xmlschemas/hotel/01-03-2006/RmmsttrnRowResponse.xsd" xmlns:s7="http://localhost/pr_xmlschemas/hotel/01-03-2006/CargoHabitacionTRNRequest.xsd" xmlns:s23="http://localhost/pr_xmlschemas/wirepr//ReservationOrigos.xsd" xmlns:s24="http://localhost/pr_xmlschemas/wirepr/TransactionTypesRequest.xsd" xmlns:s25="http://localhost/pr_xmlschemas/wirepr/TransactionTypes.xsd" xmlns:s16="http://localhost/pr_xmlschemas/wirepr//RptReservationOrigosResponse.xsd" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s2="http://webservices.micros.com/ows/5.1/Name.wsdl" xmlns:s18="http://localhost/pr_xmlschemas/wirepr/QueryRequest.xsd" xmlns:s19="http://localhost/pr_xmlschemas/wirepr//QueryRequest.xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s20="http://localhost/pr_xmlschemas/wirepr//Query.xsd" xmlns:s21="http://localhost/pr_xmlschemas/wirepr/ReservationOrigosResponse.xsd" xmlns:s22="http://localhost/pr_xmlschemas/wirepr//ReservationOrigosResponse.xsd" xmlns:s5="http://webservices.micros.com/og/4.3/HotelCommon/" xmlns:tns="http://localhost/pr_xmlschemas/wirepr/" xmlns:s17="http://localhost/pr_xmlschemas/wirepr/ExceptionInfo.xsd" targetNamespace="http://localhost/pr_xmlschemas/wirepr/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr/">
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr/RegisterNameRequest.xsd" />
+      <s:import namespace="http://webservices.micros.com/ows/5.1/Name.wsdl" />
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr/UpdateNameRequest.xsd" />
+      <s:import namespace="http://localhost/pr_xmlschemas/hotel/01-03-2006/CargoHabitacionTRNRequest.xsd" />
+      <s:import namespace="http://localhost/pr_xmlschemas/hotel/01-03-2006/RmmsttrnRowResponse.xsd" />
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr/RptReservationOrigosRequest.xsd" />
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr/RptReservationOrigosResponse.xsd" />
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr/QueryRequest.xsd" />
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr/ReservationOrigosResponse.xsd" />
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr/TransactionTypesRequest.xsd" />
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr/TransactionTypesResponse.xsd" />
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr/origos_reservas_ficticiasRequest.xsd" />
+      <s:import namespace="http://localhost/pr_xmlschemas/hotel/01-03-2006/IntegerResponse.xsd" />
+      <s:element name="RegisterNameOpera">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:RegisterNameRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RegisterNameOperaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s2:RegisterNameResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateNameOpera">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s6:UpdateNameRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateNameOperaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s2:UpdateNameResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InsertarCargoHabitacionTRN">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s7:CargoHabitacionTRNRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="InsertarCargoHabitacionTRNResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s9:RmmsttrnRowResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRptReservationOrigos">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s12:RptReservationOrigosRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRptReservationOrigosResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s15:RptReservationOrigosResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetReservationsOrigos">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s18:QueryRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetReservationsOrigosResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s21:ReservationOrigosResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTransactionTypes">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s24:TransactionTypesRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTransactionTypesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s26:TransactionTypesResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Origos_reservas_ficticias_Guardar">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s27:origos_reservas_ficticiasRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Origos_reservas_ficticias_GuardarResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s30:IntegerResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr/RegisterNameRequest.xsd">
+      <s:import namespace="http://webservices.micros.com/ows/5.1/Name.wsdl" />
+      <s:element name="RegisterNameRequest" type="s2:RegisterNameRequest" />
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webservices.micros.com/ows/5.1/Name.wsdl">
+      <s:import namespace="http://webservices.micros.com/og/4.3/Common/" />
+      <s:import namespace="http://webservices.micros.com/og/4.3/Name/" />
+      <s:complexType name="RegisterNameRequest">
+        <s:annotation>
+          <s:appinfo>
+            <keepNamespaceDeclarations>xsn</keepNamespaceDeclarations>
+          </s:appinfo>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PersonName" type="s3:PersonName" />
+          <s:element minOccurs="0" maxOccurs="1" name="NativeName" type="s4:NativeName" />
+          <s:element minOccurs="0" maxOccurs="1" name="Birthdate" type="s:date" />
+          <s:element minOccurs="0" maxOccurs="1" name="Gender" type="s3:Gender" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address" type="s3:Address" />
+          <s:element minOccurs="0" maxOccurs="1" name="Phone" type="s3:Phone" />
+          <s:element minOccurs="0" maxOccurs="1" name="Passport" type="s3:GovernmentID" />
+          <s:element minOccurs="0" maxOccurs="1" name="nationality" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="vipCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Id" type="s3:GovernmentID" />
+          <s:element minOccurs="0" maxOccurs="1" name="KeyWord" type="s4:KeyWord" />
+          <s:element minOccurs="0" maxOccurs="1" name="Company" type="s4:Company" />
+        </s:sequence>
+        <s:attribute name="loginName" type="s:string" />
+        <s:attribute name="password" type="s:string" />
+      </s:complexType>
+      <s:element name="RegisterNameResponse" type="s2:RegisterNameResponse" />
+      <s:complexType name="RegisterNameResponse">
+        <s:annotation>
+          <s:appinfo>
+            <keepNamespaceDeclarations>xsn</keepNamespaceDeclarations>
+          </s:appinfo>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Result" type="s3:ResultStatus" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="UpdateNameRequest">
+        <s:annotation>
+          <s:appinfo>
+            <keepNamespaceDeclarations>xsn</keepNamespaceDeclarations>
+          </s:appinfo>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="NameID" type="s3:UniqueID" />
+          <s:element minOccurs="0" maxOccurs="1" name="PersonName" type="s3:PersonName" />
+          <s:element minOccurs="0" maxOccurs="1" name="NativeName" type="s4:NativeName" />
+          <s:element minOccurs="0" maxOccurs="1" name="Birthdate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Gender" type="s3:Gender" />
+          <s:element minOccurs="0" maxOccurs="1" name="nationality" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="vipCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Id" type="s3:GovernmentID" />
+          <s:element minOccurs="0" maxOccurs="1" name="KeyWord" type="s4:KeyWord" />
+          <s:element minOccurs="0" maxOccurs="1" name="Company" type="s4:Company" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="UpdateNameResponse" type="s2:UpdateNameResponse" />
+      <s:complexType name="UpdateNameResponse">
+        <s:annotation>
+          <s:appinfo>
+            <keepNamespaceDeclarations>xsn</keepNamespaceDeclarations>
+          </s:appinfo>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Result" type="s3:ResultStatus" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webservices.micros.com/og/4.3/Common/">
+      <s:complexType name="PersonName">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="nameTitle" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="firstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="middleName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="lastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="nameSuffix" type="s:string" />
+        </s:sequence>
+        <s:attribute name="nameOrdered" type="s:string" />
+        <s:attribute name="familiarName" type="s:string" />
+      </s:complexType>
+      <s:simpleType name="Gender">
+        <s:restriction base="s:string">
+          <s:enumeration value="FEMALE" />
+          <s:enumeration value="MALE" />
+          <s:enumeration value="UNKNOWN" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="Address">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="AddressLine" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cityName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="stateProv" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="countryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="postalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="barCode" type="s:string" />
+        </s:sequence>
+        <s:attribute name="addressType" type="s:string" />
+        <s:attribute name="otherAddressType" type="s:string" />
+        <s:attribute name="languageCode" type="s:string" />
+      </s:complexType>
+      <s:complexType name="Phone">
+        <s:sequence>
+          <s:choice minOccurs="1" maxOccurs="1">
+            <s:element minOccurs="0" maxOccurs="1" name="PhoneNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PhoneData" type="s3:PhonePhoneData" />
+          </s:choice>
+        </s:sequence>
+        <s:attribute name="phoneType" type="s:string" />
+        <s:attribute name="phoneRole" type="s:string" />
+      </s:complexType>
+      <s:complexType name="PhonePhoneData">
+        <s:attribute name="countryAccessCode" type="s:string" />
+        <s:attribute name="areaCode" type="s:string" />
+        <s:attribute name="phoneNumber" type="s:string" />
+        <s:attribute name="extension" type="s:string" />
+      </s:complexType>
+      <s:complexType name="GovernmentID">
+        <s:attribute name="documentType" type="s:string" />
+        <s:attribute name="documentNumber" type="s:string" />
+        <s:attribute name="effectiveDate" type="s:date" />
+        <s:attribute name="expirationDate" type="s:date" />
+        <s:attribute name="placeOfIssue" type="s:string" />
+        <s:attribute name="countryOfIssue" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ResultStatus">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Text" type="s3:ArrayOfText" />
+          <s:element minOccurs="0" maxOccurs="1" name="IDs" type="s3:ArrayOfIDPair" />
+          <s:element minOccurs="0" maxOccurs="1" name="OperaErrorCode" type="s:string" />
+        </s:sequence>
+        <s:attribute name="resultStatusFlag" type="s3:ResultStatusFlag" />
+      </s:complexType>
+      <s:complexType name="ArrayOfText">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="TextElement" type="s3:Text" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Text">
+        <s:simpleContent>
+          <s:extension base="s:normalizedString">
+            <s:attribute name="formatted" type="s:boolean" />
+            <s:attribute name="language" type="s:language" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="TextElement">
+        <s:simpleContent>
+          <s:extension base="s3:Text" />
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfIDPair">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="IDPair" type="s3:IDPair" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="IDPair">
+        <s:attribute name="idType" type="s:string" />
+        <s:attribute name="operaId" type="s:long" />
+        <s:attribute name="externalId" type="s:string" />
+      </s:complexType>
+      <s:simpleType name="ResultStatusFlag">
+        <s:restriction base="s:string">
+          <s:enumeration value="FAIL" />
+          <s:enumeration value="SUCCESS" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="UniqueID">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="type" type="s3:UniqueIDType" use="required" />
+            <s:attribute name="source" type="s:string" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:simpleType name="UniqueIDType">
+        <s:restriction base="s:string">
+          <s:enumeration value="EXTERNAL" />
+          <s:enumeration value="INTERNAL" />
+          <s:enumeration value="CANCELLATIONEXTERNAL" />
+          <s:enumeration value="CANCELLATIONINTERNAL" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webservices.micros.com/og/4.3/Name/">
+      <s:import namespace="http://webservices.micros.com/og/4.3/Common/" />
+      <s:complexType name="NativeName">
+        <s:complexContent mixed="false">
+          <s:extension base="s3:PersonName">
+            <s:attribute name="languageCode" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="NameAddress">
+        <s:complexContent mixed="false">
+          <s:extension base="s3:Address">
+            <s:attribute name="operaId" type="s:long" />
+            <s:attribute name="externalId" type="s:string" />
+            <s:attribute name="primary" type="s:boolean" />
+            <s:attribute name="displaySequence" type="s:int" />
+            <s:attribute name="insertUser" type="s:string" />
+            <s:attribute name="insertDate" type="s:dateTime" />
+            <s:attribute name="updateUser" type="s:string" />
+            <s:attribute name="updateDate" type="s:dateTime" />
+            <s:attribute name="inactiveDate" type="s:date" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="NamePhone">
+        <s:complexContent mixed="false">
+          <s:extension base="s3:Phone">
+            <s:attribute name="operaId" type="s:long" />
+            <s:attribute name="externalId" type="s:string" />
+            <s:attribute name="primary" type="s:boolean" />
+            <s:attribute name="displaySequence" type="s:int" />
+            <s:attribute name="insertUser" type="s:string" />
+            <s:attribute name="insertDate" type="s:dateTime" />
+            <s:attribute name="updateUser" type="s:string" />
+            <s:attribute name="updateDate" type="s:dateTime" />
+            <s:attribute name="inactiveDate" type="s:date" />
+            <s:attribute name="extension" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="KeyWord">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Type" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Value" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Company">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CompanyType" type="s4:CompanyCompanyType" />
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyID" type="s:string" />
+        </s:sequence>
+        <s:attribute name="commissionCode" type="s:string" />
+      </s:complexType>
+      <s:simpleType name="CompanyCompanyType">
+        <s:restriction base="s:string">
+          <s:enumeration value="TRAVEL_AGENT" />
+          <s:enumeration value="COMPANY" />
+          <s:enumeration value="SOURCE" />
+          <s:enumeration value="GROUP" />
+          <s:enumeration value="CONTACT" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webservices.micros.com/og/4.3/HotelCommon/">
+      <s:import namespace="http://webservices.micros.com/og/4.3/Common/" />
+      <s:complexType name="GDSResultStatus">
+        <s:complexContent mixed="false">
+          <s:extension base="s3:ResultStatus">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="GDSError" type="s5:GDSError" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GDSError">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="errorCode" type="s:string" />
+            <s:attribute name="elementId" type="s:string" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr/UpdateNameRequest.xsd">
+      <s:import namespace="http://webservices.micros.com/ows/5.1/Name.wsdl" />
+      <s:element name="UpdateNameRequest" type="s2:UpdateNameRequest" />
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/hotel/01-03-2006/CargoHabitacionTRNRequest.xsd">
+      <s:import namespace="http://localhost/pr_xmlschemas/hotel/01-03-2006/CargoHabitacionRequest.xsd" />
+      <s:element name="CargoHabitacionTRNRequest" type="s7:CargoHabitacionTRNRequest" />
+      <s:complexType name="CargoHabitacionTRNRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Hotel" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Folio" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="CargosHabitacion" type="s7:ArrayOfCargoHabitacionRequest" />
+          <s:element minOccurs="1" maxOccurs="1" name="PostDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="NOValidarSaldo" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Batch" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HasMultipleFolio" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfCargoHabitacionRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="CargoHabitacionRequest" nillable="true" type="s8:CargoHabitacionRequest" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/hotel/01-03-2006/CargoHabitacionRequest.xsd">
+      <s:complexType name="CargoHabitacionRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Hotel" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Folio" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="PostDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Type" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Cashier" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Ent_oper" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Batch" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Entry_amt" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="Currency" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Auth" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Loc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Inv_chk" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Bill_to" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Room_Cost" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="Promo_Cd" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="NOValidarSaldo" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="RedondeSuperior" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="FolioIdn" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="RECNUMS" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/hotel/01-03-2006/RmmsttrnRowResponse.xsd">
+      <s:import namespace="http://localhost/pr_xmlschemas/hotel/01-03-2006/RmmsttrnRow.xsd" />
+      <s:import namespace="http://localhost/pr_xmlschemas/hotel/01-03-2006/ExceptionInfo.xsd" />
+      <s:element name="RmmsttrnRowResponse" type="s9:RmmsttrnRowResponse" />
+      <s:complexType name="RmmsttrnRowResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s9:ArrayOfRmmsttrnRow" />
+          <s:element minOccurs="1" maxOccurs="1" name="HasErrors" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="ValidationError" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExceptionInfo" type="s11:ExceptionInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfRmmsttrnRow">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RmmsttrnRow" nillable="true" type="s10:RmmsttrnRow" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/hotel/01-03-2006/RmmsttrnRow.xsd">
+      <s:complexType name="RmmsttrnRow">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="IsAuditor" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsCashCode" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="recnum" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="recnumString" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="hotel" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="folio" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="trnDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="type" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="sj" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="amount" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="cur_cd" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="factor" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="mex_amt" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="cashier" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="note" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ent_date" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="ent_oper" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ent_time" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ent_term" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="chg_date" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="chg_oper" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="chg_time" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="chg_term" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cc_exp" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="bill_to" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="batch" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="gl_debit" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="gl_credit" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="factor_us" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="entry_amt" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="auth" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="loc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="inv_chk" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ar_co" type="s:short" />
+          <s:element minOccurs="0" maxOccurs="1" name="ar_cust" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ar_type" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="src" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cfm" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ar_type_cd" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="bank" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="hide" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="agency" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="fact" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="ctaban" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="tc" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="room_cost" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="room_cost_mx" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="flight_cost" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="flight_cost_mx" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="lnd_trf_cost" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="lnd_trf_cost_mx" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="tip_base" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="tip_amt" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="adults" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="kids" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="childs" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="nights" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="sale_src" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="acct_hotel" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="prepay_type" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="promo_cd" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="str_value1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="str_value2" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="num_value1" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="num_value2" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="arv_date" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="folioidn" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/hotel/01-03-2006/ExceptionInfo.xsd">
+      <s:complexType name="ExceptionInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Type" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Source" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StackTrace" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr/RptReservationOrigosRequest.xsd">
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr//RptReservationOrigosRequest.xsd" />
+      <s:element name="RptReservationOrigosRequest" type="s13:RptReservationOrigosRequest" />
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr//RptReservationOrigosRequest.xsd">
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr//RptReservationOrigos.xsd" />
+      <s:complexType name="RptReservationOrigosRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="RptReservationOrigos" type="s14:RptReservationOrigos" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr//RptReservationOrigos.xsd">
+      <s:complexType name="RptReservationOrigos">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Hotel" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Folio" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Profile" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccompanyingNames" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PhoneType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Phone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AddressType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Zip" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StateN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Country" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Language" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LanguageN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Nationality" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NationalityN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Passport" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MembershipType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MembershipNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MembershipLevel" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Vip" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="VipN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Party" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UsingMember" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GuestType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="BirthDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Profession" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Agent" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AgentN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Company" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GroupId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GroupN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Source" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SourceN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Market" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MarketN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Contact" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ContactN" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ArrivalDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="ArrivalTime" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DepartureDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="DepartureTime" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Nights" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Adults" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Children" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Room" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Rooms" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="RoomClass" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RoomClassN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RoomCategory" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RoomCategoryN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RateCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RateCodeN" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Rate" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="Currency" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CurrencyN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BlockCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BlockCodeN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PaymentMethod" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PaymentMethodN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CreditCardType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CreditCardNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CreditCardExpiration" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExternalReference" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Comments" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LastRoom" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Bracelets" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CancellationNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CancellationDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="CancellationReason" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CancellationReasonN" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="EntryDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="EntryUser" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="UpdateDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="UpdateUser" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr/RptReservationOrigosResponse.xsd">
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr//RptReservationOrigosResponse.xsd" />
+      <s:element name="RptReservationOrigosResponse" type="s16:RptReservationOrigosResponse" />
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr//RptReservationOrigosResponse.xsd">
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr//RptReservationOrigos.xsd" />
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr/ExceptionInfo.xsd" />
+      <s:complexType name="RptReservationOrigosResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s16:ArrayOfRptReservationOrigos" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HasErrors" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExceptionInfo" type="s17:ExceptionInfoWire" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfRptReservationOrigos">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RptReservationOrigos" nillable="true" type="s14:RptReservationOrigos" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr/ExceptionInfo.xsd">
+      <s:complexType name="ExceptionInfoWire">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Type" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Source" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StackTrace" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HasErrors" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr/QueryRequest.xsd">
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr//QueryRequest.xsd" />
+      <s:element name="QueryRequest" type="s19:QueryRequest" />
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr//QueryRequest.xsd">
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr//Query.xsd" />
+      <s:complexType name="QueryRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Query" type="s20:Query" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr//Query.xsd">
+      <s:complexType name="Query">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Hotel" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Folio" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Room" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DateFrom" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="DateTo" type="s:dateTime" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr/ReservationOrigosResponse.xsd">
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr//ReservationOrigosResponse.xsd" />
+      <s:element name="ReservationOrigosResponse" type="s22:ReservationOrigosResponse" />
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr//ReservationOrigosResponse.xsd">
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr//ReservationOrigos.xsd" />
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr/ExceptionInfo.xsd" />
+      <s:complexType name="ReservationOrigosResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s22:ArrayOfReservationOrigos" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HasErrors" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExceptionInfo" type="s17:ExceptionInfoWire" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfReservationOrigos">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ReservationOrigos" nillable="true" type="s23:ReservationOrigos" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr//ReservationOrigos.xsd">
+      <s:complexType name="ReservationOrigos">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Resort" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Hotel" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Folio" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Arrival" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="Departure" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Room" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RoomType" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Adults" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="Children" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="Country" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Agency" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Contract" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Company" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="Membership" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr/TransactionTypesRequest.xsd">
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr/TransactionTypes.xsd" />
+      <s:element name="TransactionTypesRequest" type="s24:TransactionTypesRequest" />
+      <s:complexType name="TransactionTypesRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionTypes" type="s25:TransactionTypes" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr/TransactionTypes.xsd">
+      <s:complexType name="TransactionTypes">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Trx_code" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tc_Group" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tc_Subgroup" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr/TransactionTypesResponse.xsd">
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr/TransactionTypes.xsd" />
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr/ExceptionInfo.xsd" />
+      <s:element name="TransactionTypesResponse" type="s26:TransactionTypesResponse" />
+      <s:complexType name="TransactionTypesResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s26:ArrayOfTransactionTypes" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HasErrors" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExceptionInfo" type="s17:ExceptionInfoWire" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfTransactionTypes">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="TransactionTypes" nillable="true" type="s25:TransactionTypes" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr/origos_reservas_ficticiasRequest.xsd">
+      <s:import namespace="http://localhost/pr_xmlschemas/hotel/01-03-2006/origos_reservas_ficticiasRequest.xsd" />
+      <s:element name="origos_reservas_ficticiasRequest" type="s28:origos_reservas_ficticiasRequest" />
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/hotel/01-03-2006/origos_reservas_ficticiasRequest.xsd">
+      <s:import namespace="http://localhost/pr_xmlschemas/wirepr/origos_reservas_ficticias.xsd" />
+      <s:complexType name="origos_reservas_ficticiasRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="data" type="s29:origos_reservas_ficticias" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/wirepr/origos_reservas_ficticias.xsd">
+      <s:complexType name="origos_reservas_ficticias">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="recnum" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="hotel" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="folio" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ent_oper" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ent_date" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="chg_oper" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="chg_date" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="adults" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="kids" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="childs" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="application" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="company" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="program" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/pr_xmlschemas/hotel/01-03-2006/IntegerResponse.xsd">
+      <s:import namespace="http://localhost/pr_xmlschemas/hotel/01-03-2006/ExceptionInfo.xsd" />
+      <s:element name="IntegerResponse" type="s30:IntegerResponse" />
+      <s:complexType name="IntegerResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Numero" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="Bolean" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="HasErrors" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExceptionInfo" type="s11:ExceptionInfo" />
+          <s:element minOccurs="1" maxOccurs="1" name="HasInformation" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Information" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="RegisterNameOperaSoapIn">
+    <wsdl:part name="parameters" element="tns:RegisterNameOpera" />
+  </wsdl:message>
+  <wsdl:message name="RegisterNameOperaSoapOut">
+    <wsdl:part name="parameters" element="tns:RegisterNameOperaResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateNameOperaSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateNameOpera" />
+  </wsdl:message>
+  <wsdl:message name="UpdateNameOperaSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateNameOperaResponse" />
+  </wsdl:message>
+  <wsdl:message name="InsertarCargoHabitacionTRNSoapIn">
+    <wsdl:part name="parameters" element="tns:InsertarCargoHabitacionTRN" />
+  </wsdl:message>
+  <wsdl:message name="InsertarCargoHabitacionTRNSoapOut">
+    <wsdl:part name="parameters" element="tns:InsertarCargoHabitacionTRNResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRptReservationOrigosSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRptReservationOrigos" />
+  </wsdl:message>
+  <wsdl:message name="GetRptReservationOrigosSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRptReservationOrigosResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetReservationsOrigosSoapIn">
+    <wsdl:part name="parameters" element="tns:GetReservationsOrigos" />
+  </wsdl:message>
+  <wsdl:message name="GetReservationsOrigosSoapOut">
+    <wsdl:part name="parameters" element="tns:GetReservationsOrigosResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTransactionTypesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTransactionTypes" />
+  </wsdl:message>
+  <wsdl:message name="GetTransactionTypesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTransactionTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="Origos_reservas_ficticias_GuardarSoapIn">
+    <wsdl:part name="parameters" element="tns:Origos_reservas_ficticias_Guardar" />
+  </wsdl:message>
+  <wsdl:message name="Origos_reservas_ficticias_GuardarSoapOut">
+    <wsdl:part name="parameters" element="tns:Origos_reservas_ficticias_GuardarResponse" />
+  </wsdl:message>
+  <wsdl:portType name="OrigosServiceInterfaceSoap">
+    <wsdl:operation name="RegisterNameOpera">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Method to Register Profiles in Opera</wsdl:documentation>
+      <wsdl:input message="tns:RegisterNameOperaSoapIn" />
+      <wsdl:output message="tns:RegisterNameOperaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateNameOpera">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Method to Update Profiles in Opera</wsdl:documentation>
+      <wsdl:input message="tns:UpdateNameOperaSoapIn" />
+      <wsdl:output message="tns:UpdateNameOperaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertarCargoHabitacionTRN">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Inserta un cargo a habitación (RMMSTTRN) para un folio. Ojo, este servicio no actualiza registros existentes... sólo los crea. Sólo acepta cargos billTo-F, en dólares y que el código de posteo sea tipo-C  </wsdl:documentation>
+      <wsdl:input message="tns:InsertarCargoHabitacionTRNSoapIn" />
+      <wsdl:output message="tns:InsertarCargoHabitacionTRNSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRptReservationOrigos">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Obtiene el reporte de una reservacion para Origos</wsdl:documentation>
+      <wsdl:input message="tns:GetRptReservationOrigosSoapIn" />
+      <wsdl:output message="tns:GetRptReservationOrigosSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetReservationsOrigos">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">&lt;table&gt;&lt;tr&gt;&lt;td colspan = 2&gt;&lt;b&gt;Obtiene reservaciones para Origos dado un conjunto de criterios&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Hotel&lt;/td&gt;&lt;td&gt;= request.Hotel&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Folio&lt;/td&gt;&lt;td&gt;= request.Folio&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Numero de habitacion&lt;/td&gt;&lt;td&gt;= request.Room&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Nombre&lt;/td&gt;&lt;td&gt;= request.Name&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Fecha de llegada desde&lt;/td&gt;&lt;td&gt;= request.DateFrom&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Fecha de llegada hasta&lt;/td&gt;&lt;td&gt;= request.DateTo&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetReservationsOrigosSoapIn" />
+      <wsdl:output message="tns:GetReservationsOrigosSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTransactionTypes">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">&lt;table&gt;&lt;tr&gt;&lt;td colspan = 2&gt;&lt;b&gt;Obtiene los tipos de transacciones de opera&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Tc_Group&lt;/td&gt;&lt;td&gt;= request.Tc_Group&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Tc_Subgroup&lt;/td&gt;&lt;td&gt;= request.Tc_Subgroup&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetTransactionTypesSoapIn" />
+      <wsdl:output message="tns:GetTransactionTypesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Origos_reservas_ficticias_Guardar">
+      <wsdl:input message="tns:Origos_reservas_ficticias_GuardarSoapIn" />
+      <wsdl:output message="tns:Origos_reservas_ficticias_GuardarSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="OrigosServiceInterfaceSoap" type="tns:OrigosServiceInterfaceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="RegisterNameOpera">
+      <soap:operation soapAction="http://localhost/pr_xmlschemas/wirepr/RegisterNameOpera" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateNameOpera">
+      <soap:operation soapAction="http://localhost/pr_xmlschemas/wirepr/UpdateNameOpera" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertarCargoHabitacionTRN">
+      <soap:operation soapAction="http://localhost/pr_xmlschemas/wirepr/InsertarCargoHabitacionTRN" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRptReservationOrigos">
+      <soap:operation soapAction="http://localhost/pr_xmlschemas/wirepr/GetRptReservationOrigos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetReservationsOrigos">
+      <soap:operation soapAction="http://localhost/pr_xmlschemas/wirepr/GetReservationsOrigos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTransactionTypes">
+      <soap:operation soapAction="http://localhost/pr_xmlschemas/wirepr/GetTransactionTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Origos_reservas_ficticias_Guardar">
+      <soap:operation soapAction="http://localhost/pr_xmlschemas/wirepr/Origos_reservas_ficticias_Guardar" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="OrigosServiceInterfaceSoap12" type="tns:OrigosServiceInterfaceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="RegisterNameOpera">
+      <soap12:operation soapAction="http://localhost/pr_xmlschemas/wirepr/RegisterNameOpera" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateNameOpera">
+      <soap12:operation soapAction="http://localhost/pr_xmlschemas/wirepr/UpdateNameOpera" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertarCargoHabitacionTRN">
+      <soap12:operation soapAction="http://localhost/pr_xmlschemas/wirepr/InsertarCargoHabitacionTRN" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRptReservationOrigos">
+      <soap12:operation soapAction="http://localhost/pr_xmlschemas/wirepr/GetRptReservationOrigos" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetReservationsOrigos">
+      <soap12:operation soapAction="http://localhost/pr_xmlschemas/wirepr/GetReservationsOrigos" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTransactionTypes">
+      <soap12:operation soapAction="http://localhost/pr_xmlschemas/wirepr/GetTransactionTypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Origos_reservas_ficticias_Guardar">
+      <soap12:operation soapAction="http://localhost/pr_xmlschemas/wirepr/Origos_reservas_ficticias_Guardar" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="OrigosServiceInterface">
+    <wsdl:port name="OrigosServiceInterfaceSoap" binding="tns:OrigosServiceInterfaceSoap">
+      <soap:address location="http://svr-2000-web2:8087/WireServiceInterface/OrigosServiceInterface.asmx" />
+    </wsdl:port>
+    <wsdl:port name="OrigosServiceInterfaceSoap12" binding="tns:OrigosServiceInterfaceSoap12">
+      <soap12:address location="http://svr-2000-web2:8087/WireServiceInterface/OrigosServiceInterface.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
