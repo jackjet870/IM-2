@@ -1500,5 +1500,55 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptDepositsPaid>("USP_OR_RptDepositsPaid", dateFromParameter, dateToParameter, leadSourcesParameter, salesRoomsParameter);
         }
+    
+        public virtual ObjectResult<RptFollowUpByAgency> USP_OR_RptFollowUpByAgency(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, Nullable<bool> considerQuinellas, Nullable<bool> basedOnArrival)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var considerQuinellasParameter = considerQuinellas.HasValue ?
+                new ObjectParameter("ConsiderQuinellas", considerQuinellas) :
+                new ObjectParameter("ConsiderQuinellas", typeof(bool));
+    
+            var basedOnArrivalParameter = basedOnArrival.HasValue ?
+                new ObjectParameter("BasedOnArrival", basedOnArrival) :
+                new ObjectParameter("BasedOnArrival", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptFollowUpByAgency>("USP_OR_RptFollowUpByAgency", dateFromParameter, dateToParameter, leadSourcesParameter, considerQuinellasParameter, basedOnArrivalParameter);
+        }
+    
+        public virtual ObjectResult<RptFollowUpByPR> USP_OR_RptFollowUpByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, Nullable<bool> considerQuinellas, Nullable<bool> basedOnArrival)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var considerQuinellasParameter = considerQuinellas.HasValue ?
+                new ObjectParameter("ConsiderQuinellas", considerQuinellas) :
+                new ObjectParameter("ConsiderQuinellas", typeof(bool));
+    
+            var basedOnArrivalParameter = basedOnArrival.HasValue ?
+                new ObjectParameter("BasedOnArrival", basedOnArrival) :
+                new ObjectParameter("BasedOnArrival", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptFollowUpByPR>("USP_OR_RptFollowUpByPR", dateFromParameter, dateToParameter, leadSourcesParameter, considerQuinellasParameter, basedOnArrivalParameter);
+        }
     }
 }

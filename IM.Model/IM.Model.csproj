@@ -572,6 +572,12 @@
     <Compile Include="RptDepositsPaid.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptFollowUpByAgency.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptFollowUpByPR.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptGifts.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
