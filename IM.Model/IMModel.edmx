@@ -6003,6 +6003,27 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_RptDeposits" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptDepositsBurned" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptDepositsBurnedByResort" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptDepositsPaid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_RptGifts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_RptPersonnel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_RptPRStats" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -15126,6 +15147,27 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Folio" Mode="In" Type="String" />
             <Parameter Name="RateType" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_RptDeposits" ReturnType="Collection(IMModel.RptDeposits)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptDepositsBurned" ReturnType="Collection(IMModel.RptDepositsBurned)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptDepositsBurnedByResort" ReturnType="Collection(IMModel.RptDepositsBurnedByResort)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptDepositsPaid" ReturnType="Collection(IMModel.RptDepositsPaid)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -16044,6 +16086,79 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
         <ComplexType Name="ValidationData">
           <Property Type="String" Name="Focus" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="Message" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="RptDepositsBurned">
+          <Property Type="Int32" Name="grID" Nullable="false" />
+          <Property Type="String" Name="grNum" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="grD" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="grgu" Nullable="true" />
+          <Property Type="String" Name="grGuest" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="grHotel" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="grlo" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="grsr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="grpe" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="grcu" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="grpt" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="grHost" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="grComments" Nullable="true" MaxLength="100" />
+          <Property Type="Decimal" Name="grDepositTwisted" Nullable="false" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptDepositsBurnedByResort">
+          <Property Type="Int32" Name="grID" Nullable="false" />
+          <Property Type="String" Name="grNum" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="grD" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="grgu" Nullable="true" />
+          <Property Type="String" Name="grGuest" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="grHotel" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="guHotelB" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="grlo" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="grsr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="grpe" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="grcu" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="grpt" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="grHost" Nullable="false" MaxLength="10" />
+          <Property Type="Decimal" Name="grDepositTwisted" Nullable="false" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptDeposits">
+          <Property Type="Int32" Name="grID" Nullable="false" />
+          <Property Type="String" Name="grNum" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="Int32" Name="grgu" Nullable="true" />
+          <Property Type="DateTime" Name="grD" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="guShow" Nullable="true" />
+          <Property Type="String" Name="grGuest" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="grHotel" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="grls" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="grsr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="grpe" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="grpt" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="grcu" Nullable="false" MaxLength="10" />
+          <Property Type="Decimal" Name="grDepositTwisted" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="grDeposit" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="guDepositReceived" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="grDepositCxC" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptDepositsPaid">
+          <Property Type="Int32" Name="grID" Nullable="false" />
+          <Property Type="String" Name="grNum" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="grD" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="grgu" Nullable="true" />
+          <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="grGuest" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="grHotel" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="grls" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="grsr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="grpe" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="grcu" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="grpt" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="grHost" Nullable="false" MaxLength="10" />
+          <Property Type="Decimal" Name="grDeposit" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="grDepositTwisted" Nullable="false" Precision="19" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -19460,6 +19575,95 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_UpdateMealTicketFolio" FunctionName="IMModel.Store.USP_OR_UpdateMealTicketFolio" />
+          <FunctionImportMapping FunctionImportName="USP_OR_RptDeposits" FunctionName="IMModel.Store.USP_OR_RptDeposits" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptDeposits">
+                <ScalarProperty Name="grID" ColumnName="grID" />
+                <ScalarProperty Name="grNum" ColumnName="grNum" />
+                <ScalarProperty Name="guOutInvitNum" ColumnName="guOutInvitNum" />
+                <ScalarProperty Name="grgu" ColumnName="grgu" />
+                <ScalarProperty Name="grD" ColumnName="grD" />
+                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
+                <ScalarProperty Name="guShow" ColumnName="guShow" />
+                <ScalarProperty Name="grGuest" ColumnName="grGuest" />
+                <ScalarProperty Name="grHotel" ColumnName="grHotel" />
+                <ScalarProperty Name="grls" ColumnName="grls" />
+                <ScalarProperty Name="grsr" ColumnName="grsr" />
+                <ScalarProperty Name="grpe" ColumnName="grpe" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="grpt" ColumnName="grpt" />
+                <ScalarProperty Name="grcu" ColumnName="grcu" />
+                <ScalarProperty Name="grDepositTwisted" ColumnName="grDepositTwisted" />
+                <ScalarProperty Name="grDeposit" ColumnName="grDeposit" />
+                <ScalarProperty Name="guDepositReceived" ColumnName="guDepositReceived" />
+                <ScalarProperty Name="grDepositCxC" ColumnName="grDepositCxC" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptDepositsBurned" FunctionName="IMModel.Store.USP_OR_RptDepositsBurned" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptDepositsBurned">
+                <ScalarProperty Name="grID" ColumnName="grID" />
+                <ScalarProperty Name="grNum" ColumnName="grNum" />
+                <ScalarProperty Name="grD" ColumnName="grD" />
+                <ScalarProperty Name="grgu" ColumnName="grgu" />
+                <ScalarProperty Name="grGuest" ColumnName="grGuest" />
+                <ScalarProperty Name="grHotel" ColumnName="grHotel" />
+                <ScalarProperty Name="grlo" ColumnName="grlo" />
+                <ScalarProperty Name="grsr" ColumnName="grsr" />
+                <ScalarProperty Name="grpe" ColumnName="grpe" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="grcu" ColumnName="grcu" />
+                <ScalarProperty Name="grpt" ColumnName="grpt" />
+                <ScalarProperty Name="grHost" ColumnName="grHost" />
+                <ScalarProperty Name="grComments" ColumnName="grComments" />
+                <ScalarProperty Name="grDepositTwisted" ColumnName="grDepositTwisted" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptDepositsBurnedByResort" FunctionName="IMModel.Store.USP_OR_RptDepositsBurnedByResort" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptDepositsBurnedByResort">
+                <ScalarProperty Name="grID" ColumnName="grID" />
+                <ScalarProperty Name="grNum" ColumnName="grNum" />
+                <ScalarProperty Name="grD" ColumnName="grD" />
+                <ScalarProperty Name="grgu" ColumnName="grgu" />
+                <ScalarProperty Name="grGuest" ColumnName="grGuest" />
+                <ScalarProperty Name="grHotel" ColumnName="grHotel" />
+                <ScalarProperty Name="guHotelB" ColumnName="guHotelB" />
+                <ScalarProperty Name="grlo" ColumnName="grlo" />
+                <ScalarProperty Name="grsr" ColumnName="grsr" />
+                <ScalarProperty Name="grpe" ColumnName="grpe" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="grcu" ColumnName="grcu" />
+                <ScalarProperty Name="grpt" ColumnName="grpt" />
+                <ScalarProperty Name="grHost" ColumnName="grHost" />
+                <ScalarProperty Name="grDepositTwisted" ColumnName="grDepositTwisted" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptDepositsPaid" FunctionName="IMModel.Store.USP_OR_RptDepositsPaid" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptDepositsPaid">
+                <ScalarProperty Name="grID" ColumnName="grID" />
+                <ScalarProperty Name="grNum" ColumnName="grNum" />
+                <ScalarProperty Name="grD" ColumnName="grD" />
+                <ScalarProperty Name="grgu" ColumnName="grgu" />
+                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
+                <ScalarProperty Name="grGuest" ColumnName="grGuest" />
+                <ScalarProperty Name="grHotel" ColumnName="grHotel" />
+                <ScalarProperty Name="grls" ColumnName="grls" />
+                <ScalarProperty Name="grsr" ColumnName="grsr" />
+                <ScalarProperty Name="grpe" ColumnName="grpe" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="grcu" ColumnName="grcu" />
+                <ScalarProperty Name="grpt" ColumnName="grpt" />
+                <ScalarProperty Name="grHost" ColumnName="grHost" />
+                <ScalarProperty Name="grDeposit" ColumnName="grDeposit" />
+                <ScalarProperty Name="grDepositTwisted" ColumnName="grDepositTwisted" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

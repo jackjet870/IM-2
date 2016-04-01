@@ -16,6 +16,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.InventoryMovements", "IM.InventoryMoves\IM.InventoryMovements.csproj", "{9351E555-6800-4E9C-9BDE-BC8DB9D29711}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Inhouse", "IM.Inhouse\IM.Inhouse.csproj", "{B803B281-004C-4D8F-BB9F-065E3B19FA70}"
+	ProjectSection(ProjectDependencies) = postProject
+		{96EDCB7E-349A-4988-A8AE-EBE1F5FE3060} = {96EDCB7E-349A-4988-A8AE-EBE1F5FE3060}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.MailOuts", "IM.MailOuts\IM.MailOuts.csproj", "{8441A21C-5EF5-4FEB-BE2F-995269672694}"
 EndProject
