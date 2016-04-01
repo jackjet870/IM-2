@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.SalesLiner", "IM.SalesLi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.SalesCloser", "IM.SalesCloser\IM.SalesCloser.csproj", "{D392E711-25A3-401D-A7F8-9F0EFD879A0D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.ProcessorOuthouse", "IM.ProcessorOuthouse\IM.ProcessorOuthouse.csproj", "{29571D2A-40AF-4366-8BE9-827EC5A27BD7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -181,6 +183,14 @@ Global
 		{D392E711-25A3-401D-A7F8-9F0EFD879A0D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D392E711-25A3-401D-A7F8-9F0EFD879A0D}.Release|x86.ActiveCfg = Release|Any CPU
 		{D392E711-25A3-401D-A7F8-9F0EFD879A0D}.Release|x86.Build.0 = Release|Any CPU
+		{29571D2A-40AF-4366-8BE9-827EC5A27BD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29571D2A-40AF-4366-8BE9-827EC5A27BD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29571D2A-40AF-4366-8BE9-827EC5A27BD7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{29571D2A-40AF-4366-8BE9-827EC5A27BD7}.Debug|x86.Build.0 = Debug|Any CPU
+		{29571D2A-40AF-4366-8BE9-827EC5A27BD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29571D2A-40AF-4366-8BE9-827EC5A27BD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29571D2A-40AF-4366-8BE9-827EC5A27BD7}.Release|x86.ActiveCfg = Release|Any CPU
+		{29571D2A-40AF-4366-8BE9-827EC5A27BD7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

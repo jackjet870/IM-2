@@ -20,6 +20,7 @@ using IM.BusinessRules.BR;
 using IM.Model.Classes;
 using System.Data;
 using OfficeOpenXml.Style;
+using IM.Assignment.Classes;
 using System.IO;
 using System.Diagnostics;
 
@@ -51,6 +52,7 @@ namespace IM.Assignment
 
     private List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
     private DataTable dt = new DataTable();
+    private string dateRange;
     private string rptName;
     
 
@@ -110,9 +112,10 @@ namespace IM.Assignment
       //Obtiene numero de la semana a partir de una fecha
       int weekYear = CultureInfo.CurrentUICulture.Calendar.GetWeekOfYear(mdtmDate, CalendarWeekRule.FirstFullWeek, mdtmDate.DayOfWeek);
       lblWeek.Content = "Week " + weekYear;
-   
+
       //Rango de fechas
-      lblDataRange.Content = DateRange(mdtmDate, mdtmDate.AddDays(6));
+      dateRange = DateHelper.DateRange(mdtmDate, mdtmDate.AddDays(6));
+      lblDataRange.Content = dateRange;
 
       LoadListGuestsUnassigned();
       LoadPRs();
@@ -132,12 +135,10 @@ namespace IM.Assignment
     public string DateRange(DateTime pdtmStart, DateTime pdtmEnd)
     {
       string stgDateFormat = "";
-      
       //mismo dia
       if (pdtmStart == pdtmEnd)
       {
         stgDateFormat = pdtmStart.ToString("MMMM d, yyyy");
-
       }
       else
       {
@@ -160,10 +161,9 @@ namespace IM.Assignment
           }
         }
       }
-
       return stgDateFormat;
     }
-    #endregion
+    #endregion //Se omite este metodo.. se utiliza DateHelpers.DateRange
 
     #region getstartweek
     //Obtiene el primer dia de la semana
@@ -354,25 +354,8 @@ namespace IM.Assignment
         {
           dt = GridHelper.GetDataTableFromGrid(lstAssignmentByPR, true);
           rptName = "Assignment by PR";
-
-          string dateRange = lblDataRange.Content.ToString();
-
-         
-          List<ExcelFormatTable> format = new List<ExcelFormatTable>();
-          format.Add(new ExcelFormatTable() { Title = "In", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
-          format.Add(new ExcelFormatTable() { Title = "Out", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
-          format.Add(new ExcelFormatTable() { Title = "Room", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
-          format.Add(new ExcelFormatTable() { Title = "Last Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-          format.Add(new ExcelFormatTable() { Title = "First Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-          format.Add(new ExcelFormatTable() { Title = "Agency ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
-          format.Add(new ExcelFormatTable() { Title = "Agency", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-          format.Add(new ExcelFormatTable() { Title = "Member #", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-          format.Add(new ExcelFormatTable() { Title = "01", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-          format.Add(new ExcelFormatTable() { Title = "Comments", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-          format.Add(new ExcelFormatTable() { Title = "PR ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
-          format.Add(new ExcelFormatTable() { Title = "PR N Assigned", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-          format.Add(new ExcelFormatTable() { Title = "Pax", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-          EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRange,dateRange, format);
+          string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
+          EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRange ,dateRangeFileName, clsFormatTable.getExcelFormatTableAssignByPR());
         }
         else
         {
@@ -391,27 +374,8 @@ namespace IM.Assignment
       {
         dt = GridHelper.GetDataTableFromGrid(lstAssignment, true);
         rptName = "General Assignment";
-        
-        string dateRange = lblDataRange.Content.ToString();
-
-
-        List<ExcelFormatTable> format = new List<ExcelFormatTable>();
-        format.Add(new ExcelFormatTable() { Title = "ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Check In D", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "In", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Room", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Last Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "First Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "PR ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "PR N Assigned", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Agency ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Agency", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Member #", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Gross", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "PR", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Liner", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Closer", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRange,dateRange, format);
+        string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
+        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRange,dateRange, clsFormatTable.getExcelFormatTableGenAsignyArvls());
       }
       else
       {
@@ -429,32 +393,15 @@ namespace IM.Assignment
       {
         dt = GridHelper.GetDataTableFromGrid(lstAssignmentArrivals, true);
         rptName = "Arrivals";
-        string dateRange = lblDataRange.Content.ToString();
-
-        List<ExcelFormatTable> format = new List<ExcelFormatTable>();
-        format.Add(new ExcelFormatTable() { Title = "ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Check In D", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "In", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Room", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Last Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "First Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "PR ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "PR N Assigned", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Agency ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Agency", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Member #", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Gross", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "PR", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Liner", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "Closer", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName,dateRange,dateRange, format);
+        string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
+        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName,dateRange,dateRange, clsFormatTable.getExcelFormatTableGenAsignyArvls());
       }
       else
       {
         MessageBox.Show("There is no date.", "Intelligence Marketing Assignment", MessageBoxButton.OK, MessageBoxImage.Information);
       }
     }
-    #region
+    #endregion
 
     #region btnAssign_Click
     private void btnAssign_Click(object sender, RoutedEventArgs e)
@@ -539,10 +486,6 @@ namespace IM.Assignment
         _strgGuestAssigned.Add(selectedItem.guID);
       }
     }
-    #endregion
-
-    #endregion
-
     #endregion
 
     #endregion
