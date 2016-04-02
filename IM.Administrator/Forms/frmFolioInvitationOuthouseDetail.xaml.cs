@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
@@ -25,6 +16,7 @@ namespace IM.Administrator.Forms
   {
     #region Variables
     public FolioInvitationOuthouse folioInvOut = new FolioInvitationOuthouse();//Objeto a editar o agregar
+    public FolioInvitationOuthouse oldFolioInvOut = new FolioInvitationOuthouse();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo de la ventana
     #endregion
     public frmFolioInvitationOuthouseDetail()
@@ -46,7 +38,8 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        Close();
+        btnCancel.Focus();
+        btnCancel_Click(null, null);
       }
     }
     #endregion
@@ -62,6 +55,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      ObjectHelper.CopyProperties(folioInvOut, oldFolioInvOut);
       DataContext = folioInvOut;
       if (enumMode != EnumMode.preview)
       {
@@ -107,9 +101,39 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
+    #region Cancel
+    /// <summary>
+    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 29/03/2016
+    /// </history>
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+      if(enumMode!=EnumMode.preview)
+      {
+        if (!ObjectHelper.IsEquals(folioInvOut, oldFolioInvOut))
+        {
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
+          if (result == MessageBoxResult.OK)
+          {
+            Close();
+          }
+        }
+        else
+        {
+          Close();
+        }
+      }
+      else
+      {
+        Close();
+      }
+    }
     #endregion
 
-    #region Methods
     #region Accept
     /// <summary>
     /// Agrega o actualiza un registro dependiendo del modo de la ventana
@@ -121,65 +145,60 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      int nRes = 0;
-      string strMsj = "";
-      #region Validar El rango del folio      
-      if(string.IsNullOrWhiteSpace(txtSerie.Text))
+      btnAccept.Focus();
+      if(ObjectHelper.IsEquals(folioInvOut,oldFolioInvOut)&& enumMode!=EnumMode.add)
       {
-        strMsj += "Specify the Serie. \n";
-      }
-
-      if (folioInvOut.fiFrom == 0)
-      {
-        txtFrom.Text = "0";
-        strMsj += "Start number can not be 0.";
+        Close();
       }
       else
       {
-        if (folioInvOut.fiTo < folioInvOut.fiFrom)
+        int nRes = 0;
+        string strMsj = "";
+        #region Validar El rango del folio      
+        if (string.IsNullOrWhiteSpace(txtSerie.Text))
         {
-          if (string.IsNullOrWhiteSpace(txtTo.Text))
-          {
-            txtTo.Text = txtFrom.Text;
-          }
-          strMsj += "Start number can not be greater than End Number.";
+          strMsj += "Specify the serie. \n";
         }
-      }
-      #endregion
 
-      if (strMsj == "")
-      {
-        nRes = BRFoliosInvitationsOuthouse.SaveFolioInvittionsOutside(folioInvOut, (enumMode == EnumMode.edit));
-
-        #region respuesta
-        switch (nRes)//Se valida la respuesta de la operacion
+        if (folioInvOut.fiFrom == 0)
         {
-          case 0:
+          txtFrom.Text = "0";
+          strMsj += "Start number can not be 0.";
+        }
+        else
+        {
+          if (folioInvOut.fiTo < folioInvOut.fiFrom)
+          {
+            if (string.IsNullOrWhiteSpace(txtTo.Text))
             {
-              UIHelper.ShowMessage("Folio Invitation Outhouse Type not saved.");
-              break;
+              txtTo.Text = txtFrom.Text;
             }
-          case 1:
-            {
-              UIHelper.ShowMessage("Folio Invitation Outhouse successfully saved.");
-              DialogResult = true;
-              Close();
-              break;
-            }
-          case 2:
-            {
-              UIHelper.ShowMessage("Please check the ranges, impossible save it.");
-              break;
-            }
+            strMsj += "Start number can not be greater than End Number.";
+          }
         }
         #endregion
-      }
-      else
-      {
-        UIHelper.ShowMessage(strMsj.TrimEnd('\n'));
+
+        if (strMsj == "")
+        {
+          nRes = BRFoliosInvitationsOuthouse.SaveFolioInvittionsOutside(folioInvOut, (enumMode == EnumMode.edit));
+          UIHelper.ShowMessageResult("Folio Invitation Outhouse", nRes,blnIsRange:true);
+          if(nRes==1)
+          {
+            DialogResult = true;
+            Close();
+          }          
+        }
+        else
+        {
+          UIHelper.ShowMessage(strMsj);
+        }
       }
     }
     #endregion
+    #endregion
+
+    #region Methods
+
 
     #region LostFocus
     /// <summary>

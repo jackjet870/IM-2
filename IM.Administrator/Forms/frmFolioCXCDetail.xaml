@@ -29,7 +29,7 @@
         <CheckBox Name="chkA" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" IsChecked="{Binding fiA}" Height="13" IsEnabled="False">Active</CheckBox>
 
         <Button Name="btnAccept" Width="60" Height="30" Visibility="Hidden"  Grid.Column="1" Grid.Row="3" Margin="0,7,75,7" Click="btnAccept_Click" Content="_Accept"  HorizontalAlignment="Right"/>
-        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="3" Margin="0,7"  HorizontalAlignment="Right" IsCancel="True" Content="_Cancel"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="3" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>
 </Window>

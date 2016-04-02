@@ -8,6 +8,7 @@ using IM.BusinessRules.BR;
 using IM.Administrator.Enums;
 using IM.Base.Helpers;
 using IM.Model.Enums;
+using System.Linq;
 
 namespace IM.Administrator.Forms
 {
@@ -84,7 +85,7 @@ namespace IM.Administrator.Forms
       frmChargeToDetail frmChargeToDetail = new frmChargeToDetail();
       frmChargeToDetail.Owner = this;
       frmChargeToDetail.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
-      ObjectHelper.CopyProperties(frmChargeToDetail.chargeTo,chargeTo);
+      frmChargeToDetail.oldChargeTo = chargeTo;
       if(frmChargeToDetail.ShowDialog()==true)
       {
         List<ChargeTo> lstCargeTos = (List<ChargeTo>)dgrChargeTo.ItemsSource;
@@ -114,7 +115,8 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadChargeTo(dgrChargeTo.SelectedIndex);
+      ChargeTo chargeTo = (ChargeTo)dgrChargeTo.SelectedItem;
+      LoadChargeTo( chargeTo);
     }
     #endregion
     #region KeyBoardChange
@@ -146,7 +148,7 @@ namespace IM.Administrator.Forms
       frmSearch.strID = _chargeToFilter.ctID;
       frmSearch.strDesc = _chargeToFilter.ctPrice.ToString();
       frmSearch.nStatus = _nStatus;
-      frmSearch.strForm = "ChargeTo";
+      frmSearch.enumForm = EnumWindow.ChargeTos;
       frmSearch.Owner = this;
       //Abrir la ventana de Buscar y ver si decidió realizar algún filtro
       if (frmSearch.ShowDialog() == true)
@@ -167,8 +169,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
-      frmChargeToDetail frmChargeToDetail = new frmChargeToDetail();
-      frmChargeToDetail.chargeTo = new ChargeTo();
+      frmChargeToDetail frmChargeToDetail = new frmChargeToDetail();      
       frmChargeToDetail.Owner = this;
       frmChargeToDetail.mode = EnumMode.add;//insertar
 
@@ -220,10 +221,16 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [Emoguel] created 02/03/2016
     /// </history>
-    protected void LoadChargeTo(int nIndex=0)
+    protected void LoadChargeTo(ChargeTo chargeTo = null)
     {
+      int nIndex = 0;
       List<ChargeTo> lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter, _nStatus);
-      dgrChargeTo.ItemsSource = lstChargeTo;      
+      dgrChargeTo.ItemsSource = lstChargeTo;
+      if (chargeTo != null && lstChargeTo.Count>0)
+      {
+        chargeTo= lstChargeTo.Where(ch => ch.ctID == chargeTo.ctID).FirstOrDefault();
+        nIndex = lstChargeTo.IndexOf(chargeTo);
+      }
       GridHelper.SelectRow(dgrChargeTo, nIndex);
       StatusBarReg.Content = lstChargeTo.Count + " Charge To.";
     }

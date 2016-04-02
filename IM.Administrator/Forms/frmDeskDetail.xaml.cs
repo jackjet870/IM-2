@@ -16,6 +16,7 @@ namespace IM.Administrator.Forms
   public partial class frmDeskDetail : Window
   {
     public Desk desk = new Desk();//Objeto a edita o agregar
+    public Desk oldDesk = new Desk();//Objeto con los datos iniciales
     public EnumMode enumMode;//modo en que se mostrará la ventana    
     public frmDeskDetail()
     {
@@ -34,6 +35,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      ObjectHelper.CopyProperties(desk, oldDesk);
       DataContext = desk;
       txtID.Text = ((enumMode == EnumMode.edit) ? desk.dkID.ToString() : "");      
       LoadGridComputers();
@@ -51,7 +53,8 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        Close();
+        btnCancel.Focus();
+        btnCancel_Click(null, null);
       }
     }
     #endregion
@@ -67,41 +70,32 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      string strMsj = "";
-      int nRes = 0;
-
-      if(string.IsNullOrWhiteSpace(txtN.Text))
+      btnAccept.Focus();
+      if(ObjectHelper.IsEquals(desk,oldDesk) && enumMode!=EnumMode.add)
       {
-        strMsj += "Specify the Desk name \n";
-      }
-
-      if(strMsj=="")
-      {
-        List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
-        List<string> lstIdsComputers = lstComputers.Select(cmp => cmp.cpID).ToList();
-        nRes = BRDesks.SaveDesk(desk,(enumMode==EnumMode.edit), lstIdsComputers);
-
-        #region respuesta
-        switch (nRes)//Se valida la respuesta de la operacion
-        {
-          case 0:
-            {
-              UIHelper.ShowMessage("Desk not saved");
-              break;
-            }
-          default:
-            {
-              UIHelper.ShowMessage("Desk successfully saved");
-              DialogResult = true;
-              Close();
-              break;
-            }
-        }
-        #endregion
+        Close();
       }
       else
       {
-        UIHelper.ShowMessage(strMsj);
+        string strMsj = ValidateHelper.ValidateForm(this, "Desk");
+        int nRes = 0;
+
+        if (strMsj == "")
+        {
+          List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
+          List<string> lstIdsComputers = lstComputers.Select(cmp => cmp.cpID).ToList();
+          nRes = BRDesks.SaveDesk(desk, (enumMode == EnumMode.edit), lstIdsComputers);
+          UIHelper.ShowMessageResult("Desk", nRes, true);
+          if(nRes>0)
+          {
+            DialogResult = true;
+            Close();
+          }
+        }
+        else
+        {
+          UIHelper.ShowMessage(strMsj);
+        }
       }
     }
     #endregion
@@ -139,6 +133,39 @@ namespace IM.Administrator.Forms
         }
       }
 
+    }
+    #endregion
+
+    #region Cancel
+    /// <summary>
+    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 29/03/2016
+    /// </history>
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+      if(enumMode!=EnumMode.preview)
+      {
+        if (!ObjectHelper.IsEquals(desk, oldDesk))
+        {
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
+          if (result == MessageBoxResult.OK)
+          {
+            Close();
+          }
+        }
+        else
+        {
+          Close();
+        }
+      }
+      else
+      {
+        Close();
+      }
     }
     #endregion
     #endregion

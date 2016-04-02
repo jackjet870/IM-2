@@ -13,7 +13,8 @@ namespace IM.Administrator.Forms
   public partial class frmCreditCardTypesDetail : Window
   {
     public EnumMode mode;
-    public CreditCardType creditCardType=new CreditCardType();
+    public CreditCardType creditCardType=new CreditCardType();//Objeto a guardar
+    public CreditCardType oldCreditCard = new CreditCardType();//Objeto con los datos iniciales
     public frmCreditCardTypesDetail()
     {
       InitializeComponent();
@@ -81,6 +82,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      ObjectHelper.CopyProperties(creditCardType, oldCreditCard);
       OpenMode();
     }
     #endregion
@@ -98,8 +100,8 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        DialogResult = false;
-        Close();
+        btnCancel.Focus();
+        btnCancel_Click(null, null);
       }
     }
     #endregion
@@ -107,50 +109,29 @@ namespace IM.Administrator.Forms
     #region Accept
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      string sMsj = "";
-      #region validar campos
-      if (string.IsNullOrWhiteSpace(txtID.Text))
+      btnAccept.Focus();
+      if(ObjectHelper.IsEquals(creditCardType,oldCreditCard) && mode!=EnumMode.add)
       {
-        sMsj += "Specify the Credit Card Type ID. \n";
-      }
-
-      if (string.IsNullOrWhiteSpace(txtN.Text))
-      {
-        sMsj += "Specify the Credit Card Type Description. \n";
-      }
-
-      #endregion
-      int nRes = 0;
-      if (sMsj == "")//Todos los campos estan llenos
-      {
-        nRes = BRCreditCardTypes.SaveCreditCardType(creditCardType, (mode==EnumMode.edit));
-
-        #region respuesta
-        switch (nRes)//Se valida la respuesta de la operacion
-        {
-          case 0:
-            {
-              UIHelper.ShowMessage("Credit Card Type not saved");
-              break;
-            }
-          case 1:
-            {
-              UIHelper.ShowMessage("Credit Card Type successfully saved");
-              DialogResult = true;
-              this.Close();
-              break;
-            }
-          case 2:
-            {
-              UIHelper.ShowMessage("Credit Card Type ID already exist please select another one");
-              break;
-            }
-        }
-        #endregion
+        Close();
       }
       else
-      {//Hace falta llenar campos
-        UIHelper.ShowMessage(sMsj.TrimEnd('\n'));
+      {
+        string sMsj = ValidateHelper.ValidateForm(this, "Credit Card Type");
+        int nRes = 0;
+        if (sMsj == "")//Todos los campos estan llenos
+        {
+          nRes = BRCreditCardTypes.SaveCreditCardType(creditCardType, (mode == EnumMode.edit));
+          UIHelper.ShowMessageResult("Credit Card Type", nRes);
+          if(nRes==1)
+          {
+            DialogResult = true;
+            Close();
+          }
+        }
+        else
+        {//Hace falta llenar campos
+          UIHelper.ShowMessage(sMsj);
+        }
       }
     }
 
@@ -158,8 +139,25 @@ namespace IM.Administrator.Forms
     #region Cancel
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      DialogResult = false;
-      Close();
+      if (mode != EnumMode.preview)
+      {
+        if (!ObjectHelper.IsEquals(creditCardType, oldCreditCard))
+        {
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
+          if (result == MessageBoxResult.OK)
+          {
+            Close();
+          }
+        }
+        else
+        {
+          Close();
+        }
+      }
+      else
+      {
+        Close();
+      }
     } 
     #endregion
     #endregion

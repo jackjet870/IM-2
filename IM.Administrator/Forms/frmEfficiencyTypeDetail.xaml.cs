@@ -12,7 +12,8 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmEfficiencyTypeDetail : Window
   { 
-    public EfficiencyType efficiencyType = new EfficiencyType();
+    public EfficiencyType efficiencyType = new EfficiencyType();//objeto a guardar|actualizar
+    public EfficiencyType oldEffType = new EfficiencyType();//objeto con los datos inciales
     public EnumMode enumMode;//Modo en que se abre la ventana;
 
     public frmEfficiencyTypeDetail()
@@ -33,7 +34,8 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        Close();
+        btnCancel.Focus();
+        btnCancel_Click(null, null);
       }
     }
     #endregion
@@ -48,6 +50,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      ObjectHelper.CopyProperties(efficiencyType, oldEffType);
       OpenMode();
     }
     #endregion
@@ -63,51 +66,64 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      int nRes = 0;
-      string strMsj = "";
-      #region Validar Campos
-      if(string.IsNullOrWhiteSpace(txtID.Text))//Validamos que tenga un ID
+      btnAccept.Focus();
+      if(ObjectHelper.IsEquals(efficiencyType,oldEffType)&& enumMode!=EnumMode.add)
       {
-        strMsj += "Specify the Efficiency Type ID \n";
-      }
-
-      if(string.IsNullOrWhiteSpace(txtN.Text))//Validamos que tenga la descripcion
-      {
-        strMsj += "Specify the Efficiency Type Description";
-      }
-      #endregion
-      if(strMsj=="")
-      {
-        nRes = BREfficiencyTypes.SaveEfficiencyType(efficiencyType, (enumMode == EnumMode.edit));
-
-        #region respuesta
-        switch (nRes)//Se valida la respuesta de la operacion
-        {
-          case 0:
-            {
-              UIHelper.ShowMessage("Efficiency Type not saved");
-              break;
-            }
-          case 1:
-            {
-              UIHelper.ShowMessage("Efficiency Type successfully saved");
-              DialogResult = true;
-              Close();
-              break;
-            }
-          case 2:
-            {
-              UIHelper.ShowMessage("Efficiency Type ID already exist please select another one");              
-              break;
-            }
-        }
-        #endregion
+        Close();
       }
       else
       {
-        UIHelper.ShowMessage(strMsj.TrimEnd('\n'));
+        int nRes = 0;
+        string strMsj = ValidateHelper.ValidateForm(this, "Efficiency Type");
+        if (strMsj == "")
+        {
+          nRes = BREfficiencyTypes.SaveEfficiencyType(efficiencyType, (enumMode == EnumMode.edit));
+          UIHelper.ShowMessageResult("Efficiency Type", nRes);
+          if(nRes==1)
+          {
+            DialogResult = true;
+            Close();
+          }
+        }
+        else
+        {
+          UIHelper.ShowMessage(strMsj);
+        }
       }
       
+    }
+    #endregion
+
+    #region Cancel
+    /// <summary>
+    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 29/03/2016
+    /// </history>
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+      if (enumMode!=EnumMode.preview)
+      {
+        if (!ObjectHelper.IsEquals(efficiencyType, oldEffType))
+        {
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
+          if (result == MessageBoxResult.OK)
+          {
+            Close();
+          }
+        }
+        else
+        {
+          Close();
+        }
+      }
+      else
+      {
+        Close();
+      }
     }
     #endregion
     #endregion

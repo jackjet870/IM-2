@@ -25,10 +25,11 @@ namespace IM.Base.Helpers
     /// <history>
     /// [lchairez] 24/Feb/2016 Created
     /// [wtorres]  01/Mar/2016 Modified. Ahora la imagen y el titulo son opcionales
+    /// [emoguel]  28/Mar/2016 Modified. Ahora el boton se puede cambiar por otro
     /// </history>
-    public static MessageBoxResult ShowMessage(string message, MessageBoxImage image = MessageBoxImage.Information, string title = "")
+    public static MessageBoxResult ShowMessage(string message, MessageBoxImage image = MessageBoxImage.Information, string title = "",MessageBoxButton button=MessageBoxButton.OK)
     {
-      MessageBoxButton button = MessageBoxButton.OK;
+      
       switch (image)
       {
         case MessageBoxImage.Error:
@@ -81,6 +82,57 @@ namespace IM.Base.Helpers
 
     #endregion ForceUIToUpdate
 
+    #region ShowMessageResult
+    /// <summary>
+    /// Valida el resultado de guardar|actualizar en algun catalogo
+    /// </summary>
+    /// <param name="strObject">Nombre del objeto que aparecerá en el mensaje</param>
+    /// <param name="nResult">resultado de la operación</param>
+    /// <param name="blnIsTransaccion">valida si la operacion es una transacción</param>
+    /// <history>
+    /// [emoguel] created 02/04/2016
+    /// </history>
+    public static void ShowMessageResult(string strObject,int nResult,bool blnIsTransaccion=false,bool blnIsRange=false)
+    {
+      #region respuesta
+      switch (nResult)
+      {
+        case 0:
+          {
+            ShowMessage( strObject + " not saved.");
+            break;
+          }
+        case 1:
+          {
+            ShowMessage(strObject + " successfully saved.");
+            break;
+          }
+        case 2:
+          {
+            if (blnIsTransaccion)//SI es una transaccion
+            {
+              ShowMessage(strObject + " successfully saved.");
+              break;
+            }
+            else if(blnIsRange)//si es una validacion de rango de numeros
+            {
+              ShowMessage(strObject + " Please check the ranges, impossible save it."); 
+            }
+            else
+            {
+              ShowMessage(strObject + " ID already exist please select another one.");
+            }
+            break;
+          }
+        default://mayor que 2 cuando se guardan mas de 1 objeto
+          {
+            ShowMessage(strObject + " successfully saved.");
+            break;
+          }
+      }
+      #endregion
+    }
+    #endregion
     #endregion Metodos
   }
 }

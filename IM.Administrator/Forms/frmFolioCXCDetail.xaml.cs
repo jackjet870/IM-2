@@ -24,6 +24,7 @@ namespace IM.Administrator.Forms
   public partial class frmFolioCXCDetail : Window
   {
     public FolioCXC folioCXC = new FolioCXC();//objeto a guardar o actualizar
+    public FolioCXC oldFolioCxc = new FolioCXC();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo en el que se mostrará la ventana
 
     public frmFolioCXCDetail()
@@ -45,7 +46,8 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        Close();
+        btnCancel.Focus();
+        btnCancel_Click(null, null);
       }
     }
     #endregion
@@ -61,6 +63,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      ObjectHelper.CopyProperties(folioCXC, oldFolioCxc);
       OpenMode();
     }
     #endregion
@@ -76,57 +79,48 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      string strMsj = "";
-      int nRes = 0;
-      #region Validar El rango del folio      
-      if (folioCXC.fiFrom == 0)
+      btnAccept.Focus();
+     if(ObjectHelper.IsEquals(folioCXC,oldFolioCxc) && enumMode!=EnumMode.add)
       {
-        txtFrom.Text = "0";
-        strMsj += "Start number can not be 0.";
+        Close();
       }
-      else
+     else
       {
-        if (folioCXC.fiTo < folioCXC.fiFrom)
+        string strMsj = "";
+        int nRes = 0;
+        #region Validar El rango del folio      
+        if (folioCXC.fiFrom == 0)
         {
-          if(string.IsNullOrWhiteSpace(txtTo.Text))
-          {
-            txtTo.Text = txtFrom.Text;
-          }
-          strMsj += "Start number can not be greater than End Number.";
+          txtFrom.Text = "0";
+          strMsj += "Start number can not be 0.";
         }
-      }
-      #endregion
-
-      if (strMsj=="")
-      {
-        nRes = BRFoliosCXC.SaveFolioCXC(folioCXC, (enumMode == EnumMode.edit));
-
-        #region respuesta
-        switch (nRes)//Se valida la respuesta de la operacion
+        else
         {
-          case 0:
+          if (folioCXC.fiTo < folioCXC.fiFrom)
+          {
+            if (string.IsNullOrWhiteSpace(txtTo.Text))
             {
-              UIHelper.ShowMessage("Folio CXC Type not saved.");
-              break;
+              txtTo.Text = txtFrom.Text;
             }
-          case 1:
-            {
-              UIHelper.ShowMessage("Folio CXC successfully saved.");
-              DialogResult = true;
-              Close();
-              break;
-            }
-          case 2:
-            {
-              UIHelper.ShowMessage("Please check the ranges, impossible save it.");
-              break;
-            }
+            strMsj += "Start number can not be greater than End Number.";
+          }
         }
         #endregion
-      }
-      else
-      {
-        UIHelper.ShowMessage(strMsj.TrimEnd('\n'));
+
+        if (strMsj == "")
+        {
+          nRes = BRFoliosCXC.SaveFolioCXC(folioCXC, (enumMode == EnumMode.edit));
+          UIHelper.ShowMessageResult("Folio CxC", nRes, blnIsRange: true);
+          if(nRes==1)
+          {
+            DialogResult = true;
+            Close();
+          }          
+        }
+        else
+        {
+          UIHelper.ShowMessage(strMsj);
+        }
       }
     }
     #endregion
@@ -157,6 +151,38 @@ namespace IM.Administrator.Forms
       if (string.IsNullOrWhiteSpace(txtText.Text))
       {
         txtText.Text = "0";
+      }
+    }
+    #endregion
+    #region Cancel
+    /// <summary>
+    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 29/03/2016
+    /// </history>
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+      if(enumMode!=EnumMode.preview)
+      {
+        if (!ObjectHelper.IsEquals(folioCXC, oldFolioCxc))
+        {
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
+          if (result == MessageBoxResult.OK)
+          {
+            Close();
+          }
+        }
+        else
+        {
+          Close();
+        }
+      }
+      else
+      {
+        Close();
       }
     }
     #endregion

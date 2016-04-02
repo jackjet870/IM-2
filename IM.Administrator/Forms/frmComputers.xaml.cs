@@ -4,6 +4,8 @@ using System.Windows.Input;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
+using IM.Administrator.Enums;
+using System.Linq;
 
 namespace IM.Administrator.Forms
 {
@@ -97,7 +99,8 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadComputers(dgrComputers.SelectedIndex);
+      Computer computer = (Computer)dgrComputers.SelectedItem;
+      LoadComputers(computer);
     }
     #endregion
 
@@ -143,7 +146,7 @@ namespace IM.Administrator.Forms
     private void btnSearch_Click(object sender, RoutedEventArgs e)
     {
       frmSearch frmSearch = new frmSearch();
-      frmSearch.strForm = "Computer";
+      frmSearch.enumForm = EnumWindow.Computers;
       frmSearch.Owner = this;
       frmSearch.strID = _computerFilter.cpID;
       frmSearch.strDesc = _computerFilter.cpN;
@@ -172,7 +175,7 @@ namespace IM.Administrator.Forms
       frmComputerDetail frmComputerDetail = new frmComputerDetail();
       frmComputerDetail.Owner = this;
       frmComputerDetail.mode = Enums.EnumMode.edit;
-      ObjectHelper.CopyProperties(frmComputerDetail.computer, computer);
+      frmComputerDetail.oldComputer = computer;
       if (frmComputerDetail.ShowDialog() == true)
       {        
         List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
@@ -231,10 +234,16 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 16/03/2016
     /// </history>
-    private void LoadComputers(int nIndex=0)
+    private void LoadComputers(Computer computer=null)
     {
+      int nIndex = 0;
       List<Computer> lstComputers = BRComputers.GetComputers(_computerFilter);
       dgrComputers.ItemsSource = lstComputers;      
+      if(computer!=null && lstComputers.Count>0)
+      {
+        computer = lstComputers.Where(co => co.cpID == computer.cpID).FirstOrDefault();
+        nIndex = lstComputers.IndexOf(computer);
+      }
       GridHelper.SelectRow(dgrComputers, nIndex);
       StatusBarReg.Content = lstComputers.Count+" Computers.";
     }

@@ -15,6 +15,7 @@ namespace IM.Administrator.Forms
   public partial class frmContractsDetail : Window
   {
     public Contract contract=new Contract();//Objeto que se muestra en la ventana
+    public Contract oldContract = new Contract();//Objeto con los datos iniciales
     public EnumMode mode;//Modo en el que se abrirá la ventana
     public frmContractsDetail()
     {
@@ -26,60 +27,29 @@ namespace IM.Administrator.Forms
     #region Accept
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      string sMsj = "";
-      #region validar campos
-      if (string.IsNullOrWhiteSpace(txtID.Text))
+      btnAccept.Focus();
+      if(ObjectHelper.IsEquals(contract,oldContract) && mode!=EnumMode.add)
       {
-        sMsj += "Specify the Contract ID. \n";
-      }
-
-      if (string.IsNullOrWhiteSpace(txtN.Text))
-      {
-        sMsj += "Specify the Contract Description. \n";
-      }
-
-      if (cmbUnvMot.SelectedIndex < 0)
-      {
-        sMsj += "Specify the Contract unavailable motive . \n";
-      }
-
-      if (string.IsNullOrWhiteSpace(txtMinDays.Text))
-      {
-        sMsj += "Specify the Contract Min Days for Included Tours. \n";
-      }
-
-      #endregion
-      int nRes = 0;
-      if (sMsj == "")//Todos los campos estan llenos
-      {
-        nRes = BRContracts.SaveContract(contract, (mode==EnumMode.edit));      
-
-        #region respuesta
-        switch (nRes)//Se valida la respuesta de la operacion
-        {
-          case 0:
-            {
-              UIHelper.ShowMessage("Contract not saved");
-              break;
-            }
-          case 1:
-            {
-              UIHelper.ShowMessage("Contract successfully saved");
-              DialogResult = true;
-              this.Close();
-              break;
-            }
-          case 2:
-            {
-              UIHelper.ShowMessage("Contract ID already exist please select another one");
-              break;
-            }
-        }
-        #endregion
+        Close();
       }
       else
-      {//Hace falta llenar campos
-        UIHelper.ShowMessage(sMsj.TrimEnd('\n'));
+      {
+        string sMsj = ValidateHelper.ValidateForm(this, "Contract");
+        int nRes = 0;
+        if (sMsj == "")//Todos los campos estan llenos
+        {
+          nRes = BRContracts.SaveContract(contract, (mode == EnumMode.edit));
+          UIHelper.ShowMessageResult("Contract", nRes);
+          if(nRes==1)
+          {
+            DialogResult = true;
+            Close();
+          }
+        }
+        else
+        {//Hace falta llenar campos
+          UIHelper.ShowMessage(sMsj);
+        }
       }
     }
 
@@ -92,6 +62,7 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      ObjectHelper.CopyProperties(contract, oldContract);
       openMode();
       LoadUnvMotive();
     }
@@ -122,7 +93,40 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        DialogResult = false;
+        btnCancel.Focus();
+        btnCancel_Click(null, null);
+      }
+    }
+    #endregion
+
+    #region Cancel
+    /// <summary>
+    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 29/03/2016
+    /// </history>
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+      if(mode!=EnumMode.preview)
+      {
+        if (!ObjectHelper.IsEquals(contract, oldContract))
+        {
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
+          if (result == MessageBoxResult.OK)
+          {
+            Close();
+          }
+        }
+        else
+        {
+          Close();
+        }
+      }
+      else
+      {
         Close();
       }
     }

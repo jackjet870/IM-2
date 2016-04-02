@@ -38,7 +38,7 @@ namespace IM.Administrator.Forms
       frmDeskDetail frmDeskDetail = new frmDeskDetail();
       frmDeskDetail.enumMode = EnumMode.edit;
       frmDeskDetail.Owner = this;
-      ObjectHelper.CopyProperties(frmDeskDetail.desk, desk);
+      frmDeskDetail.oldDesk = desk;
       if(frmDeskDetail.ShowDialog()==true)
       {
         List<Desk> lstDesk = (List<Desk>)dgrDesks.ItemsSource;        
@@ -165,7 +165,7 @@ namespace IM.Administrator.Forms
       frmSearch.strID = ((_deskFilter.dkID > 0)?_deskFilter.dkID.ToString():"");
       frmSearch.strDesc = _deskFilter.dkN;
       frmSearch.nStatus = _nStatus;
-      frmSearch.strForm = "Desks";
+      frmSearch.enumForm = EnumWindow.Desks;
       if (frmSearch.ShowDialog() == true)
       {
         _deskFilter.dkID = Convert.ToInt32(frmSearch.strID);
@@ -216,7 +216,8 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadDesks(dgrDesks.SelectedIndex);
+      Desk desk = (Desk)dgrDesks.SelectedItem;
+      LoadDesks(desk);
     }
     #endregion
     #endregion
@@ -229,10 +230,16 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 17/03/2016
     /// </history>
-    private void LoadDesks(int nIndex=0)
+    private void LoadDesks(Desk desk=null)
     {
+      int nIndex = 0;
       List<Desk> lstDesks = BRDesks.GetDesks(_deskFilter, _nStatus);
       dgrDesks.ItemsSource = lstDesks;
+      if (desk != null && lstDesks.Count > 0)
+      {
+        desk = lstDesks.Where(dk => dk.dkID == desk.dkID).FirstOrDefault();
+        nIndex = lstDesks.IndexOf(desk);
+      }
       GridHelper.SelectRow(dgrDesks, nIndex);
       StatusBarReg.Content = lstDesks.Count + " Desks.";
     }

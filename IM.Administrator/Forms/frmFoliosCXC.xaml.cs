@@ -5,6 +5,7 @@ using System.Windows.Input;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
+using System.Linq;
 
 namespace IM.Administrator.Forms
 {
@@ -105,7 +106,7 @@ namespace IM.Administrator.Forms
       frmSearch.Owner = this;
       frmSearch.strID = _folioFilter.fiFrom.ToString();
       frmSearch.strDesc = _folioFilter.fiTo.ToString();
-      frmSearch.strForm = "FoliosCXC";
+      frmSearch.enumForm = Enums.EnumWindow.FoliosCxC;
       frmSearch.nStatus = _nStatus;
       if(frmSearch.ShowDialog()==true)
       {
@@ -161,7 +162,8 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadFoliosCXC(dgrFoliosCXC.SelectedIndex);
+      FolioCXC folioCxc = (FolioCXC)dgrFoliosCXC.SelectedItem;
+      LoadFoliosCXC(folioCxc);
     }
     #endregion
 
@@ -179,7 +181,7 @@ namespace IM.Administrator.Forms
       FolioCXC folioCXC = (FolioCXC)dgrFoliosCXC.SelectedItem;
       frmFolioCXCDetail frmFolioDetail = new frmFolioCXCDetail();
       frmFolioDetail.Owner = this;
-      ObjectHelper.CopyProperties(frmFolioDetail.folioCXC, folioCXC);
+      frmFolioDetail.oldFolioCxc = folioCXC;
       frmFolioDetail.enumMode = ((_blnEdit==true)?Enums.EnumMode.edit:Enums.EnumMode.preview);
 
       if(frmFolioDetail.ShowDialog()==true)
@@ -242,10 +244,16 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 22/03/2016
     /// </history>
-    private void LoadFoliosCXC(int nIndex=0)
+    private void LoadFoliosCXC(FolioCXC folioCxc=null)
     {
+      int nIndex = 0;
       List<FolioCXC> lstFoliosCXC = BRFoliosCXC.GetFoliosCXC(_folioFilter,_nStatus);
       dgrFoliosCXC.ItemsSource = lstFoliosCXC;
+      if (folioCxc != null && lstFoliosCXC.Count>0)
+      {
+        folioCxc = lstFoliosCXC.Where(fi => fi.fiID == folioCxc.fiID).FirstOrDefault();
+        nIndex = lstFoliosCXC.IndexOf(folioCxc);
+      }
       GridHelper.SelectRow(dgrFoliosCXC, nIndex);
       StatusBarReg.Content = lstFoliosCXC.Count + " Folios.";
     }

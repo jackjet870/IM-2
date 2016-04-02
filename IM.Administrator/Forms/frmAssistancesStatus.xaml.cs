@@ -9,6 +9,7 @@ using IM.Administrator.Enums;
 using IM.Base.Helpers;
 using IM.Model.Enums;
 using System;
+using System.Linq;
 
 namespace IM.Administrator.Forms
 {
@@ -118,9 +119,9 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-      AssistanceStatus Assistance = (AssistanceStatus)dgrAssitances.SelectedItem;
+      AssistanceStatus assistance = (AssistanceStatus)dgrAssitances.SelectedItem;
       frmAssistanceStatusDetail frmAssistanceDetail = new frmAssistanceStatusDetail();
-      ObjectHelper.CopyProperties(frmAssistanceDetail.assistance, Assistance);
+      frmAssistanceDetail.oldAssistance = assistance;
       frmAssistanceDetail.Owner = this;
       frmAssistanceDetail.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
       if (frmAssistanceDetail.ShowDialog() == true)
@@ -129,13 +130,13 @@ namespace IM.Administrator.Forms
         int nIndex = 0;
         if(!ValidateFilters(frmAssistanceDetail.assistance))//Validamos si cumple con los filtros
         {
-          lstAssistancesStatus.Remove(Assistance);//Quitamos el registro
+          lstAssistancesStatus.Remove(assistance);//Quitamos el registro
         }
         else
         {
-          ObjectHelper.CopyProperties(Assistance, frmAssistanceDetail.assistance);
+          ObjectHelper.CopyProperties(assistance, frmAssistanceDetail.assistance);
           lstAssistancesStatus.Sort((x, y) => string.Compare(x.atN, y.atN));//ordenamos la lista        
-          nIndex = lstAssistancesStatus.IndexOf(Assistance);
+          nIndex = lstAssistancesStatus.IndexOf(assistance);
         }        
         dgrAssitances.Items.Refresh();//regrescamos el grid
         GridHelper.SelectRow(dgrAssitances, nIndex);
@@ -157,7 +158,8 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadAssitance(dgrAssitances.SelectedIndex);
+      AssistanceStatus assitanceStatus = (AssistanceStatus)dgrAssitances.SelectedItem;
+      LoadAssitance(assitanceStatus);
     }
     #endregion
 
@@ -172,7 +174,6 @@ namespace IM.Administrator.Forms
     {
 
       frmAssistanceStatusDetail frmAssistanceDetail = new frmAssistanceStatusDetail();
-      frmAssistanceDetail.assistance = new AssistanceStatus();
       frmAssistanceDetail.Owner = this;
       frmAssistanceDetail.mode = EnumMode.add;//insertar
       if (frmAssistanceDetail.ShowDialog() == true)
@@ -230,10 +231,16 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] 27/Feb/2016 Created
     /// </history>    
-    protected void LoadAssitance(int nIndex=0)
+    protected void LoadAssitance(AssistanceStatus assistanceStatus=null)
     {
+      int nIndex = 0;
       List<AssistanceStatus> lstAssistance = BRAssistancesStatus.GetAssitanceStatus(_assistanceFilter, _nStatus);
       dgrAssitances.ItemsSource = lstAssistance;
+      if(assistanceStatus!=null && lstAssistance.Count>0)
+      {
+        assistanceStatus = lstAssistance.Where(ass => ass.atID == assistanceStatus.atID).FirstOrDefault();
+        nIndex = lstAssistance.IndexOf(assistanceStatus);
+      }
       GridHelper.SelectRow(dgrAssitances, nIndex);
       StatusBarReg.Content = lstAssistance.Count + " Assistance Status.";
     }

@@ -34,8 +34,8 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void CreateMenu()
     {
-      
-      lblUser.Content = App.User.User.peN;                        
+
+      lblUser.Content = App.User.User.peN;
       var lstMenu = new List<object>();
       #region Sales permision
       if (App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.ReadOnly))
@@ -56,6 +56,7 @@ namespace IM.Administrator.Forms
       if (App.User.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add(new { nombre = "Charge To", img = "pack://application:,,,/IM.Base;component/Images/Charge_To.png", form = "frmChargeTo" });
+        lstMenu.Add(new { nombre = "Guest Status Types", img = "pack://application:,,,/IM.Base;component/Images/Guests.ico", form = "frmGuestStatusTypes" });
       }
       #endregion
 
@@ -80,32 +81,54 @@ namespace IM.Administrator.Forms
         lstMenu.Add(new { nombre = "Currencies", img = "pack://application:,,,/IM.Base;component/Images/currency.png", form = "frmCurrencies" });
       }
       #endregion
-      
+
       #region Sale Permision
-      if(App.User.HasPermission(EnumPermission.Sales,EnumPermisionLevel.ReadOnly))
+      if (App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add(new { nombre = "Efficiency Types", img = "pack://application:,,,/IM.Base;component/Images/positioning.png", form = "frmEfficiencyTypes" });
       }
       #endregion
 
       #region Folios CxC
-      if(App.User.HasPermission(EnumPermission.FolioCXC,EnumPermisionLevel.ReadOnly))
+      if (App.User.HasPermission(EnumPermission.FolioCXC, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add(new { nombre = "Folios CXC", img = "pack://application:,,,/IM.Base;component/Images/Reports.ico", form = "frmFoliosCXC" });
       }
       #endregion
 
       #region Folio InvitationsOutHouse
-      if(App.User.HasPermission(EnumPermission.FolioInvitationsOuthouse,EnumPermisionLevel.ReadOnly))
+      if (App.User.HasPermission(EnumPermission.FolioInvitationsOuthouse, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add(new { nombre = "Folios Invitations Outhouse", img = "pack://application:,,,/IM.Base;component/Images/Reports.ico", form = "frmFoliosInvitationsOuthouse" });
       }
       #endregion
 
       #region Gifts
-      if(App.User.HasPermission(EnumPermission.Gifts,EnumPermisionLevel.ReadOnly))
+      if (App.User.HasPermission(EnumPermission.Gifts, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add(new { nombre = "Gifts Categories", img = "pack://application:,,,/IM.Base;component/Images/GiftCategory.png", form = "frmGiftsCategories" });
+      }
+      #endregion
+
+      #region Locations
+      if (App.User.HasPermission(EnumPermission.Locations, EnumPermisionLevel.ReadOnly))
+      {
+        lstMenu.Add(new { nombre = "Hotels", img = "pack://application:,,,/IM.Base;component/Images/Hotel.png", form = "frmHotels" });
+        lstMenu.Add(new { nombre = "Locations", img = "pack://application:,,,/IM.Base;component/Images/locations.png", form = "frmLocations" });
+      }
+      #endregion
+
+      #region Languages
+      if (App.User.HasPermission(EnumPermission.Languages,EnumPermisionLevel.ReadOnly))
+      {
+        lstMenu.Add(new { nombre = "Languages", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmLanguages" });
+      }
+      #endregion
+
+      #region Marital Status
+      if(App.User.HasPermission(EnumPermission.MaritalStatus,EnumPermisionLevel.ReadOnly))
+      {
+        lstMenu.Add(new { nombre = "Marital Status", img = "pack://application:,,,/IM.Base;component/Images/Marital_Status.png", form = "frmMaritalStatus" });
       }
       #endregion
 

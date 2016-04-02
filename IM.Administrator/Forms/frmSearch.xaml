@@ -21,6 +21,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>        
         <!--#endregion-->
+        
         <!--#region títulos-->
         <!--#region FolioInvitationOuthouse-->
         <Label Name="lblSerie" Visibility="Collapsed" Grid.Column="0" Grid.Row="0">Serie</Label>
@@ -29,7 +30,12 @@
         <Label Name="lblDes" Grid.Column="0" Grid.Row="2">Description</Label>
         <Label Name="lblSta" Grid.Column="0" Grid.Row="3" >Status</Label>
         <Label Name="lblSegment" Visibility="Collapsed" Grid.Column="0" Grid.Row="4">Segment</Label>
+        <!--#region Hotels-->
+        <Label Name="lblHGroup" Visibility="Collapsed" Grid.Column="0" Grid.Row="5">Segment</Label>
+        <Label Name="lblHArea" Visibility="Collapsed" Grid.Column="0" Grid.Row="6">Segment</Label>
         <!--#endregion-->
+        <!--#endregion-->
+        
         <!--#region Datos-->
         <!--#region Folio InvitationsOutHouse-->
         <TextBox Name="txtSerie"  Grid.Column="1" Visibility="Collapsed" Grid.Row="0" Margin="0,0,0,10" Height="27" Width="235" VerticalAlignment="Top" IsEnabled="True" MaxLength="5" CharacterCasing="Upper"/>
@@ -38,9 +44,9 @@
         <TextBox Name="txtD" Grid.Column="1" Grid.Row="2" Margin="0,0,0,10" Height="27" VerticalAlignment="Top" IsEnabled="True" Width="235"/>
         <ComboBox Name="cmbStatus" Grid.Column="1" Grid.Row="3" Margin="0,0,0,10" Height="27" VerticalAlignment="Top" IsEnabled="True" DisplayMemberPath="sName" SelectedValuePath="sValue" Width="235"/>
         <ComboBox Name="cmbSegment" Visibility="Collapsed" Grid.Column="1" Grid.Row="4" Margin="0,0,0,10" Height="27" VerticalAlignment="Top" IsEnabled="True" DisplayMemberPath="seN" SelectedValuePath="seID" Width="235"/>
-
-        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="5" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept"/>
-        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="5" Margin="0,7"  HorizontalAlignment="Right" IsCancel="True" Content="_Cancel"/>
+        
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="7" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="7" Margin="0,7"  HorizontalAlignment="Right" IsCancel="True" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>
 </Window>

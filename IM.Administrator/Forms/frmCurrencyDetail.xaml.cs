@@ -13,6 +13,7 @@ namespace IM.Administrator.Forms
   public partial class frmCurrencyDetail : Window
   {
     public Currency currency=new Currency();//objeto para agrear|actualizar
+    public Currency oldCurrency = new Currency();//Objeto con los datos iniciales
     public EnumMode mode;//modo en el que se abrirá la ventana add|preview|edit 
     public frmCurrencyDetail()
     {
@@ -33,8 +34,8 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        DialogResult = false;
-        Close();
+        btnCancel.Focus();
+        btnCancel_Click(null, null);
 
       }
     }
@@ -51,6 +52,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      ObjectHelper.CopyProperties(currency, oldCurrency);
       OpenMode();
     }
     #endregion
@@ -58,56 +60,68 @@ namespace IM.Administrator.Forms
 
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      string sMsj = "";
-      int nRes = 0;
-      #region validar campos
-      if (string.IsNullOrWhiteSpace(txtID.Text))
+      btnAccept.Focus();
+      if(ObjectHelper.IsEquals(currency,oldCurrency) && mode!=EnumMode.add)
       {
-        sMsj += "Specify the Currency ID. \n";
-      }
-      if (string.IsNullOrWhiteSpace(txtN.Text))
-      {
-        sMsj += "Specify the Currency Description.";
-      }
-      #endregion
-
-      if (sMsj == "")//Validar si hay cmapos vacios
-      {
-
-        nRes = BRCurrencies.saveCurrency(currency, (mode==EnumMode.edit));
-        
-        #region respuesta
-        switch (nRes)
-        {
-          case 0:
-            {
-              UIHelper.ShowMessage("Currency not saved");
-              break;
-            }
-          case 1:
-            {
-              UIHelper.ShowMessage("Currency successfully saved");
-              DialogResult = true;
-              this.Close();
-              break;
-            }
-          case 2:
-            {
-             UIHelper.ShowMessage("Currency ID already exist please select another one");
-              break;
-            }
-        }
-        #endregion
+        Close();
       }
       else
       {
-       UIHelper.ShowMessage(sMsj.TrimEnd('\n'));
-      }
+        string sMsj = ValidateHelper.ValidateForm(this, "Currency");
+        int nRes = 0;
 
+        if (sMsj == "")//Validar si hay cmapos vacios
+        {
+
+          nRes = BRCurrencies.saveCurrency(currency, (mode == EnumMode.edit));
+          UIHelper.ShowMessageResult("Currency", nRes);
+          if(nRes==1)
+          {
+            Close();
+          }
+          
+        }
+        else
+        {
+          UIHelper.ShowMessage(sMsj);
+        }
+      }
     }
 
     #endregion
-    
+
+    #region Cancel
+    /// <summary>
+    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 29/03/2016
+    /// </history>
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+      if(mode!=EnumMode.preview)
+      {
+        if (!ObjectHelper.IsEquals(currency, oldCurrency))
+        {
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
+          if (result == MessageBoxResult.OK)
+          {
+            Close();
+          }
+        }
+        else
+        {
+          Close();
+        }
+      }
+      else
+      {
+        Close();
+      }
+    }
+    #endregion
     #endregion
 
     #region metods

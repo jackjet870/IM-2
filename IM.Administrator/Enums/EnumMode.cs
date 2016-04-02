@@ -10,6 +10,7 @@ namespace IM.Administrator.Enums
   {
     preview =1,
     add,
-    edit
+    edit,
+    search
   }
 }

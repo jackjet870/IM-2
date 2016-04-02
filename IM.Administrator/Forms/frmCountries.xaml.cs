@@ -5,7 +5,7 @@ using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Administrator.Enums;
-using System.Windows.Controls;
+using System.Linq;
 using System;
 
 namespace IM.Administrator.Forms
@@ -35,10 +35,10 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = App.User.HasPermission(Model.Enums.EnumPermission.Agencies,Model.Enums.EnumPermisionLevel.Standard);
+      _blnEdit = App.User.HasPermission(Model.Enums.EnumPermission.Agencies, Model.Enums.EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       loadCountries();
-    } 
+    }
     #endregion
     #region KeyboardFocusChanged
     /// <summary>
@@ -127,26 +127,24 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
-      
+
       frmCountryDetail frmCountryDetail = new frmCountryDetail();
       frmCountryDetail.mode = EnumMode.add;
       frmCountryDetail.Owner = this;
-      Country country = new Country();
-      frmCountryDetail.country = country;
-      if(frmCountryDetail.ShowDialog()==true)
+      if (frmCountryDetail.ShowDialog() == true)
       {
-        if (ValidateFilters(country))//Validamos que cumpla con los filtros actuales
+        if (ValidateFilters(frmCountryDetail.country))//Validamos que cumpla con los filtros actuales
         {
           List<Country> lstCountry = (List<Country>)dgrCountries.ItemsSource;
-          lstCountry.Add(country);//Agregamos el nuevo registro
+          lstCountry.Add(frmCountryDetail.country);//Agregamos el nuevo registro
           lstCountry.Sort((x, y) => string.Compare(x.coN, y.coN));//Ordenamos la lista
-          int nIndex = lstCountry.IndexOf(country);//Buscamos el index del nuevo registro
+          int nIndex = lstCountry.IndexOf(frmCountryDetail.country);//Buscamos el index del nuevo registro
           dgrCountries.Items.Refresh();//refrescamos la lista
           GridHelper.SelectRow(dgrCountries, nIndex);//Seleccionamos el registro en la lista    
-          StatusBarReg.Content =lstCountry.Count+ " Countries";    
+          StatusBarReg.Content = lstCountry.Count + " Countries";
         }
       }
-    } 
+    }
     #endregion
     #region Refresh
     /// <summary>
@@ -159,8 +157,9 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      loadCountries(dgrCountries.SelectedIndex);
-    } 
+      Country country = (Country)dgrCountries.SelectedItem;
+      loadCountries( country);
+    }
     #endregion
     #region Double Click
 
@@ -177,10 +176,10 @@ namespace IM.Administrator.Forms
       Country country = (Country)dgrCountries.SelectedItem;
       frmCountryDetail frmCountryDetail = new frmCountryDetail();
       frmCountryDetail.Owner = this;
-      ObjectHelper.CopyProperties(frmCountryDetail.country, country);
-      frmCountryDetail.mode = ((_blnEdit==true)?EnumMode.edit:EnumMode.preview);
+      frmCountryDetail.oldCountry = country;
+      frmCountryDetail.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
       if (frmCountryDetail.ShowDialog() == true)
-      {        
+      {
         List<Country> lstCountry = (List<Country>)dgrCountries.ItemsSource;
         int nIndex = 0;
         if (!ValidateFilters(frmCountryDetail.country))
@@ -192,7 +191,7 @@ namespace IM.Administrator.Forms
           ObjectHelper.CopyProperties(country, frmCountryDetail.country);
           lstCountry.Sort((x, y) => string.Compare(x.coN, y.coN));//Ordenamos la lista
           nIndex = lstCountry.IndexOf(country);
-        }        
+        }
         dgrCountries.Items.Refresh();//refrescamos la lista
         GridHelper.SelectRow(dgrCountries, nIndex);//Seleccionamos el registro en la lista 
         StatusBarReg.Content = lstCountry.Count + " Countries";//Actualizamos el contador
@@ -234,10 +233,16 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [Emoguel] created 14/03/2016
     /// </history>
-    private void loadCountries(int nIndex=0)
+    private void loadCountries(Country country=null)
     {
+      int nIndex = 0;
       List<Country> lstCountries = BRCountries.GetCountries(_countryFilter, _nStatus);
       dgrCountries.ItemsSource = lstCountries;
+      if(country!=null && lstCountries.Count>0)
+      {
+        country = lstCountries.Where(cu => cu.coID == country.coID).FirstOrDefault();
+        nIndex = lstCountries.IndexOf(country);
+      }
       GridHelper.SelectRow(dgrCountries, nIndex);
       StatusBarReg.Content = lstCountries.Count + " Countries.";
     }

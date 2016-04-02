@@ -13,7 +13,8 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmComputerDetail : Window
   {
-    public Computer computer = new Computer();
+    public Computer computer = new Computer();//Objeto a guardar
+    public Computer oldComputer = new Computer();//Objeto con los datos iniciales
     public EnumMode mode;
     public frmComputerDetail()
     {
@@ -32,6 +33,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      ObjectHelper.CopyProperties(computer, oldComputer);
       LoadDesks();
       DataContext = computer;
       if(mode==EnumMode.add)
@@ -54,7 +56,8 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        Close();
+        btnCancel.Focus();
+        btnCancel_Click(null, null);
       }
     }
     #endregion
@@ -70,50 +73,63 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      int nRes = 0;
-      string sMsj = "";
-      #region validar campos
-      if (string.IsNullOrWhiteSpace(txtID.Text))
+      btnAccept.Focus();
+      if(ObjectHelper.IsEquals(computer,oldComputer) && mode!=EnumMode.add)
       {
-        sMsj += "Specify the Computer ID. \n";
+        Close();
       }
-
-      if (string.IsNullOrWhiteSpace(txtN.Text))
       {
-        sMsj += "Specify the Computer Description. \n";
-      }
-      
-      #endregion
-      if(sMsj=="")
-      {
-        nRes = BRComputers.SaveComputer(computer, ((mode == EnumMode.edit)));
+        int nRes = 0;
+        string sMsj = ValidateHelper.ValidateForm(this, "Computer");
 
-        #region respuesta
-        switch (nRes)//Se valida la respuesta de la operacion
+        
+        if (sMsj == "")
         {
-          case 0:
-            {
-              UIHelper.ShowMessage("Computer not saved");
-              break;
-            }
-          case 1:
-            {
-              UIHelper.ShowMessage("Computer successfully saved");
-              DialogResult = true;
-              this.Close();
-              break;
-            }
-          case 2:
-            {
-              UIHelper.ShowMessage("Computer ID already exist please select another one");
-              break;
-            }
+          nRes = BRComputers.SaveComputer(computer, ((mode == EnumMode.edit)));
+          UIHelper.ShowMessageResult("Coomputer", nRes);
+          if(nRes==1)
+          {
+            DialogResult = true;
+            Close();
+          }
         }
-        #endregion
+        else
+        {
+          UIHelper.ShowMessage(sMsj);
+        }
+      }
+    }
+    #endregion
+
+    #region Cancel
+    /// <summary>
+    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 29/03/2016
+    /// </history>
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+      if(mode!=EnumMode.preview)
+      {
+        if (!ObjectHelper.IsEquals(computer, oldComputer))
+        {
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
+          if (result == MessageBoxResult.OK)
+          {
+            Close();
+          }
+        }
+        else
+        {
+          Close();
+        }
       }
       else
       {
-        UIHelper.ShowMessage(sMsj.TrimEnd('\n'));
+        Close();
       }
     }
     #endregion

@@ -33,10 +33,16 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [Emoguel] created 07/003/2016
     /// </history>
-    protected void LoadCreditCardTypes(int nIndex=0)
+    protected void LoadCreditCardTypes(CreditCardType creditCardType=null)
     {
+      int nIndex = 0;
       List<CreditCardType> lstCreditCardTypes = BRCreditCardTypes.GetCreditCardTypes(_creditCardTypeFilter, _nStatus);
       dgrCreditCard.ItemsSource = lstCreditCardTypes;
+      if(creditCardType!=null && lstCreditCardTypes.Count>0)
+      {
+        creditCardType = lstCreditCardTypes.Where(cc => cc.ccID == creditCardType.ccID).FirstOrDefault();
+        nIndex = lstCreditCardTypes.IndexOf(creditCardType);
+      }
       GridHelper.SelectRow(dgrCreditCard, nIndex);      
       StatusBarReg.Content = lstCreditCardTypes.Count() + "  Credit Card Types.";
     }
@@ -148,7 +154,8 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadCreditCardTypes(dgrCreditCard.SelectedIndex);
+      CreditCardType creditCardType = (CreditCardType)dgrCreditCard.SelectedItem;
+      LoadCreditCardTypes(creditCardType);
     }
     #endregion
 
@@ -229,7 +236,7 @@ namespace IM.Administrator.Forms
       frmCreditCardTypesDetail frmCrediCard = new frmCreditCardTypesDetail();
       frmCrediCard.Owner = this;
       frmCrediCard.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
-      ObjectHelper.CopyProperties(frmCrediCard.creditCardType,creditCardType);
+      frmCrediCard.oldCreditCard = creditCardType;
       if(frmCrediCard.ShowDialog()==true)
       {
         int nIndex = 0;

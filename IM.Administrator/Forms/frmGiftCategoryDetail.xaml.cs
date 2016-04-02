@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
@@ -24,6 +13,7 @@ namespace IM.Administrator.Forms
   {
     #region Variables
     public GiftCategory giftCategory = new GiftCategory();//Objeto a agregar|Modificar
+    public GiftCategory oldGiftCategory = new GiftCategory();//Objeto con los datos iniciales
     public Enums.EnumMode enumMode;//Modo en que se abre la ventana
     #endregion
     public frmGiftCategoryDetail()
@@ -45,7 +35,8 @@ namespace IM.Administrator.Forms
     { 
       if(e.Key==Key.Escape)
       {
-        Close();
+        btnCancel.Focus();
+        btnCancel_Click(null, null);
 
       }
     }
@@ -62,6 +53,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      ObjectHelper.CopyProperties(giftCategory, oldGiftCategory);
       DataContext = giftCategory;
       switch(enumMode)//Verificar el modo en que fue abierta la ventana
       {
@@ -79,7 +71,40 @@ namespace IM.Administrator.Forms
             break;
           }
       }
-    } 
+    }
+    #endregion
+
+    #region Cancel
+    /// <summary>
+    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 29/03/2016
+    /// </history>
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+      if(enumMode!=Enums.EnumMode.preview)
+      {
+        if (!ObjectHelper.IsEquals(giftCategory, oldGiftCategory))
+        {
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
+          if (result == MessageBoxResult.OK)
+          {
+            Close();
+          }
+        }
+        else
+        {
+          Close();
+        }
+      }
+      else
+      {
+        Close();
+      }
+    }
     #endregion
 
     #region Accept
@@ -93,49 +118,25 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      string strMsj = "";
-      int nRes = 0;
-      #region validar campos
-      if (string.IsNullOrWhiteSpace(txtID.Text))
+      btnAccept.Focus();
+      if(ObjectHelper.IsEquals(giftCategory,oldGiftCategory) && enumMode!=Enums.EnumMode.add)
       {
-        strMsj += "Specify the Gift Category ID. \n";
-      }
-      if (string.IsNullOrWhiteSpace(txtN.Text))
-      {
-        strMsj += "Specify the Gift Category Description.";
-      }
-      #endregion
-
-      if(strMsj=="")
-      {
-        nRes = BRGiftsCategories.SaveGiftCategory(giftCategory, (enumMode == Enums.EnumMode.edit));
-
-        #region respuesta
-        switch (nRes)
-        {
-          case 0:
-            {
-              UIHelper.ShowMessage("Gift Category not saved.");
-              break;
-            }
-          case 1:
-            {
-              UIHelper.ShowMessage("Assistance Status successfully saved.");
-              DialogResult = true;
-              this.Close();
-              break;
-            }
-          case 2:
-            {
-              UIHelper.ShowMessage("Gift Category ID already exist please select another one.");
-              break;
-            }
-        }
-        #endregion
+        Close();
       }
       else
       {
-        UIHelper.ShowMessage(strMsj.TrimEnd('\n'));
+        string strMsj = ValidateHelper.ValidateForm(this, "Gift Category");
+        int nRes = 0;
+
+        if (strMsj == "")
+        {
+          nRes = BRGiftsCategories.SaveGiftCategory(giftCategory, (enumMode == Enums.EnumMode.edit));
+          UIHelper.ShowMessageResult("Gift Category", nRes);
+        }
+        else
+        {
+          UIHelper.ShowMessage(strMsj);
+        }
       }
     }
     #endregion

@@ -7,6 +7,7 @@ using IM.Administrator.Enums;
 using IM.Base.Helpers;
 using IM.Model.Enums;
 using System;
+using System.Linq;
 
 namespace IM.Administrator.Forms
 {
@@ -102,7 +103,7 @@ namespace IM.Administrator.Forms
       Area Area = (Area)dgrAreas.SelectedItem;
       frmAreaDetalle frmAreaDetalle = new frmAreaDetalle();
       frmAreaDetalle.Owner = this;
-      ObjectHelper.CopyProperties(frmAreaDetalle.area, Area);
+      frmAreaDetalle.oldArea = Area;
       frmAreaDetalle.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
       if (frmAreaDetalle.ShowDialog() == true)
       { 
@@ -136,9 +137,9 @@ namespace IM.Administrator.Forms
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
 
-      frmAreaDetalle frmAreaDetalle = new frmAreaDetalle();
-      frmAreaDetalle.area = new Area();
+      frmAreaDetalle frmAreaDetalle = new frmAreaDetalle();      
       frmAreaDetalle.Owner = this;
+      frmAreaDetalle.oldArea = new Area();
       frmAreaDetalle.mode = EnumMode.add;//Agregar
       if (frmAreaDetalle.ShowDialog() == true)
       {
@@ -167,7 +168,8 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadAreas(dgrAreas.SelectedIndex);
+      Area area = (Area)dgrAreas.SelectedItem;
+      LoadAreas(area);
     }
     #endregion
 
@@ -233,10 +235,16 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] 26/Feb/2016 Created
     /// </history>
-    protected void LoadAreas(int nIndex=0)
+    protected void LoadAreas(Area area=null)
     {
+      int nIndex = 0;
       List<Area> lstAreas = BRAreas.GetAreas(_areaFiltro, _nStatus);
-      dgrAreas.ItemsSource = lstAreas;      
+      dgrAreas.ItemsSource = lstAreas;
+      if (area != null && lstAreas.Count>0)
+      {
+        area = lstAreas.Where(ar => ar.arID == area.arID).FirstOrDefault();
+        nIndex = lstAreas.IndexOf(area);
+      }
       GridHelper.SelectRow(dgrAreas, nIndex);
       StatusBarReg.Content = lstAreas.Count + " Areas.";
 

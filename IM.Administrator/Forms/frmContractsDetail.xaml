@@ -27,21 +27,21 @@
         <TextBlock Grid.Column="0" Grid.Row="3" Grid.RowSpan="2" TextWrapping="WrapWithOverflow" Text="Min Days for Included Tours."/>
         <!--#endregion-->
         <!--#region Datos-->
-        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding cnID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="20"/>
-        <TextBox Name="txtN" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding cnN}"  IsEnabled="False" MaxLength="100"/>
-        <ComboBox Name="cmbUnvMot" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" DisplayMemberPath="umN" SelectedValuePath="umID" SelectedValue="{Binding cnum}" IsEnabled="False"/>
+        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" Text="{Binding cnID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="20"/>
+        <TextBox Name="txtN" Grid.Column="1" Grid.Row="1" Tag="description" Height="27" VerticalAlignment="Top" Text="{Binding cnN}"  IsEnabled="False" MaxLength="100"/>
+        <ComboBox Name="cmbUnvMot" Grid.Column="1" Grid.Row="2" Tag="unavailable motive" Height="27" VerticalAlignment="Top" DisplayMemberPath="umN" SelectedValuePath="umID" SelectedValue="{Binding cnum}" IsEnabled="False"/>
         <Grid Grid.Column="1" Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50*" />
                 <ColumnDefinition Width="50*"/>
             </Grid.ColumnDefinitions>
-            <CheckBox Name="chkA" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding cnA}" Height="13" IsEnabled="False">Active</CheckBox>            
-            <TextBox Name="txtMinDays" Grid.Column="0" IsEnabled="False" Text="{Binding cnMinDaysTours}" PreviewTextInput="txtMinDays_PreviewTextInput" MaxLength="10"/>
+            <CheckBox Name="chkA" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding cnA}" Height="13" IsEnabled="False">Active</CheckBox>
+            <TextBox Name="txtMinDays" Grid.Column="0" IsEnabled="False" Tag="Min Days for Included Tours" Text="{Binding cnMinDaysTours}" PreviewTextInput="txtMinDays_PreviewTextInput" MaxLength="10"/>
         </Grid>
 
 
         <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept"/>
-        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" IsCancel="True" Content="_Cancel"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>
 </Window>

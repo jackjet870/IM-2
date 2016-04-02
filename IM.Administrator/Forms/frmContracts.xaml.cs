@@ -8,6 +8,7 @@ using IM.Model;
 using IM.Base.Helpers;
 using IM.Model.Enums;
 using System;
+using System.Linq;
 
 namespace IM.Administrator.Forms
 {
@@ -70,7 +71,7 @@ namespace IM.Administrator.Forms
     {
       _blnEdit = App.User.HasPermission(EnumPermission.Contracts, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
-      LoadContracts();      
+      LoadContracts();
     }
     #endregion
     #region KeyBoardFocusChange
@@ -97,7 +98,8 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadContracts(dgrContracts.SelectedIndex);
+      Contract contract = (Contract)dgrContracts.SelectedItem;
+      LoadContracts(contract);
     }
     #endregion
 
@@ -115,9 +117,9 @@ namespace IM.Administrator.Forms
       Contract contract = (Contract)dgrContracts.SelectedItem;
       frmContractsDetail frmContractDetail = new frmContractsDetail();
       frmContractDetail.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
-      ObjectHelper.CopyProperties(frmContractDetail.contract,contract);
+      frmContractDetail.oldContract = contract;
       frmContractDetail.Owner = this;
-      if(frmContractDetail.ShowDialog()==true)
+      if (frmContractDetail.ShowDialog() == true)
       {
         List<Contract> lstContracts = (List<Contract>)dgrContracts.ItemsSource;
         int nIndex = 0;
@@ -129,7 +131,7 @@ namespace IM.Administrator.Forms
         {
           ObjectHelper.CopyProperties(contract, frmContractDetail.contract);
           lstContracts.Sort((x, y) => string.Compare(x.cnID, y.cnID));//ordenamos la lista        
-          nIndex = lstContracts.IndexOf(contract);  
+          nIndex = lstContracts.IndexOf(contract);
         }
         dgrContracts.Items.Refresh();
         GridHelper.SelectRow(dgrContracts, nIndex);
@@ -224,10 +226,16 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [Emoguel] created 03/03/2016
     /// </history>
-    protected void LoadContracts(int nIndex=0)
+    protected void LoadContracts( Contract contract = null)
     {
+      int nIndex = 0;
       List<Contract> lstContracts = BRContracts.getContracts(_contractFilter, _nStatus);
       dgrContracts.ItemsSource = lstContracts;
+      if(contract!=null && lstContracts.Count>0)
+      {
+        contract = lstContracts.Where(co => co.cnID == contract.cnID).FirstOrDefault();
+        nIndex = lstContracts.IndexOf(contract);
+      }
       GridHelper.SelectRow(dgrContracts, nIndex);      
       StatusBarReg.Content = lstContracts.Count + " Contracts.";
     }

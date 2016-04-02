@@ -201,14 +201,17 @@ Func<IEnumerable<T>, TData> dataSelector)
     /// [emoguel] modified 23/03/2016 Se agregó la validacion HasItems
     /// </history>
     public static void SelectRow(DataGrid grid, int nIndex)
-    { 
-      if (grid.HasItems)
+    {
+      if (nIndex>-1)
       {
         grid.Focus();
-        grid.SelectedIndex = nIndex;
-        grid.ScrollIntoView(grid.SelectedItem);
-        grid.CurrentCell = new DataGridCellInfo(grid.SelectedItem, grid.Columns[0]);
-      }      
+        grid.SelectedIndex = nIndex;                
+        if (grid.SelectedItem != null)
+        {
+          grid.ScrollIntoView(grid.SelectedItem);
+          grid.CurrentCell = new DataGridCellInfo(grid.SelectedItem, grid.Columns[0]);
+        }
+      }
     }
     #endregion
   }

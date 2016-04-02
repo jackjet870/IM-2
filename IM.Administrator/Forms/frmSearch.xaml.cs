@@ -5,6 +5,7 @@ using System.Windows.Input;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
+using IM.Administrator.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -17,12 +18,16 @@ namespace IM.Administrator.Forms
     public string strID="";//Id a filtrar
     public string strDesc="";//Descripcion a filtrar
     public int nStatus=-1;//Estatus a filtrar
-    public string strForm = "Default";//Formulario desde el que se utiliza
+    public EnumWindow enumForm;//Formulario desde el que se utiliza
     #region Agency
     public string sSegment="";//Sement by agency para cuando se abra desde agency 
     #endregion
     #region FolioInvitationOutHouse
     public string strSerie = "";//Serie a filtrar
+    #endregion
+    #region Hotels
+    public string strHotelGroup = "";
+    public string strArea = "";
     #endregion
     #endregion
 
@@ -151,11 +156,11 @@ namespace IM.Administrator.Forms
       txtID.Text = strID;
       cmbStatus.SelectedValue = nStatus;
       txtD.Text = strDesc;
-      switch (strForm)
+      switch (enumForm)
       { 
 
         #region ChargeTo
-        case "ChargeTo":
+        case EnumWindow.ChargeTos:
           {
             txtD.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
             txtD.MaxLength = 3;
@@ -175,7 +180,7 @@ namespace IM.Administrator.Forms
         #endregion
 
         #region Agency
-        case "Agency":
+        case EnumWindow.Agencies:
           {
             cmbSegment.Visibility = Visibility.Visible;
             lblSegment.Visibility = Visibility.Visible;
@@ -186,7 +191,7 @@ namespace IM.Administrator.Forms
         #endregion
 
         #region Computer
-        case "Computer":
+        case EnumWindow.Computers:
           {
             cmbStatus.Visibility = Visibility.Collapsed;
             lblSta.Visibility = Visibility.Collapsed;            
@@ -195,7 +200,7 @@ namespace IM.Administrator.Forms
         #endregion
 
         #region Desks
-        case "Desks":
+        case EnumWindow.Desks:
           {
             txtID.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
             break;
@@ -203,7 +208,7 @@ namespace IM.Administrator.Forms
         #endregion
 
         #region FoliosCXC
-        case "FoliosCXC":
+        case EnumWindow.FoliosCxC:
           {
             txtD.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
             txtID.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
@@ -216,7 +221,7 @@ namespace IM.Administrator.Forms
         #endregion
 
         #region FolioInvOut
-        case "FolioInvOut":
+        case EnumWindow.FoliosInvitationOuthouse:
           {
             txtSerie.Visibility = Visibility.Visible;
             lblSerie.Visibility = Visibility.Visible;
@@ -248,11 +253,11 @@ namespace IM.Administrator.Forms
       nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
       strID = txtID.Text.Trim();
       strDesc = txtD.Text.Trim();
-      switch (strForm)
+      switch (enumForm)
       {
         
         #region ChargeTo
-        case "ChargeTo":
+        case EnumWindow.ChargeTos:
           {            
             if (!string.IsNullOrWhiteSpace(txtD.Text))//Si el campo price tiene algún valor
             {
@@ -279,7 +284,7 @@ namespace IM.Administrator.Forms
           }
         #endregion
         #region Agency
-        case "Agency":
+        case EnumWindow.Agencies:
           {
             if (cmbSegment.SelectedValue != null)
             {
@@ -292,7 +297,7 @@ namespace IM.Administrator.Forms
           }
         #endregion
         #region Desks
-        case "Desks":
+        case EnumWindow.Desks:
           {
             if (!string.IsNullOrWhiteSpace(txtID.Text))
             {
@@ -318,7 +323,7 @@ namespace IM.Administrator.Forms
           }
         #endregion
         #region FoliosCXC
-        case "FoliosCXC":
+        case EnumWindow.FoliosCxC:
           { 
             int nFrom = 0;
             int nTo = 0;
@@ -361,7 +366,7 @@ namespace IM.Administrator.Forms
           }
         #endregion
         #region FolioInvOutHouse
-        case "FolioInvOut":
+        case EnumWindow.FoliosInvitationOuthouse:
           {
             int nFrom = 0;
             int nTo = 0;
@@ -430,7 +435,7 @@ namespace IM.Administrator.Forms
       List<SegmentByAgency> lstSegmentsByAgency = BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());
       lstSegmentsByAgency.Insert(0,new SegmentByAgency { seID = "", seN = "" });
       cmbSegment.ItemsSource = lstSegmentsByAgency;
-    } 
+    }
     #endregion
     #endregion
     #endregion

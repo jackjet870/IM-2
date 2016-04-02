@@ -34,7 +34,7 @@
         <!--#endregion-->
         <!--#region Datos-->
         <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding dkID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="20"/>
-        <TextBox Name="txtN" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding dkN}" MaxLength="10"/>
+        <TextBox Name="txtN" Grid.Column="1" Tag="description" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding dkN}" MaxLength="10"/>
         <!--#region Grid Computers-->
         <DataGrid Name="dgrComputers" Grid.Row="2" CellEditEnding="dgrComputers_CellEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Grid.Column="1" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CanUserAddRows="True" >
             <DataGrid.Columns>
@@ -49,7 +49,7 @@
         <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Command="{Binding btnAccept_Click}" >
             <AccessText Text="_Accept"/>
         </Button>
-        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" IsCancel="True">
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click">
             <AccessText Text="_Cancel"/>
         </Button>
         <!--#endregion-->

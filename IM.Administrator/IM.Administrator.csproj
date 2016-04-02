@@ -184,6 +184,46 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmGuestStatusTypeDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmGuestStatusTypes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmHotelDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmHotels.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmLanguageDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmLanguages.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\frmLocationDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmLocations.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmMaritalStatus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmMaritalStatusDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmSearch.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -193,6 +233,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Enums\EnumMode.cs" />
+    <Compile Include="Enums\EnumWindow.cs" />
     <Compile Include="Forms\frmAgencyDetail.xaml.cs">
       <DependentUpon>frmAgencyDetail.xaml</DependentUpon>
     </Compile>
@@ -280,6 +321,36 @@
     </Compile>
     <Compile Include="Forms\frmGiftsCategories.xaml.cs">
       <DependentUpon>frmGiftsCategories.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmGuestStatusTypeDetail.xaml.cs">
+      <DependentUpon>frmGuestStatusTypeDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmGuestStatusTypes.xaml.cs">
+      <DependentUpon>frmGuestStatusTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmHotelDetail.xaml.cs">
+      <DependentUpon>frmHotelDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmHotels.xaml.cs">
+      <DependentUpon>frmHotels.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmLanguageDetail.xaml.cs">
+      <DependentUpon>frmLanguageDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmLanguages.xaml.cs">
+      <DependentUpon>frmLanguages.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmLocationDetail.xaml.cs">
+      <DependentUpon>frmLocationDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmLocations.xaml.cs">
+      <DependentUpon>frmLocations.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMaritalStatus.xaml.cs">
+      <DependentUpon>frmMaritalStatus.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMaritalStatusDetail.xaml.cs">
+      <DependentUpon>frmMaritalStatusDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSearch.xaml.cs">
       <DependentUpon>frmSearch.xaml</DependentUpon>

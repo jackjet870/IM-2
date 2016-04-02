@@ -50,7 +50,7 @@
         <CheckBox Name="chkCxC" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" IsChecked="{Binding ctIsCxC}" Height="13" IsEnabled="False">Is CxC</CheckBox>
 
         <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept" />
-        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right"  IsCancel="True" Content="_Cancel"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right"  Click="btnCancel_Click" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>
 </Window>

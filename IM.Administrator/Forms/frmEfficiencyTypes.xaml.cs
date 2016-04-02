@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.BusinessRules.BR;
 using IM.Administrator.Enums;
 using IM.Base.Helpers;
 using IM.Model;
+using System.Linq;
 
 namespace IM.Administrator.Forms
 {
@@ -167,7 +159,8 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadEfficiencyTypes(dgrEfcyTypes.SelectedIndex);
+      EfficiencyType effType = (EfficiencyType)dgrEfcyTypes.SelectedItem;
+      LoadEfficiencyTypes(effType);
     }
     #endregion
 
@@ -186,7 +179,7 @@ namespace IM.Administrator.Forms
       frmEfficiencyTypeDetail frmEfyTypeDetail = new frmEfficiencyTypeDetail();
       frmEfyTypeDetail.Owner = this;
       frmEfyTypeDetail.enumMode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
-      ObjectHelper.CopyProperties(frmEfyTypeDetail.efficiencyType, efficiencyType);
+      frmEfyTypeDetail.oldEffType = efficiencyType;
 
       if (frmEfyTypeDetail.ShowDialog() == true)
       {
@@ -247,10 +240,16 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 18/03/2016
     /// </history>
-    private void LoadEfficiencyTypes(int nIndex=0)
+    private void LoadEfficiencyTypes(EfficiencyType effType=null)
     {
+      int nIndex = 0;
       List<EfficiencyType> lstEfcyTypes = BREfficiencyTypes.GetEfficiencyTypes(_efficiencyTypeFilter, _nStatus);
       dgrEfcyTypes.ItemsSource = lstEfcyTypes;
+      if(effType!=null& lstEfcyTypes.Count>0)
+      {
+        effType = lstEfcyTypes.Where(ef => ef.etID == effType.etID).FirstOrDefault();
+        nIndex = lstEfcyTypes.IndexOf(effType);
+      }
       GridHelper.SelectRow(dgrEfcyTypes, nIndex);
       StatusBarReg.Content = lstEfcyTypes.Count + " Efficiency Types.";
 

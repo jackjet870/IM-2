@@ -13,7 +13,8 @@ namespace IM.Administrator.Forms
   public partial class frmAssistanceStatusDetail : Window
   {
     public EnumMode mode;
-    public AssistanceStatus assistance=new AssistanceStatus();
+    public AssistanceStatus assistance=new AssistanceStatus();//Objeto a guardar|actualizar
+    public AssistanceStatus oldAssistance = new AssistanceStatus();//Objeto con los datos iniciales
     public frmAssistanceStatusDetail()
     {
       InitializeComponent();
@@ -83,6 +84,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      ObjectHelper.CopyProperties(assistance, oldAssistance);
       OpenMode();
     }
 
@@ -98,50 +100,30 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-
-      string sMsj = "";
-      int nRes = 0;
-      #region validar campos
-      if (string.IsNullOrWhiteSpace(txtID.Text))
+      btnAccept.Focus();
+      if(ObjectHelper.IsEquals(assistance,oldAssistance) && mode!=EnumMode.add)
       {
-        sMsj += "Specify the Assistance Status ID. \n";
-      }
-      if (string.IsNullOrWhiteSpace(txtN.Text))
-      {
-        sMsj += "Specify the Assistance Status Description.";
-      }
-      #endregion
-
-      if (sMsj == "")//Validar si hay cmapos vacios
-      {
-        nRes = BRAssistancesStatus.SaveAssitanceStatus((mode==EnumMode.edit), assistance);        
-
-        #region respuesta
-        switch (nRes)
-        {
-          case 0:
-            {
-              UIHelper.ShowMessage("Assistance Status not saved");
-              break;
-            }
-          case 1:
-            {
-              UIHelper.ShowMessage("Assistance Status successfully saved");
-              DialogResult = true;
-              this.Close();
-              break;
-            }
-          case 2:
-            {
-              UIHelper.ShowMessage("Assistance Status ID already exist please select another one");
-              break;
-            }
-        }
-        #endregion
+        Close();
       }
       else
       {
-        UIHelper.ShowMessage(sMsj.TrimEnd('\n'));
+        string sMsj = ValidateHelper.ValidateForm(this,"Assistance Status");
+        int nRes = 0;        
+
+        if (sMsj == "")//Validar si hay cmapos vacios
+        {
+          nRes = BRAssistancesStatus.SaveAssitanceStatus((mode == EnumMode.edit), assistance);
+
+          UIHelper.ShowMessageResult("Assistance Status", nRes);
+          if(nRes==1)
+          {
+            Close();
+          }
+        }
+        else
+        {
+          UIHelper.ShowMessage(sMsj);
+        }
       }
 
     }
@@ -158,11 +140,46 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        DialogResult = false;
-        Close();        
+        btnCancel.Focus();
+        btnCancel_Click(null, null);       
       }
-    } 
+    }
+    #endregion
+
+    #region Cancel
+    /// <summary>
+    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 29/03/2016
+    /// </history>
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+      if(mode!=EnumMode.preview)
+      {        
+        if (!ObjectHelper.IsEquals(assistance, oldAssistance))
+        {
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
+          if (result == MessageBoxResult.OK)
+          {
+            Close();
+          }
+        }
+        else
+        {
+          Close();
+        }
+      }
+      else
+      {
+        Close();
+      }
+    }
     #endregion
     #endregion
+
+
   }
 }

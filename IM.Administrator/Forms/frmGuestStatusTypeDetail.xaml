@@ -1,0 +1,48 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmGuestStatusTypeDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Loaded="Window_Loaded" KeyDown="Window_KeyDown"
+        Title="Guest Status Type Detail" Height="368" Width="308" DataContext="{Binding guestStaTyp}">
+    <Grid Margin="10,10,14,2" >
+        <!--#region Formato del grid-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="35*"/>
+            <ColumnDefinition Width="85*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="44"/>
+        </Grid.RowDefinitions>
+        <!--#endregion-->
+        <!--#region títulos-->
+        <Label Grid.Column="0" Grid.Row="0">ID</Label>
+        <Label Grid.Column="0" Grid.Row="1">Description</Label>
+        <Label Grid.Column="0" Grid.Row="2">Start age</Label>
+        <Label Grid.Column="0" Grid.Row="3">End age</Label>
+        <TextBlock Grid.Column="0" Grid.Row="4" Text="Maximun Authorized amount of gifts" TextWrapping="WrapWithOverflow"/>
+        <TextBlock Grid.Column="0" Grid.Row="5" Text="Maximun quanty of tours" TextWrapping="WrapWithOverflow"/>
+        <!--#endregion-->
+        <!--#region Datos-->
+        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding gsID}" IsEnabled="False" MaxLength="5" CharacterCasing="Upper" />
+        <TextBox Name="txtDes" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding gsN}" IsEnabled="False" MaxLength="30" />
+        <TextBox Name="txtStaAge" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" Text="{Binding gsAgeStart}" IsEnabled="False" MaxLength="3" PreviewTextInput="txtNumber_PreviewTextInput" LostFocus="txt_LostFocus" />
+        <TextBox Name="txtEndAge" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" Text="{Binding gsAgeEnd}" IsEnabled="False" MaxLength="3"  PreviewTextInput="txtNumber_PreviewTextInput" LostFocus="txt_LostFocus" />
+        <TextBox Name="txtMaxAmount" Grid.Column="1" Grid.Row="4" Height="27" VerticalAlignment="Top" Text="{Binding gsMaxAuthGifts,StringFormat={}{0:C}}" PreviewTextInput="txtNumber_PreviewTextInput" GotFocus="txtMaxAmount_GotFocus" LostFocus="txt_LostFocus" IsEnabled="False" MaxLength="13" />
+        <TextBox Name="txtMaxQuanty" Grid.Column="1" Grid.Row="5" Height="27" VerticalAlignment="Top" Text="{Binding gsMaxQtyTours}" IsEnabled="False" MaxLength="10" />
+        <CheckBox Name="chkA" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="{Binding gsA}" Height="13" IsEnabled="False">Active</CheckBox>
+        <CheckBox Name="chkAllTour" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" HorizontalAlignment="Right" IsChecked="{Binding gsAllowTourDisc}" Height="13" IsEnabled="False">Allow discount tour </CheckBox>
+
+        <Button Name="btnAccept" Width="60" Height="30" Visibility="Hidden"  Grid.Column="1" Grid.Row="7" Margin="0,7,75,7" Click="btnAccept_Click" Content="_Accept"  HorizontalAlignment="Right"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="7" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
+        <!--#endregion-->
+    </Grid>
+</Window>

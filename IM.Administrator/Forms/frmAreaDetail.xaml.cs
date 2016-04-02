@@ -14,7 +14,8 @@ namespace IM.Administrator.Forms
   public partial class frmAreaDetalle : Window
   {
 
-    public Area area=new Area();//Variable que recibe la entidad
+    public Area area=new Area();//Variable que se va a guardar o actualizar
+    public Area oldArea = new Area();//Variable con los atributos iniciales
     public EnumMode mode;//Modo en el que se abrirá la ventana        
     public frmAreaDetalle()
     {
@@ -98,6 +99,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      ObjectHelper.CopyProperties(area, oldArea);
       LoadRegions();
       OpenMode();
     }
@@ -113,53 +115,33 @@ namespace IM.Administrator.Forms
     /// [emoguel] 26/Feb/2016 Created
     /// </history>
     private void btnAccept_Click(object sender, RoutedEventArgs e)
-    {      
-      string sMsj = "";
-      int nRes = 0;
-      #region validar campos
-      if (string.IsNullOrWhiteSpace(txtID.Text))//ID
+    {
+      btnAccept.Focus();
+      if(ObjectHelper.IsEquals(area,oldArea)&& mode!=EnumMode.add)
       {
-        sMsj += "Specify the Area ID. \n";
-      }
-      if (string.IsNullOrWhiteSpace(txtN.Text))
-      {
-        sMsj += "Specify the Area Description. \n";
-      }
-      if (cmbRegion.SelectedIndex < 0)
-      {
-        sMsj += "Specify the Region.";
-      }
-      #endregion
-      if (sMsj == "")
-      {
-        nRes = BRAreas.SaveArea((mode==EnumMode.edit), area);        
-
-        #region Respuesta
-        switch (nRes)//Se valida la repuesta
-        {
-          case 0:
-            {
-              UIHelper.ShowMessage("Area not saved");
-              break;
-            }
-          case 1:
-            {
-              UIHelper.ShowMessage("Area successfully saved");
-              DialogResult = true;
-              this.Close();
-              break;
-            }
-          case 2:
-            {
-              UIHelper.ShowMessage("Area ID already exist please select another one");
-              break;
-            }
-        }
-        #endregion
+        Close();
       }
       else
       {
-        UIHelper.ShowMessage(sMsj.TrimEnd('\n'));
+        string sMsj = ValidateHelper.ValidateForm(this, "Area");
+        int nRes = 0;
+        
+        if (sMsj == "")
+        {
+          nRes = BRAreas.SaveArea((mode == EnumMode.edit), area);
+
+          UIHelper.ShowMessageResult("Area", nRes);
+          if(nRes==1)
+          {
+            DialogResult = true;
+            Close();
+          }
+
+        }
+        else
+        {
+          UIHelper.ShowMessage(sMsj);
+        }
       }
     }
     #endregion
@@ -174,13 +156,44 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-          DialogResult = false;
-          Close();
-        
+        btnCancel.Focus();
+        btnCancel_Click(null, null);
       }
     }
     #endregion
 
-    #endregion    
+    #region Cancel
+    /// <summary>
+    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] 29/03/2016
+    /// </history>
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+      if(mode!=EnumMode.preview)
+      {
+        if (!ObjectHelper.IsEquals(area, oldArea))
+        {
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
+          if (result == MessageBoxResult.OK)
+          {
+            Close();
+          }
+        }
+        else
+        {
+          Close();
+        }
+      }
+      else
+      {
+        Close();
+      }
+    }
+    #endregion
+    #endregion
   }
 }

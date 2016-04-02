@@ -1,19 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
+using System.Linq;
 
 namespace IM.Administrator.Forms
 {
@@ -167,7 +159,8 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadGiftsCategories(dgrGiftsCateg.SelectedIndex);
+      GiftCategory giftCategory = (GiftCategory)dgrGiftsCateg.SelectedItem;
+      LoadGiftsCategories(giftCategory);
     } 
     #endregion
 
@@ -186,7 +179,7 @@ namespace IM.Administrator.Forms
       frmGiftCategoryDetail frmGiftCategoryDetail = new frmGiftCategoryDetail();
       frmGiftCategoryDetail.Owner = this;
       frmGiftCategoryDetail.enumMode = ((_blnEdit) ? Enums.EnumMode.edit : Enums.EnumMode.preview);
-      ObjectHelper.CopyProperties(frmGiftCategoryDetail.giftCategory, giftCategory);
+      frmGiftCategoryDetail.oldGiftCategory = giftCategory;
       if(frmGiftCategoryDetail.ShowDialog()==true)
       {
         int nIndex = 0;
@@ -247,10 +240,16 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 23/03/2016
     /// </history>
-    private void LoadGiftsCategories(int nIndex = 0)
+    private void LoadGiftsCategories(GiftCategory giftCategory=null)
     {
+      int nIndex = 0;
       List<GiftCategory> lstGiftsCategories = BRGiftsCategories.GetGiftsCategories(_giftCategoryFilter, _nStatus);
       dgrGiftsCateg.ItemsSource = lstGiftsCategories;
+      if(giftCategory!=null && lstGiftsCategories.Count>0)
+      {
+        giftCategory = lstGiftsCategories.Where(gc => gc.gcID == giftCategory.gcID).FirstOrDefault();
+        nIndex = lstGiftsCategories.IndexOf(giftCategory);
+      }
       GridHelper.SelectRow(dgrGiftsCateg, nIndex);
       StatusBarReg.Content = lstGiftsCategories.Count + " Gift Categories.";
     }

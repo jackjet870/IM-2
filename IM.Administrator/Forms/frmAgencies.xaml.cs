@@ -7,6 +7,7 @@ using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Enums;
+using System.Linq;
 
 namespace IM.Administrator.Forms
 {
@@ -123,7 +124,8 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadAgencies(dgrAgencies.SelectedIndex);
+      Agency agency = (Agency)dgrAgencies.SelectedItem;
+      LoadAgencies(agency);
     }
     #endregion
 
@@ -138,7 +140,7 @@ namespace IM.Administrator.Forms
       frmAgencyDetail frmAgencyDetail = new frmAgencyDetail();
       frmAgencyDetail.enumMode = EnumMode.add;//Insertar
       frmAgencyDetail.Owner = this;
-
+      frmAgencyDetail.oldAgency = new Agency();
       if(frmAgencyDetail.ShowDialog()==true)
       {
         if (ValidateFilters(frmAgencyDetail.agency))//Validamos si el nuevo registro cumple con los requisitos
@@ -164,7 +166,7 @@ namespace IM.Administrator.Forms
       frmSearch.strDesc = _agencyFilter.agN;
       frmSearch.nStatus = _nStatus;
       frmSearch.sSegment = _agencyFilter.agse;
-      frmSearch.strForm = "Agency";
+      frmSearch.enumForm = EnumWindow.Agencies;
       frmSearch.Owner = this;
       if(frmSearch.ShowDialog()==true)
       {
@@ -188,8 +190,8 @@ namespace IM.Administrator.Forms
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
       Agency agency = (Agency)dgrAgencies.SelectedItem;      
-      frmAgencyDetail frmAgencyDetail = new frmAgencyDetail();
-      ObjectHelper.CopyProperties(frmAgencyDetail.agency,agency); 
+      frmAgencyDetail frmAgencyDetail = new frmAgencyDetail();      
+      frmAgencyDetail.oldAgency = agency;
       frmAgencyDetail.Owner = this;
       frmAgencyDetail.enumMode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
       if(frmAgencyDetail.ShowDialog()==true)
@@ -222,15 +224,17 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 08/03/2016
     /// </history>
-    protected void LoadAgencies(int nIndex=0)
+    protected void LoadAgencies(Agency agency=null)
     {
+      int nIndex = 0;
       List<Agency> lstAgencies = BRAgencies.GetAgencies(_agencyFilter, _nStatus);
       dgrAgencies.ItemsSource = lstAgencies;
-      if (lstAgencies.Count > 0)
-      {        
-        dgrAgencies.Focus();
-        GridHelper.SelectRow(dgrAgencies,nIndex);                
+      if (agency!=null && lstAgencies.Count>0)
+      {
+        agency = lstAgencies.Where(ag => ag.agID == agency.agID).FirstOrDefault();
+        nIndex = lstAgencies.IndexOf(agency);
       }
+      GridHelper.SelectRow(dgrAgencies, nIndex);
       StatusBarReg.Content = lstAgencies.Count + " Agencies.";
     }
     #endregion

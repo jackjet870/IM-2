@@ -7,6 +7,7 @@ using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Administrator.Enums;
 using IM.Model.Enums;
+using System.Linq;
 
 namespace IM.Administrator.Forms
 {
@@ -34,7 +35,8 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadCurrencies(dgrCurrencies.SelectedIndex);
+      Currency currency = (Currency)dgrCurrencies.SelectedItem;
+      LoadCurrencies(currency);
     }
     #endregion
 
@@ -76,7 +78,7 @@ namespace IM.Administrator.Forms
       frmCurrencyDetail frmCurrencyDetail = new frmCurrencyDetail();
       frmCurrencyDetail.Owner = this;
       frmCurrencyDetail.mode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
-      ObjectHelper.CopyProperties(frmCurrencyDetail.currency,currency);
+      frmCurrencyDetail.oldCurrency = currency;
       if(frmCurrencyDetail.ShowDialog()==true)
       {
         List<Currency> lstCurrencies = (List<Currency>)dgrCurrencies.ItemsSource;
@@ -224,10 +226,16 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [Emoguel] created 08/03/2016
     /// </history>
-    protected void LoadCurrencies(int nIndex=0)
+    protected void LoadCurrencies(Currency currency=null)
     {
+      int nIndex = 0;
       List<Currency> lstCurrencies = BRCurrencies.GetCurrencies(_currencyFilter, _nStatus);
       dgrCurrencies.ItemsSource = lstCurrencies;
+      if(currency!=null && lstCurrencies.Count>0)
+      {
+        currency = lstCurrencies.Where(cu => cu.cuID == currency.cuID).FirstOrDefault();
+        nIndex = lstCurrencies.IndexOf(currency);
+      }
       GridHelper.SelectRow(dgrCurrencies,nIndex);
       StatusBarReg.Content = lstCurrencies.Count + " Currencies.";
     }

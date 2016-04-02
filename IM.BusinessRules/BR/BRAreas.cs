@@ -23,7 +23,7 @@ namespace IM.BusinessRules.BR
     { 
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        var query = from areas in dbContext.Areas
+        var query = from areas in dbContext.Areas                    
                     select areas ;
 
         if (nStatus != -1)//filtro por estatus

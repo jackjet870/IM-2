@@ -1,4 +1,8 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace IM.Base.Helpers
@@ -156,6 +160,96 @@ namespace IM.Base.Helpers
       }
       return true;
     }
+
+    #region ValidateForm
+    /// <summary>
+    /// Valida que los texbox o combobox de un grid(contenedor) tengan que tener algun valor
+    /// </summary>
+    /// <param name="grid">Contenedor</param>
+    /// <param name="strForm">Nombre del formulario</param>
+    /// <returns>cadena de texto con el mensaje de los campos vacios</returns>
+    /// <history>
+    /// [emoguel] created 01/04/2016
+    /// </history>
+    public static string ValidateForm(UIElement container, string strForm)
+    {
+      string strMsj = "";      
+      List<Control> lstControls = GetChildParentCollection<Control>(container);//buscamos todos los controles de la ventana
+      lstControls = lstControls.Where(co => co.Tag != null).ToList();
+      foreach (Control control in lstControls)
+      {
+        #region TextBox
+        if (control is TextBox)//Si es Textbox
+        {
+          TextBox txt = (TextBox)control;
+          if (string.IsNullOrWhiteSpace(txt.Text))
+          {
+            strMsj += "specify the " + strForm +" "+ txt.Tag.ToString() + ". \n";
+          }
+        }
+        #endregion
+        #region Combobox
+        else if (control is ComboBox)
+        {
+          ComboBox cmb = (ComboBox)control;
+          if (cmb.SelectedIndex < 0)
+          {
+            strMsj += "specify the " + strForm +" "+cmb.Tag.ToString() + ". \n";
+          }
+        } 
+        #endregion
+      }
+
+      return strMsj.TrimEnd('\n');
+    }
+
+    #endregion
+
+    #region GetChildParenCollection
+    /// <summary>
+    /// busca todos los controles contenedores para recorrerlos
+    /// </summary>
+    /// <typeparam name="T">tipo de contenedor</typeparam>
+    /// <param name="parent">contenedor</param>
+    /// <returns>devuelve una lista de controles</returns>
+    /// <history>
+    /// [emoguel] created 02/04/2016
+    /// </history>
+    private static List<T> GetChildParentCollection<T>(object parent) where T : DependencyObject
+    {
+      List<T> logicalCollection = new List<T>();
+      GetChildCollection(parent as DependencyObject, logicalCollection);
+      return logicalCollection;
+    }
+    #endregion
+
+    #region GetChildCollection
+    /// <summary>
+    /// Obtiene todos los controles dentro de los contenedores
+    /// </summary>
+    /// <typeparam name="T">tipo de contenedor</typeparam>
+    /// <param name="parent">Contenedor</param>
+    /// <param name="logicalCollection">lista de controles</param>
+    /// <history>
+    /// [emoguel] created 02/04/2016
+    /// </history>
+    private static void GetChildCollection<T>(DependencyObject parent, List<T> logicalCollection) where T : DependencyObject
+    {
+      IEnumerable children = LogicalTreeHelper.GetChildren(parent);
+      foreach (object child in children)
+      {
+        if (child is DependencyObject)
+        {
+          DependencyObject depChild = child as DependencyObject;
+          if (child is T)
+          {
+            logicalCollection.Add(child as T);
+          }
+          GetChildCollection(depChild, logicalCollection);
+        }
+      }
+    }
+    #endregion
 
   }
 }

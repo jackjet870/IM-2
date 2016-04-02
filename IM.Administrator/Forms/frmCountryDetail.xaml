@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ResizeMode="NoResize" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         Title="Country Detail" Height="328" Width="338" DataContext="{Binding country}">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
@@ -30,10 +30,10 @@
         <TextBlock Grid.Column="0" Grid.Row="4" Grid.RowSpan="2" TextWrapping="WrapWithOverflow" Text="Nationality"/>
         <!--#endregion-->
         <!--#region Datos-->
-        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding coID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="25"/>
-        <TextBox Name="txtN" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding coN}"  IsEnabled="False" MaxLength="50"/>
-        <ComboBox Name="cmbLang" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" DisplayMemberPath="laN" SelectedValuePath="laID" SelectedValue="{Binding cola}" IsEnabled="False"/>
-        <ComboBox Name="cmbUnvMot" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" DisplayMemberPath="umN" SelectedValuePath="umID" SelectedValue="{Binding coum}" IsEnabled="False"/>
+        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" Text="{Binding coID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="25"/>
+        <TextBox Name="txtN" Grid.Column="1" Grid.Row="1" Tag="description" Height="27" VerticalAlignment="Top" Text="{Binding coN}"  IsEnabled="False" MaxLength="50"/>
+        <ComboBox Name="cmbLang" Grid.Column="1" Grid.Row="2" Tag="language" Height="27" VerticalAlignment="Top" DisplayMemberPath="laN" SelectedValuePath="laID" SelectedValue="{Binding cola}" IsEnabled="False"/>
+        <ComboBox Name="cmbUnvMot" Grid.Column="1" Grid.Row="3" Tag="unavailable motive" Height="27" VerticalAlignment="Top" DisplayMemberPath="umN" SelectedValuePath="umID" SelectedValue="{Binding coum}" IsEnabled="False"/>
         <TextBox Name="txtNat" Grid.Column="1" Grid.Row="4" Height="27" VerticalAlignment="Top" Text="{Binding coNationality}"  IsEnabled="False" MaxLength="25"/>
         <Grid Grid.Column="1" Grid.Row="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
@@ -46,7 +46,7 @@
 
 
         <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="6" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept"/>
-        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="6" Margin="0,7"  HorizontalAlignment="Right" IsCancel="True" Content="_Cancel"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="6" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>
 </Window>

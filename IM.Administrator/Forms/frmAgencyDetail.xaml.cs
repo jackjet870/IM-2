@@ -16,7 +16,8 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmAgencyDetail : Window
   {
-    public Agency agency = new Agency();//Objeto para llenar el formulario
+    public Agency oldAgency = new Agency();//Objeto con los valores iniciales
+    public Agency agency = new Agency();//Objeto para llenar el formulario    
     private string _unavailableMotive;
     private string _Market;
     public EnumMode enumMode;
@@ -25,24 +26,6 @@ namespace IM.Administrator.Forms
       InitializeComponent();      
     }
     #region eventos del formulario
-    #region WindowKeyDown
-    /// <summary>
-    /// cierra la ventana con el boton escape
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 09/03/2016
-    /// </history>
-    private void Window_KeyDown(object sender, KeyEventArgs e)
-    {  
-      if (e.Key == Key.Escape )
-      {
-        DialogResult = false;
-        Close();                
-      }      
-    }
-    #endregion
     
     #region WindowLoaded
     /// <summary>
@@ -54,7 +37,8 @@ namespace IM.Administrator.Forms
     /// [emoguel] created 09/03/2016
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
-    {      
+    {
+      ObjectHelper.CopyProperties(agency, oldAgency);
       LoadUnavailableMotives();
       LoadMarkets();
       LoadReps();
@@ -76,99 +60,53 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      string sMsj = "";
-
-      #region Validar campos obligatorios
-      if(string.IsNullOrWhiteSpace(txtID.Text))
+      btnAccept.Focus();//Para actualizar el datacontext
+      if (ObjectHelper.IsEquals(agency, oldAgency) && enumMode!=EnumMode.add)
       {
-        sMsj += "Specify the Agency ID.\n";
-      }
-      if(string.IsNullOrWhiteSpace(txtN.Text))
-      {
-        sMsj += "Specify the Agency Description.\n";
-      }
-      if(cmbUnavMot.SelectedIndex<0)
-      {
-        sMsj += "Specify the Unavailable Motive.\n";
-      }
-      if(cmbMarket.SelectedIndex<0)
-      {
-        sMsj += "Specify the Market.\n";
-      }
-      if(string.IsNullOrWhiteSpace(txtShowPay.Text))
-      {
-        sMsj += "Specify the Show Pay.\n";
-      }
-      if(string.IsNullOrWhiteSpace(txtSalePay.Text))
-      {
-        sMsj += "Specify the Sale Pay. \n";
-      }
-
-      #endregion
-
-      if(sMsj=="")
-      {
-        agency.agcl = ((agency.agcl == -1) ? null : agency.agcl);
-        agency.agse = ((agency.agse == "-1") ? null : agency.agse);
-        int nRes = 0;
-        #region Operacion
-        switch (enumMode)
-        {
-          case EnumMode.add:
-            {
-              nRes = BRAgencies.SaveAgency(agency, false);
-              break;
-            }
-          case EnumMode.edit:
-            {                    
-              bool blnMarkets = ((agency.agmk.ToString() != _Market) ? true : false);
-              bool blnUnMot = ((agency.agum.ToString() != _unavailableMotive) ? true : false);
-              nRes = BRAgencies.SaveAgency(agency, true,blnUnMot,blnMarkets);
-              break;
-            }
-        } 
-        #endregion
-
-        #region Respuesta
-        switch (nRes)//Se valida la repuesta
-        {
-          case 0:
-            {
-              UIHelper.ShowMessage("Agency not saved");
-              break;
-            }
-          case 1:
-            {
-              UIHelper.ShowMessage("Agency successfully saved");
-              DialogResult = true;
-              Close();
-              break;
-            }
-          case 2:
-            {
-              if (enumMode != EnumMode.edit)
-              {
-                UIHelper.ShowMessage("Agency ID already exist please select another one");
-              }
-              else
-              {
-                UIHelper.ShowMessage("Agency successfully saved");
-                DialogResult = true;
-                Close();
-              }
-              break;
-            }
-        }
-        #endregion
+        Close();
       }
       else
       {
-        UIHelper.ShowMessage(sMsj.TrimEnd('\n'));
+        string sMsj = ValidateHelper.ValidateForm(this, "Agency");
+
+        if (sMsj == "")
+        {
+          agency.agcl = ((agency.agcl == -1) ? null : agency.agcl);
+          agency.agse = ((agency.agse == "-1") ? null : agency.agse);
+          int nRes = 0;
+          #region Operacion
+          switch (enumMode)
+          {
+            case EnumMode.add:
+              {
+                nRes = BRAgencies.SaveAgency(agency, false);
+                break;
+              }
+            case EnumMode.edit:
+              {
+                bool blnMarkets = ((agency.agmk.ToString() != _Market) ? true : false);
+                bool blnUnMot = ((agency.agum.ToString() != _unavailableMotive) ? true : false);
+                nRes = BRAgencies.SaveAgency(agency, true, blnUnMot, blnMarkets);
+                break;
+              }
+          }
+          #endregion
+          UIHelper.ShowMessageResult("Agency", nRes, (enumMode == EnumMode.edit));    
+          if((nRes==2 && enumMode!=EnumMode.add) || nRes==1 )
+          {
+            DialogResult = true;
+            Close();
+          }      
+        }
+        else
+        {
+          UIHelper.ShowMessage(sMsj);
+        }
       }
+
     }
     #endregion
     
-
     #region Texbox Sólo Numeros
     /// <summary>
     /// TextBox Sólo acepta número
@@ -196,8 +134,7 @@ namespace IM.Administrator.Forms
     private void txt_GotFocus(object sender, RoutedEventArgs e)
     {
       TextBox txt = (TextBox)sender;
-      int nRes;
-      txt.Text = Int32.TryParse(txt.Text, NumberStyles.Currency, CultureInfo.CurrentCulture, out nRes) ? nRes.ToString("N0") : "0";
+      txt.Text = ConvertHelper.CurrencyToStandar(txt.Text);
     }
     #endregion
 
@@ -220,6 +157,57 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
+    #region KeyDown
+    /// <summary>
+    /// cierra la ventana con el boton escape
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 29/03/2016
+    /// </history>
+    private void Window_KeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Escape)
+      {
+        btnCancel.Focus();
+        btnCancel_Click(null, null);
+      }
+    }
+
+    #endregion
+    #region Cancel
+    /// <summary>
+    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 29/03/2016
+    /// </history>
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+      if(enumMode!=EnumMode.preview)
+      {
+        if (!ObjectHelper.IsEquals(agency, oldAgency))
+        {
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
+          if (result == MessageBoxResult.OK)
+          {
+            Close();
+          }
+        }
+        else
+        {
+          Close();
+        }
+      }
+      else
+      {
+        Close();
+      }
+    }
+    #endregion
     #endregion
 
     #region metodos
@@ -370,8 +358,11 @@ namespace IM.Administrator.Forms
       chkIncTour.IsEnabled = blnValue;
       chkShowInLst.IsEnabled = blnValue;
     }
+
     #endregion
 
     #endregion
+
+    
   }
 }

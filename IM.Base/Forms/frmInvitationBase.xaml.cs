@@ -2111,7 +2111,7 @@ namespace IM.Base.Forms
       var personnels = IM.BusinessRules.BR.BRPersonnel.GetPersonnel(_user.LeadSource.lsID);
       LoadComboBox(personnels, cmbPR, "pe");
 
-      var hotels = IM.BusinessRules.BR.BRHotels.GetHotels(1);
+      var hotels = IM.BusinessRules.BR.BRHotels.GetHotels(nStatus:1);
       LoadComboBox(hotels, cmbHotel, "hoID", "hoID", _user.Location.loN);
       LoadComboBox(hotels, cmbResort, "hoID", "hoID", String.Empty);
 
@@ -2129,7 +2129,7 @@ namespace IM.Base.Forms
       LoadComboBox(paymentTypes, cmbPaymentType, "pt", "CS");
       LoadComboBox(paymentTypes, cmbPaymentTypeDeposit, "pt");
       
-      var maritalStatus = IM.BusinessRules.BR.BRMaritalStatus.GetMaritalStatus();
+      var maritalStatus = IM.BusinessRules.BR.BRMaritalStatus.GetMaritalStatus(1);
       LoadComboBox(maritalStatus, cmbMaritalStatusGuest1, "ms");
       LoadComboBox(maritalStatus, cmbMaritalStatusGuest2, "ms");
 
@@ -3646,7 +3646,7 @@ namespace IM.Base.Forms
 
       foreach(GuestStatusInvitation row in dtgGuestStatus.Items)
       {
-        var guestStatusType = IM.BusinessRules.BR.BRGuestStatusType.GetGuestStatusTypeById(row.gsID);
+        var guestStatusType = IM.BusinessRules.BR.BRGuestStatusTypes.GetGuestStatusTypes(new Model.GuestStatusType { gsID=row.gsID}).FirstOrDefault();
         maxAuthGifts += row.gsQty * guestStatusType.gsMaxAuthGifts;
       }
 

@@ -102,7 +102,8 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnRef_Click(object sender, RoutedEventArgs e)
     {
-      LoadFoliosInvitationOuthouse(dgrFoliosInvOut.SelectedIndex);
+      FolioInvitationOuthouse folioInvOut = (FolioInvitationOuthouse)dgrFoliosInvOut.SelectedItem;
+      LoadFoliosInvitationOuthouse(folioInvOut);
     }
     #endregion
 
@@ -155,7 +156,7 @@ namespace IM.Administrator.Forms
       frmSearch.strID = _folioInvOutFilter.fiFrom.ToString();
       frmSearch.strDesc = _folioInvOutFilter.fiTo.ToString();
       frmSearch.strSerie = _folioInvOutFilter.fiSerie;
-      frmSearch.strForm = "FolioInvOut";
+      frmSearch.enumForm =Enums.EnumWindow.FoliosInvitationOuthouse;
       frmSearch.nStatus = _nStatus;
       if(frmSearch.ShowDialog()==true)
       {
@@ -181,7 +182,7 @@ namespace IM.Administrator.Forms
     {
       FolioInvitationOuthouse folioInvOut = (FolioInvitationOuthouse)dgrFoliosInvOut.SelectedItem;
       frmFolioInvitationOuthouseDetail frmFolioDetail = new frmFolioInvitationOuthouseDetail();
-      ObjectHelper.CopyProperties(frmFolioDetail.folioInvOut, folioInvOut);
+      frmFolioDetail.oldFolioInvOut = folioInvOut;
       frmFolioDetail.Owner = this;
       frmFolioDetail.enumMode = ((_blnEdit)?Enums.EnumMode.edit:Enums.EnumMode.preview);//Asignamos el modo
       if(frmFolioDetail.ShowDialog()==true)
@@ -243,10 +244,16 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 23/03/2016
     /// </history>
-    private void LoadFoliosInvitationOuthouse(int nIndex=0)
+    private void LoadFoliosInvitationOuthouse(FolioInvitationOuthouse folioInvOut=null)
     {
+      int nIndex = 0;
       List<FolioInvitationOuthouse> lstFoliosInvOut = BRFoliosInvitationsOuthouse.GetFoliosInvittionsOutside(_folioInvOutFilter, _nStatus);
       dgrFoliosInvOut.ItemsSource = lstFoliosInvOut;
+      if(folioInvOut!=null && lstFoliosInvOut.Count>0)        
+      {
+        folioInvOut = lstFoliosInvOut.Where(fi => fi.fiID == folioInvOut.fiID).FirstOrDefault();
+        nIndex = lstFoliosInvOut.IndexOf(folioInvOut);
+      }
       GridHelper.SelectRow(dgrFoliosInvOut, nIndex);
       StatusBarReg.Content = lstFoliosInvOut.Count + " Folio Invitations.";
     }

@@ -15,6 +15,7 @@ namespace IM.Administrator.Forms
   {
     public EnumMode mode;//modo en el que se abrirá la ventana
     public Country country = new Country();//objeto con los datos del formulario
+    public Country oldCountry = new Country();//Objeto con los datos iniciales
 
     public frmCountryDetail()
     {
@@ -33,6 +34,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      ObjectHelper.CopyProperties(country, oldCountry);
       openMode();
       loadUnavailableMotives();
       LoadLanguages();
@@ -52,8 +54,8 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        DialogResult = false;
-        Close();
+        btnCancel.Focus();
+        btnCancel_Click(null, null);
       }
     }
     #endregion
@@ -69,65 +71,67 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      int nRes = 0;
-      string sMsj = "";
-      #region validar campos
-      if (string.IsNullOrWhiteSpace(txtID.Text))
+      btnAccept.Focus();
+      if(ObjectHelper.IsEquals(country,oldCountry)&& mode!=EnumMode.add)
       {
-        sMsj += "Specify the Country ID. \n";
-      }
-
-      if (string.IsNullOrWhiteSpace(txtN.Text))
-      {
-        sMsj += "Specify the Contry description. \n";
-      }
-
-      if (cmbUnvMot.SelectedIndex < 0)
-      {
-        sMsj += "Specify the Country unavailable motive . \n";
-      }
-
-      if (cmbLang.SelectedIndex < 0)
-      {
-        sMsj += "Specify the Country language . \n";
-      }
-
-      #endregion
-
-      if(sMsj=="")
-      {
-        nRes = BRCountries.SaveCountry(country, (mode==EnumMode.edit));        
-
-        #region respuesta
-        switch (nRes)//Se valida la respuesta de la operacion
-        {
-          case 0:
-            {
-              UIHelper.ShowMessage("Country not saved");
-              break;
-            }
-          case 1:
-            {
-              UIHelper.ShowMessage("Country successfully saved");
-              DialogResult = true;
-              this.Close();
-              break;
-            }
-          case 2:
-            {
-              UIHelper.ShowMessage("Country ID already exist please select another one");
-              break;
-            }
-        }
-        #endregion
+        Close();
       }
       else
       {
-        UIHelper.ShowMessage(sMsj.TrimEnd('\n'));
+        int nRes = 0;
+        string sMsj = ValidateHelper.ValidateForm(this, "Country");
+
+        if (sMsj == "")
+        {
+          nRes = BRCountries.SaveCountry(country, (mode == EnumMode.edit));
+
+          UIHelper.ShowMessageResult("Country", nRes);
+          if(nRes==1)
+          {
+            DialogResult = true;
+            Close();
+          }
+        }
+        else
+        {
+          UIHelper.ShowMessage(sMsj);
+        }
       }
     }
     #endregion
-    
+
+    #region Cancel
+    /// <summary>
+    /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 29/03/2016
+    /// </history>
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+      if(mode!=EnumMode.preview)
+      {
+        if (!ObjectHelper.IsEquals(country, oldCountry))
+        {
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
+          if (result == MessageBoxResult.OK)
+          {
+            Close();
+          }
+        }
+        else
+        {
+          Close();
+        }
+      }
+      else
+      {
+        Close();
+      }
+    }
+    #endregion
     #endregion
 
     #region Métodos
