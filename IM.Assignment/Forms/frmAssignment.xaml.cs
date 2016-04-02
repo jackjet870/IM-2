@@ -347,6 +347,7 @@ namespace IM.Assignment
     {
       //validamos el PR
       if (ValidatePR()) {
+        filters.Add(Tuple.Create("Date Range", dateRange));
         filters.Add(Tuple.Create("Lead Source", _LeadSource));
         filters.Add(Tuple.Create(_strgPRs, _strgNamePR));
         List<RptAssignmentByPR> lstAssignmentByPR = BRAssignment.RptAssignmentByPR(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, _strgPRs);
@@ -355,7 +356,7 @@ namespace IM.Assignment
           dt = GridHelper.GetDataTableFromGrid(lstAssignmentByPR, true);
           rptName = "Assignment by PR";
           string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
-          EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRange ,dateRangeFileName, clsFormatTable.getExcelFormatTableAssignByPR());
+          EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName,dateRangeFileName, clsFormatTable.getExcelFormatTableAssignByPR());
         }
         else
         {
@@ -368,6 +369,7 @@ namespace IM.Assignment
     #region btnGeneralAssignment_Click
     private void btnGeneralAssignment_Click(object sender, RoutedEventArgs e)
     {
+      filters.Add(Tuple.Create("Date Range", dateRange));
       filters.Add(Tuple.Create("Lead Source", _LeadSource));
       List<RptAssignment> lstAssignment = BRAssignment.RptAssignment(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets) ;
       if (lstAssignment.Count > 0)
@@ -375,7 +377,7 @@ namespace IM.Assignment
         dt = GridHelper.GetDataTableFromGrid(lstAssignment, true);
         rptName = "General Assignment";
         string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
-        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRange,dateRange, clsFormatTable.getExcelFormatTableGenAsignyArvls());
+        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
       }
       else
       {
@@ -387,6 +389,7 @@ namespace IM.Assignment
     #region btnAssignmentArrivals
     private void btnAssignmentArrivals_Click(object sender, RoutedEventArgs e)
     {
+      filters.Add(Tuple.Create("Date Range", dateRange));
       filters.Add(Tuple.Create("Lead Source", _LeadSource));
       List<RptAssignmentArrivals> lstAssignmentArrivals = BRAssignment.RptAssignmetArrivals(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets);
       if (lstAssignmentArrivals.Count > 0)
@@ -394,7 +397,7 @@ namespace IM.Assignment
         dt = GridHelper.GetDataTableFromGrid(lstAssignmentArrivals, true);
         rptName = "Arrivals";
         string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
-        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName,dateRange,dateRange, clsFormatTable.getExcelFormatTableGenAsignyArvls());
+        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName,dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
       }
       else
       {

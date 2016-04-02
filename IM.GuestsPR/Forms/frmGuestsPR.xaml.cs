@@ -102,7 +102,7 @@ namespace IM.GuestsPR.Forms
         //Obtenemos el dataTable con la lista formateada
         DataTable dt = GridHelper.GetDataTableFromGrid<GuestByPR>(listaGuestByPR,true);
         //Creamos el reporte
-        FileInfo fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName,dateRange,dateRangeFileName, UseFulMethods.getExcelFormatTable());
+        FileInfo fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName, dateRangeFileName, UseFulMethods.getExcelFormatTable());
 
         if (fi != null)
         {

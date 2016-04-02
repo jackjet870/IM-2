@@ -84,7 +84,7 @@ namespace IM.SalesLiner.Forms
         //Obtenemos el dataTable con la lista formateada
         DataTable dt = GridHelper.GetDataTableFromGrid<SaleByLiner>(listaSaleByLiner, true);
         //Creamos el reporte
-        FileInfo fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName,dateRange,dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable());
+        FileInfo fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable());
 
         if (fi != null)
         {

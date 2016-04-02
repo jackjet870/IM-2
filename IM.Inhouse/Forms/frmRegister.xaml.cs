@@ -781,6 +781,8 @@ namespace IM.Inhouse
       {
        RptReservationOrigos reservation = 
          WirePRHelper.GetRptReservationOrigos(arrival.gulsOriginal, arrival.guHReservID);
+
+        
       }
     } 
     #endregion

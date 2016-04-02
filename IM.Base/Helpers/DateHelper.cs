@@ -63,7 +63,7 @@ namespace IM.Base.Helpers
       //Comparar si es la misma fecha
       if (dateFrom.Date == dateTo.Date)
       {
-        dateRange = string.Format("{0:yyyy,MMMM, dd}", dateFrom);
+        dateRange = string.Format("{0:yyyy-MMMM-dd}", dateFrom);
       }
       // Si son diferentes años
       else if (dateFrom.Year != dateTo.Year)

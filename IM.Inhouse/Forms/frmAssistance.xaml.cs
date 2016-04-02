@@ -388,7 +388,7 @@ namespace IM.Inhouse.Forms
         format.Add(new ExcelFormatTable() { Title = "Saturday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Sunday", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "#Assistence", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName,dateRange,dateRangeFileName, format);
+        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRangeFileName, format);
         MessageBox.Show("Generated Report", "Generated", MessageBoxButton.OK, MessageBoxImage.Exclamation);
       }
       StaEnd();

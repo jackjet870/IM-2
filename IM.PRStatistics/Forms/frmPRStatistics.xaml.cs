@@ -75,6 +75,7 @@ namespace IM.PRStatistics.Forms
         filterTuple = new List<Tuple<string, string>>();
         StaStart("Loading Data...");
         imgButtonOk.IsEnabled = false;
+        filterTuple.Add(new Tuple<string, string>("DateRange", DateHelper.DateRange(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value)));
         filterTuple.Add(new Tuple<string, string>("LeadSource", chbxLeadSources.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxLeadSources)));
         filterTuple.Add(new Tuple<string, string>("SalesRooms", chbxSalesRooms.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxSalesRooms)));
         filterTuple.Add(new Tuple<string, string>("Countries", chbxCountries.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxCountries)));
@@ -104,7 +105,8 @@ namespace IM.PRStatistics.Forms
         FileInfo templatePath = new FileInfo(string.Concat(Directory.GetCurrentDirectory(), "\\ReportTemplate\\RptPRStatistics.xlsx"));
         DataTable dt = GridHelper.GetDataTableFromGrid<RptPRStats>(lstRptStats);
         string nombreReporte = "PR Statistics";
-        FileInfo finfo = IM.Base.Helpers.EpplusHelper.CreateGeneralRptExcel(filterTuple, dt, nombreReporte,dateRange,dateRangeFileName, UsefulMethods.getExcelFormatTable());
+        FileInfo finfo = EpplusHelper.CreateGeneralRptExcel(filterTuple, dt, nombreReporte,dateRangeFileName, UsefulMethods.getExcelFormatTable());
+        
         if (finfo != null)
         {
           Process.Start(finfo.FullName);

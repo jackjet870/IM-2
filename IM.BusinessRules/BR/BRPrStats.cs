@@ -30,7 +30,7 @@ namespace IM.BusinessRules.BR
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
           dbContext.Database.CommandTimeout = 120;
-          return dbContext.USP_OR_RptPRStats(dateFrom, dateTo, filtros[0].Item2,filtros[1].Item2, filtros[2].Item2, filtros[3].Item2, filtros[4].Item2).ToList();
+          return dbContext.USP_OR_RptPRStats(dateFrom, dateTo, filtros[1].Item2,filtros[2].Item2, filtros[3].Item2, filtros[4].Item2, filtros[5].Item2).ToList();
         }
     }
   }
