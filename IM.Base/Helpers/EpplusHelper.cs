@@ -51,8 +51,6 @@ namespace IM.Base.Helpers
       ExcelPackage pk = new ExcelPackage();
       //Preparamos la hoja donde escribiremos
       ExcelWorksheet ws = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
-      //Numero de filtros
-      double filterNumber = filter.Count;
       //Filas Para los filtros
       int FilasTotalesFiltros = 0;
       //Numero de filas del contenido del datatable
@@ -63,7 +61,7 @@ namespace IM.Base.Helpers
 
       #region Report Header
       //Creamos la cabecera del reporte (Titulos, Filtros, Fecha y Hora de Impresion)
-      CreateReportHeader(filter, reportName, ref ws, filterNumber, ref FilasTotalesFiltros);
+      CreateReportHeader(filter, reportName, ref ws, ref FilasTotalesFiltros);
       #endregion Filtros
 
       #region Contenido del reporte
@@ -444,10 +442,12 @@ namespace IM.Base.Helpers
     /// <param name="filterList">Lista de filtros</param>
     /// <param name="reportName">Nombre del reporte</param>
     /// <param name="ws">ExcelWorkdsheet</param>
-    /// <param name="filterNumber">filterNumber</param>
     /// <param name="totalFilterRows">totalFilterRows</param>
-    private static void CreateReportHeader(List<Tuple<string, string>> filterList, string reportName, ref ExcelWorksheet ws, double filterNumber, ref int totalFilterRows)
+    /// 
+    private static void CreateReportHeader(List<Tuple<string, string>> filterList, string reportName, ref ExcelWorksheet ws, ref int totalFilterRows)
     {
+      double filterNumber = filterList.Count;
+
       #region Titulo del reporte
       //Agregamos el Nombre de la Aplicacion en las columnas combinadas A:C en la fila 1
       ws.Cells[1, 1, 1, 3].Merge = true;
