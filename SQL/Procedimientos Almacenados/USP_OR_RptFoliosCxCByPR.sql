@@ -1,13 +1,11 @@
-USE [OrigosVCPalace]
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[USP_OR_RptFoliosCxCByPR]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure [dbo].[USP_OR_RptFoliosCxCByPR]
 GO
 
-/****** Object:  StoredProcedure [dbo].[USP_OR_FoliosInvitationsOuthouseByPR]    Script Date: 01/18/2016 10:33:47 ******/
-SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON 
 GO
-
-SET QUOTED_IDENTIFIER ON
+SET ANSI_NULLS ON 
 GO
-
 
 /*
 ** Palace Resorts
@@ -15,11 +13,11 @@ GO
 **
 ** Consulta los folios CxC
 ** 
-** [lchairezReload]	18/Ene/2016 Creado
+** [lchairez]	18/Ene/2016 Created
+** [wtorres]	04/Abr/2016	Modified. Renombrado. Antes se llamaba USP_OR_FoliosPRCxC
 **
 */
-
-CREATE PROCEDURE [dbo].[USP_OR_FoliosPRCxC]
+CREATE PROCEDURE [dbo].[USP_OR_RptFoliosCxCByPR]
 	@DateFrom DATETIME = NULL,
 	@DateTo DATETIME = NULL,
 	@allFolios BIT = 1,

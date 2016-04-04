@@ -1,7 +1,10 @@
-
-SET ANSI_NULLS ON
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[USP_OR_RptFoliosInvitationsOuthouseByPR]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure [dbo].[USP_OR_RptFoliosInvitationsOuthouseByPR]
 GO
-SET QUOTED_IDENTIFIER ON
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
 GO
 
 /*
@@ -10,11 +13,11 @@ GO
 **
 ** Consulta los huespedes de un Lead Source
 ** 
-** [lchairezReload]	08/Ene/2016 Creado
+** [lchairez]	08/Ene/2016 Created
+** [wtorres]	04/Abr/2016	Modified. Renombrado. Antes se llamaba USP_OR_FoliosInvitationsOuthouseByPR
 **
 */
-
-ALTER PROCEDURE [dbo].[USP_OR_FoliosInvitationsOuthouseByPR]
+CREATE PROCEDURE [dbo].[USP_OR_RptFoliosInvitationsOuthouseByPR]
 	@DateFrom DATETIME,	-- Fecha desde
 	@DateTo DATETIME,	-- Fecha hasta
 	@Serie VARCHAR(5) = 'ALL',	-- Serie
