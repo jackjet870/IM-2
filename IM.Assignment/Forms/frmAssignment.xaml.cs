@@ -68,6 +68,9 @@ namespace IM.Assignment
     #region Metodos
 
     #region LoadListMarkets
+    /// <summary>
+    /// Carga los mercados
+    /// </summary>
     private void LoadListMarkets()
     {
       lstMarkets = BRMarkets.GetMarkets(1);
@@ -77,6 +80,9 @@ namespace IM.Assignment
     #endregion
 
     #region LoadListGuestsUnassigned
+    /// <summary>
+    /// ///Carga los huespedes no asigandos
+    /// </summary>
     private void LoadListGuestsUnassigned()
     {
       _guestUnassignedViewSource.Source = BRAssignment.GetGuestUnassigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, chkShowOnlyAvail.IsChecked.Value);
@@ -85,7 +91,9 @@ namespace IM.Assignment
     #endregion
 
     #region LoadPRs
-
+    ///<summary>
+    ///Carga los PRs que tienen asignado al menos a un huesped
+    ///</summary>
     private void LoadPRs()
     {
       _pRAssignedViewSource.Source = BRAssignment.GetPRsAssigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, chkGuestsPRs.IsChecked.Value, chkMemberPRs.IsChecked.Value);
@@ -94,6 +102,9 @@ namespace IM.Assignment
     #endregion
 
     #region LoadListGuestsAssigned
+    /// <summary>
+    ///Carga los huespedes asignados de los PRs Seleccionados
+    /// </summary>
     private void LoadListGuestsAssigned()
     {
       var selectedItems = grdPRAssigned.SelectedItems;
@@ -106,9 +117,14 @@ namespace IM.Assignment
     #endregion
 
     #region FilterRecords
+    /// <summary>
+    /// Configura los filtros que se muestran en la ventana
+    /// </summary>
     private void FilterRecords()
     {
-      
+      //Refrescamos los filtros
+      filters.Clear();
+
       //Obtiene numero de la semana a partir de una fecha
       int weekYear = CultureInfo.CurrentUICulture.Calendar.GetWeekOfYear(mdtmDate, CalendarWeekRule.FirstFullWeek, mdtmDate.DayOfWeek);
       lblWeek.Content = "Week " + weekYear;
@@ -116,7 +132,6 @@ namespace IM.Assignment
       //Rango de fechas
       dateRange = DateHelper.DateRange(mdtmDate, mdtmDate.AddDays(6));
       lblDataRange.Content = dateRange;
-
       LoadListGuestsUnassigned();
       LoadPRs();
       int sumAssign = 0;
@@ -131,7 +146,10 @@ namespace IM.Assignment
     #endregion
 
     #region DateRange
-    //Obtiene un rango de fechas
+    /// <summary>
+    /// Obtiene un rango de fechas
+    /// Se omite este metodo.. se utiliza DateHelpers.DateRange
+    /// </summary>
     public string DateRange(DateTime pdtmStart, DateTime pdtmEnd)
     {
       string stgDateFormat = "";
@@ -163,10 +181,10 @@ namespace IM.Assignment
       }
       return stgDateFormat;
     }
-    #endregion //Se omite este metodo.. se utiliza DateHelpers.DateRange
+    #endregion
 
     #region getstartweek
-    //Obtiene el primer dia de la semana
+    <
     public static System.DateTime getstartweek(DateTime dt)
      {
        System.DayOfWeek dmon = System.DayOfWeek.Monday;
@@ -177,21 +195,23 @@ namespace IM.Assignment
     #endregion
 
     #region ValidateAssign
-    //Valida los datos para poder asignar huespedes a un PR
+    /// <summary>
+    /// Valida los datos para poder asignar huespedes a un PR
+    /// </summary>
     private Boolean ValidateAssign()
     {
       Boolean blnValid;
       blnValid = true;
 
-      //valida que haya al menos un huesped seleccionado
+      ///valida que haya al menos un huesped seleccionado
       if (grdGuestUnassigned.SelectedItems.Count == 0)
       {
-        MessageBox.Show("Select at least one guest.", "Intelligence Marketing Assignment", MessageBoxButton.OK, MessageBoxImage.Information);
+        UIHelper.ShowMessage("Select at least one guest.",MessageBoxImage.Warning);
         blnValid = false;
       }
       else
       {
-       //valida que haya un PR seleccionado
+       ///valida que haya un PR seleccionado
         if (ValidatePR() == false)
         {
           blnValid = false;
@@ -203,6 +223,9 @@ namespace IM.Assignment
     #endregion
 
     #region ValidateUnassign
+    /// <summary>
+    /// Valida los datos para poder remover un huesped asignado
+    /// </summary>
     private Boolean ValidateUnassign()
     {
       Boolean blnValid;
@@ -210,7 +233,7 @@ namespace IM.Assignment
 
       if (grdGuestAssigned.SelectedItems.Count == 0)
       {
-        MessageBox.Show("Select at least one guest.", "Intelligence Marketing Assignment", MessageBoxButton.OK, MessageBoxImage.Information);
+        UIHelper.ShowMessage("Select at leas one guest",MessageBoxImage.Warning);
         blnValid = false;
       }
       else
@@ -226,7 +249,9 @@ namespace IM.Assignment
     #endregion
 
     #region ValidatePR
-    //Valida que se haya seleccionado solo un PR
+    /// <summary>
+    /// Valida que se haya seleccionado solo un PR
+    /// </summary>
     private Boolean ValidatePR()
     {
       Boolean blnValid;
@@ -234,7 +259,7 @@ namespace IM.Assignment
       //validamos que haya un PR seleccionado
       if (grdPRAssigned.SelectedItems.Count == 0)
       {
-        MessageBox.Show("Select a PR.", "Intelligence Marketing Assignment", MessageBoxButton.OK, MessageBoxImage.Information);
+        UIHelper.ShowMessage("Select a PR.", MessageBoxImage.Warning);
         blnValid = false;
       }
       else
@@ -242,7 +267,7 @@ namespace IM.Assignment
         //validamos que solo haya un PR seleccionado
         if (grdPRAssigned.SelectedItems.Count > 1)
         {
-          MessageBox.Show("Select only one PR.", "Intelligence Marketing Assignment", MessageBoxButton.OK, MessageBoxImage.Information);
+          UIHelper.ShowMessage("Select only one PR", MessageBoxImage.Warning);
           blnValid = false;
         }
       }
@@ -291,7 +316,9 @@ namespace IM.Assignment
     #endregion
 
     #region btnNext_Click
-    ///Avanza a la siguiente semana  
+    /// <summary>
+    /// Avanza a la siguiente semana  
+    /// </summary>
     private void btnNext_Click(object sender, RoutedEventArgs e)
     {
       mdtmDate = mdtmDate.AddDays(7);
@@ -300,7 +327,9 @@ namespace IM.Assignment
     #endregion
 
     #region btnBack_Click
-    //Retrocede una semana
+    /// <summary>
+    /// Retrocede una semana
+    /// </summary>
     private void btnBack_Click(object sender, RoutedEventArgs e)
     {
       mdtmDate = mdtmDate.AddDays(-7);
@@ -309,30 +338,37 @@ namespace IM.Assignment
     #endregion
 
     #region chkShowOnlyAvail_Click
+    /// <summary>
+    /// Verifica si filtrar solo los disponibles
+    /// </summary>
     private void chkShowOnlyAvail_Click(object sender, RoutedEventArgs e)
     {
       FilterRecords();
     }
     #endregion
-   
+
     #region chkMemberPRs_Click
-      //Actualiza la información al seleccionar la opcion de MembersPRs
-      private void chkMemberPRs_Click(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// Actualiza la información al seleccionar la opcion de MembersPRs
+    /// </summary>
+    private void chkMemberPRs_Click(object sender, RoutedEventArgs e)
       {
-        //Condiciona que tenga seleccionado una opcion GuestsPRs o MembersPRs
+        ///Condiciona que tenga seleccionado una opcion GuestsPRs o MembersPRs
         if (chkGuestsPRs.IsChecked == false & chkMemberPRs.IsChecked == false)
         {
           chkGuestsPRs.IsChecked = true;
         }
         FilterRecords();
       }
-      #endregion
-   
+    #endregion
+
     #region chkGuestsPRs_Click
-   //Actualiza la información al seleccionar la opcion de GuestsPRs
-   private void chkGuestsPRs_Click(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// Actualiza la información al seleccionar la opcion de GuestsPRs
+    /// </summary>
+    private void chkGuestsPRs_Click(object sender, RoutedEventArgs e)
    {
-     //Condiciona que tenga seleccionado una opcion GuestsPRs o MembersPRs
+     ///Condiciona que tenga seleccionado una opcion GuestsPRs o MembersPRs
      if (chkGuestsPRs.IsChecked.Value == false & chkMemberPRs.IsChecked.Value == false)
      {
        chkMemberPRs.IsChecked = true;
@@ -342,7 +378,9 @@ namespace IM.Assignment
     #endregion
 
     #region btnAssignmentByPR_Click
-    //Genera el reporte de huespedes asignados por PR
+    /// <summary>
+    /// Genera el reporte de huespedes asignados por PR
+    /// </summary>
     private void btnAssignmentByPR_Click(object sender, RoutedEventArgs e)
     {
       //validamos el PR
@@ -360,13 +398,16 @@ namespace IM.Assignment
         }
         else
         {
-          MessageBox.Show("There is no date.", "Intelligence Marketing Assignment", MessageBoxButton.OK, MessageBoxImage.Information);
+          UIHelper.ShowMessage("There is no data",MessageBoxImage.Warning);
         }
       }
     }
     #endregion
 
     #region btnGeneralAssignment_Click
+    /// <summary>
+    /// Genera el reporte de huespedes asignados
+    /// </summary>
     private void btnGeneralAssignment_Click(object sender, RoutedEventArgs e)
     {
       filters.Add(Tuple.Create("Date Range", dateRange));
@@ -381,12 +422,15 @@ namespace IM.Assignment
       }
       else
       {
-        MessageBox.Show("There is no date.", "Intelligence Marketing Assignment", MessageBoxButton.OK, MessageBoxImage.Information);
+        UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning);
       }
     }
     #endregion
 
     #region btnAssignmentArrivals
+    /// <summary>
+    /// Genera el reporte de llegadas y su asignación
+    /// </summary>
     private void btnAssignmentArrivals_Click(object sender, RoutedEventArgs e)
     {
       filters.Add(Tuple.Create("Date Range", dateRange));
@@ -401,12 +445,15 @@ namespace IM.Assignment
       }
       else
       {
-        MessageBox.Show("There is no date.", "Intelligence Marketing Assignment", MessageBoxButton.OK, MessageBoxImage.Information);
+        UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning);
       }
     }
     #endregion
 
     #region btnAssign_Click
+    /// <summary>
+    /// Asigna huespedes a un PR
+    /// </summary>
     private void btnAssign_Click(object sender, RoutedEventArgs e)
     {
       if (ValidateAssign())
@@ -418,6 +465,9 @@ namespace IM.Assignment
     #endregion
 
     #region btnRemove_Click
+    /// <summary>
+    /// Remueve asignación de huespedes
+    /// </summary>
     private void btnRemove_Click(object sender, RoutedEventArgs e)
     {
       if (ValidateUnassign())
@@ -429,6 +479,9 @@ namespace IM.Assignment
     #endregion
 
     #region grdListMarkets_SelectionChanged
+    /// <summary>
+    /// Guarda lista de mercados seleccionados
+    /// </summary>
     private void grdListMarkets_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       int cont = 0; _markets = string.Empty;
@@ -447,6 +500,9 @@ namespace IM.Assignment
     #endregion
 
     #region grdPRAssigned_SelectionChanged
+    /// <summary>
+    /// Guarda lista de PRs Seleccionados que tienen huespedes asignados
+    /// </summary>
     private void grdPRAssigned_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       int cont = 0; _strgPRs = string.Empty; _strgNamePR = string.Empty;
@@ -468,6 +524,9 @@ namespace IM.Assignment
     #endregion
 
     #region grdGuestUnassigned_SelectionChanged
+    /// <summary>
+    /// Guarda lista de huespedes seleccionados que no se hayan sido asignados
+    /// </summary>
     private void grdGuestUnassigned_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       _strgGuestUnassigned.Clear();
@@ -480,6 +539,9 @@ namespace IM.Assignment
     #endregion
 
     #region grdGuestAssigned_SelectionChanged
+    /// <summary>
+    /// Guarda lista de huespedes seleccionados que estan asignados
+    /// </summary>
     private void grdGuestAssigned_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       _strgGuestAssigned.Clear();
