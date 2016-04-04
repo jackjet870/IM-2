@@ -89,11 +89,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="frmLauncher.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Forms\frmLauncher.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Forms\PrinterCfg.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -104,22 +104,14 @@
     <Compile Include="Classes\ConfigButton.cs" />
     <Compile Include="Classes\EnumMenu.cs" />
     <Compile Include="Classes\ListItemLauncher.cs" />
-    <Compile Include="frmLauncher.xaml.cs">
+    <Compile Include="Forms\frmLauncher.xaml.cs">
       <DependentUpon>frmLauncher.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="PrinterCfg.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="PrinterCfg.xaml.cs">
+    <Compile Include="Forms\PrinterCfg.xaml.cs">
       <DependentUpon>PrinterCfg.xaml</DependentUpon>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

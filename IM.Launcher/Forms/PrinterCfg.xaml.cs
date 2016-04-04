@@ -3,8 +3,7 @@ using System;
 using System.Printing;
 using System.Windows;
 
-
-namespace IM.Launcher
+namespace IM.Launcher.Forms
 {
   /// <summary>
   /// Módulo para configurar las impresoras

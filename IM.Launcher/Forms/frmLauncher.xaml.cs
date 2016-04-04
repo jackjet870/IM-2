@@ -11,11 +11,14 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
-namespace IM.Launcher
+namespace IM.Launcher.Forms
 {
   /// <summary>
-  /// Interaction logic for frmLauncher.xaml
+  /// Formulario que invoca los diferentes módulos del proyecto Intelligement Marketing
   /// </summary>
+  /// <history>
+  /// [lchairez] 05/Feb/2016 Created
+  /// </history>
   public partial class frmLauncher : Window
   {
     #region Variables
@@ -78,7 +81,13 @@ namespace IM.Launcher
         MessageBox.Show("Setup");
       }
     }
-
+	
+    /// <summary>
+    /// Evita que el formulario se cierre al oprimir el botón de cerrar
+    /// </summary>
+    /// <history>
+    /// [lchairez] 05/Feb/2016 Created
+    /// </history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
       e.Cancel = !pushCtrlE;
@@ -179,7 +188,7 @@ namespace IM.Launcher
           UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.ProcessorOUT:
-          UIHelper.ShowMessage("Coming soon..");
+          Process.Start(String.Format("{0}\\IM.ProcessorOuthouse.exe", path));
           break;
         case EnumMenu.ProcessorGRAL:
           Process.Start(String.Format("{0}\\IM.ProcessorGeneral.exe", path));
