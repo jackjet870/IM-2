@@ -153,6 +153,7 @@
     <Compile Include="EfficiencyType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Enums\EnumAction.cs" />
     <Compile Include="Enums\EnumFormatTypeExcel.cs" />
     <Compile Include="Enums\EnumInvitationMode.cs" />
     <Compile Include="Enums\EnumPermission.cs" />

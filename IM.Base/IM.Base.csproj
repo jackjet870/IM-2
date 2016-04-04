@@ -83,6 +83,7 @@
     <Compile Include="Helpers\EpplusHelper.cs" />
     <Compile Include="Helpers\GridHelper.cs" />
     <Compile Include="Helpers\KeyboardHelper.cs" />
+    <Compile Include="Helpers\MessageBoxCustomHelper.cs" />
     <Compile Include="Helpers\ObjectHelper.cs" />
     <Compile Include="Helpers\enumToListHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
@@ -219,6 +220,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Marital_Status.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\Find.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

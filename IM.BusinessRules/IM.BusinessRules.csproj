@@ -77,6 +77,8 @@
     <Compile Include="BR\BRGraph.cs" />
     <Compile Include="BR\BRGuestsAdditional.cs" />
     <Compile Include="BR\BRGuests.cs" />
+    <Compile Include="BR\BRGuestsGroups.cs" />
+    <Compile Include="BR\BRGuestsGroupsIntegrants.cs" />
     <Compile Include="BR\BRGuestsLogs.cs" />
     <Compile Include="BR\BRGuestStatusTypes.cs" />
     <Compile Include="BR\BRHelpers.cs" />

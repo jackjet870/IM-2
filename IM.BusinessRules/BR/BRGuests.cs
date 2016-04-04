@@ -571,7 +571,100 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
+
+    #region GetGuestsGroupIntegrants
+    /// <summary>
+    /// Obtiene el listado de Huespedes pertenecientes a un grupo especificado
+    /// </summary>
+    /// <param name="guestsGroup">Grupo al que pertenecen los Huespedes</param>
+    /// <returns>Listado de Huespedes que integran el grupo</returns>
+    /// <history>[ECANUL] 29-03-2016 Created</history>
+    public static List<Guest> GetGuestsGroupsIntegrants(GuestsGroup guestsGroup)
+    {
+      List<Guest> lstGuests;
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        lstGuests = (from gu in dbContext.Guests
+                     from ggi in gu.GuestsGroups
+                     join gg in dbContext.GuestsGroups
+                     on ggi.gxID equals gg.gxID
+                     where gg.gxID == guestsGroup.gxID
+                     select gu).ToList();
+      }
+      return lstGuests;
+    }
+    #endregion
+
+    #region GetSearchGuestByLS
+    /// <summary>
+    /// Obtiene una lista de Guest resultado de una busqueda con parametros
+    /// </summary>
+    /// <param name="guest">Guest con informacion para buscar</param>
+    /// <param name="leadSource">LS.lspg en el cual se hara la busqueda</param>
+    /// <returns>Lista de Guests Encontrados</returns>
+    /// <history>[ECANUL] 01-04-2016 Created</history>
+    public static List<Guest> GetSearchGuestByLS(Guest guest, LeadSource leadSource)
+    {
+      List<Guest> lstGuest;
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        lstGuest = new List<Guest>();
+        if (guest.guID != 0) //Si tiene GUID, solo se busca por eso y por LS
+        {
+          lstGuest = (from gu in dbContext.Guests
+                      join ls in dbContext.LeadSources
+                      on gu.guls equals ls.lsID
+                      where ls.lspg == leadSource.lspg && gu.guID == guest.guID
+                      select gu).ToList();
+        }
+        else //Si no se tiene GUID se busca por los siguentes criterios
+        { //Si envia El nombre o apellido del Huesped, Se busca por LS, Nombres o apellidos y por Fecha de llegada
+          if (guest.guLastName1 != "" && guest.guLastName1 != null)
+          {
+            lstGuest = (from gu in dbContext.Guests
+                        join ls in dbContext.LeadSources
+                        on gu.guls equals ls.lsID
+                        where ls.lspg == leadSource.lspg &&
+                        gu.guLastName1.Contains(guest.guLastName1) || gu.guFirstName1.Contains(guest.guFirstName1)
+                        || gu.guLastname2.Contains(guest.guLastname2) || gu.guFirstName2.Contains(guest.guFirstName2)
+                        && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
+                        && gu.guls == guest.guls
+                        select gu).ToList();
+          }  //Si tiene el numero de habitacion
+          else if (guest.guRoomNum != "" && guest.guRoomNum != null)
+          {
+            lstGuest = (from gu in dbContext.Guests
+                        join ls in dbContext.LeadSources
+                        on gu.guls equals ls.lsID
+                        where ls.lspg == leadSource.lspg && gu.guRoomNum == guest.guRoomNum
+                        && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
+                        && gu.guls == guest.guls
+                        select gu).ToList();
+          } //Si tiene el numero de reservacion
+          else if (guest.guHReservID != "" && guest.guHReservID != null)
+          {
+            lstGuest = (from gu in dbContext.Guests
+                        join ls in dbContext.LeadSources
+                        on gu.guls equals ls.lsID
+                        where ls.lspg == leadSource.lspg && gu.guHReservID == guest.guHReservID
+                        && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
+                        && gu.guls == guest.guls
+                        select gu).ToList();
+          }
+          else //si no puso nada en los texbos solo se busca por LS y El rango de fechas
+          {
+            lstGuest = (from gu in dbContext.Guests
+                        join ls in dbContext.LeadSources
+                        on gu.guls equals ls.lsID
+                        where ls.lspg == leadSource.lspg && gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD
+                        && gu.guls == guest.guls
+                        select gu).ToList();
+          }
+        }
+        return lstGuest;
+      }
+    } 
+    #endregion
+
   }
 }
-
-    

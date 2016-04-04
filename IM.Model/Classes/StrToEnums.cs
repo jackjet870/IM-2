@@ -280,5 +280,28 @@ namespace IM.Model.Classes
     }
 
     #endregion
+    
+    #region EnumProgramToString
+    /// <summary>
+    /// Convuierte un Enumerado EnumPrograms a String
+    /// </summary>
+    /// <param name="programs">Enumerado a convertir (All no tiene Conversion)</param>
+    /// <returns>String equivalente Al Enumerado</returns>
+    public static string EnumProgramToString(EnumPrograms programs)
+    {
+      string str = string.Empty;
+      switch (programs)
+      {
+        case EnumPrograms.pgInhouse:
+          str = "IH";
+          break;
+        case EnumPrograms.pgOuthouse:
+          str = "OUT";
+          break;
+      }
+      return str;
+    } 
+    #endregion
+
   }
 }

@@ -117,8 +117,14 @@
     <Compile Include="Forms\frmPRNotes.xaml.cs">
       <DependentUpon>frmPRNotes.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmGuestsGroups.xaml.cs">
+      <DependentUpon>frmGuestsGroups.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmRegister.xaml.cs">
       <DependentUpon>frmRegister.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSearchGuest.xaml.cs">
+      <DependentUpon>frmSearchGuest.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSearchGuests.xaml.cs">
       <DependentUpon>frmSearchGuests.xaml</DependentUpon>
@@ -155,8 +161,10 @@
     <None Include="Properties\DataSources\IM.Model.GetGuestsAvailables.datasource" />
     <None Include="Properties\DataSources\IM.Model.GetGuestsPremanifest.datasource" />
     <None Include="Properties\DataSources\IM.Model.GetMarkets.datasource" />
+    <None Include="Properties\DataSources\IM.Model.Guest.datasource" />
     <None Include="Properties\DataSources\IM.Model.GuestArrival.datasource" />
     <None Include="Properties\DataSources\IM.Model.GuestSearched.datasource" />
+    <None Include="Properties\DataSources\IM.Model.GuestsGroup.datasource" />
     <None Include="Properties\DataSources\IM.Model.PersonnelDayOff.datasource" />
     <None Include="Properties\DataSources\IM.Model.Premanifest.datasource" />
     <None Include="Properties\DataSources\IM.Model.PRNote.datasource" />
@@ -205,7 +213,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmGuestsGroups.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmRegister.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmSearchGuest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

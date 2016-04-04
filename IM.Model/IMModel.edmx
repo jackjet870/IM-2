@@ -8602,7 +8602,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           </Key>
           <Property Name="gxID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="gxN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Guests" Relationship="Self.GuestsGroupsIntegrants" FromRole="GuestsGroups" ToRole="Guests" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="Guests" Relationship="Self.GuestsGroupsIntegrants" FromRole="GuestsGroups" ToRole="Guests" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="GuestMovement">
           <Key>

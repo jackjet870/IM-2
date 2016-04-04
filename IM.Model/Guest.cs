@@ -297,6 +297,6 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Guest> GuestsAdditional { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GuestsGroup> GuestsGroups { internal get; set; }
+        public virtual ICollection<GuestsGroup> GuestsGroups { get; set; }
     }
 }

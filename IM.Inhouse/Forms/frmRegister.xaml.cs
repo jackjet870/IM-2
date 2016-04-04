@@ -773,6 +773,69 @@ namespace IM.Inhouse
     }
     #endregion
 
+    #region chkGuestsGroupsArrivals_Clic
+    private void chkGuestsGroupsArrivals_Click(object sender, RoutedEventArgs e)
+    {
+      bool show = true;
+      bool group = false;
+      frmGuestsGroups frmGgGu;
+      var chk = sender as CheckBox;
+      int guID, guIDToAdd = 0;
+      GuestsGroup gg = new GuestsGroup();
+      EnumAction action;
+
+      GuestArrival itema = dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
+
+      action = EnumAction.None;
+      guID = itema.guID;
+      group = itema.guGroup;
+      if (itema.guGroup)//Si tiene Group
+      {
+        gg = BRGuestsGroupsIntegrants.GetGuestGroupByGuest(guID);
+        guIDToAdd = 0;
+      }//Si no tiene Grupo
+      else
+      {
+        guIDToAdd = guID;
+        //impedimos modificar los datos si el sistema esta en modo de solo lectura
+        if (App.Current.Properties.IsReadOnly)
+        {
+          MessageBox.Show("The system is in read-only mode", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+          show = false;
+        }//Si no esta en modo ReadOnly
+        else
+        {
+          MessageBoxCustomHelper.CustomMeesageBox("Create group", "Add to group", "Cancel");
+          MessageBoxResult res = MessageBox.Show("This guest does not belong to a group \nDo you want to create a new group \nor want to add the guest to an existing group?",
+            "Add Guest", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+
+          switch (res)
+          {
+            case MessageBoxResult.Yes: //Crea Nuevo
+              action = EnumAction.Add;
+              break;
+            case MessageBoxResult.No://Agrega A
+              action = EnumAction.AddTo;
+              break;
+            case MessageBoxResult.Cancel://Cancela
+              show = false;
+              break;
+          }
+          MessageBoxCustomHelper.ReturnToCommonMessageBox();
+        }
+      }
+      if (show)//Si no se cancelo en nungun momento se muestra el formulario
+      {
+        frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.SelectedDate.Value, action);
+        frmGgGu.ShowDialog();
+        Guest gu = BRGuests.GetGuest(guID);
+        group = gu.guGroup;
+        LoadGrid();
+      }
+    }
+
+    #endregion
+
     #region ReservationArrival_MouseLeftButtonUp
     private void ReservationArrival_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
@@ -928,6 +991,70 @@ namespace IM.Inhouse
     }
     #endregion
 
+    #region chkGuestsGroupsAviables
+
+    private void chkGuestsGroupsAvailables_Click(object sender, RoutedEventArgs e)
+    {
+      bool show = true;
+      bool group = false;
+      frmGuestsGroups frmGgGu;
+      var chk = sender as CheckBox;
+      int guID, guIDToAdd = 0;
+      GuestsGroup gg = new GuestsGroup();
+      EnumAction action;
+
+      GuestAvailable itema = dgGuestAvailable.Items.GetItemAt(dgGuestAvailable.Items.IndexOf(dgGuestAvailable.CurrentItem)) as GuestAvailable;
+
+      action = EnumAction.None;
+      guID = itema.guID;
+      group = itema.guGroup;
+      if (itema.guGroup)//Si tiene Group
+      {
+        gg = BRGuestsGroupsIntegrants.GetGuestGroupByGuest(guID);
+        guIDToAdd = 0;
+      }//Si no tiene Grupo
+      else
+      {
+        guIDToAdd = guID;
+        //impedimos modificar los datos si el sistema esta en modo de solo lectura
+        if (App.Current.Properties.IsReadOnly)
+        {
+          MessageBox.Show("The system is in read-only mode", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+          show = false;
+        }//Si no esta en modo ReadOnly
+        else
+        {
+          MessageBoxCustomHelper.CustomMeesageBox("Create group", "Add to group", "Cancel");
+          MessageBoxResult res = MessageBox.Show("This guest does not belong to a group \nDo you want to create a new group \nor want to add the guest to an existing group?",
+            "Add Guest", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+
+          switch (res)
+          {
+            case MessageBoxResult.Yes: //Crea Nuevo
+              action = EnumAction.Add;
+              break;
+            case MessageBoxResult.No://Agrega A
+              action = EnumAction.AddTo;
+              break;
+            case MessageBoxResult.Cancel://Cancela
+              show = false;
+              break;
+          }
+          MessageBoxCustomHelper.ReturnToCommonMessageBox();
+        }
+      }
+      if (show)//Si no se cancelo en nungun momento se muestra el formulario
+      {
+        frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.SelectedDate.Value, action);
+        frmGgGu.ShowDialog();
+        Guest gu = BRGuests.GetGuest(guID);
+        group = gu.guGroup;
+        LoadGrid();
+      }
+    }
+
+    #endregion
+
     #endregion
 
     #region 3.- Premanifest
@@ -1073,6 +1200,71 @@ namespace IM.Inhouse
     }
     #endregion
 
+    #region chkGuestsGroupsPremanifest
+
+    private void chkGuestsGroupsPremanifest_Click(object sender, RoutedEventArgs e)
+    {
+      bool show = true;
+      bool group = false;
+      frmGuestsGroups frmGgGu;
+      var chk = sender as CheckBox;
+      int guID, guIDToAdd = 0;
+      GuestsGroup gg = new GuestsGroup();
+      EnumAction action;
+
+      GuestPremanifest itema = dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)) as GuestPremanifest;
+
+      action = EnumAction.None;
+      guID = itema.guID;
+      group = itema.guGroup;
+      if (itema.guGroup)//Si tiene Group
+      {
+        gg = BRGuestsGroupsIntegrants.GetGuestGroupByGuest(guID);
+        guIDToAdd = 0;
+      }//Si no tiene Grupo
+      else
+      {
+        guIDToAdd = guID;
+        //impedimos modificar los datos si el sistema esta en modo de solo lectura
+        if (App.Current.Properties.IsReadOnly)
+        {
+          MessageBox.Show("The system is in read-only mode", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+          show = false;
+        }//Si no esta en modo ReadOnly
+        else
+        {
+          MessageBoxCustomHelper.CustomMeesageBox("Create group", "Add to group", "Cancel");
+          MessageBoxResult res = MessageBox.Show("This guest does not belong to a group \nDo you want to create a new group \nor want to add the guest to an existing group?",
+            "Add Guest", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+
+          switch (res)
+          {
+            case MessageBoxResult.Yes: //Crea Nuevo
+              action = EnumAction.Add;
+              break;
+            case MessageBoxResult.No://Agrega A
+              action = EnumAction.AddTo;
+              break;
+            case MessageBoxResult.Cancel://Cancela
+              show = false;
+              break;
+          }
+          MessageBoxCustomHelper.ReturnToCommonMessageBox();
+        }
+      }
+      if (show)//Si no se cancelo en nungun momento se muestra el formulario
+      {
+        frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.SelectedDate.Value, action);
+        frmGgGu.ShowDialog();
+        Guest gu = BRGuests.GetGuest(guID);
+        group = gu.guGroup;
+        LoadGrid();
+      }
+    }
+
+    #endregion
+
+
     #endregion
 
     #region 4.- GetGuest
@@ -1197,6 +1389,11 @@ namespace IM.Inhouse
     {
 
     }
+
+    private void CheckBox_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
     #endregion
 
     #region ChkBookCancSearched_Click
@@ -1223,6 +1420,69 @@ namespace IM.Inhouse
     }
     #endregion
 
+    #region chkGuestsGroupsSearched
+
+    private void chkGuestsGroupsGuestSearched_Click(object sender, RoutedEventArgs e)
+    {
+      bool show = true;
+      bool group = false;
+      frmGuestsGroups frmGgGu;
+      var chk = sender as CheckBox;
+      int guID, guIDToAdd = 0;
+      GuestsGroup gg = new GuestsGroup();
+      EnumAction action;
+
+      GuestSearched itema = guestSearchedDataGrid.Items.GetItemAt(guestSearchedDataGrid.Items.IndexOf(guestSearchedDataGrid.CurrentItem)) as GuestSearched;
+
+      action = EnumAction.None;
+      guID = itema.guID;
+      group = itema.guGroup;
+      if (itema.guGroup)//Si tiene Group
+      {
+        gg = BRGuestsGroupsIntegrants.GetGuestGroupByGuest(guID);
+        guIDToAdd = 0;
+      }//Si no tiene Grupo
+      else
+      {
+        guIDToAdd = guID;
+        //impedimos modificar los datos si el sistema esta en modo de solo lectura
+        if (App.Current.Properties.IsReadOnly)
+        {
+          MessageBox.Show("The system is in read-only mode", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+          show = false;
+        }//Si no esta en modo ReadOnly
+        else
+        {
+          MessageBoxCustomHelper.CustomMeesageBox("Create group", "Add to group", "Cancel");
+          MessageBoxResult res = MessageBox.Show("This guest does not belong to a group \nDo you want to create a new group \nor want to add the guest to an existing group?",
+            "Add Guest", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+
+          switch (res)
+          {
+            case MessageBoxResult.Yes: //Crea Nuevo
+              action = EnumAction.Add;
+              break;
+            case MessageBoxResult.No://Agrega A
+              action = EnumAction.AddTo;
+              break;
+            case MessageBoxResult.Cancel://Cancela
+              show = false;
+              break;
+          }
+          MessageBoxCustomHelper.ReturnToCommonMessageBox();
+        }
+      }
+      if (show)//Si no se cancelo en nungun momento se muestra el formulario
+      {
+        frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.SelectedDate.Value, action);
+        frmGgGu.ShowDialog();
+        Guest gu = BRGuests.GetGuest(guID);
+        group = gu.guGroup;
+        LoadGrid();
+      }
+    }
+
+    #endregion
 
     #endregion
 
@@ -1269,6 +1529,14 @@ namespace IM.Inhouse
       DataGridVisibility(Visibility.Hidden, Visibility.Hidden, Visibility.Visible,Visibility.Hidden);
       LoadGrid();
     }
+    #endregion
+
+    #region btnGroups_Click
+    private void btnGrouos_Click(object sender, RoutedEventArgs e)
+    {
+      Forms.frmGuestsGroups frmGroups = new frmGuestsGroups(0, 0, 0, dtpDate.SelectedDate.Value, EnumAction.Search);
+      frmGroups.Show();
+    } 
     #endregion
 
     #region btnDaysOff_Click
@@ -1333,12 +1601,9 @@ namespace IM.Inhouse
       invit.ShowDialog();
     }
     #endregion
-
+    
     #endregion
-
-  
-
-  
+    
   }
 
 }
