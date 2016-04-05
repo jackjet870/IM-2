@@ -1861,5 +1861,63 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionByContractAgencyMarketOriginallyAvailableInhouse>("USP_OR_RptProductionByContractAgencyMarketOriginallyAvailableInhouse", dateFromParameter, dateToParameter, leadSourcesParameter, marketsParameter, agenciesParameter, considerQuinellasParameter, basedOnArrivalParameter);
         }
+    
+        public virtual ObjectResult<LeadSourceShort> USP_OR_GetLeadSourcesByZoneBoss(string zone)
+        {
+            var zoneParameter = zone != null ?
+                new ObjectParameter("Zone", zone) :
+                new ObjectParameter("Zone", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<LeadSourceShort>("USP_OR_GetLeadSourcesByZoneBoss", zoneParameter);
+        }
+    
+        public virtual ObjectResult<ZoneTransfer> USP_OR_GetZonesTransfer()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ZoneTransfer>("USP_OR_GetZonesTransfer");
+        }
+    
+        public virtual ObjectResult<TransferStartData> USP_OR_TransferStart()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TransferStartData>("USP_OR_TransferStart");
+        }
+    
+        public virtual int USP_OR_TransferStopZone(string zone)
+        {
+            var zoneParameter = zone != null ?
+                new ObjectParameter("Zone", zone) :
+                new ObjectParameter("Zone", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferStopZone", zoneParameter);
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsAvailables(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsAvailables", dateFromParameter, dateToParameter);
+        }
+    
+        public virtual int USP_OR_UpdateExchangeRate(Nullable<System.DateTime> date, string currency, Nullable<decimal> exchangeRate)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var currencyParameter = currency != null ?
+                new ObjectParameter("Currency", currency) :
+                new ObjectParameter("Currency", typeof(string));
+    
+            var exchangeRateParameter = exchangeRate.HasValue ?
+                new ObjectParameter("ExchangeRate", exchangeRate) :
+                new ObjectParameter("ExchangeRate", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateExchangeRate", dateParameter, currencyParameter, exchangeRateParameter);
+        }
     }
 }

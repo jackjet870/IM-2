@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="IMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="IMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Activities">
           <Key>
             <PropertyRef Name="acID" />
@@ -5834,6 +5834,9 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="Programs" Type="varchar" Mode="In" />
           <Parameter Name="Regions" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetLeadSourcesByZoneBoss" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Zone" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetLocationsByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="User" Type="varchar" Mode="In" />
           <Parameter Name="Program" Type="varchar" Mode="In" />
@@ -5930,6 +5933,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="wmwh" Type="varchar" Mode="In" />
           <Parameter Name="wmD" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetZonesTransfer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_GraphNotBookingArrivals" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFromWeek" Type="datetime" Mode="In" />
           <Parameter Name="LeadSources" Type="varchar" Mode="In" />
@@ -6162,6 +6166,19 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
           <Parameter Name="HoursDif" Type="smallint" Mode="In" />
           <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_TransferStart" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferStopZone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Zone" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_TransferUpdateGuestsAvailables" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_UpdateExchangeRate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="Currency" Type="varchar" Mode="In" />
+          <Parameter Name="ExchangeRate" Type="decimal" Mode="In" />
         </Function>
         <Function Name="USP_OR_UpdateMealTicketFolio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
@@ -14888,10 +14905,10 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <End Role="SalesRooms" EntitySet="SalesRooms" />
           </AssociationSet>
           <FunctionImport Name="USP_OR_GetCountries" ReturnType="Collection(IMModel.CountryShort)">
-            <Parameter Name="Status" Mode="In" Type="Byte" />
+          <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetAgencies" ReturnType="Collection(IMModel.AgencyShort)">
-            <Parameter Name="Status" Mode="In" Type="Byte" />
+          <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetArrivals" ReturnType="Collection(IMModel.GuestArrival)">
             <Parameter Name="Date" Mode="In" Type="DateTime" />
@@ -14927,7 +14944,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="guBookD" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetLanguages" ReturnType="Collection(IMModel.LanguageShort)">
-            <Parameter Name="Status" Mode="In" Type="Byte" />
+          <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetLeadSourcesByUser" ReturnType="Collection(IMModel.LeadSourceByUser)">
             <Parameter Name="User" Mode="In" Type="String" />
@@ -14943,7 +14960,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="mtA" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetMarkets" ReturnType="Collection(IMModel.MarketShort)">
-            <Parameter Name="Status" Mode="In" Type="Byte" />
+          <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_Login">
             <ReturnType Type="Collection(IMModel.UserLogin)" />
@@ -14956,16 +14973,16 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="LoginType" Mode="In" Type="Byte" />
             <Parameter Name="User" Mode="In" Type="String" />
             <Parameter Name="Place" Mode="In" Type="String" />
-          </FunctionImport>
+            </FunctionImport>
           <FunctionImport Name="USP_OR_GetSalesRoomsByUser" ReturnType="Collection(IMModel.SalesRoomByUser)">
             <Parameter Name="User" Mode="In" Type="String" />
             <Parameter Name="Regions" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetSalesRoom" ReturnType="Collection(IMModel.SalesRoomCloseDates)">
-            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+          <Parameter Name="SalesRoom" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetSalesRooms" ReturnType="Collection(IMModel.SalesRoomShort)">
-            <Parameter Name="Status" Mode="In" Type="Byte" />
+          <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetWhsMovs" ReturnType="Collection(IMModel.WarehouseMovementShort)">
             <Parameter Name="wmwh" Mode="In" Type="String" />
@@ -14997,7 +15014,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Markets" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_ActualizarFechasTemporadas">
-            <Parameter Name="CurrentYear" Mode="In" Type="Int32" />
+          <Parameter Name="CurrentYear" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_CloseGiftsReceipts">
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
@@ -15016,10 +15033,10 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetExchangeRateLog" ReturnType="Collection(IMModel.ExchangeRateLogData)">
-            <Parameter Name="Currency" Mode="In" Type="String" />
+          <Parameter Name="Currency" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetExchangeRatesWithPesosByDate" ReturnType="Collection(IMModel.ExchangeRateData)">
-            <Parameter Name="Date" Mode="In" Type="DateTime" />
+          <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GraphProductionByPR" ReturnType="Collection(IMModel.GraphProductionByPRData)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
@@ -15027,7 +15044,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="LeadSource" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_InsertExchangeRate">
-            <Parameter Name="CurrentDate" Mode="In" Type="DateTime" />
+          <Parameter Name="CurrentDate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_SaveSalesRoomLog">
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
@@ -15045,14 +15062,14 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Dept" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetSalesRoomLog" ReturnType="Collection(IMModel.SalesRoomLogData)">
-            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+          <Parameter Name="SalesRoom" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_RptBookingsBySalesRoomProgramTime" ReturnType="Collection(IMModel.RptBookingsBySalesRoomProgramTime)">
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="SalesRooms" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGuestLog" ReturnType="Collection(IMModel.GuestLogData)">
-            <Parameter Name="Guest" Mode="In" Type="Int32" />
+          <Parameter Name="Guest" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_SaveLoginLog">
             <Parameter Name="Location" Mode="In" Type="String" />
@@ -15306,7 +15323,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="LeadSources" Mode="In" Type="String" />
             <Parameter Name="ChargeTo" Mode="In" Type="String" />
             <Parameter Name="Gifts" Mode="In" Type="String" />
-          </FunctionImport>
+            </FunctionImport>
           <FunctionImport Name="USP_OR_RptGuestsShowNoPresentedInvitation" ReturnType="Collection(IMModel.RptGuestsShowNoPresentedInvitation)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -15334,7 +15351,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <ReturnType Type="Collection(IMModel.GraphNotBookingArrivals)" />
             <Parameter Name="DateFromWeek" Mode="In" Type="DateTime" />
             <Parameter Name="LeadSources" Mode="In" Type="String" />
-          </FunctionImport>
+            </FunctionImport>
           <FunctionImport Name="USP_OR_RptProductionByAgeInhouse" ReturnType="Collection(IMModel.RptProductionByAgeInhouse)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -15379,6 +15396,23 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Agencies" Mode="In" Type="String" />
             <Parameter Name="ConsiderQuinellas" Mode="In" Type="Boolean" />
             <Parameter Name="BasedOnArrival" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetLeadSourcesByZoneBoss" ReturnType="Collection(IMModel.LeadSourceShort)">
+            <Parameter Name="Zone" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetZonesTransfer" ReturnType="Collection(IMModel.ZoneTransfer)" />
+          <FunctionImport Name="USP_OR_TransferStart" ReturnType="Collection(IMModel.TransferStartData)" />
+          <FunctionImport Name="USP_OR_TransferStopZone">
+            <Parameter Name="Zone" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsAvailables">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateExchangeRate">
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="Currency" Mode="In" Type="String" />
+            <Parameter Name="ExchangeRate" Mode="In" Type="Decimal" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -16639,6 +16673,19 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="String" Name="NotBookingMotiveN" Nullable="false" MaxLength="50" />
           <Property Type="Int32" Name="Arrivals" Nullable="true" />
           <Property Type="Decimal" Name="Percentage" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="LeadSourceShort">
+          <Property Type="String" Name="lsID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="lsN" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="ZoneTransfer">
+          <Property Type="String" Name="znID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="znN" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="znZoneHotel" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="TransferStartData">
+          <Property Type="Boolean" Name="ocOneNightV" Nullable="false" />
+          <Property Type="Boolean" Name="ocTwoNightV" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -20475,6 +20522,34 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetLeadSourcesByZoneBoss" FunctionName="IMModel.Store.USP_OR_GetLeadSourcesByZoneBoss">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.LeadSourceShort">
+                <ScalarProperty Name="lsID" ColumnName="lsID" />
+                <ScalarProperty Name="lsN" ColumnName="lsN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetZonesTransfer" FunctionName="IMModel.Store.USP_OR_GetZonesTransfer">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.ZoneTransfer">
+                <ScalarProperty Name="znID" ColumnName="znID" />
+                <ScalarProperty Name="znN" ColumnName="znN" />
+                <ScalarProperty Name="znZoneHotel" ColumnName="znZoneHotel" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferStart" FunctionName="IMModel.Store.USP_OR_TransferStart">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.TransferStartData">
+                <ScalarProperty Name="ocOneNightV" ColumnName="ocOneNightV" />
+                <ScalarProperty Name="ocTwoNightV" ColumnName="ocTwoNightV" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferStopZone" FunctionName="IMModel.Store.USP_OR_TransferStopZone" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsAvailables" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsAvailables" />
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateExchangeRate" FunctionName="IMModel.Store.USP_OR_UpdateExchangeRate" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -374,6 +374,9 @@
     <Compile Include="LeadSourceLogin.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="LeadSourceShort.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Location.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -753,6 +756,9 @@
     <Compile Include="TourTimesSchema.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="TransferStartData.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="UnavailableMotive.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -787,6 +793,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Zone.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ZoneTransfer.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>
