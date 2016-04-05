@@ -140,7 +140,7 @@ namespace IM.Launcher.Forms
         itemLauncher = new ListItemLauncher();
         itemLauncher.Orden = item.Key;
         itemLauncher.Descripcion = item.Value;
-        itemLauncher.UriImage = String.Format("{0}{1}_32.png", pathImages, ((EnumMenu) item.Key).ToString());
+        itemLauncher.UriImage = String.Format("{0}{1}.png", pathImages, ((EnumMenu) item.Key).ToString());
         itemLauncher.Image = new BitmapImage(new Uri(itemLauncher.UriImage));
         lstItemLauncher.Add(itemLauncher);
       }

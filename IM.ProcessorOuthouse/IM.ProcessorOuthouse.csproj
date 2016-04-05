@@ -35,23 +35,22 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Publish\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\Publish\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Images\IM.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>
@@ -116,7 +115,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Forms\frmFilterDateRange.xaml.cs">
       <DependentUpon>frmFilterDateRange.xaml</DependentUpon>
@@ -162,10 +160,6 @@
       <Project>{13f00191-f647-4865-bd19-1e0ea12f6838}</Project>
       <Name>IM.BusinessRules</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IM.Launcher\IM.Launcher.csproj">
-      <Project>{2a22e5f1-28e3-4c43-9c5b-476f077ab803}</Project>
-      <Name>IM.Launcher</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IM.Model\IM.Model.csproj">
       <Project>{4d0c8faf-7eeb-4a36-9826-e190a0d9fe72}</Project>
       <Name>IM.Model</Name>
@@ -173,9 +167,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\IM.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="IM.ico" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\DataSources\" />

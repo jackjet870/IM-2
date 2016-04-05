@@ -184,7 +184,7 @@ namespace IM.Assignment
     #endregion
 
     #region getstartweek
-    <
+    
     public static System.DateTime getstartweek(DateTime dt)
      {
        System.DayOfWeek dmon = System.DayOfWeek.Monday;
