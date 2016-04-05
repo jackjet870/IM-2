@@ -14,7 +14,6 @@ namespace IM.Graph
   public partial class App : Application
   {
     #region Constructores y destructores
-
     /// <summary>
     /// Constructor de la aplicacion
     /// </summary>
@@ -25,28 +24,11 @@ namespace IM.Graph
     {
       this.Dispatcher.UnhandledException += App_UnhandledException;
     }
-
-    #endregion Constructores y destructores
+    #endregion
 
     #region Metodos
 
-    /// <summary>
-    /// Despliega los mensajes de error de la aplicacion
-    /// </summary>
-    /// <history>
-    ///   [aalcocer]  10/03/2016 Created
-    /// </history>
-    private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-    {
-      e.Handled = true;
-      var frm = new frmError(e.Exception);
-      frm.ShowDialog();
-      if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
-      {
-        Application.Current.Shutdown();
-      }
-    }
-
+    #region OnStartup
     /// <summary>
     /// Inicializa el modulo con el Login y el Splash
     /// </summary>
@@ -64,12 +46,32 @@ namespace IM.Graph
       if (((frmLS)frmLS).IsValidated)
       {
         LeadSource leadsource = ((frmLS)frmLS).leadSource;
-        frmGraph frmGraph = new frmGraph(leadsource);
-        frmGraph.ShowDialog();
+        frmGraph frmMain = new frmGraph(leadsource);
+        frmMain.ShowDialog();
         frmSplash.Close();
       }
     }
+    #endregion
 
-    #endregion Metodos
+    #region App_UnhandledException
+    /// <summary>
+    /// Despliega los mensajes de error de la aplicacion
+    /// </summary>
+    /// <history>
+    ///   [aalcocer]  10/03/2016 Created
+    /// </history>
+    private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+      e.Handled = true;
+      var frm = new frmError(e.Exception);
+      frm.ShowDialog();
+      if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
+      {
+        Application.Current.Shutdown();
+      }
+    }
+    #endregion
+
+    #endregion
   }
 }

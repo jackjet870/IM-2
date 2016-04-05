@@ -1,14 +1,15 @@
-﻿using System.Windows;
+﻿using IM.Base.Forms;
+using IM.Base.Helpers;
 using IM.Model.Classes;
-using IM.Base.Forms;
 using IM.Model.Enums;
 using IM.Administrator.Forms;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace IM.Administrator
 {
-
   /// <summary>
   /// Interaction logic for App.xaml
   /// </summary>
@@ -20,42 +21,25 @@ namespace IM.Administrator
 
     #endregion
 
-    #region Constructores y desctructores
-    public App():base()
+    #region Constructores y destructores
+    /// <summary>
+    /// Constructor de la aplicacion
+    /// </summary>
+    public App() : base()
     {
       this.Dispatcher.UnhandledException += App_UnhandledException;
     }
     #endregion
 
-    #region Methods
-
-    #region App_UnhandledException
-
-    /// <summary>
-    /// Sirve para el manejo de excepciones no controladas
-    /// </summary>
-    private void App_UnhandledException(object sender,System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
-    {
-      e.Handled = true;
-      var frm = new frmError(e.Exception);
-      frm.ShowDialog();
-      if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
-      {
-        Application.Current.Shutdown();
-      }
-    }
-
-    #endregion
+    #region Metodos
 
     #region OnStartup
-
     /// <summary>
-    /// LLama a la ventana de login 
+    /// Inicializa el modulo con el Login y el Splash
     /// </summary>
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-
       frmSplash frmSplash = new frmSplash("Administrator");
       frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Normal);
       frmSplash.Show();
@@ -66,19 +50,35 @@ namespace IM.Administrator
         if (User.HasRole(EnumRole.Manager))
         {
           EventManager.RegisterClassHandler(typeof(AccessText), AccessKeyManager.AccessKeyPressedEvent, new RoutedEventHandler(keyManager_keyPressed));
-          frmAdmin frmAdm = new frmAdmin();
-          frmAdm.ShowDialog();
+          frmAdmin frmMain = new frmAdmin();
+          frmMain.ShowDialog();
           frmSplash.Close();
         }
         else
         {
-          //NO tiene permiso para ver el Admin
-          MessageBox.Show("User doesn't have acces");
+          // No tiene permiso para ingresar al modulo
+          UIHelper.ShowMessage("User doesn't have access");
         }
       }
     }
-
     #endregion
+
+    #region App_UnhandledException
+    /// <summary>
+    /// Despliega los mensajes de error de la aplicacion
+    /// </summary>
+    private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+      e.Handled = true;
+      var frm = new frmError(e.Exception);
+      frm.ShowDialog();
+      if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
+      {
+        Application.Current.Shutdown();
+      }
+    }
+    #endregion
+    
     #region KeyManager
     /// <summary>
     /// Verifica que los accesText sólo se ejecuten en combinacion con ALtLeft
@@ -96,6 +96,7 @@ namespace IM.Administrator
       }
     } 
     #endregion
+	
     #endregion
   }
 }

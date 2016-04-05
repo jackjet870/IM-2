@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using IM.Base.Forms;
+﻿using IM.Base.Forms;
 using IM.Base.Helpers;
-using IM.Model.Enums;
 using IM.Model.Classes;
+using IM.Model.Enums;
 using IM.ProcessorGeneral.Forms;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace IM.ProcessorGeneral
 {
@@ -18,22 +13,28 @@ namespace IM.ProcessorGeneral
   /// </summary>
   public partial class App : Application
   {
+    #region Propiedades
+
+    public static UserData User;
+
+    #endregion
+
+    #region Constructores y destructores
+    /// <summary>
+    /// Constructor de la aplicacion
+    /// </summary>
     public App() : base()
     {
-      Dispatcher.UnhandledException += Dispatcher_UnhandledException;
+      this.Dispatcher.UnhandledException += App_UnhandledException;
     }
+    #endregion
 
-    private void Dispatcher_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
-    {
-      e.Handled = true;
-      var frmError = new frmError(e.Exception);
-      if (frmError.DialogResult.HasValue && !frmError.DialogResult.Value)
-      {
-        Application.Current.Shutdown();
-      }
-    }
+    #region Metodos
 
-    public static UserData userData { get; set; }
+    #region OnStartup
+    /// <summary>
+    /// Inicializa el modulo con el Login y el Splash
+    /// </summary>
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
@@ -43,17 +44,39 @@ namespace IM.ProcessorGeneral
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        userData = frmLogin.userData;
-        if (userData.HasRole(EnumRole.Manager))
+        User = frmLogin.userData;
+        if (User.HasRole(EnumRole.Manager))
         {
-          frmProcessorGeneral frmProcessor = new frmProcessorGeneral();
-          frmProcessor.Show();
+          frmProcessorGeneral frmMain = new frmProcessorGeneral();
+          frmMain.Show();
           frmLogin.Close();
           frmSplash.Close();
         }
         else
+        {
+          // No tiene permiso para ingresar al modulo
           UIHelper.ShowMessage("User doesn't have access");
+        }
       }
     }
+    #endregion
+
+    #region App_UnhandledException
+    /// <summary>
+    /// Despliega los mensajes de error de la aplicacion
+    /// </summary>
+    private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+      e.Handled = true;
+      var frm = new frmError(e.Exception);
+      frm.ShowDialog();
+      if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
+      {
+        Application.Current.Shutdown();
+      }
+    }
+    #endregion
+
+    #endregion
   }
 }

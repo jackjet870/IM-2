@@ -1919,5 +1919,42 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateExchangeRate", dateParameter, currencyParameter, exchangeRateParameter);
         }
+    
+        public virtual ObjectResult<GiftsReceiptsShort> USP_OR_GetGiftsReceipts(Nullable<int> guest, string salesRoom, Nullable<int> receipt, string folio, Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string name, string reservation)
+        {
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            var folioParameter = folio != null ?
+                new ObjectParameter("Folio", folio) :
+                new ObjectParameter("Folio", typeof(string));
+    
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var reservationParameter = reservation != null ?
+                new ObjectParameter("Reservation", reservation) :
+                new ObjectParameter("Reservation", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftsReceiptsShort>("USP_OR_GetGiftsReceipts", guestParameter, salesRoomParameter, receiptParameter, folioParameter, dateFromParameter, dateToParameter, nameParameter, reservationParameter);
+        }
     }
 }

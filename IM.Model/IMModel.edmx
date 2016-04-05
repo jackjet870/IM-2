@@ -5781,6 +5781,16 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="Locations" Type="varchar" Mode="In" />
           <Parameter Name="Status" Type="tinyint" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetGiftsReceipts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Guest" Type="int" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+          <Parameter Name="Folio" Type="varchar" Mode="In" />
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="Reservation" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetGuestLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Guest" Type="int" Mode="In" />
         </Function>
@@ -15398,12 +15408,12 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="BasedOnArrival" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetLeadSourcesByZoneBoss" ReturnType="Collection(IMModel.LeadSourceShort)">
-            <Parameter Name="Zone" Mode="In" Type="String" />
+          <Parameter Name="Zone" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetZonesTransfer" ReturnType="Collection(IMModel.ZoneTransfer)" />
           <FunctionImport Name="USP_OR_TransferStart" ReturnType="Collection(IMModel.TransferStartData)" />
           <FunctionImport Name="USP_OR_TransferStopZone">
-            <Parameter Name="Zone" Mode="In" Type="String" />
+          <Parameter Name="Zone" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_TransferUpdateGuestsAvailables">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
@@ -15413,6 +15423,16 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="Currency" Mode="In" Type="String" />
             <Parameter Name="ExchangeRate" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGiftsReceipts" ReturnType="Collection(IMModel.GiftsReceiptsShort)">
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Folio" Mode="In" Type="String" />
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Reservation" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -16237,11 +16257,11 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="Int32" Name="grgu" Nullable="true" />
           <Property Type="String" Name="grGuest" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="Gift" Nullable="true" MaxLength="10" />
-          <Property Type="Int32" Name="Quantity" Nullable="false" />
-          <Property Type="Int32" Name="Adults" Nullable="false" />
-          <Property Type="Int32" Name="Minors" Nullable="false" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="Int32" Name="Adults" Nullable="true" />
+          <Property Type="Int32" Name="Minors" Nullable="true" />
           <Property Type="String" Name="Folios" Nullable="false" MaxLength="100" />
-          <Property Type="Decimal" Name="Cost" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="Cost" Nullable="true" Precision="19" />
           <Property Type="DateTime" Name="grD" Nullable="false" Precision="23" />
           <Property Type="Decimal" Name="CostUS" Nullable="false" Precision="19" />
           <Property Type="Decimal" Name="exExchRate" Nullable="false" Precision="12" Scale="8" />
@@ -16686,6 +16706,11 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
         <ComplexType Name="TransferStartData">
           <Property Type="Boolean" Name="ocOneNightV" Nullable="false" />
           <Property Type="Boolean" Name="ocTwoNightV" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GiftsReceiptsShort">
+          <Property Type="Int32" Name="grID" Nullable="false" />
+          <Property Type="String" Name="grNum" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="grExchange" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -20550,6 +20575,15 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <FunctionImportMapping FunctionImportName="USP_OR_TransferStopZone" FunctionName="IMModel.Store.USP_OR_TransferStopZone" />
           <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsAvailables" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsAvailables" />
           <FunctionImportMapping FunctionImportName="USP_OR_UpdateExchangeRate" FunctionName="IMModel.Store.USP_OR_UpdateExchangeRate" />
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGiftsReceipts" FunctionName="IMModel.Store.USP_OR_GetGiftsReceipts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GiftsReceiptsShort">
+                <ScalarProperty Name="grID" ColumnName="grID" />
+                <ScalarProperty Name="grNum" ColumnName="grNum" />
+                <ScalarProperty Name="grExchange" ColumnName="grExchange" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

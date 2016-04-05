@@ -50,9 +50,9 @@ namespace IM.ProcessorGeneral.Forms
       InitializeComponent();
       _lstGifts = BRGifts.GetGifts();
       _lstGiftsCate = BRGifts.GetGiftsCategories();
-      _lstSalesRoom = BRSalesRooms.GetSalesRoomsByUser(App.userData.User.peID);
+      _lstSalesRoom = BRSalesRooms.GetSalesRoomsByUser(App.User.User.peID);
       _lstPrograms = BRPrograms.GetPrograms();
-      _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.userData.User.peID, "ALL", "ALL");
+      _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, "ALL", "ALL");
       _lstRateTypes = BRRateTypes.GetRateType();
 
       cboStatus.ItemsSource = EnumToListHelper.GetList<EnumStatus>();

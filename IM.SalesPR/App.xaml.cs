@@ -1,8 +1,9 @@
 ﻿using IM.Base.Forms;
 using IM.Model.Classes;
 using IM.Model.Enums;
-using System.Windows;
 using IM.SalesPR.Forms;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace IM.SalesPR
 {
@@ -11,7 +12,6 @@ namespace IM.SalesPR
   /// </summary>
   public partial class App : Application
   {
-
     #region Propiedades
 
     public static UserData User;
@@ -19,24 +19,21 @@ namespace IM.SalesPR
     #endregion
 
     #region Constructores y destructores
-
     /// <summary>
     /// Constructor de la aplicacion
     /// </summary>
     /// <history>
     ///   [erosado]  22/Mar/2016 Created
     /// </history>
-    public App()
-      : base()
+    public App() : base()
     {
       this.Dispatcher.UnhandledException += App_UnhandledException;
     }
-
     #endregion
 
     #region Metodos
 
-    #region OnStartUp
+    #region OnStartup
     /// <summary>
     /// Inicializa el modulo con el Login y el Splash
     /// </summary>
@@ -46,28 +43,25 @@ namespace IM.SalesPR
       frmSplash frmSplash = new frmSplash("Sales PR");
       frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true);
       frmSplash.Show();
-
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
         User = frmLogin.userData;
-        Forms.frmSalesPR frmSalesPR = new Forms.frmSalesPR();
-        frmSalesPR.ShowDialog();
+        frmSalesPR frmMain = new frmSalesPR();
+        frmMain.ShowDialog();
         frmSplash.Close();
       }
     }
-
     #endregion
 
     #region App_UnhandledException
-
     /// <summary>
     /// Despliega los mensajes de error de la aplicacion
     /// </summary>
     /// <history>
     ///  [erosado]  09/Mar/2016 Created
     /// </history>
-    private void App_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+    private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
       var frm = new frmError(e.Exception);
@@ -77,7 +71,6 @@ namespace IM.SalesPR
         Application.Current.Shutdown();
       }
     }
-
     #endregion
 
     #endregion

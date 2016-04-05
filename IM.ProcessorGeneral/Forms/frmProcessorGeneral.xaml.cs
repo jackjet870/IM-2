@@ -81,7 +81,7 @@ namespace IM.ProcessorGeneral.Forms
     private void Window_Loaded(object sender, EventArgs e)
     {
       configurarGrids();
-      lblUserName.Content = App.userData.User.peN;
+      lblUserName.Content = App.User.User.peN;
     }
     #endregion
 

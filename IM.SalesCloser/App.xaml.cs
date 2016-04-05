@@ -1,8 +1,9 @@
 ﻿using IM.Base.Forms;
 using IM.Model.Classes;
 using IM.Model.Enums;
-using System.Windows;
 using IM.SalesCloser.Forms;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace IM.SalesCloser
 {
@@ -18,24 +19,21 @@ namespace IM.SalesCloser
     #endregion
 
     #region Constructores y destructores
-
     /// <summary>
     /// Constructor de la aplicacion
     /// </summary>
     /// <history>
     ///   [erosado]  23/Mar/2016 Created
     /// </history>
-    public App()
-      : base()
+    public App() : base()
     {
       this.Dispatcher.UnhandledException += App_UnhandledException;
     }
-
     #endregion
 
     #region Metodos
 
-    #region OnStartUp
+    #region OnStartup
     /// <summary>
     /// Inicializa el modulo con el Login y el Splash
     /// </summary>
@@ -47,28 +45,25 @@ namespace IM.SalesCloser
       frmSplash frmSplash = new frmSplash("Sales Closer");
       frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.SalesRoom, true);
       frmSplash.Show();
-
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
         User = frmLogin.userData;
-        frmSalesCloser frmSalesLiner = new Forms.frmSalesCloser();
-        frmSalesLiner.ShowDialog();
+        frmSalesCloser frmMain = new frmSalesCloser();
+        frmMain.ShowDialog();
         frmSplash.Close();
       }
     }
-
     #endregion
 
     #region App_UnhandledException
-
     /// <summary>
     /// Despliega los mensajes de error de la aplicacion
     /// </summary>
     /// <history>
     ///  [erosado]  23/Mar/2016 Created
     /// </history>
-    private void App_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+    private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
       var frm = new frmError(e.Exception);
@@ -78,7 +73,6 @@ namespace IM.SalesCloser
         Application.Current.Shutdown();
       }
     }
-
     #endregion
 
     #endregion

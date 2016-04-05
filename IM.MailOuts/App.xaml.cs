@@ -1,9 +1,9 @@
 ﻿using IM.Base.Forms;
 using IM.Model.Classes;
 using IM.Model.Enums;
+using IM.MailOuts.Forms;
 using System.Windows;
 using System.Windows.Threading;
-using IM.MailOuts.Forms;
 
 namespace IM.MailOuts
 {
@@ -25,7 +25,7 @@ namespace IM.MailOuts
     /// <history>
     ///   [aalcocer]  04/03/2016 Created
     /// </history>
-    public App():base()
+    public App() : base()
     {
       this.Dispatcher.UnhandledException += App_UnhandledException;
     }
@@ -33,8 +33,28 @@ namespace IM.MailOuts
 
     #region Metodos
 
-    #region App_UnhandledException
+    #region OnStartup
+    /// <summary>
+    /// Inicializa el modulo con el Login y el Splash
+    /// </summary>
+    protected override void OnStartup(StartupEventArgs e)
+    {
+      base.OnStartup(e);
+      frmSplash frmSplash = new frmSplash("Mail Outs");
+      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true);
+      frmSplash.Show();
+      frmSplash.ShowLogin(ref frmLogin);
+      if (frmLogin.IsAuthenticated)
+      {
+        User = frmLogin.userData;
+        frmMailOuts frmMain = new frmMailOuts();
+        frmMain.ShowDialog();
+        frmSplash.Close();
+      }
+    }
+    #endregion
 
+    #region App_UnhandledException
     /// <summary>
     /// Despliega los mensajes de error de la aplicacion
     /// </summary>
@@ -51,31 +71,6 @@ namespace IM.MailOuts
         Application.Current.Shutdown();
       }
     }
-
-    #endregion
-
-    #region OnStartup
-
-    /// <summary>
-    /// Inicializa el modulo con el Login y el Splash
-    /// </summary>
-    protected override void OnStartup(StartupEventArgs e)
-    {
-      base.OnStartup(e);
-
-      frmSplash frmSplash = new frmSplash("Mail Outs");
-      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true);
-      frmSplash.Show();
-      frmSplash.ShowLogin(ref frmLogin);
-      if (frmLogin.IsAuthenticated)
-      {
-        User = frmLogin.userData;
-        frmMailOuts frmInvMovs = new frmMailOuts();
-        frmInvMovs.ShowDialog();
-        frmSplash.Close();
-      }
-    }
-
     #endregion
 
     #endregion

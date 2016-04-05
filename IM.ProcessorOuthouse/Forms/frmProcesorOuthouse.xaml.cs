@@ -34,7 +34,7 @@ namespace IM.ProcessorOuthouse.Forms
     {
       InitializeComponent();
       ConfigGrds();
-      lblUserName.Content = App.userData.User.peN;
+      lblUserName.Content = App.User.User.peN;
     }
     #endregion
 

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using IM.Base.Forms;
+﻿using IM.Base.Forms;
 using IM.Base.Helpers;
-using IM.Model.Enums;
 using IM.Model.Classes;
+using IM.Model.Enums;
 using IM.ProcessorOuthouse.Forms;
+using System.Windows;
+using System.Windows.Threading;
+
 namespace IM.ProcessorOuthouse
 {
   /// <summary>
@@ -17,25 +13,28 @@ namespace IM.ProcessorOuthouse
   /// </summary>
   public partial class App : Application
   {
-    public App() : base()
-    {
-      this.Dispatcher.UnhandledException += Dispatcher_UnhandledException;
-    }
-
-    private void Dispatcher_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
-    {
-      e.Handled = true;
-      var frmError = new frmError(e.Exception);
-      if (frmError.DialogResult.HasValue && !frmError.DialogResult.Value)
-      {
-        Application.Current.Shutdown();
-      }
-    }
+    #region Propiedades
 
     public static UserData User;
 
-    public static UserData userData { get; set; }
+    #endregion
 
+    #region Constructores y destructores
+    /// <summary>
+    /// Constructor de la aplicacion
+    /// </summary>
+    public App() : base()
+    {
+      this.Dispatcher.UnhandledException += App_UnhandledException;
+    }
+    #endregion
+
+    #region Metodos
+
+    #region OnStartup
+    /// <summary>
+    /// Inicializa el modulo con el Login y el Splash
+    /// </summary>
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
@@ -45,11 +44,11 @@ namespace IM.ProcessorOuthouse
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        userData = frmLogin.userData;
-        if (userData.HasRole(EnumRole.Manager))
+        User = frmLogin.userData;
+        if (User.HasRole(EnumRole.Manager))
         {
-          frmProcessorOuthouse frmProcessorOuthouse = new frmProcessorOuthouse();
-          frmProcessorOuthouse.Show();
+          frmProcessorOuthouse frmMain = new frmProcessorOuthouse();
+          frmMain.Show();
           frmLogin.Close();
           frmSplash.Close();
         }
@@ -57,6 +56,24 @@ namespace IM.ProcessorOuthouse
           UIHelper.ShowMessage("User doesn't have access");
       }
     }
+    #endregion
 
+    #region App_UnhandledException
+    /// <summary>
+    /// Despliega los mensajes de error de la aplicacion
+    /// </summary>
+    private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+      e.Handled = true;
+      var frm = new frmError(e.Exception);
+      frm.ShowDialog();
+      if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
+      {
+        Application.Current.Shutdown();
+      }
+    }
+    #endregion
+
+    #endregion
   }
 }

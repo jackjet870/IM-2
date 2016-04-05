@@ -1,7 +1,7 @@
-﻿using System.Windows;
+﻿using IM.Base.Forms;
 using IM.Model.Classes;
-using IM.Base.Forms;
 using IM.Model.Enums;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace IM.Assignment
@@ -19,7 +19,7 @@ namespace IM.Assignment
 
     #region Constructores y destructores
     /// <summary>
-    ///   Constructor de la aplicacion
+    /// Constructor de la aplicacion
     /// </summary>
     /// <history>
     ///   [vku] 10/03/2016 Created
@@ -31,6 +31,8 @@ namespace IM.Assignment
     #endregion
 
     #region Metodos
+
+    #region OnStartup
     /// <summary>
     /// Inicializa el modulo con el Login y el Splash
     /// </summary>
@@ -47,11 +49,14 @@ namespace IM.Assignment
       if (frmLogin.IsAuthenticated)
       {
         User = frmLogin.userData;
-        frmAssignment frmAssig = new frmAssignment();
-        frmAssig.ShowDialog();
+        frmAssignment frmMain = new frmAssignment();
+        frmMain.ShowDialog();
         frmSplash.Close();
       }
     }
+    #endregion
+
+    #region App_UnhandledException
     /// <summary>
     /// Despliega los mensajes de error de la aplicacion
     /// </summary>
@@ -65,6 +70,8 @@ namespace IM.Assignment
         Application.Current.Shutdown();
       }
     }
+    #endregion
+
     #endregion
   }
 }

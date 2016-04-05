@@ -1,8 +1,9 @@
 ﻿using IM.Base.Forms;
 using IM.Model.Classes;
 using IM.Model.Enums;
-using System.Windows;
 using IM.GuestsPR.Forms;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace IM.GuestsPR
 {
@@ -11,7 +12,6 @@ namespace IM.GuestsPR
   /// </summary>
   public partial class App : Application
   {
-
     #region Propiedades
 
     public static UserData User;
@@ -19,55 +19,49 @@ namespace IM.GuestsPR
     #endregion
 
     #region Constructores y destructores
-
     /// <summary>
     /// Constructor de la aplicacion
     /// </summary>
     /// <history>
     ///   [erosado]  09/Mar/2016 Created
     /// </history>
-    public App()
-      : base()
+    public App() : base()
     {
       this.Dispatcher.UnhandledException += App_UnhandledException;
     }
-
     #endregion
 
     #region Metodos
 
-    #region OnStartUp
+    #region OnStartup
     /// <summary>
     /// Inicializa el modulo con el Login y el Splash
     /// </summary>
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Guests PR");
-      frmLogin frmLogin = new frmLogin(frmSplash,true,EnumLoginType.Location,true);
+      frmSplash frmSplash = new frmSplash("Guests by PR");
+      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true);
       frmSplash.Show();
-
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
         User = frmLogin.userData;
-        frmGuestsPR frmPrGuestsPR = new frmGuestsPR();
-        frmPrGuestsPR.ShowDialog();
+        frmGuestsPR frmMain = new frmGuestsPR();
+        frmMain.ShowDialog();
         frmSplash.Close();
       }
     }
-
     #endregion
 
     #region App_UnhandledException
-
     /// <summary>
     /// Despliega los mensajes de error de la aplicacion
     /// </summary>
     /// <history>
     ///  [erosado]  09/Mar/2016 Created
     /// </history>
-    private void App_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+    private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
       var frm = new frmError(e.Exception);
@@ -77,7 +71,6 @@ namespace IM.GuestsPR
         Application.Current.Shutdown();
       }
     }
-
     #endregion
 
     #endregion

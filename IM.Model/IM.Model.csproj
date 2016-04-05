@@ -247,6 +247,9 @@
     <Compile Include="GiftsReceiptPayment.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="GiftsReceiptsShort.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Goal.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

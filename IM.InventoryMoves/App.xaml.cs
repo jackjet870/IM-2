@@ -1,7 +1,8 @@
-﻿using System.Windows;
+﻿using IM.Base.Forms;
 using IM.Model.Classes;
-using IM.Base.Forms;
 using IM.Model.Enums;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace IM.InventoryMovements
 {
@@ -9,7 +10,7 @@ namespace IM.InventoryMovements
   /// Interaction logic for App.xaml
   /// </summary>
   public partial class App : Application
-    {
+  {
     #region Propiedades
 
     public static UserData User;
@@ -17,25 +18,24 @@ namespace IM.InventoryMovements
     #endregion
 
     #region Constructores y destructores
-
     /// <summary>
     /// Constructor de la aplicacion
     /// </summary>
     /// <history>
     ///   [wtorres]  09/Mar/2016 Created
     /// </history>
-    public App()
-      : base()
+    public App() : base()
     {
       this.Dispatcher.UnhandledException += App_UnhandledException;
     }
-
     #endregion
 
     #region Metodos
 
-    #region OnStartUp
-
+    #region OnStartup
+    /// <summary>
+    /// Inicializa el modulo con el Login y el Splash
+    /// </summary>
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
@@ -46,23 +46,21 @@ namespace IM.InventoryMovements
       if (frmLogin.IsAuthenticated)
       {
         User = frmLogin.userData;
-        frmInventoryMovements frmInvMovs = new frmInventoryMovements();
-        frmInvMovs.ShowDialog();
+        frmInventoryMovements frmMain = new frmInventoryMovements();
+        frmMain.ShowDialog();
         frmSplash.Close();
       }
     }
-
     #endregion
 
     #region App_UnhandledException
-
     /// <summary>
     /// Despliega los mensajes de error de la aplicacion
     /// </summary>
     /// <history>
     ///   [wtorres]  09/Mar/2016 Created
     /// </history>
-    private void App_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+    private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
       var frm = new frmError(e.Exception);
@@ -72,7 +70,6 @@ namespace IM.InventoryMovements
         Application.Current.Shutdown();
       }
     }
-
     #endregion
 
     #endregion
