@@ -29,8 +29,8 @@ namespace IM.Base.Helpers
     ///                                      cambiando la palabra "True" por la palabra "Yes".
     ///                                      Se hizo modificaciones en el proceso de creacion del datatable.
     /// </history>
-    public static DataTable GetDataTableFromGrid<T>(List<T> lst, bool changeDataTypeBoolToString = false, bool showCheckMark=true)
-    {      
+    public static DataTable GetDataTableFromGrid<T>(List<T> lst, bool changeDataTypeBoolToString = false, bool showCheckMark = true)
+    {
       if (changeDataTypeBoolToString)
       {
         List<PropertyDescriptor> properties =
@@ -93,83 +93,6 @@ namespace IM.Base.Helpers
     }
     #endregion
 
-    #region ToPivotArray
-    /// <summary>
-    /// Obtener una tabla pivot en base a una lista de entidades.
-    /// </summary>
-    /// <history>
-    /// [edgrodriguez] 14/03/2016  Created.
-    /// </history>
-    public static dynamic[] ToPivotArray<T, TColumn, TRows, TData>(
-this IEnumerable<T> source,
-Func<T, TColumn> columnSelector,
-Expression<Func<T, TRows>> rowSelector,
-Func<IEnumerable<T>, TData> dataSelector)
-    {
-      bool multipleColumnsGroup = false;
-      var arr = new List<object>();
-      var cols = new List<string>();
-      //Obtengo nombres de las columnas para agrupar.
-      IEnumerable<string> rowName;
-
-      try
-      {
-        rowName = ((MemberExpression)rowSelector.Body).Member.Name.Split(',');
-      }
-      catch
-      {
-        multipleColumnsGroup = true;
-        rowName = rowSelector.ReturnType.GetProperties().Select(c => c.Name);
-      }
-
-      //Obtengo las nuevas columnas.El Pivot.
-      var columns = source.Select(columnSelector).Distinct();
-
-      //Concateno los arreglos de columnas.
-      cols = rowName.Concat(columns.Select(x => x.ToString())).ToList();
-
-
-      //Se realiza la agrupacion.
-      var rows = source.GroupBy(rowSelector.Compile())
-                       .Select(rowGroup => new
-                       {
-                         Key = rowGroup.Key,
-                         Values = columns.GroupJoin(
-                               rowGroup,
-                               c => c,
-                               r => columnSelector(r),
-                               (c, columnGroup) => dataSelector(columnGroup))
-                       }).ToArray();
-
-
-
-
-      foreach (var row in rows)
-      {
-        //Se obtienen los valores de cada fila.        
-        var items = row.Values.Cast<object>().ToList();
-
-        if (multipleColumnsGroup)
-        {
-          //Obtengo los valores de las columnas agrupadas.
-          Type type = row.Key.GetType();
-          List<string> keyPropertyName = type.GetProperties().Select(c => c.Name).ToList();
-          List<Object> keyValues = keyPropertyName.Select(c => type.GetProperty(c).GetValue(row.Key, null)).ToList();
-
-          //Realizo la insercion en la lista principal de valores.
-          items.InsertRange(0, keyValues);
-        }
-        else
-          items.Insert(0, row.Key);
-
-        var obj = GetAnonymousObject(cols, items);
-        arr.Add(obj);
-      }
-      //Retorno el arreglo de rows.
-      return arr.ToArray();
-    }
-    #endregion
-
     #region GetAnonymousObject
     /// <summary>
     /// 
@@ -187,7 +110,7 @@ Func<IEnumerable<T>, TData> dataSelector)
         eo.Add(columns.ElementAt(i), values.ElementAt(i));
       }
       return eo;
-    } 
+    }
     #endregion
 
     #region SelectRow
@@ -202,10 +125,10 @@ Func<IEnumerable<T>, TData> dataSelector)
     /// </history>
     public static void SelectRow(DataGrid grid, int nIndex)
     {
-      if (nIndex>-1)
+      if (nIndex > -1)
       {
         grid.Focus();
-        grid.SelectedIndex = nIndex;                
+        grid.SelectedIndex = nIndex;
         if (grid.SelectedItem != null)
         {
           grid.ScrollIntoView(grid.SelectedItem);
@@ -213,6 +136,57 @@ Func<IEnumerable<T>, TData> dataSelector)
         }
       }
     }
+    #endregion
+
+    #region ToPivot
+    /// <summary>
+    /// Obtiene una lista de arrays con los valores de la tabla
+    /// con la estructura proporcionada.
+    /// </summary>
+    /// <returns> List<object[]> </returns>
+    /// <history>
+    /// [edgrodriguez] created 28/03/2016
+    /// </history>
+    public static List<object[]> ToPivot<T, TColumn, TRow, TData>(
+this IEnumerable<T> source,
+Func<T, TColumn> columnSelector,
+Expression<Func<T, TRow>> rowSelector,
+Func<IEnumerable<T>, TData> dataSelector)
+    {
+      DataTable dt = new DataTable();
+      var arr = new List<object>();
+      var cols = new List<string>();
+      var pivotrow = rowSelector.ReturnType.GetProperties().Select(c => c.Name).ToList();
+      var pivotcolumns = source.Select(columnSelector).Where(c => c != null).Distinct();
+
+      cols = (pivotrow).Concat(pivotcolumns.Select(x => x.ToString())).ToList();
+
+
+      var rows = source.GroupBy(rowSelector.Compile())
+                       .Select(rowGroup => new
+                       {
+                         Key = rowGroup.Key,
+                         Values = pivotcolumns.GroupJoin(
+                               rowGroup,
+                               c => c,
+                           r => columnSelector(r),
+                           (c, columnGroup) => dataSelector(columnGroup))
+                       });
+
+      List<object[]> values = new List<object[]>();
+
+      rows.ToList().ForEach(row =>
+      {
+        var keyValues = row.Key.GetType().GetProperties().Select(c => c.GetValue(row.Key) ?? null);
+        var valuesProperties = row.Values.ToList();
+        var items = valuesProperties.SelectMany(c => c.GetType().GetProperties().Select(d => d.GetValue(c) ?? null)).ToList();
+        items.InsertRange(0, keyValues);
+        values.Add(items.ToArray());
+      });
+
+      return values;
+    }
+
     #endregion
   }
 }

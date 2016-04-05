@@ -23,11 +23,11 @@ namespace IM.Model
         public Nullable<int> grgu { get; set; }
         public string grGuest { get; set; }
         public string Gift { get; set; }
-        public int Quantity { get; set; }
-        public int Adults { get; set; }
-        public int Minors { get; set; }
+        public Nullable<int> Quantity { get; set; }
+        public Nullable<int> Adults { get; set; }
+        public Nullable<int> Minors { get; set; }
         public string Folios { get; set; }
-        public decimal Cost { get; set; }
+        public Nullable<decimal> Cost { get; set; }
         public System.DateTime grD { get; set; }
         public decimal CostUS { get; set; }
         public decimal exExchRate { get; set; }

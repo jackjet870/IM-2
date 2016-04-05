@@ -185,8 +185,7 @@ namespace IM.ProcessorGeneral.Forms
         grdGifts.ItemsSource = _lstGifts;
 
       chkGifts_Checked(null, null);
-      StatusBarNumSR.Content = string.Format("{0}/{1} Selected Categories", grdCategories.SelectedItems.Count, grdCategories.Items.Count);
-
+      StatusBarNumCat.Content = string.Format("{0}/{1} Selected Categories", grdCategories.SelectedItems.Count, grdCategories.Items.Count);
     }
     #endregion
 
@@ -254,7 +253,7 @@ namespace IM.ProcessorGeneral.Forms
         chkLeadSources_Checked(null, null);
       }
 
-      StatusBarNumSR.Content = string.Format("{0}/{1} Selected Programs", grdPrograms.SelectedItems.Count, grdPrograms.Items.Count);
+      StatusBarNumProgs.Content = string.Format("{0}/{1} Selected Programs", grdPrograms.SelectedItems.Count, grdPrograms.Items.Count);
     }
     #endregion
 
@@ -291,7 +290,6 @@ namespace IM.ProcessorGeneral.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       _blnOK = false;
-      SaveFrmFilterValues();
       Close();
     }
     #endregion
@@ -326,7 +324,7 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void grdSalesRoom_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      StatusBarNumSR.Content = string.Format("{0}/{1} Selected SalesRooms", grdSalesRoom.SelectedItems.Count, grdSalesRoom.Items.Count);
+      StatusBarNumSR.Content = string.Format("{0}/{1} Selected Sales Room", grdSalesRoom.SelectedItems.Count, grdSalesRoom.Items.Count);
     }
     #endregion
 
@@ -464,6 +462,19 @@ namespace IM.ProcessorGeneral.Forms
           pnlDtmStart.IsEnabled = pnlDtmEnd.IsEnabled = true;
           break;
       }
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Guarda los valores de cada control, antes de cerrar el formulario.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 31/03/2016 Created
+    /// </history>
+    private void Window_Closing(object sender, CancelEventArgs e)
+    {
+      SaveFrmFilterValues();
     }
     #endregion
 
@@ -718,23 +729,48 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void LoadUserFilters()
     {
-      var xd = grdSalesRoom;
-
-      if (!chkAllSalesRoom.IsChecked.Value)
+      if (!chkAllSalesRoom.IsChecked.Value && chkAllSalesRoom.IsEnabled)
+      {
         frmPG._lstSalesRoom.ForEach(c =>
         {
           grdSalesRoom.SelectedItems.Add(grdSalesRoom.Items.GetItemAt(c));
         });
-      if (!chkAllCategories.IsChecked.Value)
-        frmPG._lstGiftsCate.ForEach(c => grdCategories.SelectedItems.Add(c));
-      if (!chkAllGifts.IsChecked.Value)
-        frmPG._lstGifts.ForEach(c => grdGifts.SelectedItems.Add(c));
-      if (!chkAllRatetypes.IsChecked.Value)
-        frmPG._lstRateTypes.ForEach(c => grdRatetypes.SelectedItems.Add(c));
-      if (!chkAllPrograms.IsChecked.Value)
-        frmPG._lstPrograms.ForEach(c => grdPrograms.SelectedItems.Add(c));
-      if (!chkAllLeadSources.IsChecked.Value)
-        frmPG._lstLeadSources.ForEach(c => grdLeadSources.SelectedItems.Add(c));
+      }
+      if (!chkAllCategories.IsChecked.Value && chkAllCategories.IsEnabled)
+      {
+        frmPG._lstGiftsCate.ForEach(c =>
+        {
+          grdCategories.SelectedItems.Add(grdCategories.Items.GetItemAt(c));
+        });
+      }
+      if (!chkAllGifts.IsChecked.Value && chkAllGifts.IsEnabled)
+      {
+        frmPG._lstGifts.ForEach(c =>
+        {
+          grdGifts.SelectedItems.Add(grdGifts.Items.GetItemAt(c));
+        });
+      }
+      if (!chkAllRatetypes.IsChecked.Value && chkAllRatetypes.IsEnabled)
+      {
+        frmPG._lstRateTypes.ForEach(c =>
+        {
+          grdRatetypes.SelectedItems.Add(grdRatetypes.Items.GetItemAt(c));
+        });
+      }
+      if (!chkAllPrograms.IsChecked.Value && chkAllPrograms.IsEnabled)
+      {
+        frmPG._lstPrograms.ForEach(c =>
+        {
+          grdPrograms.SelectedItems.Add(grdPrograms.Items.GetItemAt(c));
+        });
+      }
+      if (!chkAllLeadSources.IsChecked.Value && chkAllLeadSources.IsEnabled)
+      {
+        frmPG._lstLeadSources.ForEach(c =>
+        {
+          grdLeadSources.SelectedItems.Add(grdLeadSources.Items.GetItemAt(c));
+        });
+      }
 
       cboDate.SelectedValue = (frmPG._cboDateSelected != null) ? frmPG._cboDateSelected : "Dates Specified";
       dtmStart.Value = frmPG._dtmStart;
@@ -779,10 +815,10 @@ namespace IM.ProcessorGeneral.Forms
         return "End date must be greater than start date.";
       else
         return "";
-    } 
+    }
     #endregion
 
     #endregion
-
+        
   }
 }

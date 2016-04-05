@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\clsFormatReport.cs" />
+    <Compile Include="Classes\clsReports.cs" />
     <Compile Include="Forms\frmFilterDateRange.xaml.cs">
       <DependentUpon>frmFilterDateRange.xaml</DependentUpon>
     </Compile>

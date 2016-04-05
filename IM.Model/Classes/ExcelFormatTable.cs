@@ -25,5 +25,8 @@ namespace IM.Model.Classes
     public ePivotFieldAxis Axis { get; set; } = ePivotFieldAxis.Row;
     public int Order { get; set; }
     public string Formula { get; set; }
+    public bool showAll { get; set; } = false;
+    public eSortType Sort { get; set; } = eSortType.None;
+    public string PropertyName { get; set; }
   }
 }
