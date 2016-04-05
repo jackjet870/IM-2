@@ -250,6 +250,12 @@
     <Compile Include="Goal.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="GraphNotBookingArrivals.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GraphNotBookingArrivals_Totals.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="GraphProductionByPRData.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -597,10 +603,25 @@
     <Compile Include="RptPersonnel.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptProductionByAgeInhouse.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptProductionByAgeMarketOriginallyAvailableInhouse.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptProductionByAgencyInhouse.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptProductionByAgeOuthouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptProductionByAgeSalesRoomOuthouse.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptProductionByContractAgencyInhouse.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptProductionByContractAgencyMarketOriginallyAvailableInhouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptPRStats.cs">
