@@ -86,10 +86,14 @@ namespace IM.Base.Helpers
       ws.Cells[1, 1, 1, 3].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
       //Centramos el titulo del reporte  
       ws.Cells[1, 4, 1, 9].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+      
       //Centramos La etiqueta Filters
-      ws.Cells[2, 1, FilasTotalesFiltros+1, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-      ws.Cells[2, 1, FilasTotalesFiltros+1, 1].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-
+      if (filter.Count >0)
+      {
+        ws.Cells[2, 1, FilasTotalesFiltros + 1, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+        ws.Cells[2, 1, FilasTotalesFiltros + 1, 1].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+      }
+     
       string suggestedFilaName = string.Concat(reportName, " ", dateRangeFileName);
 
       #endregion
