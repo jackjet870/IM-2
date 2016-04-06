@@ -204,12 +204,13 @@ namespace IM.MailOuts.Forms
     /// </summary>
     /// <history>
     /// [aalcocer] 09/03/2016 Created
+    /// [aalcocer] 06/04/2016 Modified. La lista de combo de idiomas trae solo los activos
     /// </history>
     private void frmMailOuts_ContentRendered(object sender, EventArgs e)
     {
       //armamos la lista del combo de idiomas
       StaStart("Loading languages...");
-      _ltsLanguages = BRLanguages.GetLanguages(0);
+      _ltsLanguages = BRLanguages.GetLanguages(1);
       _languageShortViewSource.Source = _ltsLanguages;
 
       //cargamos los mail outs
