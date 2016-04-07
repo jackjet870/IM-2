@@ -29,7 +29,7 @@ namespace IM.Services.Helpers
     /// <history>[ECANUL] 05-04-2016 Created</history>
     public static OrigosServiceInterface Current(EnumClub club = EnumClub.PalaceElite)
     {
-      // si es Palace Elite
+      // si es Palace Elite 
       if (club == EnumClub.PalaceElite)
       {
         if (_serviceElite == null)

@@ -13,7 +13,6 @@ namespace IM.Services.Helpers
 {
   public class CallCenterHelper
   {
-
     #region Atributos
 
     private static CallCenterServiceInterface _serviceElite;

@@ -11,5 +11,6 @@ namespace IM.Inhouse.Classes
   /// [ecanul] 07/06/2016 Modificated Archivo renombrado a ObjServices, Agregado de clase RptEquityMembershipIM
   /// </history>
   public class RptReservationIM : RptReservationOrigos {}
+
   public class RptEquityMembershipIM : RptEquityMembership {}
 }
