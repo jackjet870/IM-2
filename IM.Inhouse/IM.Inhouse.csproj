@@ -79,6 +79,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\ObjServices.cs" />
     <Compile Include="Forms\ObjServices.cs" />
     <Compile Include="Forms\frmInhouse.xaml.cs">
       <DependentUpon>frmInhouse.xaml</DependentUpon>
