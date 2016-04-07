@@ -1,24 +1,16 @@
-﻿using System;
+﻿using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using IM.Model.Enums;
-using IM.Model;
-using IM.BusinessRules.BR;
-using IM.Base.Helpers;
-using System.ComponentModel;
-using System.Reflection;
-using Xceed.Wpf.Toolkit;
 
 namespace IM.ProcessorGeneral.Forms
 {
@@ -28,6 +20,7 @@ namespace IM.ProcessorGeneral.Forms
   public partial class frmFilterDateRange : Window
   {
     #region Atributos
+
     private List<GiftShort> _lstGifts = new List<GiftShort>();
     private List<GiftCategory> _lstGiftsCate = new List<GiftCategory>();
     private List<SalesRoomByUser> _lstSalesRoom = new List<SalesRoomByUser>();
@@ -35,10 +28,12 @@ namespace IM.ProcessorGeneral.Forms
     private List<Program> _lstPrograms = new List<Program>();
     private List<RateType> _lstRateTypes = new List<RateType>();
     public bool _blnOK = false;
-    public frmProcessorGeneral frmPG=new frmProcessorGeneral();
-    #endregion   
+    public frmProcessorGeneral frmPG = new frmProcessorGeneral();
+
+    #endregion Atributos
 
     #region Constructor
+
     /// <summary>
     /// Carga los valores iniciales del formulario.
     /// </summary>
@@ -63,11 +58,12 @@ namespace IM.ProcessorGeneral.Forms
       this.PreviewKeyDown += new KeyEventHandler(Close_KeyPreviewESC);
     }
 
-    #endregion
+    #endregion Constructor
 
     #region Eventos del Formulario
 
     #region upd_Scroll
+
     /// <summary>
     /// Cambia la fecha, aumentando/disminuyendo los dias.
     /// </summary>
@@ -102,9 +98,11 @@ namespace IM.ProcessorGeneral.Forms
       //  }
       //}
     }
-    #endregion
+
+    #endregion upd_Scroll
 
     #region chkAllSalesRoom_Checked
+
     /// <summary>
     /// Valida si el control Checkbox fue activado/Desactivado.
     /// </summary>
@@ -123,9 +121,11 @@ namespace IM.ProcessorGeneral.Forms
         grdSalesRoom.IsEnabled = true;
       }
     }
-    #endregion
+
+    #endregion chkAllSalesRoom_Checked
 
     #region chkCategories_Cheked
+
     /// <summary>
     /// Obtiene el estatus del control checkbox de categoria.
     /// </summary>
@@ -144,9 +144,11 @@ namespace IM.ProcessorGeneral.Forms
         grdCategories.IsEnabled = true;
       }
     }
-    #endregion
+
+    #endregion chkCategories_Cheked
 
     #region chkGifts_Checked
+
     /// <summary>
     /// Obtiene el estatus del control checkbox de Gifts
     /// </summary>
@@ -165,9 +167,11 @@ namespace IM.ProcessorGeneral.Forms
         grdGifts.IsEnabled = true;
       }
     }
-    #endregion
+
+    #endregion chkGifts_Checked
 
     #region grdCategories_SelectionChanged
+
     /// <summary>
     /// Filtra el grid de Gifts, al seleccionar una categoria.
     /// </summary>
@@ -187,9 +191,11 @@ namespace IM.ProcessorGeneral.Forms
       chkGifts_Checked(null, null);
       StatusBarNumCat.Content = string.Format("{0}/{1} Selected Categories", grdCategories.SelectedItems.Count, grdCategories.Items.Count);
     }
-    #endregion
+
+    #endregion grdCategories_SelectionChanged
 
     #region chkPrograms_Checked
+
     /// <summary>
     ///  Obtiene el estatus del control checkbox de programas.
     /// </summary>
@@ -208,9 +214,11 @@ namespace IM.ProcessorGeneral.Forms
         grdPrograms.IsEnabled = true;
       }
     }
-    #endregion
+
+    #endregion chkPrograms_Checked
 
     #region chkLeadSources_Checked
+
     /// <summary>
     ///  Obtiene el estatus del control checkbox de lead sources.
     /// </summary>
@@ -229,9 +237,11 @@ namespace IM.ProcessorGeneral.Forms
         grdLeadSources.IsEnabled = true;
       }
     }
-    #endregion
+
+    #endregion chkLeadSources_Checked
 
     #region grdPrograms_SelectionChanged
+
     /// <summary>
     /// Filtra el grid de LeadSources, al seleccionar un programa.
     /// </summary>
@@ -255,9 +265,11 @@ namespace IM.ProcessorGeneral.Forms
 
       StatusBarNumProgs.Content = string.Format("{0}/{1} Selected Programs", grdPrograms.SelectedItems.Count, grdPrograms.Items.Count);
     }
-    #endregion
+
+    #endregion grdPrograms_SelectionChanged
 
     #region btnOK_Click
+
     /// <summary>
     /// Devuelve un booleano para saber si se ha terminado de
     /// realizar su proceso de filtrado.
@@ -277,9 +289,11 @@ namespace IM.ProcessorGeneral.Forms
       else
         UIHelper.ShowMessage(message);
     }
-    #endregion
+
+    #endregion btnOK_Click
 
     #region btnCancel_Click
+
     /// <summary>
     /// Devuelve un booleano para saber si se ha terminado de
     /// realizar su proceso de filtrado.
@@ -292,9 +306,11 @@ namespace IM.ProcessorGeneral.Forms
       _blnOK = false;
       Close();
     }
-    #endregion
+
+    #endregion btnCancel_Click
 
     #region chkAllRateTypes_Checked
+
     /// <summary>
     ///  Obtiene el estatus del control checkbox de RateTypes.
     /// </summary>
@@ -313,9 +329,11 @@ namespace IM.ProcessorGeneral.Forms
         grdRatetypes.IsEnabled = true;
       }
     }
-    #endregion
+
+    #endregion chkAllRateTypes_Checked
 
     #region grdSalesRoom_SelectionChanged
+
     /// <summary>
     /// Actualiza el StatusBar mostrando la cantidad de items seleccionados.
     /// </summary>
@@ -326,9 +344,11 @@ namespace IM.ProcessorGeneral.Forms
     {
       StatusBarNumSR.Content = string.Format("{0}/{1} Selected Sales Room", grdSalesRoom.SelectedItems.Count, grdSalesRoom.Items.Count);
     }
-    #endregion
+
+    #endregion grdSalesRoom_SelectionChanged
 
     #region grdGifts_SelectionChanged
+
     /// <summary>
     /// Actualiza el StatusBar mostrando la cantidad de items seleccionados.
     /// </summary>
@@ -339,9 +359,11 @@ namespace IM.ProcessorGeneral.Forms
     {
       StatusBarNumGifts.Content = string.Format("{0}/{1} Selected Gifts", grdGifts.SelectedItems.Count, grdGifts.Items.Count);
     }
-    #endregion
+
+    #endregion grdGifts_SelectionChanged
 
     #region grdRatetypes_SelectionChanged
+
     /// <summary>
     /// Actualiza el StatusBar mostrando la cantidad de items seleccionados.
     /// </summary>
@@ -352,9 +374,11 @@ namespace IM.ProcessorGeneral.Forms
     {
       StatusBarNumRateT.Content = string.Format("{0}/{1} Selected Ratetypes", grdRatetypes.SelectedItems.Count, grdRatetypes.Items.Count);
     }
-    #endregion
+
+    #endregion grdRatetypes_SelectionChanged
 
     #region grdLeadSources_SelectionChanged
+
     /// <summary>
     /// Actualiza el StatusBar mostrando la cantidad de items seleccionados.
     /// </summary>
@@ -365,11 +389,13 @@ namespace IM.ProcessorGeneral.Forms
     {
       StatusBarNumLS.Content = string.Format("{0}/{1} Selected LeadSources", grdLeadSources.SelectedItems.Count, grdLeadSources.Items.Count);
     }
-    #endregion
-        
+
+    #endregion grdLeadSources_SelectionChanged
+
     #region Close_KeyPreviewESC
+
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <history>
     /// [edgrodriguez] 08/Mar/2016 Created
@@ -379,9 +405,11 @@ namespace IM.ProcessorGeneral.Forms
       if (e.Key == Key.Escape)
         Close();
     }
-    #endregion
+
+    #endregion Close_KeyPreviewESC
 
     #region cboDate_SelectionChanged
+
     /// <summary>
     /// Modifica los rangos de fecha de los datepicker, según la opcion seleccionada.
     /// </summary>
@@ -399,17 +427,21 @@ namespace IM.ProcessorGeneral.Forms
         case EnumPredefinedDate.daToday:
           dtmStart.Value = dtmEnd.Value = today;
           break;
+
         case EnumPredefinedDate.daYesterday:
           dtmStart.Value = dtmEnd.Value = today.Date.AddDays(-1);
           break;
+
         case EnumPredefinedDate.daThisWeek:
           dtmStart.Value = today.AddDays((DayOfWeek.Monday - today.DayOfWeek));
           dtmEnd.Value = today.AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
           break;
+
         case EnumPredefinedDate.daPreviousWeek:
           dtmStart.Value = today.AddDays(-7).AddDays(DayOfWeek.Monday - today.DayOfWeek);
           dtmEnd.Value = today.AddDays(-7).AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
           break;
+
         case EnumPredefinedDate.daThisHalf:
           if (today.Day <= 15)
           {
@@ -421,6 +453,7 @@ namespace IM.ProcessorGeneral.Forms
             dtmEnd.Value = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
           }
           break;
+
         case EnumPredefinedDate.daPreviousHalf:
 
           if (today.Day <= 15)
@@ -442,30 +475,37 @@ namespace IM.ProcessorGeneral.Forms
             dtmEnd.Value = new DateTime(today.Year, today.Month, 15);
           }
           break;
+
         case EnumPredefinedDate.daThisMonth:
           dtmStart.Value = new DateTime(today.Year, today.Month, 1);
           dtmEnd.Value = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
           break;
+
         case EnumPredefinedDate.daPreviousMonth:
           dtmStart.Value = new DateTime(today.Year, today.Month - 1, 1);
           dtmEnd.Value = new DateTime(today.Year, today.Month - 1, DateTime.DaysInMonth(today.Year, today.Month - 1));
           break;
+
         case EnumPredefinedDate.daThisYear:
           dtmStart.Value = new DateTime(today.Year, 1, 1);
           dtmEnd.Value = new DateTime(today.Year, 12, 31);
           break;
+
         case EnumPredefinedDate.daPreviousYear:
           dtmStart.Value = new DateTime(today.Year - 1, 1, 1);
           dtmEnd.Value = new DateTime(today.Year - 1, 12, 31);
           break;
+
         default:
           pnlDtmStart.IsEnabled = pnlDtmEnd.IsEnabled = true;
           break;
       }
     }
-    #endregion
+
+    #endregion cboDate_SelectionChanged
 
     #region Window_Closing
+
     /// <summary>
     /// Guarda los valores de cada control, antes de cerrar el formulario.
     /// </summary>
@@ -476,9 +516,10 @@ namespace IM.ProcessorGeneral.Forms
     {
       SaveFrmFilterValues();
     }
-    #endregion
 
-    #endregion
+    #endregion Window_Closing
+
+    #endregion Eventos del Formulario
 
     #region Métodos Publicos
 
@@ -498,22 +539,27 @@ namespace IM.ProcessorGeneral.Forms
       EnumExternalInvitation? enumExternalInvitation = null, bool blncbStatus = false, bool blnGiftReceiptType = false, bool blnGuestID = false, bool blnGiftSale = false)
     {
       ConfigureDates(blnOneDate, enumPeriod);
+
       #region Configuracion de Grids.
+
       ConfigureGridPanels(blnSalesRoom, blnGifts, blnCategories, blnPrograms, blnRatetypes, blnLeadSources);
       ConfigureSelection(blnOnlyOneRegister);
       ConfigureCheckboxSelectAll(blnOnlyOneRegister, blnAllSalesRoom, blnAllCategories, blnAllGifts, blnAllLeadSources, blnAllPrograms, blnAllRatetypes);
-      #endregion
+
+      #endregion Configuracion de Grids.
+
       ConfigureFilters(enumBasedOnArrival, enumQuinellas, enumDetailGifts, enumSaveCourtesyTours,
         enumSalesByMemberShipType, enumBasedOnBooking, enumExternalInvitation, blncbStatus, blnGiftReceiptType,
         blnGuestID, blnGiftSale);
       LoadUserFilters();
     }
 
-    #endregion
+    #endregion Métodos Publicos
 
     #region Métodos Privados
 
     #region ConfigureFilters
+
     /// <summary>
     /// Configura los controles que sirven para filtrar los reportes.
     /// </summary>
@@ -539,9 +585,11 @@ namespace IM.ProcessorGeneral.Forms
       cboSaveCourtesyTours.Visibility = (enumSaveCourtesyTours != null) ? Visibility.Visible : Visibility.Collapsed;
       cboExternal.Visibility = (enumExternalInvitation != null) ? Visibility.Visible : Visibility.Collapsed;
     }
-    #endregion
+
+    #endregion ConfigureFilters
 
     #region ConfigureGridPanels
+
     /// <summary>
     /// Configura los grids.
     /// </summary>
@@ -572,9 +620,11 @@ namespace IM.ProcessorGeneral.Forms
       StatusBarNumLS.Content = (blnLeadSources) ? string.Format("{0}/{1} Selected LeadSources", 0, _lstLeadSources.Count) : "";
       StatusBarNumRateT.Content = (blnRatetypes) ? string.Format("{0}/{1} Selected Ratetypes", 0, _lstRateTypes.Count) : "";
     }
-    #endregion
+
+    #endregion ConfigureGridPanels
 
     #region ConfigureSelection
+
     /// <summary>
     /// Configura el modo de seleccion de los grids(Multiseleccion ó Solo un registro).
     /// Activa o desactiva los controles checkbox dependiendo el modo de seleccion configurado.
@@ -591,9 +641,11 @@ namespace IM.ProcessorGeneral.Forms
       grdRatetypes.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       grdSalesRoom.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
     }
-    #endregion
+
+    #endregion ConfigureSelection
 
     #region ConfigureDates
+
     /// <summary>
     /// Configura los controles de fecha.
     /// </summary>
@@ -651,10 +703,12 @@ namespace IM.ProcessorGeneral.Forms
         cboDate.IsEnabled = false;
         pnlDtmEnd.IsEnabled = false;
       }
-    } 
-    #endregion
+    }
+
+    #endregion ConfigureDates
 
     #region ConfigureCheckboxSelectAll
+
     /// <summary>
     /// Valida los checkbox para seleccionar todos los registros de los grids.
     /// </summary>
@@ -677,10 +731,12 @@ namespace IM.ProcessorGeneral.Forms
       chkAllLeadSources.IsEnabled = (blnOnlyOneRegister) ? false : true;
       chkAllPrograms.IsEnabled = (blnOnlyOneRegister) ? false : true;
       chkAllRatetypes.IsEnabled = (blnOnlyOneRegister) ? false : true;
-    } 
-    #endregion
+    }
+
+    #endregion ConfigureCheckboxSelectAll
 
     #region SaveFrmFilterValues
+
     /// <summary>
     /// Guarda los datos seleccionados por el usuario.
     /// </summary>
@@ -715,11 +771,12 @@ namespace IM.ProcessorGeneral.Forms
       frmPG._enumGiftSale = ((KeyValuePair<EnumGiftSale, string>)cboGiftSale.SelectedItem).Key;
       frmPG._enumSaveCourtesyTours = ((KeyValuePair<EnumSaveCourtesyTours, string>)cboSaveCourtesyTours.SelectedItem).Key;
       frmPG._enumExternalInvitation = ((KeyValuePair<EnumExternalInvitation, string>)cboExternal.SelectedItem).Key;
+    }
 
-    } 
-    #endregion
+    #endregion SaveFrmFilterValues
 
     #region LoadUserFilters
+
     /// <summary>
     /// Obtiene los filtros que el usuario habiá seleccionado
     /// y los aplica al formulario.
@@ -787,9 +844,11 @@ namespace IM.ProcessorGeneral.Forms
       cboSaveCourtesyTours.SelectedValue = frmPG._enumSaveCourtesyTours;
       cboExternal.SelectedValue = frmPG._enumExternalInvitation;
     }
-    #endregion
+
+    #endregion LoadUserFilters
 
     #region ValidateFields
+
     /// <summary>
     /// Valida si los grid tienen al menos un elemento seleccionado.
     /// </summary>
@@ -811,14 +870,14 @@ namespace IM.ProcessorGeneral.Forms
         return "No gift is selected.";
       if (pnlCategories.Visibility == Visibility.Visible && grdCategories.SelectedItems.Count == 0)
         return "No category is selected.";
-      if(pnlDtmEnd.IsEnabled==true && dtmEnd.Value.Value<dtmStart.Value.Value)
+      if (pnlDtmEnd.IsEnabled == true && dtmEnd.Value.Value < dtmStart.Value.Value)
         return "End date must be greater than start date.";
       else
         return "";
     }
-    #endregion
 
-    #endregion
-        
+    #endregion ValidateFields
+
+    #endregion Métodos Privados
   }
 }

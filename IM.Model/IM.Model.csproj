@@ -175,6 +175,9 @@
     <Compile Include="Enums\EnumModule.cs" />
     <Compile Include="Enums\EnumPeriod.cs" />
     <Compile Include="Enums\EnumPermisionLevel.cs" />
+    <Compile Include="Enums\EnumRptGeneral.cs" />
+    <Compile Include="Enums\EnumRptLeadSource.cs" />
+    <Compile Include="Enums\EnumRptPR.cs" />
     <Compile Include="Enums\EnumSalesRoomType.cs" />
     <Compile Include="Enums\EnumPredefinedDate.cs" />
     <Compile Include="Enums\EnumPredefinedDateMonthly.cs" />
@@ -330,6 +333,7 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ConnectionHelper.cs" />
+    <Compile Include="Helpers\EnumToListHelper.cs" />
     <Compile Include="Hotel.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
