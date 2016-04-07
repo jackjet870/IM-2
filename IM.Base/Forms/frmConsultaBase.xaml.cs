@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Input;
-using IM.Base.Entities;
+using IM.Base.Classes;
 using IM.Base.Enums;
 using IM.Base.Interfaces;
 

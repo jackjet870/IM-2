@@ -122,6 +122,7 @@
     <Compile Include="Classes\GuestStatusInvitation.cs" />
     <Compile Include="Classes\GuestCreditCardInvitation.cs" />
     <Compile Include="Classes\GuestStatusTypeInvit.cs" />
+    <Compile Include="Classes\Invitation.cs" />
     <Compile Include="Classes\NoteGuest.cs" />
     <Compile Include="Classes\UserNormalLogin.cs" />
     <Compile Include="Enums\InvitationType.cs" />

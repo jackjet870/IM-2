@@ -1,6 +1,6 @@
 ﻿using IM.Base.Enums;
 
-namespace IM.Base.Entities
+namespace IM.Base.Classes
 {
   public class Parametros
   {
