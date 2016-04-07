@@ -24,7 +24,7 @@ namespace IM.Services.Helpers
     #region Propiedades
 
     /// <summary>
-    /// Recupera una instacia Singleton del servicio web Clubes Elite
+    /// Recupera una instacia Singleton del servicio web Clubes
     /// </summary>
     /// <history>[ECANUL] 05-04-2016 Created</history>
     public static OrigosServiceInterface Current(EnumClub club = EnumClub.PalaceElite)
@@ -39,9 +39,9 @@ namespace IM.Services.Helpers
           _serviceElite.Url = ConfigHelper.GetString("ClubesElite.URL");
 
           // insertamos las cabeceras de autenticacion
-          RequestHeader requestHander = new RequestHeader();
-          requestHander.Headers = ServiceHelper.GetSecurityTokenHeaders();
-          _serviceElite.RequestHeaderValue = requestHander;
+          RequestHeader requestHeader = new RequestHeader();
+          requestHeader.Headers = ServiceHelper.GetSecurityTokenHeaders();
+          _serviceElite.RequestHeaderValue = requestHeader;
         }
         return _serviceElite;
       }

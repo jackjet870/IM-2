@@ -8,5 +8,8 @@
     <Setting Name="IM_Services_ClubesService_OrigosServiceInterface" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://svr-2000-web2:8087/ClubesPRServiceInterface/OrigosServiceInterface.asmx</Value>
     </Setting>
+    <Setting Name="IM_Services_CallCenterService_CallCenterServiceInterface" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://svr-2000-web2:8087/CreditoCobranzaReservaPRServiceInterface/CallCenterServiceInterface.asmx</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

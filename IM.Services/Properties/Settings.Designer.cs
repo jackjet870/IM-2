@@ -42,5 +42,16 @@ namespace IM.Services.Properties {
                 return ((string)(this["IM_Services_ClubesService_OrigosServiceInterface"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://svr-2000-web2:8087/CreditoCobranzaReservaPRServiceInterface/CallCenterServ" +
+            "iceInterface.asmx")]
+        public string IM_Services_CallCenterService_CallCenterServiceInterface {
+            get {
+                return ((string)(this["IM_Services_CallCenterService_CallCenterServiceInterface"]));
+            }
+        }
     }
 }

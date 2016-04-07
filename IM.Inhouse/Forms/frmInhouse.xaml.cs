@@ -15,7 +15,6 @@ using System.Windows.Data;
 using System.Windows.Input;
 using IM.Services.Helpers;
 using IM.Services.WirePRService;
-using IM.Services.ClubesService;
 using IM.Inhouse.Reports;
 
 namespace IM.Inhouse
@@ -508,7 +507,7 @@ namespace IM.Inhouse
       }
     }
 
-    #region Equiry
+    #region Equity
 
     /// <summary>
     /// Obtiene un reporte de Equity
@@ -519,28 +518,65 @@ namespace IM.Inhouse
     /// <param name="clubGuest">club</param>
     /// <history>
     /// [ecanul] 06/04/2016 Created
+    /// [ecanul] 07/04/2016 Modificated Agregado Validaciones y "show" del reporte
     /// </history>
     void Equity(string membershipNum, Decimal company, int clubAgency, int clubGuest)
     {
       EnumClub club;
+      string message = string.Empty;
       if (membershipNum != null && membershipNum != "")
       {
         if (App.User.HasPermission(EnumPermission.Equity, EnumPermisionLevel.ReadOnly))
         {
-
+          // determinamos el club
           if (clubAgency != 0)
             club = StrToEnums.StringToEnumClub(clubAgency.ToString());
           else
-            club = StrToEnums.StringToEnumClub(clubGuest.ToString());//
+            club = StrToEnums.StringToEnumClub(clubGuest.ToString());
 
-          RptEquity equity = ClubesHelper.GetRptEquity(membershipNum, Convert.ToInt32(company), club);
-          if (equity != null)
-            UIHelper.ShowMessage("Reporte Conseguido");
-          else
-            UIHelper.ShowMessage("Reporte No Conseguido");
+          //obtenemos los datos del reporte del servicio de Clubes
+          Services.ClubesService.RptEquity rptClubes = ClubesHelper.GetRptEquity(membershipNum, Convert.ToInt32(company), club);
+
+          //si no se pudo generenar el reporte en clubes y nos salimos
+          if (rptClubes == null)
+          {
+            UIHelper.ShowMessage("This report did not return data", MessageBoxImage.Exclamation, "Clubes");
+            return;
+          }
+          //si no encontramos la membrecia en clubles, nos salimos
+          if (rptClubes.Membership == null)
+          {
+            UIHelper.ShowMessage("This report did not return data", MessageBoxImage.Exclamation, "Clubes");
+            return;
+          }
+
+          //Obtenemos la membrecia en el servicio de Call Center
+          Services.CallCenterService.RptEquity rptCallCenter = CallCenterHelper.GetRptEquity(membershipNum, Convert.ToInt32(company), club);
+
+          // si no se pudo generar reporte en Call Center nos salimos 
+          if (rptCallCenter == null)
+          {
+            UIHelper.ShowMessage("This report did not return data", MessageBoxImage.Exclamation, "Credito y Cobranza Reserva");
+            return;
+          }
+
+          // si no encontramos la membresia en Credito y Cobranza Reserva, nos salimos
+          if (rptCallCenter.Membership == null)
+          {
+            UIHelper.ShowMessage("This report did not return data", MessageBoxImage.Exclamation, "Credito y Cobranza Reserva");
+            return;
+          }
+
+          //var rpt = new rptEquity();
+          //var reporte = new List<Services.ClubesService.RptEquity>();
+          //reporte.Add(rptClubes);
+          //rpt.Load();
+          //rpt.SetDataSource(reporte);
+          //var _frmViewer = new frmViewer(rpt);
+          //_frmViewer.ShowDialog();
         }
         else
-          UIHelper.ShowMessage("Reporte No Conseguido", MessageBoxImage.Error);
+          UIHelper.ShowMessage("Access denied");
       }
     }
 

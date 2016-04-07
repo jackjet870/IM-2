@@ -79,9 +79,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\RptReservationIM.cs" />
+    <Compile Include="Forms\ObjServices.cs" />
     <Compile Include="Forms\frmInhouse.xaml.cs">
       <DependentUpon>frmInhouse.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\rptEquity.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptEquity.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\rptReservation.cs">
       <AutoGen>True</AutoGen>
@@ -146,6 +152,10 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptEquity.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptEquity.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptReservation.resx">
       <DependentUpon>rptReservation.cs</DependentUpon>
