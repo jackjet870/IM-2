@@ -140,10 +140,13 @@ namespace IM.Services.Helpers
       {
         UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetRptReservationOrigos");
       }
-      var Data = response.Data;
-      if (Data.Length > -1)
+      else
       {
-        report = Data[0];
+        var Data = response.Data;
+        if (Data.Length > 0)
+        {
+          report = Data[0];
+        }
       }
       return report;
     }

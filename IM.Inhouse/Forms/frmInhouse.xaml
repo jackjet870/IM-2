@@ -6,15 +6,32 @@
         xmlns:local="clr-namespace:IM.Inhouse"
         xmlns:Classes="clr-namespace:IM.Inhouse.Classes"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
-        x:Class="IM.Inhouse.frmRegister"
+        x:Class="IM.Inhouse.frmInhouse"
         mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="InHouse"  Width="1366" Height="768"  WindowState="Maximized" Loaded="Window_Loaded">
+        Title="InHouse" x:Name="house"  Width="1366" Height="768"  WindowState="Maximized" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
     <Window.Resources>
         <CollectionViewSource x:Key="guestArrivalViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestArrival}, CreateList=True}"/>
         <CollectionViewSource x:Key="guestAvailableViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestAvailable }, CreateList=True}"/>
         <CollectionViewSource x:Key="guestPremanifestViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestPremanifest}, CreateList=True}"/>
         <CollectionViewSource x:Key="guestSearchedViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestSearched}, CreateList=True}"/>
 
+        <Style TargetType="Button" x:Key="btnOptions">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="45"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+        <Style TargetType="Image" x:Key="ImageOptions">
+            <Setter Property="Width" Value="24"/>
+            <Setter Property="Height" Value="24"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="txtOptions">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="9"/>
+            <Setter Property="ForceCursor" Value="True"/>
+        </Style>
+    
     </Window.Resources>
 
     <Grid>
@@ -22,7 +39,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="83"/>
             <RowDefinition Height="86*"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="AUTO"/>
         </Grid.RowDefinitions>
         <!--#endregion-->
 
@@ -30,76 +47,74 @@
         <Grid Grid.Row="0" x:Name="grdPanel" Background="SkyBlue">
             <Grid.ColumnDefinitions>
                 <!--Botenes del Formulario Principal-->
-                <ColumnDefinition Width="30*"/>
+                <ColumnDefinition  Width="35*"/>
                 <!--Fecha y Boton de Buscar-->
-                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="Auto"/>
                 <!--Grupos Available, Contacted, Invited, On Group y Markets -->
-                <ColumnDefinition Width="26*"/>
+                <ColumnDefinition Width="Auto"/>
                 <!--Informacion del Usuario-->
-                <ColumnDefinition Width="17*"/>
+                <ColumnDefinition Width="20*"/>
             </Grid.ColumnDefinitions>
 
             <!--#region Botones-->
             <GroupBox x:Name="grbMenu" Grid.Column="0" Header="Options"  VerticalAlignment="Top" Height="70" FontWeight="Bold" Margin="10,5,5,0"  >
-                <Grid x:Name="grdOpciones" VerticalAlignment="Top">
-                    <Button x:Name="btnLogin" HorizontalAlignment="Left" Margin="0,3,0,0" VerticalAlignment="Top" Width="45" Background="White" >
-                        <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Login.png" Width="24" Height="24" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Login" HorizontalAlignment="Center"/>
+                <Grid x:Name="grdOpciones" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="btnLogin" Grid.Column="0"   Style="{StaticResource ResourceKey=btnOptions}"  >
+                        <StackPanel >
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/Login.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <TextBlock Text="Login" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnRefresh" HorizontalAlignment="Left" Margin="45,3,0,0" VerticalAlignment="Top" Width="45" Background="White">
+                    <Button x:Name="btnRefresh" Grid.Column="1" Style="{StaticResource ResourceKey=btnOptions}" Click="btnRefresh_Click">
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/refresh.png" Width="24" Height="24" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Refresh" HorizontalAlignment="Center"/>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/refresh.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <TextBlock Text="Refresh" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnPrint" HorizontalAlignment="Left" Margin="90,3,0,0" VerticalAlignment="Top" Width="45" Background="White" >
+                    <Button x:Name="btnPrint" Grid.Column="2" Style="{StaticResource ResourceKey=btnOptions}" >
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="24" Height="24" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Print" HorizontalAlignment="Center"/>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <TextBlock Text="Print" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnPreview" HorizontalAlignment="Left" Margin="135,3,0,0" VerticalAlignment="Top" Width="45" Background="White">
+                    <Button x:Name="btnPreview" Grid.Column="3" Style="{StaticResource ResourceKey=btnOptions}" >
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png" Width="24" Height="24" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Preview" HorizontalAlignment="Center"/>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <TextBlock Text="Preview" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnReport" HorizontalAlignment="Left" Margin="180,3,0,0" VerticalAlignment="Top" Width="45" Background="White">
+                    <Button x:Name="btnGrouos" Grid.Column="4" Style="{StaticResource ResourceKey=btnOptions}"  Click="btnGrouos_Click" >
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Report.png" Width="24" Height="24" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Rpt Dsg" HorizontalAlignment="Center"/>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/Guests.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <TextBlock Text="Groups" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnLayout" HorizontalAlignment="Left" Margin="225,3,0,0" VerticalAlignment="Top" Width="45" Background="White">
+                    <Button x:Name="btnAbout" Grid.Column="5"  Style="{StaticResource ResourceKey=btnOptions}">
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Layout.png" Width="24" Height="24" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Layouts" HorizontalAlignment="Center"/>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/About.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <TextBlock Text="About" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnGrouos" HorizontalAlignment="Left" Margin="309,3,0,0" VerticalAlignment="Top" Width="45" Background="White" Click="btnGrouos_Click" >
+                    <Button x:Name="btnAssistance"  Grid.Column="6" Style="{StaticResource ResourceKey=btnOptions}"  Click="btnAssistance_Click" >
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Guests.ico" Width="24" Height="24" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Groups" HorizontalAlignment="Center" FontWeight="Bold" ForceCursor="True"/>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/Assistance.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <TextBlock Text="Assist" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnAbout" HorizontalAlignment="Left" Margin="354,3,0,0" VerticalAlignment="Top" Width="45" Background="White" >
+                    <Button x:Name="btnDaysOff" Grid.Column="7" Style="{StaticResource ResourceKey=btnOptions}"  Click="btnDaysOff_Click" >
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/About.png" Width="24" Height="24" HorizontalAlignment="Center"/>
-                            <TextBlock Text="About" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="btnAssistance" HorizontalAlignment="Left" Margin="399,3,0,0" VerticalAlignment="Top" Width="45" Background="White" Click="btnAssistance_Click" >
-                        <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Assistance.ico" Width="24" Height="24" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Assist" HorizontalAlignment="Center" FontWeight="Bold" ForceCursor="True"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="btnDaysOff" HorizontalAlignment="Left" Margin="444,3,0,0" VerticalAlignment="Top" Width="45" Background="White" Click="btnDaysOff_Click" >
-                        <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/DaysOff.png" Width="24" Height="24" HorizontalAlignment="Center"/>
-                            <TextBlock Text="DaysOff" HorizontalAlignment="Center"/>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/DaysOff.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <TextBlock Text="DaysOff" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
                 </Grid>
@@ -113,10 +128,15 @@
                     <RowDefinition Height="50*"/>
                 </Grid.RowDefinitions>
                 <!-- <GroupBox Grid.Row="0" x:Name="grbDate" Header="Date" FontWeight="Bold" Margin="2,0,2,0">-->
-                <DatePicker Grid.Row="0" x:Name="dtpDate" Margin="2,0,2,0" VerticalAlignment="Bottom"  SelectedDateChanged="dtpDate_SelectedDateChanged"/>
+                <DatePicker Grid.Row="0" x:Name="dtpDate" Margin="2,0,2,0" VerticalAlignment="Bottom"   SelectedDateChanged="dtpDate_SelectedDateChanged"/>
                 <!--   </GroupBox>-->
                 <!-- <GroupBox Grid.Row="1" Margin="5,3,5,3" >-->
-                <Button Grid.Row="1" x:Name="btnSearchGuest" Content="Search Guest"  Background="White" Margin="2,5,0,0" VerticalAlignment="Top" Click="btnSearchGuest_Click" HorizontalAlignment="Left" Width="99" />
+                <Button Grid.Row="1" x:Name="btnSearchGuest"  Background="White" Margin="2,5,0,0" VerticalAlignment="Top" Click="btnSearchGuest_Click" HorizontalAlignment="Left" Width="99" >
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="pack://application:,,,/IM.Base;component/Images/Search.ico" Width="20" />
+                        <TextBlock Text="Search Guest" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
                 <!--   </GroupBox>-->
             </Grid>
             <!--#endregion-->
@@ -130,7 +150,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <GroupBox Grid.Column="0" Header ="Available" Margin="5" x:Name="gprAvailable">
+                <GroupBox Grid.Column="0" Header ="Available" Margin="5" x:Name="gprAvailable" >
                     <StackPanel Orientation="Vertical">
                         <RadioButton Checked="rb_Checked" TabIndex="1"  x:Name="rbNoAvailable" Content="  No"  Margin="2.5"/>
                         <RadioButton Checked="rb_Checked" TabIndex="2"   x:Name="rbYesAvailable" Content="  Yes" Margin="2.5"/>
@@ -159,11 +179,11 @@
                     </StackPanel>
                 </GroupBox>
 
-                <ListView Grid.Column="4"  Margin="4" FontSize="10.667" Padding="0" x:Name="listMarkets" Background="DarkSeaGreen"  SelectionChanged="listMarkets_SelectionChanged">
+                <ListView Grid.Column="4"  Margin="4" FontSize="10" Width="70"  x:Name="listMarkets" Background="DarkSeaGreen"  SelectionChanged="listMarkets_SelectionChanged">
                     <ListView.View>
                         <GridView>
                             <!--<GridViewColumn x:Name="mkIDColumn" Width="80" Header="mk ID" DisplayMemberBinding="{Binding mkID}"  />-->
-                            <GridViewColumn x:Name="mkNColumn"  DisplayMemberBinding="{Binding mkN}" />
+                            <GridViewColumn x:Name="mkNColumn"  DisplayMemberBinding="{Binding mkN}"/>
                             <GridView.ColumnHeaderContainerStyle>
                                 <Style>
                                     <Setter Property="FrameworkElement.Visibility" Value="Collapsed"/>
@@ -217,9 +237,9 @@
                 <Button Grid.Column="0" Name="btnArrivals" Click="btnArrivals_Clicked" FontSize="15" Background="#FFCDF9CB">Arrivals</Button>
                 <Button Grid.Column="1" Name="btnAvailables" Click="btnAvailables_Clicked" FontSize="15" Background="#FFB8EAB5">Availables</Button>
                 <Button Grid.Column="2" Name="btnPremanifiest" Click="btnPremanifiest_Click" FontSize="15" Background="#FFCDF9CB" >Premanifest</Button>
-            </Grid>
+            </Grid> 
             <ContentControl x:Name="ccArrivals" Grid.Row="1" Visibility="Visible" DataContext="{StaticResource guestArrivalViewSource}">
-                <DataGrid x:Name="dgGuestArrival"  SelectionUnit ="FullRow"  SelectionMode="Single"  CanUserAddRows="False" AlternatingRowBackground="Gainsboro"  AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False" >
+                <DataGrid x:Name="dgGuestArrival"   SelectionUnit ="FullRow"  SelectionMode="Single"  CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False"  SelectionChanged="dg_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn"  Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -243,9 +263,8 @@
                         <DataGridTemplateColumn x:Name="reservationColumn"   IsReadOnly="True"  Header="Rsv" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                    <Image Height="18" Source="pack://application:,,,/IM.Base;component/Images/Report.png" MouseLeftButtonUp="ReservationArrival_MouseLeftButtonUp" />
-
-                            </DataTemplate>
+                                    <Image Height="18" Source="{Binding ReservacionImage}" MouseLeftButtonUp="ReservationArrival_MouseLeftButtonUp" />
+                                </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn x:Name="guCheckInColumn" IsReadOnly="False"  Header="In" Width="auto" >
@@ -298,7 +317,6 @@
                         </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="guFollowDColumn" IsReadOnly="True" Binding="{Binding guFollowD, StringFormat=dd/MM/yyyy}" Header="Follow D" Width="auto"/>
                         <DataGridTextColumn x:Name="guPRFollowColumn" IsReadOnly="True" Binding="{Binding guPRFollow}" Header="PR Follow" Width="auto"/>
-
                         <DataGridTextColumn x:Name="guBookDColumn" IsReadOnly="True" Binding="{Binding guBookD, StringFormat=dd/MM/yyyy}" Header="Book D" Width="auto"/>
                         <DataGridTemplateColumn x:Name="guInvitColumn" IsReadOnly="False" Header="Invit" Width="auto">
                             <DataGridTemplateColumn.CellTemplate >
@@ -332,7 +350,7 @@
                         <DataGridTextColumn x:Name="guclColumn" IsReadOnly="True" Binding="{Binding gucl}" Header="Club ID" Width="auto"/>
                         <DataGridTextColumn x:Name="clNColumn" IsReadOnly="True"  Binding="{Binding clN}" Header="Club" Width="auto"/>
                         <DataGridTextColumn x:Name="guCompanyColumn" IsReadOnly="True" Binding="{Binding guCompany}" Header="Company" Width="auto"/>
-                        <DataGridTextColumn x:Name="guMembershipNumColumn" IsReadOnly="True" Binding="{Binding guMembershipNum}" Header="Member" Width="auto"/>
+                        <DataGridTextColumn x:Name="guMembershipNumColumn" IsReadOnly="True" Binding="{Binding guMembershipNum}" Header="Member" Width="auto" />
                         <DataGridTextColumn x:Name="mtNColumn" IsReadOnly="True" Binding="{Binding mtN}" Header="Membership Type" Width="auto"/>
                         <DataGridTemplateColumn x:Name="guBookCancColumn" IsReadOnly="false"  Header="C.Bk" Width="auto">
                             <DataGridTemplateColumn.CellTemplate >
@@ -366,13 +384,24 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn x:Name="guCommentsColumn" IsReadOnly="True" Binding="{Binding guComments}" Header="Comments" Width="auto"/>
+                        <DataGridTemplateColumn  Header="Comments" Width="auto" IsReadOnly="False"  >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding guComments}"  />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <TextBox x:Name="guCommentsColumnArrival" Text="{Binding guComments}" LostFocus="Comments_LostFocus" Loaded="CommentsColumn_Loaded"  />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </ContentControl>
 
             <ContentControl x:Name="ccAvailables" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource guestAvailableViewSource}}">
-                <DataGrid x:Name="dgGuestAvailable" CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  CanUserSortColumns="True" AutoGenerateColumns="False" Grid.ColumnSpan="2" Grid.Column="1" EnableRowVirtualization="True"  RowDetailsVisibilityMode="VisibleWhenSelected" >
+                <DataGrid x:Name="dgGuestAvailable" CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  CanUserSortColumns="True" AutoGenerateColumns="False" Grid.ColumnSpan="2" Grid.Column="1" EnableRowVirtualization="True"  RowDetailsVisibilityMode="VisibleWhenSelected" SelectionChanged="dg_SelectionChanged" >
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn1" Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -494,15 +523,24 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-
-
-                        <DataGridTextColumn x:Name="guCommentsColumn1" IsReadOnly="True" Binding="{Binding guComments}" Header="Comments" Width="auto"/>
+                        <DataGridTemplateColumn  Header="Comments" Width="auto" IsReadOnly="False"  >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding guComments}"  />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <TextBox x:Name="guCommentsColumnAvailable" Text="{Binding guComments}" LostFocus="Comments_LostFocus" Loaded="CommentsColumn_Loaded"  />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </ContentControl>
 
             <ContentControl x:Name="ccPremanifest" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource guestPremanifestViewSource}}">
-                <DataGrid x:Name="dgGuestPremanifest"  CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"  EnableRowVirtualization="True"   RowDetailsVisibilityMode="VisibleWhenSelected">
+                <DataGrid x:Name="dgGuestPremanifest"  CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"  EnableRowVirtualization="True"   RowDetailsVisibilityMode="Collapsed" SelectionChanged="dg_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn2" Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -513,8 +551,6 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-
-
                         <DataGridTextColumn x:Name="guIDColumn2" IsReadOnly="True" Binding="{Binding guID}" Header="GUID" Width="auto"/>
                         <DataGridTextColumn x:Name="guIdProfileOperaColumn2" IsReadOnly="True" Binding="{Binding guIdProfileOpera}" Header="Opera Id" Width="auto"/>
                         <DataGridTemplateColumn x:Name="guCheckInColumn2" IsReadOnly="False"  Header="In" Width="auto" >
@@ -630,13 +666,24 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn x:Name="guCommentsColumn2" IsReadOnly="True" Binding="{Binding guComments}" Header="Comments" Width="auto"/>
+                        <DataGridTemplateColumn  Header="Comments" Width="auto" IsReadOnly="False"  >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding guComments}"  />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <TextBox x:Name="guCommentsColumnPremanifest" Text="{Binding guComments}" LostFocus="Comments_LostFocus" Loaded="CommentsColumn_Loaded"  />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </ContentControl>
 
             <ContentControl x:Name="ccGetGuest" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource guestSearchedViewSource}}">
-                <DataGrid x:Name="guestSearchedDataGrid" CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"  EnableRowVirtualization="True"   RowDetailsVisibilityMode="VisibleWhenSelected">
+                <DataGrid x:Name="guestSearchedDataGrid" CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"  EnableRowVirtualization="True"   RowDetailsVisibilityMode="VisibleWhenSelected" SelectionChanged="dg_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn3" Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -687,7 +734,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridCheckBoxColumn x:Name="guInfoDColumn3" Binding="{Binding guInfoD, StringFormat=dd/MM/yyyy}" Header="Cont D" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guInfoDColumn3" Binding="{Binding guInfoD, StringFormat=dd/MM/yyyy}" Header="Cont D" Width="auto" IsReadOnly="True"/>
                         <DataGridTextColumn x:Name="guPRInfoColumn3" Binding="{Binding guPRInfo}" Header="PR Cont" Width="auto" IsReadOnly="True"/>
                         <DataGridTemplateColumn x:Name="guFollowColumn3" IsReadOnly="false"  Header="FU" Width="auto">
                             <DataGridTemplateColumn.CellTemplate >
@@ -696,7 +743,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridCheckBoxColumn x:Name="guFollowDColumn3" Binding="{Binding guFollowD, StringFormat=dd/MM/yyyy}" Header="Follow D" Width="auto" IsReadOnly="True"/>
+                        <DataGridTextColumn x:Name="guFollowDColumn3" Binding="{Binding guFollowD, StringFormat=dd/MM/yyyy}" Header="Follow D" Width="auto" IsReadOnly="True"/>
                         <DataGridTextColumn x:Name="guPRFollowColumn3" Binding="{Binding guPRFollow}" Header="PR Follow" Width="auto" IsReadOnly="True"/>
                         <DataGridCheckBoxColumn x:Name="guInvitColumn3" Binding="{Binding guInvit}" Header="Invit" Width="auto" IsReadOnly="True"/>
                         <DataGridCheckBoxColumn x:Name="guBookDColumn3" Binding="{Binding guBookD, StringFormat=dd/MM/yyyy}" Header="Book D" Width="auto" IsReadOnly="True"/>
@@ -761,7 +808,18 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn x:Name="guCommentsColumn3" Binding="{Binding guComments}" Header="Comments" Width="auto" IsReadOnly="True"/>
+                        <DataGridTemplateColumn  Header="Comments" Width="auto" IsReadOnly="False"  >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding guComments}"  />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <TextBox x:Name="guCommentsColumnSearched" Text="{Binding guComments}" LostFocus="Comments_LostFocus" Loaded="CommentsColumn_Loaded"  />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </ContentControl>
@@ -769,13 +827,19 @@
         <!--#endregion-->
 
         <!--#region StatusBar -->
-        <StatusBar Grid.Row="2" Background="Gray"  x:Name="stbStatusBar" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
-            <StatusBarItem Grid.Column="0" x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
-            <StatusBarItem Grid.Column="1" x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>
-            <StatusBarItem Grid.Column="2" x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
-            <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0/0" HorizontalAlignment="Right" Width="50"/>
+        <StatusBar Grid.Row="2" Background="Gray"  x:Name="stbStatusBar" VerticalAlignment="Bottom" Height="22">
+            <StatusBarItem  x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
+            <StatusBarItem  x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>
+            <StatusBarItem  x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
+            <Separator />
+            <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0" >
+                <StackPanel Orientation="Horizontal">
+                    <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Height="17"  Visibility="Hidden" />
+                    <TextBlock x:Name="lblStatusBarMessage"  FontSize="12" VerticalAlignment="Center" Margin="12,0,0,0" />
+                </StackPanel>
+            </StatusBarItem>
+            <StatusBarItem x:Name="StatusBarReg" Content="0/0" HorizontalAlignment="Right" Width="50"/>
         </StatusBar>
         <!--#endregion-->
-
     </Grid>
 </Window>

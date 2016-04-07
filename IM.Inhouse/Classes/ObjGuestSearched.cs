@@ -34,7 +34,7 @@ namespace IM.Inhouse.Classes
     }
     public string EquityColumn
     {
-      get { return (gucl != null ? "pack://application:,,,/IM.Base;component/Images/Reports.ico" : string.Empty); }
+      get { return (string.IsNullOrEmpty(guMembershipNum) ? string.Empty : "pack://application:,,,/IM.Base;component/Images/Reporte.ico"); }
     }
   }
 }

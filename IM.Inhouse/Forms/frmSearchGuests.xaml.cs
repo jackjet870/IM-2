@@ -89,7 +89,7 @@ namespace IM.Inhouse.Forms
     public bool ValidateCriteria()
     {
       // validamos que haya al menos un criterio de busqueda
-      if (txtName.Text == string.Empty && txtRoomNum.Text == string.Empty && txtguID.Text == string.Empty)
+      if (string.IsNullOrEmpty(txtName.Text) && string.IsNullOrEmpty(txtRoomNum.Text) && string.IsNullOrEmpty(txtguID.Text) && string.IsNullOrEmpty(txtReservation.Text))
       {
         UIHelper.ShowMessage("Please specify a search criteria.", MessageBoxImage.Asterisk, "any criteria");
         txtName.Focus();
@@ -139,6 +139,40 @@ namespace IM.Inhouse.Forms
         //Y le asignamos la fecha del servidor (la actual hora actual)
         picker.SelectedDate = BRHelpers.GetServerDate();
       }
+    }
+    #endregion
+
+    #region search
+    /// <summary>
+    /// Valida la informacion ingresada y luego cierra la ventana 
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 01/04/2016
+    /// </history>
+    private void search()
+    {
+      if (ValidateCriteria())
+      {
+        Close();
+        _Cancel = false;
+      }
+    }
+    #endregion
+
+    #region KeyDownEnter
+    /// <summary>
+    /// Si es precionado la tecla entre inicia las validiaciones
+    /// </summary>
+    /// <param name="e"></param>
+    /// <history>
+    /// [jorcanche] 01/04/2016
+    /// </history>
+    public void KeyDownEnter(KeyEventArgs e)
+    {
+      if (e.Key == Key.Enter)
+      {
+        search();
+      }
     } 
     #endregion
 
@@ -149,11 +183,7 @@ namespace IM.Inhouse.Forms
     #region btnSearch_Click
     private void btnSearch_Click(object sender, RoutedEventArgs e)
     {
-    if( ValidateCriteria())
-     {
-        Close();
-        _Cancel = false;
-      }
+      search();
     }
     #endregion
 
@@ -178,6 +208,8 @@ namespace IM.Inhouse.Forms
       dtpStart.SelectedDate = BRHelpers.GetServerDate().AddDays(-7).Date;
       //fecha final
       dtpEnd.SelectedDate = BRHelpers.GetServerDate().Date;
+      //Indicamos el focus al txtname
+      txtName.Focus();
     }
     #endregion
 
@@ -195,14 +227,49 @@ namespace IM.Inhouse.Forms
         e.Handled = false;
       else
         e.Handled = true;
+        KeyDownEnter(e);
+    }
+
+    #endregion
+
+    #region txtName_KeyDown
+    private void txtName_KeyDown(object sender, KeyEventArgs e)
+    {
+      KeyDownEnter(e);
+    }
+    #endregion
+
+    #region txtRoomNum_KeyDown
+    private void txtRoomNum_KeyDown(object sender, KeyEventArgs e)
+    {
+      KeyDownEnter(e);
+    }
+
+    #endregion
+
+    #region txtReservation_KeyDown
+    private void txtReservation_KeyDown(object sender, KeyEventArgs e)
+    {
+      KeyDownEnter(e);
+    }
+
+    #endregion
+
+    #region dtpStart_KeyDown
+    private void dtpStart_KeyDown(object sender, KeyEventArgs e)
+    {
+      KeyDownEnter(e);
+    }
+    #endregion
+
+    #region dtpEnd_KeyDown
+    private void dtpEnd_KeyDown(object sender, KeyEventArgs e)
+    {
+      KeyDownEnter(e);
     }
     #endregion
 
     #endregion
-
-
-
-  
 
   }
 }

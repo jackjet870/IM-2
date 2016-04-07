@@ -24,15 +24,15 @@
             <StackPanel Orientation="Horizontal"> 
                 <StackPanel Margin="7">
                     <TextBlock>Name</TextBlock>
-                    <TextBox Name="txtName" Width="130"></TextBox>
+                    <TextBox Name="txtName" Width="130" KeyDown="txtName_KeyDown"></TextBox>
                 </StackPanel>
                 <StackPanel Margin="7">
                     <TextBlock>Room</TextBlock>
-                    <TextBox Name="txtRoomNum" Width="90"></TextBox>
+                    <TextBox Name="txtRoomNum" Width="90" KeyDown="txtRoomNum_KeyDown"></TextBox>
                 </StackPanel>
                 <StackPanel Margin="7">
                     <TextBlock>Reservation</TextBlock>
-                    <TextBox Name="txtReservation" Width="95"></TextBox>
+                    <TextBox Name="txtReservation" Width="95" KeyDown="txtReservation_KeyDown"></TextBox>
                 </StackPanel>
                 <StackPanel Margin="7">
                     <TextBlock>GUID</TextBlock>
@@ -40,14 +40,14 @@
                 </StackPanel >
                 <StackPanel Margin="7">
                     <TextBlock>Arrival Date From</TextBlock>
-                    <DatePicker Name="dtpStart" SelectedDateChanged="dtpStart_SelectedDateChanged"></DatePicker>
+                    <DatePicker Name="dtpStart" SelectedDateChanged="dtpStart_SelectedDateChanged" KeyDown="dtpStart_KeyDown"></DatePicker>
                 </StackPanel>
                 <StackPanel Margin="7">
                     <TextBlock>Arrival Date To</TextBlock>
-                    <DatePicker Name="dtpEnd" SelectedDateChanged="dtpEnd_SelectedDateChanged"></DatePicker>
+                    <DatePicker Name="dtpEnd" SelectedDateChanged="dtpEnd_SelectedDateChanged" KeyDown="dtpEnd_KeyDown"></DatePicker>
                 </StackPanel>
                 <StackPanel Margin="7" VerticalAlignment="Center">
-                    <Button Content="Search" FontSize="14" Width="100"  Name="btnSearch" Click="btnSearch_Click"></Button>
+                    <Button Content="Search" FontSize="14" Width="100"  Name="btnSearch" Click="btnSearch_Click" ></Button>
                 </StackPanel>
             </StackPanel>
         </GroupBox>

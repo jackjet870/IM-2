@@ -79,6 +79,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\RptReservationIM.cs" />
+    <Compile Include="Forms\frmInhouse.xaml.cs">
+      <DependentUpon>frmInhouse.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Reports\rptReservation.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -120,9 +124,6 @@
     <Compile Include="Forms\frmGuestsGroups.xaml.cs">
       <DependentUpon>frmGuestsGroups.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmRegister.xaml.cs">
-      <DependentUpon>frmRegister.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Forms\frmSearchGuest.xaml.cs">
       <DependentUpon>frmSearchGuest.xaml</DependentUpon>
     </Compile>
@@ -156,17 +157,11 @@
     <None Include="packages.config" />
     <None Include="Properties\DataSources\IM.Model.AssistanceData.datasource" />
     <None Include="Properties\DataSources\IM.Model.AssistanceStatus.datasource" />
-    <None Include="Properties\DataSources\IM.Model.Available.datasource" />
-    <None Include="Properties\DataSources\IM.Model.GetGuestsArrivals.datasource" />
-    <None Include="Properties\DataSources\IM.Model.GetGuestsAvailables.datasource" />
-    <None Include="Properties\DataSources\IM.Model.GetGuestsPremanifest.datasource" />
-    <None Include="Properties\DataSources\IM.Model.GetMarkets.datasource" />
     <None Include="Properties\DataSources\IM.Model.Guest.datasource" />
     <None Include="Properties\DataSources\IM.Model.GuestArrival.datasource" />
     <None Include="Properties\DataSources\IM.Model.GuestSearched.datasource" />
     <None Include="Properties\DataSources\IM.Model.GuestsGroup.datasource" />
     <None Include="Properties\DataSources\IM.Model.PersonnelDayOff.datasource" />
-    <None Include="Properties\DataSources\IM.Model.Premanifest.datasource" />
     <None Include="Properties\DataSources\IM.Model.PRNote.datasource" />
     <None Include="Properties\DataSources\IM.Model.USP_OR_GetGuestLog1.datasource" />
     <None Include="Properties\Settings.settings">
@@ -209,15 +204,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmInhouse.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Forms\frmPRNotes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\frmGuestsGroups.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Forms\frmRegister.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

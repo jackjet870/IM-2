@@ -43,7 +43,37 @@ namespace IM.Inhouse.Forms
       _guest = BRGuests.GetGuest(_guestID);
 
     }
-    #endregion   
+    #endregion
+
+    #region Save
+    public void Save()
+    {
+      EnabledControls(true, true, false);
+      if (AfterValidate())
+      {
+        //Agregamos la nota 
+        PRNote note = new PRNote();
+        note.pnDT = Convert.ToDateTime(txtpnDT.Text);
+        note.pngu = _guestID;
+        note.pnPR = txtpnPR.Text;
+        note.pnText = txtpnText.Text;
+        BRNotes.SaveNoteGuest(note);
+        //Actualizamos el guest 
+        Guest guest = BRGuests.GetGuest(_guestID);
+        guest.guPRNote = true;
+        BRGuests.SaveGuest(guest);
+        //Actualizamos el datagrid 
+        _pRNoteViewSource.Source = BRNotes.GetNoteGuest(_guestID);
+        CleanControls();
+        _CreatingNote = false;
+        _saveNote = true;
+      }
+      else
+      {
+        EnabledControls(false, false, true);
+      }
+    }
+    #endregion
 
     #region Window_Loaded
     private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -55,8 +85,8 @@ namespace IM.Inhouse.Forms
       txtguID.Text = _guest.guID.ToString();
       txtguLastName1.Text = _guest.guLastName1;
       txtguFirstName1.Text = _guest.guFirstName1;
-      txtguCheckInD.Text = _guest.guCheckInD.ToString();
-      txtguCheckOutD.Text = _guest.guCheckOutD.ToString();
+      txtguCheckInD.Text = _guest.guCheckInD.ToString("dd/MM/yyyy");
+      txtguCheckOutD.Text = _guest.guCheckOutD.ToString("dd/MM/yyyy");
 
       //Cargamos el datagrid
       _pRNoteViewSource = ((CollectionViewSource)(this.FindResource("pRNoteViewSource")));
@@ -96,7 +126,7 @@ namespace IM.Inhouse.Forms
         return false;
       }
 
-       ValidationData Validate =  BRHelpers.ValidateChangedByExist(txtpnPR.Text, EncryptHelper.Encrypt(txtPwd.Password), App.User.LeadSource.lsID, "PR").Single();
+      ValidationData Validate = BRHelpers.ValidateChangedByExist(txtpnPR.Text, EncryptHelper.Encrypt(txtPwd.Password), App.User.LeadSource.lsID, "PR").Single();
 
       //Validamos que los datos de quien hizo el cambio y su contraseña existan
       if (Validate.Focus != string.Empty)
@@ -108,7 +138,7 @@ namespace IM.Inhouse.Forms
         switch (Validate.Focus)
         {
           case "ID":
-            txtpnPR.Focus();          
+            txtpnPR.Focus();
             break;
           case "ChangedBy":
             txtpnPR.Focus();
@@ -119,7 +149,7 @@ namespace IM.Inhouse.Forms
           case "PR":
             txtpnPR.Focus();
             break;
-        } 
+        }
         return false;
       }
       ////si es la primera nota que se agrega
@@ -128,8 +158,8 @@ namespace IM.Inhouse.Forms
 
       //}
       return true;
-    } 
-    #endregion 
+    }
+    #endregion
 
     #region btnAdd_Click
     private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -141,6 +171,7 @@ namespace IM.Inhouse.Forms
       EnabledControls(false, false, true);
       //ingresamos la fecha en el campo 
       txtpnDT.Text = BRHelpers.GetServerDate().ToString();
+      txtpnText.Focus();
       _CreatingNote = true;
     }
 
@@ -149,31 +180,8 @@ namespace IM.Inhouse.Forms
     #region btnSave_Click
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
-      EnabledControls(true, true, false);
-      if (AfterValidate())
-      {
-        //Agregamos la nota 
-        PRNote note = new PRNote();
-        note.pnDT = Convert.ToDateTime(txtpnDT.Text);
-        note.pngu = _guestID;
-        note.pnPR = txtpnPR.Text;
-        note.pnText = txtpnText.Text;         
-        BRNotes.SaveNoteGuest(note);
-        //Actualizamos el guest 
-        Guest guest = BRGuests.GetGuest(_guestID);
-        guest.guPRNote = true;
-        BRGuests.SaveGuest(guest);
-        //Actualizamos el datagrid 
-        _pRNoteViewSource.Source = BRNotes.GetNoteGuest(_guestID);
-        CleanControls();
-        _CreatingNote = false;
-        _saveNote = true;
-      }
-      else
-      {
-        EnabledControls(false, false, true);
-      }
-    } 
+      Save();
+    }
     #endregion
 
     #region btnCancel_Click
@@ -182,7 +190,7 @@ namespace IM.Inhouse.Forms
       CleanControls();
       EnabledControls(true, true, false);
       _CreatingNote = false;
-    } 
+    }
     #endregion
 
     #region CleanControls
@@ -190,7 +198,7 @@ namespace IM.Inhouse.Forms
     {
       txtpnDT.Text = txtpnPR.Text = txtPwd.Password = txtpnText.Text = string.Empty;
       cbopnPR.SelectedIndex = -1;
-    } 
+    }
     #endregion
 
     #region cbopnPR_SelectionChanged
@@ -211,7 +219,7 @@ namespace IM.Inhouse.Forms
           //txtguFollowD.Text = string.Empty;
         }
       }
-    } 
+    }
     #endregion
 
     #region txtpnPR_LostFocus
@@ -271,7 +279,7 @@ namespace IM.Inhouse.Forms
         txtPwd.Password = (App.User.User.peID != txtpnPR.Text ? string.Empty : EncryptHelper.Encrypt(App.User.User.pePwd));
         txtpnText.Text = item.Text;
         txtpnDT.Text = item.Date.ToString();
-        EnabledControls(true,true,false);
+        EnabledControls(true, true, false);
       }
     }
     #endregion
@@ -279,7 +287,8 @@ namespace IM.Inhouse.Forms
     #region EnabledControls
     public void EnabledControls(bool show, bool ctrluno, bool ctrldos)
     {
-      txtpnDT.IsReadOnly = txtpnPR.IsReadOnly = txtpnText.IsReadOnly = ctrluno;
+      txtpnDT.IsReadOnly = true;
+      txtpnPR.IsReadOnly = txtpnText.IsReadOnly = ctrluno;
       txtPwd.IsEnabled = cbopnPR.IsEnabled = btnSave.IsEnabled = btnCancel.IsEnabled = ctrldos;
       btnShowInfo.IsEnabled = btnAdd.IsEnabled = show;
     }
@@ -294,28 +303,24 @@ namespace IM.Inhouse.Forms
         e.Cancel = true;
       }
     }
+
     #endregion
 
-    //valida los datos extras de un registro
-
-    //Valida que la nota no se repita
-    public void BeforeValidateID()
+    #region btnSave_KeyDown
+    /// <summary>
+    /// Si es precionado la tecla entre inicia las validiaciones
+    /// </summary>
+    /// <param name="e"></param>
+    /// <history>
+    /// [jorcanche] 01/04/2016
+    /// </history>
+    private void txtpnText_KeyDown(object sender, KeyEventArgs e)
     {
-      //establecemos la fecha y hora
-      txtpnDT.Text = BRHelpers.GetServerDate().ToLongDateString();
-
-      //Establecemos los clieterios de busqueda
-
-    }
-    public void SetSearchCriteria(string pstrWhere, DateTime pstrDateTime)
-    {
-      if (BRNotes.GetCountNoteGuest(_guestID) == 0)
+      if (e.Key == Key.Enter && !string.IsNullOrEmpty(txtpnDT.Text))
       {
-
+        Save();
       }
-      
     }
+    #endregion
   }
-
-  
 }

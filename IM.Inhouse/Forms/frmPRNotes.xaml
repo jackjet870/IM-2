@@ -56,7 +56,7 @@
                 </StackPanel>
                 <StackPanel Margin="5">
                     <TextBlock><Run Text="Arrival"/></TextBlock>
-                    <TextBox IsReadOnly="True" Width="74"  x:Name="txtguCheckInD" />
+                    <TextBox IsReadOnly="True" Width="74"   x:Name="txtguCheckInD" />
                 </StackPanel>
                 <StackPanel Margin="5" >
                     <TextBlock><Run Text="Departure"/></TextBlock>
@@ -67,16 +67,16 @@
         <!--#endregion-->
 
         <!--#region DataGrid-->
-        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="10,10,10,10" DataContext="{StaticResource pRNoteViewSource}" >
-            <DataGrid Height="230" Width="700" BorderBrush="Black" Background="Bisque" CanUserAddRows="False" IsReadOnly="True" SelectionUnit="FullRow" SelectionMode="Single" AlternatingRowBackground="Gainsboro"  AlternationCount="2" x:Name="dgNotes" RowDetailsVisibilityMode="VisibleWhenSelected"  ItemsSource="{Binding}"  EnableRowVirtualization="True" AutoGenerateColumns="False" MouseDoubleClick="dgNotes_MouseDoubleClick">
+        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="10" DataContext="{StaticResource pRNoteViewSource}" >
+            <DataGrid Height="230" Width="700" BorderBrush="Black" Background="Bisque" CanUserAddRows="False" IsReadOnly="true" SelectionUnit="FullRow" SelectionMode="Single" AlternatingRowBackground="Gainsboro"  AlternationCount="2" x:Name="dgNotes" RowDetailsVisibilityMode="VisibleWhenSelected"  ItemsSource="{Binding}"  EnableRowVirtualization="True" AutoGenerateColumns="False" MouseDoubleClick="dgNotes_MouseDoubleClick">
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="pnDTColumn" Width="auto" Header="Date / Time" Binding="{Binding Date}" />
                     <DataGridTextColumn x:Name="pnguColumn" Width="auto" Header="PR" Binding="{Binding PR}" />
                     <DataGridTextColumn x:Name="pnPRColumn" Width="auto" Header="Name" Binding="{Binding Name}"/>
                     <DataGridTemplateColumn x:Name="pnTextColumn" Width="*" Header="Note" >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap"  />
+                        <DataGridTemplateColumn.CellTemplate >
+                            <DataTemplate >
+                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap"   />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -108,7 +108,7 @@
                 </StackPanel>
                 <StackPanel Margin="2" Orientation="Horizontal" >
                     <TextBlock Margin="0,0,40,0"><Run Text="Note:"/></TextBlock>
-                    <TextBox Width="610" Height="45" x:Name="txtpnText" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                    <TextBox Width="610" Height="45" x:Name="txtpnText" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" KeyDown="txtpnText_KeyDown" />
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -117,7 +117,7 @@
         <!--#region Botones-->
         <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,0,0,10">
             <Button x:Name="btnAdd" Margin="10,0,0,0" Width="60" Height="25" Content="Add" Click="btnAdd_Click"/>
-            <Button x:Name="btnSave" Margin="10,0,0,0" Width="60" Content="Save" Click="btnSave_Click" Height="25" VerticalAlignment="Top"/>
+            <Button x:Name="btnSave" Margin="10,0,0,0" Width="60" Content="Save" Click="btnSave_Click" />
             <Button x:Name="btnCancel" Margin="10,0,0,0" Width="60" Height="25" Content="Cancel" Click="btnCancel_Click" VerticalAlignment="Top"/>
         </StackPanel>
         <!--#endregion-->

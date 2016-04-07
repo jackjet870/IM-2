@@ -46,7 +46,7 @@ namespace IM.Inhouse
       if (frmLogin.IsAuthenticated)
       {
         User = frmLogin.userData;
-        frmRegister frmMain = new frmRegister();
+        frmInhouse frmMain = new frmInhouse();
         frmMain.ShowDialog();
         frmSplash.Close();
       }
