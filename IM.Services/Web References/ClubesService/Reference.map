@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://svr-2000-web2:8087/ClubesPRServiceInterface/OrigosServiceInterface.asmx?wsdl" filename="OrigosServiceInterface.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.DiscoveryDocumentReference" url="http://svr-2000-web2:8087/ClubesPRServiceInterface/OrigosServiceInterface.asmx?disco" filename="OrigosServiceInterface.disco" />
+  </Results>
+</DiscoveryClientResultsFile>

@@ -4,6 +4,7 @@ using IM.BusinessRules.BR;
 using IM.Inhouse.Classes;
 using IM.Inhouse.Forms;
 using IM.Model;
+using IM.Model.Classes;
 using IM.Model.Enums;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using IM.Services.Helpers;
 using IM.Services.WirePRService;
+using IM.Services.ClubesService;
 
 namespace IM.Inhouse
 {
@@ -474,6 +476,76 @@ namespace IM.Inhouse
         return null;
       }
     }
+
+    #endregion
+
+    #region GetEquityReport
+
+    /// <summary>
+    /// Invoca un reporte de Equity
+    /// </summary>
+    /// <param name="guest">Fila del dtg seleccionada</param>
+    /// <param name="type">1 - Arrivals | 2 - Aviable |3 - Premanifest | 4 GuestSearched </param>
+    /// <history>
+    /// [ecanul] 06/04/2016 Created
+    /// </history>
+    void GetEquityReport(object guest, int type)
+    {
+      switch (type)
+      {
+        case 1:
+          var itemGuestArrival = guest as GuestArrival;
+          Equity(itemGuestArrival.guMembershipNum, itemGuestArrival.guCompany, (int)itemGuestArrival.agcl, (int)itemGuestArrival.gucl);
+          break;
+        case 2:
+          var itemGuestAvailable = guest as GuestAvailable;
+          break;
+        case 3:
+          var itemGuestPremanifest = guest as GuestPremanifest;
+          break;
+        case 4:
+          var itemGuestSearched = guest as GuestSearched;
+          break;
+      }
+    }
+
+    #region Equiry
+
+    /// <summary>
+    /// Obtiene un reporte de Equity
+    /// </summary>
+    /// <param name="membershipNum">numero de membresia</param>
+    /// <param name="company">compania</param>
+    /// <param name="clubAgency">agencia</param>
+    /// <param name="clubGuest">club</param>
+    /// <history>
+    /// [ecanul] 06/04/2016 Created
+    /// </history>
+    void Equity(string membershipNum, Decimal company, int clubAgency, int clubGuest)
+    {
+      EnumClub club;
+      if (membershipNum != null && membershipNum != "")
+      {
+        if (App.User.HasPermission(EnumPermission.Equity, EnumPermisionLevel.ReadOnly))
+        {
+
+          if (clubAgency != 0)
+            club = StrToEnums.StringToEnumClub(clubAgency.ToString());
+          else
+            club = StrToEnums.StringToEnumClub(clubGuest.ToString());//
+
+          RptEquity equity = ClubesHelper.GetRptEquity(membershipNum, Convert.ToInt32(company), club);
+          if (equity != null)
+            UIHelper.ShowMessage("Reporte Conseguido");
+          else
+            UIHelper.ShowMessage("Reporte No Conseguido");
+        }
+        else
+          UIHelper.ShowMessage("Reporte No Conseguido", MessageBoxImage.Error);
+      }
+    }
+
+    #endregion
 
     #endregion
 
@@ -1385,11 +1457,6 @@ namespace IM.Inhouse
       }
     }
 
-    private void Image_MouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)
-    {
-
-    }
-
     private void CheckBox_Click(object sender, RoutedEventArgs e)
     {
 
@@ -1601,9 +1668,9 @@ namespace IM.Inhouse
       invit.ShowDialog();
     }
     #endregion
-    
+
     #endregion
-    
+
   }
 
 }

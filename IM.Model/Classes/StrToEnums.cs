@@ -300,6 +300,61 @@ namespace IM.Model.Classes
           break;
       }
       return str;
+    }
+    #endregion
+
+    #region StringToEnumClub
+
+    /// <summary>
+    /// Convierte una cadena a enumerado enumClub
+    /// </summary>
+    /// <param name="club">string Correspondiente al club</param>
+    /// <returns>Enumerado EnumClub correspondiente</returns>
+    /// <history>[ECANUL] 05-04-2016 Created</history>
+    public static EnumClub StringToEnumClub(string club)
+    {
+      EnumClub enumClub;
+      switch (club)
+      {
+        case "2":
+          enumClub = EnumClub.PalaceElite;
+          break;
+        case "3":
+          enumClub = EnumClub.Legendary;
+          break;
+        default:
+          enumClub = EnumClub.PalacePremier;
+          break;
+      }
+      return enumClub;
+    }
+
+    #endregion
+
+    #region EnumClubToString
+
+    /// <summary>
+    /// Convierte un enumerado enumClub a cadena
+    /// </summary>
+    /// <param name="club">Enumerado a convertir</param>
+    /// <returns>String con el valor correspondiente</returns>
+    /// <history>[ECANUL] 05-04-2016</history>
+    public static string EnumClubToString(EnumClub club)
+    {
+      string str = "";
+      switch (club)
+      {
+        case EnumClub.PalacePremier:
+          str = "Premier";
+          break;
+        case EnumClub.PalaceElite:
+          str = "Elite";
+          break;
+        case EnumClub.Legendary:
+          str = "Legendary";
+          break;
+      }
+      return str;
     } 
     #endregion
 

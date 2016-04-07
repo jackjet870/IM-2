@@ -35,10 +35,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>R:\PalaceResorts\Common2.0\PalaceTools\PalaceResorts2.Common.PalaceTools.dll</HintPath>
     </Reference>
+    <Reference Include="PalaceResorts2.Common.Security, Version=2.3.0.0, Culture=neutral, PublicKeyToken=d399b2cc59d85ff0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>R:\PalaceResorts\Common2.0\Security\PalaceResorts2.Common.Security.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -48,12 +56,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\ClubesHelper.cs" />
+    <Compile Include="Helpers\ServiceHelper.cs" />
     <Compile Include="Helpers\WirePRHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\ClubesService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Compile Include="Web References\WirePRService\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -68,6 +83,17 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
+    <WebReferenceUrl Include="http://svr-2000-web2:8087/ClubesPRServiceInterface/OrigosServiceInterface.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\ClubesService\</RelPath>
+      <UpdateFromURL>http://svr-2000-web2:8087/ClubesPRServiceInterface/OrigosServiceInterface.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>IM_Services_ClubesService_OrigosServiceInterface</CachedSettingsPropName>
+    </WebReferenceUrl>
     <WebReferenceUrl Include="http://svr-2000-web2:8087/WireServiceInterface/OrigosServiceInterface.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\WirePRService\</RelPath>
@@ -85,6 +111,59 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\ClubesService\BooleanResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\ClubesService\CardResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\ClubesService\ClmemberResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\ClubesService\ClofficeResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\ClubesService\InfoAccountCardResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\ClubesService\IntegerResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\ClubesService\MemberExtensionResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\ClubesService\MembershipOrigosResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\ClubesService\MembresiaAsociadaResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\ClubesService\MovimientoResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\ClubesService\MpCarinvResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\ClubesService\OrigosServiceInterface.wsdl" />
+    <None Include="Web References\ClubesService\ProductResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\ClubesService\RecordsetResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\ClubesService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\ClubesService\RptEquityResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\ClubesService\TarjetaResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\ClubesService\VendedorResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\WirePRService\IntegerResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
@@ -119,6 +198,13 @@
       <Project>{5870c4ea-8b03-44a1-b9a2-20e48a59a64f}</Project>
       <Name>IM.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IM.Model\IM.Model.csproj">
+      <Project>{4d0c8faf-7eeb-4a36-9826-e190a0d9fe72}</Project>
+      <Name>IM.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\ClubesService\OrigosServiceInterface.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

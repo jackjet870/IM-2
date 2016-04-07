@@ -328,6 +328,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+                        <!--#region -->
                         <DataGridTextColumn x:Name="guclColumn" IsReadOnly="True" Binding="{Binding gucl}" Header="Club ID" Width="auto"/>
                         <DataGridTextColumn x:Name="clNColumn" IsReadOnly="True"  Binding="{Binding clN}" Header="Club" Width="auto"/>
                         <DataGridTextColumn x:Name="guCompanyColumn" IsReadOnly="True" Binding="{Binding guCompany}" Header="Company" Width="auto"/>
