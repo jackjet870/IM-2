@@ -199,7 +199,10 @@ namespace IM.Base.Helpers
         } 
         #endregion
       }
-
+      if(strMsj!="")//Mandamos el foco al primer campo
+      {
+        lstControls.FirstOrDefault().Focus();
+      }
       return strMsj.TrimEnd('\n');
     }
 

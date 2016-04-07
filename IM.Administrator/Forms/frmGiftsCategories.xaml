@@ -48,7 +48,7 @@
             </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Width="25*" Binding="{Binding gcID}"/>
-                <DataGridTextColumn Header="From" Width="38*" Binding="{Binding gcN}"/>
+                <DataGridTextColumn Header="Gift Category" Width="38*" Binding="{Binding gcN}"/>
             </DataGrid.Columns>
         </DataGrid>
         <!--#endregion-->

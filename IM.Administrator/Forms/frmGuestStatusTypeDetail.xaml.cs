@@ -144,7 +144,7 @@ namespace IM.Administrator.Forms
     private void txtMaxAmount_GotFocus(object sender, RoutedEventArgs e)
     {
       TextBox txt = (TextBox)sender;
-      txt.Text = ConvertHelper.CurrencyToStandar(txt.Text);
+      txt.Text = ConvertHelper.IntCurrencyToStandar(txt.Text);
     }
     #endregion
 
@@ -201,8 +201,8 @@ namespace IM.Administrator.Forms
       {
         if (!ObjectHelper.IsEquals(guestStaTyp, guestStaTypOld))//Verificar que no haya cambios pendientes
         {
-          MessageBoxResult result = UIHelper.ShowMessage("If you close the window, the changes will be lost.", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
-          if (result == MessageBoxResult.OK)
+          MessageBoxResult result = UIHelper.ShowMessage("If you close the window, the changes will be lost.", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.Yes)
           {
             Close();
           }

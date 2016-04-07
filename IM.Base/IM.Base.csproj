@@ -226,7 +226,16 @@
     <Resource Include="Images\Marital_Status.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Payment.png" />
+    <Resource Include="Images\Money.ico" />
+    <Resource Include="Images\DateTime_Forbidden.png" />
     <Content Include="Images\Find.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Cofee.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Member.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

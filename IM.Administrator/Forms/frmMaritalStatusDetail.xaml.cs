@@ -49,7 +49,7 @@ namespace IM.Administrator.Forms
       if (enumMode != EnumMode.preview)
       {
         btnAccept.Visibility = Visibility.Visible;
-        txtID.IsEnabled = true;
+        txtID.IsEnabled = (enumMode==EnumMode.edit);
         txtN.IsEnabled = true;
         chkA.IsEnabled = true;
       }
@@ -126,8 +126,8 @@ namespace IM.Administrator.Forms
       {
         if (!ObjectHelper.IsEquals(maritalStatus, oldMaritalStatus))
         {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
-          if (result == MessageBoxResult.OK)
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.Yes)
           {
             Close();
           }

@@ -151,8 +151,8 @@ namespace IM.Administrator.Forms
       {
         if (!ObjectHelper.IsEquals(desk, oldDesk))
         {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
-          if (result == MessageBoxResult.OK)
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.Yes)
           {
             Close();
           }

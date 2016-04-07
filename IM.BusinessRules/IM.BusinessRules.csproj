@@ -90,6 +90,11 @@
     <Compile Include="BR\BRMealTickets.cs" />
     <Compile Include="BR\BRMealTicketTypes.cs" />
     <Compile Include="BR\BRMaritalStatus.cs" />
+    <Compile Include="BR\BRMembershipGroups.cs" />
+    <Compile Include="BR\BRMemberShipTypes.cs" />
+    <Compile Include="BR\BRNotBookingMotives.cs" />
+    <Compile Include="BR\BRPaymentPlaces.cs" />
+    <Compile Include="BR\BRPaymentSchemas.cs" />
     <Compile Include="BR\BRPaymentTypes.cs" />
     <Compile Include="BR\BRNotes.cs" />
     <Compile Include="BR\BRPersonnelDayOff.cs" />

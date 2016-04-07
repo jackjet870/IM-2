@@ -200,7 +200,7 @@ namespace IM.Administrator.Forms
         #endregion
 
         #region Desks
-        case EnumWindow.Desks:
+        case EnumWindow.DefaultInt:
           {
             txtID.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
             break;
@@ -232,6 +232,14 @@ namespace IM.Administrator.Forms
             lblDes.Content = "To";
             if (strID == "0") { txtID.Text = ""; }
             if (strDesc == "0") { txtD.Text = ""; }
+            break;
+          }
+        #endregion
+
+        #region
+        case EnumWindow.MealTicketTypes:
+          {
+            lblSta.Content ="With Pax";
             break;
           }
         #endregion
@@ -296,8 +304,8 @@ namespace IM.Administrator.Forms
             break;
           }
         #endregion
-        #region Desks
-        case EnumWindow.Desks:
+        #region DefaulInt
+        case EnumWindow.DefaultInt:
           {
             if (!string.IsNullOrWhiteSpace(txtID.Text))
             {

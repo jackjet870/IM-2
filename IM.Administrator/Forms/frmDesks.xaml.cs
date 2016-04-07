@@ -165,7 +165,7 @@ namespace IM.Administrator.Forms
       frmSearch.strID = ((_deskFilter.dkID > 0)?_deskFilter.dkID.ToString():"");
       frmSearch.strDesc = _deskFilter.dkN;
       frmSearch.nStatus = _nStatus;
-      frmSearch.enumForm = EnumWindow.Desks;
+      frmSearch.enumForm = EnumWindow.DefaultInt;
       if (frmSearch.ShowDialog() == true)
       {
         _deskFilter.dkID = Convert.ToInt32(frmSearch.strID);

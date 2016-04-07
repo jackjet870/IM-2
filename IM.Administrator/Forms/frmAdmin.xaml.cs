@@ -82,10 +82,11 @@ namespace IM.Administrator.Forms
       }
       #endregion
 
-      #region Sale Permision
+      #region Sales Permision
       if (App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add(new { nombre = "Efficiency Types", img = "pack://application:,,,/IM.Base;component/Images/positioning.png", form = "frmEfficiencyTypes" });
+        lstMenu.Add(new { nombre = "Payment Places", img = "pack://application:,,,/IM.Base;component/Images/money.ico", form = "frmPaymentPlaces" });
       }
       #endregion
 
@@ -132,12 +133,26 @@ namespace IM.Administrator.Forms
       }
       #endregion
 
+      #region Motives
+      if(App.User.HasPermission(EnumPermission.Motives,EnumPermisionLevel.ReadOnly))
+      {
+        lstMenu.Add(new { nombre = "Not Booking Motives", img = "pack://application:,,,/IM.Base;component/Images/DateTime_Forbidden.png", form = "frmNotBookingMotives" });
+      }
+      #endregion
+
       #region Catalogos para Tipo Administrador
       if (App.User.HasRole(EnumRole.Administrator))//Si se tiene permiso como administrador
       {
         lstMenu.Add(new { nombre = "Computers", img = "pack://application:,,,/IM.Base;component/Images/computer.png", form = "frmComputers" });
         lstMenu.Add(new { nombre = "Desks", img = "pack://application:,,,/IM.Base;component/Images/desk.png", form = "frmDesks" });
+        lstMenu.Add(new { nombre = "Meal Ticket Type", img = "pack://application:,,,/IM.Base;component/Images/Cofee.png", form = "frmMealTicketsTypes" });
+        lstMenu.Add(new { nombre = "Membership Types", img = "pack://application:,,,/IM.Base;component/Images/member.ico", form = "frmMembershipTypes" });
       }
+      #endregion
+
+      #region Catalogos Default
+      lstMenu.Add(new { nombre = "Payment Schemas", img = "pack://application:,,,/IM.Base;component/Images/Payment.png", form = "frmPaymentSchemas" });
+      lstMenu.Add(new { nombre = "Payment Types", img = "pack://application:,,,/IM.Base;component/Images/Payment.png", form = "frmPaymentTypes" });
       #endregion
 
       lstMenuAdm.ItemsSource = lstMenu;

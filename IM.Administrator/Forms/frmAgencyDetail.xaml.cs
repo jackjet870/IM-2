@@ -134,7 +134,7 @@ namespace IM.Administrator.Forms
     private void txt_GotFocus(object sender, RoutedEventArgs e)
     {
       TextBox txt = (TextBox)sender;
-      txt.Text = ConvertHelper.CurrencyToStandar(txt.Text);
+      txt.Text = ConvertHelper.IntCurrencyToStandar(txt.Text);
     }
     #endregion
 
@@ -191,8 +191,8 @@ namespace IM.Administrator.Forms
       {
         if (!ObjectHelper.IsEquals(agency, oldAgency))
         {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Warning, "Closing window", MessageBoxButton.OKCancel);
-          if (result == MessageBoxResult.OK)
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result == MessageBoxResult.Yes)
           {
             Close();
           }

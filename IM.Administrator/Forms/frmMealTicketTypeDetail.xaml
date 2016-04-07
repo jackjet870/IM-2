@@ -1,0 +1,47 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmMealTicketTypeDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        Title="Meal Ticket Type Detail" Height="368" Width="338" DataContext="{Binding mealTicketType}">
+    <Grid Margin="10,10,14,2" >
+        <!--#region Formato del grid-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="35*"/>
+            <ColumnDefinition Width="85*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="44"/>
+        </Grid.RowDefinitions>
+        <!--#endregion-->
+        <!--#region títulos-->
+        <Label Grid.Column="0" Grid.Row="0">ID</Label>
+        <Label Grid.Column="0" Grid.Row="1">Description</Label>
+        <Label Grid.Column="0" Grid.Row="2">Price Adults</Label>
+        <Label Grid.Column="0" Grid.Row="3">Price Minor</Label>
+        <TextBlock Grid.Column="0" Grid.Row="4" Text="Price Collaborator With Cost" TextWrapping="WrapWithOverflow"/>
+        <TextBlock Grid.Column="0" Grid.Row="5" Text="Price Collaborator Without Cost" TextWrapping="WrapWithOverflow"/>
+        <!--#endregion-->
+        <!--#region Datos-->
+        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" Tag="ID" VerticalAlignment="Top" Text="{Binding myID}" MaxLength="10" CharacterCasing="Upper" />
+        <TextBox Name="txtDes" Grid.Column="1" Grid.Row="1" Height="27" Tag="description" VerticalAlignment="Top" Text="{Binding myN}" MaxLength="30" />
+        <TextBox Name="txtPriceA" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" Text="{Binding myPriceA,StringFormat={}{0:C}}" MaxLength="14" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus"/>        
+        <TextBox Name="txtPriceM" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" Text="{Binding myPriceM,StringFormat={}{0:C}}" MaxLength="14"  PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus"/>
+        <TextBox Name="txtColWhit" Grid.Column="1" Grid.Row="4" Height="27" VerticalAlignment="Top" Text="{Binding myCollaboratorWithCost,StringFormat={}{0:C}}" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus" MaxLength="14" />
+        <TextBox Name="txtColWhitout" Grid.Column="1" Grid.Row="5" Height="27" VerticalAlignment="Top" Text="{Binding myCollaboratorWithoutCost,StringFormat={}{0:C}}" MaxLength="14" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus" />
+        <CheckBox Name="chkWP" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="{Binding myWPax}" Height="13" >Whit Pax</CheckBox>        
+
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="7" Margin="0,7,75,7" Click="btnAccept_Click" Content="_Accept"  HorizontalAlignment="Right"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="7" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
+        <!--#endregion-->
+    </Grid>
+</Window>

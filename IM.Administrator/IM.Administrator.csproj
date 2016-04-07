@@ -224,6 +224,54 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmMealTicketsTypes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmMealTicketTypeDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmMembershipTypeDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmMembershipTypes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmNotBookingMotiveDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmNotBookingMotives.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPaymentPlaceDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPaymentPlaces.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPaymentSchemaDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPaymentSchemas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPaymentTypeDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPaymentTypes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmSearch.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -351,6 +399,42 @@
     </Compile>
     <Compile Include="Forms\frmMaritalStatusDetail.xaml.cs">
       <DependentUpon>frmMaritalStatusDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMealTicketsTypes.xaml.cs">
+      <DependentUpon>frmMealTicketsTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMealTicketTypeDetail.xaml.cs">
+      <DependentUpon>frmMealTicketTypeDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMembershipTypeDetail.xaml.cs">
+      <DependentUpon>frmMembershipTypeDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMembershipTypes.xaml.cs">
+      <DependentUpon>frmMembershipTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmNotBookingMotiveDetail.xaml.cs">
+      <DependentUpon>frmNotBookingMotiveDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmNotBookingMotives.xaml.cs">
+      <DependentUpon>frmNotBookingMotives.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPaymentPlaceDetail.xaml.cs">
+      <DependentUpon>frmPaymentPlaceDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPaymentPlaces.xaml.cs">
+      <DependentUpon>frmPaymentPlaces.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPaymentSchemaDetail.xaml.cs">
+      <DependentUpon>frmPaymentSchemaDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPaymentSchemas.xaml.cs">
+      <DependentUpon>frmPaymentSchemas.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPaymentTypeDetail.xaml.cs">
+      <DependentUpon>frmPaymentTypeDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPaymentTypes.xaml.cs">
+      <DependentUpon>frmPaymentTypes.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSearch.xaml.cs">
       <DependentUpon>frmSearch.xaml</DependentUpon>

@@ -27,9 +27,9 @@ namespace IM.Base.Helpers
     /// [wtorres]  01/Mar/2016 Modified. Ahora la imagen y el titulo son opcionales
     /// [emoguel]  28/Mar/2016 Modified. Ahora el boton se puede cambiar por otro
     /// </history>
-    public static MessageBoxResult ShowMessage(string message, MessageBoxImage image = MessageBoxImage.Information, string title = "",MessageBoxButton button=MessageBoxButton.OK)
+    public static MessageBoxResult ShowMessage(string message, MessageBoxImage image = MessageBoxImage.Information, string title = "")
     {
-      
+      MessageBoxButton button = MessageBoxButton.OK;
       switch (image)
       {
         case MessageBoxImage.Error:

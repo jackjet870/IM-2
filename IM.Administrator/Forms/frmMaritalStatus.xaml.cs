@@ -74,7 +74,7 @@ namespace IM.Administrator.Forms
       frmMaritalStatusDetail frmMarStatus = new frmMaritalStatusDetail();
       frmMarStatus.Owner = this;
       frmMarStatus.oldMaritalStatus = maritalStatus;
-      frmMarStatus.enumMode = EnumMode.edit;
+      frmMarStatus.enumMode = (_blnEdit==true)?EnumMode.edit:EnumMode.preview;
       if(frmMarStatus.ShowDialog()==true)
       {
         int nIndex = 0;

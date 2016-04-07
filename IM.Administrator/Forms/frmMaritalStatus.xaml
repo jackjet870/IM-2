@@ -48,7 +48,7 @@
             </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Width="30*" Binding="{Binding msID}"/>
-                <DataGridTextColumn Header="Marita Status" Width="70*" Binding="{Binding msN}"/>
+                <DataGridTextColumn Header="Marital Status" Width="70*" Binding="{Binding msN}"/>
             </DataGrid.Columns>
         </DataGrid>
         <!--#endregion-->
