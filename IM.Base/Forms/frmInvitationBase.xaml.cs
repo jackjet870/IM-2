@@ -9,7 +9,9 @@ using System.Windows.Data;
 using IM.Model.Enums;
 using System.Globalization;
 using IM.BusinessRules.Classes;
-using System.IO;
+using IM.Base.Classes;
+using IM.Base.Enums;
+using IM.Model;
 
 namespace IM.Base.Forms
 {
@@ -20,40 +22,66 @@ namespace IM.Base.Forms
   /// [lchairez] 16/02/2016 Created
   /// </history>
   public partial class frmInvitationBase : Window
-  {
+  { 
     #region Atributos
 
     #region Listas
-    List<GiftInvitation> gifts = new List<GiftInvitation>();
-    List<IM.Model.InvitationGift> _lstGifts = new List<Model.InvitationGift>();
-    List<IM.Model.BookingDeposit> _lstDeposits = new List<Model.BookingDeposit>();
-    List<IM.Model.GuestStatus> _lstGuestStatus = new List<Model.GuestStatus>();
-    List<IM.Model.GuestCreditCard> _lstCreditsCard = new List<Model.GuestCreditCard>();
-    List<IM.Model.Guest> _lstAdditionals = new List<Model.Guest>();
+    private List<InvitationGift> _lstGifts = new List<InvitationGift>();
+    private List<BookingDeposit> _lstDeposits = new List<BookingDeposit>();
+    private List<GuestCreditCard> _lstCreditsCard = new List<GuestCreditCard>();
+    private List<Guest> _lstAdditionals = new List<Guest>();
+    private List<GuestStatus> _lstGuestStatus = new List<GuestStatus>();
 
-    List<GiftInvitation> _lstNewGifts = new List<GiftInvitation>();
-    List<BookingDepositInvitation> _lstNewDeposits = new List<BookingDepositInvitation>();
-    List<GuestStatusInvitation> _lstNewGuestStatus = new List<GuestStatusInvitation>();
-    List<GuestCreditCardInvitation> _lstNewCreditsCard = new List<GuestCreditCardInvitation>();
+        
     List<GuestAdditionalInvitation> _lstNewAdditionals = new List<GuestAdditionalInvitation>();
+
+    private List<objInvitGift> _lstObjInvitGift = null;
+    private List<objInvitGuestStatus> _lstObjInvitGuestStatus = null;
+    private List<objInvitCreditCard> _lstObjInvitCreditCard = null;
+    private List<objInvitBookingDeposit> _lstObjInvitBookingDeposit = null;
+    private List<objInvitAdditionalGuest> _lstObjInvitAdditionalGuest = null;
     #endregion
 
     #region Objetos
+    private Invitation invitation;
     private InvitationType _invitationType;
     private UserData _user;
-    private IM.Model.Guest _guestAdditional;
-    private GiftInvitation _previousGift;
-    private BookingDepositInvitation _previousDeposit;
-    private GuestStatusInvitation _previousGuestStatus;
-    private GuestCreditCardInvitation _previousCreditCard;
-    private IM.Model.Guest _previousGuestAdditional;
+    private Guest _guestAdditional;
+    private Guest _previousGuestAdditional;
+
+    #region Regalos
+    CollectionViewSource objInvitGiftViewSource;
+    CollectionViewSource giftShortViewSource;
+    #endregion
+
+    #region Guest Status
+    CollectionViewSource objInvitGuestStatusViewSource;
+    CollectionViewSource guestStatusTypeViewSource;
+    #endregion
+
+    #region Credit Card
+    CollectionViewSource objInvitCreditCardViewSource;
+    CollectionViewSource creditCardTypeViewSource;
+    #endregion
+
+    #region Deposits
+    CollectionViewSource objInvitBookingDepositViewSource;
+    CollectionViewSource currencyViewSource;
+    CollectionViewSource creditCardTypeDepositViewSource;
+    CollectionViewSource paymentTypeViewSource;
+    #endregion
+
+    #region Additional Guest
+    CollectionViewSource objInvitAdditionalGuestViewSource;
+    #endregion
+
     #endregion
 
     private const bool allowReschedule = true;
 
     private bool _wasSelectedByKeyboard = false;
     private int _guestID;
-    private IM.Model.Enums.EnumInvitationMode _invitationMode;
+    private EnumInvitationMode _invitationMode;
     private DateTime _serverDateTime;
     private DateTime? _bookingDate;
     private DateTime? _closeDate;
@@ -68,9 +96,8 @@ namespace IM.Base.Forms
     private string _hReservIDC;
     private DateTime? _showDate;
     private bool _bookingCancel;
-
-    private bool _wasUpdated = false;
-
+    private decimal _qtyGift;
+    
     #endregion
 
     #region Constructores y destructores
@@ -80,7 +107,7 @@ namespace IM.Base.Forms
       InitializeComponent();
     }
 
-    public frmInvitationBase(IM.BusinessRules.Enums.InvitationType invitationType, UserData userData, int guestID, IM.Model.Enums.EnumInvitationMode invitationMode)
+    public frmInvitationBase(IM.BusinessRules.Enums.InvitationType invitationType, UserData userData, int guestID, EnumInvitationMode invitationMode)
     {
       WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
 
@@ -564,6 +591,7 @@ namespace IM.Base.Forms
         Helpers.UIHelper.ShowMessage("Guest has been saved successfully", image: MessageBoxImage.Information);
         _invitationMode = EnumInvitationMode.modOnlyRead;
         EnableControls();
+        this.DialogResult = true;
       }
 
     }
@@ -606,19 +634,116 @@ namespace IM.Base.Forms
 
     #endregion
 
-    #region Métodos de los controles de la sección OTHER INFORMATION
-
+    #region Métodos de los controles de la sección GIFTS
     /// <summary>
-    /// Selecciona el hotel
+    /// Revisa que se ingrese la informacion correcta
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void cmbHotel_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void cellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
+      int qty = 0;
+      switch (e.Column.SortMemberPath)
+      {
+        case "igQty":
+          var igQty = e.EditingElement as TextBox;
+          int.TryParse(igQty.Text, out qty);
+          if (qty == 0)
+          {
+            Helpers.UIHelper.ShowMessage("Quantity can not be lower than 1");
+            e.EditingElement.Focus();
+          }
+          else
+          {
+            _qtyGift = qty;
+          }
+          break;
+        case "iggi":
+          var iggi = e.EditingElement as ComboBox;
+          if (!String.IsNullOrEmpty(iggi.SelectedValue.ToString()))
+          {
+            var gift = IM.BusinessRules.BR.BRGifts.GetGiftId(iggi.SelectedValue.ToString());
+            if(gift!= null && _qtyGift > gift.giMaxQty)
+            {
+              string error = String.Format("The maximu quantity authorized of the gift {0} has been exceeded.\n Max authotized = {1}", gift.giN, gift.giMaxQty);
+              Helpers.UIHelper.ShowMessage(error);
+              e.EditingElement.Focus();
+              e.Cancel = true;
+            }
+            else
+              _lstObjInvitGift[e.Row.GetIndex()].igAdults = 1;
+          }
+          break;
+        case "igAdults":
+          var asd = (objInvitGift)e.Row.Item;
+          var igAdults = e.EditingElement as TextBox;
+          if(!int.TryParse(igAdults.Text, out qty) || qty == 0)
+          {
+            Helpers.UIHelper.ShowMessage("Adults can not be lower than 1");
+            e.EditingElement.Focus();
+            e.Cancel = true;
+          }
+          break;
 
+        case "igMinors":
+        case "igExtraAdult":
+          var igMinorExtraA = e.EditingElement as TextBox;
+          if (!int.TryParse(igMinorExtraA.Text, out qty))
+          {
+            Helpers.UIHelper.ShowMessage("The Cells Minors and E Adults acept number only");
+            e.EditingElement.Focus();
+            e.Cancel = true;
+          }
+          break;
+      }
+      CalculateCostsPrices();
+      CalculateTotalGifts();
     }
 
     /// <summary>
+    /// Revisa que se ingresen solo datos númericos en ciertos campos
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void dtgGifts_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+    {
+      if (e.Text == ".")
+        e.Handled = false;
+      else if (!char.IsDigit(e.Text, e.Text.Length - 1))
+        e.Handled = true;
+    }
+    #endregion
+
+    #region Métodos de los controles de la sección GUEST STATUS
+    private void dtgGuestStatus_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+      decimal qty = 0;
+      switch (e.Column.SortMemberPath)
+      {
+        case "gtQuantity":
+          var gtQty = e.EditingElement as TextBox;
+          if(!decimal.TryParse(gtQty.Text, out qty) || qty == 0)
+          {
+            Helpers.UIHelper.ShowMessage("Quantity can not be lower than 1");
+            e.EditingElement.Focus();
+            return;
+          }
+          break;
+      }
+    }
+
+    private void dtgGuestStatus_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+    {
+      if (e.Text == ".")
+        e.Handled = false;
+      else if (!char.IsDigit(e.Text, e.Text.Length - 1))
+        e.Handled = true;
+    }
+    #endregion
+  
+    #region Métodos de los controles de la sección OTHER INFORMATION
+
+/// <summary>
     /// Asigna la cable de la agencia al TextBox asociado
     /// </summary>
     /// <history>
@@ -674,510 +799,74 @@ namespace IM.Base.Forms
 
     #endregion
 
-    #region Métodos de los controles de la sección GIFTS
-    /// <summary>
-    /// Guardamos en una lista temporal los regalos asignados al invitado
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void btnAddGift_Click(object sender, RoutedEventArgs e)
-    {
-      if (ValidateNewGift())
-      {
-        IM.Model.InvitationGift gift;
-        var g = IM.BusinessRules.BR.BRGifts.GetGiftId(cmbGifts.SelectedValue.ToString());
-        if (!_wasUpdated)
-        {
-          gift = new IM.Model.InvitationGift();
-          gift.iggu = _guestID;
-          gift.igQty = Convert.ToInt32(txtQtyGift.Text);
-          gift.iggi = cmbGifts.SelectedValue.ToString();
-          gift.igAdults = Convert.ToInt32(txtAdultGift.Text);
-          gift.igMinors = Convert.ToInt32(txtMinortGift.Text);
-          gift.igExtraAdults = Convert.ToInt32(txtEAdultGift.Text);
-          gift.igct = "MARKETING";
-          gift.igPriceA = g.giPrice1;
-          gift.igPriceAdult = g.giPrice1;
-          gift.igPriceM = g.giPriceMinor;
-          gift.igPriceMinor = g.giPriceMinor;
-          gift.igPriceExtraAdult = g.giPriceExtraAdult;
-
-          _lstNewGifts.Add(ConvertInvitationGiftToGiftInvitationObject(gift, true));
-        }
-        else
-        {
-          //buscamos si el regalo que editó es de los que acaba de ingresar para actualizarlo
-          var giftNew = _lstNewGifts.Where(gi => gi.iggu == _guestID && gi.iggi == _previousGift.iggi).SingleOrDefault();
-          if (giftNew != null)
-          {
-            giftNew.igQty = Convert.ToInt32(txtQtyGift.Text);
-            giftNew.iggi = cmbGifts.SelectedValue.ToString();
-            giftNew.igAdults = Convert.ToInt32(txtAdultGift.Text);
-            giftNew.igMinors = Convert.ToInt32(txtMinortGift.Text);
-            giftNew.igExtraAdults = Convert.ToInt32(txtEAdultGift.Text);
-            giftNew.igct = "MARKETING";
-            giftNew.igPriceA = g.giPrice1;
-            giftNew.igPriceAdult = g.giPrice1;
-            giftNew.igPriceM = g.giPriceMinor;
-            giftNew.igPriceMinor = g.giPriceMinor;
-            giftNew.igPriceExtraAdult = g.giPriceExtraAdult;
-          }
-
-          //buscamos si el regalo que editó es de los que acaba de ingresar para actualizarlo
-          var giftUpdated = _lstGifts.Where(gi => gi.iggu == _guestID && gi.iggi == _previousGift.iggi).SingleOrDefault();
-
-          if (giftUpdated != null)
-          {
-            giftUpdated.igQty = Convert.ToInt32(txtQtyGift.Text);
-            giftUpdated.iggi = cmbGifts.SelectedValue.ToString();
-            giftUpdated.igAdults = Convert.ToInt32(txtAdultGift.Text);
-            giftUpdated.igMinors = Convert.ToInt32(txtMinortGift.Text);
-            giftUpdated.igExtraAdults = Convert.ToInt32(txtEAdultGift.Text);
-            giftUpdated.igct = "MARKETING";
-            giftUpdated.igPriceA = g.giPrice1;
-            giftUpdated.igPriceAdult = g.giPrice1;
-            giftUpdated.igPriceM = g.giPriceMinor;
-            giftUpdated.igPriceMinor = g.giPriceMinor;
-            giftUpdated.igPriceExtraAdult = g.giPriceExtraAdult;
-            _lstNewGifts.Add(ConvertInvitationGiftToGiftInvitationObject(giftUpdated, false, _previousGift.iggi));
-            _lstGifts.Remove(giftUpdated);
-          }
-        }
-        
-        if (_wasUpdated)
-        {
-          tbiNewGift.Header = "New Gift";
-          btnAddGift.Content = "Add";
-        }
-
-        LoadGiftGrid();
-
-        txtQtyGift.Text = String.Empty;
-        cmbGifts.SelectedIndex = -1;
-        txtAdultGift.Text = "0";
-        txtMinortGift.Text = "0";
-        txtEAdultGift.Text = "0";
-
-        tbiGiftsList.IsSelected = true;
-        _wasUpdated = false;
-      }
-    }
-
-    /// <summary>
-    /// Editamos alguno de los registros dela lista
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void dtgGifts_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-    {
-      if ((GiftInvitation)dtgGifts.CurrentItem == null) return;
-      _previousGift = (IM.BusinessRules.Classes.GiftInvitation)dtgGifts.CurrentItem;
-
-      tbiNewGift.IsSelected = true;
-      tbiNewGift.Header = "Update Gift";
-
-      txtQtyGift.Text = _previousGift.igQty.ToString();
-      cmbGifts.SelectedValue = _previousGift.iggi;
-      txtAdultGift.Text = _previousGift.igAdults.ToString();
-      txtMinortGift.Text = _previousGift.igMinors.ToString();
-      txtEAdultGift.Text = _previousGift.igExtraAdults.ToString();
-      _wasUpdated = true;
-      btnAddGift.Content = "Update";
-    }
-    #endregion
-
-    #region Métodos de los controles de la sección DEPOSIT
-    /// <summary>
-    /// Habilita los controles para el ingreso de los datos de las tarjetas de crédito 
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void cmbPaymentTypeDeposit_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      bool enable = cmbPaymentTypeDeposit.SelectedValue != null && cmbPaymentTypeDeposit.SelectedValue.ToString() == "CC";
-      cmbCreditCardDeposit.IsEnabled = enable;
-      txtCardNumberDeposit.IsEnabled = enable;
-      txtExpirationCard.IsEnabled = enable;
-      txtAuthorizathionId.IsEnabled = enable;
-
-    }
-
-    /// <summary>
-    /// Guardamos en una lista temporal los depositos asignados al invitado
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void btnAddDeposit_Click(object sender, RoutedEventArgs e)
-    {
-      if (ValidateNewDesposit())
-      {
-        if (!_wasUpdated)
-        {
-          var dep = new IM.Model.BookingDeposit();
-          dep.bdgu = _guestID;
-          dep.bdAmount = Convert.ToDecimal(txtDeposit.Text);
-          dep.bdReceived = Convert.ToDecimal(txtReceived.Text);
-          dep.bdcu = cmbCurrencyDeposit.SelectedValue.ToString();
-          dep.bdpt = cmbPaymentTypeDeposit.SelectedValue.ToString();
-          dep.bdpc = txtRefundPlace.Text;
-          dep.bdcc = cmbCreditCardDeposit.IsEnabled ? cmbCreditCardDeposit.SelectedValue.ToString() : null;
-          dep.bdCardNum = txtCardNumberDeposit.IsEnabled ? txtCardNumberDeposit.Text : null;
-          dep.bdExpD = txtExpirationCard.IsEnabled ? txtExpirationCard.Text : null;
-          dep.bdAuth = txtAuthorizathionId.IsEnabled && !String.IsNullOrEmpty(txtAuthorizathionId.Text) ? int.Parse(txtAuthorizathionId.Text) : (int?) null;
-          dep.bdFolioCXC = String.IsNullOrEmpty(txtFolioCxC.Text) ? (int?)null : int.Parse(txtFolioCxC.Text);
-          dep.bdUserCXC = _user.User.peID;
-          dep.bdEntryDCXC = _serverDateTime;
-
-          _lstNewDeposits.Add(ConvertBookingDepositToBookingDepositInvitationObject(dep, true));
-        }
-        else
-        {
-          //buscamos si el depostio que editó es de los que acaba de ingresar para actualizarlo
-          var depostitNew = _lstNewDeposits.Where(d => d.bdID == _previousDeposit.bdID).SingleOrDefault();
-          if (depostitNew != null)
-          {
-            depostitNew.bdAmount = Convert.ToDecimal(txtDeposit.Text);
-            depostitNew.bdReceived = Convert.ToDecimal(txtReceived.Text);
-            depostitNew.bdcu = cmbCurrencyDeposit.SelectedValue.ToString();
-            depostitNew.bdpt = cmbPaymentTypeDeposit.SelectedValue.ToString();
-            depostitNew.bdpc = txtRefundPlace.Text;
-            depostitNew.bdcc = cmbCreditCardDeposit.IsEnabled ? cmbCreditCardDeposit.SelectedValue.ToString() : null;
-            depostitNew.bdCardNum = txtCardNumberDeposit.IsEnabled ? txtCardNumberDeposit.Text : null;
-            depostitNew.bdExpD = txtExpirationCard.IsEnabled ? txtExpirationCard.Text : null;
-            depostitNew.bdAuth = txtAuthorizathionId.IsEnabled && !String.IsNullOrEmpty(txtAuthorizathionId.Text) ? int.Parse(txtAuthorizathionId.Text) : (int?)null;
-            depostitNew.bdFolioCXC = String.IsNullOrEmpty(txtFolioCxC.Text) ? (int?)null : int.Parse(txtFolioCxC.Text);
-            depostitNew.bdUserCXC = _user.User.peID;
-            depostitNew.bdEntryDCXC = _serverDateTime;
-          }
-
-          //buscamos si el depósito que editó es de los que acaba de ingresar para actualizarlo
-          var depositUpdated = _lstDeposits.Where(d => d.bdID == _previousDeposit.bdID).SingleOrDefault();
-          if (depositUpdated != null)
-          {
-            depositUpdated.bdAmount = Convert.ToDecimal(txtDeposit.Text);
-            depositUpdated.bdReceived = Convert.ToDecimal(txtReceived.Text);
-            depositUpdated.bdcu = cmbCurrencyDeposit.SelectedValue.ToString();
-            depositUpdated.bdpt = cmbPaymentTypeDeposit.SelectedValue.ToString();
-            depositUpdated.bdpc = txtRefundPlace.Text;
-            depositUpdated.bdcc = cmbCreditCardDeposit.IsEnabled ? cmbCreditCardDeposit.SelectedValue.ToString() : null;
-            depositUpdated.bdCardNum = txtCardNumberDeposit.IsEnabled ? txtCardNumberDeposit.Text : null;
-            depositUpdated.bdExpD = txtExpirationCard.IsEnabled ? txtExpirationCard.Text : null;
-            depositUpdated.bdAuth = txtAuthorizathionId.IsEnabled && !String.IsNullOrEmpty(txtAuthorizathionId.Text) ? int.Parse(txtAuthorizathionId.Text) : (int?)null;
-            depositUpdated.bdFolioCXC = String.IsNullOrEmpty(txtFolioCxC.Text) ? (int?)null : int.Parse(txtFolioCxC.Text);
-            depositUpdated.bdUserCXC = _user.User.peID;
-            depositUpdated.bdEntryDCXC = _serverDateTime;
-            _lstNewDeposits.Add(ConvertBookingDepositToBookingDepositInvitationObject(depositUpdated, false));
-            _lstDeposits.Remove(depositUpdated);
-          }
-
-        }
-
-        if (_wasUpdated)
-        {
-          tbiNewDeposit.Header = "New Deposit";
-          btnAddDeposit.Content = "Add";
-        }
-
-        LoadDepositGrid();
-
-        tbiDepositList.IsSelected = true;
-
-        txtDeposit.Text = "0.0";
-        txtReceived.Text = "0.0";
-        cmbCurrencyDeposit.SelectedIndex = -1;
-        cmbPaymentTypeDeposit.SelectedIndex = -1;
-        txtRefundPlace.Text = String.Empty;
-        cmbCreditCardDeposit.SelectedIndex = -1;
-        txtCardNumberDeposit.Text = String.Empty;
-        txtExpirationCard.Text = String.Empty;
-        txtAuthorizathionId.Text = String.Empty;
-        txtFolioCxC.Text = String.Empty;
-
-        _wasUpdated = false;
-      }
-    }
-
-    /// <summary>
-    /// Editamos alguno de los registros dela lista
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void dtgDeposits_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-    {
-      if ((BookingDepositInvitation)dtgDeposits.CurrentItem == null) return;
-
-      _previousDeposit = (BookingDepositInvitation)dtgDeposits.CurrentItem;
-
-      tbiNewDeposit.Header = "Update Deposit";
-      tbiNewDeposit.IsSelected = true;
-
-      txtDeposit.Text = _previousDeposit.bdAmount.ToString();
-      txtReceived.Text = _previousDeposit.bdReceived.ToString();
-      cmbCurrencyDeposit.SelectedValue = _previousDeposit.bdcu;
-      cmbPaymentTypeDeposit.SelectedValue = _previousDeposit.bdpt;
-      txtRefundPlace.Text = _previousDeposit.bdpc;
-      cmbCreditCardDeposit.SelectedValue = _previousDeposit.bdcc;
-      txtCardNumberDeposit.Text = _previousDeposit.bdCardNum;
-      txtExpirationCard.Text = _previousDeposit.bdExpD;
-      txtAuthorizathionId.Text = !_previousDeposit.bdAuth.HasValue ? String.Empty : _previousDeposit.bdAuth.Value.ToString();
-      txtFolioCxC.Text = _previousDeposit.bdFolioCXC.HasValue ? _previousDeposit.bdFolioCXC.Value.ToString() : String.Empty;
-      _wasUpdated = true;
-      btnAddDeposit.Content = "Update";
-    }
-    #endregion
-
-    #region Métodos de los controles de la sección GUESTSTATUS
-    /// <summary>
-    ///Agrega un estado del invitado
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void btnAddGuestStatus_Click(object sender, RoutedEventArgs e)
-    {
-      if (ValidateNewGuestStatus())
-      {
-        if(!_wasUpdated)
-        {
-          var gs = new IM.Model.GuestStatus();
-
-          gs.gtQuantity = Convert.ToByte(txtQtyGuestStatus.Text);
-          gs.gtgs = cmbGuestStatus.SelectedValue.ToString();
-          gs.gtgu = _guestID;
-
-          _lstNewGuestStatus.Add(ConvertGuestStatusToGuestStatusInvitationObject(gs, true));
-        }
-        else
-        {
-          //buscamos si el estatus que editó es de los que acaba de ingresar para actualizarlo
-          var gsNew = _lstNewGuestStatus.SingleOrDefault(g => g.gsID == _previousGuestStatus.gsID && g.gsgu == _previousGuestStatus.gsgu);
-          if (gsNew != null)
-          {
-            gsNew.gsQty = Convert.ToByte(txtQtyGuestStatus.Text);
-            gsNew.gsID = cmbGuestStatus.SelectedValue.ToString();
-          }
-
-          //buscamos si el estatus que editó es de que extraímos de la base de datos
-          var gsUpdated = _lstGuestStatus.SingleOrDefault(g => g.gtgs == _previousGuestStatus.gsID && g.gtgu == _previousGuestStatus.gsgu);
-          if(gsUpdated != null)
-          {
-            gsUpdated.gtQuantity = Convert.ToByte(txtQtyGuestStatus.Text);
-            gsUpdated.gtgs = cmbGuestStatus.SelectedValue.ToString();
-
-            _lstNewGuestStatus.Add(ConvertGuestStatusToGuestStatusInvitationObject(gsUpdated, false, _previousGuestStatus.gsID));
-            _lstGuestStatus.Remove(gsUpdated);
-          }
-        }
-
-        if (_wasUpdated)
-        {
-          tbiNewGuestStatus.Header = "New Guest Status";
-          tbiNewGuestStatus.Content = "Add";
-        }
-
-        LoadGuestStatusGrid();
-
-        tbiGuestStatusList.IsSelected = true;
-
-        txtQtyGuestStatus.Text = String.Empty;
-        cmbGuestStatus.SelectedIndex = -1;
-        _wasUpdated = false;
-      }
-    }
-
-    private void dtgGuestStatus_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-    {
-      if ((GuestStatusInvitation)dtgGuestStatus.CurrentItem == null) return;
-
-      _previousGuestStatus = (GuestStatusInvitation)dtgGuestStatus.CurrentItem;
-
-      tbiNewGuestStatus.Header = "Update Guest Status";
-      tbiNewGuestStatus.IsSelected = true;
-
-      txtQtyGuestStatus.Text = _previousGuestStatus.gsQty.ToString();
-      cmbGuestStatus.SelectedValue = _previousGuestStatus.gsID;
-      _wasUpdated = true;
-      btnAddGuestStatus.Content = "Update";
-    }
-    #endregion
-
-    #region Métodos de los controles de la sección CREDIT CARD
-    /// <summary>
-    /// agrega unanueva tarjeta de Credito
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void btnAddCreditCard_Click(object sender, RoutedEventArgs e)
-    {
-      if (ValidateNewCreditCard())
-      {
-        if (!_wasUpdated)
-        {
-          var cc = new IM.Model.GuestCreditCard();
-          cc.gdQuantity = Convert.ToByte(txtQtyCreditCard.Text);
-          cc.gdgu = _guestID;
-          cc.gdcc = cmbCreditCards.SelectedValue.ToString();
-
-          _lstNewCreditsCard.Add(ConvertGuestCreditCardToGuestCreditCardInvitationObject(cc, true));
-        }
-        else
-        {
-          //buscamos si el estatus que editó es de los que acaba de ingresar para actualizarlo
-          var ccNew = _lstNewCreditsCard.SingleOrDefault(c => c.ccID == _previousCreditCard.ccID && c.ccgu == _previousCreditCard.ccgu);
-          if (ccNew != null)
-          {
-            ccNew.ccID = cmbCreditCards.SelectedValue.ToString();
-            ccNew.ccQty = Convert.ToInt32(txtQtyCreditCard.Text);
-          }
-
-          //buscamos si el estatus que editó es de que extraímos de la base de datos
-          var ccUpdated = _lstCreditsCard.SingleOrDefault(c => c.gdcc == _previousCreditCard.ccID && c.gdgu == _previousCreditCard.ccgu);
-          if (ccUpdated != null)
-          {
-            ccUpdated.gdcc = cmbCreditCards.SelectedValue.ToString();
-            ccUpdated.gdQuantity = Convert.ToByte(txtQtyCreditCard.Text);
-
-            _lstNewCreditsCard.Add(ConvertGuestCreditCardToGuestCreditCardInvitationObject(ccUpdated, false, _previousCreditCard.ccID));
-            _lstCreditsCard.Remove(ccUpdated);
-          }
-        }
-
-        if (_wasUpdated)
-        {
-          tbiNewCreditCard.Header = "New Guest Status";
-          btnAddCreditCard.Content = "Add";
-        }
-
-        LoadCreditCardGrid();
-
-        tbiCreditCardList.IsSelected = true;
-        txtQtyCreditCard.Text = String.Empty;
-        cmbCreditCards.SelectedIndex = -1;
-        _wasUpdated = false;
-      }
-    }
-
-    /// <summary>
-    /// Edita una tarjeta de crédito
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void dtgCCCompany_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-    {
-      if ((GuestCreditCardInvitation)dtgCCCompany.CurrentItem == null) return;
-
-      _previousCreditCard = (GuestCreditCardInvitation)dtgCCCompany.CurrentItem;
-
-      tbiNewCreditCard.Header = "Update Credit Card";
-      tbiNewCreditCard.IsSelected = true;
-
-      txtQtyCreditCard.Text = _previousCreditCard.ccQty.ToString();
-      cmbCreditCards.SelectedValue = _previousCreditCard.ccID;
-      _wasUpdated = true;
-      btnAddCreditCard.Content = "Update";
-    }
-    #endregion
-
     #region Métodos de los controles de la sección ADDITIONAL INFORMATION
     /// <summary>
     /// Agrega un huésped adicional
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void btnAddAdditional_Click(object sender, RoutedEventArgs e)
+    private void dtgAdditInform_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if (_guestAdditional != null)
+      var guid = e.EditingElement as TextBox;
+      if (guid != null)
       {
-        if(!_wasUpdated)
+        var guest = IM.BusinessRules.BR.BRGuests.GetGuestById(int.Parse(guid.Text));
+        if (guest != null)
         {
-          _lstNewAdditionals.Add(ConvertGuestToGuestAdditionalInvitationObject(_guestAdditional, true));
+          _lstObjInvitAdditionalGuest[e.Row.GetIndex()].guID = guest.guID;
+          _lstObjInvitAdditionalGuest[e.Row.GetIndex()].guLastName1 = guest.guLastName1;
+          _lstObjInvitAdditionalGuest[e.Row.GetIndex()].guFirstName1 = guest.guFirstName1;
         }
         else
         {
-          var newGA = _lstNewAdditionals.SingleOrDefault(g=> g.guID == _previousGuestAdditional.guID);
-          if(newGA != null)
-          {
-            newGA.guID = Convert.ToInt32(txtGuidAdditional.Text);
-            newGA.guLastName1 = txtLastNameAdditional.Text;
-            newGA.guFirstName1 = txtFirstNameAdditional.Text;
-          }
-
-          var updatedGA = _lstAdditionals.SingleOrDefault(g => g.guID == _previousGuestAdditional.guID);
-          if (updatedGA != null)
-          {
-            _lstAdditionals.Remove(updatedGA);
-
-            var idPrevious = _previousGuestAdditional.guID;
-            updatedGA.guID = Convert.ToInt32(txtGuidAdditional.Text);
-            updatedGA.guLastName1 = txtLastNameAdditional.Text;
-            updatedGA.guFirstName1 = txtFirstNameAdditional.Text;
-
-            _lstNewAdditionals.Add(ConvertGuestToGuestAdditionalInvitationObject(updatedGA, false, idPrevious));
-
-          }
+          Helpers.UIHelper.ShowMessage("The Guest ID does not exist");
+          e.Cancel = true;
         }
-
-        if (_wasUpdated)
-        {
-          tbiNewAdditional.Header = "New Additional";
-          btnAddCreditCard.Content = "Add";
-        }
-
-        LoadAdditionalInformartionGrid();
-
-        tbiAdditionalList.IsSelected = true;
-        txtGuidAdditional.Text = String.Empty;
-        txtLastNameAdditional.Text = String.Empty;
-        txtFirstNameAdditional.Text = String.Empty;
-
-        _guestAdditional = null;
-        _wasUpdated = false;
       }
     }
 
-    /// <summary>
-    /// Busca un huésped en la base de datos
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void txtGuidAdditional_LostFocus(object sender, RoutedEventArgs e)
+
+    #endregion
+
+    #region Métodos de los controles de la sección DEPOSIT
+    private void dtgDeposits_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
     {
-      int id;
-      if (!String.IsNullOrEmpty(txtGuidAdditional.Text) && int.TryParse(txtGuidAdditional.Text, out id) && id > 0)
+      switch(dtgDeposits.CurrentCell.Column.SortMemberPath)
       {
-        var guestAdd = IM.BusinessRules.BR.BRGuests.GetGuestById(id);
-        if (guestAdd == null)
-        {
-          Helpers.UIHelper.ShowMessage("Guest does not exist");
-          txtGuidAdditional.Text = String.Empty;
-          return;
-        }
-        txtLastNameAdditional.Text = guestAdd.guLastName1;
-        txtFirstNameAdditional.Text = guestAdd.guFirstName1;
-        _guestAdditional = guestAdd;
+        case "bdAmount":
+        case "bdReceived":
+        case "bdCardNum":
+        case "bdFolioCXC":
+          if (e.Text == ".")
+            e.Handled = false;
+          else if (!char.IsDigit(e.Text, e.Text.Length - 1))
+            e.Handled = true;
+          break;
       }
-
     }
 
-    /// <summary>
-    /// Edita un invitado adicional
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void grbAdditionalInfo_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void dtgDeposits_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      if ((IM.Model.Guest)dtgAdditInform.CurrentItem == null) return;
-
-      _previousGuestAdditional = (IM.Model.Guest)dtgAdditInform.CurrentItem;
-
-      tbiNewAdditional.Header = "Update Additional";
-      tbiNewAdditional.IsSelected = true;
-
-      txtGuidAdditional.Text = _previousGuestAdditional.guID.ToString();
-      txtLastNameAdditional.Text = _previousGuestAdditional.guLastName1;
-      txtFirstNameAdditional.Text = _previousGuestAdditional.guFirstName1;
-
-      btnAddAdditional.Content = "Update";
-      _wasUpdated = true;
+      switch(e.Column.SortMemberPath)
+      {
+        case "bdExpD":
+          var dt = new DateTime();
+          var bdExpD = e.EditingElement as TextBox;
+          if (!DateTime.TryParse(bdExpD.Text, out dt))
+          {
+            Helpers.UIHelper.ShowMessage("The expire day does not has a correct format. (MM/YY)");
+            e.Cancel = true;
+          }
+          break;
+        case "bdCardNum":
+          var cardNum = e.EditingElement as TextBox;
+          if(cardNum.Text.Length > 4)
+          {
+            Helpers.UIHelper.ShowMessage("Type the last four numbers.");
+            e.Cancel = true;
+          }
+          break;
+      }
     }
     #endregion
 
@@ -1209,7 +898,7 @@ namespace IM.Base.Forms
     /// <returns>Boolean</returns>
     private bool ValidateEdit()
     {
-      var login = new IM.Base.Forms.frmLogin(null, false, EnumLoginType.Normal, false);
+      var login = new IM.Base.Forms.frmLogin(null, false, EnumLoginType.Normal);
       login.ShowDialog();
       if (!login.IsAuthenticated)
       {
@@ -1310,9 +999,9 @@ namespace IM.Base.Forms
       cmbLocation.Visibility = Visibility.Hidden;
       lblSalesRoom2.Visibility = Visibility.Hidden;
       txtSalesRoom2.Visibility = Visibility.Hidden;
-      colElectronicPurseCreditCard.Width = new GridLength(0);
-      rowRoomQuantity.Height = new GridLength(0);
-      tbiAdditionalCreditCard.Header = "Additional Information";
+      grbElectronicPurse.Visibility = Visibility.Hidden;
+      grbElectronicPurse.Visibility = Visibility.Hidden;
+      grbRoomQuantity.Visibility = Visibility.Hidden;
     }
 
     /// <summary>
@@ -1363,7 +1052,7 @@ namespace IM.Base.Forms
       cmbSalesRoom.Visibility = Visibility.Visible;
       lblLocation2.Visibility = Visibility.Visible;
       txtLocation2.Visibility = Visibility.Visible;
-      colElectronicPurseCreditCard.Width = new GridLength(0);
+      grbElectronicPurse.Visibility = Visibility.Hidden;
 
     }
 
@@ -1387,7 +1076,7 @@ namespace IM.Base.Forms
       txtSalesRoom2.Visibility = Visibility.Hidden;
       lblBeforeInOut.Visibility = Visibility.Hidden;
       chkBeforeInOut.Visibility = Visibility.Hidden;
-      colElectronicPurseCreditCard.Width = new GridLength(0);
+      grbElectronicPurse.Visibility = Visibility.Hidden;
     }
 
     /// <summary>
@@ -1534,10 +1223,10 @@ namespace IM.Base.Forms
           var dtInvit = Convert.ToDateTime(txtDate.Text);
           //si la fecha de salida es hoy o despues y (es una invitacion nueva o la fecha de invitacion es hoy o
           //(tiene permiso especial de invitaciones y la fecha de booking original Mayor o igual a hoy))
-          if (txtDeparture.SelectedDate.HasValue && (txtDeparture.SelectedDate.Value >= _serverDateTime)
-              && ((_isNewInvitation || dtInvit == _serverDateTime)
+          if (txtDeparture.SelectedDate.HasValue && (txtDeparture.SelectedDate.Value.Date >= _serverDateTime.Date)
+              && ((_isNewInvitation || dtInvit.Date == _serverDateTime.Date)
                   || (_user.HasPermission(_invitationType == InvitationType.Host ? EnumPermission.Host : EnumPermission.PRInvitations, EnumPermisionLevel.Special)
-                  && _bookinDateOriginal >= _serverDateTime)
+                  && _bookinDateOriginal.HasValue && (_bookinDateOriginal.Value.Date>= _serverDateTime.Date))
                   )
             )
           {
@@ -1562,7 +1251,7 @@ namespace IM.Base.Forms
         if (_invitationType != InvitationType.OutHouse && _invitationType != InvitationType.Host)
         {
           //si la fecha de booking original es hoy o despues o es una invitacion nueva
-          if ((_bookinDateOriginal >= _serverDateTime) || _isNewInvitation)
+          if ((_bookinDateOriginal.HasValue && (_bookinDateOriginal.Value.Date >= _serverDateTime.Date)) || _isNewInvitation)
           {
             //OK
           }
@@ -1621,7 +1310,7 @@ namespace IM.Base.Forms
         {
 
           //si la fecha de booking original es hoy o despues o es una invitacion nueva
-          if ((_bookinDateOriginal.HasValue && _bookinDateOriginal.Value >= _serverDateTime) || _isNewInvitation)
+          if ((_bookinDateOriginal.HasValue && _bookinDateOriginal.Value.Date >= _serverDateTime.Date) || _isNewInvitation)
           {
             //OK 
           }
@@ -1848,220 +1537,11 @@ namespace IM.Base.Forms
       }
     }
 
-    /// <summary>
-    /// Convierte un objeto del tipo IM.Model.InvitationGift a un objeto IM.BussinesRules.Classes.GiftInvitation
-    /// </summary>
-    /// <param name="gift">Objeto InvitationGift</param>
-    /// <param name="isNew">Indica si es un regalo nuevo</param>
-    /// <param name="previousID">Asigna el ID anterior</param>
-    /// <returns>GiftInvitation</returns>
-    private GiftInvitation ConvertInvitationGiftToGiftInvitationObject(IM.Model.InvitationGift gift, bool isNew, string previousID = null)
-    {
-      var g = new GiftInvitation();
-      g.igAdults = gift.igAdults;
-      g.igct = gift.igct;
-      g.igExtraAdults = gift.igExtraAdults;
-      g.iggi = gift.iggi;
-      g.iggu = gift.iggu;
-      g.igMinors = gift.igMinors;
-      g.igPriceA = gift.igPriceA;
-      g.igPriceAdult = gift.igPriceAdult;
-      g.igPriceExtraAdult = gift.igPriceExtraAdult;
-      g.igPriceM = gift.igPriceM;
-      g.igPriceMinor = gift.igPriceMinor;
-      g.igQty = gift.igQty;
-      g.isNew = isNew;
-      g.isUpdate = !isNew;
-      g.iggiPrevious = !isNew ? previousID : null;
-
-      return g;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="lst"></param>
-    /// <returns></returns>
-    private List<IM.Model.InvitationGift> ConvertGiftInvitationToInvitationGiftList(List<GiftInvitation> lst)
-    {
-      return (from i in lst
-              select new IM.Model.InvitationGift
-              {
-                igAdults = i.igAdults,
-                igct = i.igct,
-                igExtraAdults = i.igExtraAdults,
-                iggi = i.iggi,
-                iggu = i.iggu,
-                igPriceA = i.igPriceA,
-                igMinors = i.igMinors,
-                igPriceAdult = i.igPriceAdult,
-                igPriceExtraAdult = i.igPriceExtraAdult,
-                igPriceM = i.igPriceM,
-                igPriceMinor = i.igPriceMinor,
-                igQty = i.igQty
-              }).ToList();
-    }
-
-    /// Convierte un objeto del tipo IM.Model.BookingDeposit a un objeto IM.BussinesRules.Classes.BookingDepositInvitation
-    /// </summary>
-    /// <param name="deposit">Objeto BookingDeposit</param>
-    /// <param name="isNew">Indica si es un regalo nuevo</param>
-    /// <param name="previousID">Asigna el ID anterior</param>
-    /// <returns>BookingDepositInvitation</returns>
-    private BookingDepositInvitation ConvertBookingDepositToBookingDepositInvitationObject(IM.Model.BookingDeposit deposit, bool isNew)
-    {
-      var d = new BookingDepositInvitation();
-      d.bdAmount = deposit.bdAmount;
-      d.bdAuth = deposit.bdAuth;
-      d.bdCardNum = deposit.bdCardNum;
-      d.bdcc = deposit.bdcc;
-      d.bdEntryDCXC = deposit.bdEntryDCXC;
-      d.bdExpD = deposit.bdExpD;
-      d.bdFolioCXC = deposit.bdFolioCXC;
-      d.bdgu = deposit.bdgu;
-      d.bdID = deposit.bdID;
-      d.bdpc = deposit.bdpc;
-      d.bdpt = deposit.bdpt;
-      d.bdReceived = deposit.bdReceived;
-      d.bdUserCXC = deposit.bdUserCXC;
-      d.bdcu = deposit.bdcu;
-      d.isNew = isNew;
-      d.isUpdated = !isNew;
-      return d;
-    }
-
-    /// <summary>
-    /// Convierte una lista del tipo  IM.BussinesRules.Classes.BookingDepositInvitation a una lista IM.Model.BookingDeposit 
-    /// </summary>
-    /// <param name="lst"></param>
-    /// <returns></returns>
-    private List<IM.Model.BookingDeposit> ConvertBookingDepositInvitationToBookingDepositList(List<BookingDepositInvitation> lst)
-    {
-      return (from deposit in lst
-              select new IM.Model.BookingDeposit
-              {
-                bdAmount = deposit.bdAmount,
-                bdAuth = deposit.bdAuth,
-                bdCardNum = deposit.bdCardNum,
-                bdcc = deposit.bdcc,
-                bdEntryDCXC = deposit.bdEntryDCXC,
-                bdExpD = deposit.bdExpD,
-                bdFolioCXC = deposit.bdFolioCXC,
-                bdgu = deposit.bdgu,
-                bdID = deposit.bdID,
-                bdpc = deposit.bdpc,
-                bdpt = deposit.bdpt,
-                bdReceived = deposit.bdReceived,
-                bdUserCXC = deposit.bdUserCXC,
-                bdcu = deposit.bdcu
-              }).ToList();
-    }
-
-    /// Convierte un objeto del tipo IM.Model.GuestStatus a un objeto IM.BussinesRules.Classes.GuestStatusInvitation
-    /// </summary>
-    /// <param name="deposit">Objeto BookingDeposit</param>
-    /// <param name="isNew">Indica si es un regalo nuevo</param>
-    /// <param name="previousID">Asigna el ID anterior</param>
-    /// <returns>BookingDepositInvitation</returns>
-    private GuestStatusInvitation ConvertGuestStatusToGuestStatusInvitationObject(IM.Model.GuestStatus guestStatus, bool isNew, string previousID = null)
-    {
-      var gs = new GuestStatusInvitation();
-      gs.gsgu = guestStatus.gtgu;
-      gs.gsID = guestStatus.gtgs;
-      gs.gsQty = guestStatus.gtQuantity;
-      gs.isNew = isNew;
-      gs.isUpdate = !isNew;
-      gs.gsIDPrevious = isNew ? null : previousID;
-      return gs;
-    }
-
-    /// <summary>
-    /// Convierte una lista del tipo  IM.BussinesRules.Classes.GuestStatusInvitation a una lista IM.Model.GuestStatus 
-    /// </summary>
-    /// <param name="lst"></param>
-    /// <returns></returns>
-    private List<IM.Model.GuestStatus> ConvertGuestStatusInvitationToGuestStatusList(List<GuestStatusInvitation> lst)
-    {
-      return (from gs in lst
-              select new IM.Model.GuestStatus
-              {
-                gtgs = gs.gsID,
-                gtQuantity = Convert.ToByte(gs.gsQty),
-                gtgu = gs.gsgu
-              }).ToList();
-    }
-
-    /// Convierte un objeto del tipo IM.Model.GuestCreditCard a un objeto IM.BussinesRules.Classes.GuestCreditCardInvitation
-    /// </summary>
-    /// <param name="deposit">Objeto GuestCreditCard</param>
-    /// <param name="isNew">Indica si es un regalo nuevo</param>
-    /// <param name="previousID">Asigna el ID anterior</param>
-    /// <returns>BookingDepositInvitation</returns>
-    private GuestCreditCardInvitation ConvertGuestCreditCardToGuestCreditCardInvitationObject(IM.Model.GuestCreditCard creditCard, bool isNew, string previousID = null)
-    {
-      var cc = new GuestCreditCardInvitation();
-      cc.ccgu = creditCard.gdgu;
-      cc.ccID = creditCard.gdcc;
-      cc.ccQty = Convert.ToInt32(creditCard.gdQuantity);
-      cc.isNew = isNew;
-      cc.isUpdate = !isNew;
-      cc.ccIDPrevious = !isNew ? previousID : null;
-      return cc;
-    }
-
-    /// <summary>
-    /// Convierte una lista del tipo  IM.BussinesRules.Classes.GuestCreditCardInvitation a una lista IM.Model.GuestCreditCard 
-    /// </summary>
-    /// <param name="lst"></param>
-    /// <returns>GuestCreditCard</returns>
-    private List<IM.Model.GuestCreditCard> ConvertGuestStatusInvitationToGuestCreditCardList(List<GuestCreditCardInvitation> lst)
-    {
-      return (from cc in lst
-              select new IM.Model.GuestCreditCard
-              {
-                gdcc = cc.ccID,
-                gdgu = cc.ccgu,
-                gdQuantity = Convert.ToByte(cc.ccQty)
-              }).ToList();
-    }
-
-    /// Convierte un objeto del tipo IM.Model.Guest a un objeto IM.BussinesRules.Classes.GuestAdditionalInvitation
-    /// </summary>
-    /// <param name="guest">Objeto Guest</param>
-    /// <param name="isNew">Indica si es un regalo nuevo</param>
-    /// <param name="previousID">Asigna el ID anterior</param>
-    /// <returns>BookingDepositInvitation</returns>
-    private GuestAdditionalInvitation ConvertGuestToGuestAdditionalInvitationObject(IM.Model.Guest guest, bool isNew, int? previousID = null)
-    {
-      var g = new GuestAdditionalInvitation();
-      g.guID = guest.guID;
-      g.guLastName1 = guest.guLastName1;
-      g.guFirstName1 = guest.guFirstName1;
-      g.isNew = isNew;
-      g.isUpdate = !isNew;
-      g.guIDPrevious = previousID.HasValue ? previousID.Value : (int?) null;
-      return g;
-    }
-
-    /// <summary>
-    /// Convierte una lista del tipo  IM.BussinesRules.Classes.GuestAdditionalInvitation a una lista IM.Model.GuestCreditCard 
-    /// </summary>
-    /// <param name="lst"></param>
-    /// <returns>GuestCreditCard</returns>
-    private List<IM.Model.Guest> ConvertGuestAdditionalInvitationToGuestList(List<GuestAdditionalInvitation> lst)
-    {
-      return (from g in lst
-              select new IM.Model.Guest
-              {
-                guID = g.guID,
-                guLastName1 = g.guLastName1,
-                guFirstName1 = g.guFirstName1
-              }).ToList();
-    }
-
     #endregion
 
     #region Métodos para cargar Controles e información del invitado
+
+    #region Controles generales, TextBox, DateTimaPickers
 
     /// <summary>
     /// Manda llamar los métodos para cargar la información del guest.
@@ -2108,7 +1588,7 @@ namespace IM.Base.Forms
       var languages = IM.BusinessRules.BR.BRLanguages.GetLanguages(1);
       LoadComboBox(languages, cmbLanguage, "la", "ES");
 
-      var personnels = IM.BusinessRules.BR.BRPersonnel.GetPersonnel(_user.LeadSource.lsID);
+      var personnels = IM.BusinessRules.BR.BRPersonnel.GetPersonnel(_user.LeadSource.lsID, roles:"PR");
       LoadComboBox(personnels, cmbPR, "pe");
 
       var hotels = IM.BusinessRules.BR.BRHotels.GetHotels(nStatus:1);
@@ -2123,27 +1603,36 @@ namespace IM.Base.Forms
 
       var currencies = IM.BusinessRules.BR.BRCurrencies.GetCurrencies(null, 1);
       LoadComboBox(currencies, cmbCurrency, "cu", "US");
-      LoadComboBox(currencies, cmbCurrencyDeposit, "cu");
+      //Combo del Grid de Depositos
+      currencyViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("currencyViewSource")));
+      currencyViewSource.Source = currencies;
 
       var paymentTypes = IM.BusinessRules.BR.BRPaymentTypes.GetPaymentTypes(1);
       LoadComboBox(paymentTypes, cmbPaymentType, "pt", "CS");
-      LoadComboBox(paymentTypes, cmbPaymentTypeDeposit, "pt");
-      
+      //Combo del Grid de Depositos
+      paymentTypeViewSource = ((CollectionViewSource)(this.FindResource("paymentTypeViewSource")));
+      paymentTypeViewSource.Source = paymentTypes;
+
       var maritalStatus = IM.BusinessRules.BR.BRMaritalStatus.GetMaritalStatus(1);
       LoadComboBox(maritalStatus, cmbMaritalStatusGuest1, "ms");
       LoadComboBox(maritalStatus, cmbMaritalStatusGuest2, "ms");
 
       var creditCards = IM.BusinessRules.BR.BRCreditCardTypes.GetCreditCardTypes(null, -1);
-      LoadComboBox(creditCards, cmbCreditCardDeposit, "cc");
-      LoadComboBox(creditCards, cmbCreditCards, "cc");
+      
+      //Combo del Grid de Depositos
+      creditCardTypeDepositViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("creditCardTypeViewSource")));
+      creditCardTypeDepositViewSource.Source = creditCards;
 
-      var guestStatus = IM.BusinessRules.BR.BRGuests.GetGuestStatusType(_guestID);
-      LoadComboBox(guestStatus, cmbGuestStatus, "gs");
+      creditCardTypeViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("creditCardTypeViewSource")));
+      creditCardTypeViewSource.Source = creditCards;
 
-      var gifts = IM.BusinessRules.BR.BRGifts.GetGifts();
-      LoadComboBox(gifts, cmbGifts, "gi");
+      guestStatusTypeViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("guestStatusTypeViewSource")));
+      guestStatusTypeViewSource.Source = IM.BusinessRules.BR.BRGuests.GetGuestStatusType(1);
+
+      giftShortViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("giftShortViewSource")));
+      giftShortViewSource.Source = IM.BusinessRules.BR.BRGifts.GetGifts();
       #endregion
-    
+
     }
 
     /// <summary>
@@ -2384,7 +1873,9 @@ namespace IM.Base.Forms
       
     }
 
-    #region Métodos para cargar ComboBoxes y DataGridComboBoxColumn
+    #endregion
+
+    #region Métodos para cargar ComboBoxes
 
     /// <summary>
     /// Carga los combos de la forma
@@ -2403,20 +1894,6 @@ namespace IM.Base.Forms
     }
 
     /// <summary>
-    /// Carga los DataGridComboBoxColumn de los grids
-    /// </summary>
-    /// <param name="items">Lista de elementos que contendrá el combo</param>
-    /// <param name="combo">Combo que se llenará con los elementos</param>
-    /// <param name="prefix">prefijo</param>
-    /// <param name="defaultValue">Valor que será seleccionado por default</param>
-    private void LoadDataGridComboBoxColumn(IEnumerable<object> items, DataGridComboBoxColumn combo, string prefix, string defaultValue = "")
-    {
-      combo.DisplayMemberPath = String.Format("{0}N", prefix);
-      combo.SelectedValuePath = String.Format("{0}ID", prefix);
-      combo.ItemsSource = items;
-    }
-
-    /// <summary>
     /// Carga los combos de tiempo de la forma
     /// </summary>
     /// <param name="items">Lista de elementos que contendrá el combo</param>
@@ -2424,7 +1901,7 @@ namespace IM.Base.Forms
     /// <param name="displayItem">Nombre del elemento</param>
     /// <param name="valueItem">Valor del elemento</param>
     /// <param name="defaultValue">Valor que será seleccionado por default</param>
-    private void LoadTimeComboBoxes(IEnumerable<IM.Model.TourTimeAvailable> items, ComboBox combo, string displayItem, string valueItem, string defaultValue = "")
+    private void LoadTimeComboBoxes(IEnumerable<TourTimeAvailable> items, ComboBox combo, string displayItem, string valueItem, string defaultValue = "")
     {
       combo.DisplayMemberPath = displayItem;
       combo.SelectedValuePath = valueItem;
@@ -2456,76 +1933,36 @@ namespace IM.Base.Forms
     /// </summary>
     private void LoadGiftGrid()
     {
-      
-      if(!dtgGifts.HasItems && !_lstGifts.Any())//sino tiene registros cargamos por primera vez el grid
+      _lstObjInvitGift = new List<objInvitGift>();
+
+      var invitGift = IM.BusinessRules.BR.BRGifts.GetGiftsByGuest(_guestID);
+
+      _lstObjInvitGift = invitGift.Select(c => new objInvitGift
       {
-        gifts = IM.BusinessRules.BR.BRGifts.GetGiftsInvitation(_guestID);
+        igAdults = c.igAdults,
+        igComments = c.igComments,
+        igct = c.igct,
+        igExtraAdults = c.igExtraAdults,
+        igFolios = c.igFolios,
+        iggi = c.iggi,
+        iggr = c.iggr,
+        iggu = c.iggu,
+        igMinors = c.igMinors,
+        igPriceA = c.igPriceA,
+        igPriceAdult = c.igPriceAdult,
+        igPriceExtraAdult = c.igPriceExtraAdult,
+        igPriceM = c.igPriceM,
+        igPriceMinor = c.igPriceMinor,
+        igQty = c.igQty
+      }).ToList();
 
-        //convetidmos la lista de GiftInvitation a InvitationGift
+      _lstGifts = invitGift;
 
-        _lstGifts = (from g in gifts
-                     select new IM.Model.InvitationGift
-                     {
-                       iggu = g.iggu,
-                       igQty = g.igQty,
-                       iggi = g.iggi,
-                       igAdults = g.igAdults,
-                       igMinors = g.igMinors,
-                       igExtraAdults = g.igExtraAdults,
-                       igPriceA = g.igPriceA,
-                       igPriceAdult = g.igPriceAdult,
-                       igPriceExtraAdult = g.igPriceExtraAdult,
-                       igPriceM = g.igPriceM,
-                       igPriceMinor = g.igPriceMinor,
-                       igct = g.igct
-                     }).ToList();
-      }
-      else //si tiene registros y se le añaden depositos se convierte la lista de InvitationGift a GiftInvitation para recargar el grid
-      {
-        gifts.Clear();
-        //unimos la lista de gift que se encuentran en la base de datos con los nuevos y actualizados
-        gifts = (from g in _lstGifts
-                 select new GiftInvitation
-                  {
-                    iggu = g.iggu,
-                    igQty = g.igQty,
-                    iggi = g.iggi,
-                    igAdults = g.igAdults,
-                    igMinors = g.igMinors,
-                    igExtraAdults = g.igExtraAdults,
-                    Gift = IM.BusinessRules.BR.BRGifts.GetGiftId(g.iggi).giN,
-                    igPriceA = g.igPriceA,
-                    igPriceAdult = g.igPriceAdult,
-                    igPriceExtraAdult = g.igPriceExtraAdult,
-                    igPriceM = g.igPriceM,
-                    igPriceMinor = g.igPriceMinor,
-                    igct = g.igct
-                    
-                 }).ToList().Union(
-                  from g in _lstNewGifts
-                  select new GiftInvitation
-                  {
-                    iggu = g.iggu,
-                    igQty = g.igQty,
-                    iggi = g.iggi,
-                    igAdults = g.igAdults,
-                    igMinors = g.igMinors,
-                    igExtraAdults = g.igExtraAdults,
-                    Gift = IM.BusinessRules.BR.BRGifts.GetGiftId(g.iggi).giN,
-                    igPriceA = g.igPriceA,
-                    igPriceAdult = g.igPriceAdult,
-                    igPriceExtraAdult = g.igPriceExtraAdult,
-                    igPriceM = g.igPriceM,
-                    igPriceMinor = g.igPriceMinor,
-                    igct = g.igct
-                  }).ToList();
-      }
-
-      dtgGifts.ItemsSource = gifts;
+      objInvitGiftViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("objInvitGiftViewSource")));
+      objInvitGiftViewSource.Source = _lstObjInvitGift;
 
       CalculateCostsPrices();
       CalculateTotalGifts();
-      
     }
 
     /// <summary>
@@ -2533,44 +1970,20 @@ namespace IM.Base.Forms
     /// </summary>
     private void LoadGuestStatusGrid()
     {
-      var guestStatus = new List<IM.BusinessRules.Classes.GuestStatusInvitation>();
+      var guestStatus = IM.BusinessRules.BR.BRGuests.GetGuestStatus(_guestID);
 
-      if (!dtgGuestStatus.HasItems && !_lstNewGuestStatus.Any())//sino tiene registros cargamos por primera vez el grid
+      _lstObjInvitGuestStatus = guestStatus.Select(c => new objInvitGuestStatus
       {
-        guestStatus = IM.BusinessRules.BR.BRGuests.GetGuestStatusTypeInvit(_guestID);
-        //convetidmos la lista de GuestStatusInvitation a GuestStatus
-        _lstGuestStatus = (from gs in guestStatus
-                           select new IM.Model.GuestStatus
-                           {
-                             gtgs = gs.gsID,
-                             gtgu = gs.gsgu,
-                             gtQuantity = Convert.ToByte(gs.gsQty)
-                           }).ToList();
-      }
-      else
-      {
-        //convetidmos la lista de GuestStatus a GuestStatusInvitation
-        guestStatus = (from gs in _lstGuestStatus
-                    select new IM.BusinessRules.Classes.GuestStatusInvitation
-                    {
-                      gsID = gs.gtgs,
-                      gsgu = gs.gtgu,
-                      gsQty = Convert.ToInt32(gs.gtQuantity),
-                      GuestStatus = IM.BusinessRules.BR.BRGuests.GetGuestStatusTypeId(gs.gtgs).gsN
-                    }).ToList().Union(
-                    from gs in _lstNewGuestStatus
-                    select new GuestStatusInvitation
-                    {
-                      gsID = gs.gsID,
-                      gsgu = gs.gsgu,
-                      gsQty = Convert.ToInt32(gs.gsQty),
-                      GuestStatus = IM.BusinessRules.BR.BRGuests.GetGuestStatusTypeId(gs.gsID).gsN
-                    }).ToList();
-      }
-      dtgGuestStatus.ItemsSource = guestStatus;
+        gtgs = c.gtgs,
+        gtgu = c.gtgu,
+        gtQuantity = c.gtQuantity
+      }).ToList();
+      _lstGuestStatus = guestStatus; // esta lista mantiene los registros de la base de datos sin modificaciones.
 
-      txtGuestStatus.Text = guestStatus!= null && guestStatus.Any() ? guestStatus.Single().gsID: String.Empty;
+      objInvitGuestStatusViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("objInvitGuestStatusViewSource")));
+      objInvitGuestStatusViewSource.Source = _lstObjInvitGuestStatus;
 
+      txtGuestStatus.Text = guestStatus.Any() ? guestStatus.First().gtgs : String.Empty;
       CalculateMaxAuthGifts();
     }
 
@@ -2579,148 +1992,69 @@ namespace IM.Base.Forms
     /// </summary>
     private void LoadDepositGrid()
     {
-      var deposits = new List<BusinessRules.Classes.BookingDepositInvitation>();
+      var deposits = IM.BusinessRules.BR.BRBookingDeposits.GetBookingDeposits(_guestID);
 
-      if(!dtgDeposits.HasItems)//sino tiene registros cargamos por primera vez el grid
+      _lstObjInvitBookingDeposit = deposits.Select(c => new objInvitBookingDeposit
       {
-        deposits = IM.BusinessRules.BR.BRBookingDeposits.GetBookingDepositsByInvitation(_guestID);
+        bdAmount = c.bdAmount,
+        bdAuth = c.bdAuth,
+        bdCardNum = c.bdCardNum,
+        bdcc = c.bdcc,
+        bdcu = c.bdcu,
+        bddr = c.bddr,
+        bdEntryDCXC = c.bdEntryDCXC,
+        bdExpD = c.bdExpD,
+        bdFolioCXC = c.bdFolioCXC,
+        bdgu = c.bdgu,
+        bdID = c.bdID,
+        bdpc = c.bdpc,
+        bdpt = c.bdpt,
+        bdReceived = c.bdReceived,
+        bdRefund = c.bdRefund,
+        bdUserCXC = c.bdUserCXC
+      }).ToList();
 
-        //convetidmos la lista de BookingDepositInvitation a BookindDeposit
-        _lstDeposits = (from d in deposits
-                        select new IM.Model.BookingDeposit
-                        {
-                          bdAmount = d.bdAmount,
-                          bdAuth = d.bdAuth,
-                          bdCardNum = d.bdCardNum,
-                          bdcc = d.bdcc,
-                          bdcu = d.bdcu,
-                          bdEntryDCXC = d.bdEntryDCXC,
-                          bdExpD = d.bdExpD,
-                          bdFolioCXC = d.bdFolioCXC,
-                          bdgu = d.bdgu,
-                          bdID = d.bdID,
-                          bdpc = d.bdpc,
-                          bdpt = d.bdpt,
-                          bdReceived = d.bdReceived,
-                          bdUserCXC = d.bdUserCXC,
-                        }).ToList();
-      }
-      else // si tiene registros y se le añaden depositos se convierte la lista de BookingDeposit a BookindDepositInvitation para recargar el grid
-      {
-        deposits = (from d in _lstDeposits
-                        select new BookingDepositInvitation
-                        {
-                          bdAmount = d.bdAmount,
-                          bdAuth = d.bdAuth,
-                          bdCardNum = d.bdCardNum,
-                          bdcc = d.bdcc,
-                          bdcu = d.bdcu,
-                          bdEntryDCXC = d.bdEntryDCXC,
-                          bdExpD = d.bdExpD,
-                          bdFolioCXC = d.bdFolioCXC,
-                          bdgu = d.bdgu,
-                          bdID = d.bdID,
-                          bdpc = d.bdpc,
-                          bdpt = d.bdpt,
-                          bdReceived = d.bdReceived,
-                          bdUserCXC = d.bdUserCXC,
-                          Currency = IM.BusinessRules.BR.BRCurrencies.GetCurrencyId(d.bdcu).cuN,
-                          PaymentType = IM.BusinessRules.BR.BRPaymentTypes.GetPaymentTypeId(d.bdpt).ptN,
-                          CreditCard = String.IsNullOrEmpty(d.bdcc) ? String.Empty : IM.BusinessRules.BR.BRCreditCardTypes.GetCreditCardTypeId(d.bdcc).ccN
-                        }).ToList().Union(
-                        from d in _lstNewDeposits
-                        select new BookingDepositInvitation
-                        {
-                          bdAmount = d.bdAmount,
-                          bdAuth = d.bdAuth,
-                          bdCardNum = d.bdCardNum,
-                          bdcc = d.bdcc,
-                          bdcu = d.bdcu,
-                          bdEntryDCXC = d.bdEntryDCXC,
-                          bdExpD = d.bdExpD,
-                          bdFolioCXC = d.bdFolioCXC,
-                          bdgu = d.bdgu,
-                          bdID = d.bdID,
-                          bdpc = d.bdpc,
-                          bdpt = d.bdpt,
-                          bdReceived = d.bdReceived,
-                          bdUserCXC = d.bdUserCXC,
-                          Currency = IM.BusinessRules.BR.BRCurrencies.GetCurrencyId(d.bdcu).cuN,
-                          PaymentType = IM.BusinessRules.BR.BRPaymentTypes.GetPaymentTypeId(d.bdpt).ptN,
-                          CreditCard = String.IsNullOrEmpty(d.bdcc) ? String.Empty : IM.BusinessRules.BR.BRCreditCardTypes.GetCreditCardTypeId(d.bdcc).ccN
-                        }).ToList();
+      _lstDeposits = deposits;  // esta lista mantiene los registros de la base de datos sin modificaciones.
 
-
-      }
-
-      dtgDeposits.ItemsSource = deposits;
+      objInvitBookingDepositViewSource = (CollectionViewSource)this.FindResource("objInvitBookingDepositViewSource");
+      objInvitBookingDepositViewSource.Source = _lstObjInvitBookingDeposit;
     }
 
     /// Carga la información del Grid de las tarjetas de crédito de los invitados
     /// </summary>
     private void LoadCreditCardGrid()
     {
-      var cc = new List<GuestCreditCardInvitation>();
-      if (!dtgCCCompany.HasItems && !_lstNewCreditsCard.Any()) //sino tiene registros cargamos por primera vez el grid
-      {
-        cc = IM.BusinessRules.BR.BRGuests.GetGuestCreditCardInvitation(_guestID);
-        _lstCreditsCard = (from c in cc
-                           select new IM.Model.GuestCreditCard
-                           {
-                             gdcc = c.ccID,
-                             gdgu = c.ccgu,
-                             gdQuantity = Convert.ToByte(c.ccQty)
-                           }).ToList();
-      }
-      else
-      {
-        cc = (from c in _lstCreditsCard
-              select new GuestCreditCardInvitation
-              {
-                ccID = c.gdcc,
-                ccgu = c.gdgu,
-                ccQty = Convert.ToByte(c.gdQuantity),
-                CreditCard = IM.BusinessRules.BR.BRCreditCardTypes.GetCreditCardTypeId(c.gdcc).ccN
-              }).ToList().Union(
-              from c in _lstNewCreditsCard
-              select new GuestCreditCardInvitation
-              {
-                ccID = c.ccID,
-                ccgu = c.ccgu,
-                ccQty = Convert.ToByte(c.ccQty),
-                CreditCard = IM.BusinessRules.BR.BRCreditCardTypes.GetCreditCardTypeId(c.ccID).ccN
-              }    
-          ).ToList();
-      }
+      var creditCard = IM.BusinessRules.BR.BRGuests.GetGuestCreditCard(_guestID);
 
-      dtgCCCompany.ItemsSource = cc;
+      _lstObjInvitCreditCard = creditCard.Select(c => new objInvitCreditCard
+      {
+        gdcc = c.gdcc,
+        gdgu = c.gdgu,
+        gdQuantity = c.gdQuantity
+      }).ToList();
 
-      txtCCCompany.Text = cc != null && cc.Any() ? cc.First().ccID : String.Empty;
+      _lstCreditsCard = creditCard; // esta lista mantiene los registros de la base de datos sin modificaciones.
+      objInvitCreditCardViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("objInvitCreditCardViewSource")));
+      objInvitCreditCardViewSource.Source = _lstObjInvitCreditCard;
     }
 
     /// Carga la información del Grid de los invitados extra
     /// </summary>
     private void LoadAdditionalInformartionGrid()
     {
-      var ad = new List<IM.Model.Guest>();
-      if(!dtgAdditInform.HasItems && !_lstNewAdditionals.Any())
+      var aGuests = IM.BusinessRules.BR.BRGuestsAdditional.GetGuestsAdditional(_guestID);
+
+      _lstObjInvitAdditionalGuest = aGuests.Select(c => new objInvitAdditionalGuest
       {
-        ad = IM.BusinessRules.BR.BRGuestsAdditional.GetGuestsAdditional(_guestID);
-        _lstAdditionals = ad;
-      }
-      else
-      {
-        ad = _lstAdditionals.Union(
-                                  from g in _lstNewAdditionals
-                                  select new IM.Model.Guest
-                                  {
-                                    guID = g.guID,
-                                    guLastName1 = g.guLastName1,
-                                    guFirstName1 = g.guFirstName1
-                                  }).ToList();
-      }
-      
-      dtgAdditInform.ItemsSource = ad;
+        guID = c.guID,
+        guLastName1 = c.guLastName1,
+        guFirstName1 = c.guFirstName1
+      }).ToList();
+
+      _lstAdditionals = aGuests;
+
+      objInvitAdditionalGuestViewSource = (CollectionViewSource)this.FindResource("objInvitAdditionalGuestViewSource");
+      objInvitAdditionalGuestViewSource.Source = _lstObjInvitAdditionalGuest;
     }
 
     #endregion
@@ -2733,12 +2067,13 @@ namespace IM.Base.Forms
     /// </summary>
     private void SaveGuestInformation()
     {
+      invitation = new Invitation();
       var guest = IM.BusinessRules.BR.BRGuests.GetGuestById(_guestID);
 
       #region Tipos de invitacion
       guest.guQuinella = ForBooleanValue(chkQuiniella.IsChecked);
       guest.guShow = ForBooleanValue(chkShow.IsChecked);
-      guest.guInterval = ForBooleanValue(chkInterval.IsChecked);
+      guest.guInterval = true;// ForBooleanValue(chkInterval.IsChecked);
       #endregion
 
       #region Lenguaje
@@ -2748,6 +2083,7 @@ namespace IM.Base.Forms
       #region Información del invitado
       guest.guInvitD = String.IsNullOrEmpty(txtDate.Text) ?  DateTime.Today : Convert.ToDateTime(txtDate.Text);
       guest.guInvitT = String.IsNullOrEmpty(txtTime.Text) ?  DateTime.Now : Convert.ToDateTime(txtTime.Text);
+      guest.guInvit = true;
       #endregion
 
       #region Guest 1
@@ -2769,9 +2105,8 @@ namespace IM.Base.Forms
       #endregion
 
       #region Gifts
-
-      var newGifts = _lstNewGifts.Where(g => g.isNew == true).ToList();
-      var updatedGifts = _lstNewGifts.Where(g => g.isUpdate == true).ToList();
+      SaveGifts();
+      
       #endregion
 
       #region Información PR
@@ -2832,14 +2167,12 @@ namespace IM.Base.Forms
       guest.gucu = ForStringValue(cmbCurrency.SelectedValue);
       guest.guHotelB = ForStringValue(cmbResort.SelectedValue);
 
-      var newDeposits = _lstNewDeposits.Where(d => d.isNew == true).ToList();
-      var updatedDeposits = _lstNewDeposits.Where(d => d.isUpdated == true).ToList();
+      SaveBookingDeposits();
       #endregion
 
       #region Guest Status 
       guest.guGStatus = ForStringValue(txtGuestStatus.Text);
-      var newGS = _lstNewGuestStatus.Where(d => d.isNew == true).ToList();
-      var updatedGS = _lstNewGuestStatus.Where(d => d.isUpdate == true).ToList();
+      SaveGuestStatus();
       #endregion
 
       #region Room Quantity
@@ -2848,14 +2181,10 @@ namespace IM.Base.Forms
       #endregion
 
       #region Credit Cards
-      var newCC = new List<GuestCreditCardInvitation>();
-      var updatedCC = new List<GuestCreditCardInvitation>();
       if (_invitationType == InvitationType.InHouse || _invitationType == InvitationType.Host)
       {
         guest.guCCType = ForStringValue(txtCCCompany.Text);
-
-        newCC = _lstNewCreditsCard.Where(d => d.isNew == true).ToList();
-        updatedCC = _lstNewCreditsCard.Where(d => d.isUpdate == true).ToList();
+        SaveCreditCards();
       }
 
 
@@ -2865,24 +2194,198 @@ namespace IM.Base.Forms
       var newGA = _lstNewAdditionals.Where(d => d.isNew == true).ToList();
       var updatedGA = _lstNewAdditionals.Where(d => d.isUpdate == true).ToList();
 
-      
+
       #endregion
 
+      invitation.Guest = guest;
 
-      IM.BusinessRules.BR.BRGuests.SaveGuestInvitation(guest
-                                                      , ConvertGiftInvitationToInvitationGiftList(newGifts)
-                                                      , updatedGifts
-                                                      , ConvertBookingDepositInvitationToBookingDepositList(newDeposits)
-                                                      , updatedDeposits
-                                                      , ConvertGuestStatusInvitationToGuestStatusList(newGS)
-                                                      , updatedGS
-                                                      , ConvertGuestStatusInvitationToGuestCreditCardList(newCC)
-                                                      , updatedCC
-                                                      , ConvertGuestAdditionalInvitationToGuestList(newGA)
-                                                      , updatedGA);
+      
+      IM.BusinessRules.BR.BRGuests.SaveGuestInvitation(invitation);
+
+    }
+    
+    /// <summary>
+    /// Guarda todos los regalos asignados
+    /// </summary>
+    private void SaveGifts()
+    {
+      invitation.NewGifts = new List<Model.InvitationGift>();
+      invitation.UpdatedGifts = new List<Model.InvitationGift>();
+      invitation.DeletedGifts = new List<Model.InvitationGift>();
+
+      if (!_lstObjInvitGift.Any()) return;
+
+      //Convertimos la lista a un objeto de la capa Model
+      var gifts = _lstObjInvitGift.Select(c => new InvitationGift
+      {
+        igAdults = c.igAdults,
+        igComments = c.igComments,
+        igct = c.igct,
+        igExtraAdults = c.igExtraAdults,
+        igFolios = c.igFolios,
+        iggi = c.iggi,
+        iggr = c.iggr,
+        iggu = c.iggu,
+        igMinors = c.igMinors,
+        igPriceA = c.igPriceA,
+        igPriceAdult = c.igPriceAdult,
+        igPriceExtraAdult = c.igPriceExtraAdult,
+        igPriceM = c.igPriceM,
+        igPriceMinor = c.igPriceMinor,
+        igQty = c.igQty
+      }).ToList();
+
+      //Obtenemos los regalos que se modificarán
+      invitation.UpdatedGifts = gifts.Where(c => c.iggu != 0).ToList();
+      
+      //Obtenemos los regalos nuevos para asignales los precios y el invitado
+      var newGifts = gifts.Where(c => c.iggu == 0).ToList();
+      if (newGifts.Any())
+      {
+        //Asignamos el guest a los nuevos regalos
+        newGifts.ForEach(c=> 
+        {
+          c.iggu = c.iggu != 0 ? c.iggu : _guestID;
+          c.igct = !String.IsNullOrEmpty(c.igct) ? c.igct : "MARKETING";
+        });
+        invitation.NewGifts.AddRange(newGifts);
+      }
+
+      
+      
 
     }
 
+    /// <summary>
+    /// Guarda los estados del invitado
+    /// </summary>
+    private void SaveGuestStatus()
+    {
+      invitation.NewGuestStatus = new List<Model.GuestStatus>();
+      invitation.UpdatedGuestStatus = new List<Model.GuestStatus>();
+      invitation.DeletedGuestStatus = new List<Model.GuestStatus>();
+      CalculateMaxAuthGifts();
+
+      if (_lstObjInvitGuestStatus.Any())
+      {
+
+        //Asignamos el guest
+        _lstObjInvitGuestStatus.ForEach(c =>
+        {
+          c.gtgu = c.gtgu != 0 ? c.gtgu : _guestID;
+        });
+
+        //Convertimos la lista a un objeto de la capa Model
+        var gs = _lstObjInvitGuestStatus.Select(c => new GuestStatus
+        {
+          gtgs = c.gtgs,
+          gtgu = c.gtgu,
+          gtQuantity = c.gtQuantity
+        }).ToList();
+
+        invitation.DeletedGuestStatus.AddRange(_lstGuestStatus); //Borramos lo que tenia la base de datos
+        invitation.NewGuestStatus.AddRange(gs); //Agregamos lo que tiene el grid
+      }
+    }
+    
+    /// <summary>
+    /// Guarda las tarjetas de credito del invitado
+    /// </summary>
+    private void SaveCreditCards()
+    {
+      invitation.NewCreditCards = new List<Model.GuestCreditCard>();
+      invitation.UpdatedCreditCards = new List<Model.GuestCreditCard>();
+      invitation.DeletedCreditCards = new List<Model.GuestCreditCard>();
+
+      if(_lstObjInvitCreditCard.Any())
+      {
+        //Asignamos el guest a la lista
+        _lstObjInvitCreditCard.ForEach(c =>
+        {
+          c.gdgu = c.gdgu != 0 ? c.gdgu : _guestID;
+        });
+        //Convertimos la lista a un objeto de la capa Model
+        var cc = _lstObjInvitCreditCard.Select(c => new GuestCreditCard
+        {
+          gdcc = c.gdcc,
+          gdgu = c.gdgu,
+          gdQuantity = c.gdQuantity
+        }).ToList();
+
+        invitation.DeletedCreditCards.AddRange(_lstCreditsCard);//Borramos lo que tenia la base de datos
+        invitation.NewCreditCards.AddRange(cc);
+      }
+    }
+
+    /// <summary>
+    /// Guarda los depósitos
+    /// </summary>
+    private void SaveBookingDeposits()
+    {
+      invitation.NewDeposits = new List<Model.BookingDeposit>();
+      invitation.UpdatedDeposits = new List<Model.BookingDeposit>();
+      invitation.DeletedDeposits = new List<Model.BookingDeposit>();
+
+      if (_lstObjInvitBookingDeposit.Any())
+      {
+        //Asignamos el guest a la lista
+        _lstObjInvitBookingDeposit.ForEach(c =>
+        {
+          c.bdgu = c.bdgu != 0 ? c.bdgu : _guestID;
+        });
+
+        var deposits = _lstObjInvitBookingDeposit.Select(c => new BookingDeposit
+        {
+          bdAmount = c.bdAmount,
+          bdAuth = c.bdAuth,
+          bdCardNum = c.bdCardNum,
+          bdcc = c.bdcc,
+          bdcu = c.bdcu,
+          bddr = c.bddr,
+          bdEntryDCXC = c.bdEntryDCXC,
+          bdExpD = c.bdExpD,
+          bdFolioCXC = c.bdFolioCXC,
+          bdgu = c.bdgu,
+          bdID = c.bdID,
+          bdpc = c.bdpc,
+          bdpt = c.bdpt,
+          bdReceived = c.bdReceived,
+          bdRefund = c.bdRefund,
+          bdUserCXC = c.bdUserCXC
+        }).ToList();
+
+        //Agregamos los nuevos depósitos
+        var newDeposit = deposits.Where(c => c.bdID == 0).ToList();
+        invitation.NewDeposits.AddRange(newDeposit);
+
+        foreach (var row in deposits.Where(c => c.bdID > 0).ToList())
+        {
+          //Buscamos los depositos en la lista que es igual a la base de datos
+          var d = _lstDeposits.SingleOrDefault(de => de.bdID == row.bdID);
+          if(d != null)//si está se actualiza
+          {
+            d.bdAmount = row.bdAmount;
+            d.bdAuth = row.bdAuth;
+            d.bdCardNum = row.bdCardNum;
+            d.bdcc = row.bdcc;
+            d.bdcu = row.bdcu;
+            d.bddr = row.bddr;
+            d.bdEntryDCXC = row.bdEntryDCXC;
+            d.bdExpD = row.bdExpD;
+            d.bdFolioCXC = row.bdFolioCXC;
+            d.bdgu = row.bdgu;
+            d.bdID = row.bdID;
+            d.bdpc = row.bdpc;
+            d.bdpt = row.bdpt;
+            d.bdReceived = row.bdReceived;
+            d.bdRefund = row.bdRefund;
+            d.bdUserCXC = row.bdUserCXC;
+            invitation.UpdatedDeposits.Add(d);
+          }
+        }
+      }
+      
+    }
     #endregion
 
     #region Métodos para validar al información
@@ -2896,9 +2399,13 @@ namespace IM.Base.Forms
       bool res = GeneralValidation();
 
       if (res)
-      {
-
-      }
+        res = ValidateGifts();
+      else if (res)
+        res = ValidateGuestStatus();
+      else if (res)
+        res = ValidateDesposits();
+      else if (res)
+        res = ValidateCreditCard();
 
       return res;
 
@@ -3039,6 +2546,37 @@ namespace IM.Base.Forms
       //{
 
       //}
+      return res;
+    }
+
+    /// <summary>
+    /// Valida que almenos se haya registrado un estatus
+    /// </summary>
+    /// <returns></returns>
+    private bool ValidateGuestStatus()
+    {
+      bool res = true;
+      if (!dtgGuestStatus.HasItems)
+      {
+        Helpers.UIHelper.ShowMessage("Specify at least one status");
+        res = false;
+      }
+      else if (_lstObjInvitGuestStatus.Where(g => g.gtQuantity == 0).Any())
+      {
+        Helpers.UIHelper.ShowMessage("Any status does not has a quantity");
+        res = false;
+      }
+      else if (_lstObjInvitGuestStatus.Where(g => String.IsNullOrEmpty(g.gtgs)).Any())
+      {
+        Helpers.UIHelper.ShowMessage("Any status does not has a status");
+        res = false;
+      }
+
+      if (!res)
+      {
+        tbiOtherInformation.IsSelected = true;
+        dtgGuestStatus.Focus();
+      }
       return res;
     }
 
@@ -3263,82 +2801,47 @@ namespace IM.Base.Forms
     /// Validamos la información de los nuevos regalos
     /// </summary>
     /// <returns>Boolean</returns>
-    private bool ValidateNewGift()
+    private bool ValidateGifts()
     {
       int qty, adult, minor, eAdult;
       bool res = true;
-      
-      var gift =new  IM.Model.Gift();
-      if (cmbGifts.SelectedIndex != -1)
+
+      //Revisamos que todos los regalos tengan una cantidad
+      if(_lstObjInvitGift.Where(g=> g.igQty == 0).Any())
       {
-        gift = IM.BusinessRules.BR.BRGifts.GetGiftId(cmbGifts.SelectedValue.ToString());
+        res = false;
+        Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific quantity");
+      }
+      else if(_lstObjInvitGift.Where(g => String.IsNullOrEmpty(g.iggi)).Any()) //Revisamos que todos los registros tengan un regalo
+      {
+        res = false;
+        Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific gift");
+      }
+      else if (_lstObjInvitGift.Where(g => g.igAdults == 0).Any()) //Revisamos que todos los registros tengan almenos un Adulto asignado
+      {
+        res = false;
+        Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific adults");
       }
 
-        if (String.IsNullOrEmpty(txtQtyGift.Text))
+      if(res)
       {
-        Helpers.UIHelper.ShowMessage("Specify the Quantity of Gifts");
-        txtQtyGift.Focus();
-        res = false;
+        foreach(var row in _lstObjInvitGift)
+        {
+          var gift = IM.BusinessRules.BR.BRGifts.GetGiftId(row.iggi);
+          if(row.igQty > gift.giMaxQty)
+          {
+            string error = String.Format("The maximu quantity authorized of the gift {0} has been exceeded.\n Max authotized = {1}", gift.giN, gift.giMaxQty);
+            Helpers.UIHelper.ShowMessage(error);
+            res = false;
+            break;
+          }
+        }
       }
-      else if (!int.TryParse(txtQtyGift.Text, out qty) && qty <= 0)
+
+      if (!res)
       {
-        Helpers.UIHelper.ShowMessage("Input a correct value in Quantity");
-        txtQtyGift.Focus();
-        res = false;
-      }
-      else if(cmbGifts.SelectedIndex == -1)
-      {
-        Helpers.UIHelper.ShowMessage("Specify a Gifts");
-        cmbGifts.Focus();
-        res = false;
-      }
-      else if (String.IsNullOrEmpty(txtAdultGift.Text))
-      {
-        Helpers.UIHelper.ShowMessage("Specify the Quantity of Adults");
-        txtAdultGift.Focus();
-        res = false;
-      }
-      else if (!int.TryParse(txtAdultGift.Text, out adult) && adult < 0)
-      {
-        Helpers.UIHelper.ShowMessage("Input a correct value in Adult");
-        txtAdultGift.Focus();
-        res = false;
-      }
-      else if (String.IsNullOrEmpty(txtMinortGift.Text))
-      {
-        Helpers.UIHelper.ShowMessage("Specify the Quantity of Minors");
-        txtMinortGift.Focus();
-        res = false;
-      }
-      else if (!int.TryParse(txtMinortGift.Text, out minor) && minor < 0)
-      {
-        Helpers.UIHelper.ShowMessage("Input a correct value in Quantity");
-        txtMinortGift.Focus();
-        res = false;
-      }
-      else if (String.IsNullOrEmpty(txtEAdultGift.Text))
-      {
-        Helpers.UIHelper.ShowMessage("Specify the Quantity of Extra Adults");
-        txtEAdultGift.Focus();
-        res = false;
-      }
-      else if (!int.TryParse(txtEAdultGift.Text, out eAdult) && eAdult < 0)
-      {
-        Helpers.UIHelper.ShowMessage("Input a correct value in Extra Adults");
-        txtEAdultGift.Focus();
-        res = false;
-      }
-      else if(adult == 0 && minor == 0)
-      {
-        Helpers.UIHelper.ShowMessage("You have not asigned the gift to people");
-        txtAdultGift.Focus();
-        res = false;
-      }
-      else if(gift != null && gift.giMaxQty < qty)
-      {
-        string error = String.Format("The maximu quantity authorized of the gift {0} has been exceeded.\n Max authotized = {1}",gift.giN, gift.giMaxQty);
-        Helpers.UIHelper.ShowMessage(error);
-        res = false;
+        tbiGeneral.IsSelected = true;
+        dtgGifts.Focus();
       }
       return res;
     }
@@ -3347,89 +2850,90 @@ namespace IM.Base.Forms
     /// Validamos la información de los nuevos depósitos
     /// </summary>
     /// <returns></returns>
-    private bool ValidateNewDesposit()
+    private bool ValidateDesposits()
     {
       bool res = true;
       decimal deposit, received;
 
-      if(String.IsNullOrEmpty(txtDeposit.Text))
+      if(_lstObjInvitBookingDeposit.Where(c=> String.IsNullOrEmpty(c.bdcu)).Any()) // validamos que se especifique la moneda
       {
-        Helpers.UIHelper.ShowMessage("Specify the amount of deposit");
-        txtDeposit.Focus();
+        foreach(var row in _lstObjInvitBookingDeposit.Where(c => String.IsNullOrEmpty(c.bdcu)).ToList())
+        {
+          if (row.bdAmount != 0 || row.bdReceived != 0)//' si se capturo alguno de los montos
+          {
+            Helpers.UIHelper.ShowMessage("Any Amount without currency specified.");
+            res = false;
+            break;
+          }
+        }
+      }
+      else if(_lstObjInvitBookingDeposit.Where(c=> String.IsNullOrEmpty(c.bdpt)).Any())// validamos que se especifique la forma de pago
+      {
+        Helpers.UIHelper.ShowMessage("Any Deposit does not has a paymente type specified.");
         res = false;
       }
-      else if (! Decimal.TryParse(txtDeposit.Text,out deposit) && deposit <= 0)
+      else if(_lstObjInvitBookingDeposit.Where(c=> c.bdAmount == 0 && c.bdReceived == 0).Any())// validamos que se especifique alguno de los montos
       {
-        Helpers.UIHelper.ShowMessage("the Input is incorrect or deposit cannot be a negative amount or zero");
-        txtDeposit.Focus();
+        Helpers.UIHelper.ShowMessage("Currency without Amount specified.");
         res = false;
       }
-      if (String.IsNullOrEmpty(txtReceived.Text))
+      else if(_lstObjInvitBookingDeposit.Where(c=> String.IsNullOrEmpty(c.bdpc)).Any())// validamos si especifico un lugar de pago
       {
-        Helpers.UIHelper.ShowMessage("Specify the amount of received");
-        txtReceived.Focus();
+        Helpers.UIHelper.ShowMessage("Select a place of payment.");
         res = false;
       }
-      else if (!Decimal.TryParse(txtReceived.Text, out received) && received < 0)
+      else if (_lstObjInvitBookingDeposit.Where(c=> c.bdpt.ToUpper() == "CC").Any()) //Validamos la informacion de la tarjeta  de credito
       {
-        Helpers.UIHelper.ShowMessage("the Input is incorrect or reveiced cannot be a negative amount");
-        txtReceived.Focus();
+        foreach (var row in _lstObjInvitBookingDeposit.Where(c => c.bdpt.ToUpper() == "CC").ToList())
+        {
+          if (String.IsNullOrEmpty(row.bdcc))
+          {
+            Helpers.UIHelper.ShowMessage("Select a credit card");
+            res = false;
+            break;
+          }
+          else if(String.IsNullOrEmpty(row.bdCardNum))
+          {
+            Helpers.UIHelper.ShowMessage("Input the last four numbers");
+            res = false;
+            break;
+          }
+          else if (String.IsNullOrEmpty(row.bdExpD))//Validamos la fecha de expiracion
+          {
+            Helpers.UIHelper.ShowMessage("Input the expire date");
+            res = false;
+            break;
+          }
+          else if (!String.IsNullOrEmpty(row.bdExpD))//Validamos la fecha de expiracion
+          {
+            var dt = new DateTime();
+            if (!DateTime.TryParse(row.bdExpD, out dt))
+            {
+              Helpers.UIHelper.ShowMessage("The expire date does not has a correct format. (MM/YY)");
+              res = false;
+              break;
+            }
+          }
+          else if(!row.bdAuth.HasValue)
+          {
+            Helpers.UIHelper.ShowMessage("Input the Authorizathion number");
+            res = false;
+            break;
+          }
+        }
+      }
+      else if(_lstObjInvitBookingDeposit.Where(c=> (c.bdAmount -  c.bdReceived) > 0  && !c.bdFolioCXC.HasValue).Any())//Validamos el importe de CXC  bdAmount - bdReceived
+      {
+        Helpers.UIHelper.ShowMessage("Add Folio CXC information.");
         res = false;
       }
-      else if(cmbCurrencyDeposit.SelectedIndex == -1)
+
+      if(!res)
       {
-        Helpers.UIHelper.ShowMessage("Choose a currency type");
-        cmbCurrencyDeposit.Focus();
-        res = false;
+        tbiOtherInformation.IsSelected = true;
+        dtgDeposits.Focus();
       }
-      else if (cmbPaymentTypeDeposit.SelectedIndex == -1)
-      {
-        Helpers.UIHelper.ShowMessage("Choose a payment type");
-        cmbPaymentTypeDeposit.Focus();
-        res = false;
-      }
-      else if (String.IsNullOrEmpty(txtRefundPlace.Text))
-      {
-        Helpers.UIHelper.ShowMessage("Specify theRefund place");
-        txtRefundPlace.Focus();
-        res = false;
-      }
-      else if (cmbPaymentTypeDeposit.SelectedValue.ToString() == "CC" && cmbCreditCardDeposit.SelectedIndex == -1)
-      {
-        Helpers.UIHelper.ShowMessage("Choose a credit card type");
-        cmbCreditCardDeposit.Focus();
-        res = false;
-      }
-      else if (cmbPaymentTypeDeposit.SelectedValue.ToString() == "CC" && String.IsNullOrEmpty(txtCardNumberDeposit.Text))
-      {
-        Helpers.UIHelper.ShowMessage("Enter the last four credit card number");
-        txtCardNumberDeposit.Focus();
-        res = false;
-      }
-      else if(cmbPaymentTypeDeposit.SelectedValue.ToString() == "CC" && String.IsNullOrEmpty(txtExpirationCard.Text))
-      {
-        Helpers.UIHelper.ShowMessage("Enter the expiration date of credit card");
-        txtExpirationCard.Focus();
-        res = false;
-      }
-      else if (cmbPaymentTypeDeposit.SelectedValue.ToString() == "CC" && !ValidateExpirationDate(txtExpirationCard.Text))
-      {
-        Helpers.UIHelper.ShowMessage("The correct format is  MM/YY");
-        txtExpirationCard.Focus();
-        res = false;
-      }
-      else if(cmbPaymentTypeDeposit.SelectedValue.ToString() == "CC" && String.IsNullOrEmpty(txtAuthorizathionId.Text))
-      {
-        Helpers.UIHelper.ShowMessage("Enter the autorizathion ID");
-        txtExpirationCard.Focus();
-        res = false;
-      }
-      else if (String.IsNullOrEmpty(txtFolioCxC.Text))
-      {
-        Helpers.UIHelper.ShowMessage("Enter the folio Cxc");
-        txtFolioCxC.Focus();
-        res = false;
-      }
+      
       return res;
     }
 
@@ -3448,63 +2952,30 @@ namespace IM.Base.Forms
     }
 
     /// <summary>
-    /// Validamos la información de un nuevo guest status
-    /// </summary>
-    /// <returns>Boolean</returns>
-    private bool ValidateNewGuestStatus()
-    {
-      bool res = true;
-      int qty;
-      if(String.IsNullOrEmpty(txtQtyGuestStatus.Text))
-      {
-        Helpers.UIHelper.ShowMessage("Specify a Guest Status Quantity");
-        txtQtyGuestStatus.Focus();
-        res = false;
-      }
-      else if(!int.TryParse(txtQtyGuestStatus.Text, out qty) && qty<1)
-      {
-        Helpers.UIHelper.ShowMessage("The Guest Status Quantity cannot be less than 1");
-        txtQtyGuestStatus.Focus();
-        res = false;
-      }
-      else if(cmbGuestStatus.SelectedIndex == -1)
-      {
-        Helpers.UIHelper.ShowMessage("Choose a Guest Status");
-        cmbGuestStatus.Focus();
-        res = false;
-      }
-
-      return res;
-    }
-
-    /// <summary>
     /// Validamos la información de una nueva tarjeta de credito
     /// </summary>
     /// <returns>Boolean</returns>
-    private bool ValidateNewCreditCard()
+    private bool ValidateCreditCard()
     {
       bool res = true;
+      if (!dtgCCCompany.HasItems) return res;
 
-      int qty;
-      if (String.IsNullOrEmpty(txtQtyCreditCard.Text))
+      if(_lstObjInvitCreditCard.Where(c=> String.IsNullOrEmpty(c.gdcc)).Any())
       {
-        Helpers.UIHelper.ShowMessage("Specify a Credit Card Quantity");
-        txtQtyCreditCard.Focus();
+        Helpers.UIHelper.ShowMessage("Select a credit card");
         res = false;
       }
-      else if (!int.TryParse(txtQtyCreditCard.Text, out qty) && qty < 1)
+      else if(_lstObjInvitCreditCard.Where(c => c.gdQuantity == 0).Any())
       {
-        Helpers.UIHelper.ShowMessage("The Credit Card Quantity cannot be less than 1");
-        txtQtyCreditCard.Focus();
+        Helpers.UIHelper.ShowMessage("Input a quantity");
         res = false;
-      }
-      else if (cmbCreditCards.SelectedIndex == -1)
-      {
-        Helpers.UIHelper.ShowMessage("Choose a Credit Card");
-        cmbCreditCards.Focus();
-        res = false;
-      }
+      }    
 
+      if(!res)
+      {
+        tbiOtherInformation.IsSelected = true;
+        dtgCCCompany.Focus();
+      }
       return res;
     }
     #endregion
@@ -3565,11 +3036,11 @@ namespace IM.Base.Forms
     /// Calcula los costos y precios de adultos y menores de un regalo
     /// </summary>
     /// <param name="useCxCCost">Indica si se utilizará el costo del empleado</param>
-    private void CalculateCostsPrices(bool useCxCCost = false)
+    private void CalculateCostsPrices (bool useCxCCost = false)
     {
       decimal costAdult, costMinor, priceAdult, priceMinor, priceExtraAdult, quantity;
       
-      foreach(var row in gifts)
+      foreach(var row in _lstObjInvitGift)
       {
         var gift = IM.BusinessRules.BR.BRGifts.GetGiftId(row.iggi);
         if(gift != null)
@@ -3594,15 +3065,15 @@ namespace IM.Base.Forms
           quantity = row.igQty;
 
           // Total del costo adultos
-          row.costAdults = quantity * (row.igAdults + row.igExtraAdults) * costAdult;
+          row.igPriceA = quantity * (row.igAdults + row.igExtraAdults) * costAdult;
           // Total del costo de menores
-          row.costMinors = quantity * row.igMinors * costMinor;
+          row.igPriceM = quantity * row.igMinors * costMinor;
           // Total del precio adultos
-          row.priceAdults = quantity * row.igAdults * priceAdult;
+          row.igPriceAdult = quantity * row.igAdults * priceAdult;
           //Total del precio de menores
-          row.priceMinor = quantity * row.igMinors * priceMinor;
+          row.igPriceMinor = quantity * row.igMinors * priceMinor;
           // Total del precio de adultos extra
-          row.priceExtraAdults = quantity * row.igExtraAdults * priceExtraAdult;
+          row.igPriceExtraAdult = quantity * row.igExtraAdults * priceExtraAdult;
         }
       }
     }
@@ -3616,13 +3087,13 @@ namespace IM.Base.Forms
     {
       decimal cost, price, totalCost = 0, totalPrice = 0;
 
-      foreach(var row in gifts)
+      foreach(var row in _lstObjInvitGift)
       {
         // calculamos el costo del regalo
-        cost = row.costAdults + row.costMinors;
+        cost = row.igPriceA + row.igPriceA;
 
         //calculamos el precio del regalo
-        price = row.priceAdults + row.priceMinor + row.priceExtraAdults;
+        price = row.igPriceAdult + row.igPriceMinor + row.igPriceExtraAdult;
 
         //si se desean todos los regalos
         if(!onlyCancellled)
@@ -3644,17 +3115,25 @@ namespace IM.Base.Forms
     {
       decimal maxAuthGifts = 0;
 
-      foreach(GuestStatusInvitation row in dtgGuestStatus.Items)
+      foreach(var row in _lstObjInvitGuestStatus)
       {
-        var guestStatusType = IM.BusinessRules.BR.BRGuestStatusTypes.GetGuestStatusTypes(new Model.GuestStatusType { gsID=row.gsID}).FirstOrDefault();
-        maxAuthGifts += row.gsQty * guestStatusType.gsMaxAuthGifts;
+        if (row.gtgs != null && row.gtQuantity > 0)
+        {
+          var guestStatusType = IM.BusinessRules.BR.BRGuestStatusTypes.GetGuestStatusTypes(new Model.GuestStatusType { gsID = row.gtgs }).FirstOrDefault();
+          maxAuthGifts += row.gtQuantity * guestStatusType.gsMaxAuthGifts;
+        }
       }
 
       txtMaxAuth.Text = maxAuthGifts.ToString("$#,##0.00;$(#,##0.00)");
     }
-    #endregion
+
+
+
 
     #endregion
 
+    #endregion
+
+    
   }
 }

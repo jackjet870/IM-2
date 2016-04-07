@@ -170,7 +170,9 @@ namespace IM.Launcher.Forms
           Process.Start(String.Format("{0}\\IM.MailOuts.exe", path));
           break;
         case EnumMenu.Animation:
-          
+          var userData = IM.BusinessRules.BR.BRPersonnel.Login(Model.Enums.EnumLoginType.Location,"LCHAIREZ", "MPS");
+          var invit = new IM.Base.Forms.frmInvitationBase(IM.BusinessRules.Enums.InvitationType.InHouse, userData, 7747843, Model.Enums.EnumInvitationMode.modOnlyRead);
+          var res = invit.ShowDialog();
           break;
         case EnumMenu.Regen:
           UIHelper.ShowMessage("Coming soon..");

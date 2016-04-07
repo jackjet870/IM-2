@@ -61,6 +61,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\objInvitAdditionalGuest.cs" />
+    <Compile Include="Classes\objInvitBookingDeposit.cs" />
+    <Compile Include="Classes\objInvitCreditCard.cs" />
+    <Compile Include="Classes\objInvitGift.cs" />
+    <Compile Include="Classes\objInvitGuestStatus.cs" />
     <Compile Include="Classes\Parametros.cs" />
     <Compile Include="Forms\frmInnerException.xaml.cs">
       <DependentUpon>frmInnerException.xaml</DependentUpon>
@@ -189,6 +194,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\IM.Base.Classes.objInvitAdditionalGuest2.datasource" />
+    <None Include="Properties\DataSources\IM.Base.Classes.objInvitBookingDeposit.datasource" />
+    <None Include="Properties\DataSources\IM.Base.Classes.objInvitCreditCard.datasource" />
+    <None Include="Properties\DataSources\IM.Base.Classes.objInvitGift.datasource" />
+    <None Include="Properties\DataSources\IM.Base.Classes.objInvitGuestStatus.datasource" />
+    <None Include="Properties\DataSources\IM.Model.CreditCardType.datasource" />
+    <None Include="Properties\DataSources\IM.Model.Currency.datasource" />
+    <None Include="Properties\DataSources\IM.Model.GiftShort.datasource" />
+    <None Include="Properties\DataSources\IM.Model.GuestStatusType.datasource" />
+    <None Include="Properties\DataSources\IM.Model.PaymentType.datasource" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\CloseSalesRoom.png" />

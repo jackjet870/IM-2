@@ -161,6 +161,7 @@
     <None Include="Properties\DataSources\IM.Model.GuestArrival.datasource" />
     <None Include="Properties\DataSources\IM.Model.GuestSearched.datasource" />
     <None Include="Properties\DataSources\IM.Model.GuestsGroup.datasource" />
+    <None Include="Properties\DataSources\IM.Model.InvitationGift.datasource" />
     <None Include="Properties\DataSources\IM.Model.PersonnelDayOff.datasource" />
     <None Include="Properties\DataSources\IM.Model.PRNote.datasource" />
     <None Include="Properties\DataSources\IM.Model.USP_OR_GetGuestLog1.datasource" />

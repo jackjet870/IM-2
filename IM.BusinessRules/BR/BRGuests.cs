@@ -295,84 +295,50 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [lchairez] 18/03/2016 Created.
     /// </history>
-    public static void SaveGuestInvitation(Guest guest
-                                          , List<InvitationGift> lstNewGifts
-                                          , List<GiftInvitation> lstUpdatedGifts
-                                          , List<BookingDeposit> lstNewDeposits
-                                          , List<BookingDepositInvitation> lstUpdatedDeposits
-                                          , List<GuestStatus> lstNewGuestStatus
-                                          , List<GuestStatusInvitation> lstUpdatedGuestStatus
-                                          , List<GuestCreditCard> lstNewCreditCard
-                                          , List<GuestCreditCardInvitation> lstUpdatedCreditCard
-                                          , List<Guest> lstNewGuestAdditional
-                                          , List<GuestAdditionalInvitation> lstUpdatedGuestAdditional)
+    public static void SaveGuestInvitation(Invitation invitation)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         try
         {
-          dbContext.Guests.Attach(guest);
-          dbContext.Entry(guest).State = System.Data.Entity.EntityState.Modified;
+          dbContext.Guests.Attach(invitation.Guest);
+          dbContext.Entry(invitation.Guest).State = System.Data.Entity.EntityState.Modified;
 
           #region Regalos
 
           //Agregamos los regalos nuevos
-          if (lstNewGifts.Any())
-            dbContext.InvitationsGifts.AddRange(lstNewGifts);
+          if (invitation.NewGifts.Any())
+            dbContext.InvitationsGifts.AddRange(invitation.NewGifts);
 
           //Actualizamos los regalos
-          foreach (var item in lstUpdatedGifts)
+          foreach (var item in invitation.UpdatedGifts)
           {
-            var gi = dbContext.InvitationsGifts.SingleOrDefault(g => g.iggu == item.iggu && g.iggi == item.iggiPrevious);
+            var gi = dbContext.InvitationsGifts.SingleOrDefault(g => g.iggu == item.iggu && g.iggi == item.iggi);
             if (gi != null)
             {
-              if (item.iggi != item.iggiPrevious)
-              {
-                dbContext.InvitationsGifts.Remove(gi);
-
-                var newGift = new InvitationGift();
-                newGift.igAdults = item.igAdults;
-                newGift.igct = item.igct;
-                newGift.igExtraAdults = item.igExtraAdults;
-                newGift.iggi = item.iggi;
-                newGift.iggu = item.iggu;
-                newGift.igMinors = item.igMinors;
-                newGift.igPriceA = item.igPriceA;
-                newGift.igPriceAdult = item.igPriceAdult;
-                newGift.igPriceExtraAdult = item.igPriceExtraAdult;
-                newGift.igPriceM = item.igPriceM;
-                newGift.igPriceMinor = item.igPriceMinor;
-                newGift.igQty = item.igQty;
-
-                dbContext.InvitationsGifts.Add(newGift);
+              gi.igAdults = item.igAdults;
+              gi.igct = item.igct;
+              gi.igExtraAdults = item.igExtraAdults;
+              gi.iggi = item.iggi;
+              gi.iggu = item.iggu;
+              gi.igMinors = item.igMinors;
+              gi.igPriceA = item.igPriceA;
+              gi.igPriceAdult = item.igPriceAdult;
+              gi.igPriceExtraAdult = item.igPriceExtraAdult;
+              gi.igPriceM = item.igPriceM;
+              gi.igPriceMinor = item.igPriceMinor;
+              gi.igQty = item.igQty;
               }
-              else
-              {
-                gi.igAdults = item.igAdults;
-                gi.igct = item.igct;
-                gi.igExtraAdults = item.igExtraAdults;
-                gi.iggi = item.iggi;
-                gi.iggu = item.iggu;
-                gi.igMinors = item.igMinors;
-                gi.igPriceA = item.igPriceA;
-                gi.igPriceAdult = item.igPriceAdult;
-                gi.igPriceExtraAdult = item.igPriceExtraAdult;
-                gi.igPriceM = item.igPriceM;
-                gi.igPriceMinor = item.igPriceMinor;
-                gi.igQty = item.igQty;
-              }
-
-            }
           }
 
           #endregion
 
           #region Depósitos
           //Agregamos los nuevos depósitos
-          if (lstNewDeposits.Any())
-            dbContext.BookingDeposits.AddRange(lstNewDeposits);
+          if (invitation.NewDeposits.Any())
+            dbContext.BookingDeposits.AddRange(invitation.NewDeposits);
 
-          foreach (var item in lstUpdatedDeposits)
+          foreach (var item in invitation.UpdatedDeposits)
           {
             var dep = dbContext.BookingDeposits.SingleOrDefault(d => d.bdID == item.bdID);
             dep.bdAmount = item.bdAmount;
@@ -392,82 +358,58 @@ namespace IM.BusinessRules.BR
           #endregion
 
           #region Guest Status
-          if (lstNewGuestStatus.Any())
-            dbContext.GuestsStatus.AddRange(lstNewGuestStatus);
-
-          foreach (var item in lstUpdatedGuestStatus)
+          if (invitation.DeletedGuestStatus.Any())
           {
-            var gs = dbContext.GuestsStatus.SingleOrDefault(g => g.gtgu == item.gsgu && g.gtgs == item.gsIDPrevious);
-            if (gs != null)
+
+            foreach(var row in invitation.DeletedGuestStatus)
             {
-              if (item.gsID != item.gsIDPrevious) //si el ID de los estatus es diferente se elimina y se inserta un nuevo registro nuevamente
-              {
+              var gs = dbContext.GuestsStatus.SingleOrDefault(g => g.gtgu == row.gtgu && g.gtgs == row.gtgs);
+              if(gs !=null)
                 dbContext.GuestsStatus.Remove(gs);
-
-                var newGS = new GuestStatus();
-                newGS.gtgs = item.gsID;
-                newGS.gtgu = item.gsgu;
-                newGS.gtQuantity = Convert.ToByte(item.gsQty);
-                dbContext.GuestsStatus.Add(newGS);
-              }
-              else //sino solo se modifica el registro existente
-              {
-                gs.gtQuantity = Convert.ToByte(item.gsQty);
-              }
             }
-
+            
           }
+
+          if (invitation.NewGuestStatus.Any())
+            dbContext.GuestsStatus.AddRange(invitation.NewGuestStatus);
+
           #endregion
 
           #region Credit Cards
-          if (lstNewCreditCard.Any())
-            dbContext.GuestsCreditCards.AddRange(lstNewCreditCard);
-
-          foreach (var item in lstUpdatedCreditCard)
+          if(invitation.DeletedCreditCards.Any())
           {
-            var cc = dbContext.GuestsCreditCards.SingleOrDefault(c => c.gdcc == item.ccIDPrevious && c.gdgu == item.ccgu);
-            if (cc != null)
-            {
-              if (item.ccID != item.ccIDPrevious) //si el ID de las tarejtas son diferente se elimina y se inserta un nuevo registro nuevamente
-              {
-                dbContext.GuestsCreditCards.Remove(cc);
-                var newCC = new GuestCreditCard();
-                newCC.gdcc = item.ccID;
-                newCC.gdgu = item.ccgu;
-                newCC.gdQuantity = Convert.ToByte(item.ccQty);
-
-                dbContext.GuestsCreditCards.Add(newCC);
-              }
-              else //sino solo se actualiza el registro
-              {
-                cc.gdQuantity = Convert.ToByte(item.ccQty);
-              }
-            }
+            var g = invitation.DeletedCreditCards.First().gdgu;
+            var cc = dbContext.GuestsCreditCards.Where(c=> c.gdgu == g).ToList();
+            dbContext.GuestsCreditCards.RemoveRange(cc);
           }
+          
+          if(invitation.NewCreditCards.Any())
+            dbContext.GuestsCreditCards.AddRange(invitation.NewCreditCards);
+          
           #endregion
           
           #region Additional Information
-          //Agregamos un nuevo invitado adicional
-          foreach (var item in lstNewGuestAdditional)
-          {
-            var guestAddit = dbContext.Guests.SingleOrDefault(gg => gg.guID == item.guID);
-            if (guestAddit != null)
-              guest.GuestsAdditional.Add(guestAddit);
-          }
+          ////Agregamos un nuevo invitado adicional
+          //foreach (var item in lstNewGuestAdditional)
+          //{
+          //  var guestAddit = dbContext.Guests.SingleOrDefault(gg => gg.guID == item.guID);
+          //  if (guestAddit != null)
+          //    guest.GuestsAdditional.Add(guestAddit);
+          //}
 
-          //Actualizamos los adicionales
-          foreach (var item in lstUpdatedGuestAdditional)
-          {
-            var updatedGuestAddit = guest.GuestsAdditional.SingleOrDefault(gg => gg.guID == item.guIDPrevious);
-            if (updatedGuestAddit != null)
-            {
-              guest.GuestsAdditional.Remove(updatedGuestAddit);
-              var guestAddit = dbContext.Guests.SingleOrDefault(gg => gg.guID == item.guID);
-              if (guestAddit != null)
-                guest.GuestsAdditional.Add(guestAddit);
-            }
+          ////Actualizamos los adicionales
+          //foreach (var item in lstUpdatedGuestAdditional)
+          //{
+          //  var updatedGuestAddit = guest.GuestsAdditional.SingleOrDefault(gg => gg.guID == item.guIDPrevious);
+          //  if (updatedGuestAddit != null)
+          //  {
+          //    guest.GuestsAdditional.Remove(updatedGuestAddit);
+          //    var guestAddit = dbContext.Guests.SingleOrDefault(gg => gg.guID == item.guID);
+          //    if (guestAddit != null)
+          //      guest.GuestsAdditional.Add(guestAddit);
+          //  }
 
-          }
+          //}
 
           #endregion
                     
@@ -666,5 +608,21 @@ namespace IM.BusinessRules.BR
     } 
     #endregion
 
+    #region GetGuestStatus
+    /// <summary>
+    /// Obtiene los estatus del invitado
+    /// </summary>
+    /// <param name="guest">Invitado a consultar</param>
+    /// <history>
+    /// [lchairez] 04/04/2016 Created.
+    /// </history>
+    public static List<GuestStatus> GetGuestStatus(int guestId)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.GuestsStatus.Where(g => g.gtgu == guestId).ToList();
+      }
+    }
+    #endregion
   }
 }
