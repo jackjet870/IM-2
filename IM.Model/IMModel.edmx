@@ -5840,6 +5840,11 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="guCheckOutD" Type="datetime" Mode="In" />
           <Parameter Name="guBookD" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetGuestsShowNoPresentedInvitation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar(max)" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetGuestsUnassigned" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -6083,11 +6088,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="LeadSources" Type="varchar" Mode="In" />
           <Parameter Name="ChargeTo" Type="varchar" Mode="In" />
           <Parameter Name="Gifts" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="USP_OR_RptGuestsShowNoPresentedInvitation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
-          <Parameter Name="DateTo" Type="datetime" Mode="In" />
-          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_RptPersonnel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_RptProductionByAgeInhouse" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -7605,8 +7605,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <End Role="WhsMovs" EntitySet="WhsMovs" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="IMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -15345,11 +15344,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="ChargeTo" Mode="In" Type="String" />
             <Parameter Name="Gifts" Mode="In" Type="String" />
             </FunctionImport>
-          <FunctionImport Name="USP_OR_RptGuestsShowNoPresentedInvitation" ReturnType="Collection(IMModel.RptGuestsShowNoPresentedInvitation)">
-            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
-            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
-            <Parameter Name="LeadSources" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="USP_OR_RptProductionByAgeOutside" ReturnType="Collection(IMModel.RptProductionByAgeOuthouse)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -15446,7 +15440,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Reservation" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetCxCPayments" ReturnType="Collection(IMModel.CxCPaymentShort)">
-            <Parameter Name="GiftReceiptID" Mode="In" Type="String" />
+          <Parameter Name="GiftReceiptID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGiftsInvitationWithoutReceipt" ReturnType="Collection(IMModel.GiftInvitationWithoutReceipt)">
             <Parameter Name="Guest" Mode="In" Type="Int32" />
@@ -15455,6 +15449,11 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <FunctionImport Name="USP_OR_GetGiftsReceiptDetail" ReturnType="Collection(IMModel.GiftsReceiptDetailShort)">
             <Parameter Name="Receipt" Mode="In" Type="Int32" />
             <Parameter Name="Package" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGuestsShowNoPresentedInvitation" ReturnType="Collection(IMModel.GuestShowNoPresentedInvitation)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -16483,19 +16482,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
         </ComplexType>
-        <ComplexType Name="RptGuestsShowNoPresentedInvitation">
-          <Property Type="Int32" Name="guID" Nullable="false" />
-          <Property Type="String" Name="guls" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
-          <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
-          <Property Type="String" Name="guFirstName1" Nullable="true" MaxLength="40" />
-          <Property Type="DateTime" Name="guShowD" Nullable="true" Precision="23" />
-          <Property Type="String" Name="guls1" Nullable="false" MaxLength="10" />
-          <Property Type="Decimal" Name="bdAmount" Nullable="false" Precision="19" />
-          <Property Type="Decimal" Name="bdReceived" Nullable="false" Precision="19" />
-          <Property Type="String" Name="bdcu" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="bdpt" Nullable="false" MaxLength="10" />
-        </ComplexType>
         <ComplexType Name="RptProductionByAgeOuthouse">
           <Property Type="String" Name="Age" Nullable="true" MaxLength="25" />
           <Property Type="Int32" Name="Books" Nullable="true" />
@@ -16797,6 +16783,18 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="Boolean" Name="geAsPromotionOpera" Nullable="false" />
           <Property Type="String" Name="geComments" Nullable="true" MaxLength="25" />
           <Property Type="String" Name="Package" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="GuestShowNoPresentedInvitation">
+          <Property Type="Int32" Name="GuestID" Nullable="false" />
+          <Property Type="String" Name="LeadSource" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="OutInvit" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="40" />
+          <Property Type="DateTime" Name="ShowDate" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="Deposit" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="Received" Nullable="false" Precision="19" />
+          <Property Type="String" Name="Currency" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="PaymentType" Nullable="false" MaxLength="30" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -20383,23 +20381,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="USP_OR_RptGuestsShowNoPresentedInvitation" FunctionName="IMModel.Store.USP_OR_RptGuestsShowNoPresentedInvitation">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.RptGuestsShowNoPresentedInvitation">
-                <ScalarProperty Name="guID" ColumnName="guID" />
-                <ScalarProperty Name="guls" ColumnName="guls" />
-                <ScalarProperty Name="guOutInvitNum" ColumnName="guOutInvitNum" />
-                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
-                <ScalarProperty Name="guFirstName1" ColumnName="guFirstName1" />
-                <ScalarProperty Name="guShowD" ColumnName="guShowD" />
-                <ScalarProperty Name="guls1" ColumnName="guls1" />
-                <ScalarProperty Name="bdAmount" ColumnName="bdAmount" />
-                <ScalarProperty Name="bdReceived" ColumnName="bdReceived" />
-                <ScalarProperty Name="bdcu" ColumnName="bdcu" />
-                <ScalarProperty Name="bdpt" ColumnName="bdpt" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_RptProductionByAgeOutside" FunctionName="IMModel.Store.USP_OR_RptProductionByAgeOutside">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.RptProductionByAgeOuthouse">
@@ -20743,6 +20724,22 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
                 <ScalarProperty Name="geAsPromotionOpera" ColumnName="geAsPromotionOpera" />
                 <ScalarProperty Name="geComments" ColumnName="geComments" />
                 <ScalarProperty Name="Package" ColumnName="Package" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGuestsShowNoPresentedInvitation" FunctionName="IMModel.Store.USP_OR_GetGuestsShowNoPresentedInvitation">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GuestShowNoPresentedInvitation">
+                <ScalarProperty Name="GuestID" ColumnName="GuestID" />
+                <ScalarProperty Name="LeadSource" ColumnName="LeadSource" />
+                <ScalarProperty Name="OutInvit" ColumnName="OutInvit" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="ShowDate" ColumnName="ShowDate" />
+                <ScalarProperty Name="Deposit" ColumnName="Deposit" />
+                <ScalarProperty Name="Received" ColumnName="Received" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

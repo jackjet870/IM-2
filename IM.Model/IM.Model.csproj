@@ -329,6 +329,9 @@
     <Compile Include="GuestsGroup.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="GuestShowNoPresentedInvitation.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="GuestSisturPromotion.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -615,9 +618,6 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptGiftsReceivedBySR.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="RptGuestsShowNoPresentedInvitation.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptPersonnel.cs">

@@ -1609,23 +1609,6 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGiftsReceivedBySR>("USP_OR_RptGiftsReceivedBySR", dateFromParameter, dateToParameter, leadSourcesParameter, chargeToParameter, giftsParameter);
         }
     
-        public virtual ObjectResult<RptGuestsShowNoPresentedInvitation> USP_OR_RptGuestsShowNoPresentedInvitation(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var leadSourcesParameter = leadSources != null ?
-                new ObjectParameter("LeadSources", leadSources) :
-                new ObjectParameter("LeadSources", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGuestsShowNoPresentedInvitation>("USP_OR_RptGuestsShowNoPresentedInvitation", dateFromParameter, dateToParameter, leadSourcesParameter);
-        }
-    
         public virtual ObjectResult<RptProductionByAgeOuthouse> USP_OR_RptProductionByAgeOutside(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string pRs, string program, Nullable<byte> filterDeposit)
         {
             var dateFromParameter = dateFrom.HasValue ?
@@ -1990,6 +1973,23 @@ namespace IM.Model
                 new ObjectParameter("Package", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftsReceiptDetailShort>("USP_OR_GetGiftsReceiptDetail", receiptParameter, packageParameter);
+        }
+    
+        public virtual ObjectResult<GuestShowNoPresentedInvitation> USP_OR_GetGuestsShowNoPresentedInvitation(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestShowNoPresentedInvitation>("USP_OR_GetGuestsShowNoPresentedInvitation", dateFromParameter, dateToParameter, leadSourcesParameter);
         }
     }
 }
