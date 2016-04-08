@@ -5792,6 +5792,9 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="Receipt" Type="int" Mode="In" />
           <Parameter Name="Package" Type="bit" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetGiftsReceiptPayments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetGiftsReceipts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Guest" Type="int" Mode="In" />
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
@@ -15455,6 +15458,9 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="LeadSources" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGiftsReceiptPayments" ReturnType="Collection(IMModel.GiftsReceiptPaymentShort)">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -16795,6 +16801,17 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="Decimal" Name="Received" Nullable="false" Precision="19" />
           <Property Type="String" Name="Currency" Nullable="false" MaxLength="20" />
           <Property Type="String" Name="PaymentType" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="GiftsReceiptPaymentShort">
+          <Property Type="Int32" Name="gygr" Nullable="false" />
+          <Property Type="Decimal" Name="gyAmount" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="gyRefund" Nullable="false" Precision="19" />
+          <Property Type="String" Name="gycu" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="gypt" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="gybk" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="gysb" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="gype" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="40" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -20740,6 +20757,21 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
                 <ScalarProperty Name="Received" ColumnName="Received" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGiftsReceiptPayments" FunctionName="IMModel.Store.USP_OR_GetGiftsReceiptPayments">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GiftsReceiptPaymentShort">
+                <ScalarProperty Name="gygr" ColumnName="gygr" />
+                <ScalarProperty Name="gyAmount" ColumnName="gyAmount" />
+                <ScalarProperty Name="gyRefund" ColumnName="gyRefund" />
+                <ScalarProperty Name="gycu" ColumnName="gycu" />
+                <ScalarProperty Name="gypt" ColumnName="gypt" />
+                <ScalarProperty Name="gybk" ColumnName="gybk" />
+                <ScalarProperty Name="gysb" ColumnName="gysb" />
+                <ScalarProperty Name="gype" ColumnName="gype" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

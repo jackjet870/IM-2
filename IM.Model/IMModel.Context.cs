@@ -1991,5 +1991,14 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestShowNoPresentedInvitation>("USP_OR_GetGuestsShowNoPresentedInvitation", dateFromParameter, dateToParameter, leadSourcesParameter);
         }
+    
+        public virtual ObjectResult<GiftsReceiptPaymentShort> USP_OR_GetGiftsReceiptPayments(Nullable<int> receipt)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftsReceiptPaymentShort>("USP_OR_GetGiftsReceiptPayments", receiptParameter);
+        }
     }
 }
