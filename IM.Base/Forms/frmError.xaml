@@ -1,7 +1,7 @@
 ﻿<Window x:Class="IM.Base.Forms.frmError"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                Title="Error" Height="438.455" Width="453" Background="SkyBlue" ShowInTaskbar="False" WindowStartupLocation="CenterScreen">
+                Title="Error" Height="438.455" Width="453" Background="SkyBlue" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" Topmost="True">
   <Grid>
     <Image Source="../Images/Error.png" Margin="10,10,0,0" Height="81" VerticalAlignment="Top" HorizontalAlignment="Left" Width="68"/>
     <Label Content="Has happened an error in the application." FontSize="16" FontWeight="Bold" Margin="100,21,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>

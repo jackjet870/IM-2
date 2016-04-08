@@ -1956,5 +1956,40 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftsReceiptsShort>("USP_OR_GetGiftsReceipts", guestParameter, salesRoomParameter, receiptParameter, folioParameter, dateFromParameter, dateToParameter, nameParameter, reservationParameter);
         }
+    
+        public virtual ObjectResult<CxCPaymentShort> USP_OR_GetCxCPayments(string giftReceiptID)
+        {
+            var giftReceiptIDParameter = giftReceiptID != null ?
+                new ObjectParameter("GiftReceiptID", giftReceiptID) :
+                new ObjectParameter("GiftReceiptID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CxCPaymentShort>("USP_OR_GetCxCPayments", giftReceiptIDParameter);
+        }
+    
+        public virtual ObjectResult<GiftInvitationWithoutReceipt> USP_OR_GetGiftsInvitationWithoutReceipt(Nullable<int> guest, Nullable<bool> package)
+        {
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            var packageParameter = package.HasValue ?
+                new ObjectParameter("Package", package) :
+                new ObjectParameter("Package", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftInvitationWithoutReceipt>("USP_OR_GetGiftsInvitationWithoutReceipt", guestParameter, packageParameter);
+        }
+    
+        public virtual ObjectResult<GiftsReceiptDetailShort> USP_OR_GetGiftsReceiptDetail(Nullable<int> receipt, Nullable<bool> package)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            var packageParameter = package.HasValue ?
+                new ObjectParameter("Package", package) :
+                new ObjectParameter("Package", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftsReceiptDetailShort>("USP_OR_GetGiftsReceiptDetail", receiptParameter, packageParameter);
+        }
     }
 }

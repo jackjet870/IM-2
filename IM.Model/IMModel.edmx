@@ -5771,6 +5771,9 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
         <Function Name="USP_OR_GetCountries" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetCxCPayments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GiftReceiptID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetExchangeRateLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Currency" Type="varchar" Mode="In" />
         </Function>
@@ -5780,6 +5783,14 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
         <Function Name="USP_OR_GetGifts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Locations" Type="varchar" Mode="In" />
           <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetGiftsInvitationWithoutReceipt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Guest" Type="int" Mode="In" />
+          <Parameter Name="Package" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetGiftsReceiptDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+          <Parameter Name="Package" Type="bit" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetGiftsReceipts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Guest" Type="int" Mode="In" />
@@ -15434,6 +15445,17 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Name" Mode="In" Type="String" />
             <Parameter Name="Reservation" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_GetCxCPayments" ReturnType="Collection(IMModel.CxCPaymentShort)">
+            <Parameter Name="GiftReceiptID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGiftsInvitationWithoutReceipt" ReturnType="Collection(IMModel.GiftInvitationWithoutReceipt)">
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="Package" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGiftsReceiptDetail" ReturnType="Collection(IMModel.GiftsReceiptDetailShort)">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Package" Mode="In" Type="Boolean" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -16711,6 +16733,70 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Property Type="Int32" Name="grID" Nullable="false" />
           <Property Type="String" Name="grNum" Nullable="true" MaxLength="10" />
           <Property Type="Boolean" Name="grExchange" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="CxCPaymentShort">
+          <Property Type="String" Name="cxReceivedBy" Nullable="false" MaxLength="10" />
+          <Property Type="Decimal" Name="cxAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="cxExchangeRate" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="cxAmountMXN" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="cxSeq" Nullable="true" />
+          <Property Type="DateTime" Name="cxD" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="GiftInvitationWithoutReceipt">
+          <Property Type="String" Name="gegr" Nullable="false" MaxLength="1" />
+          <Property Type="Int32" Name="geQty" Nullable="false" />
+          <Property Type="String" Name="QtyUnit" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="gegi" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="geAdults" Nullable="false" />
+          <Property Type="Int32" Name="geMinors" Nullable="false" />
+          <Property Type="Int32" Name="geExtraAdults" Nullable="false" />
+          <Property Type="Decimal" Name="gePriceA" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="gePriceM" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="gePriceAdult" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="gePriceMinor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="gePriceExtraAdult" Nullable="true" Precision="19" />
+          <Property Type="String" Name="gect" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="geCxC" Nullable="false" MaxLength="1" />
+          <Property Type="Decimal" Name="geCharge" Nullable="true" Precision="19" />
+          <Property Type="String" Name="geFolios" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="geSale" Nullable="true" />
+          <Property Type="Boolean" Name="geInElectronicPurse" Nullable="true" />
+          <Property Type="String" Name="geConsecutiveElectronicPurse" Nullable="false" MaxLength="1" />
+          <Property Type="Boolean" Name="geCancelElectronicPurse" Nullable="true" />
+          <Property Type="Boolean" Name="geInPVPPromo" Nullable="true" />
+          <Property Type="Boolean" Name="geCancelPVPPromo" Nullable="true" />
+          <Property Type="Boolean" Name="geInOpera" Nullable="true" />
+          <Property Type="Boolean" Name="geAsPromotionOpera" Nullable="true" />
+          <Property Type="String" Name="geComments" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="Package" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="GiftsReceiptDetailShort">
+          <Property Type="Int32" Name="gegr" Nullable="false" />
+          <Property Type="Int32" Name="geQty" Nullable="false" />
+          <Property Type="String" Name="QtyUnit" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="gegi" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="geAdults" Nullable="false" />
+          <Property Type="Int32" Name="geMinors" Nullable="false" />
+          <Property Type="Int32" Name="geExtraAdults" Nullable="false" />
+          <Property Type="Decimal" Name="gePriceA" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="gePriceM" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="gePriceAdult" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="gePriceMinor" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="gePriceExtraAdult" Nullable="false" Precision="19" />
+          <Property Type="String" Name="gect" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="geCxC" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="geCharge" Nullable="false" Precision="19" />
+          <Property Type="String" Name="geFolios" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="geSale" Nullable="false" />
+          <Property Type="Boolean" Name="geInElectronicPurse" Nullable="false" />
+          <Property Type="Int32" Name="geConsecutiveElectronicPurse" Nullable="true" />
+          <Property Type="Boolean" Name="geCancelElectronicPurse" Nullable="false" />
+          <Property Type="Boolean" Name="geInPVPPromo" Nullable="false" />
+          <Property Type="Boolean" Name="geCancelPVPPromo" Nullable="false" />
+          <Property Type="Boolean" Name="geInOpera" Nullable="false" />
+          <Property Type="Boolean" Name="geAsPromotionOpera" Nullable="false" />
+          <Property Type="String" Name="geComments" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="Package" Nullable="false" MaxLength="1" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -20581,6 +20667,82 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
                 <ScalarProperty Name="grID" ColumnName="grID" />
                 <ScalarProperty Name="grNum" ColumnName="grNum" />
                 <ScalarProperty Name="grExchange" ColumnName="grExchange" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetCxCPayments" FunctionName="IMModel.Store.USP_OR_GetCxCPayments">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.CxCPaymentShort">
+                <ScalarProperty Name="cxReceivedBy" ColumnName="cxReceivedBy" />
+                <ScalarProperty Name="cxAmount" ColumnName="cxAmount" />
+                <ScalarProperty Name="cxExchangeRate" ColumnName="cxExchangeRate" />
+                <ScalarProperty Name="cxAmountMXN" ColumnName="cxAmountMXN" />
+                <ScalarProperty Name="cxSeq" ColumnName="cxSeq" />
+                <ScalarProperty Name="cxD" ColumnName="cxD" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGiftsInvitationWithoutReceipt" FunctionName="IMModel.Store.USP_OR_GetGiftsInvitationWithoutReceipt">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GiftInvitationWithoutReceipt">
+                <ScalarProperty Name="gegr" ColumnName="gegr" />
+                <ScalarProperty Name="geQty" ColumnName="geQty" />
+                <ScalarProperty Name="QtyUnit" ColumnName="QtyUnit" />
+                <ScalarProperty Name="gegi" ColumnName="gegi" />
+                <ScalarProperty Name="geAdults" ColumnName="geAdults" />
+                <ScalarProperty Name="geMinors" ColumnName="geMinors" />
+                <ScalarProperty Name="geExtraAdults" ColumnName="geExtraAdults" />
+                <ScalarProperty Name="gePriceA" ColumnName="gePriceA" />
+                <ScalarProperty Name="gePriceM" ColumnName="gePriceM" />
+                <ScalarProperty Name="gePriceAdult" ColumnName="gePriceAdult" />
+                <ScalarProperty Name="gePriceMinor" ColumnName="gePriceMinor" />
+                <ScalarProperty Name="gePriceExtraAdult" ColumnName="gePriceExtraAdult" />
+                <ScalarProperty Name="gect" ColumnName="gect" />
+                <ScalarProperty Name="geCxC" ColumnName="geCxC" />
+                <ScalarProperty Name="geCharge" ColumnName="geCharge" />
+                <ScalarProperty Name="geFolios" ColumnName="geFolios" />
+                <ScalarProperty Name="geSale" ColumnName="geSale" />
+                <ScalarProperty Name="geInElectronicPurse" ColumnName="geInElectronicPurse" />
+                <ScalarProperty Name="geConsecutiveElectronicPurse" ColumnName="geConsecutiveElectronicPurse" />
+                <ScalarProperty Name="geCancelElectronicPurse" ColumnName="geCancelElectronicPurse" />
+                <ScalarProperty Name="geInPVPPromo" ColumnName="geInPVPPromo" />
+                <ScalarProperty Name="geCancelPVPPromo" ColumnName="geCancelPVPPromo" />
+                <ScalarProperty Name="geInOpera" ColumnName="geInOpera" />
+                <ScalarProperty Name="geAsPromotionOpera" ColumnName="geAsPromotionOpera" />
+                <ScalarProperty Name="geComments" ColumnName="geComments" />
+                <ScalarProperty Name="Package" ColumnName="Package" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGiftsReceiptDetail" FunctionName="IMModel.Store.USP_OR_GetGiftsReceiptDetail">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GiftsReceiptDetailShort">
+                <ScalarProperty Name="gegr" ColumnName="gegr" />
+                <ScalarProperty Name="geQty" ColumnName="geQty" />
+                <ScalarProperty Name="QtyUnit" ColumnName="QtyUnit" />
+                <ScalarProperty Name="gegi" ColumnName="gegi" />
+                <ScalarProperty Name="geAdults" ColumnName="geAdults" />
+                <ScalarProperty Name="geMinors" ColumnName="geMinors" />
+                <ScalarProperty Name="geExtraAdults" ColumnName="geExtraAdults" />
+                <ScalarProperty Name="gePriceA" ColumnName="gePriceA" />
+                <ScalarProperty Name="gePriceM" ColumnName="gePriceM" />
+                <ScalarProperty Name="gePriceAdult" ColumnName="gePriceAdult" />
+                <ScalarProperty Name="gePriceMinor" ColumnName="gePriceMinor" />
+                <ScalarProperty Name="gePriceExtraAdult" ColumnName="gePriceExtraAdult" />
+                <ScalarProperty Name="gect" ColumnName="gect" />
+                <ScalarProperty Name="geCxC" ColumnName="geCxC" />
+                <ScalarProperty Name="geCharge" ColumnName="geCharge" />
+                <ScalarProperty Name="geFolios" ColumnName="geFolios" />
+                <ScalarProperty Name="geSale" ColumnName="geSale" />
+                <ScalarProperty Name="geInElectronicPurse" ColumnName="geInElectronicPurse" />
+                <ScalarProperty Name="geConsecutiveElectronicPurse" ColumnName="geConsecutiveElectronicPurse" />
+                <ScalarProperty Name="geCancelElectronicPurse" ColumnName="geCancelElectronicPurse" />
+                <ScalarProperty Name="geInPVPPromo" ColumnName="geInPVPPromo" />
+                <ScalarProperty Name="geCancelPVPPromo" ColumnName="geCancelPVPPromo" />
+                <ScalarProperty Name="geInOpera" ColumnName="geInOpera" />
+                <ScalarProperty Name="geAsPromotionOpera" ColumnName="geAsPromotionOpera" />
+                <ScalarProperty Name="geComments" ColumnName="geComments" />
+                <ScalarProperty Name="Package" ColumnName="Package" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

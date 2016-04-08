@@ -80,7 +80,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\ObjServices.cs" />
-    <Compile Include="Forms\ObjServices.cs" />
     <Compile Include="Forms\frmInhouse.xaml.cs">
       <DependentUpon>frmInhouse.xaml</DependentUpon>
     </Compile>
@@ -260,9 +259,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
