@@ -11,9 +11,14 @@ namespace IM.Model
 {
     using System;
     
-    public partial class PaymentPlaceShort
+    public partial class RptGuestCeco
     {
-        public string pcID { get; set; }
-        public string pcN { get; set; }
+        public string soccecoid { get; set; }
+        public int guID { get; set; }
+        public Nullable<System.DateTime> guBookD { get; set; }
+        public string srN { get; set; }
+        public string acn { get; set; }
+        public string ceco { get; set; }
+        public string mksN { get; set; }
     }
 }

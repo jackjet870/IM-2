@@ -11,9 +11,9 @@ namespace IM.Model
 {
     using System;
     
-    public partial class PaymentPlaceShort
+    public partial class RptInvitation_Deposit
     {
-        public string pcID { get; set; }
-        public string pcN { get; set; }
+        public decimal bdAmount { get; set; }
+        public string cuN { get; set; }
     }
 }

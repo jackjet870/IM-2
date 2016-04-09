@@ -602,6 +602,9 @@
     <Compile Include="RptCxCNotAuthorized.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptDailyGiftSimple.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptDeposits.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -632,6 +635,30 @@
     <Compile Include="RptGiftsReceivedBySR.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptGuestCeco.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGuestsNoBuyers.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGuestsNoShows.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptInOut.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptInvitation.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptInvitation_Deposit.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptInvitation_Gift.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptInvitation_Guest.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptPersonnel.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -657,6 +684,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptPRStats.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptWeeklyGiftsItemsSimple.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Sale.cs">

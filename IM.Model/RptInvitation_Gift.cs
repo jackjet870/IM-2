@@ -11,9 +11,12 @@ namespace IM.Model
 {
     using System;
     
-    public partial class PaymentPlaceShort
+    public partial class RptInvitation_Gift
     {
-        public string pcID { get; set; }
-        public string pcN { get; set; }
+        public Nullable<int> guID { get; set; }
+        public string FullName { get; set; }
+        public int igQty { get; set; }
+        public string giN { get; set; }
+        public int OrderInvit { get; set; }
     }
 }

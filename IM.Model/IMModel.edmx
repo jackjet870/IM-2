@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="IMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="IMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Activities">
           <Key>
             <PropertyRef Name="acID" />
@@ -5723,6 +5723,15 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="USP_IM_RptDailyGiftSimple" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_IM_RptWeeklyGiftsItemsSimple" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_ActualizarFechasTemporadas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CurrentYear" Type="int" Mode="In" />
         </Function>
@@ -5980,6 +5989,10 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="User" Type="varchar" Mode="In" />
           <Parameter Name="Place" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_Occupation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="LS" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_RptAssignment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -6091,6 +6104,29 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="LeadSources" Type="varchar" Mode="In" />
           <Parameter Name="ChargeTo" Type="varchar" Mode="In" />
           <Parameter Name="Gifts" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptGuestCeco" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptGuestsNoBuyers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptGuestsNoShows" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptInOut" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptInvitation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GuestID" Type="int" Mode="In" />
         </Function>
         <Function Name="USP_OR_RptPersonnel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_RptProductionByAgeInhouse" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -14928,10 +14964,10 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <End Role="SalesRooms" EntitySet="SalesRooms" />
           </AssociationSet>
           <FunctionImport Name="USP_OR_GetCountries" ReturnType="Collection(IMModel.CountryShort)">
-            <Parameter Name="Status" Mode="In" Type="Byte" />
+          <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetAgencies" ReturnType="Collection(IMModel.AgencyShort)">
-            <Parameter Name="Status" Mode="In" Type="Byte" />
+          <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetArrivals" ReturnType="Collection(IMModel.GuestArrival)">
             <Parameter Name="Date" Mode="In" Type="DateTime" />
@@ -14967,7 +15003,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="guBookD" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetLanguages" ReturnType="Collection(IMModel.LanguageShort)">
-            <Parameter Name="Status" Mode="In" Type="Byte" />
+          <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetLeadSourcesByUser" ReturnType="Collection(IMModel.LeadSourceByUser)">
             <Parameter Name="User" Mode="In" Type="String" />
@@ -14983,7 +15019,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="mtA" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetMarkets" ReturnType="Collection(IMModel.MarketShort)">
-            <Parameter Name="Status" Mode="In" Type="Byte" />
+          <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_Login">
             <ReturnType Type="Collection(IMModel.UserLogin)" />
@@ -14996,16 +15032,16 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="LoginType" Mode="In" Type="Byte" />
             <Parameter Name="User" Mode="In" Type="String" />
             <Parameter Name="Place" Mode="In" Type="String" />
-          </FunctionImport>
+            </FunctionImport>
           <FunctionImport Name="USP_OR_GetSalesRoomsByUser" ReturnType="Collection(IMModel.SalesRoomByUser)">
             <Parameter Name="User" Mode="In" Type="String" />
             <Parameter Name="Regions" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetSalesRoom" ReturnType="Collection(IMModel.SalesRoomCloseDates)">
-            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+          <Parameter Name="SalesRoom" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetSalesRooms" ReturnType="Collection(IMModel.SalesRoomShort)">
-            <Parameter Name="Status" Mode="In" Type="Byte" />
+          <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetWhsMovs" ReturnType="Collection(IMModel.WarehouseMovementShort)">
             <Parameter Name="wmwh" Mode="In" Type="String" />
@@ -15037,7 +15073,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Markets" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_ActualizarFechasTemporadas">
-            <Parameter Name="CurrentYear" Mode="In" Type="Int32" />
+          <Parameter Name="CurrentYear" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_CloseGiftsReceipts">
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
@@ -15056,10 +15092,10 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetExchangeRateLog" ReturnType="Collection(IMModel.ExchangeRateLogData)">
-            <Parameter Name="Currency" Mode="In" Type="String" />
+          <Parameter Name="Currency" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetExchangeRatesWithPesosByDate" ReturnType="Collection(IMModel.ExchangeRateData)">
-            <Parameter Name="Date" Mode="In" Type="DateTime" />
+          <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GraphProductionByPR" ReturnType="Collection(IMModel.GraphProductionByPRData)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
@@ -15067,7 +15103,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="LeadSource" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_InsertExchangeRate">
-            <Parameter Name="CurrentDate" Mode="In" Type="DateTime" />
+          <Parameter Name="CurrentDate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_SaveSalesRoomLog">
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
@@ -15085,14 +15121,14 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Dept" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetSalesRoomLog" ReturnType="Collection(IMModel.SalesRoomLogData)">
-            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+          <Parameter Name="SalesRoom" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_RptBookingsBySalesRoomProgramTime" ReturnType="Collection(IMModel.RptBookingsBySalesRoomProgramTime)">
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="SalesRooms" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGuestLog" ReturnType="Collection(IMModel.GuestLogData)">
-            <Parameter Name="Guest" Mode="In" Type="Int32" />
+          <Parameter Name="Guest" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_SaveLoginLog">
             <Parameter Name="Location" Mode="In" Type="String" />
@@ -15342,7 +15378,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Program" Mode="In" Type="String" />
             <Parameter Name="PaymentTypes" Mode="In" Type="String" />
             <Parameter Name="FilterDeposit" Mode="In" Type="Byte" />
-          </FunctionImport>
+            </FunctionImport>
           <FunctionImport Name="USP_OR_RptGiftsReceivedBySR">
             <ReturnType Type="Collection(IMModel.RptGiftsReceivedBySR)" />
             <ReturnType Type="Collection(IMModel.CurrencyShort)" />
@@ -15351,7 +15387,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="LeadSources" Mode="In" Type="String" />
             <Parameter Name="ChargeTo" Mode="In" Type="String" />
             <Parameter Name="Gifts" Mode="In" Type="String" />
-          </FunctionImport>
+            </FunctionImport>
           <FunctionImport Name="USP_OR_RptProductionByAgeOutside" ReturnType="Collection(IMModel.RptProductionByAgeOuthouse)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -15374,7 +15410,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <ReturnType Type="Collection(IMModel.GraphNotBookingArrivals)" />
             <Parameter Name="DateFromWeek" Mode="In" Type="DateTime" />
             <Parameter Name="LeadSources" Mode="In" Type="String" />
-          </FunctionImport>
+            </FunctionImport>
           <FunctionImport Name="USP_OR_RptProductionByAgeInhouse" ReturnType="Collection(IMModel.RptProductionByAgeInhouse)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -15421,12 +15457,12 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="BasedOnArrival" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetLeadSourcesByZoneBoss" ReturnType="Collection(IMModel.LeadSourceShort)">
-            <Parameter Name="Zone" Mode="In" Type="String" />
+          <Parameter Name="Zone" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetZonesTransfer" ReturnType="Collection(IMModel.ZoneTransfer)" />
           <FunctionImport Name="USP_OR_TransferStart" ReturnType="Collection(IMModel.TransferStartData)" />
           <FunctionImport Name="USP_OR_TransferStopZone">
-            <Parameter Name="Zone" Mode="In" Type="String" />
+          <Parameter Name="Zone" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_TransferUpdateGuestsAvailables">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
@@ -15448,7 +15484,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="Reservation" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetCxCPayments" ReturnType="Collection(IMModel.CxCPaymentShort)">
-            <Parameter Name="GiftReceiptID" Mode="In" Type="String" />
+          <Parameter Name="GiftReceiptID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGiftsInvitationWithoutReceipt" ReturnType="Collection(IMModel.GiftInvitationWithoutReceipt)">
             <Parameter Name="Guest" Mode="In" Type="Int32" />
@@ -15464,7 +15500,47 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="LeadSources" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGiftsReceiptPayments" ReturnType="Collection(IMModel.GiftsReceiptPaymentShort)">
-            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+          <Parameter Name="Receipt" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_Occupation" ReturnType="Collection(String)">
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="LS" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptInvitation">
+            <ReturnType Type="Collection(IMModel.RptInvitation)" />
+            <ReturnType Type="Collection(IMModel.RptInvitation_Guest)" />
+            <ReturnType Type="Collection(IMModel.RptInvitation_Deposit)" />
+            <ReturnType Type="Collection(IMModel.RptInvitation_Gift)" />
+            <Parameter Name="GuestID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_IM_RptDailyGiftSimple" ReturnType="Collection(IMModel.RptDailyGiftSimple)">
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_IM_RptWeeklyGiftsItemsSimple" ReturnType="Collection(IMModel.RptWeeklyGiftsItemsSimple)">
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptGuestCeco" ReturnType="Collection(IMModel.RptGuestCeco)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptGuestsNoBuyers" ReturnType="Collection(IMModel.RptGuestsNoBuyers)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptGuestsNoShows" ReturnType="Collection(IMModel.RptGuestsNoShows)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptInOut" ReturnType="Collection(IMModel.RptInOut)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -16844,6 +16920,136 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
         <ComplexType Name="PaymentPlaceShort">
           <Property Type="String" Name="pcID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="pcN" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="RptInvitation">
+          <Property Type="String" Name="guMembershipNum" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="itRTFHeader" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="guBookD" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="guBookT" Nullable="true" Precision="23" />
+          <Property Type="String" Name="guag" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="agN" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="guco" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="coN" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="guHotel" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="guRoomNum" Nullable="true" MaxLength="15" />
+          <Property Type="Decimal" Name="guPax" Nullable="false" Precision="4" Scale="1" />
+          <Property Type="String" Name="lsN" Nullable="true" MaxLength="30" />
+          <Property Type="Decimal" Name="guDepositTwisted" Nullable="false" Precision="19" />
+          <Property Type="String" Name="cuN" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="PR" Nullable="true" MaxLength="53" />
+          <Property Type="String" Name="guExtraInfo" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="guResch" Nullable="false" />
+          <Property Type="Int32" Name="guID" Nullable="false" />
+          <Property Type="DateTime" Name="guInvitT" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="guInvitD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="itRTFFooter" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="gula" Nullable="false" MaxLength="2" />
+          <Property Type="Boolean" Name="guQuinella" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="RptInvitation_Guest">
+          <Property Type="Int32" Name="guID" Nullable="false" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="40" />
+          <Property Type="Byte" Name="Age" Nullable="true" />
+          <Property Type="String" Name="MaritalStatus" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Occupation" Nullable="true" MaxLength="25" />
+          <Property Type="Int32" Name="OrderInvit" Nullable="false" />
+          <Property Type="Int32" Name="OrderPerson" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="RptInvitation_Deposit">
+          <Property Type="Decimal" Name="bdAmount" Nullable="false" Precision="19" />
+          <Property Type="String" Name="cuN" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="RptInvitation_Gift">
+          <Property Type="Int32" Name="guID" Nullable="true" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="200" />
+          <Property Type="Int32" Name="igQty" Nullable="false" />
+          <Property Type="String" Name="giN" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="OrderInvit" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="RptDailyGiftSimple">
+          <Property Type="Boolean" Name="grCancel" Nullable="false" />
+          <Property Type="Int32" Name="grID" Nullable="false" />
+          <Property Type="String" Name="giN" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="giShortN" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="geQty" Nullable="false" />
+          <Property Type="String" Name="grlo" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="RptWeeklyGiftsItemsSimple">
+          <Property Type="DateTime" Name="grD" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Gift" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ShortN" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="Qty" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="RptGuestCeco">
+          <Property Type="String" Name="soccecoid" Nullable="false" MaxLength="2" />
+          <Property Type="Int32" Name="guID" Nullable="false" />
+          <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="srN" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="acn" Nullable="false" MaxLength="60" />
+          <Property Type="String" Name="ceco" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="mksN" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="RptGuestsNoBuyers">
+          <Property Type="String" Name="Program" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="LeadSource" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="GuestID" Nullable="false" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Email2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="CountryN" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="RptGuestsNoShows">
+          <Property Type="Int32" Name="guID" Nullable="false" />
+          <Property Type="String" Name="guRoomNum" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="guHotel" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="guFirstName1" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="guloInvit" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="guag" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="agN" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="guco" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="coN" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="gupax" Nullable="false" Precision="4" Scale="1" />
+          <Property Type="DateTime" Name="guCheckInD" Nullable="false" Precision="23" />
+          <Property Type="Decimal" Name="guDeposit" Nullable="false" Precision="19" />
+          <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="guBookCanc" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="RptInOut">
+          <Property Type="String" Name="SalesRoom" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Location" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="GUID" Nullable="false" />
+          <Property Type="String" Name="Hotel" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Room" Nullable="true" MaxLength="15" />
+          <Property Type="Decimal" Name="Pax" Nullable="false" Precision="4" Scale="1" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Agency" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="AgencyN" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="CountryN" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="ShowDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="TimeIn" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="TimeOut" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Direct" Nullable="false" />
+          <Property Type="Boolean" Name="Tour" Nullable="false" />
+          <Property Type="Boolean" Name="InOut" Nullable="false" />
+          <Property Type="Boolean" Name="WalkOut" Nullable="false" />
+          <Property Type="Boolean" Name="CourtesyTour" Nullable="false" />
+          <Property Type="Boolean" Name="SaveProgram" Nullable="false" />
+          <Property Type="String" Name="PR1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="PR2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="PR3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR3N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Host" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Comments" Nullable="true" MaxLength="100" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -20842,6 +21048,171 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
                 <ScalarProperty Name="gysb" ColumnName="gysb" />
                 <ScalarProperty Name="gype" ColumnName="gype" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_Occupation" FunctionName="IMModel.Store.USP_OR_Occupation" />
+          <FunctionImportMapping FunctionImportName="USP_OR_RptInvitation" FunctionName="IMModel.Store.USP_OR_RptInvitation">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptInvitation">
+                <ScalarProperty Name="guMembershipNum" ColumnName="guMembershipNum" />
+                <ScalarProperty Name="itRTFHeader" ColumnName="itRTFHeader" />
+                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
+                <ScalarProperty Name="guBookT" ColumnName="guBookT" />
+                <ScalarProperty Name="guag" ColumnName="guag" />
+                <ScalarProperty Name="agN" ColumnName="agN" />
+                <ScalarProperty Name="guco" ColumnName="guco" />
+                <ScalarProperty Name="coN" ColumnName="coN" />
+                <ScalarProperty Name="guHotel" ColumnName="guHotel" />
+                <ScalarProperty Name="guRoomNum" ColumnName="guRoomNum" />
+                <ScalarProperty Name="guPax" ColumnName="guPax" />
+                <ScalarProperty Name="lsN" ColumnName="lsN" />
+                <ScalarProperty Name="guDepositTwisted" ColumnName="guDepositTwisted" />
+                <ScalarProperty Name="cuN" ColumnName="cuN" />
+                <ScalarProperty Name="PR" ColumnName="PR" />
+                <ScalarProperty Name="guExtraInfo" ColumnName="guExtraInfo" />
+                <ScalarProperty Name="guResch" ColumnName="guResch" />
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="guInvitT" ColumnName="guInvitT" />
+                <ScalarProperty Name="guInvitD" ColumnName="guInvitD" />
+                <ScalarProperty Name="itRTFFooter" ColumnName="itRTFFooter" />
+                <ScalarProperty Name="gula" ColumnName="gula" />
+                <ScalarProperty Name="guQuinella" ColumnName="guQuinella" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptInvitation_Guest">
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="MaritalStatus" ColumnName="MaritalStatus" />
+                <ScalarProperty Name="Occupation" ColumnName="Occupation" />
+                <ScalarProperty Name="OrderInvit" ColumnName="OrderInvit" />
+                <ScalarProperty Name="OrderPerson" ColumnName="OrderPerson" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptInvitation_Deposit">
+                <ScalarProperty Name="bdAmount" ColumnName="bdAmount" />
+                <ScalarProperty Name="cuN" ColumnName="cuN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptInvitation_Gift">
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="igQty" ColumnName="igQty" />
+                <ScalarProperty Name="giN" ColumnName="giN" />
+                <ScalarProperty Name="OrderInvit" ColumnName="OrderInvit" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_IM_RptDailyGiftSimple" FunctionName="IMModel.Store.USP_IM_RptDailyGiftSimple">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptDailyGiftSimple">
+                <ScalarProperty Name="grCancel" ColumnName="grCancel" />
+                <ScalarProperty Name="grID" ColumnName="grID" />
+                <ScalarProperty Name="giN" ColumnName="giN" />
+                <ScalarProperty Name="giShortN" ColumnName="giShortN" />
+                <ScalarProperty Name="geQty" ColumnName="geQty" />
+                <ScalarProperty Name="grlo" ColumnName="grlo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_IM_RptWeeklyGiftsItemsSimple" FunctionName="IMModel.Store.USP_IM_RptWeeklyGiftsItemsSimple">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptWeeklyGiftsItemsSimple">
+                <ScalarProperty Name="grD" ColumnName="grD" />
+                <ScalarProperty Name="Gift" ColumnName="Gift" />
+                <ScalarProperty Name="ShortN" ColumnName="ShortN" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptGuestCeco" FunctionName="IMModel.Store.USP_OR_RptGuestCeco">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptGuestCeco">
+                <ScalarProperty Name="soccecoid" ColumnName="soccecoid" />
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
+                <ScalarProperty Name="srN" ColumnName="srN" />
+                <ScalarProperty Name="acn" ColumnName="acn" />
+                <ScalarProperty Name="ceco" ColumnName="ceco" />
+                <ScalarProperty Name="mksN" ColumnName="mksN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptGuestsNoBuyers" FunctionName="IMModel.Store.USP_OR_RptGuestsNoBuyers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptGuestsNoBuyers">
+                <ScalarProperty Name="Program" ColumnName="Program" />
+                <ScalarProperty Name="LeadSource" ColumnName="LeadSource" />
+                <ScalarProperty Name="GuestID" ColumnName="GuestID" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Email2" ColumnName="Email2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="CountryN" ColumnName="CountryN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptGuestsNoShows" FunctionName="IMModel.Store.USP_OR_RptGuestsNoShows">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptGuestsNoShows">
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="guRoomNum" ColumnName="guRoomNum" />
+                <ScalarProperty Name="guHotel" ColumnName="guHotel" />
+                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
+                <ScalarProperty Name="guFirstName1" ColumnName="guFirstName1" />
+                <ScalarProperty Name="guloInvit" ColumnName="guloInvit" />
+                <ScalarProperty Name="guag" ColumnName="guag" />
+                <ScalarProperty Name="agN" ColumnName="agN" />
+                <ScalarProperty Name="guco" ColumnName="guco" />
+                <ScalarProperty Name="coN" ColumnName="coN" />
+                <ScalarProperty Name="gupax" ColumnName="gupax" />
+                <ScalarProperty Name="guCheckInD" ColumnName="guCheckInD" />
+                <ScalarProperty Name="guDeposit" ColumnName="guDeposit" />
+                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
+                <ScalarProperty Name="guBookCanc" ColumnName="guBookCanc" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptInOut" FunctionName="IMModel.Store.USP_OR_RptInOut">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptInOut">
+                <ScalarProperty Name="SalesRoom" ColumnName="SalesRoom" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="GUID" ColumnName="GUID" />
+                <ScalarProperty Name="Hotel" ColumnName="Hotel" />
+                <ScalarProperty Name="Room" ColumnName="Room" />
+                <ScalarProperty Name="Pax" ColumnName="Pax" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Agency" ColumnName="Agency" />
+                <ScalarProperty Name="AgencyN" ColumnName="AgencyN" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="CountryN" ColumnName="CountryN" />
+                <ScalarProperty Name="ShowDate" ColumnName="ShowDate" />
+                <ScalarProperty Name="TimeIn" ColumnName="TimeIn" />
+                <ScalarProperty Name="TimeOut" ColumnName="TimeOut" />
+                <ScalarProperty Name="Direct" ColumnName="Direct" />
+                <ScalarProperty Name="Tour" ColumnName="Tour" />
+                <ScalarProperty Name="InOut" ColumnName="InOut" />
+                <ScalarProperty Name="WalkOut" ColumnName="WalkOut" />
+                <ScalarProperty Name="CourtesyTour" ColumnName="CourtesyTour" />
+                <ScalarProperty Name="SaveProgram" ColumnName="SaveProgram" />
+                <ScalarProperty Name="PR1" ColumnName="PR1" />
+                <ScalarProperty Name="PR1N" ColumnName="PR1N" />
+                <ScalarProperty Name="PR2" ColumnName="PR2" />
+                <ScalarProperty Name="PR2N" ColumnName="PR2N" />
+                <ScalarProperty Name="PR3" ColumnName="PR3" />
+                <ScalarProperty Name="PR3N" ColumnName="PR3N" />
+                <ScalarProperty Name="Host" ColumnName="Host" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
