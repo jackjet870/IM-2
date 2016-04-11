@@ -2129,5 +2129,51 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestShort>("USP_OR_GetGuestById", guestParameter);
         }
+    
+        public virtual ObjectResult<RptMealTickets> USP_OR_RptMealTickets(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms, Nullable<bool> cancelled, string rateTypes)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            var cancelledParameter = cancelled.HasValue ?
+                new ObjectParameter("Cancelled", cancelled) :
+                new ObjectParameter("Cancelled", typeof(bool));
+    
+            var rateTypesParameter = rateTypes != null ?
+                new ObjectParameter("RateTypes", rateTypes) :
+                new ObjectParameter("RateTypes", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptMealTickets>("USP_OR_RptMealTickets", dateFromParameter, dateToParameter, salesRoomsParameter, cancelledParameter, rateTypesParameter);
+        }
+    
+        public virtual ObjectResult<RptMealTicketsCost> USP_OR_RptMealTicketsCost(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms, string rateTypes)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            var rateTypesParameter = rateTypes != null ?
+                new ObjectParameter("RateTypes", rateTypes) :
+                new ObjectParameter("RateTypes", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptMealTicketsCost>("USP_OR_RptMealTicketsCost", dateFromParameter, dateToParameter, salesRoomsParameter, rateTypesParameter);
+        }
     }
 }

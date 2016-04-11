@@ -6,18 +6,17 @@
         xmlns:local="clr-namespace:IM.Base.Forms"
         mc:Ignorable="d"
         ResizeMode="NoResize" WindowStyle="None"  
-        WindowStartupLocation="CenterScreen" Background="White" BorderThickness="5" BorderBrush="AliceBlue" Width="609.509" Height="444.434" >
+        WindowStartupLocation="CenterScreen" Background="White" BorderThickness="5" BorderBrush="AliceBlue" Width="609.509" Height="444.434" Icon="/IM.Base;component/Images/IM.ico" >
 
-    <Canvas x:Name="ContentMain">
-        <TextBlock x:Name="txtTitle" HorizontalAlignment="Left" Margin="252,10,0,0" TextWrapping="Wrap" Text="Intelligence Marketing " VerticalAlignment="Top" Height="34" Width="312" FontSize="21.333"/>
-        <TextBlock x:Name="txtVersion" HorizontalAlignment="Left" Margin="252,49,0,0" TextWrapping="Wrap" Text="Version 1.0.0" VerticalAlignment="Top" Height="34" Width="312" FontSize="16"/>
-        <Image x:Name="imgLogo" HorizontalAlignment="Left" Height="205" VerticalAlignment="Top" Width="225" Source="../Images/IM.png" Canvas.Left="10" Canvas.Top="25"/>
-        <Label x:Name="lblServer" Content="lblServer" HorizontalAlignment="Left" Margin="80,235,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblDB" Content="lblDB" HorizontalAlignment="Left" Margin="80,263,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblPlatform" Content="Better Timeshare Management" Canvas.Left="194" Canvas.Top="309" FontSize="16"/>
-        <Label x:Name="lblClient" Content="Product licensed to: Searching..." Canvas.Left="218" Canvas.Top="343"/>
-        <Label x:Name="lblSN" Content="Serial Number: Searching..." Canvas.Left="228" Canvas.Top="371"/>
-        <Label x:Name="lblBottom" Content="1998-2005 Copyright. This computer program is protected by copyright law and international treaties." Canvas.Left="45" Canvas.Top="412"/>
-        <ContentControl x:Name="cntContentLogin" Content="Loading Login..." Canvas.Left="240" Canvas.Top="83" Height="203" Width="290"/>
-    </Canvas>
+  <Canvas x:Name="ContentMain">
+    <TextBlock x:Name="txtTitle" HorizontalAlignment="Left" TextWrapping="Wrap" Text="lblTitle" VerticalAlignment="Top" Height="34" Width="376" FontSize="20
+               " Canvas.Left="214" Canvas.Top="10"/>
+    <TextBlock x:Name="txtVersion" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Version 1.0.0" VerticalAlignment="Top" Height="32" Width="129" FontSize="16" Canvas.Left="219" Canvas.Top="49"/>
+    <Image x:Name="imgLogo" HorizontalAlignment="Left" Height="205" VerticalAlignment="Top" Width="204" Source="../Images/IM.png" Canvas.Left="10" Canvas.Top="25"/>
+    <Label x:Name="lblServer" Content="lblServer" HorizontalAlignment="Left" Margin="80,235,0,0" VerticalAlignment="Top"/>
+    <Label x:Name="lblDB" Content="lblDB" HorizontalAlignment="Left" Margin="80,263,0,0" VerticalAlignment="Top"/>
+    <Label x:Name="lblPlatform" Content="Better Timeshare Management" Canvas.Left="185" Canvas.Top="350" FontSize="16"/>
+    <Label x:Name="lblClient" Content="Product licensed to: Palace Resorts" Canvas.Left="202" Canvas.Top="386"/>
+    <Label x:Name="lblCopyright" Content="2016 Copyright. This computer program is protected by copyright law and international treaties." Canvas.Left="45" Canvas.Top="412"/>
+  </Canvas>
 </Window>

@@ -73,11 +73,15 @@
     <Compile Include="Forms\frmError.xaml.cs">
       <DependentUpon>frmError.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmAbout.xaml.cs" />
+    <Compile Include="Forms\frmAbout.xaml.cs" >
+	<DependentUpon>frmAbout.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmChangePassword.xaml.cs">
       <DependentUpon>frmChangePassword.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmConsultaBase.xaml.cs" />
+    <Compile Include="Forms\frmConsultaBase.xaml.cs" >
+	  <DependentUpon>frmConsultaBase.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmInvitationBase.xaml.cs">
       <DependentUpon>frmInvitationBase.xaml</DependentUpon>
     </Compile>
