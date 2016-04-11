@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms"     
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" ShowActivated="True"
-        Title="Intelligense Marketing Administrator" Height="600" Width="600" Loaded="Window_Loaded" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Closed="Window_Closed">    
+        Title="Administrator" Height="600" Width="600" Loaded="Window_Loaded" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Closed="Window_Closed">    
     <Grid  Background="LightBlue" >        
         <Grid.RowDefinitions>
             <RowDefinition Height="54"/>

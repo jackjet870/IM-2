@@ -40,7 +40,7 @@ namespace IM.SalesPR
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Sales PR");
+      frmSplash frmSplash = new frmSplash("Sales by PR");
       frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);

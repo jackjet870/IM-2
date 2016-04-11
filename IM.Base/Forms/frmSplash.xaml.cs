@@ -27,7 +27,7 @@ namespace IM.Base.Forms
       InitializeComponent();
 
       this.Title = title;
-      txtTitle.Text = string.Format("Intelligence Marketing - {0}", title);
+      lblTitle.Content = string.Format("Intelligence Marketing - {0}", title);
     }
 
     #endregion Constructores y destructores

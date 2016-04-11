@@ -308,10 +308,10 @@ namespace IM.Inhouse.Forms
     /// <history>[ECANUL] 01-04-2016 Created</history>
     void AddGuests()
     {
-      frmSearchGuest frmSGuest = new frmSearchGuest(EnumPrograms.pgInhouse, this);
+      frmSearchGuest frmSGuest = new frmSearchGuest(EnumProgram.Inhouse, this);
       frmSGuest.Owner = this;
       frmSGuest.ShowInTaskbar = false;
-      frmSGuest.lstGuest = new List<Guest>();
+      frmSGuest._lstGuests = new List<Guest>();
       frmSGuest.lstGuestAdd = new List<Guest>();
 
       if (lstGuest == null) //Solo se abre desde el boton y se da new group

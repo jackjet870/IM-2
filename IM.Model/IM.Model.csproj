@@ -163,8 +163,10 @@
     <Compile Include="Enums\EnumClub.cs" />
     <Compile Include="Enums\EnumFormatTypeExcel.cs" />
     <Compile Include="Enums\EnumInvitationMode.cs" />
+    <Compile Include="Enums\EnumMenu.cs" />
     <Compile Include="Enums\EnumPermission.cs" />
     <Compile Include="Enums\EnumPlaceType.cs" />
+    <Compile Include="Enums\EnumProgram.cs" />
     <Compile Include="Enums\EnumRole.cs" />
     <Compile Include="Enums\EnumBasedOnArrival.cs" />
     <Compile Include="Enums\EnumBasedOnBooking.cs" />
@@ -185,7 +187,6 @@
     <Compile Include="Enums\EnumPredefinedDate.cs" />
     <Compile Include="Enums\EnumPredefinedDateMonthly.cs" />
     <Compile Include="Enums\EnumPrintDevice.cs" />
-    <Compile Include="Enums\EnumPrograms.cs" />
     <Compile Include="Enums\EnumQuinellas.cs" />
     <Compile Include="Enums\EnumSalesByMembershipType.cs" />
     <Compile Include="Enums\EnumSaveCourtesyTours.cs" />

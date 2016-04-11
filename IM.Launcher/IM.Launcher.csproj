@@ -102,7 +102,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\ConfigButton.cs" />
-    <Compile Include="Classes\EnumMenu.cs" />
     <Compile Include="Classes\ListItemLauncher.cs" />
     <Compile Include="Forms\frmLauncher.xaml.cs">
       <DependentUpon>frmLauncher.xaml</DependentUpon>
@@ -151,9 +150,6 @@
     <Content Include="Images\Administrator.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\Animation.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Images\Assignment.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -196,9 +192,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\PRStatistics.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Regen.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\SalesByCloser.png">

@@ -40,7 +40,7 @@ namespace IM.SalesLiner
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Sales Liner");
+      frmSplash frmSplash = new frmSplash("Sales by Liner");
       frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.SalesRoom, true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);

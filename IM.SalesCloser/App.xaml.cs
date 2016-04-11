@@ -42,7 +42,7 @@ namespace IM.SalesCloser
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Sales Closer");
+      frmSplash frmSplash = new frmSplash("Sales by Closer");
       frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.SalesRoom, true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);

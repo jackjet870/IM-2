@@ -1,5 +1,6 @@
 ﻿using IM.Base.Helpers;
 using IM.Launcher.Classes;
+using IM.Model.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -160,7 +161,7 @@ namespace IM.Launcher.Forms
       string path = Environment.CurrentDirectory;
       switch (option)
       {
-        case EnumMenu.InHouse:
+        case EnumMenu.Inhouse:
           Process.Start(String.Format("{0}\\IM.Inhouse.exe", path));
           break;
         case EnumMenu.Assignment:
@@ -168,14 +169,6 @@ namespace IM.Launcher.Forms
           break;
         case EnumMenu.MailOuts:
           Process.Start(String.Format("{0}\\IM.MailOuts.exe", path));
-          break;
-        case EnumMenu.Animation:
-          var userData = IM.BusinessRules.BR.BRPersonnel.Login(Model.Enums.EnumLoginType.Location,"LCHAIREZ", "MPS");
-          var invit = new IM.Base.Forms.frmInvitationBase(IM.BusinessRules.Enums.InvitationType.InHouse, userData, 7747843, Model.Enums.EnumInvitationMode.modOnlyRead);
-          var res = invit.ShowDialog();
-          break;
-        case EnumMenu.Regen:
-          UIHelper.ShowMessage("Coming soon..");
           break;
         case EnumMenu.Outhouse:
           UIHelper.ShowMessage("Coming soon..");

@@ -1,22 +1,14 @@
 ﻿using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using IM.Inhouse.Classes;
 using IM.Model;
 using IM.Model.Classes;
 using IM.Model.Enums;
+using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace IM.Inhouse.Forms
 {
@@ -27,11 +19,11 @@ namespace IM.Inhouse.Forms
   {
     #region Atributos
 
-    EnumPrograms enumPrograms;
-    Guest guest;
-    LeadSource leadSource;
-    public List<Guest> lstGuest;
-    frmGuestsGroups parent;
+    EnumProgram _program;
+    Guest _guest;
+    LeadSource _leadSource;
+    public List<Guest> _lstGuests;
+    frmGuestsGroups _parent;
 
     #endregion
 
@@ -56,30 +48,30 @@ namespace IM.Inhouse.Forms
     /// <history>[ECNUL] 31-03-2016 Created</history>
     void CreateWhere()
     {
-      guest = new Guest();
-      leadSource = new LeadSource();
-      leadSource.lspg = StrToEnums.EnumProgramToString(enumPrograms);
+      _guest = new Guest();
+      _leadSource = new LeadSource();
+      _leadSource.lspg = EnumToListHelper.GetEnumDescription(_program);
       if (txtGUID.Text != "") //Si se puso id del Huesped
-        guest.guID = Convert.ToInt32(txtGUID.Text.Trim());
+        _guest.guID = Convert.ToInt32(txtGUID.Text.Trim());
       else
       {
         //Busca por nombre y apellido
         if (txtName.Text != "")
         {
-          guest.guLastName1 = txtName.Text;
-          guest.guFirstName1 = txtName.Text;
-          guest.guLastname2 = txtName.Text;
-          guest.guFirstName2 = txtName.Text;
+          _guest.guLastName1 = txtName.Text;
+          _guest.guFirstName1 = txtName.Text;
+          _guest.guLastname2 = txtName.Text;
+          _guest.guFirstName2 = txtName.Text;
         }
         else if (txtRoom.Text != "") //Numero de habitacion
-          guest.guRoomNum = txtRoom.Text;
+          _guest.guRoomNum = txtRoom.Text;
         else if (txtReservation.Text != "") //Folio de reservacion
-          guest.guHReservID = txtReservation.Text;
+          _guest.guHReservID = txtReservation.Text;
         ///BUSQUEDAS WHERE OBLIGADAS
         //Between de Fecha de llegada Si no se tiene GUID Siempre se busca por fecha de llegada
-        guest.guCheckInD = Convert.ToDateTime(dtpFrom.SelectedDate.Value.ToShortDateString());
-        guest.guCheckOutD = Convert.ToDateTime(dtpTo.SelectedDate.Value.ToShortDateString()); //Deberia ser CheckInD tambien pero se usa este para hacer el between
-        guest.guls = cmbLeadSourse.SelectedValue.ToString(); //Toma el LeadSource del Combo Obligado siempre se busca por LS
+        _guest.guCheckInD = Convert.ToDateTime(dtpFrom.SelectedDate.Value.ToShortDateString());
+        _guest.guCheckOutD = Convert.ToDateTime(dtpTo.SelectedDate.Value.ToShortDateString()); //Deberia ser CheckInD tambien pero se usa este para hacer el between
+        _guest.guls = cmbLeadSourse.SelectedValue.ToString(); //Toma el LeadSource del Combo Obligado siempre se busca por LS
         //Se usa si se tiene un Where Antes
         //if (false)
         //  guest.guID = guest.guID;
@@ -95,14 +87,14 @@ namespace IM.Inhouse.Forms
     {
       StaStart("Loading Guests...");
       CreateWhere();
-      lstGuest = BRGuests.GetSearchGuestByLS(guest, leadSource);
-      if (lstGuest.Count != 0)
-        dtgGuests.ItemsSource = lstGuest;
+      _lstGuests = BRGuests.GetSearchGuestByLS(_guest, _leadSource);
+      if (_lstGuests.Count != 0)
+        dtgGuests.ItemsSource = _lstGuests;
 
-      if (lstGuest.Count == 1)
-        StatusBarReg.Content = lstGuest.Count + " Guest";
+      if (_lstGuests.Count == 1)
+        StatusBarReg.Content = _lstGuests.Count + " Guest";
       else
-        StatusBarReg.Content = lstGuest.Count + " Guests";
+        StatusBarReg.Content = _lstGuests.Count + " Guests";
 
       StaEnd();
     }
@@ -114,8 +106,8 @@ namespace IM.Inhouse.Forms
     void LoadReturnList()
     {
       StaStart("Loading Selected Guests...");
-      lstGuest = dtgGuests.SelectedItems.OfType<Guest>().ToList();
-      if (lstGuest.Count == 0)
+      _lstGuests = dtgGuests.SelectedItems.OfType<Guest>().ToList();
+      if (_lstGuests.Count == 0)
         MessageBox.Show("No se han seleccionado Huespedes");
       //lstGuest = dtgGuests.SelectedItems
       StaEnd();
@@ -147,11 +139,11 @@ namespace IM.Inhouse.Forms
     #endregion
 
     #region Contructores y Destructores
-    public frmSearchGuest(EnumPrograms prog, frmGuestsGroups winParent)
+    public frmSearchGuest(EnumProgram program, frmGuestsGroups winParent)
     {
       InitializeComponent();
-      enumPrograms = prog;
-      parent = winParent;
+      _program = program;
+      _parent = winParent;
     }
     #endregion
     
@@ -175,8 +167,8 @@ namespace IM.Inhouse.Forms
     private void btnOK_Click(object sender, RoutedEventArgs e)
     {
       LoadReturnList();
-      lstGuestAdd = lstGuest;
-      dtgGuests.ItemsSource = lstGuest;
+      lstGuestAdd = _lstGuests;
+      dtgGuests.ItemsSource = _lstGuests;
       Close();
       cancel = false;
     }
