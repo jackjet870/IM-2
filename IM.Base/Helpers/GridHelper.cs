@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.ComponentModel;
-using System.Windows.Controls;
-using System.Linq.Expressions;
-using System.Linq;
+using System.Data;
 using System.Dynamic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Windows.Controls;
 
 namespace IM.Base.Helpers
 {
@@ -20,82 +20,71 @@ namespace IM.Base.Helpers
     /// <param name="changeDataTypeBoolToString">true : Cambia las columnas boleanas a string - false: las deja como boleanas</param>
     /// <param name="lst">Lista tipada</param>
     /// <param name="showCheckMark"> false: Cambia las columnas booleanas a string y convierte la palabra </param>
+    /// <param name="replaceStringNullOrWhiteSpace">Cambia las columnas string vacias a "-" </param>
     /// <returns>DataTable</returns>
     /// <history>
     /// [erosado] 12/Mar/2016  Created.
-    /// [erosado] 17/Mar/2016  Se agrego la opcion para cambiar los tipos de datos de la Boolean a string, 
+    /// [erosado] 17/Mar/2016  Se agrego la opcion para cambiar los tipos de datos de la Boolean a string,
     ///                        esto nos sirve para que en el reporte se muestren palomitas en lugar de la palabra "VERDADERO"
     /// [edgrodriguez] 19/Mar/2016 Modified. Opcion para cambiar los tipos de datos de Boolean a string
     ///                                      cambiando la palabra "True" por la palabra "Yes".
     ///                                      Se hizo modificaciones en el proceso de creacion del datatable.
+    /// [aalcocer] 11/04/216 Modified. Opcion para reemplazar campos vacios.
     /// </history>
-    public static DataTable GetDataTableFromGrid<T>(List<T> lst, bool changeDataTypeBoolToString = false, bool showCheckMark = true)
+    public static DataTable GetDataTableFromGrid<T>(List<T> lst, bool changeDataTypeBoolToString = false, bool showCheckMark = true, bool replaceStringNullOrWhiteSpace = false)
     {
-      if (changeDataTypeBoolToString)
-      {
-        List<PropertyDescriptor> properties =
-            TypeDescriptor.GetProperties(typeof(T)).Cast<PropertyDescriptor>().ToList();
-        List<int> columnsChanged = new List<int>();
-        DataTable table = new DataTable();
-        properties.ForEach(c =>
-        {
-          var type = Nullable.GetUnderlyingType(c.PropertyType) ?? c.PropertyType;
-          if (type == typeof(bool) || type == typeof(bool?))
-          {
-            table.Columns.Add(c.Name, typeof(string));
-            columnsChanged.Add(properties.IndexOf(c));
-          }
-          else
-          {
-            if (type == typeof(string))
-              table.Columns.Add(new DataColumn { ColumnName = c.Name, DataType = type, DefaultValue = (showCheckMark) ? "" : "-" });
-            else
-              table.Columns.Add(c.Name, type);
-          }
-        });
+      DataTable table = new DataTable();
+      List<PropertyDescriptor> properties = TypeDescriptor.GetProperties(typeof(T)).Cast<PropertyDescriptor>().ToList();
+      List<int> columnsChanged = new List<int>();
 
-        lst.ForEach(c =>
-        {
-          DataRow newRow = table.NewRow();
-          var values = properties.Select(v => v.GetValue(c)).ToArray();
-          columnsChanged.ForEach(col =>
-          {
-            if (showCheckMark)
-              values[col] = (values[col].ToString().ToLower() == "true") ? "ü" : "";
-            else
-              values[col] = (values[col].ToString().ToLower() == "true") ? "Yes" : " ";
-          });
-          newRow.ItemArray = values;
-          table.Rows.Add(newRow);
-        });
-
-        return table;
-      }
-      else
+      properties.ForEach(c =>
       {
-        #region Convertimos lista tipada en DataTable
-        PropertyDescriptorCollection properties =
-            TypeDescriptor.GetProperties(typeof(T));
-        DataTable table = new DataTable();
-        foreach (PropertyDescriptor prop in properties)
-          table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
-        foreach (T item in lst)
+        Type type = Nullable.GetUnderlyingType(c.PropertyType) ?? c.PropertyType;
+        //Cambia las columnas boleanas a string
+        if (changeDataTypeBoolToString && (type == typeof(bool) || type == typeof(bool?)))
         {
-          DataRow row = table.NewRow();
-          foreach (PropertyDescriptor prop in properties)
-            row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
-          table.Rows.Add(row);
+          table.Columns.Add(c.Name, typeof(string));
+          columnsChanged.Add(properties.IndexOf(c));
         }
-        #endregion
+        else if (type == typeof(string))
+          table.Columns.Add(new DataColumn { ColumnName = c.Name, DataType = type, DefaultValue = (replaceStringNullOrWhiteSpace || showCheckMark) ? "" : "-" });
+        else
+          table.Columns.Add(c.Name, type);
+      });
 
-        return table;
-      }
+      lst.ForEach(c =>
+      {
+        DataRow newRow = table.NewRow();
+        var values = properties.Select(v => v.GetValue(c) ?? DBNull.Value).ToArray();
+
+        columnsChanged.ForEach(col =>
+        {
+          if (showCheckMark)
+            values[col] = (values[col].ToString().ToLower() == "true") ? "ü" : "";
+          else
+            values[col] = (values[col].ToString().ToLower() == "true") ? "Yes" : " ";
+        });
+
+        if (replaceStringNullOrWhiteSpace)
+        {
+          for (int i = 0; i < values.Length; i++)
+            if (string.IsNullOrWhiteSpace(values[i].ToString()))
+              values[i] = "-";
+        }
+
+        newRow.ItemArray = values;
+        table.Rows.Add(newRow);
+      });
+
+      return table;
     }
-    #endregion
+
+    #endregion GetDatatableFromGrid
 
     #region GetAnonymousObject
+
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <history>
     /// [edgrodriguez] 14/03/2016  Created.
@@ -111,9 +100,11 @@ namespace IM.Base.Helpers
       }
       return eo;
     }
-    #endregion
+
+    #endregion GetAnonymousObject
 
     #region SelectRow
+
     /// <summary>
     /// Selecciona un registro del grid
     /// </summary>
@@ -136,9 +127,11 @@ namespace IM.Base.Helpers
         }
       }
     }
-    #endregion
+
+    #endregion SelectRow
 
     #region ToPivot
+
     /// <summary>
     /// Obtiene una lista de arrays con los valores de la tabla
     /// con la estructura proporcionada.
@@ -160,7 +153,6 @@ Func<IEnumerable<T>, TData> dataSelector)
       var pivotcolumns = source.Select(columnSelector).Where(c => c != null).Distinct();
 
       cols = (pivotrow).Concat(pivotcolumns.Select(x => x.ToString())).ToList();
-
 
       var rows = source.GroupBy(rowSelector.Compile())
                        .Select(rowGroup => new
@@ -187,6 +179,6 @@ Func<IEnumerable<T>, TData> dataSelector)
       return values;
     }
 
-    #endregion
+    #endregion ToPivot
   }
 }

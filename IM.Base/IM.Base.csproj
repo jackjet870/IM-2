@@ -47,6 +47,7 @@
     <Reference Include="SAPBusinessObjects.WPF.ViewerShared, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Linq.Dynamic, Version=1.0.5840.25917, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Linq.Dynamic.1.0.6\lib\net40\System.Linq.Dynamic.dll</HintPath>
       <Private>True</Private>
@@ -73,14 +74,14 @@
     <Compile Include="Forms\frmError.xaml.cs">
       <DependentUpon>frmError.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmAbout.xaml.cs" >
-	<DependentUpon>frmAbout.xaml</DependentUpon>
+    <Compile Include="Forms\frmAbout.xaml.cs">
+      <DependentUpon>frmAbout.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmChangePassword.xaml.cs">
       <DependentUpon>frmChangePassword.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmConsultaBase.xaml.cs" >
-	  <DependentUpon>frmConsultaBase.xaml</DependentUpon>
+    <Compile Include="Forms\frmConsultaBase.xaml.cs">
+      <DependentUpon>frmConsultaBase.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmInvitationBase.xaml.cs">
       <DependentUpon>frmInvitationBase.xaml</DependentUpon>
