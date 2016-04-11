@@ -22,11 +22,12 @@ namespace IM.Model.Classes
     public bool SubtotalTop { get; set; } = false;
     public bool Outline { get; set; } = false;
     public bool Compact { get; set; } = false;
-    public ePivotFieldAxis Axis { get; set; } = ePivotFieldAxis.Row;
+    public ePivotFieldAxis Axis { get; set; } = ePivotFieldAxis.None;
     public int Order { get; set; }
     public string Formula { get; set; }
     public bool showAll { get; set; } = false;
     public eSortType Sort { get; set; } = eSortType.None;
     public string PropertyName { get; set; }
+    public string SuperHeader { get; set; }
   }
 }

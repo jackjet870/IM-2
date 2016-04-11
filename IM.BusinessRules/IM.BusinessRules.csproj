@@ -101,6 +101,7 @@
     <Compile Include="BR\BRPersonnelDayOff.cs" />
     <Compile Include="BR\BRPrStats.cs" />
     <Compile Include="BR\BRRegions.cs" />
+    <Compile Include="BR\BRReportsByLeadSource.cs" />
     <Compile Include="BR\BRTourTimesAvailables.cs" />
     <Compile Include="BR\BRSalesRoomsLogs.cs" />
     <Compile Include="BR\BRSales.cs" />
@@ -132,9 +133,18 @@
     <Compile Include="BR\BRSalesRooms.cs" />
     <Compile Include="Enums\PlaceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IM.Model\IM.Model.csproj">
