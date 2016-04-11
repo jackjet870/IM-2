@@ -2120,5 +2120,14 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptInOut>("USP_OR_RptInOut", dateFromParameter, dateToParameter, salesRoomsParameter);
         }
+    
+        public virtual ObjectResult<GuestShort> USP_OR_GetGuestById(Nullable<int> guest)
+        {
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestShort>("USP_OR_GetGuestById", guestParameter);
+        }
     }
 }
