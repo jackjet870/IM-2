@@ -332,6 +332,9 @@
     <Compile Include="GuestsGroup.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="GuestShort.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="GuestShowNoPresentedInvitation.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
