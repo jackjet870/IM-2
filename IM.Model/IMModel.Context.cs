@@ -2175,5 +2175,64 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptMealTicketsCost>("USP_OR_RptMealTicketsCost", dateFromParameter, dateToParameter, salesRoomsParameter, rateTypesParameter);
         }
+    
+        public virtual ObjectResult<RptMemberships> USP_OR_RptMemberships(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms, string leadSources)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptMemberships>("USP_OR_RptMemberships", dateFromParameter, dateToParameter, salesRoomsParameter, leadSourcesParameter);
+        }
+    
+        public virtual ObjectResult<RptMembershipsByAgencyMarket> USP_OR_RptMembershipsByAgencyMarket(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptMembershipsByAgencyMarket>("USP_OR_RptMembershipsByAgencyMarket", dateFromParameter, dateToParameter, salesRoomsParameter);
+        }
+    
+        public virtual ObjectResult<RptMembershipsByHost> USP_OR_RptMembershipsByHost(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms, string leadSources)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptMembershipsByHost>("USP_OR_RptMembershipsByHost", dateFromParameter, dateToParameter, salesRoomsParameter, leadSourcesParameter);
+        }
     }
 }

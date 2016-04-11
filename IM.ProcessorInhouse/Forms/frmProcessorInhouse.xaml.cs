@@ -71,7 +71,7 @@ namespace IM.ProcessorInhouse.Forms
 
     public EnumExternalInvitation _enumExternalInvitation;
 
-    private EnumPrograms _enumPrograms;
+    private EnumProgram _enumPrograms;
     private EnumRptLeadSource _rptLeadSource;
     private EnumRptGeneral _rptGeneral;
     private EnumRptPR _rptPR;
@@ -277,7 +277,7 @@ namespace IM.ProcessorInhouse.Forms
       // obtenemos las fechas iniciales de los reportes
       GetFirstDayValue();
 
-      _enumPrograms = EnumPrograms.pgInhouse; //Programa
+      _enumPrograms = EnumProgram.Inhouse; //Programa
       _enumBasedOnArrival = EnumBasedOnArrival.boaBasedOnArrival; //Basado en llegada
       _enumQuinellas = EnumQuinellas.quNoQuinellas; //No considerar quinielas
       _enumSaveCourtesyTours = EnumSaveCourtesyTours.sctIncludeSaveCourtesyTours; //Incluir tours de rescate y cortesia
@@ -482,7 +482,7 @@ namespace IM.ProcessorInhouse.Forms
           break;
 
         case EnumRptLeadSource.ProductionbyAgencyNights:
-          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, enumPrograms: EnumPrograms.pgInhouse,
+          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, enumPrograms: EnumProgram.Inhouse,
             blnLeadSources: true, enumBasedOnArrival: _enumBasedOnArrival, enumQuinellas: _enumQuinellas,
             enumSalesByMemberShipType: _enumSalesByMemberShipType, enumExternalInvitation: _enumExternalInvitation,
             blnNight: true);
@@ -490,7 +490,7 @@ namespace IM.ProcessorInhouse.Forms
 
         case EnumRptLeadSource.ProductionbyNationality:
         case EnumRptLeadSource.ProductionbyNationalityMarketOriginallyAvailable:
-          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, enumPrograms: EnumPrograms.pgInhouse,
+          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, enumPrograms: EnumProgram.Inhouse,
             blnLeadSources: true, enumBasedOnArrival: _enumBasedOnArrival, enumQuinellas: _enumQuinellas,
             enumDetailGifts: _enumDetailsGift);
           break;
@@ -498,7 +498,7 @@ namespace IM.ProcessorInhouse.Forms
         case EnumRptLeadSource.ProductionbyAgency:
         case EnumRptLeadSource.ProductionbyAgencyOnlyQuinellas:
           _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister,
-            enumPrograms: EnumPrograms.pgInhouse,
+            enumPrograms: EnumProgram.Inhouse,
             blnLeadSources: true, enumBasedOnArrival: _enumBasedOnArrival, enumQuinellas: _enumQuinellas,
             enumSalesByMemberShipType: _enumSalesByMemberShipType,
             enumExternalInvitation: _enumExternalInvitation);
@@ -506,14 +506,14 @@ namespace IM.ProcessorInhouse.Forms
 
         case EnumRptLeadSource.CostbyPR:
           _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister,
-            enumPrograms: EnumPrograms.pgInhouse,
+            enumPrograms: EnumProgram.Inhouse,
             blnLeadSources: true, enumQuinellas: _enumQuinellas, enumDetailGifts: _enumDetailsGift);
           break;
 
         case EnumRptLeadSource.ScorebyPR:
         case EnumRptLeadSource.ShowFactorbyBookingDate:
           _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister,
-            enumPrograms: EnumPrograms.pgInhouse,
+            enumPrograms: EnumProgram.Inhouse,
             blnLeadSources: true, enumQuinellas: _enumQuinellas);
           break;
 
@@ -530,7 +530,7 @@ namespace IM.ProcessorInhouse.Forms
         case EnumRptLeadSource.ProductionbyPRSalesRoom:
         case EnumRptLeadSource.ProductionbyPRGroup:
           _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister,
-            enumPrograms: EnumPrograms.pgInhouse, blnLeadSources: true,
+            enumPrograms: EnumProgram.Inhouse, blnLeadSources: true,
             enumBasedOnArrival: _enumBasedOnArrival, enumQuinellas: _enumQuinellas);
           break;
 
@@ -539,20 +539,20 @@ namespace IM.ProcessorInhouse.Forms
         case EnumRptLeadSource.ProductionbyContractAgency:
         case EnumRptLeadSource.ProductionbyContractAgencyMarketOriginallyAvailable:
           _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister,
-            enumPrograms: EnumPrograms.pgInhouse, blnLeadSources: true,
+            enumPrograms: EnumProgram.Inhouse, blnLeadSources: true,
             blnMarkets: true, blnAllMarkets: true, blnAgencies: true, blnAllAgencies: true,
             enumQuinellas: _enumQuinellas);
           break;
 
         case EnumRptLeadSource.UnavailableMotivesByAgency:
           _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister,
-            enumPrograms: EnumPrograms.pgInhouse, blnLeadSources: true,
+            enumPrograms: EnumProgram.Inhouse, blnLeadSources: true,
             blnMarkets: true, blnAllMarkets: true, blnAgencies: true, blnAllAgencies: true);
           break;
 
         default:
           _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister,
-            enumPrograms: EnumPrograms.pgInhouse, blnLeadSources: true);
+            enumPrograms: EnumProgram.Inhouse, blnLeadSources: true);
           break;
       }
       WaitMessage(false);

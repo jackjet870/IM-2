@@ -7,12 +7,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("IM.ProcessorInhouse")]
-[assembly: AssemblyDescription("Intelligence Marketing Processor Inhouse")]
+[assembly: AssemblyTitle("Intelligence Marketing - Processor Inhouse")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Amazon.com")]
-[assembly: AssemblyProduct("IM.ProcessorInhouse")]
-[assembly: AssemblyCopyright("Copyright © Amazon.com 2016")]
+[assembly: AssemblyCompany("Palace Resorts")]
+[assembly: AssemblyProduct("Intelligence Marketing - Processor Inhouse")]
+[assembly: AssemblyCopyright("Copyright © 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

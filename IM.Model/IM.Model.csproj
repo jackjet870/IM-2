@@ -669,6 +669,15 @@
     <Compile Include="RptMealTicketsCost.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptMemberships.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptMembershipsByAgencyMarket.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptMembershipsByHost.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptPersonnel.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

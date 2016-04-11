@@ -357,7 +357,7 @@ namespace IM.ProcessorInhouse.Forms
         bool blnChargeTo = false, bool blnAllChargeTo = false, bool blnGifts = false, bool blnAllGifts = false,
         bool blnMarkets = false, bool blnAllMarkets = false, bool blnAgencies = false, bool blnAllAgencies = false,
         bool blnCountries = false, bool blnAllCountries = false, bool blnGiftsQuantity = false, bool blnAllGiftsQuantity = false,
-        EnumPeriod enumPeriod = EnumPeriod.pdNone, EnumPrograms enumPrograms = EnumPrograms.pgAll, EnumBasedOnArrival? enumBasedOnArrival = null,
+        EnumPeriod enumPeriod = EnumPeriod.pdNone, EnumProgram enumPrograms = EnumProgram.All, EnumBasedOnArrival? enumBasedOnArrival = null,
         EnumBasedOnBooking? enumBasedOnBooking = null, EnumQuinellas? enumQuinellas = null, EnumDetailGifts? enumDetailGifts = null,
         EnumSalesByMemberShipType? enumSalesByMemberShipType = null, EnumStatus? enumStatus = null, EnumGiftsReceiptType? enumGiftsReceiptType = null,
         string strGuestID = null, EnumGiftSale? enumGiftSale = null, EnumSaveCourtesyTours? enumSaveCourtesyTours = null,

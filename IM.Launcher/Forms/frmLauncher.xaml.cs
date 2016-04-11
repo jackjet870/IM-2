@@ -180,7 +180,7 @@ namespace IM.Launcher.Forms
           Process.Start(String.Format("{0}\\IM.InventoryMovements.exe", path));
           break;
         case EnumMenu.ProcessorINH:
-          UIHelper.ShowMessage("Coming soon..");
+          Process.Start(String.Format("{0}\\IM.ProcessorInhouse.exe", path));
           break;
         case EnumMenu.ProcessorOUT:
           Process.Start(String.Format("{0}\\IM.ProcessorOuthouse.exe", path));
