@@ -8,7 +8,7 @@
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
         x:Class="IM.Inhouse.frmInhouse"
         mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="InHouse" x:Name="house"  Width="1366" Height="768"  WindowState="Maximized" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
+        Title="Inhouse" x:Name="house"  Width="1100" Height="700"  WindowState="Maximized" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
     <Window.Resources>
         <CollectionViewSource x:Key="guestArrivalViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestArrival}, CreateList=True}"/>
         <CollectionViewSource x:Key="guestAvailableViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestAvailable }, CreateList=True}"/>
@@ -21,23 +21,32 @@
             <Setter Property="Width" Value="45"/>
             <Setter Property="Background" Value="White"/>
         </Style>
+        
         <Style TargetType="Image" x:Key="ImageOptions">
             <Setter Property="Width" Value="24"/>
             <Setter Property="Height" Value="24"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
+        
         <Style TargetType="TextBlock" x:Key="txtOptions">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="9"/>
             <Setter Property="ForceCursor" Value="True"/>
         </Style>
-    
+
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="#FF99C3D4"/>
+        </Style>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Height" Value="75"/>
+        </Style>
     </Window.Resources>
 
     <Grid>
         <!--#region Configuración del Grid Principal -->
         <Grid.RowDefinitions>
-            <RowDefinition Height="83"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="86*"/>
             <RowDefinition Height="AUTO"/>
         </Grid.RowDefinitions>
@@ -57,7 +66,7 @@
             </Grid.ColumnDefinitions>
 
             <!--#region Botones-->
-            <GroupBox x:Name="grbMenu" Grid.Column="0" Header="Options"  VerticalAlignment="Top" Height="70" FontWeight="Bold" Margin="10,5,5,0"  >
+            <GroupBox x:Name="grbMenu" Grid.Column="0" Header="Options"  VerticalAlignment="Top" FontWeight="Bold" Margin="10,5,5,0"  >
                 <Grid x:Name="grdOpciones" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -69,7 +78,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="btnLogin" Grid.Column="0"   Style="{StaticResource ResourceKey=btnOptions}"  >
+                    <Button x:Name="btnLogin" Grid.Column="0"   Style="{StaticResource ResourceKey=btnOptions}" Click="btnLogin_Click"  >
                         <StackPanel >
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Login.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Login" Style="{StaticResource ResourceKey=txtOptions}"/>
@@ -99,7 +108,7 @@
                             <TextBlock Text="Groups" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnAbout" Grid.Column="5"  Style="{StaticResource ResourceKey=btnOptions}">
+                    <Button x:Name="btnAbout" Grid.Column="5"  Style="{StaticResource ResourceKey=btnOptions}" Click="btnAbout_Click">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/About.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="About" Style="{StaticResource ResourceKey=txtOptions}"/>
@@ -144,13 +153,13 @@
             <!--#region Grupos Available, Contacted, Invited, On Group y Markets-->
             <Grid Grid.Column="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <GroupBox Grid.Column="0" Header ="Available" Margin="5" x:Name="gprAvailable" >
+                <GroupBox Grid.Column="0" Header ="Available" Margin="5" x:Name="gprAvailable"  >
                     <StackPanel Orientation="Vertical">
                         <RadioButton Checked="rb_Checked" TabIndex="1"  x:Name="rbNoAvailable" Content="  No"  Margin="2.5"/>
                         <RadioButton Checked="rb_Checked" TabIndex="2"   x:Name="rbYesAvailable" Content="  Yes" Margin="2.5"/>
@@ -179,7 +188,7 @@
                     </StackPanel>
                 </GroupBox>
 
-                <ListView Grid.Column="4"  Margin="4" FontSize="10" Width="70"  x:Name="listMarkets" Background="DarkSeaGreen"  SelectionChanged="listMarkets_SelectionChanged">
+                <ListView Grid.Column="4"  Margin="4" FontSize="10" Width="70" Height="75"  x:Name="listMarkets" Background="DarkSeaGreen"  SelectionChanged="listMarkets_SelectionChanged">
                     <ListView.View>
                         <GridView>
                             <!--<GridViewColumn x:Name="mkIDColumn" Width="80" Header="mk ID" DisplayMemberBinding="{Binding mkID}"  />-->
@@ -227,7 +236,6 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <!--#endregion -->
-
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -237,9 +245,9 @@
                 <Button Grid.Column="0" Name="btnArrivals" Click="btnArrivals_Clicked" FontSize="15" Background="#FFCDF9CB">Arrivals</Button>
                 <Button Grid.Column="1" Name="btnAvailables" Click="btnAvailables_Clicked" FontSize="15" Background="#FFB8EAB5">Availables</Button>
                 <Button Grid.Column="2" Name="btnPremanifiest" Click="btnPremanifiest_Click" FontSize="15" Background="#FFCDF9CB" >Premanifest</Button>
-            </Grid> 
-            <ContentControl x:Name="ccArrivals" Grid.Row="1" Visibility="Visible" DataContext="{StaticResource guestArrivalViewSource}">
-                <DataGrid x:Name="dgGuestArrival"   SelectionUnit ="FullRow"  SelectionMode="Single"  CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False"  SelectionChanged="dg_SelectionChanged">
+            </Grid>
+            <ContentControl x:Name="ccArrivals"  Grid.Row="1" Visibility="Visible" DataContext="{StaticResource guestArrivalViewSource}">
+                <DataGrid x:Name="dgGuestArrival"  SelectionUnit ="FullRow"  SelectionMode="Single"  CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False"  SelectionChanged="dg_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn"  Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -400,8 +408,8 @@
                 </DataGrid>
             </ContentControl>
 
-            <ContentControl x:Name="ccAvailables" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource guestAvailableViewSource}}">
-                <DataGrid x:Name="dgGuestAvailable" CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  CanUserSortColumns="True" AutoGenerateColumns="False" Grid.ColumnSpan="2" Grid.Column="1" EnableRowVirtualization="True"  RowDetailsVisibilityMode="VisibleWhenSelected" SelectionChanged="dg_SelectionChanged" >
+            <ContentControl x:Name="ccAvailables"   Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource guestAvailableViewSource}}">
+                <DataGrid x:Name="dgGuestAvailable"  CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  CanUserSortColumns="True" AutoGenerateColumns="False" Grid.ColumnSpan="2" Grid.Column="1" EnableRowVirtualization="True"  RowDetailsVisibilityMode="VisibleWhenSelected" SelectionChanged="dg_SelectionChanged" >
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn1" Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -539,7 +547,7 @@
                 </DataGrid>
             </ContentControl>
 
-            <ContentControl x:Name="ccPremanifest" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource guestPremanifestViewSource}}">
+            <ContentControl x:Name="ccPremanifest" Background="SkyBlue" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource guestPremanifestViewSource}}">
                 <DataGrid x:Name="dgGuestPremanifest"  CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"  EnableRowVirtualization="True"   RowDetailsVisibilityMode="Collapsed" SelectionChanged="dg_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn2" Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
@@ -682,7 +690,7 @@
                 </DataGrid>
             </ContentControl>
 
-            <ContentControl x:Name="ccGetGuest" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource guestSearchedViewSource}}">
+            <ContentControl x:Name="ccGetGuest" Background="SkyBlue" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource guestSearchedViewSource}}">
                 <DataGrid x:Name="guestSearchedDataGrid" CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"  EnableRowVirtualization="True"   RowDetailsVisibilityMode="VisibleWhenSelected" SelectionChanged="dg_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn3" Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >

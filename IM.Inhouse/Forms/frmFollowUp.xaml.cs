@@ -145,6 +145,11 @@ namespace IM.Inhouse
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
       frmLogin log = new frmLogin(null, false, EnumLoginType.Normal, false);
+      if (App.User.AutoSign)
+      {
+        //App.User.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);
+        log.userData = App.User;
+      }
       log.ShowDialog();
       if (log.IsAuthenticated)
       {
@@ -191,26 +196,37 @@ namespace IM.Inhouse
     {
       if (Validate())
       {
-        _wasSaved = true;
+        //_wasSaved = true;
         //guardamos la informacion del seguimiento
         _guest.guPRFollow = txtguPRFollow.Text;
         _guest.guFollowD = Convert.ToDateTime(txtguFollowD.Text).Date;
         _guest.guFollow = true;
-        BRGuests.SaveGuest(_guest);
 
-        //guardamos la informacion de contacto
-        BRGuestsLogs.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);
-
-        chkguFollow.IsChecked = true;
-        this.Close();
+        //Enviamos los parametros para que guarde los cambios del guest y el log del Guest.
+        //Si hubo un erro al ejecutar el metodo SaveGuestAvailOrFollowUp nos devolvera 0, indicando que ningun paso 
+        //se realizo, es decir ni se guardo el Guest ni el Log, y siendo así ya no modificamos la variable
+        //_wasSaved que es la que indica que se guardo el FollowUp.
+        if (BRGuests.SaveChangedOfGuest(_guest, App.User.LeadSource.lsHoursDif, _user.User.peID) != 0)
+        {
+          _wasSaved = true;
+          chkguFollow.IsChecked = true;
+        }
+        else
+        {
+          UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
+            MessageBoxImage.Error, "Information can not keep");
+        }
+        this.Close();        
       }
+      //BRGuests.SaveGuest(_guest);
+      //BRGuestsLogs.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);
     }
 
     #endregion
 
     #endregion
 
-    
+
   }
 }
 

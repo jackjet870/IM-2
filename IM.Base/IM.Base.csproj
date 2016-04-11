@@ -87,6 +87,7 @@
     <Compile Include="Forms\frmViewer.xaml.cs">
       <DependentUpon>frmViewer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ComputerHelper.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
     <Compile Include="Helpers\DateHelper.cs" />
     <Compile Include="Helpers\EpplusHelper.cs" />

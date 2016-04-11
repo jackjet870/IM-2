@@ -456,9 +456,15 @@ namespace IM.Inhouse
     {
       //Validamos las credenciales del usuario y sus permisos 
       frmLogin log = new frmLogin(null, false, EnumLoginType.Normal, false);
+      if (App.User.AutoSign)
+      {
+        //App.User.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);
+        log.userData = App.User;
+      }
       log.ShowDialog();
       if (log.IsAuthenticated)
       {
+        //log.userData.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);
         if (log.userData.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard))
         {
           return log;
@@ -875,24 +881,52 @@ namespace IM.Inhouse
     /// <param name="e"></param>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      Inhouse_Loaded();
+    }
 
+    #endregion
+
+    #region Inhouse_Loaded
+    /// <summary>
+    /// Inicializa Inhouse (Carga los controles y la Informacón dependiendo del LeadSource y el usuario Logueado)
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 11/04/2016
+    /// </history>
+    private void Inhouse_Loaded()
+    {
+      //Guardamos el log del login 
+      BRLoginLogs.SaveGuestLog(App.User.Location.loID, App.User.User.peID, Environment.MachineName.ToString());
+
+      //Cargamos la variable de Occupancy
+      txtOccupancy.Text = BRLeadSources.GetOccupationLeadSources(BRHelpers.GetServerDate().Date, App.User.Location.loID).ToString(); ;
+
+      //Indicamos al statusbar que me muestre cierta informacion cuando oprimimos cierto teclado
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+
       //StaStart("Load Inhouse...");
+      //Cargamos las variables del usuario
       txtUser.Text = App.User.User.peN;
       txtLocation.Text = App.User.Location.loN;
+
+      //Cargamos la fecha actual del servidor
       dtpDate.SelectedDate = BRHelpers.GetServerDate().Date;
 
+      //Inicializamos las variables de los DataGrids
       _guestArrivalViewSource = ((CollectionViewSource)(this.FindResource("guestArrivalViewSource")));
       _guestAvailableViewSource = ((CollectionViewSource)(this.FindResource("guestAvailableViewSource")));
       _guestPremanifestViewSource = ((CollectionViewSource)(this.FindResource("guestPremanifestViewSource")));
       _guestSearchedViewSource = ((CollectionViewSource)(this.FindResource("guestSearchedViewSource")));
+
+      //Cargamos los datagrids
       LoadGrid();
+
+      //Cargamos el listado de markets
       listMarkets.ItemsSource = BRMarkets.GetMarkets(1);
       //StaEnd();
-    }
-
+    } 
     #endregion
 
     #region listMarkets_SelectionChanged
@@ -939,6 +973,7 @@ namespace IM.Inhouse
         //le asignamos el valor del dtpDate a la variable global para que otro control tenga acceso al valor actual del dtpDate
         _serverDate = picker.SelectedDate.Value;
         //Cargamos el grid del tab que esta seleccionado
+       txtOccupancy.Text = BRLeadSources.GetOccupationLeadSources(picker.SelectedDate.Value, App.User.Location.loID);
         LoadGrid();
         //gprInfo.BindingGroup.GetValue                 
       }
@@ -1662,7 +1697,7 @@ namespace IM.Inhouse
 
     #endregion
 
- 
+    #region Comments_LostFocus
     private void Comments_LostFocus(object sender, RoutedEventArgs e)
     {
       var txt = sender as TextBox;
@@ -1671,13 +1706,13 @@ namespace IM.Inhouse
         Guest guest = null;
         if (txt.Name == "guCommentsColumnArrival")
         {
-          var Row = dgGuestArrival.SelectedItem as GuestArrival;          
-          guest = BRGuests.GetGuest(Row.guID);     
+          var Row = dgGuestArrival.SelectedItem as GuestArrival;
+          guest = BRGuests.GetGuest(Row.guID);
         }
         if (txt.Name == "guCommentsColumnAvailable")
         {
           var Row = dgGuestAvailable.SelectedItem as GuestAvailable;
-          guest = BRGuests.GetGuest(Row.guID);         
+          guest = BRGuests.GetGuest(Row.guID);
         }
         if (txt.Name == "guCommentsColumnPremanifest")
         {
@@ -1693,19 +1728,50 @@ namespace IM.Inhouse
         BRGuests.SaveGuest(guest);
       }
     }
+    #endregion
 
+    #region CommentsColumn_Loaded
     private void CommentsColumn_Loaded(object sender, RoutedEventArgs e)
     {
       var txt = sender as TextBox;
       txt.Focus();
     }
+    #endregion
 
+    #region btnRefresh_Click
     private void btnRefresh_Click(object sender, RoutedEventArgs e)
     {
       StaStart("Loading...");
       LoadGrid();
       StaEnd();
     }
+    #endregion
+
+    #region btnLogin_Click
+    private void btnLogin_Click(object sender, RoutedEventArgs e)
+    {
+      frmLogin log = new frmLogin(null, false, EnumLoginType.Location, true);
+      if (App.User.AutoSign)
+      {
+        log.userData = App.User;
+      }
+      log.ShowDialog();
+      if (log.IsAuthenticated)
+      {
+        App.User = log.userData;
+        Inhouse_Loaded();
+      }
+    } 
+    #endregion
+
+    #region btnAbout_Click
+    private void btnAbout_Click(object sender, RoutedEventArgs e)
+    {
+      frmAbout formAbout = new frmAbout();
+      formAbout.ShowInTaskbar = false;
+      formAbout.ShowDialog();
+    } 
+    #endregion
 
     #region btnArrivals_Clicked
     /// <summary>
@@ -1844,7 +1910,6 @@ namespace IM.Inhouse
     }
     #endregion
 
-
     #region Window_KeyDown
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
@@ -1862,7 +1927,6 @@ namespace IM.Inhouse
       }
     }
     #endregion
-
 
     #endregion
   }

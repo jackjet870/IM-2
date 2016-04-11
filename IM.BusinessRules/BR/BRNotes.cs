@@ -9,22 +9,28 @@ using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
 {
+  /// <summary>
+  /// Clase que se utiliza para las notas de un Guest
+  /// </summary>
+  /// <history>
+  /// [jorcanche] 11/04/2016
+  /// </history>
   public class BRNotes
   {
     #region GetCountNoteGuest
     /// <summary>
-    /// Devuelve el numero total de notas de un Guest
+    /// Indica si un huesped tiene notas o no
     /// </summary>
     /// <param name="guId">Id a Guest</param>
     /// <returns>bool</returns>
     /// <history>
     /// [jorcanche] created 22/03/2016
     /// </history>
-    public static int GetCountNoteGuest(int guestId)
+    public static bool  GetCountNoteGuest(int guestId)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        return (from gu in dbContext.PRNotes where gu.pngu == guestId select gu).Count();
+      {    
+        return ((from gu in dbContext.PRNotes where gu.pngu == guestId select gu).Count() > 0) ? true : false;
       }
     }
     #endregion
@@ -60,20 +66,41 @@ namespace IM.BusinessRules.BR
 
     #region SaveNoteGuest
     /// <summary>
-    /// Guarda la Nota del Guest
+    /// Guarda la Nota y modifica el Guest
     /// </summary>
     /// <param name="PRNote">Tipo nota</param>
+    ///<param name="guest">Tipo de Guest</param>
     /// <history>
     /// [jorcanche] created 14/03/2016
     /// </history>
-    public static int SaveNoteGuest(PRNote PRNote)
+    public static int SaveNoteGuest(PRNote prNote, Guest guest)
     {
-      int nRes = 0;
+      int respuesta = 0;
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        dbContext.Entry(PRNote).State = System.Data.Entity.EntityState.Added;
-        return nRes = dbContext.SaveChanges();
+        using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        {
+          try
+          {
+            ///Guardamos la informacion de la nota del guest 
+            dbContext.Entry(prNote).State = System.Data.Entity.EntityState.Added;
 
+            //Guardamos la modificación del guest si se debe modificar
+            if (guest != null)
+            {
+              dbContext.Entry(guest).State = System.Data.Entity.EntityState.Modified;
+            }
+
+            respuesta = dbContext.SaveChanges();
+            transaction.Commit();
+            return respuesta;
+          }
+          catch
+          {
+            transaction.Rollback();
+            return respuesta = 0;
+          }
+        }
       }
     }
     #endregion

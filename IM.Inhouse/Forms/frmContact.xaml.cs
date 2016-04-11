@@ -69,22 +69,7 @@ namespace IM.Inhouse
 
     #region Metodos
 
-    #region GetIPMachine
-    public string GetIPMachine()
-    {
-      IPHostEntry host;
-      string localIP = "";
-      host = Dns.GetHostEntry(Dns.GetHostName());
-      foreach (IPAddress ip in host.AddressList)
-      {
-        if (ip.AddressFamily.ToString() == "InterNetwork")
-        {
-          localIP = ip.ToString();
-        }
-      }
-      return localIP;
-    }
-    #endregion
+   
 
     #region Validate
     public bool Validate()
@@ -113,6 +98,11 @@ namespace IM.Inhouse
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
       frmLogin log = new frmLogin(null, false, EnumLoginType.Normal, false);
+      if (App.User.AutoSign)
+      {
+        //App.User.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);
+        log.userData = App.User;
+      }
       log.ShowDialog();
       if (log.IsAuthenticated)
       {
@@ -227,24 +217,33 @@ namespace IM.Inhouse
     {
       if (Validate())
       {
-        //Modificamos las variable indicando que si se guardo la variable
-        _wasSave = true;
         //guardamos la informacion de contacto
         _guest.guloInfo = _user.User.peID;
         _guest.guPRInfo = txtguPRInfo.Text;
         _guest.guInfoD = Convert.ToDateTime(txtguInfoD.Text).Date;
-        _guest.guInfo = true;
-        BRGuests.SaveGuest(_guest);
+        _guest.guInfo = true;     
 
-        //guardamos la informacion de contacto
-        BRGuestsLogs.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);
-
-        //guardamos el movimiento de contactacion del huesped
-        BRGuests.SaveGuestMovement(_guestID, EnumGuestsMovementsType.Contact, _user.User.peID, Environment.MachineName.ToString(), GetIPMachine());
-
-        chkguInfo.IsChecked = true;
+        //Enviamos los parametros para que guarde los cambios del guest y el log del Guest y de igual forma los moviemientos de este (SaveGuestMovement).
+        //Si hubo un erro al ejecutar el metodo SaveGuestContact nos devolvera 0, indicando que ningun paso 
+        //se realizo, es decir ni se guardo el Guest, el Log ni los movimientos de este, siendo así ya no modificamos la variable
+        //_wasSaved que es la que indica que se guardo el Avail.
+        if (BRGuests.SaveGuestContact(_guest, App.User.LeadSource.lsHoursDif, _user.User.peID,
+            EnumGuestsMovementsType.Contact,Environment.MachineName.ToString(),ComputerHelper.GetIPMachine()) != 0)
+        {
+          //Modificamos las variable indicando que si se guardo la variable
+          _wasSave = true;
+          chkguInfo.IsChecked = true;
+        }
+        else
+        {
+          UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
+            MessageBoxImage.Error, "Information can not keep");
+        }
         this.Close();
       }
+      //BRGuests.SaveGuest(_guest);        
+      //BRGuestsLogs.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);
+      //BRGuests.SaveGuestMovement(_guestID, EnumGuestsMovementsType.Contact, _user.User.peID, Environment.MachineName.ToString(), GetIPMachine());
     }
     #endregion
 

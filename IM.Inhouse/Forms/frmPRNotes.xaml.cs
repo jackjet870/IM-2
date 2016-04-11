@@ -57,21 +57,44 @@ namespace IM.Inhouse.Forms
         note.pngu = _guestID;
         note.pnPR = txtpnPR.Text;
         note.pnText = txtpnText.Text;
-        BRNotes.SaveNoteGuest(note);
-        //Actualizamos el guest 
-        Guest guest = BRGuests.GetGuest(_guestID);
-        guest.guPRNote = true;
-        BRGuests.SaveGuest(guest);
-        //Actualizamos el datagrid 
-        _pRNoteViewSource.Source = BRNotes.GetNoteGuest(_guestID);
+
+        //Actualizamos el guest si no tiene ninguna nota
+        Guest guest = null;
+        if (!BRNotes.GetCountNoteGuest(_guestID))
+        {
+          guest = BRGuests.GetGuest(_guestID);
+          guest.guPRNote = true;
+          _saveNote = true;
+        }
+        else
+        {
+          _saveNote = false;
+        }
+
+        //Enviamos los parametros para que agregue la nueva nota y modificamos el guest.
+        //Si hubo un erro al ejecutar el metodo SaveNoteGuest nos devolvera 0, indicando que ningun paso 
+        //se realizo, es decir ni se agrego la nota y se modifico el guest, y siendo así ya no modificamos la variable
+        //_saveNote que es el que indica que se guardo el Avail.
+        if (BRNotes.SaveNoteGuest(note, guest) != 0)
+        {
+          //Actualizamos el datagrid 
+          _pRNoteViewSource.Source = BRNotes.GetNoteGuest(_guestID);
+        }
+        else
+        {
+          //De no ser así informamos que no se guardo la información por algun motivo
+          UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
+            MessageBoxImage.Error, "Information can not keep");   
+        }
         CleanControls();
         _CreatingNote = false;
-        _saveNote = true;
       }
       else
       {
         EnabledControls(false, false, true);
       }
+      //BRNotes.SaveNoteGuest(note);
+      //BRGuests.SaveGuest(guest);
     }
     #endregion
 
@@ -165,9 +188,13 @@ namespace IM.Inhouse.Forms
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
       CleanControls();
-      txtpnPR.Text = App.User.User.peID;
-      cbopnPR.SelectedValue = App.User.User.peID;
-      txtPwd.Password = EncryptHelper.Encrypt(App.User.User.pePwd);
+
+      if (App.User.AutoSign)
+      {
+        txtpnPR.Text = App.User.User.peID;
+        cbopnPR.SelectedValue = App.User.User.peID;
+        txtPwd.Password = App.User.User.pePwd;
+      }      
       EnabledControls(false, false, true);
       //ingresamos la fecha en el campo 
       txtpnDT.Text = BRHelpers.GetServerDate().ToString();
@@ -211,7 +238,7 @@ namespace IM.Inhouse.Forms
           if (!_searchPRbyTxt)
           {
             txtpnPR.Text = ((PersonnelShort)cbopnPR.SelectedItem).peID;
-            txtPwd.Password = (App.User.User.peID != txtpnPR.Text ? string.Empty : EncryptHelper.Encrypt(App.User.User.pePwd));
+            Pass();
           }
         }
         else
@@ -222,6 +249,11 @@ namespace IM.Inhouse.Forms
     }
     #endregion
 
+
+    public void Pass()
+    {
+      txtPwd.Password = (App.User.AutoSign ? (App.User.User.peID != txtpnPR.Text ? string.Empty : App.User.User.pePwd) : string.Empty);
+    }
     #region txtpnPR_LostFocus
     private void txtpnPR_LostFocus(object sender, RoutedEventArgs e)
     {
@@ -245,9 +277,9 @@ namespace IM.Inhouse.Forms
       {
         cbopnPR.SelectedIndex = -1;
       }
-      //Si es el mismo usuario que esta actualmente logueado entonces le agregamos la contraseña y la desencriptamos 
+      //Si es el mismo usuario que esta actualmente logueado y si puso autosing entonces le agregamos la contraseña y la desencriptamos 
       //de no ser así lo dejamos vacio
-      txtPwd.Password = (App.User.User.peID != txtpnPR.Text ? string.Empty : EncryptHelper.Encrypt(App.User.User.pePwd));
+      Pass();
       _searchPRbyTxt = false;
     }
     #endregion
@@ -276,7 +308,7 @@ namespace IM.Inhouse.Forms
         cbopnPR.SelectedValue = item.PR;
         txtpnPR.Text = item.PR;
         //txtPwd.Password = BRPersonnel.GetPersonnelById(item.PR).pePwd;
-        txtPwd.Password = (App.User.User.peID != txtpnPR.Text ? string.Empty : EncryptHelper.Encrypt(App.User.User.pePwd));
+        Pass();
         txtpnText.Text = item.Text;
         txtpnDT.Text = item.Date.ToString();
         EnabledControls(true, true, false);

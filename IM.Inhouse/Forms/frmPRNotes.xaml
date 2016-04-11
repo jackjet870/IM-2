@@ -117,7 +117,7 @@
         <!--#region Botones-->
         <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,0,0,10">
             <Button x:Name="btnAdd" Margin="10,0,0,0" Width="60" Height="25" Content="Add" Click="btnAdd_Click"/>
-            <Button x:Name="btnSave" Margin="10,0,0,0" Width="60" Content="Save" Click="btnSave_Click" />
+            <Button x:Name="btnSave" Margin="10,0,0,0" Width="60" Content="Save" Click="btnSave_Click" Height="25" VerticalAlignment="Top" />
             <Button x:Name="btnCancel" Margin="10,0,0,0" Width="60" Height="25" Content="Cancel" Click="btnCancel_Click" VerticalAlignment="Top"/>
         </StackPanel>
         <!--#endregion-->

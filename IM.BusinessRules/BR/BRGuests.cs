@@ -168,7 +168,6 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
-
     #region GetGuest
     /// <summary>
     /// get a Guest
@@ -605,7 +604,7 @@ namespace IM.BusinessRules.BR
         }
         return lstGuest;
       }
-    } 
+    }
     #endregion
 
     #region GetGuestStatus
@@ -621,6 +620,90 @@ namespace IM.BusinessRules.BR
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.GuestsStatus.Where(g => g.gtgu == guestId).ToList();
+      }
+    }
+    #endregion
+
+    #region SaveChangedOfGuest
+    /// <summary>
+    /// Guarda los cambios en un guest y de igual forma el Log de este.
+    /// </summary>
+    /// <param name="guest">El Guest que se desea modificar</param>
+    /// <param name="lsHoursDif">Hours dif para guardar el Log</param>
+    /// <param name="changedBy">Usuario quien modifico el Guest y Log</param>
+    /// <history>
+    /// [jorcanche] 07/04/2016 Created
+    /// </history>
+    public static int SaveChangedOfGuest(Guest guest, short lsHoursDif, string changedBy)
+    {
+      int respuesta = 0;
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        {
+          try
+          {
+            //Guardamos los cambios en el Guest
+            dbContext.Entry(guest).State = System.Data.Entity.EntityState.Modified;
+
+            //Guardamos el Log del guest
+            dbContext.USP_OR_SaveGuestLog(guest.guID, lsHoursDif, changedBy);
+
+            respuesta = dbContext.SaveChanges();
+            transaction.Commit();
+            return respuesta;
+          }
+          catch
+          {
+            transaction.Rollback();
+            return respuesta = 0;
+          }
+        }
+      }
+    }
+    #endregion
+
+    #region SaveGuestContact
+    /// <summary>
+    /// Guarda la Contactacion del guest, el Log y de igual forma los moviemientos de este (SaveGuestMovement).
+    /// </summary>
+    /// <param name="guest">El Guest que se desea guardar</param>
+    /// <param name="lsHoursDif">Hours dif para guardar el Log</param>
+    /// <param name="changedBy">Usuario quin modifico el registro</param>
+    /// <param name="guestMovementType">Tipo de Moviemiento en este caso es "Contact"</param>
+    /// <param name="computerName">Nombre de la computadora en donde se esta modificando el Guest</param>
+    /// <param name="iPAddress">Dirrecion IP de la computadora en donde se esta modificando el Guest</param>
+    /// <history>
+    /// [jorcanche] 07/04/2016 Created
+    /// </history>
+    public static int SaveGuestContact(Guest guest, short lsHoursDif, string changedBy, EnumGuestsMovementsType guestMovementType, string computerName, string iPAddress)
+    {
+      int respuesta = 0;
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        {
+          try
+          {
+            //guardamos la informacion de contacto
+            dbContext.Entry(guest).State = System.Data.Entity.EntityState.Modified;
+
+            //guardamos el Log del huesped
+            dbContext.USP_OR_SaveGuestLog(guest.guID, lsHoursDif, changedBy);
+
+            //guardamos el movimiento de contactacion del huesped
+            dbContext.USP_OR_SaveGuestMovement(guest.guID, StrToEnums.EumGuestsMovementsTypeToString(guestMovementType), changedBy, computerName, iPAddress);
+
+            respuesta = dbContext.SaveChanges();
+            transaction.Commit();
+            return respuesta;
+          }
+          catch
+          {
+            transaction.Rollback();
+            return respuesta = 0;
+          }
+        }
       }
     }
     #endregion

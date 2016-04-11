@@ -45,7 +45,7 @@ namespace IM.Inhouse.Forms
     {
       get
       {
-        return (!txtReservation.Text.Equals(string.Empty) ? txtRoomNum.Text : "ALL");
+        return (!txtReservation.Text.Equals(string.Empty) ? txtReservation.Text : "ALL");
       }
     }
     public int _guestID

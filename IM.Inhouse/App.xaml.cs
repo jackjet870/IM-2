@@ -1,4 +1,5 @@
 ﻿using IM.Base.Forms;
+using IM.Base.Helpers;
 using IM.Model.Classes;
 using IM.Model.Enums;
 using System.Windows;
@@ -36,16 +37,19 @@ namespace IM.Inhouse
     /// <summary>
     /// Inicializa el modulo con el Login y el Splash
     /// </summary>
+    /// <history>
+    /// [jorcanche] 11/04/2016  created 
+    /// </history>
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Inhouse");
-      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location);
+      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location,true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;
+        User = frmLogin.userData;        
         frmInhouse frmMain = new frmInhouse();
         frmMain.ShowDialog();
         frmSplash.Close();

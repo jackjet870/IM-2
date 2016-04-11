@@ -277,20 +277,29 @@ namespace IM.Inhouse
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
       if (Validate())
-      {
-        //Modificamos las variable indicando que si se guardo la variable
-        _wasSaved = true;
-        //guardamos la informacion de contacto
+      {               
+        //guardamos la informacion de disponibilidad
         _guest.guum = txtguum.Text != string.Empty ? Convert.ToByte(txtguum.Text) : (byte) 0;
         _guest.guOriginAvail = chkguOriginAvail.IsChecked.Value;
         _guest.guAvail = chkguAvail.IsChecked.Value;
         _guest.guPRAvail = txtguPRAvail.Text;
-        BRGuests.SaveGuest(_guest);
-        //Se guarda el Log del Guest 
-        BRGuestsLogs.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);
-        this.Close();
+
+        //Enviamos los parametros para que guarde los cambios del guest y el log del Guest.
+        //Si hubo un erro al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso 
+        //se realizo, es decir ni se guardo el Guest ni el Log, y siendo así ya no modificamos la variable
+        //_wasSaved que es el que indica que se guardo el Avail.
+        if (BRGuests.SaveChangedOfGuest(_guest, App.User.LeadSource.lsHoursDif, _user.User.peID) != 0)
+        {
+          _wasSaved = true;
+        }   
+        else
+        {
+          //De no ser así informamos que no se guardo la información por algun motivo
+          UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
+            MessageBoxImage.Error, "Information can not keep");
+        }    
+        this.Close();        
       }
-      else { MessageBox.Show("don´t save"); }
     }
     #endregion
 
@@ -306,6 +315,12 @@ namespace IM.Inhouse
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
       frmLogin log = new frmLogin();
+      if (App.User.AutoSign)
+      {
+        //App.User.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);
+        //MessageBox.Show(App.User.User.pePwd.ToString());
+        log.userData = App.User;
+      }
       log.ShowDialog();
       if (log.IsAuthenticated)
       {

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using IM.Model;
 using IM.BusinessRules.BR;
+using IM.Base.Helpers;
 
 namespace IM.Inhouse.Forms
 {
@@ -78,16 +79,26 @@ namespace IM.Inhouse.Forms
     private void ValidateSave()
     {
       //Invertimos el valor del Check si cancelo o lo descancelo
-      _cancelado = chkguBookCanc.IsChecked = chkguBookCanc.IsChecked.Value ? false : true;
-
+      _cancelado = chkguBookCanc.IsChecked = !chkguBookCanc.IsChecked.Value;
       //Guardamos el BookCanceled
       _guest.guBookCanc = _cancelado.Value;
-      BRGuests.SaveGuest(_guest);
-
-      //guardamos la informacion de contacto
-      BRGuestsLogs.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.peID);
-
+      
+      //Enviamos los parametros para que guarde los cambios del guest y el log del Guest.
+      //Si hubo un erro al ejecutar el metodo SaveChangedOfGuest nos devolvera 0, indicando que ningun paso 
+      //se realizo, es decir ni se guardo el Guest ni el Log, y siendo así ya no modificamos la variable
+      //_wasSaved que es el que indica que se guardo el Avail.
+      if (BRGuests.SaveChangedOfGuest(_guest, App.User.LeadSource.lsHoursDif, _user.peID) == 0)
+      {
+        //De no ser así informamos que no se guardo la información por algun motivo
+        UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
+          MessageBoxImage.Error, "Information can not keep");
+        //Regresamos el Valor a como estaba
+        _cancelado = chkguBookCanc.IsChecked = !chkguBookCanc.IsChecked.Value;
+      }
       this.Close();
+
+      //BRGuests.SaveGuest(_guest);
+      //BRGuestsLogs.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.peID);
     }
     #endregion
 

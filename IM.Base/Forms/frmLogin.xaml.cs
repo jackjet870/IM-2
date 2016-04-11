@@ -171,8 +171,10 @@ namespace IM.Base.Forms
     /// [jorcanche] 01/03/2016 Modified (Se agrega el "Case" Location)
     /// [vipacheco] 01/03/2016 Modified --> Se agrego validacion case para Sales Room
     /// [erosado] 19/Mar/2016 Validamos que el _frmBase no sea null
-    /// </history>
-    private void btnAceptar_Click(object sender, RoutedEventArgs e)
+    /// [jorcanche] 11/04/2016 Si chkAutoSign es verdadero desencriptamos el password y se guarda 
+    ///                         Y AutoSign se deja como verdadero
+    /// </history>   
+  private void btnAceptar_Click(object sender, RoutedEventArgs e)
     {
       if (!Validate())
         return;
@@ -264,6 +266,7 @@ namespace IM.Base.Forms
       if ((bool)chkAutoSign.IsChecked)
       {
         this.userData.AutoSign = true;
+        this.userData.User.pePwd = EncryptHelper.Encrypt(this.userData.User.pePwd);
       }
 
       IsAuthenticated = true;
@@ -330,6 +333,7 @@ namespace IM.Base.Forms
     /// [edgrodriguez] 29/02/2016 Modified
     /// [jorcanche] 01/03/2016 Modified (Se agrega el "Case" Location)
     /// [vipacheco] 01/03/2016 Modified --> Se agrego case para Sales Room
+    /// [jorcanche] 11/04/2016 Modified se agrega la condicion AutoSign
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
@@ -375,6 +379,10 @@ namespace IM.Base.Forms
           if (userData.SalesRoom != null)
           {
             DoGetSalesRoomsByUser(this.userData.User.peID, true);
+          }
+          if (userData.AutoSign)
+          {
+            chkAutoSign.IsChecked = true;
           }
         }
       }

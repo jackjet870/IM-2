@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Inhouse"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Inhouse.frmGuestLog"
         mc:Ignorable="d" Background="Beige"  ResizeMode="NoResize" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="Guest Log"  Height="297.736" Width="846.792" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+        Title="Guest Log" ShowInTaskbar="False"  Height="297.736" Width="846.792" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <CollectionViewSource x:Key="GuestLogViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GuestLogData}, CreateList=True}"/>
     </Window.Resources>
