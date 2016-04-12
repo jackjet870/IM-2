@@ -6260,14 +6260,69 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Parameter Name="HoursDif" Type="smallint" Mode="In" />
           <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_TransferAddAgencies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferAddAgenciesHotel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferAddContracts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferAddCountries" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferAddCountriesHotel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferAddGroups" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferAddGuests" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferAddRoomTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferDeleteReservationsCancelled" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_TransferStart" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferStop" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_TransferStopZone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Zone" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_TransferUpdateAgenciesHotelNames" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateAgenciesNames" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateContractsNames" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateCountriesHotelNames" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateCountriesNames" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGroupsNames" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsAgencies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsAges" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsAvailabilityUnavailableMotives" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_TransferUpdateGuestsAvailables" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="USP_OR_TransferUpdateGuestsBirthDates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsCheckInDates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsCheckIns" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsCheckOutDates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsCheckOutsEarly" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsCities" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsContracts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsCountries" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsCreditCards" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsEmails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsFirstNames" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsGuestTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsIdProfileOpera" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsLastNames" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsMarkets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsPax" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsReservationTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsRoomNumbers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsRoomTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsStates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateGuestsUnavailableMotives1NightRevert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateRoomTypesNames" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateTransferAgencies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateTransferAvailability" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateTransferCountries" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateTransferLanguages" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateTransferMarkets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateTransferUnavailableMotivesBy1Night" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateTransferUnavailableMotivesBy2Nights" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateTransferUnavailableMotivesByAgency" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateTransferUnavailableMotivesByContract" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateTransferUnavailableMotivesByCountry" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateTransferUnavailableMotivesByGroups" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateTransferUnavailableMotivesByNewMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateTransferUnavailableMotivesByPax" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferUpdateTransferUnavailableMotivesByTransfer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_UpdateExchangeRate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="Currency" Type="varchar" Mode="In" />
@@ -15608,6 +15663,61 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
             <Parameter Name="SalesRooms" Mode="In" Type="String" />
             <Parameter Name="LeadSources" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_TransferAddAgencies" />
+          <FunctionImport Name="USP_OR_TransferAddAgenciesHotel" />
+          <FunctionImport Name="USP_OR_TransferAddContracts" />
+          <FunctionImport Name="USP_OR_TransferAddCountries" />
+          <FunctionImport Name="USP_OR_TransferAddCountriesHotel" />
+          <FunctionImport Name="USP_OR_TransferAddGroups" />
+          <FunctionImport Name="USP_OR_TransferAddGuests" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="USP_OR_TransferAddRoomTypes" />
+          <FunctionImport Name="USP_OR_TransferDeleteReservationsCancelled" />
+          <FunctionImport Name="USP_OR_TransferStop" />
+          <FunctionImport Name="USP_OR_TransferUpdateAgenciesHotelNames" />
+          <FunctionImport Name="USP_OR_TransferUpdateAgenciesNames" />
+          <FunctionImport Name="USP_OR_TransferUpdateContractsNames" />
+          <FunctionImport Name="USP_OR_TransferUpdateCountriesHotelNames" />
+          <FunctionImport Name="USP_OR_TransferUpdateCountriesNames" />
+          <FunctionImport Name="USP_OR_TransferUpdateGroupsNames" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsAgencies" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsAges" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsAvailabilityUnavailableMotives" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsBirthDates" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsCheckInDates" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsCheckIns" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsCheckOutDates" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsCheckOutsEarly" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsCities" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsContracts" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsCountries" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsCreditCards" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsEmails" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsFirstNames" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsGuestTypes" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsIdProfileOpera" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsLastNames" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsMarkets" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsPax" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsReservationTypes" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsRoomNumbers" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsRoomTypes" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsStates" />
+          <FunctionImport Name="USP_OR_TransferUpdateGuestsUnavailableMotives1NightRevert" />
+          <FunctionImport Name="USP_OR_TransferUpdateRoomTypesNames" />
+          <FunctionImport Name="USP_OR_TransferUpdateTransferAgencies" />
+          <FunctionImport Name="USP_OR_TransferUpdateTransferAvailability" />
+          <FunctionImport Name="USP_OR_TransferUpdateTransferCountries" />
+          <FunctionImport Name="USP_OR_TransferUpdateTransferLanguages" />
+          <FunctionImport Name="USP_OR_TransferUpdateTransferMarkets" />
+          <FunctionImport Name="USP_OR_TransferUpdateTransferUnavailableMotivesBy1Night" />
+          <FunctionImport Name="USP_OR_TransferUpdateTransferUnavailableMotivesBy2Nights" />
+          <FunctionImport Name="USP_OR_TransferUpdateTransferUnavailableMotivesByAgency" />
+          <FunctionImport Name="USP_OR_TransferUpdateTransferUnavailableMotivesByContract" />
+          <FunctionImport Name="USP_OR_TransferUpdateTransferUnavailableMotivesByCountry" />
+          <FunctionImport Name="USP_OR_TransferUpdateTransferUnavailableMotivesByGroups" />
+          <FunctionImport Name="USP_OR_TransferUpdateTransferUnavailableMotivesByNewMember" />
+          <FunctionImport Name="USP_OR_TransferUpdateTransferUnavailableMotivesByPax" />
+          <FunctionImport Name="USP_OR_TransferUpdateTransferUnavailableMotivesByTransfer" />
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -21612,6 +21722,61 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferAddAgencies" FunctionName="IMModel.Store.USP_OR_TransferAddAgencies" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferAddAgenciesHotel" FunctionName="IMModel.Store.USP_OR_TransferAddAgenciesHotel" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferAddContracts" FunctionName="IMModel.Store.USP_OR_TransferAddContracts" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferAddCountries" FunctionName="IMModel.Store.USP_OR_TransferAddCountries" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferAddCountriesHotel" FunctionName="IMModel.Store.USP_OR_TransferAddCountriesHotel" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferAddGroups" FunctionName="IMModel.Store.USP_OR_TransferAddGroups" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferAddGuests" FunctionName="IMModel.Store.USP_OR_TransferAddGuests" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferAddRoomTypes" FunctionName="IMModel.Store.USP_OR_TransferAddRoomTypes" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferDeleteReservationsCancelled" FunctionName="IMModel.Store.USP_OR_TransferDeleteReservationsCancelled" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferStop" FunctionName="IMModel.Store.USP_OR_TransferStop" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateAgenciesHotelNames" FunctionName="IMModel.Store.USP_OR_TransferUpdateAgenciesHotelNames" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateAgenciesNames" FunctionName="IMModel.Store.USP_OR_TransferUpdateAgenciesNames" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateContractsNames" FunctionName="IMModel.Store.USP_OR_TransferUpdateContractsNames" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateCountriesHotelNames" FunctionName="IMModel.Store.USP_OR_TransferUpdateCountriesHotelNames" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateCountriesNames" FunctionName="IMModel.Store.USP_OR_TransferUpdateCountriesNames" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGroupsNames" FunctionName="IMModel.Store.USP_OR_TransferUpdateGroupsNames" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsAgencies" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsAgencies" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsAges" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsAges" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsAvailabilityUnavailableMotives" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsAvailabilityUnavailableMotives" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsBirthDates" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsBirthDates" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsCheckInDates" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsCheckInDates" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsCheckIns" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsCheckIns" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsCheckOutDates" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsCheckOutDates" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsCheckOutsEarly" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsCheckOutsEarly" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsCities" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsCities" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsContracts" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsContracts" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsCountries" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsCountries" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsCreditCards" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsCreditCards" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsEmails" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsEmails" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsFirstNames" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsFirstNames" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsGuestTypes" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsGuestTypes" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsIdProfileOpera" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsIdProfileOpera" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsLastNames" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsLastNames" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsMarkets" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsMarkets" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsPax" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsPax" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsReservationTypes" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsReservationTypes" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsRoomNumbers" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsRoomNumbers" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsRoomTypes" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsRoomTypes" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsStates" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsStates" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateGuestsUnavailableMotives1NightRevert" FunctionName="IMModel.Store.USP_OR_TransferUpdateGuestsUnavailableMotives1NightRevert" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateRoomTypesNames" FunctionName="IMModel.Store.USP_OR_TransferUpdateRoomTypesNames" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateTransferAgencies" FunctionName="IMModel.Store.USP_OR_TransferUpdateTransferAgencies" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateTransferAvailability" FunctionName="IMModel.Store.USP_OR_TransferUpdateTransferAvailability" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateTransferCountries" FunctionName="IMModel.Store.USP_OR_TransferUpdateTransferCountries" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateTransferLanguages" FunctionName="IMModel.Store.USP_OR_TransferUpdateTransferLanguages" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateTransferMarkets" FunctionName="IMModel.Store.USP_OR_TransferUpdateTransferMarkets" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateTransferUnavailableMotivesBy1Night" FunctionName="IMModel.Store.USP_OR_TransferUpdateTransferUnavailableMotivesBy1Night" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateTransferUnavailableMotivesBy2Nights" FunctionName="IMModel.Store.USP_OR_TransferUpdateTransferUnavailableMotivesBy2Nights" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateTransferUnavailableMotivesByAgency" FunctionName="IMModel.Store.USP_OR_TransferUpdateTransferUnavailableMotivesByAgency" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateTransferUnavailableMotivesByContract" FunctionName="IMModel.Store.USP_OR_TransferUpdateTransferUnavailableMotivesByContract" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateTransferUnavailableMotivesByCountry" FunctionName="IMModel.Store.USP_OR_TransferUpdateTransferUnavailableMotivesByCountry" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateTransferUnavailableMotivesByGroups" FunctionName="IMModel.Store.USP_OR_TransferUpdateTransferUnavailableMotivesByGroups" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateTransferUnavailableMotivesByNewMember" FunctionName="IMModel.Store.USP_OR_TransferUpdateTransferUnavailableMotivesByNewMember" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateTransferUnavailableMotivesByPax" FunctionName="IMModel.Store.USP_OR_TransferUpdateTransferUnavailableMotivesByPax" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferUpdateTransferUnavailableMotivesByTransfer" FunctionName="IMModel.Store.USP_OR_TransferUpdateTransferUnavailableMotivesByTransfer" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -2234,5 +2234,280 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptMembershipsByHost>("USP_OR_RptMembershipsByHost", dateFromParameter, dateToParameter, salesRoomsParameter, leadSourcesParameter);
         }
+    
+        public virtual int USP_OR_TransferAddAgencies()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferAddAgencies");
+        }
+    
+        public virtual int USP_OR_TransferAddAgenciesHotel()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferAddAgenciesHotel");
+        }
+    
+        public virtual int USP_OR_TransferAddContracts()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferAddContracts");
+        }
+    
+        public virtual int USP_OR_TransferAddCountries()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferAddCountries");
+        }
+    
+        public virtual int USP_OR_TransferAddCountriesHotel()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferAddCountriesHotel");
+        }
+    
+        public virtual int USP_OR_TransferAddGroups()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferAddGroups");
+        }
+    
+        public virtual ObjectResult<Nullable<int>> USP_OR_TransferAddGuests()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("USP_OR_TransferAddGuests");
+        }
+    
+        public virtual int USP_OR_TransferAddRoomTypes()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferAddRoomTypes");
+        }
+    
+        public virtual int USP_OR_TransferDeleteReservationsCancelled()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferDeleteReservationsCancelled");
+        }
+    
+        public virtual int USP_OR_TransferStop()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferStop");
+        }
+    
+        public virtual int USP_OR_TransferUpdateAgenciesHotelNames()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateAgenciesHotelNames");
+        }
+    
+        public virtual int USP_OR_TransferUpdateAgenciesNames()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateAgenciesNames");
+        }
+    
+        public virtual int USP_OR_TransferUpdateContractsNames()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateContractsNames");
+        }
+    
+        public virtual int USP_OR_TransferUpdateCountriesHotelNames()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateCountriesHotelNames");
+        }
+    
+        public virtual int USP_OR_TransferUpdateCountriesNames()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateCountriesNames");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGroupsNames()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGroupsNames");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsAgencies()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsAgencies");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsAges()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsAges");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsAvailabilityUnavailableMotives()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsAvailabilityUnavailableMotives");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsBirthDates()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsBirthDates");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsCheckInDates()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsCheckInDates");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsCheckIns()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsCheckIns");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsCheckOutDates()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsCheckOutDates");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsCheckOutsEarly()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsCheckOutsEarly");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsCities()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsCities");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsContracts()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsContracts");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsCountries()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsCountries");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsCreditCards()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsCreditCards");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsEmails()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsEmails");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsFirstNames()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsFirstNames");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsGuestTypes()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsGuestTypes");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsIdProfileOpera()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsIdProfileOpera");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsLastNames()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsLastNames");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsMarkets()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsMarkets");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsPax()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsPax");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsReservationTypes()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsReservationTypes");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsRoomNumbers()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsRoomNumbers");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsRoomTypes()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsRoomTypes");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsStates()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsStates");
+        }
+    
+        public virtual int USP_OR_TransferUpdateGuestsUnavailableMotives1NightRevert()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateGuestsUnavailableMotives1NightRevert");
+        }
+    
+        public virtual int USP_OR_TransferUpdateRoomTypesNames()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateRoomTypesNames");
+        }
+    
+        public virtual int USP_OR_TransferUpdateTransferAgencies()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateTransferAgencies");
+        }
+    
+        public virtual int USP_OR_TransferUpdateTransferAvailability()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateTransferAvailability");
+        }
+    
+        public virtual int USP_OR_TransferUpdateTransferCountries()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateTransferCountries");
+        }
+    
+        public virtual int USP_OR_TransferUpdateTransferLanguages()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateTransferLanguages");
+        }
+    
+        public virtual int USP_OR_TransferUpdateTransferMarkets()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateTransferMarkets");
+        }
+    
+        public virtual int USP_OR_TransferUpdateTransferUnavailableMotivesBy1Night()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateTransferUnavailableMotivesBy1Night");
+        }
+    
+        public virtual int USP_OR_TransferUpdateTransferUnavailableMotivesBy2Nights()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateTransferUnavailableMotivesBy2Nights");
+        }
+    
+        public virtual int USP_OR_TransferUpdateTransferUnavailableMotivesByAgency()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateTransferUnavailableMotivesByAgency");
+        }
+    
+        public virtual int USP_OR_TransferUpdateTransferUnavailableMotivesByContract()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateTransferUnavailableMotivesByContract");
+        }
+    
+        public virtual int USP_OR_TransferUpdateTransferUnavailableMotivesByCountry()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateTransferUnavailableMotivesByCountry");
+        }
+    
+        public virtual int USP_OR_TransferUpdateTransferUnavailableMotivesByGroups()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateTransferUnavailableMotivesByGroups");
+        }
+    
+        public virtual int USP_OR_TransferUpdateTransferUnavailableMotivesByNewMember()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateTransferUnavailableMotivesByNewMember");
+        }
+    
+        public virtual int USP_OR_TransferUpdateTransferUnavailableMotivesByPax()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateTransferUnavailableMotivesByPax");
+        }
+    
+        public virtual int USP_OR_TransferUpdateTransferUnavailableMotivesByTransfer()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferUpdateTransferUnavailableMotivesByTransfer");
+        }
     }
 }
