@@ -106,8 +106,11 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Classes\ExcelFormatTable.cs" />
+    <Compile Include="Classes\Invitation.cs" />
+    <Compile Include="Classes\NoteGuest.cs" />
     <Compile Include="Classes\StrToEnums.cs" />
     <Compile Include="Classes\UserData.cs" />
+    <Compile Include="Classes\UserNormalLogin.cs" />
     <Compile Include="Club.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -193,6 +196,7 @@
     <Compile Include="Enums\EnumSaveCourtesyTours.cs" />
     <Compile Include="Enums\EnumStatus.cs" />
     <Compile Include="Enums\EnumTeamType.cs" />
+    <Compile Include="Enums\EnumInvitationType.cs" />
     <Compile Include="ExchangeRate.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

@@ -90,5 +90,40 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
+
+    #region GuestStatustypeId
+    /// <summary>
+    /// Obtiene el tipo de  estatus del invitado por su ID
+    /// </summary>
+    /// <param name="gstId">Identificador del tipo de estado del invitado</param>
+    /// <returns>GuestStatusType</returns>
+    /// <history>
+    /// [lchairez] 24/03/2016 Created.
+    /// </history>
+    public static GuestStatusType GetGuestStatusTypeId(string gstId)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.GuestsStatusTypes.Where(g => g.gsID == gstId).SingleOrDefault();
+      }
+    }
+    #endregion
+
+    #region GetGuestStatus
+    /// <summary>
+    /// Obtiene los estatus del invitado
+    /// </summary>
+    /// <param name="guest">Invitado a consultar</param>
+    /// <history>
+    /// [lchairez] 04/04/2016 Created.
+    /// </history>
+    public static List<GuestStatus> GetGuestStatus(int guestId)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.GuestsStatus.Where(g => g.gtgu == guestId).ToList();
+      }
+    }
+    #endregion
   }
 }

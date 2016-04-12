@@ -1,5 +1,4 @@
-﻿using IM.BusinessRules.Classes;
-using IM.Model;
+﻿using IM.Model;
 using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
@@ -86,46 +85,6 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion GetGiftsByGuest
-
-    #region GetGiftsInvitation
-
-    /// <summary>
-    /// Obtiene una lista especifica para cargar el grid de regalos de una invitación.
-    /// </summary>
-    /// <param name="guestId">Identificador del cliente</param>
-    /// <returns>Lista de la clase GiftInvitation</returns>
-    /// <history>
-    /// [lchairez] 23/Mar/2016 Created
-    /// </history>
-    public static List<GiftInvitation> GetGiftsInvitation(int guestId)
-    {
-      var gifts = GetGiftsByGuest(guestId);
-
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var giftsInvit = (from gi in gifts
-                          join g in dbContext.Gifts on gi.iggi equals g.giID
-                          select new GiftInvitation
-                          {
-                            iggu = gi.iggu,
-                            igQty = gi.igQty,
-                            iggi = gi.iggi,
-                            Gift = g.giN,
-                            igAdults = gi.igAdults,
-                            igMinors = gi.igMinors,
-                            igExtraAdults = gi.igExtraAdults,
-                            igPriceA = gi.igPriceA,
-                            igPriceAdult = gi.igPriceAdult,
-                            igPriceExtraAdult = gi.igPriceExtraAdult,
-                            igPriceM = gi.igPriceM,
-                            igPriceMinor = gi.igPriceMinor,
-                            igct = gi.igct
-                          }).ToList();
-        return giftsInvit;
-      }
-    }
-
-    #endregion GetGiftsInvitation
 
     #region GetGiftId
 

@@ -68,6 +68,7 @@
     <Compile Include="Classes\objInvitGift.cs" />
     <Compile Include="Classes\objInvitGuestStatus.cs" />
     <Compile Include="Classes\Parametros.cs" />
+    <Compile Include="Forms\frmSeacrhGuest.cs" />
     <Compile Include="Forms\frmInnerException.xaml.cs">
       <DependentUpon>frmInnerException.xaml</DependentUpon>
     </Compile>
@@ -124,6 +125,10 @@
     <Resource Include="Images\User.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Forms\frmSeacrhGuest.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Forms\frmInnerException.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -200,7 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Properties\DataSources\IM.Base.Classes.objInvitAdditionalGuest2.datasource" />
+    <None Include="Properties\DataSources\IM.Base.Classes.objInvitAdditionalGuest.datasource" />
     <None Include="Properties\DataSources\IM.Base.Classes.objInvitBookingDeposit.datasource" />
     <None Include="Properties\DataSources\IM.Base.Classes.objInvitCreditCard.datasource" />
     <None Include="Properties\DataSources\IM.Base.Classes.objInvitGift.datasource" />

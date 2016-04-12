@@ -15,10 +15,7 @@ using IM.InventoryMovements.Clases;
 using IM.Model;
 using IM.Model.Classes;
 using IM.BusinessRules.BR;
-using IM.BusinessRules.Entities;
 using IM.Base.Forms;
-using System.Data.Entity.SqlServer;
-using System.ComponentModel;
 
 namespace IM.InventoryMovements
 {

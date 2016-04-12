@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IM.BusinessRules.Enums
+namespace IM.Model.Enums
 {
-  public enum PlaceType
+  public enum EnumInvitationType
   {
-    LeadSources,
-    SalesRoom,
-    WareHouse
+    InHouse = 0,
+    OutHouse,
+    Host,
+    Animation,
+    Regen
   }
 }

@@ -1394,8 +1394,8 @@ namespace IM.Inhouse
     {
       GuestArrival itema = dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
       var chk = sender as CheckBox;    //bool? con = ck.IsChecked;
-      var userData = IM.BusinessRules.BR.BRPersonnel.Login(Model.Enums.EnumLoginType.Location, App.User.User.peID, App.User.Location.loID);
-      var invit = new IM.Base.Forms.frmInvitationBase(IM.BusinessRules.Enums.InvitationType.InHouse, userData, itema.guID, !chk.IsChecked.Value ? Model.Enums.EnumInvitationMode.modOnlyRead : Model.Enums.EnumInvitationMode.modAdd); 
+      var userData = BRPersonnel.Login(Model.Enums.EnumLoginType.Location, App.User.User.peID, App.User.Location.loID);
+      var invit = new frmInvitationBase(EnumInvitationType.InHouse, userData, itema.guID, !chk.IsChecked.Value ? EnumInvitationMode.modOnlyRead : EnumInvitationMode.modAdd); 
       var res = invit.ShowDialog();
       chk.IsChecked = (res.HasValue && res.Value) || itema.guInvit;
       var Premanifest = dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)) as GuestPremanifest;
@@ -1900,8 +1900,8 @@ namespace IM.Inhouse
             
       var isChecked = chk.IsChecked.HasValue && chk.IsChecked.Value;
       chk.IsChecked = itema.guInvit;
-      var userData = BRPersonnel.Login(Model.Enums.EnumLoginType.Location, App.User.User.peID, App.User.Location.loID);
-      var invit = new frmInvitationBase(IM.BusinessRules.Enums.InvitationType.InHouse, userData, itema.guID, !isChecked ? EnumInvitationMode.modOnlyRead :EnumInvitationMode.modAdd);
+      var userData = BRPersonnel.Login(EnumLoginType.Location, App.User.User.peID, App.User.Location.loID);
+      var invit = new frmInvitationBase(EnumInvitationType.InHouse, userData, itema.guID, !isChecked ? EnumInvitationMode.modOnlyRead :EnumInvitationMode.modAdd);
       invit.Owner = this;
       invit.ShowInTaskbar = false;
       var res = invit.ShowDialog();

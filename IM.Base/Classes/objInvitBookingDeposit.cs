@@ -10,7 +10,9 @@ namespace IM.Base.Classes
     {
       get
       {
-        return String.Concat(this[bdAmount.ToString()], " ", this[bdReceived.ToString()]);
+        return String.Concat(this[bdAmount.ToString()], " ", this[bdReceived.ToString()], "  ", this[bdcu]
+                            , " ", this[bdpt], " ", this[bdcc], " ", this[bdCardNum], " ", this[bdExpD]
+                            , " ", this[bdAuth.HasValue ? bdAuth.Value.ToString() : String.Empty], " ", this[bdFolioCXC.HasValue ?  bdFolioCXC.Value.ToString() : String.Empty]);
       }
     }
 
@@ -21,16 +23,30 @@ namespace IM.Base.Classes
         string errorMessage = null;
         switch (columnName)
         {
+          case "bdAmount":
+            if(bdAmount == 0)
+            {
+              errorMessage = "Currency without Amount specified.";
+            }
+            else if(bdAmount != bdReceived)
+            {
+              errorMessage = "The Deposit and Received amounts have to be equals";
+            }
+            break;
+          case "bdReceived":
+            if (bdReceived == 0)
+            {
+              errorMessage = "Input a Deposit amount";
+            }
+            else if (bdAmount != bdReceived)
+            {
+              errorMessage = "The Deposit and Received amounts have to be equals";
+            }
+            break;
           case "bdcu":
             if (String.IsNullOrWhiteSpace(bdcu))
             {
               errorMessage = "Select a Currency.";
-            }
-            break;
-          case "bdcc":
-            if (String.IsNullOrEmpty(bdcc))
-            {
-              errorMessage = "Select a Credit Card";
             }
             break;
           case "bdpt":
@@ -39,40 +55,51 @@ namespace IM.Base.Classes
               errorMessage = "Select a Payment Type";
             }
             break;
+          case "bdcc":
+            if (bdpt == "CC" && String.IsNullOrEmpty(bdcc))
+            {
+              errorMessage = "Select a Credit Card";
+            }
+            break;
           case "bdpc":
             if (String.IsNullOrEmpty(bdpc))
             {
               errorMessage = "Input a Refund Place.";
             }
             break;
-          case "bdReceived":
-            if (bdReceived > bdAmount)
-            {
-              errorMessage = "The received amount can not be more than the deposit amount";
-            }
-            else if (bdReceived == 0 && bdAmount == 0)
-              errorMessage = "Currency without Amount specified.";
-            break;
-          case "bdAmount":
-            if (bdAmount == 0 && bdReceived == 0)
-            {
-              errorMessage = "Currency without Amount specified.";
-            }
-            break;
           case "bdExpD":
             if (bdpt == "CC")
             {
               var dt = new DateTime();
-              if (!DateTime.TryParse(bdExpD, out dt))
+              var exp = "01/" + bdExpD;
+              if (!DateTime.TryParse(exp, out dt))
               {
                 errorMessage = "The expire day does not has a correct format. (MM/YY)";
               }
             }
             break;
           case "bdCardNum":
-            if(!String.IsNullOrEmpty(bdCardNum) && bdCardNum.Length > 4)
+            if (bdpt != "CC") break;
+
+            if (!String.IsNullOrEmpty(bdCardNum) && bdCardNum.Length > 4)
             {
               errorMessage = "Type the last four numbers.";
+            }
+            break;
+          case "bdAuth":
+            if(bdpt == "CC" && String.IsNullOrEmpty(bdAuth.ToString()))
+            {
+              errorMessage = "Input a Auth ID";
+            }
+            break;
+          case "bdFolioCXC":
+            if(!bdFolioCXC.HasValue)
+            {
+              errorMessage = "Input a Folio CxC";
+            }
+            else if(bdFolioCXC.Value <=0)
+            {
+              errorMessage = "The Folio CxC can not be less than zero";
             }
             break;
         }

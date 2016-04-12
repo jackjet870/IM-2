@@ -26,11 +26,9 @@ namespace IM.Base.Classes
             {
               errorMessage = "Select a Status.";
             }
-            break;
-          case "gtQuantity":
-            if (gtQuantity == 0)
+            else
             {
-              errorMessage = "Input a Quantity.";
+              gtQuantity = 1;
             }
             break;
         }

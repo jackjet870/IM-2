@@ -4,7 +4,6 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Classes;
 using IM.Model.Enums;
-using IM.BusinessRules.Entities;
 using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR

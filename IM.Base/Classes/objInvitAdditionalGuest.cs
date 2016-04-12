@@ -1,11 +1,18 @@
 ﻿using System;
-using IM.Model;
 using System.ComponentModel;
 
 namespace IM.Base.Classes
 {
-  public class objInvitAdditionalGuest :  Guest, IDataErrorInfo
+  public class objInvitAdditionalGuest :  IDataErrorInfo
   {
+    public int guIDParent { get; set; }
+
+    public int guID { get; set; }
+
+    public string  guLastName1 { get; set; }
+
+    public string guFirstName1 { get; set; }
+
     public string Error
     {
       get

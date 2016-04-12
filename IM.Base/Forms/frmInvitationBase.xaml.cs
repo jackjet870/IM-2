@@ -3,12 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using IM.BusinessRules.Enums;
 using System.Linq;
 using System.Windows.Data;
 using IM.Model.Enums;
 using System.Globalization;
-using IM.BusinessRules.Classes;
 using IM.Base.Classes;
 using IM.Base.Enums;
 using IM.Model;
@@ -31,24 +29,20 @@ namespace IM.Base.Forms
     private List<GuestCreditCard> _lstCreditsCard = new List<GuestCreditCard>();
     private List<Guest> _lstAdditionals = new List<Guest>();
     private List<GuestStatus> _lstGuestStatus = new List<GuestStatus>();
-
-        
-    List<GuestAdditionalInvitation> _lstNewAdditionals = new List<GuestAdditionalInvitation>();
-
+    
     private List<objInvitGift> _lstObjInvitGift = null;
     private List<objInvitGuestStatus> _lstObjInvitGuestStatus = null;
     private List<objInvitCreditCard> _lstObjInvitCreditCard = null;
     private List<objInvitBookingDeposit> _lstObjInvitBookingDeposit = null;
     private List<objInvitAdditionalGuest> _lstObjInvitAdditionalGuest = null;
+
     #endregion
 
     #region Objetos
     private Invitation invitation;
-    private InvitationType _invitationType;
+    private EnumInvitationType _invitationType;
     private UserData _user;
-    private Guest _guestAdditional;
-    private Guest _previousGuestAdditional;
-
+    
     #region Regalos
     CollectionViewSource objInvitGiftViewSource;
     CollectionViewSource giftShortViewSource;
@@ -57,6 +51,7 @@ namespace IM.Base.Forms
     #region Guest Status
     CollectionViewSource objInvitGuestStatusViewSource;
     CollectionViewSource guestStatusTypeViewSource;
+    objInvitGuestStatus objInvitGuestStatusTemp = new objInvitGuestStatus();
     #endregion
 
     #region Credit Card
@@ -97,7 +92,7 @@ namespace IM.Base.Forms
     private DateTime? _showDate;
     private bool _bookingCancel;
     private decimal _qtyGift;
-    
+    private bool _isCCPaymentPay = false;
     #endregion
 
     #region Constructores y destructores
@@ -107,7 +102,7 @@ namespace IM.Base.Forms
       InitializeComponent();
     }
 
-    public frmInvitationBase(IM.BusinessRules.Enums.InvitationType invitationType, UserData userData, int guestID, EnumInvitationMode invitationMode)
+    public frmInvitationBase(IM.Model.Enums.EnumInvitationType invitationType, UserData userData, int guestID, EnumInvitationMode invitationMode)
     {
       WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
 
@@ -164,22 +159,23 @@ namespace IM.Base.Forms
       // deshabilitamos los botones de Change, Reschedule y Rebook
       EnableButtonsChangeRescheduleRebook(false, false, false);
       cmbBookingTime.IsEnabled = true;
+      grbPrInfo.IsEnabled = true;
 
       if (allowReschedule)//si se permite hacer reschedules
       {
         var invitD = Convert.ToDateTime(txtDate.Text);
         //si la fecha de invitacion es hoy o si la fecha de booking es despues hoy
-        if (invitD == _serverDateTime || txtBookingDate.SelectedDate.Value > _serverDateTime)
+        if (invitD.Date == _serverDateTime.Date || txtBookingDate.SelectedDate.Value.Date > _serverDateTime.Date)
         {
           //' Fecha de booking
           txtBookingDate.IsEnabled = true;
 
           //si tiene permiso especial de invitaciones
-          if (_user.HasPermission(_invitationType == InvitationType.Host ? EnumPermission.HostInvitations : EnumPermission.PRInvitations, EnumPermisionLevel.Special)
-              || _user.HasPermission(_invitationType == InvitationType.Host ? EnumPermission.HostInvitations : EnumPermission.PRInvitations, EnumPermisionLevel.SuperSpecial))
+          if (_user.HasPermission(_invitationType == EnumInvitationType.Host ? EnumPermission.HostInvitations : EnumPermission.PRInvitations, EnumPermisionLevel.Special)
+              || _user.HasPermission(_invitationType == EnumInvitationType.Host ? EnumPermission.HostInvitations : EnumPermission.PRInvitations, EnumPermisionLevel.SuperSpecial))
           {
             //PR Contract
-            if (_invitationType == InvitationType.OutHouse)
+            if (_invitationType == EnumInvitationType.OutHouse)
             {
               txtPRContract.IsEnabled = true;
               cmbPRContract.IsEnabled = true;
@@ -190,7 +186,7 @@ namespace IM.Base.Forms
             cmbPR.IsEnabled = true;
 
             //Sala /Location
-            if (_invitationType == InvitationType.Host)
+            if (_invitationType == EnumInvitationType.Host)
             {
               txtLocation.IsEnabled = true;
               cmbLocation.IsEnabled = true;
@@ -208,7 +204,7 @@ namespace IM.Base.Forms
         txtBookingDate.IsEnabled = true;
 
         //PR Contract
-        if (_invitationType == InvitationType.OutHouse)
+        if (_invitationType == EnumInvitationType.OutHouse)
         {
           txtPRContract.IsEnabled = true;
           cmbPRContract.IsEnabled = true;
@@ -219,7 +215,7 @@ namespace IM.Base.Forms
         cmbPR.IsEnabled = true;
 
         //Sala /Location
-        if (_invitationType == InvitationType.Host)
+        if (_invitationType == EnumInvitationType.Host)
         {
           txtLocation.IsEnabled = true;
           cmbLocation.IsEnabled = true;
@@ -243,7 +239,7 @@ namespace IM.Base.Forms
       //deshabilitamos los botones de Change, Reschedule y Rebook
       EnableButtonsChangeRescheduleRebook(false, false, false);
 
-      if (_invitationType == InvitationType.Host)
+      if (_invitationType == EnumInvitationType.Host)
       {
         txtLocation.IsEnabled = true;
         cmbLocation.IsEnabled = true;
@@ -299,7 +295,7 @@ namespace IM.Base.Forms
 
       #region Booking
       //Pr Contract
-      if (_invitationType == InvitationType.OutHouse)
+      if (_invitationType == EnumInvitationType.OutHouse)
       {
         txtPRContract.Text = String.Empty;
         cmbPRContract.SelectedIndex = -1;
@@ -327,7 +323,7 @@ namespace IM.Base.Forms
         cmbRescheduleTime.SelectedIndex = -1;
       }
 
-      if (_invitationType == InvitationType.InHouse || _invitationType == InvitationType.Animation || _invitationType == InvitationType.Regen)
+      if (_invitationType == EnumInvitationType.InHouse || _invitationType == EnumInvitationType.Animation || _invitationType == EnumInvitationType.Regen)
       {
         //No directa
         chkDirect.IsChecked = false;
@@ -717,33 +713,35 @@ namespace IM.Base.Forms
     #region Métodos de los controles de la sección GUEST STATUS
     private void dtgGuestStatus_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-      decimal qty = 0;
       switch (e.Column.SortMemberPath)
       {
-        case "gtQuantity":
-          var gtQty = e.EditingElement as TextBox;
-          if(!decimal.TryParse(gtQty.Text, out qty) || qty == 0)
+        case "gtgs":
+          var gtgs = e.EditingElement as ComboBox;
+          if(gtgs.SelectedIndex != -1 )
           {
-            Helpers.UIHelper.ShowMessage("Quantity can not be lower than 1");
-            e.EditingElement.Focus();
-            return;
+            _lstObjInvitGuestStatus[e.Row.GetIndex()].gtgs = gtgs.SelectedValue.ToString();
+            _lstObjInvitGuestStatus[e.Row.GetIndex()].gtQuantity = Convert.ToByte(1);
+            CalculateMaxAuthGifts();
           }
           break;
       }
     }
 
-    private void dtgGuestStatus_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+    //Permite solo Agregar un Registro al Grid.
+    private void dtgGuestStatus_LoadingRow(object sender, DataGridRowEventArgs e)
     {
-      if (e.Text == ".")
-        e.Handled = false;
-      else if (!char.IsDigit(e.Text, e.Text.Length - 1))
-        e.Handled = true;
+      System.ComponentModel.IEditableCollectionView itemView = dtgGuestStatus.Items;
+      if (_lstObjInvitGuestStatus.Count == 1 && itemView.IsAddingNew)
+      {
+        itemView.CommitNew();
+        dtgGuestStatus.CanUserAddRows = false;
+      }
     }
     #endregion
-  
+
     #region Métodos de los controles de la sección OTHER INFORMATION
 
-/// <summary>
+    /// <summary>
     /// Asigna la cable de la agencia al TextBox asociado
     /// </summary>
     /// <history>
@@ -805,7 +803,7 @@ namespace IM.Base.Forms
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void dtgAdditInform_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    private void dtgAdditionalGuest_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
       var guid = e.EditingElement as TextBox;
       if (guid != null)
@@ -825,6 +823,27 @@ namespace IM.Base.Forms
       }
     }
 
+    /// <summary>
+    /// Agrega un invitado adicional
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void btnSearchAdditional_Click(object sender, RoutedEventArgs e)
+    {
+      var search = new frmSeacrhGuest(_user);
+      search.Owner = this;
+      bool? res = search.ShowDialog();
+      if (res.HasValue && res.Value && search.guestAdditional != null)
+      {
+        var objAddGuest = new objInvitAdditionalGuest();
+        objAddGuest.guID = search.guestAdditional.guID;
+        objAddGuest.guLastName1 = search.guestAdditional.guLastName1;
+        objAddGuest.guFirstName1 = search.guestAdditional.guFirstName1;
+
+        _lstObjInvitAdditionalGuest.Add(objAddGuest);
+        dtgAdditionalGuest.Items.Refresh();
+      }
+    }
 
     #endregion
 
@@ -849,22 +868,70 @@ namespace IM.Base.Forms
     {
       switch(e.Column.SortMemberPath)
       {
-        case "bdExpD":
-          var dt = new DateTime();
-          var bdExpD = e.EditingElement as TextBox;
-          if (!DateTime.TryParse(bdExpD.Text, out dt))
+        case "bdpt":
+          var bdpt = e.EditingElement as ComboBox;
+          if(bdpt.SelectedValue.ToString() == "CC")
           {
-            Helpers.UIHelper.ShowMessage("The expire day does not has a correct format. (MM/YY)");
+            _isCCPaymentPay = true;
+          }
+          else
+          {
+            _isCCPaymentPay = false;
+          }
+          break;
+        case "bdcc":
+          var bdcc = e.EditingElement as ComboBox;
+          if(_isCCPaymentPay && bdcc.SelectedIndex == -1)
+          {
+            Helpers.UIHelper.ShowMessage("Choose a Credit Card");
             e.Cancel = true;
           }
           break;
+        case "":
+          break;
+        case "bdExpD":
+          var dt = new DateTime();
+          var bdExpD = e.EditingElement as TextBox;
+          if(_isCCPaymentPay)
+            if(String.IsNullOrEmpty(bdExpD.Text))
+            {
+              Helpers.UIHelper.ShowMessage("Input a expire date (MM/YY)");
+              e.Cancel = true;
+            }
+            else
+            {
+              var exp = bdExpD.Text;
+              exp = "01/" + bdExpD.Text;
+              if (!DateTime.TryParse(exp, out dt))
+              {
+                Helpers.UIHelper.ShowMessage("The expire day does not has a correct format. (MM/YY)");
+                e.Cancel = true;
+              }
+            }
+          
+          break;
         case "bdCardNum":
           var cardNum = e.EditingElement as TextBox;
-          if(cardNum.Text.Length > 4)
+          if(_isCCPaymentPay && String.IsNullOrEmpty(cardNum.Text))
+          {
+            Helpers.UIHelper.ShowMessage("Type the last four Creedit Card's numbers");
+            e.Cancel = true;
+          }
+          else if (cardNum.Text.Length > 4)
           {
             Helpers.UIHelper.ShowMessage("Type the last four numbers.");
             e.Cancel = true;
+            cardNum.Text = String.Empty;
           }
+          break;
+        case "bdAuth":
+          var bdAuth = e.EditingElement as TextBox;
+          if(_isCCPaymentPay && String.IsNullOrEmpty(bdAuth.Text))
+          {
+            Helpers.UIHelper.ShowMessage("Input the Authorizathion ID");
+            e.Cancel = true;
+          }
+
           break;
       }
     }
@@ -898,7 +965,8 @@ namespace IM.Base.Forms
     /// <returns>Boolean</returns>
     private bool ValidateEdit()
     {
-      var login = new IM.Base.Forms.frmLogin(null, false, EnumLoginType.Normal);
+      _user.AutoSign = true; 
+      var login = new IM.Base.Forms.frmLogin(null, false, EnumLoginType.Normal, true);
       login.ShowDialog();
       if (!login.IsAuthenticated)
       {
@@ -908,7 +976,7 @@ namespace IM.Base.Forms
       }
       // validamos que tenga permiso estandar de invitaciones
       bool permission = false;
-      if (_invitationType == InvitationType.Host)
+      if (_invitationType == EnumInvitationType.Host)
         permission = _user.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.Standard);
       else
         permission = _user.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard);
@@ -935,19 +1003,19 @@ namespace IM.Base.Forms
     {
       switch (_invitationType)
       {
-        case BusinessRules.Enums.InvitationType.InHouse:
+        case EnumInvitationType.InHouse:
           InHouseControlsConfig();
           break;
-        case BusinessRules.Enums.InvitationType.OutHouse:
+        case EnumInvitationType.OutHouse:
           OutHouseControlsConfig();
           break;
-        case BusinessRules.Enums.InvitationType.Host:
+        case EnumInvitationType.Host:
           HostControlsConfig();
           break;
-        case BusinessRules.Enums.InvitationType.Animation:
+        case EnumInvitationType.Animation:
           AnimationControlsConfig();
           break;
-        case BusinessRules.Enums.InvitationType.Regen:
+        case EnumInvitationType.Regen:
           RegenControlsConfig();
           break;
       }
@@ -1095,11 +1163,11 @@ namespace IM.Base.Forms
       if (enable)
       {
         //si es una invitacion outhouse nueva, permitimos definir el folio de la invitacion 
-        if (_invitationType == InvitationType.OutHouse && _invitationMode == EnumInvitationMode.modAdd)
+        if (_invitationType == EnumInvitationType.OutHouse && _invitationMode == EnumInvitationMode.modAdd)
         {
           txtOutInvitation.IsEnabled = true;
         }
-        else if (_invitationMode == EnumInvitationMode.modEdit && _invitationType == InvitationType.InHouse) //si es una invitacion inhouse
+        else if (_invitationMode == EnumInvitationMode.modEdit && _invitationType == EnumInvitationType.InHouse) //si es una invitacion inhouse
         {
           // si no tiene un folio de reservacion definido, permitimos definirlo
           if (String.IsNullOrEmpty(txtReservationNumber.Text))
@@ -1109,7 +1177,7 @@ namespace IM.Base.Forms
 
         }
         //si es una invitacion outhouse, permitimos definir el folio de la invitacion outhouse
-        else if (_invitationMode == EnumInvitationMode.modEdit && _invitationType == InvitationType.InHouse)
+        else if (_invitationMode == EnumInvitationMode.modEdit && _invitationType == EnumInvitationType.InHouse)
         {
           txtOutInvitation.IsEnabled = true;
         }
@@ -1136,7 +1204,7 @@ namespace IM.Base.Forms
       #region PR information
       grbPrInfo.IsEnabled = enable;
 
-      if (_invitationType == InvitationType.OutHouse)
+      if (_invitationType == EnumInvitationType.OutHouse)
       {
         txtPRContract.IsEnabled = enable;
         cmbPRContract.IsEnabled = enable;
@@ -1145,7 +1213,7 @@ namespace IM.Base.Forms
       txtPR.IsEnabled = enable;
       cmbPR.IsEnabled = enable;
 
-      if (_invitationType == InvitationType.Host)
+      if (_invitationType == EnumInvitationType.Host)
       {
         txtLocation.IsEnabled = enable;
         cmbLocation.IsEnabled = enable;
@@ -1161,19 +1229,19 @@ namespace IM.Base.Forms
       cmbBookingTime.IsEnabled = enable;
       chkDirect.IsEnabled = enable;
 
-      if (_invitationType != InvitationType.Regen && _invitationType != InvitationType.Animation)
+      if (_invitationType != EnumInvitationType.Regen && _invitationType != EnumInvitationType.Animation)
       {
         chkBeforeInOut.IsEnabled = enable;
       }
 
-      if (_invitationType != InvitationType.OutHouse)
+      if (_invitationType != EnumInvitationType.OutHouse)
       {
         txtRescheduleDate.IsEnabled = enable;
         cmbRescheduleTime.IsEnabled = enable;
         chkResch.IsEnabled = enable;
       }
 
-      if (_invitationType == InvitationType.OutHouse)
+      if (_invitationType == EnumInvitationType.OutHouse)
       {
         txtFlightNumber.IsEnabled = enable;
       }
@@ -1184,7 +1252,7 @@ namespace IM.Base.Forms
 
       if (enable) //si se esta modificando o agregando
       {
-        if (_invitationType != InvitationType.Host) // si no es el modulo host
+        if (_invitationType != EnumInvitationType.Host) // si no es el modulo host
         {
           //no se permite modificar el PR, sala, fecha y hora de booking si es una invitacion existente
           if (_invitationMode != EnumInvitationMode.modAdd)
@@ -1218,14 +1286,14 @@ namespace IM.Base.Forms
 
       if (_invitationMode == EnumInvitationMode.modEdit)
       {
-        if (_invitationType != InvitationType.OutHouse)
+        if (_invitationType != EnumInvitationType.OutHouse)
         {
           var dtInvit = Convert.ToDateTime(txtDate.Text);
           //si la fecha de salida es hoy o despues y (es una invitacion nueva o la fecha de invitacion es hoy o
           //(tiene permiso especial de invitaciones y la fecha de booking original Mayor o igual a hoy))
           if (txtDeparture.SelectedDate.HasValue && (txtDeparture.SelectedDate.Value.Date >= _serverDateTime.Date)
               && ((_isNewInvitation || dtInvit.Date == _serverDateTime.Date)
-                  || (_user.HasPermission(_invitationType == InvitationType.Host ? EnumPermission.Host : EnumPermission.PRInvitations, EnumPermisionLevel.Special)
+                  || (_user.HasPermission(_invitationType == EnumInvitationType.Host ? EnumPermission.Host : EnumPermission.PRInvitations, EnumPermisionLevel.Special)
                   && _bookinDateOriginal.HasValue && (_bookinDateOriginal.Value.Date>= _serverDateTime.Date))
                   )
             )
@@ -1248,7 +1316,7 @@ namespace IM.Base.Forms
       if (_invitationMode == EnumInvitationMode.modEdit)
       {
         //si no es el modulo outside ni el de Host
-        if (_invitationType != InvitationType.OutHouse && _invitationType != InvitationType.Host)
+        if (_invitationType != EnumInvitationType.OutHouse && _invitationType != EnumInvitationType.Host)
         {
           //si la fecha de booking original es hoy o despues o es una invitacion nueva
           if ((_bookinDateOriginal.HasValue && (_bookinDateOriginal.Value.Date >= _serverDateTime.Date)) || _isNewInvitation)
@@ -1275,7 +1343,7 @@ namespace IM.Base.Forms
       if (_invitationMode == EnumInvitationMode.modEdit)//si se esta modificando
       {
         //si no es el modulo outside ni el de Host
-        if (_invitationType != InvitationType.OutHouse && _invitationType != InvitationType.Host)
+        if (_invitationType != EnumInvitationType.OutHouse && _invitationType != EnumInvitationType.Host)
         {
           //si tiene copia de folio de reservacion, no se permite modificar la agencia
           if (!String.IsNullOrEmpty(_hReservIDC))
@@ -1289,10 +1357,10 @@ namespace IM.Base.Forms
           txtArrival.IsEnabled = false;
         }
 
-        if (_invitationType != InvitationType.OutHouse)//si no es el modulo outside
+        if (_invitationType != EnumInvitationType.OutHouse)//si no es el modulo outside
         {
           //solo se permite modificar la fecha de salida si tiene permiso especial de invitaciones
-          if (!_user.HasPermission(_invitationType == InvitationType.Host ? EnumPermission.Host : EnumPermission.PRInvitations, EnumPermisionLevel.Special))
+          if (!_user.HasPermission(_invitationType == EnumInvitationType.Host ? EnumPermission.Host : EnumPermission.PRInvitations, EnumPermisionLevel.Special))
           {
             txtDeparture.IsEnabled = false;
           }
@@ -1306,7 +1374,7 @@ namespace IM.Base.Forms
 
       if (_invitationMode == EnumInvitationMode.modEdit)//si se esta modificando
       {
-        if (_invitationType != InvitationType.OutHouse && _invitationType != InvitationType.Host)//si no es el modulo outside ni el de Host
+        if (_invitationType != EnumInvitationType.OutHouse && _invitationType != EnumInvitationType.Host)//si no es el modulo outside ni el de Host
         {
 
           //si la fecha de booking original es hoy o despues o es una invitacion nueva
@@ -1323,7 +1391,7 @@ namespace IM.Base.Forms
       }
 
       #region Creadit Cards
-      if (_invitationType == InvitationType.InHouse || _invitationType == InvitationType.Host)
+      if (_invitationType == EnumInvitationType.InHouse || _invitationType == EnumInvitationType.Host)
       {
         grbCreditCards.IsEnabled = enableCreditCardsGuestsStatusRoomsQuantity;
         if (enable)
@@ -1344,7 +1412,7 @@ namespace IM.Base.Forms
       #endregion
 
       #region Electronic Purse
-      if (_invitationType == InvitationType.InHouse)
+      if (_invitationType == EnumInvitationType.InHouse)
       {
         grbElectronicPurse.IsEnabled = enable;
       }
@@ -1384,8 +1452,8 @@ namespace IM.Base.Forms
     private void SetupChangeRescheduleRebook()
     {
       //si la fecha de salida es hoy o despues o el usuario tiene permiso especial de invitaciones
-      if ((txtDeparture.SelectedDate.HasValue && txtDeparture.SelectedDate.Value >= _serverDateTime)
-        || _user.HasPermission(_invitationType == InvitationType.Host ? EnumPermission.HostInvitations : EnumPermission.PRInvitations, EnumPermisionLevel.SuperSpecial))
+      if ((txtDeparture.SelectedDate.HasValue && txtDeparture.SelectedDate.Value.Date >= _serverDateTime.Date)
+        || _user.HasPermission(_invitationType == EnumInvitationType.Host ? EnumPermission.HostInvitations : EnumPermission.PRInvitations, EnumPermisionLevel.SuperSpecial))
       {
         if (_invitationMode == EnumInvitationMode.modAdd)//si es una invitacion nueva
         {
@@ -1395,7 +1463,7 @@ namespace IM.Base.Forms
         else if (chkShow.IsChecked.HasValue && chkShow.IsChecked.Value) // si tiene show
         {
           //no se puede modificar Antes In & Out
-          if (_invitationType != InvitationType.Animation || _invitationType != InvitationType.Regen)
+          if (_invitationType != EnumInvitationType.Animation || _invitationType != EnumInvitationType.Regen)
           {
             chkBeforeInOut.IsChecked = false;
           }
@@ -1403,46 +1471,46 @@ namespace IM.Base.Forms
           //solo se permite rebook
           EnableButtonsChangeRescheduleRebook(false, false, true);
         }
-        else if (Convert.ToDateTime(txtDate.Text) == _serverDateTime && (chkResch.IsChecked.HasValue && !chkResch.IsChecked.Value)) //si la fecha de invitacion es hoy y no es un reschedule
+        else if (Convert.ToDateTime(txtDate.Text).Date == _serverDateTime.Date && (chkResch.IsChecked.HasValue && !chkResch.IsChecked.Value)) //si la fecha de invitacion es hoy y no es un reschedule
         {
           // no se permite reschedule
           EnableButtonsChangeRescheduleRebook(true, false, true);
         }
-        else if (Convert.ToDateTime(txtDate.Text) == _serverDateTime && (chkResch.IsChecked.HasValue && chkResch.IsChecked.Value)) // si la fecha de invitacion es hoy y es un reschedule
+        else if (Convert.ToDateTime(txtDate.Text).Date == _serverDateTime.Date && (chkResch.IsChecked.HasValue && chkResch.IsChecked.Value)) // si la fecha de invitacion es hoy y es un reschedule
         {
           // no se permite cambiar
           EnableButtonsChangeRescheduleRebook(false, true, true);
         }
         // si la fecha de invitacion es antes de hoy y no es un reschedule y su fecha de booking es despues de hoy y tiene permiso estandar de invitaciones
-        else if ((Convert.ToDateTime(txtDate.Text) < _serverDateTime)
+        else if ((Convert.ToDateTime(txtDate.Text).Date < _serverDateTime.Date)
                   && (chkResch.IsChecked.HasValue && !chkResch.IsChecked.Value)
-                  && (txtBookingDate.SelectedDate.HasValue && (txtBookingDate.SelectedDate.Value > _serverDateTime))
-                  && _user.HasPermission(_invitationType == InvitationType.Host ? EnumPermission.HostInvitations : EnumPermission.PRInvitations, EnumPermisionLevel.Standard)
+                  && (txtBookingDate.SelectedDate.HasValue && (txtBookingDate.SelectedDate.Value.Date > _serverDateTime.Date))
+                  && _user.HasPermission(_invitationType == EnumInvitationType.Host ? EnumPermission.HostInvitations : EnumPermission.PRInvitations, EnumPermisionLevel.Standard)
                 )
         {
           // no se permite reschedule
           EnableButtonsChangeRescheduleRebook(true, false, true);
         }
         // si la fecha de invitacion es antes de hoy y no es un reschedule y su fecha de booking es hoy
-        else if ((Convert.ToDateTime(txtDate.Text) < _serverDateTime)
+        else if ((Convert.ToDateTime(txtDate.Text).Date < _serverDateTime.Date)
                   && (chkResch.IsChecked.HasValue && !chkResch.IsChecked.Value)
-                  && (txtBookingDate.SelectedDate.HasValue && (txtBookingDate.SelectedDate.Value == _serverDateTime))
+                  && (txtBookingDate.SelectedDate.HasValue && (txtBookingDate.SelectedDate.Value.Date == _serverDateTime.Date))
                 )
         {
           // se permite cambiar, reschedule y rebook
           EnableButtonsChangeRescheduleRebook(true, true, true);
         }
         //' si la fecha de invitacion es antes de hoy y no es un reschedule y su fecha de booking es antes de hoy
-        else if ((Convert.ToDateTime(txtDate.Text) < _serverDateTime)
+        else if ((Convert.ToDateTime(txtDate.Text).Date < _serverDateTime.Date)
                   && (chkResch.IsChecked.HasValue && !chkResch.IsChecked.Value)
-                  && (txtBookingDate.SelectedDate.HasValue && (txtBookingDate.SelectedDate.Value < _serverDateTime))
+                  && (txtBookingDate.SelectedDate.HasValue && (txtBookingDate.SelectedDate.Value.Date < _serverDateTime.Date))
                 )
         {
           //No se permite cambiar
           EnableButtonsChangeRescheduleRebook(false, true, true);
         }
         //si la fecha de invitacion es antes de hoy y no es un reschedule
-        else if ((Convert.ToDateTime(txtDate.Text) < _serverDateTime)
+        else if ((Convert.ToDateTime(txtDate.Text).Date < _serverDateTime.Date)
                   && (chkResch.IsChecked.HasValue && chkResch.IsChecked.Value)
                 )
         {
@@ -1484,9 +1552,9 @@ namespace IM.Base.Forms
       grbPrInfo.IsEnabled = enabledChange || enabledRebook || enabledReschedule || enableGroupBox;
 
       btnChange.IsEnabled = enabledChange;
-      if (_invitationType != InvitationType.OutHouse)
+      if (_invitationType != EnumInvitationType.OutHouse)
       {
-        btnReschedule.IsEnabled = enabledChange;
+        btnReschedule.IsEnabled = enabledReschedule;
         btnRebook.IsEnabled = enabledRebook;
       }
     }
@@ -1504,7 +1572,7 @@ namespace IM.Base.Forms
       }
 
       //Location
-      if (_invitationType != InvitationType.Host)//si no es modulo Host
+      if (_invitationType != EnumInvitationType.Host)//si no es modulo Host
       {
         if (String.IsNullOrEmpty(txtLocation.Text))
         {
@@ -1519,7 +1587,7 @@ namespace IM.Base.Forms
     /// </summary>
     private void BackupOriginalValues()
     {
-      if (_invitationType != InvitationType.Host)
+      if (_invitationType != EnumInvitationType.Host)
       {
         //Location Original
         _locationOriginal = txtLocation2.Text;
@@ -1553,19 +1621,19 @@ namespace IM.Base.Forms
       //Aqui cargamos los controles que son específicos por tipo de invitación
       switch (_invitationType)
       {
-        case BusinessRules.Enums.InvitationType.InHouse:
+        case EnumInvitationType.InHouse:
           LoadInHouseControls();
           break;
-        case BusinessRules.Enums.InvitationType.OutHouse:
+        case EnumInvitationType.OutHouse:
           LoadOutHouseControls();
           break;
-        case BusinessRules.Enums.InvitationType.Host:
+        case EnumInvitationType.Host:
           LoadHostControls();
           break;
-        case BusinessRules.Enums.InvitationType.Animation:
+        case EnumInvitationType.Animation:
           LoadAnimationControls();
           break;
-        case BusinessRules.Enums.InvitationType.Regen:
+        case EnumInvitationType.Regen:
           LoadRegenControls();
           break;
       }
@@ -1657,7 +1725,7 @@ namespace IM.Base.Forms
       #region Información del invitado
       txtGuid.Text = guest.guID.ToString();
 
-      if (_invitationType != InvitationType.OutHouse)
+      if (_invitationType != EnumInvitationType.OutHouse)
       {
         txtReservationNumber.Text = guest.guHReservID;
         txtRebookRef.Text = guest.guRef.ToString();
@@ -1666,7 +1734,7 @@ namespace IM.Base.Forms
       txtDate.Text = guest.guInvitD.HasValue ? guest.guInvitD.Value.ToString("dd/MM/yyyy") : DateTime.Now.ToString("dd/MM/yyyy");
       txtTime.Text = guest.guInvitT.HasValue ? guest.guInvitT.Value.ToString("hh:mm") : DateTime.Now.ToString("hh:mm");
 
-      if (_invitationType == InvitationType.OutHouse || _invitationType == InvitationType.Host)
+      if (_invitationType == EnumInvitationType.OutHouse || _invitationType == EnumInvitationType.Host)
       {
         txtOutInvitation.Text = guest.guOutInvitNum;
       }
@@ -1703,7 +1771,7 @@ namespace IM.Base.Forms
       #endregion
 
       #region Información PR
-      if (_invitationType == InvitationType.OutHouse)
+      if (_invitationType == EnumInvitationType.OutHouse)
       {
         cmbPRContract.SelectedValue = String.IsNullOrEmpty(guest.guPRInfo) ? String.Empty : guest.guPRInfo;
         txtPRContract.Text = String.IsNullOrEmpty(guest.guPRInfo) ? String.Empty : guest.guPRInfo;
@@ -1712,7 +1780,7 @@ namespace IM.Base.Forms
       cmbPR.SelectedValue = String.IsNullOrEmpty(guest.guPRInvit1) ? String.Empty : guest.guPRInvit1;
       txtPR.Text = String.IsNullOrEmpty(guest.guPRInvit1) ? String.Empty : guest.guPRInvit1;
 
-      if (_invitationType != InvitationType.Host)
+      if (_invitationType != EnumInvitationType.Host)
       {
         cmbSalesRoom.SelectedValue = "MPS";// String.IsNullOrEmpty(guest.gusr) ? String.Empty : guest.gusr;
         txtSalesRoom.Text = String.IsNullOrEmpty(guest.gusr) ? String.Empty : guest.gusr;
@@ -1733,7 +1801,7 @@ namespace IM.Base.Forms
       }
 
 
-      if (_invitationType != InvitationType.OutHouse)
+      if (_invitationType != EnumInvitationType.OutHouse)
       {
         txtRescheduleDate.Text = guest.guReschD.HasValue ? guest.guReschD.Value.ToString("dd/MM/yyyy") : String.Empty;
         if (guest.guReschD.HasValue)
@@ -1748,12 +1816,12 @@ namespace IM.Base.Forms
       }
 
 
-      if (_invitationType != InvitationType.Animation && _invitationType != InvitationType.Regen)
+      if (_invitationType != EnumInvitationType.Animation && _invitationType != EnumInvitationType.Regen)
         chkBeforeInOut.IsChecked = guest.guAntesIO;
 
       chkDirect.IsChecked = guest.guDirect;
 
-      if (_invitationType != InvitationType.Host)
+      if (_invitationType != EnumInvitationType.Host)
       {
         txtLocation2.Text = String.IsNullOrEmpty(guest.guloInvit) ? txtSalesRoom.Text : guest.guloInvit;
       }
@@ -1793,12 +1861,12 @@ namespace IM.Base.Forms
       #endregion
 
       #region Room Quantity
-      if (_invitationType != InvitationType.OutHouse)
+      if (_invitationType != EnumInvitationType.OutHouse)
         txtRoomQuantity.Text = guest.guRoomsQty.ToString();
       #endregion
 
       #region Credit Cards *************FALTA LLENAR GRID
-      if (_invitationType == InvitationType.InHouse || _invitationType == InvitationType.Host)
+      if (_invitationType == EnumInvitationType.InHouse || _invitationType == EnumInvitationType.Host)
       {
         txtCCCompany.Text = guest.guCCType;
         LoadCreditCardGrid();
@@ -1970,7 +2038,7 @@ namespace IM.Base.Forms
     /// </summary>
     private void LoadGuestStatusGrid()
     {
-      var guestStatus = IM.BusinessRules.BR.BRGuests.GetGuestStatus(_guestID);
+      var guestStatus = IM.BusinessRules.BR.BRGuestStatusTypes.GetGuestStatus(_guestID);
 
       _lstObjInvitGuestStatus = guestStatus.Select(c => new objInvitGuestStatus
       {
@@ -1985,6 +2053,8 @@ namespace IM.Base.Forms
 
       txtGuestStatus.Text = guestStatus.Any() ? guestStatus.First().gtgs : String.Empty;
       CalculateMaxAuthGifts();
+
+      if (_lstObjInvitGuestStatus.Any()) dtgGuestStatus.CanUserAddRows = false;
     }
 
     /// <summary>
@@ -2046,15 +2116,16 @@ namespace IM.Base.Forms
 
       _lstObjInvitAdditionalGuest = aGuests.Select(c => new objInvitAdditionalGuest
       {
+        guIDParent = _guestID,
         guID = c.guID,
         guLastName1 = c.guLastName1,
         guFirstName1 = c.guFirstName1
       }).ToList();
 
       _lstAdditionals = aGuests;
-
-      objInvitAdditionalGuestViewSource = (CollectionViewSource)this.FindResource("objInvitAdditionalGuestViewSource");
+      objInvitAdditionalGuestViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("objInvitAdditionalGuestViewSource")));
       objInvitAdditionalGuestViewSource.Source = _lstObjInvitAdditionalGuest;
+      
     }
 
     #endregion
@@ -2110,14 +2181,14 @@ namespace IM.Base.Forms
       #endregion
 
       #region Información PR
-      if (_invitationType == InvitationType.OutHouse)
+      if (_invitationType == EnumInvitationType.OutHouse)
       {
         guest.guPRInfo = ForStringValue(txtPRContract.Text);
       }
 
       guest.guPRInvit1 = ForStringValue(txtPR.Text);
 
-      if (_invitationType != InvitationType.Host)
+      if (_invitationType != EnumInvitationType.Host)
       {
         guest.gusr = ForStringValue(cmbSalesRoom.SelectedValue);
       }
@@ -2129,7 +2200,7 @@ namespace IM.Base.Forms
       guest.guBookD = txtBookingDate.SelectedDate.HasValue ? txtBookingDate.SelectedDate.Value : (DateTime?)null;
       guest.guBookT = txtBookingDate.SelectedDate.HasValue && !String.IsNullOrEmpty(cmbBookingTime.SelectedValue.ToString()) ? Convert.ToDateTime(cmbBookingTime.SelectedValue.ToString()) : (DateTime?)null;
 
-      if (_invitationType != InvitationType.OutHouse)
+      if (_invitationType != EnumInvitationType.OutHouse)
       {
         guest.guReschD = txtRescheduleDate.SelectedDate.HasValue ? txtRescheduleDate.SelectedDate : null;
         guest.guReschT = txtRescheduleDate.SelectedDate.HasValue && !String.IsNullOrEmpty(cmbRescheduleTime.SelectedValue.ToString()) ? Convert.ToDateTime(cmbRescheduleTime.SelectedValue.ToString()) : (DateTime?) null;
@@ -2137,12 +2208,12 @@ namespace IM.Base.Forms
       }
 
 
-      if (_invitationType != InvitationType.Animation && _invitationType != InvitationType.Regen)
+      if (_invitationType != EnumInvitationType.Animation && _invitationType != EnumInvitationType.Regen)
         guest.guAntesIO = ForBooleanValue(chkBeforeInOut.IsChecked);
 
       guest.guDirect = ForBooleanValue(chkDirect.IsChecked);
 
-      if (_invitationType != InvitationType.Host)
+      if (_invitationType != EnumInvitationType.Host)
       {
         guest.guloInvit = ForStringValue(txtLocation2.Text);
       }
@@ -2176,12 +2247,12 @@ namespace IM.Base.Forms
       #endregion
 
       #region Room Quantity
-      if (_invitationType != InvitationType.OutHouse)
+      if (_invitationType != EnumInvitationType.OutHouse)
         guest.guRoomsQty = ForIntegerValue(txtRoomQuantity.Text);
       #endregion
 
       #region Credit Cards
-      if (_invitationType == InvitationType.InHouse || _invitationType == InvitationType.Host)
+      if (_invitationType == EnumInvitationType.InHouse || _invitationType == EnumInvitationType.Host)
       {
         guest.guCCType = ForStringValue(txtCCCompany.Text);
         SaveCreditCards();
@@ -2190,11 +2261,8 @@ namespace IM.Base.Forms
 
       #endregion
 
-      #region Additional Information *********FALTA LLENAR EL GRID
-      var newGA = _lstNewAdditionals.Where(d => d.isNew == true).ToList();
-      var updatedGA = _lstNewAdditionals.Where(d => d.isUpdate == true).ToList();
-
-
+      #region Additional Information 
+      SaveAdditionalGuests();
       #endregion
 
       invitation.Guest = guest;
@@ -2386,6 +2454,23 @@ namespace IM.Base.Forms
       }
       
     }
+
+    /// <summary>
+    /// Guarda los invitados adicionales
+    /// </summary>
+    private void SaveAdditionalGuests()
+    {
+      invitation.NewAdditional = new List<Guest>();
+      invitation.UpdatedAdditional = new List<Guest>();
+      invitation.DeletedAdditional = new List<Guest>();
+
+      foreach(var row in _lstObjInvitAdditionalGuest)
+      {
+        var guest = IM.BusinessRules.BR.BRGuests.GetGuestById(row.guID);
+        invitation.NewAdditional.Add(guest); //Agregamos lo que tiene el grid
+        invitation.DeletedAdditional.Add(guest);//Borramos lo que tenia la base de datos
+      }
+    }
     #endregion
 
     #region Métodos para validar al información
@@ -2396,16 +2481,18 @@ namespace IM.Base.Forms
     /// <returns></returns>
     private bool Validate()
     {
-      bool res = GeneralValidation();
+      bool res = true;
 
-      if (res)
-        res = ValidateGifts();
-      else if (res)
-        res = ValidateGuestStatus();
-      else if (res)
-        res = ValidateDesposits();
-      else if (res)
-        res = ValidateCreditCard();
+      if (!GeneralValidation())
+        res = false;
+      else if (!ValidateGifts())
+        res = false;
+      else if (!ValidateGuestStatus())
+        res = false;
+      else if (!ValidateDesposits())
+        res = false;
+      else if (!ValidateCreditCard())
+        res = false;
 
       return res;
 
@@ -2418,16 +2505,41 @@ namespace IM.Base.Forms
     private bool GeneralValidation()
     {
       bool res = true;
-
-      if (_invitationType == InvitationType.InHouse)
+      tbiGeneral.IsSelected = true;
+      if (_invitationType == EnumInvitationType.InHouse && !ValidateFolioInHouse()) //validamos que el folio de invitación inhouse
       {
-        if (!ValidateFolioInHouse()) //validamos que el folio de invitación inhouse
-        {
-          Helpers.UIHelper.ShowMessage("The reservation number has been assigned previously");
-          res = false;
-        }
+        Helpers.UIHelper.ShowMessage("The reservation number has been assigned previously");
+        res = false;
       }
-      else if (_invitationType == InvitationType.OutHouse)
+      else if (_invitationType == EnumInvitationType.OutHouse && String.IsNullOrEmpty(txtPRContract.Text))//validamos que haya seleccionado un proveedor Contact
+      {
+        Helpers.UIHelper.ShowMessage("Specify a PR Contract");
+        cmbPRContract.Focus();
+        res = false;
+      }
+      else if (String.IsNullOrEmpty(txtPR.Text))//validamos que haya seleccionado un proveedor
+      {
+        Helpers.UIHelper.ShowMessage("Specify a PR");
+        cmbPR.Focus();
+        res = false;
+      }
+      else if (_invitationType != EnumInvitationType.Host && String.IsNullOrEmpty(txtSalesRoom.Text))//validamos que haya seleccionado una sala de ventas
+      {
+        Helpers.UIHelper.ShowMessage("Specify a Sales Room");
+        cmbSalesRoom.Focus();
+        res = false;
+      }
+      else if (!ValidateBookindAndRescheduleDate()) //validamos las fechas de booking y reschedule
+      {
+        res = false;
+      }
+      else if (_invitationType == EnumInvitationType.Host && String.IsNullOrEmpty(txtLocation.Text))  // validamos la locacion
+      {
+        Helpers.UIHelper.ShowMessage("Specify a Location");
+        cmbLocation.Focus();
+        res = false;
+      }
+      else if (_invitationType == EnumInvitationType.OutHouse)
       {
         if (String.IsNullOrEmpty(txtOutInvitation.Text)) //validamos que el campo de folio Out está lleno
         {
@@ -2442,13 +2554,19 @@ namespace IM.Base.Forms
           res = false;
         }
       }
-      if (!txtBookingDate.SelectedDate.HasValue)//Validamos que haya ingresado una fecha de booking
+      else if (!txtBookingDate.SelectedDate.HasValue)//Validamos que haya ingresado una fecha de booking
       {
         Helpers.UIHelper.ShowMessage("Specify the Booking date");
         txtBookingDate.Focus();
         res = false;
       }
-      else if (!ValidateClosedDate())//validamos que la fecha de bookin no este en fecha cerrada
+      else if (cmbBookingTime.SelectedIndex == -1)//Validamos que haya ingresado una fecha de booking
+      {
+        Helpers.UIHelper.ShowMessage("Specify the Booking time");
+        cmbBookingTime.Focus();
+        res = false;
+      }
+      else if (ValidateClosedDate())//validamos que la fecha de bookin no este en fecha cerrada
       {
         Helpers.UIHelper.ShowMessage("It's not allowed to make Invitations for a closed date.");
         txtBookingDate.Focus();
@@ -2464,34 +2582,6 @@ namespace IM.Base.Forms
       {
         Helpers.UIHelper.ShowMessage("Enter firts name of Guest 1.");
         txtFirstNameGuest1.Focus();
-        res = false;
-      }
-      else if (_invitationType == InvitationType.OutHouse && String.IsNullOrEmpty(txtPRContract.Text))//validamos que haya seleccionado un proveedor Contact
-      {
-        Helpers.UIHelper.ShowMessage("Specify a PR Contract");
-        cmbPRContract.Focus();
-        res = false;
-      }
-      else if (String.IsNullOrEmpty(txtPR.Text))//validamos que haya seleccionado un proveedor
-      {
-        Helpers.UIHelper.ShowMessage("Specify a PR");
-        cmbPR.Focus();
-        res = false;
-      }
-      else if (_invitationType != InvitationType.Host && String.IsNullOrEmpty(txtSalesRoom.Text))//validamos que haya seleccionado una sala de ventas
-      {
-        Helpers.UIHelper.ShowMessage("Specify a Sales Room");
-        cmbSalesRoom.Focus();
-        res = false;
-      }
-      else if (!ValidateBookindAndRescheduleDate()) //validamos las fechas de booking y reschedule
-      {
-        res = false;
-      }
-      else if (_invitationType == InvitationType.Host && String.IsNullOrEmpty(txtLocation.Text))  // validamos la locacion
-      {
-        Helpers.UIHelper.ShowMessage("Specify a Location");
-        cmbLocation.Focus();
         res = false;
       }
       else if (cmbHotel.SelectedIndex == -1 || cmbHotel.SelectedValue == null || String.IsNullOrEmpty(cmbHotel.SelectedValue.ToString()))// validamos el hotel
@@ -2512,13 +2602,13 @@ namespace IM.Base.Forms
         txtPax.Focus();
         res = false;
       }
-      else if (System.Text.RegularExpressions.Regex.IsMatch(txtPax.Text, @"[^0-9.-]+"))//^[0-9]([.][0-9]{1,2})?$
+      else if (System.Text.RegularExpressions.Regex.IsMatch(txtPax.Text, @"[^0-9.-]+"))//validamos que el pax sea númerico 
       {
         Helpers.UIHelper.ShowMessage("Pax control accepts numbers");
         txtPax.Focus();
         res = false;
       }
-      else if (Convert.ToDecimal(txtPax.Text) < 0.1m || Convert.ToDecimal(txtPax.Text) > 1000)
+      else if (Convert.ToDecimal(txtPax.Text) < 0.1m || Convert.ToDecimal(txtPax.Text) > 1000) //vlidamos que el pax se entre entre 1y mil
       {
         Helpers.UIHelper.ShowMessage("Pax is out of range. Allowed values are 0.1 to 1000");
         txtPax.Focus();
@@ -2542,10 +2632,7 @@ namespace IM.Base.Forms
         cmbCountry.Focus();
         res = false;
       }
-      //else if ()//' validamos los regalos
-      //{
-
-      //}
+      
       return res;
     }
 
@@ -2556,19 +2643,20 @@ namespace IM.Base.Forms
     private bool ValidateGuestStatus()
     {
       bool res = true;
-      if (!dtgGuestStatus.HasItems)
+      string title = "Guest Status Section";
+      if (!_lstObjInvitGuestStatus.Any())
       {
-        Helpers.UIHelper.ShowMessage("Specify at least one status");
+        Helpers.UIHelper.ShowMessage("Specify at least one status", title: title);
         res = false;
       }
       else if (_lstObjInvitGuestStatus.Where(g => g.gtQuantity == 0).Any())
       {
-        Helpers.UIHelper.ShowMessage("Any status does not has a quantity");
+        Helpers.UIHelper.ShowMessage("Any status does not has a quantity", title: title);
         res = false;
       }
       else if (_lstObjInvitGuestStatus.Where(g => String.IsNullOrEmpty(g.gtgs)).Any())
       {
-        Helpers.UIHelper.ShowMessage("Any status does not has a status");
+        Helpers.UIHelper.ShowMessage("Any status does not has a status", title: title);
         res = false;
       }
 
@@ -2576,6 +2664,175 @@ namespace IM.Base.Forms
       {
         tbiOtherInformation.IsSelected = true;
         dtgGuestStatus.Focus();
+      }
+      return res;
+    }
+
+    /// <summary>
+    /// Validamos la información de los nuevos regalos
+    /// </summary>
+    /// <returns>Boolean</returns>
+    private bool ValidateGifts()
+    {
+      bool res = true;
+      string title = "Gifts Section";
+      //Revisamos que todos los regalos tengan una cantidad
+      if (_lstObjInvitGift.Where(g => g.igQty == 0).Any())
+      {
+        res = false;
+        Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific quantity", title: title);
+      }
+      else if (_lstObjInvitGift.Where(g => String.IsNullOrEmpty(g.iggi)).Any()) //Revisamos que todos los registros tengan un regalo
+      {
+        res = false;
+        Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific gift", title: title);
+      }
+      else if (_lstObjInvitGift.Where(g => g.igAdults == 0).Any()) //Revisamos que todos los registros tengan almenos un Adulto asignado
+      {
+        res = false;
+        Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific adults", title: title);
+      }
+
+      if (res)
+      {
+        foreach (var row in _lstObjInvitGift)
+        {
+          var gift = IM.BusinessRules.BR.BRGifts.GetGiftId(row.iggi);
+          if (row.igQty > gift.giMaxQty)
+          {
+            string error = String.Format("The maximu quantity authorized of the gift {0} has been exceeded.\n Max authotized = {1}", gift.giN, gift.giMaxQty);
+            Helpers.UIHelper.ShowMessage(error, title: title);
+            res = false;
+            break;
+          }
+        }
+      }
+
+      if (!res)
+      {
+        tbiGeneral.IsSelected = true;
+        dtgGifts.Focus();
+      }
+      return res;
+    }
+
+    /// <summary>
+    /// Validamos la información de los nuevos depósitos
+    /// </summary>
+    /// <returns></returns>
+    private bool ValidateDesposits()
+    {
+      bool res = true;
+      string title = "Deposit Section";
+      
+      if (_lstObjInvitBookingDeposit.Where(c => String.IsNullOrEmpty(c.bdcu)).Any()) // validamos que se especifique la moneda
+      {
+        foreach (var row in _lstObjInvitBookingDeposit.Where(c => String.IsNullOrEmpty(c.bdcu)).ToList())
+        {
+          if (row.bdAmount != 0 || row.bdReceived != 0)//' si se capturo alguno de los montos
+          {
+            Helpers.UIHelper.ShowMessage("Any Amount without currency specified.", title: title);
+            res = false;
+            break;
+          }
+        }
+      }
+      else if (_lstObjInvitBookingDeposit.Where(c => String.IsNullOrEmpty(c.bdpt)).Any())// validamos que se especifique la forma de pago
+      {
+        Helpers.UIHelper.ShowMessage("Any Deposit does not has a paymente type specified.", title: title);
+        res = false;
+      }
+      else if (_lstObjInvitBookingDeposit.Where(c => c.bdAmount == 0 && c.bdReceived == 0).Any())// validamos que se especifique alguno de los montos
+      {
+        Helpers.UIHelper.ShowMessage("Currency without Amount specified.", title: title);
+        res = false;
+      }
+      else if (_lstObjInvitBookingDeposit.Where(c => String.IsNullOrEmpty(c.bdpc)).Any())// validamos si especifico un lugar de pago
+      {
+        Helpers.UIHelper.ShowMessage("Select a place of payment.", title: title);
+        res = false;
+      }
+      else if (_lstObjInvitBookingDeposit.Where(c => c.bdpt.ToUpper() == "CC").Any()) //Validamos la informacion de la tarjeta  de credito
+      {
+        foreach (var row in _lstObjInvitBookingDeposit.Where(c => c.bdpt.ToUpper() == "CC").ToList())
+        {
+          if (String.IsNullOrEmpty(row.bdcc))
+          {
+            Helpers.UIHelper.ShowMessage("Select a credit card", title: title);
+            res = false;
+            break;
+          }
+          else if (String.IsNullOrEmpty(row.bdCardNum))
+          {
+            Helpers.UIHelper.ShowMessage("Input the last four numbers", title: title);
+            res = false;
+            break;
+          }
+          else if (String.IsNullOrEmpty(row.bdExpD))//Validamos la fecha de expiracion
+          {
+            Helpers.UIHelper.ShowMessage("Input the expire date", title: title);
+            res = false;
+            break;
+          }
+          else if (!String.IsNullOrEmpty(row.bdExpD))//Validamos la fecha de expiracion
+          {
+            var dt = new DateTime();
+            var exp = "01/" + row.bdExpD;
+            if (!DateTime.TryParse(exp, out dt))
+            {
+              Helpers.UIHelper.ShowMessage("The expire date does not has a correct format. (MM/YY)", title: title);
+              res = false;
+              break;
+            }
+          }
+          else if (!row.bdAuth.HasValue)
+          {
+            Helpers.UIHelper.ShowMessage("Input the Authorizathion number", title: title);
+            res = false;
+            break;
+          }
+        }
+      }
+      else if (_lstObjInvitBookingDeposit.Where(c => (c.bdAmount - c.bdReceived) > 0 && !c.bdFolioCXC.HasValue).Any())//Validamos el importe de CXC  bdAmount - bdReceived
+      {
+        Helpers.UIHelper.ShowMessage("Add Folio CXC information.", title: title);
+        res = false;
+      }
+
+      if (!res)
+      {
+        tbiOtherInformation.IsSelected = true;
+        dtgDeposits.Focus();
+      }
+
+      return res;
+    }
+
+    /// <summary>
+    /// Validamos la información de una nueva tarjeta de credito
+    /// </summary>
+    /// <returns>Boolean</returns>
+    private bool ValidateCreditCard()
+    {
+      bool res = true;
+      string title = "Credit Card Section";
+      if (!dtgCCCompany.HasItems) return res;
+
+      if (_lstObjInvitCreditCard.Where(c => String.IsNullOrEmpty(c.gdcc)).Any())
+      {
+        Helpers.UIHelper.ShowMessage("Select a credit card", title: title);
+        res = false;
+      }
+      else if (_lstObjInvitCreditCard.Where(c => c.gdQuantity == 0).Any())
+      {
+        Helpers.UIHelper.ShowMessage("Input a quantity", title: title);
+        res = false;
+      }
+
+      if (!res)
+      {
+        tbiOtherInformation.IsSelected = true;
+        dtgCCCompany.Focus();
       }
       return res;
     }
@@ -2653,7 +2910,8 @@ namespace IM.Base.Forms
     /// <returns></returns>
     private bool ValidateClosedDate()
     {
-      return _closeDate.HasValue && txtBookingDate.SelectedDate.Value <= _closeDate.Value;
+      if (!_closeDate.HasValue) return false;
+      return txtBookingDate.SelectedDate.Value.Date <= _closeDate.Value.Date;
     }
 
     /// <summary>
@@ -2708,7 +2966,7 @@ namespace IM.Base.Forms
       }
       else
       {
-        if(txtBookingDate.SelectedDate.Value < DateTime.Today)//validamos que la fecha de booking no sea antes de hoy
+        if(txtBookingDate.SelectedDate.Value.Date < DateTime.Today.Date)//validamos que la fecha de booking no sea antes de hoy
         {
           Helpers.UIHelper.ShowMessage("Booking date can not be before today.");
           txtBookingDate.Focus();
@@ -2718,13 +2976,13 @@ namespace IM.Base.Forms
 
       if (!res) return res;
 
-      if (txtDeparture.SelectedDate.HasValue && (txtDeparture.SelectedDate.Value < txtBookingDate.SelectedDate.Value)) //Validamos que la fecha de entrada no sea mayor ala fecha de salida
+      if (txtDeparture.SelectedDate.HasValue && (txtDeparture.SelectedDate.Value.Date < txtBookingDate.SelectedDate.Value.Date)) //Validamos que la fecha de entrada no sea mayor ala fecha de salida
       {
         Helpers.UIHelper.ShowMessage("Booking date can not be after Check Out date");
         txtBookingDate.Focus();
         res = false;
       }
-      else if (txtArrival.SelectedDate.HasValue && (txtArrival.SelectedDate.Value > txtBookingDate.SelectedDate.Value))
+      else if (txtArrival.SelectedDate.HasValue && (txtArrival.SelectedDate.Value.Date > txtBookingDate.SelectedDate.Value.Date))
       {
         Helpers.UIHelper.ShowMessage("Booking date can not be before Check In date.");
         txtBookingDate.Focus();
@@ -2759,17 +3017,17 @@ namespace IM.Base.Forms
         errorMessage ="Specify the reschedule date.";
         res = false;
       }
-      else if (txtDeparture.SelectedDate.HasValue && (txtRescheduleDate.SelectedDate.Value > txtDeparture.SelectedDate.Value)) //validamos que la fecha de reschedule no sea despues de la fecha de salida
+      else if (txtDeparture.SelectedDate.HasValue && (txtRescheduleDate.SelectedDate.Value.Date > txtDeparture.SelectedDate.Value.Date)) //validamos que la fecha de reschedule no sea despues de la fecha de salida
       {
         errorMessage = "Reschedule date can not be after check out date.";
         res = false;
       }
-      else if (txtArrival.SelectedDate.HasValue && (txtRescheduleDate.SelectedDate.Value < txtArrival.SelectedDate.Value)) // validamos que la fecha de reschedule no sea antes de la fecha de llegada
+      else if (txtArrival.SelectedDate.HasValue && (txtRescheduleDate.SelectedDate.Value.Date < txtArrival.SelectedDate.Value.Date)) // validamos que la fecha de reschedule no sea antes de la fecha de llegada
       {
         errorMessage = "Reschedule date can not be before booking date.";
         res = false;
       }
-      else if (txtRescheduleDate.SelectedDate.Value < DateTime.Today) // validamos que la fecha de reschedule no sea antes de hoy
+      else if (txtRescheduleDate.SelectedDate.Value.Date < DateTime.Today.Date) // validamos que la fecha de reschedule no sea antes de hoy
       {
         errorMessage = "Reschedule date can not be before today.";
         res = false;
@@ -2796,147 +3054,7 @@ namespace IM.Base.Forms
 
       return res;
     }
-    
-    /// <summary>
-    /// Validamos la información de los nuevos regalos
-    /// </summary>
-    /// <returns>Boolean</returns>
-    private bool ValidateGifts()
-    {
-      int qty, adult, minor, eAdult;
-      bool res = true;
-
-      //Revisamos que todos los regalos tengan una cantidad
-      if(_lstObjInvitGift.Where(g=> g.igQty == 0).Any())
-      {
-        res = false;
-        Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific quantity");
-      }
-      else if(_lstObjInvitGift.Where(g => String.IsNullOrEmpty(g.iggi)).Any()) //Revisamos que todos los registros tengan un regalo
-      {
-        res = false;
-        Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific gift");
-      }
-      else if (_lstObjInvitGift.Where(g => g.igAdults == 0).Any()) //Revisamos que todos los registros tengan almenos un Adulto asignado
-      {
-        res = false;
-        Helpers.UIHelper.ShowMessage("any of the gifts does not have a specific adults");
-      }
-
-      if(res)
-      {
-        foreach(var row in _lstObjInvitGift)
-        {
-          var gift = IM.BusinessRules.BR.BRGifts.GetGiftId(row.iggi);
-          if(row.igQty > gift.giMaxQty)
-          {
-            string error = String.Format("The maximu quantity authorized of the gift {0} has been exceeded.\n Max authotized = {1}", gift.giN, gift.giMaxQty);
-            Helpers.UIHelper.ShowMessage(error);
-            res = false;
-            break;
-          }
-        }
-      }
-
-      if (!res)
-      {
-        tbiGeneral.IsSelected = true;
-        dtgGifts.Focus();
-      }
-      return res;
-    }
-
-    /// <summary>
-    /// Validamos la información de los nuevos depósitos
-    /// </summary>
-    /// <returns></returns>
-    private bool ValidateDesposits()
-    {
-      bool res = true;
-      decimal deposit, received;
-
-      if(_lstObjInvitBookingDeposit.Where(c=> String.IsNullOrEmpty(c.bdcu)).Any()) // validamos que se especifique la moneda
-      {
-        foreach(var row in _lstObjInvitBookingDeposit.Where(c => String.IsNullOrEmpty(c.bdcu)).ToList())
-        {
-          if (row.bdAmount != 0 || row.bdReceived != 0)//' si se capturo alguno de los montos
-          {
-            Helpers.UIHelper.ShowMessage("Any Amount without currency specified.");
-            res = false;
-            break;
-          }
-        }
-      }
-      else if(_lstObjInvitBookingDeposit.Where(c=> String.IsNullOrEmpty(c.bdpt)).Any())// validamos que se especifique la forma de pago
-      {
-        Helpers.UIHelper.ShowMessage("Any Deposit does not has a paymente type specified.");
-        res = false;
-      }
-      else if(_lstObjInvitBookingDeposit.Where(c=> c.bdAmount == 0 && c.bdReceived == 0).Any())// validamos que se especifique alguno de los montos
-      {
-        Helpers.UIHelper.ShowMessage("Currency without Amount specified.");
-        res = false;
-      }
-      else if(_lstObjInvitBookingDeposit.Where(c=> String.IsNullOrEmpty(c.bdpc)).Any())// validamos si especifico un lugar de pago
-      {
-        Helpers.UIHelper.ShowMessage("Select a place of payment.");
-        res = false;
-      }
-      else if (_lstObjInvitBookingDeposit.Where(c=> c.bdpt.ToUpper() == "CC").Any()) //Validamos la informacion de la tarjeta  de credito
-      {
-        foreach (var row in _lstObjInvitBookingDeposit.Where(c => c.bdpt.ToUpper() == "CC").ToList())
-        {
-          if (String.IsNullOrEmpty(row.bdcc))
-          {
-            Helpers.UIHelper.ShowMessage("Select a credit card");
-            res = false;
-            break;
-          }
-          else if(String.IsNullOrEmpty(row.bdCardNum))
-          {
-            Helpers.UIHelper.ShowMessage("Input the last four numbers");
-            res = false;
-            break;
-          }
-          else if (String.IsNullOrEmpty(row.bdExpD))//Validamos la fecha de expiracion
-          {
-            Helpers.UIHelper.ShowMessage("Input the expire date");
-            res = false;
-            break;
-          }
-          else if (!String.IsNullOrEmpty(row.bdExpD))//Validamos la fecha de expiracion
-          {
-            var dt = new DateTime();
-            if (!DateTime.TryParse(row.bdExpD, out dt))
-            {
-              Helpers.UIHelper.ShowMessage("The expire date does not has a correct format. (MM/YY)");
-              res = false;
-              break;
-            }
-          }
-          else if(!row.bdAuth.HasValue)
-          {
-            Helpers.UIHelper.ShowMessage("Input the Authorizathion number");
-            res = false;
-            break;
-          }
-        }
-      }
-      else if(_lstObjInvitBookingDeposit.Where(c=> (c.bdAmount -  c.bdReceived) > 0  && !c.bdFolioCXC.HasValue).Any())//Validamos el importe de CXC  bdAmount - bdReceived
-      {
-        Helpers.UIHelper.ShowMessage("Add Folio CXC information.");
-        res = false;
-      }
-
-      if(!res)
-      {
-        tbiOtherInformation.IsSelected = true;
-        dtgDeposits.Focus();
-      }
-      
-      return res;
-    }
-
+       
     /// <summary>
     /// Validamos la información introducida en el campo Expiration
     /// </summary>
@@ -2951,33 +3069,6 @@ namespace IM.Base.Forms
       return res;
     }
 
-    /// <summary>
-    /// Validamos la información de una nueva tarjeta de credito
-    /// </summary>
-    /// <returns>Boolean</returns>
-    private bool ValidateCreditCard()
-    {
-      bool res = true;
-      if (!dtgCCCompany.HasItems) return res;
-
-      if(_lstObjInvitCreditCard.Where(c=> String.IsNullOrEmpty(c.gdcc)).Any())
-      {
-        Helpers.UIHelper.ShowMessage("Select a credit card");
-        res = false;
-      }
-      else if(_lstObjInvitCreditCard.Where(c => c.gdQuantity == 0).Any())
-      {
-        Helpers.UIHelper.ShowMessage("Input a quantity");
-        res = false;
-      }    
-
-      if(!res)
-      {
-        tbiOtherInformation.IsSelected = true;
-        dtgCCCompany.Focus();
-      }
-      return res;
-    }
     #endregion
 
     #region Métodos para asignar valores al objeto Guest
@@ -3126,14 +3217,10 @@ namespace IM.Base.Forms
 
       txtMaxAuth.Text = maxAuthGifts.ToString("$#,##0.00;$(#,##0.00)");
     }
-
-
-
-
     #endregion
 
     #endregion
 
-    
   }
 }
+

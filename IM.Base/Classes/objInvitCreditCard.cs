@@ -22,7 +22,11 @@ namespace IM.Base.Classes
         switch (columnName)
         {
           case "gdcc":
-            if (String.IsNullOrWhiteSpace(gdcc))
+            if(gdQuantity == 0)
+            {
+              errorMessage = "Input a quantity";
+            }
+            else if (String.IsNullOrWhiteSpace(gdcc))
             {
               errorMessage = "Select a Credit Card.";
             }

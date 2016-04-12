@@ -11,8 +11,7 @@ namespace IM.Base.Classes
     {
       get
       {
-        return String.Concat(this[igQty.ToString()], " ", this[iggi], " ",
-                             this[igComments]);
+        return String.Concat(this[igQty.ToString()], " ", this[iggi], " ", this[igAdults.ToString()]);
       }
     }
 
@@ -23,16 +22,26 @@ namespace IM.Base.Classes
         string errorMessage = null;
         switch (columnName)
         {
-          case "iggi":
-            if (String.IsNullOrWhiteSpace(iggi))
-            {
-              errorMessage = "Select a Gift.";
-            }
-            break;
           case "igQty":
             if (igQty == 0)
             {
               errorMessage = "Input a Quantity.";
+            }
+            break;
+          case "iggi":
+            if (igQty == 0)
+            {
+              errorMessage = "Input a Quantity.";
+            }
+            else if (String.IsNullOrWhiteSpace(iggi))
+            {
+              errorMessage = "Select a Gift.";
+            }
+            break;
+          case "igAdults":
+            if(igAdults == 0 && !String.IsNullOrEmpty(iggi))
+            {
+              errorMessage = "Adult quantity can not be less 1";
             }
             break;
         }

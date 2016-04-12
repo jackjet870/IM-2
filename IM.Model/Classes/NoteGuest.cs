@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IM.BusinessRules.Entities
+namespace IM.Model.Classes
 {
   public class NoteGuest
   {

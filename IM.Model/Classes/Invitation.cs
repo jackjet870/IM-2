@@ -2,7 +2,7 @@
 using IM.Model;
 using System.Collections.Generic;
 
-namespace IM.BusinessRules.Classes
+namespace IM.Model.Classes
 {
   public class Invitation
   {

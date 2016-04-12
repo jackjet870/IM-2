@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
-using IM.BusinessRules.Classes;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using IM.Model.Classes;
@@ -227,34 +226,6 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
-    #region GetGuestStatusTypeInvit
-    /// <summary>
-    /// Obtiene una lista específica de elementos para el grid de guest estatus
-    /// </summary>
-    /// <param name="guestId">Identificador del invitado</param>
-    /// <returns>Lista de GuestStatusTypeInvit</returns>
-    /// <history>
-    /// [lchairez] 16/03/2016 Created.
-    /// </history>
-    public static List<GuestStatusInvitation> GetGuestStatusTypeInvit(int guestId)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var gs = (from gss in dbContext.GuestsStatus
-                  join gst in dbContext.GuestsStatusTypes on gss.gtgs equals gst.gsID
-                  where gss.gtgu == guestId
-                  select new GuestStatusInvitation
-                  {
-                    gsgu = gss.gtgu,
-                    gsID = gss.gtgs,
-                    GuestStatus = gst.gsN,
-                    gsQty = gss.gtQuantity
-                  }).ToList();
-        return gs;
-      }
-    }
-    #endregion
-
     #region GetGuestCreditCard
     /// <summary>
     /// Obtiene las tarjetas de crédito del invitado
@@ -388,30 +359,26 @@ namespace IM.BusinessRules.BR
           #endregion
           
           #region Additional Information
-          ////Agregamos un nuevo invitado adicional
-          //foreach (var item in lstNewGuestAdditional)
-          //{
-          //  var guestAddit = dbContext.Guests.SingleOrDefault(gg => gg.guID == item.guID);
-          //  if (guestAddit != null)
-          //    guest.GuestsAdditional.Add(guestAddit);
-          //}
+          //Borramos los invitados adicionales
+          foreach(var row in invitation.DeletedAdditional)
+          {
+              var guestAddit = dbContext.Guests.SingleOrDefault(gg => gg.guID == row.guID);
+              if (guestAddit != null)
+                invitation.Guest.GuestsAdditional.Remove(guestAddit);
+          }
 
-          ////Actualizamos los adicionales
-          //foreach (var item in lstUpdatedGuestAdditional)
-          //{
-          //  var updatedGuestAddit = guest.GuestsAdditional.SingleOrDefault(gg => gg.guID == item.guIDPrevious);
-          //  if (updatedGuestAddit != null)
-          //  {
-          //    guest.GuestsAdditional.Remove(updatedGuestAddit);
-          //    var guestAddit = dbContext.Guests.SingleOrDefault(gg => gg.guID == item.guID);
-          //    if (guestAddit != null)
-          //      guest.GuestsAdditional.Add(guestAddit);
-          //  }
+          //Agregamos un nuevo invitado adicional
+          foreach (var item in invitation.NewAdditional)
+          {
+            var guestAddit = dbContext.Guests.SingleOrDefault(gg => gg.guID == item.guID);
+            if (guestAddit != null)
+              invitation.Guest.GuestsAdditional.Add(guestAddit);
+          }
 
-          //}
+
 
           #endregion
-                    
+
           dbContext.SaveChanges();
         }
         catch(Exception ex)
@@ -463,54 +430,6 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion
-
-    #region GuestStatustypeId
-    /// <summary>
-    /// Obtiene el tipo de  estatus del invitado por su ID
-    /// </summary>
-    /// <param name="gstId">Identificador del tipo de estado del invitado</param>
-    /// <returns>GuestStatusType</returns>
-    /// <history>
-    /// [lchairez] 24/03/2016 Created.
-    /// </history>
-    public static GuestStatusType GetGuestStatusTypeId(string gstId)
-    {
-      using(var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        return dbContext.GuestsStatusTypes.Where(g => g.gsID == gstId).SingleOrDefault();
-      }
-    }
-    #endregion
-
-    #region GetGuestCreditCardInvitation
-    /// <summary>
-    /// Obtiene una lista específica para llenar el grid de tarjetas de credito para las invitaciones
-    /// </summary>
-    /// <param name="guestId">Identificador del invitado</param>
-    /// <returns>Lista de GuestCreditCardInvitation</returns>
-    /// <history>
-    /// [lchairez] 24/03/2016 Created.
-    /// </history>
-    public static List<GuestCreditCardInvitation> GetGuestCreditCardInvitation(int guestId)
-    {
-      using(var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var creditCards = GetGuestCreditCard(guestId);
-
-        var cc = (from gc in creditCards
-                  join c in dbContext.CreditCardTypes on gc.gdcc equals c.ccID
-                  select new GuestCreditCardInvitation
-                  {
-                    ccgu = gc.gdgu,
-                    ccID = gc.gdcc,
-                    ccQty = gc.gdQuantity,
-                    CreditCard = c.ccN
-                  }).ToList();
-
-        return cc;
-      }
-    }
     #endregion
 
     #region GetGuestsGroupIntegrants
@@ -607,23 +526,6 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
-    #region GetGuestStatus
-    /// <summary>
-    /// Obtiene los estatus del invitado
-    /// </summary>
-    /// <param name="guest">Invitado a consultar</param>
-    /// <history>
-    /// [lchairez] 04/04/2016 Created.
-    /// </history>
-    public static List<GuestStatus> GetGuestStatus(int guestId)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        return dbContext.GuestsStatus.Where(g => g.gtgu == guestId).ToList();
-      }
-    }
-    #endregion
-
     #region SaveChangedOfGuest
     /// <summary>
     /// Guarda los cambios en un guest y de igual forma el Log de este.
@@ -704,6 +606,46 @@ namespace IM.BusinessRules.BR
             return respuesta = 0;
           }
         }
+      }
+    }
+    #endregion
+
+    #region GetSearchGuest
+
+    public static List<Guest> GetSearchGuest(string leadSource, string name, string room, string reservacion, DateTime dtFrom, DateTime dtTo, string lsProgram)
+    {
+      using(var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var guests = (from g in dbContext.Guests
+                     join ls in dbContext.LeadSources on g.guls equals ls.lsID
+                     where ls.lspg == lsProgram
+                          && (g.guCheckInD >= dtFrom && g.guCheckInD <= dtTo)
+                      select g).ToList();
+        if(!String.IsNullOrEmpty(leadSource))
+        {
+          guests = guests.Where(g => g.guls.Equals(leadSource)).ToList();
+        }
+
+        if (!String.IsNullOrEmpty(name))
+        {
+          guests = guests.Where(g=> (g.guLastName1 != null && g.guLastName1.ToUpper().Contains(name))
+                                || (g.guFirstName1 != null && g.guFirstName1.ToUpper().Contains(name))
+                                || (g.guLastname2 != null && g.guLastname2.ToUpper().Contains(name))
+                                || (g.guFirstName2 != null && g.guFirstName2.ToUpper().Contains(name))).ToList();
+
+        }
+
+        if (!String.IsNullOrEmpty(room))
+        {
+          guests = guests.Where(g => g.guRoomNum != null && g.guRoomNum.Contains(room)).ToList();
+        }
+
+        if (!String.IsNullOrEmpty(reservacion))
+        {
+          guests = guests.Where(g => g.guHReservID != null && g.guHReservID.Contains(reservacion)).ToList();
+        }
+
+        return guests;
       }
     }
     #endregion

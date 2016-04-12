@@ -18,6 +18,7 @@
         <CollectionViewSource x:Key="currencyViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:Currency}, CreateList=True}"/>
         <CollectionViewSource x:Key="paymentTypeViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:PaymentType}, CreateList=True}"/>
         <CollectionViewSource x:Key="objInvitAdditionalGuestViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:objInvitAdditionalGuest}, CreateList=True}"/>
+        
     </Window.Resources>
 
     <Grid Background="SkyBlue" ScrollViewer.CanContentScroll="True"
@@ -28,7 +29,7 @@
         </Grid.RowDefinitions>
         <TabControl Grid.Row="0">
             <!--#region TAB General-->
-            <TabItem Header="General" Name="tbiGeneral">
+            <TabItem Header="General" Name="tbiGeneral" Height="29" VerticalAlignment="Bottom">
                 <Grid Background="SkyBlue" Name="grdGeneral">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5"></ColumnDefinition>
@@ -315,7 +316,7 @@
                                                 </Style>
                                             </DataGridComboBoxColumn.EditingElementStyle>
                                         </DataGridComboBoxColumn>
-                                        <DataGridTextColumn Binding="{Binding igAdults, ValidatesOnDataErrors=True}"  Header="Adults" />
+                                        <DataGridTextColumn Binding="{Binding igAdults, ValidatesOnDataErrors=True}" Header="Adults" />
                                         <DataGridTextColumn Binding="{Binding igMinors, ValidatesOnDataErrors=True}" Header="Minors" />
                                         <DataGridTextColumn Binding="{Binding igExtraAdults, ValidatesOnDataErrors=True}" Header="E.Adults" />
                                     </DataGrid.Columns>
@@ -598,7 +599,7 @@
 
                             <!--#region RESORT-->
                             <Label Grid.Column="0" Grid.Row="5"  HorizontalAlignment="Right">Resort</Label>
-                            <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="5" Name="cmbResort" FontSize="10"/>
+                            <ComboBox Grid.ColumnSpan="2" Name="cmbResort" FontSize="10" Margin="-153,-25,72,38"/>
                             <!--#endregion-->
 
                         </Grid>
@@ -628,16 +629,16 @@
                             <DataGrid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Name="dtgGuestStatus" 
                                       AutoGenerateColumns="False" CanUserAddRows="True" CanUserSortColumns="False"
                                       ItemsSource="{Binding Source={StaticResource objInvitGuestStatusViewSource}}" 
-                                      CellEditEnding="dtgGuestStatus_CellEditEnding"
-                                      PreviewTextInput="dtgGuestStatus_PreviewTextInput" >
+                                      CellEditEnding="dtgGuestStatus_CellEditEnding" LoadingRow="dtgGuestStatus_LoadingRow">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Qty" Binding="{Binding gtQuantity}" Width="40"/>
+                                    <DataGridTextColumn Header="Qty" Binding="{Binding gtQuantity, ValidatesOnDataErrors=True}" Width="40" Visibility="Hidden"/>
                                     <DataGridComboBoxColumn  x:Name="cmbGuestStatus" SelectedValueBinding="{Binding gtgs, ValidatesOnDataErrors=True}"
                                                                             DisplayMemberPath="gsN" SelectedValuePath="gsID"  Header="Status" Width="*"
                                                                      ItemsSource="{Binding Source={StaticResource guestStatusTypeViewSource}}">
                                         <DataGridComboBoxColumn.EditingElementStyle>
-                                            <Style TargetType="ComboBox">
+                                            <Style TargetType="{x:Type ComboBox}">
                                                 <Setter Property="IsEditable" Value="True"/>
+                                                <!--<EventSetter Event="SelectionChanged" Handler="dtgGuestStatus_SelectionChanged"/>-->
                                             </Style>
                                         </DataGridComboBoxColumn.EditingElementStyle>
                                     </DataGridComboBoxColumn>
@@ -691,18 +692,32 @@
                     <!--#endregion-->
 
                     <!--#region ADDITIONAL INFORMATION-->
-                    <GroupBox Grid.Column="2" Grid.Row="1" Header="Additional Infomation" Name="grbAdditionalInfo" Grid.ColumnSpan="2">
-                        <DataGrid Name="dtgAdditInform" AutoGenerateColumns="False"
-                                          CanUserAddRows="True" CanUserSortColumns="False"
-                                          ItemsSource="{Binding Source={StaticResource objInvitAdditionalGuestViewSource}}" CellEditEnding="dtgAdditInform_CellEditEnding" PreviewTextInput="PreviewTextInput">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn />
-                                <DataGridTextColumn Header="GUID" Binding="{Binding guID}"/>
-                                <DataGridTextColumn Header="Last Name" Binding="{Binding guLastName1}" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="Firts Name" Binding="{Binding guFirstName1}" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="Details" Width="*"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                    <GroupBox Grid.Column="2" Grid.Row="1" Header="Additional Guest" Name="grbAdditionalInfo" Grid.ColumnSpan="2">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Button Name="btnSearchAdditional" Width="90" HorizontalAlignment="Right" Click="btnSearchAdditional_Click">
+                                <StackPanel Orientation="Horizontal" Width="80" HorizontalAlignment="Center">
+                                    <TextBlock>Buscar</TextBlock>
+                                    <Image Name="imgSearchAdditional" Source="../Images/Search.ico" Width="28" Height="18" HorizontalAlignment="Right"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!--#region Grid-->
+                            <DataGrid Grid.Row="1" Name="dtgAdditionalGuest" CanUserAddRows="True" CanUserSortColumns="False"
+                                      ItemsSource="{Binding Source={StaticResource objInvitAdditionalGuestViewSource}}"
+                                      AutoGenerateColumns="False" CellEditEnding="dtgAdditionalGuest_CellEditEnding" PreviewTextInput="PreviewTextInput" >
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="GUID" Binding="{Binding guID, ValidatesOnDataErrors=True}"/>
+                                    <DataGridTextColumn Header="Last Name" Binding="{Binding guLastName1}" IsReadOnly="True" />
+                                    <DataGridTextColumn Header="First Name" Binding="{Binding guFirstName1}" IsReadOnly="True"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <!--#endregion-->
+                        </Grid>
+
                     </GroupBox>
                     <!--#endregion-->
 
