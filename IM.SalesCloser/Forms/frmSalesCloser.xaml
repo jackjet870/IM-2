@@ -53,7 +53,7 @@
                     <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=DateRange}"/>
                     <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
                     <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=DateRange}"/>
-                    <ComboBox x:Name="cbxPersonnel"  Style="{StaticResource cbxPersonnel}" TextSearch.TextPath="peN">
+                    <ComboBox x:Name="cbxPersonnel"  Style="{StaticResource cbxPersonnel}" TextSearch.TextPath="peID">
                         <ComboBox.ItemTemplate>
                             <StaticResource ResourceKey="comboBoxTemplate"/>
                         </ComboBox.ItemTemplate>
