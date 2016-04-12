@@ -14,7 +14,7 @@ namespace IM.Assignment.Classes
   /// Interaction logic for frmAssignment.xaml
   /// </summary>
   /// <history>
-  ///   [vku] 31/03/2016 Created
+  ///   [vku] 31/Mar/2016 Created
   /// </history>
   public class clsFormatTable
   {
@@ -23,6 +23,12 @@ namespace IM.Assignment.Classes
     #endregion
 
     #region getExcelFormatTableAssignByPR
+    /// <summary>
+    ///  Formato para el reporte de asignacion po PR
+    /// </summary>
+    /// <history>
+    ///   [vku] 31/Mar/2016 Created
+    /// </history>
     public static List<ExcelFormatTable> getExcelFormatTableAssignByPR()
     {
       format.Clear();
@@ -44,6 +50,12 @@ namespace IM.Assignment.Classes
     #endregion
 
     #region getExcelFormatTableGenAsignyArvls
+    /// <summary>
+    /// Formato para el reporte de llegadas y asignacion
+    /// </summary>
+    /// <history>
+    ///   [vku] 31/Mar/2016 Created
+    /// </history>
     public static List<ExcelFormatTable> getExcelFormatTableGenAsignyArvls()
     {
       format.Clear();
