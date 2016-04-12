@@ -21,7 +21,7 @@ namespace IM.Model
         public bool mtA { get; set; }
         public System.DateTime mtU { get; set; }
     
-        public virtual Language Language { internal get; set; }
-        public virtual LeadSource LeadSource { internal get; set; }
+        public virtual Language Language { get; set; }
+        public virtual LeadSource LeadSource { get; set; }
     }
 }

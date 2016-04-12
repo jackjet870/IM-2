@@ -357,7 +357,7 @@ namespace IM.ProcessorInhouse.Forms
         bool blnChargeTo = false, bool blnAllChargeTo = false, bool blnGifts = false, bool blnAllGifts = false,
         bool blnMarkets = false, bool blnAllMarkets = false, bool blnAgencies = false, bool blnAllAgencies = false,
         bool blnCountries = false, bool blnAllCountries = false, bool blnGiftsQuantity = false, bool blnAllGiftsQuantity = false,
-        EnumPeriod enumPeriod = EnumPeriod.pdNone, EnumProgram enumPrograms = EnumProgram.All, EnumBasedOnArrival? enumBasedOnArrival = null,
+        EnumPeriod enumPeriod = EnumPeriod.pdNone, EnumProgram program = EnumProgram.All, EnumBasedOnArrival? enumBasedOnArrival = null,
         EnumBasedOnBooking? enumBasedOnBooking = null, EnumQuinellas? enumQuinellas = null, EnumDetailGifts? enumDetailGifts = null,
         EnumSalesByMemberShipType? enumSalesByMemberShipType = null, EnumStatus? enumStatus = null, EnumGiftsReceiptType? enumGiftsReceiptType = null,
         string strGuestID = null, EnumGiftSale? enumGiftSale = null, EnumSaveCourtesyTours? enumSaveCourtesyTours = null,
@@ -367,12 +367,12 @@ namespace IM.ProcessorInhouse.Forms
 
       if (blnPersonnel)
       {
-        var x = BRLeadSources.GetLeadSourcesByUser(App.userData.User.peID, EnumToListHelper.GetEnumDescription(enumPrograms)).Select(y => y.lsID);
+        var x = BRLeadSources.GetLeadSourcesByUser(App.userData.User.peID, program).Select(y => y.lsID);
         _lstPersonnel = BRPersonnel.GetPersonnel(string.Join(",", x), roles: "PR", status: 0);
       }
       if (blnLeadSources)
       {
-        _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.userData.User.peID, EnumToListHelper.GetEnumDescription(enumPrograms));
+        _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.userData.User.peID, program);
         if (blnLsHotelNotNull)
         {
           var lstLsIDHotelNotNull = BRLeadSources.GetLeadSources(1).

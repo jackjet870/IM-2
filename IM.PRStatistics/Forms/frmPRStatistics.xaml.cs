@@ -114,7 +114,7 @@ namespace IM.PRStatistics.Forms
       }
       else
       {
-        UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
+        UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Information,"PR Statistics");
       }
     }
     /// <summary>
@@ -249,7 +249,7 @@ namespace IM.PRStatistics.Forms
     /// </history>
     public void DoGetLeadSources(string user)
     {
-      Task.Factory.StartNew(() => BRLeadSources.GetLeadSourcesByUser(user, "ALL", "ALL"))
+      Task.Factory.StartNew(() => BRLeadSources.GetLeadSourcesByUser(user, EnumProgram.All, "ALL"))
       .ContinueWith(
       (task1) =>
       {

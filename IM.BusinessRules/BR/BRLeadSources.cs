@@ -1,4 +1,5 @@
 ﻿using IM.Model;
+using IM.Model.Enums;
 using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
@@ -21,16 +22,17 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [erosado] 08/03/2016  created
     /// [aalcocer] 17/03/2016 Modified. Agregado parametros por default
+    /// [erosado] 07/04/2016  Modified. Se cambio el parametro string Progam a EnumPrograms
     /// </hystory>
 
-    public static List<LeadSourceByUser> GetLeadSourcesByUser(string user, string programs = "ALL", string regions = "ALL")
+    public static List<LeadSourceByUser> GetLeadSourcesByUser(string user, EnumProgram program = EnumProgram.All, string regions = "ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.USP_OR_GetLeadSourcesByUser(user, programs, regions).ToList();
+        return dbContext.USP_OR_GetLeadSourcesByUser(user, EnumToListHelper.GetEnumDescription(program), regions).ToList();
       }
     }
-
+      
     #endregion GetLeadSourcesByUser
 
     #region GetLeadSources

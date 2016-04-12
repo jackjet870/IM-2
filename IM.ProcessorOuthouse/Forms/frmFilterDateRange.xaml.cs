@@ -36,7 +36,7 @@ namespace IM.ProcessorOuthouse.Forms
       InitializeComponent();
 
       _lstGifts = BRGifts.GetGifts();
-      _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, "OUT", "ALL");
+      _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, EnumProgram.Outhouse, "ALL");
       _lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter,-1);
       _lstPaymentType = BRPaymentTypes.GetPaymentTypes(1);
       _lstPRs = BRPersonnel.GetPersonnel("MPS", "ALL" ,Model.Classes.StrToEnums.EnumRoleToString(Model.Enums.EnumRole.PR),1);
