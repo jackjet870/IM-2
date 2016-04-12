@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using IM.Model.Helpers;
+using System.Windows;
 
 namespace IM.Base.Forms
 {
@@ -21,6 +22,7 @@ namespace IM.Base.Forms
     /// <param name="title">Formulario principal del modulo</param>
     /// <history>
     /// [wtorres]  10/Mar/2016 Modified. Agregue el parametro title
+    /// [wtorres]  12/Abr/2016 Modified. Ahora despliega el nombre del servidor y de la base de datos
     /// </history>
     public frmSplash(string title)
     {
@@ -28,6 +30,10 @@ namespace IM.Base.Forms
 
       this.Title = title;
       lblTitle.Content = string.Format("Intelligence Marketing - {0}", title);
+
+      // desplegamos el nombre del servidor y de la base de datos
+      lblServerName.Content = ConnectionHelper.ServerName;
+      lblDatabaseName.Content = ConnectionHelper.DatabaseName;
     }
 
     #endregion Constructores y destructores
