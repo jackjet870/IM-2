@@ -123,6 +123,21 @@ namespace IM.Base.Helpers
 
     #endregion
 
-
+    #region GetStartWeek
+    /// <summary>
+    ///   Devuelve el primer dia de la semana dada un fecha
+    /// </summary>
+    /// <param name="date"></param>
+    /// <history>
+    ///   [vku] 05/Mar/2016 Created
+    /// </history>
+    public static System.DateTime GetStartWeek(DateTime date)
+    {
+      System.DayOfWeek dmon = System.DayOfWeek.Monday;
+      int span = date.DayOfWeek - dmon;
+      date = date.AddDays(-span);
+      return date;
+    }
+    #endregion
   }
 }

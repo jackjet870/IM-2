@@ -1,28 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Globalization;
 using IM.Model;
-using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using IM.Model.Classes;
 using System.Data;
-using OfficeOpenXml.Style;
 using IM.Assignment.Classes;
-using System.IO;
-using System.Diagnostics;
 
 namespace IM.Assignment
 {
@@ -31,7 +17,7 @@ namespace IM.Assignment
   /// Interaction logic for frmAssignment.xaml
   /// </summary>
   /// <history>
-  ///   [vku] 08/03/2016 Created
+  ///   [vku] 08/Mar/2016 Created
   /// </history>
   public partial class frmAssignment : Window
   {
@@ -71,6 +57,9 @@ namespace IM.Assignment
     /// <summary>
     /// Carga los mercados
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void LoadListMarkets()
     {
       lstMarkets = BRMarkets.GetMarkets(1);
@@ -83,6 +72,9 @@ namespace IM.Assignment
     /// <summary>
     /// ///Carga los huespedes no asigandos
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void LoadListGuestsUnassigned()
     {
       _guestUnassignedViewSource.Source = BRAssignment.GetGuestUnassigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, chkShowOnlyAvail.IsChecked.Value);
@@ -94,6 +86,9 @@ namespace IM.Assignment
     ///<summary>
     ///Carga los PRs que tienen asignado al menos a un huesped
     ///</summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void LoadPRs()
     {
       _pRAssignedViewSource.Source = BRAssignment.GetPRsAssigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, chkGuestsPRs.IsChecked.Value, chkMemberPRs.IsChecked.Value);
@@ -105,6 +100,9 @@ namespace IM.Assignment
     /// <summary>
     ///Carga los huespedes asignados de los PRs Seleccionados
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void LoadListGuestsAssigned()
     {
       var selectedItems = grdPRAssigned.SelectedItems;
@@ -120,16 +118,19 @@ namespace IM.Assignment
     /// <summary>
     /// Configura los filtros que se muestran en la ventana
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void FilterRecords()
     {
-      //Refrescamos los filtros
+      ///Refrescamos los filtros
       filters.Clear();
 
-      //Obtiene numero de la semana a partir de una fecha
+      ///Obtiene numero de la semana a partir de una fecha
       int weekYear = CultureInfo.CurrentUICulture.Calendar.GetWeekOfYear(mdtmDate, CalendarWeekRule.FirstFullWeek, mdtmDate.DayOfWeek);
       lblWeek.Content = "Week " + weekYear;
 
-      //Rango de fechas
+      ///Rango de fechas
       dateRange = DateHelper.DateRange(mdtmDate, mdtmDate.AddDays(6));
       lblDataRange.Content = dateRange;
       LoadListGuestsUnassigned();
@@ -141,63 +142,16 @@ namespace IM.Assignment
       }
       lblTotalAssign.Content = sumAssign;
       lblTotalW.Content = sumAssign + grdGuestUnassigned.Items.Count;
-
     }
-    #endregion
-
-    #region DateRange
-    /// <summary>
-    /// Obtiene un rango de fechas
-    /// Se omite este metodo.. se utiliza DateHelpers.DateRange
-    /// </summary>
-    public string DateRange(DateTime pdtmStart, DateTime pdtmEnd)
-    {
-      string stgDateFormat = "";
-      //mismo dia
-      if (pdtmStart == pdtmEnd)
-      {
-        stgDateFormat = pdtmStart.ToString("MMMM d, yyyy");
-      }
-      else
-      {
-        //diferente año
-        if (pdtmStart.Year != pdtmEnd.Year)
-        {
-          stgDateFormat = pdtmStart.ToString("MMMM d, yyyy - ") + pdtmEnd.ToString("MMMM d, yyyy");
-        }
-        else
-        {
-          //mismo año, diferente mes
-          if (pdtmStart.Month != pdtmEnd.Month)
-          {
-            stgDateFormat = pdtmStart.ToString("MMMM d - ") + pdtmEnd.ToString("MMMMM d, yyyy");
-          }
-          else
-          {
-            //mismo año, mismo mes
-            stgDateFormat = pdtmStart.ToString("MMMM d - ") + pdtmEnd.ToString("d, yyyy");
-          }
-        }
-      }
-      return stgDateFormat;
-    }
-    #endregion
-
-    #region getstartweek
-    
-    public static System.DateTime getstartweek(DateTime dt)
-     {
-       System.DayOfWeek dmon = System.DayOfWeek.Monday;
-       int span = dt.DayOfWeek - dmon;
-       dt = dt.AddDays(-span);
-       return dt;
-     }
     #endregion
 
     #region ValidateAssign
     /// <summary>
     /// Valida los datos para poder asignar huespedes a un PR
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private Boolean ValidateAssign()
     {
       Boolean blnValid;
@@ -226,6 +180,9 @@ namespace IM.Assignment
     /// <summary>
     /// Valida los datos para poder remover un huesped asignado
     /// </summary>
+    /// <history>
+    ///   [vku]08/Mar/2016 Created
+    /// </history>
     private Boolean ValidateUnassign()
     {
       Boolean blnValid;
@@ -252,6 +209,9 @@ namespace IM.Assignment
     /// <summary>
     /// Valida que se haya seleccionado solo un PR
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private Boolean ValidatePR()
     {
       Boolean blnValid;
@@ -283,25 +243,11 @@ namespace IM.Assignment
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       System.Windows.Data.CollectionViewSource marketShortViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("marketShortViewSource")));
-      //Load data by setting the CollectionViewSource.Source property:
-      // marketShortViewSource.Source = [generic data source]
-
-      // System.Windows.Data.CollectionViewSource guestUnassignedViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("guestUnassignedViewSource")));
-      // Load data by setting the CollectionViewSource.Source property:
-      // guestUnassignedViewSource.Source = [generic data source]
-
-      //System.Windows.Data.CollectionViewSource pRAssignedViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("pRAssignedViewSource")));
-      // Load data by setting the CollectionViewSource.Source property:
-      // pRAssignedViewSource.Source = [generic data source]
-
-      //System.Windows.Data.CollectionViewSource guestAssignedViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("guestAssignedViewSource")));
-      // Load data by setting the CollectionViewSource.Source property:
-      // guestAssignedViewSource.Source = [generic data source]
 
       _LeadSource = App.User.Location.loID;
-      mdtmDate = getstartweek(DateTime.Today.Date);
+      mdtmDate = DateHelper.GetStartWeek(DateTime.Today.Date);
 
-      //Inicializamos los filtros
+      ///Inicializamos los filtros
       chkMemberPRs.IsChecked = true;
 
 
@@ -319,6 +265,9 @@ namespace IM.Assignment
     /// <summary>
     /// Avanza a la siguiente semana  
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void btnNext_Click(object sender, RoutedEventArgs e)
     {
       mdtmDate = mdtmDate.AddDays(7);
@@ -330,6 +279,9 @@ namespace IM.Assignment
     /// <summary>
     /// Retrocede una semana
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void btnBack_Click(object sender, RoutedEventArgs e)
     {
       mdtmDate = mdtmDate.AddDays(-7);
@@ -341,6 +293,9 @@ namespace IM.Assignment
     /// <summary>
     /// Verifica si filtrar solo los disponibles
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void chkShowOnlyAvail_Click(object sender, RoutedEventArgs e)
     {
       FilterRecords();
@@ -351,6 +306,9 @@ namespace IM.Assignment
     /// <summary>
     /// Actualiza la información al seleccionar la opcion de MembersPRs
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void chkMemberPRs_Click(object sender, RoutedEventArgs e)
       {
         ///Condiciona que tenga seleccionado una opcion GuestsPRs o MembersPRs
@@ -366,6 +324,9 @@ namespace IM.Assignment
     /// <summary>
     /// Actualiza la información al seleccionar la opcion de GuestsPRs
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void chkGuestsPRs_Click(object sender, RoutedEventArgs e)
    {
      ///Condiciona que tenga seleccionado una opcion GuestsPRs o MembersPRs
@@ -381,9 +342,12 @@ namespace IM.Assignment
     /// <summary>
     /// Genera el reporte de huespedes asignados por PR
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void btnAssignmentByPR_Click(object sender, RoutedEventArgs e)
     {
-      //validamos el PR
+      ///validamos el PR
       if (ValidatePR()) {
         filters.Add(Tuple.Create("Date Range", dateRange));
         filters.Add(Tuple.Create("Lead Source", _LeadSource));
@@ -408,6 +372,9 @@ namespace IM.Assignment
     /// <summary>
     /// Genera el reporte de huespedes asignados
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void btnGeneralAssignment_Click(object sender, RoutedEventArgs e)
     {
       filters.Add(Tuple.Create("Date Range", dateRange));
@@ -431,6 +398,9 @@ namespace IM.Assignment
     /// <summary>
     /// Genera el reporte de llegadas y su asignación
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void btnAssignmentArrivals_Click(object sender, RoutedEventArgs e)
     {
       filters.Add(Tuple.Create("Date Range", dateRange));
@@ -454,6 +424,9 @@ namespace IM.Assignment
     /// <summary>
     /// Asigna huespedes a un PR
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void btnAssign_Click(object sender, RoutedEventArgs e)
     {
       if (ValidateAssign())
@@ -468,6 +441,9 @@ namespace IM.Assignment
     /// <summary>
     /// Remueve asignación de huespedes
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void btnRemove_Click(object sender, RoutedEventArgs e)
     {
       if (ValidateUnassign())
@@ -482,6 +458,9 @@ namespace IM.Assignment
     /// <summary>
     /// Guarda lista de mercados seleccionados
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void grdListMarkets_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       int cont = 0; _markets = string.Empty;
@@ -503,6 +482,9 @@ namespace IM.Assignment
     /// <summary>
     /// Guarda lista de PRs Seleccionados que tienen huespedes asignados
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void grdPRAssigned_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       int cont = 0; _strgPRs = string.Empty; _strgNamePR = string.Empty;
@@ -527,6 +509,9 @@ namespace IM.Assignment
     /// <summary>
     /// Guarda lista de huespedes seleccionados que no se hayan sido asignados
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void grdGuestUnassigned_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       _strgGuestUnassigned.Clear();
@@ -535,6 +520,7 @@ namespace IM.Assignment
       {
         _strgGuestUnassigned.Add(selectedItem.guID);
       }
+      StatusBarReg.Content = string.Format("{0}/{1}", grdGuestUnassigned.SelectedItems.Count, grdGuestUnassigned.Items.Count);
     }
     #endregion
 
@@ -542,6 +528,9 @@ namespace IM.Assignment
     /// <summary>
     /// Guarda lista de huespedes seleccionados que estan asignados
     /// </summary>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    /// </history>
     private void grdGuestAssigned_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       _strgGuestAssigned.Clear();

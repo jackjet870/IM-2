@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,13 +11,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Model;
+using IM.Model.Classes;
+using System.Linq.Expressions;
+using System.Text.RegularExpressions;
+using System.Data;
 using IM.Base.Helpers;
-using Xceed.Wpf.Toolkit;
+using System.IO;
+using System.Dynamic;
+using IM.ProcessorOuthouse.Classes;
+using System.Diagnostics;
 
 namespace IM.ProcessorOuthouse.Forms
 {
@@ -25,7 +32,7 @@ namespace IM.ProcessorOuthouse.Forms
   /// Interaction logic for frmProcessorOuthouse.xaml
   /// </summary>
   /// <history>
-  ///   [vku] 22/03/2016 Created
+  ///   [vku] 22/Mar/2016 Created
   /// </history>
   public partial class frmProcessorOuthouse : Window
   {
@@ -42,6 +49,27 @@ namespace IM.ProcessorOuthouse.Forms
     private frmFilterDateRange _frmFilter;
     private bool _blnOneDate;
     private bool _blnOnlyOneRegister;
+
+    public List<int> _lstLeadSources = new List<int>();
+    public List<int> _lstPaymentTypes = new List<int>();
+    public List<int> _lstPRs = new List<int>();
+    public List<int> _lstChargeTo = new List<int>();
+    public List<int> _lstGifts = new List<int>();
+    public string _cboDateSelected;
+    public string _cboFolSeriesSelected;
+    public DateTime _dtmStart = DateTime.Now.Date;
+    public DateTime _dtmEnd = DateTime.Now.Date;
+    public EnumBasedOnArrival _enumBasedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival;
+    public EnumBasedOnBooking _enumBasedOnBooking = EnumBasedOnBooking.bobNoBasedOnBooking;
+    public EnumQuinellas _enumQuinellas = EnumQuinellas.quNoQuinellas;
+    public EnumDetailGifts _enumDetailsGift = EnumDetailGifts.dgNoDetailGifts;
+    public EnumSalesByMemberShipType _enumSalesByMemberShipType = EnumSalesByMemberShipType.sbmNoDetail;
+    public EnumStatus _enumStatus = EnumStatus.staActives;
+    public EnumGiftSale _enumGiftSale = EnumGiftSale.gsAll;
+    public EnumSaveCourtesyTours _enumSaveCourtesyTours = EnumSaveCourtesyTours.sctExcludeSaveCourtesyTours;
+    public EnumExternalInvitation _enumExternalInvitation = EnumExternalInvitation.extExclude;
+    public string _folFrom = "";
+    public string _folTo = "";
     #endregion
 
     #region Metodos
@@ -52,7 +80,7 @@ namespace IM.ProcessorOuthouse.Forms
     /// los reportes.
     /// </summary>
     /// <history>
-    /// [vku] 22/03/2016 Created
+    /// [vku] 22/Mar/2016 Created
     /// </history>
     private void ConfigGrds()
     {
@@ -139,16 +167,19 @@ namespace IM.ProcessorOuthouse.Forms
     /// <summary>
     /// Prepara un reporte por LeadSource
     /// </summary>
+    /// <history>
+    ///   [vku] 28/Mar/2016 Created
+    /// </history>
     private void PrepareReportByLeadSource()
     {
       String strReport = "";
-      // Se Valida que haya un reporte seleccionado
+      ///Se Valida que haya un reporte seleccionado
       if (grdRptsByLeadSource.SelectedItems.Count < 0)
         return;
 
         WaitMessage(true, "Loading Date Range Window...");
     
-      //Se obtiene el nombre del reporte
+      ///Se obtiene el nombre del reporte
       strReport = ((dynamic)grdRptsByLeadSource.SelectedItem).rptName;
  
       _blnOneDate = false;
@@ -169,6 +200,9 @@ namespace IM.ProcessorOuthouse.Forms
     /// <summary>
     /// Prepara un reporte por PR
     /// </summary>
+    /// <history>
+    ///   [vku] 28/Mar/2016 Created
+    /// </history>
     public void PrepareReportByPR()
     {
       String strReport = "";
@@ -213,6 +247,9 @@ namespace IM.ProcessorOuthouse.Forms
     /// <summary>
     /// Prepara un reporte de Others
     /// </summary>
+    /// <history>
+    ///   [vku] 28/Mar/2016 Created
+    /// </history>
     public void PrepareOtherReports()
     {
       String strReport = "";
@@ -242,6 +279,9 @@ namespace IM.ProcessorOuthouse.Forms
     /// Abre la ventan frmFilterDateRange con los controles configurados
     /// segun el reporte seleccionado por LeadSource
     /// </summary>
+    /// <history>
+    ///   [vku] 28/Mar/2016 Created
+    /// </history>
     private void OpenFilterDateRangeLS(string strReport)
     {
       _frmFilter = new frmFilterDateRange();
@@ -304,8 +344,124 @@ namespace IM.ProcessorOuthouse.Forms
       _frmFilter.ShowDialog();
       if (_frmFilter._blnOK)
       {
+        ShowLeadSourceReport(strReport);
         _frmFilter.Close();
       }
+      else {
+        _frmFilter.Close();
+        _frmFilter = null;
+      }
+    }
+    #endregion
+
+    #region ShowLeadSourceReport
+    /// <summary>
+    ///  Muestra un reporte por lead source
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <history>
+    ///   [vku] 05/Abr/2016 Created
+    /// </history>
+    public void ShowLeadSourceReport(string strReport)
+    {
+      FileInfo finfo = null;
+      string dateRange = (_blnOneDate) ? DateHelper.DateRange(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmStart.Value.Value) : DateHelper.DateRange(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value);
+      string dateRangeFileNameRep = (_blnOneDate) ? DateHelper.DateRangeFileName(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmStart.Value.Value) : DateHelper.DateRangeFileName(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value);
+      DataTable dtData = new DataTable();
+      List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
+      WaitMessage(true, "Loading report...");
+
+      switch (strReport)
+      {
+        #region Deposits Payment By PR
+        case "Deposits Payment by PR":
+          List<object> lstRptDepositsPaymentByPR = BRReportsByLeadSource.GetRptDepositsPaymentByPR(
+            _frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, 
+            string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
+            string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
+            "OUT",
+            string.Join(",", _frmFilter.grdPaymentTypes.SelectedItems.Cast<PaymentType>().Select(c => c.ptID).ToList()),
+            Convert.ToByte(EnumFilterDeposit.fdDepositShowsNoDeposit));
+          if (_lstPaymentTypes.Any())
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList())));
+            finfo = clsReports.ExportRptDepositsPaymentByPR(strReport, dateRangeFileNameRep, filters, lstRptDepositsPaymentByPR);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing Outhouse");
+          }
+          break;
+        #endregion
+
+        #region Gifts Received by Sales Room
+        case "Gifts Received by Sales Room":
+          List<object> lstRptGiftsReceivedBySR = BRReportsByLeadSource.GetRptGiftsReceivedBySR(
+          _frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, 
+          string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
+          string.Join(",", _frmFilter.grdChargeTo.SelectedItems.Cast<ChargeTo>().Select(c => c.ctID).ToList()),
+          string.Join(",", _frmFilter.grdGifts.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList()));
+          if (lstRptGiftsReceivedBySR.Any())
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList())));
+            filters.Add(new Tuple<string, string>("Charge To", _frmFilter.grdChargeTo.SelectedItems.Count == _frmFilter.grdChargeTo.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdChargeTo.SelectedItems.Cast<ChargeTo>().Select(c => c.ctID).ToList())));
+            filters.Add(new Tuple<string, string>("Gifts", _frmFilter.grdGifts.SelectedItems.Count == _frmFilter.grdGifts.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdGifts.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList())));
+            finfo = clsReports.ExportRptGiftsReceivedBySR(strReport, dateRangeFileNameRep, filters, lstRptGiftsReceivedBySR);
+          }
+          break;
+        #endregion
+
+        #region Guests Show No Presented Invitation
+        case "Guests Show No Presented Invitation":
+          List<GuestShowNoPresentedInvitation> lstRptGuestsShowNoPresentedInvitation = BRReportsByLeadSource.GetRptGuestsShowNoPresentedInvitation(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdLeadSources.SelectedItems.OfType<LeadSourceByUser>().Select(c => c.lsID)));
+          if (lstRptGuestsShowNoPresentedInvitation.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList())));
+            finfo = clsReports.ExportRptGuestsShowNoPresentedInvitation(strReport, dateRangeFileNameRep, filters, lstRptGuestsShowNoPresentedInvitation);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing Outhouse");
+          }
+          break;
+        #endregion
+
+        #region PR Payment Commissions
+        #endregion
+
+        #region Production by Age 
+        case "Production by Age":
+          List<RptProductionByAgeOuthouse> lstRptProductionByAgeOuthouse = BRReportsByLeadSource.GetRptProductionByAge(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+            string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
+            "ALL",
+            "OUT",
+            Convert.ToByte(EnumFilterDeposit.fdDepositShowsNoDeposit));
+          if (lstRptProductionByAgeOuthouse.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList())));
+            finfo = clsReports.ExportRptProductionByAge(strReport, dateRangeFileNameRep, filters, lstRptProductionByAgeOuthouse);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing Outhouse");
+          }
+          break;
+
+        #endregion
+
+      }
+
+      if (finfo != null)
+      {
+        Process.Start(finfo.FullName);
+      }
+
+      WaitMessage(false);
+
     }
     #endregion
 
@@ -314,6 +470,9 @@ namespace IM.ProcessorOuthouse.Forms
     /// Abre la ventan frmFilterDateRange con los controles configurados
     /// segun el reporte seleccionado por PR
     /// </summary>
+    /// <history>
+    ///   [vku] 28/Mar/2016 Created
+    /// </history>
     public void OpenFilterDateRangePR(string strReport)
     {
       _frmFilter = new frmFilterDateRange();
@@ -359,11 +518,28 @@ namespace IM.ProcessorOuthouse.Forms
     }
     #endregion
 
+    #region ShowByPRReport
+    /// <summary>
+    ///  Muestra un reporte por PR
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <history>
+    ///   [vku] 05/Abr/2016 Created
+    /// </history>
+    public void ShowByPRReport(string strReport)
+    {
+
+    }
+    #endregion
+
     #region OpenFIlterDateRangeOtherReport
     /// <summary>
     /// Abre la ventan frmFilterDateRange con los controles configurados
     /// segun el reporte seleccionado por LeadSource
     /// </summary>
+    /// <history>
+    ///   [vku] 28/Mar/2016 Created
+    /// </history>
     public void OpenFilterDateRangeOtherReport(string strReport)
     {
       _frmFilter = new frmFilterDateRange();
@@ -390,9 +566,27 @@ namespace IM.ProcessorOuthouse.Forms
     }
     #endregion
 
+    #region ShowOtherReport
+    /// <summary>
+    ///  Muestra otros reportes
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <history>
+    ///   [vku] 05/Abr/2016 Created
+    /// </history>
+    public void ShowOtherReport(string strReport)
+    {
+
+    }
+    #endregion
+
     #region WaitMessage
     /// <summary>
     /// Indica en la barra de estado que se inicio un proceso
+    /// </summary>
+    /// <history>
+    ///   [vku] 28/Mar/2016 Created
+    /// </history>
     private void WaitMessage(bool show, String message = "")
     {
       lblStatusBarMessage.Content = message;
@@ -410,6 +604,9 @@ namespace IM.ProcessorOuthouse.Forms
     /// <summary>
     /// Imprime un reporte por LeadSource
     /// </summary>
+    /// <history>
+    ///   [vku] 22/Mar/2016 Created
+    /// </history>
     private void btnPrintRptByLeadSource_Click(object sender, RoutedEventArgs e)
     {
       PrepareReportByLeadSource();
@@ -420,6 +617,9 @@ namespace IM.ProcessorOuthouse.Forms
     /// <summary>
     /// Imprime un reporte por PR
     /// </summary>
+    /// <history>
+    ///   [vku] 22/Mar/2016 Created
+    /// </history>
     private void btnPrintRptByPR_Click(object sender, RoutedEventArgs e)
     {
       PrepareReportByPR();
@@ -430,6 +630,9 @@ namespace IM.ProcessorOuthouse.Forms
     /// <summary>
     /// Imprime un reporte de Others
     /// </summary>
+    /// <history>
+    ///   [vku] 22/Mar/2016 Created
+    /// </history>
     private void btnPrintOtherRpts_Click(object sender, RoutedEventArgs e)
     {
       PrepareOtherReports();
@@ -440,6 +643,9 @@ namespace IM.ProcessorOuthouse.Forms
     /// <summary>
     /// Cierra la aplicacion Processor Outhouse
     /// </summary>
+    /// <history>
+    ///   [vku] 22/Mar/2016 Created
+    /// </history>
     private void btnExit_Click(object sender, RoutedEventArgs e)
     {
       App.Current.Shutdown();
@@ -450,6 +656,9 @@ namespace IM.ProcessorOuthouse.Forms
     /// <summary>
     /// Se abre frmDateRange al hacer doble clic a un reporte por leadsource
     /// </summary>
+    /// <history>
+    ///   [vku] 22/Mar/2016 Created
+    /// </history>
     private void grdrptLeadSources_dblClick(object sender, RoutedEventArgs e)
     {
       PrepareReportByLeadSource();
@@ -457,7 +666,12 @@ namespace IM.ProcessorOuthouse.Forms
     #endregion
 
     #region grdrptByPR_dblClick
-    //Se abre frmDateRange al hacer doble clic a un reporte por PR
+    /// <summary>
+    ///   Se abre frmDateRange al hacer doble clic a un reporte por PR
+    /// </summary>
+    /// <history>
+    ///   [vku] 22/Mar/2016 Created
+    /// </history>
     private void grdrptByPR_dblClick(object sender, RoutedEventArgs e)
     {
       PrepareReportByPR();
@@ -465,7 +679,12 @@ namespace IM.ProcessorOuthouse.Forms
     #endregion
 
     #region grdOtherRpt_dblClick
-    //Se abre frmDateRange al hacer doble clic a un reporte de Others
+    /// <summary>
+    ///   Se abre frmDateRange al hacer doble clic a un reporte de Others
+    /// </summary>
+    /// <history>
+    ///   [vku] 22/Mar/2016 Created
+    /// </history>
     private void grdOtherRpt_dblClick(object sender, RoutedEventArgs e)
     {
       PrepareOtherReports();
