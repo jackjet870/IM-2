@@ -68,7 +68,7 @@
     <Compile Include="Classes\objInvitGift.cs" />
     <Compile Include="Classes\objInvitGuestStatus.cs" />
     <Compile Include="Classes\Parametros.cs" />
-    <Compile Include="Forms\frmSeacrhGuest.cs" />
+    <Compile Include="Forms\frmSearchGuest.cs" />
     <Compile Include="Forms\frmInnerException.xaml.cs">
       <DependentUpon>frmInnerException.xaml</DependentUpon>
     </Compile>
@@ -125,7 +125,7 @@
     <Resource Include="Images\User.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Forms\frmSeacrhGuest.xaml">
+    <Page Include="Forms\frmSearchGuest.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

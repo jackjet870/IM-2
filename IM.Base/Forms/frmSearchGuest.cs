@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using IM.BusinessRules;
+using IM.BusinessRules.BR;
 using IM.Model.Classes;
 using IM.Model;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ namespace IM.Base.Forms
   /// <history>
   /// [lchairez] 09/Feb/2016 Created
   /// </history>
-  public partial class frmSeacrhGuest : Window
+  public partial class frmSearchGuest : Window
   {
     #region Atributos
     UserData _user;
@@ -26,7 +26,7 @@ namespace IM.Base.Forms
     #endregion
 
     #region Constructores y destructores
-    public frmSeacrhGuest(UserData user)
+    public frmSearchGuest(UserData user)
     {
       WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
       _user = user;

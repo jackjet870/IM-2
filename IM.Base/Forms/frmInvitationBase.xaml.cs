@@ -830,7 +830,7 @@ namespace IM.Base.Forms
     /// <param name="e"></param>
     private void btnSearchAdditional_Click(object sender, RoutedEventArgs e)
     {
-      var search = new frmSeacrhGuest(_user);
+      var search = new frmSearchGuest(_user);
       search.Owner = this;
       bool? res = search.ShowDialog();
       if (res.HasValue && res.Value && search.guestAdditional != null)
@@ -965,8 +965,12 @@ namespace IM.Base.Forms
     /// <returns>Boolean</returns>
     private bool ValidateEdit()
     {
-      _user.AutoSign = true; 
-      var login = new IM.Base.Forms.frmLogin(null, false, EnumLoginType.Normal, true);
+      var login = new IM.Base.Forms.frmLogin();
+      _user.AutoSign = true;
+      if (_user.AutoSign)
+      {
+        login.userData = _user;
+      }
       login.ShowDialog();
       if (!login.IsAuthenticated)
       {
