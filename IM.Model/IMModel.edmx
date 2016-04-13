@@ -5782,6 +5782,10 @@
         <Function Name="USP_OR_GetExchangeRateLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Currency" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetExchangeRatesByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="Currency" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetExchangeRatesWithPesosByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="datetime" Mode="In" />
         </Function>
@@ -15970,13 +15974,13 @@
             <Parameter Name="Package" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGiftsReceiptDetailPromotionsOpera" ReturnType="Collection(IMModel.GiftsReceiptDetailPromotionsOpera)">
-            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+          <Parameter Name="Receipt" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGiftsReceiptDetailPromotionsPVP" ReturnType="Collection(IMModel.GiftsReceiptDetailPromotionsSistur)">
-            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+          <Parameter Name="Receipt" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGiftsReceiptDetailRoomChargesOpera" ReturnType="Collection(IMModel.GiftsReceiptDetailRoomChargesOpera)">
-            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+          <Parameter Name="Receipt" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGiftsReceiptPackage" ReturnType="Collection(IMModel.GiftsReceiptPackage)">
             <Parameter Name="Receipt" Mode="In" Type="Int32" />
@@ -16000,7 +16004,7 @@
             <Parameter Name="ReimpresionMotive" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_UpdateGiftReceiptsReimpresionNumber">
-            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+          <Parameter Name="Receipt" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_UpdateGiftsReceiptDetailPromotionOpera">
             <Parameter Name="Receipt" Mode="In" Type="Int32" />
@@ -16029,6 +16033,10 @@
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
             <Parameter Name="GiftsHost" Mode="In" Type="String" />
             <Parameter Name="Personnel" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetExchangeRatesByDate" ReturnType="Collection(IMModel.ExchangeRateShort)">
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="Currency" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -18127,6 +18135,10 @@
           <Property Type="Boolean" Name="gkAsPromotionOpera" Nullable="false" />
           <Property Type="String" Name="gkPromotionOpera" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="gkComments" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="ExchangeRateShort">
+          <Property Type="String" Name="excu" Nullable="false" MaxLength="10" />
+          <Property Type="Decimal" Name="exExchRate" Nullable="false" Precision="12" Scale="8" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -23051,6 +23063,14 @@
               <ComplexTypeMapping TypeName="IMModel.ValidationData">
                 <ScalarProperty Name="Focus" ColumnName="Focus" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetExchangeRatesByDate" FunctionName="IMModel.Store.USP_OR_GetExchangeRatesByDate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.ExchangeRateShort">
+                <ScalarProperty Name="excu" ColumnName="excu" />
+                <ScalarProperty Name="exExchRate" ColumnName="exExchRate" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

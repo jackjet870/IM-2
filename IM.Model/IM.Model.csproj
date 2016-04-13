@@ -209,6 +209,9 @@
     <Compile Include="ExchangeRateLogData.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ExchangeRateShort.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="FolioCXC.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

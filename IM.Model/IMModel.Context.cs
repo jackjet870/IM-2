@@ -3130,5 +3130,18 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ValidationData>("USP_OR_ValidateGiftsReceipt", changedByParameter, passwordParameter, guestParameter, locationParameter, salesRoomParameter, giftsHostParameter, personnelParameter);
         }
+    
+        public virtual ObjectResult<ExchangeRateShort> USP_OR_GetExchangeRatesByDate(Nullable<System.DateTime> date, string currency)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var currencyParameter = currency != null ?
+                new ObjectParameter("Currency", currency) :
+                new ObjectParameter("Currency", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ExchangeRateShort>("USP_OR_GetExchangeRatesByDate", dateParameter, currencyParameter);
+        }
     }
 }
