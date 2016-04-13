@@ -5727,6 +5727,10 @@
         <Function Name="USP_OR_ActualizarFechasTemporadas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CurrentYear" Type="int" Mode="In" />
         </Function>
+        <Function Name="USP_OR_CancelGiftsReceipt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="USP_OR_CloseGiftsReceipts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
@@ -5792,6 +5796,24 @@
         <Function Name="USP_OR_GetGiftsReceiptDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Receipt" Type="int" Mode="In" />
           <Parameter Name="Package" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetGiftsReceiptDetailCancel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+          <Parameter Name="ExternalProducts" Type="tinyint" Mode="In" />
+          <Parameter Name="Package" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetGiftsReceiptDetailPromotionsOpera" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetGiftsReceiptDetailPromotionsPVP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetGiftsReceiptDetailRoomChargesOpera" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetGiftsReceiptPackage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+          <Parameter Name="Package" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetGiftsReceiptPayments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Receipt" Type="int" Mode="In" />
@@ -6337,6 +6359,11 @@
           <Parameter Name="HoursDif" Type="smallint" Mode="In" />
           <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_SaveGiftsReceiptLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+          <Parameter Name="HoursDif" Type="smallint" Mode="In" />
+          <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_SaveGuestLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Guest" Type="int" Mode="In" />
           <Parameter Name="HoursDif" Type="smallint" Mode="In" />
@@ -6348,6 +6375,14 @@
           <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
           <Parameter Name="ComputerName" Type="varchar" Mode="In" />
           <Parameter Name="IPAddress" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_SaveGuestPromotion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+          <Parameter Name="Gift" Type="varchar" Mode="In" />
+          <Parameter Name="PromotionOpera" Type="varchar" Mode="In" />
+          <Parameter Name="Guest" Type="int" Mode="In" />
+          <Parameter Name="Quantity" Type="int" Mode="In" />
+          <Parameter Name="Date" Type="datetime" Mode="In" />
         </Function>
         <Function Name="USP_OR_SaveLoginLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Location" Type="varchar" Mode="In" />
@@ -6427,11 +6462,37 @@
           <Parameter Name="Currency" Type="varchar" Mode="In" />
           <Parameter Name="ExchangeRate" Type="decimal" Mode="In" />
         </Function>
+        <Function Name="USP_OR_UpdateGiftReceiptsReimpresionMotive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+          <Parameter Name="ReimpresionMotive" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_UpdateGiftReceiptsReimpresionNumber" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_UpdateGiftsReceiptDetailPromotionOpera" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+          <Parameter Name="Gift" Type="varchar" Mode="In" />
+          <Parameter Name="PromotionOpera" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_UpdateGiftsReceiptDetailPromotionPVP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+          <Parameter Name="Gift" Type="varchar" Mode="In" />
+          <Parameter Name="PromotionPVP" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_UpdateGiftsReceiptDetailRoomChargeOpera" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+          <Parameter Name="Gift" Type="varchar" Mode="In" />
+          <Parameter Name="TransactionTypeOpera" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_UpdateMealTicketFolio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
           <Parameter Name="MealTicketType" Type="varchar" Mode="In" />
           <Parameter Name="Folio" Type="varchar" Mode="In" />
           <Parameter Name="RateType" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_UpdateRoomChargesConsecutive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Hotel" Type="varchar" Mode="In" />
+          <Parameter Name="Folio" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_ValidateChangedBy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
@@ -6463,6 +6524,15 @@
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
           <Parameter Name="Folio" Type="varchar" Mode="In" />
           <Parameter Name="GuestID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_ValidateGiftsReceipt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varchar" Mode="In" />
+          <Parameter Name="Guest" Type="int" Mode="In" />
+          <Parameter Name="Location" Type="varchar" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="GiftsHost" Type="varchar" Mode="In" />
+          <Parameter Name="Personnel" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="IMModelStoreContainer">
           <EntitySet Name="Activities" EntityType="Self.Activities" Schema="dbo" store:Type="Tables" />
@@ -15890,6 +15960,76 @@
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="LeadSources" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_CancelGiftsReceipt">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGiftsReceiptDetailCancel" ReturnType="Collection(IMModel.GiftsReceiptDetailCancel)">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="ExternalProducts" Mode="In" Type="Byte" />
+            <Parameter Name="Package" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGiftsReceiptDetailPromotionsOpera" ReturnType="Collection(IMModel.GiftsReceiptDetailPromotionsOpera)">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGiftsReceiptDetailPromotionsPVP" ReturnType="Collection(IMModel.GiftsReceiptDetailPromotionsSistur)">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGiftsReceiptDetailRoomChargesOpera" ReturnType="Collection(IMModel.GiftsReceiptDetailRoomChargesOpera)">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGiftsReceiptPackage" ReturnType="Collection(IMModel.GiftsReceiptPackage)">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Package" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_SaveGiftsReceiptLog">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="HoursDif" Mode="In" Type="Int16" />
+            <Parameter Name="ChangedBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_SaveGuestPromotion">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Gift" Mode="In" Type="String" />
+            <Parameter Name="PromotionOpera" Mode="In" Type="String" />
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="Quantity" Mode="In" Type="Int32" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateGiftReceiptsReimpresionMotive">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="ReimpresionMotive" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateGiftReceiptsReimpresionNumber">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateGiftsReceiptDetailPromotionOpera">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Gift" Mode="In" Type="String" />
+            <Parameter Name="PromotionOpera" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateGiftsReceiptDetailPromotionPVP">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Gift" Mode="In" Type="String" />
+            <Parameter Name="PromotionPVP" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateGiftsReceiptDetailRoomChargeOpera">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Gift" Mode="In" Type="String" />
+            <Parameter Name="TransactionTypeOpera" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateRoomChargesConsecutive">
+            <Parameter Name="Hotel" Mode="In" Type="String" />
+            <Parameter Name="Folio" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_ValidateGiftsReceipt" ReturnType="Collection(IMModel.ValidationData)">
+            <Parameter Name="ChangedBy" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="Location" Mode="In" Type="String" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="GiftsHost" Mode="In" Type="String" />
+            <Parameter Name="Personnel" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -17905,6 +18045,88 @@
           <Property Type="Decimal" Name="agSalePay" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="SumSalesPay" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="TotalPay" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="GiftsReceiptDetailCancel">
+          <Property Type="Int32" Name="gegr" Nullable="false" />
+          <Property Type="Boolean" Name="geCancelElectronicPurse" Nullable="false" />
+          <Property Type="Boolean" Name="geCancelPVPPromo" Nullable="false" />
+          <Property Type="Int32" Name="geQty" Nullable="false" />
+          <Property Type="String" Name="QtyUnit" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="gegi" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="geAdults" Nullable="false" />
+          <Property Type="Int32" Name="geMinors" Nullable="false" />
+          <Property Type="Int32" Name="geExtraAdults" Nullable="false" />
+          <Property Type="Decimal" Name="gePriceA" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="gePriceM" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="gePriceAdult" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="gePriceMinor" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="gePriceExtraAdult" Nullable="false" Precision="19" />
+          <Property Type="String" Name="gect" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="geFolios" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="geSale" Nullable="false" />
+          <Property Type="Boolean" Name="geInElectronicPurse" Nullable="false" />
+          <Property Type="Int32" Name="geConsecutiveElectronicPurse" Nullable="true" />
+          <Property Type="Boolean" Name="geInPVPPromo" Nullable="false" />
+          <Property Type="String" Name="gePVPPromotion" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="geComments" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="Package" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="GiftsReceiptDetailPromotionsOpera">
+          <Property Type="Int32" Name="gegr" Nullable="false" />
+          <Property Type="String" Name="gegi" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="giN" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="giPromotionOpera" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="grgu" Nullable="true" />
+          <Property Type="Int32" Name="geQty" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GiftsReceiptDetailPromotionsSistur">
+          <Property Type="Int32" Name="gegr" Nullable="false" />
+          <Property Type="String" Name="guFirstName1" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="gegi" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="giN" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="giPVPPromotion" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="gulsOriginal" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="guHReservID" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="lspg" Nullable="false" MaxLength="10" />
+          <Property Type="Boolean" Name="lsUseSistur" Nullable="false" />
+          <Property Type="String" Name="lsPropertyOpera" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="srPropertyOpera" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="srUseSistur" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GiftsReceiptDetailRoomChargesOpera">
+          <Property Type="Int32" Name="gegr" Nullable="false" />
+          <Property Type="String" Name="gegi" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="giN" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="gePriceA" Nullable="false" Precision="19" />
+          <Property Type="String" Name="giOperaTransactionType" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="rhConsecutive" Nullable="true" />
+          <Property Type="String" Name="gulsOriginal" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="guHReservID" Nullable="true" MaxLength="15" />
+        </ComplexType>
+        <ComplexType Name="GiftsReceiptPackage">
+          <Property Type="Int32" Name="gkgr" Nullable="false" />
+          <Property Type="String" Name="gkPack" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="gkgi" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="gkQty" Nullable="false" />
+          <Property Type="Int32" Name="gkAdults" Nullable="false" />
+          <Property Type="Int32" Name="gkMinors" Nullable="false" />
+          <Property Type="Int32" Name="gkExtraAdults" Nullable="false" />
+          <Property Type="Decimal" Name="gkPriceA" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="gkPriceM" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="gkPriceMinor" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="gkPriceAdult" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="gkPriceExtraAdult" Nullable="false" Precision="19" />
+          <Property Type="String" Name="gkFolios" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="gkInElectronicPurse" Nullable="false" />
+          <Property Type="Int32" Name="gkConsecutiveElectronicPurse" Nullable="true" />
+          <Property Type="Boolean" Name="gkCancelElectronicPurse" Nullable="false" />
+          <Property Type="Boolean" Name="gkInPVPPromo" Nullable="false" />
+          <Property Type="Boolean" Name="gkCancelPVPPromo" Nullable="false" />
+          <Property Type="Boolean" Name="gkInOpera" Nullable="false" />
+          <Property Type="Boolean" Name="gkAsPromotionOpera" Nullable="false" />
+          <Property Type="String" Name="gkPromotionOpera" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="gkComments" Nullable="true" MaxLength="100" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -22710,6 +22932,125 @@
                 <ScalarProperty Name="agSalePay" ColumnName="agSalePay" />
                 <ScalarProperty Name="SumSalesPay" ColumnName="SumSalesPay" />
                 <ScalarProperty Name="TotalPay" ColumnName="TotalPay" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_CancelGiftsReceipt" FunctionName="IMModel.Store.USP_OR_CancelGiftsReceipt" />
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGiftsReceiptDetailCancel" FunctionName="IMModel.Store.USP_OR_GetGiftsReceiptDetailCancel">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GiftsReceiptDetailCancel">
+                <ScalarProperty Name="gegr" ColumnName="gegr" />
+                <ScalarProperty Name="geCancelElectronicPurse" ColumnName="geCancelElectronicPurse" />
+                <ScalarProperty Name="geCancelPVPPromo" ColumnName="geCancelPVPPromo" />
+                <ScalarProperty Name="geQty" ColumnName="geQty" />
+                <ScalarProperty Name="QtyUnit" ColumnName="QtyUnit" />
+                <ScalarProperty Name="gegi" ColumnName="gegi" />
+                <ScalarProperty Name="geAdults" ColumnName="geAdults" />
+                <ScalarProperty Name="geMinors" ColumnName="geMinors" />
+                <ScalarProperty Name="geExtraAdults" ColumnName="geExtraAdults" />
+                <ScalarProperty Name="gePriceA" ColumnName="gePriceA" />
+                <ScalarProperty Name="gePriceM" ColumnName="gePriceM" />
+                <ScalarProperty Name="gePriceAdult" ColumnName="gePriceAdult" />
+                <ScalarProperty Name="gePriceMinor" ColumnName="gePriceMinor" />
+                <ScalarProperty Name="gePriceExtraAdult" ColumnName="gePriceExtraAdult" />
+                <ScalarProperty Name="gect" ColumnName="gect" />
+                <ScalarProperty Name="geFolios" ColumnName="geFolios" />
+                <ScalarProperty Name="geSale" ColumnName="geSale" />
+                <ScalarProperty Name="geInElectronicPurse" ColumnName="geInElectronicPurse" />
+                <ScalarProperty Name="geConsecutiveElectronicPurse" ColumnName="geConsecutiveElectronicPurse" />
+                <ScalarProperty Name="geInPVPPromo" ColumnName="geInPVPPromo" />
+                <ScalarProperty Name="gePVPPromotion" ColumnName="gePVPPromotion" />
+                <ScalarProperty Name="geComments" ColumnName="geComments" />
+                <ScalarProperty Name="Package" ColumnName="Package" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGiftsReceiptDetailPromotionsOpera" FunctionName="IMModel.Store.USP_OR_GetGiftsReceiptDetailPromotionsOpera">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GiftsReceiptDetailPromotionsOpera">
+                <ScalarProperty Name="gegr" ColumnName="gegr" />
+                <ScalarProperty Name="gegi" ColumnName="gegi" />
+                <ScalarProperty Name="giN" ColumnName="giN" />
+                <ScalarProperty Name="giPromotionOpera" ColumnName="giPromotionOpera" />
+                <ScalarProperty Name="grgu" ColumnName="grgu" />
+                <ScalarProperty Name="geQty" ColumnName="geQty" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGiftsReceiptDetailPromotionsPVP" FunctionName="IMModel.Store.USP_OR_GetGiftsReceiptDetailPromotionsPVP">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GiftsReceiptDetailPromotionsSistur">
+                <ScalarProperty Name="gegr" ColumnName="gegr" />
+                <ScalarProperty Name="guFirstName1" ColumnName="guFirstName1" />
+                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
+                <ScalarProperty Name="gegi" ColumnName="gegi" />
+                <ScalarProperty Name="giN" ColumnName="giN" />
+                <ScalarProperty Name="giPVPPromotion" ColumnName="giPVPPromotion" />
+                <ScalarProperty Name="gulsOriginal" ColumnName="gulsOriginal" />
+                <ScalarProperty Name="guHReservID" ColumnName="guHReservID" />
+                <ScalarProperty Name="lspg" ColumnName="lspg" />
+                <ScalarProperty Name="lsUseSistur" ColumnName="lsUseSistur" />
+                <ScalarProperty Name="lsPropertyOpera" ColumnName="lsPropertyOpera" />
+                <ScalarProperty Name="srPropertyOpera" ColumnName="srPropertyOpera" />
+                <ScalarProperty Name="srUseSistur" ColumnName="srUseSistur" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGiftsReceiptDetailRoomChargesOpera" FunctionName="IMModel.Store.USP_OR_GetGiftsReceiptDetailRoomChargesOpera">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GiftsReceiptDetailRoomChargesOpera">
+                <ScalarProperty Name="gegr" ColumnName="gegr" />
+                <ScalarProperty Name="gegi" ColumnName="gegi" />
+                <ScalarProperty Name="giN" ColumnName="giN" />
+                <ScalarProperty Name="gePriceA" ColumnName="gePriceA" />
+                <ScalarProperty Name="giOperaTransactionType" ColumnName="giOperaTransactionType" />
+                <ScalarProperty Name="rhConsecutive" ColumnName="rhConsecutive" />
+                <ScalarProperty Name="gulsOriginal" ColumnName="gulsOriginal" />
+                <ScalarProperty Name="guHReservID" ColumnName="guHReservID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGiftsReceiptPackage" FunctionName="IMModel.Store.USP_OR_GetGiftsReceiptPackage">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GiftsReceiptPackage">
+                <ScalarProperty Name="gkgr" ColumnName="gkgr" />
+                <ScalarProperty Name="gkPack" ColumnName="gkPack" />
+                <ScalarProperty Name="gkgi" ColumnName="gkgi" />
+                <ScalarProperty Name="gkQty" ColumnName="gkQty" />
+                <ScalarProperty Name="gkAdults" ColumnName="gkAdults" />
+                <ScalarProperty Name="gkMinors" ColumnName="gkMinors" />
+                <ScalarProperty Name="gkExtraAdults" ColumnName="gkExtraAdults" />
+                <ScalarProperty Name="gkPriceA" ColumnName="gkPriceA" />
+                <ScalarProperty Name="gkPriceM" ColumnName="gkPriceM" />
+                <ScalarProperty Name="gkPriceMinor" ColumnName="gkPriceMinor" />
+                <ScalarProperty Name="gkPriceAdult" ColumnName="gkPriceAdult" />
+                <ScalarProperty Name="gkPriceExtraAdult" ColumnName="gkPriceExtraAdult" />
+                <ScalarProperty Name="gkFolios" ColumnName="gkFolios" />
+                <ScalarProperty Name="gkInElectronicPurse" ColumnName="gkInElectronicPurse" />
+                <ScalarProperty Name="gkConsecutiveElectronicPurse" ColumnName="gkConsecutiveElectronicPurse" />
+                <ScalarProperty Name="gkCancelElectronicPurse" ColumnName="gkCancelElectronicPurse" />
+                <ScalarProperty Name="gkInPVPPromo" ColumnName="gkInPVPPromo" />
+                <ScalarProperty Name="gkCancelPVPPromo" ColumnName="gkCancelPVPPromo" />
+                <ScalarProperty Name="gkInOpera" ColumnName="gkInOpera" />
+                <ScalarProperty Name="gkAsPromotionOpera" ColumnName="gkAsPromotionOpera" />
+                <ScalarProperty Name="gkPromotionOpera" ColumnName="gkPromotionOpera" />
+                <ScalarProperty Name="gkComments" ColumnName="gkComments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_SaveGiftsReceiptLog" FunctionName="IMModel.Store.USP_OR_SaveGiftsReceiptLog" />
+          <FunctionImportMapping FunctionImportName="USP_OR_SaveGuestPromotion" FunctionName="IMModel.Store.USP_OR_SaveGuestPromotion" />
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateGiftReceiptsReimpresionMotive" FunctionName="IMModel.Store.USP_OR_UpdateGiftReceiptsReimpresionMotive" />
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateGiftReceiptsReimpresionNumber" FunctionName="IMModel.Store.USP_OR_UpdateGiftReceiptsReimpresionNumber" />
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateGiftsReceiptDetailPromotionOpera" FunctionName="IMModel.Store.USP_OR_UpdateGiftsReceiptDetailPromotionOpera" />
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateGiftsReceiptDetailPromotionPVP" FunctionName="IMModel.Store.USP_OR_UpdateGiftsReceiptDetailPromotionPVP" />
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateGiftsReceiptDetailRoomChargeOpera" FunctionName="IMModel.Store.USP_OR_UpdateGiftsReceiptDetailRoomChargeOpera" />
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateRoomChargesConsecutive" FunctionName="IMModel.Store.USP_OR_UpdateRoomChargesConsecutive" />
+          <FunctionImportMapping FunctionImportName="USP_OR_ValidateGiftsReceipt" FunctionName="IMModel.Store.USP_OR_ValidateGiftsReceipt">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.ValidationData">
+                <ScalarProperty Name="Focus" ColumnName="Focus" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

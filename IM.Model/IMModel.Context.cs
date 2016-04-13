@@ -2895,5 +2895,240 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptRepsPaymentSummary>("USP_OR_RptRepsPaymentSummary", dateFromParameter, dateToParameter, leadSourcesParameter);
         }
+    
+        public virtual int USP_OR_CancelGiftsReceipt(Nullable<int> receipt, Nullable<System.DateTime> date)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CancelGiftsReceipt", receiptParameter, dateParameter);
+        }
+    
+        public virtual ObjectResult<GiftsReceiptDetailCancel> USP_OR_GetGiftsReceiptDetailCancel(Nullable<int> receipt, Nullable<byte> externalProducts, Nullable<bool> package)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            var externalProductsParameter = externalProducts.HasValue ?
+                new ObjectParameter("ExternalProducts", externalProducts) :
+                new ObjectParameter("ExternalProducts", typeof(byte));
+    
+            var packageParameter = package.HasValue ?
+                new ObjectParameter("Package", package) :
+                new ObjectParameter("Package", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftsReceiptDetailCancel>("USP_OR_GetGiftsReceiptDetailCancel", receiptParameter, externalProductsParameter, packageParameter);
+        }
+    
+        public virtual ObjectResult<GiftsReceiptDetailPromotionsOpera> USP_OR_GetGiftsReceiptDetailPromotionsOpera(Nullable<int> receipt)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftsReceiptDetailPromotionsOpera>("USP_OR_GetGiftsReceiptDetailPromotionsOpera", receiptParameter);
+        }
+    
+        public virtual ObjectResult<GiftsReceiptDetailPromotionsSistur> USP_OR_GetGiftsReceiptDetailPromotionsPVP(Nullable<int> receipt)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftsReceiptDetailPromotionsSistur>("USP_OR_GetGiftsReceiptDetailPromotionsPVP", receiptParameter);
+        }
+    
+        public virtual ObjectResult<GiftsReceiptDetailRoomChargesOpera> USP_OR_GetGiftsReceiptDetailRoomChargesOpera(Nullable<int> receipt)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftsReceiptDetailRoomChargesOpera>("USP_OR_GetGiftsReceiptDetailRoomChargesOpera", receiptParameter);
+        }
+    
+        public virtual ObjectResult<GiftsReceiptPackage> USP_OR_GetGiftsReceiptPackage(Nullable<int> receipt, string package)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            var packageParameter = package != null ?
+                new ObjectParameter("Package", package) :
+                new ObjectParameter("Package", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftsReceiptPackage>("USP_OR_GetGiftsReceiptPackage", receiptParameter, packageParameter);
+        }
+    
+        public virtual int USP_OR_SaveGiftsReceiptLog(Nullable<int> receipt, Nullable<short> hoursDif, string changedBy)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            var hoursDifParameter = hoursDif.HasValue ?
+                new ObjectParameter("HoursDif", hoursDif) :
+                new ObjectParameter("HoursDif", typeof(short));
+    
+            var changedByParameter = changedBy != null ?
+                new ObjectParameter("ChangedBy", changedBy) :
+                new ObjectParameter("ChangedBy", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveGiftsReceiptLog", receiptParameter, hoursDifParameter, changedByParameter);
+        }
+    
+        public virtual int USP_OR_SaveGuestPromotion(Nullable<int> receipt, string gift, string promotionOpera, Nullable<int> guest, Nullable<int> quantity, Nullable<System.DateTime> date)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            var giftParameter = gift != null ?
+                new ObjectParameter("Gift", gift) :
+                new ObjectParameter("Gift", typeof(string));
+    
+            var promotionOperaParameter = promotionOpera != null ?
+                new ObjectParameter("PromotionOpera", promotionOpera) :
+                new ObjectParameter("PromotionOpera", typeof(string));
+    
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            var quantityParameter = quantity.HasValue ?
+                new ObjectParameter("Quantity", quantity) :
+                new ObjectParameter("Quantity", typeof(int));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveGuestPromotion", receiptParameter, giftParameter, promotionOperaParameter, guestParameter, quantityParameter, dateParameter);
+        }
+    
+        public virtual int USP_OR_UpdateGiftReceiptsReimpresionMotive(Nullable<int> receipt, Nullable<byte> reimpresionMotive)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            var reimpresionMotiveParameter = reimpresionMotive.HasValue ?
+                new ObjectParameter("ReimpresionMotive", reimpresionMotive) :
+                new ObjectParameter("ReimpresionMotive", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateGiftReceiptsReimpresionMotive", receiptParameter, reimpresionMotiveParameter);
+        }
+    
+        public virtual int USP_OR_UpdateGiftReceiptsReimpresionNumber(Nullable<int> receipt)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateGiftReceiptsReimpresionNumber", receiptParameter);
+        }
+    
+        public virtual int USP_OR_UpdateGiftsReceiptDetailPromotionOpera(Nullable<int> receipt, string gift, string promotionOpera)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            var giftParameter = gift != null ?
+                new ObjectParameter("Gift", gift) :
+                new ObjectParameter("Gift", typeof(string));
+    
+            var promotionOperaParameter = promotionOpera != null ?
+                new ObjectParameter("PromotionOpera", promotionOpera) :
+                new ObjectParameter("PromotionOpera", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateGiftsReceiptDetailPromotionOpera", receiptParameter, giftParameter, promotionOperaParameter);
+        }
+    
+        public virtual int USP_OR_UpdateGiftsReceiptDetailPromotionPVP(Nullable<int> receipt, string gift, string promotionPVP)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            var giftParameter = gift != null ?
+                new ObjectParameter("Gift", gift) :
+                new ObjectParameter("Gift", typeof(string));
+    
+            var promotionPVPParameter = promotionPVP != null ?
+                new ObjectParameter("PromotionPVP", promotionPVP) :
+                new ObjectParameter("PromotionPVP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateGiftsReceiptDetailPromotionPVP", receiptParameter, giftParameter, promotionPVPParameter);
+        }
+    
+        public virtual int USP_OR_UpdateGiftsReceiptDetailRoomChargeOpera(Nullable<int> receipt, string gift, string transactionTypeOpera)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            var giftParameter = gift != null ?
+                new ObjectParameter("Gift", gift) :
+                new ObjectParameter("Gift", typeof(string));
+    
+            var transactionTypeOperaParameter = transactionTypeOpera != null ?
+                new ObjectParameter("TransactionTypeOpera", transactionTypeOpera) :
+                new ObjectParameter("TransactionTypeOpera", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateGiftsReceiptDetailRoomChargeOpera", receiptParameter, giftParameter, transactionTypeOperaParameter);
+        }
+    
+        public virtual int USP_OR_UpdateRoomChargesConsecutive(string hotel, string folio)
+        {
+            var hotelParameter = hotel != null ?
+                new ObjectParameter("Hotel", hotel) :
+                new ObjectParameter("Hotel", typeof(string));
+    
+            var folioParameter = folio != null ?
+                new ObjectParameter("Folio", folio) :
+                new ObjectParameter("Folio", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateRoomChargesConsecutive", hotelParameter, folioParameter);
+        }
+    
+        public virtual ObjectResult<ValidationData> USP_OR_ValidateGiftsReceipt(string changedBy, string password, Nullable<int> guest, string location, string salesRoom, string giftsHost, string personnel)
+        {
+            var changedByParameter = changedBy != null ?
+                new ObjectParameter("ChangedBy", changedBy) :
+                new ObjectParameter("ChangedBy", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("Password", password) :
+                new ObjectParameter("Password", typeof(string));
+    
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            var locationParameter = location != null ?
+                new ObjectParameter("Location", location) :
+                new ObjectParameter("Location", typeof(string));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var giftsHostParameter = giftsHost != null ?
+                new ObjectParameter("GiftsHost", giftsHost) :
+                new ObjectParameter("GiftsHost", typeof(string));
+    
+            var personnelParameter = personnel != null ?
+                new ObjectParameter("Personnel", personnel) :
+                new ObjectParameter("Personnel", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ValidationData>("USP_OR_ValidateGiftsReceipt", changedByParameter, passwordParameter, guestParameter, locationParameter, salesRoomParameter, giftsHostParameter, personnelParameter);
+        }
     }
 }

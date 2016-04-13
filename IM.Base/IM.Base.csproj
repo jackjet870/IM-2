@@ -68,7 +68,9 @@
     <Compile Include="Classes\objInvitGift.cs" />
     <Compile Include="Classes\objInvitGuestStatus.cs" />
     <Compile Include="Classes\Parametros.cs" />
-    <Compile Include="Forms\frmSearchGuest.cs" />
+    <Compile Include="Forms\frmSearchGuest.cs">
+      <DependentUpon>frmSearchGuest.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmInnerException.xaml.cs">
       <DependentUpon>frmInnerException.xaml</DependentUpon>
     </Compile>
