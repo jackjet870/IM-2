@@ -4,6 +4,7 @@ using IM.BusinessRules;
 using IM.Model.Classes;
 using IM.Model;
 using System.Collections.Generic;
+using IM.Model.Enums;
 
 namespace IM.Base.Forms
 {
@@ -109,7 +110,7 @@ namespace IM.Base.Forms
 
     private void CargaLeadSources()
     {
-      var ls = BusinessRules.BR.BRLeadSources.GetLeadSourcesByUser(_user.User.peID,programs: "IH");
+      var ls = BRLeadSources.GetLeadSourcesByUser(_user.User.peID, EnumProgram.Inhouse);
       cmbLeadSources.DisplayMemberPath = "lsN";
       cmbLeadSources.SelectedValuePath = "lsID";
       cmbLeadSources.ItemsSource = ls;

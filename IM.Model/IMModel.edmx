@@ -702,8 +702,6 @@
           <Property Name="glLastName2" Type="varchar" MaxLength="25" />
           <Property Name="glFirstName2" Type="varchar" MaxLength="40" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'OrigosVCPalace.dbo.GuestOpera' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="GuestOpera">
           <Key>
             <PropertyRef Name="gogu" />
@@ -1061,13 +1059,10 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.GuestOpera' does not have a pri
           <Property Name="icN" Type="varchar" MaxLength="60" Nullable="false" />
           <Property Name="icpg" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'OrigosVCPalace.dbo.IncomesCECOCEBETYpes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="IncomesCECOCEBETYpes">
           <Key>
             <PropertyRef Name="iccce" />
             <PropertyRef Name="iccic" />
-            <PropertyRef Name="iccCEBEID" />
           </Key>
           <Property Name="iccce" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="iccic" Type="varchar" MaxLength="5" Nullable="false" />
@@ -1279,13 +1274,10 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.IncomesCECOCEBETYpes' does not 
           <Property Name="mksCode" Type="varchar" MaxLength="4" />
           <Property Name="mkspg" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="MarketSegmentsCECOCEBETypes">
           <Key>
             <PropertyRef Name="mcmks" />
             <PropertyRef Name="mcce" />
-            <PropertyRef Name="mcCECOID" />
           </Key>
           <Property Name="mcmks" Type="varchar" MaxLength="4" Nullable="false" />
           <Property Name="mcce" Type="varchar" MaxLength="10" Nullable="false" />
@@ -6522,6 +6514,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <EntitySet Name="Goals" EntityType="Self.Goals" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Groups" EntityType="Self.Groups" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GuestLog" EntityType="Self.GuestLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GuestOpera" EntityType="Self.GuestOpera" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Guests" EntityType="Self.Guests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GuestsAdditional" EntityType="Self.GuestsAdditional" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GuestsCreditCards" EntityType="Self.GuestsCreditCards" Schema="dbo" store:Type="Tables" />
@@ -6536,6 +6529,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <EntitySet Name="HotelGroups" EntityType="Self.HotelGroups" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Hotels" EntityType="Self.Hotels" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Incomes" EntityType="Self.Incomes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IncomesCECOCEBETYpes" EntityType="Self.IncomesCECOCEBETYpes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InvitsGifts" EntityType="Self.InvitsGifts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InvitsTexts" EntityType="Self.InvitsTexts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Languages" EntityType="Self.Languages" Schema="dbo" store:Type="Tables" />
@@ -6548,6 +6542,7 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <EntitySet Name="MailOutTexts" EntityType="Self.MailOutTexts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Markets" EntityType="Self.Markets" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MarketSegments" EntityType="Self.MarketSegments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MarketSegmentsCECOCEBETypes" EntityType="Self.MarketSegmentsCECOCEBETypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MealTicketFolios" EntityType="Self.MealTicketFolios" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MealTickets" EntityType="Self.MealTickets" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MealTicketTypes" EntityType="Self.MealTicketTypes" Schema="dbo" store:Type="Tables" />
@@ -6627,41 +6622,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <EntitySet Name="Wholesalers" EntityType="Self.Wholesalers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WhsMovs" EntityType="Self.WhsMovs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Zones" EntityType="Self.Zones" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="GuestOpera" EntityType="Self.GuestOpera" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>
-              SELECT
-              [GuestOpera].[gogu] AS [gogu],
-              [GuestOpera].[goSourceID] AS [goSourceID],
-              [GuestOpera].[goTravelAgentID] AS [goTravelAgentID],
-              [GuestOpera].[goGroupID] AS [goGroupID],
-              [GuestOpera].[goBlockCode] AS [goBlockCode],
-              [GuestOpera].[goMarketCode] AS [goMarketCode],
-              [GuestOpera].[goMarketGroup] AS [goMarketGroup],
-              [GuestOpera].[goSourceGroup] AS [goSourceGroup],
-              [GuestOpera].[goRegion] AS [goRegion],
-              [GuestOpera].[goCountry] AS [goCountry],
-              [GuestOpera].[goTerritory] AS [goTerritory]
-              FROM [dbo].[GuestOpera] AS [GuestOpera]
-            </DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="IncomesCECOCEBETYpes" EntityType="Self.IncomesCECOCEBETYpes" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>
-              SELECT
-              [IncomesCECOCEBETYpes].[iccce] AS [iccce],
-              [IncomesCECOCEBETYpes].[iccic] AS [iccic],
-              [IncomesCECOCEBETYpes].[iccCEBEID] AS [iccCEBEID]
-              FROM [dbo].[IncomesCECOCEBETYpes] AS [IncomesCECOCEBETYpes]
-            </DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="MarketSegmentsCECOCEBETypes" EntityType="Self.MarketSegmentsCECOCEBETypes" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>
-              SELECT
-              [MarketSegmentsCECOCEBETypes].[mcmks] AS [mcmks],
-              [MarketSegmentsCECOCEBETypes].[mcce] AS [mcce],
-              [MarketSegmentsCECOCEBETypes].[mcCECOID] AS [mcCECOID]
-              FROM [dbo].[MarketSegmentsCECOCEBETypes] AS [MarketSegmentsCECOCEBETypes]
-            </DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_ACTIVITY_CECOTYPE" Association="Self.FK_ACTIVITY_CECOTYPE">
             <End Role="CECOCEBETypes" EntitySet="CECOCEBETypes" />
             <End Role="Activities" EntitySet="Activities" />
@@ -10503,7 +10463,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Key>
             <PropertyRef Name="iccce" />
             <PropertyRef Name="iccic" />
-            <PropertyRef Name="iccCEBEID" />
           </Key>
           <Property Name="iccce" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="iccic" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
@@ -10515,7 +10474,6 @@ warning 6002: The table/view 'OrigosVCPalace.dbo.MarketSegmentsCECOCEBETypes' do
           <Key>
             <PropertyRef Name="mcmks" />
             <PropertyRef Name="mcce" />
-            <PropertyRef Name="mcCECOID" />
           </Key>
           <Property Name="mcmks" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="mcce" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
