@@ -6,6 +6,7 @@ using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using System.Linq;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -106,7 +107,7 @@ namespace IM.Administrator.Forms
       frmSearch.Owner = this;
       frmSearch.strID = _folioFilter.fiFrom.ToString();
       frmSearch.strDesc = _folioFilter.fiTo.ToString();
-      frmSearch.enumForm = Enums.EnumWindow.FoliosCxC;
+      frmSearch.enumWindow = EnumWindow.FoliosCxC;
       frmSearch.nStatus = _nStatus;
       if(frmSearch.ShowDialog()==true)
       {
@@ -132,7 +133,7 @@ namespace IM.Administrator.Forms
     {
       frmFolioCXCDetail frmFolioDetail = new frmFolioCXCDetail();
       frmFolioDetail.Owner = this;
-      frmFolioDetail.enumMode = Enums.EnumMode.add;
+      frmFolioDetail.enumMode = EnumMode.add;
       if(frmFolioDetail.ShowDialog()==true)
       {
         FolioCXC folioCXC = frmFolioDetail.folioCXC;
@@ -182,7 +183,7 @@ namespace IM.Administrator.Forms
       frmFolioCXCDetail frmFolioDetail = new frmFolioCXCDetail();
       frmFolioDetail.Owner = this;
       frmFolioDetail.oldFolioCxc = folioCXC;
-      frmFolioDetail.enumMode = ((_blnEdit==true)?Enums.EnumMode.edit:Enums.EnumMode.preview);
+      frmFolioDetail.enumMode = ((_blnEdit==true)?EnumMode.edit:EnumMode.preview);
 
       if(frmFolioDetail.ShowDialog()==true)
       {

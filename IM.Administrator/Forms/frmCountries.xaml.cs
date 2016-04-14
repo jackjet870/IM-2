@@ -4,7 +4,7 @@ using System.Windows.Input;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using System.Linq;
 using System;
 
@@ -24,7 +24,7 @@ namespace IM.Administrator.Forms
     }
 
     #region Eventos del formulario
-    #region LLena los datos del formulario
+    #region WindowLoaded
     /// <summary>
     /// Llena los datos del formulario
     /// </summary>
@@ -35,7 +35,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = App.User.HasPermission(Model.Enums.EnumPermission.Agencies, Model.Enums.EnumPermisionLevel.Standard);
+      _blnEdit = App.User.HasPermission(EnumPermission.Agencies, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       loadCountries();
     }

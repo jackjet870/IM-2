@@ -30,11 +30,11 @@
         <TextBlock Grid.Column="0" Grid.Row="4" Grid.RowSpan="2" TextWrapping="WrapWithOverflow" Text="Nationality"/>
         <!--#endregion-->
         <!--#region Datos-->
-        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" Text="{Binding coID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="25"/>
-        <TextBox Name="txtN" Grid.Column="1" Grid.Row="1" Tag="description" Height="27" VerticalAlignment="Top" Text="{Binding coN}"  IsEnabled="False" MaxLength="50"/>
+        <TextBox Name="txtcoID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" Text="{Binding coID}" CharacterCasing="Upper" IsEnabled="False" />
+        <TextBox Name="txtcoN" Grid.Column="1" Grid.Row="1" Tag="description" Height="27" VerticalAlignment="Top" Text="{Binding coN}"  IsEnabled="False" />
         <ComboBox Name="cmbLang" Grid.Column="1" Grid.Row="2" Tag="language" Height="27" VerticalAlignment="Top" DisplayMemberPath="laN" SelectedValuePath="laID" SelectedValue="{Binding cola}" IsEnabled="False"/>
         <ComboBox Name="cmbUnvMot" Grid.Column="1" Grid.Row="3" Tag="unavailable motive" Height="27" VerticalAlignment="Top" DisplayMemberPath="umN" SelectedValuePath="umID" SelectedValue="{Binding coum}" IsEnabled="False"/>
-        <TextBox Name="txtNat" Grid.Column="1" Grid.Row="4" Height="27" VerticalAlignment="Top" Text="{Binding coNationality}"  IsEnabled="False" MaxLength="25"/>
+        <TextBox Name="txtcoNationality" Grid.Column="1" Grid.Row="4" Height="27" VerticalAlignment="Top" Text="{Binding coNationality}"  IsEnabled="False"/>
         <Grid Grid.Column="1" Grid.Row="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50*" />

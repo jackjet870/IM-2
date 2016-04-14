@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using IM.Model;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 
@@ -42,27 +42,24 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(membershipType, oldMembershipType);
       DataContext = membershipType;
       LoadMemberGroups();
-      txtID.IsEnabled = (enumMode != EnumMode.edit);
+      txtmtID.IsEnabled = (enumMode != EnumMode.edit);
       #region Mode Search
       if (enumMode == EnumMode.search)
       {
-        chkA.Visibility = Visibility.Collapsed;
+        chkmtA.Visibility = Visibility.Collapsed;
         cmbSta.Visibility = Visibility.Visible;
         lblFrom.Visibility = Visibility.Collapsed;
         lblLevel.Visibility = Visibility.Collapsed;
         lblTo.Visibility = Visibility.Collapsed;
-        txtLevel.Visibility = Visibility.Collapsed;
-        txtTo.Visibility = Visibility.Collapsed;
-        txtFrom.Visibility = Visibility.Collapsed;
+        txtmtLevel.Visibility = Visibility.Collapsed;
+        txtmtTo.Visibility = Visibility.Collapsed;
+        txtmtFrom.Visibility = Visibility.Collapsed;
         lblStatus.Visibility = Visibility.Visible;
         LoadStatus();
         cmbSta.SelectedValue = nStatus;
-      } 
-      #endregion
-      if(enumMode!=EnumMode.preview)
-      {
-        btnAccept.Visibility = Visibility.Visible;
       }
+      #endregion
+      UIHelper.SetMaxLength(membershipType, this);
     }
     #endregion
 
@@ -96,7 +93,7 @@ namespace IM.Administrator.Forms
       btnAccept.Focus();
       if (enumMode != EnumMode.search)
       {
-        if (ObjectHelper.IsEquals(membershipType, oldMembershipType) && !Validation.GetHasError(txtLevel) && enumMode!=EnumMode.add)
+        if (ObjectHelper.IsEquals(membershipType, oldMembershipType) && !Validation.GetHasError(txtmtLevel) && enumMode!=EnumMode.add)
         {
           Close();
         }
@@ -104,9 +101,9 @@ namespace IM.Administrator.Forms
         {
           string strMsj = ValidateHelper.ValidateForm(this, "Membership Type");
           #region ValidateLevel
-          if(!string.IsNullOrWhiteSpace(txtLevel.Text.Trim()))
+          if(!string.IsNullOrWhiteSpace(txtmtLevel.Text.Trim()))
           {
-            int nRes = Convert.ToInt32(txtLevel.Text.Trim());
+            int nRes = Convert.ToInt32(txtmtLevel.Text.Trim());
             if(nRes>255 || nRes<1)
             {
               strMsj +=((strMsj=="")?"":" \n")+ "Level is out of range. Allowed values are 1 to 255.";
@@ -273,7 +270,7 @@ namespace IM.Administrator.Forms
       {
         lstMembershipGroup.Insert(0, new MembershipGroup { mgID = "", mgN = "" });
       }
-      cmbMtGroup.ItemsSource = lstMembershipGroup;
+      cmbmtGroup.ItemsSource = lstMembershipGroup;
     }
     #endregion
 

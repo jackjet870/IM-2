@@ -6,6 +6,7 @@ using System.Windows.Input;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -36,7 +37,7 @@ namespace IM.Administrator.Forms
       MembershipType membershipType = (MembershipType)dgrMemberShipTypes.SelectedItem;
       frmMembershipTypeDetail frmMemshipTypeDetail = new frmMembershipTypeDetail();
       frmMemshipTypeDetail.Owner = this;
-      frmMemshipTypeDetail.enumMode = Enums.EnumMode.edit;
+      frmMemshipTypeDetail.enumMode = EnumMode.edit;
       frmMemshipTypeDetail.oldMembershipType = membershipType;
       frmMemshipTypeDetail.oldMembershipType = membershipType;
       if (frmMemshipTypeDetail.ShowDialog() == true)
@@ -181,7 +182,7 @@ namespace IM.Administrator.Forms
     {
       frmMembershipTypeDetail frmMemshipTypeDetail = new frmMembershipTypeDetail();
       frmMemshipTypeDetail.Owner = this;
-      frmMemshipTypeDetail.enumMode = Enums.EnumMode.add;
+      frmMemshipTypeDetail.enumMode = EnumMode.add;
       if(frmMemshipTypeDetail.ShowDialog()==true)
       {
         MembershipType membershipType = frmMemshipTypeDetail.membershipType;
@@ -213,7 +214,7 @@ namespace IM.Administrator.Forms
     {
       frmMembershipTypeDetail frmMemshipTypeDetail = new frmMembershipTypeDetail();
       frmMemshipTypeDetail.Owner = this;
-      frmMemshipTypeDetail.enumMode = Enums.EnumMode.search;
+      frmMemshipTypeDetail.enumMode = EnumMode.search;
       frmMemshipTypeDetail.nStatus = _nStatus;
       frmMemshipTypeDetail.oldMembershipType = _membershipTypeFilter;
       if(frmMemshipTypeDetail.ShowDialog()==true)

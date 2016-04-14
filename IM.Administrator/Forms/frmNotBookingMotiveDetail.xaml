@@ -24,9 +24,9 @@
         <Label Grid.Column="0" Grid.Row="1">Description</Label>
         <!--#endregion-->
         <!--#region Datos-->
-        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding nbID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="10"/>
-        <TextBox Name="txtN" Grid.Column="1" Tag="description" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding nbN}"  IsEnabled="False" MaxLength="50"/>
-        <CheckBox Name="chkA" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" IsChecked="{Binding nbA}" Height="13" IsEnabled="False">Active</CheckBox>
+        <TextBox Name="txtnbID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding nbID}" CharacterCasing="Upper" IsEnabled="False" />
+        <TextBox Name="txtnbN" Grid.Column="1" Tag="description" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding nbN}"  IsEnabled="False" />
+        <CheckBox Name="chknbA" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" IsChecked="{Binding nbA}" Height="13" IsEnabled="False">Active</CheckBox>
 
         <Button Name="btnAccept" Width="60" Height="30"  Grid.Column="1" Grid.Row="3" Margin="0,7,75,7" Click="btnAccept_Click" HorizontalAlignment="Right" Visibility="Hidden" Content="_Accept"/>
         <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="3" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>

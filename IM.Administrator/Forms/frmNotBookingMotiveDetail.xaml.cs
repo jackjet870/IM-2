@@ -3,7 +3,7 @@ using System.Windows.Input;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -36,11 +36,12 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(notBookingMotive, oldNotBookingMotive);
       DataContext = notBookingMotive;
-      txtN.IsEnabled = (enumMode != EnumMode.preview);
-      chkA.IsEnabled = (enumMode != EnumMode.preview);
+      txtnbN.IsEnabled = (enumMode != EnumMode.preview);
+      chknbA.IsEnabled = (enumMode != EnumMode.preview);
       if(enumMode!=EnumMode.preview)
       {
         btnAccept.Visibility = Visibility.Visible;
+        UIHelper.SetMaxLength(notBookingMotive, this);
       }
     }
     #endregion

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.Model;
 using IM.BusinessRules.BR;
@@ -169,7 +169,7 @@ namespace IM.Administrator.Forms
       frmSearch.strID = _mealTkTypeFilter.myID;
       frmSearch.strDesc = _mealTkTypeFilter.myN;
       frmSearch.nStatus = _nWpax;
-      frmSearch.enumForm = EnumWindow.MealTicketTypes;
+      frmSearch.enumWindow = EnumWindow.MealTicketTypes;
       if(frmSearch.ShowDialog()==true)
       {
         _nWpax = frmSearch.nStatus;

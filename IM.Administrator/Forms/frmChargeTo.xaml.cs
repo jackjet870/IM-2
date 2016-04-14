@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using IM.Model;
 using IM.BusinessRules.BR;
-using IM.Administrator.Enums;
 using IM.Base.Helpers;
 using IM.Model.Enums;
 using System.Linq;
@@ -148,7 +146,7 @@ namespace IM.Administrator.Forms
       frmSearch.strID = _chargeToFilter.ctID;
       frmSearch.strDesc = _chargeToFilter.ctPrice.ToString();
       frmSearch.nStatus = _nStatus;
-      frmSearch.enumForm = EnumWindow.ChargeTos;
+      frmSearch.enumWindow = EnumWindow.ChargeTos;
       frmSearch.Owner = this;
       //Abrir la ventana de Buscar y ver si decidió realizar algún filtro
       if (frmSearch.ShowDialog() == true)

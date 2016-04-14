@@ -87,6 +87,7 @@ namespace IM.Administrator.Forms
       {
         lstMenu.Add(new { nombre = "Efficiency Types", img = "pack://application:,,,/IM.Base;component/Images/positioning.png", form = "frmEfficiencyTypes" });
         lstMenu.Add(new { nombre = "Payment Places", img = "pack://application:,,,/IM.Base;component/Images/money.ico", form = "frmPaymentPlaces" });
+        lstMenu.Add(new { nombre = "Periods", img = "pack://application:,,,/IM.Base;component/Images/IconDate.png", form = "frmPeriods" });
       }
       #endregion
 
@@ -140,6 +141,14 @@ namespace IM.Administrator.Forms
       }
       #endregion
 
+      #region Teams
+      if(App.User.HasPermission(EnumPermission.Teams,EnumPermisionLevel.ReadOnly))
+      {
+        lstMenu.Add(new { nombre = "Posts", img = "pack://application:,,,/IM.Base;component/Images/Posts.png", form = "frmPosts" });
+        lstMenu.Add(new { nombre = "Posts Log", img = "pack://application:,,,/IM.Base;component/Images/Log.ico", form = "frmPostsLog" });
+      }
+      #endregion
+
       #region Catalogos para Tipo Administrador
       if (App.User.HasRole(EnumRole.Administrator))//Si se tiene permiso como administrador
       {
@@ -147,6 +156,10 @@ namespace IM.Administrator.Forms
         lstMenu.Add(new { nombre = "Desks", img = "pack://application:,,,/IM.Base;component/Images/desk.png", form = "frmDesks" });
         lstMenu.Add(new { nombre = "Meal Ticket Type", img = "pack://application:,,,/IM.Base;component/Images/Cofee.png", form = "frmMealTicketsTypes" });
         lstMenu.Add(new { nombre = "Membership Types", img = "pack://application:,,,/IM.Base;component/Images/member.ico", form = "frmMembershipTypes" });
+        lstMenu.Add(new { nombre = "Permissions", img = "pack://application:,,,/IM.Base;component/Images/Police.ico", form = "frmPermissions" });
+        lstMenu.Add(new { nombre = "Permissions Levels", img = "pack://application:,,,/IM.Base;component/Images/Police.ico", form = "frmPermissionsLevels" });
+        lstMenu.Add(new { nombre = "Place Types", img = "pack://application:,,,/IM.Base;component/Images/Lead_Sources.png", form = "frmPlaceTypes" });
+        lstMenu.Add(new { nombre = "Rate Types", img = "pack://application:,,,/IM.Base;component/Images/Reports.ico", form = "frmRateTypes" });
       }
       #endregion
 

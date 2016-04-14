@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using IM.Model;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 
@@ -105,12 +105,13 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(paymentPlace, oldPaymentPlace);
       DataContext = paymentPlace;
-      txtID.IsEnabled = (enumMode != EnumMode.edit);
-      txtN.IsEnabled = (enumMode != EnumMode.preview);
-      chkA.IsEnabled = (enumMode != EnumMode.preview);
+      txtpcID.IsEnabled = (enumMode != EnumMode.edit);      
       if (enumMode != EnumMode.preview)
       {
         btnAccept.Visibility = Visibility.Visible;
+        txtpcN.IsEnabled = true;
+        chkpcA.IsEnabled = true;
+        UIHelper.SetMaxLength(paymentPlace, this);
       }
     } 
     #endregion

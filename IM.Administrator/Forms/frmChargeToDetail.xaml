@@ -26,8 +26,8 @@
         <TextBlock Grid.Column="0" Grid.Row="2" TextWrapping="WrapWithOverflow" Text="Calculation Type" />
         <!--#endregion-->
         <!--#region Datos-->
-        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding ctID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="10"/>
-        <TextBox Name="txtPri" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding ctPrice}" MaxLength="3"  IsEnabled="False" PreviewTextInput="txtPri_PreviewTextInput"/>
+        <TextBox Name="txtctID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding ctID}" CharacterCasing="Upper" IsEnabled="False"/>
+        <TextBox Name="txtctPrice" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding ctPrice}" IsEnabled="False" PreviewTextInput="txtPri_PreviewTextInput"/>
         <Grid Grid.Column="1" Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100*"/>
@@ -49,7 +49,7 @@
         </Grid>
         <CheckBox Name="chkCxC" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" IsChecked="{Binding ctIsCxC}" Height="13" IsEnabled="False">Is CxC</CheckBox>
 
-        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept" />
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7" Visibility="Hidden"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept" />
         <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right"  Click="btnCancel_Click" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>

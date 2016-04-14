@@ -32,13 +32,13 @@
         <TextBlock Grid.Column="0" Grid.Row="5" Text="Price Collaborator Without Cost" TextWrapping="WrapWithOverflow"/>
         <!--#endregion-->
         <!--#region Datos-->
-        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" Tag="ID" VerticalAlignment="Top" Text="{Binding myID}" MaxLength="10" CharacterCasing="Upper" />
-        <TextBox Name="txtDes" Grid.Column="1" Grid.Row="1" Height="27" Tag="description" VerticalAlignment="Top" Text="{Binding myN}" MaxLength="30" />
-        <TextBox Name="txtPriceA" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" Text="{Binding myPriceA,StringFormat={}{0:C}}" MaxLength="14" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus"/>        
-        <TextBox Name="txtPriceM" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" Text="{Binding myPriceM,StringFormat={}{0:C}}" MaxLength="14"  PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus"/>
-        <TextBox Name="txtColWhit" Grid.Column="1" Grid.Row="4" Height="27" VerticalAlignment="Top" Text="{Binding myCollaboratorWithCost,StringFormat={}{0:C}}" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus" MaxLength="14" />
-        <TextBox Name="txtColWhitout" Grid.Column="1" Grid.Row="5" Height="27" VerticalAlignment="Top" Text="{Binding myCollaboratorWithoutCost,StringFormat={}{0:C}}" MaxLength="14" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus" />
-        <CheckBox Name="chkWP" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="{Binding myWPax}" Height="13" >Whit Pax</CheckBox>        
+        <TextBox Name="txtmyID" Grid.Column="1" Grid.Row="0" Height="27" Tag="ID" VerticalAlignment="Top" Text="{Binding myID}" CharacterCasing="Upper" />
+        <TextBox Name="txtmyN" Grid.Column="1" Grid.Row="1" Height="27" Tag="description" VerticalAlignment="Top" Text="{Binding myN}"/>
+        <TextBox Name="txtmyPriceA" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" Text="{Binding myPriceA,StringFormat={}{0:C}}" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus"/>        
+        <TextBox Name="txtmyPriceM" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" Text="{Binding myPriceM,StringFormat={}{0:C}}" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus"/>
+        <TextBox Name="txtmyCollaboratorWithCost" Grid.Column="1" Grid.Row="4" Height="27" VerticalAlignment="Top" Text="{Binding myCollaboratorWithCost,StringFormat={}{0:C}}" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus"/>
+        <TextBox Name="txtmyCollaboratorWithoutCost" Grid.Column="1" Grid.Row="5" Height="27" VerticalAlignment="Top" Text="{Binding myCollaboratorWithoutCost,StringFormat={}{0:C}}" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus" />
+        <CheckBox Name="chkmyWPax" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="{Binding myWPax}" Height="13" >Whit Pax</CheckBox>        
 
         <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="7" Margin="0,7,75,7" Click="btnAccept_Click" Content="_Accept"  HorizontalAlignment="Right"/>
         <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="7" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>

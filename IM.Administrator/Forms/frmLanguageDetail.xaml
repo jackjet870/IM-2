@@ -24,8 +24,8 @@
         <Label Grid.Column="0" Grid.Row="1">Description</Label>
         <!--#endregion-->
         <!--#region Datos-->
-        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" Text="{Binding laID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="2"/>
-        <TextBox Name="txtN" Grid.Column="1" Grid.Row="1" Tag="description" Height="27" VerticalAlignment="Top" Text="{Binding laN}"  IsEnabled="False" MaxLength="10"/>
+        <TextBox Name="txtlaID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" Text="{Binding laID}" CharacterCasing="Upper" IsEnabled="False" />
+        <TextBox Name="txtlaN" Grid.Column="1" Grid.Row="1" Tag="description" Height="27" VerticalAlignment="Top" Text="{Binding laN}"  IsEnabled="False"/>
         <CheckBox Name="chkA" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" IsChecked="{Binding laA}" Height="13" IsEnabled="False">Active</CheckBox>
 
         <Button Name="btnAccept" Width="60" Height="30"  Grid.Column="1" Grid.Row="3" Visibility="Hidden" Margin="0,7,75,7" Click="btnAccept_Click" HorizontalAlignment="Right" Content="_Accept"/>

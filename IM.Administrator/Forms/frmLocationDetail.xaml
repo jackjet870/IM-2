@@ -33,13 +33,13 @@
         <Label Name="lblSta" Visibility="Collapsed" Grid.Column="0" Grid.Row="5">Status</Label>
         <!--#endregion-->
         <!--#region Datos-->
-        <TextBox Name="txtID" Grid.Column="1" Tag="ID" Grid.Row="0" Height="27" Margin="0,0,0,15" VerticalAlignment="Top" Text="{Binding loID}" IsEnabled="False" MaxLength="10" CharacterCasing="Upper" />
-        <TextBox Name="txtDes" Grid.Column="1" Tag="Description" Grid.Row="1" Height="27" Margin="0,0,0,15" VerticalAlignment="Top" Text="{Binding loN}" IsEnabled="False" MaxLength="30" />
-        <ComboBox Name="cmbLeadSr" Grid.Column="1" Tag="Lead Source" Grid.Row="2"  Margin="0,0,0,15" Height="27" VerticalAlignment="Top" DisplayMemberPath="lsN" SelectedValuePath="lsID" SelectedValue="{Binding lols}" IsEnabled="False" Width="235"/>
-        <ComboBox Name="cmbSalRom" Grid.Column="1" Tag="Sales Room" Grid.Row="3"  Margin="0,0,0,15" Height="27" VerticalAlignment="Top" DisplayMemberPath="srN" SelectedValuePath="srID" SelectedValue="{Binding losr}" IsEnabled="False" Width="235"/>
-        <ComboBox Name="cmbLocCat" Grid.Column="1" Grid.Row="4"  Margin="0,0,0,15" Height="27" VerticalAlignment="Top" DisplayMemberPath="lcN" SelectedValuePath="lcID" SelectedValue="{Binding lolc}" IsEnabled="False" Width="235"/>        
+        <TextBox Name="txtloID" Grid.Column="1" Tag="ID" Grid.Row="0" Height="27" Margin="0,0,0,15" VerticalAlignment="Top" Text="{Binding loID}" IsEnabled="False" CharacterCasing="Upper" />
+        <TextBox Name="txtloN" Grid.Column="1" Tag="Description" Grid.Row="1" Height="27" Margin="0,0,0,15" VerticalAlignment="Top" Text="{Binding loN}" IsEnabled="False" />
+        <ComboBox Name="cmblols" Grid.Column="1" Tag="Lead Source" Grid.Row="2"  Margin="0,0,0,15" Height="27" VerticalAlignment="Top" DisplayMemberPath="lsN" SelectedValuePath="lsID" SelectedValue="{Binding lols}" IsEnabled="False" Width="235"/>
+        <ComboBox Name="cmblosr" Grid.Column="1" Tag="Sales Room" Grid.Row="3"  Margin="0,0,0,15" Height="27" VerticalAlignment="Top" DisplayMemberPath="srN" SelectedValuePath="srID" SelectedValue="{Binding losr}" IsEnabled="False" Width="235"/>
+        <ComboBox Name="cmblolc" Grid.Column="1" Grid.Row="4"  Margin="0,0,0,15" Height="27" VerticalAlignment="Top" DisplayMemberPath="lcN" SelectedValuePath="lcID" SelectedValue="{Binding lolc}" IsEnabled="False" Width="235"/>        
         <ComboBox Name="cmbSta" Grid.Column="1" Grid.Row="5"  Margin="0,0,0,15" Height="27" VerticalAlignment="Top" DisplayMemberPath="sName" SelectedValuePath="sValue" Width="235" Visibility="Collapsed"/>
-        <CheckBox Name="chkA" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" Margin="0,0,0,15" HorizontalAlignment="Left" IsChecked="{Binding loA}" Height="13" IsEnabled="False">Active</CheckBox>
+        <CheckBox Name="chkloA" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" Margin="0,0,0,15" HorizontalAlignment="Left" IsChecked="{Binding loA}" Height="13" IsEnabled="False">Active</CheckBox>
         <CheckBox Name="chkReg" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" Margin="0,0,0,15" HorizontalAlignment="Center" IsChecked="{Binding loRegen}"  Height="13" IsEnabled="False">Regen</CheckBox>
         <CheckBox Name="chkAni" Grid.Column="1" Grid.Row="7" VerticalAlignment="Top" Margin="0,0,0,15" HorizontalAlignment="Left" IsChecked="{Binding loAnimacion}"  Height="13" IsEnabled="False">Animation</CheckBox>
         <CheckBox Name="chkFly" Grid.Column="1" Grid.Row="7" VerticalAlignment="Top" Margin="0,0,0,15" HorizontalAlignment="Center" IsChecked="{Binding loFlyers}"  Height="13" IsEnabled="False">Flyers</CheckBox>

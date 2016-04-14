@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using IM.Model;
 using IM.Base.Helpers;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.BusinessRules.BR;
 
 

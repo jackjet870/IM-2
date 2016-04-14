@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.Model;
 using IM.BusinessRules.BR;
@@ -42,7 +42,7 @@ namespace IM.Administrator.Forms
       frmSearch.strID = (_notBookingMotFilter.nbID>0)?_notBookingMotFilter.nbID.ToString():"";
       frmSearch.strDesc = _notBookingMotFilter.nbN;
       frmSearch.nStatus = _nStatus;
-      frmSearch.enumForm = EnumWindow.DefaultInt;      
+      frmSearch.enumWindow = EnumWindow.DefaultInt;      
       if (frmSearch.ShowDialog() == true)
       {
         _nStatus = frmSearch.nStatus;

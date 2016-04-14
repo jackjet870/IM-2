@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Base.Helpers;
@@ -53,7 +53,15 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(currency, oldCurrency);
-      OpenMode();
+      if(mode!=EnumMode.preview)
+      {
+        txtcuID.IsEnabled = (mode == EnumMode.add);
+        txtcuN.IsEnabled = true;
+        chkA.IsEnabled = true;
+        btnAccept.Visibility = Visibility.Visible;
+        UIHelper.SetMaxLength(currency, this);
+      }
+      DataContext = currency;
     }
     #endregion
     #region Accept
@@ -123,57 +131,6 @@ namespace IM.Administrator.Forms
     }
     #endregion
     #endregion
-
-    #region metods
-    #region OpenMode
-    /// <summary>
-    /// Abre la ventana dependiendo del modo que elija el usuario
-    /// Preview|Edit|Add
-    /// </summary>
-    /// <history>
-    /// [emoguel] 08/03/2016 Created
-    /// </history>
-    protected void OpenMode()
-    {
-      DataContext = currency;
-      switch (mode)
-      {
-        case EnumMode.preview://show
-          {
-            btnAccept.Visibility = Visibility.Hidden;
-            break;
-          }
-        case EnumMode.add://add
-          {
-            txtID.IsEnabled = true;
-            LockControls(true);
-            break;
-          }
-        case EnumMode.edit://Edit
-          {
-            txtID.IsEnabled = false;
-            LockControls(true);
-            break;
-          }
-      }
-
-    }
-
-    #endregion
-    #region LockControls
-    /// <summary>
-    /// Bloquea|Desbloquea los botones dependiendo del modo en que se habra
-    /// </summary>
-    /// <param name="bValue">true para desbloquear| false para bloquear</param>
-    /// <history>
-    /// [emoguel] created 08/03/2016
-    /// </history>
-    protected void LockControls(bool blnValue)
-    {
-      txtN.IsEnabled = blnValue;
-      chkA.IsEnabled = blnValue;
-    } 
-    #endregion
-    #endregion
+    
   }
 }

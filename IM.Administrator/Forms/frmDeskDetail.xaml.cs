@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
@@ -37,7 +37,8 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(desk, oldDesk);
       DataContext = desk;
-      txtID.Text = ((enumMode == EnumMode.edit) ? desk.dkID.ToString() : "");      
+      txtdkID.Text = ((enumMode == EnumMode.edit) ? desk.dkID.ToString() : "");
+      UIHelper.SetMaxLength(desk, this);
       LoadGridComputers();
       LoadCmbComputers();
     } 

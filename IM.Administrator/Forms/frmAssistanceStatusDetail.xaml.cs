@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using IM.Model;
 using IM.BusinessRules.BR;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.Base.Helpers;
 
 namespace IM.Administrator.Forms
@@ -19,59 +19,7 @@ namespace IM.Administrator.Forms
     {
       InitializeComponent();
     }
-
-    #region metodos
-    #region  Modo de la ventana
-    /// <summary>
-    /// Abre la ventana dependiendo del modo que elija el usuario
-    /// Preview|Edit|Add
-    /// </summary>
-    /// <history>
-    /// [emoguel] 27/Feb/2016 Created
-    /// </history>
-    protected void OpenMode()
-    {
-      DataContext = assistance;
-      switch (mode)
-      {
-        case EnumMode.preview://show
-          {
-            btnAccept.Visibility = Visibility.Hidden;            
-            break;
-          }
-        case EnumMode.add://add
-          {
-            txtID.IsEnabled = true;
-            LockControls(true);
-            break;
-          }
-        case EnumMode.edit://Edit
-          {
-            txtID.IsEnabled = false;
-            LockControls(true);
-            break;
-          }
-      }
-
-    }
-    #endregion
-
-    #region LockControls
-    /// <summary>
-    /// Bloquea|Desbloquea los botones dependiendo del modo en que se habra
-    /// </summary>
-    /// <param name="blnValue">true para desbloquear| false para bloquear</param>
-    /// <history>
-    /// [emoguel] 27/Feb/2016 Created
-    /// </history>
-    protected void LockControls(bool blnValue)
-    {
-      txtN.IsEnabled = blnValue;
-      chkA.IsEnabled = blnValue;
-    }
-    #endregion
-    #endregion
-
+    
     #region eventos de controles
     #region Loaded
     /// <summary>
@@ -85,7 +33,16 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(assistance, oldAssistance);
-      OpenMode();
+      DataContext = assistance;
+      if(mode!=EnumMode.preview)
+      {
+        txtatN.IsEnabled = true;
+        chkA.IsEnabled = true;
+        txtatID.IsEnabled = (mode == EnumMode.add);
+        btnAccept.Visibility = Visibility.Visible;
+        UIHelper.SetMaxLength(assistance, this);
+      }
+      
     }
 
     #endregion

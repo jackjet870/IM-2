@@ -5,7 +5,7 @@ using System.Windows.Input;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -18,7 +18,7 @@ namespace IM.Administrator.Forms
     public string strID="";//Id a filtrar
     public string strDesc="";//Descripcion a filtrar
     public int nStatus=-1;//Estatus a filtrar
-    public EnumWindow enumForm;//Formulario desde el que se utiliza
+    public EnumWindow enumWindow;//Formulario desde el que se utiliza
     #region Agency
     public string sSegment="";//Sement by agency para cuando se abra desde agency 
     #endregion
@@ -156,7 +156,7 @@ namespace IM.Administrator.Forms
       txtID.Text = strID;
       cmbStatus.SelectedValue = nStatus;
       txtD.Text = strDesc;
-      switch (enumForm)
+      switch (enumWindow)
       { 
 
         #region ChargeTo
@@ -261,7 +261,7 @@ namespace IM.Administrator.Forms
       nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
       strID = txtID.Text.Trim();
       strDesc = txtD.Text.Trim();
-      switch (enumForm)
+      switch (enumWindow)
       {
         
         #region ChargeTo

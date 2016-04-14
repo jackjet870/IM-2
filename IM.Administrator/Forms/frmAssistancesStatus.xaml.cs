@@ -5,7 +5,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using IM.Model;
 using IM.BusinessRules.BR;
-using IM.Administrator.Enums;
 using IM.Base.Helpers;
 using IM.Model.Enums;
 using System;

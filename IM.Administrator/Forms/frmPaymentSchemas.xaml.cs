@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
@@ -166,7 +166,7 @@ namespace IM.Administrator.Forms
     {
       frmSearch frmSearch = new frmSearch();
       frmSearch.Owner = this;
-      frmSearch.enumForm = EnumWindow.DefaultInt;
+      frmSearch.enumWindow = EnumWindow.DefaultInt;
       frmSearch.strID = (_paymentSchemaFilter.pasID>0)?_paymentSchemaFilter.pasID.ToString():"";
       frmSearch.strDesc = _paymentSchemaFilter.pasN;
       frmSearch.nStatus = _nStatus;

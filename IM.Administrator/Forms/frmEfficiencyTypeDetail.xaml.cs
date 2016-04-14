@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
@@ -51,7 +51,15 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(efficiencyType, oldEffType);
-      OpenMode();
+      DataContext = efficiencyType;
+      if (enumMode != EnumMode.preview)
+      {
+        txtetN.IsEnabled = true;
+        chkA.IsEnabled = true;
+        txtetID.IsEnabled = (enumMode == EnumMode.add);
+        btnAccept.Visibility = Visibility.Visible;
+        UIHelper.SetMaxLength(efficiencyType, this);
+      }
     }
     #endregion
 
@@ -127,38 +135,6 @@ namespace IM.Administrator.Forms
     }
     #endregion
     #endregion
-
-    #region métodos
-    #region OpenMode
-    /// <summary>
-    /// Cambia el estatus de los controles dependiendo del modo
-    /// </summary>
-    /// <history>
-    /// [emoguel] created 18/03/2016
-    /// </history>
-    private void OpenMode()
-    {
-      DataContext = efficiencyType;
-      switch (enumMode)
-      {
-
-        case EnumMode.edit:
-          {
-            txtN.IsEnabled = true;
-            chkA.IsEnabled = true;
-            break;
-          }
-        case EnumMode.add:
-          {
-            txtID.IsEnabled = true;
-            txtN.IsEnabled = true;
-            chkA.IsEnabled = true;
-            break;
-          }
-      }
-    } 
-    #endregion
-
-    #endregion
+    
   }
 }

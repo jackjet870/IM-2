@@ -9,8 +9,8 @@
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="71"/>
-            <ColumnDefinition Width="81*"/>
+            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="80*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="44"/>
@@ -24,11 +24,11 @@
         <Label Grid.Column="0" Grid.Row="1">Description</Label>
         <!--#endregion-->
         <!--#region Datos-->
-        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" Text="{Binding cuID}" CharacterCasing="Upper" IsEnabled="False" MaxLength="10"/>
-        <TextBox Name="txtN" Grid.Column="1" Grid.Row="1" Tag="description" Height="27" VerticalAlignment="Top" Text="{Binding cuN}"  IsEnabled="False" MaxLength="20"/>
+        <TextBox Name="txtcuID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" Text="{Binding cuID}" CharacterCasing="Upper" IsEnabled="False" />
+        <TextBox Name="txtcuN" Grid.Column="1" Grid.Row="1" Tag="description" Height="27" VerticalAlignment="Top" Text="{Binding cuN}"  IsEnabled="False"/>
         <CheckBox Name="chkA" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" IsChecked="{Binding cuA}" Height="13" IsEnabled="False">Active</CheckBox>
 
-        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="3" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept" />
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="3" Margin="0,7,75,7" Visibility="Hidden"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept" />
         <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="3" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>

@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using IM.Model;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 
@@ -36,9 +36,10 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(computer, oldComputer);
       LoadDesks();
       DataContext = computer;
-      if(mode==EnumMode.add)
+      UIHelper.SetMaxLength(computer, this);
+      if (mode==EnumMode.add)
       {
-        txtID.IsEnabled = true;
+        txtcpID.IsEnabled = true;
       }      
     }
     #endregion
@@ -149,8 +150,7 @@ namespace IM.Administrator.Forms
       List<Desk> lstDesk = BRDesks.GetDesks(new Desk());
       cmbDesk.ItemsSource = lstDesk;
     }
-    #endregion
-    
+    #endregion    
     #endregion
   }
 }

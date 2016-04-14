@@ -18,14 +18,20 @@ namespace IM.Base.Helpers
     /// <param name="ObjOld">Objeto a copiar los valores</param>
     /// <history>
     /// [emoguel] created 12/03/2016
+    /// [emoguel] modified se agrego una bandera para clonar las propiedades "Virtual"
     /// </history>
-    public static void CopyProperties <T> (T objNew, T ObjOld)
+    public static void CopyProperties <T> (T objNew, T ObjOld,bool blnIsVirtual=false)
     {
       if (objNew != null && ObjOld != null)
       {
         var type = typeof(T);
+        var property = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
+        if (!blnIsVirtual)
+        {
+          property = property.Where(pi => !pi.GetMethod.IsVirtual).ToList();
+        }
 
-        foreach (PropertyInfo pi in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        foreach (PropertyInfo pi in property)
         {
           var oldValue = type.GetProperty(pi.Name).GetValue(ObjOld, null);
           type.GetProperty(pi.Name).SetValue(objNew, oldValue);
@@ -44,13 +50,18 @@ namespace IM.Base.Helpers
     /// <returns>True. Son iguales | false. No son iguales</returns>
     /// <history>
     /// [emoguel] created 28/03/2016
+    /// [emoguel] modified se agrego una bandera para clonar las propiedades "Virtual"
     /// </history>
-    public static bool IsEquals<T>(T objNew, T ObjOld)
+    public static bool IsEquals<T>(T objNew, T ObjOld,bool blnIsVirtual=false)
     {
       if (objNew != null && ObjOld != null)
       {
         var type = typeof(T);
-        var property = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => !p.GetMethod.IsVirtual);//recorremos las propiedades ignorando las de navegacion
+        var property = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
+        if (!blnIsVirtual)
+        {
+          property = property.Where(pi => !pi.GetMethod.IsVirtual).ToList();
+        }
         if (property.Count() > 0)
         {
           #region Recorrer y comparar las propiedades

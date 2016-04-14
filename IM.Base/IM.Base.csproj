@@ -263,6 +263,10 @@
     <Resource Include="Images\Marital_Status.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Posts.png" />
+    <Resource Include="Images\Lead_Sources.png" />
+    <Resource Include="Images\Police.ico" />
+    <Resource Include="Images\IconDate.png" />
     <Resource Include="Images\Payment.png" />
     <Resource Include="Images\Money.ico" />
     <Resource Include="Images\DateTime_Forbidden.png" />

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
@@ -35,9 +35,23 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(country, oldCountry);
-      openMode();
+      #region LockControls
+      if(mode!=EnumMode.preview)
+      {
+        txtcoID.IsEnabled = (mode == EnumMode.add);
+        txtcoN.IsEnabled = true;
+        txtcoNationality.IsEnabled = true;
+        cmbLang.IsEnabled = true;
+        cmbUnvMot.IsEnabled = true;
+        chkA.IsEnabled = true;
+        chkSil.IsEnabled = true;
+        btnAccept.Visibility = Visibility.Visible;
+        UIHelper.SetMaxLength(country, this);
+      }
+      #endregion
       loadUnavailableMotives();
       LoadLanguages();
+      DataContext = country;
     }
     #endregion
 
@@ -161,61 +175,7 @@ namespace IM.Administrator.Forms
       List<LanguageShort> lstLanguages = BRLanguages.GetLanguages(0);
       cmbLang.ItemsSource = lstLanguages;
     }
-    #endregion
-
-    #region Open Mode
-    /// <summary>
-    /// Varifica en que modo se abrió la ventana
-    /// </summary>
-    /// <history>
-    /// [emoguel] created 15/03/2016
-    /// </history>
-    private void openMode()
-    {
-      DataContext = country;
-      switch(mode)
-      {
-        case EnumMode.add:
-          {
-            txtID.IsEnabled = true;
-            cmbUnvMot.SelectedIndex = -1;
-            lockControls(true);
-            break;
-          }
-        case EnumMode.edit:
-          {
-            txtID.IsEnabled = false;
-            lockControls(true);
-            break;
-          }
-
-        case EnumMode.preview:
-          {
-            btnAccept.Visibility = Visibility.Hidden;
-            break;
-          }
-      }
-    }
-    #endregion
-
-    #region Lock Controls
-    /// <summary>
-    /// BLoquea| Desbloquea los controles
-    /// </summary>
-    /// <param name="blnValue"></param>
-    /// <history>
-    /// [emoguel] created 15/03/2016
-    /// </history>
-    private void lockControls(bool blnValue)
-    {
-      txtN.IsEnabled = blnValue;
-      txtNat.IsEnabled = blnValue;
-      chkA.IsEnabled = blnValue;
-      chkSil.IsEnabled = blnValue;
-      cmbLang.IsEnabled = blnValue;
-      cmbUnvMot.IsEnabled = blnValue;
-    }
-    #endregion
+    #endregion    
 
     #endregion
     

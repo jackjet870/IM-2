@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model;
-using System.Windows.Controls;
-using System.Linq;
 
 namespace IM.Administrator.Forms
 {
@@ -62,17 +60,17 @@ namespace IM.Administrator.Forms
       if(enumMode!=EnumMode.preview)
       {
         btnAccept.Visibility = Visibility.Visible;
-        txtDes.IsEnabled = true;
-        cmbLocCat.IsEnabled = true;
-        cmbSalRom.IsEnabled = true;        
-        txtID.IsEnabled = (enumMode != EnumMode.edit);        
+        txtloN.IsEnabled = true;
+        cmblolc.IsEnabled = true;
+        cmblosr.IsEnabled = true;        
+        txtloID.IsEnabled = (enumMode != EnumMode.edit);        
         if(enumMode==EnumMode.search)
         {
           lblLeaSrc.Visibility = Visibility.Collapsed;
-          cmbLeadSr.Visibility = Visibility.Collapsed;
+          cmblols.Visibility = Visibility.Collapsed;
           lblSta.Visibility = Visibility.Visible;
           cmbSta.Visibility = Visibility.Visible;
-          chkA.Visibility = Visibility.Collapsed;
+          chkloA.Visibility = Visibility.Collapsed;
           chkAni.Visibility = Visibility.Collapsed;
           chkFly.Visibility = Visibility.Collapsed;
           chkReg.Visibility = Visibility.Collapsed;
@@ -82,13 +80,14 @@ namespace IM.Administrator.Forms
         }
         else
         {
-          chkA.IsEnabled = true;
+          chkloA.IsEnabled = true;
           chkAni.IsEnabled = true;
           chkFly.IsEnabled = true;
           chkReg.IsEnabled = true;
-          cmbLeadSr.IsEnabled = true;
+          cmblols.IsEnabled = true;
           LoadLeadSource();
         }
+        UIHelper.SetMaxLength(location, this);
       }
     }
     #endregion
@@ -218,7 +217,7 @@ namespace IM.Administrator.Forms
       {
         lstSalesRoom.Insert(0, new SalesRoomShort { srID = "", srN = "" });
       }
-      cmbSalRom.ItemsSource = lstSalesRoom;
+      cmblosr.ItemsSource = lstSalesRoom;
     }
     #endregion
     
@@ -236,7 +235,7 @@ namespace IM.Administrator.Forms
       {
         lstLocCategories.Insert(0, new LocationCategory { lcID = "", lcN = "" });
       }
-      cmbLocCat.ItemsSource = lstLocCategories;
+      cmblolc.ItemsSource = lstLocCategories;
     }
     #endregion
 
@@ -250,7 +249,7 @@ namespace IM.Administrator.Forms
     private void LoadLeadSource()
     {
       List<LeadSource> lstLeadSource = BRLeadSources.GetLeadSources(1);
-      cmbLeadSr.ItemsSource = lstLeadSource;
+      cmblols.ItemsSource = lstLeadSource;
     }
     #endregion
     #endregion

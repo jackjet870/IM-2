@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using IM.Administrator.Enums;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;

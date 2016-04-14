@@ -5,7 +5,7 @@ using System.Windows.Input;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -59,10 +59,11 @@ namespace IM.Administrator.Forms
       DataContext = folioInvOut;
       if (enumMode != EnumMode.preview)
       {
-        txtSerie.IsEnabled = true;
-        txtFrom.IsEnabled = true;
-        txtTo.IsEnabled = true;
+        txtfiSerie.IsEnabled = true;
+        txtfiFrom.IsEnabled = true;
+        txtfiTo.IsEnabled = true;
         chkA.IsEnabled = true;
+        UIHelper.SetMaxLength(folioInvOut, this);
         btnAccept.Visibility = Visibility.Visible;
       }
     } 
@@ -155,23 +156,23 @@ namespace IM.Administrator.Forms
         int nRes = 0;
         string strMsj = "";
         #region Validar El rango del folio      
-        if (string.IsNullOrWhiteSpace(txtSerie.Text))
+        if (string.IsNullOrWhiteSpace(txtfiSerie.Text))
         {
           strMsj += "Specify the serie. \n";
         }
 
         if (folioInvOut.fiFrom == 0)
         {
-          txtFrom.Text = "0";
+          txtfiFrom.Text = "0";
           strMsj += "Start number can not be 0.";
         }
         else
         {
           if (folioInvOut.fiTo < folioInvOut.fiFrom)
           {
-            if (string.IsNullOrWhiteSpace(txtTo.Text))
+            if (string.IsNullOrWhiteSpace(txtfiTo.Text))
             {
-              txtTo.Text = txtFrom.Text;
+              txtfiTo.Text = txtfiFrom.Text;
             }
             strMsj += "Start number can not be greater than End Number.";
           }
@@ -198,8 +199,6 @@ namespace IM.Administrator.Forms
     #endregion
 
     #region Methods
-
-
     #region LostFocus
     /// <summary>
     /// Cambiar el valor del textbox cuando pierde el foco

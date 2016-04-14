@@ -5,7 +5,7 @@ using System.Windows.Input;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using System.Linq;
 
 namespace IM.Administrator.Forms
@@ -35,7 +35,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _blnEdit = App.User.HasPermission(Model.Enums.EnumPermission.Locations, Model.Enums.EnumPermisionLevel.Standard);
+      _blnEdit = App.User.HasPermission(EnumPermission.Locations, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
       LoadHotels();
     }
@@ -212,7 +212,8 @@ namespace IM.Administrator.Forms
         }
         else
         {
-          ObjectHelper.CopyProperties(hotel, frmHotelDetail.hotel);//Actualizamos los datos del registro en el grid                    
+          ObjectHelper.CopyProperties(hotel, frmHotelDetail.hotel,true);//Actualizamos los datos del registro en el grid         
+          lstHotels.Sort((x, y) => string.Compare(x.hoID, y.hoID));           
           nIndex = dgrHotels.SelectedIndex;
         }
         dgrHotels.Items.Refresh();

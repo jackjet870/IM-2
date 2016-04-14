@@ -5,7 +5,7 @@ using System.Windows.Input;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using System.Linq;
 
 namespace IM.Administrator.Forms
@@ -165,7 +165,7 @@ namespace IM.Administrator.Forms
       frmSearch.strID = ((_deskFilter.dkID > 0)?_deskFilter.dkID.ToString():"");
       frmSearch.strDesc = _deskFilter.dkN;
       frmSearch.nStatus = _nStatus;
-      frmSearch.enumForm = EnumWindow.DefaultInt;
+      frmSearch.enumWindow = EnumWindow.DefaultInt;
       if (frmSearch.ShowDialog() == true)
       {
         _deskFilter.dkID = Convert.ToInt32(frmSearch.strID);

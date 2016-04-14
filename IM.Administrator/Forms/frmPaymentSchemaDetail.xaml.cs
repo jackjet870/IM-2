@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using IM.Base.Helpers;
 using IM.Model;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.BusinessRules.BR;
 
 namespace IM.Administrator.Forms
@@ -54,7 +54,8 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(paymentSchema, oldPaymentSchema);
-      DataContext = paymentSchema;      
+      DataContext = paymentSchema;
+      UIHelper.SetMaxLength(paymentSchema, this);
     } 
     #endregion
 

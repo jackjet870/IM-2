@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Input;
 using IM.BusinessRules.BR;
 using IM.Model;
-using IM.Administrator.Enums;
 using IM.Base.Helpers;
 using IM.Model.Enums;
 using System;

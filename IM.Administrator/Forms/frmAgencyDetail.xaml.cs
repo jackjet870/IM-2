@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using IM.Model;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
-using System.Globalization;
 
 namespace IM.Administrator.Forms
 {
@@ -21,6 +19,7 @@ namespace IM.Administrator.Forms
     private string _unavailableMotive;
     private string _Market;
     public EnumMode enumMode;
+
     public frmAgencyDetail()
     {
       InitializeComponent();      
@@ -38,14 +37,34 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      ObjectHelper.CopyProperties(agency, oldAgency);
+      ObjectHelper.CopyProperties(agency, oldAgency);      
       LoadUnavailableMotives();
       LoadMarkets();
       LoadReps();
       LoadSegments();
       LoadClubs();
       LoadCountries();
-      OpenMode();
+      #region Bloquear botones
+      if (enumMode != EnumMode.preview)
+      {
+        btnAccept.Visibility = Visibility.Visible;
+        txtagID.IsEnabled = (enumMode == EnumMode.add);
+        txtagN.IsEnabled = true;
+        txtagSalePay.IsEnabled = true;
+        txtagShowPay.IsEnabled = true;
+        cmbClub.IsEnabled = true;
+        cmbCountri.IsEnabled = true;
+        cmbMarket.IsEnabled = true;
+        cmbRep.IsEnabled = true;
+        cmbSegment.IsEnabled = true;
+        cmbUnavMot.IsEnabled = true;
+        chkA.IsEnabled = true;
+        chkIncTour.IsEnabled = true;
+        chkShowInLst.IsEnabled = true;
+        UIHelper.SetMaxLength(agency, this);
+      }
+      #endregion      
+      DataContext = agency;
     }
     #endregion
 
@@ -133,7 +152,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void txt_GotFocus(object sender, RoutedEventArgs e)
     {
-      TextBox txt = (TextBox)sender;
+      TextBox txt = (TextBox)sender;      
       txt.Text = ConvertHelper.IntCurrencyToStandar(txt.Text);
     }
     #endregion
@@ -297,68 +316,6 @@ namespace IM.Administrator.Forms
       List<CountryShort> lstCountries = BRCountries.GetCountries(1);
       cmbCountri.ItemsSource = lstCountries;
     }
-    #endregion
-
-    #region modo de la ventana
-    /// <summary>
-    /// Abre la ventana dependiendo del modo que elija el usuario
-    /// Preview|Edit|Add
-    /// </summary>
-    /// <history>
-    /// [emoguel] 11/03/2016 Created
-    /// </history>
-    protected void OpenMode()
-    {
-      this.DataContext = agency;
-      switch (enumMode)
-      {        
-        case EnumMode.preview://show
-          {
-            btnAccept.Visibility = Visibility.Hidden;            
-            break;
-          }
-        case EnumMode.add://add
-          {
-            txtID.IsEnabled = true;
-            LockControls(true);
-            break;
-          }
-        case EnumMode.edit://Edit
-          {
-            txtID.IsEnabled = false;
-            LockControls(true);
-            _unavailableMotive = agency.agum.ToString();//Llenamos la variable con el valor original
-            _Market = agency.agmk.ToString();//Llenamos la variable con el valor original        
-            break;
-          }
-      }
-
-    }
-    #endregion
-    #region Bloquear|Desbloquear controles
-    /// <summary>
-    /// Bloquea|Desbloquea los botones dependiendo del modo en que se habra
-    /// </summary>
-    /// <param name="bValue">true para desbloquear| false para bloquear</param>
-    /// <history>
-    /// [emoguel] 11/03/2016 Created
-    /// </history>
-    protected void LockControls(bool blnValue)
-    {
-      txtN.IsEnabled = blnValue;
-      txtSalePay.IsEnabled = blnValue;
-      txtShowPay.IsEnabled = blnValue;
-      cmbCountri.IsEnabled = blnValue;
-      cmbMarket.IsEnabled = blnValue;
-      cmbRep.IsEnabled = blnValue;
-      cmbUnavMot.IsEnabled = blnValue;
-      cmbClub.IsEnabled = blnValue;
-      cmbSegment.IsEnabled = blnValue;
-      chkA.IsEnabled = blnValue;
-      chkIncTour.IsEnabled = blnValue;
-      chkShowInLst.IsEnabled = blnValue;
-    }
-
     #endregion
 
     #endregion

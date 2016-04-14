@@ -6,6 +6,7 @@ using System.Windows.Input;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -120,7 +121,7 @@ namespace IM.Administrator.Forms
     {
       frmFolioInvitationOuthouseDetail frmFolioDetail = new frmFolioInvitationOuthouseDetail();
       frmFolioDetail.Owner = this;
-      frmFolioDetail.enumMode = Enums.EnumMode.add;
+      frmFolioDetail.enumMode = EnumMode.add;
       if(frmFolioDetail.ShowDialog()==true)
       {
         
@@ -156,7 +157,7 @@ namespace IM.Administrator.Forms
       frmSearch.strID = _folioInvOutFilter.fiFrom.ToString();
       frmSearch.strDesc = _folioInvOutFilter.fiTo.ToString();
       frmSearch.strSerie = _folioInvOutFilter.fiSerie;
-      frmSearch.enumForm =Enums.EnumWindow.FoliosInvitationOuthouse;
+      frmSearch.enumWindow =EnumWindow.FoliosInvitationOuthouse;
       frmSearch.nStatus = _nStatus;
       if(frmSearch.ShowDialog()==true)
       {
@@ -184,7 +185,7 @@ namespace IM.Administrator.Forms
       frmFolioInvitationOuthouseDetail frmFolioDetail = new frmFolioInvitationOuthouseDetail();
       frmFolioDetail.oldFolioInvOut = folioInvOut;
       frmFolioDetail.Owner = this;
-      frmFolioDetail.enumMode = ((_blnEdit)?Enums.EnumMode.edit:Enums.EnumMode.preview);//Asignamos el modo
+      frmFolioDetail.enumMode = ((_blnEdit)?EnumMode.edit:EnumMode.preview);//Asignamos el modo
       if(frmFolioDetail.ShowDialog()==true)
       {
         int nIndex = 0;

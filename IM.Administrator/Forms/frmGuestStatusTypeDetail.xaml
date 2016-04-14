@@ -32,12 +32,12 @@
         <TextBlock Grid.Column="0" Grid.Row="5" Text="Maximun quanty of tours" TextWrapping="WrapWithOverflow"/>
         <!--#endregion-->
         <!--#region Datos-->
-        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding gsID}" IsEnabled="False" MaxLength="5" CharacterCasing="Upper" />
-        <TextBox Name="txtDes" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding gsN}" IsEnabled="False" MaxLength="30" />
-        <TextBox Name="txtStaAge" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" Text="{Binding gsAgeStart}" IsEnabled="False" MaxLength="3" PreviewTextInput="txtNumber_PreviewTextInput" LostFocus="txt_LostFocus" />
-        <TextBox Name="txtEndAge" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" Text="{Binding gsAgeEnd}" IsEnabled="False" MaxLength="3"  PreviewTextInput="txtNumber_PreviewTextInput" LostFocus="txt_LostFocus" />
-        <TextBox Name="txtMaxAmount" Grid.Column="1" Grid.Row="4" Height="27" VerticalAlignment="Top" Text="{Binding gsMaxAuthGifts,StringFormat={}{0:C}}" PreviewTextInput="txtNumber_PreviewTextInput" GotFocus="txtMaxAmount_GotFocus" LostFocus="txt_LostFocus" IsEnabled="False" MaxLength="13" />
-        <TextBox Name="txtMaxQuanty" Grid.Column="1" Grid.Row="5" Height="27" VerticalAlignment="Top" Text="{Binding gsMaxQtyTours}" IsEnabled="False" MaxLength="10" />
+        <TextBox Name="txtgsID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding gsID}" IsEnabled="False" CharacterCasing="Upper" />
+        <TextBox Name="txtgsN" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding gsN}" IsEnabled="False" />
+        <TextBox Name="txtgsAgeStart" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" Text="{Binding gsAgeStart}" IsEnabled="False" PreviewTextInput="txtNumber_PreviewTextInput" LostFocus="txt_LostFocus" />
+        <TextBox Name="txtgsAgeEnd" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" Text="{Binding gsAgeEnd}" IsEnabled="False" PreviewTextInput="txtNumber_PreviewTextInput" LostFocus="txt_LostFocus" />
+        <TextBox Name="txtgsMaxAuthGifts" Grid.Column="1" Grid.Row="4" Height="27" VerticalAlignment="Top" Text="{Binding gsMaxAuthGifts,StringFormat={}{0:C}}" PreviewTextInput="txtNumber_PreviewTextInput" GotFocus="txtMaxAmount_GotFocus" LostFocus="txt_LostFocus" IsEnabled="False" />
+        <TextBox Name="txtgsMaxQtyTours" Grid.Column="1" Grid.Row="5" Height="27" VerticalAlignment="Top" Text="{Binding gsMaxQtyTours}" IsEnabled="False" MaxLength="10" />
         <CheckBox Name="chkA" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="{Binding gsA}" Height="13" IsEnabled="False">Active</CheckBox>
         <CheckBox Name="chkAllTour" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" HorizontalAlignment="Right" IsChecked="{Binding gsAllowTourDisc}" Height="13" IsEnabled="False">Allow discount tour </CheckBox>
 

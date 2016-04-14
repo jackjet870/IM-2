@@ -174,7 +174,7 @@ namespace IM.Base.Helpers
     public static string ValidateForm(UIElement container, string strForm)
     {
       string strMsj = "";      
-      List<Control> lstControls = GetChildParentCollection<Control>(container);//buscamos todos los controles de la ventana
+      List<Control> lstControls = UIHelper.GetChildParentCollection<Control>(container);//buscamos todos los controles de la ventana
       lstControls = lstControls.Where(co => co.Tag != null).ToList();
       foreach (Control control in lstControls)
       {
@@ -207,52 +207,5 @@ namespace IM.Base.Helpers
     }
 
     #endregion
-
-    #region GetChildParenCollection
-    /// <summary>
-    /// busca todos los controles contenedores para recorrerlos
-    /// </summary>
-    /// <typeparam name="T">tipo de contenedor</typeparam>
-    /// <param name="parent">contenedor</param>
-    /// <returns>devuelve una lista de controles</returns>
-    /// <history>
-    /// [emoguel] created 02/04/2016
-    /// </history>
-    private static List<T> GetChildParentCollection<T>(object parent) where T : DependencyObject
-    {
-      List<T> logicalCollection = new List<T>();
-      GetChildCollection(parent as DependencyObject, logicalCollection);
-      return logicalCollection;
-    }
-    #endregion
-
-    #region GetChildCollection
-    /// <summary>
-    /// Obtiene todos los controles dentro de los contenedores
-    /// </summary>
-    /// <typeparam name="T">tipo de contenedor</typeparam>
-    /// <param name="parent">Contenedor</param>
-    /// <param name="logicalCollection">lista de controles</param>
-    /// <history>
-    /// [emoguel] created 02/04/2016
-    /// </history>
-    private static void GetChildCollection<T>(DependencyObject parent, List<T> logicalCollection) where T : DependencyObject
-    {
-      IEnumerable children = LogicalTreeHelper.GetChildren(parent);
-      foreach (object child in children)
-      {
-        if (child is DependencyObject)
-        {
-          DependencyObject depChild = child as DependencyObject;
-          if (child is T)
-          {
-            logicalCollection.Add(child as T);
-          }
-          GetChildCollection(depChild, logicalCollection);
-        }
-      }
-    }
-    #endregion
-
   }
 }

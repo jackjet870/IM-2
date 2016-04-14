@@ -99,7 +99,13 @@
     <Compile Include="BR\BRPaymentSchemas.cs" />
     <Compile Include="BR\BRPaymentTypes.cs" />
     <Compile Include="BR\BRNotes.cs" />
+    <Compile Include="BR\BRPeriods.cs" />
+    <Compile Include="BR\BRPermissions.cs" />
+    <Compile Include="BR\BRPermissionsLevels.cs" />
     <Compile Include="BR\BRPersonnelDayOff.cs" />
+    <Compile Include="BR\BRPlaceTypes.cs" />
+    <Compile Include="BR\BRPosts.cs" />
+    <Compile Include="BR\BRPostsLog.cs" />
     <Compile Include="BR\BRPrStats.cs" />
     <Compile Include="BR\BRRegions.cs" />
     <Compile Include="BR\BRReportsByLeadSource.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 
 namespace IM.Base.Helpers
 {
@@ -30,8 +31,9 @@ namespace IM.Base.Helpers
     /// </history>
     public static string IntCurrencyToStandar(string textCurrency)
     {
-      int nRes = 0;
-      return Int32.TryParse(textCurrency, NumberStyles.Currency, CultureInfo.CurrentCulture, out nRes) ? nRes.ToString() : "0";
+      textCurrency = textCurrency.Remove(textCurrency.Length - 3);
+      textCurrency = new string(textCurrency.Where(s => char.IsDigit(s)).ToArray());
+      return textCurrency;
     }
     #endregion
   }

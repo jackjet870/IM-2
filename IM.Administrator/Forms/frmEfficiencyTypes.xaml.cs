@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using IM.BusinessRules.BR;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.Model;
 using System.Linq;
@@ -37,7 +37,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       LoadEfficiencyTypes();
-      _blnEdit = App.User.HasPermission(Model.Enums.EnumPermission.Sales, Model.Enums.EnumPermisionLevel.Standard);
+      _blnEdit = App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.Standard);
       btnAdd.IsEnabled = _blnEdit;
     }
     #endregion

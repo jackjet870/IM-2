@@ -6,6 +6,7 @@ using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using System.Linq;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -131,7 +132,7 @@ namespace IM.Administrator.Forms
     {
       frmGiftCategoryDetail frmGiftCategoryDetail = new frmGiftCategoryDetail();
       frmGiftCategoryDetail.Owner = this;
-      frmGiftCategoryDetail.enumMode = Enums.EnumMode.add;
+      frmGiftCategoryDetail.enumMode =EnumMode.add;
       if(frmGiftCategoryDetail.ShowDialog()==true)
       {
         if(ValidateFilter(frmGiftCategoryDetail.giftCategory))//Verificamos si cumple con los filtros actuales
@@ -178,7 +179,7 @@ namespace IM.Administrator.Forms
       GiftCategory giftCategory = (GiftCategory)dgrGiftsCateg.SelectedItem;
       frmGiftCategoryDetail frmGiftCategoryDetail = new frmGiftCategoryDetail();
       frmGiftCategoryDetail.Owner = this;
-      frmGiftCategoryDetail.enumMode = ((_blnEdit) ? Enums.EnumMode.edit : Enums.EnumMode.preview);
+      frmGiftCategoryDetail.enumMode = ((_blnEdit) ? EnumMode.edit : EnumMode.preview);
       frmGiftCategoryDetail.oldGiftCategory = giftCategory;
       if(frmGiftCategoryDetail.ShowDialog()==true)
       {

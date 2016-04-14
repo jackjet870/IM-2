@@ -3,6 +3,7 @@ using System.Windows.Input;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -14,7 +15,7 @@ namespace IM.Administrator.Forms
     #region Variables
     public GiftCategory giftCategory = new GiftCategory();//Objeto a agregar|Modificar
     public GiftCategory oldGiftCategory = new GiftCategory();//Objeto con los datos iniciales
-    public Enums.EnumMode enumMode;//Modo en que se abre la ventana
+    public EnumMode enumMode;//Modo en que se abre la ventana
     #endregion
     public frmGiftCategoryDetail()
     {
@@ -55,21 +56,13 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(giftCategory, oldGiftCategory);
       DataContext = giftCategory;
-      switch(enumMode)//Verificar el modo en que fue abierta la ventana
+      if(enumMode!= EnumMode.preview)
       {
-        case Enums.EnumMode.add:
-          {
-            txtID.IsEnabled = true;
-            txtN.IsEnabled = true;
-            chkA.IsEnabled = true;
-            break;
-          }
-        case Enums.EnumMode.edit:
-          {
-            txtN.IsEnabled = true;
-            chkA.IsEnabled = true;
-            break;
-          }
+        txtgcID.IsEnabled = (enumMode == EnumMode.add);
+        txtgcN.IsEnabled = true;
+        chkA.IsEnabled = true;
+        btnAccept.Visibility = Visibility.Visible;
+        UIHelper.SetMaxLength(giftCategory, this);
       }
     }
     #endregion
@@ -85,7 +78,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if(enumMode!=Enums.EnumMode.preview)
+      if(enumMode!=EnumMode.preview)
       {
         if (!ObjectHelper.IsEquals(giftCategory, oldGiftCategory))
         {
@@ -119,7 +112,7 @@ namespace IM.Administrator.Forms
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
-      if(ObjectHelper.IsEquals(giftCategory,oldGiftCategory) && enumMode!=Enums.EnumMode.add)
+      if(ObjectHelper.IsEquals(giftCategory,oldGiftCategory) && enumMode!=EnumMode.add)
       {
         Close();
       }
@@ -130,7 +123,7 @@ namespace IM.Administrator.Forms
 
         if (strMsj == "")
         {
-          nRes = BRGiftsCategories.SaveGiftCategory(giftCategory, (enumMode == Enums.EnumMode.edit));
+          nRes = BRGiftsCategories.SaveGiftCategory(giftCategory, (enumMode == EnumMode.edit));
           UIHelper.ShowMessageResult("Gift Category", nRes);
         }
         else

@@ -4,7 +4,7 @@ using System.Windows.Input;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using System.Linq;
 
 namespace IM.Administrator.Forms
@@ -117,7 +117,7 @@ namespace IM.Administrator.Forms
     {
       frmComputerDetail frmComputerDetail = new frmComputerDetail();
       frmComputerDetail.Owner = this;
-      frmComputerDetail.mode = Enums.EnumMode.add;
+      frmComputerDetail.mode = EnumMode.add;
       if (frmComputerDetail.ShowDialog() == true)
       {
         if (ValidateFilters(frmComputerDetail.computer))//Validamos que cumpla con los filtros
@@ -146,7 +146,7 @@ namespace IM.Administrator.Forms
     private void btnSearch_Click(object sender, RoutedEventArgs e)
     {
       frmSearch frmSearch = new frmSearch();
-      frmSearch.enumForm = EnumWindow.Computers;
+      frmSearch.enumWindow = EnumWindow.Computers;
       frmSearch.Owner = this;
       frmSearch.strID = _computerFilter.cpID;
       frmSearch.strDesc = _computerFilter.cpN;
@@ -174,7 +174,7 @@ namespace IM.Administrator.Forms
       Computer computer = (Computer)dgrComputers.SelectedItem;
       frmComputerDetail frmComputerDetail = new frmComputerDetail();
       frmComputerDetail.Owner = this;
-      frmComputerDetail.mode = Enums.EnumMode.edit;
+      frmComputerDetail.mode = EnumMode.edit;
       frmComputerDetail.oldComputer = computer;
       if (frmComputerDetail.ShowDialog() == true)
       {        

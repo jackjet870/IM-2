@@ -5,7 +5,8 @@ using System.Windows.Input;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
+using System.Linq;
 
 namespace IM.Administrator.Forms
 {
@@ -70,7 +71,7 @@ namespace IM.Administrator.Forms
         chkA.IsEnabled = true;
         if (enumMode != EnumMode.edit)
         {
-          txtID.IsEnabled = true;
+          txthoID.IsEnabled = true;
         }
         #region Modo Busqueda
         if (enumMode == EnumMode.search)
@@ -82,6 +83,7 @@ namespace IM.Administrator.Forms
           cmbStatus.Visibility = Visibility.Visible;
         }
         #endregion
+        UIHelper.SetMaxLength(hotel, this);
       }
     }
     #endregion
@@ -115,6 +117,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Hotel", nRes);
             if(nRes==1)
             {
+              hotel = BRHotels.GetHotels(hotel, blnInclude: true).FirstOrDefault();
               DialogResult = true;
               Close();
             }

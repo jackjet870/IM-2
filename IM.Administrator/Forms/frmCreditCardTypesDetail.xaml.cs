@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
@@ -19,60 +19,7 @@ namespace IM.Administrator.Forms
     {
       InitializeComponent();
     }
-
-    #region métodos
-    #region OpenMode
-    /// <summary>
-    /// Abre la ventana dependiendo del modo que elija el usuario
-    /// Preview|Edit|Add
-    /// </summary>
-    /// <history>
-    /// [emoguel] 07/03/2016 Created
-    /// </history>
-    protected void OpenMode()
-    {
-      DataContext = creditCardType;
-      switch (mode)
-      {
-        case EnumMode.preview://preview
-          {
-            btnAccept.Visibility = Visibility.Hidden;
-            break;
-          }
-        case EnumMode.add://add
-          {
-            txtID.IsEnabled = true;
-            LockControls(true);
-            break;
-          }
-        case EnumMode.edit://Edit
-          {
-            txtID.IsEnabled = false;
-            LockControls(true);
-            break;
-          }
-      }
-
-    }
-
-    #endregion
-    #region LockControls
-    /// <summary>
-    /// Bloquea|Desbloquea los botones dependiendo del modo en que se habra
-    /// </summary>
-    /// <param name="bValue">true para desbloquear| false para bloquear</param>
-    /// <history>
-    /// [emoguel] 07/03/2016 Created
-    /// </history>
-    protected void LockControls(bool blnValue)
-    {
-      txtN.IsEnabled = blnValue;
-      chkIsCC.IsEnabled = blnValue;
-      chkA.IsEnabled = blnValue;
-    }
-
-    #endregion
-    #endregion
+    
     #region eventos de los controles
     #region windowLoaded
     /// <summary>
@@ -83,7 +30,16 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(creditCardType, oldCreditCard);
-      OpenMode();
+      if (mode != EnumMode.preview)
+      {
+        txtccID.IsEnabled = (mode == EnumMode.add);
+        txtccN.IsEnabled = true;
+        chkA.IsEnabled = true;
+        chkIsCC.IsEnabled = true;
+        btnAccept.Visibility = Visibility.Visible;
+        UIHelper.SetMaxLength(creditCardType, this);
+      }      
+      DataContext = creditCardType;
     }
     #endregion
 

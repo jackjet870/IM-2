@@ -5,7 +5,7 @@ using System.Windows.Input;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -34,56 +34,7 @@ namespace IM.Administrator.Forms
       List<ChargeCalculationType> lstChargeType = BRChargeCalculationTypes.GetChargeCalculationTypes(new ChargeCalculationType(), 1);
       cmbCalTyp.ItemsSource = lstChargeType;
     } 
-    #endregion
-
-    #region OpenMode
-    /// <summary>
-    /// Abre la ventana dependiendo del modo que elija el usuario
-    /// Preview|Edit|Add
-    /// </summary>
-    /// <history>
-    /// [emoguel] 02/03/2016 Created
-    /// </history>
-    protected void OpenMode()
-    {
-      DataContext = chargeTo;
-      switch (mode)
-      {
-        case EnumMode.preview://show
-          {
-            btnAccept.Visibility = Visibility.Hidden;            
-            break;
-          }
-        case EnumMode.add://add
-          {
-            txtID.IsEnabled = true;
-            LockControls(true);
-
-            break;
-          }
-        case EnumMode.edit://Edit
-          {
-            txtID.IsEnabled = false;
-            LockControls(true);
-            break;
-          }
-      }
-
-    }
-
-    #endregion
-    #region LockControls
-    /// <summary>
-    /// Bloquea controles dependiendo del modo en que se visualize la ventana
-    /// </summary>
-    /// <param name="blnValue"></param>
-    protected void LockControls(bool blnValue)
-    {
-      txtPri.IsEnabled = blnValue;
-      cmbCalTyp.IsEnabled = blnValue;
-      chkCxC.IsEnabled = blnValue;
-    }
-    #endregion
+    #endregion    
     #endregion
 
     #region eventos de los controles
@@ -105,21 +56,21 @@ namespace IM.Administrator.Forms
         string sMsj = "";
         int nRes = 0;
         #region validar campos
-        if (string.IsNullOrWhiteSpace(txtID.Text))//ID
+        if (string.IsNullOrWhiteSpace(txtctID.Text))//ID
         {
           sMsj += "Specify the Area ID. \n";
         }
         #region validar price
-        if (string.IsNullOrWhiteSpace(txtPri.Text))//Se valida que se haya llenado el campo
+        if (string.IsNullOrWhiteSpace(txtctPrice.Text))//Se valida que se haya llenado el campo
         {
           sMsj += "Specify the Charge To Price. \n";
         }
         else
         {
-          int nPrice = Convert.ToInt32(txtPri.Text);
+          int nPrice = Convert.ToInt32(txtctPrice.Text);
           if (!(nPrice > 0 && nPrice < 256))//Se valida que el número esté en el rango de tipo byte
           {
-            txtPri.Text = ((nPrice == 0) ? "" : nPrice.ToString());
+            txtctPrice.Text = ((nPrice == 0) ? "" : nPrice.ToString());
             sMsj += "The price must be higher than 0 and must be smaller than 255. \n";
           }
         }
@@ -152,12 +103,25 @@ namespace IM.Administrator.Forms
     #endregion
     
     #region LoadFrom
+    /// <summary>
+    /// Carga los datos del formulario
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(chargeTo, oldChargeTo);
       LoadChargeType();
-      OpenMode();
-
+      DataContext = chargeTo;
+      if(mode!=EnumMode.preview)
+      {
+        btnAccept.Visibility = Visibility.Visible;
+        txtctPrice.IsEnabled = true;
+        chkCxC.IsEnabled = true;
+        cmbCalTyp.IsEnabled = true;
+        txtctID.IsEnabled = (mode == EnumMode.add);
+        UIHelper.SetMaxLength(chargeTo, this);
+      }      
       tlpCalc.Text = "A - If the guest has tour then the charge is equal to the total of gifts less the maximum amount"
         + "authorized else the charge is equal to the total of gifts. The maximum amount authorized is based on the Lead Source. \n \n"
         + "B - The charge is equal to the total of gifts. \n \n "

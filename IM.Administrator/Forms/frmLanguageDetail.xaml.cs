@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.Model;
 using IM.BusinessRules.BR;
@@ -48,13 +37,14 @@ namespace IM.Administrator.Forms
       DataContext = language;
       if (enumMode != EnumMode.preview)
       {
-        txtN.IsEnabled = true;
+        txtlaN.IsEnabled = true;
         chkA.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
         if (enumMode == EnumMode.add)
         {
-          txtID.IsEnabled = true;
+          txtlaID.IsEnabled = true;
         }
+        UIHelper.SetMaxLength(language, this);
       }
 
     } 

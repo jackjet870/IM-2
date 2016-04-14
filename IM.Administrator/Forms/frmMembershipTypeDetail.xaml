@@ -33,16 +33,16 @@
         <Label Name="lblStatus" Grid.Column="0" Grid.Row="6" Content="Status" Visibility="Collapsed" />
         <!--#endregion-->
         <!--#region Datos-->
-        <TextBox Name="txtID" Grid.Column="1" Grid.Row="0" Height="27" Margin="0,0,0,15" Tag="ID" VerticalAlignment="Top" Text="{Binding mtID}" MaxLength="10"  Width="235" CharacterCasing="Upper" />
-        <TextBox Name="txtDes" Grid.Column="1" Grid.Row="1" Height="27" Margin="0,0,0,15" Tag="description" VerticalAlignment="Top" Text="{Binding mtN}" MaxLength="50" />
-        <ComboBox Name="cmbMtGroup" Grid.Column="1" Grid.Row="2" Margin="0,0,0,15" Tag="Membership Group" Height="27" VerticalAlignment="Top" SelectedValuePath="mgID" DisplayMemberPath="mgN" SelectedValue="{Binding mtGroup}"/>
-        <TextBox Name="txtLevel" Grid.Column="1" Grid.Row="3" Margin="0,0,0,15" Tag="Level" Height="27" VerticalAlignment="Top" Text="{Binding mtLevel}" MaxLength="3"  PreviewTextInput="txt_LevelTextInput" />
-        <TextBox Name="txtFrom" Grid.Column="1" Grid.Row="4" Margin="0,0,0,15" Height="27" VerticalAlignment="Top" Text="{Binding mtFrom,StringFormat={}{0:C}}" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus" MaxLength="14" />
-        <TextBox Name="txtTo" Grid.Column="1" Grid.Row="5" Margin="0,0,0,15" Height="27" VerticalAlignment="Top" Text="{Binding mtTo,StringFormat={}{0:C}}" MaxLength="14" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus" />
-        <CheckBox Name="chkA" Grid.Column="1" Grid.Row="6" Margin="0,0,0,15" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="{Binding mtA}" Height="13" >Active</CheckBox>
+        <TextBox Name="txtmtID" Grid.Column="1" Grid.Row="0" Height="27" Margin="0,0,0,15" Tag="ID" VerticalAlignment="Top" Text="{Binding mtID}" Width="235" CharacterCasing="Upper" />
+        <TextBox Name="txtmtN" Grid.Column="1" Grid.Row="1" Height="27" Margin="0,0,0,15" Tag="description" VerticalAlignment="Top" Width="235" Text="{Binding mtN}"  />
+        <ComboBox Name="cmbmtGroup" Grid.Column="1" Grid.Row="2" Margin="0,0,0,15" Tag="Membership Group" Height="27" VerticalAlignment="Top" SelectedValuePath="mgID" DisplayMemberPath="mgN" SelectedValue="{Binding mtGroup}"/>
+        <TextBox Name="txtmtLevel" Grid.Column="1" Grid.Row="3" Margin="0,0,0,15" Tag="Level" Height="27" VerticalAlignment="Top" Text="{Binding mtLevel}" Width="235" PreviewTextInput="txt_LevelTextInput" MaxLength="3"/>
+        <TextBox Name="txtmtFrom" Grid.Column="1" Grid.Row="4" Margin="0,0,0,15" Height="27" VerticalAlignment="Top" Text="{Binding mtFrom,StringFormat={}{0:C}}" Width="235"  PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus"  />
+        <TextBox Name="txtmtTo" Grid.Column="1" Grid.Row="5" Margin="0,0,0,15" Height="27" VerticalAlignment="Top" Text="{Binding mtTo,StringFormat={}{0:C}}" Width="235"  PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus" />
+        <CheckBox Name="chkmtA" Grid.Column="1" Grid.Row="6" Margin="0,0,0,15" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="{Binding mtA}" Height="13" >Active</CheckBox>
         <ComboBox Name="cmbSta" Grid.Column="1" Grid.Row="6"  Margin="0,0,0,15" Height="27" VerticalAlignment="Top" DisplayMemberPath="sName" SelectedValuePath="sValue" Width="235" Visibility="Collapsed"/>
 
-        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="7" Margin="0,7,75,7" Click="btnAccept_Click" Visibility="Visible" Content="_Accept"  HorizontalAlignment="Right"/>
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="7" Margin="0,7,75,7" Click="btnAccept_Click" Content="_Accept"  HorizontalAlignment="Right"/>
         <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="7" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>

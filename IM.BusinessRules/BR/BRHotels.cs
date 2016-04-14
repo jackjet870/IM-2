@@ -82,9 +82,7 @@ namespace IM.BusinessRules.BR
         #region Update
         if (blnUpdate)//Si es actualizar
         {
-          hotel.Area = null;
-          hotel.HotelGroup = null;
-          dbContext.Entry(hotel).State= EntityState.Modified;          
+          dbContext.Entry(hotel).State= EntityState.Modified;                        
         }
         #endregion
         #region Insert
@@ -103,11 +101,7 @@ namespace IM.BusinessRules.BR
         }
         #endregion
         
-        int nRes= dbContext.SaveChanges();
-        //devolvemos el objeto con sus relaciones
-        hotel = dbContext.Hotels.Where(ho => ho.hoID == hotel.hoID).Include("Area").Include("HotelGroup").FirstOrDefault();
-
-        return nRes;
+        return dbContext.SaveChanges();        
       }
     }
       #endregion

@@ -48,7 +48,7 @@ namespace IM.ProcessorGeneral.Forms
       _lstSalesRoom = BRSalesRooms.GetSalesRoomsByUser(App.User.User.peID);
       _lstPrograms = BRPrograms.GetPrograms();
       _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, EnumProgram.All, "ALL");
-      _lstRateTypes = BRRateTypes.GetRateType();
+      _lstRateTypes = BRRateTypes.GetRateTypes();
 
       cboStatus.ItemsSource = EnumToListHelper.GetList<EnumStatus>();
       cboSaveCourtesyTours.ItemsSource = EnumToListHelper.GetList<EnumSaveCourtesyTours>();

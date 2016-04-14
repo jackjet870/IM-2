@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -65,7 +54,8 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(paymentType, oldPaymentType);
       DataContext = paymentType;
-      txtID.IsEnabled = (enumMode != EnumMode.edit);
+      txtptID.IsEnabled = (enumMode != EnumMode.edit);
+      UIHelper.SetMaxLength(paymentType, this);
     } 
     #endregion
 

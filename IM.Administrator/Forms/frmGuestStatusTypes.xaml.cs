@@ -6,6 +6,7 @@ using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using System.Linq;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -120,7 +121,7 @@ namespace IM.Administrator.Forms
     {
       frmGuestStatusTypeDetail frmGuesStaDet = new frmGuestStatusTypeDetail();
       frmGuesStaDet.Owner = this;
-      frmGuesStaDet.enumMode = Enums.EnumMode.add;
+      frmGuesStaDet.enumMode = EnumMode.add;
       if(frmGuesStaDet.ShowDialog()==true)
       {
         if(ValidateFilter(frmGuesStaDet.guestStaTyp))//Verificamos que cumpla con los filtros
@@ -179,7 +180,7 @@ namespace IM.Administrator.Forms
       frmGuestStatusTypeDetail frmGuesStaDet = new frmGuestStatusTypeDetail();
       frmGuesStaDet.guestStaTypOld = guestStaTyp;
       frmGuesStaDet.Owner = this;
-      frmGuesStaDet.enumMode = ((_blnEdit == true) ? Enums.EnumMode.edit : Enums.EnumMode.preview);
+      frmGuesStaDet.enumMode = ((_blnEdit == true) ? EnumMode.edit : EnumMode.preview);
       if(frmGuesStaDet.ShowDialog()==true)
       {
         int nIndex = 0;

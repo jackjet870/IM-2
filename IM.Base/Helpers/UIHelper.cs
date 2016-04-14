@@ -1,5 +1,14 @@
-﻿using System;
+﻿using IM.Model;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Entity.Core.Objects.DataClasses;
+using System.Data.Entity.Infrastructure;
+using System.Linq;
+using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace IM.Base.Helpers
@@ -131,6 +140,162 @@ namespace IM.Base.Helpers
           }
       }
       #endregion
+    }
+    #endregion
+
+    #region SetUpControls
+    /// <summary>
+    /// Le asigna el maximo de escritura a los controles igual al que tienen en la BD
+    /// </summary>
+    /// <param name="obj">Objeto a validar las propiedades</param>
+    /// <param name="ui">Contenedor donde va a buscar controles</param>
+    /// <history>
+    /// [emoguel] created 08/04/2016
+    /// </history>
+    public static void SetMaxLength(object obj, Window ui)
+    {
+      List<Control> lstControls = GetChildParentCollection<Control>(ui);//Obtenemos la lista de controles del contenedor      
+
+      var type = obj.GetType();//Obtenemos el tipo de objeto
+      if (lstControls.Count > 0)
+      {
+        #region Obtenemos el MaxLength
+        using (var db = new IMEntities(Model.Helpers.ConnectionHelper.ConnectionString))
+        {
+          var objectContext = ((IObjectContextAdapter)db).ObjectContext;//obtenemos el contexto
+          
+          var elementType = objectContext
+              .MetadataWorkspace
+              .GetEntityContainer(objectContext.DefaultContainerName, DataSpace.CSpace)
+              .BaseEntitySets
+              .First(meta => meta.ElementType.Name == type.Name)
+              .ElementType;//Obtenemos el objeto
+          
+
+          foreach (PropertyInfo pi in type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => !pi.GetMethod.IsVirtual))//recorremos las propiedades
+          {            
+            EdmMember edm = elementType.Members.Where(em => em.Name == pi.Name).FirstOrDefault();//Obtenemos el edmMember            
+
+            Facet facet;
+            Control control = lstControls.Where(cl => cl.Name == "txt" + pi.Name).FirstOrDefault();//buscamos si existe el control
+
+            if (control != null)//Verifcamos que tengamos un control
+            {
+              TextBox txt = control as TextBox;//Convertimos el control a texbox
+              TypeCode typeCode = Type.GetTypeCode(pi.PropertyType);//Obtenemos el tipo de dato              
+              switch (typeCode)
+              {
+                #region String
+                case TypeCode.String:
+                case TypeCode.Char:
+                  {
+                    facet= edm.TypeUsage.Facets.Where(fc => fc.Name == "MaxLength").FirstOrDefault();//Obtenemos el length
+                    txt.MaxLength = Convert.ToInt32(facet.Value);//Asignamos el MaxLength
+                    break;
+                  }
+                #endregion
+
+                #region Decimal
+                case TypeCode.Decimal:
+                case TypeCode.Double:                
+                  {
+                    int Precision = Convert.ToInt32(edm.TypeUsage.Facets.Where(fc => fc.Name == "Precision").FirstOrDefault().Value);
+                    txt.MaxLength = Precision;
+                    break;
+                  }
+                #endregion
+
+                #region Byte
+                case TypeCode.Byte:
+                  {
+                    txt.MaxLength = 3;
+                    break;
+                  }
+                #endregion
+
+                #region Int
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                  {
+                    txt.MaxLength = 10;
+                    break;
+                  }
+                #endregion
+
+                #region DateTime
+                case TypeCode.DateTime:
+                  {
+                    if (txt.Name.EndsWith("DT"))
+                    {
+                      txt.MaxLength = 24;
+                    }
+                    else if (txt.Name.EndsWith("T"))
+                    {
+                      txt.MaxLength = 5;
+                    }
+                    else
+                    {
+                      txt.MaxLength = 10;
+                    }
+                    break;
+                  } 
+                  #endregion
+
+              }
+            }           
+            
+          }
+        }
+        #endregion
+      }
+
+    }
+    #endregion
+
+    #region GetChildParenCollection
+    /// <summary>
+    /// busca todos los controles contenedores para recorrerlos
+    /// </summary>
+    /// <typeparam name="T">tipo de contenedor</typeparam>
+    /// <param name="parent">contenedor</param>
+    /// <returns>devuelve una lista de controles</returns>
+    /// <history>
+    /// [emoguel] created 02/04/2016
+    /// </history>
+    public static List<T> GetChildParentCollection<T>(object parent) where T : DependencyObject
+    {
+      List<T> logicalCollection = new List<T>();
+      GetChildCollection(parent as DependencyObject, logicalCollection);
+      return logicalCollection;
+    }
+    #endregion
+
+    #region GetChildCollection
+    /// <summary>
+    /// Obtiene todos los controles dentro de los contenedores
+    /// </summary>
+    /// <typeparam name="T">tipo de contenedor</typeparam>
+    /// <param name="parent">Contenedor</param>
+    /// <param name="logicalCollection">lista de controles</param>
+    /// <history>
+    /// [emoguel] created 02/04/2016
+    /// </history>
+    private static void GetChildCollection<T>(DependencyObject parent, List<T> logicalCollection) where T : DependencyObject
+    {
+      IEnumerable children = LogicalTreeHelper.GetChildren(parent);
+      foreach (object child in children)
+      {
+        if (child is DependencyObject)
+        {
+          DependencyObject depChild = child as DependencyObject;
+          if (child is T)
+          {
+            logicalCollection.Add(child as T);
+          }
+          GetChildCollection(depChild, logicalCollection);
+        }
+      }
     }
     #endregion
     #endregion Metodos

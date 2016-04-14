@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 
 namespace IM.Administrator.Forms
 {
@@ -49,9 +38,10 @@ namespace IM.Administrator.Forms
       if (enumMode != EnumMode.preview)
       {
         btnAccept.Visibility = Visibility.Visible;
-        txtID.IsEnabled = (enumMode==EnumMode.edit);
-        txtN.IsEnabled = true;
-        chkA.IsEnabled = true;
+        txtmsID.IsEnabled = (enumMode==EnumMode.add);
+        txtmsN.IsEnabled = true;
+        chkmsA.IsEnabled = true;
+        UIHelper.SetMaxLength(maritalStatus, this);
       }
     } 
     #endregion

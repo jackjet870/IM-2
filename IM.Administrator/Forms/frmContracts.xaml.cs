@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using IM.Administrator.Enums;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Base.Helpers;

@@ -272,6 +272,62 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmPeriodDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPeriods.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPermissionDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPermissionLevelDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPermissions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPermissionsLevels.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPlaceTypeDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPlaceTypes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPostDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPostLogDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPosts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmPostsLog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmRateTypeDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmRateTypes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmSearch.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -280,8 +336,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Enums\EnumMode.cs" />
-    <Compile Include="Enums\EnumWindow.cs" />
     <Compile Include="Forms\frmAgencyDetail.xaml.cs">
       <DependentUpon>frmAgencyDetail.xaml</DependentUpon>
     </Compile>
@@ -435,6 +489,48 @@
     </Compile>
     <Compile Include="Forms\frmPaymentTypes.xaml.cs">
       <DependentUpon>frmPaymentTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPeriodDetail.xaml.cs">
+      <DependentUpon>frmPeriodDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPeriods.xaml.cs">
+      <DependentUpon>frmPeriods.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPermissionDetail.xaml.cs">
+      <DependentUpon>frmPermissionDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPermissionLevelDetail.xaml.cs">
+      <DependentUpon>frmPermissionLevelDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPermissions.xaml.cs">
+      <DependentUpon>frmPermissions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPermissionsLevels.xaml.cs">
+      <DependentUpon>frmPermissionsLevels.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPlaceTypeDetail.xaml.cs">
+      <DependentUpon>frmPlaceTypeDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPlaceTypes.xaml.cs">
+      <DependentUpon>frmPlaceTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPostDetail.xaml.cs">
+      <DependentUpon>frmPostDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPostLogDetail.xaml.cs">
+      <DependentUpon>frmPostLogDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPosts.xaml.cs">
+      <DependentUpon>frmPosts.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmPostsLog.xaml.cs">
+      <DependentUpon>frmPostsLog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmRateTypeDetail.xaml.cs">
+      <DependentUpon>frmRateTypeDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmRateTypes.xaml.cs">
+      <DependentUpon>frmRateTypes.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSearch.xaml.cs">
       <DependentUpon>frmSearch.xaml</DependentUpon>

@@ -63,7 +63,7 @@ namespace IM.Host.Forms
       _dsMealTicketType = ((CollectionViewSource)(this.FindResource("dsMealTicketType")));
 
       //  Obtenemos los tipos de tarifa
-      _dsRateType.Source = BRRateTypes.GetRateType(1, true, true, true);
+      _dsRateType.Source = BRRateTypes.GetRateTypes(new RateType { raID=1}, 1, true, true);
 
       // Obtenemos los colaboradores
       _dsPersonnel.Source = BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);

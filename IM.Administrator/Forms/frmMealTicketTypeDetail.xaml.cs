@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
@@ -35,7 +35,8 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(mealTicketType, oldMealTicketType);
       DataContext = mealTicketType;
-      txtID.IsEnabled = (enumMode == EnumMode.add);
+      txtmyID.IsEnabled = (enumMode == EnumMode.add);
+      UIHelper.SetMaxLength(mealTicketType, this);
     }
     #endregion
 

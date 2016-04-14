@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using IM.Model;
 using IM.Base.Helpers;
-using IM.Administrator.Enums;
+using IM.Model.Enums;
 using IM.BusinessRules.BR;
 
 namespace IM.Administrator.Forms
@@ -34,7 +34,7 @@ namespace IM.Administrator.Forms
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
-      if(ObjectHelper.IsEquals(guestStaTyp,guestStaTypOld) && !Validation.GetHasError(txtEndAge) && !Validation.GetHasError(txtStaAge) && enumMode!=EnumMode.add)//Verificamos si se realizó algun cambio
+      if (ObjectHelper.IsEquals(guestStaTyp, guestStaTypOld) && !Validation.GetHasError(txtgsAgeEnd) && !Validation.GetHasError(txtgsAgeStart) && enumMode!=EnumMode.add)//Verificamos si se realizó algun cambio
       {
         Close();
       }
@@ -52,15 +52,15 @@ namespace IM.Administrator.Forms
           strMsj += "Specify the Guest status type description. \n";
         }
         #region validar star Age y end age
-        if(Validation.GetHasError(txtStaAge))//Validamos que no pueda ser mayor a 255        
+        if(Validation.GetHasError(txtgsAgeStart))//Validamos que no pueda ser mayor a 255        
         {
           strMsj += "Start Age can not be greater than 255. \n";          
         }
-        if(Validation.GetHasError(txtEndAge))
+        if(Validation.GetHasError(txtgsAgeEnd))
         {
           strMsj += "End Age can not be greater than 255. \n";
         }
-        if(!Validation.GetHasError(txtStaAge)&&!Validation.GetHasError(txtEndAge))
+        if(!Validation.GetHasError(txtgsAgeStart) &&!Validation.GetHasError(txtgsAgeEnd))
         {
           if(guestStaTyp.gsAgeStart>guestStaTyp.gsAgeEnd)//Validamos que start Edge no se mayor que end Age
           {
@@ -103,15 +103,16 @@ namespace IM.Administrator.Forms
       DataContext = guestStaTyp;
       if(enumMode!=EnumMode.preview)
       {
-        txtID.IsEnabled = (enumMode==EnumMode.add);
-        txtDes.IsEnabled = true;
-        txtStaAge.IsEnabled = true;
-        txtEndAge.IsEnabled = true;
-        txtMaxAmount.IsEnabled = true;
-        txtMaxQuanty.IsEnabled = true;
+        txtgsID.IsEnabled = (enumMode==EnumMode.add);
+        txtgsN.IsEnabled = true;
+        txtgsAgeStart.IsEnabled = true;
+        txtgsAgeEnd.IsEnabled = true;
+        txtgsMaxAuthGifts.IsEnabled = true;
+        txtgsMaxQtyTours.IsEnabled = true;
         chkA.IsEnabled = true;
         chkAllTour.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
+        UIHelper.SetMaxLength(guestStaTyp, this);
       }
     }
     #endregion
