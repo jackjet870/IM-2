@@ -84,6 +84,7 @@
     <Compile Include="BR\BRHelpers.cs" />
     <Compile Include="BR\BRHotelGroups.cs" />
     <Compile Include="BR\BRHotels.cs" />
+    <Compile Include="BR\BRInvitation.cs" />
     <Compile Include="BR\BRLanguages.cs" />
     <Compile Include="BR\BRLocationsCategories.cs" />
     <Compile Include="BR\BRLoginLogs.cs" />

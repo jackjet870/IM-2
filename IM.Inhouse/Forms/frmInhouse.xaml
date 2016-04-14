@@ -90,13 +90,13 @@
                             <TextBlock Text="Refresh" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnPrint" Grid.Column="2" Style="{StaticResource ResourceKey=btnOptions}" >
+                    <Button x:Name="btnPrint" Grid.Column="2" Style="{StaticResource ResourceKey=btnOptions}" Click="btnPrint_Click">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Print" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnPreview" Grid.Column="3" Style="{StaticResource ResourceKey=btnOptions}" >
+                    <Button x:Name="btnPreview" Grid.Column="3" Style="{StaticResource ResourceKey=btnOptions}" Click="btnPreview_Click" HorizontalAlignment="Right" Width="46" >
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Preview" Style="{StaticResource ResourceKey=txtOptions}"/>

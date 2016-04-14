@@ -108,6 +108,7 @@
     <Compile Include="Classes\ExcelFormatTable.cs" />
     <Compile Include="Classes\Invitation.cs" />
     <Compile Include="Classes\NoteGuest.cs" />
+    <Compile Include="Classes\InvitationData.cs" />
     <Compile Include="Classes\StrToEnums.cs" />
     <Compile Include="Classes\UserData.cs" />
     <Compile Include="Classes\UserNormalLogin.cs" />

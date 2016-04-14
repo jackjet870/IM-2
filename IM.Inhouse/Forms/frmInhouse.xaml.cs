@@ -1770,6 +1770,40 @@ namespace IM.Inhouse
       frmAbout formAbout = new frmAbout();
       formAbout.ShowInTaskbar = false;
       formAbout.ShowDialog();
+    }
+    #endregion
+
+    #region btnPreview_Click
+    private void btnPreview_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+    #endregion
+
+    #region btnPrint_Click
+    private void btnPrint_Click(object sender, RoutedEventArgs e)
+    {
+      //Traemos la informacion del store y la almacenamos en un procedimiento
+      InvitationData invitationData = BRInvitation.RptInvitationData(7751973, App.User.User.peID);
+
+      var rptInvi = new rptInvitation();
+
+      rptInvi.SetDataSource(RptCrystal(invitationData.Invitation));
+      rptInvi.Subreports["rptInvitationGuests.rpt"].SetDataSource(invitationData.InvitationGuest);
+      rptInvi.Subreports["rptInvitationDeposits.rpt"].SetDataSource(invitationData.InvitationDeposit);
+      rptInvi.Subreports["rptInvitationGifts.rpt"].SetDataSource(invitationData.InvitationGift);
+
+      var _frmViewer = new frmViewer(rptInvi);
+      _frmViewer.ShowDialog();
+    }
+    #endregion
+
+    #region RptCrystal
+    public List<object> RptCrystal(object obj)
+    {
+      var lst = new List<object>();
+      lst.Add(obj);
+      return lst;
     } 
     #endregion
 
