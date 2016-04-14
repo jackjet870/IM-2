@@ -350,7 +350,7 @@
                         <DataGridTemplateColumn x:Name="equityColumn" IsReadOnly="True"  Header="Equity" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding EquityColumn}" Width="17" Height="17"/>
+                                    <Image Source="{Binding EquityColumn}" Width="17" Height="17" MouseLeftButtonUp="Equity_MouseLeftButtonUp"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

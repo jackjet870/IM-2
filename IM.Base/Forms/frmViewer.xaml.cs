@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using System.Windows;
 
 namespace IM.Base.Forms
 {
@@ -7,21 +8,22 @@ namespace IM.Base.Forms
   /// </summary>
   public partial class frmViewer : Window
   {
-    private object _rpt;
+    private ReportClass _rpt;
 
     public frmViewer()
     {
       InitializeComponent();
     }
 
-    public frmViewer(object _rpt) : this()
+    public frmViewer(ReportClass rpt) : this()
     {
-      this._rpt = _rpt;
+      this._rpt = rpt;
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      crystalReportsViewer1.ViewerCore.ReportSource = _rpt;
+      reportViewer.Owner = Window.GetWindow(this);
+      reportViewer.ViewerCore.ReportSource = _rpt;
     }
   }
 }

@@ -14,8 +14,52 @@ namespace IM.Inhouse.Classes
   /// </history>
   /// 
   public class RptReservationIM : RptReservationOrigos { }
-
+  
+  #region ClubesService
   public class RptEquityMembershipIM : RptEquityMembership { }
+
+  public class RptEquityVerificationIM : RptEquityVerification { }
+
+  public class RptEquitySalesmanIM : RptEquitySalesman { }
+
+  public class RptEquityCoOwnerIM : RptEquityCoOwner { }
+
+  public class RptEquityBeneficiaryIM : RptEquityBeneficiary { }
+
+  public class RptEquityHotelIM : RptEquityHotel { }
+
+  public class RptEquityGolfFieldsHeaderIM : RptEquityGolfFieldsHeader { }
+
+  public class RptEquityGolfFieldsDetailM : RptEquityGolfFieldsDetail { }
+
+  public class RptEquityRoomTypeIM : RptEquityRoomType { }
+
+  public class RptEquityBalanceElectronicPurseHeaderIM : RptEquityBalanceElectronicPurseHeader { }
+
+  public class RptEquityBalanceElectronicPurseDetailIM : RptEquityBalanceElectronicPurseDetail { }
+
+  public class RptEquityPaymentPromiseIM : RptEquityPaymentPromise { }
+
+  public class RptEquityWeeksNightsHeaderIM : RptEquityWeeksNightsHeader { }
+
+  public class RptEquityWeeksNightsDetailIM : RptEquityWeeksNightsDetail { }
+
+  public class RptEquityGolfRCIIM : RptEquityWeeksNightsHeader { }
+
+  public class infoPromotionAffiliationStatusIM : infoPromotionAffiliationStatus { }
+
+  public class MemberExtensionIM : MemberExtension { }
+  #endregion
+
+  #region CallCenterService
+
+  public class RptEquityMembershipCallCIM : Services.CallCenterService.RptEquityMembership { }
+
+  public class RptEquityProvisionIM : Services.CallCenterService.RptEquityProvision { }
+
+  public class RptEquityReservationIM : Services.CallCenterService.RptEquityReservation { }
+
+  #endregion
 
   public class RptInvitationIM : RptInvitation
   {

@@ -16,6 +16,8 @@ using System.Windows.Input;
 using IM.Services.Helpers;
 using IM.Services.WirePRService;
 using IM.Inhouse.Reports;
+using System.IO;
+using System.Collections;
 
 namespace IM.Inhouse
 {
@@ -529,11 +531,12 @@ namespace IM.Inhouse
     void Equity(string membershipNum, Decimal company, int clubAgency, int clubGuest)
     {
       EnumClub club;
-      string message = string.Empty;
+      // si tiene membrecia
       if (membershipNum != null && membershipNum != "")
-      {
+      {//si tiene permiso para el reporte de equity
         if (App.User.HasPermission(EnumPermission.Equity, EnumPermisionLevel.ReadOnly))
         {
+          // // // ShowReport
           // determinamos el club
           if (clubAgency != 0)
             club = StrToEnums.StringToEnumClub(clubAgency.ToString());
@@ -552,7 +555,7 @@ namespace IM.Inhouse
           //si no encontramos la membrecia en clubles, nos salimos
           if (rptClubes.Membership == null)
           {
-            UIHelper.ShowMessage("This report did not return data", MessageBoxImage.Exclamation, "Clubes");
+            UIHelper.ShowMessage("Membership not found", MessageBoxImage.Exclamation, "Clubes");
             return;
           }
 
@@ -569,22 +572,66 @@ namespace IM.Inhouse
           // si no encontramos la membresia en Credito y Cobranza Reserva, nos salimos
           if (rptCallCenter.Membership == null)
           {
-            UIHelper.ShowMessage("This report did not return data", MessageBoxImage.Exclamation, "Credito y Cobranza Reserva");
+            UIHelper.ShowMessage("Membership not found", MessageBoxImage.Exclamation, "Credito y Cobranza Reserva");
             return;
           }
 
-          //var rpt = new rptEquity();
-          //var reporte = new List<Services.ClubesService.RptEquity>();
-          //reporte.Add(rptClubes);
+          // indicamos que ciertas listas del reporte no tienen registros
+          RptEquityHeader header = new RptEquityHeader();
+          header.HasGolfFields = rptClubes.GolfFieldsDetail.Length > 0;
+
+          var equity = new rptEquity();
+          //datos generales de equity
+          equity.Database.Tables["Header"].SetDataSource(ObjectHelper.ObjectToList(header));
+          equity.Database.Tables["Membership"].SetDataSource(ObjectHelper.ObjectToList(rptClubes.Membership));
+          equity.Database.Tables["Member"].SetDataSource(ObjectHelper.ObjectToList(rptCallCenter.Membership));
+          equity.Database.Tables["SalesmanOPC"].SetDataSource(rptClubes.Salesmen);
+          equity.Database.Tables["Hotel"].SetDataSource(ObjectHelper.ObjectToList(rptClubes.Hotels));
+          equity.Database.Tables["GolfFieldsHeader"].SetDataSource(ObjectHelper.ObjectToList(rptClubes.GolfFieldsHeader));
+          equity.Database.Tables["Verification"].SetDataSource(ObjectHelper.ObjectToList(rptClubes.Verification));
+          //Subreportes
+          equity.Subreports["rptEquitySalesman.rpt"].SetDataSource(rptClubes.Salesmen);
+          equity.Subreports["rptEquityCoOwners.rpt"].SetDataSource(rptClubes.CoOwners);
+          equity.Subreports["rptEquityBeneficiaries.rpt"].SetDataSource(rptClubes.Beneficiaries);
+          equity.Subreports["rptEquityGolfFields.rpt"].SetDataSource(rptClubes.GolfFieldsDetail);
+          equity.Subreports["rptEquityRoomTypes.rpt"].SetDataSource(rptClubes.RoomTypes);
+          equity.Subreports["rptEquityProvisionsSNORM.rpt"].SetDataSource(rptCallCenter.Provisions);
+          equity.Subreports["rptEquityProvisionsSAIRF.rpt"].SetDataSource(rptCallCenter.Provisions);
+          equity.Subreports["rptEquityProvisionsSRCI.rpt"].SetDataSource(rptCallCenter.Provisions);
+          equity.Subreports["rptEquityProvisionsSCOMP.rpt"].SetDataSource(rptCallCenter.Provisions);
+          equity.Subreports["rptEquityProvisionsSCRG.rpt"].SetDataSource(rptCallCenter.Provisions);
+          equity.Subreports["rptEquityProvisionsSIGR.rpt"].SetDataSource(rptCallCenter.Provisions);
+          equity.Subreports["rptEquityProvisionsSVEC.rpt"].SetDataSource(rptCallCenter.Provisions);
+          equity.Subreports["rptEquityProvisionsSREF.rpt"].SetDataSource(rptCallCenter.Provisions);
+          equity.Subreports["rptEquityReservations.rpt"].SetDataSource(rptCallCenter.Reservations);
+          equity.Subreports["rptEquityBalanceElectronicPurse.rpt"].Database.Tables["EquityBalanceElectronicPurseDetail"].SetDataSource(rptClubes.BalanceElectronicPurseDetails);
+          equity.Subreports["rptEquityBalanceElectronicPurse.rpt"].Database.Tables["BalanceElectronicPurseHeader"].SetDataSource(rptClubes.BalanceElectronicPurseHeaders);
+          equity.Subreports["rptEquityPaymentPromises.rpt"].SetDataSource(rptClubes.PaymentPromises);
+          equity.Subreports["rptEquityWeeksNights.rpt"].Database.Tables["WeeksNightsDetail"].SetDataSource(rptClubes.WeeksNightsDetails);
+          equity.Subreports["rptEquityWeeksNights.rpt"].Database.Tables["WeeksNightsHeader"].SetDataSource(rptClubes.WeeksNightsHeaders);
+          equity.Subreports["rptEquityGolfRCI.rpt"].SetDataSource(rptClubes.GolfRCI);
+          equity.Subreports["rptEquityPromotions.rpt"].SetDataSource(rptClubes.Promotions);
+          //var rpt = new rptReservation();
+          //var reporte = new List<RptReservationOrigos>();
+          //reporte.Add(reservation);
           //rpt.Load();
           //rpt.SetDataSource(reporte);
-          //var _frmViewer = new frmViewer(rpt);
-          //_frmViewer.ShowDialog();
+          var _frmViewer = new frmViewer(equity);
+          _frmViewer.ShowDialog();
         }
         else
           UIHelper.ShowMessage("Access denied");
       }
     }
+    void GenerateReport()
+    {
+      
+    }
+
+    #endregion
+
+    #endregion
+
 
     #region Reservation
     /// <summary>
@@ -618,10 +665,6 @@ namespace IM.Inhouse
         }
       }
     }
-    #endregion
-
-    #endregion
-
     #endregion
 
     #region OpenInfo
@@ -1212,6 +1255,12 @@ namespace IM.Inhouse
       Reservation(dgGuestArrival);
     }
     #endregion
+
+    private void Equity_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+      var guest = dgGuestArrival.Items[dgGuestArrival.Items.CurrentPosition] as GuestArrival;
+      GetEquityReport(guest, 1);
+    }
 
     #endregion
 

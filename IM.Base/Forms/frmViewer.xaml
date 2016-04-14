@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="ReportViewer" Height="600" Width="800" Loaded="Window_Loaded" WindowState="Maximized" ShowInTaskbar="False" Topmost="True">
     <Grid>
-        <my:CrystalReportsViewer  Name="crystalReportsViewer1" ToggleSidePanel="None" ShowToggleSidePanelButton="False" />
+        <my:CrystalReportsViewer  x:Name="reportViewer" ToggleSidePanel="None" ShowToggleSidePanelButton="False" />
     </Grid>
 </Window>

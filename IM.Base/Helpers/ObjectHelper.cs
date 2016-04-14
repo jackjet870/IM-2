@@ -93,5 +93,23 @@ namespace IM.Base.Helpers
       return false;
     }
     #endregion
+
+    #region ObjectToList
+    /// <summary>
+    /// Obtiene un objeto y lo converte a lista de objetos
+    /// </summary>
+    /// <param name="obj">objeto a convertir a lista</param>
+    /// <history>
+    /// [jorcanche] 13/04/2015 Created
+    /// [ecanul] 14/04/2016 Modificated (Metodo movido a Base.Helpers)
+    /// </history>
+    public static List<object> ObjectToList(object obj)
+    {
+      var lst = new List<object>();
+      lst.Add(obj);
+      return lst;
+    }
+
+    #endregion
   }
 }
