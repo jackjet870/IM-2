@@ -56,7 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\rptEquityData.cs" />
     <Compile Include="Helpers\CallCenterHelper.cs" />
     <Compile Include="Helpers\ClubesHelper.cs" />
     <Compile Include="Helpers\ServiceHelper.cs" />

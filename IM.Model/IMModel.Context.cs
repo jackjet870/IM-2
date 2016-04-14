@@ -3143,5 +3143,158 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ExchangeRateShort>("USP_OR_GetExchangeRatesByDate", dateParameter, currencyParameter);
         }
+    
+        public virtual ObjectResult<RptProductionByAgencyMarketHotelOuthouse> USP_OR_RptProductionByAgencyMarketHotelOutside(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string pRs, string program, Nullable<byte> filterDeposit)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var pRsParameter = pRs != null ?
+                new ObjectParameter("PRs", pRs) :
+                new ObjectParameter("PRs", typeof(string));
+    
+            var programParameter = program != null ?
+                new ObjectParameter("Program", program) :
+                new ObjectParameter("Program", typeof(string));
+    
+            var filterDepositParameter = filterDeposit.HasValue ?
+                new ObjectParameter("FilterDeposit", filterDeposit) :
+                new ObjectParameter("FilterDeposit", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionByAgencyMarketHotelOuthouse>("USP_OR_RptProductionByAgencyMarketHotelOutside", dateFromParameter, dateToParameter, leadSourcesParameter, pRsParameter, programParameter, filterDepositParameter);
+        }
+    
+        public virtual ObjectResult<RptProductionByAgencyOuthouse> USP_OR_RptProductionByAgencyOutside(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string pRs, string program, Nullable<byte> filterDeposit, Nullable<bool> salesByMembershipType)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var pRsParameter = pRs != null ?
+                new ObjectParameter("PRs", pRs) :
+                new ObjectParameter("PRs", typeof(string));
+    
+            var programParameter = program != null ?
+                new ObjectParameter("Program", program) :
+                new ObjectParameter("Program", typeof(string));
+    
+            var filterDepositParameter = filterDeposit.HasValue ?
+                new ObjectParameter("FilterDeposit", filterDeposit) :
+                new ObjectParameter("FilterDeposit", typeof(byte));
+    
+            var salesByMembershipTypeParameter = salesByMembershipType.HasValue ?
+                new ObjectParameter("SalesByMembershipType", salesByMembershipType) :
+                new ObjectParameter("SalesByMembershipType", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionByAgencyOuthouse>("USP_OR_RptProductionByAgencyOutside", dateFromParameter, dateToParameter, leadSourcesParameter, pRsParameter, programParameter, filterDepositParameter, salesByMembershipTypeParameter);
+        }
+    
+        public virtual ObjectResult<RptProductionByCoupleTypeOuthouse> USP_OR_RptProductionByCoupleTypeOutside(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string pRs, string program, Nullable<byte> filterDeposit)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var pRsParameter = pRs != null ?
+                new ObjectParameter("PRs", pRs) :
+                new ObjectParameter("PRs", typeof(string));
+    
+            var programParameter = program != null ?
+                new ObjectParameter("Program", program) :
+                new ObjectParameter("Program", typeof(string));
+    
+            var filterDepositParameter = filterDeposit.HasValue ?
+                new ObjectParameter("FilterDeposit", filterDeposit) :
+                new ObjectParameter("FilterDeposit", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionByCoupleTypeOuthouse>("USP_OR_RptProductionByCoupleTypeOutside", dateFromParameter, dateToParameter, leadSourcesParameter, pRsParameter, programParameter, filterDepositParameter);
+        }
+    
+        public virtual ObjectResult<RptProductionByCoupleTypeSalesRoomOuthouse> USP_OR_RptProductionByCoupleTypeSalesRoomOutside(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string pRs, string program, Nullable<byte> filterDeposit)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var pRsParameter = pRs != null ?
+                new ObjectParameter("PRs", pRs) :
+                new ObjectParameter("PRs", typeof(string));
+    
+            var programParameter = program != null ?
+                new ObjectParameter("Program", program) :
+                new ObjectParameter("Program", typeof(string));
+    
+            var filterDepositParameter = filterDeposit.HasValue ?
+                new ObjectParameter("FilterDeposit", filterDeposit) :
+                new ObjectParameter("FilterDeposit", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionByCoupleTypeSalesRoomOuthouse>("USP_OR_RptProductionByCoupleTypeSalesRoomOutside", dateFromParameter, dateToParameter, leadSourcesParameter, pRsParameter, programParameter, filterDepositParameter);
+        }
+    
+        public virtual ObjectResult<RptProductionByPROuthouse> USP_OR_RptProductionByPROutside(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string pRs, string program, Nullable<byte> filterDeposit, Nullable<bool> basedOnBooking)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var pRsParameter = pRs != null ?
+                new ObjectParameter("PRs", pRs) :
+                new ObjectParameter("PRs", typeof(string));
+    
+            var programParameter = program != null ?
+                new ObjectParameter("Program", program) :
+                new ObjectParameter("Program", typeof(string));
+    
+            var filterDepositParameter = filterDeposit.HasValue ?
+                new ObjectParameter("FilterDeposit", filterDeposit) :
+                new ObjectParameter("FilterDeposit", typeof(byte));
+    
+            var basedOnBookingParameter = basedOnBooking.HasValue ?
+                new ObjectParameter("BasedOnBooking", basedOnBooking) :
+                new ObjectParameter("BasedOnBooking", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionByPROuthouse>("USP_OR_RptProductionByPROutside", dateFromParameter, dateToParameter, leadSourcesParameter, pRsParameter, programParameter, filterDepositParameter, basedOnBookingParameter);
+        }
     }
 }
