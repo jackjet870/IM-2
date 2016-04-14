@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
+using IM.Model.Enums;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.BusinessRules.BR
 {
@@ -28,21 +30,35 @@ namespace IM.BusinessRules.BR
 
     #endregion
 
-    #region GetMailOutTextsByLeadSourceAndLanguage
+    #region GetMailOutsText
     /// <summary>
-    /// Obtiene MailOutText por un leadSourceID y un LanguageID
+    /// Obtiene los MailOutsText
     /// </summary>
     /// <param name="leadSourceID">lsID</param>
     /// <param name="languageID">laID</param>
-    /// <returns>List<MailOutText></MailOutText></returns>
-    /// <history>
-    /// [erosado] Created 06/04/2016
-    /// </history>
-    public static List<MailOutText> GetMailOutTextsByLeadSourceAndLanguage(string leadSourceID, string languageID)
+    /// <param name="status">-1 Todos, 0 Inactivos, 1 Activos</param>
+    /// <returns>List<MailOutText></returns>
+    public static List<MailOutText> GetMailOutTexts(string leadSourceID = null, string languageID = null, int status=-1)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return (from mot in dbContext.MailOutTexts where mot.mtls == leadSourceID && mot.mtla == languageID orderby mot.mtmoCode select mot).ToList();
+        var query = from mot in dbContext.MailOutTexts
+                    select mot;
+
+        if (leadSourceID != null)
+        {
+          query = query.Where(mot=> mot.mtls == leadSourceID);
+        }
+        if (languageID != null)
+        {
+          query = query.Where(mot => mot.mtla == languageID);
+        }
+        if (status != -1)
+        {
+          bool blstatus = Convert.ToBoolean(status);
+          query = query.Where(mot => mot.mtA == blstatus);
+        }
+        return query.OrderBy(mot => mot.mtmoCode).ToList();
       }
     }
     #endregion
@@ -70,5 +86,6 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
+
   }
 }

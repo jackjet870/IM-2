@@ -112,8 +112,8 @@ namespace IM.Base.Forms
     /// Funcion encargado de cargar los datos desde el archivo de configuracion
     /// </summary>
     /// <history>
-    /// 
     /// [vipacheco] 08/03/2016 Modified --> se agrego case para sales room
+    /// [erosado]   14/04/2016  Modified. Se elimino la seleccion del archivo de configuracion de este metodo.
     /// </history>
     private void LoadFromFile()
     {
@@ -129,7 +129,6 @@ namespace IM.Base.Forms
             if (cmbPlace.Visibility == Visibility.Visible)
             {
               txtUser_LostFocus(null, null);
-              cmbPlace.SelectedValue = _iniFileHelper.readText("Login", "Warehouse", "");
             }
             btnAceptar.Focus();
             break;
@@ -137,7 +136,6 @@ namespace IM.Base.Forms
             if (cmbPlace.Visibility == Visibility.Visible)
             {
               txtUser_LostFocus(null, null);
-              cmbPlace.SelectedValue = _iniFileHelper.readText("Login", "Location", "");
             }
             btnAceptar.Focus();
             break;
@@ -145,7 +143,6 @@ namespace IM.Base.Forms
             if (cmbPlace.Visibility == Visibility.Visible)
             {
               txtUser_LostFocus(null, null);
-              cmbPlace.SelectedValue = _iniFileHelper.readText("Login", "Sales Room", "");
             }
             btnAceptar.Focus();
             break;
@@ -416,6 +413,7 @@ namespace IM.Base.Forms
     /// </summary>
     /// <history>
     /// [erosado] 19/Mar/2016 Created
+    /// [erosado] 14/04/2016  Modified Se agrego la seleccion de datos desde el archivo Configuration.ini
     /// </history>
     public void DoGetWareHousesByUser(string IdUsuario, bool AutoAsignLogin = false)
     {
@@ -446,9 +444,13 @@ namespace IM.Base.Forms
                 int index = lstPS.FindIndex(x => x.whN.Equals(this.userData.Warehouse.whN));
                 cmbPlace.SelectedIndex = index;
               }
+              else if (_iniFileHelper != null)
+              {
+                cmbPlace.SelectedValue = _iniFileHelper.readText("Login", "Warehouse", "");
+              }
               else
               {
-                cmbPlace.SelectedItem = 0;
+                cmbPlace.SelectedIndex = 0;
               }
             }
             else
@@ -468,6 +470,7 @@ namespace IM.Base.Forms
     /// </summary>
     /// <history>
     /// [erosado] 19/Mar/2016 Created
+    /// [erosado] 14/04/2016  Modified Se agrego la seleccion de datos desde el archivo Configuration.ini
     /// </history>
     public void DoGetLocationsByUser(string IdUsuario, bool AutoAsignLogin = false)
     {
@@ -491,7 +494,6 @@ namespace IM.Base.Forms
                 cmbPlace.SelectedValuePath = "loID";
                 cmbPlace.DisplayMemberPath = "loN";
                 cmbPlace.IsEnabled = true;
-                cmbPlace.SelectedIndex = 0;
 
               if (AutoAsignLogin)
               {
@@ -499,9 +501,13 @@ namespace IM.Base.Forms
                 int index = lstPS.FindIndex(x => x.loN.Equals(this.userData.Location.loN));
                 cmbPlace.SelectedIndex = index;
               }
+              else if (_iniFileHelper != null)
+              {
+                cmbPlace.SelectedValue = _iniFileHelper.readText("Login", "Location", "");
+              }
               else
               {
-                cmbPlace.SelectedItem = 0;
+                cmbPlace.SelectedIndex = 0;
               }
 
             }
@@ -523,6 +529,7 @@ namespace IM.Base.Forms
     /// </summary>
     /// <history>
     /// [erosado] 19/Mar/2016 Created
+    /// [erosado] 14/04/2016  Modified Se agrego la seleccion de datos desde el archivo Configuration.ini
     /// </history>
     public void DoGetSalesRoomsByUser(string IdUsuario, bool AutoAsignLogin = false)
     {
@@ -546,7 +553,6 @@ namespace IM.Base.Forms
               cmbPlace.SelectedValuePath = "srID";
               cmbPlace.DisplayMemberPath = "srN";
               cmbPlace.IsEnabled = true;
-              cmbPlace.SelectedIndex = 0;
 
               if (AutoAsignLogin)
               {
@@ -554,9 +560,13 @@ namespace IM.Base.Forms
                 int index = lstPS.FindIndex(x => x.srN.Equals(this.userData.SalesRoom.srN));
                 cmbPlace.SelectedIndex = index;
               }
+              else if (_iniFileHelper != null)
+              {
+                cmbPlace.SelectedValue = _iniFileHelper.readText("Login", "SalesRoom", "");
+              }
               else
               {
-                cmbPlace.SelectedItem = 0;
+                cmbPlace.SelectedIndex = 0;
               }
             }
             else
