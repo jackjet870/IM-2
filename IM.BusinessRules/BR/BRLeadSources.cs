@@ -32,7 +32,7 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_GetLeadSourcesByUser(user, EnumToListHelper.GetEnumDescription(program), regions).ToList();
       }
     }
-      
+
     #endregion GetLeadSourcesByUser
 
     #region GetLeadSources
@@ -57,7 +57,26 @@ namespace IM.BusinessRules.BR
 
     #endregion GetLeadSources
 
+    #region GetLeadSourcesByZoneBoss
 
+    /// <summary>
+    /// Obtiene los Lead Sources dada una zona y el patron configurado
+    /// </summary>
+    /// <param name="zone"> Zona </param>
+    /// <returns>List<LeadSourceShort></returns>
+    /// <history>
+    /// [michan] 14/04/2016 Created
+    /// </history>
+    public static List<LeadSourceShort> GetLeadSourcesByZoneBoss(string zone)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_GetLeadSourcesByZoneBoss(zone).ToList();
+      }
+    }
+
+    #endregion GetLeadSources
+    
     #region GetOccupationLeadSources
     /// <summary>
     /// Obtiene el porcentaje de ocupacion de un Lead Source en una fecha determinada
@@ -74,7 +93,7 @@ namespace IM.BusinessRules.BR
       {
         return "Occupancy " + dbContext.USP_OR_Occupation(date, lS).Single();
       }
-    } 
+    }
     #endregion
 
   }

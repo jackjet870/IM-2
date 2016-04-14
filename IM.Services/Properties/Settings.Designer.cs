@@ -53,5 +53,25 @@ namespace IM.Services.Properties {
                 return ((string)(this["IM_Services_CallCenterService_CallCenterServiceInterface"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://svr-2000-web2:8087/HotelServiceInterface/ServiceInterface.asmx")]
+        public string IM_Services_HotelService_ServiceInterface {
+            get {
+                return ((string)(this["IM_Services_HotelService_ServiceInterface"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://svr-2000-web2:8087/IntranetServiceInterface/ServiceInterface.asmx")]
+        public string IM_Services_IntranetService_ServiceInterface {
+            get {
+                return ((string)(this["IM_Services_IntranetService_ServiceInterface"]));
+            }
+        }
     }
 }

@@ -106,6 +106,25 @@ namespace IM.BusinessRules.BR
 
       return nRes;
     }
+        #endregion
+
+    #region TransferAddCountries
+
+        /// <summary>
+        /// Agrega las paises en el proceso de transferencia
+        /// </summary>
+        /// <hystory>
+        /// [michan] 13/04/2016  created
+        /// </hystory>
+
+        public static int TransferAddCountries()
+    {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+            return dbContext.USP_OR_TransferAddCountries();
+        }
+    }
     #endregion
-  }
+
+    }
 }

@@ -11,5 +11,11 @@
     <Setting Name="IM_Services_CallCenterService_CallCenterServiceInterface" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://svr-2000-web2:8087/CreditoCobranzaReservaPRServiceInterface/CallCenterServiceInterface.asmx</Value>
     </Setting>
+    <Setting Name="IM_Services_HotelService_ServiceInterface" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://svr-2000-web2:8087/HotelServiceInterface/ServiceInterface.asmx</Value>
+    </Setting>
+    <Setting Name="IM_Services_IntranetService_ServiceInterface" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://svr-2000-web2:8087/IntranetServiceInterface/ServiceInterface.asmx</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tns="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s4="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/ExceptionInfo.xsd" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s5="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioTesoreriaRequest.xsd" xmlns:s1="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioFiscalRequest.xsd" xmlns:s6="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioTesoreria.xsd" xmlns:s2="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioFiscal.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s7="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioTesoreriaResponse.xsd" xmlns:s3="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioFiscalResponse.xsd" targetNamespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/">
+      <s:import namespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioFiscalRequest.xsd" />
+      <s:import namespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioFiscalResponse.xsd" />
+      <s:import namespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioTesoreriaRequest.xsd" />
+      <s:import namespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioTesoreriaResponse.xsd" />
+      <s:element name="ObtenerTipoCambioFiscal">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:TipoCambioFiscalRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ObtenerTipoCambioFiscalResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s3:TipoCambioFiscalResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RequestHeader" type="tns:RequestHeader" />
+      <s:complexType name="RequestHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Headers" type="tns:ArrayOfAnyType" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:complexType name="ArrayOfAnyType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="anyType" nillable="true" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ResponseHeader" type="tns:ResponseHeader" />
+      <s:complexType name="ResponseHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Headers" type="tns:ArrayOfAnyType" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="ObtenerTipoCambioTesoreria">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s5:TipoCambioTesoreriaRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ObtenerTipoCambioTesoreriaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s7:TipoCambioTesoreriaResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioFiscalRequest.xsd">
+      <s:import namespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioFiscal.xsd" />
+      <s:element name="TipoCambioFiscalRequest" type="s1:TipoCambioFiscalRequest" />
+      <s:complexType name="TipoCambioFiscalRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TipoCambioFiscal" type="s2:TipoCambioFiscal" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioFiscal.xsd">
+      <s:complexType name="TipoCambioFiscal">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Fecha" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="TipoCambio" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="FechaIngresoDato" type="s:dateTime" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioFiscalResponse.xsd">
+      <s:import namespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioFiscal.xsd" />
+      <s:import namespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/ExceptionInfo.xsd" />
+      <s:element name="TipoCambioFiscalResponse" type="s3:TipoCambioFiscalResponse" />
+      <s:complexType name="TipoCambioFiscalResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s3:ArrayOfTipoCambioFiscal" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HasErrors" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExceptionInfo" type="s4:ExceptionInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfTipoCambioFiscal">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="TipoCambioFiscal" nillable="true" type="s2:TipoCambioFiscal" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/ExceptionInfo.xsd">
+      <s:complexType name="ExceptionInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Type" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Source" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StackTrace" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioTesoreriaRequest.xsd">
+      <s:import namespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioTesoreria.xsd" />
+      <s:element name="TipoCambioTesoreriaRequest" type="s5:TipoCambioTesoreriaRequest" />
+      <s:complexType name="TipoCambioTesoreriaRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TipoCambioTesoreria" type="s6:TipoCambioTesoreria" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioTesoreria.xsd">
+      <s:complexType name="TipoCambioTesoreria">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Fecha" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="TipoCambio" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="IdMoneda" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioTesoreriaResponse.xsd">
+      <s:import namespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/TipoCambioTesoreria.xsd" />
+      <s:import namespace="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/ExceptionInfo.xsd" />
+      <s:complexType name="TipoCambioTesoreriaResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s7:ArrayOfTipoCambioTesoreria" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HasErrors" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExceptionInfo" type="s4:ExceptionInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfTipoCambioTesoreria">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="TipoCambioTesoreria" nillable="true" type="s6:TipoCambioTesoreria" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="TipoCambioTesoreriaResponse" type="s7:TipoCambioTesoreriaResponse" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ObtenerTipoCambioFiscalSoapIn">
+    <wsdl:part name="parameters" element="tns:ObtenerTipoCambioFiscal" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerTipoCambioFiscalSoapOut">
+    <wsdl:part name="parameters" element="tns:ObtenerTipoCambioFiscalResponse" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerTipoCambioFiscalRequestHeader">
+    <wsdl:part name="RequestHeader" element="tns:RequestHeader" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerTipoCambioFiscalResponseHeader">
+    <wsdl:part name="ResponseHeader" element="tns:ResponseHeader" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerTipoCambioTesoreriaSoapIn">
+    <wsdl:part name="parameters" element="tns:ObtenerTipoCambioTesoreria" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerTipoCambioTesoreriaSoapOut">
+    <wsdl:part name="parameters" element="tns:ObtenerTipoCambioTesoreriaResponse" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerTipoCambioTesoreriaRequestHeader">
+    <wsdl:part name="RequestHeader" element="tns:RequestHeader" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerTipoCambioTesoreriaResponseHeader">
+    <wsdl:part name="ResponseHeader" element="tns:ResponseHeader" />
+  </wsdl:message>
+  <wsdl:portType name="ServiceInterfaceSoap">
+    <wsdl:operation name="ObtenerTipoCambioFiscal">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Obtenemos un registro de tipo de cambio fiscal para la fecha especificada.</wsdl:documentation>
+      <wsdl:input message="tns:ObtenerTipoCambioFiscalSoapIn" />
+      <wsdl:output message="tns:ObtenerTipoCambioFiscalSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerTipoCambioTesoreria">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Obtenemos un registro de tipo de cambio para tesoreria segun una fecha y clave de moneda especifica.</wsdl:documentation>
+      <wsdl:input message="tns:ObtenerTipoCambioTesoreriaSoapIn" />
+      <wsdl:output message="tns:ObtenerTipoCambioTesoreriaSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ServiceInterfaceSoap" type="tns:ServiceInterfaceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ObtenerTipoCambioFiscal">
+      <soap:operation soapAction="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/ObtenerTipoCambioFiscal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ObtenerTipoCambioFiscalRequestHeader" part="RequestHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+        <soap:header message="tns:ObtenerTipoCambioFiscalResponseHeader" part="ResponseHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerTipoCambioTesoreria">
+      <soap:operation soapAction="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/ObtenerTipoCambioTesoreria" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ObtenerTipoCambioTesoreriaRequestHeader" part="RequestHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+        <soap:header message="tns:ObtenerTipoCambioTesoreriaResponseHeader" part="ResponseHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServiceInterfaceSoap12" type="tns:ServiceInterfaceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ObtenerTipoCambioFiscal">
+      <soap12:operation soapAction="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/ObtenerTipoCambioFiscal" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ObtenerTipoCambioFiscalRequestHeader" part="RequestHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ObtenerTipoCambioFiscalResponseHeader" part="ResponseHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerTipoCambioTesoreria">
+      <soap12:operation soapAction="http://webpalace/pr_xmlschemas/Intranet/19-03-2008/ObtenerTipoCambioTesoreria" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ObtenerTipoCambioTesoreriaRequestHeader" part="RequestHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ObtenerTipoCambioTesoreriaResponseHeader" part="ResponseHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ServiceInterface">
+    <wsdl:port name="ServiceInterfaceSoap" binding="tns:ServiceInterfaceSoap">
+      <soap:address location="http://svr-2000-web2:8087/IntranetServiceInterface/ServiceInterface.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServiceInterfaceSoap12" binding="tns:ServiceInterfaceSoap12">
+      <soap12:address location="http://svr-2000-web2:8087/IntranetServiceInterface/ServiceInterface.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

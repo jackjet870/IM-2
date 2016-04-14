@@ -87,6 +87,30 @@ namespace IM.BusinessRules.BR
         }
       }
     }
-    #endregion
-  }
+        #endregion
+
+
+
+    #region UpdateExchangeRate
+
+    /// <summary>
+    /// Función para actualizar un Exchange Rate
+    /// </summary>
+    /// <param name="date">Fecha</param>
+    /// <param name="currency">Moneda</param>
+    /// <param name="exchangeRate">Tipo de cambio</param>
+    /// <returns></returns>
+    /// <history>
+    ///   [michan] 06/04/2016 Created
+    /// </history>
+    public static void UpdateExchangeRate(DateTime? date, string currency, decimal? exchangeRate)
+    {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+            dbContext.USP_OR_UpdateExchangeRate(date, currency, exchangeRate);
+        }
+    }
+
+        #endregion
+    }
 }
