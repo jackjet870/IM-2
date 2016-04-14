@@ -21,6 +21,7 @@ namespace IM.Model.Enums
       Number,
       DecimalNumber,
       Boolean,
-      Date
+      Date,
+      Time
   }
 }

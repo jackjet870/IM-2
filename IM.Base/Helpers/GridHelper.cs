@@ -129,56 +129,6 @@ namespace IM.Base.Helpers
     }
 
     #endregion SelectRow
-
-    #region ToPivot
-
-    /// <summary>
-    /// Obtiene una lista de arrays con los valores de la tabla
-    /// con la estructura proporcionada.
-    /// </summary>
-    /// <returns> List<object[]> </returns>
-    /// <history>
-    /// [edgrodriguez] created 28/03/2016
-    /// </history>
-    public static List<object[]> ToPivot<T, TColumn, TRow, TData>(
-this IEnumerable<T> source,
-Func<T, TColumn> columnSelector,
-Expression<Func<T, TRow>> rowSelector,
-Func<IEnumerable<T>, TData> dataSelector)
-    {
-      DataTable dt = new DataTable();
-      var arr = new List<object>();
-      var cols = new List<string>();
-      var pivotrow = rowSelector.ReturnType.GetProperties().Select(c => c.Name).ToList();
-      var pivotcolumns = source.Select(columnSelector).Where(c => c != null).Distinct();
-
-      cols = (pivotrow).Concat(pivotcolumns.Select(x => x.ToString())).ToList();
-
-      var rows = source.GroupBy(rowSelector.Compile())
-                       .Select(rowGroup => new
-                       {
-                         Key = rowGroup.Key,
-                         Values = pivotcolumns.GroupJoin(
-                               rowGroup,
-                               c => c,
-                           r => columnSelector(r),
-                           (c, columnGroup) => dataSelector(columnGroup))
-                       });
-
-      List<object[]> values = new List<object[]>();
-
-      rows.ToList().ForEach(row =>
-      {
-        var keyValues = row.Key.GetType().GetProperties().Select(c => c.GetValue(row.Key) ?? null);
-        var valuesProperties = row.Values.ToList();
-        var items = valuesProperties.SelectMany(c => c.GetType().GetProperties().Select(d => d.GetValue(c) ?? null)).ToList();
-        items.InsertRange(0, keyValues);
-        values.Add(items.ToArray());
-      });
-
-      return values;
-    }
-
-    #endregion ToPivot
+        
   }
 }

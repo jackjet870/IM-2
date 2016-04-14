@@ -14,8 +14,9 @@ namespace IM.ProcessorGeneral.Classes
   public static class clsReports
   {
 
-
     #region Reports By SalesRoom
+
+    #region Bookings
 
     #region ExportRptBookingsBySalesRoomProgramTime
     /// <summary>
@@ -32,7 +33,8 @@ namespace IM.ProcessorGeneral.Classes
     public static FileInfo ExportRptBookingsBySalesRoomProgramTime(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptBookingsBySalesRoomProgramTime> lstRptBBSalesRoom)
     {
       DataTable dtData = GridHelper.GetDataTableFromGrid(lstRptBBSalesRoom);
-      return EpplusHelper.CreatePivotRptExcel(true, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptBookingsBySalesRoomProgramTime());
+
+      return EpplusHelper.CreatePivotRptExcel(true, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptBookingsBySalesRoomProgramTime(), true, true);
     }
     #endregion
 
@@ -51,9 +53,13 @@ namespace IM.ProcessorGeneral.Classes
     public static FileInfo ExportRptBookingsBySalesRoomProgramLeadSourceTime(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptBookingsBySalesRoomProgramLeadSourceTime> lstRptBBSalesRoomLS)
     {
       DataTable dtData = GridHelper.GetDataTableFromGrid(lstRptBBSalesRoomLS);
-      return EpplusHelper.CreatePivotRptExcel(true, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptBookingsBySalesRoomProgramLeadSourceTime());
+      return EpplusHelper.CreatePivotRptExcel(true, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptBookingsBySalesRoomProgramLeadSourceTime(), true, true);
     }
     #endregion
+
+    #endregion
+
+    #region CxC
 
     #region ExportRptCxC
     /// <summary>
@@ -69,7 +75,7 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static FileInfo ExportRptCxC(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptCxC> lstRptCxC)
     {
-      DataTable dtData = GridHelper.GetDataTableFromGrid(lstRptCxC, changeDataTypeBoolToString: true, showCheckMark: false);
+      DataTable dtData = GridHelper.GetDataTableFromGrid(lstRptCxC, changeDataTypeBoolToString: true, showCheckMark: false, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptCxC(), showRowGrandTotal: true);
     }
     #endregion
@@ -137,7 +143,6 @@ namespace IM.ProcessorGeneral.Classes
 
       //Obtenemos los datos.
       var receiptsWithGift = (from gRcpt in lstReceipts
-                              join gft in lstGift on gRcpt.Gift equals gft.giID
                               select new
                               {
                                 gRcpt.Adults,
@@ -148,7 +153,7 @@ namespace IM.ProcessorGeneral.Classes
                                 CostUS = lstReceipts.Where(c => c.grID == gRcpt.grID).Sum(c => c.CostUS),
                                 gRcpt.exExchRate,
                                 gRcpt.Folios,
-                                gft.giN,//Obtenemos el ID del regalo.
+                                giN = gRcpt.Gift != null ? lstGift.FirstOrDefault(g => g.giID == gRcpt.Gift).giN : null,//Obtenemos el ID del regalo.
                                 Gift = gRcpt.Gift,
                                 gRcpt.grCxCComments,
                                 gRcpt.grD,
@@ -169,20 +174,7 @@ namespace IM.ProcessorGeneral.Classes
                               })
                               .ToList();
 
-      var pivot = receiptsWithGift.Where(c => c.Gift != null).OrderBy(c => c.giN)
-                              .ToPivot(
-        c => new { c.Gift, c.giN },
-        c => new { c.grID, c.grNum, c.grpe, c.peN, c.grlo, c.grHost, c.HostN, c.grgu, c.grGuest, c.Adults, c.Minors, c.grD, c.CostUS, c.exExchRate, c.CostMX, c.grMemberNum, c.grCxCComments },
-        c => new { Quantity = c.Distinct().Select(v => v.Quantity).FirstOrDefault(), Cost = c.Distinct().Select(v => v.Cost).FirstOrDefault(), Folios = c.Distinct().Select(v => v.Folios).FirstOrDefault() ?? string.Empty });
-
-      lstReceipts.Where(c => c.Gift == null).
-        Select(c => new { c.grID, c.grNum, c.grpe, c.peN, c.grlo, c.grHost, c.HostN, c.grgu, c.grGuest, c.Adults, c.Minors, c.grD, c.CostUS, c.exExchRate, c.CostMX, c.grMemberNum, c.grCxCComments }).ToList()
-        .ForEach(c => pivot.Add(c.GetType().GetProperties().Select(v => v.GetValue(c)).ToArray()));
-
-      //Ordenamos por grID
-      pivot = pivot.OrderBy(c => Convert.ToSingle(c[0])).ToList();
-
-      return EpplusHelper.createExcelCustom(GridHelper.GetDataTableFromGrid(receiptsWithGift.OrderBy(c => c.giN).ToList()), filters, strReport, dateRangeFileName, clsFormatReport.rptCxCGifts(), true, pivot, true, true);
+      return EpplusHelper.createExcelCustomPivot(GridHelper.GetDataTableFromGrid(receiptsWithGift.OrderBy(c => c.giN).ToList()), filters, strReport, dateRangeFileName, clsFormatReport.rptCxCGifts(), blnRowGrandTotal: true);
     }
     #endregion
 
@@ -199,10 +191,14 @@ namespace IM.ProcessorGeneral.Classes
     /// </history>
     public static FileInfo ExportRptCxCNotAuthorized(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptCxCNotAuthorized> lstRptCxCNotAuthorized)
     {
-      DataTable dtData = GridHelper.GetDataTableFromGrid(lstRptCxCNotAuthorized, changeDataTypeBoolToString: true, showCheckMark: false);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptCxCNotAuthorized());
+      DataTable dtData = GridHelper.GetDataTableFromGrid(lstRptCxCNotAuthorized, changeDataTypeBoolToString: true, showCheckMark: false, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.createExcelCustom(dtData, filters, strReport, dateRangeFileName, clsFormatReport.rptCxCNotAuthorized());
     }
-    #endregion 
+    #endregion
+
+    #endregion
+
+    #region Deposits
 
     #region ExportRptDeposits
     /// <summary>
@@ -255,7 +251,7 @@ namespace IM.ProcessorGeneral.Classes
                       .ThenBy(c => c.grID)
                       .ToList();
 
-      return EpplusHelper.CreatePivotRptExcel(false, filters, GridHelper.GetDataTableFromGrid(lstRptDeps, true, false), strReport, dateRangeFileName, clsFormatReport.rptDeposits(), showRowGrandTotal: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, GridHelper.GetDataTableFromGrid(lstRptDeps, true, false, true), strReport, dateRangeFileName, clsFormatReport.rptDeposits(), showRowGrandTotal: true);
     }
     #endregion
 
@@ -270,7 +266,7 @@ namespace IM.ProcessorGeneral.Classes
     ///  <history>
     /// [edgrodriguez] 04/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptBurnedDeposits(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<object> lstRptBurnedDeposits, DateTime dtmStart,DateTime dtmEnd)
+    public static FileInfo ExportRptBurnedDeposits(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<object> lstRptBurnedDeposits, DateTime dtmStart, DateTime dtmEnd)
     {
       //Recibos de Regalo
       var lstGiftReceipts = lstRptBurnedDeposits[0] as List<RptDepositsBurned>;
@@ -284,40 +280,33 @@ namespace IM.ProcessorGeneral.Classes
       var lstGiftSales = lstRptBurnedDeposits[3] as Dictionary<int, List<Sale>>;
 
       var lstRptDeps = (from gRcpt in lstGiftReceipts
-                          join curr in lstCurrencies on gRcpt.grcu equals curr.cuID
-                          join payType in lstPaymentType on gRcpt.grpt equals payType.ptID
-                          select new
-                          {
-                            gRcpt.grID,
-                            gRcpt.grNum,
-                            gRcpt.grD,
-                            gRcpt.grgu,
-                            gRcpt.grGuest,
-                            gRcpt.grHotel,
-                            gRcpt.grlo,
-                            gRcpt.grsr,
-                            gRcpt.grpe,
-                            gRcpt.peN,
-                            gRcpt.grHost,
-                            gRcpt.grComments,
-                            curr.cuN,
-                            payType.ptN,
-                            gRcpt.grDepositTwisted,
-                            memberNum = (lstGiftSales.ContainsKey(gRcpt.grID)) ? string.Join(",", lstGiftSales[gRcpt.grID].Select(s => s.saMembershipNum).ToList()) : "-",
-                            procAmount = (lstGiftSales.ContainsKey(gRcpt.grID)) ? lstGiftSales[gRcpt.grID].Where(s => s.saProc && (s.saProcD >= dtmStart && s.saProcD <= dtmEnd)).Sum(s => s.saGrossAmount) : 0,
-                            pendAmount = (lstGiftSales.ContainsKey(gRcpt.grID)) ? lstGiftSales[gRcpt.grID].Where(s => !s.saProc || (s.saProc && !(s.saProcD >= dtmStart && s.saProcD <= dtmEnd))).Sum(s => s.saGrossAmount) : 0
-                          }
+                        join curr in lstCurrencies on gRcpt.grcu equals curr.cuID
+                        join payType in lstPaymentType on gRcpt.grpt equals payType.ptID
+                        select new
+                        {
+                          gRcpt.grID,
+                          gRcpt.grNum,
+                          gRcpt.grD,
+                          gRcpt.grgu,
+                          gRcpt.grGuest,
+                          gRcpt.grHotel,
+                          gRcpt.grlo,
+                          gRcpt.grsr,
+                          gRcpt.grpe,
+                          gRcpt.peN,
+                          gRcpt.grHost,
+                          gRcpt.grComments,
+                          curr.cuN,
+                          payType.ptN,
+                          gRcpt.grDepositTwisted,
+                          memberNum = ((lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) == 1 || (lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) > 1 && lstGiftReceipts.First(gr => gr.grgu == gRcpt.grgu).grID == gRcpt.grID)) ? ((lstGiftSales.ContainsKey(gRcpt.grID)) ? string.Join(",", lstGiftSales[gRcpt.grID].Select(s => s.saMembershipNum).ToList()) : "-") : "-"),
+                          procAmount = ((lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) == 1 || (lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) > 1 && lstGiftReceipts.First(gr => gr.grgu == gRcpt.grgu).grID == gRcpt.grID)) ? ((lstGiftSales.ContainsKey(gRcpt.grID)) ? lstGiftSales[gRcpt.grID].Where(s => s.saProc && (s.saProcD >= dtmStart && s.saProcD <= dtmEnd)).Sum(s => s.saGrossAmount) : 0) : 0),
+                          pendAmount = ((lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) == 1 || (lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) > 1 && lstGiftReceipts.First(gr => gr.grgu == gRcpt.grgu).grID == gRcpt.grID)) ? ((lstGiftSales.ContainsKey(gRcpt.grID)) ? lstGiftSales[gRcpt.grID].Where(s => !s.saProc || (s.saProc && !(s.saProcD >= dtmStart && s.saProcD <= dtmEnd))).Sum(s => s.saGrossAmount) : 0) : 0)
+                        }
                         ).OrderBy(c => c.grD)
                         .ThenBy(c => c.grID)
                         .ToList();
-
-      var pivot = lstRptDeps.ToPivot(
-        c => new { c.cuN, c.ptN },
-        c => new { c.grID, c.grNum, c.grD, c.grgu, c.grGuest, c.grHotel, c.grlo, c.grsr, c.grpe, c.peN, c.grHost, c.grComments, c.memberNum, c.procAmount, c.pendAmount },
-        c => new { grDepositTwisted = c.Distinct().Select(v => v.grDepositTwisted).FirstOrDefault() }
-        );
-
-      return EpplusHelper.createExcelCustom(GridHelper.GetDataTableFromGrid(lstRptDeps, true, false), filters, strReport, dateRangeFileName, clsFormatReport.rptBurnedDeposits(), true, pivot, true, true);
+      return EpplusHelper.createExcelCustomPivot(GridHelper.GetDataTableFromGrid(lstRptDeps, true, false), filters, strReport, dateRangeFileName, clsFormatReport.rptBurnedDeposits(), blnRowGrandTotal: true);
     }
     #endregion 
 
@@ -350,41 +339,342 @@ namespace IM.ProcessorGeneral.Classes
                         join payType in lstPaymentType on gRcpt.grpt equals payType.ptID
                         select new
                         {
+                          grID = gRcpt.grID,
+                          grNum = gRcpt.grNum,
+                          grD = gRcpt.grD,
+                          grgu = gRcpt.grgu,
+                          grGuest = gRcpt.grGuest,
+                          grHotel = gRcpt.grHotel,
+                          guHotelB = gRcpt.guHotelB,
+                          grlo = gRcpt.grlo,
+                          grsr = gRcpt.grsr,
+                          grpe = gRcpt.grpe,
+                          peN = gRcpt.peN,
+                          grHost = gRcpt.grHost,
+                          cuN = curr.cuN,
+                          ptN = payType.ptN,
+                          grDepositTwisted = gRcpt.grDepositTwisted,
+                          memberNum = ((lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) == 1 || (lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) > 1 && lstGiftReceipts.First(gr => gr.grgu == gRcpt.grgu).grID == gRcpt.grID)) ? ((lstGiftSales.ContainsKey(gRcpt.grID)) ? string.Join(",", lstGiftSales[gRcpt.grID].Select(s => s.saMembershipNum).ToList()) : "-") : "-"),
+                          procAmount = ((lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) == 1 || (lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) > 1 && lstGiftReceipts.First(gr => gr.grgu == gRcpt.grgu).grID == gRcpt.grID)) ? ((lstGiftSales.ContainsKey(gRcpt.grID)) ? lstGiftSales[gRcpt.grID].Where(s => s.saProc && (s.saProcD >= dtmStart && s.saProcD <= dtmEnd)).Sum(s => s.saGrossAmount) : 0) : 0),
+                          pendAmount = ((lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) == 1 || (lstGiftReceipts.Count(gr => gr.grgu == gRcpt.grgu) > 1 && lstGiftReceipts.First(gr => gr.grgu == gRcpt.grgu).grID == gRcpt.grID)) ? ((lstGiftSales.ContainsKey(gRcpt.grID)) ? lstGiftSales[gRcpt.grID].Where(s => !s.saProc || (s.saProc && !(s.saProcD >= dtmStart && s.saProcD <= dtmEnd))).Sum(s => s.saGrossAmount) : 0) : 0)
+                        }
+                        ).OrderBy(c => c.grD)
+                        .ThenBy(c => c.grID)
+                        .ToList();
+
+      return EpplusHelper.createExcelCustomPivot(GridHelper.GetDataTableFromGrid(lstRptDeps, true, false), filters, strReport, dateRangeFileName, clsFormatReport.RptBurnedDepositsByResorts(), blnShowSubtotal: true);
+    }
+    #endregion
+
+    #region ExportRptPaidDeposits
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Paid Deposits.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRange">Rango de Fechas</param>
+    /// <param name="lstRptPaidDeposits">Lista de PaidDeposits,Currency, PaymentType y Sales</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 05/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptPaidDeposits(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<object> lstRptPaidDeposits, DateTime dtmStart, DateTime dtmEnd)
+    {
+      //Recibos de Regalo
+      var lstGiftReceipts = lstRptPaidDeposits[0] as List<RptDepositsPaid>;
+      //Monedas
+      var lstCurrencies = lstRptPaidDeposits[1] as List<Currency>;
+      //Tipos de Pago
+      var lstPaymentType = lstRptPaidDeposits[2] as List<PaymentType>;
+
+      var lstRptDeps = (from gRcpt in lstGiftReceipts
+                        join curr in lstCurrencies on gRcpt.grcu equals curr.cuID
+                        join payType in lstPaymentType on gRcpt.grpt equals payType.ptID
+                        select new
+                        {
                           gRcpt.grID,
                           gRcpt.grNum,
                           gRcpt.grD,
                           gRcpt.grgu,
+                          gRcpt.guBookD, 
                           gRcpt.grGuest,
                           gRcpt.grHotel,
-                          gRcpt.guHotelB,
-                          gRcpt.grlo,
+                          gRcpt.grls,
                           gRcpt.grsr,
                           gRcpt.grpe,
                           gRcpt.peN,
                           gRcpt.grHost,
                           curr.cuN,
                           payType.ptN,
-                          gRcpt.grDepositTwisted,
-                          memberNum = (lstGiftSales.ContainsKey(gRcpt.grID)) ? string.Join(",", lstGiftSales[gRcpt.grID].Select(s => s.saMembershipNum).ToList()) : "-",
-                          procAmount = (lstGiftSales.ContainsKey(gRcpt.grID)) ? lstGiftSales[gRcpt.grID].Where(s => s.saProc && (s.saProcD >= dtmStart && s.saProcD <= dtmEnd)).Sum(s => s.saGrossAmount) : 0,
-                          pendAmount = (lstGiftSales.ContainsKey(gRcpt.grID)) ? lstGiftSales[gRcpt.grID].Where(s => !s.saProc || (s.saProc && !(s.saProcD >= dtmStart && s.saProcD <= dtmEnd))).Sum(s => s.saGrossAmount) : 0
+                          gRcpt.grDeposit,
+                          gRcpt.grDepositTwisted
                         }
                         ).OrderBy(c => c.grD)
                         .ThenBy(c => c.grID)
                         .ToList();
 
-      var pivot = lstRptDeps.ToPivot(
-        c => new { c.cuN, c.ptN },
-        c => new { c.grID, c.grNum, c.grD, c.grgu, c.grGuest, c.grHotel, c.guHotelB, c.grlo, c.grsr, c.grpe, c.peN, c.grHost, c.memberNum, c.procAmount, c.pendAmount },
-        c => new { grDepositTwisted = c.Distinct().Select(v => v.grDepositTwisted).FirstOrDefault() }
-        );
+      return EpplusHelper.createExcelCustomPivot(GridHelper.GetDataTableFromGrid(lstRptDeps, true, false), filters, strReport, dateRangeFileName, clsFormatReport.RptPaidDeposits(), blnShowSubtotal: true);
 
-      return EpplusHelper.createExcelCustom(GridHelper.GetDataTableFromGrid(lstRptDeps, true, false), filters, strReport, dateRangeFileName, clsFormatReport.rptBurnedDeposits(), true, pivot, true, true);
     }
-    #endregion 
+    #endregion
 
     #endregion
 
+    #region Gifts
+
+    #region ExportRptDailyGiftSimple
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Daily Gift Simple.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRange">Rango de Fechas</param>
+    /// <param name="lstRptDailyGS">Lista de RptDailyGiftSimple</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 07/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptDailyGiftSimple(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptDailyGiftSimple> lstRptDailyGS)
+    {
+      return EpplusHelper.CreatePivotRptExcel(false, filters, GridHelper.GetDataTableFromGrid(lstRptDailyGS, true, false), strReport, dateRangeFileName, clsFormatReport.RptDailyGiftSimple(), showRowGrandTotal: true);
+    }
+    #endregion
+
+    #region ExportRptWeeklyGiftSimple
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Weekly Gift Simple.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRange">Rango de Fechas</param>
+    /// <param name="lstRptWeeklyGS">Lista de RptWeeklyGiftSimple</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 08/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptWeeklyGiftSimple(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptWeeklyGiftsItemsSimple> lstRptWeeklyGS)
+    {
+      return EpplusHelper.CreatePivotRptExcel(false, filters, GridHelper.GetDataTableFromGrid(lstRptWeeklyGS, true, false), strReport, dateRangeFileName, clsFormatReport.RptWeeklyGiftSimple(), showRowGrandTotal: true);
+    }
+    #endregion
+
+    #endregion
+
+    #region Guests
+
+    #region ExportRptGuestCeco
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Guest CECO.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRange">Rango de Fechas</param>
+    /// <param name="lstRptGuestCeco">Lista de RptGuestCeco</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 08/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptGuestCeco(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptGuestCeco> lstRptGuestCeco)
+    {
+      return EpplusHelper.CreatePivotRptExcel(false, filters, GridHelper.GetDataTableFromGrid(lstRptGuestCeco, true, false), strReport, dateRangeFileName, clsFormatReport.RptGuestCeco());
+    }
+    #endregion 
+
+    #region ExportRptGuestNoBuyers
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Guest No Buyers.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRange">Rango de Fechas</param>
+    /// <param name="lstRptGuestNoBuyers">Lista de RptGuestNoBuyers</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 08/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptGuestNoBuyers(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptGuestsNoBuyers> lstRptGuestNoBuyers)
+    {
+      lstRptGuestNoBuyers = lstRptGuestNoBuyers
+        .OrderBy(c => c.Program)
+        .ThenBy(c => c.LeadSource)
+        .ThenBy(c => c.GuestID)
+        .ToList();
+      return EpplusHelper.CreatePivotRptExcel(false, filters, GridHelper.GetDataTableFromGrid(lstRptGuestNoBuyers, true, false), strReport, dateRangeFileName, clsFormatReport.RptGuestNoBuyers());
+    }
+    #endregion
+
+    #region ExportRptInOut
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de In & Out.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRange">Rango de Fechas</param>
+    /// <param name="lstRptInOut">Lista de RptGuestNoBuyers</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 09/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptInOut(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptInOut> lstRptInOut)
+    {
+
+      var lstRptInOutNew = lstRptInOut
+        .OrderBy(c => c.SalesRoom)
+        .ThenBy(c => c.Location)
+        .ThenBy(c => c.GUID)
+        .ThenBy(c => c.ShowDate)
+        .Select(c => new
+        {
+          c.SalesRoom,
+          c.Location,
+          c.GUID,
+          c.Hotel,
+          c.Room,
+          c.Pax,
+          c.LastName,
+          c.FirstName,
+          c.Agency,
+          c.AgencyN,
+          c.Country,
+          c.CountryN,
+          c.ShowDate,
+          c.TimeIn,
+          c.TimeOut,
+          c.Direct,
+          Tour = Convert.ToInt32(c.Tour),
+          InOut = Convert.ToInt32(c.InOut),
+          WalkOut = Convert.ToInt32(c.WalkOut),
+          CourtesyTour = Convert.ToInt32(c.CourtesyTour),
+          SaveProgram = Convert.ToInt32(c.SaveProgram),
+          c.PR1,
+          c.PR1N,
+          c.PR2,
+          c.PR2N,
+          c.PR3,
+          c.PR3N,
+          c.Host,
+          c.Comments
+        })
+        .ToList();
+      return EpplusHelper.CreatePivotRptExcel(false, filters, GridHelper.GetDataTableFromGrid(lstRptInOutNew, true, false), strReport, dateRangeFileName, clsFormatReport.RptInOut());
+    }
+    #endregion
+
+    #region ExportRptGuestNoShows
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Guest No Shows.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRange">Rango de Fechas</param>
+    /// <param name="lstRptGuestNoShows">Lista de RptGuestNoShows</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 09/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptGuestNoShows(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptGuestsNoShows> lstRptGuestNoShows)
+    {
+      return EpplusHelper.CreatePivotRptExcel(false, filters, GridHelper.GetDataTableFromGrid(lstRptGuestNoShows, true, false), strReport, dateRangeFileName, clsFormatReport.RptGuestNoShow(), showRowGrandTotal: true);
+    }
+    #endregion
+
+    #endregion
+
+    #region Meal Tickets
+
+    #region ExportRptMealTickets
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Meal Tickets.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRange">Rango de Fechas</param>
+    /// <param name="lstRptMealTickets">Lista de RptMealTickets</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 11/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptMealTickets(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptMealTickets> lstRptMealTickets, bool groupByHost = false)
+    {
+      FileInfo file = null;
+      if (groupByHost)
+        file = EpplusHelper.CreatePivotRptExcel(false, filters, GridHelper.GetDataTableFromGrid(lstRptMealTickets, true, false), strReport, dateRangeFileName, clsFormatReport.RptMealTicketsByHost(), showRowGrandTotal: true);
+      else
+        file = EpplusHelper.CreatePivotRptExcel(false, filters, GridHelper.GetDataTableFromGrid(lstRptMealTickets, true, false), strReport, dateRangeFileName, clsFormatReport.RptMealTickets(), showRowGrandTotal: true);
+
+
+      return file;
+    }
+    #endregion
+
+    #region ExportRptMealTicketsCost
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Meal Tickets With Cost.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRange">Rango de Fechas</param>
+    /// <param name="lstRptMealTicketsCost">Lista de RptMealTicketsCost</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 11/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptMealTicketsCost(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptMealTicketsCost> lstRptMealTicketsCost)
+    {
+      return EpplusHelper.CreatePivotRptExcel(false, filters, GridHelper.GetDataTableFromGrid(lstRptMealTicketsCost, true, false), strReport, dateRangeFileName, clsFormatReport.RptMealTicketsCost(), showRowGrandTotal: true, showColumnGrandTotal: true);
+    }
+    #endregion
+
+    #endregion
+
+    #region MemberShips
+
+    #region ExportRptMemberships
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Memberships.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRangeFileName">Rango de Fechas</param>
+    /// <param name="lstRptMemberships">Lista de RptMemberships</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 11/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptMemberships(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptMemberships> lstRptMemberships)
+    {
+      return EpplusHelper.createExcelCustom(GridHelper.GetDataTableFromGrid(lstRptMemberships, true, false), filters, strReport, dateRangeFileName, clsFormatReport.RptMemberships(), blnRowGrandTotal: true);
+    }
+    #endregion
+
+    #region ExportRptMembershipsByAgencyMarket
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Memberships By Agency & Market.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRangeFileName">Rango de Fechas</param>
+    /// <param name="lstRptMembershipsAgencyM">Lista de RptMembershipsByAgencyMarket</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 11/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptMembershipsByAgencyMarket(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptMembershipsByAgencyMarket> lstRptMembershipsAgencyM)
+    {
+      return EpplusHelper.createExcelCustom(GridHelper.GetDataTableFromGrid(lstRptMembershipsAgencyM, true, false), filters, strReport, dateRangeFileName, clsFormatReport.RptMembershipsByAgencyMarket(), blnShowSubtotal: true);//, blnRowGrandTotal: true);
+    }
+    #endregion
+
+    #region ExportRptMembershipsByHost
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Memberships By Host.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRangeFileName">Rango de Fechas</param>
+    /// <param name="lstRptMembershipsHost">Lista de RptMembershipsByHost</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 14/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptMembershipsByHost(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptMembershipsByHost> lstRptMembershipsHost)
+    {
+      lstRptMembershipsHost.ForEach(c => c.guEntryHost = string.Format("{0} {1}", c.guEntryHost, c.guEntryHostN));
+      return EpplusHelper.createExcelCustom(GridHelper.GetDataTableFromGrid(lstRptMembershipsHost, true, false), filters, strReport, dateRangeFileName, clsFormatReport.RptMembershipsByHost(), blnShowSubtotal: true);//, blnRowGrandTotal: true);
+    }
+    #endregion
+
+    #endregion
+
+    #endregion
 
   }
 }

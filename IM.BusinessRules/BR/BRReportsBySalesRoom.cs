@@ -8,6 +8,9 @@ namespace IM.BusinessRules.BR
 {
   public class BRReportsBySalesRoom
   {
+
+    #region Bookings
+
     #region GetRptBookingsBySalesRoomProgramTime
     /// <summary>
     /// Obtiene el reporte de Bookings por Sala de venta y Programa
@@ -24,7 +27,7 @@ namespace IM.BusinessRules.BR
       {
         return dbContext.USP_OR_RptBookingsBySalesRoomProgramTime(dtmStart, salesRooms).ToList();
       }
-    } 
+    }
     #endregion
 
     #region GetRptBookingsBySalesRoomProgramLeadSourceTime
@@ -43,8 +46,12 @@ namespace IM.BusinessRules.BR
       {
         return dbContext.USP_OR_RptBookingsBySalesRoomProgramLeadSourceTime(dtmStart, salesRooms).ToList();
       }
-    } 
+    }
     #endregion
+
+    #endregion
+
+    #region CxC
 
     #region GetRptCxC
     /// <summary>
@@ -63,7 +70,7 @@ namespace IM.BusinessRules.BR
       {
         return dbContext.USP_OR_RptCxC(dtmStart, dtmEnd, salesRooms).ToList();
       }
-    } 
+    }
     #endregion
 
     #region GetRptCxCDeposits
@@ -81,7 +88,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        var lstDeposits= dbContext.USP_OR_RptCxCDeposits(dtmStart, dtmEnd, salesRooms).ToList();
+        var lstDeposits = dbContext.USP_OR_RptCxCDeposits(dtmStart, dtmEnd, salesRooms).ToList();
         var lstCurrencies = (from cxcDep in lstDeposits
                              join curr in dbContext.Currencies on cxcDep.grcuCxCPRDeposit equals curr.cuID
                              select curr).Distinct().ToList();
@@ -140,6 +147,10 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    #endregion
+
+    #region Deposits
+
     #region GetRptDeposits
     /// <summary>
     /// Obtiene el reporte de Deposits por Sala de ventas y un rango de fechas..
@@ -185,44 +196,36 @@ namespace IM.BusinessRules.BR
     public static List<object> GetRptDepositsBurned(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
     {
       List<string> salesRoom = salesRooms.Split(',').ToList();
-      try
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-        {
-          //Obtenemos los recibos de regalo.
-          var giftReceipts = dbContext.USP_OR_RptDepositsBurned(dtmStart, dtmEnd, salesRooms).ToList();
+        //Obtenemos los recibos de regalo.
+        var giftReceipts = dbContext.USP_OR_RptDepositsBurned(dtmStart, dtmEnd, salesRooms).ToList();
 
-          var currencies = (from gRcpt in giftReceipts
-                            join curr in dbContext.Currencies on gRcpt.grcu equals curr.cuID
-                            select curr).Distinct().ToList();
+        var currencies = (from gRcpt in giftReceipts
+                          join curr in dbContext.Currencies on gRcpt.grcu equals curr.cuID
+                          select curr).Distinct().ToList();
 
-          var paymentsType = (from gRcpt in giftReceipts
-                              join payTyp in dbContext.PaymentTypes on gRcpt.grpt equals payTyp.ptID
-                              select payTyp).Distinct().ToList();
+        var paymentsType = (from gRcpt in giftReceipts
+                            join payTyp in dbContext.PaymentTypes on gRcpt.grpt equals payTyp.ptID
+                            select payTyp).Distinct().ToList();
 
-          var saleReceipts = (from gSale in dbContext.Sales
-                              join gu in dbContext.Guests on gSale.sagu equals gu.guID
-                              join gRctp in dbContext.GiftsReceipts on gu.guID equals gRctp.grgu
-                              join per in dbContext.Personnels on gRctp.grpe equals per.peID
-                              where salesRoom.Contains(gSale.sasr) &&
-                              gSale.saD >= dtmStart && gSale.saD <= dtmEnd &&
-                              gRctp.grDepositTwisted > 0
-                              select new
-                              {
-                                gRctp.grID,
-                                gSale
-                              })
-                              .GroupBy(c => c.grID)
-                              .ToDictionary(c => c.Key, c => c.Select(s=>s.gSale).ToList());
+        var saleReceipts = (from gSale in dbContext.Sales
+                            join gu in dbContext.Guests on gSale.sagu equals gu.guID
+                            join gRctp in dbContext.GiftsReceipts on gu.guID equals gRctp.grgu
+                            join per in dbContext.Personnels on gRctp.grpe equals per.peID
+                            where salesRoom.Contains(gSale.sasr) &&
+                            gSale.saD >= dtmStart && gSale.saD <= dtmEnd &&
+                            gRctp.grDepositTwisted > 0
+                            select new
+                            {
+                              gRctp.grID,
+                              gSale
+                            })
+                            .GroupBy(c => c.grID)
+                            .ToDictionary(c => c.Key, c => c.Select(s => s.gSale).ToList());
 
         return new List<object> { giftReceipts, currencies, paymentsType, saleReceipts };
-        }
       }
-      catch (Exception ex)
-      {
-        return null;
-      }
-      
     }
     #endregion
 
@@ -240,45 +243,323 @@ namespace IM.BusinessRules.BR
     public static List<object> GetRptDepositsBurnedByResort(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
     {
       List<string> salesRoom = salesRooms.Split(',').ToList();
-      try
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-        {
-          //Obtenemos los recibos de regalo.
-          var giftReceipts = dbContext.USP_OR_RptDepositsBurnedByResort(dtmStart, dtmEnd, salesRooms).ToList();
+        //Obtenemos los recibos de regalo.
+        var giftReceipts = dbContext.USP_OR_RptDepositsBurnedByResort(dtmStart, dtmEnd, salesRooms).ToList();
 
-          var currencies = (from gRcpt in giftReceipts
-                            join curr in dbContext.Currencies on gRcpt.grcu equals curr.cuID
-                            select curr).Distinct().ToList();
+        var currencies = (from gRcpt in giftReceipts
+                          join curr in dbContext.Currencies on gRcpt.grcu equals curr.cuID
+                          select curr).Distinct().ToList();
 
-          var paymentsType = (from gRcpt in giftReceipts
-                              join payTyp in dbContext.PaymentTypes on gRcpt.grpt equals payTyp.ptID
-                              select payTyp).Distinct().ToList();
+        var paymentsType = (from gRcpt in giftReceipts
+                            join payTyp in dbContext.PaymentTypes on gRcpt.grpt equals payTyp.ptID
+                            select payTyp).Distinct().ToList();
 
-          var saleReceipts = (from gSale in dbContext.Sales
-                              join gu in dbContext.Guests on gSale.sagu equals gu.guID
-                              join gRctp in dbContext.GiftsReceipts on gu.guID equals gRctp.grgu
-                              join per in dbContext.Personnels on gRctp.grpe equals per.peID
-                              where salesRoom.Contains(gSale.sasr) &&
-                              gSale.saD >= dtmStart && gSale.saD <= dtmEnd &&
-                              (gRctp.grDepositTwisted > 0  ||  (gu.guHotelB!="" && gu.guHotelB != null)) 
-                              select new
-                              {
-                                gRctp.grID,
-                                gSale
-                              })
-                              .GroupBy(c => c.grID)
-                              .ToDictionary(c => c.Key, c => c.Select(s => s.gSale).ToList());
+        var saleReceipts = (from gSale in dbContext.Sales
+                            join gu in dbContext.Guests on gSale.sagu equals gu.guID
+                            join gRctp in dbContext.GiftsReceipts on gu.guID equals gRctp.grgu
+                            join per in dbContext.Personnels on gRctp.grpe equals per.peID
+                            where salesRoom.Contains(gSale.sasr) &&
+                            gSale.saD >= dtmStart && gSale.saD <= dtmEnd &&
+                            (gRctp.grDepositTwisted > 0 || (gu.guHotelB != "" && gu.guHotelB != null))
+                            select new
+                            {
+                              gRctp.grID,
+                              gSale
+                            })
+                            .GroupBy(c => c.grID)
+                            .ToDictionary(c => c.Key, c => c.Select(s => s.gSale).ToList());
 
-          return new List<object> { giftReceipts, currencies, paymentsType, saleReceipts };
-        }
+        return new List<object> { giftReceipts, currencies, paymentsType, saleReceipts };
       }
-      catch (Exception ex)
-      {
-        return null;
-      }
-
     }
+    #endregion
+
+    #region GetRptPaidDeposits
+    /// <summary>
+    /// Obtiene el reporte de Paid Deposits por Sala de ventas y un rango de fechas..
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="dtmEnd"></param>
+    /// <param name="salesRooms"></param>
+    /// <returns> List<object> </returns>
+    /// <history>
+    /// [edgrodriguez] 05/Abr/2016 Created
+    /// </history>
+    public static List<object> GetRptPaidDeposits(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
+    {
+      List<string> salesRoom = salesRooms.Split(',').ToList();
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        //Obtenemos los recibos de regalo.
+        var giftReceipts = dbContext.USP_OR_RptDepositsPaid(dtmStart, dtmEnd, "ALL", salesRooms).ToList();
+
+        var currencies = (from gRcpt in giftReceipts
+                          join curr in dbContext.Currencies on gRcpt.grcu equals curr.cuID
+                          select curr).Distinct().ToList();
+
+        var paymentsType = (from gRcpt in giftReceipts
+                            join payTyp in dbContext.PaymentTypes on gRcpt.grpt equals payTyp.ptID
+                            select payTyp).Distinct().ToList();
+        
+        return new List<object> { giftReceipts, currencies, paymentsType };
+      }
+    }
+    #endregion
+
+    #endregion
+
+    #region Gifts
+
+    #region GetRptDailyGiftSimple
+    /// <summary>
+    /// Obtiene el reporte de Daily Gift Simple por Sala de ventas y una fecha en especifico.
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="dtmEnd"></param>
+    /// <param name="salesRooms"></param>
+    /// <returns> List<RptDailyGiftSimple> </returns>
+    /// <history>
+    /// [edgrodriguez] 07/Abr/2016 Created
+    /// </history>
+    public static List<RptDailyGiftSimple> GetRptDailyGiftSimple(DateTime? dtmStart, string salesRooms)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        //Obtenemos los recibos de regalo.
+        var DailyGiftSimple = dbContext.USP_IM_RptDailyGiftSimple(dtmStart, salesRooms).ToList();
+        return DailyGiftSimple;
+      }
+    }
+    #endregion
+
+    #region GetRptWeeklyGiftsItemsSimple
+    /// <summary>
+    /// Obtiene el reporte de Weekly Gift Simple por Sala de ventas.
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="salesRooms"></param>
+    /// <returns> List<RptWeeklyGiftsItemsSimple> </returns>
+    /// <history>
+    /// [edgrodriguez] 08/Abr/2016 Created
+    /// </history>
+    public static List<RptWeeklyGiftsItemsSimple> GetRptWeeklyGiftsItemsSimple(DateTime? dtmStart, string salesRooms)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        //Obtenemos los recibos de regalo.
+        var lstweeklyGiftSimple = dbContext.USP_IM_RptWeeklyGiftsItemsSimple(dtmStart, dtmStart.Value.AddDays(6), salesRooms).ToList();
+        return lstweeklyGiftSimple;
+      }
+    }
+    #endregion
+
+    #endregion
+
+    #region Guests
+
+    #region GetRptGuestCeco
+    /// <summary>
+    /// Obtiene el reporte de Weekly Gift Simple por Sala de ventas.
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="salesRooms"></param>
+    /// <returns> List<RptGuestCeco> </returns>
+    /// <history>
+    /// [edgrodriguez] 08/Abr/2016 Created
+    /// </history>
+    public static List<RptGuestCeco> GetRptGuestCeco(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstGuestCeco = dbContext.USP_OR_RptGuestCeco(dtmStart, dtmEnd, salesRooms).ToList();
+        return lstGuestCeco;
+      }
+    }
+    #endregion
+
+    #region GetRptGuestNoBuyers
+    /// <summary>
+    /// Obtiene el reporte de Guest No Buyers por Sala de ventas.
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="salesRooms"></param>
+    /// <returns> List<RptGuestsNoBuyers> </returns>
+    /// <history>
+    /// [edgrodriguez] 08/Abr/2016 Created
+    /// </history>
+    public static List<RptGuestsNoBuyers> GetRptGuestNoBuyers(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstGuestNoBuyers = dbContext.USP_OR_RptGuestsNoBuyers(dtmStart, dtmEnd, salesRooms).ToList();
+        return lstGuestNoBuyers;
+      }
+    }
+    #endregion
+
+    #region GetRptInOut
+    /// <summary>
+    /// Obtiene el reporte de In & Out por Sala de ventas.
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="salesRooms"></param>
+    /// <returns> List<RptInOut> </returns>
+    /// <history>
+    /// [edgrodriguez] 09/Abr/2016 Created
+    /// </history>
+    public static List<RptInOut> GetRptInOut(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstInOut = dbContext.USP_OR_RptInOut(dtmStart, dtmEnd, salesRooms).ToList();
+        return lstInOut;
+      }
+    }
+    #endregion
+
+    #region GetRptGuestNoShows
+    /// <summary>
+    /// Obtiene el reporte de Guest No Show por Sala de ventas.
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="salesRooms"></param>
+    /// <returns> List<RptGuestsNoShows> </returns>
+    /// <history>
+    /// [edgrodriguez] 09/Abr/2016 Created
+    /// </history>
+    public static List<RptGuestsNoShows> GetRptGuestNoShows(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstInOut = dbContext.USP_OR_RptGuestsNoShows(dtmStart, dtmEnd, salesRooms).ToList();
+        return lstInOut;
+      }
+    }
+    #endregion
+
+    #endregion
+
+    #region Meal Tickets
+
+    #region GetRptMealTickets
+    /// <summary>
+    /// Obtiene el reporte de Meal Tickets por Sala de ventas.
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="salesRooms"></param>
+    /// <returns> List<RptMealTickets> </returns>
+    /// <history>
+    /// [edgrodriguez] 11/Abr/2016 Created
+    /// </history>
+    public static List<RptMealTickets> GetRptMealTickets(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms, bool? cancelled, string rateTypes)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstMealTickets = dbContext.USP_OR_RptMealTickets(dtmStart, dtmEnd, salesRooms, cancelled, rateTypes).ToList();
+        return lstMealTickets;
+      }
+    }
+    #endregion
+
+    #region GetRptMealTicketsCost
+    /// <summary>
+    /// Obtiene el reporte de Meal Tickets Cost por Sala de ventas.
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="salesRooms"></param>
+    /// <returns> List<RptMealTicketsCost> </returns>
+    /// <history>
+    /// [edgrodriguez] 11/Abr/2016 Created
+    /// </history>
+    public static List<RptMealTicketsCost> GetRptMealTicketsCost(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms, string rateTypes)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstMealTicketsCost = dbContext.USP_OR_RptMealTicketsCost(dtmStart, dtmEnd, salesRooms, rateTypes).ToList();
+        var MealTicketTypes = (from mtt in dbContext.MealTicketTypes
+                               join mtc in lstMealTicketsCost.Select(c => c.Type).Distinct() on mtt.myID equals mtc
+                               select mtt).ToList();
+        lstMealTicketsCost.ForEach(c => c.Type = MealTicketTypes.First(t => t.myID == c.Type).myN);
+
+
+        return lstMealTicketsCost;
+      }
+    }
+    #endregion
+
+    #endregion
+
+    #region Memberships
+
+    #region GetRptMemberships
+    /// <summary>
+    /// Obtiene el reporte de MemberShips por Sala de ventas.
+    /// </summary>
+    /// <param name="dtmStart">Fecha Inicial</param>
+    /// <param name="dtmEnd">Fecha Final</param>
+    /// <param name="salesRooms"> Filtro de Sales Room</param>
+    /// <param name="leadSources"> Filtro de Lead Sources</param>
+    /// <returns> List<RptMemberships> </returns>
+    /// <history>
+    /// [edgrodriguez] 11/Abr/2016 Created
+    /// </history>
+    public static List<RptMemberships> GetRptMemberships(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms, string leadSources = "ALL")
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstMemberships = dbContext.USP_OR_RptMemberships(dtmStart, dtmEnd, salesRooms, leadSources).ToList();
+
+        return lstMemberships;
+      }
+    }
+    #endregion
+
+    #region GetRptMembershipsByAgencyMarket
+    /// <summary>
+    /// Obtiene el reporte de MemberShips por Sala de ventas.
+    /// </summary>
+    /// <param name="dtmStart">Fecha Inicial</param>
+    /// <param name="dtmEnd">Fecha Final</param>
+    /// <param name="salesRooms"> Filtro de Sales Room</param>
+    /// <param name="leadSources"> Filtro de Lead Sources</param>
+    /// <returns> List<RptMembershipsByAgencyMarket> </returns>
+    /// <history>
+    /// [edgrodriguez] 11/Abr/2016 Created
+    /// </history>
+    public static List<RptMembershipsByAgencyMarket> GetRptMembershipsByAgencyMarket(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstMemberships = dbContext.USP_OR_RptMembershipsByAgencyMarket(dtmStart, dtmEnd, salesRooms).ToList();
+        return lstMemberships;
+      }
+    }
+    #endregion
+
+    #region GetRptMembershipsByHost
+    /// <summary>
+    /// Obtiene el reporte de MemberShips por Sala de ventas.
+    /// </summary>
+    /// <param name="dtmStart">Fecha Inicial</param>
+    /// <param name="dtmEnd">Fecha Final</param>
+    /// <param name="salesRooms"> Filtro de Sales Room</param>
+    /// <param name="leadSources"> Filtro de Lead Sources</param>
+    /// <returns> List<RptMembershipsByAgencyMarket> </returns>
+    /// <history>
+    /// [edgrodriguez] 11/Abr/2016 Created
+    /// </history>
+    public static List<RptMembershipsByHost> GetRptMembershipsByHost(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL", string leadSources = "ALL")
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstMemberships = dbContext.USP_OR_RptMembershipsByHost(dtmStart, dtmEnd, salesRooms, leadSources).ToList();
+        return lstMemberships;
+      }
+    }
+    #endregion
+
     #endregion
 
   }

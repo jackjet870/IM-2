@@ -29,5 +29,7 @@ namespace IM.Model.Classes
     public eSortType Sort { get; set; } = eSortType.None;
     public string PropertyName { get; set; }
     public string SuperHeader { get; set; }
+    public bool IsGroup { get; set; } = false;
+    public DataFieldFunctions AggregateFunction { get; set; } = DataFieldFunctions.None;
   }
 }
