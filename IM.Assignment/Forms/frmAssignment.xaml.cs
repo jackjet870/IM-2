@@ -8,7 +8,9 @@ using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using System.Data;
+using System.IO;
 using IM.Assignment.Classes;
+using System.Diagnostics;
 
 namespace IM.Assignment
 {
@@ -40,8 +42,8 @@ namespace IM.Assignment
     private DataTable dt = new DataTable();
     private string dateRange;
     private string rptName;
-    
 
+    FileInfo finfo;
     #endregion
 
     #region Constructores y destructores
@@ -235,6 +237,16 @@ namespace IM.Assignment
     }
     #endregion
 
+    #region OpenReport
+    private void OpenReport(FileInfo finfo)
+    {
+      if (finfo != null)
+      {
+        Process.Start(finfo.FullName);
+      }
+    }
+    #endregion
+
     #endregion
 
     #region Eventos
@@ -347,6 +359,7 @@ namespace IM.Assignment
     /// </history>
     private void btnAssignmentByPR_Click(object sender, RoutedEventArgs e)
     {
+      filters.Clear();
       ///validamos el PR
       if (ValidatePR()) {
         filters.Add(Tuple.Create("Date Range", dateRange));
@@ -355,16 +368,18 @@ namespace IM.Assignment
         List<RptAssignmentByPR> lstAssignmentByPR = BRAssignment.RptAssignmentByPR(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, _strgPRs);
         if (lstAssignmentByPR.Count > 0)
         {
+          finfo = null;
           dt = GridHelper.GetDataTableFromGrid(lstAssignmentByPR, true);
           rptName = "Assignment by PR";
           string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
-          EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName,dateRangeFileName, clsFormatTable.getExcelFormatTableAssignByPR());
+          finfo = EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName,dateRangeFileName, clsFormatTable.getExcelFormatTableAssignByPR());
         }
         else
         {
           UIHelper.ShowMessage("There is no data",MessageBoxImage.Warning);
         }
       }
+      OpenReport(finfo);
     }
     #endregion
 
@@ -377,20 +392,23 @@ namespace IM.Assignment
     /// </history>
     private void btnGeneralAssignment_Click(object sender, RoutedEventArgs e)
     {
+      filters.Clear();
       filters.Add(Tuple.Create("Date Range", dateRange));
       filters.Add(Tuple.Create("Lead Source", _LeadSource));
       List<RptAssignment> lstAssignment = BRAssignment.RptAssignment(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets) ;
       if (lstAssignment.Count > 0)
       {
+        finfo = null;
         dt = GridHelper.GetDataTableFromGrid(lstAssignment, true);
         rptName = "General Assignment";
         string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
-        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
+        finfo = EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
       }
       else
       {
         UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning);
       }
+      OpenReport(finfo);
     }
     #endregion
 
@@ -403,20 +421,23 @@ namespace IM.Assignment
     /// </history>
     private void btnAssignmentArrivals_Click(object sender, RoutedEventArgs e)
     {
+      filters.Clear();
       filters.Add(Tuple.Create("Date Range", dateRange));
       filters.Add(Tuple.Create("Lead Source", _LeadSource));
       List<RptAssignmentArrivals> lstAssignmentArrivals = BRAssignment.RptAssignmetArrivals(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets);
       if (lstAssignmentArrivals.Count > 0)
       {
+        finfo = null;
         dt = GridHelper.GetDataTableFromGrid(lstAssignmentArrivals, true);
         rptName = "Arrivals";
         string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
-        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName,dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
+        finfo = EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName,dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
       }
       else
       {
         UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning);
       }
+      OpenReport(finfo);
     }
     #endregion
 
