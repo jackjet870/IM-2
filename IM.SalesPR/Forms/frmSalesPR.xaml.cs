@@ -78,7 +78,7 @@ namespace IM.SalesPR.Forms
         //Obtenemos el nombre del reporte y el dateRange
         string rptName = "Sales By PR";
         //Obtenemos el dataTable con la lista formateada 
-        DataTable dt = GridHelper.GetDataTableFromGrid<SaleByPR>(listaSaleByPR, true);
+        DataTable dt = TableHelper.GetDataTableFromList(listaSaleByPR, true);
         //Creamos el reporte
         FileInfo fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable());
 

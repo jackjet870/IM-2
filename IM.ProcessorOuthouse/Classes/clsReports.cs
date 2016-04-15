@@ -56,7 +56,7 @@ namespace IM.ProcessorOuthouse.Classes
                               })
                               .ToList();
 
-      DataTable dtData = GridHelper.GetDataTableFromGrid(lstRptDepositsPaymentByPR);
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptDepositsPaymentByPR);
       return EpplusHelper.CreateGeneralRptExcel(filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptDepositsPaymentByPR());
     }
     #endregion
@@ -85,7 +85,7 @@ namespace IM.ProcessorOuthouse.Classes
 
                                  ).ToList(); 
 
-      DataTable dtData = GridHelper.GetDataTableFromGrid(lstGifRecBySRWithCu);
+      DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptGiftsRecivedBySR(), showRowGrandTotal: true);
     }
      #endregion
@@ -103,7 +103,7 @@ namespace IM.ProcessorOuthouse.Classes
     /// </history>
     public static FileInfo ExportRptGuestsShowNoPresentedInvitation(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<GuestShowNoPresentedInvitation> lstRptGuestsShowNoPresentedInvitation)
     {
-      DataTable dtData = GridHelper.GetDataTableFromGrid(lstRptGuestsShowNoPresentedInvitation);
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptGuestsShowNoPresentedInvitation);
       return EpplusHelper.CreateGeneralRptExcel(filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptGuestsShowNoPresentedInvitation());
     }
     #endregion
@@ -111,7 +111,7 @@ namespace IM.ProcessorOuthouse.Classes
     #region ExportRptProductionByAge
     public static FileInfo ExportRptProductionByAge(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionByAgeOuthouse> lstRptProductionByAgeOuthouse)
     {        
-      DataTable dtData = GridHelper.GetDataTableFromGrid(lstRptProductionByAgeOuthouse);
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByAgeOuthouse);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByAge(), showRowGrandTotal: true);
     }
     #endregion

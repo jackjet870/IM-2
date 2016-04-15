@@ -1,9 +1,6 @@
-﻿using System.ComponentModel;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Linq;
-using System;
 using System.Collections.Generic;
-using System.Collections;
 
 namespace IM.Base.Helpers
 {
@@ -100,12 +97,13 @@ namespace IM.Base.Helpers
     /// </summary>
     /// <param name="obj">objeto a convertir a lista</param>
     /// <history>
-    /// [jorcanche] 13/04/2015 Created
-    /// [ecanul] 14/04/2016 Modificated (Metodo movido a Base.Helpers)
+    /// [jorcanche] 13/Abr/2015 Created
+    /// [ecanul]    14/Abr/2016 Modified. Metodo movido a Base.Helpers
+    /// [wtorres]   15/Abr/2016 Modified. Ahora devuelve una lista tipeada
     /// </history>
-    public static List<object> ObjectToList(object obj)
+    public static List<T> ObjectToList<T>(T obj)
     {
-      var lst = new List<object>();
+      var lst = new List<T>();
       lst.Add(obj);
       return lst;
     }

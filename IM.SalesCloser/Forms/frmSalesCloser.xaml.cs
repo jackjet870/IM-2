@@ -82,7 +82,7 @@ namespace IM.SalesCloser.Forms
         //Obtenemos el nombre del reporte y el dateRange
         string rptName = "Sales By Closer";
         //Obtenemos el dataTable con la lista formateada
-        DataTable dt = GridHelper.GetDataTableFromGrid<SaleByCloser>(listaSaleByCloser, true);
+        DataTable dt = TableHelper.GetDataTableFromList(listaSaleByCloser, true);
         //Creamos el reporte
         FileInfo fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable());
 

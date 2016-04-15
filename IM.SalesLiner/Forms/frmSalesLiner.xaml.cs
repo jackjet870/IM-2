@@ -82,7 +82,7 @@ namespace IM.SalesLiner.Forms
         //Obtenemos el nombre del reporte y el dateRange
         string rptName = "Sales By Liner";
         //Obtenemos el dataTable con la lista formateada
-        DataTable dt = GridHelper.GetDataTableFromGrid<SaleByLiner>(listaSaleByLiner, true);
+        DataTable dt = TableHelper.GetDataTableFromList(listaSaleByLiner, true);
         //Creamos el reporte
         FileInfo fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable());
 

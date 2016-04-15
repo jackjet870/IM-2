@@ -103,7 +103,7 @@ namespace IM.PRStatistics.Forms
         string dateRange = DateHelper.DateRange(dtpkFrom.SelectedDate.Value,dtpkTo.SelectedDate.Value);
         string dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
         FileInfo templatePath = new FileInfo(string.Concat(Directory.GetCurrentDirectory(), "\\ReportTemplate\\RptPRStatistics.xlsx"));
-        DataTable dt = GridHelper.GetDataTableFromGrid<RptPRStats>(lstRptStats);
+        DataTable dt = TableHelper.GetDataTableFromList(lstRptStats);
         string nombreReporte = "PR Statistics";
         FileInfo finfo = EpplusHelper.CreateGeneralRptExcel(filterTuple, dt, nombreReporte,dateRangeFileName, UsefulMethods.getExcelFormatTable());
         

@@ -894,7 +894,7 @@ namespace IM.ProcessorGeneral.Forms
           List<RptPersonnel> lstRptPersonnel = BRGeneralReports.GetRptPersonnel();
           if (lstRptPersonnel.Count > 0)
           {
-            dtData = GridHelper.GetDataTableFromGrid(lstRptPersonnel, changeDataTypeBoolToString: true);
+            dtData = TableHelper.GetDataTableFromList(lstRptPersonnel, changeDataTypeBoolToString: true);
 
             finfo = EpplusHelper.CreateGeneralRptExcel(filters, dtData, strReport, "", clsFormatReport.rptPersonnel());
           }
@@ -907,7 +907,7 @@ namespace IM.ProcessorGeneral.Forms
           List<RptGifts> lstRptGift = BRGeneralReports.GetRptGifts();
           if (lstRptGift.Count > 0)
           {
-            dtData = GridHelper.GetDataTableFromGrid(lstRptGift, changeDataTypeBoolToString: true, showCheckMark: true);
+            dtData = TableHelper.GetDataTableFromList(lstRptGift, changeDataTypeBoolToString: true, showCheckMark: true);
             finfo = EpplusHelper.CreateGeneralRptExcel(filters, dtData, strReport, "", clsFormatReport.rptGifts());
             if (finfo != null)
             {

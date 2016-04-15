@@ -41,7 +41,6 @@ namespace IM.Assignment
     private List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
     private DataTable dt = new DataTable();
     private string dateRange;
-    private string rptName;
 
     FileInfo finfo;
     #endregion
@@ -369,10 +368,9 @@ namespace IM.Assignment
         if (lstAssignmentByPR.Count > 0)
         {
           finfo = null;
-          dt = GridHelper.GetDataTableFromGrid(lstAssignmentByPR, true);
-          rptName = "Assignment by PR";
+          dt = TableHelper.GetDataTableFromList(lstAssignmentByPR, true);
           string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
-          finfo = EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName,dateRangeFileName, clsFormatTable.getExcelFormatTableAssignByPR());
+          finfo = EpplusHelper.CreateGeneralRptExcel(filters, dt, "Assignment by PR", dateRangeFileName, clsFormatTable.getExcelFormatTableAssignByPR());
         }
         else
         {
@@ -399,10 +397,9 @@ namespace IM.Assignment
       if (lstAssignment.Count > 0)
       {
         finfo = null;
-        dt = GridHelper.GetDataTableFromGrid(lstAssignment, true);
-        rptName = "General Assignment";
+        dt = TableHelper.GetDataTableFromList(lstAssignment, true);
         string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
-        finfo = EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
+        finfo = EpplusHelper.CreateGeneralRptExcel(filters, dt, "General Assignment", dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
       }
       else
       {
@@ -428,10 +425,9 @@ namespace IM.Assignment
       if (lstAssignmentArrivals.Count > 0)
       {
         finfo = null;
-        dt = GridHelper.GetDataTableFromGrid(lstAssignmentArrivals, true);
-        rptName = "Arrivals";
+        dt = TableHelper.GetDataTableFromList(lstAssignmentArrivals, true);
         string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
-        finfo = EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName,dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
+        finfo = EpplusHelper.CreateGeneralRptExcel(filters, dt, "Arrivals", dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
       }
       else
       {

@@ -368,7 +368,7 @@ namespace IM.Inhouse.Forms
       listAssistData = BRAssistance.GetAssistance(enumPalaceType, palaceId, dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
       if(listAssistData.Count>0)
       {
-        dt = GridHelper.GetDataTableFromGrid(listAssistData, true);
+        dt = TableHelper.GetDataTableFromList(listAssistData, true);
         rptName = "Assistance " + palaceId;
         string dateRange = DateHelper.DateRange(dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
         string dateRangeFileName = DateHelper.DateRangeFileName(dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);

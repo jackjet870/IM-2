@@ -1837,23 +1837,14 @@ namespace IM.Inhouse
 
       var rptInvi = new rptInvitation();
 
-      rptInvi.SetDataSource(RptCrystal(invitationData.Invitation));
-      rptInvi.Subreports["rptInvitationGuests.rpt"].SetDataSource(invitationData.InvitationGuest);
+      rptInvi.SetDataSource(TableHelper.GetDataTableFromList(ObjectHelper.ObjectToList(invitationData.Invitation)));
+      rptInvi.Subreports["rptInvitationGuests.rpt"].SetDataSource(TableHelper.GetDataTableFromList(invitationData.InvitationGuest));
       rptInvi.Subreports["rptInvitationDeposits.rpt"].SetDataSource(invitationData.InvitationDeposit);
-      rptInvi.Subreports["rptInvitationGifts.rpt"].SetDataSource(invitationData.InvitationGift);
+      rptInvi.Subreports["rptInvitationGifts.rpt"].SetDataSource(TableHelper.GetDataTableFromList(invitationData.InvitationGift));
 
       var _frmViewer = new frmViewer(rptInvi);
       _frmViewer.ShowDialog();
     }
-    #endregion
-
-    #region RptCrystal
-    public List<object> RptCrystal(object obj)
-    {
-      var lst = new List<object>();
-      lst.Add(obj);
-      return lst;
-    } 
     #endregion
 
     #region btnArrivals_Clicked

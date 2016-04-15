@@ -13,7 +13,7 @@ namespace IM.ProcessorInhouse.Classes
     public static FileInfo ExportRptCostByPR(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptCostByPR> listRptCostByPrs)
     {
       var listRptCostByPrsAux = listRptCostByPrs.Select(c => new { c.PR, c.PRN, c.Shows, c.TotalCost }).ToList();
-      DataTable dtData = GridHelper.GetDataTableFromGrid(listRptCostByPrsAux, replaceStringNullOrWhiteSpace: true);
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptCostByPrsAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptCostByPRFormat(), true);
     }
 
@@ -21,7 +21,7 @@ namespace IM.ProcessorInhouse.Classes
       List<RptCostByPRWithDetailGifts> listRptCostByPRWithDetailGifts)
     {
       var listRptCostByPRWithDetailGiftsAux = listRptCostByPRWithDetailGifts.Select(c => new { c.PR, c.PRN, c.Qty, c.GiftsID, c.GiftsName, c.Shows, c.TotalCost }).ToList();
-      DataTable dtData = GridHelper.GetDataTableFromGrid(listRptCostByPRWithDetailGiftsAux, replaceStringNullOrWhiteSpace: true);
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptCostByPRWithDetailGiftsAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptCostByPRWithDetailGiftsFormat(), true);
     }
 
@@ -41,7 +41,7 @@ namespace IM.ProcessorInhouse.Classes
         c.Sales,
         c.SalesAmount
       }).ToList();
-      DataTable dtData = GridHelper.GetDataTableFromGrid(listRptFollowUpByAgenciesAux, replaceStringNullOrWhiteSpace: true);
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptFollowUpByAgenciesAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptFollowUpByAgencyFormat(), true);
     }
 
@@ -61,7 +61,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount
       }).ToList();
 
-      DataTable dtData = GridHelper.GetDataTableFromGrid(listRptFollowUpByPRAux, replaceStringNullOrWhiteSpace: true);
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptFollowUpByPRAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptFollowUpByPRFormat(), true);
     }
 
@@ -86,7 +86,7 @@ namespace IM.ProcessorInhouse.Classes
         c.Sales_SELFGEN,
         c.SalesAmount_SELFGEN
       }).ToList();
-      DataTable dtData = GridHelper.GetDataTableFromGrid(listRptProductionByAgeInhousesAux, replaceStringNullOrWhiteSpace: true);
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByAgeInhousesAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByAgeInhouseFormat(), true);
     }
 
@@ -113,7 +113,7 @@ namespace IM.ProcessorInhouse.Classes
         c.Sales_SELFGEN,
         c.SalesAmount_SELFGEN
       }).ToList();
-      DataTable dtData = GridHelper.GetDataTableFromGrid(listProductionByAgeMarketOriginallyAvailableInhousesAux, replaceStringNullOrWhiteSpace: true);
+      DataTable dtData = TableHelper.GetDataTableFromList(listProductionByAgeMarketOriginallyAvailableInhousesAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetProductionByAgeMarketOriginallyAvailableInhouseFormat(), true);
     }
 
@@ -140,7 +140,7 @@ namespace IM.ProcessorInhouse.Classes
         c.Sales_SELFGEN,
         c.SalesAmount_SELFGEN
       }).ToList();
-      DataTable dtData = GridHelper.GetDataTableFromGrid(listRptProductionByContractAgencyInhousesAux, replaceStringNullOrWhiteSpace: true);
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByContractAgencyInhousesAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByContractAgencyInhouseFormat(), true);
     }
 
@@ -169,7 +169,7 @@ namespace IM.ProcessorInhouse.Classes
         c.Sales_SELFGEN,
         c.SalesAmount_SELFGEN
       }).ToList();
-      DataTable dtData = GridHelper.GetDataTableFromGrid(listRptProductionByContractAgencyInhousesAux, replaceStringNullOrWhiteSpace: true);
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByContractAgencyInhousesAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByContractAgencyMarketOriginallyAvailableInhouseFormat(), true);
     }
   }
