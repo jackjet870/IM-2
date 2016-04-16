@@ -954,6 +954,9 @@
     <Compile Include="TourTimesSchema.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Transfer.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="TransferStartData.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

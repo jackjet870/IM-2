@@ -187,6 +187,7 @@ namespace IM.Model
         public virtual DbSet<GuestOpera> GuestsOpera { get; set; }
         public virtual DbSet<IncomeCECOCEBEType> IncomesCECOCEBETypes { get; set; }
         public virtual DbSet<MarketSegmentCECOCEBEType> MarketsSegmentsCECOCEBETypes { get; set; }
+        public virtual DbSet<Transfer> Transfers { get; set; }
     
         public virtual ObjectResult<CountryShort> USP_OR_GetCountries(Nullable<byte> status)
         {
@@ -3551,6 +3552,21 @@ namespace IM.Model
                 new ObjectParameter("SalesRooms", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGiftsReceiptsPayments>("USP_OR_RptGiftsReceiptsPayments", dateFromParameter, dateToParameter, salesRoomsParameter);
+        }
+    
+        public virtual int USP_OR_TransferDeleteTransfer()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_TransferDeleteTransfer");
+        }
+    
+        public virtual ObjectResult<Transfer> USP_OR_TransferGetTransfer()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Transfer>("USP_OR_TransferGetTransfer");
+        }
+    
+        public virtual ObjectResult<Transfer> USP_OR_TransferGetTransfer(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Transfer>("USP_OR_TransferGetTransfer", mergeOption);
         }
     }
 }
