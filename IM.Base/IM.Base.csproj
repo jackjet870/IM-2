@@ -53,6 +53,7 @@
       <HintPath>..\packages\System.Linq.Dynamic.1.0.6\lib\net40\System.Linq.Dynamic.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -96,6 +97,7 @@
     <Compile Include="Forms\frmViewer.xaml.cs">
       <DependentUpon>frmViewer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ByteToBoleanValueConverterHelper.cs" />
     <Compile Include="Helpers\ComputerHelper.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
     <Compile Include="Helpers\DateHelper.cs" />
@@ -111,6 +113,7 @@
       <DependentUpon>frmSplash.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\IniFileHelper.cs" />
+    <Compile Include="Helpers\UIRichTextBoxHelper.cs" />
     <Compile Include="Helpers\ValidateHelper.cs" />
     <Compile Include="Interfaces\IMetodosPublicos.cs" />
     <Compile Include="Language\ResLanguage.ES.US.Designer.cs">
