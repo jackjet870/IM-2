@@ -20,6 +20,7 @@ namespace IM.Model
             this.Agencies = new HashSet<Agency>();
             this.Guests = new HashSet<Guest>();
             this.Wholesalers = new HashSet<Wholesaler>();
+            this.osTransfers = new HashSet<Transfer>();
         }
     
         public int clID { get; set; }
@@ -32,5 +33,7 @@ namespace IM.Model
         public virtual ICollection<Guest> Guests { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Wholesaler> Wholesalers { internal get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Transfer> osTransfers { get; set; }
     }
 }

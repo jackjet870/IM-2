@@ -41,6 +41,7 @@ namespace IM.Launcher.Forms
 
     #region Métodos de la forma
 
+    #region Window_Loaded
     /// <summary>
     /// Al iniciar la forma crea los botones del menú
     /// </summary>
@@ -55,7 +56,9 @@ namespace IM.Launcher.Forms
       lblVersion.Content = "Launcher v" + name.Version;
       lsbLauncher.ItemsSource = BuildLauncher();
     }
+    #endregion
 
+    #region Window_KeyDown
     /// <summary>
     /// Ejecuta tareas con algunas teclas de configuración se realizan tareas.
     /// </summary>
@@ -79,10 +82,12 @@ namespace IM.Launcher.Forms
       }
       if (e.Key == Key.S && pushCtrl)
       {
-        MessageBox.Show("Setup");
+        UIHelper.ShowMessage("Setup");
       }
     }
-	
+    #endregion
+
+    #region Window_Closing
     /// <summary>
     /// Evita que el formulario se cierre al oprimir el botón de cerrar
     /// </summary>
@@ -94,7 +99,9 @@ namespace IM.Launcher.Forms
       e.Cancel = !pushCtrlE;
       this.WindowState = System.Windows.WindowState.Minimized;
     }
+    #endregion
 
+    #region lsbLauncher_MouseDoubleClick
     /// <summary>
     /// Abre cada módulo al oprimir dos veces el botón correspodiente
     /// </summary>
@@ -103,13 +110,15 @@ namespace IM.Launcher.Forms
     /// </history>
     private void lsbLauncher_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-      if(lsbLauncher.SelectedItem != null)
+      if (lsbLauncher.SelectedItem != null)
       {
         var item = (ListItemLauncher)lsbLauncher.SelectedItem;
         CallingExe((EnumMenu)item.Orden);
       }
     }
+    #endregion
 
+    #region lsbLauncher_KeyDown
     /// <summary>
     /// Abre cada módulo a oprimir Enter en el botón correspodiente
     /// </summary>
@@ -118,37 +127,42 @@ namespace IM.Launcher.Forms
     /// </history>
     private void lsbLauncher_KeyDown(object sender, KeyEventArgs e)
     {
-      if(e.Key == Key.Enter && lsbLauncher.SelectedItem != null)
+      if (e.Key == Key.Enter && lsbLauncher.SelectedItem != null)
       {
         var item = (ListItemLauncher)lsbLauncher.SelectedItem;
         CallingExe((EnumMenu)item.Orden);
       }
     }
+    #endregion
 
     #endregion
 
-    #region Métodos privados
+    #region Metodos privados
+
+    #region BuildLauncher
     private IEnumerable<ListItemLauncher> BuildLauncher()
     {
       var lstNames = new ConfigButton().ListOfButtons();
       ListItemLauncher itemLauncher;
       var lstItemLauncher = new List<ListItemLauncher>();
 
-      string pathImages =System.IO. Path.Combine(Directory.GetCurrentDirectory(), "Images\\");
+      string pathImages = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Images\\");
 
       foreach (var item in lstNames)
       {
         itemLauncher = new ListItemLauncher();
         itemLauncher.Orden = item.Key;
         itemLauncher.Descripcion = item.Value;
-        itemLauncher.UriImage = String.Format("{0}{1}.png", pathImages, ((EnumMenu) item.Key).ToString());
+        itemLauncher.UriImage = String.Format("{0}{1}.png", pathImages, ((EnumMenu)item.Key).ToString());
         itemLauncher.Image = new BitmapImage(new Uri(itemLauncher.UriImage));
         lstItemLauncher.Add(itemLauncher);
       }
 
       return lstItemLauncher;
     }
+    #endregion
 
+    #region CallingExe
     /// <summary>
     /// Ejecuta el .exe de cada módulo, según corresponda
     /// </summary>
@@ -225,7 +239,9 @@ namespace IM.Launcher.Forms
           break;
       }
     }
+    #endregion
 
+    #region ShowInfoUser
     /// <summary>
     /// Muestra información sobre el usuario
     /// </summary>
@@ -251,11 +267,10 @@ namespace IM.Launcher.Forms
 
       string message = String.Format("User Name: {0}\nComputer Name Local: {1}\nComputer IP Address Local: {2}\nComputer Name Remote: {3}\nComputer IP Address Remote: {4}", userName, machineName, ipAddress, String.Empty, String.Empty);
 
-      MessageBox.Show(message, "Intelligence Marketing Launcher", MessageBoxButton.OK, MessageBoxImage.Information);
-    }
-
+      UIHelper.ShowMessage(message);
+    } 
+    #endregion
 
     #endregion
-        
   }
 }

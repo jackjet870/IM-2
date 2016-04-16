@@ -58,6 +58,7 @@ namespace IM.Launcher.Classes
       lstMenus.Add((int)EnumMenu.Outhouse, EnumToListHelper.GetEnumDescription(EnumMenu.Outhouse));
       lstMenus.Add((int)EnumMenu.Host, EnumToListHelper.GetEnumDescription(EnumMenu.Host));
       lstMenus.Add((int)EnumMenu.InventoryMovs, EnumToListHelper.GetEnumDescription(EnumMenu.InventoryMovs));
+      lstMenus.Add((int)EnumMenu.ProcessorGRAL, EnumToListHelper.GetEnumDescription(EnumMenu.ProcessorGRAL));
       lstMenus.Add((int)EnumMenu.ProcessorINH, EnumToListHelper.GetEnumDescription(EnumMenu.ProcessorINH));
       lstMenus.Add((int)EnumMenu.ProcessorOUT, EnumToListHelper.GetEnumDescription(EnumMenu.ProcessorOUT));
       lstMenus.Add((int)EnumMenu.ProcessorSales, EnumToListHelper.GetEnumDescription(EnumMenu.ProcessorSales));

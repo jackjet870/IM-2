@@ -1415,6 +1415,71 @@
           <Property Name="ocVATRate" Type="money" Nullable="false" />
           <Property Name="ocInvitationsCloseD" Type="datetime" />
         </EntityType>
+        <EntityType Name="osTransfer">
+          <Key>
+            <PropertyRef Name="tls" />
+            <PropertyRef Name="tHReservID" />
+          </Key>
+          <Property Name="tls" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="tHReservID" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="tFirstName" Type="varchar" MaxLength="40" />
+          <Property Name="tLastName" Type="varchar" MaxLength="65" />
+          <Property Name="tRoomNum" Type="varchar" MaxLength="6" />
+          <Property Name="tPax" Type="decimal" Precision="4" Scale="1" Nullable="false" />
+          <Property Name="tCheckInD" Type="datetime" />
+          <Property Name="tCheckOutD" Type="datetime" />
+          <Property Name="tcoID" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="tcoN" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="tagID" Type="varchar" MaxLength="35" Nullable="false" />
+          <Property Name="tagN" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="tOnGroup" Type="bit" Nullable="false" />
+          <Property Name="tComplim" Type="bit" Nullable="false" />
+          <Property Name="tVIP" Type="bit" Nullable="false" />
+          <Property Name="tMember" Type="bit" Nullable="false" />
+          <Property Name="tum" Type="tinyint" Nullable="false" />
+          <Property Name="tmk" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tAvail" Type="bit" Nullable="false" />
+          <Property Name="tla" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="toagID" Type="varchar" MaxLength="35" />
+          <Property Name="tocoID" Type="varchar" MaxLength="25" />
+          <Property Name="tGuestStatus" Type="varchar" MaxLength="1" />
+          <Property Name="tMembershipNum" Type="varchar" MaxLength="15" />
+          <Property Name="tcoAID" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="tcoAN" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="tO1" Type="varchar" MaxLength="20" />
+          <Property Name="tO2" Type="varchar" MaxLength="20" />
+          <Property Name="tO3" Type="varchar" MaxLength="20" />
+          <Property Name="tO4" Type="varchar" MaxLength="20" />
+          <Property Name="tO5" Type="varchar" MaxLength="20" />
+          <Property Name="tO6" Type="varchar" MaxLength="20" />
+          <Property Name="tEditDT" Type="datetime" Nullable="false" />
+          <Property Name="tHotel" Type="varchar" MaxLength="20" />
+          <Property Name="tCCType" Type="varchar" MaxLength="30" />
+          <Property Name="tDivResConsec" Type="tinyint" Nullable="false" />
+          <Property Name="tDivResLeadSource" Type="varchar" MaxLength="10" />
+          <Property Name="tDivResResNum" Type="varchar" MaxLength="15" />
+          <Property Name="tGuestRef" Type="varchar" MaxLength="12" />
+          <Property Name="tBirthDate1" Type="datetime" />
+          <Property Name="tBirthDate2" Type="datetime" />
+          <Property Name="tBirthDate3" Type="datetime" />
+          <Property Name="tBirthDate4" Type="datetime" />
+          <Property Name="tAge1" Type="tinyint" />
+          <Property Name="tAge2" Type="tinyint" />
+          <Property Name="tReservationType" Type="varchar" MaxLength="1" />
+          <Property Name="tHotelPrevious" Type="varchar" MaxLength="10" />
+          <Property Name="tFolioPrevious" Type="varchar" MaxLength="15" />
+          <Property Name="tEmail" Type="varchar" MaxLength="50" />
+          <Property Name="tCity" Type="varchar" MaxLength="40" />
+          <Property Name="tState" Type="varchar" MaxLength="40" />
+          <Property Name="tCompany" Type="decimal" Precision="2" Scale="0" Nullable="false" />
+          <Property Name="tIdProfileOpera" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="trt" Type="varchar" MaxLength="10" />
+          <Property Name="trtN" Type="varchar" MaxLength="50" />
+          <Property Name="tcnN" Type="varchar" MaxLength="100" />
+          <Property Name="tcl" Type="int" />
+          <Property Name="tgroupID" Type="varchar" MaxLength="10" />
+          <Property Name="tgroupN" Type="varchar" MaxLength="90" />
+        </EntityType>
         <EntityType Name="PaymentPlaces">
           <Key>
             <PropertyRef Name="pcID" />
@@ -4439,6 +4504,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_osTransfer_Clubs">
+          <End Role="Clubs" Type="Self.Clubs" Multiplicity="0..1" />
+          <End Role="osTransfer" Type="Self.osTransfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clubs">
+              <PropertyRef Name="clID" />
+            </Principal>
+            <Dependent Role="osTransfer">
+              <PropertyRef Name="tcl" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_peID">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="1" />
           <End Role="FolioInvitationsOutsidePR" Type="Self.FolioInvitationsOutsidePR" Multiplicity="*" />
@@ -6522,6 +6599,8 @@
         <Function Name="USP_OR_TransferAddGuests" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_TransferAddRoomTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_TransferDeleteReservationsCancelled" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferDeleteTransfer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_TransferGetTransfer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_TransferStart" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_TransferStop" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_TransferStopZone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -6742,6 +6821,7 @@
           <EntitySet Name="Notices" EntityType="Self.Notices" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NoticesByLeadSource" EntityType="Self.NoticesByLeadSource" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="osConfig" EntityType="Self.osConfig" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="osTransfer" EntityType="Self.osTransfer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentPlaces" EntityType="Self.PaymentPlaces" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payments" EntityType="Self.Payments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentSchemas" EntityType="Self.PaymentSchemas" Schema="dbo" store:Type="Tables" />
@@ -7563,6 +7643,10 @@
             <End Role="TourTimesSchemas" EntitySet="TourTimesSchemas" />
             <End Role="osConfig" EntitySet="osConfig" />
           </AssociationSet>
+          <AssociationSet Name="FK_osTransfer_Clubs" Association="Self.FK_osTransfer_Clubs">
+            <End Role="Clubs" EntitySet="Clubs" />
+            <End Role="osTransfer" EntitySet="osTransfer" />
+          </AssociationSet>
           <AssociationSet Name="fk_peID" Association="Self.fk_peID">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="FolioInvitationsOutsidePR" EntitySet="FolioInvitationsOutsidePR" />
@@ -8156,6 +8240,7 @@
           <NavigationProperty Name="Agencies" Relationship="Self.FK_Agencies_Clubs" FromRole="Clubs" ToRole="Agencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Guests" Relationship="Self.FK_Guests_Clubs" FromRole="Clubs" ToRole="Guests" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Wholesalers" Relationship="Self.FK_Wholesalers_Clubs" FromRole="Clubs" ToRole="Wholesalers" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="osTransfers" Relationship="IMModel.FK_osTransfer_Clubs" FromRole="Club" ToRole="osTransfer" />
         </EntityType>
         <EntityType Name="Computer">
           <Key>
@@ -16268,6 +16353,13 @@
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="SalesRooms" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="Transfers" EntityType="IMModel.Transfer" />
+          <AssociationSet Name="FK_osTransfer_Clubs" Association="IMModel.FK_osTransfer_Clubs">
+            <End Role="Club" EntitySet="Clubs" />
+            <End Role="osTransfer" EntitySet="Transfers" />
+          </AssociationSet>
+          <FunctionImport Name="USP_OR_TransferDeleteTransfer" />
+          <FunctionImport Name="USP_OR_TransferGetTransfer" EntitySet="Transfers" ReturnType="Collection(IMModel.Transfer)" />
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -18672,6 +18764,84 @@
           <Property Type="Decimal" Name="Amount" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AmountUS" Nullable="true" Precision="38" Scale="7" />
         </ComplexType>
+        <EntityType Name="Transfer">
+          <Key>
+            <PropertyRef Name="tls" />
+            <PropertyRef Name="tHReservID" />
+          </Key>
+          <Property Name="tls" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="tHReservID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="tFirstName" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="tLastName" Type="String" MaxLength="65" FixedLength="false" Unicode="false" />
+          <Property Name="tRoomNum" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="tPax" Type="Decimal" Nullable="false" Precision="4" Scale="1" />
+          <Property Name="tCheckInD" Type="DateTime" Precision="3" />
+          <Property Name="tCheckOutD" Type="DateTime" Precision="3" />
+          <Property Name="tcoID" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="tcoN" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="tagID" Type="String" Nullable="false" MaxLength="35" FixedLength="false" Unicode="false" />
+          <Property Name="tagN" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="tOnGroup" Type="Boolean" Nullable="false" />
+          <Property Name="tComplim" Type="Boolean" Nullable="false" />
+          <Property Name="tVIP" Type="Boolean" Nullable="false" />
+          <Property Name="tMember" Type="Boolean" Nullable="false" />
+          <Property Name="tum" Type="Byte" Nullable="false" />
+          <Property Name="tmk" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="tAvail" Type="Boolean" Nullable="false" />
+          <Property Name="tla" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="toagID" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
+          <Property Name="tocoID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="tGuestStatus" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="tMembershipNum" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="tcoAID" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="tcoAN" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="tO1" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="tO2" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="tO3" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="tO4" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="tO5" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="tO6" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="tEditDT" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="tHotel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="tCCType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tDivResConsec" Type="Byte" Nullable="false" />
+          <Property Name="tDivResLeadSource" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="tDivResResNum" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="tGuestRef" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="tBirthDate1" Type="DateTime" Precision="3" />
+          <Property Name="tBirthDate2" Type="DateTime" Precision="3" />
+          <Property Name="tBirthDate3" Type="DateTime" Precision="3" />
+          <Property Name="tBirthDate4" Type="DateTime" Precision="3" />
+          <Property Name="tAge1" Type="Byte" />
+          <Property Name="tAge2" Type="Byte" />
+          <Property Name="tReservationType" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="tHotelPrevious" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="tFolioPrevious" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="tEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="tCity" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="tState" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="tCompany" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
+          <Property Name="tIdProfileOpera" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="trt" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="trtN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="tcnN" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="tcl" Type="Int32" />
+          <Property Name="tgroupID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="tgroupN" Type="String" MaxLength="90" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Club" Relationship="IMModel.FK_osTransfer_Clubs" FromRole="osTransfer" ToRole="Club" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        </EntityType>
+        <Association Name="FK_osTransfer_Clubs">
+          <End Type="IMModel.Club" Role="Club" Multiplicity="0..1" />
+          <End Type="IMModel.Transfer" Role="osTransfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Club">
+              <PropertyRef Name="clID" />
+            </Principal>
+            <Dependent Role="osTransfer">
+              <PropertyRef Name="tcl" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23975,6 +24145,74 @@
                 <ScalarProperty Name="AmountUS" ColumnName="AmountUS" />
               </ComplexTypeMapping>
             </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Transfers">
+            <EntityTypeMapping TypeName="IMModel.Transfer">
+              <MappingFragment StoreEntitySet="osTransfer">
+                <ScalarProperty Name="tgroupN" ColumnName="tgroupN" />
+                <ScalarProperty Name="tgroupID" ColumnName="tgroupID" />
+                <ScalarProperty Name="tcl" ColumnName="tcl" />
+                <ScalarProperty Name="tcnN" ColumnName="tcnN" />
+                <ScalarProperty Name="trtN" ColumnName="trtN" />
+                <ScalarProperty Name="trt" ColumnName="trt" />
+                <ScalarProperty Name="tIdProfileOpera" ColumnName="tIdProfileOpera" />
+                <ScalarProperty Name="tCompany" ColumnName="tCompany" />
+                <ScalarProperty Name="tState" ColumnName="tState" />
+                <ScalarProperty Name="tCity" ColumnName="tCity" />
+                <ScalarProperty Name="tEmail" ColumnName="tEmail" />
+                <ScalarProperty Name="tFolioPrevious" ColumnName="tFolioPrevious" />
+                <ScalarProperty Name="tHotelPrevious" ColumnName="tHotelPrevious" />
+                <ScalarProperty Name="tReservationType" ColumnName="tReservationType" />
+                <ScalarProperty Name="tAge2" ColumnName="tAge2" />
+                <ScalarProperty Name="tAge1" ColumnName="tAge1" />
+                <ScalarProperty Name="tBirthDate4" ColumnName="tBirthDate4" />
+                <ScalarProperty Name="tBirthDate3" ColumnName="tBirthDate3" />
+                <ScalarProperty Name="tBirthDate2" ColumnName="tBirthDate2" />
+                <ScalarProperty Name="tBirthDate1" ColumnName="tBirthDate1" />
+                <ScalarProperty Name="tGuestRef" ColumnName="tGuestRef" />
+                <ScalarProperty Name="tDivResResNum" ColumnName="tDivResResNum" />
+                <ScalarProperty Name="tDivResLeadSource" ColumnName="tDivResLeadSource" />
+                <ScalarProperty Name="tDivResConsec" ColumnName="tDivResConsec" />
+                <ScalarProperty Name="tCCType" ColumnName="tCCType" />
+                <ScalarProperty Name="tHotel" ColumnName="tHotel" />
+                <ScalarProperty Name="tEditDT" ColumnName="tEditDT" />
+                <ScalarProperty Name="tO6" ColumnName="tO6" />
+                <ScalarProperty Name="tO5" ColumnName="tO5" />
+                <ScalarProperty Name="tO4" ColumnName="tO4" />
+                <ScalarProperty Name="tO3" ColumnName="tO3" />
+                <ScalarProperty Name="tO2" ColumnName="tO2" />
+                <ScalarProperty Name="tO1" ColumnName="tO1" />
+                <ScalarProperty Name="tcoAN" ColumnName="tcoAN" />
+                <ScalarProperty Name="tcoAID" ColumnName="tcoAID" />
+                <ScalarProperty Name="tMembershipNum" ColumnName="tMembershipNum" />
+                <ScalarProperty Name="tGuestStatus" ColumnName="tGuestStatus" />
+                <ScalarProperty Name="tocoID" ColumnName="tocoID" />
+                <ScalarProperty Name="toagID" ColumnName="toagID" />
+                <ScalarProperty Name="tla" ColumnName="tla" />
+                <ScalarProperty Name="tAvail" ColumnName="tAvail" />
+                <ScalarProperty Name="tmk" ColumnName="tmk" />
+                <ScalarProperty Name="tum" ColumnName="tum" />
+                <ScalarProperty Name="tMember" ColumnName="tMember" />
+                <ScalarProperty Name="tVIP" ColumnName="tVIP" />
+                <ScalarProperty Name="tComplim" ColumnName="tComplim" />
+                <ScalarProperty Name="tOnGroup" ColumnName="tOnGroup" />
+                <ScalarProperty Name="tagN" ColumnName="tagN" />
+                <ScalarProperty Name="tagID" ColumnName="tagID" />
+                <ScalarProperty Name="tcoN" ColumnName="tcoN" />
+                <ScalarProperty Name="tcoID" ColumnName="tcoID" />
+                <ScalarProperty Name="tCheckOutD" ColumnName="tCheckOutD" />
+                <ScalarProperty Name="tCheckInD" ColumnName="tCheckInD" />
+                <ScalarProperty Name="tPax" ColumnName="tPax" />
+                <ScalarProperty Name="tRoomNum" ColumnName="tRoomNum" />
+                <ScalarProperty Name="tLastName" ColumnName="tLastName" />
+                <ScalarProperty Name="tFirstName" ColumnName="tFirstName" />
+                <ScalarProperty Name="tHReservID" ColumnName="tHReservID" />
+                <ScalarProperty Name="tls" ColumnName="tls" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferDeleteTransfer" FunctionName="IMModel.Store.USP_OR_TransferDeleteTransfer" />
+          <FunctionImportMapping FunctionImportName="USP_OR_TransferGetTransfer" FunctionName="IMModel.Store.USP_OR_TransferGetTransfer">
           </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>

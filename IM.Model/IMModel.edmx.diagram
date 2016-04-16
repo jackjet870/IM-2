@@ -438,6 +438,8 @@
         <AssociationConnector Association="IMModel.NoticesByLeadSource" ManuallyRouted="false" />
         <AssociationConnector Association="IMModel.PersonnelRoles" ManuallyRouted="false" />
         <AssociationConnector Association="IMModel.BanksBySalesRooms" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="IMModel.Transfer" Width="1.5" PointX="15.375" PointY="52.875" />
+        <AssociationConnector Association="IMModel.FK_osTransfer_Clubs" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
