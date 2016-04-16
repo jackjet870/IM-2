@@ -45,13 +45,6 @@ namespace IM.Administrator.Forms
       }
       #endregion
 
-      #region Location Permision
-      if (App.User.HasPermission(EnumPermission.Locations, EnumPermisionLevel.ReadOnly))
-      {
-        lstMenu.Add(new { nombre = "Areas", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmAreas" });
-      }
-      #endregion
-
       #region HostInvitations Permision
       if (App.User.HasPermission(EnumPermission.HostInvitations, EnumPermisionLevel.ReadOnly))
       {
@@ -102,6 +95,7 @@ namespace IM.Administrator.Forms
       if (App.User.HasPermission(EnumPermission.FolioInvitationsOuthouse, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add(new { nombre = "Folios Invitations Outhouse", img = "pack://application:,,,/IM.Base;component/Images/Reports.ico", form = "frmFoliosInvitationsOuthouse" });
+        lstMenu.Add(new { nombre = "Reason for Cancellation of Folios", img = "pack://application:,,,/IM.Base;component/Images/Forbidden.png", form = "frmReasonCancellationFolios" });
       }
       #endregion
 
@@ -115,8 +109,10 @@ namespace IM.Administrator.Forms
       #region Locations
       if (App.User.HasPermission(EnumPermission.Locations, EnumPermisionLevel.ReadOnly))
       {
+        lstMenu.Add(new { nombre = "Areas", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmAreas" });
         lstMenu.Add(new { nombre = "Hotels", img = "pack://application:,,,/IM.Base;component/Images/Hotel.png", form = "frmHotels" });
         lstMenu.Add(new { nombre = "Locations", img = "pack://application:,,,/IM.Base;component/Images/locations.png", form = "frmLocations" });
+        lstMenu.Add(new { nombre = "Regions", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmRegions" });
       }
       #endregion
 
@@ -160,12 +156,14 @@ namespace IM.Administrator.Forms
         lstMenu.Add(new { nombre = "Permissions Levels", img = "pack://application:,,,/IM.Base;component/Images/Police.ico", form = "frmPermissionsLevels" });
         lstMenu.Add(new { nombre = "Place Types", img = "pack://application:,,,/IM.Base;component/Images/Lead_Sources.png", form = "frmPlaceTypes" });
         lstMenu.Add(new { nombre = "Rate Types", img = "pack://application:,,,/IM.Base;component/Images/Reports.ico", form = "frmRateTypes" });
+        //lstMenu.Add(new { nombre = "Reimpresion Motives", img = "pack://application:,,,/IM.Base;component/Images/Printer.png", form = "frmReimpresionMotives" });
       }
       #endregion
 
       #region Catalogos Default
       lstMenu.Add(new { nombre = "Payment Schemas", img = "pack://application:,,,/IM.Base;component/Images/Payment.png", form = "frmPaymentSchemas" });
       lstMenu.Add(new { nombre = "Payment Types", img = "pack://application:,,,/IM.Base;component/Images/Payment.png", form = "frmPaymentTypes" });
+      lstMenu.Add(new { nombre = "Refund Types", img = "pack://application:,,,/IM.Base;component/Images/Money_Bag.png", form = "frmRefundTypes" });
       #endregion
 
       lstMenuAdm.ItemsSource = lstMenu;
@@ -212,7 +210,6 @@ namespace IM.Administrator.Forms
       else//Se pone el foco en la ventana
       {
         wd.Activate();
-        //wd.Focus();
       }
     }
     #endregion
