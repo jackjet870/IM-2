@@ -477,9 +477,12 @@ namespace IM.ProcessorGeneral.Forms
       DataTable dtData = new DataTable();
       List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
       WaitMessage(true, "Loading report...");
+      filters.Add(new Tuple<string, string>("Date Range", dateRange));
+      filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
+
       switch (strReport)
       {
-        
+
         #region Reportes Bookings
 
         #region Bookings By Sales Room, Program & Time
@@ -487,8 +490,6 @@ namespace IM.ProcessorGeneral.Forms
           List<RptBookingsBySalesRoomProgramTime> lstRptBBSalesRoom = BRReportsBySalesRoom.GetRptBookingsBySalesRoomProgramTime(_frmFilter.dtmStart.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
           if (lstRptBBSalesRoom.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptBookingsBySalesRoomProgramTime(strReport, dateRangeFileNameRep, filters, lstRptBBSalesRoom);
           }
           else
@@ -500,8 +501,6 @@ namespace IM.ProcessorGeneral.Forms
           List<RptBookingsBySalesRoomProgramLeadSourceTime> lstRptBBSalesRoomPLST = BRReportsBySalesRoom.GetRptBookingsBySalesRoomProgramLeadSourceTime(_frmFilter.dtmStart.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
           if (lstRptBBSalesRoomPLST.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptBookingsBySalesRoomProgramLeadSourceTime(strReport, dateRangeFileNameRep, filters, lstRptBBSalesRoomPLST);
           }
           else
@@ -518,8 +517,6 @@ namespace IM.ProcessorGeneral.Forms
           List<RptCxC> lstRptCxC = BRReportsBySalesRoom.GetRptCxC(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
           if (lstRptCxC.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptCxC(strReport, dateRangeFileNameRep, filters, lstRptCxC);
           }
           else
@@ -531,8 +528,6 @@ namespace IM.ProcessorGeneral.Forms
           List<object> lstRptCxCDeposits = BRReportsBySalesRoom.GetRptCxCDeposits(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
           if (lstRptCxCDeposits.Any())
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptCxCDeposits(strReport, dateRangeFileNameRep, filters, lstRptCxCDeposits);
           }
           else
@@ -544,8 +539,6 @@ namespace IM.ProcessorGeneral.Forms
           List<object> lstRptCxCGifts = BRReportsBySalesRoom.GetRptCxCGifts(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
           if (lstRptCxCGifts.Any())
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptCxCGift(strReport, dateRangeFileNameRep, filters, lstRptCxCGifts);
           }
           else
@@ -557,9 +550,18 @@ namespace IM.ProcessorGeneral.Forms
           List<RptCxCNotAuthorized> lstRptCxCNotAut = BRReportsBySalesRoom.GetRptCxCNotAuthorized(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
           if (lstRptCxCNotAut.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptCxCNotAuthorized(strReport, dateRangeFileNameRep, filters, lstRptCxCNotAut);
+          }
+          else
+            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
+          break;
+        #endregion
+        #region CxC Payments
+        case "CxC Payments":
+          List<RptCxCPayments> lstRptCxCPayments = BRReportsBySalesRoom.GetRptCxCPayments(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
+          if (lstRptCxCPayments.Count > 0)
+          {
+            finfo = clsReports.ExportRptCxCPayments(strReport, dateRangeFileNameRep, filters, lstRptCxCPayments);
           }
           else
             UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
@@ -575,50 +577,39 @@ namespace IM.ProcessorGeneral.Forms
           List<object> lstRptDeposits = BRReportsBySalesRoom.GetRptDeposits(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
           if (lstRptDeposits.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptDeposits(strReport, dateRangeFileNameRep, filters, lstRptDeposits);
           }
           else
             UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           break;
         #endregion
-
         #region Burned Deposits
         case "Burned Deposits":
           List<object> lstRptBurnedDeposits = BRReportsBySalesRoom.GetRptDepositsBurned(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
           if (lstRptBurnedDeposits.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptBurnedDeposits(strReport, dateRangeFileNameRep, filters, lstRptBurnedDeposits, _frmFilter.dtmStart.Value.Value.Date, _frmFilter.dtmEnd.Value.Value.Date);
           }
           else
             UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           break;
         #endregion
-
         #region Burned Deposits by Resorts
         case "Burned Deposits by Resort":
           List<object> lstRptBurnedDepositsResort = BRReportsBySalesRoom.GetRptDepositsBurnedByResort(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
           if (lstRptBurnedDepositsResort.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptBurnedDepositsByResorts(strReport, dateRangeFileNameRep, filters, lstRptBurnedDepositsResort, _frmFilter.dtmStart.Value.Value.Date, _frmFilter.dtmEnd.Value.Value.Date);
           }
           else
             UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           break;
         #endregion
-
         #region Paid Deposits
         case "Paid Deposits":
           List<object> lstRptPaidDeposits = BRReportsBySalesRoom.GetRptPaidDeposits(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
           if (lstRptPaidDeposits.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptPaidDeposits(strReport, dateRangeFileNameRep, filters, lstRptPaidDeposits, _frmFilter.dtmStart.Value.Value.Date, _frmFilter.dtmEnd.Value.Value.Date);
           }
           else
@@ -630,14 +621,38 @@ namespace IM.ProcessorGeneral.Forms
 
         #region Reportes Gifts
 
+        #region Gifts By Category
+
+        case "Gifts By Category":
+          List<RptGiftsByCategory> lstRptGiftByCat = BRReportsBySalesRoom.GetRptGiftsByCategory(_frmFilter.dtmStart.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
+          if (lstRptGiftByCat.Count > 0)
+          {
+            finfo = clsReports.ExportRptGiftsByCategory(strReport, dateRangeFileNameRep, filters, lstRptGiftByCat);
+          }
+          else
+            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
+          break;
+
+        #endregion
+        #region Gifts By Category & Program
+
+        case "Gifts By Category & Program":
+          List<RptGiftsByCategoryProgram> lstRptGiftByCatP = BRReportsBySalesRoom.GetRptGiftsByCategoryProgram(_frmFilter.dtmStart.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
+          if (lstRptGiftByCatP.Count > 0)
+          {
+            finfo = clsReports.ExportRptGiftsByCategoryProgram(strReport, dateRangeFileNameRep, filters, lstRptGiftByCatP);
+          }
+          else
+            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
+          break;
+
+        #endregion
         #region Daily Gifts (Simple)
 
         case "Daily Gifts (Simple)":
           List<RptDailyGiftSimple> lstRptDailyG = BRReportsBySalesRoom.GetRptDailyGiftSimple(_frmFilter.dtmStart.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
           if (lstRptDailyG.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptDailyGiftSimple(strReport, dateRangeFileNameRep, filters, lstRptDailyG);
           }
           else
@@ -645,14 +660,11 @@ namespace IM.ProcessorGeneral.Forms
           break;
 
         #endregion
-
         #region Weekly Gifts (ITEMS) (Simple)
         case "Weekly Gifts (ITEMS) (Simple)":
           List<RptWeeklyGiftsItemsSimple> lstWeeklyGiftsSimple = BRReportsBySalesRoom.GetRptWeeklyGiftsItemsSimple(_frmFilter.dtmStart.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
           if (lstWeeklyGiftsSimple.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptWeeklyGiftSimple(strReport, dateRangeFileNameRep, filters, lstWeeklyGiftsSimple);
           }
           else
@@ -669,50 +681,39 @@ namespace IM.ProcessorGeneral.Forms
           List<RptGuestCeco> lstRptGuestCeco = BRReportsBySalesRoom.GetRptGuestCeco(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
           if (lstRptGuestCeco.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptGuestCeco(strReport, dateRangeFileNameRep, filters, lstRptGuestCeco);
           }
           else
             UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           break;
         #endregion
-
         #region Guests No Buyers
         case "Guests No Buyers":
           List<RptGuestsNoBuyers> lstRptGuestNoBuyers = BRReportsBySalesRoom.GetRptGuestNoBuyers(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
           if (lstRptGuestNoBuyers.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptGuestNoBuyers(strReport, dateRangeFileNameRep, filters, lstRptGuestNoBuyers);
           }
           else
             UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           break;
         #endregion
-
         #region In & Out
         case "In & Out":
           List<RptInOut> lstRptInOut = BRReportsBySalesRoom.GetRptInOut(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
           if (lstRptInOut.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptInOut(strReport, dateRangeFileNameRep, filters, lstRptInOut);
           }
           else
             UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           break;
         #endregion
-
         #region No Shows
         case "No Shows":
           List<RptGuestsNoShows> lstGuestNoShows = BRReportsBySalesRoom.GetRptGuestNoShows(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
           if (lstGuestNoShows.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptGuestNoShows(strReport, dateRangeFileNameRep, filters, lstGuestNoShows);
           }
           else
@@ -731,22 +732,17 @@ namespace IM.ProcessorGeneral.Forms
           List<RptMealTickets> lstMealTickets = BRReportsBySalesRoom.GetRptMealTickets(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)), (strReport == "Meal Tickets Cancelled") ? true : false, string.Join(",", _frmFilter.grdRatetypes.SelectedItems.OfType<RateType>().Select(c => c.raID)));
           if (lstMealTickets.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptMealTickets(strReport, dateRangeFileNameRep, filters, lstMealTickets, (strReport == "Meal Tickets by Host") ? true : false);
           }
           else
             UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           break;
         #endregion
-
         #region Meal Tickets Cost
         case "Meal Tickets with Cost":
           List<RptMealTicketsCost> lstMealTicketsCost = BRReportsBySalesRoom.GetRptMealTicketsCost(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)), string.Join(",", _frmFilter.grdRatetypes.SelectedItems.OfType<RateType>().Select(c => c.raID)));
           if (lstMealTicketsCost.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptMealTicketsCost(strReport, dateRangeFileNameRep, filters, lstMealTicketsCost);
           }
           else
@@ -763,37 +759,147 @@ namespace IM.ProcessorGeneral.Forms
           List<RptMemberships> lstMemberships = BRReportsBySalesRoom.GetRptMemberships(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
           if (lstMemberships.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptMemberships(strReport, dateRangeFileNameRep, filters, lstMemberships);
           }
           else
             UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           break;
         #endregion
-
         #region Memberships by Agency & Market
         case "Memberships by Agency & Market":
           List<RptMembershipsByAgencyMarket> lstMembershipsAgencyM = BRReportsBySalesRoom.GetRptMembershipsByAgencyMarket(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
           if (lstMembershipsAgencyM.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptMembershipsByAgencyMarket(strReport, dateRangeFileNameRep, filters, lstMembershipsAgencyM);
           }
           else
             UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           break;
         #endregion
-
-        #region Memberships by Agency & Market
+        #region Memberships by Host
         case "Memberships by Host":
           List<RptMembershipsByHost> lstMembershipsHost = BRReportsBySalesRoom.GetRptMembershipsByHost(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
           if (lstMembershipsHost.Count > 0)
           {
-            filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("SalesRoom", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
             finfo = clsReports.ExportRptMembershipsByHost(strReport, dateRangeFileNameRep, filters, lstMembershipsHost);
+          }
+          else
+            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
+          break;
+        #endregion
+
+        #endregion
+
+        #region Reportes Production
+
+        #region Production by Sales Room
+
+        case "Production by Sales Room":
+          List<RptProductionBySalesRoom> lstProductionBySR = BRReportsBySalesRoom.GetRptProductionBySalesRoom(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)), _frmFilter.chkQuinellas.IsChecked.Value, _frmFilter.chkBasedOnArrival.IsChecked.Value);
+          if (lstProductionBySR.Count > 0)
+          {
+            if (_frmFilter.chkBasedOnArrival.IsChecked.Value)
+              filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
+            if(_frmFilter.chkQuinellas.IsChecked.Value)
+              filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
+
+            finfo = clsReports.ExportRptProductionBySalesRoom(strReport, dateRangeFileNameRep, filters, lstProductionBySR);
+          }
+          else
+            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
+          break;
+
+        #endregion
+        #region Production by Sales Room & Market
+        case "Production by Sales Room & Market":
+          List<RptProductionBySalesRoomMarket> lstProductionBySRM = BRReportsBySalesRoom.GetRptProductionBySalesRoomMarket(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)), _frmFilter.chkQuinellas.IsChecked.Value, _frmFilter.chkBasedOnArrival.IsChecked.Value);
+          if (lstProductionBySRM.Count > 0)
+          {
+            if (_frmFilter.chkBasedOnArrival.IsChecked.Value)
+              filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
+            if (_frmFilter.chkQuinellas.IsChecked.Value)
+              filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
+
+            finfo = clsReports.ExportRptProductionBySalesRoomMarket(strReport, dateRangeFileNameRep, filters, lstProductionBySRM);
+          }
+          else
+            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
+          break;
+
+        #endregion
+        #region Production by Sales Room, Program, Market & Submarket
+        case "Production by Sales Room, Program, Market & Submarket":
+          List<RptProductionBySalesRoomProgramMarketSubmarket> lstProductionBySRMSm = BRReportsBySalesRoom.GetRptProductionBySalesRoomMarketSubMarket(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)), _frmFilter.chkQuinellas.IsChecked.Value, _frmFilter.chkBasedOnArrival.IsChecked.Value);
+          if (lstProductionBySRMSm.Count > 0)
+          {
+            if (_frmFilter.chkBasedOnArrival.IsChecked.Value)
+              filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
+            if (_frmFilter.chkQuinellas.IsChecked.Value)
+              filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
+
+            finfo = clsReports.ExportRptProductionBySalesRoomMarketSubMarket(strReport, dateRangeFileNameRep, filters, lstProductionBySRMSm);
+          }
+          else
+            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
+          break;
+
+        #endregion
+        #region Production by Show Program
+        case "Production by Show Program":
+          List<RptProductionByShowProgram> lstProductionByShowProgram = BRReportsBySalesRoom.GetRptProductionByShowProgram(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)), _frmFilter.chkQuinellas.IsChecked.Value, _frmFilter.chkBasedOnArrival.IsChecked.Value);
+          if (lstProductionByShowProgram.Count > 0)
+          {
+            if (_frmFilter.chkBasedOnArrival.IsChecked.Value)
+              filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
+            if (_frmFilter.chkQuinellas.IsChecked.Value)
+              filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
+
+            finfo = clsReports.ExportRptProductionByShowProgram(strReport, dateRangeFileNameRep, filters, lstProductionByShowProgram);
+          }
+          else
+            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
+          break;
+
+        #endregion
+        #region Production by Show, Program & Program
+        case "Production by Show Program & Program":
+          List<RptProductionByShowProgramProgram> lstProductionByShowProgramPro = BRReportsBySalesRoom.GetRptProductionByShowProgramProgram(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)), _frmFilter.chkQuinellas.IsChecked.Value, _frmFilter.chkBasedOnArrival.IsChecked.Value);
+          if (lstProductionByShowProgramPro.Count > 0)
+          {
+            if (_frmFilter.chkBasedOnArrival.IsChecked.Value)
+              filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
+            if (_frmFilter.chkQuinellas.IsChecked.Value)
+              filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
+
+            finfo = clsReports.ExportRptProductionByShowProgramProgram(strReport, dateRangeFileNameRep, filters, lstProductionByShowProgramPro);
+          }
+          else
+            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
+          break;
+
+        #endregion
+
+        #endregion
+
+        #region Reportes Taxis
+
+        #region Taxis In
+        case "Taxis In":
+          List<RptTaxisIn> lstTaxisIn = BRReportsBySalesRoom.GetRptTaxisIn(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
+          if (lstTaxisIn.Count > 0)
+          {
+            finfo = clsReports.ExportRptTaxiIn(strReport, dateRangeFileNameRep, filters, lstTaxisIn);
+          }
+          else
+            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
+          break;
+        #endregion
+        #region Taxis Out
+        case "Taxis Out":
+          List<RptTaxisOut> lstTaxisOut = BRReportsBySalesRoom.GetRptTaxisOut(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
+          if (lstTaxisOut.Count > 0)
+          {
+            finfo = clsReports.ExportRptTaxiOut(strReport, dateRangeFileNameRep, filters, lstTaxisOut);
           }
           else
             UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);

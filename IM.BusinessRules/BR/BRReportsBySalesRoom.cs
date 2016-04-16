@@ -147,6 +147,27 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    #region GetRptCxCPayments
+    /// <summary>
+    /// Obtiene el reporte de CxC Payments por Sala de ventas y un rango de fechas..
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="dtmEnd"></param>
+    /// <param name="salesRooms"></param>
+    /// <returns> List<RptCxCPayments> </returns>
+    /// <history>
+    /// [edgrodriguez] 16/Abr/2016 Created
+    /// </history>
+    public static List<RptCxCPayments> GetRptCxCPayments(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        //Obtenemos los recibos de regalo.
+        return dbContext.USP_OR_RptCxCPayments(dtmStart, dtmEnd, salesRooms).ToList();
+      }
+    }
+    #endregion
+
     #endregion
 
     #region Deposits
@@ -302,7 +323,7 @@ namespace IM.BusinessRules.BR
         var paymentsType = (from gRcpt in giftReceipts
                             join payTyp in dbContext.PaymentTypes on gRcpt.grpt equals payTyp.ptID
                             select payTyp).Distinct().ToList();
-        
+
         return new List<object> { giftReceipts, currencies, paymentsType };
       }
     }
@@ -311,6 +332,34 @@ namespace IM.BusinessRules.BR
     #endregion
 
     #region Gifts
+
+    #region GetRptGiftsByCategory
+
+    public static List<RptGiftsByCategory> GetRptGiftsByCategory(DateTime? dtmStart, string salesRooms)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        //Obtenemos los recibos de regalo.
+        var DailyGiftByCat = dbContext.USP_OR_RptGiftsByCategory(dtmStart, dtmStart.Value.AddDays(6).Date, salesRooms).ToList();
+        return DailyGiftByCat;
+      }
+    }
+
+    #endregion
+
+    #region GetRptGiftsByCategoryProgram
+
+    public static List<RptGiftsByCategoryProgram> GetRptGiftsByCategoryProgram(DateTime? dtmStart, string salesRooms)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        //Obtenemos los recibos de regalo.
+        var DailyGiftByCatP = dbContext.USP_OR_RptGiftsByCategoryProgram(dtmStart, dtmStart.Value.AddDays(6).Date, salesRooms).ToList();
+        return DailyGiftByCatP;
+      }
+    }
+
+    #endregion
 
     #region GetRptDailyGiftSimple
     /// <summary>
@@ -562,5 +611,172 @@ namespace IM.BusinessRules.BR
 
     #endregion
 
+    #region Production
+
+    #region GetRptProductionBySalesRoom
+    /// <summary>
+    /// Obtiene el reporte Production By SalesRoom.
+    /// </summary>
+    /// <param name="dtmStart">Fecha Inicial</param>
+    /// <param name="dtmEnd">Fecha Final</param>
+    /// <param name="salesRooms"> Filtro de Sales Room</param>
+    /// <param name="basedOnArrivals"> Filtro de Arrivals</param>
+    /// <param name="considerQuinellas">Filtro de Quinellas</param>
+    /// <returns> List<RptProductionBySalesRoom> </returns>
+    /// <history>
+    /// [edgrodriguez] 15/Abr/2016 Created.
+    /// </history>
+    public static List<RptProductionBySalesRoom> GetRptProductionBySalesRoom(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL", bool considerQuinellas = false, bool basedOnArrivals = false)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.Database.CommandTimeout = Properties.Settings.Default.UPS_OR_RptProductionBySalesRoom;
+        var lstProductionBySR = dbContext.USP_OR_RptProductionBySalesRoom(dtmStart, dtmEnd, salesRooms, considerQuinellas, basedOnArrivals).ToList();
+        return lstProductionBySR;
+      }
+    }
+    #endregion
+
+    #region GetRptProductionBySalesRoomMarket
+    /// <summary>
+    /// Obtiene el reporte Production By SalesRoom & Market.
+    /// </summary>
+    /// <param name="dtmStart">Fecha Inicial</param>
+    /// <param name="dtmEnd">Fecha Final</param>
+    /// <param name="salesRooms"> Filtro de Sales Room</param>
+    /// <param name="basedOnArrivals"> Filtro de Arrivals</param>
+    /// <param name="considerQuinellas">Filtro de Quinellas</param>
+    /// <returns> List<RptProductionBySalesRoomMarket> </returns>
+    /// <history>
+    /// [edgrodriguez] 15/Abr/2016 Created.
+    /// </history>
+    public static List<RptProductionBySalesRoomMarket> GetRptProductionBySalesRoomMarket(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL", bool considerQuinellas = false, bool basedOnArrivals = false)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.Database.CommandTimeout = Properties.Settings.Default.UPS_OR_RptProductionBySalesRoomMarket;
+        var lstProductionBySRM = dbContext.USP_OR_RptProductionBySalesRoomMarket(dtmStart, dtmEnd, salesRooms, considerQuinellas, basedOnArrivals).ToList();
+        return lstProductionBySRM;
+      }
+    }
+    #endregion
+
+    #region GetRptProductionBySalesRoomMarketSubMarket
+    /// <summary>
+    /// Obtiene el reporte Production By SalesRoom,Market & Submarket.
+    /// </summary>
+    /// <param name="dtmStart">Fecha Inicial</param>
+    /// <param name="dtmEnd">Fecha Final</param>
+    /// <param name="salesRooms"> Filtro de Sales Room</param>
+    /// <param name="basedOnArrivals"> Filtro de Arrivals</param>
+    /// <param name="considerQuinellas">Filtro de Quinellas</param>
+    /// <returns> List<RptProductionBySalesRoomProgramMarketSubmarket> </returns>
+    /// <history>
+    /// [edgrodriguez] 15/Abr/2016 Created.
+    /// </history>
+    public static List<RptProductionBySalesRoomProgramMarketSubmarket> GetRptProductionBySalesRoomMarketSubMarket(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL", bool considerQuinellas = false, bool basedOnArrivals = false)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.Database.CommandTimeout = Properties.Settings.Default.UPS_OR_RptProductionBySalesRoomMarket;
+        var lstProductionBySRMSm = dbContext.USP_OR_RptProductionBySalesRoomProgramMarketSubmarket(dtmStart, dtmEnd, salesRooms, considerQuinellas, basedOnArrivals).ToList();
+        return lstProductionBySRMSm;
+      }
+    }
+    #endregion
+
+    #region GetRptProductionByShowProgram
+    /// <summary>
+    /// Obtiene el reporte Production By Show & Program.
+    /// </summary>
+    /// <param name="dtmStart">Fecha Inicial</param>
+    /// <param name="dtmEnd">Fecha Final</param>
+    /// <param name="salesRooms"> Filtro de Sales Room</param>
+    /// <param name="basedOnArrivals"> Filtro de Arrivals</param>
+    /// <param name="considerQuinellas">Filtro de Quinellas</param>
+    /// <returns> List<RptProductionByShowProgram> </returns>
+    /// <history>
+    /// [edgrodriguez] 15/Abr/2016 Created.
+    /// </history>
+    public static List<RptProductionByShowProgram> GetRptProductionByShowProgram(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL", bool considerQuinellas = false, bool basedOnArrivals = false)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.Database.CommandTimeout = Properties.Settings.Default.UPS_OR_RptProductionBySalesRoomMarket;
+        var lstProductionByShowP = dbContext.USP_OR_RptProductionByShowProgram(dtmStart, dtmEnd, salesRooms, considerQuinellas, basedOnArrivals).ToList();
+        return lstProductionByShowP;
+      }
+    }
+    #endregion
+
+    #region GetRptProductionByShowProgramProgram
+    /// <summary>
+    /// Obtiene el reporte Production By Show,Program & Program.
+    /// </summary>
+    /// <param name="dtmStart">Fecha Inicial</param>
+    /// <param name="dtmEnd">Fecha Final</param>
+    /// <param name="salesRooms"> Filtro de Sales Room</param>
+    /// <param name="basedOnArrivals"> Filtro de Arrivals</param>
+    /// <param name="considerQuinellas">Filtro de Quinellas</param>
+    /// <returns> List<RptProductionByShowProgramProgram> </returns>
+    /// <history>
+    /// [edgrodriguez] 15/Abr/2016 Created.
+    /// </history>
+    public static List<RptProductionByShowProgramProgram> GetRptProductionByShowProgramProgram(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL", bool considerQuinellas = false, bool basedOnArrivals = false)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.Database.CommandTimeout = Properties.Settings.Default.UPS_OR_RptProductionBySalesRoomMarket;
+        var lstProductionByShowPP = dbContext.USP_OR_RptProductionByShowProgramProgram(dtmStart, dtmEnd, salesRooms, considerQuinellas, basedOnArrivals).ToList();
+        return lstProductionByShowPP;
+      }
+    }
+    #endregion
+
+    #endregion
+
+    #region Taxis
+
+    #region GetRptTaxisIn
+    /// <summary>
+    /// Obtiene el reporte Taxis In.
+    /// </summary>
+    /// <param name="dtmStart">Fecha Inicial</param>
+    /// <param name="dtmEnd">Fecha Final</param>
+    /// <param name="salesRooms"> Filtro de Sales Room</param>
+    /// <history>
+    ///   [edgrodriguez] 16/Abr/2016 Created.
+    /// </history>
+    public static List<RptTaxisIn> GetRptTaxisIn(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstTaxisIn = dbContext.USP_OR_RptTaxisIn(dtmStart, dtmEnd, salesRooms).ToList();
+        return lstTaxisIn;
+      }
+    }
+    #endregion
+
+    #region GetRptTaxisOut
+    /// <summary>
+    /// Obtiene el reporte Taxis Out.
+    /// </summary>
+    /// <param name="dtmStart">Fecha Inicial</param>
+    /// <param name="dtmEnd">Fecha Final</param>
+    /// <param name="salesRooms"> Filtro de Sales Room</param>
+    /// <history>
+    ///   [edgrodriguez] 16/Abr/2016 Created.
+    /// </history>
+    public static List<RptTaxisOut> GetRptTaxisOut(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstTaxisOut = dbContext.USP_OR_RptTaxisOut(dtmStart, dtmEnd, salesRooms).ToList();
+        return lstTaxisOut;
+      }
+    }
+    #endregion
+
+    #endregion
   }
 }

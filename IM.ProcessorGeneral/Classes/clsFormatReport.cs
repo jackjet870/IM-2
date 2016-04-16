@@ -210,6 +210,42 @@ new ExcelFormatTable() { Title = "CxC", PropertyName = "CxC", Format = EnumForma
 
     #endregion
 
+    #region rptCxCPayments
+
+    /// <summary>
+    /// Formato para el reporte CxC Payments
+    /// </summary>
+    /// <returns> List<ExcelFormatTable> </returns>
+    /// <history>
+    /// [edgrodriguez] 16/Abr/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> rptCxCPayments()
+    {
+      return new List<ExcelFormatTable>() {
+new ExcelFormatTable() { Title = "LS", PropertyName = "grls", Order = 1, IsGroup = true },
+new ExcelFormatTable() { Title = "Rcpt", PropertyName = "grID", Axis = ePivotFieldAxis.Row, Order = 1 },
+new ExcelFormatTable() { Title = "Rcpt D", PropertyName = "grD", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 2 },
+new ExcelFormatTable() { Title = "PR", PropertyName = "grpe", Axis = ePivotFieldAxis.Row, Order = 3 },
+new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN", Axis = ePivotFieldAxis.Row, Order = 4 },
+new ExcelFormatTable() { Title = "Pay USD", PropertyName = "AmountToPayUSD", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 5 },
+new ExcelFormatTable() { Title = "Pay MXN", PropertyName = "AmountToPayMXN", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 6 },
+new ExcelFormatTable() { Title = "Paid USD", PropertyName = "AmountPaidUSD", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 7 },
+new ExcelFormatTable() { Title = "Paid MXN", PropertyName = "AmountPaidMXN", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 8 },
+new ExcelFormatTable() { Title = "Bal USD", PropertyName = "BalanceUSD", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 9 },
+new ExcelFormatTable() { Title = "Bal MXN", PropertyName = "BalanceMXN", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 10 },
+new ExcelFormatTable() { Title = "GUID", PropertyName = "grgu", Axis = ePivotFieldAxis.Row, Order = 11 },
+new ExcelFormatTable() { Title = "Reserv", PropertyName = "guHReservID", Axis = ePivotFieldAxis.Row, Order = 12 },
+new ExcelFormatTable() { Title = "Out Inv", PropertyName = "guOutInvitNum", Axis = ePivotFieldAxis.Row, Order = 13 },
+new ExcelFormatTable() { Title = "Payment Date", PropertyName = "cxD", Format = EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 14 },
+new ExcelFormatTable() { Title = "Rec By", PropertyName = "cxReceivedBy", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 15 },
+new ExcelFormatTable() { Title = "Rec Name", PropertyName = "ReceivedByName", Axis = ePivotFieldAxis.Row, Order = 16 },
+new ExcelFormatTable() { Title = "Amt USD", PropertyName = "AmountUSD", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 17 },
+new ExcelFormatTable() { Title = "Amt MXN", PropertyName = "AmountMXN", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 18 }
+      };
+    }
+
+    #endregion
+
     #endregion
 
     #region Deposits
@@ -356,6 +392,55 @@ new ExcelFormatTable() { Title = "Burned", PropertyName = "grDepositTwisted", Fo
     #endregion
 
     #region Gift
+
+    #region RptGiftsByCategory
+
+    /// <summary>
+    /// Formato para el reporte Gifts By Category
+    /// </summary>
+    /// <returns> List<ExcelFormatTable> </returns>
+    /// <history>
+    /// [edgrodriguez] 15/Abr/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> RptGiftsByCategory()
+    {
+      return new List<ExcelFormatTable>() {
+new ExcelFormatTable() { Title = "Gift", PropertyName = "Gift", Axis = ePivotFieldAxis.Row, Order = 1 },
+new ExcelFormatTable() { Title = "Total Quantity", PropertyName = "TotalQty", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 2, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Unit Cost", PropertyName = "UnitCost", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 3, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Total Cost", PropertyName = "TotalCost",Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 4, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Quantity", PropertyName = "Quantity", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 1, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum },
+new ExcelFormatTable() { Title = "Day", PropertyName = "Day", Axis = ePivotFieldAxis.Column, Order = 1 },
+new ExcelFormatTable() { Title = "Category", PropertyName = "Category",Axis = ePivotFieldAxis.Row, IsGroup = true, Order = 5 }
+      };
+    }
+
+    #endregion
+
+    #region RptGiftsByCategoryProgram
+
+    /// <summary>
+    /// Formato para el reporte Gifts By Category
+    /// </summary>
+    /// <returns> List<ExcelFormatTable> </returns>
+    /// <history>
+    /// [edgrodriguez] 15/Abr/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> RptGiftsByCategoryProgram()
+    {
+      return new List<ExcelFormatTable>() {
+new ExcelFormatTable() { Title = "Gift", PropertyName = "Gift", Axis = ePivotFieldAxis.Row, Order = 1 },
+new ExcelFormatTable() { Title = "Total Quantity", PropertyName = "TotalQty", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 2, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Unit Cost", PropertyName = "UnitCost", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 3, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Total Cost", PropertyName = "TotalCost",Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 4, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Quantity", PropertyName = "Quantity", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 1, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum },
+new ExcelFormatTable() { Title = "Day", PropertyName = "Day", Axis = ePivotFieldAxis.Column, Order = 1 },
+new ExcelFormatTable() { Title = "Program", PropertyName = "Program",Axis = ePivotFieldAxis.Row, IsGroup = true, Order = 1 },
+new ExcelFormatTable() { Title = "Category", PropertyName = "Category",Axis = ePivotFieldAxis.Row, IsGroup = true, Order = 2 }
+      };
+    }
+
+    #endregion
 
     #region RptDailyGiftSimple
 
@@ -729,8 +814,8 @@ new ExcelFormatTable() { Title = "Proc Vol", PropertyName = "ProcAmount", Format
 new ExcelFormatTable() { Title = "OOP Vol", PropertyName = "OOPAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 11, SubTotalFunctions = eSubTotalFunctions.Sum },
 new ExcelFormatTable() { Title = "Canc Vol", PropertyName = "CancAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 12, SubTotalFunctions = eSubTotalFunctions.Sum  },
 new ExcelFormatTable() { Title = "Pend Vol", PropertyName = "PendAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 14, SubTotalFunctions = eSubTotalFunctions.Sum  },
-new ExcelFormatTable() { Title = "% DP", PropertyName = "saDownPaymentPercentage", Format = EnumFormatTypeExcel.Percent, Axis = ePivotFieldAxis.Row, Order = 15, SubTotalFunctions = eSubTotalFunctions.Avg },
-new ExcelFormatTable() { Title = "% EDP", PropertyName = "saDownPaymentPaidPercentage", Format = EnumFormatTypeExcel.Percent, Axis = ePivotFieldAxis.Row, Order = 17, SubTotalFunctions = eSubTotalFunctions.Avg },
+new ExcelFormatTable() { Title = "% DP", PropertyName = "saDownPaymentPercentage",IsCalculated = true, Formula = "IF([ProcAmount]=0,0,[saDownPayment]/[ProcAmount])" , Format = EnumFormatTypeExcel.Percent, Axis = ePivotFieldAxis.Row, Order = 15, SubTotalFunctions = eSubTotalFunctions.Avg },
+new ExcelFormatTable() { Title = "% EDP", PropertyName = "saDownPaymentPaidPercentage", IsCalculated = true, Formula = "IF([ProcAmount]=0,0,[saDownPaymentPaid]/[ProcAmount])", Format = EnumFormatTypeExcel.Percent, Axis = ePivotFieldAxis.Row, Order = 17, SubTotalFunctions = eSubTotalFunctions.Avg },
 new ExcelFormatTable() { Title = "Comments", PropertyName = "saComments", Axis = ePivotFieldAxis.Row, Order = 19 },
 new ExcelFormatTable() { Title = "Total Proc", PropertyName = "TotalProcAmount", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 13, SubTotalFunctions = eSubTotalFunctions.Sum },
 new ExcelFormatTable() { Title = "$ DP", PropertyName = "saDownPayment", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 16, SubTotalFunctions = eSubTotalFunctions.Sum  },
@@ -776,6 +861,226 @@ new ExcelFormatTable() { Title = "Total Proc", PropertyName = "TotalProcAmount",
     #endregion
 
     #endregion
+
+    #region Production
+
+    #region RptProductionBySalesRoom
+
+    /// <summary>
+    /// Formato para el reporte Production by SalesRoom
+    /// </summary>
+    /// <returns> List<ExcelFormatTable> </returns>
+    /// <history>
+    /// [edgrodriguez] 15/Abr/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> RptProductionBySalesRoom()
+    {
+      return new List<ExcelFormatTable>() {
+new ExcelFormatTable() { Title = "Sales Room", PropertyName = "SalesRoom", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 1 },
+new ExcelFormatTable() { Title = "Books", PropertyName = "GrossBooks", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 2, Function = DataFieldFunctions.Sum },
+new ExcelFormatTable() { Title = "Directs", PropertyName = "Directs", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 3, Function = DataFieldFunctions.Sum },
+new ExcelFormatTable() { Title = "T Books", PropertyName = "Books", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 4, Function = DataFieldFunctions.Sum },
+new ExcelFormatTable() { Title = "Shows", PropertyName = "GrossShows", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 5, Function = DataFieldFunctions.Sum },
+new ExcelFormatTable() { Title = "T Shows", PropertyName = "Shows", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 6, Function = DataFieldFunctions.Sum },
+new ExcelFormatTable() { Title = "Sh %", PropertyName = "ShowsFactor", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Percent, Order = 7, IsCalculated = true, Formula="IF([GrossBooks]=0,0,[GrossShows]/[GrossBooks])" },
+new ExcelFormatTable() { Title = "Sales", PropertyName = "Sales", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 8, Function = DataFieldFunctions.Sum },
+new ExcelFormatTable() { Title = "Amount", PropertyName = "SalesAmount", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 9, Function = DataFieldFunctions.Sum },
+new ExcelFormatTable() { Title = "Ci %", PropertyName = "ClosingFactor", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Percent, Order = 11, IsCalculated = true, Formula="IF([Shows]=0,0,[Sales]/[Shows])" },
+new ExcelFormatTable() { Title = "Eff", PropertyName = "Efficiency", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 10, IsCalculated = true, Formula="IF([Shows]=0,0,[SalesAmount]/[Shows])" },
+new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 12, IsCalculated = true, Formula="IF([Sales]=0,0,[SalesAmount]/[Sales])" }
+      };
+    }
+
+    #endregion
+
+    #region RptProductionBySalesRoomMarket
+
+    /// <summary>
+    /// Formato para el reporte Production by SalesRoom & Market
+    /// </summary>
+    /// <returns> List<ExcelFormatTable> </returns>
+    /// <history>
+    /// [edgrodriguez] 15/Abr/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> RptProductionBySalesRoomMarket()
+    {
+      return new List<ExcelFormatTable>() {
+new ExcelFormatTable() { Title = "Sales Room", PropertyName = "SalesRoom", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 1 },
+new ExcelFormatTable() { Title = "Market", PropertyName = "Market", Order = 1, IsGroup = true },
+new ExcelFormatTable() { Title = "Books", PropertyName = "GrossBooks", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 2, SubTotalFunctions= eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Directs", PropertyName = "Directs", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 3, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "T Books", PropertyName = "Books", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 4, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Shows", PropertyName = "GrossShows", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 5, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "T Shows", PropertyName = "Shows", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 6, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Sh %", PropertyName = "ShowsFactor", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Percent, Order = 7, IsCalculated = true, Formula="IF([GrossBooks]=0,0,[GrossShows]/[GrossBooks])" },
+new ExcelFormatTable() { Title = "Sales", PropertyName = "Sales", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 8, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Amount", PropertyName = "SalesAmount", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 9, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Ci %", PropertyName = "ClosingFactor", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Percent, Order = 11, IsCalculated = true, Formula="IF([Shows]=0,0,[Sales]/[Shows])" },
+new ExcelFormatTable() { Title = "Eff", PropertyName = "Efficiency", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 10, IsCalculated = true, Formula="IF([Shows]=0,0,[SalesAmount]/[Shows])" },
+new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 12, IsCalculated = true, Formula="IF([Sales]=0,0,[SalesAmount]/[Sales])" }
+      };
+    }
+
+    #endregion
+
+    #region RptProductionBySalesRoomMarketSubMarket
+
+    /// <summary>
+    /// Formato para el reporte Production by SalesRoom,Market & Submarket
+    /// </summary>
+    /// <returns> List<ExcelFormatTable> </returns>
+    /// <history>
+    /// [edgrodriguez] 15/Abr/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> RptProductionBySalesRoomMarketSubMarket()
+    {
+      return new List<ExcelFormatTable>() {
+new ExcelFormatTable() { Title = "Sales Room", PropertyName = "SalesRoom", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 1 },
+new ExcelFormatTable() { Title = "Program", PropertyName = "Program", Order = 1, IsGroup = true },
+new ExcelFormatTable() { Title = "Market", PropertyName = "Market", Order = 2, IsGroup = true },
+new ExcelFormatTable() { Title = "Submarket", PropertyName = "Submarket", Order = 3, IsGroup = true },
+new ExcelFormatTable() { Title = "Books", PropertyName = "GrossBooks", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 2, SubTotalFunctions= eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Directs", PropertyName = "Directs", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 3, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "T Books", PropertyName = "Books", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 4, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Shows", PropertyName = "GrossShows", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 5, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "T Shows", PropertyName = "Shows", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 6, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Sh %", PropertyName = "ShowsFactor", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Percent, Order = 7, IsCalculated = true, Formula="IF([GrossBooks]=0,0,[GrossShows]/[GrossBooks])" },
+new ExcelFormatTable() { Title = "Sales", PropertyName = "Sales", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 8, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Amount", PropertyName = "SalesAmount", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 9, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Ci %", PropertyName = "ClosingFactor", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Percent, Order = 11, IsCalculated = true, Formula="IF([Shows]=0,0,[Sales]/[Shows])" },
+new ExcelFormatTable() { Title = "Eff", PropertyName = "Efficiency", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 10, IsCalculated = true, Formula="IF([Shows]=0,0,[SalesAmount]/[Shows])" },
+new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 12, IsCalculated = true, Formula="IF([Sales]=0,0,[SalesAmount]/[Sales])" }
+      };
+    }
+
+    #endregion
+
+    #region RptProductionByShowProgram
+
+    /// <summary>
+    /// Formato para el reporte Production by Show & Program
+    /// </summary>
+    /// <returns> List<ExcelFormatTable> </returns>
+    /// <history>
+    /// [edgrodriguez] 15/Abr/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> RptProductionByShowProgram()
+    {
+      return new List<ExcelFormatTable>() {
+new ExcelFormatTable() { Title = "Show Program Category", PropertyName = "ShowProgramCategory", Order = 1, IsGroup = true },
+new ExcelFormatTable() { Title = "Show Program", PropertyName = "ShowProgram", Axis = ePivotFieldAxis.Row, Order = 1 },
+new ExcelFormatTable() { Title = "Books", PropertyName = "GrossBooks", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 2, SubTotalFunctions= eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Directs", PropertyName = "Directs", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 3, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "T Books", PropertyName = "Books", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 4, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Shows", PropertyName = "GrossShows", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 5, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "T Shows", PropertyName = "Shows", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 6, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Sh %", PropertyName = "ShowsFactor", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Percent, Order = 7, IsCalculated = true, Formula="IF([GrossBooks]=0,0,[GrossShows]/[GrossBooks])" },
+new ExcelFormatTable() { Title = "Sales", PropertyName = "Sales", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 8, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Amount", PropertyName = "SalesAmount", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 9, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Ci %", PropertyName = "ClosingFactor", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Percent, Order = 11, IsCalculated = true, Formula="IF([Shows]=0,0,[Sales]/[Shows])" },
+new ExcelFormatTable() { Title = "Eff", PropertyName = "Efficiency", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 10, IsCalculated = true, Formula="IF([Shows]=0,0,[SalesAmount]/[Shows])" },
+new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 12, IsCalculated = true, Formula="IF([Sales]=0,0,[SalesAmount]/[Sales])" }
+      };
+    }
+
+    #endregion
+
+    #region RptProductionByShowProgramProgram
+
+    /// <summary>
+    /// Formato para el reporte Production by Show,Program & Program
+    /// </summary>
+    /// <returns> List<ExcelFormatTable> </returns>
+    /// <history>
+    /// [edgrodriguez] 15/Abr/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> RptProductionByShowProgramProgram()
+    {
+      return new List<ExcelFormatTable>() {
+new ExcelFormatTable() { Title = "Program", PropertyName = "Program", Order = 1, IsGroup = true },
+new ExcelFormatTable() { Title = "Show Program Category", PropertyName = "ShowProgramCategory", Order = 2, IsGroup = true },
+new ExcelFormatTable() { Title = "Show Program", PropertyName = "ShowProgram", Axis = ePivotFieldAxis.Row, Order = 1 },
+new ExcelFormatTable() { Title = "Books", PropertyName = "GrossBooks", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 2, SubTotalFunctions= eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Directs", PropertyName = "Directs", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 3, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "T Books", PropertyName = "Books", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 4, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Shows", PropertyName = "GrossShows", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 5, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "T Shows", PropertyName = "Shows", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 6, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Sh %", PropertyName = "ShowsFactor", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Percent, Order = 7, IsCalculated = true, Formula="IF([GrossBooks]=0,0,[GrossShows]/[GrossBooks])" },
+new ExcelFormatTable() { Title = "Sales", PropertyName = "Sales", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 8, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Amount", PropertyName = "SalesAmount", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 9, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Ci %", PropertyName = "ClosingFactor", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Percent, Order = 11, IsCalculated = true, Formula="IF([Shows]=0,0,[Sales]/[Shows])" },
+new ExcelFormatTable() { Title = "Eff", PropertyName = "Efficiency", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 10, IsCalculated = true, Formula="IF([Shows]=0,0,[SalesAmount]/[Shows])" },
+new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 12, IsCalculated = true, Formula="IF([Sales]=0,0,[SalesAmount]/[Sales])" }
+      };
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Taxis
+
+    #region RptTaxisIn
+
+    /// <summary>
+    /// Formato para el reporte Taxis In
+    /// </summary>
+    /// <returns> List<ExcelFormatTable> </returns>
+    /// <history>
+    /// [edgrodriguez] 16/Abr/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> RptTaxisIn()
+    {
+      return new List<ExcelFormatTable>() {
+new ExcelFormatTable() { Title = "Show Type", PropertyName = "ShowType", Order = 1, IsGroup = true },
+new ExcelFormatTable() { Title = "GUID", PropertyName = "guID", Axis = ePivotFieldAxis.Row, Order = 1 },
+new ExcelFormatTable() { Title = "Loc", PropertyName = "guloInvit", Axis = ePivotFieldAxis.Row, Order = 2 },
+new ExcelFormatTable() { Title = "Date", PropertyName = "guShowD", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Date, Order = 3 },
+new ExcelFormatTable() { Title = "Last Name", PropertyName = "guGuest", Axis = ePivotFieldAxis.Row, Order = 4 },
+new ExcelFormatTable() { Title = "Pax", PropertyName = "guPax", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.DecimalNumber, Order = 5, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Adults", PropertyName = "Adults", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 6, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Minors", PropertyName = "Minors", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Number, Order = 7, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Hotel", PropertyName = "guHotel", Axis = ePivotFieldAxis.Row, Order = 8 },
+new ExcelFormatTable() { Title = "PR", PropertyName = "guPRInvit1", Axis = ePivotFieldAxis.Row, Order = 9 },
+new ExcelFormatTable() { Title = "Taxi", PropertyName = "guTaxiIn", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.DecimalNumber, Order = 10, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Host", PropertyName = "guEntryHost", Axis = ePivotFieldAxis.Row, Order = 11 },
+new ExcelFormatTable() { Title = "Comments", PropertyName = "guWComments", Axis = ePivotFieldAxis.Row, Order = 12 }
+      };
+    }
+
+    #endregion
+
+    #region RptTaxisOut
+
+    /// <summary>
+    /// Formato para el reporte Taxis Out
+    /// </summary>
+    /// <returns> List<ExcelFormatTable> </returns>
+    /// <history>
+    /// [edgrodriguez] 16/Abr/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> RptTaxisOut()
+    {
+      return new List<ExcelFormatTable>() {
+new ExcelFormatTable() { Title = "Ch B", PropertyName = "grID", Axis = ePivotFieldAxis.Row, Order =1 },
+new ExcelFormatTable() { Title = "Guest Name", PropertyName = "grGuest", Axis = ePivotFieldAxis.Row, Order = 5 },
+new ExcelFormatTable() { Title = "LS", PropertyName = "grlo", Axis = ePivotFieldAxis.Row, Order = 4 },
+new ExcelFormatTable() { Title = "Hotel", PropertyName = "grHotel", Axis = ePivotFieldAxis.Row, Order = 7 },
+new ExcelFormatTable() { Title = "Pax", PropertyName = "grPax", Axis = ePivotFieldAxis.Row, Order = 6, Format = EnumFormatTypeExcel.DecimalNumber, Function=DataFieldFunctions.Sum },
+new ExcelFormatTable() { Title = "Date", PropertyName = "grD", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Date, Order = 3 },
+new ExcelFormatTable() { Title = "PR", PropertyName = "grpe", Axis = ePivotFieldAxis.Row, Order = 8 },
+new ExcelFormatTable() { Title = "Taxi", PropertyName = "grTaxiOut", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.DecimalNumber, Order = 9, Function = DataFieldFunctions.Sum },
+new ExcelFormatTable() { Title = "Taxi Diff", PropertyName = "grTaxiOutDiff", Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.DecimalNumber, Order = 10, Function = DataFieldFunctions.Sum },
+new ExcelFormatTable() { Title = "Chb PP", PropertyName = "grNum", Axis = ePivotFieldAxis.Row, Order = 2 },
+new ExcelFormatTable() { Title = "Host", PropertyName = "grHost", Axis = ePivotFieldAxis.Row, Order = 11 },
+new ExcelFormatTable() { Title = "Comments", PropertyName = "guWComments", Axis = ePivotFieldAxis.Row, Order = 12 }
+      };
+    }
+
+    #endregion
+
+    #endregion
+
 
     #endregion
 

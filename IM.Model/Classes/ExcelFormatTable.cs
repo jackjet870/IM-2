@@ -11,6 +11,8 @@ namespace IM.Model.Classes
   /// <history>
   /// [erosado]  14/03/2016  Created
   /// [aalcocer] 28/03/2016 Modified. Se agregan mas propiedades y se establecen por default algunas propiedades
+  /// [edgrodriguez] 12/04/2016 Modified. Se agregan las propiedaes IsGroup, AggregateFunction
+  /// [edgrodriguez] 15/04/2016 Modified. Se agrega la propiedad IsCalculated
   /// </history>
   public class ExcelFormatTable
   {
@@ -31,5 +33,6 @@ namespace IM.Model.Classes
     public string SuperHeader { get; set; }
     public bool IsGroup { get; set; } = false;
     public DataFieldFunctions AggregateFunction { get; set; } = DataFieldFunctions.None;
+    public bool IsCalculated { get; set; }
   }
 }

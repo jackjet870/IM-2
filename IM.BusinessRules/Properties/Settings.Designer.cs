@@ -94,5 +94,41 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_RptPRStats"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int UPS_OR_RptProductionBySalesRoom {
+            get {
+                return ((int)(this["UPS_OR_RptProductionBySalesRoom"]));
+            }
+            set {
+                this["UPS_OR_RptProductionBySalesRoom"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int UPS_OR_RptProductionBySalesRoomMarket {
+            get {
+                return ((int)(this["UPS_OR_RptProductionBySalesRoomMarket"]));
+            }
+            set {
+                this["UPS_OR_RptProductionBySalesRoomMarket"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("90")]
+        public int UPS_OR_RptProductionBySalesRoomMarketSubmarket {
+            get {
+                return ((int)(this["UPS_OR_RptProductionBySalesRoomMarketSubmarket"]));
+            }
+            set {
+                this["UPS_OR_RptProductionBySalesRoomMarketSubmarket"] = value;
+            }
+        }
     }
 }

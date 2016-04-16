@@ -473,7 +473,14 @@ namespace IM.Base.Helpers
             formatTable.Where(c => c.Axis == ePivotFieldAxis.Row && !c.IsGroup)
             .OrderBy(row => row.Order).ToList().ForEach(row =>
             {
-              wsData.Cells[RowNumber, drColumn].Value = dr[row.PropertyName];
+              if (!row.IsCalculated)
+                wsData.Cells[RowNumber, drColumn].Value = dr[row.PropertyName];
+              else
+              {
+                wsData.Cells[RowNumber, drColumn].Formula = GetFormula(formatTable, row.Formula, RowNumber);
+                //wsData.Cells[RowNumber, drColumn].Calculate();
+              }
+
               wsData.Cells[RowNumber, drColumn].Style.Numberformat.Format = GetFormat(row);
               drColumn++;
             });
@@ -487,15 +494,20 @@ namespace IM.Base.Helpers
             .OrderBy(row => row.Order).ToList().ForEach(format =>
             {
               wsData.Cells[RowNumber, format.Order].Style.Numberformat.Format = GetFormat(format);
-              switch (format.SubTotalFunctions)
+              if (!format.IsCalculated)
               {
-                case eSubTotalFunctions.Sum:
-                  wsData.Cells[RowNumber, format.Order].Formula = "=SUM(" + wsData.Cells[dataIniRow, format.Order, RowNumber - 1, format.Order].Address + ")";
-                  break;
-                case eSubTotalFunctions.Avg:
-                  wsData.Cells[RowNumber, format.Order].Formula = "=AVERAGE(" + wsData.Cells[dataIniRow, format.Order, RowNumber - 1, format.Order].Address + ")";
-                  break;
+                switch (format.SubTotalFunctions)
+                {
+                  case eSubTotalFunctions.Sum:
+                    wsData.Cells[RowNumber, format.Order].Formula = "=SUM(" + wsData.Cells[dataIniRow, format.Order, RowNumber - 1, format.Order].Address + ")";
+                    break;
+                  case eSubTotalFunctions.Avg:
+                    wsData.Cells[RowNumber, format.Order].Formula = "=AVERAGE(" + wsData.Cells[dataIniRow, format.Order, RowNumber - 1, format.Order].Address + ")";
+                    break;
+                }
               }
+              else
+                wsData.Cells[RowNumber, format.Order].Formula = GetFormula(formatTable, format.Formula, RowNumber);
             });
             RowNumber++;
           }
@@ -529,15 +541,20 @@ namespace IM.Base.Helpers
           .OrderBy(row => row.Order).ToList().ForEach(format =>
           {
             wsData.Cells[RowNumber, format.Order].Style.Numberformat.Format = GetFormat(format);
-            switch (format.Function)
+            if (!format.IsCalculated)
             {
-              case DataFieldFunctions.Sum:
-                wsData.Cells[RowNumber, format.Order].Formula = "=SUM(" + wsData.Cells[dataIniRow, format.Order, RowNumber - 1, format.Order].Address + ")";
-                break;
-              case DataFieldFunctions.Average:
-                wsData.Cells[RowNumber, format.Order].Formula = "=AVERAGE(" + wsData.Cells[dataIniRow, format.Order, RowNumber - 1, format.Order].Address + ")";
-                break;
+              switch (format.Function)
+              {
+                case DataFieldFunctions.Sum:
+                  wsData.Cells[RowNumber, format.Order].Formula = "=SUM(" + wsData.Cells[dataIniRow, format.Order, RowNumber - 1, format.Order].Address + ")";
+                  break;
+                case DataFieldFunctions.Average:
+                  wsData.Cells[RowNumber, format.Order].Formula = "=AVERAGE(" + wsData.Cells[dataIniRow, format.Order, RowNumber - 1, format.Order].Address + ")";
+                  break;
+              }
             }
+            else
+              wsData.Cells[RowNumber, format.Order].Formula = GetFormula(formatTable, format.Formula, RowNumber);
           });
         }
         #endregion
@@ -950,7 +967,7 @@ namespace IM.Base.Helpers
           break;
 
         case EnumFormatTypeExcel.Currency:
-          format = "$#,##0.00;-$#,##0.00;$-;";
+          format = "_-$ #,##0.00_-;-$ #,##0.00_-;_-$*  - ??_-;_-@_-";
           break;
 
         case EnumFormatTypeExcel.Number:
@@ -1373,10 +1390,10 @@ namespace IM.Base.Helpers
         DataRow[] FilteredRows = _SourceTable.Select(Filter);
         object[] objList = FilteredRows.Select(x => x.Field<object>(format.PropertyName)).ToArray();
 
-        switch (format.Function)
+        switch (format.AggregateFunction)
         {
           case DataFieldFunctions.Average:
-            return objList.Count() == 0 ? null : (object)(Convert.ToDecimal(objList.Sum(c => Convert.ToDecimal(c)) / objList.Count()));
+            return objList.Count() == 0 ? 0 : (object)(Convert.ToDecimal(objList.Sum(c => Convert.ToDecimal(c)) / objList.Count()));
           case DataFieldFunctions.Count:
             return objList.Count();
           case DataFieldFunctions.Max:
@@ -1386,7 +1403,7 @@ namespace IM.Base.Helpers
           case DataFieldFunctions.Sum:
             return objList.Sum(c => Convert.ToDecimal(c));
           default:
-            return objList.Count() == 0 ? null : objList.First();
+            return objList.Count() == 0 ? 0 : objList.First();
         }
       }
       catch (Exception ex)
@@ -1395,6 +1412,55 @@ namespace IM.Base.Helpers
       }
     }
 
+    #endregion
+
+    #region GetExcelColumnName
+    /// <summary>
+    /// Obtiene la letra de una columna.
+    /// </summary>
+    /// <param name="columnNumber"></param>
+    /// <returns> string </returns>
+    /// <history>
+    ///   [edgrodriguez] 15/03/2016  Created.
+    /// </history>
+    private static string GetExcelColumnName(int columnNumber)
+    {
+      int dividend = columnNumber;
+      string columnName = String.Empty;
+      int modulo;
+
+      while (dividend > 0)
+      {
+        modulo = (dividend - 1) % 26;
+        columnName = Convert.ToChar(65 + modulo).ToString() + columnName;
+        dividend = (int)((dividend - modulo) / 26);
+      }
+
+      return columnName;
+    }
+    #endregion
+
+    #region GetFormula
+    /// <summary>
+    /// Obtiene la formula para asignar a una celda.
+    /// </summary>
+    /// <param name="columnNumber"></param>
+    /// <returns> string </returns>
+    /// <history>
+    ///   [edgrodriguez] 15/03/2016  Created.
+    /// </history>
+    private static string GetFormula(List<ExcelFormatTable> formatTable,string Formula, int rowNumber)
+    {
+      var Columns = Regex.Matches(Formula, @"(\[.*?\])+");
+      foreach (var match in Columns)
+      {
+        var formatCol = formatTable.First(c => c.PropertyName == match.ToString().Replace("[", "").Replace("]", ""));
+        Formula = Formula.Replace(match.ToString(), GetExcelColumnName(formatCol.Order) + rowNumber);
+      }
+
+
+        return Formula;
+    }
     #endregion
 
     #endregion Private Methods

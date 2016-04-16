@@ -196,6 +196,24 @@ namespace IM.ProcessorGeneral.Classes
     }
     #endregion
 
+    #region ExportRptCxCPayments
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de RptCxCNotAuthorized.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRange">Rango de Fechas</param>
+    /// <param name="lstRptCxCPayments">Lista de RptCxCPayments</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 16/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptCxCPayments(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptCxCPayments> lstRptCxCPayments)
+    {
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptCxCPayments, changeDataTypeBoolToString: true, showCheckMark: false, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.createExcelCustom(dtData, filters, strReport, dateRangeFileName, clsFormatReport.rptCxCPayments());
+    }
+    #endregion
+
     #endregion
 
     #region Deposits
@@ -420,6 +438,67 @@ namespace IM.ProcessorGeneral.Classes
     #endregion
 
     #region Gifts
+
+    #region ExportRptGiftsByCategory
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Gift By Category.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRange">Rango de Fechas</param>
+    /// <param name="lstRptGiftsByCat">Lista de RptGiftsByCategory</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 16/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptGiftsByCategory(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptGiftsByCategory> lstRptGiftsByCat)
+    {
+      var lstGifts = lstRptGiftsByCat.Select(c => new
+      {
+        Gift = c.gegi,
+        TotalQty=lstRptGiftsByCat.Where(g=>g.gegi==c.gegi).Sum(g=>g.Quantity),
+        UnitCost=c.UnitCost,
+        TotalCost= lstRptGiftsByCat.Where(g => g.gegi == c.gegi).Sum(g => g.TotalCost),
+        Quantity=c.Quantity,
+        Day =c.Day,
+        Category= c.gcN
+      }).ToList();
+
+
+
+      return EpplusHelper.createExcelCustomPivot(TableHelper.GetDataTableFromList(lstGifts, true, false),filters, strReport, dateRangeFileName, clsFormatReport.RptGiftsByCategory(), blnShowSubtotal: true);
+    }
+    #endregion
+
+    #region ExportRptGiftsByCategoryProgram
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Gifts By Category & Program.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRange">Rango de Fechas</param>
+    /// <param name="lstRptGiftsByCatP">Lista de RptGiftsByCategoryProgram</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 16/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptGiftsByCategoryProgram(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptGiftsByCategoryProgram> lstRptGiftsByCatP)
+    {
+      var lstGifts = lstRptGiftsByCatP.Select(c => new
+      {
+        Gift = c.gegi,
+        TotalQty = lstRptGiftsByCatP.Where(g => g.gegi == c.gegi).Sum(g => g.Quantity),
+        UnitCost = c.UnitCost,
+        TotalCost = lstRptGiftsByCatP.Where(g => g.gegi == c.gegi).Sum(g => g.TotalCost),
+        Quantity = c.Quantity,
+        Day = c.Day,
+        Category = c.gcN,
+        Program = c.Program
+      }).ToList();
+
+
+
+      return EpplusHelper.createExcelCustomPivot(TableHelper.GetDataTableFromList(lstGifts, true, false), filters, strReport, dateRangeFileName, clsFormatReport.RptGiftsByCategoryProgram(), blnShowSubtotal: true);
+    }
+    #endregion
 
     #region ExportRptDailyGiftSimple
     /// <summary>
@@ -669,6 +748,133 @@ namespace IM.ProcessorGeneral.Classes
     {
       lstRptMembershipsHost.ForEach(c => c.guEntryHost = string.Format("{0} {1}", c.guEntryHost, c.guEntryHostN));
       return EpplusHelper.createExcelCustom(TableHelper.GetDataTableFromList(lstRptMembershipsHost, true, false), filters, strReport, dateRangeFileName, clsFormatReport.RptMembershipsByHost(), blnShowSubtotal: true);//, blnRowGrandTotal: true);
+    }
+    #endregion
+
+    #endregion
+
+    #region Production
+
+    #region ExportRptProductionBySalesRoom
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Production by SalesRoom.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRangeFileName">Rango de Fechas</param>
+    /// <param name="lstRptProductionBySR">Lista de RptProductionBySalesRoom</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 15/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptProductionBySalesRoom(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionBySalesRoom> lstRptProductionBySR)
+    {
+      return EpplusHelper.createExcelCustom(TableHelper.GetDataTableFromList(lstRptProductionBySR, true, false), filters, strReport, dateRangeFileName, clsFormatReport.RptProductionBySalesRoom(), blnRowGrandTotal: true);
+    }
+    #endregion
+
+    #region ExportRptProductionBySalesRoomMarket
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Production by SalesRoom & Market.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRangeFileName">Rango de Fechas</param>
+    /// <param name="lstRptProductionBySRM">Lista de RptProductionBySalesRoomMarket</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 15/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptProductionBySalesRoomMarket(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionBySalesRoomMarket> lstRptProductionBySRM)
+    {
+      return EpplusHelper.createExcelCustom(TableHelper.GetDataTableFromList(lstRptProductionBySRM, true, false), filters, strReport, dateRangeFileName, clsFormatReport.RptProductionBySalesRoomMarket(), blnShowSubtotal: true);
+    }
+    #endregion
+
+    #region ExportRptProductionBySalesRoomMarketSubMarket
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Production by SalesRoom,Market & Submarket.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRangeFileName">Rango de Fechas</param>
+    /// <param name="lstRptProductionBySRMSm">Lista de RptProductionBySalesRoomMarket</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 15/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptProductionBySalesRoomMarketSubMarket(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionBySalesRoomProgramMarketSubmarket> lstRptProductionBySRMSm)
+    {
+      return EpplusHelper.createExcelCustom(TableHelper.GetDataTableFromList(lstRptProductionBySRMSm, true, false), filters, strReport, dateRangeFileName, clsFormatReport.RptProductionBySalesRoomMarketSubMarket(), blnShowSubtotal: true);
+    }
+    #endregion
+
+    #region ExportRptProductionByShowProgram
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Production by Show & Program.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRangeFileName">Rango de Fechas</param>
+    /// <param name="lstRptProductionByShowProgram">Lista de RptProductionByShowProgram</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 15/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptProductionByShowProgram(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionByShowProgram> lstRptProductionByShowProgram)
+    {
+      return EpplusHelper.createExcelCustom(TableHelper.GetDataTableFromList(lstRptProductionByShowProgram, true, false), filters, strReport, dateRangeFileName, clsFormatReport.RptProductionByShowProgram(), blnShowSubtotal: true);
+    }
+    #endregion
+
+    #region ExportRptProductionByShowProgramProgram
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Production by Show,Program & Program.
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRangeFileName">Rango de Fechas</param>
+    /// <param name="lstRptProductionByShowProgram">Lista de RptProductionByShowProgram</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 15/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptProductionByShowProgramProgram(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionByShowProgramProgram> lstRptProductionByShowProgramProgram)
+    {
+      return EpplusHelper.createExcelCustom(TableHelper.GetDataTableFromList(lstRptProductionByShowProgramProgram, true, false), filters, strReport, dateRangeFileName, clsFormatReport.RptProductionByShowProgramProgram(), blnShowSubtotal: true);
+    }
+    #endregion
+
+    #endregion
+
+    #region Taxi
+
+    #region ExportRptTaxiIn
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Taxi In
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRangeFileName">Rango de Fechas</param>
+    /// <param name="lstRptProductionByShowProgram">Lista de RptTaxisIn</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 16/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptTaxiIn(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptTaxisIn> lstRptTaxiIn)
+    {
+      return EpplusHelper.createExcelCustom(TableHelper.GetDataTableFromList(lstRptTaxiIn, true, false), filters, strReport, dateRangeFileName, clsFormatReport.RptTaxisIn(), blnShowSubtotal: true);
+    }
+    #endregion
+
+    #region ExportRptTaxiOut
+    /// <summary>
+    /// Obtiene los datos para Exportar a Excel el reporte de Taxi Out
+    /// </summary>
+    /// <param name="strReport">Nombre del Reporte</param>
+    /// <param name="dateRangeFileName">Rango de Fechas</param>
+    /// <param name="lstRptProductionByShowProgram">Lista de RptTaxisIn</param>
+    /// <returns> FileInfo </returns>
+    ///  <history>
+    /// [edgrodriguez] 16/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptTaxiOut(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptTaxisOut> lstRptTaxiOut)
+    {
+      return EpplusHelper.createExcelCustom(TableHelper.GetDataTableFromList(lstRptTaxiOut, true, false), filters, strReport, dateRangeFileName, clsFormatReport.RptTaxisOut(), blnRowGrandTotal: true);
     }
     #endregion
 
