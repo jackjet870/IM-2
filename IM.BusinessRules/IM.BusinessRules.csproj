@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BRReimpresionMotives.cs" />
     <Compile Include="BR\BRAgencies.cs" />
     <Compile Include="BR\BRAreas.cs" />
     <Compile Include="BR\BRAssignment.cs" />
@@ -107,7 +108,10 @@
     <Compile Include="BR\BRPosts.cs" />
     <Compile Include="BR\BRPostsLog.cs" />
     <Compile Include="BR\BRPrStats.cs" />
+    <Compile Include="BR\BRReasonCancellationFolios.cs" />
+    <Compile Include="BR\BRRefundTypes.cs" />
     <Compile Include="BR\BRRegions.cs" />
+    <Compile Include="BR\BRReimpresionMotives.cs" />
     <Compile Include="BR\BRReportsByLeadSource.cs" />
     <Compile Include="BR\BRTourTimesAvailables.cs" />
     <Compile Include="BR\BRSalesRoomsLogs.cs" />

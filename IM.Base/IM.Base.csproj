@@ -101,12 +101,14 @@
     <Compile Include="Helpers\ComputerHelper.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
     <Compile Include="Helpers\DateHelper.cs" />
+    <Compile Include="Helpers\EntityHelper.cs" />
     <Compile Include="Helpers\EpplusHelper.cs" />
     <Compile Include="Helpers\TableHelper.cs" />
     <Compile Include="Helpers\GridHelper.cs" />
     <Compile Include="Helpers\KeyboardHelper.cs" />
     <Compile Include="Helpers\MessageBoxCustomHelper.cs" />
     <Compile Include="Helpers\ObjectHelper.cs" />
+    <Compile Include="Helpers\TextBoxHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Helpers\EncryptHelper.cs" />
     <Compile Include="Forms\frmSplash.xaml.cs">
@@ -268,6 +270,8 @@
     <Resource Include="Images\Marital_Status.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Money_Bag.png" />
+    <Resource Include="Images\Forbidden.png" />
     <Resource Include="Images\Posts.png" />
     <Resource Include="Images\Lead_Sources.png" />
     <Resource Include="Images\Police.ico" />

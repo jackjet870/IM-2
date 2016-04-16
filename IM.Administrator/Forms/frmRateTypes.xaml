@@ -12,7 +12,7 @@
             <StatusBarItem Grid.Column="0" x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
             <StatusBarItem Grid.Column="1" x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>
             <StatusBarItem Grid.Column="2" x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
-            <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0 Rate Types." HorizontalAlignment="Right" Width="90"/>
+            <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0 Rate Types." HorizontalAlignment="Right" />
         </StatusBar>
         <!--#endregion-->
         <!--#region toolbar -->
@@ -23,7 +23,7 @@
                     <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Refresh"/>
                 </StackPanel>
             </Button>
-            <Button ToolTip="Create new Rate Types" Name="btnAdd" Click="btnAdd_Click" >
+            <Button ToolTip="Create new Rate Type" Name="btnAdd" Click="btnAdd_Click" >
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/IM.Base;component/Images/button_add.png" />
                     <AccessText Text="_Add" Margin="3,0,0,0" VerticalAlignment="Center"/>

@@ -21,7 +21,7 @@ namespace IM.BusinessRules.BR
     /// [emoguel] 11/03/2016 Se le agregaron los filtros ID y Descripcion
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
     /// </history>
-    public static List<Region> GetRegions(Region region=null,int nStatus=-1)
+    public static List<Region> GetRegions(int nStatus=-1, Region region = null)
     {      
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -49,6 +49,44 @@ namespace IM.BusinessRules.BR
         return query.OrderBy(rg=>rg.rgN).ToList();
       }
       
+    }
+    #endregion
+    #region SaveRegion
+    /// <summary>
+    /// Agrega|Actualiza un registro en el catalogo Regions
+    /// </summary>
+    /// <param name="region">Objeto a guardar</param>
+    /// <param name="blnUpdate">True. Actualiza | false. Agrega</param>
+    /// <returns>0. No se guardó | 1. Se guardó | 2. Existe un registro con el mismo ID</returns>
+    /// <history>
+    /// [emoguel] created 14/04/2016
+    /// </history>
+    public static int SaveRegion(Region region,bool blnUpdate)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        #region Update
+        if (blnUpdate)
+        {
+          dbContext.Entry(region).State = System.Data.Entity.EntityState.Modified;
+        }
+        #endregion
+        #region Insert
+        else
+        {
+          Region regionVal = dbContext.Regions.Where(rg => rg.rgID == region.rgID).FirstOrDefault();
+          if(regionVal!=null)//Validamos que no exista un registro con el mismo ID
+          {
+            return 2;
+          }
+          else//Agregar
+          {
+            dbContext.Regions.Add(region);
+          }
+        } 
+        #endregion
+        return dbContext.SaveChanges();
+      }
     }
     #endregion
   }

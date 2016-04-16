@@ -74,7 +74,7 @@ namespace IM.Administrator.Forms
         UIHelper.SetMaxLength(contract, this);
       }
       LoadUnvMotive();
-      
+      DataContext = contract;
     }
     #endregion
 

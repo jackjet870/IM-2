@@ -3,8 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Metadata.Edm;
-using System.Data.Entity.Core.Objects.DataClasses;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -143,7 +141,7 @@ namespace IM.Base.Helpers
     }
     #endregion
 
-    #region SetUpControls
+    #region SetMaxLength
     /// <summary>
     /// Le asigna el maximo de escritura a los controles igual al que tienen en la BD
     /// </summary>
@@ -156,96 +154,84 @@ namespace IM.Base.Helpers
     {
       List<Control> lstControls = GetChildParentCollection<Control>(ui);//Obtenemos la lista de controles del contenedor      
 
-      var type = obj.GetType();//Obtenemos el tipo de objeto
+      Type type = obj.GetType();//Obtenemos el tipo de objeto
       if (lstControls.Count > 0)
       {
         #region Obtenemos el MaxLength
-        using (var db = new IMEntities(Model.Helpers.ConnectionHelper.ConnectionString))
-        {
-          var objectContext = ((IObjectContextAdapter)db).ObjectContext;//obtenemos el contexto
-          
-          var elementType = objectContext
-              .MetadataWorkspace
-              .GetEntityContainer(objectContext.DefaultContainerName, DataSpace.CSpace)
-              .BaseEntitySets
-              .First(meta => meta.ElementType.Name == type.Name)
-              .ElementType;//Obtenemos el objeto
-          
+        EntityTypeBase entityTypeBase = EntityHelper.GetEntityTypeBase(type);
+        foreach (PropertyInfo pi in type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => !pi.GetMethod.IsVirtual))//recorremos las propiedades
+        {            
+          EdmMember edm = entityTypeBase.Members.Where(em => em.Name == pi.Name).FirstOrDefault();//Obtenemos el edmMember            
 
-          foreach (PropertyInfo pi in type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => !pi.GetMethod.IsVirtual))//recorremos las propiedades
-          {            
-            EdmMember edm = elementType.Members.Where(em => em.Name == pi.Name).FirstOrDefault();//Obtenemos el edmMember            
+          Facet facet;
+          Control control = lstControls.Where(cl => cl.Name == "txt" + pi.Name).FirstOrDefault();//buscamos si existe el control
 
-            Facet facet;
-            Control control = lstControls.Where(cl => cl.Name == "txt" + pi.Name).FirstOrDefault();//buscamos si existe el control
-
-            if (control != null)//Verifcamos que tengamos un control
+          if (control != null)//Verifcamos que tengamos un control
+          {
+            TextBox txt = control as TextBox;//Convertimos el control a texbox
+            TypeCode typeCode = Type.GetTypeCode(pi.PropertyType);//Obtenemos el tipo de dato              
+            switch (typeCode)
             {
-              TextBox txt = control as TextBox;//Convertimos el control a texbox
-              TypeCode typeCode = Type.GetTypeCode(pi.PropertyType);//Obtenemos el tipo de dato              
-              switch (typeCode)
-              {
-                #region String
-                case TypeCode.String:
-                case TypeCode.Char:
-                  {
-                    facet= edm.TypeUsage.Facets.Where(fc => fc.Name == "MaxLength").FirstOrDefault();//Obtenemos el length
-                    txt.MaxLength = Convert.ToInt32(facet.Value);//Asignamos el MaxLength
-                    break;
-                  }
-                #endregion
+              #region String
+              case TypeCode.String:
+              case TypeCode.Char:
+                {
+                  facet= edm.TypeUsage.Facets.Where(fc => fc.Name == "MaxLength").FirstOrDefault();//Obtenemos el length
+                  txt.MaxLength = Convert.ToInt32(facet.Value);//Asignamos el MaxLength
+                  break;
+                }
+              #endregion
 
-                #region Decimal
-                case TypeCode.Decimal:
-                case TypeCode.Double:                
-                  {
-                    int Precision = Convert.ToInt32(edm.TypeUsage.Facets.Where(fc => fc.Name == "Precision").FirstOrDefault().Value);
-                    txt.MaxLength = Precision;
-                    break;
-                  }
-                #endregion
+              #region Decimal
+              case TypeCode.Decimal:
+              case TypeCode.Double:                
+                {
+                  int Precision = Convert.ToInt32(edm.TypeUsage.Facets.Where(fc => fc.Name == "Precision").FirstOrDefault().Value);
+                  txt.MaxLength = Precision;
+                  break;
+                }
+              #endregion
 
-                #region Byte
-                case TypeCode.Byte:
-                  {
-                    txt.MaxLength = 3;
-                    break;
-                  }
-                #endregion
+              #region Byte
+              case TypeCode.Byte:
+                {
+                  txt.MaxLength = 3;
+                  break;
+                }
+              #endregion
 
-                #region Int
-                case TypeCode.Int16:
-                case TypeCode.Int32:
-                case TypeCode.Int64:
+              #region Int
+              case TypeCode.Int16:
+              case TypeCode.Int32:
+              case TypeCode.Int64:
+                {
+                  txt.MaxLength = 10;
+                  break;
+                }
+              #endregion
+
+              #region DateTime
+              case TypeCode.DateTime:
+                {
+                  if (txt.Name.EndsWith("DT"))
+                  {
+                    txt.MaxLength = 24;
+                  }
+                  else if (txt.Name.EndsWith("T"))
+                  {
+                    txt.MaxLength = 5;
+                  }
+                  else
                   {
                     txt.MaxLength = 10;
-                    break;
                   }
+                  break;
+                } 
                 #endregion
 
-                #region DateTime
-                case TypeCode.DateTime:
-                  {
-                    if (txt.Name.EndsWith("DT"))
-                    {
-                      txt.MaxLength = 24;
-                    }
-                    else if (txt.Name.EndsWith("T"))
-                    {
-                      txt.MaxLength = 5;
-                    }
-                    else
-                    {
-                      txt.MaxLength = 10;
-                    }
-                    break;
-                  } 
-                  #endregion
-
-              }
-            }           
+            }
+          }           
             
-          }
         }
         #endregion
       }

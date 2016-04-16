@@ -32,7 +32,7 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void LoadRegions()
     {
-      List<Region> lstRegions = BRRegions.GetRegions(new Region(),1);
+      List<Region> lstRegions = BRRegions.GetRegions(1);
       cmbRegion.ItemsSource = lstRegions;
     }
     #endregion

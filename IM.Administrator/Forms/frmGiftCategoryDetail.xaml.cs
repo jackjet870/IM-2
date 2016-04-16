@@ -112,19 +112,22 @@ namespace IM.Administrator.Forms
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
-      if(ObjectHelper.IsEquals(giftCategory,oldGiftCategory) && enumMode!=EnumMode.add)
+      if(enumMode != EnumMode.add && ObjectHelper.IsEquals(giftCategory,oldGiftCategory))
       {
         Close();
       }
       else
       {
-        string strMsj = ValidateHelper.ValidateForm(this, "Gift Category");
-        int nRes = 0;
-
+        string strMsj = ValidateHelper.ValidateForm(this, "Gift Category");        
         if (strMsj == "")
         {
-          nRes = BRGiftsCategories.SaveGiftCategory(giftCategory, (enumMode == EnumMode.edit));
+          int nRes = BRGiftsCategories.SaveGiftCategory(giftCategory, (enumMode == EnumMode.edit));
           UIHelper.ShowMessageResult("Gift Category", nRes);
+          if(nRes==1)
+          {
+            DialogResult = true;
+            Close();
+          }
         }
         else
         {
