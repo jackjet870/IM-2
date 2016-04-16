@@ -118,246 +118,246 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="msgLblAdults" xml:space="preserve">
-    <value>Adults</value>
+    <value>Adultos</value>
   </data>
   <data name="msgLblAge" xml:space="preserve">
-    <value>Age</value>
+    <value>Edad</value>
   </data>
   <data name="msgLblAgency" xml:space="preserve">
-    <value>Agency</value>
+    <value>Agencia</value>
   </data>
   <data name="msgLblAges" xml:space="preserve">
-    <value>Ages</value>
+    <value>Edades</value>
   </data>
   <data name="msgLblAmount" xml:space="preserve">
-    <value>Amount</value>
+    <value>Monto</value>
   </data>
   <data name="msgLblAmountLetter" xml:space="preserve">
-    <value>Amount in Letters</value>
+    <value>Cantidad en Letra</value>
   </data>
   <data name="msgLblArrival" xml:space="preserve">
-    <value>Arrival</value>
+    <value>LLegada</value>
   </data>
   <data name="msgLblAuthorization" xml:space="preserve">
-    <value>Authorization ID</value>
+    <value>ID Autorizacion</value>
   </data>
   <data name="msgLblAuthorizedBy" xml:space="preserve">
-    <value>Authorized by</value>
+    <value>Autorizado por</value>
   </data>
   <data name="msgLblBy" xml:space="preserve">
-    <value>By</value>
+    <value>Por</value>
   </data>
   <data name="msgLblCardNumber" xml:space="preserve">
-    <value>Card Number</value>
+    <value>Numero Tarjeta</value>
   </data>
   <data name="msgLblChildren" xml:space="preserve">
-    <value>Children</value>
+    <value>Niños</value>
   </data>
   <data name="msgLblClient" xml:space="preserve">
-    <value>Client</value>
+    <value>Cliente</value>
   </data>
   <data name="msgLblComment" xml:space="preserve">
-    <value>Comment</value>
+    <value>Comentario</value>
   </data>
   <data name="msgLblComments" xml:space="preserve">
-    <value>Comments</value>
+    <value>Comentarios</value>
   </data>
   <data name="msgLblCountry" xml:space="preserve">
-    <value>Country</value>
+    <value>País</value>
   </data>
   <data name="msgLblCoupon" xml:space="preserve">
-    <value>COUPON</value>
+    <value>CUPON</value>
   </data>
   <data name="msgLblCreditCard" xml:space="preserve">
-    <value>Credit Card</value>
+    <value>Tarjeta de crédito</value>
   </data>
   <data name="msgLblCreditCards" xml:space="preserve">
-    <value>Credits Cards</value>
+    <value>Tarjetas de crédito</value>
   </data>
   <data name="msgLblCurrency" xml:space="preserve">
-    <value>Currency</value>
+    <value>Moneda</value>
   </data>
   <data name="msgLblCxCDeposit" xml:space="preserve">
-    <value>CxC Deposit</value>
+    <value>CxC de Deposito</value>
   </data>
   <data name="msgLblCxCGifts" xml:space="preserve">
-    <value>CxC Gifts</value>
+    <value>CxC de Regalos</value>
   </data>
   <data name="msgLblCxCTaxiOut" xml:space="preserve">
-    <value>CxC Taxi Out</value>
+    <value>CxC de Taxi de salida</value>
   </data>
   <data name="msgLblDate" xml:space="preserve">
-    <value>Date</value>
+    <value>Fecha</value>
   </data>
   <data name="msgLblDateTimeShow" xml:space="preserve">
-    <value>Date and Time Show</value>
+    <value>Fecha y hora de presentación</value>
   </data>
   <data name="msgLblDeparture" xml:space="preserve">
-    <value>Departure</value>
+    <value>Salida</value>
   </data>
   <data name="msgLblDeposit" xml:space="preserve">
-    <value>Deposit</value>
+    <value>Depósito</value>
   </data>
   <data name="msgLblDepositBurned" xml:space="preserve">
-    <value>Deposit Burned</value>
+    <value>Depósito quemado</value>
   </data>
   <data name="msgLblDeposits" xml:space="preserve">
-    <value>Deposits</value>
+    <value>Depósitos</value>
   </data>
   <data name="msgLblDepositsBurned" xml:space="preserve">
-    <value>Deposits Burned</value>
+    <value>Depósitos quemados</value>
   </data>
   <data name="msgLblDirect" xml:space="preserve">
-    <value>Direct</value>
+    <value>Directa</value>
   </data>
   <data name="msgLblEmail" xml:space="preserve">
-    <value>E-mail</value>
+    <value>Correo electrónico</value>
   </data>
   <data name="msgLblExchangeRate" xml:space="preserve">
-    <value>Exchange Rate</value>
+    <value>Tipo de cambio</value>
   </data>
   <data name="msgLblExpiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Expiracion</value>
   </data>
   <data name="msgLblFirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>Nombre</value>
   </data>
   <data name="msgLblGift" xml:space="preserve">
-    <value>Gift</value>
+    <value>Regalo</value>
   </data>
   <data name="msgLblGifts" xml:space="preserve">
-    <value>Gifts</value>
+    <value>Regalos</value>
   </data>
   <data name="msgLblGiftsHostess" xml:space="preserve">
-    <value>Gifts Host(ess)</value>
+    <value>Host(ess) de regalos</value>
   </data>
   <data name="msgLblGiftsReceipt" xml:space="preserve">
-    <value>Gifts Receipt</value>
+    <value>Recibo de regalos</value>
   </data>
   <data name="msgLblGiftsReceiptAcceptConditions" xml:space="preserve">
-    <value>I Accept the terms and conditions on this coupon.</value>
+    <value>Acepto las condiciones descritas de uso de este cupón.</value>
   </data>
   <data name="msgLblGuest" xml:space="preserve">
-    <value>Guest</value>
+    <value>Invitado</value>
   </data>
   <data name="msgLblGuests" xml:space="preserve">
-    <value>Guests</value>
+    <value>Invitados</value>
   </data>
   <data name="msgLblGuestService" xml:space="preserve">
-    <value>Guest Service</value>
+    <value>Representante</value>
   </data>
   <data name="msgLblHostessApproval" xml:space="preserve">
-    <value>Hostess approval</value>
+    <value>Aprobación de la anfitriona</value>
   </data>
   <data name="msgLblHotel" xml:space="preserve">
     <value>Hotel</value>
   </data>
   <data name="msgLblId" xml:space="preserve">
-    <value>Id</value>
+    <value>Clave</value>
   </data>
   <data name="msgLblIdentification" xml:space="preserve">
-    <value>Identification</value>
+    <value>Identificación</value>
   </data>
   <data name="msgLblInvitation" xml:space="preserve">
-    <value>Invitation</value>
+    <value>Invitación</value>
   </data>
   <data name="msgLblLastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>Apellido</value>
   </data>
   <data name="msgLblLocation" xml:space="preserve">
-    <value>Location</value>
+    <value>Locación</value>
   </data>
   <data name="msgLblLocationManager" xml:space="preserve">
-    <value>Location Manager</value>
+    <value>Gerente de locación</value>
   </data>
   <data name="msgLblMaritalStatus" xml:space="preserve">
-    <value>Marital Status</value>
+    <value>Estado civil</value>
   </data>
   <data name="msgLblMembershipNum" xml:space="preserve">
-    <value>Membership Num.</value>
+    <value>No. Membresía</value>
   </data>
   <data name="msgLblMinors" xml:space="preserve">
-    <value>Minors</value>
+    <value>Menores</value>
   </data>
   <data name="msgLblName" xml:space="preserve">
-    <value>Name</value>
+    <value>Nombre</value>
   </data>
   <data name="msgLblNameMT" xml:space="preserve">
-    <value>Name</value>
+    <value>Nombre</value>
   </data>
   <data name="msgLblNotes" xml:space="preserve">
-    <value>Notes</value>
+    <value>Notas</value>
   </data>
   <data name="msgLblOccupation" xml:space="preserve">
-    <value>Occupation</value>
+    <value>Ocupación</value>
   </data>
   <data name="msgLblOfferedBy" xml:space="preserve">
-    <value>Offered by</value>
+    <value>Ofrecido por</value>
   </data>
   <data name="msgLblOutsideInvitation" xml:space="preserve">
-    <value>Outside Invitation</value>
+    <value>Invitación externa</value>
   </data>
   <data name="msgLblPax" xml:space="preserve">
     <value>Pax</value>
   </data>
   <data name="msgLblPaymentType" xml:space="preserve">
-    <value>Payment Type</value>
+    <value>Forma de pago</value>
   </data>
   <data name="msgLblQuantity" xml:space="preserve">
-    <value>Quantity</value>
+    <value>Cantidad</value>
   </data>
   <data name="msgLblQuantityAbbreviation" xml:space="preserve">
-    <value>Qty</value>
+    <value>Cant</value>
   </data>
   <data name="msgLblReceiptID" xml:space="preserve">
-    <value>Receipt ID</value>
+    <value>Clave de recibo</value>
   </data>
   <data name="msgLblReceiptNum" xml:space="preserve">
-    <value>Receipt Num.</value>
+    <value>No. Recibo</value>
   </data>
   <data name="msgLblReceived" xml:space="preserve">
-    <value>Received</value>
+    <value>Recibido</value>
   </data>
   <data name="msglblReimpresion" xml:space="preserve">
-    <value>Reprinted # [grReimpresion] with motive [rmN]</value>
+    <value>Reimpreso # [grReimpresion] con el motivo [rmN]</value>
   </data>
   <data name="msgLblReservation" xml:space="preserve">
-    <value>Reservation</value>
+    <value>Reservación</value>
   </data>
   <data name="msgLblResidence" xml:space="preserve">
-    <value>Residence</value>
+    <value>Residencia</value>
   </data>
   <data name="msgLblRole" xml:space="preserve">
-    <value>Role</value>
+    <value>Rol</value>
   </data>
   <data name="msgLblRoomNum" xml:space="preserve">
-    <value>Room</value>
+    <value>Habitación</value>
   </data>
   <data name="msgLblSalesmen" xml:space="preserve">
-    <value>Salesmen</value>
+    <value>Vendedores</value>
   </data>
   <data name="msgLblState" xml:space="preserve">
-    <value>State</value>
+    <value>Estado</value>
   </data>
   <data name="msgLblTaxiIn" xml:space="preserve">
-    <value>Taxi In</value>
+    <value>Taxi de llegada</value>
   </data>
   <data name="msgLblTaxiOut" xml:space="preserve">
-    <value>Taxi Out</value>
+    <value>Taxi de salida</value>
   </data>
   <data name="msgLblTime" xml:space="preserve">
-    <value>Time</value>
+    <value>Hora</value>
   </data>
   <data name="msgLblType" xml:space="preserve">
-    <value>Type</value>
+    <value>Tipo</value>
   </data>
   <data name="msgRptTitleGuestRegistration" xml:space="preserve">
-    <value>Guest Registration</value>
+    <value>Registro de huéspedes</value>
   </data>
   <data name="msgTxtGuestRegistrationPrivacity" xml:space="preserve">
-    <value>The Client / Member dully authorizes PALACE ELITE and its subsidiaries to incorporate the data undersigned in the present document, to its respective files, the Member can exercise his right of access, rectification, cancellation and opposition related to the treaty and cession/ international transference of his data of personal nature according to the privacy policy on page www.palaceresorts.com/privacy-policy) and by Mexican law in the subject.</value>
+    <value>El Cliente / Afiliado autoriza expresamente a PALACE ELITE y a sus subsidiarias  a incorporar los datos señalados en el presente documento, a sus respectivos ficheros, el Afiliado puede ejercer su derecho de acceso, rectificación, cancelación y oposición en relación al tratamiento y cesión/ transferencia internacional de sus datos de carácter personal, de acuerdo a la política de privacidad que se encuentra en la página www.palaceresorts.com/privacy-policy y por el derecho mexicano.</value>
   </data>
   <data name="msgTxtGuestRegistrationRestrictions" xml:space="preserve">
-    <value>Restrictions apply. If married, both, husband and wife, must attend. Gifts is subject to completion of the visit. No verbal offer is valid. This presentation will take 90 minutes.</value>
+    <value>Aplica restricciones. Si están casados, ambos tienen que asistir. El regalo está sujeto a la terminación de la visita. Ningún ofrecimiento verbal es válido. Esta presentación tendrá una duración de 90 minutos.</value>
   </data>
 </root>

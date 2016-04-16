@@ -12,14 +12,13 @@ namespace IM.BusinessRules.BR
 {
   public class BRInvitation
   {
-    public static InvitationData RptInvitationData(int GuestID, string ChangedBy)
+    public static InvitationData RptInvitationData(int GuestID)
     {
       var InvitationData = new InvitationData();
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString) )
       {
         var resInvitation =  dbContext.USP_OR_RptInvitation(GuestID);
         InvitationData.Invitation = resInvitation.FirstOrDefault();
-        //InvitationData.Invitation.guResch = true;
  
         var resInviationGuest = resInvitation.GetNextResult<RptInvitation_Guest>();
         InvitationData.InvitationGuest = resInviationGuest.ToList();

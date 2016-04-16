@@ -142,7 +142,7 @@
     <value>Authorization ID</value>
   </data>
   <data name="msgLblAuthorizedBy" xml:space="preserve">
-    <value>Authorized by</value>
+    <value>ID de Autorização</value>
   </data>
   <data name="msgLblBy" xml:space="preserve">
     <value>By</value>
@@ -217,7 +217,7 @@
     <value>Exchange Rate</value>
   </data>
   <data name="msgLblExpiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Expiração</value>
   </data>
   <data name="msgLblFirstName" xml:space="preserve">
     <value>First Name</value>

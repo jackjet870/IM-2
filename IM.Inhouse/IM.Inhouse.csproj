@@ -91,30 +91,6 @@
       <DependentUpon>rptEquity.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Reports\rptInvitation.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptInvitation.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Reports\rptInvitationDeposits.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptInvitationDeposits.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Reports\rptInvitationGifts.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptInvitationGifts.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Reports\rptInvitationGuests.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptInvitationGuests.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Reports\rptEquityBalanceElectronicPurse.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -296,25 +272,6 @@
     <EmbeddedResource Include="Reports\rptEquity.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptEquity.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptInvitation.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptInvitation.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptInvitationDeposits.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptInvitationDeposits.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptInvitationGifts.resx">
-      <DependentUpon>rptInvitationGifts.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptInvitationGifts.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptInvitationGifts.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptInvitationGuests.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptInvitationGuests.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptEquityBalanceElectronicPurse.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

@@ -18,6 +18,7 @@ using IM.Services.WirePRService;
 using IM.Inhouse.Reports;
 using System.IO;
 using System.Collections;
+using System.Windows.Documents;
 
 namespace IM.Inhouse
 {
@@ -173,7 +174,7 @@ namespace IM.Inhouse
             else
             {
               //Preguntamos al usuario si en verdan desea darle Check In al Huesped
-              MessageBoxResult result = System.Windows.MessageBox.Show("Are you sure you want to mark this record as Check-in? /n This change can not be undone.", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+              MessageBoxResult result = System.Windows.MessageBox.Show("Are you sure you want to mark this record as Check-in? \n This change can not be undone.", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
               if (result == MessageBoxResult.No)
               {
                 return false;
@@ -323,10 +324,7 @@ namespace IM.Inhouse
               dgGuestArrival.SelectedItems.OfType<GuestArrival>().ToList().ForEach(item => { item.guAvail = true; });
               dgGuestArrival.Items.Refresh();
             }
-            else
-            {
-              SaveAvailGuest(itemGuestArrival.guID);
-            }
+            SaveAvailGuest(itemGuestArrival.guID);
             //Si no hubo problema en las validaciones mandamos el valor que obtuvo al hacer click en el checkbox          
             return itemGuestArrival.guCheckIn;
           }
@@ -346,10 +344,7 @@ namespace IM.Inhouse
               dgGuestPremanifest.SelectedItems.OfType<GuestPremanifest>().ToList().ForEach(item => item.guAvail = true);
               dgGuestPremanifest.Items.Refresh();
             }
-            else
-            {
-              SaveAvailGuest(itemGuestPremanifest.guID);
-            }
+            SaveAvailGuest(itemGuestPremanifest.guID);
             //Si no hubo problema en las validaciones mandamos el valor que obtuvo al hacer click en el checkbox          
             return itemGuestPremanifest.guCheckIn;
           }
@@ -368,10 +363,7 @@ namespace IM.Inhouse
               guestSearchedDataGrid.SelectedItems.OfType<GuestSearched>().ToList().ForEach(item => item.guAvail = true);
               guestSearchedDataGrid.Items.Refresh();
             }
-            else
-            {
-              SaveAvailGuest(itemGuestSearched.guID);
-            }
+            SaveAvailGuest(itemGuestSearched.guID);
             //Si no hubo problema en las validaciones mandamos el valor que obtuvo al hacer click en el checkbox          
             return itemGuestSearched.guCheckIn;
           }
@@ -969,7 +961,7 @@ namespace IM.Inhouse
       //Cargamos el listado de markets
       listMarkets.ItemsSource = BRMarkets.GetMarkets(1);
       //StaEnd();
-    } 
+    }
     #endregion
 
     #region listMarkets_SelectionChanged
@@ -1016,7 +1008,7 @@ namespace IM.Inhouse
         //le asignamos el valor del dtpDate a la variable global para que otro control tenga acceso al valor actual del dtpDate
         _serverDate = picker.SelectedDate.Value;
         //Cargamos el grid del tab que esta seleccionado
-       txtOccupancy.Text = BRLeadSources.GetOccupationLeadSources(picker.SelectedDate.Value, App.User.Location.loID);
+        txtOccupancy.Text = BRLeadSources.GetOccupationLeadSources(picker.SelectedDate.Value, App.User.Location.loID);
         LoadGrid();
         //gprInfo.BindingGroup.GetValue                 
       }
@@ -1444,7 +1436,7 @@ namespace IM.Inhouse
       GuestArrival itema = dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
       var chk = sender as CheckBox;    //bool? con = ck.IsChecked;
       var userData = BRPersonnel.Login(Model.Enums.EnumLoginType.Location, App.User.User.peID, App.User.Location.loID);
-      var invit = new frmInvitationBase(EnumInvitationType.InHouse, userData, itema.guID, !chk.IsChecked.Value ? EnumInvitationMode.modOnlyRead : EnumInvitationMode.modAdd); 
+      var invit = new frmInvitationBase(EnumInvitationType.InHouse, userData, itema.guID, !chk.IsChecked.Value ? EnumInvitationMode.modOnlyRead : EnumInvitationMode.modAdd);
       var res = invit.ShowDialog();
       chk.IsChecked = (res.HasValue && res.Value) || itema.guInvit;
       var Premanifest = dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)) as GuestPremanifest;
@@ -1810,7 +1802,7 @@ namespace IM.Inhouse
         App.User = log.userData;
         Inhouse_Loaded();
       }
-    } 
+    }
     #endregion
 
     #region btnAbout_Click
@@ -1825,26 +1817,144 @@ namespace IM.Inhouse
     #region btnPreview_Click
     private void btnPreview_Click(object sender, RoutedEventArgs e)
     {
-
+      string Culturas = string.Empty;
+      foreach (string str in LanguageHelper.cultures())
+      {
+        Culturas = Culturas + str + " \n";
+      }
+      MessageBox.Show(Culturas);
     }
+
     #endregion
 
     #region btnPrint_Click
     private void btnPrint_Click(object sender, RoutedEventArgs e)
     {
-      //Traemos la informacion del store y la almacenamos en un procedimiento
-      InvitationData invitationData = BRInvitation.RptInvitationData(7751973, App.User.User.peID);
-
-      var rptInvi = new rptInvitation();
-
-      rptInvi.SetDataSource(TableHelper.GetDataTableFromList(ObjectHelper.ObjectToList(invitationData.Invitation)));
-      rptInvi.Subreports["rptInvitationGuests.rpt"].SetDataSource(TableHelper.GetDataTableFromList(invitationData.InvitationGuest));
-      rptInvi.Subreports["rptInvitationDeposits.rpt"].SetDataSource(invitationData.InvitationDeposit);
-      rptInvi.Subreports["rptInvitationGifts.rpt"].SetDataSource(TableHelper.GetDataTableFromList(invitationData.InvitationGift));
-
-      var _frmViewer = new frmViewer(rptInvi);
-      _frmViewer.ShowDialog();
+      //RPTInvitation();
     }
+    #endregion
+
+    //public void RPTInvitation()
+    //{
+    //  //Traemos la informacion del store y la almacenamos en un procedimiento
+    //  InvitationData invitationData = BRInvitation.RptInvitationData(7751973);
+
+    //  //Determinamos el Lenguaje
+    //  LanguageHelper.IDLanguage = invitationData.Invitation.gula;
+
+    //  //Modificamos el tamaño de las condiciones de la invitación (Pie de Informe "itRTFFooter")
+    //  //invitationData.Invitation.itRTFFooter = ChangedPropertyRTF(invitationData.Invitation.itRTFFooter);
+    //  //var s = invitationData.Invitation.itRTFFooter
+
+    //  //Le damos memoria al reporte de Invitacion
+    //  var rptInvi = new rptInvitation();
+
+    //  //Le agregamos la informacion 
+    //  rptInvi.SetDataSource(TableHelper.GetDataTableFromList(ObjectHelper.ObjectToList(invitationData.Invitation)));
+
+    //  //Cargamos los subreportes
+    //  rptInvi.Subreports["rptInvitationGuests.rpt"].SetDataSource(TableHelper.GetDataTableFromList(invitationData.InvitationGuest));
+    //  rptInvi.Subreports["rptInvitationDeposits.rpt"].SetDataSource(invitationData.InvitationDeposit);
+    //  rptInvi.Subreports["rptInvitationGifts.rpt"].SetDataSource(TableHelper.GetDataTableFromList(invitationData.InvitationGift));
+
+    //  //Cargamos las Etiquetas 
+    //  lblInvitation(rptInvi);
+
+    //  //Cargamos el Viewer
+    //  var _frmViewer = new frmViewer(rptInvi);
+    //  _frmViewer.ShowDialog();
+    //}
+
+    //public void lblInvitation(rptInvitation rptInv)
+    //{       
+    //  //Etiquetas de Depositos
+    //  rptInv.SetParameterValue("lblDeposits", LanguageHelper.GetMessage(EnumMessage.msgLblDeposits));
+    //  rptInv.SetParameterValue("lblDeposit", LanguageHelper.GetMessage(EnumMessage.msgLblDeposit));
+    //  rptInv.SetParameterValue("lblCurrency", LanguageHelper.GetMessage(EnumMessage.msgLblCurrency));    
+    //  //Depositos quemados
+    //  rptInv.SetParameterValue("lblDepositBurned", LanguageHelper.GetMessage(EnumMessage.msgLblDepositBurned));
+    //  //************************************************************************************************
+
+    //  //Etiquetas de Regalos      
+    //  rptInv.SetParameterValue("lblGifts", LanguageHelper.GetMessage(EnumMessage.msgLblGifts));
+    //  rptInv.SetParameterValue("lblQuantityGifts", LanguageHelper.GetMessage(EnumMessage.msgLblQuantityAbbreviation));
+    //  rptInv.SetParameterValue("lblGift", LanguageHelper.GetMessage(EnumMessage.msgLblGift));
+    //  //************************************************************************************************
+
+    //  //Etiquetas Invitados
+    //  rptInv.SetParameterValue("lblGuests", LanguageHelper.GetMessage(EnumMessage.msgLblGuests));
+    //  rptInv.SetParameterValue("lblLastName", LanguageHelper.GetMessage(EnumMessage.msgLblLastName));
+    //  rptInv.SetParameterValue("lblFirstName", LanguageHelper.GetMessage(EnumMessage.msgLblFirstName));
+    //  rptInv.SetParameterValue("lblAge", LanguageHelper.GetMessage(EnumMessage.msgLblAge));
+    //  rptInv.SetParameterValue("lblMaritalStatus", LanguageHelper.GetMessage(EnumMessage.msgLblMaritalStatus));
+    //  rptInv.SetParameterValue("lblOccupation", LanguageHelper.GetMessage(EnumMessage.msgLblOccupation));
+    //  //************************************************************************************************
+      
+    //  //Numero de membresia
+    //  rptInv.SetParameterValue("lblMembershipNum", LanguageHelper.GetMessage(EnumMessage.msgLblMembershipNum));
+    //  //Fecha
+    //  rptInv.SetParameterValue("lblDate", LanguageHelper.GetMessage(EnumMessage.msgLblDate));
+    //  //Hora
+    //  rptInv.SetParameterValue("lblTime", LanguageHelper.GetMessage(EnumMessage.msgLblTime));
+    //  //Agencia
+    //  rptInv.SetParameterValue("lblAgency", LanguageHelper.GetMessage(EnumMessage.msgLblAgency));
+    //  //Pais
+    //  rptInv.SetParameterValue("lblCountry", LanguageHelper.GetMessage(EnumMessage.msgLblCountry));
+    //  //Hotel
+    //  rptInv.SetParameterValue("lblHotel", LanguageHelper.GetMessage(EnumMessage.msgLblHotel));
+    //  //Numero de habitación
+    //  rptInv.SetParameterValue("lblRoomNum", LanguageHelper.GetMessage(EnumMessage.msgLblRoomNum));
+    //  //Pax
+    //  rptInv.SetParameterValue("lblPax", LanguageHelper.GetMessage(EnumMessage.msgLblPax));
+    //  //Location
+    //  rptInv.SetParameterValue("lblLocation", LanguageHelper.GetMessage(EnumMessage.msgLblLocation));
+    //  //Guest Service
+    //  rptInv.SetParameterValue("lblGuestService", LanguageHelper.GetMessage(EnumMessage.msgLblGuestService));
+    //  //Notas
+    //  rptInv.SetParameterValue("lblNotes", LanguageHelper.GetMessage(EnumMessage.msgLblNotes));
+    //  //Fecha y hora
+    //  rptInv.SetParameterValue("lblDateTime", BRHelpers.GetServerDate());
+    //  //Cambiado por
+    //  rptInv.SetParameterValue("lblChangedBy", App.User.User.peID);
+    //}
+
+    public string ChangedPropertyRTF(string rtf)
+    {
+      //using (MemoryStream ms = new MemoryStream())
+      //{
+        var rtbRTF = new System.Windows.Forms.RichTextBox();
+
+        rtbRTF.Rtf = rtf;
+
+         rtbRTF.SelectionFont = new System.Drawing.Font("Arial", 13);
+         rtbRTF.Font = rtbRTF.SelectionFont;
+        //rtbRTF.Font = rtbRTF.SelectionFont;
+
+        // rtbRTF.SelectAll();
+        return rtbRTF.Rtf.ToString();
+        //rtbRTF.Selection.ApplyPropertyValue(Inline.FontSizeProperty, new System.Drawing.Size(FontSize, FontSize));
+
+        //  TextRange textRange = new TextRange(rtbRTF.Document.ContentStart, rtbRTF.Document.ContentEnd);
+        //  textRange.Save(ms, DataFormats.Rtf);
+        //  return System.Text.Encoding.Default.GetString(ms.ToArray());
+      //}
+    }
+
+    public string SetRtf(string document)
+    {
+      var documentBytes = System.Text.Encoding.UTF8.GetBytes(document);
+      using (var reader = new MemoryStream(documentBytes))
+      {
+        RichTextBox rtb = new RichTextBox();
+        reader.Position = 0;
+        rtb.SelectAll();
+        rtb.Selection.Load(reader, DataFormats.Rtf);
+        rtb.FontSize = 14;
+
+        return rtb.SelectionBrush.ToString() ; ;
+      }
+    }
+
     #endregion
 
     #region btnArrivals_Clicked
@@ -1971,11 +2081,11 @@ namespace IM.Inhouse
         chk.IsChecked = false;
         return;
       }
-            
+
       var isChecked = chk.IsChecked.HasValue && chk.IsChecked.Value;
       chk.IsChecked = itema.guInvit;
       var userData = BRPersonnel.Login(EnumLoginType.Location, App.User.User.peID, App.User.Location.loID);
-      var invit = new frmInvitationBase(EnumInvitationType.InHouse, userData, itema.guID, !isChecked ? EnumInvitationMode.modOnlyRead :EnumInvitationMode.modAdd);
+      var invit = new frmInvitationBase(EnumInvitationType.InHouse, userData, itema.guID, !isChecked ? EnumInvitationMode.modOnlyRead : EnumInvitationMode.modAdd);
       invit.Owner = this;
       invit.ShowInTaskbar = false;
       var res = invit.ShowDialog();
@@ -2002,8 +2112,7 @@ namespace IM.Inhouse
     }
     #endregion
 
-    #endregion
+ 
   }
 }
-
 

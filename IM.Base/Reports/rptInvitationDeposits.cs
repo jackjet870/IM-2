@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace IM.Inhouse.Reports {
+namespace IM.Base.Reports {
     using System;
     using System.ComponentModel;
     using CrystalDecisions.Shared;
@@ -16,14 +16,14 @@ namespace IM.Inhouse.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class rptInvitationGifts : ReportClass {
+    public class rptInvitationDeposits : ReportClass {
         
-        public rptInvitationGifts() {
+        public rptInvitationDeposits() {
         }
         
         public override string ResourceName {
             get {
-                return "rptInvitationGifts.rpt";
+                return "rptInvitationDeposits.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace IM.Inhouse.Reports {
         
         public override string FullResourceName {
             get {
-                return "IM.Inhouse.Reports.rptInvitationGifts.rpt";
+                return "IM.Base.Reports.rptInvitationDeposits.rpt";
             }
             set {
                 // Do nothing
@@ -90,9 +90,9 @@ namespace IM.Inhouse.Reports {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedrptInvitationGifts : Component, ICachedReport {
+    public class CachedrptInvitationDeposits : Component, ICachedReport {
         
-        public CachedrptInvitationGifts() {
+        public CachedrptInvitationDeposits() {
         }
         
         [Browsable(false)]
@@ -129,7 +129,7 @@ namespace IM.Inhouse.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            rptInvitationGifts rpt = new rptInvitationGifts();
+            rptInvitationDeposits rpt = new rptInvitationDeposits();
             rpt.Site = this.Site;
             return rpt;
         }

@@ -61,731 +61,731 @@ namespace IM.Base.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Guest Registration.
+        ///   Looks up a localized string similar to Adults.
         /// </summary>
-        public static string res1000 {
+        public static string msgLblAdults {
             get {
-                return ResourceManager.GetString("res1000", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Last Name.
-        /// </summary>
-        public static string res1001 {
-            get {
-                return ResourceManager.GetString("res1001", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to First Name.
-        /// </summary>
-        public static string res1002 {
-            get {
-                return ResourceManager.GetString("res1002", resourceCulture);
+                return ResourceManager.GetString("msgLblAdults", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Age.
         /// </summary>
-        public static string res1003 {
+        public static string msgLblAge {
             get {
-                return ResourceManager.GetString("res1003", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Marital Status.
-        /// </summary>
-        public static string res1004 {
-            get {
-                return ResourceManager.GetString("res1004", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invitation.
-        /// </summary>
-        public static string res1005 {
-            get {
-                return ResourceManager.GetString("res1005", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Gifts.
-        /// </summary>
-        public static string res1006 {
-            get {
-                return ResourceManager.GetString("res1006", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Gift.
-        /// </summary>
-        public static string res1007 {
-            get {
-                return ResourceManager.GetString("res1007", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Quantity.
-        /// </summary>
-        public static string res1008 {
-            get {
-                return ResourceManager.GetString("res1008", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Residence.
-        /// </summary>
-        public static string res1009 {
-            get {
-                return ResourceManager.GetString("res1009", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Hotel.
-        /// </summary>
-        public static string res1010 {
-            get {
-                return ResourceManager.GetString("res1010", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Room.
-        /// </summary>
-        public static string res1011 {
-            get {
-                return ResourceManager.GetString("res1011", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Occupation.
-        /// </summary>
-        public static string res1012 {
-            get {
-                return ResourceManager.GetString("res1012", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Location.
-        /// </summary>
-        public static string res1013 {
-            get {
-                return ResourceManager.GetString("res1013", resourceCulture);
+                return ResourceManager.GetString("msgLblAge", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Agency.
         /// </summary>
-        public static string res1014 {
+        public static string msgLblAgency {
             get {
-                return ResourceManager.GetString("res1014", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Pax.
-        /// </summary>
-        public static string res1015 {
-            get {
-                return ResourceManager.GetString("res1015", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Date.
-        /// </summary>
-        public static string res1016 {
-            get {
-                return ResourceManager.GetString("res1016", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Time.
-        /// </summary>
-        public static string res1017 {
-            get {
-                return ResourceManager.GetString("res1017", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Deposits.
-        /// </summary>
-        public static string res1018 {
-            get {
-                return ResourceManager.GetString("res1018", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Deposit.
-        /// </summary>
-        public static string res1019 {
-            get {
-                return ResourceManager.GetString("res1019", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Received.
-        /// </summary>
-        public static string res1020 {
-            get {
-                return ResourceManager.GetString("res1020", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Currency.
-        /// </summary>
-        public static string res1021 {
-            get {
-                return ResourceManager.GetString("res1021", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Deposits Burned.
-        /// </summary>
-        public static string res1022 {
-            get {
-                return ResourceManager.GetString("res1022", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Outside Invitation.
-        /// </summary>
-        public static string res1023 {
-            get {
-                return ResourceManager.GetString("res1023", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Date and Time Show.
-        /// </summary>
-        public static string res1024 {
-            get {
-                return ResourceManager.GetString("res1024", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Taxi In.
-        /// </summary>
-        public static string res1025 {
-            get {
-                return ResourceManager.GetString("res1025", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Direct.
-        /// </summary>
-        public static string res1026 {
-            get {
-                return ResourceManager.GetString("res1026", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Salesmen.
-        /// </summary>
-        public static string res1027 {
-            get {
-                return ResourceManager.GetString("res1027", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Id.
-        /// </summary>
-        public static string res1028 {
-            get {
-                return ResourceManager.GetString("res1028", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Name.
-        /// </summary>
-        public static string res1029 {
-            get {
-                return ResourceManager.GetString("res1029", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Role.
-        /// </summary>
-        public static string res1030 {
-            get {
-                return ResourceManager.GetString("res1030", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Credits Cards.
-        /// </summary>
-        public static string res1031 {
-            get {
-                return ResourceManager.GetString("res1031", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Credit Card.
-        /// </summary>
-        public static string res1032 {
-            get {
-                return ResourceManager.GetString("res1032", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Comments.
-        /// </summary>
-        public static string res1033 {
-            get {
-                return ResourceManager.GetString("res1033", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Comment.
-        /// </summary>
-        public static string res1034 {
-            get {
-                return ResourceManager.GetString("res1034", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to By.
-        /// </summary>
-        public static string res1035 {
-            get {
-                return ResourceManager.GetString("res1035", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Restrictions apply. If married, both, husband and wife, must attend. Gifts is subject to completion of the visit. No verbal offer is valid. This presentation will take 90 minutes..
-        /// </summary>
-        public static string res1036 {
-            get {
-                return ResourceManager.GetString("res1036", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Client.
-        /// </summary>
-        public static string res1037 {
-            get {
-                return ResourceManager.GetString("res1037", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Hostess approval.
-        /// </summary>
-        public static string res1038 {
-            get {
-                return ResourceManager.GetString("res1038", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Guests.
-        /// </summary>
-        public static string res1039 {
-            get {
-                return ResourceManager.GetString("res1039", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to E-mail.
-        /// </summary>
-        public static string res1040 {
-            get {
-                return ResourceManager.GetString("res1040", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Adults.
-        /// </summary>
-        public static string res1041 {
-            get {
-                return ResourceManager.GetString("res1041", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Minors.
-        /// </summary>
-        public static string res1042 {
-            get {
-                return ResourceManager.GetString("res1042", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Identification.
-        /// </summary>
-        public static string res1043 {
-            get {
-                return ResourceManager.GetString("res1043", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Children.
-        /// </summary>
-        public static string res1044 {
-            get {
-                return ResourceManager.GetString("res1044", resourceCulture);
+                return ResourceManager.GetString("msgLblAgency", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Ages.
         /// </summary>
-        public static string res1045 {
+        public static string msgLblAges {
             get {
-                return ResourceManager.GetString("res1045", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to State.
-        /// </summary>
-        public static string res1046 {
-            get {
-                return ResourceManager.GetString("res1046", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Country.
-        /// </summary>
-        public static string res1047 {
-            get {
-                return ResourceManager.GetString("res1047", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Arrival.
-        /// </summary>
-        public static string res1048 {
-            get {
-                return ResourceManager.GetString("res1048", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Departure.
-        /// </summary>
-        public static string res1049 {
-            get {
-                return ResourceManager.GetString("res1049", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Offered by.
-        /// </summary>
-        public static string res1050 {
-            get {
-                return ResourceManager.GetString("res1050", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Receipt Num..
-        /// </summary>
-        public static string res1051 {
-            get {
-                return ResourceManager.GetString("res1051", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Membership Num..
-        /// </summary>
-        public static string res1052 {
-            get {
-                return ResourceManager.GetString("res1052", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Exchange Rate.
-        /// </summary>
-        public static string res1053 {
-            get {
-                return ResourceManager.GetString("res1053", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Guest.
-        /// </summary>
-        public static string res1054 {
-            get {
-                return ResourceManager.GetString("res1054", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Gifts Host(ess).
-        /// </summary>
-        public static string res1055 {
-            get {
-                return ResourceManager.GetString("res1055", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Location Manager.
-        /// </summary>
-        public static string res1056 {
-            get {
-                return ResourceManager.GetString("res1056", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Receipt ID.
-        /// </summary>
-        public static string res1057 {
-            get {
-                return ResourceManager.GetString("res1057", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Deposit Burned.
-        /// </summary>
-        public static string res1058 {
-            get {
-                return ResourceManager.GetString("res1058", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Taxi Out.
-        /// </summary>
-        public static string res1059 {
-            get {
-                return ResourceManager.GetString("res1059", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Guest Service.
-        /// </summary>
-        public static string res1060 {
-            get {
-                return ResourceManager.GetString("res1060", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Notes.
-        /// </summary>
-        public static string res1061 {
-            get {
-                return ResourceManager.GetString("res1061", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Qty.
-        /// </summary>
-        public static string res1062 {
-            get {
-                return ResourceManager.GetString("res1062", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Gifts Receipt.
-        /// </summary>
-        public static string res1063 {
-            get {
-                return ResourceManager.GetString("res1063", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Client / Member dully authorizes PALACE ELITE and its subsidiaries to incorporate the data undersigned in the present document, to its respective files, the Member can exercise his right of access, rectification, cancellation and opposition related to the treaty and cession/ international transference of his data of personal nature according to the privacy policy on page www.palaceresorts.com/privacy-policy) and by Mexican law in the subject..
-        /// </summary>
-        public static string res1064 {
-            get {
-                return ResourceManager.GetString("res1064", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to COUPON.
-        /// </summary>
-        public static string res1065 {
-            get {
-                return ResourceManager.GetString("res1065", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to I Accept the terms and conditions on this coupon..
-        /// </summary>
-        public static string res1066 {
-            get {
-                return ResourceManager.GetString("res1066", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Payment Type.
-        /// </summary>
-        public static string res1067 {
-            get {
-                return ResourceManager.GetString("res1067", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Authorized by.
-        /// </summary>
-        public static string res1068 {
-            get {
-                return ResourceManager.GetString("res1068", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Reprinted # [grReimpresion] with motive [rmN].
-        /// </summary>
-        public static string res1069 {
-            get {
-                return ResourceManager.GetString("res1069", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Reservation.
-        /// </summary>
-        public static string res1070 {
-            get {
-                return ResourceManager.GetString("res1070", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to CxC Deposit.
-        /// </summary>
-        public static string res1071 {
-            get {
-                return ResourceManager.GetString("res1071", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to CxC Taxi Out.
-        /// </summary>
-        public static string res1072 {
-            get {
-                return ResourceManager.GetString("res1072", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to CxC Gifts.
-        /// </summary>
-        public static string res1073 {
-            get {
-                return ResourceManager.GetString("res1073", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Name.
-        /// </summary>
-        public static string res1074 {
-            get {
-                return ResourceManager.GetString("res1074", resourceCulture);
+                return ResourceManager.GetString("msgLblAges", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Amount.
         /// </summary>
-        public static string res1075 {
+        public static string msgLblAmount {
             get {
-                return ResourceManager.GetString("res1075", resourceCulture);
+                return ResourceManager.GetString("msgLblAmount", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Amount in Letters.
         /// </summary>
-        public static string res1076 {
+        public static string msgLblAmountLetter {
             get {
-                return ResourceManager.GetString("res1076", resourceCulture);
+                return ResourceManager.GetString("msgLblAmountLetter", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type.
+        ///   Looks up a localized string similar to Arrival.
         /// </summary>
-        public static string res1077 {
+        public static string msgLblArrival {
             get {
-                return ResourceManager.GetString("res1077", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Card Number.
-        /// </summary>
-        public static string res1078 {
-            get {
-                return ResourceManager.GetString("res1078", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Expiration.
-        /// </summary>
-        public static string res1079 {
-            get {
-                return ResourceManager.GetString("res1079", resourceCulture);
+                return ResourceManager.GetString("msgLblArrival", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Authorization ID.
         /// </summary>
-        public static string res1080 {
+        public static string msgLblAuthorization {
             get {
-                return ResourceManager.GetString("res1080", resourceCulture);
+                return ResourceManager.GetString("msgLblAuthorization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authorized by.
+        /// </summary>
+        public static string msgLblAuthorizedBy {
+            get {
+                return ResourceManager.GetString("msgLblAuthorizedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By.
+        /// </summary>
+        public static string msgLblBy {
+            get {
+                return ResourceManager.GetString("msgLblBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Card Number.
+        /// </summary>
+        public static string msgLblCardNumber {
+            get {
+                return ResourceManager.GetString("msgLblCardNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Children.
+        /// </summary>
+        public static string msgLblChildren {
+            get {
+                return ResourceManager.GetString("msgLblChildren", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Client.
+        /// </summary>
+        public static string msgLblClient {
+            get {
+                return ResourceManager.GetString("msgLblClient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string msgLblComment {
+            get {
+                return ResourceManager.GetString("msgLblComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments.
+        /// </summary>
+        public static string msgLblComments {
+            get {
+                return ResourceManager.GetString("msgLblComments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Country.
+        /// </summary>
+        public static string msgLblCountry {
+            get {
+                return ResourceManager.GetString("msgLblCountry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to COUPON.
+        /// </summary>
+        public static string msgLblCoupon {
+            get {
+                return ResourceManager.GetString("msgLblCoupon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credit Card.
+        /// </summary>
+        public static string msgLblCreditCard {
+            get {
+                return ResourceManager.GetString("msgLblCreditCard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credits Cards.
+        /// </summary>
+        public static string msgLblCreditCards {
+            get {
+                return ResourceManager.GetString("msgLblCreditCards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currency.
+        /// </summary>
+        public static string msgLblCurrency {
+            get {
+                return ResourceManager.GetString("msgLblCurrency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CxC Deposit.
+        /// </summary>
+        public static string msgLblCxCDeposit {
+            get {
+                return ResourceManager.GetString("msgLblCxCDeposit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CxC Gifts.
+        /// </summary>
+        public static string msgLblCxCGifts {
+            get {
+                return ResourceManager.GetString("msgLblCxCGifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CxC Taxi Out.
+        /// </summary>
+        public static string msgLblCxCTaxiOut {
+            get {
+                return ResourceManager.GetString("msgLblCxCTaxiOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date.
+        /// </summary>
+        public static string msgLblDate {
+            get {
+                return ResourceManager.GetString("msgLblDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date and Time Show.
+        /// </summary>
+        public static string msgLblDateTimeShow {
+            get {
+                return ResourceManager.GetString("msgLblDateTimeShow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Departure.
+        /// </summary>
+        public static string msgLblDeparture {
+            get {
+                return ResourceManager.GetString("msgLblDeparture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deposit.
+        /// </summary>
+        public static string msgLblDeposit {
+            get {
+                return ResourceManager.GetString("msgLblDeposit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deposit Burned.
+        /// </summary>
+        public static string msgLblDepositBurned {
+            get {
+                return ResourceManager.GetString("msgLblDepositBurned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deposits.
+        /// </summary>
+        public static string msgLblDeposits {
+            get {
+                return ResourceManager.GetString("msgLblDeposits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deposits Burned.
+        /// </summary>
+        public static string msgLblDepositsBurned {
+            get {
+                return ResourceManager.GetString("msgLblDepositsBurned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Direct.
+        /// </summary>
+        public static string msgLblDirect {
+            get {
+                return ResourceManager.GetString("msgLblDirect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E-mail.
+        /// </summary>
+        public static string msgLblEmail {
+            get {
+                return ResourceManager.GetString("msgLblEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exchange Rate.
+        /// </summary>
+        public static string msgLblExchangeRate {
+            get {
+                return ResourceManager.GetString("msgLblExchangeRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expiration.
+        /// </summary>
+        public static string msgLblExpiration {
+            get {
+                return ResourceManager.GetString("msgLblExpiration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First Name.
+        /// </summary>
+        public static string msgLblFirstName {
+            get {
+                return ResourceManager.GetString("msgLblFirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gift.
+        /// </summary>
+        public static string msgLblGift {
+            get {
+                return ResourceManager.GetString("msgLblGift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gifts.
+        /// </summary>
+        public static string msgLblGifts {
+            get {
+                return ResourceManager.GetString("msgLblGifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gifts Host(ess).
+        /// </summary>
+        public static string msgLblGiftsHostess {
+            get {
+                return ResourceManager.GetString("msgLblGiftsHostess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gifts Receipt.
+        /// </summary>
+        public static string msgLblGiftsReceipt {
+            get {
+                return ResourceManager.GetString("msgLblGiftsReceipt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I Accept the terms and conditions on this coupon..
+        /// </summary>
+        public static string msgLblGiftsReceiptAcceptConditions {
+            get {
+                return ResourceManager.GetString("msgLblGiftsReceiptAcceptConditions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guest.
+        /// </summary>
+        public static string msgLblGuest {
+            get {
+                return ResourceManager.GetString("msgLblGuest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guests.
+        /// </summary>
+        public static string msgLblGuests {
+            get {
+                return ResourceManager.GetString("msgLblGuests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guest Service.
+        /// </summary>
+        public static string msgLblGuestService {
+            get {
+                return ResourceManager.GetString("msgLblGuestService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hostess approval.
+        /// </summary>
+        public static string msgLblHostessApproval {
+            get {
+                return ResourceManager.GetString("msgLblHostessApproval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hotel.
+        /// </summary>
+        public static string msgLblHotel {
+            get {
+                return ResourceManager.GetString("msgLblHotel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id.
+        /// </summary>
+        public static string msgLblId {
+            get {
+                return ResourceManager.GetString("msgLblId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identification.
+        /// </summary>
+        public static string msgLblIdentification {
+            get {
+                return ResourceManager.GetString("msgLblIdentification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invitation.
+        /// </summary>
+        public static string msgLblInvitation {
+            get {
+                return ResourceManager.GetString("msgLblInvitation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Name.
+        /// </summary>
+        public static string msgLblLastName {
+            get {
+                return ResourceManager.GetString("msgLblLastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location.
+        /// </summary>
+        public static string msgLblLocation {
+            get {
+                return ResourceManager.GetString("msgLblLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location Manager.
+        /// </summary>
+        public static string msgLblLocationManager {
+            get {
+                return ResourceManager.GetString("msgLblLocationManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Marital Status.
+        /// </summary>
+        public static string msgLblMaritalStatus {
+            get {
+                return ResourceManager.GetString("msgLblMaritalStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Membership Num..
+        /// </summary>
+        public static string msgLblMembershipNum {
+            get {
+                return ResourceManager.GetString("msgLblMembershipNum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minors.
+        /// </summary>
+        public static string msgLblMinors {
+            get {
+                return ResourceManager.GetString("msgLblMinors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string msgLblName {
+            get {
+                return ResourceManager.GetString("msgLblName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string msgLblNameMT {
+            get {
+                return ResourceManager.GetString("msgLblNameMT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notes.
+        /// </summary>
+        public static string msgLblNotes {
+            get {
+                return ResourceManager.GetString("msgLblNotes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Occupation.
+        /// </summary>
+        public static string msgLblOccupation {
+            get {
+                return ResourceManager.GetString("msgLblOccupation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Offered by.
+        /// </summary>
+        public static string msgLblOfferedBy {
+            get {
+                return ResourceManager.GetString("msgLblOfferedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Outside Invitation.
+        /// </summary>
+        public static string msgLblOutsideInvitation {
+            get {
+                return ResourceManager.GetString("msgLblOutsideInvitation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pax.
+        /// </summary>
+        public static string msgLblPax {
+            get {
+                return ResourceManager.GetString("msgLblPax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Payment Type.
+        /// </summary>
+        public static string msgLblPaymentType {
+            get {
+                return ResourceManager.GetString("msgLblPaymentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quantity.
+        /// </summary>
+        public static string msgLblQuantity {
+            get {
+                return ResourceManager.GetString("msgLblQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Qty.
+        /// </summary>
+        public static string msgLblQuantityAbbreviation {
+            get {
+                return ResourceManager.GetString("msgLblQuantityAbbreviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receipt ID.
+        /// </summary>
+        public static string msgLblReceiptID {
+            get {
+                return ResourceManager.GetString("msgLblReceiptID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receipt Num..
+        /// </summary>
+        public static string msgLblReceiptNum {
+            get {
+                return ResourceManager.GetString("msgLblReceiptNum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Received.
+        /// </summary>
+        public static string msgLblReceived {
+            get {
+                return ResourceManager.GetString("msgLblReceived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reprinted # [grReimpresion] with motive [rmN].
+        /// </summary>
+        public static string msglblReimpresion {
+            get {
+                return ResourceManager.GetString("msglblReimpresion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reservation.
+        /// </summary>
+        public static string msgLblReservation {
+            get {
+                return ResourceManager.GetString("msgLblReservation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Residence.
+        /// </summary>
+        public static string msgLblResidence {
+            get {
+                return ResourceManager.GetString("msgLblResidence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Role.
+        /// </summary>
+        public static string msgLblRole {
+            get {
+                return ResourceManager.GetString("msgLblRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Room.
+        /// </summary>
+        public static string msgLblRoomNum {
+            get {
+                return ResourceManager.GetString("msgLblRoomNum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Salesmen.
+        /// </summary>
+        public static string msgLblSalesmen {
+            get {
+                return ResourceManager.GetString("msgLblSalesmen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to State.
+        /// </summary>
+        public static string msgLblState {
+            get {
+                return ResourceManager.GetString("msgLblState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Taxi In.
+        /// </summary>
+        public static string msgLblTaxiIn {
+            get {
+                return ResourceManager.GetString("msgLblTaxiIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Taxi Out.
+        /// </summary>
+        public static string msgLblTaxiOut {
+            get {
+                return ResourceManager.GetString("msgLblTaxiOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time.
+        /// </summary>
+        public static string msgLblTime {
+            get {
+                return ResourceManager.GetString("msgLblTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string msgLblType {
+            get {
+                return ResourceManager.GetString("msgLblType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guest Registration.
+        /// </summary>
+        public static string msgRptTitleGuestRegistration {
+            get {
+                return ResourceManager.GetString("msgRptTitleGuestRegistration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Client / Member dully authorizes PALACE ELITE and its subsidiaries to incorporate the data undersigned in the present document, to its respective files, the Member can exercise his right of access, rectification, cancellation and opposition related to the treaty and cession/ international transference of his data of personal nature according to the privacy policy on page www.palaceresorts.com/privacy-policy) and by Mexican law in the subject..
+        /// </summary>
+        public static string msgTxtGuestRegistrationPrivacity {
+            get {
+                return ResourceManager.GetString("msgTxtGuestRegistrationPrivacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restrictions apply. If married, both, husband and wife, must attend. Gifts is subject to completion of the visit. No verbal offer is valid. This presentation will take 90 minutes..
+        /// </summary>
+        public static string msgTxtGuestRegistrationRestrictions {
+            get {
+                return ResourceManager.GetString("msgTxtGuestRegistrationRestrictions", resourceCulture);
             }
         }
     }

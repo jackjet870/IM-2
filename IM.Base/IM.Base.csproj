@@ -31,6 +31,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.dll</HintPath>
@@ -69,6 +71,7 @@
     <Compile Include="Classes\objInvitCreditCard.cs" />
     <Compile Include="Classes\objInvitGift.cs" />
     <Compile Include="Classes\objInvitGuestStatus.cs" />
+    <Compile Include="Helpers\LanguageHelper.cs" />
     <Compile Include="Classes\Parametros.cs" />
     <Compile Include="Forms\frmSearchGuest.cs">
       <DependentUpon>frmSearchGuest.xaml</DependentUpon>
@@ -119,17 +122,51 @@
     <Compile Include="Helpers\UIRichTextBoxHelper.cs" />
     <Compile Include="Helpers\ValidateHelper.cs" />
     <Compile Include="Interfaces\IMetodosPublicos.cs" />
-    <Compile Include="Language\ResLanguage.ES.US.Designer.cs">
-      <DependentUpon>ResLanguage.ES.US.resx</DependentUpon>
+    <Compile Include="Language\ResLanguage.Designer.cs">
+      <DependentUpon>ResLanguage.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Language\ResLanguage.Designer.cs">
+    <Compile Include="Language\ResLanguage.PT-BR.Designer.cs">
+      <DependentUpon>ResLanguage.PT-BR.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ResLanguage.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Language\ResLanguage.ES-ES.Designer.cs">
+      <DependentUpon>ResLanguage.ES-ES.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Language\ResLanguage.EN-US.Designer.cs">
+      <DependentUpon>ResLanguage.EN-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\rptInvitation.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptInvitation.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptInvitationDeposits.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptInvitationDeposits.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptInvitationGifts.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptInvitationGifts.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptInvitationGuests.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptInvitationGuests.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\About.png" />
@@ -295,16 +332,49 @@
   <ItemGroup>
     <Resource Include="Images\Member.ico" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Language\ResLanguage.ES.US.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ResLanguage.ES.US.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Language\ResLanguage.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ResLanguage.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Language\ResLanguage.PT-BR.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResLanguage.PT-BR.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Language\ResLanguage.ES-ES.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResLanguage.ES-ES.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Language\ResLanguage.EN-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResLanguage.EN-US.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptInvitation.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptInvitation.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptInvitationDeposits.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptInvitationDeposits.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptInvitationGifts.resx">
+      <DependentUpon>rptInvitationGifts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptInvitationGifts.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptInvitationGifts.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptInvitationGuests.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptInvitationGuests.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
