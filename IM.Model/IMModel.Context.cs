@@ -3568,5 +3568,18 @@ namespace IM.Model
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Transfer>("USP_OR_TransferGetTransfer", mergeOption);
         }
+    
+        public virtual ObjectResult<NoticeShort> USP_OR_GetNotices(string leadSource, Nullable<System.DateTime> date)
+        {
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<NoticeShort>("USP_OR_GetNotices", leadSourceParameter, dateParameter);
+        }
     }
 }

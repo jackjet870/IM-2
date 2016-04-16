@@ -5984,6 +5984,10 @@
         <Function Name="USP_OR_GetMarkets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetNotices" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LeadSource" Type="varchar" Mode="In" />
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetPersonnel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LeadSources" Type="varchar" Mode="In" />
           <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
@@ -16360,6 +16364,10 @@
           </AssociationSet>
           <FunctionImport Name="USP_OR_TransferDeleteTransfer" />
           <FunctionImport Name="USP_OR_TransferGetTransfer" EntitySet="Transfers" ReturnType="Collection(IMModel.Transfer)" />
+          <FunctionImport Name="USP_OR_GetNotices" ReturnType="Collection(IMModel.NoticeShort)">
+            <Parameter Name="LeadSource" Mode="In" Type="String" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -18842,6 +18850,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="NoticeShort">
+          <Property Type="String" Name="noTitle" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="noText" Nullable="false" MaxLength="Max" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -24213,6 +24225,14 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_TransferDeleteTransfer" FunctionName="IMModel.Store.USP_OR_TransferDeleteTransfer" />
           <FunctionImportMapping FunctionImportName="USP_OR_TransferGetTransfer" FunctionName="IMModel.Store.USP_OR_TransferGetTransfer">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetNotices" FunctionName="IMModel.Store.USP_OR_GetNotices">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.NoticeShort">
+                <ScalarProperty Name="noTitle" ColumnName="noTitle" />
+                <ScalarProperty Name="noText" ColumnName="noText" />
+              </ComplexTypeMapping>
+            </ResultMapping>
           </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>

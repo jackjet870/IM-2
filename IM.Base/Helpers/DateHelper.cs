@@ -57,6 +57,7 @@ namespace IM.Base.Helpers
     /// <returns>Rango de fecha formateada (string) </returns>
     /// <history>
     /// [erosado] 24/Mar/2016 Created
+    /// [wtorres] 16/Abr/2016 Modified. Correccion de error en el formato de mes en rangos de 1 dia
     /// </history>
     public static string DateRangeFileName(DateTime dateFrom, DateTime dateTo)
     {
@@ -64,7 +65,7 @@ namespace IM.Base.Helpers
       //Comparar si es la misma fecha
       if (dateFrom.Date == dateTo.Date)
       {
-        dateRange = string.Format("{0:yyyy-MMMM-dd}", dateFrom);
+        dateRange = string.Format("{0:yyyy-MM-dd}", dateFrom);
       }
       // Si son diferentes años
       else if (dateFrom.Year != dateTo.Year)

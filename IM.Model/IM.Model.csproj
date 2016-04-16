@@ -492,6 +492,9 @@
     <Compile Include="Notice.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="NoticeShort.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Payment.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
