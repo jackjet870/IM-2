@@ -95,6 +95,7 @@
     <Compile Include="BR\BRMembershipGroups.cs" />
     <Compile Include="BR\BRMemberShipTypes.cs" />
     <Compile Include="BR\BRNotBookingMotives.cs" />
+    <Compile Include="BR\BROsTransfer.cs" />
     <Compile Include="BR\BRPaymentPlaces.cs" />
     <Compile Include="BR\BRPaymentSchemas.cs" />
     <Compile Include="BR\BRPaymentTypes.cs" />
