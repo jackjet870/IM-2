@@ -2,19 +2,16 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Configuration;
 using System.Windows.Threading;
-using IM.Transfer.Clases;
-
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Services.Helpers;
+using IM.Services.HotelService;
 using IM.Services.IntranetService;
 using PalaceResorts.Common.PalaceTools;
-using System.Data;
 using System.Threading;
 using System.ComponentModel;
-using System.Globalization;
+using IM.Model;
 
 namespace IM.Transfer.Forms
 
@@ -46,83 +43,97 @@ namespace IM.Transfer.Forms
         private static TimeSpan _tranferExchangeRatesEndTime;//Hora final del proceso de actualización de tipos de cambio
         private static TimeSpan _tranferExchangeRatesIntervalTime;//Intervalo de tiempo del proceso de actualización de tipos de cambio
         private static DateTime _lastExchangeRate;//Ultima hora que se ejecuto el proceso de actualización de tipos de cambio
-        public static List<Log.Transaction> listTransactions = new List<Log.Transaction>();
+        public static List<LogHelper.Transaction> listTransactions = new List<LogHelper.Transaction>();
         public readonly BackgroundWorker WorkerExchangeRate;
+        public static string lblTextLastExchangeRage = "Last Transfer Exchange Rate ";
+        public static string lblTextLastReservations = "Last Transfer Reservations ";
 
 
-        #endregion
+    #endregion
 
         #region Contructores y Destructores
         public frmTransferLauncher()
-        {
-            InitializeComponent();
-            InitializeValuesParameters();
-            WorkerExchangeRate = new BackgroundWorker();
-            WorkerExchangeRate.WorkerReportsProgress = true;
-            WorkerExchangeRate.WorkerSupportsCancellation = true;
-            WorkerExchangeRate.DoWork += WorkerUpdateExchangeRateDoWork;
-            WorkerExchangeRate.RunWorkerCompleted += WorkerExchangeRateRunWorkerCompleted;
-            WorkerExchangeRate.ProgressChanged += new ProgressChangedEventHandler(progresBarTransfer_Changed);
+            {
+                InitializeComponent();
+                InitializeValuesParameters();
+                WorkerExchangeRate = new BackgroundWorker();
+                WorkerExchangeRate.WorkerReportsProgress = true;
+                WorkerExchangeRate.WorkerSupportsCancellation = true;
+                WorkerExchangeRate.DoWork += WorkerUpdateExchangeRateDoWork;
+                WorkerExchangeRate.RunWorkerCompleted += WorkerExchangeRateRunWorkerCompleted;
+                WorkerExchangeRate.ProgressChanged += new ProgressChangedEventHandler(progresBarTransfer_Changed);
 
-        }
+            }
 
         #endregion
 
-        #region Metodos
-        
-        
-        private void InitializeValuesParameters() {
-            //Se inicializan los valores de los parametros para la transferencia de reservaciones.
-            _stratTimeT = TimeSpan.Parse(ConfigHelper.GetString("StartTime"));
-            _endTimeT = TimeSpan.Parse(ConfigHelper.GetString("EndTime"));
-            _intervalTimeT = TimeSpan.Parse(ConfigHelper.GetString("IntervalTime"));
-            _daysBeforeDAY = Convert.ToInt32(ConfigHelper.GetString("DaysBefore"));
-            _daysAfterDAY = Convert.ToInt32(ConfigHelper.GetString("DaysAfter"));
-            _retrys = Convert.ToInt32(ConfigHelper.GetString("Retrys"));
-            _timeOutT = ConfigHelper.GetString("TimeOut");
-            _timeOutWebServiceT = ConfigHelper.GetString("TimeOutWebService");
-            _standbyIntervalTime = TimeSpan.Parse(ConfigHelper.GetString("StandbyIntervalTime"));
+    #region Metodos para transferencias
 
-            _dateToday = DateTime.Now;
+    #region InitializeValuesParameters
+    ///<summary>Metodo que inicializa los parametros y configuracion de las transferencias</summary>
+    ///<history>
+    ///[michan] 15/04/2016 Created
+    ///</history>
+    private void InitializeValuesParameters() {
+              //Se inicializan los valores de los parametros para la transferencia de reservaciones.
+              _stratTimeT = TimeSpan.Parse(ConfigHelper.GetString("StartTime"));
+              _endTimeT = TimeSpan.Parse(ConfigHelper.GetString("EndTime"));
+              _intervalTimeT = TimeSpan.Parse(ConfigHelper.GetString("IntervalTime"));
+              _daysBeforeDAY = Convert.ToInt32(ConfigHelper.GetString("DaysBefore"));
+              _daysAfterDAY = Convert.ToInt32(ConfigHelper.GetString("DaysAfter"));
+              _retrys = Convert.ToInt32(ConfigHelper.GetString("Retrys"));
+              _timeOutT = ConfigHelper.GetString("TimeOut");
+              _timeOutWebServiceT = ConfigHelper.GetString("TimeOutWebService");
+              _standbyIntervalTime = TimeSpan.Parse(ConfigHelper.GetString("StandbyIntervalTime"));
 
-            //se inicializan los parametros para ejecutar ExchangeRate
-            _tranferExchangeRatesStartTime = TimeSpan.Parse(ConfigHelper.GetString("TranferExchangeRatesStartTime"));
-            _tranferExchangeRatesEndTime = TimeSpan.Parse(ConfigHelper.GetString("TranferExchangeRatesEndTime"));
-            _tranferExchangeRatesIntervalTime = TimeSpan.Parse(ConfigHelper.GetString("TranferExchangeRatesIntervalTime"));
-            _lastExchangeRate = DateTime.Now;
+              _dateToday = DateTime.Now;
+
+              //se inicializan los parametros para ejecutar ExchangeRate
+              _tranferExchangeRatesStartTime = TimeSpan.Parse(ConfigHelper.GetString("TranferExchangeRatesStartTime"));
+              _tranferExchangeRatesEndTime = TimeSpan.Parse(ConfigHelper.GetString("TranferExchangeRatesEndTime"));
+              _tranferExchangeRatesIntervalTime = TimeSpan.Parse(ConfigHelper.GetString("TranferExchangeRatesIntervalTime"));
+              _lastExchangeRate = DateTime.Now;
             
-        }
+          }
+    #endregion
 
-        public void InitializeExchangeRate() {
-            //INSTANCIANDO EL TIMER CON LA CLASE DISPATCHERTIMER 
-            DispatcherTimer dispathcerT = new DispatcherTimer();
-            //EL INTERVALO DEL TIMER ES DE HORAS, MINUTOS Y SEGUNDOS QUE SE PASAN COMO PARAMETRO 
-            dispathcerT.Interval = _standbyIntervalTime;//new TimeSpan(0, 0, Convert.ToInt32(_standbyIntervalTime));
-            //EL EVENTO TICK SE SUBSCRIBE A UN CONTROLADOR DE EVENTOS UTILIZANDO LAMBDA 
-            dispathcerT.Tick += (s, a) =>
-            {
-                //ACCION QUE SE DETONA CUANDO YA TRANSCURRIERON LOS SEGUNDOS ESTABLECIDOS
-                dispathcerT.Stop();
-                DateTime _currentTime = DateTime.Now;
-                if (!isDateEquals(_currentTime, _lastExchangeRate))
-                {
-                    _lastExchangeRate = DateTime.Now;
-                }                
+    #region InitializeExchangeRate
+    ///<summary>Metodo que inicializa y ejecuta cuando se cumple la validación para la actualización del Exchange Rate</summary>
+    ///<history>
+    ///[michan] 15/04/2016 Created
+    ///</history>
+    public void InitializeExchangeRate() {
+              //INSTANCIANDO EL TIMER CON LA CLASE DISPATCHERTIMER 
+              DispatcherTimer dispathcerT = new DispatcherTimer();
+              //EL INTERVALO DEL TIMER ES DE HORAS, MINUTOS Y SEGUNDOS QUE SE PASAN COMO PARAMETRO 
+              dispathcerT.Interval = _standbyIntervalTime;//new TimeSpan(0, 0, Convert.ToInt32(_standbyIntervalTime));
+              //EL EVENTO TICK SE SUBSCRIBE A UN CONTROLADOR DE EVENTOS UTILIZANDO LAMBDA 
+              dispathcerT.Tick += (s, a) =>
+              {
+                  //ACCION QUE SE DETONA CUANDO YA TRANSCURRIERON LOS SEGUNDOS ESTABLECIDOS
+                  dispathcerT.Stop();
+                  DateTime _currentTime = DateTime.Now;
+              
+                  if (!DateHelper.isDateEquals(_currentTime, _lastExchangeRate))
+                  {
+                      _lastExchangeRate = DateTime.Now;
+                  }                
                 
-                if (IsRangeTime(_currentTime, _lastExchangeRate) && IsRangeHours(_currentTime.TimeOfDay, _tranferExchangeRatesStartTime, _tranferExchangeRatesEndTime))
-                {  
-                    WorkerExchangeRate.RunWorkerAsync();
-                    //UpdateExchangeRates();
-                    _lastExchangeRate = AddTimeDate(_tranferExchangeRatesIntervalTime);
-                }
-                dispathcerT.Start();
+                  if (DateHelper.IsRangeTime(_currentTime, _lastExchangeRate) && DateHelper.IsRangeHours(_currentTime.TimeOfDay, _tranferExchangeRatesStartTime, _tranferExchangeRatesEndTime))
+                  {  
+                      WorkerExchangeRate.RunWorkerAsync();
+                      _lastExchangeRate = DateHelper.AddTimeDate(_tranferExchangeRatesIntervalTime);
+                  }
+                  dispathcerT.Start();
 
-            };
-            dispathcerT.Start();
+              };
+              dispathcerT.Start();
             
-        }
+          }
+    #endregion
 
-        private static void InitializerReservations()
+
+    private static void InitializerReservations()
         {
             //INSTANCIANDO EL TIMER CON LA CLASE DISPATCHERTIMER 
             DispatcherTimer dispathcerT = new DispatcherTimer();
@@ -147,21 +158,31 @@ namespace IM.Transfer.Forms
 
         }
 
-        public void InitializerProgressBar()
+    #region InitializerProgressBar
+    ///<summary>Metodo que inicializa y reestablece los valores de la barra de progreso</summary>
+    ///<history>
+    ///[michan] 15/04/2016 Created
+    ///</history>
+    public void InitializerProgressBar()
         {
             //Configuración del ProgressBar
             progresBarTransfer.Minimum = 0;//valor mínimo (inicio de la barra de carga)
             progresBarTransfer.Maximum = 100;//valor máximo(hasta donde se carga, como ejemplo 100)
             progresBarTransfer.Value = 0;//valor de inicio
             textStatusProgresBar.Text = String.Format("{0:0%}", 0);
-            //almacenamos el valor del progressbar con la siguiente variable
 
 
         }
+    #endregion
 
-        private void LoadDataGRidXML()
+    #region LoadDataGRidXML
+    ///<summary>Metodo que carga e inicializa el grid del log de Exchange Rate</summary>
+    ///<history>
+    ///[michan] 15/04/2016 Created
+    ///</history>
+    private void LoadDataGRidXML()
         { 
-            DateTime dateTo = Log.dateBefore(_daysBeforeDAY, _dateToday);
+            DateTime dateTo = DateHelper.DaysBeforeOrAfter(_daysBeforeDAY);
 
             /*Application.Current.Dispatcher.Invoke(
                 DispatcherPriority.Background,
@@ -169,7 +190,7 @@ namespace IM.Transfer.Forms
                         () =>
                         {*/
                             Task.Factory.StartNew(() => 
-                            listTransactions = Log.LoadHistoryLog("ExchangeRate", DateTime.Now, dateTo))
+                            listTransactions = LogHelper.LoadHistoryLog("ExchangeRate", DateTime.Now, dateTo))
                                 .ContinueWith(
                                     (task1) =>
                                         {
@@ -188,7 +209,7 @@ namespace IM.Transfer.Forms
                                                     {
                                                         _lastExchangeRate = listTransactions[listTransactions.Count - 1].Date;
                                                         grdLogTransfer.ItemsSource = listTransactions;
-                                                        //grdLogTransfer.Items.Refresh();//Refrescamos el grid
+                                                        grdLogTransfer.Items.Refresh();//Refrescamos el grid
                                                         //GridHelper.SelectRow(grdLogTransfer, grdLogTransfer.Items.Count);
 
 
@@ -204,8 +225,70 @@ namespace IM.Transfer.Forms
                     )
                  );*/
         }
+    #endregion
 
-        private void UpdateExchangeRates()
+    public void DoReservations()
+    {
+      List<ZoneTransfer> zoneTransfer = BRZones.GetZonesTransfer();
+      string zoneID = "";
+      string zoneName = "";
+      string zoneHotel = "";
+      if (zoneTransfer.Count <= 0)
+      {
+        
+      }
+      
+      foreach (ZoneTransfer zone in zoneTransfer)
+      {
+        zoneID = zone.znID.ToString();
+        zoneName = zone.znN.ToString();
+        zoneHotel = zone.znZoneHotel.ToString();
+        ExportToTransfer(zoneID, zoneName, zoneHotel);
+
+
+        Console.WriteLine("ID: " + zoneID + "\t " + "Zone Name: " + zoneName + "\t" + "Zone Hotel: " + zoneHotel + "\t" + "\t");
+      }
+
+    }
+
+    public void ExportToTransfer(string zoneID, string zoneName, string zoneHotel)
+    {
+      GetReservations(zoneID, zoneName, zoneHotel);
+    }
+
+    public void GetReservations(string zoneID, string zoneName, string zoneHotel)
+    {
+      List<LeadSourceShort> hotels =  BRLeadSources.GetLeadSourcesByZoneBoss(zoneID);
+      DateTime dateFrom =  DateHelper.DaysBeforeOrAfter(_daysBeforeDAY);
+      DateTime dateTo = DateHelper.DaysBeforeOrAfter(_daysAfterDAY);
+      string leadSourceID = StringIDHoteles(hotels);
+
+
+      if (hotels.Count <= 0 )
+      {}
+      ReservationOrigosTransfer reservations = HotelService.GetReservationsByArrivalDate(zoneHotel, dateFrom, dateTo, leadSourceID);
+      if( reservations != null )
+      {
+       
+        
+        
+      }
+
+    }
+
+    public string StringIDHoteles(List<LeadSourceShort> hotels)
+    {
+      string leadSourceId = string.Empty;
+      foreach (LeadSourceShort hotel in hotels)
+      {
+        Console.WriteLine("ID: " + hotel.lsID + "\t " + "Zone Name: " + hotel.lsN + "\t" + "\t" + "\t");
+        leadSourceId += hotel.lsID + ",";
+      }
+      leadSourceId = leadSourceId.Remove(leadSourceId.Length - 1);
+      return leadSourceId;
+    }
+
+    private void UpdateExchangeRates()
         {
             DateTime startExchangeRate = DateTime.Now;
             DateTime endExchangeRate;            
@@ -234,7 +317,7 @@ namespace IM.Transfer.Forms
                         BRExchangeRate.UpdateExchangeRate(_dtpServerDate, _currencyId, _exchangeRateType);
                         endExchangeRate = DateTime.Now;
 
-                        AddItemDataGridExchangeRate(DateTime.Now, "Info", "Updating Exchange Rate in " +timeDuration(startExchangeRate, endExchangeRate).ToString(@"hh\ \h\ \:mm\ \m\ \:ss\ \s\ \:fff\ \m\s"));
+                        AddItemDataGridExchangeRate(DateTime.Now, "Info", "Updating Exchange Rate in " + DateHelper.timeDuration(startExchangeRate, endExchangeRate).ToString(@"hh\ \h\ \:mm\ \m\ \:ss\ \s\ \:fff\ \m\s"));
 
                         AddItemDataGridExchangeRate(DateTime.Now, "Success", "Process finished");
                     }
@@ -259,48 +342,6 @@ namespace IM.Transfer.Forms
 
         }
 
-        private static bool IsRangeHours(TimeSpan currentTime, TimeSpan stratTime, TimeSpan endTime)
-        {
-            bool _response = false;
-            if (currentTime.CompareTo(stratTime) > -1 && currentTime.CompareTo(endTime) < 1)
-            {
-                _response = true;
-            }
-            return _response;
-        }
-
-        private static bool IsRangeTime(DateTime currentTime, DateTime compareTime)
-        {
-            bool _response = false;
-            if ((currentTime.Hour == compareTime.Hour) && (currentTime.Minute == currentTime.Minute))
-            {
-                _response = true;
-            }
-            return _response;
-        }
-
-        private static bool isDateEquals(DateTime dateToday, DateTime dateCompare)
-        {
-            bool status = false;
-            if(dateToday.ToString("d") == dateCompare.ToString("d"))
-            {
-                status = true;
-            }
-            return status;
-        }
-
-        private static DateTime AddTimeDate(TimeSpan compareTime)
-        {
-            DateTime dateAfter = DateTime.Now.AddHours(compareTime.Hours).AddMinutes(compareTime.Minutes).AddSeconds(compareTime.Seconds);
-            return dateAfter;
-
-        }
-
-        private static TimeSpan timeDuration(DateTime dateFirst, DateTime dateEnd)
-        {
-            return dateEnd.Subtract(dateFirst).Duration();  
-        }
-
 
         public void AddItemDataGridExchangeRate(DateTime date, string logLevel, string message)
         {
@@ -310,12 +351,12 @@ namespace IM.Transfer.Forms
                        () =>
                        {*/
             
-                    listTransactions.Add(Log.AddTransaction("ExchangeRate", date, logLevel, message));
+                    listTransactions.Add(LogHelper.AddTransaction("ExchangeRate", date, logLevel, message));
                     grdLogTransfer.ItemsSource = null;
                     grdLogTransfer.ItemsSource = listTransactions;
                     //grdLogTransfer.Items.Add(Log.AddTransaction("ExchangeRate", date, logLevel, message));
                     grdLogTransfer.Items.Refresh();//Refrescamos el grid
-                    //GridHelper.SelectRow(grdLogTransfer, grdLogTransfer.Items.Count);
+                    GridHelper.SelectRow(grdLogTransfer, grdLogTransfer.Items.Count);
 
 
             
@@ -329,7 +370,13 @@ namespace IM.Transfer.Forms
 
         }
 
-        public void AddValueProgressBar(int value)
+    #region AddValueProgressBar
+    ///<summary>Metodo que actualiza la barra de progreso</summary>
+    ///<param name="value">recibe el valor de la carra de progreso del 1 al  10</param>
+    ///<history>
+    ///[michan] 15/04/2016 Created
+    ///</history>
+    public void AddValueProgressBar(int value)
         {
             int valueIncrement = (value * 10);
             double porcentValue = 0.00;
@@ -343,30 +390,56 @@ namespace IM.Transfer.Forms
             WorkerExchangeRate.ReportProgress(80, 0.80);
 
         }
+    #endregion
 
-        public void CancellWorkerExchangeRate()
+    #region CancellWorkerExchangeRate
+    ///<summary>Metodo que cancela y finaliza la tarea de transferencia de Exchange Rate</summary>
+    ///<history>
+    ///[michan] 15/04/2016 Created
+    ///</history>
+    public void CancellWorkerExchangeRate()
         {
             if (WorkerExchangeRate.WorkerSupportsCancellation == true)
             {
                 WorkerExchangeRate.CancelAsync();
             }
         }
+    #endregion
 
-        public delegate void UpdateDelegateExchangeRate(DateTime date, string logLevel, string message);
+    #region UpdateDelegateExchangeRate
+    ///<summary>Metodo para crear delegado utilizado en la actualizacion el grid del log</summary>
+    ///<history>
+    ///[michan] 15/04/2016 Created
+    ///</history>
+    public delegate void UpdateDelegateExchangeRate(DateTime date, string logLevel, string message);
+    #endregion
 
-        public void UpdateDelegateDatagridExchangeRate(DateTime date, string logLevel = "", string message = "")
+    #region UpdateDelegateDatagridExchangeRate
+    ///<summary>Metodo que agrega nuevo registro en el log de exchange rate y actualiza el grid de log de exchange rate</summary>
+    ///<history>
+    ///[michan] 15/04/2016 Created
+    ///</history>
+    public void UpdateDelegateDatagridExchangeRate(DateTime date, string logLevel = "", string message = "")
         {
             //lblLastTransferReservations.Content = " Time :" + " = > "+ date.ToString();
-            listTransactions.Add(Log.AddTransaction("ExchangeRate", date, logLevel, message));
+            listTransactions.Add(LogHelper.AddTransaction("ExchangeRate", date, logLevel, message));
             grdLogTransfer.ItemsSource = null;
             grdLogTransfer.ItemsSource = listTransactions;
-            
+            grdLogTransfer.Items.Refresh();//Refrescamos el grid
+            GridHelper.SelectRow(grdLogTransfer, grdLogTransfer.Items.Count);
 
-            //grdLogTransfer.Items.Add(Log.AddTransaction("ExchangeRate", date, logLevel, message));
 
-        }
+      //grdLogTransfer.Items.Add(Log.AddTransaction("ExchangeRate", date, logLevel, message));
 
-        private void WorkerExchangeRateRunWorkerCompleted(object Sender, RunWorkerCompletedEventArgs e)
+    }
+    #endregion
+
+    #region WorkerExchangeRateRunWorkerCompleted
+    ///<summary>Metodo que se ejecuta cuando se finaliza alguna tarea</summary>
+    ///<history>
+    ///[michan] 15/04/2016 Created
+    ///</history>
+    private void WorkerExchangeRateRunWorkerCompleted(object Sender, RunWorkerCompletedEventArgs e)
         {
             if (!e.Cancelled)
             {
@@ -390,8 +463,14 @@ namespace IM.Transfer.Forms
                 AddValueProgressBar(0);
             }
         }
+    #endregion
 
-        private void WorkerUpdateExchangeRateDoWork(object Sender, DoWorkEventArgs e)
+    #region WorkerUpdateExchangeRateDoWork
+    ///<summary>Metodo que contiene la tarea que realiza todo el proceso de actualizacion de Exchange Rate</summary>
+    ///<history>
+    ///[michan] 15/04/2016 Created
+    ///</history>
+    private void WorkerUpdateExchangeRateDoWork(object Sender, DoWorkEventArgs e)
         {
             /*for (int i = 0; i <= 100; i++)
             {
@@ -444,7 +523,7 @@ namespace IM.Transfer.Forms
                         endExchangeRate = DateTime.Now;
 
                         //AddItemDataGridExchangeRate(DateTime.Now, "Info", "Updating Exchange Rate in " + timeDuration(startExchangeRate, endExchangeRate).ToString(@"hh\ \h\ \:mm\ \m\ \:ss\ \s\ \:fff\ \m\s"));
-                        grdLogTransfer.Dispatcher.BeginInvoke(DispatcherPriority.Normal, updateDelegate, DateTime.Now, "Info", "Updating Exchange Rate in " + timeDuration(startExchangeRate, endExchangeRate).ToString(@"hh\ \h\ \:mm\ \m\ \:ss\ \s\ \:fff\ \m\s"));
+                        grdLogTransfer.Dispatcher.BeginInvoke(DispatcherPriority.Normal, updateDelegate, DateTime.Now, "Info", "Updating Exchange Rate in " + DateHelper.timeDuration(startExchangeRate, endExchangeRate).ToString(@"hh\ \h\ \:mm\ \m\ \:ss\ \s\ \:fff\ \m\s"));
                         AddValueProgressBar(6);
                         //AddItemDataGridExchangeRate(DateTime.Now, "Success", "Process finished");
                         grdLogTransfer.Dispatcher.BeginInvoke(DispatcherPriority.Normal, updateDelegate, DateTime.Now, "Success", "Process finished");
@@ -476,23 +555,25 @@ namespace IM.Transfer.Forms
                 grdLogTransfer.Dispatcher.BeginInvoke(DispatcherPriority.Normal, updateDelegate, DateTime.Now, "Warning", "Exchange rate does not exists for day");
             }
         }
+    #endregion
 
+    #endregion
 
-        #endregion
-
-        
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+    #region Metodos de Ventana
+    private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             lblDate.Content = DateTime.Now.ToString("dd/MM/yyyy");
             lblStatus.Content = "STAND BY";
             LoadDataGRidXML();
             InitializeExchangeRate();
-            lblLastTransferExchangeRate.Content = _lastExchangeRate.ToString();
+            lblLastTransferExchangeRate.Content = lblTextLastExchangeRage + _lastExchangeRate.ToString();
             InitializerProgressBar();
+            DoReservations();
         }
+    #endregion
 
-        private void btnTrasnferReservations_Click(object sender, RoutedEventArgs e)
+    #region Metodos de acciones de botones
+    private void btnTrasnferReservations_Click(object sender, RoutedEventArgs e)
         {
             
             //WorkerExchangeRate.RunWorkerAsync();
@@ -507,8 +588,9 @@ namespace IM.Transfer.Forms
             }
 
         }
+    #endregion
 
-        private void progresBarTransfer_Changed(object sender, ProgressChangedEventArgs e)
+    private void progresBarTransfer_Changed(object sender, ProgressChangedEventArgs e)
         {
             progresBarTransfer.Value = e.ProgressPercentage;
             textStatusProgresBar.Text = String.Format("{0:p0}", e.UserState);

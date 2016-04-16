@@ -89,8 +89,6 @@ namespace IM.BusinessRules.BR
     }
         #endregion
 
-
-
     #region UpdateExchangeRate
 
     /// <summary>
@@ -111,6 +109,7 @@ namespace IM.BusinessRules.BR
         }
     }
 
-        #endregion
-    }
+    #endregion
+
+  }
 }

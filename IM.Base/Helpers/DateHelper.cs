@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace IM.Base.Helpers
 {
@@ -137,6 +138,127 @@ namespace IM.Base.Helpers
       int span = date.DayOfWeek - dmon;
       date = date.AddDays(-span);
       return date;
+    }
+    #endregion
+
+    #region IsRangeHours
+    ///<summary>Metodo que valida que una hora este en un rango</summary>
+    ///<param name="stratTime">Hora donde se inicia la validacion</param>
+    ///<param name="endTime">Hora donde finaliza la validacion</param>
+    ///<param name="currentTime">Hora que se va validar</param>
+    ///<history>
+    ///[michan] 14/04/2016 Created
+    ///</history>
+    public static bool IsRangeHours(TimeSpan currentTime, TimeSpan stratTime, TimeSpan endTime)
+    {
+      bool _response = false;
+      if (currentTime.CompareTo(stratTime) > -1 && currentTime.CompareTo(endTime) < 1)
+      {
+        _response = true;
+      }
+      return _response;
+    }
+    #endregion
+
+    #region IsRangeTime
+    ///<summary>Metodo que valida que dos horas sean iguales</summary>
+    ///<param name="currentTime">dia que contiene la hora actual</param>
+    ///<param name="compareTime">Dia y hora con que se va comparar</param>
+    ///<history>
+    ///[michan] 14/04/2016 Created
+    ///</history>
+    public static bool IsRangeTime(DateTime currentTime, DateTime compareTime)
+    {
+      bool _response = false;
+      if ((currentTime.Hour == compareTime.Hour) && (currentTime.Minute == currentTime.Minute))
+      {
+        _response = true;
+      }
+      return _response;
+    }
+    #endregion
+
+    #region isDateEquals
+    ///<summary>Metodo que valida dos fechas sean iguales</summary>
+    ///<param name="dateToday">Fecha que se desea comparar</param>
+    ///<param name="dateCompare">Fecha con que se va comparar</param>
+    ///<history>
+    ///[michan] 14/04/2016 Created
+    ///</history>
+    public static bool isDateEquals(DateTime dateToday, DateTime dateCompare)
+    {
+      bool status = false;
+      if (dateToday.ToString("d") == dateCompare.ToString("d"))
+      {
+        status = true;
+      }
+      return status;
+    }
+    #endregion
+
+    #region AddTimeDate
+    ///<summary>Metodo que agrega tiempo a hora actual</summary>
+    ///<param name="addTime">Horas que se desean aumentar al dia</param>
+    ///<history>
+    ///[michan] 14/04/2016 Created
+    ///</history>
+    public static DateTime AddTimeDate(TimeSpan addTime)
+    {
+      DateTime dateAfter = DateTime.Now.AddHours(addTime.Hours).AddMinutes(addTime.Minutes).AddSeconds(addTime.Seconds);
+      return dateAfter;
+
+    }
+    #endregion
+
+    #region timeDuration
+    ///<summary>Metodo que retorna el tiempo transcurrido entre dos Datetime</summary>
+    ///<param name="dateFirst">Tiempo de inicio</param>
+    ///<param name="dateEnd">Tiempo donde termina</param>
+    ///<history>
+    ///[michan] 14/04/2016 Created
+    ///</history>
+    public static TimeSpan timeDuration(DateTime dateFirst, DateTime dateEnd)
+    {
+      return dateEnd.Subtract(dateFirst).Duration();
+    }
+    #endregion
+
+    #region DaysBeforeOrAfter
+    ///<summary>Metodo que agrega o resta días a una fecha</summary>
+    ///<param name="date">Fecha que se agregara los dias</param>
+    ///<param name="days">Cantidad de dias ha agregar</param>
+    ///<history>
+    ///[michan] 14/04/2016 Created
+    ///</history>
+    public static DateTime DaysBeforeOrAfter(int days, DateTime? date = null)
+    {
+      if (date == null)
+      {
+        date = DateTime.Now;
+      }
+      DateTime dateBefore = date.Value.AddDays(days);
+      return dateBefore;
+    }
+    #endregion
+
+    #region GetMonthName
+    ///<summary>Metodo retorna el nombre del mes</summary>
+    ///<param name="monthNumber">Numero de mes</param>
+    ///<history>
+    ///[michan] 14/04/2016 Created
+    ///</history>
+    public static string GetMonthName(int monthNumber)
+    {
+      try
+      {
+        DateTimeFormatInfo dateFormat = CultureInfo.CurrentCulture.DateTimeFormat;
+        string MonthName = dateFormat.GetMonthName(monthNumber);
+        return MonthName;
+      }
+      catch
+      {
+        return "Desconocido";
+      }
     }
     #endregion
   }
