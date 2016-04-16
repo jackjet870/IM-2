@@ -328,6 +328,34 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmReasonCancellationFolioDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmReasonCancellationFolios.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmRefundTypeDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmRefundTypes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmRegionDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmRegions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmReimpresionMotives.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmSearch.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -531,6 +559,27 @@
     </Compile>
     <Compile Include="Forms\frmRateTypes.xaml.cs">
       <DependentUpon>frmRateTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmReasonCancellationFolioDetail.xaml.cs">
+      <DependentUpon>frmReasonCancellationFolioDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmReasonCancellationFolios.xaml.cs">
+      <DependentUpon>frmReasonCancellationFolios.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmRefundTypeDetail.xaml.cs">
+      <DependentUpon>frmRefundTypeDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmRefundTypes.xaml.cs">
+      <DependentUpon>frmRefundTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmRegionDetail.xaml.cs">
+      <DependentUpon>frmRegionDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmRegions.xaml.cs">
+      <DependentUpon>frmRegions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmReimpresionMotives.xaml.cs">
+      <DependentUpon>frmReimpresionMotives.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSearch.xaml.cs">
       <DependentUpon>frmSearch.xaml</DependentUpon>

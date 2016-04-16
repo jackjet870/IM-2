@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Linq;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Metadata.Edm;
+using System;
 
 namespace IM.Base.Helpers
 {
@@ -38,6 +40,7 @@ namespace IM.Base.Helpers
     #endregion
 
     #region Equals
+    #region Compare Objects
     /// <summary>
     /// Compara los atributos de  objetos para saber si sus valores son iguales
     /// </summary>
@@ -49,7 +52,7 @@ namespace IM.Base.Helpers
     /// [emoguel] created 28/03/2016
     /// [emoguel] modified se agrego una bandera para clonar las propiedades "Virtual"
     /// </history>
-    public static bool IsEquals<T>(T objNew, T ObjOld,bool blnIsVirtual=false)
+    public static bool IsEquals<T>(T objNew, T ObjOld, bool blnIsVirtual = false)
     {
       if (objNew != null && ObjOld != null)
       {
@@ -86,9 +89,42 @@ namespace IM.Base.Helpers
         {
           return false;
         }
-      } 
+      }
       return false;
+    } 
+    #endregion
+
+    #region CompareList
+    /// <summary>
+    /// Compara que los items de ambas listas sean los mismos
+    /// </summary>
+    /// <param name="lstNew">Lista Nueva</param>
+    /// <param name="lstOld">Lista Antigua</param>
+    /// <returns>True. Contienen los mismos registro | False.Tienen registros diferentes</returns>
+    /// <history>
+    /// [emoguel] created 15/04/2016
+    /// </history>
+    public static bool IsListEquals<T>(List<T> lstNew, List<T> lstOld)
+    {
+      Type type = typeof(T);
+
+      #region Obtener la llave primaria
+      EntityTypeBase entityTypeBase = EntityHelper.GetEntityTypeBase(type);//Obtenemos las propiedades de la entidad
+      EdmMember edmMember = entityTypeBase.KeyMembers.FirstOrDefault();//Obtenemos la llave primaria
+
+      var lst1 = lstNew.Where(p => !lstOld.Any(p1 => type.GetProperty(edmMember.Name).GetValue(p1) == type.GetProperty(edmMember.Name).GetValue(p))).ToList();
+      var lst2 = lstOld.Where(p => !lstNew.Any(p1 => type.GetProperty(edmMember.Name).GetValue(p1) == type.GetProperty(edmMember.Name).GetValue(p))).ToList();
+      #endregion
+
+      if (lst1.Count() > 0 || lst2.Count() > 0)
+      {
+        return false;
+      }
+      return true;
     }
+
+
+    #endregion
     #endregion
 
     #region ObjectToList

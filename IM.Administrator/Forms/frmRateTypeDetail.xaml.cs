@@ -39,7 +39,7 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    #region Cancel
+    #region Key Down
     /// <summary>
     /// Cierra ka ventana con el boton escape
     /// </summary>

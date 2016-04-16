@@ -15,9 +15,12 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmDeskDetail : Window
   {
+    #region variables
     public Desk desk = new Desk();//Objeto a edita o agregar
     public Desk oldDesk = new Desk();//Objeto con los datos iniciales
-    public EnumMode enumMode;//modo en que se mostrará la ventana    
+    public EnumMode enumMode;//modo en que se mostrará la ventana  
+    private List<Computer> _oldLstComputers = new List<Computer>();//Lista incial de computadoras 
+    #endregion
     public frmDeskDetail()
     {
       InitializeComponent();
@@ -72,7 +75,8 @@ namespace IM.Administrator.Forms
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
-      if(ObjectHelper.IsEquals(desk,oldDesk) && enumMode!=EnumMode.add)
+      List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
+      if (enumMode != EnumMode.add && ObjectHelper.IsEquals(desk, oldDesk) && ObjectHelper.IsEquals(lstComputers, _oldLstComputers))
       {
         Close();
       }
@@ -82,8 +86,7 @@ namespace IM.Administrator.Forms
         int nRes = 0;
 
         if (strMsj == "")
-        {
-          List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
+        { 
           List<string> lstIdsComputers = lstComputers.Select(cmp => cmp.cpID).ToList();
           nRes = BRDesks.SaveDesk(desk, (enumMode == EnumMode.edit), lstIdsComputers);
           UIHelper.ShowMessageResult("Desk", nRes, true);
@@ -150,7 +153,8 @@ namespace IM.Administrator.Forms
     {
       if(enumMode!=EnumMode.preview)
       {
-        if (!ObjectHelper.IsEquals(desk, oldDesk))
+        List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;        
+        if (!ObjectHelper.IsEquals(desk, oldDesk) || !ObjectHelper.IsListEquals(lstComputers,_oldLstComputers))
         {
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
@@ -187,6 +191,7 @@ namespace IM.Administrator.Forms
       {
         computer.cpdk = desk.dkID;
         lstComputers= BRComputers.GetComputers(computer);
+        _oldLstComputers = lstComputers.ToList();
       }
       
       dgrComputers.ItemsSource = lstComputers;
@@ -206,7 +211,7 @@ namespace IM.Administrator.Forms
       cmbComputers.ItemsSource = lstComputers;
     }
     #endregion
-
+    
     #endregion
   }
 }
