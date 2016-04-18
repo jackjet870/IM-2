@@ -3722,5 +3722,170 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptPremanifestWithGifts>("USP_OR_RptPremanifestWithGifts", dateParameter, placeIDParameter, salesRoomParameter, multiLeadSourceParameter, regenParameter, currentDateParameter);
         }
+    
+        public virtual ObjectResult<RptSelfGen> sprptSelfGen(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptSelfGen>("sprptSelfGen", dateFromParameter, dateToParameter, leadSourcesParameter);
+        }
+    
+        public virtual ObjectResult<RptDepositRefund> USP_OR_RptDepositRefund(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptDepositRefund>("USP_OR_RptDepositRefund", dateFromParameter, dateToParameter, leadSourcesParameter);
+        }
+    
+        public virtual ObjectResult<RptDepositsBurnedGuests> USP_OR_RptDepositsBurnedGuests(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptDepositsBurnedGuests>("USP_OR_RptDepositsBurnedGuests", dateFromParameter, dateToParameter, leadSourcesParameter);
+        }
+    
+        public virtual ObjectResult<RptDepositsByPR> USP_OR_RptDepositsByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptDepositsByPR>("USP_OR_RptDepositsByPR", dateFromParameter, dateToParameter, leadSourcesParameter);
+        }
+    
+        public virtual ObjectResult<RptGiftsSale> USP_OR_RptGiftsSale(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms, string categories, string gifts, Nullable<byte> sale)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            var categoriesParameter = categories != null ?
+                new ObjectParameter("Categories", categories) :
+                new ObjectParameter("Categories", typeof(string));
+    
+            var giftsParameter = gifts != null ?
+                new ObjectParameter("Gifts", gifts) :
+                new ObjectParameter("Gifts", typeof(string));
+    
+            var saleParameter = sale.HasValue ?
+                new ObjectParameter("Sale", sale) :
+                new ObjectParameter("Sale", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGiftsSale>("USP_OR_RptGiftsSale", dateFromParameter, dateToParameter, salesRoomsParameter, categoriesParameter, giftsParameter, saleParameter);
+        }
+    
+        public virtual ObjectResult<RptGiftsUsedBySistur> USP_OR_RptGiftsUsedBySistur(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms, string programs, string leadSources)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            var programsParameter = programs != null ?
+                new ObjectParameter("Programs", programs) :
+                new ObjectParameter("Programs", typeof(string));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGiftsUsedBySistur>("USP_OR_RptGiftsUsedBySistur", dateFromParameter, dateToParameter, salesRoomsParameter, programsParameter, leadSourcesParameter);
+        }
+    
+        public virtual ObjectResult<RptInOutByPR> USP_OR_RptInOutByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptInOutByPR>("USP_OR_RptInOutByPR", dateFromParameter, dateToParameter, leadSourcesParameter);
+        }
+    
+        public virtual ObjectResult<RptPersonnelAccess> USP_OR_RptPersonnelAccess(string leadSources)
+        {
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptPersonnelAccess>("USP_OR_RptPersonnelAccess", leadSourcesParameter);
+        }
+    
+        public virtual ObjectResult<RptDepositsNoShow> USP_OR_RptDepositsNoShow(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptDepositsNoShow>("USP_OR_RptDepositsNoShow", dateFromParameter, dateToParameter, leadSourcesParameter);
+        }
     }
 }

@@ -649,6 +649,9 @@
     <Compile Include="RptDailyGiftSimple.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptDepositRefund.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptDeposits.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -656,6 +659,15 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptDepositsBurnedByResort.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptDepositsBurnedGuests.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptDepositsByPR.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptDepositsNoShow.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptDepositsPaid.cs">
@@ -691,6 +703,15 @@
     <Compile Include="RptGiftsReceivedBySR.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptGiftsSale.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGiftsSale_Payment.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGiftsUsedBySistur.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptGuestCeco.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -701,6 +722,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptInOut.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptInOutByPR.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptInvitation.cs">
@@ -731,6 +755,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptPersonnel.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptPersonnelAccess.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptPremanifest.cs">
@@ -836,6 +863,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptRepsPaymentSummary.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptSelfGen.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptTaxisIn.cs">
@@ -944,6 +974,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="SourcePayment.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SourcePaymentShort.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="TeamGuestServices.cs">
