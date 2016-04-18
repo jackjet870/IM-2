@@ -350,7 +350,7 @@
                         <DataGridTemplateColumn x:Name="equityColumn" IsReadOnly="True"  Header="Equity" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding EquityColumn}" Width="17" Height="17" MouseLeftButtonUp="Equity_MouseLeftButtonUp"/>
+                                    <Image Source="{Binding EquityColumn}" Width="17" Height="17" MouseLeftButtonUp="ArrivalsEquity_MouseLeftButtonUp"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -489,7 +489,7 @@
                         <DataGridTemplateColumn x:Name="equityColumn1" IsReadOnly="True"  Header="Equity" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding EquityColumn}" Width="17" Height="17"/>
+                                    <Image Source="{Binding EquityColumn}" Width="17" Height="17" MouseLeftButtonUp="AviablesEquity_MouseLeftButtonUp"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -630,7 +630,7 @@
                         <DataGridTemplateColumn x:Name="equityColumn2" IsReadOnly="True"  Header="Equity" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding EquityColumn}" Width="17" Height="17"/>
+                                    <Image Source="{Binding EquityColumn}" Width="17" Height="17" MouseLeftButtonUp="PremanifestEquity_MouseLeftButtonUp"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -773,7 +773,7 @@
                         <DataGridTemplateColumn x:Name="equityColumn3" IsReadOnly="True"  Header="Equity" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding EquityColumn}" Width="17" Height="17"/>
+                                    <Image Source="{Binding EquityColumn}" Width="17" Height="17" MouseLeftButtonUp="GetGuestEquity_MouseLeftButtonUp"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

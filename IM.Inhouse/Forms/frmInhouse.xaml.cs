@@ -15,6 +15,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using IM.Services.Helpers;
 using IM.Services.WirePRService;
+using IM.Services.CallCenterService;
 using IM.Inhouse.Reports;
 using System.IO;
 using System.Collections;
@@ -489,6 +490,7 @@ namespace IM.Inhouse
     /// </history>
     void GetEquityReport(object guest, int type)
     {
+      StaStart("Loading Equity Report ...");
       switch (type)
       {
         case 1:
@@ -497,14 +499,18 @@ namespace IM.Inhouse
           break;
         case 2:
           var itemGuestAvailable = guest as GuestAvailable;
+          Equity(itemGuestAvailable.guMembershipNum, itemGuestAvailable.guCompany, (int)itemGuestAvailable.agcl, (int)itemGuestAvailable.gucl);
           break;
         case 3:
           var itemGuestPremanifest = guest as GuestPremanifest;
+          Equity(itemGuestPremanifest.guMembershipNum, itemGuestPremanifest.guCompany, (int)itemGuestPremanifest.agcl, (int)itemGuestPremanifest.gucl);
           break;
         case 4:
           var itemGuestSearched = guest as GuestSearched;
+          Equity(itemGuestSearched.guMembershipNum, itemGuestSearched.guCompany, (int)itemGuestSearched.agcl, (int)itemGuestSearched.gucl);
           break;
       }
+      StaEnd();
     }
 
     #region Equity
@@ -571,38 +577,93 @@ namespace IM.Inhouse
           // indicamos que ciertas listas del reporte no tienen registros
           RptEquityHeader header = new RptEquityHeader();
           header.HasGolfFields = rptClubes.GolfFieldsDetail.Length > 0;
+          header.IsElite = (club == EnumClub.PalaceElite);
 
           var equity = new rptEquity();
           //datos generales de equity
-          equity.Database.Tables["Header"].SetDataSource(ObjectHelper.ObjectToList(header));
           equity.Database.Tables["Membership"].SetDataSource(ObjectHelper.ObjectToList(rptClubes.Membership));
           equity.Database.Tables["Member"].SetDataSource(ObjectHelper.ObjectToList(rptCallCenter.Membership));
-          equity.Database.Tables["SalesmanOPC"].SetDataSource(rptClubes.Salesmen);
+          //Si no tiene un Salesman  con OPC no se envia nada
+          Services.ClubesService.RptEquitySalesman[] salesmanOPC = rptClubes.Salesmen.Where(sm => sm.Title.Trim() == "OPC").ToArray();
+          if (salesmanOPC.Length > 0)
+            equity.Database.Tables["SalesmanOPC"].SetDataSource(salesmanOPC);
           equity.Database.Tables["Hotel"].SetDataSource(ObjectHelper.ObjectToList(rptClubes.Hotels));
           equity.Database.Tables["GolfFieldsHeader"].SetDataSource(ObjectHelper.ObjectToList(rptClubes.GolfFieldsHeader));
+          if (rptClubes.Verification != null)
+            rptClubes.Verification.VOLUMENGOLF = rptCallCenter.Membership.Golf - (rptClubes.Verification.VOLUMENGOLF / EquityHelpers.GetIVAByOffice(rptClubes.Membership.OFFICE));
           equity.Database.Tables["Verification"].SetDataSource(ObjectHelper.ObjectToList(rptClubes.Verification));
           //Subreportes
           equity.Subreports["rptEquitySalesman.rpt"].SetDataSource(rptClubes.Salesmen);
           equity.Subreports["rptEquityCoOwners.rpt"].SetDataSource(rptClubes.CoOwners);
-          equity.Subreports["rptEquityBeneficiaries.rpt"].SetDataSource(rptClubes.Beneficiaries);
+          
+          equity.Subreports["rptEquityBeneficiaries.rpt"].Database.Tables["Reporte"].SetDataSource(rptClubes.Beneficiaries);
+          equity.Subreports["rptEquityBeneficiaries.rpt"].Database.Tables["Membership"].SetDataSource(ObjectHelper.ObjectToList(rptCallCenter.Membership));
+
           equity.Subreports["rptEquityGolfFields.rpt"].SetDataSource(rptClubes.GolfFieldsDetail);
           equity.Subreports["rptEquityRoomTypes.rpt"].SetDataSource(rptClubes.RoomTypes);
-          equity.Subreports["rptEquityProvisionsSNORM.rpt"].SetDataSource(rptCallCenter.Provisions);
-          equity.Subreports["rptEquityProvisionsSAIRF.rpt"].SetDataSource(rptCallCenter.Provisions);
-          equity.Subreports["rptEquityProvisionsSRCI.rpt"].SetDataSource(rptCallCenter.Provisions);
-          equity.Subreports["rptEquityProvisionsSCOMP.rpt"].SetDataSource(rptCallCenter.Provisions);
-          equity.Subreports["rptEquityProvisionsSCRG.rpt"].SetDataSource(rptCallCenter.Provisions);
-          equity.Subreports["rptEquityProvisionsSIGR.rpt"].SetDataSource(rptCallCenter.Provisions);
-          equity.Subreports["rptEquityProvisionsSVEC.rpt"].SetDataSource(rptCallCenter.Provisions);
-          equity.Subreports["rptEquityProvisionsSREF.rpt"].SetDataSource(rptCallCenter.Provisions);
-          equity.Subreports["rptEquityReservations.rpt"].SetDataSource(rptCallCenter.Reservations);
+
+          RptEquityProvision[] provisionsSNORM = rptCallCenter.Provisions.Where(p => p.IsSNORM == true).ToArray();
+          header.HasSNORM = provisionsSNORM.Length > 0;
+          if (header.HasSNORM)
+            equity.Subreports["rptEquityProvisionsSNORM.rpt"].SetDataSource(provisionsSNORM);
+
+          RptEquityProvision[] provisionsSAIRF = rptCallCenter.Provisions.Where(p => p.IsSAIRF == true).ToArray();
+          header.HasSAIRF = provisionsSAIRF.Length > 0;
+          equity.Subreports["rptEquityProvisionsSAIRF.rpt"].SetDataSource(provisionsSAIRF);
+
+          RptEquityProvision[] provisionsSRCI = rptCallCenter.Provisions.Where(p => p.IsSRCI == true).ToArray();
+          header.HasSRCI = provisionsSRCI.Length > 0;
+          equity.Subreports["rptEquityProvisionsSRCI.rpt"].SetDataSource(provisionsSRCI);
+
+          RptEquityProvision[] provisionsSCOMP = rptCallCenter.Provisions.Where(p => p.IsSCOMP == true).ToArray();
+          header.HasSCOMP = provisionsSCOMP.Length > 0;
+          equity.Subreports["rptEquityProvisionsSCOMP.rpt"].SetDataSource(provisionsSCOMP);
+
+          RptEquityProvision[] provisionsSCRG = rptCallCenter.Provisions.Where(p => p.IsSCRG == true).ToArray();
+          header.HasSCRG = provisionsSCRG.Length > 0;
+          equity.Subreports["rptEquityProvisionsSCRG.rpt"].SetDataSource(provisionsSCRG);
+
+          RptEquityProvision[] provisionsSIGR = rptCallCenter.Provisions.Where(p => p.IsSIGR == true).ToArray();
+          header.HasSIGR = provisionsSIGR.Length > 0;
+          equity.Subreports["rptEquityProvisionsSIGR.rpt"].SetDataSource(provisionsSIGR);
+
+          RptEquityProvision[] provisionsSVEC = rptCallCenter.Provisions.Where(p => p.IsSVEC == true).ToArray();
+          header.HasSVEC = provisionsSVEC.Length > 0;
+          equity.Subreports["rptEquityProvisionsSVEC.rpt"].SetDataSource(provisionsSVEC);
+
+          RptEquityProvision[] provisionsSREF = rptCallCenter.Provisions.Where(p => p.IsSREF == true).ToArray();
+          header.HasSREF = provisionsSREF.Length > 0;
+          equity.Subreports["rptEquityProvisionsSREF.rpt"].SetDataSource(provisionsSREF);
+
+          equity.Database.Tables["Header"].SetDataSource(ObjectHelper.ObjectToList(header));
+          if (rptCallCenter.Reservations.Length != 0)
+            equity.Subreports["rptEquityReservations.rpt"].SetDataSource(rptCallCenter.Reservations);
+
+          if (rptClubes.BalanceElectronicPurseHeaders.Length == 0)
+            equity.Subreports["rptEquityBalanceElectronicPurse.rpt"].ReportDefinition.Sections["GroupHeaderSection1"].SectionFormat.EnableSuppress = true;
           equity.Subreports["rptEquityBalanceElectronicPurse.rpt"].Database.Tables["EquityBalanceElectronicPurseDetail"].SetDataSource(rptClubes.BalanceElectronicPurseDetails);
           equity.Subreports["rptEquityBalanceElectronicPurse.rpt"].Database.Tables["BalanceElectronicPurseHeader"].SetDataSource(rptClubes.BalanceElectronicPurseHeaders);
-          equity.Subreports["rptEquityPaymentPromises.rpt"].SetDataSource(rptClubes.PaymentPromises);
-          equity.Subreports["rptEquityWeeksNights.rpt"].Database.Tables["WeeksNightsDetail"].SetDataSource(rptClubes.WeeksNightsDetails);
-          equity.Subreports["rptEquityWeeksNights.rpt"].Database.Tables["WeeksNightsHeader"].SetDataSource(rptClubes.WeeksNightsHeaders);
-          equity.Subreports["rptEquityGolfRCI.rpt"].SetDataSource(rptClubes.GolfRCI);
-          equity.Subreports["rptEquityPromotions.rpt"].SetDataSource(rptClubes.Promotions);
+          var sum = rptCallCenter.Membership.Down - rptCallCenter.Membership.Down_escrow - rptCallCenter.Membership.Down_bal;
+          if (sum > 1)
+            equity.Subreports["rptEquityPaymentPromises.rpt"].SetDataSource(rptClubes.PaymentPromises);
+          if (club == EnumClub.PalaceElite)
+          {
+            equity.Subreports["rptEquityWeeksNights.rpt"].Database.Tables["WeeksNightsDetail"].SetDataSource(rptClubes.WeeksNightsDetails);
+            equity.Subreports["rptEquityWeeksNights.rpt"].Database.Tables["WeeksNightsHeader"].SetDataSource(rptClubes.WeeksNightsHeaders);
+          }
+          if (club == EnumClub.PalaceElite)
+            equity.Subreports["rptEquityGolfRCI.rpt"].SetDataSource(rptClubes.GolfRCI);
+          else
+            equity.ReportDefinition.ReportObjects["srptGolfRCI"].ObjectFormat.EnableSuppress = true;
+          if (club == EnumClub.PalaceElite)
+            equity.Subreports["rptEquityPromotions.rpt"].SetDataSource(rptClubes.Promotions);
+
+          if (club == EnumClub.PalaceElite)
+            if(rptClubes.MemberExtension != null)
+              if(rptClubes.MemberExtension.WHOLESALER)
+                equity.ReportDefinition.Sections["Section2"].SectionFormat.EnableSuppress = false;
+            //equity.ReportDefinition.ReportObjects["txtWhuoleSaler"].ObjectFormat.EnableSuppress = false;
+
           //var rpt = new rptReservation();
           //var reporte = new List<RptReservationOrigos>();
           //reporte.Add(reservation);
@@ -614,10 +675,6 @@ namespace IM.Inhouse
         else
           UIHelper.ShowMessage("Access denied");
       }
-    }
-    void GenerateReport()
-    {
-      
     }
 
     #endregion
@@ -1248,11 +1305,13 @@ namespace IM.Inhouse
     }
     #endregion
 
-    private void Equity_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    #region ArrivalsEquity_MouseLeftButtonUp
+    private void ArrivalsEquity_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
       var guest = dgGuestArrival.Items[dgGuestArrival.Items.CurrentPosition] as GuestArrival;
       GetEquityReport(guest, 1);
-    }
+    } 
+    #endregion
 
     #endregion
 
@@ -1402,6 +1461,14 @@ namespace IM.Inhouse
       }
     }
 
+    #endregion
+
+    #region AviablesEquity_MouseLeftButtonUp
+    private void AviablesEquity_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+      var guest = dgGuestAvailable.Items[dgGuestAvailable.Items.CurrentPosition] as GuestAvailable;
+      GetEquityReport(guest, 2);
+    } 
     #endregion
 
     #endregion
@@ -1566,6 +1633,14 @@ namespace IM.Inhouse
 
     #endregion
 
+    #region PremanifestEquity_MouseLeftButtonUp
+    private void PremanifestEquity_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+      var guest = dgGuestPremanifest.Items[dgGuestPremanifest.Items.CurrentPosition] as GuestPremanifest;
+      GetEquityReport(guest, 3);
+    }
+
+    #endregion
 
     #endregion
 
@@ -1659,6 +1734,16 @@ namespace IM.Inhouse
         }
       }
     }
+    #endregion
+
+    #region GetGuestEquity_MouseLeftButtonUp
+
+    private void GetGuestEquity_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+      var guest = guestSearchedDataGrid.Items[guestSearchedDataGrid.Items.CurrentPosition] as GuestSearched;
+      GetEquityReport(guest, 4);
+    }
+
     #endregion
 
     #endregion
