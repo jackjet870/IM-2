@@ -112,6 +112,7 @@
     <Compile Include="BR\BRRegions.cs" />
     <Compile Include="BR\BRReimpresionMotives.cs" />
     <Compile Include="BR\BRReportsByLeadSource.cs" />
+    <Compile Include="BR\BRReportsGeneral.cs" />
     <Compile Include="BR\BRTourTimesAvailables.cs" />
     <Compile Include="BR\BRSalesRoomsLogs.cs" />
     <Compile Include="BR\BRSales.cs" />

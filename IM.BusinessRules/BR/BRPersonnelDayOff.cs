@@ -21,7 +21,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        string _teamType = StrToEnums.EnumTeamTypeToString(teamType);
+        string _teamType = EnumToListHelper.GetEnumDescription(teamType);
         return dbContext.USP_OR_GetPersonnelDaysOff(_teamType, placeID).ToList();
       }
     }
