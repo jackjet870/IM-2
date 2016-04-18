@@ -6,6 +6,7 @@ namespace IM.Base.Helpers
 {
   public class ByteToBoleanValueConverterHelper : IValueConverter
   {
+    #region Convert
     /// <summary>
     /// Convierte byte a Boolean para usar un radioButton
     /// </summary>
@@ -20,6 +21,9 @@ namespace IM.Base.Helpers
     {
       return value.Equals(byte.Parse(trueValue.ToString()));
     }
+    #endregion
+
+    #region ConvertBack
     /// <summary>
     /// Convierte un bool en el ConverterParameter
     /// </summary>
@@ -34,5 +38,6 @@ namespace IM.Base.Helpers
     {
       return value.Equals(true) ? trueValue : Binding.DoNothing;
     }
+    #endregion
   }
 }

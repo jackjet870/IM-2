@@ -71,6 +71,7 @@
     <Compile Include="Classes\objInvitCreditCard.cs" />
     <Compile Include="Classes\objInvitGift.cs" />
     <Compile Include="Classes\objInvitGuestStatus.cs" />
+    <Compile Include="Helpers\ExecuteCommandHelper.cs" />
     <Compile Include="Helpers\LanguageHelper.cs" />
     <Compile Include="Classes\Parametros.cs" />
     <Compile Include="Forms\frmSearchGuest.cs">
