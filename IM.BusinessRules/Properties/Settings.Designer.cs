@@ -25,7 +25,7 @@ namespace IM.BusinessRules.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        [global::System.Configuration.DefaultSettingValueAttribute("90")]
         public int USP_OR_RptFollowUpByAgency_Timeout {
             get {
                 return ((int)(this["USP_OR_RptFollowUpByAgency_Timeout"]));
@@ -128,6 +128,222 @@ namespace IM.BusinessRules.Properties {
             }
             set {
                 this["UPS_OR_RptProductionBySalesRoomMarketSubmarket"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptProductionByCoupleTypeInhouse_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByCoupleTypeInhouse_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByCoupleTypeInhouse_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptProductionByNationalityInhouse_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByNationalityInhouse_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByNationalityInhouse_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptProductionByDeskInhouse_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByDeskInhouse_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByDeskInhouse_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_OR_RptProductionByGroupInhouse_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByGroupInhouse_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByGroupInhouse_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptProductionByGuestStatusInhouse_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByGuestStatusInhouse_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByGuestStatusInhouse_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptProductionByMemberTypeAgencyInhouse_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByMemberTypeAgencyInhouse_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByMemberTypeAgencyInhouse_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptProductionByNationalityMarketOriginallyAvailableInhouse_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByNationalityMarketOriginallyAvailableInhouse_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByNationalityMarketOriginallyAvailableInhouse_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptProductionByGiftQuantity_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByGiftQuantity_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByGiftQuantity_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptProductionByPRInhouse_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByPRInhouse_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByPRInhouse_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptProductionByPRGroupInhouse_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByPRGroupInhouse_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByPRGroupInhouse_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptProductionByPRSalesRoomInhouse_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByPRSalesRoomInhouse_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByPRSalesRoomInhouse_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptRepsPayment_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptRepsPayment_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptRepsPayment_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptRepsPaymentSummary_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptRepsPaymentSummary_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptRepsPaymentSummary_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptCostByPR_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptCostByPR_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptCostByPR_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptCostByPRWithDetailGifts_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptCostByPRWithDetailGifts_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptCostByPRWithDetailGifts_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptProductionByContractAgencyMarketOriginallyAvailableInhouse_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByContractAgencyMarketOriginallyAvailableInhouse_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByContractAgencyMarketOriginallyAvailableInhouse_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptProductionByContractAgencyInhouse_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByContractAgencyInhouse_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByContractAgencyInhouse_Timeout"] = value;
             }
         }
     }

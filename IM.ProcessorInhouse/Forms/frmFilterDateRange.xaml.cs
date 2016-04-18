@@ -28,7 +28,6 @@ namespace IM.ProcessorInhouse.Forms
 
     private List<Agency> _lstAgencies = new List<Agency>();
     private List<MarketShort> _lstMarkets = new List<MarketShort>();
-    private List<RateType> _lstCountries = new List<RateType>();
 
     public bool _blnOK;
     public frmProcessorInhouse frmIH = new frmProcessorInhouse();
@@ -367,12 +366,12 @@ namespace IM.ProcessorInhouse.Forms
 
       if (blnPersonnel)
       {
-        var x = BRLeadSources.GetLeadSourcesByUser(App.userData.User.peID, program).Select(y => y.lsID);
+        var x = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program).Select(y => y.lsID);
         _lstPersonnel = BRPersonnel.GetPersonnel(string.Join(",", x), roles: "PR", status: 0);
       }
       if (blnLeadSources)
       {
-        _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.userData.User.peID, program);
+        _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program);
         if (blnLsHotelNotNull)
         {
           var lstLsIDHotelNotNull = BRLeadSources.GetLeadSources(1).
@@ -438,27 +437,27 @@ namespace IM.ProcessorInhouse.Forms
         EnumSaveCourtesyTours? enumSaveCourtesyTours, EnumExternalInvitation? enumExternalInvitation, bool blnClub, bool blnNight)
     {
       if (enumBasedOnArrival != null)
-        chkBasedOnArrival.IsChecked = enumBasedOnArrival == EnumBasedOnArrival.boaBasedOnArrival;
+        chkBasedOnArrival.IsChecked = Convert.ToBoolean(enumBasedOnArrival);
       else
         chkBasedOnArrival.Visibility = Visibility.Collapsed;
 
       if (enumBasedOnBooking != null)
-        chkBasedOnBooking.IsChecked = enumBasedOnBooking == EnumBasedOnBooking.bobBasedOnBooking;
+        chkBasedOnBooking.IsChecked = Convert.ToBoolean(enumBasedOnBooking);
       else
         chkBasedOnBooking.Visibility = Visibility.Collapsed;
 
       if (enumQuinellas != null)
-        chkQuinellas.IsChecked = enumQuinellas == EnumQuinellas.quQuinellas;
+        chkQuinellas.IsChecked = Convert.ToBoolean(enumQuinellas);
       else
         chkQuinellas.Visibility = Visibility.Collapsed;
 
       if (enumDetailGifts != null)
-        chkDetailGifts.IsChecked = enumDetailGifts == EnumDetailGifts.dgDetailGifts;
+        chkDetailGifts.IsChecked = Convert.ToBoolean(enumDetailGifts);
       else
         chkDetailGifts.Visibility = Visibility.Collapsed;
 
       if (enumSalesByMemberShipType != null)
-        chkSalesByMembershipType.IsChecked = enumSalesByMemberShipType == EnumSalesByMemberShipType.sbmDetail;
+        chkSalesByMembershipType.IsChecked = Convert.ToBoolean(enumSalesByMemberShipType);
       else
         chkSalesByMembershipType.Visibility = Visibility.Collapsed;
 
@@ -527,7 +526,7 @@ namespace IM.ProcessorInhouse.Forms
       grdGiftsQuantity.ItemsSource = blnGiftsQuantity ? _lstGiftsQuantity : null;
       grdMarkets.ItemsSource = blnMarkets ? _lstMarkets : null;
       grdAgencies.ItemsSource = blnAgencies ? _lstAgencies : null;
-      grdCountries.ItemsSource = blnCountries ? _lstCountries : null;
+      //grdCountries.ItemsSource = blnCountries ? _lstCountries : null;
 
       StatusBarNumPR.Content = blnPersonnel ? $"{0}/{_lstPersonnel.Count} Selected Personnel" : "";
       StatusBarNumLS.Content = blnLeadSources ? $"{0}/{_lstLeadSources.Count} Selected LeadSources" : "";
@@ -536,7 +535,7 @@ namespace IM.ProcessorInhouse.Forms
       StatusBarNumGiftsQuantity.Content = blnGiftsQuantity ? $"{0}/{_lstGiftsQuantity.Count} Selected Gifts" : "";
       StatusBarNumMark.Content = (blnMarkets) ? $"{0}/{_lstMarkets.Count} Selected Markets" : "";
       StatusBarNumAgen.Content = (blnAgencies) ? $"{0}/{_lstAgencies.Count} Selected Agencies" : "";
-      StatusBarNumCoun.Content = (blnCountries) ? $"{0}/{_lstCountries.Count} Selected Countries" : "";
+      //StatusBarNumCoun.Content = (blnCountries) ? $"{0}/{_lstCountries.Count} Selected Countries" : "";
     }
 
     #endregion ConfigureGridPanels
@@ -683,14 +682,11 @@ namespace IM.ProcessorInhouse.Forms
       frmIH._dtmStart = dtmStart.Value.Value;
       frmIH._dtmEnd = dtmEnd.Value.Value;
       frmIH._enumBasedOnArrival = (chkBasedOnArrival.IsChecked.Value) ? EnumBasedOnArrival.boaBasedOnArrival : EnumBasedOnArrival.boaNoBasedOnArrival;
-      //frmIH._enumBasedOnBooking = (chkBasedOnBooking.IsChecked.Value) ? EnumBasedOnBooking.bobBasedOnBooking : EnumBasedOnBooking.bobNoBasedOnBooking;
       frmIH._enumQuinellas = (chkQuinellas.IsChecked.Value) ? EnumQuinellas.quQuinellas : EnumQuinellas.quNoQuinellas;
       frmIH._enumDetailsGift = (chkDetailGifts.IsChecked.Value) ? EnumDetailGifts.dgDetailGifts : EnumDetailGifts.dgNoDetailGifts;
       frmIH._enumSalesByMemberShipType = (chkSalesByMembershipType.IsChecked.Value) ? EnumSalesByMemberShipType.sbmDetail : EnumSalesByMemberShipType.sbmNoDetail;
       frmIH._enumStatus = ((KeyValuePair<EnumStatus, string>)cboStatus.SelectedItem).Key;
-      //frmIH._enumGiftsReceiptType = ((KeyValuePair<EnumGiftsReceiptType, string>)cboGiftsReceiptType.SelectedItem).Key;
       frmIH._guestID = txtGuestID.Text;
-      //frmIH._enumGiftSale = ((KeyValuePair<EnumGiftSale, string>)cboGiftSale.SelectedItem).Key;
       frmIH._enumSaveCourtesyTours = ((KeyValuePair<EnumSaveCourtesyTours, string>)cboSaveCourtesyTours.SelectedItem).Key;
       frmIH._enumExternalInvitation = ((KeyValuePair<EnumExternalInvitation, string>)cboExternal.SelectedItem).Key;
     }
@@ -704,7 +700,7 @@ namespace IM.ProcessorInhouse.Forms
     /// y los aplica al formulario.
     /// </summary>
     /// <history>
-    /// [edgrodriguez] 03/Mar/2016 Created
+    /// [aalcocer] 23/Mar/2016 Created
     /// </history>
     private void LoadUserFilters()
     {
@@ -741,15 +737,12 @@ namespace IM.ProcessorInhouse.Forms
       cboDate.SelectedValue = frmIH._cboDateSelected ?? "Dates Specified";
       dtmStart.Value = frmIH._dtmStart;
       dtmEnd.Value = frmIH._dtmEnd;
-      chkBasedOnArrival.IsChecked = (frmIH._enumBasedOnArrival == EnumBasedOnArrival.boaBasedOnArrival);
-      //chkBasedOnBooking.IsChecked = (frmIH._enumBasedOnBooking == EnumBasedOnBooking.bobBasedOnBooking) ? true : false;
-      chkQuinellas.IsChecked = (frmIH._enumQuinellas == EnumQuinellas.quQuinellas);
-      chkDetailGifts.IsChecked = (frmIH._enumDetailsGift == EnumDetailGifts.dgDetailGifts);
-      chkSalesByMembershipType.IsChecked = (frmIH._enumSalesByMemberShipType == EnumSalesByMemberShipType.sbmDetail);
+      chkBasedOnArrival.IsChecked = Convert.ToBoolean(frmIH._enumBasedOnArrival);
+      chkQuinellas.IsChecked = Convert.ToBoolean(frmIH._enumQuinellas);
+      chkDetailGifts.IsChecked = Convert.ToBoolean(frmIH._enumDetailsGift);
+      chkSalesByMembershipType.IsChecked = Convert.ToBoolean(frmIH._enumSalesByMemberShipType);
       cboStatus.SelectedValue = frmIH._enumStatus;
-      //cboGiftsReceiptType.SelectedValue = frmIH._enumGiftsReceiptType;
       txtGuestID.Text = frmIH._guestID;
-      //cboGiftSale.SelectedValue = frmIH._enumGiftSale;
       cboSaveCourtesyTours.SelectedValue = frmIH._enumSaveCourtesyTours;
       cboExternal.SelectedValue = frmIH._enumExternalInvitation;
     }
@@ -773,16 +766,8 @@ namespace IM.ProcessorInhouse.Forms
         return "No Market is selected";
       if (pnlAgencies.Visibility == Visibility.Visible && grdAgencies.SelectedItems.Count == 0)
         return "No Agency is selected";
-      //if (pnlRateTypes.Visibility == Visibility.Visible && grdRatetypes.SelectedItems.Count == 0)
-      //  return "No Rate types is selected.";
-      //if (pnlPrograms.Visibility == Visibility.Visible && grdPrograms.SelectedItems.Count == 0)
-      //  return "No program is selected.";
-      //if (pnlLeadSource.Visibility == Visibility.Visible && grdLeadSources.SelectedItems.Count == 0)
-      //  return "No lead source is selected.";
-      //if (pnlGifts.Visibility == Visibility.Visible && grdGifts.SelectedItems.Count == 0)
-      //  return "No gift is selected.";
-      //if (pnlCategories.Visibility == Visibility.Visible && grdCategories.SelectedItems.Count == 0)
-      //  return "No category is selected.";
+      if (pnlPersonnel.Visibility == Visibility.Visible && grdPersonnel.SelectedItems.Count == 0)
+        return "No PR is selected.";
       if (pnlDtmEnd.IsEnabled && dtmEnd.Value.Value < dtmStart.Value.Value)
         return "End date must be greater than start date.";
       return string.Empty;

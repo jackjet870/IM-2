@@ -1,5 +1,6 @@
 ﻿using IM.Model.Enums;
 using OfficeOpenXml.Style;
+using OfficeOpenXml.Table;
 using OfficeOpenXml.Table.PivotTable;
 using System;
 
@@ -9,10 +10,11 @@ namespace IM.Model.Classes
   /// Clase que sirve para definir el formato de las columnas a la hora de generar un Reporte
   /// </summary>
   /// <history>
-  /// [erosado]  14/03/2016  Created
-  /// [aalcocer] 28/03/2016 Modified. Se agregan mas propiedades y se establecen por default algunas propiedades
-  /// [edgrodriguez] 12/04/2016 Modified. Se agregan las propiedaes IsGroup, AggregateFunction
-  /// [edgrodriguez] 15/04/2016 Modified. Se agrega la propiedad IsCalculated
+  /// [erosado]       14/03/2016 Created
+  /// [aalcocer]      28/03/2016 Modified. Se agregan mas propiedades y se establecen por default algunas propiedades
+  /// [edgrodriguez]  12/04/2016 Modified. Se agregan las propiedaes IsGroup, AggregateFunction
+  /// [edgrodriguez]  15/04/2016 Modified. Se agrega la propiedad IsCalculated
+  /// [aalcocer]      18/04/2016 Modified. Se agrega la propiedad TotalsRowFunction
   /// </history>
   public class ExcelFormatTable
   {
@@ -34,5 +36,6 @@ namespace IM.Model.Classes
     public bool IsGroup { get; set; } = false;
     public DataFieldFunctions AggregateFunction { get; set; } = DataFieldFunctions.None;
     public bool IsCalculated { get; set; }
+    public RowFunctions TotalsRowFunction { get; set; } = RowFunctions.None;
   }
 }

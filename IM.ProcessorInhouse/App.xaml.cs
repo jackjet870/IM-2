@@ -3,13 +3,8 @@ using IM.Base.Helpers;
 using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.ProcessorInhouse.Forms;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace IM.ProcessorInhouse
 {
@@ -18,51 +13,76 @@ namespace IM.ProcessorInhouse
   /// </summary>
   public partial class App : Application
   {
-    public static UserData userData { get; set; }
+    #region Propiedades
 
+    public static UserData User;
+
+    #endregion Propiedades
+
+    #region Constructores y destructores
+
+    /// <summary>
+    /// Constructor de la aplicacion
+    /// </summary>
     public App() : base()
     {
-      Dispatcher.UnhandledException += Dispatcher_UnhandledException;
+      this.Dispatcher.UnhandledException += App_UnhandledException;
     }
 
-    private void Dispatcher_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+    #endregion Constructores y destructores
+
+    #region Metodos
+
+    #region OnStartup
+
+    /// <summary>
+    /// Inicializa el modulo con el Login y el Splash
+    /// </summary>
+    protected override void OnStartup(StartupEventArgs e)
+    {
+      base.OnStartup(e);
+      frmSplash frmSplash = new frmSplash("Processor Inhouse");
+      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Normal);
+      frmSplash.Show();
+      frmSplash.ShowLogin(ref frmLogin);
+      if (frmLogin.IsAuthenticated)
+      {
+        User = frmLogin.userData;
+        if (User.HasRole(EnumRole.Manager))
+        {
+          frmProcessorInhouse frmMain = new frmProcessorInhouse();
+          frmMain.Show();
+          frmLogin.Close();
+          frmSplash.Close();
+        }
+        else
+        {
+          // No tiene permiso para ingresar al modulo
+          UIHelper.ShowMessage("User doesn't have access");
+        }
+      }
+    }
+
+    #endregion OnStartup
+
+    #region App_UnhandledException
+
+    /// <summary>
+    /// Despliega los mensajes de error de la aplicacion
+    /// </summary>
+    private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
       e.Handled = true;
-      var frmError = new frmError(e.Exception);
-      if (frmError.DialogResult.HasValue && !frmError.DialogResult.Value)
+      var frm = new frmError(e.Exception);
+      frm.ShowDialog();
+      if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
       {
         Application.Current.Shutdown();
       }
     }
 
-    protected override void OnStartup(StartupEventArgs e)
-    {
-      base.OnStartup(e);
-      userData = new UserData
-      {
-        User = new Model.UserLogin
-        {
-          peID = "AALCOCER"
-        }
-      };
+    #endregion App_UnhandledException
 
-      //frmSplash frmSplash = new frmSplash("Processor General");
-      //frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Normal);
-      //frmSplash.Show();
-      //frmSplash.ShowLogin(ref frmLogin);
-      //if (frmLogin.IsAuthenticated)
-      //{
-      //  userData = frmLogin.userData;
-      //  if (userData.HasRole("MANAGER"))
-      //  {
-      //    frmProcessorInhouse frmProcessor = new frmProcessorInhouse();
-      //    frmProcessor.Show();
-      //    frmLogin.Close();
-      //    frmSplash.Close();
-      //  }
-      //  else
-      //    UIHelper.ShowMessage("User doesn't have access");
-      //}
-    }
+    #endregion Metodos
   }
 }

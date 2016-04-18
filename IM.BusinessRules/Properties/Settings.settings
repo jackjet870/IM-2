@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="USP_OR_RptFollowUpByAgency_Timeout" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">60</Value>
+      <Value Profile="(Default)">90</Value>
     </Setting>
     <Setting Name="USP_OR_RptFollowUpByPR_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
@@ -28,6 +28,60 @@
     </Setting>
     <Setting Name="UPS_OR_RptProductionBySalesRoomMarketSubmarket" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">90</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByCoupleTypeInhouse_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByNationalityInhouse_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByDeskInhouse_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByGroupInhouse_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByGuestStatusInhouse_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByMemberTypeAgencyInhouse_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByNationalityMarketOriginallyAvailableInhouse_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByGiftQuantity_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByPRInhouse_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByPRGroupInhouse_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByPRSalesRoomInhouse_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptRepsPayment_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptRepsPaymentSummary_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptCostByPR_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptCostByPRWithDetailGifts_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByContractAgencyMarketOriginallyAvailableInhouse_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByContractAgencyInhouse_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
     </Setting>
   </Settings>
 </SettingsFile>
