@@ -3581,5 +3581,146 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<NoticeShort>("USP_OR_GetNotices", leadSourceParameter, dateParameter);
         }
+    
+        public virtual ObjectResult<RptArrivals> USP_OR_RptArrivals(Nullable<System.DateTime> date, string leadSource, string markets, Nullable<int> available, Nullable<int> contacted, Nullable<int> invited, Nullable<int> onGroup)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var marketsParameter = markets != null ?
+                new ObjectParameter("Markets", markets) :
+                new ObjectParameter("Markets", typeof(string));
+    
+            var availableParameter = available.HasValue ?
+                new ObjectParameter("Available", available) :
+                new ObjectParameter("Available", typeof(int));
+    
+            var contactedParameter = contacted.HasValue ?
+                new ObjectParameter("Contacted", contacted) :
+                new ObjectParameter("Contacted", typeof(int));
+    
+            var invitedParameter = invited.HasValue ?
+                new ObjectParameter("Invited", invited) :
+                new ObjectParameter("Invited", typeof(int));
+    
+            var onGroupParameter = onGroup.HasValue ?
+                new ObjectParameter("OnGroup", onGroup) :
+                new ObjectParameter("OnGroup", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptArrivals>("USP_OR_RptArrivals", dateParameter, leadSourceParameter, marketsParameter, availableParameter, contactedParameter, invitedParameter, onGroupParameter);
+        }
+    
+        public virtual ObjectResult<RptAvailables> USP_OR_RptAvailables(Nullable<System.DateTime> currentDate, string leadSource, string markets, Nullable<int> contacted, Nullable<int> invited, Nullable<int> onGroup)
+        {
+            var currentDateParameter = currentDate.HasValue ?
+                new ObjectParameter("CurrentDate", currentDate) :
+                new ObjectParameter("CurrentDate", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var marketsParameter = markets != null ?
+                new ObjectParameter("Markets", markets) :
+                new ObjectParameter("Markets", typeof(string));
+    
+            var contactedParameter = contacted.HasValue ?
+                new ObjectParameter("Contacted", contacted) :
+                new ObjectParameter("Contacted", typeof(int));
+    
+            var invitedParameter = invited.HasValue ?
+                new ObjectParameter("Invited", invited) :
+                new ObjectParameter("Invited", typeof(int));
+    
+            var onGroupParameter = onGroup.HasValue ?
+                new ObjectParameter("OnGroup", onGroup) :
+                new ObjectParameter("OnGroup", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptAvailables>("USP_OR_RptAvailables", currentDateParameter, leadSourceParameter, marketsParameter, contactedParameter, invitedParameter, onGroupParameter);
+        }
+    
+        public virtual ObjectResult<RptPremanifest> USP_OR_RptPremanifest(Nullable<System.DateTime> date, string placeID, string salesRoom, string markets, Nullable<int> onGroup, Nullable<bool> multiLeadSource, Nullable<bool> regen, Nullable<System.DateTime> currentDate)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var placeIDParameter = placeID != null ?
+                new ObjectParameter("PlaceID", placeID) :
+                new ObjectParameter("PlaceID", typeof(string));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var marketsParameter = markets != null ?
+                new ObjectParameter("Markets", markets) :
+                new ObjectParameter("Markets", typeof(string));
+    
+            var onGroupParameter = onGroup.HasValue ?
+                new ObjectParameter("OnGroup", onGroup) :
+                new ObjectParameter("OnGroup", typeof(int));
+    
+            var multiLeadSourceParameter = multiLeadSource.HasValue ?
+                new ObjectParameter("MultiLeadSource", multiLeadSource) :
+                new ObjectParameter("MultiLeadSource", typeof(bool));
+    
+            var regenParameter = regen.HasValue ?
+                new ObjectParameter("Regen", regen) :
+                new ObjectParameter("Regen", typeof(bool));
+    
+            var currentDateParameter = currentDate.HasValue ?
+                new ObjectParameter("CurrentDate", currentDate) :
+                new ObjectParameter("CurrentDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptPremanifest>("USP_OR_RptPremanifest", dateParameter, placeIDParameter, salesRoomParameter, marketsParameter, onGroupParameter, multiLeadSourceParameter, regenParameter, currentDateParameter);
+        }
+    
+        public virtual ObjectResult<RptPremanifestOuthouse> USP_OR_RptPremanifestOutside(Nullable<System.DateTime> date, string leadSource)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptPremanifestOuthouse>("USP_OR_RptPremanifestOutside", dateParameter, leadSourceParameter);
+        }
+    
+        public virtual ObjectResult<RptPremanifestWithGifts> USP_OR_RptPremanifestWithGifts(Nullable<System.DateTime> date, string placeID, string salesRoom, Nullable<bool> multiLeadSource, Nullable<bool> regen, Nullable<System.DateTime> currentDate)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var placeIDParameter = placeID != null ?
+                new ObjectParameter("PlaceID", placeID) :
+                new ObjectParameter("PlaceID", typeof(string));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var multiLeadSourceParameter = multiLeadSource.HasValue ?
+                new ObjectParameter("MultiLeadSource", multiLeadSource) :
+                new ObjectParameter("MultiLeadSource", typeof(bool));
+    
+            var regenParameter = regen.HasValue ?
+                new ObjectParameter("Regen", regen) :
+                new ObjectParameter("Regen", typeof(bool));
+    
+            var currentDateParameter = currentDate.HasValue ?
+                new ObjectParameter("CurrentDate", currentDate) :
+                new ObjectParameter("CurrentDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptPremanifestWithGifts>("USP_OR_RptPremanifestWithGifts", dateParameter, placeIDParameter, salesRoomParameter, multiLeadSourceParameter, regenParameter, currentDateParameter);
+        }
     }
 }
