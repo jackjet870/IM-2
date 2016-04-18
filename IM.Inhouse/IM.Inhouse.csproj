@@ -92,36 +92,6 @@
       <DependentUpon>rptEquity.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Reports\rptEquityWeeksNights.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptEquityWeeksNights.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Reports\rptInvitation.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptInvitation.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Reports\rptInvitationDeposits.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptInvitationDeposits.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Reports\rptInvitationGifts.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptInvitationGifts.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Reports\rptInvitationGuests.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptInvitationGuests.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Reports\rptEquityBalanceElectronicPurse.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -212,12 +182,6 @@
       <DependentUpon>rptEquitySalesman.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Reports\rptEquityWeeksNights.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptEquityWeeksNights.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Reports\rptEquityGolfRCI.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -230,16 +194,22 @@
       <DependentUpon>rptEquityCoOwners.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Reports\rptReservation.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptReservation.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Reports\rptEquityBeneficiaries.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>rptEquityBeneficiaries.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptEquityWeeksNights.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptEquityWeeksNights.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptReservation.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptReservation.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
   </ItemGroup>
@@ -303,29 +273,6 @@
     <EmbeddedResource Include="Reports\rptEquity.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptEquity.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptEquityWeeksNights.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptEquityWeeksNights.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptInvitation.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptInvitation.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptInvitationDeposits.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptInvitationDeposits.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptInvitationGifts.resx">
-      <DependentUpon>rptInvitationGifts.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptInvitationGifts.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptInvitationGifts.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptInvitationGuests.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptInvitationGuests.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptEquityBalanceElectronicPurse.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
@@ -395,16 +342,18 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptEquityGolfRCI.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptReservation.resx">
-      <DependentUpon>rptReservation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptReservation.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptReservation.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptEquityBeneficiaries.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptEquityBeneficiaries.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptEquityWeeksNights.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptEquityWeeksNights.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptReservation.resx" />
+    <EmbeddedResource Include="Reports\rptReservation.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptReservation.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\IM.Model.AssistanceData.datasource" />
