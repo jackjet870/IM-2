@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace IM.Model.Enums
 {
-    /// <summary>
-    /// Enumera un Equipo, teamPRr = GS
-    /// teamSalesmen = SA
-    /// </summary>
-    public enum EnumTeamType
-    {
-        TeamSalesmen,
-        TeamPRs
-    }
+  /// <summary>
+  /// Enumera un Equipo, teamPRr = GS
+  /// teamSalesmen = SA
+  /// </summary>
+  /// <history>
+  /// [ecanul] 22/03/2016 Created 
+  /// [ecanul] 18/04/2016 Modificated Agregada Descrpcion
+  /// </history>
+  public enum EnumTeamType
+  {
+    [Description("SA")]
+    TeamSalesmen,
+    [Description("GS")]
+    TeamPRs
+  }
 }

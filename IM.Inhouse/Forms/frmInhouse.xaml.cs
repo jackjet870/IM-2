@@ -20,6 +20,8 @@ using IM.Inhouse.Reports;
 using System.IO;
 using System.Collections;
 using System.Windows.Documents;
+using IM.Model.Helpers;
+using System.Data;
 
 namespace IM.Inhouse
 {
@@ -39,6 +41,12 @@ namespace IM.Inhouse
     private int _available, _invited, _onGroup, _info, _guestGuid = 0;
     private string _markets = "ALL", _guestName, _guestRoom, _guestReservation;
 
+    private EnumScreen screen;
+    
+    //Para el Excel
+    private List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
+    private DataTable dt = new DataTable();
+    private string rptName;
     #endregion
 
     #region Constructores y destructores
@@ -94,6 +102,7 @@ namespace IM.Inhouse
           _guestArrivalViewSource.Source =
             BRGuests.GetGuestsArrivals(_serverDate, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup)
             .Select(parent => new ObjGuestArrival(parent)).ToList();
+          screen = EnumScreen.Arrivals;
         }
         //GuestAvailable
         if (ccAvailables.Visibility.Equals(Visibility.Visible))
@@ -102,6 +111,7 @@ namespace IM.Inhouse
           _guestAvailableViewSource.Source =
            BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup)
            .Select(parent => new ObjGuestAvailable(parent)).ToList();
+          screen = EnumScreen.Availables;
         }
         //GuestPremanifest
         if (ccPremanifest.Visibility.Equals(Visibility.Visible))
@@ -109,6 +119,7 @@ namespace IM.Inhouse
           _guestPremanifestViewSource.Source =
           BRGuests.GetGuestsPremanifest(_serverDate, App.User.LeadSource.lsID, _markets, _onGroup)
             .Select(parent => new ObjGuestPremanifest(parent)).ToList();
+          screen = EnumScreen.Premanifest;
         }
         //GuestSearched
         if (ccGetGuest.Visibility.Equals(Visibility.Visible))
@@ -116,6 +127,7 @@ namespace IM.Inhouse
           _guestSearchedViewSource.Source =
            BRGuests.GetGuests(_guestdateFrom, _guestDateTo, App.User.LeadSource.lsID, _guestName, _guestRoom, _guestReservation, _guestGuid)
             .Select(parent => new ObjGuestSearched(parent)).ToList();
+          screen = EnumScreen.Search;
         }
       }
     }
@@ -681,7 +693,6 @@ namespace IM.Inhouse
 
     #endregion
 
-
     #region Reservation
     /// <summary>
     /// Muestra el reporte de la reservacion del Guest
@@ -933,6 +944,45 @@ namespace IM.Inhouse
       }
     }
     #endregion
+
+    /// <summary>
+    /// Invoca el Reporte Solicitado en formato Excel
+    /// </summary>
+    void ChargePreview()
+    {
+      bool hasData = false;
+      string ls = "LEAD SOURCE " + App.User.LeadSource.lsN;
+      switch (screen)
+      {
+        case EnumScreen.Arrivals:
+          if (dgGuestArrival.Items.Count > 0)
+          {
+            List<RptArrivals> arrivals = BRReportsGeneral.GetRptArrivals(dtpDate.SelectedDate.Value, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup);
+            ReportsToExcel.ArrivalsToExcel(arrivals,dtpDate.SelectedDate.Value);
+            hasData = true;
+          }
+          break;
+        case EnumScreen.Availables:
+          if (dgGuestAvailable.Items.Count > 0)
+          {
+           
+            hasData = true;
+          }
+          break;
+        case EnumScreen.Premanifest:
+          if (dgGuestPremanifest.Items.Count > 0)
+          {
+            hasData = true;
+          }
+          break;
+      }
+
+      if (hasData)
+        UIHelper.ShowMessage("Generated Report",MessageBoxImage.Exclamation,"Inhouse");
+      else
+        UIHelper.ShowMessage("There is no data.");
+
+    }
 
     #region StaStart
     /// <summary>
@@ -1902,12 +1952,16 @@ namespace IM.Inhouse
     #region btnPreview_Click
     private void btnPreview_Click(object sender, RoutedEventArgs e)
     {
-      string Culturas = string.Empty;
-      foreach (string str in LanguageHelper.cultures())
-      {
-        Culturas = Culturas + str + " \n";
-      }
-      MessageBox.Show(Culturas);
+      //string Culturas = string.Empty;
+      //foreach (string str in LanguageHelper.cultures())
+      //{
+      //  Culturas = Culturas + str + " \n";
+      //}
+      //MessageBox.Show(Culturas);
+
+      StaStart("Printing "+ EnumToListHelper.GetEnumDescription(screen) + "...");
+      ChargePreview();
+      StaEnd();
     }
 
     #endregion

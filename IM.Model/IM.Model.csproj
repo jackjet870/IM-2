@@ -198,6 +198,7 @@
     <Compile Include="Enums\EnumQuinellas.cs" />
     <Compile Include="Enums\EnumSalesByMembershipType.cs" />
     <Compile Include="Enums\EnumSaveCourtesyTours.cs" />
+    <Compile Include="Enums\EnumScreen.cs" />
     <Compile Include="Enums\EnumStatus.cs" />
     <Compile Include="Enums\EnumTeamType.cs" />
     <Compile Include="Enums\EnumInvitationType.cs" />
