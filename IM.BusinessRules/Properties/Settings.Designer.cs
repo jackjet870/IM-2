@@ -346,5 +346,29 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_RptProductionByContractAgencyInhouse_Timeout"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_OR_RptGiftsReceivedBySR_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptGiftsReceivedBySR_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptGiftsReceivedBySR_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_OR_RptProductionByAgencyMarketHotelOutside_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByAgencyMarketHotelOutside_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByAgencyMarketHotelOutside_Timeout"] = value;
+            }
+        }
     }
 }
