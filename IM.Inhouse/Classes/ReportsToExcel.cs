@@ -1,4 +1,5 @@
 ﻿using IM.Base.Helpers;
+using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Classes;
 using IM.Model.Enums;
@@ -26,7 +27,7 @@ namespace IM.Inhouse.Classes
     /// </summary>
     /// <param name="arrivlas">Lista de Arrivals para hacer el excel</param>}
     /// <history>
-    /// [ecanul] 18/04/2016 Created
+    /// [ecanul] 19/04/2016 Created
     /// </history>
     public static void ArrivalsToExcel(List<RptArrivals> arrivlas, DateTime date)
     {
@@ -63,6 +64,160 @@ namespace IM.Inhouse.Classes
     }
 
     #endregion
+    
+    #region AvailablesToExcel
 
+    /// <summary>
+    /// Obtiene un reporte de Aviables en formato Excel
+    /// </summary>
+    /// <param name="aviables">Lista de Aviables</param>
+    /// <history>
+    /// [ecanul] 19/04/2016 Created
+    /// </history>
+    public static void AvailablesToExcel(List<RptAvailables> aviables)
+    {
+      filters = new List<Tuple<string, string>>();
+      dt = new DataTable();
+      filters.Add(Tuple.Create("Lead Source", App.User.LeadSource.lsID));
+      DateTime date = BRHelpers.GetServerDate();
+      if (aviables.Count > 0)
+      {
+        dt = TableHelper.GetDataTableFromList(aviables, true);
+        rptName = "Aviables " + App.User.LeadSource.lsN;
+        string dateRange = DateHelper.DateRangeFileName(date, date);
+        List<ExcelFormatTable> format = new List<ExcelFormatTable>();
+
+        format.Add(new ExcelFormatTable() { Title = "GUID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Reserv.#", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Room", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "LastName", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Pax", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Check-In", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Check-Out", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Country ID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Country", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Agency ID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Agency", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Av", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Info", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Inv", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "PR B", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Comments", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+
+        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRange, format);
+      }
+    }
+
+    #endregion
+
+    #region PremanifestToExcel
+
+    /// <summary>
+    /// Obtiene un reporte de Premanifest en Formato de Excel
+    /// </summary>
+    /// <param name="premanifest">Listado con Premanifest</param>
+    /// <history>
+    /// [ecanul] 19/04/2016 Created
+    /// </history>
+    public static void PremanifestToExcel(List<RptPremanifest> premanifest)
+    {
+      
+      filters = new List<Tuple<string, string>>();
+      dt = new DataTable();
+      filters.Add(Tuple.Create("Lead Source", App.User.LeadSource.lsID));
+      DateTime date = BRHelpers.GetServerDate();
+      if (premanifest.Count > 0)
+      {
+        
+        dt = TableHelper.GetDataTableFromList(premanifest, true);
+        rptName = "Premanifest " + App.User.LeadSource.lsN;
+        int j = dt.Columns.Count;
+        string dateRange = DateHelper.DateRangeFileName(date, date);
+        List<ExcelFormatTable> format = new List<ExcelFormatTable>();
+
+        format.Add(new ExcelFormatTable() { Title = "SR", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "LS", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "GUID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Hotel", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Room", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "LastName", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Pax", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Check-In", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Check-Out", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Country ID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Country", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Agency ID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Agency", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Invit D", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Invit T", Format = EnumFormatTypeExcel.Time, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Book T", Format = EnumFormatTypeExcel.Time, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "PR B", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Clxd", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Rsc", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Sh", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Sale", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "InvitType", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Deposits_Comments", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+
+        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRange, format);
+      }
+    }
+
+    #endregion
+
+    #region PremanifestWithGuiftsToExcel
+
+    /// <summary>
+    /// Obtiene un reporte de Premanifest With Gifts en Formato de Excel
+    /// </summary>
+    /// <param name="premanifest">Listado con Premanifest With Gifts</param>
+    /// <history>
+    /// [ecanul] 19/04/2016 Created
+    /// </history>
+    public static void PremanifestWithGiftsToExcel(List<RptPremanifestWithGifts> withGifts)
+    {
+      filters = new List<Tuple<string, string>>();
+      dt = new DataTable();
+      filters.Add(Tuple.Create("Lead Source", App.User.LeadSource.lsID));
+      DateTime date = BRHelpers.GetServerDate();
+      if (withGifts.Count > 0)
+      {
+        dt = TableHelper.GetDataTableFromList(withGifts, true);
+        rptName = "Premanifest with gifts" + App.User.LeadSource.lsN;
+        string dateRange = DateHelper.DateRangeFileName(date, date);
+        List<ExcelFormatTable> format = new List<ExcelFormatTable>();
+
+        format.Add(new ExcelFormatTable() { Title = "Sales Room", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Location", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "GUID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "LS", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Room", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "County ID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "County", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Hotel", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Pax", Format = EnumFormatTypeExcel.DecimalNumber, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Invit D", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Invit T", Format = EnumFormatTypeExcel.Time, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Resch", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "CheckIn", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "CheckOut", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Agency ID", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Agency", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Comments", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Book T", Format = EnumFormatTypeExcel.Time, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "PR", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "G.T./CC", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "CCType", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Sh", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Sa", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "BKC", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "Gifts", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
+
+        EpplusHelper.CreateGeneralRptExcel(filters, dt, rptName, dateRange, format);
+      }
+    }
+
+    #endregion
   }
 }

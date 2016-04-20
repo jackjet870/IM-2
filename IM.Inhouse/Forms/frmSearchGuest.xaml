@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Inhouse.Forms"
         mc:Ignorable="d"
-        Title="Search Guest" Height="400" Width="700" ShowInTaskbar="False" Loaded="Window_Loaded"  Topmost="True" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen">
+        Title="Search Guest" Height="400" Width="700" ShowInTaskbar="False" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1.3*"/>
@@ -53,7 +53,7 @@
         <Grid x:Name="grdTable" Margin="5,5,5,5" Grid.Row="1">
             <DataGrid x:Name="dtgGuests" HorizontalAlignment="Left" Margin="0,0,0,0" AutoGenerateColumns="False" DataContext="{Binding lstGuest}" CanUserAddRows="False" CanUserReorderColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn x:Name="guIDColumn" Width=".8*" Header="GUID" Binding="{Binding guID}"  />
+                    <DataGridTextColumn x:Name="guIDColumn" Width=".8*" Header="GUID" Binding="{Binding guID}" IsReadOnly="True" />
                     <DataGridTextColumn x:Name="guLastName1Column" Width="1*" Header="Last Name" Binding="{Binding guLastName1}" IsReadOnly="True"/>
                     <DataGridTextColumn x:Name="guFirstName1Column" Width="1*" Header="First Name" Binding="{Binding guFirstName1}" IsReadOnly="True"/>
                     <DataGridTextColumn x:Name="gulsColumn" Width="1*" Header="LS" Binding="{Binding guls}" IsReadOnly="True"/>

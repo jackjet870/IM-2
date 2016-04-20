@@ -4,27 +4,6 @@ namespace IM.Model.Classes
 {
   public class StrToEnums
   {
-    #region EnumTeamTypeToString
-
-    /// <summary>
-    /// Convierte un Enumerado tipo EnumTeamType a String
-    /// </summary>
-    /// <param name="teamType">Enumerado TeamType</param>
-    /// <returns>Valor del Enumerado en String</returns>
-    /// <history>
-    /// [ECANUL] 09-03-2016 Created
-    /// </history>
-    public static string EnumTeamTypeToString(EnumTeamType teamType)
-    {
-      string str;
-      if (teamType == EnumTeamType.TeamPRs)
-        str = "GS";
-      else
-        str = "SA";
-      return str;
-    }
-
-    #endregion
 
     #region EnumRoleToString
 
@@ -253,88 +232,5 @@ namespace IM.Model.Classes
     }
 
     #endregion
-
-    #region EnumPalaceTypeToString
-    /// <summary>
-    /// Convierte un enumerado EnumPalaceType a String
-    /// </summary>
-    /// <param name="palaceType">Enumerado PalaceType</param>
-    /// <returns>Valor del enumerado en string</returns>
-    /// <history>[ECANUL] 16-03-2016 Created</history>
-    public static string EnumPalaceTypeToSting(EnumPlaceType palaceType)
-    {
-      string str = string.Empty;
-      switch(palaceType)
-      {
-        case EnumPlaceType.LeadSource:
-          str = "LS";
-        break;
-        case EnumPlaceType.SalesRoom:
-          str = "SR";
-          break;
-        case EnumPlaceType.Warehouse:
-          str = "WH";
-          break;
-      }
-      return str;
-    }
-
-    #endregion
-
-    #region StringToEnumClub
-
-    /// <summary>
-    /// Convierte una cadena a enumerado enumClub
-    /// </summary>
-    /// <param name="club">string Correspondiente al club</param>
-    /// <returns>Enumerado EnumClub correspondiente</returns>
-    /// <history>[ECANUL] 05-04-2016 Created</history>
-    public static EnumClub StringToEnumClub(string club)
-    {
-      EnumClub enumClub;
-      switch (club)
-      {
-        case "2":
-          enumClub = EnumClub.PalaceElite;
-          break;
-        case "3":
-          enumClub = EnumClub.Legendary;
-          break;
-        default:
-          enumClub = EnumClub.PalacePremier;
-          break;
-      }
-      return enumClub;
-    }
-
-    #endregion
-
-    #region EnumClubToString
-
-    /// <summary>
-    /// Convierte un enumerado enumClub a cadena
-    /// </summary>
-    /// <param name="club">Enumerado a convertir</param>
-    /// <returns>String con el valor correspondiente</returns>
-    /// <history>[ECANUL] 05-04-2016</history>
-    public static string EnumClubToString(EnumClub club)
-    {
-      string str = "";
-      switch (club)
-      {
-        case EnumClub.PalacePremier:
-          str = "Premier";
-          break;
-        case EnumClub.PalaceElite:
-          str = "Elite";
-          break;
-        case EnumClub.Legendary:
-          str = "Legendary";
-          break;
-      }
-      return str;
-    } 
-    #endregion
-
   }
 }

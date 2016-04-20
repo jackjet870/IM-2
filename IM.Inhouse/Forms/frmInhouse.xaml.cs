@@ -42,11 +42,7 @@ namespace IM.Inhouse
     private string _markets = "ALL", _guestName, _guestRoom, _guestReservation;
 
     private EnumScreen screen;
-    
-    //Para el Excel
-    private List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
-    private DataTable dt = new DataTable();
-    private string rptName;
+   
     #endregion
 
     #region Constructores y destructores
@@ -549,10 +545,13 @@ namespace IM.Inhouse
           // // // ShowReport
           // determinamos el club
           if (clubAgency != 0)
-            club = StrToEnums.StringToEnumClub(clubAgency.ToString());
+          {
+            club = EnumToListHelper.StringToEnum<EnumClub>(clubAgency.ToString());
+          }
           else
-            club = StrToEnums.StringToEnumClub(clubGuest.ToString());
-
+          {
+            club = EnumToListHelper.StringToEnum<EnumClub>(clubGuest.ToString());
+          }
           //obtenemos los datos del reporte del servicio de Clubes
           Services.ClubesService.RptEquity rptClubes = ClubesHelper.GetRptEquity(membershipNum, Convert.ToInt32(company), club);
 
@@ -945,44 +944,83 @@ namespace IM.Inhouse
     }
     #endregion
 
+    #region ShowbtnWitGifts
+
+    /// <summary>
+    /// Muestra u oculta el Boton Pre/Gifts
+    /// </summary>
+    /// <param name="show"> true muestra | false oculta</param>
+    /// <history>
+    /// [ecanul] 19/04/2016 Created
+    /// </history>
+    void ShowbtnWitGifts(bool show)
+    {
+      if (show)
+        colGifts.Width = new GridLength(1, GridUnitType.Star);
+      else
+        colGifts.Width = new GridLength(0);
+    } 
+
+    #endregion
+
+    #region CreateExcelReport
+
     /// <summary>
     /// Invoca el Reporte Solicitado en formato Excel
     /// </summary>
-    void ChargePreview()
+    /// <history>
+    /// <param name="WithGifts">Opcional true = PremanifestWithGifts | false reporte comun</param>
+    /// [ecanul] 18/04/2016 Created
+    /// [ecanul] 19/04/2016 Modificated Agregada funcionalidad para Aviables, Premanifest y Premanifest With Gifts
+    /// </history>
+    void CreateExcelReport(bool WithGifts = false)
     {
       bool hasData = false;
-      string ls = "LEAD SOURCE " + App.User.LeadSource.lsN;
       switch (screen)
       {
         case EnumScreen.Arrivals:
           if (dgGuestArrival.Items.Count > 0)
           {
-            List<RptArrivals> arrivals = BRReportsGeneral.GetRptArrivals(dtpDate.SelectedDate.Value, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup);
-            ReportsToExcel.ArrivalsToExcel(arrivals,dtpDate.SelectedDate.Value);
+            List<RptArrivals> arrivals = BRGeneralReports.GetRptArrivals(dtpDate.SelectedDate.Value, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup);
+            ReportsToExcel.ArrivalsToExcel(arrivals, dtpDate.SelectedDate.Value);
             hasData = true;
           }
           break;
         case EnumScreen.Availables:
           if (dgGuestAvailable.Items.Count > 0)
           {
-           
+            List<RptAvailables> aviables = BRGeneralReports.GetRptAviables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup);
+            ReportsToExcel.AvailablesToExcel(aviables);
             hasData = true;
           }
           break;
         case EnumScreen.Premanifest:
           if (dgGuestPremanifest.Items.Count > 0)
           {
-            hasData = true;
+            if (!WithGifts) //Si no se mando nada o mando falso
+            {
+              List<RptPremanifest> premanifest = BRGeneralReports.GetRptPremanifest(dtpDate.SelectedDate.Value, App.User.LeadSource.lsID, _markets, _onGroup);
+              ReportsToExcel.PremanifestToExcel(premanifest);
+              hasData = true;
+            }
+            else
+            {
+              List<RptPremanifestWithGifts> withGifts = BRGeneralReports.GetRptPremanifestWithGifts(dtpDate.SelectedDate.Value, App.User.LeadSource.lsID, _markets, _onGroup);
+              ReportsToExcel.PremanifestWithGiftsToExcel(withGifts);
+              hasData = true;
+            }
           }
           break;
       }
 
-      if (hasData)
-        UIHelper.ShowMessage("Generated Report",MessageBoxImage.Exclamation,"Inhouse");
-      else
+      if (hasData) //Muestra mensaje para informar que el reporte ha sido generado con exito
+        UIHelper.ShowMessage("Generated Report", MessageBoxImage.Information, "Inhouse");
+      else //Si el Grid esta vacio
         UIHelper.ShowMessage("There is no data.");
 
-    }
+    } 
+
+    #endregion
 
     #region StaStart
     /// <summary>
@@ -1960,7 +1998,7 @@ namespace IM.Inhouse
       //MessageBox.Show(Culturas);
 
       StaStart("Printing "+ EnumToListHelper.GetEnumDescription(screen) + "...");
-      ChargePreview();
+      CreateExcelReport();
       StaEnd();
     }
 
@@ -2094,6 +2132,15 @@ namespace IM.Inhouse
       }
     }
 
+    #region btnWithGifts_Click
+
+    private void btnWithGifts_Click(object sender, RoutedEventArgs e)
+    {
+      CreateExcelReport(true);
+    } 
+
+    #endregion
+
     #endregion
 
     #region btnArrivals_Clicked
@@ -2110,6 +2157,8 @@ namespace IM.Inhouse
       DataGridVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Hidden, Visibility.Hidden);
       LoadGrid();
       StaEnd();
+      //oculta el boton btnWitGifts que exporta el reporte Premanifest WithGifts
+      ShowbtnWitGifts(false);
     }
     #endregion
 
@@ -2127,6 +2176,8 @@ namespace IM.Inhouse
       DataGridVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Hidden, Visibility.Hidden);
       LoadGrid();
       StaEnd();
+      //oculta el boton btnWitGifts que exporta el reporte Premanifest WithGifts
+      ShowbtnWitGifts(false);
     }
     #endregion
 
@@ -2144,6 +2195,8 @@ namespace IM.Inhouse
       DataGridVisibility(Visibility.Hidden, Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
       LoadGrid();
       StaEnd();
+      //Muestra el boton btnWitGifts que exporta el reporte Premanifest WithGifts
+      ShowbtnWitGifts(true);
     }
     #endregion
 
@@ -2151,7 +2204,7 @@ namespace IM.Inhouse
     private void btnGrouos_Click(object sender, RoutedEventArgs e)
     {
       Forms.frmGuestsGroups frmGroups = new frmGuestsGroups(0, 0, 0, dtpDate.SelectedDate.Value, EnumAction.Search);
-      frmGroups.Show();
+      frmGroups.ShowDialog();
     }
     #endregion
 
@@ -2159,7 +2212,7 @@ namespace IM.Inhouse
     private void btnDaysOff_Click(object sender, RoutedEventArgs e)
     {
       frmDaysOff frmDaysOff = new frmDaysOff(EnumTeamType.TeamPRs);
-      frmDaysOff.Show();
+      frmDaysOff.ShowDialog();
     }
     #endregion
 
@@ -2195,6 +2248,8 @@ namespace IM.Inhouse
           DataGridVisibility(Visibility.Hidden, Visibility.Hidden, Visibility.Hidden, Visibility.Visible);
           LoadGrid();
           StaEnd();
+          //oculta el boton btnWitGifts que exporta el reporte Premanifest WithGifts
+          ShowbtnWitGifts(false);
         }
 
       }
@@ -2205,7 +2260,7 @@ namespace IM.Inhouse
     private void btnAssistance_Click(object sender, RoutedEventArgs e)
     {
       Forms.frmAssistance frmAssistance = new Forms.frmAssistance(EnumPlaceType.LeadSource);
-      frmAssistance.Show();
+      frmAssistance.ShowDialog();
     }
     #endregion
 

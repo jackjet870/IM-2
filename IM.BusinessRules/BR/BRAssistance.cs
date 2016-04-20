@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        string strPalaceType = StrToEnums.EnumPalaceTypeToSting(palaceType);
+        string strPalaceType = EnumToListHelper.GetEnumDescription(palaceType);
         return dbContext.USP_OR_GetAssistance(strPalaceType, PalaceID, dateStart, DateEnd).ToList();
       }
     }
@@ -45,7 +45,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        string strPalaceType = StrToEnums.EnumPalaceTypeToSting(palaceType);
+        string strPalaceType = EnumToListHelper.GetEnumDescription(palaceType);
         return dbContext.USP_OR_GetPersonnelAssistance(strPalaceType, PalaceID, dateStart, DateEnd).ToList();
       }
     }

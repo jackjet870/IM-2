@@ -7,6 +7,7 @@ using System.Windows.Input;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Model;
+using IM.Model.Helpers;
 using System.Data;
 using IM.Base.Helpers;
 using System.IO;
@@ -367,9 +368,9 @@ namespace IM.ProcessorOuthouse.Forms
             _frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
-            "OUT",
+            EnumProgram.Outhouse,
             string.Join(",", _frmFilter.grdPaymentTypes.SelectedItems.Cast<PaymentType>().Select(c => c.ptID).ToList()),
-            Convert.ToByte(EnumFilterDeposit.fdDepositShowsNoDeposit));
+            EnumFilterDeposit.fdDepositShowsNoDeposit);
           if (_lstPaymentTypes.Any())
           {
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
@@ -426,8 +427,8 @@ namespace IM.ProcessorOuthouse.Forms
           List<RptProductionByPROuthouse> lstRptProductionByPROuthouse = BRReportsByLeadSource.GetRptProductionByPROuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
-            "OUT",
-            Convert.ToByte(EnumFilterDeposit.fdDepositShowsNoDeposit),
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit,
             _enumBasedOnBooking);
           if (lstRptProductionByPROuthouse.Any())
           {
@@ -448,8 +449,8 @@ namespace IM.ProcessorOuthouse.Forms
           List<RptProductionByAgeOuthouse> lstRptProductionByAgeOuthouse = BRReportsByLeadSource.GetRptProductionByAge(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
-            "OUT",
-            Convert.ToByte(EnumFilterDeposit.fdDepositShowsNoDeposit));
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit);
           if (lstRptProductionByAgeOuthouse.Count > 0)
           {
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
@@ -469,8 +470,8 @@ namespace IM.ProcessorOuthouse.Forms
           List<RptProductionByAgeSalesRoomOuthouse> lstRptProductionByAgeSalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByAgeSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
-            "OUT",
-            Convert.ToByte(EnumFilterDeposit.fdDepositShowsNoDeposit));
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit);
           if (lstRptProductionByAgeSalesRoomOuthouse.Count > 0)
           {
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
@@ -489,9 +490,9 @@ namespace IM.ProcessorOuthouse.Forms
           List<RptProductionByAgencyOuthouse> lstRptProductionByAgencyOuthouse = BRReportsByLeadSource.GetRptProductionByAgencyOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
-            "OUT",
-            Convert.ToByte(EnumFilterDeposit.fdDepositShowsNoDeposit),
-            Convert.ToBoolean(_enumSalesByMemberShipType));
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit,
+            _enumSalesByMemberShipType);
           if (lstRptProductionByAgencyOuthouse.Count > 0)
           {
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
@@ -515,8 +516,8 @@ namespace IM.ProcessorOuthouse.Forms
           List<RptProductionByAgencyMarketHotelOuthouse> lstRptProductionByAgencyMarketHotelOuthouse = BRReportsByLeadSource.GetRptProductionByAgencyMarketHotelOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
-            "OUT",
-            Convert.ToByte(EnumFilterDeposit.fdDepositShowsNoDeposit));
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit);
           if(lstRptProductionByAgencyMarketHotelOuthouse.Count > 0)
           {
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
