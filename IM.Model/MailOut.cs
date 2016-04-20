@@ -14,6 +14,32 @@ namespace IM.Model
     
     public partial class MailOut
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public MailOut()
+        {
+            this.moOrder = 20;
+            this.moGroup = "A";
+            this.moCCheckInDFrom = 0;
+            this.moCCheckInDTo = 0;
+            this.moCCheckOutDFrom = 0;
+            this.moCCheckOutDTo = 0;
+            this.moCBookDFrom = 0;
+            this.moCBookDTo = 0;
+            this.moCCheckIn = false;
+            this.moCInfo = 0;
+            this.moCInvit = 0;
+            this.moCBookCanc = 0;
+            this.moCShow = false;
+            this.moCSale = false;
+            this.moCOnGroup = 0;
+            this.moCRoomNumFrom = "";
+            this.moCRoomNumTo = "999999";
+            this.moCMarket = "ANY ONE";
+            this.moCAgency = "ANY ONE";
+            this.moCCountry = "ANY ONE";
+            this.moA = true;
+        }
+    
         public string mols { get; set; }
         public string moCode { get; set; }
         public short moOrder { get; set; }

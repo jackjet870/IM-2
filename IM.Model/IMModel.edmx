@@ -9554,27 +9554,27 @@
           </Key>
           <Property Name="mols" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="moCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="moOrder" Type="Int16" Nullable="false" />
-          <Property Name="moGroup" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="moCCheckInDFrom" Type="Int16" Nullable="false" />
-          <Property Name="moCCheckInDTo" Type="Int16" Nullable="false" />
-          <Property Name="moCCheckOutDFrom" Type="Int16" Nullable="false" />
-          <Property Name="moCCheckOutDTo" Type="Int16" Nullable="false" />
-          <Property Name="moCBookDFrom" Type="Int16" />
-          <Property Name="moCBookDTo" Type="Int16" />
-          <Property Name="moCCheckIn" Type="Boolean" Nullable="false" />
-          <Property Name="moCInfo" Type="Byte" Nullable="false" />
-          <Property Name="moCInvit" Type="Byte" Nullable="false" />
-          <Property Name="moCBookCanc" Type="Byte" Nullable="false" />
-          <Property Name="moCShow" Type="Boolean" Nullable="false" />
-          <Property Name="moCSale" Type="Boolean" Nullable="false" />
-          <Property Name="moCOnGroup" Type="Byte" Nullable="false" />
-          <Property Name="moCRoomNumFrom" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="moCRoomNumTo" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="moCMarket" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="moCAgency" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
-          <Property Name="moCCountry" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="moA" Type="Boolean" Nullable="false" />
+          <Property Name="moOrder" Type="Int16" Nullable="false" DefaultValue="20" />
+          <Property Name="moGroup" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="A" />
+          <Property Name="moCCheckInDFrom" Type="Int16" Nullable="false" DefaultValue="0" />
+          <Property Name="moCCheckInDTo" Type="Int16" Nullable="false" DefaultValue="0" />
+          <Property Name="moCCheckOutDFrom" Type="Int16" Nullable="false" DefaultValue="0" />
+          <Property Name="moCCheckOutDTo" Type="Int16" Nullable="false" DefaultValue="0" />
+          <Property Name="moCBookDFrom" Type="Int16" DefaultValue="0" />
+          <Property Name="moCBookDTo" Type="Int16" DefaultValue="0" />
+          <Property Name="moCCheckIn" Type="Boolean" Nullable="false" DefaultValue="False" />
+          <Property Name="moCInfo" Type="Byte" Nullable="false" DefaultValue="0" />
+          <Property Name="moCInvit" Type="Byte" Nullable="false" DefaultValue="0" />
+          <Property Name="moCBookCanc" Type="Byte" Nullable="false" DefaultValue="0" />
+          <Property Name="moCShow" Type="Boolean" Nullable="false" DefaultValue="False" />
+          <Property Name="moCSale" Type="Boolean" Nullable="false" DefaultValue="False" />
+          <Property Name="moCOnGroup" Type="Byte" Nullable="false" DefaultValue="0" />
+          <Property Name="moCRoomNumFrom" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
+          <Property Name="moCRoomNumTo" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="999999" />
+          <Property Name="moCMarket" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="ANY ONE" />
+          <Property Name="moCAgency" Type="String" MaxLength="35" FixedLength="false" Unicode="false" DefaultValue="ANY ONE" />
+          <Property Name="moCCountry" Type="String" MaxLength="25" FixedLength="false" Unicode="false" DefaultValue="ANY ONE" />
+          <Property Name="moA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <NavigationProperty Name="LeadSource" Relationship="Self.FK_MailOuts_LeadSources" FromRole="MailOuts" ToRole="LeadSources" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="MailOutText">
@@ -9585,9 +9585,9 @@
           </Key>
           <Property Name="mtls" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="mtmoCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="mtla" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="mtla" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="EN" />
           <Property Name="mtRTF" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="mtA" Type="Boolean" Nullable="false" />
+          <Property Name="mtA" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="mtU" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Language" Relationship="Self.FK_MailOutTexts_Languages" FromRole="MailOutTexts" ToRole="Languages" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="LeadSource" Relationship="Self.FK_MailOutTexts_LeadSources" FromRole="MailOutTexts" ToRole="LeadSources" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
