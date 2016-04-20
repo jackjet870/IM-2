@@ -318,7 +318,7 @@
     <Resource Include="Images\Payment.png" />
     <Resource Include="Images\Money.ico" />
     <Resource Include="Images\DateTime_Forbidden.png" />
-    <Content Include="Images\Find.png" />
+    <Resource Include="Images\Find.png" />
     <Resource Include="Images\Search.ico" />
   </ItemGroup>
   <ItemGroup>

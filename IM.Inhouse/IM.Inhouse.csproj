@@ -82,6 +82,7 @@
     </Compile>
     <Compile Include="Classes\EquityHelpers.cs" />
     <Compile Include="Classes\ObjReports.cs" />
+    <Compile Include="Classes\ObjSearchGuestGroup.cs" />
     <Compile Include="Classes\ReportsToExcel.cs" />
     <Compile Include="Classes\RptEquityHeader.cs" />
     <Compile Include="Forms\frmInhouse.xaml.cs">

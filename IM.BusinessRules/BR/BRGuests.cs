@@ -485,10 +485,11 @@ namespace IM.BusinessRules.BR
                         join ls in dbContext.LeadSources
                         on gu.guls equals ls.lsID
                         where ls.lspg == leadSource.lspg &&
-                        gu.guLastName1.Contains(guest.guLastName1) || gu.guFirstName1.Contains(guest.guFirstName1)
-                        || gu.guLastname2.Contains(guest.guLastname2) || gu.guFirstName2.Contains(guest.guFirstName2)
-                        && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
+                        (gu.guLastName1.Contains(guest.guLastName1) || gu.guFirstName1.Contains(guest.guFirstName1)
+                        || gu.guLastname2.Contains(guest.guLastname2) || gu.guFirstName2.Contains(guest.guFirstName2))
                         && gu.guls == guest.guls
+                        && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
+                        orderby gu.guls, gu.guLastName1
                         select gu).ToList();
           }  //Si tiene el numero de habitacion
           else if (guest.guRoomNum != "" && guest.guRoomNum != null)

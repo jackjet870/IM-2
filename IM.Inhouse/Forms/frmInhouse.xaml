@@ -77,6 +77,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="0" x:Name="colGifts"/>
                     </Grid.ColumnDefinitions>
                     <Button x:Name="btnLogin" Grid.Column="0"   Style="{StaticResource ResourceKey=btnOptions}" Click="btnLogin_Click"  >
                         <StackPanel >
@@ -124,6 +125,12 @@
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/DaysOff.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="DaysOff" Style="{StaticResource ResourceKey=txtOptions}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="btnWithGifts" Grid.Column="8" Style="{StaticResource ResourceKey=btnOptions}"  Click="btnWithGifts_Click" >
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <TextBlock Text="Pre/Gifts" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
                 </Grid>

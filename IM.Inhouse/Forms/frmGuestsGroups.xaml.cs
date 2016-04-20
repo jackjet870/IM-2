@@ -2,21 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Model;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
-using IM.Inhouse.Classes;
 
 namespace IM.Inhouse.Forms
 {
@@ -36,25 +28,37 @@ namespace IM.Inhouse.Forms
     List<Guest> lstGuestTemp;
     bool mode; //false nuevo | true modifica
 
-    #endregion      
+    #endregion
 
     #region Metodos
 
+    #region ValidateGroupSelected
+
+    /// <summary>
+    /// Valida que el gridGuestGroup no este vacio 
+    /// </summary>
+    /// <history>
+    /// [ecanul] 28/03/2016 Created
+    /// </history>
     bool ValidateGroupSelected()
     {
       bool valido = false;
       List<GuestsGroup> guestGroup = dtgGuestsGroup.SelectedItems.OfType<GuestsGroup>().ToList();
       if (guestGroup.Count != 0)
-        valido=true;
+        valido = true;
       return valido;
     }
+
+    #endregion
+    
+    #region CreateWhere
 
     /// <summary>
     /// Llena datos para crear la clausula Where.
     /// </summary>
     /// <param name="where">Clausula WHERE si ya se tiene predefinida (Experimental)</param>
     /// <history>[ECNUL] 28-03-2016 Created</history>
-    void CreateWhere(string where ="")
+    void CreateWhere(string where = "")
     {
       guest = new Guest();
       guestsGroup = new GuestsGroup();
@@ -79,13 +83,13 @@ namespace IM.Inhouse.Forms
           }
           guest.guCheckInD = dtpGuestStart.SelectedDate.Value;
           //En realidad tambien debe ser en guCheckInD pero es para ser usada en un between que se usa el siguiente campo tipo fecha
-          guest.guCheckOutD = dtpGuestEnd.SelectedDate.Value; 
+          guest.guCheckOutD = dtpGuestEnd.SelectedDate.Value;
         }
         //El join es estatico... se hace desde el BR
       }
       else //Si se envia algo en el where
       {//Se intuye si se manda algo en el Where es una cadena cualquiera AUN ASI se crea un Switch Case para futuras modificaciones
-        switch(where)
+        switch (where)
         {
           case "0": //Solo para tener la esrtructura de la tabla
             guest.guID = 0;
@@ -93,6 +97,10 @@ namespace IM.Inhouse.Forms
         }
       }
     }
+
+    #endregion
+
+    #region LoadGrdGuestsGroups
 
     /// <summary>
     /// Carga el DataGrid GuestsGroups
@@ -103,18 +111,19 @@ namespace IM.Inhouse.Forms
       StaStart("Loading Groups...");
       CreateWhere();
       lstGuestsGroups = BRGuestsGroups.GetGuestsGroups(guest, guestsGroup);
-      if(lstGuestsGroups.Count!=0)
-        dtgGuestsGroup.ItemsSource=lstGuestsGroups;
-     
+      if (lstGuestsGroups.Count != 0)
+        dtgGuestsGroup.ItemsSource = lstGuestsGroups;
+
       if (dtgGuestsGroup.Items.Count == 1)
         StatusBarReg.Content = dtgGuestsGroup.Items.Count + " Group";
       else
         StatusBarReg.Content = dtgGuestsGroup.Items.Count + " Groups";
-
-
-
       StaEnd();
     }
+
+    #endregion
+
+    #region ClearControls
 
     /// <summary>
     /// Limpia los controles y los vuelve a su estado por defecto
@@ -130,6 +139,10 @@ namespace IM.Inhouse.Forms
       txtDescription.Text = "";
     }
 
+    #endregion
+
+    #region LoadGridGuestsGroupsIntegrants
+
     /// <summary>
     /// Carga el Grid GuestsGroupsIntegrants
     /// </summary>
@@ -143,12 +156,17 @@ namespace IM.Inhouse.Forms
       {
         if (enumAction == EnumAction.AddTo)
           AddGuestToGridGuestsGroupsIntegrants(guestID);
-        dtgGuestGroupIntegrants.ItemsSource = lstGuest;
-        lblIntegrants.Content = "Integrants: " + lstGuest.Count;
+        else
+          dtgGuestGroupIntegrants.ItemsSource = lstGuest;
+        lblIntegrants.Content = "Integrants: " + dtgGuestGroupIntegrants.Items.Count;
       }
-
+      dtgGuestGroupIntegrants.IsEnabled = true;
       StaEnd();
     }
+
+    #endregion
+
+    #region LoadGuestsGroupsInfo
 
     /// <summary>
     /// Garga en los controles la informacion del GuestsGroupSeleccionado
@@ -165,10 +183,14 @@ namespace IM.Inhouse.Forms
       txtDescription.Text = guestGroup[0].gxN;
       gx.gxID = guestGroup[0].gxID;
       gx.gxN = guestGroup[0].gxN;
-      
+
       LoadGridGuestsGroupsIntegrants(gx);
       StaEnd();
     }
+
+    #endregion
+
+    #region AddGuestToGridGuestsGroupsIntegrants
 
     /// <summary>
     /// Agrega un Huesped a la tabla GuestsGroupsIntegrants Cuando se manda desde frmRegister
@@ -182,6 +204,8 @@ namespace IM.Inhouse.Forms
       {
         if (lstGuest == null)
           lstGuestTemp = new List<Guest>();
+        else
+          lstGuestTemp = lstGuest;
         lstGuestTemp.Add(BRGuests.GetGuest(id));
       }
       else
@@ -192,6 +216,10 @@ namespace IM.Inhouse.Forms
       dtgGuestGroupIntegrants.ItemsSource = lstGuestTemp;
       lblIntegrants.Content = "Integrants: " + dtgGuestGroupIntegrants.Items.Count;
     }
+
+    #endregion
+
+    #region CaseLoad
 
     /// <summary>
     /// Selecciona la accion a hacer segun EnumAction
@@ -215,7 +243,7 @@ namespace IM.Inhouse.Forms
           break;
         case EnumAction.AddTo:
           //txtID.Text = groupID.ToString();
-          if(groupID!=0)
+          if (groupID != 0)
           {
             txtSearchGroupID.Text = groupID.ToString();
             LoadGrdGuestsGroups();
@@ -226,13 +254,17 @@ namespace IM.Inhouse.Forms
       }
     }
 
+    #endregion
+
+    #region EnableControls
+
     /// <summary>
     /// Habilita o Inhabilita controles segun sea el caso
     /// </summary>
     /// <param name="function">0 Search/Default | 1 Add | 2 Edit | 3 Vista(Cuando se selecciona un Huesped con grupo)</param>
     void EnableControls(int function)
     {
-      switch(function)
+      switch (function)
       {
         case 0: //Search/Default
           //Habilita
@@ -249,6 +281,7 @@ namespace IM.Inhouse.Forms
           btnCancel.IsEnabled = false;
           dtgGuestGroupIntegrants.CanUserAddRows = false;
           dtgGuestGroupIntegrants.IsReadOnly = true;
+          btnAddGuest.Visibility = Visibility.Collapsed;
           break;
         case 1: //ADD 
           //Inhabilita
@@ -265,9 +298,10 @@ namespace IM.Inhouse.Forms
           dtgGuestGroupIntegrants.Focus();
           lstGuestsGroups = new List<GuestsGroup>();
           dtgGuestGroupIntegrants.ItemsSource = lstGuestsGroups;
-          grdListGuest.IsEnabled = true;          
+          grdListGuest.IsEnabled = true;
           btnSave.IsEnabled = true;
           btnCancel.IsEnabled = true;
+          btnAddGuest.Visibility = Visibility.Visible;
           break;
         case 2: //Edit
           //Inhabilita
@@ -285,6 +319,7 @@ namespace IM.Inhouse.Forms
           grdListGuest.IsEnabled = true;
           btnSave.IsEnabled = true;
           btnCancel.IsEnabled = true;
+          btnAddGuest.Visibility = Visibility.Visible;
           break;
         case 3:
           //inhabilita
@@ -293,6 +328,7 @@ namespace IM.Inhouse.Forms
           btnCancel.IsEnabled = false;
           dtgGuestGroupIntegrants.CanUserAddRows = false;
           dtgGuestGroupIntegrants.IsReadOnly = true;
+          btnAddGuest.Visibility = Visibility.Collapsed;
           //Habilita
           grdGroup.IsEnabled = true;
           btnShow.IsEnabled = true;
@@ -301,6 +337,10 @@ namespace IM.Inhouse.Forms
           break;
       }
     }
+
+    #endregion
+
+    #region AddGuests
 
     /// <summary>
     /// Abre el formulario frmSearchGuest y agrega los guespedes buscados al grid
@@ -356,6 +396,10 @@ namespace IM.Inhouse.Forms
       }
     }
 
+    #endregion
+
+    #region StaStart
+
     /// <summary>
     /// Indica en la barra de estado que se inicio un proceso
     /// </summary>
@@ -368,6 +412,10 @@ namespace IM.Inhouse.Forms
       this.Cursor = Cursors.Wait;
     }
 
+    #endregion
+
+    #region StaEnd
+
     /// <summary>
     /// Indica en la barra de estado que se finalizo un proceso
     /// </summary>
@@ -378,6 +426,8 @@ namespace IM.Inhouse.Forms
       imgStatusBarMessage.Visibility = Visibility.Hidden;
       this.Cursor = null;
     }
+
+    #endregion
 
     #endregion
 
@@ -465,10 +515,7 @@ namespace IM.Inhouse.Forms
 
     private void btnAddGuest_Click(object sender, RoutedEventArgs e)
     {
-      if (dtgGuestGroupIntegrants.SelectedIndex == dtgGuestGroupIntegrants.Items.Count - 1)
-      {
-        AddGuests();
-      }
+      AddGuests();
     }
 
     private void btnShow_Click(object sender, RoutedEventArgs e)

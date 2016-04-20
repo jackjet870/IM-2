@@ -6,7 +6,28 @@
         xmlns:local="clr-namespace:IM.Inhouse.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Inhouse.Forms.frmGuestsGroups"
         mc:Ignorable="d"
-        Title="Guests Groups"  Height="650" Width="800" ShowInTaskbar="False" Loaded="Window_Loaded" Topmost="True" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+        Title="Guests Groups"  Height="650" Width="800" ShowInTaskbar="False" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+    <Window.Resources>
+        <Style TargetType="Button" x:Key="btnOptions">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
+        <Style TargetType="Image" x:Key="ImageOptions">
+            <Setter Property="Width" Value="24"/>
+            <Setter Property="Height" Value="24"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="txtOptions">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="9"/>
+            <Setter Property="FontStyle" Value="Normal"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1.5*" />
@@ -116,19 +137,16 @@
                     <DataGrid x:Name="dtgGuestGroupIntegrants" CanUserAddRows="True"  AutoGenerateColumns="False"
                               Margin="0,0,0,0" DataContext="{Binding lstGuest}" >
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn>
+                            <!--<DataGridTemplateColumn>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <!--Click=""-->
-                                        <Button x:Name="btnAddGuest" Click="btnAddGuest_Click">
-                                            <StackPanel>
-                                                <Image Source="pack://application:,,,/IM.Base;component/Images/Find.png" Width="10" Height="10" />
-                                            </StackPanel>
-                                        </Button>
+                                        Click=""
+                                        <Image x:Name="btnAddGuest" Source="pack://application:,,,/IM.Base;component/Images/Find.png" Width="10" Height="10" Visibility="Hidden">                                            
+                                        </Image>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn x:Name="guIDColumn" Width=".8*" Header="ID" Binding="{Binding guID}"  />
+                            </DataGridTemplateColumn>-->
+                            <DataGridTextColumn x:Name="guIDColumn" Width=".8*" Header="ID" Binding="{Binding guID}" IsReadOnly="True" />
                             <DataGridTextColumn x:Name="guLastName1Column" Width="1*" Header="Last Name" Binding="{Binding guLastName1}" IsReadOnly="True"/>
                             <DataGridTextColumn x:Name="guFirstName1Column" Width="1*" Header="First Name" Binding="{Binding guFirstName1}" IsReadOnly="True"/>
                             <DataGridTextColumn x:Name="gulsOriginalColumn" Width=".7*" Header="Hotel" Binding="{Binding gulsOriginal}" IsReadOnly="True"/>
@@ -141,10 +159,17 @@
                 </Grid>
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="6*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="1" Content="Integrants: 0" VerticalAlignment="Center" x:Name="lblIntegrants"/>
+                    <Button x:Name="btnAddGuest" Grid.Column="0"   Style="{StaticResource ResourceKey=btnOptions}" Click="btnAddGuest_Click" Visibility="Collapsed" >
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" >
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/Find.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <TextBlock Text="Find Guest" Style="{StaticResource ResourceKey=txtOptions}"/>
+                        </StackPanel>
+                    </Button>
+                    <Label Grid.Column="2" Content="Integrants: 0" VerticalAlignment="Center" x:Name="lblIntegrants"/>
                 </Grid>
             </Grid>
             <!--#endregion-->
