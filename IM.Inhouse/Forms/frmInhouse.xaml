@@ -44,7 +44,7 @@
     </Window.Resources>
 
     <Grid>
-        <!--#region Configuración del Grid Principal -->
+        <!--#region  Configuración del Grid Principal -->
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="86*"/>
