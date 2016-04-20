@@ -7,7 +7,6 @@ using System.Windows.Input;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Model;
-using IM.Model.Helpers;
 using System.Data;
 using IM.Base.Helpers;
 using System.IO;
@@ -536,8 +535,8 @@ namespace IM.ProcessorOuthouse.Forms
           List<RptProductionByCoupleTypeOuthouse> lstRptProductionByCoupleTypeOuthouse = BRReportsByLeadSource.GetRptProductionByCoupleTypeOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
-            "OUT",
-            Convert.ToByte(EnumFilterDeposit.fdDepositShowsNoDeposit));
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit);
           if (lstRptProductionByCoupleTypeOuthouse.Count > 0)
           {
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
@@ -556,8 +555,8 @@ namespace IM.ProcessorOuthouse.Forms
           List<RptProductionByCoupleTypeSalesRoomOuthouse> lstRptProductionByCoupleTypeSalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByCoupleTypeSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
-            "OUT",
-            Convert.ToByte(EnumFilterDeposit.fdDepositShowsNoDeposit));
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit);
           if (lstRptProductionByCoupleTypeSalesRoomOuthouse.Count > 0)
           {
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
