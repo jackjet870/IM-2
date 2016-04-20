@@ -14,6 +14,13 @@ namespace IM.Model
     
     public partial class MailOutText
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public MailOutText()
+        {
+            this.mtla = "EN";
+            this.mtA = true;
+        }
+    
         public string mtls { get; set; }
         public string mtmoCode { get; set; }
         public string mtla { get; set; }
