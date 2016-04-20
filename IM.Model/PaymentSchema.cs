@@ -16,9 +16,9 @@ namespace IM.Model
     {
         public int pasID { get; set; }
         public string pasN { get; set; }
-        public Nullable<int> pasCoupleFrom { get; set; }
-        public Nullable<int> pasCoupleTo { get; set; }
-        public Nullable<decimal> pasShowFactor { get; set; }
-        public Nullable<bool> pasA { get; set; }
+        public int pasCoupleFrom { get; set; }
+        public int pasCoupleTo { get; set; }
+        public decimal pasShowFactor { get; set; }
+        public bool pasA { get; set; }
     }
 }

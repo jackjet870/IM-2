@@ -785,6 +785,9 @@
     <Compile Include="RptProductionByAgencyOuthouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptProductionByAgencySalesRoomOuthouse.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptProductionByAgeOuthouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -809,6 +812,12 @@
     <Compile Include="RptProductionByDeskInhouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptProductionByGiftInvitation.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptProductionByGiftInvitationSalesRoom.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptProductionByGiftQuantity.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -816,6 +825,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptProductionByGuestStatusInhouse.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptProductionByGuestStatusOuthouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptProductionByMemberTypeAgencyInhouse.cs">
@@ -828,6 +840,12 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptProductionByNationalityMarketOriginallyAvailableInhouse.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptProductionByNationalityOuthouse.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptProductionByNationalitySalesRoomOuthouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptProductionByPRGroupInhouse.cs">

@@ -103,13 +103,13 @@
           <Property Name="bdpc" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="bdcc" Type="varchar" MaxLength="10" />
           <Property Name="bdCardNum" Type="varchar" MaxLength="4" />
+          <Property Name="bdExpD" Type="varchar" MaxLength="5" />
           <Property Name="bdAuth" Type="int" />
           <Property Name="bdRefund" Type="bit" />
           <Property Name="bddr" Type="int" />
           <Property Name="bdFolioCXC" Type="int" />
-          <Property Name="bdUserCXC" Type="varchar" MaxLength="20" />
+          <Property Name="bdUserCXC" Type="varchar" MaxLength="10" />
           <Property Name="bdEntryDCXC" Type="datetime" />
-          <Property Name="bdExpD" Type="varchar" MaxLength="5" />
         </EntityType>
         <EntityType Name="CECOCEBETypes">
           <Key>
@@ -1503,11 +1503,11 @@
             <PropertyRef Name="pasID" />
           </Key>
           <Property Name="pasID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="pasN" Type="varchar" MaxLength="30" />
-          <Property Name="pasCoupleFrom" Type="int" />
-          <Property Name="pasCoupleTo" Type="int" />
-          <Property Name="pasShowFactor" Type="money" />
-          <Property Name="pasA" Type="bit" />
+          <Property Name="pasN" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="pasCoupleFrom" Type="int" Nullable="false" />
+          <Property Name="pasCoupleTo" Type="int" Nullable="false" />
+          <Property Name="pasShowFactor" Type="money" Nullable="false" />
+          <Property Name="pasA" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PaymentTypes">
           <Key>
@@ -2416,6 +2416,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_BookingDeposits_Personnel_CxC">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="BookingDeposits" Type="Self.BookingDeposits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="BookingDeposits">
+              <PropertyRef Name="bdUserCXC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ChargeTo_ChargeCalculationTypes">
           <End Role="ChargeCalculationTypes" Type="Self.ChargeCalculationTypes" Multiplicity="1" />
           <End Role="ChargeTo" Type="Self.ChargeTo" Multiplicity="*" />
@@ -2524,7 +2536,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_drrf">
+        <Association Name="FK_DepositsRefund_Guests">
+          <End Role="Guests" Type="Self.Guests" Multiplicity="1" />
+          <End Role="DepositsRefund" Type="Self.DepositsRefund" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Guests">
+              <PropertyRef Name="guID" />
+            </Principal>
+            <Dependent Role="DepositsRefund">
+              <PropertyRef Name="drgu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DepositsRefund_RefundTypes">
           <End Role="RefundTypes" Type="Self.RefundTypes" Multiplicity="0..1" />
           <End Role="DepositsRefund" Type="Self.DepositsRefund" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3529,18 +3553,6 @@
             </Principal>
             <Dependent Role="Guests">
               <PropertyRef Name="guco" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Guests_guid">
-          <End Role="Guests" Type="Self.Guests" Multiplicity="1" />
-          <End Role="DepositsRefund" Type="Self.DepositsRefund" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Guests">
-              <PropertyRef Name="guID" />
-            </Principal>
-            <Dependent Role="DepositsRefund">
-              <PropertyRef Name="drgu" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6048,6 +6060,7 @@
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
           <Parameter Name="PR" Type="varchar" Mode="In" />
+          <Parameter Name="SearchBySalePR" Type="bit" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetSalesRoom" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
@@ -6419,6 +6432,15 @@
           <Parameter Name="FilterDeposit" Type="tinyint" Mode="In" />
           <Parameter Name="SalesByMembershipType" Type="bit" Mode="In" />
         </Function>
+        <Function Name="USP_OR_RptProductionByAgencySalesRoomOutside" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
+          <Parameter Name="PRs" Type="varchar" Mode="In" />
+          <Parameter Name="Program" Type="varchar" Mode="In" />
+          <Parameter Name="FilterDeposit" Type="tinyint" Mode="In" />
+          <Parameter Name="SalesByMembershipType" Type="bit" Mode="In" />
+        </Function>
         <Function Name="USP_OR_RptProductionByAgeOutside" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -6485,6 +6507,24 @@
           <Parameter Name="ConsiderQuinellas" Type="bit" Mode="In" />
           <Parameter Name="BasedOnArrival" Type="bit" Mode="In" />
         </Function>
+        <Function Name="USP_OR_RptProductionByGiftInvitation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
+          <Parameter Name="PRs" Type="varchar" Mode="In" />
+          <Parameter Name="Program" Type="varchar" Mode="In" />
+          <Parameter Name="Gifts" Type="varchar" Mode="In" />
+          <Parameter Name="FilterDeposit" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptProductionByGiftInvitationSalesRoom" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
+          <Parameter Name="PRs" Type="varchar" Mode="In" />
+          <Parameter Name="Program" Type="varchar" Mode="In" />
+          <Parameter Name="Gifts" Type="varchar" Mode="In" />
+          <Parameter Name="FilterDeposit" Type="tinyint" Mode="In" />
+        </Function>
         <Function Name="USP_OR_RptProductionByGiftQuantity" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -6506,6 +6546,14 @@
           <Parameter Name="LeadSources" Type="varchar" Mode="In" />
           <Parameter Name="ConsiderQuinellas" Type="bit" Mode="In" />
           <Parameter Name="BasedOnArrival" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptProductionByGuestStatusOutside" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
+          <Parameter Name="PRs" Type="varchar" Mode="In" />
+          <Parameter Name="Program" Type="varchar" Mode="In" />
+          <Parameter Name="FilterDeposit" Type="tinyint" Mode="In" />
         </Function>
         <Function Name="USP_OR_RptProductionByMemberTypeAgencyInhouse" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -6544,6 +6592,24 @@
           <Parameter Name="ConsiderQuinellas" Type="bit" Mode="In" />
           <Parameter Name="FilterSaveCourtesyTours" Type="tinyint" Mode="In" />
           <Parameter Name="BasedOnArrival" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptProductionByNationalityOutside" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
+          <Parameter Name="PRs" Type="varchar" Mode="In" />
+          <Parameter Name="Program" Type="varchar" Mode="In" />
+          <Parameter Name="FilterDeposit" Type="tinyint" Mode="In" />
+          <Parameter Name="FilterSaveCourtesyTours" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptProductionByNationalitySalesRoomOutside" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
+          <Parameter Name="PRs" Type="varchar" Mode="In" />
+          <Parameter Name="Program" Type="varchar" Mode="In" />
+          <Parameter Name="FilterDeposit" Type="tinyint" Mode="In" />
+          <Parameter Name="FilterSaveCourtesyTours" Type="tinyint" Mode="In" />
         </Function>
         <Function Name="USP_OR_RptProductionByPRGroupInhouse" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -7038,6 +7104,10 @@
             <End Role="PaymentTypes" EntitySet="PaymentTypes" />
             <End Role="BookingDeposits" EntitySet="BookingDeposits" />
           </AssociationSet>
+          <AssociationSet Name="FK_BookingDeposits_Personnel_CxC" Association="Self.FK_BookingDeposits_Personnel_CxC">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="BookingDeposits" EntitySet="BookingDeposits" />
+          </AssociationSet>
           <AssociationSet Name="FK_ChargeTo_ChargeCalculationTypes" Association="Self.FK_ChargeTo_ChargeCalculationTypes">
             <End Role="ChargeCalculationTypes" EntitySet="ChargeCalculationTypes" />
             <End Role="ChargeTo" EntitySet="ChargeTo" />
@@ -7074,7 +7144,11 @@
             <End Role="DepositsRefund" EntitySet="DepositsRefund" />
             <End Role="BookingDeposits" EntitySet="BookingDeposits" />
           </AssociationSet>
-          <AssociationSet Name="fk_drrf" Association="Self.fk_drrf">
+          <AssociationSet Name="FK_DepositsRefund_Guests" Association="Self.FK_DepositsRefund_Guests">
+            <End Role="Guests" EntitySet="Guests" />
+            <End Role="DepositsRefund" EntitySet="DepositsRefund" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DepositsRefund_RefundTypes" Association="Self.FK_DepositsRefund_RefundTypes">
             <End Role="RefundTypes" EntitySet="RefundTypes" />
             <End Role="DepositsRefund" EntitySet="DepositsRefund" />
           </AssociationSet>
@@ -7409,10 +7483,6 @@
           <AssociationSet Name="FK_Guests_Countries" Association="Self.FK_Guests_Countries">
             <End Role="Countries" EntitySet="Countries" />
             <End Role="Guests" EntitySet="Guests" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Guests_guid" Association="Self.FK_Guests_guid">
-            <End Role="Guests" EntitySet="Guests" />
-            <End Role="DepositsRefund" EntitySet="DepositsRefund" />
           </AssociationSet>
           <AssociationSet Name="FK_Guests_NotBookingMotives" Association="Self.FK_Guests_NotBookingMotives">
             <End Role="NotBookingMotives" EntitySet="NotBookingMotives" />
@@ -8280,13 +8350,14 @@
           <Property Name="bdRefund" Type="Boolean" />
           <Property Name="bddr" Type="Int32" />
           <Property Name="bdFolioCXC" Type="Int32" />
-          <Property Name="bdUserCXC" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="bdUserCXC" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="bdEntryDCXC" Type="DateTime" Precision="3" />
           <Property Name="bdExpD" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="CreditCardType" Relationship="Self.fk_bookingdeposit_credittype" FromRole="BookingDeposits" ToRole="CreditCardTypes" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="PaymentPlace" Relationship="Self.FK_BookingDeposits_PaymentPlaces" FromRole="BookingDeposits" ToRole="PaymentPlaces" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="PaymentType" Relationship="Self.FK_BookingDeposits_PaymentTypes" FromRole="BookingDeposits" ToRole="PaymentTypes" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="DepositsRefund" Relationship="Self.FK_DepositsRefund_drID" FromRole="BookingDeposits" ToRole="DepositsRefund" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="Personnel" Relationship="IMModel.FK_BookingDeposits_Personnel_CxC" FromRole="BookingDeposit" ToRole="Personnel" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="CECOCEBEType">
           <Key>
@@ -9778,11 +9849,11 @@
             <PropertyRef Name="pasID" />
           </Key>
           <Property Name="pasID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="pasN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="pasCoupleFrom" Type="Int32" />
-          <Property Name="pasCoupleTo" Type="Int32" />
-          <Property Name="pasShowFactor" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="pasA" Type="Boolean" />
+          <Property Name="pasN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="pasCoupleFrom" Type="Int32" Nullable="false" />
+          <Property Name="pasCoupleTo" Type="Int32" Nullable="false" />
+          <Property Name="pasShowFactor" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="pasA" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="PaymentType">
           <Key>
@@ -9978,6 +10049,7 @@
           <NavigationProperty Name="WarehouseMovements" Relationship="Self.FK_WhsMovs_Personnel" FromRole="Personnel" ToRole="WhsMovs" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Efficiencies" Relationship="Self.EfficiencySalesmen" FromRole="Personnel" ToRole="Efficiency" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Roles" Relationship="Self.PersonnelRoles" FromRole="Personnel" ToRole="Roles" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="BookingDeposits" Relationship="IMModel.FK_BookingDeposits_Personnel_CxC" FromRole="Personnel" ToRole="BookingDeposit" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="PersonnelPermission">
           <Key>
@@ -15813,6 +15885,7 @@
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="LeadSource" Mode="In" Type="String" />
             <Parameter Name="PR" Mode="In" Type="String" />
+            <Parameter Name="SearchBySalePR" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_ValidateFolioInvitationsOutside" ReturnType="Collection(Boolean)">
             <Parameter Name="Serie" Mode="In" Type="String" />
@@ -16546,6 +16619,63 @@
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="LeadSources" Mode="In" Type="String" />
+          </FunctionImport>
+          <AssociationSet Name="FK_BookingDeposits_Personnel_CxC" Association="IMModel.FK_BookingDeposits_Personnel_CxC">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="BookingDeposit" EntitySet="BookingDeposits" />
+          </AssociationSet>
+          <FunctionImport Name="USP_OR_RptProductionByAgencySalesRoomOutside" ReturnType="Collection(IMModel.RptProductionByAgencySalesRoomOuthouse)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="PRs" Mode="In" Type="String" />
+            <Parameter Name="Program" Mode="In" Type="String" />
+            <Parameter Name="FilterDeposit" Mode="In" Type="Byte" />
+            <Parameter Name="SalesByMembershipType" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptProductionByGiftInvitation" ReturnType="Collection(IMModel.RptProductionByGiftInvitation)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="PRs" Mode="In" Type="String" />
+            <Parameter Name="Program" Mode="In" Type="String" />
+            <Parameter Name="Gifts" Mode="In" Type="String" />
+            <Parameter Name="FilterDeposit" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptProductionByGiftInvitationSalesRoom" ReturnType="Collection(IMModel.RptProductionByGiftInvitationSalesRoom)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="PRs" Mode="In" Type="String" />
+            <Parameter Name="Program" Mode="In" Type="String" />
+            <Parameter Name="Gifts" Mode="In" Type="String" />
+            <Parameter Name="FilterDeposit" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptProductionByGuestStatusOutside" ReturnType="Collection(IMModel.RptProductionByGuestStatusOuthouse)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="PRs" Mode="In" Type="String" />
+            <Parameter Name="Program" Mode="In" Type="String" />
+            <Parameter Name="FilterDeposit" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptProductionByNationalityOutside" ReturnType="Collection(IMModel.RptProductionByNationalityOuthouse)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="PRs" Mode="In" Type="String" />
+            <Parameter Name="Program" Mode="In" Type="String" />
+            <Parameter Name="FilterDeposit" Mode="In" Type="Byte" />
+            <Parameter Name="FilterSaveCourtesyTours" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptProductionByNationalitySalesRoomOutside" ReturnType="Collection(IMModel.RptProductionByNationalitySalesRoomOuthouse)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="PRs" Mode="In" Type="String" />
+            <Parameter Name="Program" Mode="In" Type="String" />
+            <Parameter Name="FilterDeposit" Mode="In" Type="Byte" />
+            <Parameter Name="FilterSaveCourtesyTours" Mode="In" Type="Byte" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -19345,6 +19475,160 @@
           <Property Type="Decimal" Name="guDeposit" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="guDepositReceived" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="guDepositTwisted" Nullable="true" Precision="19" />
+        </ComplexType>
+        <Association Name="FK_BookingDeposits_Personnel_CxC">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.BookingDeposit" Role="BookingDeposit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="BookingDeposit">
+              <PropertyRef Name="bdUserCXC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="RptProductionByAgencySalesRoomOuthouse">
+          <Property Type="String" Name="Agency" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="AgencyN" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="SalesRoomID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SalesRoomN" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="Books" Nullable="true" />
+          <Property Type="Int32" Name="InOuts" Nullable="true" />
+          <Property Type="Int32" Name="GrossBooks" Nullable="true" />
+          <Property Type="Int32" Name="Shows" Nullable="true" />
+          <Property Type="Decimal" Name="ShowsFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="WalkOuts" Nullable="true" />
+          <Property Type="Int32" Name="Tours" Nullable="true" />
+          <Property Type="Int32" Name="CourtesyTours" Nullable="true" />
+          <Property Type="Int32" Name="SaveTours" Nullable="true" />
+          <Property Type="Int32" Name="TotalTours" Nullable="true" />
+          <Property Type="Int32" Name="UPS" Nullable="true" />
+          <Property Type="Int32" Name="Sales_TOTAL" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_TOTAL" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_PROC" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_PROC" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_OOP" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_OOP" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_CANCEL" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_CANCEL" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Subtotal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="CancelFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptProductionByGiftInvitation">
+          <Property Type="String" Name="GiftID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="GiftN" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Books" Nullable="true" />
+          <Property Type="Int32" Name="InOuts" Nullable="true" />
+          <Property Type="Int32" Name="GrossBooks" Nullable="true" />
+          <Property Type="Int32" Name="Shows" Nullable="true" />
+          <Property Type="Decimal" Name="ShowsFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_TOTAL" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_TOTAL" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_PROC" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_PROC" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_OOP" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_OOP" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_CANCEL" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_CANCEL" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Subtotal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="CancelFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptProductionByGiftInvitationSalesRoom">
+          <Property Type="String" Name="GiftID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="GiftN" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SalesRoomID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SalesRoomN" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="Books" Nullable="true" />
+          <Property Type="Int32" Name="InOuts" Nullable="true" />
+          <Property Type="Int32" Name="GrossBooks" Nullable="true" />
+          <Property Type="Int32" Name="Shows" Nullable="true" />
+          <Property Type="Decimal" Name="ShowsFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_TOTAL" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_TOTAL" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_PROC" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_PROC" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_OOP" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_OOP" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_CANCEL" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_CANCEL" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Subtotal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="CancelFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptProductionByGuestStatusOuthouse">
+          <Property Type="String" Name="GuestStatus" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="LeadSource" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="Books" Nullable="true" />
+          <Property Type="Int32" Name="InOuts" Nullable="true" />
+          <Property Type="Int32" Name="GrossBooks" Nullable="true" />
+          <Property Type="Int32" Name="Shows" Nullable="true" />
+          <Property Type="Decimal" Name="ShowsFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_TOTAL" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_TOTAL" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_PROC" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_PROC" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_OOP" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_OOP" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_CANCEL" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_CANCEL" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Subtotal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="CancelFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptProductionByNationalityOuthouse">
+          <Property Type="String" Name="Nationality" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="Books" Nullable="true" />
+          <Property Type="Int32" Name="InOuts" Nullable="true" />
+          <Property Type="Int32" Name="GrossBooks" Nullable="true" />
+          <Property Type="Int32" Name="Shows" Nullable="true" />
+          <Property Type="Decimal" Name="ShowsFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_TOTAL" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_TOTAL" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_PROC" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_PROC" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_OOP" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_OOP" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_CANCEL" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_CANCEL" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Subtotal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="CancelFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptProductionByNationalitySalesRoomOuthouse">
+          <Property Type="String" Name="Nationality" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="SalesRoomID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SalesRoomN" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="Books" Nullable="true" />
+          <Property Type="Int32" Name="InOuts" Nullable="true" />
+          <Property Type="Int32" Name="GrossBooks" Nullable="true" />
+          <Property Type="Int32" Name="Shows" Nullable="true" />
+          <Property Type="Decimal" Name="ShowsFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_TOTAL" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_TOTAL" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_PROC" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_PROC" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_OOP" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_OOP" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_CANCEL" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_CANCEL" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Subtotal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="CancelFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -25108,6 +25392,172 @@
                 <ScalarProperty Name="guDeposit" ColumnName="guDeposit" />
                 <ScalarProperty Name="guDepositReceived" ColumnName="guDepositReceived" />
                 <ScalarProperty Name="guDepositTwisted" ColumnName="guDepositTwisted" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptProductionByAgencySalesRoomOutside" FunctionName="IMModel.Store.USP_OR_RptProductionByAgencySalesRoomOutside">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptProductionByAgencySalesRoomOuthouse">
+                <ScalarProperty Name="Agency" ColumnName="Agency" />
+                <ScalarProperty Name="AgencyN" ColumnName="AgencyN" />
+                <ScalarProperty Name="SalesRoomID" ColumnName="SalesRoomID" />
+                <ScalarProperty Name="SalesRoomN" ColumnName="SalesRoomN" />
+                <ScalarProperty Name="Books" ColumnName="Books" />
+                <ScalarProperty Name="InOuts" ColumnName="InOuts" />
+                <ScalarProperty Name="GrossBooks" ColumnName="GrossBooks" />
+                <ScalarProperty Name="Shows" ColumnName="Shows" />
+                <ScalarProperty Name="ShowsFactor" ColumnName="ShowsFactor" />
+                <ScalarProperty Name="WalkOuts" ColumnName="WalkOuts" />
+                <ScalarProperty Name="Tours" ColumnName="Tours" />
+                <ScalarProperty Name="CourtesyTours" ColumnName="CourtesyTours" />
+                <ScalarProperty Name="SaveTours" ColumnName="SaveTours" />
+                <ScalarProperty Name="TotalTours" ColumnName="TotalTours" />
+                <ScalarProperty Name="UPS" ColumnName="UPS" />
+                <ScalarProperty Name="Sales_TOTAL" ColumnName="Sales_TOTAL" />
+                <ScalarProperty Name="SalesAmount_TOTAL" ColumnName="SalesAmount_TOTAL" />
+                <ScalarProperty Name="Sales_PROC" ColumnName="Sales_PROC" />
+                <ScalarProperty Name="SalesAmount_PROC" ColumnName="SalesAmount_PROC" />
+                <ScalarProperty Name="Sales_OOP" ColumnName="Sales_OOP" />
+                <ScalarProperty Name="SalesAmount_OOP" ColumnName="SalesAmount_OOP" />
+                <ScalarProperty Name="Sales_CANCEL" ColumnName="Sales_CANCEL" />
+                <ScalarProperty Name="SalesAmount_CANCEL" ColumnName="SalesAmount_CANCEL" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+                <ScalarProperty Name="CancelFactor" ColumnName="CancelFactor" />
+                <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+                <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptProductionByGiftInvitation" FunctionName="IMModel.Store.USP_OR_RptProductionByGiftInvitation">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptProductionByGiftInvitation">
+                <ScalarProperty Name="GiftID" ColumnName="GiftID" />
+                <ScalarProperty Name="GiftN" ColumnName="GiftN" />
+                <ScalarProperty Name="Books" ColumnName="Books" />
+                <ScalarProperty Name="InOuts" ColumnName="InOuts" />
+                <ScalarProperty Name="GrossBooks" ColumnName="GrossBooks" />
+                <ScalarProperty Name="Shows" ColumnName="Shows" />
+                <ScalarProperty Name="ShowsFactor" ColumnName="ShowsFactor" />
+                <ScalarProperty Name="Sales_TOTAL" ColumnName="Sales_TOTAL" />
+                <ScalarProperty Name="SalesAmount_TOTAL" ColumnName="SalesAmount_TOTAL" />
+                <ScalarProperty Name="Sales_PROC" ColumnName="Sales_PROC" />
+                <ScalarProperty Name="SalesAmount_PROC" ColumnName="SalesAmount_PROC" />
+                <ScalarProperty Name="Sales_OOP" ColumnName="Sales_OOP" />
+                <ScalarProperty Name="SalesAmount_OOP" ColumnName="SalesAmount_OOP" />
+                <ScalarProperty Name="Sales_CANCEL" ColumnName="Sales_CANCEL" />
+                <ScalarProperty Name="SalesAmount_CANCEL" ColumnName="SalesAmount_CANCEL" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+                <ScalarProperty Name="CancelFactor" ColumnName="CancelFactor" />
+                <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+                <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptProductionByGiftInvitationSalesRoom" FunctionName="IMModel.Store.USP_OR_RptProductionByGiftInvitationSalesRoom">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptProductionByGiftInvitationSalesRoom">
+                <ScalarProperty Name="GiftID" ColumnName="GiftID" />
+                <ScalarProperty Name="GiftN" ColumnName="GiftN" />
+                <ScalarProperty Name="SalesRoomID" ColumnName="SalesRoomID" />
+                <ScalarProperty Name="SalesRoomN" ColumnName="SalesRoomN" />
+                <ScalarProperty Name="Books" ColumnName="Books" />
+                <ScalarProperty Name="InOuts" ColumnName="InOuts" />
+                <ScalarProperty Name="GrossBooks" ColumnName="GrossBooks" />
+                <ScalarProperty Name="Shows" ColumnName="Shows" />
+                <ScalarProperty Name="ShowsFactor" ColumnName="ShowsFactor" />
+                <ScalarProperty Name="Sales_TOTAL" ColumnName="Sales_TOTAL" />
+                <ScalarProperty Name="SalesAmount_TOTAL" ColumnName="SalesAmount_TOTAL" />
+                <ScalarProperty Name="Sales_PROC" ColumnName="Sales_PROC" />
+                <ScalarProperty Name="SalesAmount_PROC" ColumnName="SalesAmount_PROC" />
+                <ScalarProperty Name="Sales_OOP" ColumnName="Sales_OOP" />
+                <ScalarProperty Name="SalesAmount_OOP" ColumnName="SalesAmount_OOP" />
+                <ScalarProperty Name="Sales_CANCEL" ColumnName="Sales_CANCEL" />
+                <ScalarProperty Name="SalesAmount_CANCEL" ColumnName="SalesAmount_CANCEL" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+                <ScalarProperty Name="CancelFactor" ColumnName="CancelFactor" />
+                <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+                <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptProductionByGuestStatusOutside" FunctionName="IMModel.Store.USP_OR_RptProductionByGuestStatusOutside">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptProductionByGuestStatusOuthouse">
+                <ScalarProperty Name="GuestStatus" ColumnName="GuestStatus" />
+                <ScalarProperty Name="LeadSource" ColumnName="LeadSource" />
+                <ScalarProperty Name="Books" ColumnName="Books" />
+                <ScalarProperty Name="InOuts" ColumnName="InOuts" />
+                <ScalarProperty Name="GrossBooks" ColumnName="GrossBooks" />
+                <ScalarProperty Name="Shows" ColumnName="Shows" />
+                <ScalarProperty Name="ShowsFactor" ColumnName="ShowsFactor" />
+                <ScalarProperty Name="Sales_TOTAL" ColumnName="Sales_TOTAL" />
+                <ScalarProperty Name="SalesAmount_TOTAL" ColumnName="SalesAmount_TOTAL" />
+                <ScalarProperty Name="Sales_PROC" ColumnName="Sales_PROC" />
+                <ScalarProperty Name="SalesAmount_PROC" ColumnName="SalesAmount_PROC" />
+                <ScalarProperty Name="Sales_OOP" ColumnName="Sales_OOP" />
+                <ScalarProperty Name="SalesAmount_OOP" ColumnName="SalesAmount_OOP" />
+                <ScalarProperty Name="Sales_CANCEL" ColumnName="Sales_CANCEL" />
+                <ScalarProperty Name="SalesAmount_CANCEL" ColumnName="SalesAmount_CANCEL" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+                <ScalarProperty Name="CancelFactor" ColumnName="CancelFactor" />
+                <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+                <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptProductionByNationalityOutside" FunctionName="IMModel.Store.USP_OR_RptProductionByNationalityOutside">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptProductionByNationalityOuthouse">
+                <ScalarProperty Name="Nationality" ColumnName="Nationality" />
+                <ScalarProperty Name="Books" ColumnName="Books" />
+                <ScalarProperty Name="InOuts" ColumnName="InOuts" />
+                <ScalarProperty Name="GrossBooks" ColumnName="GrossBooks" />
+                <ScalarProperty Name="Shows" ColumnName="Shows" />
+                <ScalarProperty Name="ShowsFactor" ColumnName="ShowsFactor" />
+                <ScalarProperty Name="Sales_TOTAL" ColumnName="Sales_TOTAL" />
+                <ScalarProperty Name="SalesAmount_TOTAL" ColumnName="SalesAmount_TOTAL" />
+                <ScalarProperty Name="Sales_PROC" ColumnName="Sales_PROC" />
+                <ScalarProperty Name="SalesAmount_PROC" ColumnName="SalesAmount_PROC" />
+                <ScalarProperty Name="Sales_OOP" ColumnName="Sales_OOP" />
+                <ScalarProperty Name="SalesAmount_OOP" ColumnName="SalesAmount_OOP" />
+                <ScalarProperty Name="Sales_CANCEL" ColumnName="Sales_CANCEL" />
+                <ScalarProperty Name="SalesAmount_CANCEL" ColumnName="SalesAmount_CANCEL" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+                <ScalarProperty Name="CancelFactor" ColumnName="CancelFactor" />
+                <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+                <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptProductionByNationalitySalesRoomOutside" FunctionName="IMModel.Store.USP_OR_RptProductionByNationalitySalesRoomOutside">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptProductionByNationalitySalesRoomOuthouse">
+                <ScalarProperty Name="Nationality" ColumnName="Nationality" />
+                <ScalarProperty Name="SalesRoomID" ColumnName="SalesRoomID" />
+                <ScalarProperty Name="SalesRoomN" ColumnName="SalesRoomN" />
+                <ScalarProperty Name="Books" ColumnName="Books" />
+                <ScalarProperty Name="InOuts" ColumnName="InOuts" />
+                <ScalarProperty Name="GrossBooks" ColumnName="GrossBooks" />
+                <ScalarProperty Name="Shows" ColumnName="Shows" />
+                <ScalarProperty Name="ShowsFactor" ColumnName="ShowsFactor" />
+                <ScalarProperty Name="Sales_TOTAL" ColumnName="Sales_TOTAL" />
+                <ScalarProperty Name="SalesAmount_TOTAL" ColumnName="SalesAmount_TOTAL" />
+                <ScalarProperty Name="Sales_PROC" ColumnName="Sales_PROC" />
+                <ScalarProperty Name="SalesAmount_PROC" ColumnName="SalesAmount_PROC" />
+                <ScalarProperty Name="Sales_OOP" ColumnName="Sales_OOP" />
+                <ScalarProperty Name="SalesAmount_OOP" ColumnName="SalesAmount_OOP" />
+                <ScalarProperty Name="Sales_CANCEL" ColumnName="Sales_CANCEL" />
+                <ScalarProperty Name="SalesAmount_CANCEL" ColumnName="SalesAmount_CANCEL" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+                <ScalarProperty Name="CancelFactor" ColumnName="CancelFactor" />
+                <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+                <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

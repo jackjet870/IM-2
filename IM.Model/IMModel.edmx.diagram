@@ -440,6 +440,7 @@
         <AssociationConnector Association="IMModel.BanksBySalesRooms" ManuallyRouted="false" />
         <EntityTypeShape EntityType="IMModel.Transfer" Width="1.5" PointX="15.375" PointY="52.875" />
         <AssociationConnector Association="IMModel.FK_osTransfer_Clubs" />
+        <AssociationConnector Association="IMModel.FK_BookingDeposits_Personnel_CxC" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

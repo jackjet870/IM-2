@@ -26,8 +26,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.USP_OR_GetSalesByPR(dateFrom, dateTo, leadSources, PR).ToList();
-        
+        return dbContext.USP_OR_GetSalesByPR(dateFrom, dateTo, leadSources, PR, true).ToList();
       }
     }
 

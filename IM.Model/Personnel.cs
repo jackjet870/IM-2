@@ -134,6 +134,7 @@ namespace IM.Model
             this.WarehouseMovements = new HashSet<WarehouseMovement>();
             this.Efficiencies = new HashSet<Efficiency>();
             this.Roles = new HashSet<Role>();
+            this.BookingDeposits = new HashSet<BookingDeposit>();
         }
     
         public string peID { get; set; }
@@ -390,5 +391,7 @@ namespace IM.Model
         public virtual ICollection<Efficiency> Efficiencies { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Role> Roles { internal get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BookingDeposit> BookingDeposits { internal get; set; }
     }
 }
