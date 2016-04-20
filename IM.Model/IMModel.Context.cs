@@ -4085,5 +4085,18 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionByNationalitySalesRoomOuthouse>("USP_OR_RptProductionByNationalitySalesRoomOutside", dateFromParameter, dateToParameter, leadSourcesParameter, pRsParameter, programParameter, filterDepositParameter, filterSaveCourtesyToursParameter);
         }
+    
+        public virtual ObjectResult<GuestStatusValidateData> USP_OR_GetGuestStatusValidateInfo(Nullable<int> guest, Nullable<int> giftReceipt)
+        {
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            var giftReceiptParameter = giftReceipt.HasValue ?
+                new ObjectParameter("GiftReceipt", giftReceipt) :
+                new ObjectParameter("GiftReceipt", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestStatusValidateData>("USP_OR_GetGuestStatusValidateInfo", guestParameter, giftReceiptParameter);
+        }
     }
 }

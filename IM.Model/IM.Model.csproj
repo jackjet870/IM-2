@@ -377,6 +377,9 @@
     <Compile Include="GuestStatusType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="GuestStatusValidateData.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="GuestUnassigned.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
