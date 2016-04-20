@@ -41,6 +41,9 @@ namespace IM.Inhouse
     private int _available, _invited, _onGroup, _info, _guestGuid = 0;
     private string _markets = "ALL", _guestName, _guestRoom, _guestReservation;
 
+    //Le damos memoria solo una vez al visualizador de noticias
+    //frmNotices not = new frmNotices();
+
     private EnumScreen screen;
    
     #endregion
@@ -1106,6 +1109,28 @@ namespace IM.Inhouse
       //Cargamos el listado de markets
       listMarkets.ItemsSource = BRMarkets.GetMarkets(1);
       //StaEnd();
+
+      //Abrimos el visualizador de  noticias    
+      Window win = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x is frmNotices);
+      if (win != null)
+      {
+        win.Activate();
+        return;
+      }
+      win = new frmNotices();
+      win.Show();
+      //if (not != null)
+      //{
+      //  if (!not.IsLoaded)
+      //  {
+      //    not.Show();
+      //  }
+      //}
+      //else
+      //{
+      //  not = new frmNotices();
+      //  not.Show();
+      //}
     }
     #endregion
 

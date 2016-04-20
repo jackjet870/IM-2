@@ -309,6 +309,8 @@
     <Resource Include="Images\Marital_Status.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Down.png" />
+    <Resource Include="Images\Up.png" />
     <Resource Include="Images\Money_Bag.png" />
     <Resource Include="Images\Forbidden.png" />
     <Resource Include="Images\Posts.png" />
@@ -319,6 +321,7 @@
     <Resource Include="Images\Money.ico" />
     <Resource Include="Images\DateTime_Forbidden.png" />
     <Resource Include="Images\Find.png" />
+    <Resource Include="Images\Change.ico" />
     <Resource Include="Images\Search.ico" />
   </ItemGroup>
   <ItemGroup>
