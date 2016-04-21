@@ -23,7 +23,11 @@ namespace IM.Inhouse.Forms
   /// </summary>
   public partial class frmNotices : Window
   {
+    //string RTFNotices = string.Empty;
+    //string RTFNotice = string.Empty;
+
     string RTFNotices = string.Empty;
+    string RTFNotice = string.Empty;
     DispatcherTimer timer;
     double speed = 0;
     //bool speedChanged = false;
@@ -33,68 +37,82 @@ namespace IM.Inhouse.Forms
       InitializeComponent();
     }
 
-
-    /// <summary>
-    /// Para porder mover la ventana con el status bar
-    /// </summary>
-    /// <jorcanche> [jorcanche] 19/04/2016
-    private void stbStatusBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      this.DragMove();
-    }
-
     /// <summary>
     /// Trae las noticias y las carga en el rtb
-    /// </summary>
-    /// <jorcanche> [jorcanche] 19/04/2016
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
     private void GetNotices()
-    {
-      ViewerNotice.AppendText(string.Empty);
+    {     
+      rtbViewerNotice.Document.Blocks.Clear();
       RTFNotices = string.Empty;
+      RTFNotice = string.Empty;
+
       var Notices = BRNotices.GetNotices(App.User.LeadSource.lsID, BRHelpers.GetServerDate().Date);
 
       if (Notices.Count > 0)
       {
         foreach (NoticeShort Notice in Notices)
-        {
-          //RTFNotices = RTFNotices + Notice.noTitle + @" \par  ";
-          RTFNotices = RTFNotices + Title(Notice.noTitle)+ @" \par";
-          RTFNotices = RTFNotices + Notice.noText + @" \par \par ";
+        {                   
+          RTFNotices = RTFNotices + Title(Notice.noTitle);
+          RTFNotices = RTFNotices + Text(Notice.noText);
         }
-        UIRichTextBoxHelper.LoadRTF(ref ViewerNotice, RTFNotices);     
+        UIRichTextBoxHelper.LoadRTF(ref rtbViewerNotice, RTFNotices);
+        RTFNotice = UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtbViewerNotice);
+        //rtbViewerNotice.Document.Blocks.Add(new Paragraph(new Run("\u2028 \u2028")));
       }
+    }
+
+    /// <summary>
+    /// Devuelve el text en el estilo RTF
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
+    private string Text(string Text)
+    {
+      var rtb = new RichTextBox();
+      UIRichTextBoxHelper.LoadRTF(ref rtb, Text);
+      rtb.Document.Foreground = Brushes.Black;
+      rtb.Document.FontSize = 10;
+      //Agregamos dos saltos de pagina
+      rtb.Document.Blocks.Add(new Paragraph(new Run("\u2028 \u2028")));      
+      return UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtb);
     }
 
     /// <summary>
     /// Agrega titulo a las noticias con su formato correspondiente
     /// </summary>
-    /// <jorcanche> [jorcanche] 19/04/2016
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
     public new string Title(string titulo)
     {
-      RichTextBox rtb = new RichTextBox();
-      //rtb.Document = mcFlowDoc;
-
-      rtb.AppendText(titulo);
-      //rtb.Background = Brushes.AntiqueWhite;
-      rtb.Foreground = Brushes.Black;
-      rtb.FontFamily = new FontFamily("Verdana");
-      rtb.FontSize = 20;
-      //rtb.HorizontalAlignment = HorizontalAlignment.Center;
-      //rtb.FontStretch = FontStretches.UltraExpanded;      
-      rtb.FontWeight = FontWeights.Bold;
-      // rtb.HorizontalContentAlignment = HorizontalAlignment.Center;
-      rtb.SelectAll();
-      rtb.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
-      rtb.Selection.ApplyPropertyValue(Inline.BaselineAlignmentProperty, BaselineAlignment.Center);
-      // rtb.TextAlignment = "Center"
-      return UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtb);
-
+      // Create a FlowDocument
+      FlowDocument flowDocument = new FlowDocument();
+      // Create a paragraph with text
+      Paragraph paragraph = new Paragraph();
+      //Agregamos el titulo
+      paragraph.Inlines.Add(new Underline(new Run(titulo)));
+      paragraph.Inlines.Add(new Run("\u2028"));      
+      //Lo agregamos el documento
+      flowDocument.Blocks.Add(paragraph);
+      //Aplicamos el estilo      
+      flowDocument.Foreground = Brushes.Black;
+      flowDocument.FontFamily = new FontFamily("Verdana");
+      flowDocument.FontSize = 20;
+      flowDocument.TextAlignment = TextAlignment.Center;
+      flowDocument.FontWeight = FontWeights.Bold;      
+      var rtb = new RichTextBox();
+      rtb.Document = flowDocument;
+      return UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtb); 
     }
 
     /// <summary>
     /// Vuelve a cargar las noticias del día en el rtb
-    /// </summary>
-    /// <jorcanche> [jorcanche] 19/04/2016
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
     private void btnRefresh_Click(object sender, RoutedEventArgs e)
     {
       //speedChanged = false;
@@ -102,6 +120,7 @@ namespace IM.Inhouse.Forms
       GetNotices();
       if (chkAutoscroll.IsChecked.Value)
       {
+        speed = .0025;
         RiniciarTimer();
         AutoScroll();
       }
@@ -110,7 +129,9 @@ namespace IM.Inhouse.Forms
     /// <summary>
     /// Carga todas las notices del día en el rtb
     /// </summary>
-    /// <jorcanche> [jorcanche] 19/04/2016
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       GetNotices();
@@ -118,8 +139,9 @@ namespace IM.Inhouse.Forms
 
     /// <summary>
     /// inicia el tiempo y manipula el scrollViewer.
-    /// </summary>
-    /// <jorcanche> [jorcanche] 19/04/2016
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
     private void chkAutoscroll_Checked(object sender, RoutedEventArgs e)
     {
       speed = .0025;
@@ -133,8 +155,9 @@ namespace IM.Inhouse.Forms
 
     /// <summary>
     /// Termina el tiempo y manipula el scrollViewer.
-    /// </summary>
-    /// <jorcanche> [jorcanche] 19/04/2016
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
     private void chkAutoscroll_Unchecked(object sender, RoutedEventArgs e)
     {
       RiniciarTimer();
@@ -142,22 +165,26 @@ namespace IM.Inhouse.Forms
       //deshabilitamos botones de velocidad
       btnUpSpeed.Visibility = btnDownSpeed.Visibility = Visibility.Hidden;
       //speedChanged = false;
+      GetNotices();
     }
 
     /// <summary>
     /// Inicia el tiempo y manipula el scrollViewer.
     /// </summary>
-    /// <jorcanche> [jorcanche] 19/04/2016
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
     public void AutoScroll()
     {
+      //PrepareRTB();
+      //_scrollViewer.MaxHeight = 10000;
       double scroll = 0;
       _scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
       timer = new DispatcherTimer();
       timer.Interval = new TimeSpan(0, 0, 3/4);
       timer.Tick += ((sender, e) =>
-      {
-        //_scrollViewer.LineDown();
-        scroll = scroll + speed; //.095;
+      {     
+        scroll = scroll + speed;
         _scrollViewer.ScrollToVerticalOffset(scroll);      
 
         if (_scrollViewer.VerticalOffset == _scrollViewer.ScrollableHeight)
@@ -169,10 +196,32 @@ namespace IM.Inhouse.Forms
       timer.Start();
     }
 
+    private void PrepareRTB()
+    {
+      string espace = agregarespacios();
+      espace = espace + RTFNotice;
+      UIRichTextBoxHelper.LoadRTF(ref rtbViewerNotice, espace);
+    }
+
+    private string agregarespacios()
+    {
+      string espacio = string.Empty;
+      double tamaño = Height; //rtb 248
+      //double resultado = (((tamaño-120) * 11)/230);
+      double resultado = (((tamaño -100) * 12) / 248);
+      //double resultado = 12;
+      for (int i = 1; i<= resultado; i++)
+      {
+        espacio = espacio + string.Format(@"Linea {0} \par ",i );
+      }
+      return espacio;
+    }
     /// <summary>
     /// Detiene el tiempo cuando entrea el Mouse al control
     /// </summary>
-    /// <jorcanche> [jorcanche] 19/04/2016
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
     private void ViewerNotice_MouseEnter(object sender, MouseEventArgs e)
     {
       if (timer != null)
@@ -182,7 +231,9 @@ namespace IM.Inhouse.Forms
     /// <summary>
     /// Prosigue con el tiempo cuando sale el Mouse del control
     /// </summary>
-    /// <jorcanche> [jorcanche] 19/04/2016
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
     private void ViewerNotice_MouseLeave(object sender, MouseEventArgs e)
     {
       if (timer != null)
@@ -192,7 +243,9 @@ namespace IM.Inhouse.Forms
     /// <summary>
     /// Detiene el tiempo 
     /// </summary>
-    /// <jorcanche> [jorcanche] 19/04/2016
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
     public void RiniciarTimer()
     {
       if (timer != null)
@@ -210,33 +263,50 @@ namespace IM.Inhouse.Forms
     /// <summary>
     /// Aumenta la velocidad del tiempo en .0002 segundos
     /// </summary>
-    /// <jorcanche> [jorcanche] 19/04/2016
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
     private void UpSpeed_Click(object sender, RoutedEventArgs e)
     {
       //speedChanged = true;
-      speed = speed + .0002;
+      //speed = speed + .0002;
+      speed = speed + .0008;
     }
 
     /// <summary>
     /// Disminuye la velocidad del tiempo en .0002 segundos
     /// </summary>
-    /// <jorcanche> [jorcanche] 19/04/2016
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
     private void DownSpeed_Click(object sender, RoutedEventArgs e)
     {
       //speedChanged = true;
+      //if((speed-.0008) >= 0)
+      speed = speed - .0008;
+    }
+
+    private void btnUpSpeed_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+      speed = speed + .0002;
+    }
+
+
+    private void btnDownSpeed_MouseDown(object sender, MouseButtonEventArgs e)
+    {
       speed = speed - .0002;
     }
 
-    //// Create a FlowDocument
-    //FlowDocument mcFlowDoc = new FlowDocument();
 
-    //// Create a paragraph with text
-    //Paragraph para = new Paragraph();
-    //para.Inlines.Add(new Underline(new Bold(new Run(titulo))));
-    ////para.Inlines.Add(new Bold(new Run("Go ahead.")));
-
-    //// Add the paragraph to blocks of paragraph
-    //mcFlowDoc.Blocks.Add(para);
-
+    /// <summary>
+    /// Para porder mover la ventana con el status bar
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 19/04/2016
+    /// <history>
+    private void stbStatusBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+      this.DragMove();
+    }
   }
 }

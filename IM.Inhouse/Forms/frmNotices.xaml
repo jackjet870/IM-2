@@ -17,13 +17,13 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Name="_scrollViewer"  Grid.ColumnSpan="2" Grid.Row="0"  Margin="5" >
-            <RichTextBox  Name="ViewerNotice"   MouseEnter="ViewerNotice_MouseEnter" MouseLeave="ViewerNotice_MouseLeave" IsReadOnly="True" />
+        <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Name="_scrollViewer" ClipToBounds="False"  Grid.ColumnSpan="2" Grid.Row="0"  Margin="5" >
+            <RichTextBox  Name="rtbViewerNotice" MouseEnter="ViewerNotice_MouseEnter"  MouseLeave="ViewerNotice_MouseLeave" IsReadOnly="True" />
         </ScrollViewer>
 
         <CheckBox Grid.Row="1" Name="chkAutoscroll" Margin="15,0" VerticalAlignment="Center" Content="Autoscroll" FontSize="15" Checked="chkAutoscroll_Checked" Unchecked="chkAutoscroll_Unchecked"/>
 
-        <Button Grid.ColumnSpan ="2" Grid.Row="1" Width="27" Height="27" x:Name="btnRefresh" Click="btnRefresh_Click" Margin="0,0,0,5" HorizontalAlignment="Center"   >
+        <Button Grid.ColumnSpan ="2" Grid.Row="1" Width="27" Height="27"  x:Name="btnRefresh" Click="btnRefresh_Click" Margin="0,0,0,5" HorizontalAlignment="Center">
             <StackPanel>
                 <Image Source="pack://application:,,,/IM.Base;component/Images/Change.ico" Width="18" />
             </StackPanel>
@@ -35,12 +35,12 @@
 
 
         <StackPanel Grid.Column="1" Grid.Row="1">
-            <Button Name="btnUpSpeed"  Grid.Row="0" HorizontalAlignment="Center"  Width="30" Height="20" Margin="40,0,0,2"  ToolTip="Up Speed AutoScroll" Click="UpSpeed_Click" Visibility="Hidden">
+            <Button Name="btnUpSpeed" MouseDown="btnUpSpeed_MouseDown"  Grid.Row="0" HorizontalAlignment="Center"  Width="30" Height="20" Margin="40,0,0,2"  ToolTip="Up Speed AutoScroll" Click="UpSpeed_Click" Visibility="Hidden">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="1" >
                     <Image Source="pack://application:,,,/IM.Base;component/Images/Up.png" />
                 </StackPanel>
             </Button>
-            <Button Name="btnDownSpeed" Grid.Row="1" HorizontalAlignment="Center" Width="30" Height="20" Margin="40,0,0,3"  ToolTip="Down Speed Auto Scroll" Click="DownSpeed_Click"  Visibility="Hidden">
+            <Button Name="btnDownSpeed" MouseDown="btnDownSpeed_MouseDown" Grid.Row="1" HorizontalAlignment="Center" Width="30" Height="20" Margin="40,0,0,3"  ToolTip="Down Speed AutoScroll" Click="DownSpeed_Click"  Visibility="Hidden">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="1" >
                     <Image Source="pack://application:,,,/IM.Base;component/Images/Down.png" />
                 </StackPanel>

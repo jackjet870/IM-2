@@ -260,7 +260,7 @@ namespace IM.Base.Forms
           }
           break;
       }
-      if ((bool)chkAutoSign.IsChecked)
+      if (chkAutoSign.IsChecked.Value)
       {
         this.userData.AutoSign = true;
         this.userData.User.pePwd = EncryptHelper.Encrypt(this.userData.User.pePwd);

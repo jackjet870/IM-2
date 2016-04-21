@@ -19,12 +19,11 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche] created 18/04/2016 Created
     /// </history>
-    public static List<NoticeShort> GetNotices(string leadSource, DateTime date)
+    public static List<NoticeShort> GetNotices(string leadSource, Nullable<System.DateTime> date)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        var notice = dbContext.USP_OR_GetNotices(leadSource, date).ToList();
-        return notice;
+        return dbContext.USP_OR_GetNotices(leadSource, date).ToList();        
       }
     }
     #endregion

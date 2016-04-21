@@ -8,7 +8,7 @@
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
         x:Class="IM.Inhouse.frmInhouse"
         mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="Inhouse" x:Name="house"  Width="1100" Height="700"  WindowState="Maximized" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
+        Title="Inhouse" x:Name="house" Width="1100"  Height="700"  WindowState="Maximized" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
     <Window.Resources>
         <CollectionViewSource x:Key="guestArrivalViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestArrival}, CreateList=True}"/>
         <CollectionViewSource x:Key="guestAvailableViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestAvailable }, CreateList=True}"/>
@@ -46,7 +46,7 @@
     <Grid>
         <!--#region  Configuración del Grid Principal -->
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="95"/>
             <RowDefinition Height="86*"/>
             <RowDefinition Height="AUTO"/>
         </Grid.RowDefinitions>

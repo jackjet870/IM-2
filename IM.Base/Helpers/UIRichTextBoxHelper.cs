@@ -80,7 +80,7 @@ namespace IM.Base.Helpers
 
     }
     /// <summary>
-    /// Carga un RichTextBox con un string RTF.
+    /// Carga un RichTextBox con un string con formato RTF.
     /// </summary>
     /// <param name="rtb">ref RichTextBox</param>
     /// <param name="rtf">string rtf</param>
