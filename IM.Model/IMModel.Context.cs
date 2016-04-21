@@ -4203,5 +4203,86 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptUnavailableMotivesByAgency>("USP_OR_RptUnavailableMotivesByAgency", dateFromParameter, dateToParameter, leadSourcesParameter, marketsParameter, agenciesParameter);
         }
+    
+        public virtual ObjectResult<RptWarehouseMovements> sprptWhsMovs(Nullable<System.DateTime> startD, Nullable<System.DateTime> endD, string wH0)
+        {
+            var startDParameter = startD.HasValue ?
+                new ObjectParameter("StartD", startD) :
+                new ObjectParameter("StartD", typeof(System.DateTime));
+    
+            var endDParameter = endD.HasValue ?
+                new ObjectParameter("endD", endD) :
+                new ObjectParameter("endD", typeof(System.DateTime));
+    
+            var wH0Parameter = wH0 != null ?
+                new ObjectParameter("WH0", wH0) :
+                new ObjectParameter("WH0", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptWarehouseMovements>("sprptWhsMovs", startDParameter, endDParameter, wH0Parameter);
+        }
+    
+        public virtual ObjectResult<RptAgencies> USP_OR_RptAgencies()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptAgencies>("USP_OR_RptAgencies");
+        }
+    
+        public virtual ObjectResult<RptProductionByLeadSourceMarketMonthly> USP_OR_RptProductionByLeadSourceMarketMonthly(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string program, Nullable<bool> considerQuinellas, Nullable<int> external, Nullable<bool> basedOnArrival)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var programParameter = program != null ?
+                new ObjectParameter("Program", program) :
+                new ObjectParameter("Program", typeof(string));
+    
+            var considerQuinellasParameter = considerQuinellas.HasValue ?
+                new ObjectParameter("ConsiderQuinellas", considerQuinellas) :
+                new ObjectParameter("ConsiderQuinellas", typeof(bool));
+    
+            var externalParameter = external.HasValue ?
+                new ObjectParameter("External", external) :
+                new ObjectParameter("External", typeof(int));
+    
+            var basedOnArrivalParameter = basedOnArrival.HasValue ?
+                new ObjectParameter("BasedOnArrival", basedOnArrival) :
+                new ObjectParameter("BasedOnArrival", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionByLeadSourceMarketMonthly>("USP_OR_RptProductionByLeadSourceMarketMonthly", dateFromParameter, dateToParameter, leadSourcesParameter, programParameter, considerQuinellasParameter, externalParameter, basedOnArrivalParameter);
+        }
+    
+        public virtual ObjectResult<RptProductionReferral> USP_OR_RptProductionReferral(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionReferral>("USP_OR_RptProductionReferral", dateFromParameter, dateToParameter);
+        }
+    
+        public virtual ObjectResult<RptSalesByProgramLeadSourceMarket> USP_OR_RptSalesByProgramLeadSourceMarket(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptSalesByProgramLeadSourceMarket>("USP_OR_RptSalesByProgramLeadSourceMarket", dateFromParameter, dateToParameter);
+        }
     }
 }

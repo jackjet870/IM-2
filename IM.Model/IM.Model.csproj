@@ -623,6 +623,9 @@
     <Compile Include="RoomType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptAgencies.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptArrivals.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -854,6 +857,9 @@
     <Compile Include="RptProductionByGuestStatusOuthouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptProductionByLeadSourceMarketMonthly.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptProductionByMemberTypeAgencyInhouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -899,6 +905,9 @@
     <Compile Include="RptProductionByShowProgramProgram.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptProductionReferral.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptPRStats.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -906,6 +915,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptRepsPaymentSummary.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptSalesByProgramLeadSourceMarket.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptSelfGen.cs">
@@ -921,6 +933,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptUnavailableMotivesByAgency.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptWarehouseMovements.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptWeeklyGiftsItemsSimple.cs">
