@@ -250,10 +250,10 @@ namespace IM.Inhouse.Forms
       {
         nres = BRAssistance.SaveAssistanceList(AssistanceToAssistance.ConvertAssistanceDataToAssistance(c));
       });
-      StaEnd();
-      LoadGrid();
       ChangeUseMode(false);
       MessageBox.Show("Saved Assistence", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+      LoadGrid();
+      StaEnd();
     }
 
     /// <summary>
