@@ -11,11 +11,9 @@ namespace IM.Model
 {
     using System;
     
-    public partial class GraphNotBookingArrivals_Totals
+    public partial class GraphMaximum
     {
-        public int MaxGraphW { get; set; }
-        public int MaxGraphM { get; set; }
-        public Nullable<int> TotalW { get; set; }
-        public Nullable<int> TotalM { get; set; }
+        public Nullable<int> MaxGraphW { get; set; }
+        public Nullable<int> MaxGraphM { get; set; }
     }
 }

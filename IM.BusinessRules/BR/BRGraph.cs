@@ -20,7 +20,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [aalcocer] 07/03/2016 Created
     /// </history>
-    public static List<GraphProductionByPRData> GetGraphProductionByPR(DateTime dateFrom, DateTime dateTo, string leadSource)
+    public static List<GraphProductionByPR> GetGraphProductionByPR(DateTime dateFrom, DateTime dateTo, string leadSource)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {

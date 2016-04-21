@@ -163,9 +163,9 @@ namespace IM.Graph.Forms
       StaStart();
       lblTitleGraph.Content = cmbLS.Text;
 
-      List<GraphProductionByPRData> _lstGraphProductionByPRData = BRGraph.GetGraphProductionByPR(dtpStartDate.SelectedDate.Value, dtpEndDate.SelectedDate.Value, cmbLS.SelectedValue.ToString());
-      List<GraphProductionByPRData> _lstgeneralGraphProductionByPRAux = new List<GraphProductionByPRData>();
-      _lstgeneralGraphProductionByPRAux.Add(new GraphProductionByPRData
+      List<GraphProductionByPR> _lstGraphProductionByPRData = BRGraph.GetGraphProductionByPR(dtpStartDate.SelectedDate.Value, dtpEndDate.SelectedDate.Value, cmbLS.SelectedValue.ToString());
+      List<GraphProductionByPR> _lstgeneralGraphProductionByPRAux = new List<GraphProductionByPR>();
+      _lstgeneralGraphProductionByPRAux.Add(new GraphProductionByPR
       {
         PR = "General Production",
         Books = _lstGraphProductionByPRData.Sum(lst => lst.Books),

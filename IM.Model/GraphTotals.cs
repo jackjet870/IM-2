@@ -11,11 +11,11 @@ namespace IM.Model
 {
     using System;
     
-    public partial class GraphProductionByPRData
+    public partial class GraphTotals
     {
-        public string PR { get; set; }
-        public Nullable<decimal> Books { get; set; }
-        public Nullable<decimal> Shows { get; set; }
-        public Nullable<decimal> Sales { get; set; }
+        public int MaxGraphW { get; set; }
+        public int MaxGraphM { get; set; }
+        public Nullable<int> TotalW { get; set; }
+        public Nullable<int> TotalM { get; set; }
     }
 }

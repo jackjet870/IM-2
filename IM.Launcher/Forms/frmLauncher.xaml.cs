@@ -227,7 +227,7 @@ namespace IM.Launcher.Forms
           Process.Start(String.Format("{0}\\IM.Administrator.exe", path));
           break;
         case EnumMenu.MailOutsConfig:
-          UIHelper.ShowMessage("Coming soon..");
+          Process.Start(String.Format("{0}\\IM.MailOutsConfig.exe", path));
           break;
         case EnumMenu.InvitationsConfig:
           UIHelper.ShowMessage("Coming soon..");

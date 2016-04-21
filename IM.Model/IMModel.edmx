@@ -6100,10 +6100,20 @@
           <Parameter Name="DateFromWeek" Type="datetime" Mode="In" />
           <Parameter Name="LeadSources" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GraphProduction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFromWeek" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
+          <Parameter Name="ConsiderQuinellas" Type="bit" Mode="In" />
+          <Parameter Name="BasedOnArrival" Type="bit" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GraphProductionByPR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GraphUnavailableArrivals" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFromWeek" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_InsertExchangeRate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CurrentDate" Type="datetime" Mode="In" />
@@ -6427,6 +6437,13 @@
           <Parameter Name="Program" Type="varchar" Mode="In" />
           <Parameter Name="FilterDeposit" Type="tinyint" Mode="In" />
         </Function>
+        <Function Name="USP_OR_RptProductionByAgencyMonthly" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="Agencies" Type="varchar" Mode="In" />
+          <Parameter Name="ConsiderQuinellas" Type="bit" Mode="In" />
+          <Parameter Name="BasedOnArrival" Type="bit" Mode="In" />
+        </Function>
         <Function Name="USP_OR_RptProductionByAgencyOutside" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -6700,6 +6717,12 @@
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="LeadSources" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_RptShowFactorByBookingDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
+          <Parameter Name="ConsiderQuinellas" Type="bit" Mode="In" />
+        </Function>
         <Function Name="USP_OR_RptTaxisIn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -6709,6 +6732,13 @@
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptUnavailableMotivesByAgency" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
+          <Parameter Name="Markets" Type="varchar" Mode="In" />
+          <Parameter Name="Agencies" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_SaveExchangeRateLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Currency" Type="varchar" Mode="In" />
@@ -15691,7 +15721,7 @@
           <FunctionImport Name="USP_OR_GetExchangeRatesWithPesosByDate" ReturnType="Collection(IMModel.ExchangeRateData)">
           <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
-          <FunctionImport Name="USP_OR_GraphProductionByPR" ReturnType="Collection(IMModel.GraphProductionByPRData)">
+          <FunctionImport Name="USP_OR_GraphProductionByPR" ReturnType="Collection(IMModel.GraphProductionByPR)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="LeadSource" Mode="In" Type="String" />
@@ -16000,7 +16030,7 @@
             <Parameter Name="FilterDeposit" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GraphNotBookingArrivals">
-            <ReturnType Type="Collection(IMModel.GraphNotBookingArrivals_Totals)" />
+            <ReturnType Type="Collection(IMModel.GraphTotals)" />
             <ReturnType Type="Collection(IMModel.GraphNotBookingArrivals)" />
             <ReturnType Type="Collection(IMModel.GraphNotBookingArrivals)" />
             <Parameter Name="DateFromWeek" Mode="In" Type="DateTime" />
@@ -16020,7 +16050,10 @@
             <Parameter Name="ConsiderQuinellas" Mode="In" Type="Boolean" />
             <Parameter Name="BasedOnArrival" Mode="In" Type="Boolean" />
           </FunctionImport>
-          <FunctionImport Name="USP_OR_RptProductionByAgencyInhouse" ReturnType="Collection(IMModel.RptProductionByAgencyInhouse)">
+          <FunctionImport Name="USP_OR_RptProductionByAgencyInhouse">
+            <ReturnType Type="Collection(IMModel.RptProductionByAgencyInhouse)" />
+            <ReturnType Type="Collection(IMModel.MembershipTypeShort)" />
+            <ReturnType Type="Collection(IMModel.RptProductionByAgencyInhouse_SalesByMembershipType)" />
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="LeadSources" Mode="In" Type="String" />
@@ -16685,6 +16718,42 @@
             <Parameter Name="Guest" Mode="In" Type="Int32" />
             <Parameter Name="GiftReceipt" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_GraphProduction">
+            <ReturnType Type="Collection(IMModel.GraphProduction_Weeks)" />
+            <ReturnType Type="Collection(IMModel.GraphProduction_Months)" />
+            <ReturnType Type="Collection(IMModel.GraphMaximum)" />
+            <Parameter Name="DateFromWeek" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="ConsiderQuinellas" Mode="In" Type="Boolean" />
+            <Parameter Name="BasedOnArrival" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GraphUnavailableArrivals">
+            <ReturnType Type="Collection(IMModel.GraphTotals)" />
+            <ReturnType Type="Collection(IMModel.GraphUnavailableArrivals)" />
+            <ReturnType Type="Collection(IMModel.GraphUnavailableArrivals)" />
+            <Parameter Name="DateFromWeek" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptProductionByAgencyMonthly" ReturnType="Collection(IMModel.RptProductionByAgencyMonthly)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="Agencies" Mode="In" Type="String" />
+            <Parameter Name="ConsiderQuinellas" Mode="In" Type="Boolean" />
+            <Parameter Name="BasedOnArrival" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptShowFactorByBookingDate" ReturnType="Collection(IMModel.RptShowFactorByBookingDate)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="ConsiderQuinellas" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptUnavailableMotivesByAgency" ReturnType="Collection(IMModel.RptUnavailableMotivesByAgency)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="Markets" Mode="In" Type="String" />
+            <Parameter Name="Agencies" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -17088,7 +17157,7 @@
           <Property Type="Decimal" Name="exExchRate" Nullable="false" Precision="12" Scale="8" />
           <Property Type="Decimal" Name="RatePesos" Nullable="true" Precision="33" Scale="21" />
         </ComplexType>
-        <ComplexType Name="GraphProductionByPRData">
+        <ComplexType Name="GraphProductionByPR">
           <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
           <Property Type="Decimal" Name="Books" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Shows" Nullable="true" Precision="19" />
@@ -17921,7 +17990,7 @@
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
         </ComplexType>
-        <ComplexType Name="GraphNotBookingArrivals_Totals">
+        <ComplexType Name="GraphTotals">
           <Property Type="Int32" Name="MaxGraphW" Nullable="false" />
           <Property Type="Int32" Name="MaxGraphM" Nullable="false" />
           <Property Type="Int32" Name="TotalW" Nullable="true" />
@@ -19651,6 +19720,102 @@
           <Property Type="Int32" Name="DiscUsed" Nullable="false" />
           <Property Type="Int32" Name="TourUsed" Nullable="false" />
           <Property Type="String" Name="lspg" Nullable="false" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="MembershipTypeShort">
+          <Property Type="String" Name="mtID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="mtN" Nullable="false" MaxLength="50" />
+          <Property Type="Byte" Name="mtLevel" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="RptProductionByAgencyInhouse_SalesByMembershipType">
+          <Property Type="String" Name="Agency" Nullable="false" MaxLength="35" />
+          <Property Type="String" Name="Market" Nullable="false" MaxLength="13" />
+          <Property Type="String" Name="MembershipType" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="Sales" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptUnavailableMotivesByAgency">
+          <Property Type="Byte" Name="umID" Nullable="true" />
+          <Property Type="String" Name="UnavailMot" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="mkID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Market" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="agID" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="Agency" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="Arrivals" Nullable="true" />
+          <Property Type="Decimal" Name="ArrivalsPercentage" Nullable="true" Precision="12" Scale="6" />
+          <Property Type="Int32" Name="ByUser" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="RptShowFactorByBookingDate">
+          <Property Type="String" Name="Agency" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="AgencyN" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="DaysDifference" Nullable="true" />
+          <Property Type="Int32" Name="Difference" Nullable="true" />
+          <Property Type="Int32" Name="Books" Nullable="true" />
+          <Property Type="Int32" Name="Shows" Nullable="true" />
+          <Property Type="Decimal" Name="ShowsFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="InOuts" Nullable="true" />
+          <Property Type="Int32" Name="WalkOuts" Nullable="true" />
+          <Property Type="Int32" Name="Group" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="RptProductionByAgencyMonthly">
+          <Property Type="Int32" Name="Year" Nullable="true" />
+          <Property Type="Boolean" Name="AgencyTotal" Nullable="true" />
+          <Property Type="String" Name="Agency" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="AgencyN" Nullable="false" MaxLength="100" />
+          <Property Type="Boolean" Name="LeadSourceTotal" Nullable="true" />
+          <Property Type="String" Name="LeadSource" Nullable="true" MaxLength="41" />
+          <Property Type="Int32" Name="Month" Nullable="true" />
+          <Property Type="String" Name="MonthN" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="Arrivals" Nullable="true" />
+          <Property Type="Int32" Name="Contacts" Nullable="true" />
+          <Property Type="Int32" Name="Availables" Nullable="true" />
+          <Property Type="Int32" Name="GrossBooks" Nullable="true" />
+          <Property Type="Int32" Name="Books" Nullable="true" />
+          <Property Type="Int32" Name="GrossShows" Nullable="true" />
+          <Property Type="Int32" Name="Shows" Nullable="true" />
+          <Property Type="Int32" Name="Sales" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="GraphUnavailableArrivals">
+          <Property Type="String" Name="UnavailableMotiveN" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="Arrivals" Nullable="true" />
+          <Property Type="Decimal" Name="Percentage" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="ByUser" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GraphProduction_Weeks">
+          <Property Type="Byte" Name="Period" Nullable="true" />
+          <Property Type="Int32" Name="Arrivals" Nullable="true" />
+          <Property Type="Int32" Name="Availables" Nullable="true" />
+          <Property Type="Decimal" Name="AvailablesFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Contacts" Nullable="true" />
+          <Property Type="Decimal" Name="ContactsFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Books" Nullable="true" />
+          <Property Type="Decimal" Name="BooksFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Shows" Nullable="true" />
+          <Property Type="Decimal" Name="ShowsFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales" Nullable="true" />
+          <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="GraphProduction_Months">
+          <Property Type="Byte" Name="Period" Nullable="true" />
+          <Property Type="Int32" Name="Arrivals" Nullable="true" />
+          <Property Type="Int32" Name="Availables" Nullable="true" />
+          <Property Type="Decimal" Name="AvailablesFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Contacts" Nullable="true" />
+          <Property Type="Decimal" Name="ContactsFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Books" Nullable="true" />
+          <Property Type="Decimal" Name="BooksFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Shows" Nullable="true" />
+          <Property Type="Decimal" Name="ShowsFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales" Nullable="true" />
+          <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SalesAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="GraphMaximum">
+          <Property Type="Int32" Name="MaxGraphW" Nullable="true" />
+          <Property Type="Int32" Name="MaxGraphM" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -22426,7 +22591,7 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_GraphProductionByPR" FunctionName="IMModel.Store.USP_OR_GraphProductionByPR">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.GraphProductionByPRData">
+              <ComplexTypeMapping TypeName="IMModel.GraphProductionByPR">
                 <ScalarProperty Name="PR" ColumnName="PR" />
                 <ScalarProperty Name="Books" ColumnName="Books" />
                 <ScalarProperty Name="Shows" ColumnName="Shows" />
@@ -23329,7 +23494,7 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_GraphNotBookingArrivals" FunctionName="IMModel.Store.USP_OR_GraphNotBookingArrivals" >
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.GraphNotBookingArrivals_Totals">
+              <ComplexTypeMapping TypeName="IMModel.GraphTotals">
                 <ScalarProperty Name="MaxGraphW" ColumnName="MaxGraphW" />
                 <ScalarProperty Name="MaxGraphM" ColumnName="MaxGraphM" />
                 <ScalarProperty Name="TotalW" ColumnName="TotalW" />
@@ -23410,7 +23575,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_RptProductionByAgencyInhouse" FunctionName="IMModel.Store.USP_OR_RptProductionByAgencyInhouse">
-            <ResultMapping>
+          <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.RptProductionByAgencyInhouse">
                 <ScalarProperty Name="Agency" ColumnName="Agency" />
                 <ScalarProperty Name="AgencyN" ColumnName="AgencyN" />
@@ -23441,6 +23606,22 @@
                 <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.MembershipTypeShort">
+                <ScalarProperty Name="mtID" ColumnName="mtID" />
+                <ScalarProperty Name="mtN" ColumnName="mtN" />
+                <ScalarProperty Name="mtLevel" ColumnName="mtLevel" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptProductionByAgencyInhouse_SalesByMembershipType">
+                <ScalarProperty Name="Agency" ColumnName="Agency" />
+                <ScalarProperty Name="Market" ColumnName="Market" />
+                <ScalarProperty Name="MembershipType" ColumnName="MembershipType" />
+                <ScalarProperty Name="Sales" ColumnName="Sales" />
+                <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -25598,6 +25779,130 @@
                 <ScalarProperty Name="DiscUsed" ColumnName="DiscUsed" />
                 <ScalarProperty Name="TourUsed" ColumnName="TourUsed" />
                 <ScalarProperty Name="lspg" ColumnName="lspg" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GraphProduction" FunctionName="IMModel.Store.USP_OR_GraphProduction" >
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GraphProduction_Weeks">
+                <ScalarProperty Name="Period" ColumnName="Period" />
+                <ScalarProperty Name="Arrivals" ColumnName="Arrivals" />
+                <ScalarProperty Name="Availables" ColumnName="Availables" />
+                <ScalarProperty Name="AvailablesFactor" ColumnName="AvailablesFactor" />
+                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
+                <ScalarProperty Name="ContactsFactor" ColumnName="ContactsFactor" />
+                <ScalarProperty Name="Books" ColumnName="Books" />
+                <ScalarProperty Name="BooksFactor" ColumnName="BooksFactor" />
+                <ScalarProperty Name="Shows" ColumnName="Shows" />
+                <ScalarProperty Name="ShowsFactor" ColumnName="ShowsFactor" />
+                <ScalarProperty Name="Sales" ColumnName="Sales" />
+                <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GraphProduction_Months">
+                <ScalarProperty Name="Period" ColumnName="Period" />
+                <ScalarProperty Name="Arrivals" ColumnName="Arrivals" />
+                <ScalarProperty Name="Availables" ColumnName="Availables" />
+                <ScalarProperty Name="AvailablesFactor" ColumnName="AvailablesFactor" />
+                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
+                <ScalarProperty Name="ContactsFactor" ColumnName="ContactsFactor" />
+                <ScalarProperty Name="Books" ColumnName="Books" />
+                <ScalarProperty Name="BooksFactor" ColumnName="BooksFactor" />
+                <ScalarProperty Name="Shows" ColumnName="Shows" />
+                <ScalarProperty Name="ShowsFactor" ColumnName="ShowsFactor" />
+                <ScalarProperty Name="Sales" ColumnName="Sales" />
+                <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+                <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GraphMaximum">
+                <ScalarProperty Name="MaxGraphW" ColumnName="MaxGraphW" />
+                <ScalarProperty Name="MaxGraphM" ColumnName="MaxGraphM" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GraphUnavailableArrivals" FunctionName="IMModel.Store.USP_OR_GraphUnavailableArrivals" >
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GraphTotals">
+                <ScalarProperty Name="MaxGraphW" ColumnName="MaxGraphW" />
+                <ScalarProperty Name="MaxGraphM" ColumnName="MaxGraphM" />
+                <ScalarProperty Name="TotalW" ColumnName="TotalW" />
+                <ScalarProperty Name="TotalM" ColumnName="TotalM" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GraphUnavailableArrivals">
+                <ScalarProperty Name="UnavailableMotiveN" ColumnName="UnavailableMotiveN" />
+                <ScalarProperty Name="Arrivals" ColumnName="Arrivals" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="ByUser" ColumnName="ByUser" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GraphUnavailableArrivals">
+                <ScalarProperty Name="UnavailableMotiveN" ColumnName="UnavailableMotiveN" />
+                <ScalarProperty Name="Arrivals" ColumnName="Arrivals" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="ByUser" ColumnName="ByUser" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptProductionByAgencyMonthly" FunctionName="IMModel.Store.USP_OR_RptProductionByAgencyMonthly" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptProductionByAgencyMonthly">
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="AgencyTotal" ColumnName="AgencyTotal" />
+                <ScalarProperty Name="Agency" ColumnName="Agency" />
+                <ScalarProperty Name="AgencyN" ColumnName="AgencyN" />
+                <ScalarProperty Name="LeadSourceTotal" ColumnName="LeadSourceTotal" />
+                <ScalarProperty Name="LeadSource" ColumnName="LeadSource" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="MonthN" ColumnName="MonthN" />
+                <ScalarProperty Name="Arrivals" ColumnName="Arrivals" />
+                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
+                <ScalarProperty Name="Availables" ColumnName="Availables" />
+                <ScalarProperty Name="GrossBooks" ColumnName="GrossBooks" />
+                <ScalarProperty Name="Books" ColumnName="Books" />
+                <ScalarProperty Name="GrossShows" ColumnName="GrossShows" />
+                <ScalarProperty Name="Shows" ColumnName="Shows" />
+                <ScalarProperty Name="Sales" ColumnName="Sales" />
+                <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
+                <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptShowFactorByBookingDate" FunctionName="IMModel.Store.USP_OR_RptShowFactorByBookingDate" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptShowFactorByBookingDate">
+                <ScalarProperty Name="Agency" ColumnName="Agency" />
+                <ScalarProperty Name="AgencyN" ColumnName="AgencyN" />
+                <ScalarProperty Name="DaysDifference" ColumnName="DaysDifference" />
+                <ScalarProperty Name="Difference" ColumnName="Difference" />
+                <ScalarProperty Name="Books" ColumnName="Books" />
+                <ScalarProperty Name="Shows" ColumnName="Shows" />
+                <ScalarProperty Name="ShowsFactor" ColumnName="ShowsFactor" />
+                <ScalarProperty Name="InOuts" ColumnName="InOuts" />
+                <ScalarProperty Name="WalkOuts" ColumnName="WalkOuts" />
+                <ScalarProperty Name="Group" ColumnName="Group" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptUnavailableMotivesByAgency" FunctionName="IMModel.Store.USP_OR_RptUnavailableMotivesByAgency" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptUnavailableMotivesByAgency">
+                <ScalarProperty Name="umID" ColumnName="umID" />
+                <ScalarProperty Name="UnavailMot" ColumnName="UnavailMot" />
+                <ScalarProperty Name="mkID" ColumnName="mkID" />
+                <ScalarProperty Name="Market" ColumnName="Market" />
+                <ScalarProperty Name="agID" ColumnName="agID" />
+                <ScalarProperty Name="Agency" ColumnName="Agency" />
+                <ScalarProperty Name="Arrivals" ColumnName="Arrivals" />
+                <ScalarProperty Name="ArrivalsPercentage" ColumnName="ArrivalsPercentage" />
+                <ScalarProperty Name="ByUser" ColumnName="ByUser" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

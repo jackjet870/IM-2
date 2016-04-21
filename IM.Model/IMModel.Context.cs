@@ -610,7 +610,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ExchangeRateData>("USP_OR_GetExchangeRatesWithPesosByDate", dateParameter);
         }
     
-        public virtual ObjectResult<GraphProductionByPRData> USP_OR_GraphProductionByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource)
+        public virtual ObjectResult<GraphProductionByPR> USP_OR_GraphProductionByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource)
         {
             var dateFromParameter = dateFrom.HasValue ?
                 new ObjectParameter("DateFrom", dateFrom) :
@@ -624,7 +624,7 @@ namespace IM.Model
                 new ObjectParameter("LeadSource", leadSource) :
                 new ObjectParameter("LeadSource", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GraphProductionByPRData>("USP_OR_GraphProductionByPR", dateFromParameter, dateToParameter, leadSourceParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GraphProductionByPR>("USP_OR_GraphProductionByPR", dateFromParameter, dateToParameter, leadSourceParameter);
         }
     
         public virtual int USP_OR_InsertExchangeRate(Nullable<System.DateTime> currentDate)
@@ -1672,7 +1672,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionByAgeSalesRoomOuthouse>("USP_OR_RptProductionByAgeSalesRoomOutside", dateFromParameter, dateToParameter, leadSourcesParameter, pRsParameter, programParameter, filterDepositParameter);
         }
     
-        public virtual ObjectResult<GraphNotBookingArrivals_Totals> USP_OR_GraphNotBookingArrivals(Nullable<System.DateTime> dateFromWeek, string leadSources)
+        public virtual ObjectResult<GraphTotals> USP_OR_GraphNotBookingArrivals(Nullable<System.DateTime> dateFromWeek, string leadSources)
         {
             var dateFromWeekParameter = dateFromWeek.HasValue ?
                 new ObjectParameter("DateFromWeek", dateFromWeek) :
@@ -1682,7 +1682,7 @@ namespace IM.Model
                 new ObjectParameter("LeadSources", leadSources) :
                 new ObjectParameter("LeadSources", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GraphNotBookingArrivals_Totals>("USP_OR_GraphNotBookingArrivals", dateFromWeekParameter, leadSourcesParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GraphTotals>("USP_OR_GraphNotBookingArrivals", dateFromWeekParameter, leadSourcesParameter);
         }
     
         public virtual ObjectResult<RptProductionByAgeInhouse> USP_OR_RptProductionByAgeInhouse(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, Nullable<bool> considerQuinellas, Nullable<bool> basedOnArrival)
@@ -4097,6 +4097,111 @@ namespace IM.Model
                 new ObjectParameter("GiftReceipt", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestStatusValidateData>("USP_OR_GetGuestStatusValidateInfo", guestParameter, giftReceiptParameter);
+        }
+    
+        public virtual ObjectResult<GraphProduction_Weeks> USP_OR_GraphProduction(Nullable<System.DateTime> dateFromWeek, string leadSources, Nullable<bool> considerQuinellas, Nullable<bool> basedOnArrival)
+        {
+            var dateFromWeekParameter = dateFromWeek.HasValue ?
+                new ObjectParameter("DateFromWeek", dateFromWeek) :
+                new ObjectParameter("DateFromWeek", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var considerQuinellasParameter = considerQuinellas.HasValue ?
+                new ObjectParameter("ConsiderQuinellas", considerQuinellas) :
+                new ObjectParameter("ConsiderQuinellas", typeof(bool));
+    
+            var basedOnArrivalParameter = basedOnArrival.HasValue ?
+                new ObjectParameter("BasedOnArrival", basedOnArrival) :
+                new ObjectParameter("BasedOnArrival", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GraphProduction_Weeks>("USP_OR_GraphProduction", dateFromWeekParameter, leadSourcesParameter, considerQuinellasParameter, basedOnArrivalParameter);
+        }
+    
+        public virtual ObjectResult<GraphTotals> USP_OR_GraphUnavailableArrivals(Nullable<System.DateTime> dateFromWeek, string leadSources)
+        {
+            var dateFromWeekParameter = dateFromWeek.HasValue ?
+                new ObjectParameter("DateFromWeek", dateFromWeek) :
+                new ObjectParameter("DateFromWeek", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GraphTotals>("USP_OR_GraphUnavailableArrivals", dateFromWeekParameter, leadSourcesParameter);
+        }
+    
+        public virtual ObjectResult<RptProductionByAgencyMonthly> USP_OR_RptProductionByAgencyMonthly(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string agencies, Nullable<bool> considerQuinellas, Nullable<bool> basedOnArrival)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var agenciesParameter = agencies != null ?
+                new ObjectParameter("Agencies", agencies) :
+                new ObjectParameter("Agencies", typeof(string));
+    
+            var considerQuinellasParameter = considerQuinellas.HasValue ?
+                new ObjectParameter("ConsiderQuinellas", considerQuinellas) :
+                new ObjectParameter("ConsiderQuinellas", typeof(bool));
+    
+            var basedOnArrivalParameter = basedOnArrival.HasValue ?
+                new ObjectParameter("BasedOnArrival", basedOnArrival) :
+                new ObjectParameter("BasedOnArrival", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionByAgencyMonthly>("USP_OR_RptProductionByAgencyMonthly", dateFromParameter, dateToParameter, agenciesParameter, considerQuinellasParameter, basedOnArrivalParameter);
+        }
+    
+        public virtual ObjectResult<RptShowFactorByBookingDate> USP_OR_RptShowFactorByBookingDate(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, Nullable<bool> considerQuinellas)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var considerQuinellasParameter = considerQuinellas.HasValue ?
+                new ObjectParameter("ConsiderQuinellas", considerQuinellas) :
+                new ObjectParameter("ConsiderQuinellas", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptShowFactorByBookingDate>("USP_OR_RptShowFactorByBookingDate", dateFromParameter, dateToParameter, leadSourcesParameter, considerQuinellasParameter);
+        }
+    
+        public virtual ObjectResult<RptUnavailableMotivesByAgency> USP_OR_RptUnavailableMotivesByAgency(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string markets, string agencies)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var marketsParameter = markets != null ?
+                new ObjectParameter("Markets", markets) :
+                new ObjectParameter("Markets", typeof(string));
+    
+            var agenciesParameter = agencies != null ?
+                new ObjectParameter("Agencies", agencies) :
+                new ObjectParameter("Agencies", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptUnavailableMotivesByAgency>("USP_OR_RptUnavailableMotivesByAgency", dateFromParameter, dateToParameter, leadSourcesParameter, marketsParameter, agenciesParameter);
         }
     }
 }
