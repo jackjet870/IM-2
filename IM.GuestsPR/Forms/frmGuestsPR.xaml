@@ -9,6 +9,13 @@
     d:Height="768" d:Width="1024" WindowStartupLocation="CenterScreen" 
     Icon="/IM.GuestsPR;component/Images/IM.ico" WindowState="Maximized" WindowStyle="SingleBorderWindow"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">
+   
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,
+            AncestorType={x:Type Window}}, Path=LoadCombo}" Key="F5" Modifiers="Ctrl"/>
+    </Window.InputBindings>
+    
+    
     <Grid x:Name="layout" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
         <Grid.RowDefinitions>

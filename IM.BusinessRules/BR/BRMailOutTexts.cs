@@ -75,14 +75,8 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        MailOutText c = (from x in dbContext.MailOutTexts
-                         where 
-                         x.mtls == mot.mtls &&
-                         x.mtla==mot.mtla &&
-                         x.mtmoCode == mot.mtmoCode
-                         select x).First();
-        c.mtRTF = mot.mtRTF;
-        dbContext.SaveChanges();
+        dbContext.Entry(mot).State = System.Data.Entity.EntityState.Modified;
+        int j = dbContext.SaveChanges();
       }
     }
     #endregion

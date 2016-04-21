@@ -25,10 +25,13 @@ namespace IM.SalesCloser.Forms
     #region Propiedades, Atributos
     List<bool> filtersBool = null;
     List<Tuple<string, string>> filtersReport = null;
+
+    public ExecuteCommandHelper LoadCombo { get; set; }
     #endregion
     public frmSalesCloser()
     {
       InitializeComponent();
+      LoadCombo = new ExecuteCommandHelper(x => LoadPersonnel());
     }
 
     #region Eventos Ventana
@@ -40,8 +43,7 @@ namespace IM.SalesCloser.Forms
     /// </history>   
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      StaStart("Loading personnel...");
-      DoGetPersonnel(App.User.SalesRoom.srID, StrToEnums.EnumRoleToString(EnumRole.Closer));
+      LoadPersonnel();
       //Seleccionamos los días en el datapicker 
       dtpkFrom.SelectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
       dtpkTo.SelectedDate = DateTime.Now;
@@ -136,9 +138,7 @@ namespace IM.SalesCloser.Forms
       if (frmlogin.IsAuthenticated)
       {
         App.User = frmlogin.userData;
-        StaStart("Loading personnel...");
-        DoGetPersonnel(App.User.SalesRoom.srID, Model.Classes.StrToEnums.EnumRoleToString(EnumRole.Closer));
-
+        LoadPersonnel();
       }
 
     }
@@ -176,6 +176,7 @@ namespace IM.SalesCloser.Forms
         if (task1.IsFaulted)
         {
           UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          StaEnd();
           return false;
         }
         else
@@ -380,9 +381,21 @@ namespace IM.SalesCloser.Forms
       }
       else
       {
-        cbxPersonnel.Text = "No data found";
+        cbxPersonnel.Text = "No data found - Press Ctrl+F5 to load Data";
       }
 
+    }
+
+    /// <summary>
+    /// Carga personal en el combobox
+    /// </summary>
+    /// <history>
+    /// [erosado] 18/04/2016  Created
+    /// </history>
+    public void LoadPersonnel()
+    {
+      StaStart("Loading Personnel...");
+      DoGetPersonnel(App.User.SalesRoom.srID, StrToEnums.EnumRoleToString(EnumRole.Closer));
     }
     #endregion
   }

@@ -53,7 +53,7 @@ namespace IM.Model.Helpers
       get
       {
         if (string.IsNullOrEmpty(_sqlConnectionString))
-        {         
+        {
           _sqlConnectionString = AppConfigHelper.GetSettingByKey(ConnectionKey);
         }
         return _sqlConnectionString;

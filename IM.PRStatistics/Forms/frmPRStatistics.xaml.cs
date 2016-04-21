@@ -26,7 +26,7 @@ namespace IM.PRStatistics.Forms
   {
     #region Propiedades y Atributos
     List<Tuple<string,string>> filterTuple= null; // Agrega los filtros de busqueda
-
+    public ExecuteCommandHelper LoadCatalogList { get; set; }
     #endregion
 
     #region Constructores y  Destructores
@@ -40,6 +40,8 @@ namespace IM.PRStatistics.Forms
     public frmPRStatistics()
     {
       InitializeComponent();
+      //Instanciamos nuestro delegado
+      LoadCatalogList = new ExecuteCommandHelper(x => LoadCatalogs());
     }
     #endregion
 
@@ -47,17 +49,13 @@ namespace IM.PRStatistics.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       //Inicializamos los catalogos
-      DoGetLeadSources(App.User.User.peID);
-      DoGetSalesRooms(App.User.User.peID);
-      DoGetCountries();
-      DoGetAgencies();
-      DoGetMarkets();
+      LoadCatalogs();
       //Seleccionamos los días en el datapicker 
       dtpkFrom.SelectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
       dtpkTo.SelectedDate = DateTime.Now;
-
       //Agregamos la informacion del usuario en la interfaz
       txtbUserName.Text = App.User.User.peN;
+
     }
     /// <summary>
     /// Evento que se encarga de generar las estadisticas
@@ -138,7 +136,6 @@ namespace IM.PRStatistics.Forms
     {
       this.Close();
     }
-
     #endregion
 
     #region StatusBar
@@ -256,6 +253,7 @@ namespace IM.PRStatistics.Forms
         if (task1.IsFaulted)
         {
           UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          StaEnd();
           return false;
         }
         else
@@ -269,6 +267,7 @@ namespace IM.PRStatistics.Forms
               lsbxLeadSources.DataContext = data;
             }
           }
+          StaEnd();
           return false;
         }
       },
@@ -291,6 +290,7 @@ namespace IM.PRStatistics.Forms
         if (task1.IsFaulted)
         {
           UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          StaEnd();
           return false;
         }
         else
@@ -305,6 +305,7 @@ namespace IM.PRStatistics.Forms
               chbxSalesRooms.IsChecked = true;
             }
           }
+          StaEnd();
           return false;
         }
       },
@@ -326,6 +327,7 @@ namespace IM.PRStatistics.Forms
         if (task1.IsFaulted)
         {
           UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          StaEnd();
           return false;
         }
         else
@@ -340,6 +342,7 @@ namespace IM.PRStatistics.Forms
               chbxCountries.IsChecked = true;
             }
           }
+          StaEnd();
           return false;
         }
       },
@@ -362,6 +365,7 @@ namespace IM.PRStatistics.Forms
         if (task1.IsFaulted)
         {
           UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          StaEnd();
           return false;
         }
         else
@@ -376,6 +380,7 @@ namespace IM.PRStatistics.Forms
               chbxAgencies.IsChecked = true;
             }
           }
+          StaEnd();
           return false;
         }
       },
@@ -397,6 +402,7 @@ namespace IM.PRStatistics.Forms
         if (task1.IsFaulted)
         {
           UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          StaEnd();
           return false;
         }
         else
@@ -411,6 +417,7 @@ namespace IM.PRStatistics.Forms
               chbxMarkets.IsChecked = true;
             }
           }
+          StaEnd();
           return false;
         }
       },
@@ -612,6 +619,22 @@ namespace IM.PRStatistics.Forms
 
     #endregion
 
+    #region Metodos
+    /// <summary>
+    /// Carga los catalogos de LeadSource, SalesRooms, Countries, Agencies, Markets
+    /// </summary>
+    /// <history>
+    /// [erosado] 18/04/2016  Created.
+    /// </history>
+    protected void LoadCatalogs()
+    {
+      DoGetLeadSources(App.User.User.peID);
+      DoGetSalesRooms(App.User.User.peID);
+      DoGetCountries();
+      DoGetAgencies();
+      DoGetMarkets();
+    }
+    #endregion
 
   }
 }
