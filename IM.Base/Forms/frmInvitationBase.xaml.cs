@@ -67,6 +67,7 @@ namespace IM.Base.Forms
     CollectionViewSource currencyViewSource;
     CollectionViewSource creditCardTypeDepositViewSource;
     CollectionViewSource paymentTypeViewSource;
+    CollectionViewSource paymentPlaceViewSource;
     #endregion
 
     #region Additional Guest
@@ -735,9 +736,7 @@ namespace IM.Base.Forms
     }
 
     #endregion
-
-
-
+    
     #region Métodos de los controles de la sección GIFTS
     /// <summary>
     /// Revisa que se ingrese la informacion correcta
@@ -953,6 +952,71 @@ namespace IM.Base.Forms
       }
     }
 
+    /// <summary>
+    /// Agrega un invitado adicional
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void imgSearchGuest_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+      //if (dtgAdditionalGuest.SelectedIndex == -1)
+      //  dtgAdditionalGuest.SelectedIndex = 0;
+
+      objInvitAdditionalGuest item = null;
+      
+      if (dtgAdditionalGuest.CurrentItem is objInvitAdditionalGuest)
+        item = (objInvitAdditionalGuest)dtgAdditionalGuest.CurrentItem;
+
+      var search = new frmSearchGuest(_user);
+      search.Owner = this;
+      bool? res = search.ShowDialog();
+      if (res.HasValue && res.Value && search.guestAdditional != null)
+      {
+        var objAddGuest = new objInvitAdditionalGuest();
+        objAddGuest.guID = search.guestAdditional.guID;
+        objAddGuest.guLastName1 = search.guestAdditional.guLastName1;
+        objAddGuest.guFirstName1 = search.guestAdditional.guFirstName1;
+
+        if (item != null)
+        {
+          var addGuest = _lstObjInvitAdditionalGuest.SingleOrDefault(g => g.guID == item.guID);
+          if (addGuest != null)
+          {
+            addGuest.guID = search.guestAdditional.guID;
+            addGuest.guLastName1 = search.guestAdditional.guLastName1;
+            addGuest.guFirstName1 = search.guestAdditional.guFirstName1;
+          }
+        }
+        else
+        {
+          _lstObjInvitAdditionalGuest.Add(objAddGuest);
+        }
+
+        dtgAdditionalGuest.CommitEdit();
+        dtgAdditionalGuest.Items.Refresh();
+      }
+      
+    }
+
+    /// <summary>
+    /// Abre el detalle del invitado
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void  imgDetails_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+      if(!(dtgAdditionalGuest.CurrentItem is objInvitAdditionalGuest)) return;
+      
+      var item = (objInvitAdditionalGuest)dtgAdditionalGuest.CurrentItem;
+      if (item == null || item.guID == 0)
+      {
+        return;
+      }
+      var frmGuest = new frmGuest(_user, item.guID, true, _invitationType == EnumInvitationType.InHouse, false);
+      frmGuest.Owner = this;
+      frmGuest.ShowDialog();
+      
+    }
     #endregion
 
     #region Métodos de los controles de la sección DEPOSIT
@@ -1073,8 +1137,7 @@ namespace IM.Base.Forms
     /// <returns>Boolean</returns>
     private bool ValidateEdit()
     {
-      var login = new IM.Base.Forms.frmLogin();
-      _user.AutoSign = true;
+      var login = new frmLogin();
       if (_user.AutoSign)
       {
         login.userData = _user;
@@ -1793,6 +1856,11 @@ namespace IM.Base.Forms
       paymentTypeViewSource = ((CollectionViewSource)(this.FindResource("paymentTypeViewSource")));
       paymentTypeViewSource.Source = paymentTypes;
 
+      //Combo del Grid de Depositos
+      var paymentePlaces = BRPaymentPlaces.GetPaymentPlaces();
+      paymentPlaceViewSource = ((CollectionViewSource)(this.FindResource("paymentPlaceViewSource")));
+      paymentPlaceViewSource.Source = paymentePlaces;
+
       var maritalStatus = IM.BusinessRules.BR.BRMaritalStatus.GetMaritalStatus(1);
       LoadComboBox(maritalStatus, cmbMaritalStatusGuest1, "ms");
       LoadComboBox(maritalStatus, cmbMaritalStatusGuest2, "ms");
@@ -2199,7 +2267,7 @@ namespace IM.Base.Forms
       _lstDeposits = deposits;  // esta lista mantiene los registros de la base de datos sin modificaciones.
 
       objInvitBookingDepositViewSource = (CollectionViewSource)this.FindResource("objInvitBookingDepositViewSource");
-      objInvitBookingDepositViewSource.Source = _lstObjInvitBookingDeposit;
+      objInvitBookingDepositViewSource.Source = _lstObjInvitBookingDeposit.OrderBy(c=> c.bdID);
     }
 
     /// Carga la información del Grid de las tarjetas de crédito de los invitados
@@ -2522,7 +2590,7 @@ namespace IM.Base.Forms
           bdcc = c.bdcc,
           bdcu = c.bdcu,
           bddr = c.bddr,
-          bdEntryDCXC = c.bdEntryDCXC,
+          bdEntryDCXC = c.bdEntryDCXC.HasValue ? c.bdEntryDCXC : DateTime.Today,
           bdExpD = c.bdExpD,
           bdFolioCXC = c.bdFolioCXC,
           bdgu = c.bdgu,
@@ -2531,7 +2599,7 @@ namespace IM.Base.Forms
           bdpt = c.bdpt,
           bdReceived = c.bdReceived,
           bdRefund = c.bdRefund,
-          bdUserCXC = c.bdUserCXC
+          bdUserCXC = !String.IsNullOrEmpty(c.bdUserCXC) ? c.bdUserCXC : _user.User.peID
         }).ToList();
 
         //Agregamos los nuevos depósitos
@@ -3333,6 +3401,7 @@ namespace IM.Base.Forms
 
     #endregion
 
+    
   }
 }
 

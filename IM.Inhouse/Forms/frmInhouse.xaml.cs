@@ -2134,8 +2134,8 @@ namespace IM.Inhouse
 
       var isChecked = chk.IsChecked.HasValue && chk.IsChecked.Value;
       chk.IsChecked = itema.guInvit;
-      var userData = BRPersonnel.Login(EnumLoginType.Location, App.User.User.peID, App.User.Location.loID);
-      var invit = new frmInvitationBase(EnumInvitationType.InHouse, userData, itema.guID, !isChecked ? EnumInvitationMode.modOnlyRead : EnumInvitationMode.modAdd);
+      //var userData = BRPersonnel.Login(EnumLoginType.Location, App.User.User.peID, App.User.Location.loID);
+      var invit = new frmInvitationBase(EnumInvitationType.InHouse, App.User, itema.guID, !isChecked ? EnumInvitationMode.modOnlyRead : EnumInvitationMode.modAdd);
       invit.Owner = this;
       invit.ShowInTaskbar = false;
       var res = invit.ShowDialog();

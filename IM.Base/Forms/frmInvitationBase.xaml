@@ -18,7 +18,8 @@
         <CollectionViewSource x:Key="currencyViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:Currency}, CreateList=True}"/>
         <CollectionViewSource x:Key="paymentTypeViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:PaymentType}, CreateList=True}"/>
         <CollectionViewSource x:Key="objInvitAdditionalGuestViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:objInvitAdditionalGuest}, CreateList=True}"/>
-        
+        <CollectionViewSource x:Key="paymentPlaceViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:PaymentPlace}, CreateList=True}"/>
+
     </Window.Resources>
 
     <Grid Background="SkyBlue" ScrollViewer.CanContentScroll="True"
@@ -536,14 +537,13 @@
 
                             <!--#region GRID DEPOSITOS-->
                             <DataGrid Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="3" Name="dtgDeposits" AutoGenerateColumns="False"
-                                      CanUserAddRows="True" CanUserSortColumns="False" 
-                                      ItemsSource="{Binding Source={StaticResource objInvitBookingDepositViewSource}}" 
-                                      PreviewTextInput="dtgDeposits_PreviewTextInput" CellEditEnding="dtgDeposits_CellEditEnding" Margin="2,0,-2,0">
+                                      CanUserAddRows="True" PreviewTextInput="dtgDeposits_PreviewTextInput" CellEditEnding="dtgDeposits_CellEditEnding"
+                                      ItemsSource="{Binding Source={StaticResource objInvitBookingDepositViewSource}}" >
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="bdID" Binding="{Binding bdID}" Visibility="Hidden"/>
                                     <DataGridTextColumn Header="Deposits" Binding="{Binding bdAmount, StringFormat='#.00', ValidatesOnDataErrors=True}" Width="70"/>
                                     <DataGridTextColumn Header="Received" Binding="{Binding bdReceived,StringFormat='#.00', ValidatesOnDataErrors=True}" Width="70"/>
-                                    <DataGridTextColumn Header="CxC" Width="70"/>
+                                    <DataGridTextColumn Header="CxC" Width="70" IsReadOnly="True"/>
                                     <DataGridComboBoxColumn x:Name="cmbCurrencyDeposit" Width="90"
                                                                             DisplayMemberPath="cuN" SelectedValuePath="cuID"  Header="Currency"
                                                                         SelectedValueBinding="{Binding bdcu, ValidatesOnDataErrors=True}"
@@ -564,7 +564,16 @@
                                             </Style>
                                         </DataGridComboBoxColumn.EditingElementStyle>
                                     </DataGridComboBoxColumn>
-                                    <DataGridTextColumn Header="Refund Places" Binding="{Binding bdpc, ValidatesOnDataErrors=True}" Width="70"/>
+                                    <DataGridComboBoxColumn x:Name="cmbRefundPlace" Width="90"
+                                                                        DisplayMemberPath="pcN" SelectedValuePath="pcID"  Header="Refund Placee"
+                                                                        SelectedValueBinding="{Binding bdpc, ValidatesOnDataErrors=True}"
+                                                                        ItemsSource="{Binding Source={StaticResource paymentPlaceViewSource}}">
+                                        <DataGridComboBoxColumn.EditingElementStyle>
+                                            <Style TargetType="ComboBox">
+                                                <Setter Property="IsEditable" Value="True"/>
+                                            </Style>
+                                        </DataGridComboBoxColumn.EditingElementStyle>
+                                    </DataGridComboBoxColumn>
                                     <DataGridComboBoxColumn x:Name="cmbCreditCardDeposit" SelectedValueBinding="{Binding bdcc, ValidatesOnDataErrors=True}"
                                                                             DisplayMemberPath="ccN" SelectedValuePath="ccID"  Header="Credit Card" Width="90"
                                                                      ItemsSource="{Binding Source={StaticResource creditCardTypeViewSource}}">
@@ -579,7 +588,7 @@
                                     <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth, ValidatesOnDataErrors=True}"/>
                                     <DataGridTextColumn Header="Folio CxC" Binding="{Binding bdFolioCXC, ValidatesOnDataErrors=True}"/>
                                     <DataGridTextColumn Header="User CxC" Binding="{Binding bdUserCXC, ValidatesOnDataErrors=True}" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="Entry CxC" Binding="{Binding bdEntryDCXC, ValidatesOnDataErrors=True}" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="Entry CxC" Binding="{Binding bdEntryDCXC, ValidatesOnDataErrors=True, StringFormat={}{0:dd/MM/yyyy}}" IsReadOnly="True"/>
 
                                 </DataGrid.Columns>
                             </DataGrid>
@@ -599,7 +608,7 @@
 
                             <!--#region RESORT-->
                             <Label Grid.Column="0" Grid.Row="5"  HorizontalAlignment="Right">Resort</Label>
-                            <ComboBox Grid.ColumnSpan="2" Name="cmbResort" FontSize="10" Margin="-153,-25,72,38"/>
+                            <ComboBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="5"  Name="cmbResort" FontSize="10"/>
                             <!--#endregion-->
 
                         </Grid>
@@ -693,31 +702,31 @@
 
                     <!--#region ADDITIONAL INFORMATION-->
                     <GroupBox Grid.Column="2" Grid.Row="1" Header="Additional Guest" Name="grbAdditionalInfo" Grid.ColumnSpan="2">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Button Name="btnSearchAdditional" Width="90" HorizontalAlignment="Right" Click="btnSearchAdditional_Click">
-                                <StackPanel Orientation="Horizontal" Width="80" HorizontalAlignment="Center">
-                                    <TextBlock>Buscar</TextBlock>
-                                    <Image Name="imgSearchAdditional" Source="../Images/Search.ico" Width="28" Height="18" HorizontalAlignment="Right"/>
-                                </StackPanel>
-                            </Button>
-
-                            <!--#region Grid-->
-                            <DataGrid Grid.Row="1" Name="dtgAdditionalGuest" CanUserAddRows="True" CanUserSortColumns="False"
-                                      ItemsSource="{Binding Source={StaticResource objInvitAdditionalGuestViewSource}}"
-                                      AutoGenerateColumns="False" CellEditEnding="dtgAdditionalGuest_CellEditEnding" PreviewTextInput="PreviewTextInput" >
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="GUID" Binding="{Binding guID, ValidatesOnDataErrors=True}"/>
-                                    <DataGridTextColumn Header="Last Name" Binding="{Binding guLastName1}" IsReadOnly="True" />
-                                    <DataGridTextColumn Header="First Name" Binding="{Binding guFirstName1}" IsReadOnly="True"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                            <!--#endregion-->
-                        </Grid>
-
+                        <!--#region Grid-->
+                        <DataGrid Grid.Row="1" Name="dtgAdditionalGuest" CanUserAddRows="True" CanUserSortColumns="False"
+                                    ItemsSource="{Binding Source={StaticResource objInvitAdditionalGuestViewSource}}"
+                                    AutoGenerateColumns="False" CellEditEnding="dtgAdditionalGuest_CellEditEnding" PreviewTextInput="PreviewTextInput" >
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Search" Width="55">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Name="imgSearchGuest" Source="../Images/Search.ico"  Height="15" MouseLeftButtonDown="imgSearchGuest_MouseLeftButtonDown" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="GUID" Binding="{Binding guID, ValidatesOnDataErrors=True}"/>
+                                <DataGridTextColumn Header="Last Name" Binding="{Binding guLastName1}" IsReadOnly="True" />
+                                <DataGridTextColumn Header="First Name" Binding="{Binding guFirstName1}" IsReadOnly="True"/>
+                                <DataGridTemplateColumn Width="55">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Name="imgDetails" Source="../Images/Layout.png"  Height="15" MouseLeftButtonDown="imgDetails_MouseLeftButtonDown" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <!--#endregion-->
                     </GroupBox>
                     <!--#endregion-->
 

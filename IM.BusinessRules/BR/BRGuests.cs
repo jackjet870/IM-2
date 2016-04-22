@@ -277,58 +277,66 @@ namespace IM.BusinessRules.BR
           #region Regalos
 
           //Agregamos los regalos nuevos
-          if (invitation.NewGifts.Any())
+          if (invitation.NewGifts != null && invitation.NewGifts.Any())
             dbContext.InvitationsGifts.AddRange(invitation.NewGifts);
 
           //Actualizamos los regalos
-          foreach (var item in invitation.UpdatedGifts)
+          if(invitation.UpdatedGifts != null)
           {
-            var gi = dbContext.InvitationsGifts.SingleOrDefault(g => g.iggu == item.iggu && g.iggi == item.iggi);
-            if (gi != null)
+            foreach (var item in invitation.UpdatedGifts)
             {
-              gi.igAdults = item.igAdults;
-              gi.igct = item.igct;
-              gi.igExtraAdults = item.igExtraAdults;
-              gi.iggi = item.iggi;
-              gi.iggu = item.iggu;
-              gi.igMinors = item.igMinors;
-              gi.igPriceA = item.igPriceA;
-              gi.igPriceAdult = item.igPriceAdult;
-              gi.igPriceExtraAdult = item.igPriceExtraAdult;
-              gi.igPriceM = item.igPriceM;
-              gi.igPriceMinor = item.igPriceMinor;
-              gi.igQty = item.igQty;
+              var gi = dbContext.InvitationsGifts.SingleOrDefault(g => g.iggu == item.iggu && g.iggi == item.iggi);
+              if (gi != null)
+              {
+                gi.igAdults = item.igAdults;
+                gi.igct = item.igct;
+                gi.igExtraAdults = item.igExtraAdults;
+                gi.iggi = item.iggi;
+                gi.iggu = item.iggu;
+                gi.igMinors = item.igMinors;
+                gi.igPriceA = item.igPriceA;
+                gi.igPriceAdult = item.igPriceAdult;
+                gi.igPriceExtraAdult = item.igPriceExtraAdult;
+                gi.igPriceM = item.igPriceM;
+                gi.igPriceMinor = item.igPriceMinor;
+                gi.igQty = item.igQty;
               }
+            }
           }
+          
 
           #endregion
 
           #region Depósitos
           //Agregamos los nuevos depósitos
-          if (invitation.NewDeposits.Any())
+          if (invitation.NewDeposits != null && invitation.NewDeposits.Any())
             dbContext.BookingDeposits.AddRange(invitation.NewDeposits);
 
-          foreach (var item in invitation.UpdatedDeposits)
+          if(invitation.UpdatedDeposits != null)
           {
-            var dep = dbContext.BookingDeposits.SingleOrDefault(d => d.bdID == item.bdID);
-            dep.bdAmount = item.bdAmount;
-            dep.bdAuth = item.bdAuth;
-            dep.bdCardNum = item.bdCardNum;
-            dep.bdcc = item.bdcc;
-            dep.bdcu = item.bdcu;
-            dep.bdEntryDCXC = item.bdEntryDCXC;
-            dep.bdExpD = item.bdExpD;
-            dep.bdFolioCXC = item.bdFolioCXC;
-            dep.bdgu = item.bdgu;
-            dep.bdpc = item.bdpc;
-            dep.bdpt = item.bdpt;
-            dep.bdReceived = item.bdReceived;
-            dep.bdUserCXC = item.bdUserCXC;
+            foreach (var item in invitation.UpdatedDeposits)
+            {
+              var dep = dbContext.BookingDeposits.SingleOrDefault(d => d.bdID == item.bdID);
+              dep.bdAmount = item.bdAmount;
+              dep.bdAuth = item.bdAuth;
+              dep.bdCardNum = item.bdCardNum;
+              dep.bdcc = item.bdcc;
+              dep.bdcu = item.bdcu;
+              dep.bdEntryDCXC = item.bdEntryDCXC;
+              dep.bdExpD = item.bdExpD;
+              dep.bdFolioCXC = item.bdFolioCXC;
+              dep.bdgu = item.bdgu;
+              dep.bdpc = item.bdpc;
+              dep.bdpt = item.bdpt;
+              dep.bdReceived = item.bdReceived;
+              dep.bdUserCXC = item.bdUserCXC;
+            }
           }
+          
           #endregion
 
           #region Guest Status
-          if (invitation.DeletedGuestStatus.Any())
+          if (invitation.DeletedGuestStatus != null && invitation.DeletedGuestStatus.Any())
           {
 
             foreach(var row in invitation.DeletedGuestStatus)
@@ -340,43 +348,47 @@ namespace IM.BusinessRules.BR
             
           }
 
-          if (invitation.NewGuestStatus.Any())
+          if (invitation.NewGuestStatus != null && invitation.NewGuestStatus.Any())
             dbContext.GuestsStatus.AddRange(invitation.NewGuestStatus);
 
           #endregion
 
           #region Credit Cards
-          if(invitation.DeletedCreditCards.Any())
+          if(invitation.DeletedCreditCards != null && invitation.DeletedCreditCards.Any())
           {
             var g = invitation.DeletedCreditCards.First().gdgu;
             var cc = dbContext.GuestsCreditCards.Where(c=> c.gdgu == g).ToList();
             dbContext.GuestsCreditCards.RemoveRange(cc);
           }
           
-          if(invitation.NewCreditCards.Any())
+          if(invitation.NewCreditCards != null && invitation.NewCreditCards.Any())
             dbContext.GuestsCreditCards.AddRange(invitation.NewCreditCards);
           
           #endregion
           
           #region Additional Information
-          //Borramos los invitados adicionales
-          foreach(var row in invitation.DeletedAdditional)
+          if(invitation.DeletedAdditional != null)
           {
+            //Borramos los invitados adicionales
+            foreach (var row in invitation.DeletedAdditional)
+            {
               var guestAddit = dbContext.Guests.SingleOrDefault(gg => gg.guID == row.guID);
               if (guestAddit != null)
                 invitation.Guest.GuestsAdditional.Remove(guestAddit);
+            }
           }
-
-          //Agregamos un nuevo invitado adicional
-          foreach (var item in invitation.NewAdditional)
+          
+          if(invitation.NewAdditional != null)
           {
-            var guestAddit = dbContext.Guests.SingleOrDefault(gg => gg.guID == item.guID);
-            if (guestAddit != null)
-              invitation.Guest.GuestsAdditional.Add(guestAddit);
+            //Agregamos un nuevo invitado adicional
+            foreach (var item in invitation.NewAdditional)
+            {
+              var guestAddit = dbContext.Guests.SingleOrDefault(gg => gg.guID == item.guID);
+              if (guestAddit != null)
+                invitation.Guest.GuestsAdditional.Add(guestAddit);
+            }
           }
-
-
-
+          
           #endregion
 
           dbContext.SaveChanges();
@@ -647,6 +659,26 @@ namespace IM.BusinessRules.BR
         }
 
         return guests;
+      }
+    }
+    #endregion
+
+    #region ChangedByExist
+    /// <summary>
+    /// Valida si el usuario que realizará cambios existe
+    /// </summary>
+    /// <param name="changedBy">usuario</param>
+    /// <param name="password">password</param>
+    /// <param name="placeType">lugar</param>
+    /// <param name="placesID">Id del lugar</param>
+    /// <param name="userType">Tipo usuario</param>
+    /// <param name="pr">Si se saliva el pr</param>
+    /// <returns></returns>
+    public static ValidationData ChangedByExist(string changedBy, string password, string placesID, string placeType = "LS", string userType = "Changed By", string pr = null)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_ValidateChangedBy(changedBy, password, placeType, placesID, userType, pr).SingleOrDefault();
       }
     }
     #endregion
