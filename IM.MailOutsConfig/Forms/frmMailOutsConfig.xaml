@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.MailOutsConfig.Forms"
         xmlns:base="clr-namespace:IM.Base.Helpers;assembly=IM.Base"
         mc:Ignorable="d" Title="Mail Outs Configuration"
-    d:Height="768" d:Width="1024" WindowStartupLocation="CenterScreen" 
+    d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
     Icon="/IM.MailOutsConfig;component/Images/IM.ico" WindowState="Normal" WindowStyle="SingleBorderWindow" ShowInTaskbar="False"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">
     <Window.Resources>

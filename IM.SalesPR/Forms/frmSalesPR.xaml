@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.SalesPR.Forms"
          mc:Ignorable="d"
          Title="Sales By PR"
-    d:Height="768" d:Width="1024" WindowStartupLocation="CenterScreen" 
+    d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
     Icon="/IM.SalesPR;component/Images/IM.ico" WindowState="Maximized" WindowStyle="SingleBorderWindow"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">
     <Window.InputBindings>
@@ -96,7 +96,9 @@
                 </StackPanel>
                 <TextBlock Text="Filters" Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <CheckBox x:Name="chkLeadSource"  Content="All Lead Sources" Margin="5"/>
+                    <RadioButton x:Name="rdoSalesPr"  Content="Sales PR" Margin="5"  IsChecked="True"/>
+                    <RadioButton x:Name="rdoContactPR"  Content="Contacts PR" Margin="5"/>
+                    <CheckBox x:Name="chkLeadSource"  Content="All Lead Sources" Margin="10,5"/>
                 </StackPanel>
             </StackPanel>
         </Border>

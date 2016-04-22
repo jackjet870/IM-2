@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
-using IM.Model;
+using IM.Base.Forms;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using System.Data;
-using System.Linq;
-using System.Windows.Documents;
-using System.IO;
-using IM.Model.Enums;
-using System.Globalization;
-using System.Threading;
-using IM.Base.Forms;
-using IM.MailOutsConfig.Reports;
 using IM.MailOutsConfig.Classes;
-using System.Text;
+using IM.MailOutsConfig.Reports;
+using IM.Model;
+using IM.Model.Enums;
+using Cursors = System.Windows.Input.Cursors;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using MenuItem = System.Windows.Controls.MenuItem;
 
 namespace IM.MailOutsConfig.Forms
 {
@@ -29,7 +29,7 @@ namespace IM.MailOutsConfig.Forms
   {
     #region Propiedades, Atributos
     private rptMailOuts _rptMailOuts = new rptMailOuts(); //Reporte
-    private MailOutText SelectedMailOutsText = null; //MailOutsText Selected
+    private MailOutText SelectedMailOutsText; //MailOutsText Selected
     public ExecuteCommandHelper RefreshDataSource { get; set; }
     #endregion
 
@@ -150,7 +150,7 @@ namespace IM.MailOutsConfig.Forms
     ///<history>
     ///[erosado]  08/04/2016  Created
     /// </history>
-    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    private void Window_Closing(object sender, CancelEventArgs e)
     {
       if (!imgEdit.IsEnabled)
       {
@@ -207,7 +207,7 @@ namespace IM.MailOutsConfig.Forms
     {
       Task.Factory.StartNew(() => BRLeadSources.GetLeadSourcesByUser(user,EnumProgram.Inhouse))
       .ContinueWith(
-      (task1) =>
+      task1 =>
       {
         if (task1.IsFaulted)
         {
@@ -215,24 +215,21 @@ namespace IM.MailOutsConfig.Forms
           StaEnd();
           return false;
         }
-        else
+        if (task1.IsCompleted)
         {
-          if (task1.IsCompleted)
+          List<LeadSourceByUser> data = task1.Result;
+          if (data.Count > 0)
           {
-            List<LeadSourceByUser> data = task1.Result;
-            if (data.Count > 0)
-            {
-              cbxLeadSource.ItemsSource = data;
-              cbxLeadSource.SelectedIndex = 0;
-            }
-            else
-            {
-              cbxLeadSource.Text = "No data found - Press Ctrl+F5 to load Data";
-            }
+            cbxLeadSource.ItemsSource = data;
+            cbxLeadSource.SelectedIndex = 0;
           }
-          StaEnd();
-          return false;
+          else
+          {
+            cbxLeadSource.Text = "No data found - Press Ctrl+F5 to load Data";
+          }
         }
+        StaEnd();
+        return false;
       },
       TaskScheduler.FromCurrentSynchronizationContext()
       );
@@ -248,7 +245,7 @@ namespace IM.MailOutsConfig.Forms
     {
       Task.Factory.StartNew(() => BRLanguages.GetLanguages(1))
       .ContinueWith(
-      (task1) =>
+      task1 =>
       {
         if (task1.IsFaulted)
         {
@@ -256,24 +253,21 @@ namespace IM.MailOutsConfig.Forms
           StaEnd();
           return false;
         }
-        else
+        if (task1.IsCompleted)
         {
-          if (task1.IsCompleted)
+          List<LanguageShort> data = task1.Result;
+          if (data.Count > 0)
           {
-            List<LanguageShort> data = task1.Result;
-            if (data.Count > 0)
-            {
-              cbxLanguage.ItemsSource = data;
-              cbxLanguage.SelectedIndex = 0;
-            }
-            else
-            {
-              cbxLanguage.Text = "No data found - Press Ctrl+F5 to load Data";
-            }
+            cbxLanguage.ItemsSource = data;
+            cbxLanguage.SelectedIndex = 0;
           }
-          StaEnd();
-          return false;
+          else
+          {
+            cbxLanguage.Text = "No data found - Press Ctrl+F5 to load Data";
+          }
         }
+        StaEnd();
+        return false;
       },
       TaskScheduler.FromCurrentSynchronizationContext()
       );
@@ -290,7 +284,7 @@ namespace IM.MailOutsConfig.Forms
     {
       Task.Factory.StartNew(() => BRMailOutTexts.GetMailOutTexts(ls,la,1))
       .ContinueWith(
-      (task1) =>
+      task1 =>
       {
         if (task1.IsFaulted)
         {
@@ -298,21 +292,18 @@ namespace IM.MailOutsConfig.Forms
           StaEnd();
           return false;
         }
-        else
+        if (task1.IsCompleted)
         {
-          if (task1.IsCompleted)
+          List<MailOutText> data = task1.Result;
+          if (data.Count > 0)
           {
-            List<MailOutText> data = task1.Result;
-            if (data.Count > 0)
-            {
-              lsbxMailOuts.ItemsSource = data;
-              txtbMailOutsNumber.Text = data.Count.ToString();
-              lsbxMailOuts.SelectedIndex = 0;
-            }
+            lsbxMailOuts.ItemsSource = data;
+            txtbMailOutsNumber.Text = data.Count.ToString();
+            lsbxMailOuts.SelectedIndex = 0;
           }
-          StaEnd();
-          return false;
         }
+        StaEnd();
+        return false;
       },
       TaskScheduler.FromCurrentSynchronizationContext()
       );
@@ -328,7 +319,7 @@ namespace IM.MailOutsConfig.Forms
     {
       Task.Factory.StartNew(() => BRMailOutTexts.UpdateRTFMailOutTexts(mot))
       .ContinueWith(
-      (task1) =>
+      task1 =>
       {
         if (task1.IsFaulted)
         {
@@ -336,17 +327,14 @@ namespace IM.MailOutsConfig.Forms
           StaEnd();
           return false;
         }
-        else
+        if (task1.IsCompleted)
         {
-          if (task1.IsCompleted)
-          {
-            UIRichTextBoxHelper.LoadRTF(ref richTextBox, mot.mtRTF);
-            UIHelper.ShowMessage("Data saved successfully",MessageBoxImage.Information,"Mail Outs Configuration");
-            EditModeOff();
-          }
-          StaEnd();
-          return false;
+          UIRichTextBoxHelper.LoadRTF(ref richTextBox, mot.mtRTF);
+          UIHelper.ShowMessage("Data saved successfully",MessageBoxImage.Information,"Mail Outs Configuration");
+          EditModeOff();
         }
+        StaEnd();
+        return false;
       },
       TaskScheduler.FromCurrentSynchronizationContext()
       );
@@ -382,7 +370,7 @@ namespace IM.MailOutsConfig.Forms
     /// <history>
     /// [erosado] 23/Mar/2016 Created
     /// </history>
-    private void CkeckKeysPress(System.Windows.Controls.Primitives.StatusBarItem statusBar, Key key)
+    private void CkeckKeysPress(StatusBarItem statusBar, Key key)
     {
       var keyPess = Keyboard.GetKeyStates(key).ToString();
 
@@ -403,7 +391,7 @@ namespace IM.MailOutsConfig.Forms
     /// <history>
     /// [erosado] 23/Mar/2016 Created
     /// </history>
-    private void KeyDefault(System.Windows.Controls.Primitives.StatusBarItem statusBar)
+    private void KeyDefault(StatusBarItem statusBar)
     {
       statusBar.FontWeight = FontWeights.Normal;
       statusBar.Foreground = Brushes.Gray;
@@ -416,11 +404,11 @@ namespace IM.MailOutsConfig.Forms
     /// [erosado] 23/Mar/2016 Created
     /// </history>
     /// <param name="message">mensaje</param>
-    private void StaStart(String message)
+    private void StaStart(string message)
     {
       lblStatusBarMessage.Content = message;
       imgStatusBarMessage.Visibility = Visibility.Visible;
-      this.Cursor = Cursors.Wait;
+      Cursor = Cursors.Wait;
 
     }
 
@@ -430,12 +418,11 @@ namespace IM.MailOutsConfig.Forms
     /// <history>
     /// [erosado] 23/Mar/2016 Created
     /// </history>
-    /// <param name="message">mensaje</param>
     private void StaEnd()
     {
       lblStatusBarMessage.Content = null;
       imgStatusBarMessage.Visibility = Visibility.Hidden;
-      this.Cursor = null;
+      Cursor = null;
     }
 
     /// <summary>
@@ -482,7 +469,7 @@ namespace IM.MailOutsConfig.Forms
     private void cbxfontFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       if (cbxfontFamilies.SelectedItem != null)
-        richTextBox.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, cbxfontFamilies.SelectedItem);
+        richTextBox.Selection.ApplyPropertyValue(TextElement.FontFamilyProperty, cbxfontFamilies.SelectedItem);
     }
     /// <summary>
     /// Cambia a negritas el texto seleccionado en el richtextbox
@@ -492,16 +479,16 @@ namespace IM.MailOutsConfig.Forms
     /// </history>
     private void imgTextBold_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      object temp = richTextBox.Selection.GetPropertyValue(Inline.FontWeightProperty);
+      object temp = richTextBox.Selection.GetPropertyValue(TextElement.FontWeightProperty);
       if (temp != null)
       {
         if (!temp.Equals(FontWeights.Bold))
         {
-          richTextBox.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+          richTextBox.Selection.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
         }
         else
         {
-          richTextBox.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Normal);
+          richTextBox.Selection.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Normal);
         }
       }
     }
@@ -513,16 +500,16 @@ namespace IM.MailOutsConfig.Forms
     /// </history>
     private void imgTextItalic_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      object temp = richTextBox.Selection.GetPropertyValue(Inline.FontStyleProperty);
+      object temp = richTextBox.Selection.GetPropertyValue(TextElement.FontStyleProperty);
       if (temp != null)
       {
         if (!temp.Equals(FontStyles.Italic))
         {
-          richTextBox.Selection.ApplyPropertyValue(Inline.FontStyleProperty, FontStyles.Italic);
+          richTextBox.Selection.ApplyPropertyValue(TextElement.FontStyleProperty, FontStyles.Italic);
         }
         else
         {
-          richTextBox.Selection.ApplyPropertyValue(Inline.FontStyleProperty, FontStyles.Normal);
+          richTextBox.Selection.ApplyPropertyValue(TextElement.FontStyleProperty, FontStyles.Normal);
         }
       }
     }
@@ -576,7 +563,7 @@ namespace IM.MailOutsConfig.Forms
     /// </history>
     private void cbxfontSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      richTextBox.Selection.ApplyPropertyValue(Inline.FontSizeProperty, cbxfontSize.SelectedItem.ToString());
+      richTextBox.Selection.ApplyPropertyValue(TextElement.FontSizeProperty, cbxfontSize.SelectedItem.ToString());
     }
 
     private void imgTextLeft_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -632,7 +619,7 @@ namespace IM.MailOutsConfig.Forms
     /// </history>
     private void imgColorPick_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
+      ColorDialog colorDialog = new ColorDialog();
       if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
       {
         SolidColorBrush scb = new SolidColorBrush(Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B));
@@ -761,7 +748,7 @@ namespace IM.MailOutsConfig.Forms
     private void fillMailReport()
     {
       List<GuestMailOutsText> _guestMailOutsText = new List<GuestMailOutsText>();
-      _guestMailOutsText.Add(new GuestMailOutsText() { mtRTF = UIRichTextBoxHelper.getRTFFromRichTextBox(ref richTextBox), MrMrs = "<MrMrs>", LastName = "<LastName1>", Room = "<Room>", RoomNum = "<RoomNum>" });
+      _guestMailOutsText.Add(new GuestMailOutsText { mtRTF = UIRichTextBoxHelper.getRTFFromRichTextBox(ref richTextBox), MrMrs = "<MrMrs>", LastName = "<LastName1>", Room = "<Room>", RoomNum = "<RoomNum>" });
       _rptMailOuts.Load();
       _rptMailOuts.SetDataSource(_guestMailOutsText);
     }

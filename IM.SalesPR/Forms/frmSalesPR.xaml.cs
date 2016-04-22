@@ -8,8 +8,6 @@ using System.Windows.Media;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using System.Data;
-using System.IO;
 using System.Diagnostics;
 using IM.Base.Forms;
 using IM.Model.Enums;
@@ -19,8 +17,8 @@ namespace IM.SalesPR.Forms
   public partial class frmSalesPR : Window
   {
     #region Propiedades, Atributos
-    List<bool> filtersBool = null;
-    List<Tuple<string, string>> filtersReport = null;
+
+    private List<Tuple<string, string>> _filtersReport;
     public ExecuteCommandHelper LoadCombo { get; set; }
     #endregion
 
@@ -44,7 +42,7 @@ namespace IM.SalesPR.Forms
       dtpkFrom.SelectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
       dtpkTo.SelectedDate = DateTime.Now;
       //Agregamos login del usuario en la interfaz
-      setNewUserLogin();
+      SetNewUserLogin();
     }
     /// <summary>
     /// Evento que se lanza cuando realizamos la consulta boton Search
@@ -56,13 +54,16 @@ namespace IM.SalesPR.Forms
     {
       StaStart("Loading data...");
       imgButtonOk.IsEnabled = false;
-      filtersBool = new List<bool>();
-      string leadSource = (chkLeadSource.IsChecked == true ? "ALL" : App.User.LeadSource.lsID);
-      PersonnelShort pr = cbxPersonnel.SelectedValue as PersonnelShort;
-      filtersReport = new List<Tuple<string, string>>();
-      filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", App.User.LeadSource.lsID));
+      //new List<bool>();
+      var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : App.User.LeadSource.lsID);
+      var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
+      _filtersReport = new List<Tuple<string, string>>();
+      _filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", App.User.LeadSource.lsID));
 
-      DoGetSalesByPR(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, leadSource, pr.peID);
+      if (dtpkFrom.SelectedDate != null && dtpkTo.SelectedDate != null)
+      {
+        DoGetSalesByPr(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, leadSource, personnelShort?.peID, (bool)rdoSalesPr.IsChecked);
+      }
     }
     /// <summary>
     /// Evento que se lanza cuando generamos nuestro reporte boton Print
@@ -72,20 +73,23 @@ namespace IM.SalesPR.Forms
     /// </history>
     private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      List<SaleByPR> listaSaleByPR = dtgr.DataContext as List<SaleByPR>;
-      if (listaSaleByPR != null)
+      var listaSaleByPr = dtgr.DataContext as List<SaleByPR>;
+      if (listaSaleByPr != null)
       {
-        string dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
-        //Obtenemos el nombre del reporte y el dateRange
-        string rptName = "Sales By PR";
-        //Obtenemos el dataTable con la lista formateada 
-        DataTable dt = TableHelper.GetDataTableFromList(listaSaleByPR, true);
-        //Creamos el reporte
-        FileInfo fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable());
-
-        if (fi != null)
+        if (dtpkFrom.SelectedDate != null & dtpkTo.SelectedDate != null)
         {
-          Process.Start(fi.FullName);
+          var dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
+          //Obtenemos el nombre del reporte y el dateRange
+          const string rptName = "Sales By PR";
+          //Obtenemos el dataTable con la lista formateada 
+          var dt = TableHelper.GetDataTableFromList(listaSaleByPr, true);
+          //Creamos el reporte
+          var fi = EpplusHelper.CreateGeneralRptExcel(_filtersReport, dt, rptName, dateRangeFileName, Utilities.UseFulMethods.getExcelFormatTable());
+
+          if (fi != null)
+          {
+            Process.Start(fi.FullName);
+          }
         }
       }
       else
@@ -112,7 +116,7 @@ namespace IM.SalesPR.Forms
     /// </history>
     private void imgButtonExit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      this.Close();
+      Close();
     }
 
     /// <summary>
@@ -123,7 +127,7 @@ namespace IM.SalesPR.Forms
     /// </history>
     private void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      frmLogin frmlogin = new frmLogin(blnChangePassword: true, loginType: EnumLoginType.Location, blnAutoSign: true);
+      var frmlogin = new frmLogin(blnChangePassword: true, loginType: EnumLoginType.Location, blnAutoSign: true);
       if (App.User.AutoSign)
       {
         frmlogin.userData = App.User;
@@ -148,7 +152,7 @@ namespace IM.SalesPR.Forms
     /// </history>
     private void dtgr_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      StatusBarReg.Content = string.Format("{0}/{1}", (dtgr.SelectedIndex + 1).ToString(), dtgr.Items.Count.ToString());
+      StatusBarReg.Content = $"{(dtgr.SelectedIndex + 1)}/{dtgr.Items.Count}";
     }
     #endregion
 
@@ -164,13 +168,13 @@ namespace IM.SalesPR.Forms
     
     public void DoGetPersonnel(string leadSources, string roles)
     {
-      Task.Factory.StartNew(() => BRPersonnel.GetPersonnel(leadSources, "ALL", roles, 1))
+      Task.Factory.StartNew(() => BRPersonnel.GetPersonnel(leadSources, "ALL", roles))
       .ContinueWith(
       (task1) =>
       {
         if (task1.IsFaulted)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
           StaEnd();
           return false;
         }
@@ -178,13 +182,13 @@ namespace IM.SalesPR.Forms
         {
           if (task1.IsCompleted)
           {
-            List<PersonnelShort> data = task1.Result;
+            var data = task1.Result;
             if (data.Count > 0)
             {
               data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
               cbxPersonnel.ItemsSource = data;
             }
-            setNewUserLogin();
+            SetNewUserLogin();
           }
           StaEnd();
           return false;
@@ -201,18 +205,19 @@ namespace IM.SalesPR.Forms
     /// <param name="dateTo">fecha final</param>
     /// <param name="leadSources">LeadoSource</param>
     /// <param name="PR">Pr</param>
+    /// <param name="searchBySalePr">True - SearchBySalePr  - False SearchByContacts</param>
     /// <history>
     /// [erosado] 22/Mar/2016 Created
     /// </history>
-    public void DoGetSalesByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR)
+    public void DoGetSalesByPr(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, bool searchBySalePr)
     {
-      Task.Factory.StartNew(() => BRSales.GetSalesByPR(dateFrom, dateTo, leadSources, PR))
+      Task.Factory.StartNew(() => BRSales.GetSalesByPR(dateFrom, dateTo, leadSources, PR,searchBySalePr))
       .ContinueWith(
       (task1) =>
       {
         if (task1.IsFaulted)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
           StaEnd();
           imgButtonOk.IsEnabled = true;
           return false;
@@ -236,7 +241,6 @@ namespace IM.SalesPR.Forms
             }
             StaEnd();
             imgButtonOk.IsEnabled = true;
-
           }
 
           return false;
@@ -314,7 +318,7 @@ namespace IM.SalesPR.Forms
     {
       lblStatusBarMessage.Content = message;
       imgStatusBarMessage.Visibility = Visibility.Visible;
-      this.Cursor = Cursors.Wait;
+      Cursor = Cursors.Wait;
 
     }
 
@@ -324,12 +328,11 @@ namespace IM.SalesPR.Forms
     /// <history>
     /// [erosado] 22/Mar/2016 Created
     /// </history>
-    /// <param name="message">mensaje</param>
     private void StaEnd()
     {
       lblStatusBarMessage.Content = null;
       imgStatusBarMessage.Visibility = Visibility.Hidden;
-      this.Cursor = null;
+      Cursor = null;
     }
 
     /// <summary>
@@ -353,21 +356,21 @@ namespace IM.SalesPR.Forms
     /// <history>
     /// [erosado] 22/Mar/2016 Created
     /// </history>
-    public void setNewUserLogin()
+    public void SetNewUserLogin()
     {
       //Agregamos la informacion del usuario en la interfaz
       txtbUserName.Text = App.User.User.peN;
       txtbLocation.Text = App.User.Location.loN;
       //Validamos permisos y restricciones para el combobox
 
-      if (App.User.HasPermission(Model.Enums.EnumPermission.PRInvitations, Model.Enums.EnumPermisionLevel.Special))
+      if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Special))
       {
+        chkLeadSource.Visibility = Visibility.Visible;
         cbxPersonnel.IsEnabled = true;
         if (cbxPersonnel.Items.Count > 0)
         {
-          List<PersonnelShort> lstPS = cbxPersonnel.ItemsSource as List<PersonnelShort>;
-          int index = lstPS.FindIndex(x => x.peID.Equals(App.User.User.peID));
-          cbxPersonnel.SelectedIndex = index;
+          var lstPs = cbxPersonnel.ItemsSource as List<PersonnelShort>;
+          cbxPersonnel.SelectedIndex = lstPs.FindIndex(x => x.peID == App.User.User.peID);
         }
         else
         {
@@ -376,11 +379,12 @@ namespace IM.SalesPR.Forms
       }
       else
       {
+        chkLeadSource.Visibility = Visibility.Collapsed;
         cbxPersonnel.IsEnabled = false;
         if (cbxPersonnel.Items.Count > 0)
         {
-          List<PersonnelShort> lstPS = cbxPersonnel.ItemsSource as List<PersonnelShort>;
-          int index = lstPS.FindIndex(x => x.peID.Equals(App.User.User.peID));
+          var lstPs = cbxPersonnel.ItemsSource as List<PersonnelShort>;
+          var index = lstPs.FindIndex(x => x.peID.Equals(App.User.User.peID));
           cbxPersonnel.SelectedIndex = index;
         }
         else

@@ -27,14 +27,13 @@ namespace IM.Base.Helpers
     {
       return true;
     }
-    public event EventHandler CanExecuteChanged
+
+     public event EventHandler CanExecuteChanged
     {
-
-      add { throw new NotSupportedException(); }
-
+      add {}
       remove { }
-
     }
+
 
   }
 }

@@ -86,11 +86,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\EnumMatchToBooleanConverter.cs" />
-    <Compile Include="Classes\EnumStateRadioButtons.cs" />
     <Compile Include="Classes\GuestMailOutsText.cs" />
-    <Compile Include="Classes\VMMailOuts.cs" />
-    <Compile Include="EnumType.cs" />
     <Compile Include="Reports\rptMailOuts.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -139,9 +135,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utilities\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Forms\frmMailOutsConfig.xaml">
       <Generator>MSBuild:Compile</Generator>

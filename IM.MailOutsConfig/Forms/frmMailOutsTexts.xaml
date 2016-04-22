@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.MailOutsConfig.Forms"
         mc:Ignorable="d"
           Title="Mail Outs Configuration"
-    d:Height="768" d:Width="1024" WindowStartupLocation="CenterScreen" 
+    d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
     Icon="/IM.MailOutsConfig;component/Images/IM.ico" WindowState="Maximized" WindowStyle="SingleBorderWindow"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded" Closing="Window_Closing">
     <Window.InputBindings>
@@ -86,6 +86,7 @@
                             <!--Fondo para Item No seleccionado-->
                             <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
                         </ListBox.Resources>
+                            <TextBlock  Text="Last Name"/>
                             <TextBlock  Text="First Name"/>
                             <TextBlock  Text="Book Time"/>
                             <TextBlock  Text="Pick Up"/>

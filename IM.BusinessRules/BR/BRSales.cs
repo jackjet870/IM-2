@@ -11,6 +11,7 @@ namespace IM.BusinessRules.BR
   public class BRSales
   {
     #region GetSalesByPR
+
     /// <summary>
     /// Obtiene Guests por PR
     /// </summary>
@@ -18,15 +19,16 @@ namespace IM.BusinessRules.BR
     /// <param name="dateTo">FechaFin</param>
     /// <param name="leadSources">Lead Source</param>
     /// <param name="PR">PR</param>
+    /// <param name="searchBySalePR">True SalePR - False ContactsPR</param>
     /// <returns>List<SaleByPR></returns>
     /// <history>
     /// [erosado] 23/Mar/2016 Created
     /// </history>
-    public static List<SaleByPR> GetSalesByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR)
+    public static List<SaleByPR> GetSalesByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, bool searchBySalePR)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.USP_OR_GetSalesByPR(dateFrom, dateTo, leadSources, PR, true).ToList();
+        return dbContext.USP_OR_GetSalesByPR(dateFrom, dateTo, leadSources, PR, searchBySalePR).ToList();
       }
     }
 

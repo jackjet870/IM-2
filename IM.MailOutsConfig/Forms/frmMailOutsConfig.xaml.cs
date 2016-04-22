@@ -1,15 +1,14 @@
-﻿using IM.Base.Helpers;
-using IM.BusinessRules.BR;
-using IM.Model;
-using IM.Model.Enums;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using IM.BusinessRules;
+using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
 
 namespace IM.MailOutsConfig.Forms
 {
@@ -20,12 +19,12 @@ namespace IM.MailOutsConfig.Forms
   {
     #region Propiedades y Atributos
     public ExecuteCommandHelper RefreshDataSource { get; set; }
-    MailOut selectedMailOut = null;
+    MailOut _selectedMailOut;
     #endregion
     public frmMailOutsConfig()
     {
       InitializeComponent();
-      RefreshDataSource = new ExecuteCommandHelper(x => loadDataSource());
+      RefreshDataSource = new ExecuteCommandHelper(x => LoadDataSource());
     }
     #region Eventos de la ventana
     /// <summary>
@@ -36,7 +35,7 @@ namespace IM.MailOutsConfig.Forms
     /// </history>   
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      loadDataSource();
+      LoadDataSource();
     }
     /// <summary>
     /// Guarda los cambios de un MailOut
@@ -46,7 +45,7 @@ namespace IM.MailOutsConfig.Forms
     /// </history>
     private void imgSave_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      DoUpdateMailOut(selectedMailOut);
+      DoUpdateMailOut(_selectedMailOut);
     }
     /// <summary>
     /// Activa el RichTextBox para que pueda ser editado
@@ -113,7 +112,7 @@ namespace IM.MailOutsConfig.Forms
       if (result == MessageBoxResult.Yes)
       {
         StaStart("Deleting MailOut...");
-        DoDeleteMailOut(selectedMailOut);
+        DoDeleteMailOut(_selectedMailOut);
       }
     }
     /// <summary>
@@ -139,8 +138,8 @@ namespace IM.MailOutsConfig.Forms
     {
       if (lsbxMailOuts.SelectedValue != null)
       {
-        selectedMailOut = lsbxMailOuts.SelectedItem as MailOut;
-        layout.DataContext = selectedMailOut;
+        _selectedMailOut = lsbxMailOuts.SelectedItem as MailOut;
+        layout.DataContext = _selectedMailOut;
       }
     }
     #endregion
@@ -157,28 +156,25 @@ namespace IM.MailOutsConfig.Forms
     {
       Task.Factory.StartNew(() => BRLeadSources.GetLeadSourcesByUser(user, EnumProgram.Inhouse))
       .ContinueWith(
-      (task1) =>
+      task1 =>
       {
         if (task1.IsFaulted)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error, "Mail Outs Configuration");
+          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error, "Mail Outs Configuration");
           StaEnd();
           return false;
         }
-        else
+        if (task1.IsCompleted)
         {
-          if (task1.IsCompleted)
+          List<LeadSourceByUser> data = task1.Result;
+          if (data.Count > 0)
           {
-            List<LeadSourceByUser> data = task1.Result;
-            if (data.Count > 0)
-            {
-              cbxLeadSource.ItemsSource = data;
-              cbxLeadSource.SelectedIndex = 0;
-            }
+            cbxLeadSource.ItemsSource = data;
+            cbxLeadSource.SelectedIndex = 0;
           }
-          StaEnd();
-          return false;
         }
+        StaEnd();
+        return false;
       },
       TaskScheduler.FromCurrentSynchronizationContext()
       );
@@ -193,31 +189,28 @@ namespace IM.MailOutsConfig.Forms
     /// </history>
     public void DoGetMailOuts(string ls)
     {
-      Task.Factory.StartNew(() => BRMailOuts.GetMailOuts(ls,-1))
+      Task.Factory.StartNew(() => BRMailOuts.GetMailOuts(ls))
       .ContinueWith(
-      (task1) =>
+      task1 =>
       {
         if (task1.IsFaulted)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error, "Mail Outs Configuration");
+          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error, "Mail Outs Configuration");
           StaEnd();
           return false;
         }
-        else
+        if (task1.IsCompleted)
         {
-          if (task1.IsCompleted)
+          List<MailOut> data = task1.Result;
+          if (data.Count > 0)
           {
-            List<MailOut> data = task1.Result;
-            if (data.Count > 0)
-            {
-              lsbxMailOuts.ItemsSource = data;
-              txtbMailOutsNumber.Text = data.Count.ToString();
-              lsbxMailOuts.SelectedIndex = 0;
-            }
+            lsbxMailOuts.ItemsSource = data;
+            txtbMailOutsNumber.Text = data.Count.ToString();
+            lsbxMailOuts.SelectedIndex = 0;
           }
-          StaEnd();
-          return false;
         }
+        StaEnd();
+        return false;
       },
       TaskScheduler.FromCurrentSynchronizationContext()
       );
@@ -233,33 +226,30 @@ namespace IM.MailOutsConfig.Forms
     {
       Task.Factory.StartNew(() => BRCountries.GetCountries(1))
       .ContinueWith(
-      (task1) =>
+      task1 =>
       {
         if (task1.IsFaulted)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
           StaEnd();
           return false;
         }
-        else
+        if (task1.IsCompleted)
         {
-          if (task1.IsCompleted)
+          List<CountryShort> data = task1.Result;
+          if (data.Count > 0)
           {
-            List<CountryShort> data = task1.Result;
-            if (data.Count > 0)
-            {
-              data.Insert(0, new CountryShort() { coN = "ANY ONE", coID = "ANY ONE" });
-              cbxCountry.ItemsSource = data;
-              cbxCountry.SelectedIndex = 0;
-            }
-            else
-            {
-              cbxCountry.Text = "No data found - Press Ctrl+F5 to load Data";
-            }
+            data.Insert(0, new CountryShort { coN = "ANY ONE", coID = "ANY ONE" });
+            cbxCountry.ItemsSource = data;
+            cbxCountry.SelectedIndex = 0;
           }
-          StaEnd();
-          return false;
+          else
+          {
+            cbxCountry.Text = "No data found - Press Ctrl+F5 to load Data";
+          }
         }
+        StaEnd();
+        return false;
       },
       TaskScheduler.FromCurrentSynchronizationContext()
       );
@@ -275,34 +265,31 @@ namespace IM.MailOutsConfig.Forms
     {
       Task.Factory.StartNew(() => BRAgencies.GetAgencies(1))
       .ContinueWith(
-      (task1) =>
+      task1 =>
       {
         if (task1.IsFaulted)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
           StaEnd();
           return false;
         }
-        else
+        if (task1.IsCompleted)
         {
-          if (task1.IsCompleted)
+          task1.Wait(1000);
+          List<AgencyShort> data = task1.Result;
+          if (data.Count > 0)
           {
-            task1.Wait(1000);
-            List<AgencyShort> data = task1.Result;
-            if (data.Count > 0)
-            {
-              data.Insert(0, new AgencyShort() { agN = "ANY ONE", agID = "ANY ONE" });
-              cbxAgency.ItemsSource = data;
-              cbxAgency.SelectedIndex = 0;
-            }
-            else
-            {
-              cbxAgency.Text="No data found - Press Ctrl+F5 to load Data";
-            }
+            data.Insert(0, new AgencyShort { agN = "ANY ONE", agID = "ANY ONE" });
+            cbxAgency.ItemsSource = data;
+            cbxAgency.SelectedIndex = 0;
           }
-          StaEnd();
-          return false;
+          else
+          {
+            cbxAgency.Text="No data found - Press Ctrl+F5 to load Data";
+          }
         }
+        StaEnd();
+        return false;
       },
       TaskScheduler.FromCurrentSynchronizationContext()
       );
@@ -317,34 +304,31 @@ namespace IM.MailOutsConfig.Forms
     {
       Task.Factory.StartNew(() => BRMarkets.GetMarkets(1))
       .ContinueWith(
-      (task1) =>
+      task1 =>
       {
         if (task1.IsFaulted)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
           StaEnd();
           return false;
         }
-        else
+        if (task1.IsCompleted)
         {
-          if (task1.IsCompleted)
+          task1.Wait(1000);
+          List<MarketShort> data = task1.Result;
+          if (data.Count > 0)
           {
-            task1.Wait(1000);
-            List<MarketShort> data = task1.Result;
-            if (data.Count > 0)
-            {
-              data.Insert(0, new MarketShort() { mkN = "ANY ONE", mkID = "ANY ONE" });
-              cbxMarket.ItemsSource = data;
-              cbxMarket.SelectedIndex = 0;
-            }
-            else
-            {
-              cbxMarket.Text = "No data found - Press Ctrl+F5 to load Data";
-            }
+            data.Insert(0, new MarketShort { mkN = "ANY ONE", mkID = "ANY ONE" });
+            cbxMarket.ItemsSource = data;
+            cbxMarket.SelectedIndex = 0;
           }
-          StaEnd();
-          return false;
+          else
+          {
+            cbxMarket.Text = "No data found - Press Ctrl+F5 to load Data";
+          }
         }
+        StaEnd();
+        return false;
       },
       TaskScheduler.FromCurrentSynchronizationContext()
       );
@@ -360,34 +344,31 @@ namespace IM.MailOutsConfig.Forms
     {
       Task.Factory.StartNew(() => BRMailOuts.UpdateMailOut(mo))
       .ContinueWith(
-      (task1) =>
+      task1 =>
       {
         if (task1.IsFaulted)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
           StaEnd();
           return false;
         }
-        else
+        if (task1.IsCompleted)
         {
-          if (task1.IsCompleted)
+          task1.Wait(1000);
+          int data = task1.Result;
+          if (data > 0)
           {
-            task1.Wait(1000);
-            int data = task1.Result;
-            if (data > 0)
-            {
-              UIHelper.ShowMessage("Data saved successfully", MessageBoxImage.Information, "Mail Outs Configuration");
-              EditModeOff();
-              cbxLeadSource_SelectionChanged(this, null);
-            }
-            else
-            {
-              UIHelper.ShowMessage("We have a problem", MessageBoxImage.Error, "Mail Outs Configuration");
-            }
+            UIHelper.ShowMessage("Data saved successfully", MessageBoxImage.Information, "Mail Outs Configuration");
+            EditModeOff();
+            cbxLeadSource_SelectionChanged(this, null);
           }
-          StaEnd();
-          return false;
+          else
+          {
+            UIHelper.ShowMessage("We have a problem", MessageBoxImage.Error, "Mail Outs Configuration");
+          }
         }
+        StaEnd();
+        return false;
       },
       TaskScheduler.FromCurrentSynchronizationContext()
       );
@@ -403,42 +384,41 @@ namespace IM.MailOutsConfig.Forms
     {
       Task.Factory.StartNew(() => BRMailOuts.DeleteMailOut(mo))
       .ContinueWith(
-      (task1) =>
+      task1 =>
       {
         if (task1.IsFaulted)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
           StaEnd();
           return false;
         }
-        else
+        if (task1.IsCompleted)
         {
-          if (task1.IsCompleted)
+          task1.Wait(1000);
+          int data = task1.Result;
+          if (data > 0)
           {
-            task1.Wait(1000);
-            int data = task1.Result;
-            if (data > 0)
-            {
-              UIHelper.ShowMessage("Delete MailOut successfully", MessageBoxImage.Information, "Mail Outs Configuration");
-              EditModeOff();
-              cbxLeadSource_SelectionChanged(this, null);
-            }
-            else
-            {
-              UIHelper.ShowMessage("We have a problem", MessageBoxImage.Error, "Mail Outs Configuration");
-            }
+            UIHelper.ShowMessage("Delete MailOut successfully", MessageBoxImage.Information, "Mail Outs Configuration");
+            EditModeOff();
+            cbxLeadSource_SelectionChanged(this, null);
           }
-          StaEnd();
-          return false;
+          else
+          {
+            UIHelper.ShowMessage("We have a problem", MessageBoxImage.Error, "Mail Outs Configuration");
+          }
         }
+        StaEnd();
+        return false;
       },
       TaskScheduler.FromCurrentSynchronizationContext()
       );
     }
+
     /// <summary>
     /// Inserta un MailOut Nuevo
     /// </summary>
-    /// <param name="mo">MailOut</param>
+    /// <param name="mols">MailOut</param>
+    /// <param name="moCode"></param>
     /// <history>
     /// [erosado] 20/04/2016 Created
     /// </history>
@@ -446,40 +426,37 @@ namespace IM.MailOutsConfig.Forms
     {
       Task.Factory.StartNew(() => BRMailOuts.InsertMailOut(mols,moCode))
       .ContinueWith(
-      (task1) =>
+      task1 =>
       {
         if (task1.IsFaulted)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
+          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
           StaEnd();
           return false;
         }
-        else
+        if (task1.IsCompleted)
         {
-          if (task1.IsCompleted)
+          task1.Wait(1000);
+          int data = task1.Result;
+          if (data != -1)
           {
-            task1.Wait(1000);
-            int data = task1.Result;
-            if (data != -1)
+            if (data != 0)
             {
-              if (data != 0)
-              {
-                UIHelper.ShowMessage("Insert MailOut successfully", MessageBoxImage.Information, "Mail Outs Configuration");
-                cbxLeadSource_SelectionChanged(this, null);
-              }
-              else
-              {
-                UIHelper.ShowMessage("Mail Out name already exists.", MessageBoxImage.Warning, "Mail Outs Configuration");
-              }
+              UIHelper.ShowMessage("Insert MailOut successfully", MessageBoxImage.Information, "Mail Outs Configuration");
+              cbxLeadSource_SelectionChanged(this, null);
             }
             else
             {
-              UIHelper.ShowMessage("We have a problem", MessageBoxImage.Error, "Mail Outs Configuration");
+              UIHelper.ShowMessage("Mail Out name already exists.", MessageBoxImage.Warning, "Mail Outs Configuration");
             }
           }
-          StaEnd();
-          return false;
+          else
+          {
+            UIHelper.ShowMessage("We have a problem", MessageBoxImage.Error, "Mail Outs Configuration");
+          }
         }
+        StaEnd();
+        return false;
       },
       TaskScheduler.FromCurrentSynchronizationContext()
       );
@@ -515,7 +492,7 @@ namespace IM.MailOutsConfig.Forms
     /// <history>
     /// [erosado] 23/Mar/2016 Created
     /// </history>
-    private void CkeckKeysPress(System.Windows.Controls.Primitives.StatusBarItem statusBar, Key key)
+    private void CkeckKeysPress(StatusBarItem statusBar, Key key)
     {
       var keyPess = Keyboard.GetKeyStates(key).ToString();
 
@@ -536,7 +513,7 @@ namespace IM.MailOutsConfig.Forms
     /// <history>
     /// [erosado] 23/Mar/2016 Created
     /// </history>
-    private void KeyDefault(System.Windows.Controls.Primitives.StatusBarItem statusBar)
+    private void KeyDefault(StatusBarItem statusBar)
     {
       statusBar.FontWeight = FontWeights.Normal;
       statusBar.Foreground = Brushes.Gray;
@@ -549,26 +526,24 @@ namespace IM.MailOutsConfig.Forms
     /// [erosado] 23/Mar/2016 Created
     /// </history>
     /// <param name="message">mensaje</param>
-    private void StaStart(String message)
+    private void StaStart(string message)
     {
       lblStatusBarMessage.Content = message;
       imgStatusBarMessage.Visibility = Visibility.Visible;
-      this.Cursor = Cursors.Wait;
+      Cursor = Cursors.Wait;
 
     }
-
     /// <summary>
     /// Indica en la barra de estado que se termina un proceso
     /// </summary>
     /// <history>
     /// [erosado] 23/Mar/2016 Created
     /// </history>
-    /// <param name="message">mensaje</param>
     private void StaEnd()
     {
       lblStatusBarMessage.Content = null;
       imgStatusBarMessage.Visibility = Visibility.Hidden;
-      this.Cursor = null;
+      Cursor = null;
     }
 
     /// <summary>
@@ -645,7 +620,7 @@ namespace IM.MailOutsConfig.Forms
     /// <history>
     /// [erosado] 19/04/2016  Created.
     /// </history>
-    public void loadDataSource()
+    public void LoadDataSource()
     {
       StaStart("Loading LeadSources, Markets, Agencies, Countries ...");
       //Cargamos LeadSource

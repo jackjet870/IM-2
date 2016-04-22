@@ -1,9 +1,8 @@
-﻿using IM.Base.Forms;
-using IM.Model.Classes;
-using IM.Model.Enums;
-using IM.MailOutsConfig.Forms;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Threading;
+using IM.Base.Forms;
+using IM.MailOutsConfig.Forms;
+using IM.Model.Classes;
 
 namespace IM.MailOutsConfig
 {
@@ -25,7 +24,7 @@ namespace IM.MailOutsConfig
     /// <history>
     ///   [erosado]  09/Mar/2016 Created
     /// </history>
-    public App() : base()
+    public App()
     {
       Dispatcher.UnhandledException += App_UnhandledException;
     }
@@ -71,7 +70,7 @@ namespace IM.MailOutsConfig
       frm.ShowDialog();
       if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
       {
-        Application.Current.Shutdown();
+        Current.Shutdown();
       }
     }
     #endregion
