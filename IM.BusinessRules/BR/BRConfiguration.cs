@@ -27,23 +27,6 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region GetServerDateTime
-    /// <summary>
-    /// Obtiene la fecha y hora del servidor
-    /// </summary>
-    /// <returns></returns>
-    /// <history>
-    /// [lchairez] 10/03/2016 Created.
-    /// </history>
-    public static DateTime GetServerDateTime()
-    {
-      using(var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var dateTime =  dbContext.Database.SqlQuery<DateTime>("SELECT GETDATE()");
-        return dateTime.AsEnumerable().First();
-      }
-    }
-    #endregion
+        
   }
 }

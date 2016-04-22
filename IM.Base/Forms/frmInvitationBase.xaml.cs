@@ -139,7 +139,7 @@ namespace IM.Base.Forms
       BackupOriginalValues();
       EnableControls();
 
-      _serverDateTime = IM.BusinessRules.BR.BRConfiguration.GetServerDateTime();
+      _serverDateTime = IM.BusinessRules.BR.BRHelpers.GetServerDate();
       _bookingDate = txtBookingDate.SelectedDate.HasValue ? txtBookingDate.SelectedDate.Value : (DateTime?)null;
       _closeDate = IM.BusinessRules.BR.BRConfiguration.GetCloseDate();
 
