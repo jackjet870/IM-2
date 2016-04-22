@@ -5826,6 +5826,9 @@
         <Function Name="USP_OR_ActualizarFechasTemporadas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CurrentYear" Type="int" Mode="In" />
         </Function>
+        <Function Name="USP_OR_AddAccessAdministrator" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PlaceType" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_CancelGiftsReceipt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Receipt" Type="int" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
@@ -10514,13 +10517,13 @@
           </Key>
           <Property Name="srID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="srN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="srHoursDif" Type="Int16" Nullable="false" />
+          <Property Name="srHoursDif" Type="Int16" Nullable="false" DefaultValue="0" />
           <Property Name="srAddOut" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="srDBMaint" Type="Boolean" Nullable="false" />
+          <Property Name="srDBMaint" Type="Boolean" Nullable="false" DefaultValue="False" />
           <Property Name="srWH" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="srar" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="srA" Type="Boolean" Nullable="false" />
-          <Property Name="srcu" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="srA" Type="Boolean" Nullable="false" DefaultValue="True" />
+          <Property Name="srcu" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="US" />
           <Property Name="srGiftsRcptCloseD" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="srCxCCloseD" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="srAppointment" Type="Boolean" Nullable="false" />
@@ -10529,9 +10532,9 @@
           <Property Name="srMealTicketsCloseD" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="srSalesCloseD" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="srPropertyOpera" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="srUseSistur" Type="Boolean" Nullable="false" />
-          <Property Name="srCECOID" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="srCEBEID" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="srUseSistur" Type="Boolean" Nullable="false" DefaultValue="True" />
+          <Property Name="srCECOID" Type="String" MaxLength="2" FixedLength="false" Unicode="false" DefaultValue="" />
+          <Property Name="srCEBEID" Type="String" MaxLength="2" FixedLength="false" Unicode="false" DefaultValue="" />
           <NavigationProperty Name="Area" Relationship="Self.FK_SalesRooms_Areas" FromRole="SalesRooms" ToRole="Areas" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Currency" Relationship="Self.FK_SalesRooms_Currencies" FromRole="SalesRooms" ToRole="Currencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Efficiencies" Relationship="Self.FK_Efficiency_SalesRooms" FromRole="SalesRooms" ToRole="Efficiency" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -16799,6 +16802,9 @@
           <FunctionImport Name="USP_OR_RptSalesByProgramLeadSourceMarket" ReturnType="Collection(IMModel.RptSalesByProgramLeadSourceMarket)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_AddAccessAdministrator">
+            <Parameter Name="PlaceType" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -26130,6 +26136,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_AddAccessAdministrator" FunctionName="IMModel.Store.USP_OR_AddAccessAdministrator" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

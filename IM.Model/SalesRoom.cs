@@ -17,6 +17,13 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SalesRoom()
         {
+            this.srHoursDif = 0;
+            this.srDBMaint = false;
+            this.srA = true;
+            this.srcu = "US";
+            this.srUseSistur = true;
+            this.srCECOID = "";
+            this.srCEBEID = "";
             this.Efficiencies = new HashSet<Efficiency>();
             this.GiftsReceipts = new HashSet<GiftsReceipt>();
             this.MealTicketsFolios = new HashSet<MealTicketFolio>();

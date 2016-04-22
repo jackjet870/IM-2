@@ -4284,5 +4284,14 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptSalesByProgramLeadSourceMarket>("USP_OR_RptSalesByProgramLeadSourceMarket", dateFromParameter, dateToParameter);
         }
+    
+        public virtual int USP_OR_AddAccessAdministrator(string placeType)
+        {
+            var placeTypeParameter = placeType != null ?
+                new ObjectParameter("PlaceType", placeType) :
+                new ObjectParameter("PlaceType", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_AddAccessAdministrator", placeTypeParameter);
+        }
     }
 }
