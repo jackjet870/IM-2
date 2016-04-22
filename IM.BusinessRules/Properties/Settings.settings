@@ -89,5 +89,17 @@
     <Setting Name="USP_OR_RptProductionByAgencyMarketHotelOutside_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">120</Value>
     </Setting>
+    <Setting Name="USP_OR_RptProductionByAgencySalesRoomOutside_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">180</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByPROutside_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByGiftInvitation_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByGiftInvitationSalesRoom_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

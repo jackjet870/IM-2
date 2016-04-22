@@ -16,6 +16,8 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
  
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical" Name="pnlLeadSources" Width="auto" Height="auto" Grid.Column="0" Visibility="Visible">
@@ -37,8 +39,28 @@
                 <StatusBarItem x:Name="StatusBarNumLS" Content="" Width="200" HorizontalContentAlignment="Left" />
             </StatusBar>
         </StackPanel>
+        
+        <StackPanel Orientation="Vertical" Name="pnlLeadSourcesPaymentComm" Width="auto" Height="auto" Grid.Column="1" Visibility="Visible">
+            <CheckBox Name="chkAllLeadSourcesPaymentComm" Content="All Lead Sources" VerticalAlignment="Top" Margin="10" Checked="chkAllLeadSourcesPaymentComm_Checked" Unchecked="chkAllLeadSourcesPaymentComm_Checked"/>
+            <DataGrid Name="grdLeadSourcesPaymentComm" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdLeadSourcesPaymentComm_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding lsN}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Content" Value="Lead Sources"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StatusBar Height="30" Width="200" VerticalAlignment="Bottom">
+                <StatusBarItem x:Name="StatusBarNumLSPC" Content="" Width="200" HorizontalContentAlignment="Left" />
+            </StatusBar>
+        </StackPanel>
 
-        <StackPanel Orientation="Vertical" Name="pnlPaymentTypes" Width="auto" Height="auto" Grid.Column="1" Visibility="Visible">
+        <StackPanel Orientation="Vertical" Name="pnlPaymentTypes" Width="auto" Height="auto" Grid.Column="2" Visibility="Visible">
             <CheckBox Name="chkAllPaymentTypes" Content="All Payment Types" VerticalAlignment="Top" Margin="10" Checked="chkAllPaymentTypes_Checked" Unchecked="chkAllPaymentTypes_Checked"/>
             <DataGrid Name="grdPaymentTypes" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdPaymentTypes_SelectionChanged">
                 <DataGrid.Columns>
@@ -58,7 +80,7 @@
             </StatusBar>
         </StackPanel>
 
-        <StackPanel Orientation="Vertical" Name="pnlPR" Width="auto" Height="auto" Grid.Column="2" Visibility="Visible">
+        <StackPanel Orientation="Vertical" Name="pnlPR" Width="auto" Height="auto" Grid.Column="3" Visibility="Visible">
             <CheckBox Name="chkAllPR" Content="All PR" VerticalAlignment="Top" Margin="10" Checked="chkAllPR_Checked" Unchecked="chkAllPR_Checked"/>
             <DataGrid Name="grdPR" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdPR_SelectionChanged">
                 <DataGrid.Columns>
@@ -85,7 +107,7 @@
             </StatusBar>
         </StackPanel>
 
-        <StackPanel Orientation="Vertical" Name="pnlChargeTo" Width="auto" Height="auto" Grid.Column="3" Visibility="Visible">
+        <StackPanel Orientation="Vertical" Name="pnlChargeTo" Width="auto" Height="auto" Grid.Column="4" Visibility="Visible">
             <CheckBox Name="chkAllChargeTo" Content="All Charge To" VerticalAlignment="Top" Margin="10" Checked="chkAllChargeTo_Checked" Unchecked="chkAllChargeTo_Checked"/>
             <DataGrid Name="grdChargeTo" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdChargeTo_SelectionChanged">
                 <DataGrid.Columns>
@@ -105,7 +127,7 @@
             </StatusBar>
         </StackPanel>
 
-        <StackPanel Orientation="Vertical" Name="pnlGifts" Width="auto" Height="auto" Grid.Column="4" Visibility="Visible">
+        <StackPanel Orientation="Vertical" Name="pnlGifts" Width="auto" Height="auto" Grid.Column="5" Visibility="Visible">
             <CheckBox Name="chkAllGifts" Content="All Gifts" VerticalAlignment="Top" Margin="10" Checked="chkAllGifts_Checked" Unchecked="chkAllGifts_Checked"/>
             <DataGrid Name="grdGifts" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdGifts_SelectionChanged">
                 <DataGrid.Columns>
@@ -125,7 +147,27 @@
             </StatusBar>
         </StackPanel>
 
-        <Grid Grid.Column="6">
+        <StackPanel Orientation="Vertical" Name="pnlGiftsProdGift" Width="auto" Height="auto" Grid.Column="6" Visibility="Visible">
+            <CheckBox Name="chkAllGiftsProdGift" Content="All Gifts" VerticalAlignment="Top" Margin="10" Checked="chkAllGiftsProdGift_Checked" Unchecked="chkAllGiftsProdGift_Checked"/>
+            <DataGrid Name="grdGiftsProdGift" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdGiftsProdGrift_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding giN}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Content" Value="Gifts"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StatusBar Height="30" Width="200" VerticalAlignment="Bottom">
+                <StatusBarItem x:Name="StatusBarNumGPG" Content="" Width="200" HorizontalContentAlignment="Left" />
+            </StatusBar>
+        </StackPanel>
+
+        <Grid Grid.Column="7">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>

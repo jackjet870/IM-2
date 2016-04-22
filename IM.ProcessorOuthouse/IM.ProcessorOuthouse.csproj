@@ -122,6 +122,7 @@
     </Compile>
     <Compile Include="Classes\clsFormatReport.cs" />
     <Compile Include="Classes\clsReports.cs" />
+    <Compile Include="Classes\GetSettings.cs" />
     <Compile Include="Forms\frmFilterDateRange.xaml.cs">
       <DependentUpon>frmFilterDateRange.xaml</DependentUpon>
     </Compile>

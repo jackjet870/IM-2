@@ -96,5 +96,37 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    #region GetLeadSourcesById
+
+    /// <summary>
+    ///Método para obtener una lista de LeadSources por id.
+    /// </summary>
+    /// <param name="lsIDList">Lista de id de Agency</param>
+    /// <returns>List<LeadSourceShort></returns>
+    /// <history>
+    /// [vku] 20/Abr/2016 Created
+    /// </history>
+    public static List<LeadSource> GetLeadSourceById(IEnumerable<string> lsIDList)
+    {
+      List<LeadSource> lstgetLeadSources;
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        lstgetLeadSources = dbContext.LeadSources.Where(x => lsIDList.Contains(x.lsID)).
+          Select(x => new
+          {
+            x.lsID,
+            x.lsN
+          }).AsEnumerable().
+          Select(x => new LeadSource
+          {
+            lsID = x.lsID,
+            lsN = x.lsN
+          }).ToList();
+      }
+      return lstgetLeadSources;
+    }
+
+    #endregion GetLeadSourcesById
+
   }
 }

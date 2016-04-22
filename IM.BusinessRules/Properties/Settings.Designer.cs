@@ -370,5 +370,53 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_RptProductionByAgencyMarketHotelOutside_Timeout"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("180")]
+        public int USP_OR_RptProductionByAgencySalesRoomOutside_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByAgencySalesRoomOutside_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByAgencySalesRoomOutside_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_OR_RptProductionByPROutside_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByPROutside_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByPROutside_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_OR_RptProductionByGiftInvitation_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByGiftInvitation_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByGiftInvitation_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_OR_RptProductionByGiftInvitationSalesRoom_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByGiftInvitationSalesRoom_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByGiftInvitationSalesRoom_Timeout"] = value;
+            }
+        }
     }
 }

@@ -39,10 +39,12 @@ namespace IM.ProcessorOuthouse.Forms
     private bool _blnOnlyOneRegister;
 
     public List<int> _lstLeadSources = new List<int>();
+    public List<int> _lstLeadSourcesPaymentComm = new List<int>();
     public List<int> _lstPaymentTypes = new List<int>();
     public List<int> _lstPRs = new List<int>();
     public List<int> _lstChargeTo = new List<int>();
     public List<int> _lstGifts = new List<int>();
+    public List<int> _lstGiftsProdGift = new List<int>();
     public string _cboDateSelected;
     public string _cboFolSeriesSelected;
     public DateTime _dtmStart = DateTime.Now.Date;
@@ -302,7 +304,7 @@ namespace IM.ProcessorOuthouse.Forms
           _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true);
             break;
         case "PR Payment Commissions":
-          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true);
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSourcesPaymentComm: true, blnAllLeadSourcePaymentComm: true, enumPeriod : EnumPeriod.pdWeekly );
           break;
         case "Production by Agency":
         case "Production by Agency & Sales Room":
@@ -310,7 +312,7 @@ namespace IM.ProcessorOuthouse.Forms
             break;
         case "Production by Gift (Invitation)":
         case "Production by Gift (Invitation) & Sales Room":
-            _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnGifts: true, blnAllGifts: true);
+            _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnGiftProdGift: true, blnAllGiftProdGift: true);
             break;
         case "Production by Nationality":
         case "Production by Nationality & Sales Room":
@@ -386,7 +388,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Gifts Received by Sales Room
         case "Gifts Received by Sales Room":
           List<object> lstRptGiftsReceivedBySR = BRReportsByLeadSource.GetRptGiftsReceivedBySR(
-          _frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, 
+          _frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
           string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
           string.Join(",", _frmFilter.grdChargeTo.SelectedItems.Cast<ChargeTo>().Select(c => c.ctID).ToList()),
           string.Join(",", _frmFilter.grdGifts.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList()));
@@ -424,7 +426,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region PR Payment Commissions
         case "PR Payment Commissions":
           List<RptProductionByPROuthouse> lstRptProductionByPROuthouse = BRReportsByLeadSource.GetRptProductionByPROuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
-            string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
+            string.Join(",", _frmFilter.grdLeadSourcesPaymentComm.SelectedItems.Cast<LeadSource>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
             EnumFilterDeposit.fdDepositShowsNoDeposit,
@@ -432,14 +434,14 @@ namespace IM.ProcessorOuthouse.Forms
           if (lstRptProductionByPROuthouse.Any())
           {
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
-            filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList())));
+            filters.Add(new Tuple<string, string>("Lead Sources", string.Join(",", _frmFilter.grdLeadSourcesPaymentComm.SelectedItems.Cast<LeadSource>().Select(c => c.lsID).ToList())));
             finfo = clsReports.ExportRptProductionByPROuthouse(strReport, dateRangeFileNameRep, filters, lstRptProductionByPROuthouse);
           }
           else
           {
             UIHelper.ShowMessage("There is no data");
           }
-     
+
           break;
         #endregion
 
@@ -507,6 +509,21 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Agency & Sales Room
         case "Production by Agency & Sales Room":
+          List<RptProductionByAgencySalesRoomOuthouse> lstRptProductionByAgencySalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByAgencySalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+            string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
+            "ALL",
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit);
+           if(lstRptProductionByAgencySalesRoomOuthouse.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID))));
+            finfo = clsReports.ExportRptProductionByAgencySalesRoomOuhouse(strReport, dateRangeFileNameRep, filters, lstRptProductionByAgencySalesRoomOuthouse);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
+          }
           break;
         #endregion
 
@@ -562,6 +579,112 @@ namespace IM.ProcessorOuthouse.Forms
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
             filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID))));
             finfo = clsReports.ExportRptProductionByCoupleTypeSalesRoomOuthouse(strReport, dateRangeFileNameRep, filters, lstRptProductionByCoupleTypeSalesRoomOuthouse);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
+          }
+          break;
+        #endregion
+
+        #region Production by Gift (Invitation)
+        case "Production by Gift (Invitation)":
+          List<RptProductionByGiftInvitation> lstRptProductionByGiftInvitation = BRReportsByLeadSource.GetRptProductionByGiftInvitation(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+            string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
+            "ALL",
+            EnumProgram.Outhouse,
+            string.Join(",", _frmFilter.grdGiftsProdGift.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList()),
+           EnumFilterDeposit.fdDepositShowsNoDeposit);
+          if (lstRptProductionByGiftInvitation.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID))));
+            filters.Add(new Tuple<string, string>("Gifts", string.Join(",", _frmFilter.grdGiftsProdGift.SelectedItems.Cast<GiftShort>().Select(c => c.giID))));
+            finfo = clsReports.ExportRptProductionByGiftInvitation(strReport, dateRangeFileNameRep, filters, lstRptProductionByGiftInvitation);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthose");
+          }
+          break;
+        #endregion
+
+        #region Production by Gift (Invitation) & Sales Room
+        case "Production by Gift (Invitation) & Sales Room":
+          List<RptProductionByGiftInvitationSalesRoom> lstRptProductionByGiftInvitationSalesRoom = BRReportsByLeadSource.GetRptProductionByGiftInvitationSalesRoom(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+            string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
+            "ALL",
+            EnumProgram.Outhouse,
+            string.Join(",", _frmFilter.grdGiftsProdGift.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList()),
+           EnumFilterDeposit.fdDepositShowsNoDeposit);
+          if (lstRptProductionByGiftInvitationSalesRoom.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID))));
+            filters.Add(new Tuple<string, string>("Gifts", string.Join(",", _frmFilter.grdGiftsProdGift.SelectedItems.Cast<GiftShort>().Select(c => c.giID))));
+            finfo = clsReports.ExportRptProductionByGiftInvitationSalesRoom(strReport, dateRangeFileNameRep, filters, lstRptProductionByGiftInvitationSalesRoom);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
+          }
+          break;
+        #endregion
+
+        #region Production by Guest Status
+        case "Production by Guest Status":
+          List<RptProductionByGuestStatusOuthouse> lstRptProductionByGuestStatusOuthouse = BRReportsByLeadSource.GetRptProductionByGuestStatusOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+            string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
+            "ALL",
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdAll);
+          if (lstRptProductionByGuestStatusOuthouse.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID))));
+            finfo = clsReports.ExportRptProductionByGuestStatusOuthouse(strReport, dateRangeFileNameRep, filters, lstRptProductionByGuestStatusOuthouse);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
+          }
+          break;
+        #endregion
+
+        #region Production by Nationality
+        case "Production by Nationality":
+          List<RptProductionByNationalityOuthouse> lstRptProductionByNationalityOuthouse = BRReportsByLeadSource.GetRptProductionByNationalityOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
+            "ALL",
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit,
+            _enumSaveCourtesyTours);
+          if (lstRptProductionByNationalityOuthouse.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID))));
+            finfo = clsReports.ExportRptProductionByNationalityOuthouse(strReport, dateRangeFileNameRep, filters, lstRptProductionByNationalityOuthouse);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
+          }
+          break;
+        #endregion
+
+        #region Production by Nationality & Sales Room
+        case "Production by Nationality & Sales Room":
+          List<RptProductionByNationalitySalesRoomOuthouse> lstRptProductionByNationalitySalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByNationalitySalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
+             "ALL",
+             EnumProgram.Outhouse,
+             EnumFilterDeposit.fdDepositShowsNoDeposit,
+             _enumSaveCourtesyTours);
+          if (lstRptProductionByNationalitySalesRoomOuthouse.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID))));
+            finfo = clsReports.ExportRptProductionByNationalitySalesRoomOuthouse(strReport, dateRangeFileNameRep, filters, lstRptProductionByNationalitySalesRoomOuthouse);
           }
           else
           {

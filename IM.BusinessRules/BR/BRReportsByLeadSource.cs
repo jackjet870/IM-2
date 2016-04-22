@@ -762,6 +762,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
+        dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByPROutside_Timeout;
         return dbContext.USP_OR_RptProductionByPROutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(programa), Convert.ToByte(filterDeposit), Convert.ToBoolean(basedOnBooking)).ToList();
       }
     }
@@ -810,6 +811,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
+        dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByAgencySalesRoomOutside_Timeout;
         return dbContext.USP_OR_RptProductionByAgeSalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposit)).ToList();
       }
     }
@@ -827,20 +829,42 @@ namespace IM.BusinessRules.BR
     /// <param name="filtersDeposits">Filtro de depositos
     /// 0. Sin filtro, 1. Con deposito(Deposits), 2. Sin deposito(Flyers), 3. Con deposito y shows sin deposito(Deposits & Flyers Show)
     /// </param>
-    /// <param name="salesByMembershipType">Indica si se desean las ventas por tipo de membresia</param>
+    /// <param name="salesByMemberShipType">Indica si se desean las ventas por tipo de membresia</param>
     /// <history>
     ///   [vku] 15/Abr/2016 Created
     /// </history>
-    public static List<RptProductionByAgencyOuthouse> GetRptProductionByAgencyOuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSalesByMemberShipType salesByMembershipType = EnumSalesByMemberShipType.sbmNoDetail)
+    public static List<RptProductionByAgencyOuthouse> GetRptProductionByAgencyOuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSalesByMemberShipType salesByMemberShipType = EnumSalesByMemberShipType.sbmNoDetail)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.USP_OR_RptProductionByAgencyOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToBoolean(salesByMembershipType)).ToList();
+        return dbContext.USP_OR_RptProductionByAgencyOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToBoolean(salesByMemberShipType)).ToList();
       }
     }
     #endregion
 
     #region GetRptProductionByAgencySalesRoomOuthouse
+    /// <summary>
+    ///  Obtiene los datos para el reporte de produccion por agencia y sala (Outside)
+    /// </summary>
+    /// <param name="dtmStart">Fecha desde</param>
+    /// <param name="dtmEnd">Fecha hasta</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <param name="PRs">Claves de PRs</param>
+    /// <param name="program">Clave de programa</param>
+    /// <param name="filtersDeposits">Filtro de depositos
+    /// 0. Sin filtro, 1. Con deposito(Deposits), 2. Sin deposito(Flyers), 3. Con deposito y shows sin deposito(Deposits & Flyers Show)
+    /// </param>
+    /// <param name="salesByMemberShipType">Indica si se desean las ventas por tipo de membresia</param>
+    /// <history>
+    ///   [vku] 20/Abr/2016 Created
+    /// </history>
+    public static List<RptProductionByAgencySalesRoomOuthouse> GetRptProductionByAgencySalesRoomOuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSalesByMemberShipType salesByMemberShipType = EnumSalesByMemberShipType.sbmNoDetail)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptProductionByAgencySalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToBoolean(salesByMemberShipType)).ToList();
+      }
+    }
     #endregion
 
     #region GetRptProductionByAgencyMarketHotelOuthouse
@@ -901,7 +925,7 @@ namespace IM.BusinessRules.BR
     /// <param name="leadSources">Claves de Lead Sources</param>
     /// <param name="PRs">Claves de PRs</param>
     /// <param name="program">Clave de programa</param>
-    /// <param name="filterDeposits">Filtro de depositos</param>
+    /// <param name="filterDeposits">Filtro de depositos
     /// 0. Sin filtro, 1. Con deposito(Deposits), 2. Sin deposito(Flyers), 3. Con deposito y shows sin deposito(Deposits & Flyers Show)
     /// </param>
     /// <history>
@@ -912,6 +936,135 @@ namespace IM.BusinessRules.BR
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_RptProductionByCoupleTypeSalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
+      }
+    }
+    #endregion
+
+    #region GetRptProductionByGiftInvitation
+    /// <summary>
+    ///   Obtiene los datos para el reporte de produccion por regalo de invitacion
+    /// </summary>
+    /// <param name="dtmStart">Fecha de desde</param>
+    /// <param name="dtmEnd">Fecha hasta</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <param name="PRs">Claves de PRs</param>
+    /// <param name="program">Clave de programa</param>
+    /// <param name="gifts">Claves de regalos</param>
+    /// <param name="filterDeposits">Filtro de depositos
+    ///  0. Sin filtro, 1. Con deposito(Deposits), 2. Sin deposito(Flyers), 3. Con deposito y shows sin deposito(Deposits & Flyers Show)
+    /// </param>
+    /// <history>
+    ///   [vku] 21/Abr/2016 Created
+    /// </history>
+    public static List<RptProductionByGiftInvitation> GetRptProductionByGiftInvitation(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, string gifts = "ALL", EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+         dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByGiftInvitation_Timeout;
+        return dbContext.USP_OR_RptProductionByGiftInvitation(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), gifts, Convert.ToByte(filterDeposits)).ToList();
+      }
+    }
+    #endregion
+
+    #region GetRptProductionByGiftInvitationSalesRoom
+    /// <summary>
+    ///   Obtiene los datos para el reporte de produccion por regalo de invitacion y sala
+    /// </summary>
+    /// <param name="dtmStart">Fecha de desde</param>
+    /// <param name="dtmEnd">Fecha hasta</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <param name="PRs">Claves de PRs</param>
+    /// <param name="program">Clave de programa</param>
+    /// <param name="gifts">Claves de regalos</param>
+    /// <param name="filterDeposits">Filtro de depositos
+    ///  0. Sin filtro, 1. Con deposito(Deposits), 2. Sin deposito(Flyers), 3. Con deposito y shows sin deposito(Deposits & Flyers Show)
+    /// </param>
+    /// <history>
+    ///   [vku] 21/Abr/2016 Created
+    /// </history>
+    public static List<RptProductionByGiftInvitationSalesRoom> GetRptProductionByGiftInvitationSalesRoom(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, string gifts = "ALL", EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptProductionByGiftInvitationSalesRoom(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), gifts, Convert.ToByte(filterDeposits)).ToList();
+      }
+    }
+    #endregion
+
+    #region GetProductionByGuestStatusOuthouse
+    /// <summary>
+    ///   Obtiene los datos para el reporte de produccion por estatus de huesped (Outside) 
+    /// </summary>
+    /// <param name="dtmStart">Fecha desde</param>
+    /// <param name="dtmEnd">Fecha hasta</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <param name="PRs">Claves de PRs</param>
+    /// <param name="program">Clave de programa</param>
+    /// <param name="filterDeposits">
+    ///  0. Sin filtro, 1. Con deposito(Deposits), 2. Sin deposito(Flyers), 3. Con deposito y shows sin deposito(Deposits & Flyers Show)
+    /// </param>
+    /// <history>
+    ///   [vku] 22/Abr/2016 Created
+    /// </history>
+    public static List<RptProductionByGuestStatusOuthouse> GetRptProductionByGuestStatusOuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptProductionByGuestStatusOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
+      }
+    }
+    #endregion
+
+    #region GetProductionByNationalityOuthouse
+    /// <summary>
+    ///   Obtiene los datos para el reporte de produccion por nacionalidad (outside)
+    /// </summary>
+    /// <param name="dtmStart">Fecha desde</param>
+    /// <param name="dtmEnd">Fecha hasta</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <param name="PRs">Claves de PRs</param>
+    /// <param name="program">Clave de programa</param>
+    /// <param name="filterDeposits">Filtro de depositos
+    ///  0. Sin filtro, 1. Con deposito(Deposits), 2. Sin deposito(Flyers), 3. Con deposito y shows sin deposito(Deposits & Flyers Show)
+    /// </param>
+    /// <param name="saveCourtesyTours">Filtro de tours de rescate y cortesia
+    /// 0. Sin filtro, 1. Excluir tours de rescate y cortesia, 2. Excluir tours de rescate y cortesia sin venta
+    /// </param>
+    /// <history>
+    ///   [vku] 22/Abr/2016 Created
+    /// </history>
+    public static List<RptProductionByNationalityOuthouse> GetRptProductionByNationalityOuthouse(DateTime dtmStart, DateTime dtmEnd,string leadSources, string PRs,EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSaveCourtesyTours saveCourtesyTours = EnumSaveCourtesyTours.sctIncludeSaveCourtesyTours)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptProductionByNationalityOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToByte(saveCourtesyTours)).ToList();
+      }
+    }
+    #endregion
+
+    #region GetProductionByNationalitySalesRoomOuthouse
+    /// <summary>
+    ///  Obtienes los datos para el reporte de produccion por nacionalidad y sala (Outside)
+    /// </summary>
+    /// <param name="dtmStart">Fecha desde</param>
+    /// <param name="dtmEnd">Fecha hasta</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <param name="PRs">Claves de PRs</param>
+    /// <param name="program">Clave de programa</param>
+    /// <param name="filterDeposits">Filtro de depositos
+    /// 0. Sin filtro, 1. Con deposito(Deposits), 2. Sin deposito(Flyers), 3. Con deposito y shows sin deposito(Deposits & Flyers Show)
+    /// </param>
+    /// <param name="saveCourtesyTours">Filtro de tours de rescate y cortesia
+    /// 0. Sin filtro, 1. Excluir tours de rescate y cortesia, 2. Excluir tours de rescate y cortesia sin venta
+    /// </param>
+    /// <history>
+    ///   [vku] 22/Abr/2016 Created
+    /// </history>
+    public static List<RptProductionByNationalitySalesRoomOuthouse> GetRptProductionByNationalitySalesRoomOuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSaveCourtesyTours saveCourtesyTours = EnumSaveCourtesyTours.sctIncludeSaveCourtesyTours)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptProductionByNationalitySalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToByte(saveCourtesyTours)).ToList();
       }
     }
     #endregion

@@ -9,8 +9,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using IM.ProcessorOuthouse.Classes;
 
 namespace IM.ProcessorOuthouse.Forms
 {
@@ -31,9 +31,15 @@ namespace IM.ProcessorOuthouse.Forms
 
       _lstGifts = BRGifts.GetGifts();
 
+      List<string> _prodByGift = GetSettings.ProductionByGift();
+      _lstGiftsProdGift = BRGifts.GetGiftsShortById(_prodByGift);
+
       _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, EnumProgram.Outhouse, "ALL");
 
-      _lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter,-1);
+      List<string> _paymentComm = GetSettings.PRPaymentCommissions();
+      _lstLeadSourcesPaymentComm = BRLeadSources.GetLeadSourceById(_paymentComm);
+  
+     _lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter,-1);
       _lstPaymentType = BRPaymentTypes.GetPaymentTypes(1);
       _lstPRs = BRPersonnel.GetPersonnel("MPS", "ALL" ,Model.Classes.StrToEnums.EnumRoleToString(Model.Enums.EnumRole.PR),1);
       _lstFoliosInvitationOuthouse = BRFoliosInvitationsOuthouse.GetFoliosInvittionsOutside(nStatus: 1);
@@ -49,10 +55,11 @@ namespace IM.ProcessorOuthouse.Forms
 
     #region Atributos
     private List<LeadSourceByUser> _lstLeadSources = new List<LeadSourceByUser>();
+    private List<LeadSource> _lstLeadSourcesPaymentComm = new List<LeadSource>();
     private List<PaymentType> _lstPaymentType = new List<PaymentType>();
     private List<PersonnelShort> _lstPRs = new List<PersonnelShort>();
     private List<ChargeTo> _lstChargeTo = new List<ChargeTo>();
-    private List<GiftShort> _lstGifts = new List<GiftShort>();
+    private List<GiftShort> _lstGifts, _lstGiftsProdGift = new List<GiftShort>();
     private List<FolioInvitationOuthouse> _lstFoliosInvitationOuthouse = new List<FolioInvitationOuthouse>();
     private List<FolioCxCPR> _lstRangeFolios= new List<FolioCxCPR>();
     private FolioInvitationOuthouse _folioInvOutFilter = new FolioInvitationOuthouse();
@@ -71,26 +78,32 @@ namespace IM.ProcessorOuthouse.Forms
     /// <history>
     ///   [vku] 22/Mar/2016 Created
     /// </history>
-    private void ConfigureGridsPanels(bool blnLeadSources, bool blnPaymentTypes, bool blnPR,
-      bool blnChargeTo, bool blnGifts, bool blnRangeFolios)
+    private void ConfigureGridsPanels(bool blnLeadSources, bool blnLeadSourcesPaymentComm, bool blnPaymentTypes, bool blnPR,
+      bool blnChargeTo, bool blnGifts, bool blnGiftProdGift, bool blnRangeFolios)
     {
       pnlLeadSources.Visibility = (blnLeadSources) ? Visibility.Visible : Visibility.Collapsed;
+      pnlLeadSourcesPaymentComm.Visibility = (blnLeadSourcesPaymentComm) ? Visibility.Visible : Visibility.Collapsed;
       pnlPaymentTypes.Visibility = (blnPaymentTypes) ? Visibility.Visible : Visibility.Collapsed;
       pnlPR.Visibility = (blnPR) ? Visibility.Visible : Visibility.Collapsed;
       pnlChargeTo.Visibility = (blnChargeTo) ? Visibility.Visible : Visibility.Collapsed;
       pnlGifts.Visibility = (blnGifts) ? Visibility.Visible : Visibility.Collapsed;
+      pnlGiftsProdGift.Visibility = (blnGiftProdGift) ? Visibility.Visible : Visibility.Collapsed;
 
       grdLeadSources.ItemsSource = (blnLeadSources) ? _lstLeadSources : null;
+      grdLeadSourcesPaymentComm.ItemsSource = (blnLeadSourcesPaymentComm) ? _lstLeadSourcesPaymentComm : null;
       grdPaymentTypes.ItemsSource = (blnPaymentTypes) ? _lstPaymentType : null;
       grdPR.ItemsSource = (blnPR) ? _lstPRs : null;
       grdChargeTo.ItemsSource = (blnChargeTo) ? _lstChargeTo : null;
       grdGifts.ItemsSource = (blnGifts) ? _lstGifts : null;
-      
+      grdGiftsProdGift.ItemsSource = (blnGiftProdGift) ? _lstGiftsProdGift : null;
+
       StatusBarNumPT.Content = (blnPaymentTypes) ? string.Format("{0}/{1} Selected PaymentTypes", 0, _lstPaymentType.Count) : "";
       StatusBarNumPR.Content = (blnPR) ? string.Format("{0}/{1} Selected PRs", 0, _lstPRs.Count) : "";
       StatusBarNumCT.Content = (blnChargeTo) ? string.Format("{0}/{1} Selected ChargeTo", 0, _lstChargeTo.Count) : "";
       StatusBarNumG.Content = (blnGifts) ? string.Format("{0}/{1} Selected Gifts", 0, _lstGifts.Count) : "";
+      StatusBarNumGPG.Content = (blnGiftProdGift) ? string.Format("{0}/{1} Selected Gifts", 0, _lstGiftsProdGift.Count) : "";
       StatusBarNumLS.Content = (blnLeadSources) ? string.Format("{0}/{1} Selected LeadSources", 0, _lstLeadSources.Count) : "";
+      StatusBarNumLSPC.Content = (blnLeadSourcesPaymentComm) ? string.Format("{0}/{1} Selected LeadSources", 0, _lstLeadSourcesPaymentComm.Count) : "";
     }
     #endregion
 
@@ -101,19 +114,19 @@ namespace IM.ProcessorOuthouse.Forms
     /// <history>
     ///   [vku] 22/Mar/2016 Created
     /// </history>
-    public void ConfigureForm(bool blnLeadSource = false, bool blnAllLeadSource = false,
+    public void ConfigureForm(bool blnLeadSource = false, bool blnLeadSourcesPaymentComm = false, bool blnAllLeadSource = false, bool blnAllLeadSourcePaymentComm = false,
       bool blnPaymentTypes = false, bool blnAllPaymentTypes = false, bool blnPRs = false, bool blnAllPRs = false,
-      bool blnChargeTo = false, bool blnAllChargeTo = false, bool blnGifts = false, bool blnAllGifts = false, bool blnRangeFolios = false, bool blnAllRangeFolios = false,
+      bool blnChargeTo = false, bool blnAllChargeTo = false, bool blnGifts = false, bool blnAllGifts = false, bool blnGiftProdGift = false, bool blnAllGiftProdGift = false, bool blnRangeFolios = false, bool blnAllRangeFolios = false,
       bool blnOneDate = false, bool blnOnlyOneRegister = false, bool blnChkUsedate = false, EnumPeriod enumPeriod = EnumPeriod.pdNone,
       EnumProgram enumPrograms = EnumProgram.All, bool blnOnePeriod = false, EnumBasedOnArrival enumBasedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival,
       EnumQuinellas enumQuinellas = EnumQuinellas.quNoQuinellas, EnumDetailGifts enumDetailGifts = EnumDetailGifts.dgNoDetailGifts, EnumSaveCourtesyTours? enumSaveCourtesyTours = null,
       EnumSalesByMemberShipType enumSalesByMemberShipType = EnumSalesByMemberShipType.sbmNoDetail, EnumBasedOnBooking enumBasedOnBooking = EnumBasedOnBooking.bobNoBasedOnBooking,
       EnumExternalInvitation? enumExternalInvitation = null, bool blnFolSeries = false, bool blnFolFrom = false, bool blnFolTo = false, bool blnUseDates = false, bool blnAllFolios = false)
     {
-     ConfigureDates(blnOneDate, enumPeriod);
-      ConfigureGridsPanels(blnLeadSource, blnPaymentTypes, blnPRs, blnChargeTo, blnGifts, blnRangeFolios);
+      ConfigureDates(blnOneDate, enumPeriod);
+      ConfigureGridsPanels(blnLeadSource, blnLeadSourcesPaymentComm, blnPaymentTypes, blnPRs, blnChargeTo, blnGifts, blnGiftProdGift, blnRangeFolios);
       ConfigureSelection(blnOnlyOneRegister);
-      ConfigureCheckboxSelectAll(blnOnlyOneRegister, blnAllLeadSource, blnAllPaymentTypes, blnAllPRs, blnAllChargeTo, blnAllGifts, blnAllRangeFolios, blnChkUsedate);
+      ConfigureCheckboxSelectAll(blnOnlyOneRegister, blnAllLeadSource, blnAllLeadSourcePaymentComm, blnAllPaymentTypes, blnAllPRs, blnAllChargeTo, blnAllGifts, blnAllGiftProdGift, blnAllRangeFolios, blnChkUsedate);
       ConfigureFilters(enumBasedOnArrival, enumQuinellas, enumDetailGifts, enumSaveCourtesyTours,
         enumSalesByMemberShipType, enumBasedOnBooking, enumExternalInvitation, blnFolSeries, blnFolFrom, blnFolTo, blnUseDates, blnAllFolios);
       LoadUserFilters();
@@ -192,10 +205,12 @@ namespace IM.ProcessorOuthouse.Forms
     private void ConfigureSelection(bool blnOnlyOneRegister)
     {
       grdLeadSources.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
+      grdLeadSourcesPaymentComm.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       grdPaymentTypes.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       grdPR.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       grdChargeTo.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       grdGifts.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
+      grdGiftsProdGift.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
     }
     #endregion
 
@@ -206,20 +221,24 @@ namespace IM.ProcessorOuthouse.Forms
     /// <history>
     ///   [vku] 22/Mar/2016 Created
     /// </history>
-    private void ConfigureCheckboxSelectAll(bool blnOnlyOneRegister, bool blnAllLeadSources, bool blnAllPaymentTypes, bool blnAllPRs, bool blnAllChargeTo, bool blnAllGifts, bool blnAllRangeFolios, bool blnChkUseDate)
+    private void ConfigureCheckboxSelectAll(bool blnOnlyOneRegister, bool blnAllLeadSources, bool blnAllLeadSourcesPaymentComm, bool blnAllPaymentTypes, bool blnAllPRs, bool blnAllChargeTo, bool blnAllGifts, bool blnAllGiftProdGift, bool blnAllRangeFolios, bool blnChkUseDate)
     {
       chkAllLeadSources.IsChecked = blnAllLeadSources;
+      chkAllLeadSourcesPaymentComm.IsChecked = blnAllLeadSourcesPaymentComm;
       chkAllPaymentTypes.IsChecked = blnAllPaymentTypes;
       chkAllPR.IsChecked = blnAllPRs;
       chkAllChargeTo.IsChecked = blnAllChargeTo;
       chkAllGifts.IsChecked = blnAllGifts;
+      chkAllGiftsProdGift.IsChecked = blnAllGiftProdGift;
       chkUseDates.IsChecked = blnChkUseDate;
 
       chkAllLeadSources.IsEnabled = (blnOnlyOneRegister) ? false : true;
+      chkAllLeadSourcesPaymentComm.IsEnabled = (blnOnlyOneRegister) ? false : true;
       chkAllPaymentTypes.IsEnabled = (blnOnlyOneRegister) ? false : true;
       chkAllPR.IsEnabled = (blnOnlyOneRegister) ? false : true;
       chkAllChargeTo.IsEnabled = (blnOnlyOneRegister) ? false : true;
       chkAllGifts.IsEnabled = (blnOnlyOneRegister) ? false : true;
+      chkAllGiftsProdGift.IsEnabled = (blnOnlyOneRegister) ? false : true;
       chkUseDates.IsEnabled = (blnOnlyOneRegister) ? false : true;
     }
     #endregion
@@ -266,6 +285,8 @@ namespace IM.ProcessorOuthouse.Forms
     {
       if (!chkAllLeadSources.IsChecked.Value)
         frmPO._lstLeadSources = grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => grdLeadSources.Items.IndexOf(c)).ToList();
+      if (!chkAllLeadSourcesPaymentComm.IsChecked.Value)
+        frmPO._lstLeadSourcesPaymentComm = grdLeadSourcesPaymentComm.SelectedItems.Cast<LeadSource>().Select(c => grdLeadSourcesPaymentComm.Items.IndexOf(c)).ToList();
       if (!chkAllPaymentTypes.IsChecked.Value)
         frmPO._lstPaymentTypes = grdPaymentTypes.SelectedItems.Cast<PaymentType>().Select(c => grdPaymentTypes.Items.IndexOf(c)).ToList();
       if (!chkAllPR.IsChecked.Value)
@@ -274,6 +295,8 @@ namespace IM.ProcessorOuthouse.Forms
         frmPO._lstChargeTo = grdChargeTo.SelectedItems.Cast<ChargeTo>().Select(c => grdGifts.Items.IndexOf(c)).ToList();
       if (!chkAllGifts.IsChecked.Value)
         frmPO._lstGifts = grdGifts.SelectedItems.Cast<GiftShort>().Select(c => grdGifts.Items.IndexOf(c)).ToList();
+      if (!chkAllGiftsProdGift.IsChecked.Value)
+        frmPO._lstGiftsProdGift = grdGiftsProdGift.SelectedItems.Cast<GiftShort>().Select(c => grdGiftsProdGift.Items.IndexOf(c)).ToList();
       frmPO._cboDateSelected = cboDate.SelectedValue.ToString();
     //  frmPO._cboFolSeriesSelected = cboFolSeries.SelectedValue.ToString();
       frmPO._dtmStart = dtmStart.Value.Value;
@@ -308,6 +331,13 @@ namespace IM.ProcessorOuthouse.Forms
           grdLeadSources.SelectedItems.Add(grdLeadSources.Items.GetItemAt(c));
         });
       }
+      if (!chkAllLeadSourcesPaymentComm.IsChecked.Value && chkAllLeadSourcesPaymentComm.IsEnabled)
+      {
+        frmPO._lstLeadSourcesPaymentComm.ForEach(c =>
+        {
+          grdLeadSourcesPaymentComm.SelectedItems.Add(grdLeadSourcesPaymentComm.Items.GetItemAt(c));
+        });
+      }
       if (!chkAllPaymentTypes.IsChecked.Value && chkAllPaymentTypes.IsEnabled)
       {
         frmPO._lstPaymentTypes.ForEach(c =>
@@ -334,6 +364,13 @@ namespace IM.ProcessorOuthouse.Forms
         frmPO._lstGifts.ForEach(c =>
         {
           grdGifts.SelectedItems.Add(grdGifts.Items.GetItemAt(c));
+        });
+      }
+      if (!chkAllGiftsProdGift.IsChecked.Value && chkAllGiftsProdGift.IsEnabled)
+      {
+        frmPO._lstGiftsProdGift.ForEach(c =>
+        {
+          grdGiftsProdGift.SelectedItems.Add(grdGiftsProdGift.Items.GetItemAt(c));
         });
       }
 
@@ -368,6 +405,8 @@ namespace IM.ProcessorOuthouse.Forms
     {
       if (pnlLeadSources.Visibility == Visibility.Visible && grdLeadSources.SelectedItems.Count == 0)
         return "No lead source is selected.";
+      if (pnlLeadSourcesPaymentComm.Visibility == Visibility.Visible && grdLeadSourcesPaymentComm.SelectedItems.Count == 0)
+        return "No lead source is selected.";
       if (pnlPaymentTypes.Visibility == Visibility.Visible && grdPaymentTypes.SelectedItems.Count == 0)
         return "No payment Types is selected";
       if (pnlPR.Visibility == Visibility.Visible && grdPR.SelectedItems.Count == 0)
@@ -375,6 +414,8 @@ namespace IM.ProcessorOuthouse.Forms
       if (pnlChargeTo.Visibility == Visibility.Visible && grdChargeTo.SelectedItems.Count == 0)
         return "No Charge To is selected.";
       if (pnlGifts.Visibility == Visibility.Visible && grdGifts.SelectedItems.Count == 0)
+        return "No gift is selected.";
+      if (pnlGiftsProdGift.Visibility == Visibility.Visible && grdGiftsProdGift.SelectedItems.Count == 0)
         return "No gift is selected.";
       else
         return "";
@@ -417,6 +458,41 @@ namespace IM.ProcessorOuthouse.Forms
     private void grdLeadSources_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       StatusBarNumLS.Content = string.Format("{0}/{1} Selected LeadSources", grdLeadSources.SelectedItems.Count, grdLeadSources.Items.Count);
+    }
+    #endregion
+
+    #region chkAllLeadSourcesPaymentComm_Checked
+    /// <summary>
+    ///  Valida si el checkbox ALL fua activo o desactivado para seleccionar o
+    ///  deselecionar la lista leadsources
+    /// </summary>
+    /// <history>
+    ///   [vku] 20/Abr/2016 Created
+    /// </history>
+    private void chkAllLeadSourcesPaymentComm_Checked(object sender, RoutedEventArgs e)
+    {
+      if ((bool)chkAllLeadSourcesPaymentComm.IsChecked)
+      {
+        grdLeadSourcesPaymentComm.SelectAll();
+        grdLeadSourcesPaymentComm.IsEnabled = false;
+      }
+      else {
+        grdLeadSourcesPaymentComm.UnselectAll();
+        grdLeadSourcesPaymentComm.IsEnabled = true;
+      }
+    }
+    #endregion
+
+    #region grdLeadSourcesPaymentComm_SelectionChanged
+    /// <summary>
+    ///  Barra de estado de leadsources al seleccionar
+    /// </summary>
+    /// <history>
+    ///   [vku] 20/Abr/2016 Created
+    /// </history>
+    private void grdLeadSourcesPaymentComm_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      StatusBarNumLSPC.Content = string.Format("{0}/{1} Selected LeadSources", grdLeadSourcesPaymentComm.SelectedItems.Count, grdLeadSourcesPaymentComm.Items.Count);
     }
     #endregion
 
@@ -561,6 +637,42 @@ namespace IM.ProcessorOuthouse.Forms
     private void grdGifts_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       StatusBarNumG.Content = string.Format("{0}/{1} Selected Gifts", grdGifts.SelectedItems.Count, grdGifts.Items.Count);
+    }
+    #endregion
+
+    #region chkAllGiftsProdGift_Checked
+    /// <summary>
+    ///  Valida si el checkbox ALL fua activo o desactivado para seleccionar o
+    ///  deselecionar la lista regalos
+    /// </summary>
+    /// <history>
+    ///   [vku] 21/Abr/2016 Created
+    /// </history>
+    private void chkAllGiftsProdGift_Checked(object sender, RoutedEventArgs e)
+    {
+      if ((bool)chkAllGiftsProdGift.IsChecked)
+      {
+        grdGiftsProdGift.SelectAll();
+        grdGiftsProdGift.IsEnabled = false;
+      }
+      else
+      {
+        grdGiftsProdGift.UnselectAll();
+        grdGiftsProdGift.IsEnabled = true;
+      }
+    }
+    #endregion
+
+    #region grdGiftsProdGift_SelectionChanged
+    /// <summary>
+    ///  Barra de estado regalos al seleccionar
+    /// </summary>
+    /// <history>
+    ///   [vku] 21/Abr/2016 Created
+    /// </history>
+    private void grdGiftsProdGrift_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      StatusBarNumGPG.Content = string.Format("{0}/{1} Selected Gifts", grdGiftsProdGift.SelectedItems.Count, grdGiftsProdGift.Items.Count);
     }
     #endregion
 
@@ -731,6 +843,5 @@ namespace IM.ProcessorOuthouse.Forms
     #endregion
 
     #endregion
-
   }
 }
