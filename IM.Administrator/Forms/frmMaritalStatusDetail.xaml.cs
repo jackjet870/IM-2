@@ -41,7 +41,7 @@ namespace IM.Administrator.Forms
         txtmsID.IsEnabled = (enumMode==EnumMode.add);
         txtmsN.IsEnabled = true;
         chkmsA.IsEnabled = true;
-        UIHelper.SetMaxLength(maritalStatus, this);
+        UIHelper.SetUpControls(maritalStatus, this);
       }
     } 
     #endregion

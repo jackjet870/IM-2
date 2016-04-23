@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,20 +8,6 @@ namespace IM.Base.Helpers
 {
   public class TextBoxHelper
   {
-    public static void Properties(TextBox textbox,TypeCode typeCode)
-    {
-      switch(typeCode)
-      {
-        #region Byte
-        case TypeCode.Byte:
-          {
-            textbox.LostFocus += txt_LostFocus;
-            //textbox.PreviewTextInput+=
-            break;
-          } 
-          #endregion
-      }      
-    }
 
     #region LostFocus
     /// <summary>
@@ -35,7 +18,7 @@ namespace IM.Base.Helpers
     /// <history>
     /// [emoguel] created 16/04/2016
     /// </history>
-    private static void txt_LostFocus(object sender, RoutedEventArgs e)
+    public static void LostFocus(object sender, RoutedEventArgs e)
     {
       TextBox txt = (TextBox)sender;
       if (string.IsNullOrWhiteSpace(txt.Text))
@@ -43,7 +26,7 @@ namespace IM.Base.Helpers
         txt.Text = "0";
       }
     }
-    #endregion
+    #endregion    
 
     #region DecimalTextInput
     /// <summary>
@@ -54,16 +37,12 @@ namespace IM.Base.Helpers
     /// <history>
     /// [emoguel] created 16/04/2016
     /// </history>
-    private void DecimalTextInput(object sender, TextCompositionEventArgs e)
-    {
+    public static void DecimalTextInput(object sender, TextCompositionEventArgs e)
+    {      
       TextBox txt = (TextBox)sender;
-      if (e.Text == "." && !txt.Text.Trim().Contains("."))
-      {
-        e.Handled = false;
-      }
-      else
-      {
-        e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
+      if (!(e.Text == "." && !txt.Text.Trim().Contains(".")))
+      { 
+        e.Handled = !ValidateHelper.OnlyNumbers(e.Text);        
       }
     }
     #endregion
@@ -77,7 +56,7 @@ namespace IM.Base.Helpers
     /// <history>
     /// [emoguel] created 16/04/2016
     /// </history>
-    private void ByteTextInput(object sender, TextCompositionEventArgs e)
+    public static void ByteTextInput(object sender, TextCompositionEventArgs e)
     {
       TextBox txt = (TextBox)sender;
       if (txt.Text.Trim().Count() == 2 && ValidateHelper.OnlyNumbers(e.Text))
@@ -104,9 +83,59 @@ namespace IM.Base.Helpers
     /// <history>
     /// [emoguel] created 16/04/2016
     /// </history>
-    private void PreviewTextInputNumber(object sender, TextCompositionEventArgs e)
+    public static void IntTextInput(object sender, TextCompositionEventArgs e)
     {
       e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
+    }
+    #endregion
+
+    #region Decimal_GotFocus
+    /// <summary>
+    /// Cambia de formato currency a standar
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] 18/04/2016
+    /// </history>
+    public static void DecimalGotFocus(object sender, RoutedEventArgs e)
+    {
+      TextBox txt = (TextBox)sender;
+      txt.Text = ConvertHelper.DoubleCurrencyToStandar(txt.Text.Trim());
+    }
+    #endregion
+
+    #region Int_GotFocus
+    /// <summary>
+    /// Cambia de formato currency a standar
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] 18/04/2016
+    /// </history>
+    public static void IntGotFocus(object sender, RoutedEventArgs e)
+    {
+      TextBox txt = (TextBox)sender;
+      txt.Text = ConvertHelper.IntCurrencyToStandar(txt.Text.Trim());
+    }
+    #endregion
+
+    #region PreviewTextLetter
+    /// <summary>
+    /// Verifica que solo se escriban Letras
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 18/04/2016
+    /// </history>
+    public static void LetterTextInput(object sender, TextCompositionEventArgs e)
+    {
+      if (!char.IsLetter(Convert.ToChar(e.Text)))
+      {
+        e.Handled = true;
+      }
     }
     #endregion
   }

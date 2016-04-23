@@ -55,7 +55,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="reasonCancellationFolio">Objeto a guardar</param>
     /// <param name="blnUpdate">True. Actualiza | False. Inserta</param>
-    /// <returns>0. No se guardó | 1. Se guardó correctamenre  | 2. Existe un registro con el mismo ID</returns>
+    /// <returns>0. No se guardó | 1. Se guardó correctamenre  | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 14/04/2016
     /// </history>
@@ -75,7 +75,7 @@ namespace IM.BusinessRules.BR
           ReasonCancellationFolio resCabFolVal = dbContext.ReasonsCancellationFolios.Where(rcf => rcf.rcfID == reasonCancellationFolio.rcfID).FirstOrDefault();
           if(resCabFolVal!=null)//Validamos que no exista un registro con el mismo ID
           {
-            return 2;
+            return -1;
           }
           else//Agregar
           {

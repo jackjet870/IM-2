@@ -41,7 +41,7 @@ namespace IM.Administrator.Forms
         btnAccept.Visibility = Visibility.Visible;
         txtpoID.IsEnabled = (enumMode == EnumMode.add);
       }
-      UIHelper.SetMaxLength(post, this);
+      UIHelper.SetUpControls(post, this);
     } 
     #endregion
 

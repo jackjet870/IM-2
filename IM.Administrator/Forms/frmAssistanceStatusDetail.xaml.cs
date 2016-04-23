@@ -40,7 +40,7 @@ namespace IM.Administrator.Forms
         chkA.IsEnabled = true;
         txtatID.IsEnabled = (mode == EnumMode.add);
         btnAccept.Visibility = Visibility.Visible;
-        UIHelper.SetMaxLength(assistance, this);
+        UIHelper.SetUpControls(assistance, this);
       }
       
     }

@@ -75,7 +75,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="country">Objeto a guardar en la BD</param>
     /// <param name="blnUpdate">True. Actualiza | False. Agrega</param>
-    /// <returns>0. No se guardó | 1. Guardado correctamente | 2.Se tiene un objeto con el mismo ID</returns>
+    /// <returns>0. No se guardó | 1. Guardado correctamente | -1.Se tiene un objeto con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 16/03/2016
     /// </history>
@@ -94,7 +94,7 @@ namespace IM.BusinessRules.BR
           Country countryValid = dbContext.Countries.Where(co => co.coID == country.coID).FirstOrDefault<Country>();
           if (countryValid != null)//Existe un registro con el mismo ID
           {
-            nRes = 2;
+            nRes = -1;
           }
           else
           {

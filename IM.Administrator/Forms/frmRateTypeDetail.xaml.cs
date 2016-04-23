@@ -34,7 +34,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(rateType, oldRateType);
-      UIHelper.SetMaxLength(rateType, this);
+      UIHelper.SetUpControls(rateType, this);
       DataContext = rateType;
     }
     #endregion

@@ -55,7 +55,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="post">Objeto a guardar</param>
     /// <param name="blnUpdate">True. Actualiza | False. Agrega</param>
-    /// <returns>Lista de Tipo Post</returns>
+    /// <returns>0. No se guardó | 1. se guardó | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 11/04/2016
     /// </history>
@@ -75,7 +75,7 @@ namespace IM.BusinessRules.BR
           Post postVal = dbContext.Posts.Where(po => po.poID == post.poID).FirstOrDefault();
           if(postVal!=null)//verficamos si existe un registro con el mismo ID
           {
-            return 2;
+            return -1;
           }
           else
           {

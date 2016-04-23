@@ -33,7 +33,7 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(permission, oldPermission);
       DataContext = permission;
       txtpmID.IsEnabled = (enumMode == EnumMode.add);
-      UIHelper.SetMaxLength(permission, this);
+      UIHelper.SetUpControls(permission, this);
     } 
     #endregion
 

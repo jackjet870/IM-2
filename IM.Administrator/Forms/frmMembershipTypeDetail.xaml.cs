@@ -55,11 +55,12 @@ namespace IM.Administrator.Forms
         txtmtTo.Visibility = Visibility.Collapsed;
         txtmtFrom.Visibility = Visibility.Collapsed;
         lblStatus.Visibility = Visibility.Visible;
-        LoadStatus();
+        ComboBoxHelper.LoadComboDefault(cmbSta);
         cmbSta.SelectedValue = nStatus;
+        Title = "Search";
       }
       #endregion
-      UIHelper.SetMaxLength(membershipType, this);
+      UIHelper.SetUpControls(membershipType, this);
     }
     #endregion
 
@@ -167,92 +168,7 @@ namespace IM.Administrator.Forms
         Close();
       }
     } 
-    #endregion
-
-    #region LostFocus
-    /// <summary>
-    /// SI el campo está vacio por default le pone 0
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 04/04/2016
-    /// </history>
-    private void txt_LostFocus(object sender, RoutedEventArgs e)
-    {
-      TextBox txt = (TextBox)sender;
-      if (string.IsNullOrWhiteSpace(txt.Text))
-      {
-        txt.Text = "0";
-      }
-    }
-    #endregion
-
-    #region Number Text Input
-    /// <summary>
-    /// verifica que unicamente acepte numero y 1 punto
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 04/04/2016
-    /// </history>
-    private void txt_NumberTextInput(object sender, TextCompositionEventArgs e)
-    {
-      TextBox txt = (TextBox)sender;
-      if (e.Text == "." && !txt.Text.Trim().Contains("."))
-      {
-        e.Handled = false;
-      }
-      else
-      {
-        e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
-      }
-    }
-    #endregion
-
-    #region txt_LevelNumberImput
-    /// <summary>
-    /// Valida que solo se puedan escribir Números
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 04/04/2016
-    /// </history>
-    private void txt_LevelTextInput(object sender, TextCompositionEventArgs e)
-    {
-      TextBox txt = (TextBox)sender;
-      if (txt.Text.Trim().Count() == 2 && ValidateHelper.OnlyNumbers(e.Text))
-      {
-        int nLevel = Convert.ToInt32(txt.Text.Trim()+e.Text);
-        if(nLevel>255)
-        {
-          txt.Text = "255";
-        }
-      }
-      else
-      {
-        e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
-      }
-    } 
-    #endregion
-
-    #region Got Focus
-    /// <summary>
-    /// Cambia de formato currency a standar
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] 04/04/2016
-    /// </history>
-    private void txt_GotFocus(object sender, RoutedEventArgs e)
-    {
-      TextBox txt = (TextBox)sender;
-      txt.Text = ConvertHelper.DoubleCurrencyToStandar(txt.Text.Trim());
-    }
-    #endregion
+    #endregion    
     #endregion
 
     #region Methods
@@ -272,27 +188,7 @@ namespace IM.Administrator.Forms
       }
       cmbmtGroup.ItemsSource = lstMembershipGroup;
     }
-    #endregion
-
-    #region LoadStatus
-    /// <summary>
-    /// Llena la lista de estatus
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 04/04/2016
-    /// </history>
-    protected void LoadStatus()
-    {
-      List<object> lstStatus = new List<object>();
-      lstStatus.Add(new { sName = "All", sValue = -1 });
-      lstStatus.Add(new { sName = "Inactive", sValue = 0 });
-      lstStatus.Add(new { sName = "Active", sValue = 1 });
-      cmbSta.ItemsSource = lstStatus;
-    }
-
-    #endregion
+    #endregion    
     #endregion
   }
 }

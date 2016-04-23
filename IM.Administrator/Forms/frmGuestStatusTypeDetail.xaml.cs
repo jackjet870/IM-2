@@ -112,58 +112,7 @@ namespace IM.Administrator.Forms
         chkA.IsEnabled = true;
         chkAllTour.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
-        UIHelper.SetMaxLength(guestStaTyp, this);
-      }
-    }
-    #endregion
-    
-
-    #region PreviewTextInput
-    /// <summary>
-    /// PreviewTextInput
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 28/03/2016
-    /// </history>
-    private void txtNumber_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
-    }
-    #endregion
-
-    #region GotFocus
-    /// <summary>
-    /// Cambia el formato del textbox
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 28/03/2016
-    /// </history>
-    private void txtMaxAmount_GotFocus(object sender, RoutedEventArgs e)
-    {
-      TextBox txt = (TextBox)sender;
-      txt.Text = ConvertHelper.IntCurrencyToStandar(txt.Text);
-    }
-    #endregion
-
-    #region LostFocus
-    /// <summary>
-    /// asigna el valor 0 al campo vacio
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 2/003/2016
-    /// </history>
-    private void txt_LostFocus(object sender, RoutedEventArgs e)
-    {
-      TextBox txt = (TextBox)sender;
-      if (string.IsNullOrWhiteSpace(txt.Text))
-      {
-        txt.Text = "0";
+        UIHelper.SetUpControls(guestStaTyp, this);
       }
     }
     #endregion

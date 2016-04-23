@@ -52,7 +52,7 @@ namespace IM.BusinessRules.BR
     /// Agrega|Actualiza un registro al catalogo Computers
     /// </summary>
     /// <param name="computer">Objeto a guardar</param>
-    /// <returns>0. No se guardo | 1. Guardado correctamente | 2. Existe un registro con el mismo ID</returns>
+    /// <returns>0. No se guardo | 1. Guardado correctamente | -1. Existe un registro con el mismo ID</returns>
     public static int SaveComputer(Computer computer,bool blnUpdate)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
@@ -70,7 +70,7 @@ namespace IM.BusinessRules.BR
           }
           else//Existe un registro con el mismo ID
           {
-            return 2;
+            return -1;
           }
         }
         return dbContext.SaveChanges();

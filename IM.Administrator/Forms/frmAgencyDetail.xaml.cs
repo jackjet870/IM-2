@@ -61,7 +61,7 @@ namespace IM.Administrator.Forms
         chkA.IsEnabled = true;
         chkIncTour.IsEnabled = true;
         chkShowInLst.IsEnabled = true;
-        UIHelper.SetMaxLength(agency, this);
+        UIHelper.SetUpControls(agency, this);
       }
       #endregion      
       DataContext = agency;
@@ -110,7 +110,7 @@ namespace IM.Administrator.Forms
               }
           }
           #endregion
-          UIHelper.ShowMessageResult("Agency", nRes, (enumMode == EnumMode.edit));    
+          UIHelper.ShowMessageResult("Agency", nRes);    
           if((nRes==2 && enumMode!=EnumMode.add) || nRes==1 )
           {
             DialogResult = true;
@@ -124,58 +124,8 @@ namespace IM.Administrator.Forms
       }
 
     }
-    #endregion
+    #endregion    
     
-    #region Texbox Sólo Numeros
-    /// <summary>
-    /// TextBox Sólo acepta número
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 11/03/2016
-    /// </history>
-    private void txt_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
-    }
-    #endregion
-
-    #region Got Focus
-    /// <summary>
-    /// Cambia el string format del campo de textos
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 11/03/2016
-    /// </history>
-    private void txt_GotFocus(object sender, RoutedEventArgs e)
-    {
-      TextBox txt = (TextBox)sender;      
-      txt.Text = ConvertHelper.IntCurrencyToStandar(txt.Text);
-    }
-    #endregion
-
-    #region LostFocus
-    /// <summary>
-    /// Le pone un valor default a cun campo de texto
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 11/03/2016
-    /// </history>
-    private void txt_LostFocus(object sender, RoutedEventArgs e)
-    {
-      TextBox txt = (TextBox)sender;
-      if (string.IsNullOrWhiteSpace(txt.Text))
-      {
-        txt.Text = "0";
-      }
-    }
-    #endregion
-
     #region KeyDown
     /// <summary>
     /// cierra la ventana con el boton escape
@@ -195,6 +145,7 @@ namespace IM.Administrator.Forms
     }
 
     #endregion
+
     #region Cancel
     /// <summary>
     /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes

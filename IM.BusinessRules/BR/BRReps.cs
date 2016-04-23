@@ -19,7 +19,7 @@ namespace IM.BusinessRules.BR
     /// [Emoguel] created 11/03/2016
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto 
     /// </history>
-    public static List<Rep> GetReps(Rep rep,int nStatus=-1)
+    public static List<Rep> GetReps(Rep rep=null,int nStatus=-1)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -40,6 +40,46 @@ namespace IM.BusinessRules.BR
         }
 
         return query.OrderBy(r=>r.rpID).ToList();
+      }
+    }
+    #endregion
+
+    #region SaveRep
+    /// <summary>
+    /// Actualiza|Guarda un registro en el catalogo Reps
+    /// </summary>
+    /// <param name="rep">Objeto a guardar</param>
+    /// <param name="blnUpdate">Truw. Actualiza |False. Inserta</param>
+    /// <returns>0. No se guuardó  | 1. Si se guardó | -1. Existe un registro con el mismo ID</returns>
+    /// <history>
+    /// [emoguel] created 18/04/2016
+    /// </history>
+    public static int SaveReps(Rep rep,bool blnUpdate)
+    {      
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        #region Update
+        if (blnUpdate)
+        {
+          dbContext.Entry(rep).State = System.Data.Entity.EntityState.Modified;
+        }
+        #endregion
+        #region Save
+        else
+        {
+          Rep repVal = dbContext.Reps.Where(rp => rp.rpID == rep.rpID).FirstOrDefault();
+          if(repVal!=null)//Validamos si existe un registro con el mismo ID
+          {
+            return -1;
+          }
+          else//Agregamos
+          {
+            dbContext.Reps.Add(rep);
+          }
+        }
+        #endregion
+
+        return dbContext.SaveChanges();
       }
     }
     #endregion

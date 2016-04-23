@@ -100,7 +100,7 @@ namespace IM.Administrator.Forms
         if (strMsj == "")
         {
           nRes = BRFoliosCXC.SaveFolioCXC(folioCXC, (enumMode == EnumMode.edit));
-          UIHelper.ShowMessageResult("Folio CxC", nRes, blnIsRange: true);
+          UIHelper.ShowMessageResult("Folio CxC", nRes);
           if(nRes==1)
           {
             DialogResult = true;

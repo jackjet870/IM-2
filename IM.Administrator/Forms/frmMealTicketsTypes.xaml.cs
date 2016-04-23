@@ -169,7 +169,7 @@ namespace IM.Administrator.Forms
       frmSearch.strID = _mealTkTypeFilter.myID;
       frmSearch.strDesc = _mealTkTypeFilter.myN;
       frmSearch.nStatus = _nWpax;
-      frmSearch.enumWindow = EnumWindow.MealTicketTypes;
+      frmSearch.lblSta.Content = "With Pax";
       if(frmSearch.ShowDialog()==true)
       {
         _nWpax = frmSearch.nStatus;

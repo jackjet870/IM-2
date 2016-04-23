@@ -55,7 +55,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(paymentSchema, oldPaymentSchema);
       DataContext = paymentSchema;
-      UIHelper.SetMaxLength(paymentSchema, this);
+      UIHelper.SetUpControls(paymentSchema, this);
     } 
     #endregion
 
@@ -123,40 +123,6 @@ namespace IM.Administrator.Forms
       else
       {
         Close();
-      }
-    } 
-    #endregion
-
-    #region NumberInput
-    /// <summary>
-    /// El control solo acepta numeros
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 06/04/2016
-    /// </history>
-    private void txt_NumberTextInput(object sender, TextCompositionEventArgs e)
-    {
-      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
-    } 
-    #endregion
-
-    #region LostFocus
-    /// <summary>
-    /// Pone un valor por default cuando el control pierde el foco
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created b06/04/2016
-    /// </history>
-    private void txt_LostFocus(object sender, RoutedEventArgs e)
-    {
-      TextBox txt = (TextBox)sender;
-      if (string.IsNullOrWhiteSpace(txt.Text))
-      {
-        txt.Text = "0";
       }
     } 
     #endregion

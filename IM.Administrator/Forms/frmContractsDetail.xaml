@@ -36,7 +36,7 @@
                 <ColumnDefinition Width="50*"/>
             </Grid.ColumnDefinitions>
             <CheckBox Name="chkA" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding cnA}" Height="13" IsEnabled="False">Active</CheckBox>
-            <TextBox Name="txtcnMinDaysTours" Grid.Column="0" IsEnabled="False" Tag="Min Days for Included Tours" Text="{Binding cnMinDaysTours}" PreviewTextInput="txtMinDays_PreviewTextInput" MaxLength="10" />
+            <TextBox Name="txtcnMinDaysTours" Grid.Column="0" IsEnabled="False" Tag="Min Days for Included Tours" Text="{Binding cnMinDaysTours}" MaxLength="10" />
         </Grid>
         <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7" Visibility="Hidden"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept"/>
         <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>

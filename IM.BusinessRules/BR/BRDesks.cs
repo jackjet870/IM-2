@@ -56,7 +56,7 @@ namespace IM.BusinessRules.BR
     /// <param name="desk">Objeto a guardar en la BD</param>
     /// <param name="blnUpdate">True. Actualiza un registro | False. Agrega un registro</param>
     /// <param name="lstIdsComputers">id's de computers a relacionar</param>
-    /// <returns>0. No se puedo guardar | > 0 . Se guardó correctamente | 2. Existe un registro con el mismo ID (Sólo cuando es insertar)</returns>
+    /// <returns>0. No se puedo guardar | > 0 . Se guardó correctamente | -1. Existe un registro con el mismo ID (Sólo cuando es insertar)</returns>
     /// <history>
     /// [emoguel] created 16/03/2016
     /// </history>
@@ -94,7 +94,7 @@ namespace IM.BusinessRules.BR
 
             #endregion
 
-            #region Desaignar
+            #region Asignar
             var lstComputersAsi = (from cmp in dbContext.Computers
                                     where lstIdsComputers.Contains(cmp.cpID)
                                     select cmp).ToList();//Buscamos todas las computers que se van a asignar

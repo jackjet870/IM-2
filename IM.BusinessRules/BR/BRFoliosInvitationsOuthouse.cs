@@ -48,7 +48,14 @@ namespace IM.BusinessRules.BR
 
           if (folioInvitationOutside.fiFrom > 0 && folioInvitationOutside.fiTo > 0)//Filtro por rango
           {
-            query = query.Where(fi => folioInvitationOutside.fiFrom >= fi.fiFrom && folioInvitationOutside.fiTo <= fi.fiTo);
+            if (folioInvitationOutside.fiFrom == folioInvitationOutside.fiTo)
+            {
+              query = query.Where(fi => folioInvitationOutside.fiFrom>=fi.fiFrom && folioInvitationOutside.fiTo<= fi.fiTo );              
+            }
+            else
+            {
+              query = query.Where(fi => fi.fiFrom >= folioInvitationOutside.fiFrom  && fi.fiTo<= folioInvitationOutside.fiTo);
+            }             
           }
 
         }
@@ -64,7 +71,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="folioInvitationOutside">Entidad a guardar</param>
     /// <param name="blnUpdate">True. Actualiza | False. Agrega</param>
-    /// <returns>0. No se guardó | 1. Se guardó correctamente | 2. Verificar el rango</returns>
+    /// <returns>0. No se guardó | 1. Se guardó correctamente | -2. Verificar el rango</returns>
     /// <history>
     /// [emoguel] created 23/03/2016
     /// </history>
@@ -84,14 +91,14 @@ namespace IM.BusinessRules.BR
           }
           else
           {
-            return 2;
+            return -2;
           }
         }
         #endregion
         #region Add
         else//SI es insertar
         {
-          blnIsValid = (bool)dbContext.USP_OR_ValidateFolioInvitationsOutside(folioInvitationOutside.fiSerie, folioInvitationOutside.fiFrom, folioInvitationOutside.fiTo, folioInvitationOutside.fiA, 1).FirstOrDefault();
+          blnIsValid = (bool)dbContext.USP_OR_ValidateFolioInvitationsOutside(folioInvitationOutside.fiSerie, folioInvitationOutside.fiFrom, folioInvitationOutside.fiTo, folioInvitationOutside.fiA, 0).FirstOrDefault();
 
           if (blnIsValid)//Validamos el rango
           {
@@ -99,7 +106,7 @@ namespace IM.BusinessRules.BR
           }
           else
           {
-            return 2;
+            return -2;
           }
         }
         #endregion

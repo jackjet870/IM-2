@@ -27,7 +27,7 @@
         <!--#endregion-->
         <!--#region Datos-->
         <TextBox Name="txtctID" Grid.Column="1" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding ctID}" CharacterCasing="Upper" IsEnabled="False"/>
-        <TextBox Name="txtctPrice" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding ctPrice}" IsEnabled="False" PreviewTextInput="txtPri_PreviewTextInput"/>
+        <TextBox Name="txtctPrice" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding ctPrice}" IsEnabled="False"/>
         <Grid Grid.Column="1" Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100*"/>

@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
@@ -133,7 +125,29 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
-
+      ReimpresionMotive reimpresionMotive = (ReimpresionMotive)dgrReimpresionMotives.SelectedItem;
+      frmReimpresionMotiveDetail frmReimpresionMotive = new frmReimpresionMotiveDetail();
+      frmReimpresionMotive.Owner = this;
+      frmReimpresionMotive.enumMode = EnumMode.edit;
+      frmReimpresionMotive.oldReimpresionMotive = reimpresionMotive;
+      if(frmReimpresionMotive.ShowDialog()==true)
+      {
+        int nIndex = 0;
+        List<ReimpresionMotive> lstReimpresionMotive = (List<ReimpresionMotive>)dgrReimpresionMotives.ItemsSource;
+        if(ValidateFilter(frmReimpresionMotive.reimpresionMotive))//Verificamos que cumpla con los filtros actuales del grid
+        {
+          ObjectHelper.CopyProperties(reimpresionMotive, frmReimpresionMotive.reimpresionMotive);//Actualizamos los valores
+          lstReimpresionMotive.Sort((x, y) => string.Compare(x.rmN, y.rmN));//Ordenamos la lista
+          nIndex = lstReimpresionMotive.IndexOf(reimpresionMotive);//Obtenemos el index del registro
+        }
+        else
+        {
+          lstReimpresionMotive.Remove(reimpresionMotive);//Quitamos el registro
+        }
+        dgrReimpresionMotives.Items.Refresh();//Actualizamos la vista
+        GridHelper.SelectRow(dgrReimpresionMotives, nIndex);//Seleccionamos el contador
+        StatusBarReg.Content = lstReimpresionMotive.Count + " Reimpresion Motives.";//Actualizamos el contador
+      }
     }
     #endregion
 
@@ -154,7 +168,7 @@ namespace IM.Administrator.Forms
       frmSearch.strID = (_reimpresionMotiveFilter.rmID>0)?_reimpresionMotiveFilter.rmID.ToString():"";
       frmSearch.strDesc = _reimpresionMotiveFilter.rmN;
       frmSearch.nStatus = _nStatus;
-      frmSearch.enumWindow = EnumWindow.DefaultInt;
+      frmSearch.enumWindow = EnumWindow.DefaultByte;
       if(frmSearch.ShowDialog()==true)
       {
         _nStatus = frmSearch.nStatus;
@@ -176,7 +190,23 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
-
+      frmReimpresionMotiveDetail frmReimpresionMotive = new frmReimpresionMotiveDetail();
+      frmReimpresionMotive.Owner = this;
+      frmReimpresionMotive.enumMode = EnumMode.add;
+      if(frmReimpresionMotive.ShowDialog()==true)
+      {
+        ReimpresionMotive reimpresionMotive = frmReimpresionMotive.reimpresionMotive;
+        if(ValidateFilter(reimpresionMotive))//Verificamos si cumple con los filtros actuales
+        {
+          List<ReimpresionMotive> lstReimpresionMotive = (List<ReimpresionMotive>)dgrReimpresionMotives.ItemsSource;
+          lstReimpresionMotive.Add(reimpresionMotive);//Agregamos el registro nuevo
+          lstReimpresionMotive.Sort((x, y) => string.Compare(x.rmN, y.rmN));//Ordenamos la lista
+          int nIndex = lstReimpresionMotive.IndexOf(reimpresionMotive);//Obtemos la posicion del nuevo registro
+          dgrReimpresionMotives.Items.Refresh();//Actualizamos la vista
+          GridHelper.SelectRow(dgrReimpresionMotives, nIndex);//Seleccionamos el registro nuevo
+          StatusBarReg.Content = lstReimpresionMotive.Count + " Reimpresion Motives.";//Actualizamos el contador
+        }
+      }
     } 
     #endregion
 
@@ -236,24 +266,23 @@ namespace IM.Administrator.Forms
     {
       if(_nStatus!=-1)//Filtro por estatus
       {
-        if(_reimpresionMotiveFilter.rmA!=Convert.ToBoolean(_nStatus))
+        if(reimpresionMotive.rmA!=Convert.ToBoolean(_nStatus))
         {
           return false;
         }
-
-        if(_reimpresionMotiveFilter.rmID>0)//filtro por ID
+      }
+      if (_reimpresionMotiveFilter.rmID > 0)//filtro por ID
+      {
+        if (_reimpresionMotiveFilter.rmID != reimpresionMotive.rmID)
         {
-          if(_reimpresionMotiveFilter.rmID!=reimpresionMotive.rmID)
-          {
-            return false;
-          }
+          return false;
         }
-        if (!string.IsNullOrWhiteSpace(_reimpresionMotiveFilter.rmN))//Filtro por descripción
+      }
+      if (!string.IsNullOrWhiteSpace(_reimpresionMotiveFilter.rmN))//Filtro por descripción
+      {
+        if (!reimpresionMotive.rmN.Contains(_reimpresionMotiveFilter.rmN))
         {
-          if (!reimpresionMotive.rmN.Contains(_reimpresionMotiveFilter.rmN))
-          {
-            return false;
-          }
+          return false;
         }
       }
       return true;

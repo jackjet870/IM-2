@@ -1,0 +1,56 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmSalesRoomDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        Title="Sales Room Detail" DataContext="{Binding salesRoom}" SizeToContent="WidthAndHeight">
+    <Grid Margin="10,10,14,2" >
+        <!--#region Formato del grid-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="75*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <!--#endregion-->
+        <!--#region títulos-->
+        <Label Grid.Column="0" Grid.Row="0">ID</Label>
+        <Label Grid.Column="0" Grid.Row="1">Description</Label>
+        <Label Grid.Column="0" Grid.Row="2" >Area</Label>
+        <Label Name="lblWareHouse" Grid.Column="0" Grid.Row="3" >Warehouse</Label>
+        <Label Grid.Column="0" Grid.Row="4" >Currency</Label>
+        <Label Name="lblBoss" Grid.Column="0" Grid.Row="5" >Boss</Label>
+        <Label Name="lblOpera" Grid.Column="0" Grid.Row="6" >Property Opera</Label>
+        <Label Name="lblApp" Visibility="Collapsed" Grid.Column="0" Grid.Row="6">Appointment</Label>
+        <Label Name="lblStatus" Visibility="Collapsed" Grid.Column="0" Grid.Row="7">Status</Label>
+        <!--#endregion-->
+        <!--#region Datos-->
+        <TextBox Name="txtsrID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" CharacterCasing="Upper" Text="{Binding srID}" IsEnabled="False" Width="235" Margin="0,0,0,15" />
+        <TextBox Name="txtsrN" Grid.Column="1" Grid.Row="1" Tag="description" Height="27" VerticalAlignment="Top" Width="235" Margin="0,0,0,15" Text="{Binding srN}" />
+        <ComboBox Name="cmbsrar" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" DisplayMemberPath="arN" SelectedValuePath="arID" Width="235" SelectedValue="{Binding srar}" Margin="0,0,0,15"/>
+        <ComboBox Name="cmbsrWH" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" DisplayMemberPath="whN" SelectedValuePath="whID" Width="235" Margin="0,0,0,15" SelectedValue="{Binding srWH}"/>
+        <ComboBox Name="cmbsrcu" Grid.Column="1" Grid.Row="4" Height="27" VerticalAlignment="Top" DisplayMemberPath="cuN" SelectedValuePath="cuID" Width="235" Margin="0,0,0,15" SelectedValue="{Binding srcu}" />
+        <ComboBox Name="cmbsrBoss" Grid.Column="1" Grid.Row="5" Height="27" VerticalAlignment="Top" DisplayMemberPath="peN" SelectedValuePath="peID" Width="235" Margin="0,0,0,15" SelectedValue="{Binding srBoss}"/>
+        <TextBox Name="txtsrPropertyOpera" Grid.Column="1" Grid.Row="6" Height="27" Text="{Binding srPropertyOpera}" VerticalAlignment="Top" Width="235" Margin="0,0,0,15" />
+        <ComboBox Name="cmbApp" Grid.Column="1" Grid.Row="6" Visibility="Collapsed" Margin="0,0,0,15" Height="27" VerticalAlignment="Top" IsEnabled="True" DisplayMemberPath="sName" SelectedValuePath="sValue" Width="235"/>
+        <ComboBox Name="cmbStatus" Grid.Column="1" Grid.Row="7" Visibility="Collapsed" Margin="0,0,0,15" Height="27" VerticalAlignment="Top" IsEnabled="True" DisplayMemberPath="sName" SelectedValuePath="sValue" Width="235"/>        
+        <CheckBox Name="chksrA" Grid.Column="1" Grid.Row="7" VerticalAlignment="Top" Height="13" IsChecked="{Binding srA}" >Active</CheckBox>
+        <CheckBox Name="chksrUseSistur" Grid.Column="1" Grid.Row="7" VerticalAlignment="Top" IsChecked="{Binding srUseSistur}" HorizontalAlignment="Center" Height="13" Margin="72,0,88,0" Width="75" >Use Situr</CheckBox>
+        <CheckBox Name="chksrAppointment" Grid.Column="1" Grid.Row="7" VerticalAlignment="Top" HorizontalAlignment="Right" IsChecked="{Binding srAppointment}" Height="13" >Appointment</CheckBox>
+
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="9" Margin="0,7,75,7" Visibility="Hidden" HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept" />
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="9" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
+        <!--#endregion-->
+    </Grid>
+</Window>

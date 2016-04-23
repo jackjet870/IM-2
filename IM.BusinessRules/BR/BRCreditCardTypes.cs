@@ -55,7 +55,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="creditCardType">Objeto a agregar o actualiza en la BD</param>
     /// <param name="blnUpd">boleano para saber si se va a actualziar o agregar</param>
-    /// <returns>0. No se guardó el registro | 1. El registro se guardó | 2. Existe un registro con el mismo ID</returns>
+    /// <returns>0. No se guardó el registro | 1. El registro se guardó | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [Emoguel] created 07/03/2016
     /// </history>
@@ -74,7 +74,7 @@ namespace IM.BusinessRules.BR
           CreditCardType creditCardTypeVal = dbContext.CreditCardTypes.Where(cct => cct.ccID == creditCardType.ccID).FirstOrDefault();
           if (creditCardTypeVal != null)//Existe un registro con el mismo ID
           {
-            nRes = 2;
+            nRes = -1;
           }
           else//Agregar a la BD
           {

@@ -46,7 +46,7 @@ namespace IM.Administrator.Forms
         chkA.IsEnabled = true;
         chkSil.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
-        UIHelper.SetMaxLength(country, this);
+        UIHelper.SetUpControls(country, this);
       }
       #endregion
       loadUnavailableMotives();

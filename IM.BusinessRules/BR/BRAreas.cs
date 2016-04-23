@@ -56,7 +56,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="bUpd">true para Actualizar| false para agregar registro</param>
     /// <param name="Area">Entidad para guardar</param>
-    /// <returns>0.No se guardó el registro | 1. El registro se guardo correctamente | 2. Existe un registro con el mismo ID</returns>
+    /// <returns>0.No se guardó el registro | 1. El registro se guardo correctamente | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] 26/Feb/2016 Created
     /// </history>
@@ -71,7 +71,7 @@ namespace IM.BusinessRules.BR
               Area areaValue = dbContext.Areas.Where(c => c.arID == area.arID).FirstOrDefault();
               if (areaValue != null)//Verificar que no exista un registro con el mismo ID
               {
-                nRes = 2;
+                nRes = -1;
               }
               else
               {

@@ -34,7 +34,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(region, oldRegion);
-      UIHelper.SetMaxLength(region, this);
+      UIHelper.SetUpControls(region, this);
       DataContext = region;
       if(enumMode!=EnumMode.preview)
       {

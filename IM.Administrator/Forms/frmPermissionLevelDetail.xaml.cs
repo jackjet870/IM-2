@@ -35,7 +35,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(permissionLevel, oldPermissionLevel);      
-      UIHelper.SetMaxLength(permissionLevel, this);
+      UIHelper.SetUpControls(permissionLevel, this);
       DataContext = permissionLevel;
       if (enumMode == EnumMode.add)
       {
@@ -108,6 +108,10 @@ namespace IM.Administrator.Forms
       else
       {
         string strMsj = ValidateHelper.ValidateForm(this, "Permission Level");
+        if(permissionLevel.plID>0)
+        {
+          strMsj += (strMsj == "") ? "" : " \n " + "Permission Level can not be 0.";
+        }
         if (strMsj=="")
         {
           int nRes = BRPermissionsLevels.SavePermissions(permissionLevel, (enumMode == EnumMode.edit));
@@ -124,42 +128,6 @@ namespace IM.Administrator.Forms
         }
       }
     }
-    #endregion
-
-    #region Preview textInput
-    /// <summary>
-    /// Solo acepta numeros
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 04/11/2016
-    /// </history>
-    private void txtatID_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
-    }
-    #endregion
-
-    #region LostFocus
-    /// <summary>
-    /// Valida que el numero no sea 0
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 11/04/2016
-    /// </history>
-    private void txtatID_LostFocus(object sender, RoutedEventArgs e)
-    {
-      if(!string.IsNullOrWhiteSpace(txtplID.Text))
-      {
-        if(Convert.ToInt32(txtplID.Text)==0)
-        {
-          txtplID.Text = "";
-        }
-      }
-    } 
     #endregion
   }
 }

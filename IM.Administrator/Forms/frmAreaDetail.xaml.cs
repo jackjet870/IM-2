@@ -60,7 +60,7 @@ namespace IM.Administrator.Forms
         cmbRegion.IsEnabled = true;
         txtarID.IsEnabled = (mode == EnumMode.add);
         btnAccept.Visibility = Visibility.Visible;
-        UIHelper.SetMaxLength(area, this);
+        UIHelper.SetUpControls(area, this);
       }      
     }
     #endregion

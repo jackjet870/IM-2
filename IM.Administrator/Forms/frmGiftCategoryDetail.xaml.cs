@@ -62,7 +62,7 @@ namespace IM.Administrator.Forms
         txtgcN.IsEnabled = true;
         chkA.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
-        UIHelper.SetMaxLength(giftCategory, this);
+        UIHelper.SetUpControls(giftCategory, this);
       }
     }
     #endregion

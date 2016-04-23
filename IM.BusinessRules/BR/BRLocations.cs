@@ -88,7 +88,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="location">Objeto a guardar</param>
     /// <param name="blnUpdate">True. Actualiza | False. Agrega</param>
-    /// <returns>0. No se guardó | 1. Se guardó correctamente | 2. Existe un registro con el mismo ID</returns>
+    /// <returns>0. No se guardó | 1. Se guardó correctamente | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 01/04/2016
     /// </history>
@@ -108,7 +108,7 @@ namespace IM.BusinessRules.BR
           Location locationVal = dbContext.Locations.Where(lo => lo.loID == location.loID).FirstOrDefault();
           if(locationVal!=null)//Existe un registro con el mismo ID
           {
-            return 2;
+            return -1;
           }
           else//Insertar el registro
           {

@@ -39,7 +39,7 @@ namespace IM.Administrator.Forms
       if(enumMode!=EnumMode.preview)
       {
         btnAccept.Visibility = Visibility.Visible;
-        UIHelper.SetMaxLength(period, this);
+        UIHelper.SetUpControls(period, this);
       }
     }
     #endregion

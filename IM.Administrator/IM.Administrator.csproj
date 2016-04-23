@@ -352,7 +352,67 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmReimpresionMotiveDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmReimpresionMotives.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmRepDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmReps.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmRoleDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmRoles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmRoomTypeDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmRoomTypes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmSalesAmountRangeDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmSalesAmountRanges.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmSalesRoomDetail.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\frmSalesRooms.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmSaleTypeDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmSaleTypes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmScoreRuleConceptDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmScoreRulesConcepts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -578,8 +638,53 @@
     <Compile Include="Forms\frmRegions.xaml.cs">
       <DependentUpon>frmRegions.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmReimpresionMotiveDetail.xaml.cs">
+      <DependentUpon>frmReimpresionMotiveDetail.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmReimpresionMotives.xaml.cs">
       <DependentUpon>frmReimpresionMotives.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmRepDetail.xaml.cs">
+      <DependentUpon>frmRepDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmReps.xaml.cs">
+      <DependentUpon>frmReps.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmRoleDetail.xaml.cs">
+      <DependentUpon>frmRoleDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmRoles.xaml.cs">
+      <DependentUpon>frmRoles.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmRoomTypeDetail.xaml.cs">
+      <DependentUpon>frmRoomTypeDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmRoomTypes.xaml.cs">
+      <DependentUpon>frmRoomTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSalesAmountRangeDetail.xaml.cs">
+      <DependentUpon>frmSalesAmountRangeDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSalesAmountRanges.xaml.cs">
+      <DependentUpon>frmSalesAmountRanges.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSalesRoomDetail.xaml.cs">
+      <DependentUpon>frmSalesRoomDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSalesRooms.xaml.cs">
+      <DependentUpon>frmSalesRooms.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSaleTypeDetail.xaml.cs">
+      <DependentUpon>frmSaleTypeDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSaleTypes.xaml.cs">
+      <DependentUpon>frmSaleTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmScoreRuleConceptDetail.xaml.cs">
+      <DependentUpon>frmScoreRuleConceptDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmScoreRulesConcepts.xaml.cs">
+      <DependentUpon>frmScoreRulesConcepts.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSearch.xaml.cs">
       <DependentUpon>frmSearch.xaml</DependentUpon>

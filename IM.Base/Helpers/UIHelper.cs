@@ -1,4 +1,4 @@
-﻿using IM.Model;
+﻿using IM.Model.Enums;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Threading;
 
 namespace IM.Base.Helpers
@@ -95,40 +96,28 @@ namespace IM.Base.Helpers
     /// </summary>
     /// <param name="strObject">Nombre del objeto que aparecerá en el mensaje</param>
     /// <param name="nResult">resultado de la operación</param>
-    /// <param name="blnIsTransaccion">valida si la operacion es una transacción</param>
     /// <history>
     /// [emoguel] created 02/04/2016
+    /// [emoguel] modified 22/04/2016 se Elimino el parametro transaction
     /// </history>
-    public static void ShowMessageResult(string strObject,int nResult,bool blnIsTransaccion=false,bool blnIsRange=false)
+    public static void ShowMessageResult(string strObject, int nResult)
     {
       #region respuesta
       switch (nResult)
       {
+        case -2:
+          {
+            ShowMessage(strObject + " Please check the ranges, impossible save it.");
+            break;
+          }
+        case -1:
+          {
+            ShowMessage(strObject + " ID already exist please select another one.");
+            break;
+          }
         case 0:
           {
-            ShowMessage( strObject + " not saved.");
-            break;
-          }
-        case 1:
-          {
-            ShowMessage(strObject + " successfully saved.");
-            break;
-          }
-        case 2:
-          {
-            if (blnIsTransaccion)//SI es una transaccion
-            {
-              ShowMessage(strObject + " successfully saved.");
-              break;
-            }
-            else if(blnIsRange)//si es una validacion de rango de numeros
-            {
-              ShowMessage(strObject + " Please check the ranges, impossible save it."); 
-            }
-            else
-            {
-              ShowMessage(strObject + " ID already exist please select another one.");
-            }
+            ShowMessage(strObject + " not saved.");
             break;
           }
         default://mayor que 2 cuando se guardan mas de 1 objeto
@@ -141,7 +130,7 @@ namespace IM.Base.Helpers
     }
     #endregion
 
-    #region SetMaxLength
+    #region SetUpControls
     /// <summary>
     /// Le asigna el maximo de escritura a los controles igual al que tienen en la BD
     /// </summary>
@@ -150,7 +139,7 @@ namespace IM.Base.Helpers
     /// <history>
     /// [emoguel] created 08/04/2016
     /// </history>
-    public static void SetMaxLength(object obj, Window ui)
+    public static void SetUpControls(object obj, Window ui, EnumMode enumMode=EnumMode.preview)
     {
       List<Control> lstControls = GetChildParentCollection<Control>(ui);//Obtenemos la lista de controles del contenedor      
 
@@ -164,12 +153,11 @@ namespace IM.Base.Helpers
           EdmMember edm = entityTypeBase.Members.Where(em => em.Name == pi.Name).FirstOrDefault();//Obtenemos el edmMember            
 
           Facet facet;
-          Control control = lstControls.Where(cl => cl.Name == "txt" + pi.Name).FirstOrDefault();//buscamos si existe el control
-
+          Control control = lstControls.Where(cl => cl.Name == "txt" + pi.Name).FirstOrDefault();//buscamos si existe el control          
           if (control != null)//Verifcamos que tengamos un control
           {
             TextBox txt = control as TextBox;//Convertimos el control a texbox
-            TypeCode typeCode = Type.GetTypeCode(pi.PropertyType);//Obtenemos el tipo de dato              
+            TypeCode typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(pi.PropertyType) ?? pi.PropertyType);
             switch (typeCode)
             {
               #region String
@@ -187,7 +175,27 @@ namespace IM.Base.Helpers
               case TypeCode.Double:                
                 {
                   int Precision = Convert.ToInt32(edm.TypeUsage.Facets.Where(fc => fc.Name == "Precision").FirstOrDefault().Value);
-                  txt.MaxLength = Precision;
+                  int Scale = Convert.ToInt32(edm.TypeUsage.Facets.Where(fc => fc.Name == "Scale").FirstOrDefault().Value);
+                  if(Scale>0)
+                  {
+                    txt.PreviewTextInput += TextBoxHelper.DecimalTextInput;
+                    if (enumMode != EnumMode.search)
+                    {
+                      txt.LostFocus += TextBoxHelper.LostFocus;
+                      txt.GotFocus += TextBoxHelper.DecimalGotFocus;
+                    }
+                  }
+                  else
+                  {
+                    txt.PreviewTextInput += TextBoxHelper.IntTextInput;
+                    if (enumMode != EnumMode.search)
+                    {
+                      txt.LostFocus += TextBoxHelper.LostFocus;
+                      txt.GotFocus += TextBoxHelper.IntGotFocus;
+                    }
+                  }
+                  
+                  txt.MaxLength = Precision;                  
                   break;
                 }
               #endregion
@@ -196,6 +204,11 @@ namespace IM.Base.Helpers
               case TypeCode.Byte:
                 {
                   txt.MaxLength = 3;
+                  txt.PreviewTextInput += TextBoxHelper.ByteTextInput;
+                  if (enumMode != EnumMode.search)
+                  {
+                    txt.LostFocus += TextBoxHelper.LostFocus;
+                  }
                   break;
                 }
               #endregion
@@ -206,6 +219,11 @@ namespace IM.Base.Helpers
               case TypeCode.Int64:
                 {
                   txt.MaxLength = 10;
+                  txt.PreviewTextInput += TextBoxHelper.IntTextInput;
+                  if (enumMode != EnumMode.search)
+                  {
+                    txt.LostFocus += TextBoxHelper.LostFocus;
+                  }
                   break;
                 }
               #endregion
@@ -283,6 +301,124 @@ namespace IM.Base.Helpers
         }
       }
     }
+    #endregion
+
+    #region UiSetDatacontext
+
+    #endregion
+    #region UiSetDatacontext
+    /// <summary>
+    /// Asigna el datacontex a cada control del formulario dependiendo del ID y del tipo de dato
+    /// </summary>
+    /// <param name="obj">Objeto con las proiedades</param>
+    /// <param name="ui">Formulario al que se le asignará los bindings</param>
+    /// <param name="bindingMode">Modo de sincronizado del control y el objeto</param>
+    /// <history>
+    /// [emoguel] created 21/04/2016
+    /// </history>
+    public static void UiSetDatacontext(object obj, Window ui, BindingMode bindingMode = BindingMode.TwoWay)
+    {
+      List<Control> lstControls = GetChildParentCollection<Control>(ui);//Obtenemos la lista de controles del contenedor      
+
+      Type type = obj.GetType();//Obtenemos el tipo de objeto
+      if (lstControls.Count > 0)
+      {
+        #region Obtenemos el MaxLength
+
+        foreach (PropertyInfo pi in type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => !pi.GetMethod.IsVirtual))//recorremos las propiedades
+        {
+          TypeCode typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(pi.PropertyType) ?? pi.PropertyType);
+          switch (typeCode)
+          {
+            #region Texbox,ComboBox
+            case TypeCode.Int32:
+            case TypeCode.Int16:
+            case TypeCode.Int64:
+            case TypeCode.SByte:
+            case TypeCode.Byte:
+            case TypeCode.String:
+              {
+                Control control = lstControls.Where(cl => cl.Name.EndsWith(pi.Name)).FirstOrDefault();//buscamos si existe el control                
+
+                if (control != null)
+                {
+                  Binding binding = new Binding();
+                  binding.Mode = bindingMode;
+                  binding.Path = new PropertyPath(pi.Name);
+                  if (control is TextBox)
+                  {
+                    control.SetBinding(TextBox.TextProperty, binding);
+                  }
+                  else if (control is ComboBox)
+                  {
+                    control.SetBinding(ComboBox.SelectedValueProperty, binding);
+                  }
+
+                  //binding.Source = sourceObject;  // view model?
+                }
+                break;
+              }
+            #endregion
+
+            #region TextBox Currency
+            case TypeCode.Double:
+            case TypeCode.Decimal:
+              {
+                Control control = lstControls.Where(cl => cl.Name.EndsWith(pi.Name)).FirstOrDefault();//buscamos si existe el control                
+
+                if (control != null)
+                {
+                  Binding binding = new Binding();
+                  binding.Mode = bindingMode;
+                  binding.Path = new PropertyPath(pi.Name);
+                  if (bindingMode != BindingMode.OneWay)
+                  {
+                    binding.StringFormat = "{0:C}";
+                  }
+                  control.SetBinding(TextBox.TextProperty, binding);
+                }
+                break;
+              }
+            #endregion
+
+            #region CheckBox
+            case TypeCode.Boolean:
+              {
+                Control control = lstControls.Where(cl => cl.Name == "chk" + pi.Name).FirstOrDefault();//buscamos si existe el control                
+                if (control != null)
+                {
+                  Binding binding = new Binding();
+                  binding.Mode = bindingMode;
+                  binding.Path = new PropertyPath(pi.Name);
+                  control.SetBinding(CheckBox.IsCheckedProperty, binding);
+                }
+                break;
+              }
+            #endregion
+
+            #region DateTime
+            case TypeCode.DateTime:
+              {
+                Control control = lstControls.Where(cl => cl.Name.EndsWith(pi.Name)).FirstOrDefault();//buscamos si existe el control                
+
+                if (control != null)
+                {
+                  Binding binding = new Binding();
+                  binding.Mode = bindingMode;
+                  binding.Path = new PropertyPath(pi.Name);
+                  control.SetBinding(DatePicker.SelectedDateProperty, binding);
+                }
+                break;
+              }
+              #endregion
+
+          }
+
+        }
+        #endregion
+      }
+
+    } 
     #endregion
     #endregion Metodos
   }

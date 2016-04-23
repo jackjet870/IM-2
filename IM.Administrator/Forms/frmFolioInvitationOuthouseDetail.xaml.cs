@@ -57,49 +57,17 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(folioInvOut, oldFolioInvOut);
       DataContext = folioInvOut;
+      txtfiSerie.PreviewTextInput += TextBoxHelper.LetterTextInput;
       if (enumMode != EnumMode.preview)
       {
         txtfiSerie.IsEnabled = true;
         txtfiFrom.IsEnabled = true;
         txtfiTo.IsEnabled = true;
         chkA.IsEnabled = true;
-        UIHelper.SetMaxLength(folioInvOut, this);
+        UIHelper.SetUpControls(folioInvOut, this);
         btnAccept.Visibility = Visibility.Visible;
       }
     } 
-    #endregion
-
-    #region PreviweTextNum
-    /// <summary>
-    /// Verifica que solo se escriban numeros
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 23/03/2016
-    /// </history>
-    private void txtFrom_PreviewTextNum(object sender, TextCompositionEventArgs e)
-    {
-      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
-    }
-    #endregion
-
-    #region PreviewTextLetter
-    /// <summary>
-    /// Verifica que solo se escriban Letras
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 23/03/2016
-    /// </history>
-    private void txtFrom_PreviewTextLetter(object sender, TextCompositionEventArgs e)
-    {
-      if (!char.IsLetter(Convert.ToChar(e.Text)))
-      {
-        e.Handled = true;
-      }
-    }
     #endregion
 
     #region Cancel
@@ -182,7 +150,7 @@ namespace IM.Administrator.Forms
         if (strMsj == "")
         {
           nRes = BRFoliosInvitationsOuthouse.SaveFolioInvittionsOutside(folioInvOut, (enumMode == EnumMode.edit));
-          UIHelper.ShowMessageResult("Folio Invitation Outhouse", nRes,blnIsRange:true);
+          UIHelper.ShowMessageResult("Folio Invitation Outhouse", nRes);
           if(nRes==1)
           {
             DialogResult = true;
@@ -196,27 +164,6 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
-    #endregion
-
-    #region Methods
-    #region LostFocus
-    /// <summary>
-    /// Cambiar el valor del textbox cuando pierde el foco
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 23/03/2016
-    /// </history>
-    private void txt_LostFocus(object sender, RoutedEventArgs e)
-    {
-      TextBox txt = (TextBox)sender;
-      if(string.IsNullOrWhiteSpace(txt.Text))
-      {
-        txt.Text = "0";
-      }
-    }
-    #endregion 
     #endregion
   }
 }

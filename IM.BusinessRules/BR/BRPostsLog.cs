@@ -57,7 +57,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="postLog">objeto a guardar</param>
     /// <param name="blnUpdate">True. Actualiza | False. Inserta</param>
-    /// <returns>0. No se guardó | 1. Se guard'o</returns>
+    /// <returns>0. No se guardó | 1. Se guardó</returns>
     /// <history>
     /// [emoguel] created 12/04/2016
     /// </history>

@@ -58,7 +58,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="mealTicketType">Objeto a guardar</param>
     /// <param name="blnUpdate">True. Actualiza | False. Agrega un registro</param>
-    /// <returns>0. No se guardó el registro | 1. Se guardó el registro | 2. Existe un registro con el mismo ID</returns>
+    /// <returns>0. No se guardó el registro | 1. Se guardó el registro | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 04/04/2016
     /// </history>
@@ -79,7 +79,7 @@ namespace IM.BusinessRules.BR
 
           if(mealTicketTypeVal!=null)//Verificar si existe un registro con el mismo ID
           {
-            return 2;
+            return -1;
           }
           else
           {

@@ -10,6 +10,7 @@
     Desks,
     FoliosCxC,
     FoliosInvitationOuthouse,
-    MealTicketTypes
+    MealTicketTypes,
+    DefaultByte
   }
 }

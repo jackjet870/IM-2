@@ -67,7 +67,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="currency">objeto a guardar en la BD</param>
     /// <param name="blnUpd">true. para actualizar | false. para agregar</param>
-    /// <returns>0. No se pudo guardar el registro | 1. El registro se guardo | 2.- Existe un registro con el mismo ID</returns>
+    /// <returns>0. No se pudo guardar el registro | 1. El registro se guardo | -1.- Existe un registro con el mismo ID</returns>
     /// <history>
     /// [Emoguel] created 07/03/2016
     /// </history>
@@ -86,7 +86,7 @@ namespace IM.BusinessRules.BR
           Currency currencyVal = dbContext.Currencies.Where(c=>c.cuID==currency.cuID).FirstOrDefault();
           if(currencyVal!=null)//Existe un registro con el mismo ID
           {
-            nRes = 2;
+            nRes = -1;
           }
           else//NO existe un registro con el mismo ID
           {

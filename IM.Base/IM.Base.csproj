@@ -71,6 +71,7 @@
     <Compile Include="Classes\objInvitCreditCard.cs" />
     <Compile Include="Classes\objInvitGift.cs" />
     <Compile Include="Classes\objInvitGuestStatus.cs" />
+    <Compile Include="Helpers\ComboBoxHelper.cs" />
     <Compile Include="Forms\frmGuest.xaml.cs">
       <DependentUpon>frmGuest.xaml</DependentUpon>
     </Compile>
@@ -317,6 +318,8 @@
     <Resource Include="Images\Marital_Status.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Sales_Room.png" />
+    <Resource Include="Images\Rep.png" />
     <Resource Include="Images\Down.png" />
     <Resource Include="Images\Up.png" />
     <Resource Include="Images\Money_Bag.png" />
@@ -328,6 +331,7 @@
     <Resource Include="Images\Payment.png" />
     <Resource Include="Images\Money.ico" />
     <Resource Include="Images\DateTime_Forbidden.png" />
+    <Resource Include="Images\Bedroom.png" />
     <Resource Include="Images\Find.png" />
     <Resource Include="Images\Change.ico" />
     <Resource Include="Images\Search.ico" />
@@ -384,7 +388,9 @@
       <LastGenOutput>rptInvitationGuests.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Score.gif" />
+  </ItemGroup>
   <ItemGroup>
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>

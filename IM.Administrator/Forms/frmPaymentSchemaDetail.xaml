@@ -32,14 +32,14 @@
         <!--#region Datos-->
         <TextBox Name="txtpasID" Grid.Column="1" Grid.Row="0" Height="27" Tag="ID" VerticalAlignment="Top" Text="{Binding pasID}" CharacterCasing="Upper" IsEnabled="False" />
         <TextBox Name="txtpasN" Grid.Column="1" Grid.Row="1" Height="27" Tag="description" VerticalAlignment="Top" Text="{Binding pasN}" />
-        <TextBox Name="txtpasCoupleFrom" Grid.Column="1" Grid.Row="2" Height="27" Tag="Couples From" VerticalAlignment="Top" Text="{Binding pasCoupleFrom}" MaxLength="10" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" />
-        <TextBox Name="txtpasCoupleTo" Grid.Column="1" Grid.Row="3" Height="27" Tag="Couples To" VerticalAlignment="Top" Text="{Binding pasCoupleTo}" MaxLength="10"  PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus"/>
+        <TextBox Name="txtpasCoupleFrom" Grid.Column="1" Grid.Row="2" Height="27" Tag="Couples From" VerticalAlignment="Top" Text="{Binding pasCoupleFrom}" />
+        <TextBox Name="txtpasCoupleTo" Grid.Column="1" Grid.Row="3" Height="27" Tag="Couples To" VerticalAlignment="Top" Text="{Binding pasCoupleTo}" />
         <Grid Grid.Column="1" Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="90*"/>
                 <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Name="txtShowFactor" Grid.Column="0" Height="27" VerticalAlignment="Top" Tag="Show Factor" HorizontalAlignment="Stretch" Text="{Binding pasShowFactor}" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" MaxLength="18" />
+            <TextBox Name="txtpasShowFactor" Grid.Column="0" Height="27" VerticalAlignment="Top" Tag="Show Factor" HorizontalAlignment="Stretch" Text="{Binding pasShowFactor}" />
             <Label Grid.Column="1" HorizontalAlignment="Right">%</Label>
         </Grid>        
         <CheckBox Name="chkA" Grid.Column="1" Grid.Row="5" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="{Binding pasA}" Height="14" >Active</CheckBox>

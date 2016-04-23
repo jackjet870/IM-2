@@ -120,7 +120,7 @@ namespace IM.Administrator.Forms
         chkCxC.IsEnabled = true;
         cmbCalTyp.IsEnabled = true;
         txtctID.IsEnabled = (mode == EnumMode.add);
-        UIHelper.SetMaxLength(chargeTo, this);
+        UIHelper.SetUpControls(chargeTo, this);
       }      
       tlpCalc.Text = "A - If the guest has tour then the charge is equal to the total of gifts less the maximum amount"
         + "authorized else the charge is equal to the total of gifts. The maximum amount authorized is based on the Lead Source. \n \n"
@@ -130,18 +130,7 @@ namespace IM.Administrator.Forms
     }
 
     #endregion
-    #region PreviewKeyInput
-    /// <summary>
-    /// Valida que unicamente se inserten numeros
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void txtPri_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
-    }
 
-    #endregion
     #region WindowKeyDown
     /// <summary>
     /// Cierra la ventana detalle con la tecla escape

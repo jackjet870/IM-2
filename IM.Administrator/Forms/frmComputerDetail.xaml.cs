@@ -36,7 +36,7 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(computer, oldComputer);
       LoadDesks();
       DataContext = computer;
-      UIHelper.SetMaxLength(computer, this);
+      UIHelper.SetUpControls(computer, this);
       if (mode==EnumMode.add)
       {
         txtcpID.IsEnabled = true;

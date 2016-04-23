@@ -17,7 +17,7 @@ namespace IM.Base.Helpers
     /// </history>
     public static string DoubleCurrencyToStandar(string textCurrency)
     {
-      double dRes = 0;      
+      double dRes = 0;
       return double.TryParse(textCurrency, NumberStyles.Currency, CultureInfo.CurrentCulture, out dRes) ? dRes.ToString() : "0";
     }
 

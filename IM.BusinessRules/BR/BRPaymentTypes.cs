@@ -75,7 +75,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="paymentType">Objeto a guardar</param>
     /// <param name="blnUpdtae">True. Actualiza | False. Agrega</param>
-    /// <returns>0. No se guardó | 1. Se guardó | 2. Existe un registro con el mismo ID</returns>
+    /// <returns>0. No se guardó | 1. Se guardó | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 06/04/2016
     /// </history>
@@ -95,7 +95,7 @@ namespace IM.BusinessRules.BR
           PaymentType paymentTypeVal = dbContext.PaymentTypes.Where(pt => pt.ptID == paymentType.ptID).FirstOrDefault();
           if(paymentTypeVal!=null)//Validamos que no si existe un registro con el mismo ID
           {
-            return 2;
+            return -1;
           }
           else//agregar
           {

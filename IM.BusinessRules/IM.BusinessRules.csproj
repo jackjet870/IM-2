@@ -113,6 +113,12 @@
     <Compile Include="BR\BRRegions.cs" />
     <Compile Include="BR\BRReimpresionMotives.cs" />
     <Compile Include="BR\BRReportsByLeadSource.cs" />
+    <Compile Include="BR\BRRoles.cs" />
+    <Compile Include="BR\BRRoomTypes.cs" />
+    <Compile Include="BR\BRSaleAmountRanges.cs" />
+    <Compile Include="BR\BRSaleTypes.cs" />
+    <Compile Include="BR\BRSaleTypesCategories.cs" />
+    <Compile Include="BR\BRScoreRulesConcepts.cs" />
     <Compile Include="BR\BRTourTimesAvailables.cs" />
     <Compile Include="BR\BRSalesRoomsLogs.cs" />
     <Compile Include="BR\BRSales.cs" />

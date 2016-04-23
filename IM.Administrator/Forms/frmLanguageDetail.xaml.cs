@@ -44,7 +44,7 @@ namespace IM.Administrator.Forms
         {
           txtlaID.IsEnabled = true;
         }
-        UIHelper.SetMaxLength(language, this);
+        UIHelper.SetUpControls(language, this);
       }
 
     } 

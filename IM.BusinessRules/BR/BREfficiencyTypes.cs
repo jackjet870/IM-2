@@ -70,7 +70,7 @@ namespace IM.BusinessRules.BR
           EfficiencyType efficiencyTypeVal = dbContext.EfficiencyTypes.Where(eft => eft.etID == efficiencyType.etID).FirstOrDefault();
           if(efficiencyTypeVal!=null)//Si existe un registro con el mismo id
           {
-            return 2;
+            return -1;
           }
           else//Insertar
           {

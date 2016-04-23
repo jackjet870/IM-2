@@ -60,7 +60,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="memberShipType">Objeto a guardar</param>
     /// <param name="blnUpdate">True. Actualiza | False. Inserta</param>
-    /// <returns>0. No se guardó | 1. se guardó correctamente | 2. Existe un registro con el mismo ID</returns>
+    /// <returns>0. No se guardó | 1. se guardó correctamente | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 04/04/2016
     /// </history>
@@ -80,7 +80,7 @@ namespace IM.BusinessRules.BR
           MembershipType memberShipTypeVal = dbContext.MembershipTypes.Where(mt => mt.mtID == memberShipType.mtID).FirstOrDefault();
           if(memberShipTypeVal!=null)//Verificar que se tenga un objeto
           {
-            return 2;
+            return -1;
           }
           else//insertar
           {

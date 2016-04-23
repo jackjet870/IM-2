@@ -35,7 +35,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(refundType, oldRefundType);
       txtrfID.IsEnabled = (enumMode == EnumMode.add);
-      UIHelper.SetMaxLength(refundType, this);
+      UIHelper.SetUpControls(refundType, this);
       DataContext = refundType;
     }
     #endregion
@@ -70,6 +70,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
+      btnAccept.Focus();
       if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(refundType,oldRefundType))
       {
         Close();

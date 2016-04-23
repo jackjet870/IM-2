@@ -60,7 +60,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="contract">Entidad a guardar en la BD</param>
     /// <param name="blnUpd">true. Actualiza | false. Inserta</param>
-    /// <returns>0. No se guardó el registro | 1. Se guardó el registro | 2. Existe un registro con el mismo ID</returns>
+    /// <returns>0. No se guardó el registro | 1. Se guardó el registro | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [Emoguel] created 01/03/2016
     /// </history>
@@ -80,7 +80,7 @@ namespace IM.BusinessRules.BR
           Contract contractVal = dbContext.Contracts.Where(c => c.cnID == contract.cnID).FirstOrDefault();
           if(contractVal!=null)//Existe con registro con el mismo ID
           {
-            nRes = 2;
+            nRes = -1;
           }
           else
           {

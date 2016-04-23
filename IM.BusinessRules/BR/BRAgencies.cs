@@ -81,7 +81,7 @@ namespace IM.BusinessRules.BR
     /// <param name="blnUpd">True. Actuliza la entidad | False. Agrega el registro a la BD</param>
     /// <param name="blnMarket">True. Actualiza el mercado de los huspedes</param>
     /// <param name="blnUnavailMots">True. Cambia el motivo de indisponibilidad</param>
-    /// <returns>0. No se pudo guardar | 1.Se guardo | 2. Existe un registro con el mismo ID</returns>
+    /// <returns>0. No se pudo guardar | 1.Se guardo | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 11/03/2016
     /// </history>
@@ -188,7 +188,7 @@ namespace IM.BusinessRules.BR
           Agency agencyVal = dbContext.Agencies.Where(ag => ag.agID == agency.agID).FirstOrDefault();
           if (agencyVal != null)//Se valida que no exista un registro con el mismo ID
           {
-            nRes = 2;//Existe un registro con el mismo ID
+            nRes = -1;//Existe un registro con el mismo ID
           }
           else//No existe registro con el mismo ID
           {

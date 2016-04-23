@@ -56,7 +56,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="guestStatusType">Objeto a guardar</param>
     /// <param name="blnUpdate">True. Actualiza | false. Inserta</param>
-    /// <returns>0. registro no guardado | 1. Registro guardado | 2. existe un registro con el mismo ID</returns>
+    /// <returns>0. registro no guardado | 1. Registro guardado | -1. existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 24/03/2016
     /// </history>
@@ -77,7 +77,7 @@ namespace IM.BusinessRules.BR
 
           if(guestStatusTypeVal!=null)//Se valida si existe un registro con el mismo ID
           {
-            return 2;//Existe un registro con el mismo ID
+            return -1;//Existe un registro con el mismo ID
           }
           else//crear el registro nuevo
           {

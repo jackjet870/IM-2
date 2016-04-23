@@ -41,7 +41,7 @@ namespace IM.Administrator.Forms
       if(enumMode!=EnumMode.preview)
       {
         btnAccept.Visibility = Visibility.Visible;
-        UIHelper.SetMaxLength(notBookingMotive, this);
+        UIHelper.SetUpControls(notBookingMotive, this);
       }
     }
     #endregion

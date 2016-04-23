@@ -37,7 +37,7 @@ namespace IM.Administrator.Forms
         chkA.IsEnabled = true;
         chkIsCC.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
-        UIHelper.SetMaxLength(creditCardType, this);
+        UIHelper.SetUpControls(creditCardType, this);
       }      
       DataContext = creditCardType;
     }

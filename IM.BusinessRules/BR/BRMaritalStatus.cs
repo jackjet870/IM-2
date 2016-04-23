@@ -58,7 +58,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="maritalStatus">Objeto a guardar</param>
     /// <param name="blnUpdate">True. Actualiza | False. Inserta</param>
-    /// <returns>0. No se guardó | 1. Se guardó correctamente | 2. Existe un registro con el mismo ID</returns>
+    /// <returns>0. No se guardó | 1. Se guardó correctamente | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 01/04/2016
     /// </history>
@@ -79,7 +79,7 @@ namespace IM.BusinessRules.BR
 
           if (marStatusVal != null)//Validamos que no exista registro con el mismoID
           {
-            return 2;
+            return -1;
           }
           else
           {

@@ -50,7 +50,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="folioCXC">Objeto a guardar</param>
     /// <param name="blnUpdate">True. Actualiza | False. Agrega</param>
-    /// <returns>0. No se guardó | 1. Guardado correctamente | 2. Verificar el rango</returns>
+    /// <returns>0. No se guardó | 1. Guardado correctamente | -2. Verificar el rango</returns>
     /// <history>
     /// [emoguel] created 22/03/2016
     /// </history>
@@ -71,14 +71,14 @@ namespace IM.BusinessRules.BR
           }
           else//No es valido
           {
-            return 2;
+            return -2;
           }
         }
         #endregion
         #region Insertar
         else//Insertar
         {
-          blnIsValid = (bool)(dbContext.USP_OR_ValidateFolioCXC(folioCXC.fiFrom, folioCXC.fiTo, folioCXC.fiA, 1).FirstOrDefault());//Valida si se puede guardar
+          blnIsValid = (bool)(dbContext.USP_OR_ValidateFolioCXC(folioCXC.fiFrom, folioCXC.fiTo, folioCXC.fiA, 0).FirstOrDefault());//Valida si se puede guardar
 
           if (blnIsValid)//Si es valido
           {
@@ -86,7 +86,7 @@ namespace IM.BusinessRules.BR
           }
           else//No es valido
           {
-            return 2;
+            return -2;
           }
         }
         #endregion

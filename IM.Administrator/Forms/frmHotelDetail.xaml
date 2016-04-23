@@ -28,10 +28,10 @@
         <Label Name="lblStatus" Grid.Column="0" Grid.Row="3" Visibility="Collapsed">Status</Label>
         <!--#endregion-->
         <!--#region Datos-->
-        <TextBox Name="txthoID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27"  Margin="0,0,0,10" VerticalAlignment="Top" Text="{Binding hoID}" CharacterCasing="Upper" IsEnabled="False" Width="235"/>
-        <ComboBox Name="cmbHotelGr" Grid.Column="1" Grid.Row="1" Tag="group"  Margin="0,0,0,10" Height="27" VerticalAlignment="Top" DisplayMemberPath="hgN" SelectedValuePath="hgID" SelectedValue="{Binding hoGroup}" IsEnabled="False" Width="235"/>
-        <ComboBox Name="cmbHotelAr" Grid.Column="1" Grid.Row="2" Tag="area"  Margin="0,0,0,10" Height="27" VerticalAlignment="Top" DisplayMemberPath="arN" SelectedValuePath="arID" SelectedValue="{Binding hoar}" IsEnabled="False" Width="235"/>
-        <ComboBox Name="cmbStatus" Grid.Column="1" Grid.Row="3" Visibility="Collapsed" Margin="0,0,0,10" Height="27" VerticalAlignment="Top" IsEnabled="True" DisplayMemberPath="sName" SelectedValuePath="sValue" Width="235"/>
+        <TextBox Name="txthoID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27"  Margin="0,0,0,15" VerticalAlignment="Top" Text="{Binding hoID}" CharacterCasing="Upper" IsEnabled="False" Width="235"/>
+        <ComboBox Name="cmbHotelGr" Grid.Column="1" Grid.Row="1" Tag="group"  Margin="0,0,0,15" Height="27" VerticalAlignment="Top" DisplayMemberPath="hgN" SelectedValuePath="hgID" SelectedValue="{Binding hoGroup}" IsEnabled="False" Width="235"/>
+        <ComboBox Name="cmbHotelAr" Grid.Column="1" Grid.Row="2" Tag="area"  Margin="0,0,0,15" Height="27" VerticalAlignment="Top" DisplayMemberPath="arN" SelectedValuePath="arID" SelectedValue="{Binding hoar}" IsEnabled="False" Width="235"/>
+        <ComboBox Name="cmbStatus" Grid.Column="1" Grid.Row="3" Visibility="Collapsed" Margin="0,0,0,15" Height="27" VerticalAlignment="Top" IsEnabled="True" DisplayMemberPath="sName" SelectedValuePath="sValue" Width="235"/>
         <CheckBox Name="chkA" Grid.Column="1" Grid.Row="4"  VerticalAlignment="Center" IsChecked="{Binding hoA}" Height="13" IsEnabled="False">Active</CheckBox>
 
         <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="5" Visibility="Hidden" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept"/>

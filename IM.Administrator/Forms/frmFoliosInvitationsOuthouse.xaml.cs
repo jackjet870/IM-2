@@ -296,10 +296,20 @@ namespace IM.Administrator.Forms
       }
 
       if (_folioInvOutFilter.fiFrom > 0 && _folioInvOutFilter.fiTo > 0)//Filtro por rango de folios
-      {
-        if (!(newFolioInvOut.fiFrom >= _folioInvOutFilter.fiFrom && newFolioInvOut.fiTo <= _folioInvOutFilter.fiTo))
+      { 
+        if (_folioInvOutFilter.fiFrom == _folioInvOutFilter.fiTo)
         {
-          return false;
+          if(!(_folioInvOutFilter.fiFrom>=newFolioInvOut.fiFrom && _folioInvOutFilter.fiTo<=newFolioInvOut.fiTo))
+          {
+            return false;
+          }
+        }
+        else
+        {
+          if (!(newFolioInvOut.fiFrom >= _folioInvOutFilter.fiFrom && newFolioInvOut.fiTo <= _folioInvOutFilter.fiTo))
+          {
+            return false;
+          }
         }
       }
 

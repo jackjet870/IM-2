@@ -57,7 +57,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="membershipGroup">Objeto a guardar</param>
     /// <param name="blnUpdate">True. Actualiza | False. Insertar</param>
-    /// <returns>0. No se pudo guardar | 1. se guardó | 2. existe un registro con el mismo ID</returns>
+    /// <returns>0. No se pudo guardar | 1. se guardó | -1. existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 04/04/2016
     /// </history>
@@ -77,7 +77,7 @@ namespace IM.BusinessRules.BR
           MembershipGroup membershipGroupVal = dbContext.MembershipsGroups.Where(mg => mg.mgID == membershipGroup.mgID).FirstOrDefault();
           if(membershipGroupVal!=null)//validamos si existe un objeto con el mismo ID
           {
-            return 2;
+            return -1;
           }
           else
           {

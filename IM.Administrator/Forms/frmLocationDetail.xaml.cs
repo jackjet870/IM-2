@@ -75,7 +75,7 @@ namespace IM.Administrator.Forms
           chkFly.Visibility = Visibility.Collapsed;
           chkReg.Visibility = Visibility.Collapsed;
           Title = "Search";
-          LoadStatus();
+          ComboBoxHelper.LoadComboDefault(cmbSta);
           cmbSta.SelectedValue = nStatus;
         }
         else
@@ -87,7 +87,7 @@ namespace IM.Administrator.Forms
           cmblols.IsEnabled = true;
           LoadLeadSource();
         }
-        UIHelper.SetMaxLength(location, this);
+        UIHelper.SetUpControls(location, this);
       }
     }
     #endregion
@@ -183,25 +183,6 @@ namespace IM.Administrator.Forms
     #endregion
 
     #region Methods
-    #region LoadStatus
-    /// <summary>
-    /// Llena la lista de estatus
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 01/04/2016
-    /// </history>
-    protected void LoadStatus()
-    {
-      List<object> lstStatus = new List<object>();
-      lstStatus.Add(new { sName = "All", sValue = -1 });
-      lstStatus.Add(new { sName = "Inactive", sValue = 0 });
-      lstStatus.Add(new { sName = "Active", sValue = 1 });      
-      cmbSta.ItemsSource = lstStatus;
-    }
-
-    #endregion
 
     #region LoadSaleRoom
     /// <summary>

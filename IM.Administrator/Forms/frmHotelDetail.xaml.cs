@@ -76,14 +76,14 @@ namespace IM.Administrator.Forms
         #region Modo Busqueda
         if (enumMode == EnumMode.search)
         {
-          LoadStatus();
+          ComboBoxHelper.LoadComboDefault(cmbStatus);
           cmbStatus.SelectedValue = nStatus;
           chkA.Visibility = Visibility.Collapsed;
           lblStatus.Visibility = Visibility.Visible;
           cmbStatus.Visibility = Visibility.Visible;
         }
         #endregion
-        UIHelper.SetMaxLength(hotel, this);
+        UIHelper.SetUpControls(hotel, this);
       }
     }
     #endregion
@@ -208,27 +208,6 @@ namespace IM.Administrator.Forms
 
       cmbHotelAr.ItemsSource = lstAreas;
     }
-    #endregion
-
-    #region LoadStatus
-    /// <summary>
-    /// Llena la lista de estatus
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 30/03/2016
-    /// </history>
-    protected void LoadStatus()
-    {
-      List<object> lstStatus = new List<object>();
-      lstStatus.Add(new { sName = "All", sValue = -1 });
-      lstStatus.Add(new { sName = "Inactive", sValue = 0 });
-      lstStatus.Add(new { sName = "Active", sValue = 1 });
-
-      cmbStatus.ItemsSource = lstStatus;
-    }
-
     #endregion
 
     #endregion

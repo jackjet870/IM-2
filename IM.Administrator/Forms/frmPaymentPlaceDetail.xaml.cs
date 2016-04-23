@@ -111,7 +111,7 @@ namespace IM.Administrator.Forms
         btnAccept.Visibility = Visibility.Visible;
         txtpcN.IsEnabled = true;
         chkpcA.IsEnabled = true;
-        UIHelper.SetMaxLength(paymentPlace, this);
+        UIHelper.SetUpControls(paymentPlace, this);
       }
     } 
     #endregion

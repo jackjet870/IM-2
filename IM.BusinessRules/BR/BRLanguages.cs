@@ -74,7 +74,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="language">Objeto a guardar</param>
     /// <param name="blnUpdate">True. Actualiza | False. Inserta</param>
-    /// <returns>0. No se guardó | 1. registro guardado | 2. Existe un registro con el mismo ID</returns>
+    /// <returns>0. No se guardó | 1. registro guardado | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 30/03/2016
     /// </history>
@@ -94,7 +94,7 @@ namespace IM.BusinessRules.BR
           Language languageVal = dbContext.Languages.Where(la => la.laID == language.laID).FirstOrDefault();
           if(languageVal!=null)//Validamos si existe un objeto con el mismo nombre}
           {
-            return 2;//Existe un registro con el mismo nombre
+            return -1;//Existe un registro con el mismo nombre
           }
           else
           {

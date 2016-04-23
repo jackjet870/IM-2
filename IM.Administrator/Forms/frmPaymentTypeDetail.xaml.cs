@@ -55,7 +55,7 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(paymentType, oldPaymentType);
       DataContext = paymentType;
       txtptID.IsEnabled = (enumMode != EnumMode.edit);
-      UIHelper.SetMaxLength(paymentType, this);
+      UIHelper.SetUpControls(paymentType, this);
     } 
     #endregion
 

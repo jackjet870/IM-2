@@ -64,7 +64,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      LoadStatus();
+      ComboBoxHelper.LoadComboDefault(cmbStatus);
       LoadForm();
     }
 
@@ -123,26 +123,6 @@ namespace IM.Administrator.Forms
 
     #endregion
     #region metodos
-    #region LoadStatus
-    /// <summary>
-    /// Llena la lista de estatus
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] 3/Mar/2016 Created
-    /// </history>
-    protected void LoadStatus()
-    {
-      List<object> lstStatus = new List<object>();
-      lstStatus.Add(new { sName = "All", sValue = -1 });
-      lstStatus.Add(new { sName = "Inactive", sValue = 0 });
-      lstStatus.Add(new { sName = "Active", sValue = 1 });
-
-      cmbStatus.ItemsSource = lstStatus;
-    }
-
-    #endregion
 
     #region LoadForm
     /// <summary>
@@ -162,7 +142,7 @@ namespace IM.Administrator.Forms
         #region ChargeTo
         case EnumWindow.ChargeTos:
           {
-            txtD.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
+            txtD.PreviewTextInput += TextBoxHelper.IntTextInput;
             txtD.MaxLength = 3;
             lblDes.Content = "Price";
             lblSta.Content = "CxC";
@@ -199,10 +179,10 @@ namespace IM.Administrator.Forms
           }
         #endregion
 
-        #region Desks
+        #region DefaultInt
         case EnumWindow.DefaultInt:
           {
-            txtID.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
+            txtID.PreviewTextInput += TextBoxHelper.IntTextInput;
             break;
           }
         #endregion
@@ -210,8 +190,8 @@ namespace IM.Administrator.Forms
         #region FoliosCXC
         case EnumWindow.FoliosCxC:
           {
-            txtD.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
-            txtID.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
+            txtD.PreviewTextInput += TextBoxHelper.IntTextInput;
+            txtID.PreviewTextInput += TextBoxHelper.IntTextInput;
             lblID.Content = "From ";
             lblDes.Content = "To";
             if (strID == "0") { txtID.Text = ""; }
@@ -226,8 +206,8 @@ namespace IM.Administrator.Forms
             txtSerie.Visibility = Visibility.Visible;
             lblSerie.Visibility = Visibility.Visible;
             txtSerie.Text = strSerie;
-            txtD.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
-            txtID.PreviewTextInput += new TextCompositionEventHandler(PreviewTextInputNumber);
+            txtD.PreviewTextInput += TextBoxHelper.IntTextInput;
+            txtID.PreviewTextInput += TextBoxHelper.IntTextInput;
             lblID.Content = "From ";
             lblDes.Content = "To";
             if (strID == "0") { txtID.Text = ""; }
@@ -236,13 +216,14 @@ namespace IM.Administrator.Forms
           }
         #endregion
 
-        #region
-        case EnumWindow.MealTicketTypes:
+        #region DefaultByte
+        case EnumWindow.DefaultByte:
           {
-            lblSta.Content ="With Pax";
+            txtID.MaxLength = 3;
+            txtID.PreviewTextInput += TextBoxHelper.ByteTextInput;
             break;
-          }
-        #endregion
+          } 
+          #endregion
       }
 
     }
@@ -305,6 +286,7 @@ namespace IM.Administrator.Forms
           }
         #endregion
         #region DefaulInt
+        case EnumWindow.DefaultByte:
         case EnumWindow.DefaultInt:
           {
             if (!string.IsNullOrWhiteSpace(txtID.Text))
@@ -398,9 +380,9 @@ namespace IM.Administrator.Forms
                 UIHelper.ShowMessage("Start number and end number can not be 0.");
                 blnDialogResult = false;
               }
-              else if (nTo > nFrom)
+              else if (nFrom < nTo)
               {
-                UIHelper.ShowMessage("Start Number can not be greater than End Number.");
+                UIHelper.ShowMessage("End Number can not be greater than Start Number.");
                 blnDialogResult = false;
               }
 
@@ -423,8 +405,8 @@ namespace IM.Administrator.Forms
             DialogResult = true;
             Close();
             break;
-          } 
-          #endregion
+          }
+        #endregion        
       }
     }
     #endregion

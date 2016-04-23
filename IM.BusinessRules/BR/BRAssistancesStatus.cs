@@ -61,7 +61,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="bUpd">true para actualizar | false para guardar un nuevo registro</param>
     /// <param name="assistance"></param>
-    /// <returns>0.No se guardó el registro | 1. El registro se guardo correctamente | 2. Existe un registro con el mismo ID</returns>
+    /// <returns>0.No se guardó el registro | 1. El registro se guardo correctamente | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] 27/Feb/2016 Created
     /// </history>
@@ -82,7 +82,7 @@ namespace IM.BusinessRules.BR
           AssistanceStatus assistanceVal = dbContext.AssistancesStatus.Where(c => c.atID == assistance.atID).FirstOrDefault();
           if (assistanceVal != null)//Validar si existe un registro con el mismo nombre
           {
-            nRes = 2;
+            nRes = -1;
           }
           else//guardar el registro
           {

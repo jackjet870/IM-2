@@ -41,7 +41,7 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(desk, oldDesk);
       DataContext = desk;
       txtdkID.Text = ((enumMode == EnumMode.edit) ? desk.dkID.ToString() : "");
-      UIHelper.SetMaxLength(desk, this);
+      UIHelper.SetUpControls(desk, this);
       LoadGridComputers();
       LoadCmbComputers();
     } 
@@ -89,7 +89,7 @@ namespace IM.Administrator.Forms
         { 
           List<string> lstIdsComputers = lstComputers.Select(cmp => cmp.cpID).ToList();
           nRes = BRDesks.SaveDesk(desk, (enumMode == EnumMode.edit), lstIdsComputers);
-          UIHelper.ShowMessageResult("Desk", nRes, true);
+          UIHelper.ShowMessageResult("Desk", nRes);
           if(nRes>0)
           {
             DialogResult = true;

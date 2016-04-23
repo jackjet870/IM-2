@@ -59,7 +59,7 @@ namespace IM.Administrator.Forms
         txtcuN.IsEnabled = true;
         chkA.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
-        UIHelper.SetMaxLength(currency, this);
+        UIHelper.SetUpControls(currency, this);
       }
       DataContext = currency;
     }

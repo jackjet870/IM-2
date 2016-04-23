@@ -46,8 +46,8 @@
             <TextBox Name="txtagN" Grid.Column="1" Grid.Row="1" Tag="description"  Height="27" VerticalAlignment="Top" Text="{Binding agN}"  IsEnabled="False" />
             <ComboBox Name="cmbUnavMot" Grid.Column="1" Grid.Row="2" Tag="unavailable motive" Height="27" VerticalAlignment="Top" SelectedValuePath="umID" DisplayMemberPath="umN" SelectedValue="{Binding agum}" IsEnabled="False"/>
             <ComboBox Name="cmbMarket" Grid.Column="1" Grid.Row="3" Tag="market"  Height="27" VerticalAlignment="Top" SelectedValuePath="mkID" DisplayMemberPath="mkN" SelectedValue="{Binding agmk}" IsEnabled="False"/>
-            <TextBox Name="txtagShowPay"  Grid.Column="1" Grid.Row="4" Height="27" Tag="show pay"  VerticalAlignment="Top"  Text="{Binding agShowPay,StringFormat={}{0:C}}" LostFocus="txt_LostFocus"  IsEnabled="False" GotFocus="txt_GotFocus" PreviewTextInput="txt_PreviewTextInput"/>            
-            <TextBox Name="txtagSalePay" Grid.Column="1" Grid.Row="5" Height="27" Tag="salePay" VerticalAlignment="Top" Text="{Binding agSalePay,StringFormat={}{0:C}}" LostFocus="txt_LostFocus"  IsEnabled="False" GotFocus="txt_GotFocus" PreviewTextInput="txt_PreviewTextInput"/>
+            <TextBox Name="txtagShowPay"  Grid.Column="1" Grid.Row="4" Height="27" Tag="show pay"  VerticalAlignment="Top"  Text="{Binding agShowPay,StringFormat={}{0:C}}" IsEnabled="False" />            
+            <TextBox Name="txtagSalePay" Grid.Column="1" Grid.Row="5" Height="27" Tag="salePay" VerticalAlignment="Top" Text="{Binding agSalePay,StringFormat={}{0:C}}" IsEnabled="False" />
             <!--#endregion--> 
         </Grid>
         <!--#endregion-->

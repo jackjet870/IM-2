@@ -34,10 +34,10 @@
         <!--#region Datos-->
         <TextBox Name="txtmyID" Grid.Column="1" Grid.Row="0" Height="27" Tag="ID" VerticalAlignment="Top" Text="{Binding myID}" CharacterCasing="Upper" />
         <TextBox Name="txtmyN" Grid.Column="1" Grid.Row="1" Height="27" Tag="description" VerticalAlignment="Top" Text="{Binding myN}"/>
-        <TextBox Name="txtmyPriceA" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" Text="{Binding myPriceA,StringFormat={}{0:C}}" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus"/>        
-        <TextBox Name="txtmyPriceM" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" Text="{Binding myPriceM,StringFormat={}{0:C}}" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus"/>
-        <TextBox Name="txtmyCollaboratorWithCost" Grid.Column="1" Grid.Row="4" Height="27" VerticalAlignment="Top" Text="{Binding myCollaboratorWithCost,StringFormat={}{0:C}}" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus"/>
-        <TextBox Name="txtmyCollaboratorWithoutCost" Grid.Column="1" Grid.Row="5" Height="27" VerticalAlignment="Top" Text="{Binding myCollaboratorWithoutCost,StringFormat={}{0:C}}" PreviewTextInput="txt_NumberTextInput" LostFocus="txt_LostFocus" GotFocus="txt_GotFocus" />
+        <TextBox Name="txtmyPriceA" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" Text="{Binding myPriceA,StringFormat={}{0:C}}" />        
+        <TextBox Name="txtmyPriceM" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" Text="{Binding myPriceM,StringFormat={}{0:C}}" />
+        <TextBox Name="txtmyCollaboratorWithCost" Grid.Column="1" Grid.Row="4" Height="27" VerticalAlignment="Top" Text="{Binding myCollaboratorWithCost,StringFormat={}{0:C}}" />
+        <TextBox Name="txtmyCollaboratorWithoutCost" Grid.Column="1" Grid.Row="5" Height="27" VerticalAlignment="Top" Text="{Binding myCollaboratorWithoutCost,StringFormat={}{0:C}}" />
         <CheckBox Name="chkmyWPax" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="{Binding myWPax}" Height="13" >Whit Pax</CheckBox>        
 
         <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="7" Margin="0,7,75,7" Click="btnAccept_Click" Content="_Accept"  HorizontalAlignment="Right"/>

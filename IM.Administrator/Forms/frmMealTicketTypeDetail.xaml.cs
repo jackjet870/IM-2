@@ -36,7 +36,7 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(mealTicketType, oldMealTicketType);
       DataContext = mealTicketType;
       txtmyID.IsEnabled = (enumMode == EnumMode.add);
-      UIHelper.SetMaxLength(mealTicketType, this);
+      UIHelper.SetUpControls(mealTicketType, this);
     }
     #endregion
 
@@ -97,6 +97,7 @@ namespace IM.Administrator.Forms
     }
 
     #endregion
+
     #region Cancel
     /// <summary>
     /// Cierra la ventana verificando los cambios pendientes
@@ -120,65 +121,6 @@ namespace IM.Administrator.Forms
       {
         Close();
       }
-    } 
-    #endregion
-
-    #region txt_NumberTextInput
-    /// <summary>
-    /// Solamente se pueden escribir números
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 04/04/2016
-    /// </history>
-    private void txt_NumberTextInput(object sender, TextCompositionEventArgs e)
-    {
-      TextBox txt = (TextBox)sender;
-      if(e.Text=="." && !txt.Text.Trim().Contains("."))
-      {
-        e.Handled = false;
-      }
-      else
-      {
-        e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
-      }
-      
-    }
-    #endregion
-
-    #region LostFocus
-    /// <summary>
-    /// Convierte el formato de numero currency a estandar
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 04/04/2016
-    /// </history>
-    private void txt_LostFocus(object sender, RoutedEventArgs e)
-    {
-      TextBox txt = (TextBox)sender;
-      if (string.IsNullOrWhiteSpace(txt.Text.Trim()))
-      {
-        txt.Text = "0";
-      }
-    }
-    #endregion
-
-    #region GotFocus
-    /// <summary>
-    /// Convierte el formato de numero estandar a currency
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 04/04/2016
-    /// </history>
-    private void txt_GotFocus(object sender, RoutedEventArgs e)
-    {
-      TextBox txt = (TextBox)sender;
-      txt.Text = ConvertHelper.DoubleCurrencyToStandar(txt.Text);      
     } 
     #endregion
   }

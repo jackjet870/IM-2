@@ -36,7 +36,7 @@ namespace IM.Administrator.Forms
       ObjectHelper.CopyProperties(placeType, oldPlaceType);
       DataContext = placeType;
       txtpyID.IsEnabled = (enumMode == EnumMode.add);
-      UIHelper.SetMaxLength(placeType, this);
+      UIHelper.SetUpControls(placeType, this);
     }
     #endregion
 

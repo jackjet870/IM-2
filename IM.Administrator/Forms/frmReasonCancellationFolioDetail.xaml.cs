@@ -34,7 +34,7 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ObjectHelper.CopyProperties(reasonCancellationFolio, oldReasonCanFol);
-      UIHelper.SetMaxLength(reasonCancellationFolio, this);
+      UIHelper.SetUpControls(reasonCancellationFolio, this);
       if(enumMode!=EnumMode.preview)
       {
         txtrcfID.IsEnabled = (enumMode == EnumMode.add);

@@ -54,7 +54,7 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="reimpresionMotive">Objeto a guardar</param>
     /// <param name="blnUpdate">True. Actualiza  | False. Agrega</param>
-    /// <returns>0. No se guardó | 1. Se guardó | 2. Existe un registro con el mismo ID</returns>
+    /// <returns>0. No se guardó | 1. Se guardó | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 16/04/2016
     /// </history>
@@ -74,7 +74,7 @@ namespace IM.BusinessRules.BR
           ReimpresionMotive reimpresionMotVal = dbContext.ReimpresionMotives.Where(rm => rm.rmID == reimpresionMotive.rmID).FirstOrDefault();
           if(reimpresionMotVal!=null)//Validar si existe un registro con el mismo ID
           {
-            return 2;
+            return -1;
           }
           else//Agregar
           {

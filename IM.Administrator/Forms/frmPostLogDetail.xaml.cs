@@ -47,7 +47,7 @@ namespace IM.Administrator.Forms
         btnAccept.Visibility = Visibility.Visible;
         txtppDT.IsEnabled = true;
         cmbpppo.IsEnabled = true;
-        UIHelper.SetMaxLength(postLog, this);
+        UIHelper.SetUpControls(postLog, this);
         if(enumMode==EnumMode.search)
         {
           txtppID.Visibility = Visibility.Collapsed;

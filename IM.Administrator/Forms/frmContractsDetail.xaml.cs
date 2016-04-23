@@ -54,6 +54,7 @@ namespace IM.Administrator.Forms
     }
 
     #endregion
+
     #region LoadedWindow
     /// <summary>
     /// Llama eventos predeterminados al abrir la ventana
@@ -71,22 +72,10 @@ namespace IM.Administrator.Forms
         cmbUnvMot.IsEnabled = true;
         chkA.IsEnabled = true;
         btnAccept.Visibility = Visibility.Visible;
-        UIHelper.SetMaxLength(contract, this);
+        UIHelper.SetUpControls(contract, this);
       }
       LoadUnvMotive();
       DataContext = contract;
-    }
-    #endregion
-
-    #region PreviewtextInput
-    /// <summary>
-    /// Valida que el textbox solamente acepte números
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void txtMinDays_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
     }
     #endregion
 
