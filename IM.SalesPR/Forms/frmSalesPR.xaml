@@ -96,8 +96,8 @@
                 </StackPanel>
                 <TextBlock Text="Filters" Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <RadioButton x:Name="rdoSalesPr"  Content="Sales PR" Margin="5"  IsChecked="True"/>
-                    <RadioButton x:Name="rdoContactPR"  Content="Contacts PR" Margin="5"/>
+                    <RadioButton x:Name="rdoSalesPr"  Content="PR of Sales" Margin="5"  IsChecked="True"/>
+                    <RadioButton x:Name="rdoContactPR"  Content="PR of Contacts" Margin="5"/>
                     <CheckBox x:Name="chkLeadSource"  Content="All Lead Sources" Margin="10,5"/>
                 </StackPanel>
             </StackPanel>
