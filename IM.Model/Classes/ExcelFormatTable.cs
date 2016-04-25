@@ -37,5 +37,7 @@ namespace IM.Model.Classes
     public DataFieldFunctions AggregateFunction { get; set; } = DataFieldFunctions.None;
     public bool IsCalculated { get; set; }
     public RowFunctions TotalsRowFunction { get; set; } = RowFunctions.None;
+
+    public bool InsertBlankRow { get; set; } = false;
   }
 }
