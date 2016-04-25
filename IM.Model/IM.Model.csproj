@@ -701,6 +701,18 @@
     <Compile Include="RptDepositsPaymentByPR_Deposit.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptFoliosCXC.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptFoliosCxCByPR.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptFoliosInvitationByDateFolio.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptFoliosInvitationsOuthouseByPR.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptFollowUpByAgency.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -878,6 +890,9 @@
     <Compile Include="RptProductionByNationalitySalesRoomOuthouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptProductionByPRContactOuthouse.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptProductionByPRGroupInhouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -888,6 +903,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptProductionByPRSalesRoomInhouse.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptProductionByPRSalesRoomOuthouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptProductionBySalesRoom.cs">
