@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace IM.MailOutsConfig.Reports {
+namespace IM.Host.Reports {
     using System;
     using System.ComponentModel;
     using CrystalDecisions.Shared;
@@ -16,14 +16,14 @@ namespace IM.MailOutsConfig.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class rptMailOuts : ReportClass {
+    public class rptGiftsReceipt : ReportClass {
         
-        public rptMailOuts() {
+        public rptGiftsReceipt() {
         }
         
         public override string ResourceName {
             get {
-                return "rptMailOuts.rpt";
+                return "rptGiftsReceipt.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace IM.MailOutsConfig.Reports {
         
         public override string FullResourceName {
             get {
-                return "IM.MailOutsConfig.Reports.rptMailOuts.rpt";
+                return "IM.Host.Reports.rptGiftsReceipt.rpt";
             }
             set {
                 // Do nothing
@@ -90,9 +90,9 @@ namespace IM.MailOutsConfig.Reports {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedrptMailOuts : Component, ICachedReport {
+    public class CachedrptGiftsReceipt : Component, ICachedReport {
         
-        public CachedrptMailOuts() {
+        public CachedrptGiftsReceipt() {
         }
         
         [Browsable(false)]
@@ -129,7 +129,7 @@ namespace IM.MailOutsConfig.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            rptMailOuts rpt = new rptMailOuts();
+            rptGiftsReceipt rpt = new rptGiftsReceipt();
             rpt.Site = this.Site;
             return rpt;
         }

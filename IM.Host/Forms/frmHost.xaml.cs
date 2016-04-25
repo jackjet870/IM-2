@@ -13,6 +13,7 @@ using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Enums;
 using IM.Host.Enums;
+using System.Collections.Generic;
 
 namespace IM.Host
 {
@@ -362,7 +363,7 @@ namespace IM.Host
     private void btnExtRate_Click(object sender, RoutedEventArgs e)
     {
       //Verificamos si el usuario cuenta con los permisos suficientes
-      if (!App.User.HasPermission(EnumPermission.ExchangeRates, EnumPermisionLevel.ReadOnly)) // _userData.Permissions.Exists(c => c.pppm == "EXCHRATES" && c.pppl >= 1))
+      if (!App.User.HasPermission(EnumPermission.ExchangeRates, EnumPermisionLevel.ReadOnly))
       {
         MessageBox.Show("User doesn't have access", "Exchange Rate");
         return;
@@ -374,7 +375,7 @@ namespace IM.Host
       _frExtChangeRate.ShowDialog();
     }
 
-    private void ChkguShow_Click(object sender, RoutedEventArgs e)
+    private void guShow_Click(object sender, RoutedEventArgs e)
     {
       // Obtenemos el row seleccionado!
 
@@ -405,6 +406,7 @@ namespace IM.Host
       }
     }
 
+    #region ValidateGuest
     /// <summary>
     /// Función encargada de validar que sea un usuario valido con sus respectivos permisos
     /// </summary>
@@ -427,7 +429,17 @@ namespace IM.Host
       }
       else if (!App.User.HasPermission(permission, EnumPermisionLevel.Standard)) // PERMISO - Solo Lectura
       {
-        if (!guestHost.guMealTicket)
+        if (!guestHost.guMealTicket && strField == "guMealTicket")
+        {
+          UIHelper.ShowMessage("You have read access.", MessageBoxImage.Exclamation);
+          return false;
+        }
+        else if (!guestHost.guGiftsReceived && strField == "guGiftsReceived")
+        {
+          UIHelper.ShowMessage("You have read access.", MessageBoxImage.Exclamation);
+          return false;
+        }
+        else if (!guestHost.guShow && strField == "guShow")
         {
           UIHelper.ShowMessage("You have read access.", MessageBoxImage.Exclamation);
           return false;
@@ -440,23 +452,17 @@ namespace IM.Host
       }
       return true;
     }
+    #endregion
 
+    #region btnMealTickets_Click
     /// <summary>
-    /// Función para madar ejecutar el formulario Gifts Receipts
+    /// Invoca  el formulario Meal Ticket por medio del boton correspondiente.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     /// <history>
-    /// [vipacheco] 03/17/2016 Created
+    /// [vipacheco] 18/03/2016 Created
     /// </history>
-    private void btnGiftsReceipts_Click(object sender, RoutedEventArgs e)
-    {
-      frmGiftsReceipts _frmGiftsReceipts = new frmGiftsReceipts();
-      _frmGiftsReceipts.ShowInTaskbar = false;
-      _frmGiftsReceipts.Owner = this;
-      _frmGiftsReceipts.ShowDialog();
-    }
-
     private void btnMealTickets_Click(object sender, RoutedEventArgs e)
     {
       // Se verifica si el usuario tiene permisos de edicion!
@@ -468,8 +474,18 @@ namespace IM.Host
       _frmMealTickets.modeOpen = ((modeEdit == true) ? EnumModeOpen.Edit : EnumModeOpen.Search);
       _frmMealTickets.Owner = this;
       _frmMealTickets.ShowDialog();
-    }
+    } 
+    #endregion
 
+    #region guMealTickets_Click
+    /// <summary>
+    /// Invoca el formulario Meal Ticket por medio del CheckBox correspondiente!
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 18/03/2016 Created
+    /// </history>
     private void guMealTickets_Click(object sender, RoutedEventArgs e)
     {
       // Obtenemos el row seleccionado!
@@ -477,22 +493,122 @@ namespace IM.Host
       GuestPremanifestHost guestHost = (GuestPremanifestHost)_chekedValue.DataContext;
 
       //Validamos que sea un invitado valido
-      if (ValidateGuest(guestHost, EnumPermission.MealTicket, "guMealTickets"))
+      if (ValidateGuest(guestHost, EnumPermission.MealTicket, "guMealTicket"))
       {
         // Desplegamos el formulario Show
         frmMealTickets _frmMealTickets = new frmMealTickets(guestHost.guID);
         _frmMealTickets.ShowInTaskbar = false;
 
+        List<MealTicket> _valuePreview = BRMealTickets.GetMealTickets(guestHost.guID);
+        SalesRoomCloseDates _closeSalesRoom = BRSalesRooms.GetSalesRoom(App.User.SalesRoom.srID);
+
         if (guestHost.guMealTicket)
-          _frmMealTickets.modeOpen = EnumModeOpen.Preview;
+        {
+          // Verificamos si alguno de sus cupones de comida es de una fecha cerrada, impedimos modificar los datos
+          _valuePreview.ForEach(x =>
+                                    {
+                                      if (IsClosed_MealTicket(x.meD, _closeSalesRoom.srMealTicketsCloseD))
+                                      {
+                                        _frmMealTickets.modeOpen = EnumModeOpen.Preview;
+                                        return;
+                                      }
+                                      else
+                                        _frmMealTickets.modeOpen = EnumModeOpen.PreviewEdit;
+                                    });
+        }
         else
-          _frmMealTickets.modeOpen = EnumModeOpen.Edit;
+          _frmMealTickets.modeOpen = EnumModeOpen.PreviewEdit;
 
         _frmMealTickets.Owner = this;
         _frmMealTickets.ShowDialog();
 
+        //dtgPremanifestHost.Items.Refresh();
       }
-    }
-  }
+      else
+        _chekedValue.IsChecked = false;
 
+      dtgPremanifestHost.Items.Refresh();
+      dtpDate_SelectedDateChanged(null, null);
+      
+    }
+    #endregion
+
+    #region IsClosed_MealTicket
+    /// <summary>
+    /// Evalua si el Mealticket no se ha cerrado!
+    /// </summary>
+    /// <param name="pdtmDate"></param>
+    /// <param name="pdtmClose"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 23/03/2016 Created
+    /// </history>
+    private bool IsClosed_MealTicket(DateTime pdtmDate, DateTime pdtmClose)
+    {
+      bool blnClosed = false;
+      DateTime _pdtmDate;
+
+      if (DateTime.TryParse(pdtmDate + "", out _pdtmDate))
+      {
+        if (_pdtmDate <= pdtmClose)
+        {
+          blnClosed = true;
+        }
+      }
+      return blnClosed;
+    }
+    #endregion
+
+    #region btnGiftsReceipts_Click
+    /// <summary>
+    /// Función para madar ejecutar el formulario Gifts Receipts
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 03/17/2016 Created
+    /// </history>
+    private void btnGiftsReceipts_Click(object sender, RoutedEventArgs e)
+    {
+      // Se verifica si el usuario tiene permisos de edicion!
+      bool modeEdit = App.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard);
+
+      // Se invoca el formulario de acuerdo al permiso del usuario!
+      frmGiftsReceipts _frmGiftsReceipts = new frmGiftsReceipts();
+      _frmGiftsReceipts.ShowInTaskbar = false;
+      _frmGiftsReceipts.modeOpen = ((modeEdit == true) ? EnumModeOpen.Edit : EnumModeOpen.Search);
+      _frmGiftsReceipts.Owner = this;
+      _frmGiftsReceipts.ShowDialog();
+    }
+    #endregion
+
+    #region guGiftsReceived_Click
+    /// <summary>
+    /// Invoca el formulario Gifts Received
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 04/04/2016 Created
+    /// </history>
+    private void guGiftsReceived_Click(object sender, RoutedEventArgs e)
+    {
+      // Obtenemos el row seleccionado!
+      CheckBox _chekedValue = sender as CheckBox;
+      GuestPremanifestHost guestHost = (GuestPremanifestHost)_chekedValue.DataContext;
+
+      //Validamos que sea un invitado valido
+      if (ValidateGuest(guestHost, EnumPermission.GiftsReceipts, "guGiftsReceived"))
+      {
+        bool _edit = App.User.HasPermission(EnumPermission.GiftsReceipts, EnumPermisionLevel.Standard);
+
+        frmGiftsReceipts _frmGiftsReceipts = new frmGiftsReceipts(guestHost.guID);
+        _frmGiftsReceipts.ShowInTaskbar = false;
+        _frmGiftsReceipts.Owner = this;
+        _frmGiftsReceipts.modeOpen = (_edit) ? EnumModeOpen.PreviewEdit : EnumModeOpen.Preview;
+        _frmGiftsReceipts.ShowDialog();
+      }
+    } 
+    #endregion
+  }
 }

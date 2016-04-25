@@ -185,6 +185,24 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    #region GetGuestShort
+    /// <summary>
+    /// Obtiene registros especificos de un guest Short con un guestID ingresado.
+    /// </summary>
+    /// <param name="guestID"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 11/Abril/2016 Created
+    /// </history>
+    public static GuestShort GetGuestShort(int guestID)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_GetGuestById(guestID).SingleOrDefault();
+      }
+    } 
+    #endregion
+
     #region SaveGuestMovement
     /// <summary>
     /// Guarda los moviemientos del Guest
@@ -682,5 +700,29 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
+
+    #region UpdateFieldguMealTicket
+    /// <summary>
+    /// Actualiza el campo guMealTicket cuando sea requerido
+    /// </summary>
+    /// <param name="chkValue"></param>
+    /// <param name="guestID"></param>
+    /// <history>
+    /// [vipacheco] 01/04/2016 Created
+    /// </history>
+    public static void UpdateFieldguMealTicket(bool chkValue, int guestID)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        Guest _guest = dbContext.Guests.Where(x => x.guID == guestID).FirstOrDefault<Guest>();
+
+        _guest.guMealTicket = chkValue;
+
+        dbContext.Entry(_guest).State = System.Data.Entity.EntityState.Modified;
+        dbContext.SaveChanges();
+      }
+    } 
+    #endregion
+
   }
 }

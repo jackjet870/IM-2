@@ -227,5 +227,68 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
+
+#region GetSalesRoomByID
+    /// <summary>
+    /// Obtiene los registros de un Sales Room por su ID
+    /// </summary>
+    /// <param name="srID"> Identificador de Sales Room </param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 14/Abril/2016 Created
+    /// </history>
+    public static SalesRoom GetSalesRoomByID(string srID)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.SalesRooms.Where(x => x.srID == srID).FirstOrDefault();
+
+
+
+
+
+
+
+
+      }
+    }
+    #endregion
+
+    #region GetCloseSalesRoom
+    /// <summary>
+    /// Obtiene la fecha de cierre de algun Sales Room
+    /// </summary>
+    /// <param name="salesRoomType"></param>
+    /// <param name="salesRoom"></param>
+    /// <returns> DateTime </returns>
+    /// <history>
+    /// [vipacheco] 19/Abril/2016 Created
+    /// </history>
+    public static DateTime? GetCloseSalesRoom(EnumSalesRoomType salesRoomType, string salesRoom)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        SalesRoom _salesRoom;
+        switch (salesRoomType)
+        {
+          case EnumSalesRoomType.Shows:
+            _salesRoom = dbContext.SalesRooms.Where(x => x.srID == salesRoom).SingleOrDefault();
+            return _salesRoom.srShowsCloseD;
+          case EnumSalesRoomType.MealTickets:
+            _salesRoom = dbContext.SalesRooms.Where(x => x.srID == salesRoom).SingleOrDefault();
+            return _salesRoom.srMealTicketsCloseD;
+          case EnumSalesRoomType.Sales:
+            _salesRoom = dbContext.SalesRooms.Where(x => x.srID == salesRoom).SingleOrDefault();
+            return _salesRoom.srSalesCloseD;
+          case EnumSalesRoomType.GiftsReceipts:
+            _salesRoom = dbContext.SalesRooms.Where(x => x.srID == salesRoom).SingleOrDefault();
+            return _salesRoom.srGiftsRcptCloseD;
+          default:
+            return null;
+        }
+      }
+    } 
+    #endregion
+
   }
 }

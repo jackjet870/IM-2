@@ -72,8 +72,45 @@ namespace IM.BusinessRules.BR
       {
         return dbContext.MealTickets.Where(x => x.megu == guestID).ToList();
       }
-    } 
+    }
     #endregion
 
+    #region InsertNewMealTicket
+    /// <summary>
+    /// Función que agrega un nuevo Meal Ticket
+    /// </summary>
+    /// <param name="pMealTicket"></param>
+    /// <history>
+    /// [vipacheco] 01/04/2016 Created
+    /// </history>
+    public static void InsertNewMealTicket(MealTicket pMealTicket)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.MealTickets.Add(pMealTicket);
+
+        dbContext.SaveChanges();
+      }
+    }
+    #endregion
+
+    #region UpdateMealTicket
+    /// <summary>
+    /// Función que actualiza un Meal Ticket creado anteriomente
+    /// </summary>
+    /// <param name="pMealTicket"></param>
+    /// <history>
+    /// [vipacheco] 01/04/2016 Created
+    /// </history>
+    public static void UpdateMealTicket(MealTicket pMealTicket)
+    {
+      using (var dbcontext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbcontext.Entry(pMealTicket).State = System.Data.Entity.EntityState.Modified;
+
+        dbcontext.SaveChanges();
+      }
+    } 
+    #endregion
   }
 }

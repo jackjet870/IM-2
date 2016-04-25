@@ -50,6 +50,24 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    #region GetGuestStatusTypeByID
+    /// <summary>
+    /// Obtiene los registrs de un GuestsStatusType de acuerdo con el guestID
+    /// </summary>
+    /// <param name="guestID"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 11/Abril/2016 Created
+    /// </history>
+    public static GuestStatusType GetGuestStatusTypeByID(string gtgs)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.GuestsStatusTypes.Where(x => x.gsID == gtgs).SingleOrDefault();
+      }
+    } 
+    #endregion
+
     #region SaveGuestStatusType
     /// <summary>
     /// Guarda|actualiza un registro en el catalogo GuestStatus

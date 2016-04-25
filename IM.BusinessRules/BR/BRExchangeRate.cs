@@ -89,6 +89,41 @@ namespace IM.BusinessRules.BR
     }
         #endregion
 
+    #region GetExchangeRateByID
+    /// <summary>
+    /// Obtiene un ExchangeRate por medio de su ID
+    /// </summary>
+    /// <param name="exchangeID"> ID del Exchange Rate</param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 13/abril/2016 Created
+    /// </history>
+    public static ExchangeRate GetExchangeRateByID(string exchangeID)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.ExchangeRates.Where(x => x.excu == exchangeID).OrderBy(o => o.exD).FirstOrDefault();
+      }
+    } 
+    #endregion
+
+    #region GetExchangeRatesByDate
+    /// <summary>
+    /// Obtiene los tipos de cambio dada una fecha
+    /// </summary>
+    /// <param name="_date"></param>
+    /// <history>
+    /// [vipacheco] 13/Abril/2016 Created
+    /// </history>
+    public static List<ExchangeRateShort> GetExchangeRatesByDate(DateTime? _date, string currency = "")
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_GetExchangeRatesByDate(_date, currency).ToList();
+      }
+    } 
+    #endregion
+
     #region UpdateExchangeRate
 
     /// <summary>
@@ -110,6 +145,5 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion
-
   }
 }

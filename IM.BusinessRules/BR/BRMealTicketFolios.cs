@@ -11,6 +11,7 @@ namespace IM.BusinessRules.BR
   public class BRMealTicketFolios
   {
 
+    #region GetMaxMealTicketFolio
     /// <summary>
     /// Funcion para obtener el ultimo folio agregado
     /// </summary>
@@ -27,7 +28,28 @@ namespace IM.BusinessRules.BR
       {
         return Convert.ToInt32(dbContext.MealTicketsFolios.Where(x => x.mfsr == mfsr && x.mfmy == mfmy && x.mfra == mfra).Select(s => s.mfFolio).Max());
       }
+    } 
+    #endregion
+
+    #region UpdateMealTicketFolio
+    /// <summary>
+    /// Funcion que actualiza en la BD del Meal ticket creado
+    /// </summary>
+    /// <param name="SR"></param>
+    /// <param name="MType"></param>
+    /// <param name="RType"></param>
+    /// <param name="strNewFolio"></param>
+    /// <history>
+    /// [vipacheco] 31/03/2016 Created
+    /// </history>
+    public static void UpdateMealTicketFolio(string SR, string MType, int RType, string strNewFolio)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.USP_OR_UpdateMealTicketFolio(SR, MType, strNewFolio, RType);
+      }
     }
+    #endregion
 
   }
 }

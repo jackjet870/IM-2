@@ -168,6 +168,7 @@
     <Compile Include="Enums\EnumClub.cs" />
     <Compile Include="Enums\EnumFilterDeposit.cs" />
     <Compile Include="Enums\EnumFormatTypeExcel.cs" />
+    <Compile Include="Enums\EnumGiftsType.cs" />
     <Compile Include="Enums\EnumInvitationMode.cs" />
     <Compile Include="Enums\EnumMenu.cs" />
     <Compile Include="Enums\EnumMode.cs" />

@@ -34,6 +34,25 @@ namespace IM.BusinessRules.BR
 
     #endregion GetGifts
 
+    #region GetGifts
+    /// <summary>
+    /// Obtiene todos los gifts activos
+    /// </summary>
+    /// <param name="status"></param>
+    /// <returns> Lista de entidades GIFT</returns>
+    /// <history>
+    /// [vipacheco] 22/Abril/2016 Created
+    /// </history>
+    public static List<Gift> GetGifts(int status)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        bool _status = Convert.ToBoolean(status);
+        return dbContext.Gifts.Where(x => x.giA == _status).ToList();
+      }
+    } 
+    #endregion
+
     #region GetGiftsCategories
 
     /// <summary>
@@ -151,5 +170,22 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion GetGiftsShortById
+
+    #region GetGiftsInputList
+    /// <summary>
+    /// Obtiene Gifts de una lista de gifts ingresada
+    /// </summary>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 20/Abril/2016 Created
+    /// </history>
+    public static List<Gift> GetGiftsInputList(List<GiftsReceiptDetailShort> _listGiftsID)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.Gifts.Where(x => x.giA == true && _listGiftsID.Select(s => s.gegi).Contains(x.giID)).ToList();
+      }
+    } 
+    #endregion
   }
 }
