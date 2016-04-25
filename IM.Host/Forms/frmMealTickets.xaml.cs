@@ -31,6 +31,8 @@ namespace IM.Host.Forms
     #region VARIABLES
     public static int _pguId = 0;
     public static int _pQty = 1;
+    public static int _rateTypeChild = -1;
+    public bool _reanOnly = true;
     public EnumModeOpen modeOpen;
     public GuestPremanifestHost _guestPremanifestHost = new GuestPremanifestHost();
     CollectionViewSource _dsRateType;
@@ -80,63 +82,26 @@ namespace IM.Host.Forms
         case EnumModeOpen.Add:
         case EnumModeOpen.Edit:
           ControlsVisibility(Visibility.Visible, Visibility.Visible, Visibility.Hidden, Visibility.Hidden);
-
-          if (_pguId != 0)
-          {
-            List<MealTicket> _valueEdit = BRMealTickets.GetMealTickets(_pguId);
-
-            if (_valueEdit.Count > 0)
-            {
-              _dsMealTicket.Source = _valueEdit;
-            }
-            else
-            {
-              //MealTicket mealTicket = (MealTicket)dgMealTicket.SelectedItem;
-              frmMealTicketsDetail _frmMealTicketsDetail = new frmMealTicketsDetail();
-              _frmMealTicketsDetail.ShowInTaskbar = false;
-              _frmMealTicketsDetail.Owner = this;
-              _frmMealTicketsDetail.modeOpen = EnumModeOpen.Preview;
-              _frmMealTicketsDetail.Title += "ADD";
-              _frmMealTicketsDetail.ShowDialog();
-            }
-          }
-
-
           break;
         case EnumModeOpen.Search:
           ControlsVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Hidden, Visibility.Hidden);
           break;
         case EnumModeOpen.Preview:
+          // Se muestran y ocultan los controles necesarios
           ControlsVisibility(Visibility.Hidden, Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
 
-          if (_pguId != 0)
-          {
-            List<MealTicket> _valuePreview = BRMealTickets.GetMealTickets(_pguId);
+          // Se busca la informacion con guestID proporcionado
+          _dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId);
 
-            if (_valuePreview.Count > 0 )
-            {
-              _dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId);
+          AdjustsControlsAndColumns();
+          break;
+        case EnumModeOpen.PreviewEdit:
+          ControlsVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
 
-              Thickness margin = dgMealTicket.Margin;
-              margin.Top = 18;
-              dgMealTicket.Margin = margin;
-              // Se ocultan la primeras 4 columnas!
-              meraColumn.Visibility = Visibility.Hidden;
-              mepeColumn.Visibility = Visibility.Hidden;
-              meagColumn.Visibility = Visibility.Hidden;
-              merepColumn.Visibility = Visibility.Hidden;
-            }
-            else
-            {
-              MealTicket mealTicket = (MealTicket)dgMealTicket.SelectedItem;
-              frmMealTicketsDetail _frmMealTicketsDetail = new frmMealTicketsDetail();
-              _frmMealTicketsDetail.ShowInTaskbar = false;
-              _frmMealTicketsDetail.Owner = this;
-              _frmMealTicketsDetail.modeOpen = EnumModeOpen.Preview;
-              _frmMealTicketsDetail.Title += "ADD";
-              _frmMealTicketsDetail.ShowDialog();
-            }
-          }
+          // Se busca la informacion con guestID proporcionado
+          _dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId);
+
+          AdjustsControlsAndColumns();
           break;
       }
     } 
@@ -212,72 +177,61 @@ namespace IM.Host.Forms
     /// </history>
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
-      MealTicket mealTicket = (MealTicket)dgMealTicket.SelectedItem;
-      _pguId = (mealTicket == null) ? 0 : mealTicket.megu;
       frmMealTicketsDetail _frmMealTicketsDetail = new frmMealTicketsDetail();
       _frmMealTicketsDetail.ShowInTaskbar = false;
       _frmMealTicketsDetail.Owner = this;
-      _frmMealTicketsDetail.modeOpen = EnumModeOpen.Add;
+      _frmMealTicketsDetail.modeOpen = (modeOpen == EnumModeOpen.Edit) ? EnumModeOpen.Add : EnumModeOpen.PreviewEdit;
       _frmMealTicketsDetail.Title += "ADD";
+
       _frmMealTicketsDetail.ShowDialog();
 
+      if (modeOpen == EnumModeOpen.PreviewEdit)
+      {
+        _dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId);
+      }
+      else
+        btnSearch_Click(null, null);
     }
     #endregion
 
     #region Cell_DoubleClick
+    /// <summary>
+    /// Función encargada de verificar si cuenta con los permisos de edicion!
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 23/04/2016 Created
+    /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
       // Se verifica que tenga permisos de editar
-      if (modeOpen != EnumModeOpen.Search && App.User.HasPermission(EnumPermission.MealTicket, EnumPermisionLevel.Standard))
+      if (modeOpen != EnumModeOpen.Search && modeOpen != EnumModeOpen.Preview)
       {
         MealTicket mealTicket = (MealTicket)dgMealTicket.SelectedItem;
 
-        // si alguno de sus cupones de comida es de una fecha cerrada, impedimos modificar los datos
-        SalesRoomCloseDates _closeSalesRoom = BRSalesRooms.GetSalesRoom(App.User.SalesRoom.srID);
-        //With grd
-        //    For i = .FixedRows To.Rows - 1
-        //        If basCommon.IsClosed(.TextMatrix(i, .ColIndex("meD")), mdtmClose) Then
-        //            OnlyReadMode
-        //            Exit For
-        //        End If
-        //    Next
-        //End With
+        //_pguId = mealTicket.megu;
+        frmMealTicketsDetail _frmMealTicketsDetail = new frmMealTicketsDetail();
+        ObjectHelper.CopyProperties(_frmMealTicketsDetail._mealTicketCurrency, mealTicket);
 
-        //if (App.User.SalesRoom.srID mealTicket.meD)
-        if(!IsClosed(mealTicket.meD, _closeSalesRoom.srMealTicketsCloseD))
+        _frmMealTicketsDetail.ShowInTaskbar = false;
+        _frmMealTicketsDetail.modeOpen = (modeOpen == EnumModeOpen.Edit) ? EnumModeOpen.Edit : EnumModeOpen.Preview;
+        _frmMealTicketsDetail.Owner = this;
+        _frmMealTicketsDetail.Title += "ID " + mealTicket.meID;
+
+        if (_frmMealTicketsDetail.ShowDialog() == true)
         {
-          _pguId = mealTicket.megu;
-          frmMealTicketsDetail _frmMealTicketsDetail = new frmMealTicketsDetail();
-          ObjectHelper.CopyProperties(_frmMealTicketsDetail._mealTicketCurrency, mealTicket);
-
-          _frmMealTicketsDetail.ShowInTaskbar = false;
-          _frmMealTicketsDetail.modeOpen = modeOpen;
-          _frmMealTicketsDetail.Owner = this;
-          _frmMealTicketsDetail.Title += "ID " + mealTicket.meID;
-
-          if (_frmMealTicketsDetail.ShowDialog() == true)
-          {
-            ObjectHelper.CopyProperties(mealTicket, _frmMealTicketsDetail._mealTicketCurrency);
-          }
+          ObjectHelper.CopyProperties(mealTicket, _frmMealTicketsDetail._mealTicketCurrency);
         }
+
+        if (modeOpen == EnumModeOpen.PreviewEdit)
+        {
+          _dsMealTicket.Source = BRMealTickets.GetMealTickets(_pguId);
+        }
+
       }
     } 
     #endregion
-
-    private bool IsClosed(DateTime pdtmDate, DateTime pdtmClose)
-    {
-      bool blnClosed = false;
-      DateTime _pdtmDate;
-
-      if (DateTime.TryParse(pdtmDate+"", out _pdtmDate))
-      {
-        if (_pdtmDate <= pdtmClose)
-        {
-          blnClosed = true;
-        }
-      }
-      return blnClosed;
-    }
 
     #region Row KeyDown
     /// <summary>
@@ -324,28 +278,72 @@ namespace IM.Host.Forms
     }
     #endregion
 
+    #region cboRateType_SelectionChanged
+    /// <summary>
+    /// Modifica el grid segun la seleccion del RateType
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 23/03/2016 Created
+    /// </history>
     private void cboRateType_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       RateType _rateType = (RateType)cboRateType.SelectedItem;
 
       if (_rateType != null) // Se verifica que el SelectedItem no sea null
       {
+        _dsMealTicket.Source = null;
+
         if (_rateType.raID != 4 && modeOpen != EnumModeOpen.Preview) // Si es diferente de tipo External!
         {
-          controlVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Hidden);
+          controlColumnVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Hidden);
         }
         else if (modeOpen != EnumModeOpen.Preview) // Es external
         {
-          controlVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Visible);
+          controlColumnVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Visible);
         }
       }
-    }
+    } 
+    #endregion
 
-    private void controlVisibility(Visibility vCollaborator, Visibility vRepresentative, Visibility vAgency)
+    #region controlColumnVisibility
+    /// <summary>
+    /// Oculta las columnas del grid segun sea necesario
+    /// </summary>
+    /// <param name="vCollaborator"></param>
+    /// <param name="vRepresentative"></param>
+    /// <param name="vAgency"></param>
+    /// <history>
+    /// [vipacheco] 01/04/2016 Created
+    /// </history>
+    private void controlColumnVisibility(Visibility vCollaborator, Visibility vRepresentative, Visibility vAgency)
     {
       mepeColumn.Visibility = vCollaborator;
       meagColumn.Visibility = vAgency;
       merepColumn.Visibility = vRepresentative;
     }
+    #endregion
+
+    #region AdjustsControlsAndColumns
+    /// <summary>
+    /// Funcion encargada de alinear el margen y ocultar columnas cuando el modeOpen es Preview y PreviewEdit
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 02/04/2016 Created
+    /// </history>
+    private void AdjustsControlsAndColumns()
+    {
+      Thickness _margin = dgMealTicket.Margin;
+      _margin.Top = 18;
+      dgMealTicket.Margin = _margin;
+      // Se ocultan la primeras 4 columnas!
+      meraColumn.Visibility = Visibility.Hidden;
+      mepeColumn.Visibility = Visibility.Hidden;
+      meagColumn.Visibility = Visibility.Hidden;
+      merepColumn.Visibility = Visibility.Hidden;
+    } 
+    #endregion
+
   }
 }

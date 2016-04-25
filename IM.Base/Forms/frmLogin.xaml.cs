@@ -252,7 +252,7 @@ namespace IM.Base.Forms
         case EnumLoginType.SalesRoom://Sales Room - HOST
 
           // validamos que el usuario tenga permiso
-          if (!userData.Permissions.Exists(c => c.pppm == "HOST" && c.pppl >= 1))
+          if (!userData.Permissions.Exists(c => c.pppm == "HOST" && c.pppl > 1))
           {
             UIHelper.ShowMessage("User doesn't have access");
             btnCancelar_Click(null, null);

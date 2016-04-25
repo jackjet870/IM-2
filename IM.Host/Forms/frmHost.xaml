@@ -261,18 +261,10 @@
                         </DataGridCheckBoxColumn.HeaderStyle>
                     </DataGridCheckBoxColumn>
                     <DataGridTextColumn x:Name="guTaxiInColumn" Binding="{Binding guTaxiIn}" Header="Taxi In" Width="SizeToHeader" IsReadOnly="True"/>
-                    <!--<DataGridCheckBoxColumn x:Name="guShowColumn" Binding="{Binding guShow}" Header="Sh" Width="SizeToHeader">
-                        <DataGridCheckBoxColumn.HeaderStyle>
-                            <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="ToolTip" Value="Show up"/>
-                            </Style>
-                        </DataGridCheckBoxColumn.HeaderStyle>
-                    </DataGridCheckBoxColumn>-->
-
                     <DataGridTemplateColumn x:Name="guShowColumn" IsReadOnly="False"  Header="Sh" Width="SizeToHeader" >
                         <DataGridTemplateColumn.CellTemplate >
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding guShow}"  Click="ChkguShow_Click"  HorizontalAlignment="Center" />
+                                <CheckBox IsChecked="{Binding guShow}"  Click="guShow_Click"  HorizontalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.HeaderStyle>
@@ -289,13 +281,6 @@
                             </Style>
                         </DataGridCheckBoxColumn.HeaderStyle>
                     </DataGridCheckBoxColumn>
-                    <!--<DataGridCheckBoxColumn x:Name="guMealTicketColumn" Binding="{Binding guMealTicket}" Header="M T" Width="SizeToHeader">
-                        <DataGridCheckBoxColumn.HeaderStyle>
-                            <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="ToolTip" Value="Meal Ticket"/>
-                            </Style>
-                        </DataGridCheckBoxColumn.HeaderStyle>
-                    </DataGridCheckBoxColumn>-->
                     <DataGridTemplateColumn x:Name="guMealTicketColumn" IsReadOnly="False"  Header="M T" Width="SizeToHeader" >
                         <DataGridTemplateColumn.CellTemplate >
                             <DataTemplate>
@@ -315,13 +300,27 @@
                             </Style>
                         </DataGridCheckBoxColumn.HeaderStyle>
                     </DataGridCheckBoxColumn>
-                    <DataGridCheckBoxColumn x:Name="guGiftsReceivedColumn" Binding="{Binding guGiftsReceived}" Header="Gifts" Width="SizeToHeader">
+
+                    <DataGridTemplateColumn x:Name="guGiftsReceivedColumn" IsReadOnly="False"  Header="Gifts" Width="SizeToHeader" >
+                        <DataGridTemplateColumn.CellTemplate >
+                            <DataTemplate>
+                                <CheckBox x:Name="guGiftsReceived" IsChecked="{Binding guGiftsReceived}"  Click="guGiftsReceived_Click"  HorizontalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="ToolTip" Value="Gifts Received"/>
+                            </Style>
+                        </DataGridTemplateColumn.HeaderStyle>
+                    </DataGridTemplateColumn>
+
+                    <!--<DataGridCheckBoxColumn x:Name="guGiftsReceivedColumn" Binding="{Binding guGiftsReceived}" Header="Gifts" Width="SizeToHeader">
                         <DataGridCheckBoxColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="ToolTip" Value="Gifts Received"/>
                             </Style>
                         </DataGridCheckBoxColumn.HeaderStyle>
-                    </DataGridCheckBoxColumn>
+                    </DataGridCheckBoxColumn>-->
                     <DataGridTextColumn x:Name="guWCommentsColumn" Binding="{Binding guWComments}" Header="Comments" Width="*"/>
                     <!--#endregion-->
                     <!--

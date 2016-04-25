@@ -4,11 +4,35 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Host.Forms"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="IM.Host.Forms.frmGiftsReceipts"
+        xmlns:validation="clr-namespace:IM.Host.Classes"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmGiftsReceipts"
         mc:Ignorable="d"
-        Title="Gifts Receipts" Height="724.334" Width="1047.441" WindowStartupLocation="CenterScreen">
-    <Grid>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="60" Margin="10,10,0,0" VerticalAlignment="Top" Width="170">
+        Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        Title="Gifts Receipts" Height="724.334" Width="1047.441" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <Window.Resources>
+        <CollectionViewSource x:Key="dsGiftsReceipt" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceipt}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsGiftsReceiptsShort" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceiptsShort}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsPersonnel_Offered" d:DesignSource="{d:DesignInstance {x:Type Model:Personnel}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsPersonnel_Gifts" d:DesignSource="{d:DesignInstance {x:Type Model:Personnel}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsChargeTo" d:DesignSource="{d:DesignInstance {x:Type Model:ChargeTo}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsPaymentType" d:DesignSource="{d:DesignInstance {x:Type Model:PaymentType}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsCurrencyPRDeposit" d:DesignSource="{d:DesignInstance {x:Type Model:Currency}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsCurrencyTaxiOut" d:DesignSource="{d:DesignInstance {x:Type Model:Currency}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsCurrency" d:DesignSource="{d:DesignInstance {x:Type Model:Currency}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsGiftsReceiptDetailShort" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceiptDetailShort}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsCurrencyDeposits" d:DesignSource="{d:DesignInstance {x:Type Model:Currency}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsGifts" d:DesignSource="{d:DesignInstance {x:Type Model:Gift}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsGiftsReceiptPaymentShort" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceiptPaymentShort}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsBookingDeposit" d:DesignSource="{d:DesignInstance {x:Type Model:BookingDeposit}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsGiftsReceiptPackage" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceiptPackage}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsSourcePayments" d:DesignSource="{d:DesignInstance {x:Type Model:SourcePayment}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsBanks" d:DesignSource="{d:DesignInstance {x:Type Model:Bank}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsSalesRooms" d:DesignSource="{d:DesignInstance {x:Type Model:SalesRoomShort}, CreateList=True}"/>
+        <CollectionViewSource x:Key="dsHotels" d:DesignSource="{d:DesignInstance {x:Type Model:Hotel}, CreateList=True}"/>
+    </Window.Resources>
+
+    <Grid x:Name="grdMain" DataContext="{StaticResource dsGiftsReceipt}">
+        <Border x:Name="brdExchange" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="60" Margin="10,10,0,0" VerticalAlignment="Top" Width="170">
             <Canvas>
                 <TextBlock x:Name="lblExchange" Canvas.Left="46" TextWrapping="Wrap" Text="Exchange" Canvas.Top="19" FontWeight="Bold" FontSize="15"/>
             </Canvas>
@@ -16,141 +40,411 @@
         <GroupBox x:Name="grbSelectionCriteria" Header="Selection Criteria" FontSize="12" FontWeight="Bold" HorizontalAlignment="Left" Margin="185,3,0,0" VerticalAlignment="Top" Height="67" Width="844">
             <Canvas>
                 <TextBlock x:Name="lblCgrID" Canvas.Left="5" TextWrapping="Wrap" Text="Receipt ID" Canvas.Top="5" FontWeight="Normal" FontSize="11"/>
-                <TextBox x:Name="textBox" Height="23" Canvas.Left="5" AcceptsReturn="False" Canvas.Top="21" Width="70" FontWeight="Normal"/>
+                <TextBox x:Name="txtCgrID" Height="23" Canvas.Left="5" AcceptsReturn="False" Canvas.Top="21" Width="70" FontWeight="Normal" PreviewTextInput="ValidateNumber"/>
                 <TextBlock x:Name="lblCgrNum" Canvas.Left="80" TextWrapping="Wrap" Text="Receipt Num" Canvas.Top="5" FontWeight="Normal" FontSize="11"/>
                 <TextBox x:Name="txtCgrNum" Height="23" Canvas.Left="80" AcceptsReturn="False" Canvas.Top="21" Width="70" FontWeight="Normal"/>
                 <TextBlock x:Name="lblCgrgu" Canvas.Left="154" TextWrapping="Wrap" Text="GUID" Canvas.Top="5" FontWeight="Normal" FontSize="11"/>
-                <TextBox x:Name="txtCgrgu" Height="23" Canvas.Left="154" AcceptsReturn="False" Canvas.Top="21" Width="80" FontWeight="Normal"/>
+                <TextBox x:Name="txtCgrgu" Height="23" Canvas.Left="154" AcceptsReturn="False" Canvas.Top="21" Width="80" FontWeight="Normal" PreviewTextInput="ValidateNumber"/>
                 <TextBlock x:Name="lblCgrGuest" Canvas.Left="238" TextWrapping="Wrap" Text="Guest Name" Canvas.Top="5" FontWeight="Normal" FontSize="11"/>
                 <TextBox x:Name="txtCgrGuest" Height="23" Canvas.Left="238" AcceptsReturn="False" Canvas.Top="21" Width="150" FontWeight="Normal"/>
                 <TextBlock x:Name="lblCReservation" Canvas.Left="392" TextWrapping="Wrap" Text="Reservation" Canvas.Top="5" FontWeight="Normal" FontSize="11"/>
-                <TextBox x:Name="txtCReservation" Height="23" Canvas.Left="392" AcceptsReturn="False" Canvas.Top="21" Width="60" FontWeight="Normal"/>
+                <TextBox x:Name="txtCReservation" Height="23" Canvas.Left="392" AcceptsReturn="False" Canvas.Top="21" Width="60" FontWeight="Normal" PreviewTextInput="ValidateNumber"/>
                 <TextBlock x:Name="lblCgrDFrom" Canvas.Left="457" TextWrapping="Wrap" Text="From" Canvas.Top="5" FontWeight="Normal" FontSize="11"/>
-                <xctk:DateTimePicker x:Name="dtpCgrDFrom" Canvas.Left="457" Canvas.Top="21" Width="130" Height="22"/>
+                <xctk:DateTimePicker x:Name="dtpCgrDFrom" Canvas.Left="457" Canvas.Top="21" Width="130" Height="22" Format="LongDate" Loaded="Initialize_Date"/>
                 <TextBlock x:Name="lblTo" Canvas.Left="592" TextWrapping="Wrap" Text="To" Canvas.Top="5" FontWeight="Normal" FontSize="11"/>
-                <xctk:DateTimePicker x:Name="dtpTo" Canvas.Left="592" Canvas.Top="21" Width="130" Height="22"/>
-                <Button x:Name="btnSearch" Content="Search" Canvas.Left="744" Canvas.Top="21" Width="75"/>
-
-
+                <xctk:DateTimePicker x:Name="dtpTo" Canvas.Left="592" Canvas.Top="21" Width="130" Height="22" Format="LongDate" Loaded="Initialize_Date"/>
+                <Button x:Name="btnSearch" Content="Search" Canvas.Left="744" Canvas.Top="21" Width="75" Click="btnSearch_Click"/>
             </Canvas>
         </GroupBox>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="525" Margin="185,75,0,0" VerticalAlignment="Top" Width="844">
+        <Border x:Name="brdGeneral" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="525" Margin="185,75,0,0" VerticalAlignment="Top" Width="844">
             <TabControl x:Name="tabCGeneral">
                 <TabItem Header="General">
                     <Grid Background="White">
                         <TextBlock x:Name="lblgrID" HorizontalAlignment="Left" Margin="10,3,0,0" TextWrapping="Wrap" Text="Receipt ID" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrID" HorizontalAlignment="Left" Height="23" Margin="10,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="65"/>
+                        <TextBox x:Name="txtgrID" HorizontalAlignment="Left" Height="23" Margin="10,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="65" Text="{Binding grID}" IsReadOnly="True"/>
                         <TextBlock x:Name="lblgrD" HorizontalAlignment="Left" Margin="80,3,0,0" TextWrapping="Wrap" Text="Date" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrD" HorizontalAlignment="Left" Height="23" Margin="80,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="75"/>
-                        <TextBlock x:Name="lblgrNum" HorizontalAlignment="Left" Margin="159,3,0,0" TextWrapping="Wrap" Text="Rcpt. Number" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrNum" HorizontalAlignment="Left" Height="23" Margin="159,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="75"/>
-                        <TextBlock x:Name="lblgrls" HorizontalAlignment="Left" Margin="239,3,0,0" TextWrapping="Wrap" Text="Lead Source" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrls" HorizontalAlignment="Left" Height="23" Margin="239,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="80"/>
-                        <TextBlock x:Name="lblgrlo" HorizontalAlignment="Left" Margin="323,3,0,0" TextWrapping="Wrap" Text="Location" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrlo" HorizontalAlignment="Left" Height="23" Margin="323,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="80"/>
-                        <TextBlock x:Name="lblgrsr" HorizontalAlignment="Left" Margin="407,3,0,0" TextWrapping="Wrap" Text="Sales Room" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrsr" HorizontalAlignment="Left" Height="23" Margin="407,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="100"/>
-                        <TextBlock x:Name="lblgrMemberNum" HorizontalAlignment="Left" Margin="512,3,0,0" TextWrapping="Wrap" Text="Membership #" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrMemberNum" HorizontalAlignment="Left" Height="23" Margin="512,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="100"/>
+                        <xctk:DateTimePicker x:Name="dtpgrD" HorizontalAlignment="Left" Margin="80,17,0,0" VerticalAlignment="Top" Width="124" Format="ShortDate" Value="{Binding grD}" IsReadOnly="True" TextAlignment="Left"/>
+                        <TextBlock x:Name="lblgrNum" HorizontalAlignment="Left" Margin="211,3,0,0" TextWrapping="Wrap" Text="Rcpt. Number" VerticalAlignment="Top"/>
+                        <TextBox x:Name="txtgrNum" HorizontalAlignment="Left" Height="23" Margin="211,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="75" Text="{Binding grNum}" IsReadOnly="True"/>
+                        <TextBlock x:Name="lblgrls" HorizontalAlignment="Left" Margin="291,3,0,0" TextWrapping="Wrap" Text="Lead Source" VerticalAlignment="Top"/>
+                        <TextBox x:Name="txtgrls" HorizontalAlignment="Left" Height="23" Margin="291,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="80" Text="{Binding grls}" IsReadOnly="True"/>
+                        <TextBlock x:Name="lblgrlo" HorizontalAlignment="Left" Margin="375,3,0,0" TextWrapping="Wrap" Text="Location" VerticalAlignment="Top"/>
+                        <TextBox x:Name="txtgrlo" HorizontalAlignment="Left" Height="23" Margin="375,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="80" Text="{Binding grlo}" IsReadOnly="True"/>
+                        <TextBlock x:Name="lblgrsr" HorizontalAlignment="Left" Margin="459,3,0,0" TextWrapping="Wrap" Text="Sales Room" VerticalAlignment="Top"/>
+                        <ComboBox x:Name="cboSalesRoom" HorizontalAlignment="Left" Margin="459,17,0,0" VerticalAlignment="Top" Width="134" DisplayMemberPath="srN" ItemsSource="{Binding Source={StaticResource dsSalesRooms}}" SelectedValuePath="srID" SelectedValue="{Binding grsr}" IsReadOnly="True"/>
+                        <ComboBox x:Name="cboHotel" HorizontalAlignment="Left" Margin="398,102,0,0" VerticalAlignment="Top" Width="140" DisplayMemberPath="hoID" ItemsSource="{Binding Source={StaticResource dsHotels}}" SelectedValuePath="hoID" SelectedValue="{Binding grHotel}" IsReadOnly="True"/>
+                        <TextBlock x:Name="lblgrMemberNum" HorizontalAlignment="Left" Margin="599,3,0,0" TextWrapping="Wrap" Text="Membership #" VerticalAlignment="Top"/>
+                        <TextBox x:Name="txtgrMemberNum" HorizontalAlignment="Left" Height="23" Margin="599,17,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="100" Text="{Binding grMemberNum}" IsReadOnly="True"/>
                         <TextBlock x:Name="lblgrgu" HorizontalAlignment="Left" Margin="10,42,0,0" TextWrapping="Wrap" Text="GUID" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrgu" HorizontalAlignment="Left" Height="23" Margin="10,57,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="65"/>
-                        <TextBlock x:Name="lblGuestName" HorizontalAlignment="Left" Margin="79,42,0,0" TextWrapping="Wrap" Text="Gguest Name" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtGuestName" HorizontalAlignment="Left" Height="23" Margin="79,57,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="155"/>
+                        <TextBox x:Name="txtgrgu" HorizontalAlignment="Left" Height="23" Margin="10,57,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="65" Text="{Binding grgu}" IsReadOnly="True"/>
+                        <TextBlock x:Name="lblGuestName" HorizontalAlignment="Left" Margin="79,42,0,0" TextWrapping="Wrap" Text="Guest Name" VerticalAlignment="Top"/>
+                        <TextBox x:Name="txtGuestName" HorizontalAlignment="Left" Height="23" Margin="79,57,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="155" IsReadOnly="True" />
                         <TextBlock x:Name="lblReservationCaption" HorizontalAlignment="Left" Margin="238,42,0,0" TextWrapping="Wrap" Text="Rsrv. Num." VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtReservationCaption" HorizontalAlignment="Left" Height="23" Margin="238,57,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="81"/>
+                        <TextBox x:Name="txtReservationCaption" HorizontalAlignment="Left" Height="23" Margin="238,57,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="81" IsReadOnly="True"/>
                         <TextBlock x:Name="lblAgencyCaption" HorizontalAlignment="Left" Margin="323,42,0,0" TextWrapping="Wrap" Text="Agency" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtAgencyCaption" HorizontalAlignment="Left" Height="23" Margin="323,57,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="184"/>
+                        <TextBox x:Name="txtAgencyCaption" HorizontalAlignment="Left" Height="23" Margin="323,57,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="184" IsReadOnly="True"/>
                         <TextBlock x:Name="lblProgramCaption" HorizontalAlignment="Left" Margin="512,41,0,0" TextWrapping="Wrap" Text="Program" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtProgramCaption" HorizontalAlignment="Left" Height="23" Margin="512,56,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="100"/>
+                        <TextBox x:Name="txtProgramCaption" HorizontalAlignment="Left" Height="23" Margin="512,56,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="100" IsReadOnly="True"/>
                         <TextBlock x:Name="lblgrGuest" HorizontalAlignment="Left" Margin="10,88,0,0" TextWrapping="Wrap" Text="Guest 1" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrGuest" HorizontalAlignment="Left" Height="23" Margin="10,102,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="190"/>
+                        <TextBox x:Name="txtgrGuest" HorizontalAlignment="Left" Height="23" Margin="10,102,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="190" Text="{Binding grGuest}" IsReadOnly="True"/>
                         <TextBlock x:Name="lblgrGuest2" HorizontalAlignment="Left" Margin="205,88,0,0" TextWrapping="Wrap" Text="Guest 2" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrGuest2" HorizontalAlignment="Left" Height="23" Margin="205,102,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="190"/>
+                        <TextBox x:Name="txtgrGuest2" HorizontalAlignment="Left" Height="23" Margin="205,102,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="190" Text="{Binding grGuest2}" IsReadOnly="True"/>
                         <TextBlock x:Name="lblgrHotel" HorizontalAlignment="Left" Margin="399,88,0,0" TextWrapping="Wrap" Text="Hotel" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrHotel" HorizontalAlignment="Left" Height="23" Margin="399,102,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="140"/>
                         <TextBlock x:Name="lblgrRoomNum" HorizontalAlignment="Left" Margin="543,88,0,0" TextWrapping="Wrap" Text="Room" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrRoomNum" HorizontalAlignment="Left" Height="23" Margin="543,102,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69"/>
+                        <TextBox x:Name="txtgrRoomNum" HorizontalAlignment="Left" Height="23" Margin="543,102,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding grRoomNum}" IsReadOnly="True" PreviewTextInput="ValidateNumber"/>
                         <TextBlock x:Name="lblgrPax" HorizontalAlignment="Left" Margin="616,88,0,0" TextWrapping="Wrap" Text="Pax" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrPax" HorizontalAlignment="Left" Height="23" Margin="616,102,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69"/>
+                        <TextBox x:Name="txtgrPax" HorizontalAlignment="Left" Height="23" Margin="616,102,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding grPax, StringFormat={}{0:0.0}, FallbackValue=0.0}" IsReadOnly="True" PreviewTextInput="ValidateDecimal"/>
                         <TextBlock x:Name="lblgrTaxiOut" HorizontalAlignment="Left" Margin="688,88,0,0" TextWrapping="Wrap" Text="Taxi Out" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrTaxiOut" HorizontalAlignment="Left" Height="23" Margin="688,102,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69"/>
+                        <TextBox x:Name="txtgrTaxiOut" HorizontalAlignment="Left" Height="23" Margin="688,102,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding grTaxiOut, StringFormat={}{0:0.00}, FallbackValue=0.00}" IsReadOnly="True" PreviewTextInput="ValidateDecimal"/>
                         <TextBlock x:Name="lblgrTaxiOutDiff" HorizontalAlignment="Left" Margin="761,88,0,0" TextWrapping="Wrap" Text="Taxi Out Diff" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrTaxiOutDiff" HorizontalAlignment="Left" Height="23" Margin="761,102,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69"/>
-                        <CheckBox x:Name="chkgrExchange" Content="Exchange" HorizontalAlignment="Left" Margin="714,5,0,0" VerticalAlignment="Top"/>
-                        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="57" Margin="702,23,0,0" VerticalAlignment="Top" Width="92">
-                            <Grid>
-                                <CheckBox x:Name="chkgrCancel" Content="Cancelled" HorizontalAlignment="Left" Margin="12,6,0,0" VerticalAlignment="Top"/>
-                                <TextBox x:Name="txtgrCancelD" HorizontalAlignment="Left" Height="23" Margin="10,28,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="70"/>
+                        <TextBox x:Name="txtgrTaxiOutDiff" HorizontalAlignment="Left" Height="23" Margin="761,102,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="69" Text="{Binding grTaxiOutDiff, StringFormat={}{0:0.00}, FallbackValue=0.00}" IsReadOnly="True" PreviewTextInput="ValidateDecimal"/>
+                        <CheckBox x:Name="chkgrExchange" Content="Exchange" HorizontalAlignment="Left" Margin="751,5,0,0" VerticalAlignment="Top" IsChecked="{Binding grExchange}"/>
+                        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="57" Margin="749,23,0,0" VerticalAlignment="Top" Width="75">
+                            <Grid Margin="0,0,-1,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="31*"/>
+                                    <ColumnDefinition Width="14*"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox x:Name="chkgrCancel" Content="Cancelled" HorizontalAlignment="Left" Margin="4,6,0,0" VerticalAlignment="Top" IsChecked="{Binding grCancel}" Grid.ColumnSpan="2"/>
+                                <TextBox x:Name="txtgrCancelD" HorizontalAlignment="Left" Height="23" Margin="1,28,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="70" Text="{Binding grCancelD}" Grid.ColumnSpan="2" IsReadOnly="True"/>
                             </Grid>
                         </Border>
                         <TextBlock x:Name="lblgrpe" HorizontalAlignment="Left" Margin="14,135,0,0" TextWrapping="Wrap" Text="Offered by" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrpe" HorizontalAlignment="Left" Height="23" Margin="82,131,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="120"/>
-                        <ComboBox x:Name="cbogrpe" HorizontalAlignment="Left" Margin="206,132,0,0" VerticalAlignment="Top" Width="158"/>
+                        <TextBox x:Name="txtgrpe" HorizontalAlignment="Left" Height="20" Margin="82,132,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="120" Text="{Binding grpe}" IsReadOnly="True"/>
+                        <ComboBox x:Name="cbogrpe" HorizontalAlignment="Left" Margin="206,132,0,0" VerticalAlignment="Top" Width="158" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnel_Offered}}" SelectedValuePath="peID" SelectedValue="{Binding grpe}"/>
                         <TextBlock x:Name="lblgrHost" HorizontalAlignment="Left" Margin="14,162,0,0" TextWrapping="Wrap" Text="Gifts Hostess" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrHost" HorizontalAlignment="Left" Height="23" Margin="82,158,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="120"/>
-                        <ComboBox x:Name="cbogrHost" HorizontalAlignment="Left" Margin="206,158,0,0" VerticalAlignment="Top" Width="158"/>
+                        <TextBox x:Name="txtgrHost" HorizontalAlignment="Left" Height="20" Margin="82,160,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="120" Text="{Binding grHost}" IsReadOnly="True"/>
+                        <ComboBox x:Name="cbogrHost" HorizontalAlignment="Left" Margin="206,158,0,0" VerticalAlignment="Top" Width="158" DisplayMemberPath="peN" ItemsSource="{Binding Source={StaticResource dsPersonnel_Gifts}}" SelectedValuePath="peID" SelectedValue="{Binding grHost}"/>
                         <TextBlock x:Name="lblgrComments" HorizontalAlignment="Left" Margin="385,136,0,0" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtgrComments" HorizontalAlignment="Left" Height="45" Margin="451,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="371" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
-                        <GroupBox x:Name="grbGifts" Header="Gifts" HorizontalAlignment="Left" Margin="14,186,0,0" VerticalAlignment="Top" Width="808" Height="190">
+                        <TextBox x:Name="txtgrComments" HorizontalAlignment="Left" Height="45" Margin="451,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="371" ScrollViewer.VerticalScrollBarVisibility="Visible" Text="{Binding grComments}"/>
+                        <GroupBox x:Name="grbGifts" Header="Gifts" HorizontalAlignment="Left" Margin="14,181,0,0" VerticalAlignment="Top" Width="808" Height="211">
                             <Grid>
-                                <TextBlock x:Name="lblgrMaxAuthGifts" HorizontalAlignment="Left" Margin="117,149,0,0" TextWrapping="Wrap" Text="Max Authorized" VerticalAlignment="Top"/>
-                                <TextBox x:Name="txtgrMaxAuthGifts" HorizontalAlignment="Left" Height="23" Margin="198,145,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="100"/>
-                                <TextBlock x:Name="lblTotalCostCaption" HorizontalAlignment="Left" Margin="302,149,0,0" TextWrapping="Wrap" Text="Total Cost" VerticalAlignment="Top"/>
-                                <TextBox x:Name="txtTotalCostCaption" HorizontalAlignment="Left" Height="23" Margin="357,145,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="100"/>
-                                <TextBlock x:Name="lblTotalPriceCaption" HorizontalAlignment="Left" Margin="462,149,0,0" TextWrapping="Wrap" Text="Total Price" VerticalAlignment="Top"/>
-                                <TextBox x:Name="txtTotalPriceCaption" HorizontalAlignment="Left" Height="23" Margin="517,145,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="100"/>
-                                <TextBlock x:Name="lblTotalToPayCaption" HorizontalAlignment="Left" Margin="623,149,0,0" TextWrapping="Wrap" Text="Total To Pay" VerticalAlignment="Top"/>
-                                <TextBox x:Name="txtTotalToPayCaption" HorizontalAlignment="Left" Height="23" Margin="687,145,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="100"/>
+                                <TextBlock x:Name="lblgrMaxAuthGifts" HorizontalAlignment="Left" Margin="117,175,0,0" TextWrapping="Wrap" Text="Max Authorized" VerticalAlignment="Top"/>
+                                <TextBox x:Name="txtgrMaxAuthGifts" HorizontalAlignment="Left" Height="23" Margin="198,171,0,-1" AcceptsReturn="False" VerticalAlignment="Top" Width="100" Text="{Binding grMaxAuthGifts, StringFormat={}{0:$0.00}}" IsReadOnly="True"/>
+                                <TextBlock x:Name="lblTotalCostCaption" HorizontalAlignment="Left" Margin="302,175,0,0" TextWrapping="Wrap" Text="Total Cost" VerticalAlignment="Top"/>
+                                <TextBox x:Name="txtTotalCostCaption" HorizontalAlignment="Left" Height="23" Margin="356,171,0,-1" AcceptsReturn="False" VerticalAlignment="Top" Width="101" IsReadOnly="True" Text="$0.00"/>
+                                <TextBlock x:Name="lblTotalPriceCaption" HorizontalAlignment="Left" Margin="462,175,0,0" TextWrapping="Wrap" Text="Total Price" VerticalAlignment="Top"/>
+                                <TextBox x:Name="txtTotalPriceCaption" HorizontalAlignment="Left" Height="23" Margin="517,171,0,-1" AcceptsReturn="False" VerticalAlignment="Top" Width="100" IsReadOnly="True" Text="$0.00"/>
+                                <TextBlock x:Name="lblTotalToPayCaption" HorizontalAlignment="Left" Margin="623,175,0,0" TextWrapping="Wrap" Text="Total To Pay" VerticalAlignment="Top"/>
+                                <TextBox x:Name="txtTotalToPayCaption" HorizontalAlignment="Left" Height="23" Margin="687,171,0,-1" AcceptsReturn="False" VerticalAlignment="Top" Width="100" IsReadOnly="True" Text="$0.00"/>
 
+                                <DataGrid x:Name="grdGiftsReceiptDetail" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsGiftsReceiptDetailShort}}" Margin="0,2,9,25" RowDetailsVisibilityMode="Collapsed" RowDetailsVisibilityChanged="grdGiftsReceiptDetail_RowDetailsVisibilityChanged" IsReadOnly="True" AddingNewItem="grdGiftsReceiptDetail_AddingNewItem" CanUserReorderColumns="False" CanUserSortColumns="False" RowEditEnding="grdGiftsReceiptDetail_RowEditEnding" CellEditEnding="grdGiftsReceiptDetail_CellEditEnding"  DataGridCell.GotFocus="DataGrid_CellGotFocus" CommandManager.PreviewExecuted="DriversDataGrid_PreviewDeleteCommandHandler" SelectionMode="Single" CanUserAddRows="False">
+                                    <!--<DataGrid.Resources>-->
+                                    <!-- Validation Error Template for a DataGrid Row -->
+                                    <!--<Style TargetType="{x:Type DataGridRow}">
+                                            <Setter Property="ValidationErrorTemplate">
+                                                <Setter.Value>
+                                                    <ControlTemplate>
+                                                        <Image
+                                                           ToolTip="{Binding RelativeSource={
+                                                                                 RelativeSource FindAncestor,
+                                                                                 AncestorType={x:Type DataGridRow}},
+                                                                             Path=(Validation.Errors)[0].ErrorContent}"
+                                                           Margin="0"
+                                                           Width="11" Height="11" />    
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGrid.Resources>-->
+
+                                    <DataGrid.Resources>
+                                        <!--#region ESTILOS DEL DATAGRID-->
+                                        <Style TargetType="{x:Type DataGridRow}">
+                                            <Style.Resources>
+                                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                                                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                                                <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
+                                            </Style.Resources>
+                                        </Style>
+                                        <Style TargetType="{x:Type DataGridCell}">
+                                            <Setter Property="IsEditing" Value="True" />
+                                        </Style>
+                                        <Style TargetType="DataGridRow">
+                                                <EventSetter Event="MouseDoubleClick" Handler="grdGiftsReceiptDetail_DoubleClick"/>
+                                                <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                                        </Style>
+                                        <!--#endregion-->
+                                    </DataGrid.Resources>
+
+                                    <DataGrid.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                        </Style>
+                                    </DataGrid.CellStyle>
+
+                                    <DataGrid.RowHeaderTemplate>
+                                        <DataTemplate>
+                                            <Expander Expanded="Expander_Expanded" Collapsed="Expander_Collapsed">
+
+                                            </Expander>
+                                        </DataTemplate>
+                                    </DataGrid.RowHeaderTemplate>
+
+                                    <DataGrid.RowValidationRules>
+                                        <validation:GiftsReceiptsValidationGrid ValidationStep="UpdatedValue"/>
+                                    </DataGrid.RowValidationRules>
+
+                                    <DataGrid.Columns>
+                                        <DataGridCheckBoxColumn x:Name="chkDelete" Header="Delete" Visibility="Collapsed">
+
+                                        </DataGridCheckBoxColumn>
+                                        <DataGridTextColumn x:Name="geQtyColumn" Header="Qty" Binding="{Binding geQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="SizeToHeader">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Quantity"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                            <!--<DataGridTextColumn.Binding>
+                                                <Binding Path="geQty">
+                                                    <Binding.ValidationRules>
+                                                        <validation:GiftsReceiptsValidationGrid ValidationStep="UpdatedValue" />
+                                                    </Binding.ValidationRules>
+                                                </Binding>
+                                            </DataGridTextColumn.Binding>-->
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn x:Name="qtyUnitColumn" Binding="{Binding QtyUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Unit" Width="SizeToHeader" IsReadOnly="True">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Unit Quantity"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridComboBoxColumn x:Name="gegiColumn" SelectedValueBinding="{Binding gegi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="giID" DisplayMemberPath="giN" Header="Gift" Width="Auto" ItemsSource="{Binding Source={StaticResource dsGifts}}">
+                                            <DataGridComboBoxColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Gift"/>
+                                                </Style>
+                                            </DataGridComboBoxColumn.HeaderStyle>
+                                            <!--<DataGridComboBoxColumn.EditingElementStyle>
+                                                <Style TargetType="{x:Type ComboBox}">
+                                                    <EventSetter Event="SelectionChanged" Handler="SomeSelectionChanged" />
+                                                </Style>
+                                            </DataGridComboBoxColumn.EditingElementStyle>-->
+                                        </DataGridComboBoxColumn>
+                                        <DataGridTextColumn x:Name="geAdultsColumn" Binding="{Binding geAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Adults" Width="SizeToHeader">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Number of adults"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn x:Name="geMinorsColumn" Binding="{Binding geMinors, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Minors" Width="SizeToHeader">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Number of minors"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn x:Name="geExtraAdultsColumn" Binding="{Binding geExtraAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="E. Adults" Width="SizeToHeader">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Number of extra adults"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn x:Name="gePriceAColumn" Binding="{Binding gePriceA, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}}" Header="C. Adults" Width="SizeToHeader" IsReadOnly="True">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Total cost of adults"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn x:Name="gePriceMColumn" Binding="{Binding gePriceM, StringFormat={}{0:0.00}}" Header="C. Minors" Width="SizeToHeader" IsReadOnly="True">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Total cost of minors"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn x:Name="gePriceAdultColumn" Binding="{Binding gePriceAdult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}}" Header="P. Adults" Width="SizeToHeader" IsReadOnly="True">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Total price of adults"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn x:Name="gePriceMinorColumn" Binding="{Binding gePriceMinor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}}" Header="P. Minors" Width="SizeToHeader" IsReadOnly="True">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Total price of minors"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn x:Name="gePriceExtraAdultColumn" Binding="{Binding gePriceExtraAdult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}}" Header="P. E. Adults" Width="SizeToHeader" IsReadOnly="True">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Total price of extra adults"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn x:Name="geFoliosColumn" Binding="{Binding geFolios, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Folios" Width="SizeToHeader">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Folios"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridCheckBoxColumn x:Name="geSaleColumn" Binding="{Binding geSale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Sale" Width="SizeToHeader">
+                                            <DataGridCheckBoxColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Gift Sale Type"/>
+                                                </Style>
+                                            </DataGridCheckBoxColumn.HeaderStyle>
+                                        </DataGridCheckBoxColumn>
+                                        <!--<DataGridCheckBoxColumn x:Name="geInElectronicPurseColumn" Binding="{Binding geInElectronicPurse}" Header="In E-Purse" Width="SizeToHeader">
+                                            <DataGridCheckBoxColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="In Electronic Purse"/>
+                                                </Style>
+                                            </DataGridCheckBoxColumn.HeaderStyle>
+                                        </DataGridCheckBoxColumn>
+                                        <DataGridCheckBoxColumn x:Name="geConsecutiveElectronicPurseColumn" Binding="{Binding geConsecutiveElectronicPurse}" Header="Consecutive" Width="SizeToHeader">
+                                            <DataGridCheckBoxColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Consecutive Electronic Purse"/>
+                                                </Style>
+                                            </DataGridCheckBoxColumn.HeaderStyle>
+                                        </DataGridCheckBoxColumn>
+                                        <DataGridCheckBoxColumn x:Name="geCancelElectronicPurseColumn" Binding="{Binding geCancelElectronicPurse}" Header="Cancel E-Purse" Width="SizeToHeader">
+                                            <DataGridCheckBoxColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Cancelled in Electronic Purse"/>
+                                                </Style>
+                                            </DataGridCheckBoxColumn.HeaderStyle>
+                                        </DataGridCheckBoxColumn>-->
+                                        <DataGridCheckBoxColumn x:Name="geInPVPPromoColumn" Binding="{Binding geInPVPPromo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="In Sistur" Width="SizeToHeader" IsReadOnly="True">
+                                            <DataGridCheckBoxColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="In Sistur Promotion"/>
+                                                </Style>
+                                            </DataGridCheckBoxColumn.HeaderStyle>
+                                        </DataGridCheckBoxColumn>
+                                        <DataGridCheckBoxColumn x:Name="geCancelPVPPromoColumn" Binding="{Binding geCancelPVPPromo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Cancel Sistur" Width="SizeToHeader" IsReadOnly="True">
+                                            <DataGridCheckBoxColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Cancelled in Sistur Promotion"/>
+                                                </Style>
+                                            </DataGridCheckBoxColumn.HeaderStyle>
+                                        </DataGridCheckBoxColumn>
+                                        <DataGridCheckBoxColumn x:Name="geInOperaColumn" Binding="{Binding geInOpera}" Header="In Opera" Width="SizeToHeader" IsReadOnly="True">
+                                            <DataGridCheckBoxColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="In Opera"/>
+                                                </Style>
+                                            </DataGridCheckBoxColumn.HeaderStyle>
+                                        </DataGridCheckBoxColumn>
+                                        <DataGridCheckBoxColumn x:Name="geAsPromotionOperaColumn" Binding="{Binding geAsPromotionOpera, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="As Promotion" Width="SizeToHeader" IsReadOnly="True">
+                                            <DataGridCheckBoxColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="As Opera Promotion"/>
+                                                </Style>
+                                            </DataGridCheckBoxColumn.HeaderStyle>
+                                        </DataGridCheckBoxColumn>
+                                        <DataGridTextColumn x:Name="geCommentsColumn" Binding="{Binding geComments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Comments" Width="SizeToHeader">
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="ToolTip" Value="Comments"/>
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+                                        </DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                    <DataGrid.RowDetailsTemplate>
+                                        <DataTemplate>
+                                            <DataGrid x:Name="dgGiftsReceiptPackage" ItemsSource="{Binding Source={StaticResource dsGiftsReceiptPackage}}" AutoGenerateColumns="False" IsReadOnly="True" FontWeight="Bold" RowHeight="20">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn x:Name="gkQtyColumn" Binding="{Binding gkQty}" Width="SizeToHeader"/>
+                                                    <DataGridComboBoxColumn x:Name="gkgiColumn" SelectedValueBinding="{Binding gkgi, Mode=OneWay}" SelectedValuePath="giID" DisplayMemberPath="giN" Width="600" ItemsSource="{Binding Source={StaticResource dsGifts}}" />
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </DataTemplate>
+                                    </DataGrid.RowDetailsTemplate>
+                                </DataGrid>
+                                <Button x:Name="btnRemoveGift" Content="Remove" HorizontalAlignment="Left" Margin="735,0,0,171" VerticalAlignment="Bottom" Width="50" Click="btnRemoveGift_Click"  />
+                                <Button x:Name="btnAddGift" Content="Add" HorizontalAlignment="Left" Margin="680,0,0,171" VerticalAlignment="Bottom" Width="50" />
+                                <Button x:Name="btnSaveGift" Content="Remove" HorizontalAlignment="Left" Margin="360,0,0,171" VerticalAlignment="Bottom" Width="50" Click="btnRemoveGift_Click"/>
+                                <Button x:Name="btnCancelGift" Content="Cancel" HorizontalAlignment="Left" Margin="437,0,0,171" VerticalAlignment="Bottom" Width="50" Click="btnCancelGift_Click"/>
                             </Grid>
                         </GroupBox>
-                        <GroupBox x:Name="grbPayments" Header="Payments" HorizontalAlignment="Left" Margin="14,381,0,0" VerticalAlignment="Top" Width="808" Height="99">
-                            <Grid>
+                        <GroupBox x:Name="grbPayments" Header="Payments" HorizontalAlignment="Left" Margin="14,392,0,-1" VerticalAlignment="Top" Width="808" Height="99">
+                            <Grid Margin="0,1,0,-1">
                                 <TextBlock x:Name="lblTotalPaymentsCaption" HorizontalAlignment="Left" Margin="708,6,0,0" TextWrapping="Wrap" Text="Total Payments" VerticalAlignment="Top" Width="88"/>
-                                <TextBox x:Name="txtTotalPaymentsCaption" HorizontalAlignment="Left" Height="23" Margin="708,19,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="78"/>
-
+                                <TextBox x:Name="txtTotalPaymentsCaption" HorizontalAlignment="Left" Height="23" Margin="708,19,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="78" IsReadOnly="True" Text="0.00"/>
+                                <DataGrid x:Name="dgGiftsReceiptPaymentShort" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsGiftsReceiptPaymentShort}}" Margin="0,0,93,0" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn x:Name="gyAmountColumn" Binding="{Binding gyAmount, StringFormat={}{0:0.00}}" Header="Paid" Width="Auto"/>
+                                        <DataGridTextColumn x:Name="gyRefundColumn" Binding="{Binding gyRefund, StringFormat={}{0:0.00}}" Header="Refund" Width="Auto"/>
+                                        <DataGridComboBoxColumn x:Name="gycuColumn" SelectedValueBinding="{Binding gycu}" Header="Currency" Width="Auto" SelectedValuePath="cuID" DisplayMemberPath="cuN" ItemsSource="{Binding Source={StaticResource dsCurrencyDeposits}}"/>
+                                        <DataGridComboBoxColumn x:Name="gyptColumn" SelectedValueBinding="{Binding gypt}" Header="Payment Type" Width="Auto" SelectedValuePath="ptID" DisplayMemberPath="ptN" ItemsSource="{Binding Source={StaticResource dsPaymentType}}"/>
+                                        <DataGridComboBoxColumn x:Name="gybkColumn" SelectedValueBinding="{Binding gybk}" Header="Bank" Width="Auto" SelectedValuePath="bkID" DisplayMemberPath="bkN" ItemsSource="{Binding Source={StaticResource dsBanks}}"/>
+                                        <DataGridComboBoxColumn x:Name="gysbColumn" SelectedValueBinding="{Binding gysb}" Header="Source" Width="Auto" SelectedValuePath="sbID" DisplayMemberPath="sbN" ItemsSource="{Binding Source={StaticResource dsSourcePayments}}"/>
+                                        <DataGridTextColumn x:Name="gypeColumn" Binding="{Binding gype}" Header="User" Width="Auto" IsReadOnly="True"/>
+                                        <DataGridTextColumn x:Name="userNameColumn" Binding="{Binding UserName}" Header="User Name" Width="*" IsReadOnly="True"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
                             </Grid>
                         </GroupBox>
-
                     </Grid>
                 </TabItem>
                 <TabItem Header="CxC &amp; Deposits">
                     <Grid Background="White">
-                        <GroupBox x:Name="grbCxC" Header="CxC" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="191" Width="426">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="9*"/>
+                            <ColumnDefinition Width="199*"/>
+                        </Grid.ColumnDefinitions>
+                        <GroupBox x:Name="grbCxC" Header="CxC" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="191" Width="426" Grid.ColumnSpan="2">
                             <Grid>
                                 <TextBlock x:Name="lblgrct" HorizontalAlignment="Left" Margin="7,10,0,0" TextWrapping="Wrap" Text="Change to" VerticalAlignment="Top"/>
-                                <ComboBox x:Name="cbogrct" HorizontalAlignment="Left" Margin="7,25,0,0" VerticalAlignment="Top" Width="143"/>
+                                <ComboBox x:Name="cbogrct" HorizontalAlignment="Left" Margin="7,25,0,0" VerticalAlignment="Top" Width="143" DisplayMemberPath="ctID" ItemsSource="{Binding Source={StaticResource dsChargeTo}}" SelectedValuePath="ctID" SelectedValue="{Binding grct}" Loaded="cbogrct_Loaded" SelectionChanged="cbogrct_SelectionChanged"/>
                                 <TextBlock x:Name="lblgrCxCGifts" HorizontalAlignment="Left" Margin="154,10,0,0" TextWrapping="Wrap" Text="CxC Gifts" VerticalAlignment="Top"/>
-                                <TextBox x:Name="txtgrCxCGifts" HorizontalAlignment="Left" Height="23" Margin="155,25,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="80"/>
-                                <TextBlock x:Name="lblgrCxCAdj" HorizontalAlignment="Left" Margin="241,10,0,0" TextWrapping="Wrap" Text="CxC Adjustment" VerticalAlignment="Top"/>
-                                <TextBox x:Name="txtgrCxCAdj" HorizontalAlignment="Left" Height="23" Margin="242,25,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="80"/>
+                                <TextBox x:Name="txtgrCxCGifts" HorizontalAlignment="Left" Height="20" Margin="155,25,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="62" Text="{Binding grcxcGifts, StringFormat={}{0:0.00}, FallbackValue=0.00}" IsReadOnly="True" BorderThickness="1"/>
+                                <TextBlock x:Name="lblgrCxCAdj" HorizontalAlignment="Left" Margin="235,10,0,0" TextWrapping="Wrap" Text="CxC Adjustment" VerticalAlignment="Top"/>
+                                <TextBox x:Name="txtgrCxCAdj" HorizontalAlignment="Left" Height="20" Margin="236,25,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="80" Text="{Binding grcxcAdj, StringFormat={}{0:0.00}, FallbackValue=0.00}" PreviewTextInput="ValidateDecimal" PreviewKeyDown="txtgrCxCAdj_PreviewKeyDown" BorderThickness="1"/>
                                 <TextBlock x:Name="lblTotalCxC" HorizontalAlignment="Left" Margin="328,10,-11,0" TextWrapping="Wrap" Text="Total CxC Gifts" VerticalAlignment="Top" Width="81"/>
-                                <TextBox x:Name="txtTotalCxC" HorizontalAlignment="Left" Height="23" Margin="329,25,-11,0" AcceptsReturn="False" VerticalAlignment="Top" Width="80"/>
+                                <TextBox x:Name="txtTotalCxC" HorizontalAlignment="Left" Height="20" Margin="328,25,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="76" Text="0.00" IsReadOnly="True" BorderThickness="1"/>
                                 <TextBlock x:Name="lblgrCxCPRDeposit" HorizontalAlignment="Left" Margin="9,51,0,0" TextWrapping="Wrap" Text="CxC Deposit" VerticalAlignment="Top"/>
-                                <TextBox x:Name="txtgrCxCPRDeposit" HorizontalAlignment="Left" Height="23" Margin="10,66,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="65"/>
-                                <ComboBox x:Name="cbogrcuCxCPRDeposit" HorizontalAlignment="Left" Margin="79,66,0,0" VerticalAlignment="Top" Width="120"/>
+                                <TextBox x:Name="txtgrCxCPRDeposit" HorizontalAlignment="Left" Height="23" Margin="10,66,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="65" Text="{Binding grcxcPRDeposit, StringFormat={}{0:0.00}, FallbackValue=0.00}"/>
+                                <ComboBox x:Name="cbogrcuCxCPRDeposit" HorizontalAlignment="Left" Margin="79,66,0,0" VerticalAlignment="Top" Width="120" DisplayMemberPath="cuN" ItemsSource="{Binding Source={StaticResource dsCurrencyPRDeposit}}" SelectedValuePath="cuID" SelectedValue="{Binding grcucxcPRDeposit}"/>
                                 <TextBlock x:Name="lblgrCxCTaxiOut" HorizontalAlignment="Left" Margin="203,51,0,0" TextWrapping="Wrap" Text="CxC Taxi Out" VerticalAlignment="Top"/>
-                                <TextBox x:Name="txtgrCxCTaxiOut" HorizontalAlignment="Left" Height="23" Margin="204,66,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="65"/>
-                                <ComboBox x:Name="cbogrcuCxCTaxiOut" HorizontalAlignment="Left" Margin="273,66,0,0" VerticalAlignment="Top" Width="131"/>
+                                <TextBox x:Name="txtgrCxCTaxiOut" HorizontalAlignment="Left" Height="23" Margin="204,66,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="65" Text="{Binding grcxcTaxiOut, StringFormat={}{0:0.00}, FallbackValue=0.00}"/>
+                                <ComboBox x:Name="cbogrcuCxCTaxiOut" HorizontalAlignment="Left" Margin="273,66,0,0" VerticalAlignment="Top" Width="131" DisplayMemberPath="cuN" ItemsSource="{Binding Source={StaticResource dsCurrencyTaxiOut}}" SelectedValuePath="cuID" SelectedValue="{Binding grcucxcTaxiOut}"/>
                                 <TextBlock x:Name="lblgrCxCComments" HorizontalAlignment="Left" Margin="9,94,0,0" TextWrapping="Wrap" Text="CxC Deposit" VerticalAlignment="Top"/>
-                                <TextBox x:Name="txtgrCxCComments" HorizontalAlignment="Left" Height="54" Margin="10,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="394" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+                                <TextBox x:Name="txtgrCxCComments" HorizontalAlignment="Left" Height="54" Margin="10,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="394" ScrollViewer.VerticalScrollBarVisibility="Visible" Text="{Binding grcxcComments}"/>
 
                             </Grid>
                         </GroupBox>
-                        <GroupBox x:Name="grbDepposits" Header="Deposits" HorizontalAlignment="Left" Margin="10,215,0,0" VerticalAlignment="Top" Height="210" Width="812">
+                        <GroupBox x:Name="grbDepposits" Header="Deposits" HorizontalAlignment="Left" Margin="10,215,0,0" VerticalAlignment="Top" Height="210" Width="812" Grid.ColumnSpan="2">
                             <Grid>
-                                <TextBlock x:Name="lblDepositMNCaption" HorizontalAlignment="Left" Margin="716,10,0,0" TextWrapping="Wrap" Text="Deposits M.N" VerticalAlignment="Top"/>
-                                <TextBox x:Name="txtDepositMN" HorizontalAlignment="Left" Height="23" Margin="704,26,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="91" IsReadOnly="True"/>
-                                <TextBlock x:Name="lblDepositUSCaption" HorizontalAlignment="Left" Margin="721,54,0,0" TextWrapping="Wrap" Text="Deposits US" VerticalAlignment="Top"/>
-                                <TextBox x:Name="txtDepositUS" HorizontalAlignment="Left" Height="23" Margin="704,70,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="91" IsReadOnly="True"/>
+                                <TextBlock x:Name="lblDepositMNCaption" HorizontalAlignment="Left" Margin="727,10,0,0" TextWrapping="Wrap" Text="Deposits M.N" VerticalAlignment="Top"/>
+                                <TextBox x:Name="txtDepositMN" HorizontalAlignment="Left" Height="23" Margin="727,26,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="68" IsReadOnly="True" Text="0.00"/>
+                                <TextBlock x:Name="lblDepositUSCaption" HorizontalAlignment="Left" Margin="734,54,0,0" TextWrapping="Wrap" Text="Deposits US" VerticalAlignment="Top"/>
+                                <TextBox x:Name="txtDepositUS" HorizontalAlignment="Left" Height="23" Margin="727,70,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="68" IsReadOnly="True" Text="0.00"/>
                                 <TextBlock x:Name="lblgrDeposit" HorizontalAlignment="Left" Margin="21,143,0,0" TextWrapping="Wrap" Text="Deposits US" VerticalAlignment="Top" Width="37"/>
-                                <TextBox x:Name="txtgrDeposit" HorizontalAlignment="Left" Height="23" Margin="10,159,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="58"/>
+                                <TextBox x:Name="txtgrDeposit" HorizontalAlignment="Left" Height="23" Margin="10,159,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="58" Text="{Binding grDeposit, StringFormat={}{0:0.00}, FallbackValue=0.00}" PreviewTextInput="ValidateDecimal" PreviewKeyDown="ValidateEnter_PreviewKeyDown"/>
                                 <TextBlock x:Name="lblgrDepositTwisted" HorizontalAlignment="Left" Margin="86,143,0,0" TextWrapping="Wrap" Text="Burned" VerticalAlignment="Top" Width="37"/>
-                                <TextBox x:Name="txtgrDepositTwisted" HorizontalAlignment="Left" Height="23" Margin="75,159,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="58"/>
+                                <TextBox x:Name="txtgrDepositTwisted" HorizontalAlignment="Left" Height="23" Margin="75,159,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="58" Text="{Binding grDepositTwisted, StringFormat={}{0:0.00}, FallbackValue=0.00}" PreviewTextInput="ValidateDecimal" PreviewKeyDown="ValidateEnter_PreviewKeyDown"/>
                                 <TextBlock x:Name="lblgrcu" HorizontalAlignment="Left" Margin="139,143,0,0" TextWrapping="Wrap" Text="Currency" VerticalAlignment="Top" Width="68"/>
-                                <ComboBox x:Name="cbogrcu" HorizontalAlignment="Left" Margin="141,158,0,0" VerticalAlignment="Top" Width="138"/>
+                                <ComboBox x:Name="cbogrcu" HorizontalAlignment="Left" Margin="141,158,0,0" VerticalAlignment="Top" Width="138" DisplayMemberPath="cuN" ItemsSource="{Binding Source={StaticResource dsCurrency}}" SelectedValuePath="cuID" SelectedValue="{Binding grcu}" SelectionChanged="cbogrcu_SelectionChanged"/>
                                 <TextBlock x:Name="lblgrpt" HorizontalAlignment="Left" Margin="286,143,0,0" TextWrapping="Wrap" Text="Payment Type" VerticalAlignment="Top" Width="68"/>
-                                <ComboBox x:Name="cbogrpt" HorizontalAlignment="Left" Margin="288,158,0,0" VerticalAlignment="Top" Width="138"/>
+                                <ComboBox x:Name="cbogrpt" HorizontalAlignment="Left" Margin="288,158,0,0" VerticalAlignment="Top" Width="138" DisplayMemberPath="ptN" ItemsSource="{Binding Source={StaticResource dsPaymentType}}" SelectedValuePath="ptID" SelectedValue="grpt"/>
+                                <DataGrid x:Name="dgBookingDeposit" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsBookingDeposit}}" Margin="0,0,78,49" RowDetailsVisibilityMode="VisibleWhenSelected">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn x:Name="bdAmountColumn" Binding="{Binding bdAmount, StringFormat={}{0:0.00}}" Header="Deposit" Width="SizeToHeader"/>
+                                        <DataGridTextColumn x:Name="bdReceivedColumn" Binding="{Binding bdReceived, StringFormat={}{0:0.00}}" Header="Received" Width="SizeToHeader"/>
+                                        <DataGridTextColumn x:Name="bdCxCColumn" Binding="{Binding CxC, StringFormat={}{0:0.00}}" Header="CxC" Width="SizeToHeader"/>
+                                        <DataGridComboBoxColumn x:Name="bdcuColumn" SelectedValueBinding="{Binding bdcu, Mode=OneWay}" Header="Currency" Width="Auto" SelectedValuePath="cuID" DisplayMemberPath="cuN" ItemsSource="{Binding Source={StaticResource dsCurrencyDeposits}}"/>
+                                        <DataGridComboBoxColumn x:Name="bdptColumn" SelectedValueBinding="{Binding bdpt, Mode=OneWay}" Header="Payment Type" Width="Auto" SelectedValuePath="ptID" DisplayMemberPath="ptN" ItemsSource="{Binding Source={StaticResource dsPaymentType}}"/>
+                                        <DataGridTextColumn x:Name="bdpcColumn" Binding="{Binding bdpc}" Header="Refund Places" Width="Auto"/>
+                                        <DataGridTextColumn x:Name="bdccColumn" Binding="{Binding bdcc}" Header="Credit Card Type" Width="SizeToHeader"/>
+                                        <DataGridTextColumn x:Name="bdCardNumColumn" Binding="{Binding bdCardNum}" Header="Card Number" Width="SizeToHeader"/>
+                                        <DataGridTextColumn x:Name="bdExpDColumn" Binding="{Binding bdExpD}" Header="Expiration" Width="Auto"/>
+                                        <DataGridTextColumn x:Name="bdAuthColumn" Binding="{Binding bdAuth}" Header="Authorizathion ID" Width="Auto"/>
+                                        <DataGridTextColumn x:Name="bdFolioCXCColumn" Binding="{Binding bdFolioCXC}" Header="Folio CxC" Width="Auto"/>
+                                        <DataGridTextColumn x:Name="bdUserCXCColumn" Binding="{Binding bdUserCXC}" Header="User CxC" Width="Auto"/>
+                                        <DataGridTextColumn x:Name="bdEntryDCXCColumn" Binding="{Binding bdEntryDCXC, StringFormat=d}" Header="Entry CxC" Width="Auto"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
 
                             </Grid>
                         </GroupBox>
@@ -159,24 +453,38 @@
                 </TabItem>
             </TabControl>
         </Border>
-        <GroupBox x:Name="grbChangeBy" Header="Change By" HorizontalAlignment="Left" Margin="185,605,0,0" VerticalAlignment="Top" Height="82" Width="246">
+        <GroupBox x:Name="grbChangeBy" Header="Change By" HorizontalAlignment="Left" Margin="185,605,0,0" VerticalAlignment="Top" Height="82" Width="220">
             <Grid>
-                <TextBox x:Name="txtChangedBy" HorizontalAlignment="Left" Height="23" Margin="5,5,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="120"/>
-                <TextBox x:Name="txtPwd" HorizontalAlignment="Left" Height="23" Margin="5,33,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="120"/>
-                <Button x:Name="btnLog" Content="Log" HorizontalAlignment="Left" Margin="143,19,0,0" VerticalAlignment="Top" Width="75"/>
+                <TextBox x:Name="txtChangedBy" HorizontalAlignment="Left" Height="23" Margin="5,5,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="102" CharacterCasing="Upper"/>
+                <PasswordBox x:Name="txtPwd" HorizontalAlignment="Left" Height="23" Margin="5,33,0,0" PasswordChar="*"  VerticalAlignment="Top" Width="102"/>
+                <Button x:Name="btnLog" Content="Log" HorizontalAlignment="Left" Margin="123,19,0,0" VerticalAlignment="Top" Width="75" Click="btnLog_Click"/>
             </Grid>
         </GroupBox>
-        <Button x:Name="btnNew" Content="New" HorizontalAlignment="Left" Margin="452,611,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btnExchange" Content="Exchange" HorizontalAlignment="Left" Margin="535,611,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btnEdit" Content="Edit" HorizontalAlignment="Left" Margin="617,611,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="698,611,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btnUndo" Content="Undo" HorizontalAlignment="Left" Margin="778,611,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btnPrint" Content="Print" HorizontalAlignment="Left" Margin="860,611,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left" Margin="941,611,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="btnCancel" Content="Cancel Receipt" HorizontalAlignment="Left" Margin="505,647,0,0" VerticalAlignment="Top" Width="90"/>
-        <Button x:Name="btnCancelSisturPromotions" Content="Cancel Sistur" HorizontalAlignment="Left" Margin="615,647,0,0" VerticalAlignment="Top" Width="90"/>
-        <Button x:Name="btnEPurse" Content="E-Purse" HorizontalAlignment="Left" Margin="719,647,0,0" VerticalAlignment="Top" Width="90"/>
-        <Button x:Name="btnCancelElectronicPurse" Content="Cancel E-Purse" HorizontalAlignment="Left" Margin="826,647,0,0" VerticalAlignment="Top" Width="90"/>
+        <Button x:Name="btnNew" Content="New" HorizontalAlignment="Left" Margin="432,622,0,0" VerticalAlignment="Top" Width="75" Click="btnNew_Click"/>
+        <Button x:Name="btnExchange" Content="Exchange" HorizontalAlignment="Left" Margin="517,622,0,0" VerticalAlignment="Top" Width="75" Click="btnExchange_Click"/>
+        <Button x:Name="btnEdit" Content="Edit" HorizontalAlignment="Left" Margin="602,622,0,0" VerticalAlignment="Top" Width="75" Click="btnEdit_Click"/>
+        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="688,622,0,0" VerticalAlignment="Top" Width="75" Click="btnSave_Click"/>
+        <Button x:Name="btnUndo" Content="Undo" HorizontalAlignment="Left" Margin="773,622,0,0" VerticalAlignment="Top" Width="75" Click="btnUndo_Click"/>
+        <Button x:Name="btnPrint" Content="Print" HorizontalAlignment="Left" Margin="858,622,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left" Margin="941,622,0,0" VerticalAlignment="Top" Width="75" Click="btnClose_Click"/>
+        <Button x:Name="btnCancel" Content="Cancel Receipt" HorizontalAlignment="Left" Margin="505,658,0,0" VerticalAlignment="Top" Width="90" Click="btnCancel_Click"/>
+        <Button x:Name="btnCancelSisturPromotions" Content="Cancel Sistur" HorizontalAlignment="Left" Margin="615,658,0,0" VerticalAlignment="Top" Width="90" Click="btnCancelSisturPromotions_Click"/>
+        <Button x:Name="btnEPurse" Content="E-Purse" HorizontalAlignment="Left" Margin="719,658,0,0" VerticalAlignment="Top" Width="90" Click="btnEPurse_Click"/>
+        <Button x:Name="btnCancelElectronicPurse" Content="Cancel E-Purse" HorizontalAlignment="Left" Margin="826,658,0,0" VerticalAlignment="Top" Width="90" Click="btnCancelElectronicPurse_Click"/>
+
+        <DataGrid x:Name="grdReceipts" DataContext="{StaticResource dsGiftsReceiptsShort}" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="10,75,859,97" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" Loaded="grdReceipts_Loaded">
+            <DataGrid.Resources>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="MouseDoubleClick" Handler="grdGiftsReceipt_DoubleClick"/>
+                    <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="grIDColumn" Binding="{Binding grID}" Header="Rcpt ID" Width="Auto"/>
+                <DataGridTextColumn x:Name="grNumColumn" Binding="{Binding grNum}" Header="Receipt #" Width="Auto"/>
+                <DataGridCheckBoxColumn x:Name="grExchangeColumn" Binding="{Binding grExchange}" Header="Exch." Width="SizeToHeader"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
     </Grid>
 </Window>

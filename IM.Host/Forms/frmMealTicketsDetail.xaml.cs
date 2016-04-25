@@ -54,7 +54,6 @@ namespace IM.Host.Forms
       {
         #region EnumModeOpen.Add
         case EnumModeOpen.Add:
-          DataContext = _mealTicketCurrency;
           dtpDate.Value = frmHost._dtpServerDate.Date;
           break;
         #endregion
@@ -64,20 +63,33 @@ namespace IM.Host.Forms
           dtpDate.Value = _mealTicketCurrency.meD.Date;
           break;
         #endregion
-        #region EnumModeOpen.Preview
+        /*#region EnumModeOpen.Preview
         case EnumModeOpen.Preview:
           DataContext = _mealTicketCurrency;
           dtpDate.Value = (_mealTicketCurrency.meD.Date <= new DateTime(0001, 01, 1)) ? frmHost._dtpServerDate : _mealTicketCurrency.meD.Date;
           lblRateType.Visibility = Visibility.Hidden;
           cboRateType.Visibility = Visibility.Hidden;
+          cboRateType.SelectedItem = null;
           lblAgency.Visibility = Visibility.Hidden;
           cboAgency.Visibility = Visibility.Hidden;
+          cboAgency.SelectedItem = null;
           lblCollaborator.Visibility = Visibility.Hidden;
           cboCollaborator.Visibility = Visibility.Hidden;
+          cboCollaborator.SelectedItem = null;
           lblRepresentative.Visibility = Visibility.Hidden;
           txtRepresentative.Visibility = Visibility.Hidden;
+          txtRepresentative.Text = "";
           break;
-          #endregion
+        #endregion*/
+        case EnumModeOpen.PreviewEdit: 
+          HiddenControls();
+          dtpDate.Value = frmHost._dtpServerDate.Date;
+          break;
+        case EnumModeOpen.Preview: 
+          HiddenControls();
+          DataContext = _mealTicketCurrency;
+          dtpDate.Value = (_mealTicketCurrency.meD.Date <= new DateTime(0001, 01, 1)) ? frmHost._dtpServerDate : _mealTicketCurrency.meD.Date;
+          break;
       } 
       #endregion
 
@@ -89,6 +101,30 @@ namespace IM.Host.Forms
       _dsAgency.Source = BRAgencies.GetAgencies(1);
       // Obtenemos los tipos de cupones de comida.
       _dsMealTicketType.Source = BRMealTicketTypes.GetMealTicketType();
+    }
+    #endregion
+
+    #region HiddenControls
+    /// <summary>
+    /// Oculta los controles necesarios segun el caso lo requiera.
+    /// </summary>
+    /// <history>
+    /// [vipacheco] 04/04/2016 Created
+    /// </history>
+    private void HiddenControls()
+    {
+      lblRateType.Visibility = Visibility.Hidden;
+      cboRateType.Visibility = Visibility.Hidden;
+      cboRateType.SelectedItem = null;
+      lblAgency.Visibility = Visibility.Hidden;
+      cboAgency.Visibility = Visibility.Hidden;
+      cboAgency.SelectedItem = null;
+      lblCollaborator.Visibility = Visibility.Hidden;
+      cboCollaborator.Visibility = Visibility.Hidden;
+      cboCollaborator.SelectedItem = null;
+      lblRepresentative.Visibility = Visibility.Hidden;
+      txtRepresentative.Visibility = Visibility.Hidden;
+      txtRepresentative.Text = "";
     } 
     #endregion
 
@@ -105,34 +141,30 @@ namespace IM.Host.Forms
     {
       RateType _rateType = (RateType)cboRateType.SelectedItem;
 
-      //if (controlRateType == false)
-      //{
+      if (modeOpen != EnumModeOpen.Preview && modeOpen != EnumModeOpen.PreviewEdit)
+      {
         if (_rateType != null) // Se verifica que el SelectedItem no sea null
         {
-          if (_rateType.raID != 4 && modeOpen != EnumModeOpen.Preview) // Si es diferente de tipo External!
+          if (_rateType.raID >= 2 && _rateType.raID < 4 ) // Si es diferente de tipo External!
           {
             controlVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
           }
-          else if (modeOpen != EnumModeOpen.Preview) // Es external
+          else if (_rateType.raID == 4) // Es external
           {
             controlVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Visible);
           }
         }
-        else if (modeOpen != EnumModeOpen.Preview)
+        else// if (modeOpen != EnumModeOpen.Preview)
         {
           controlVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
         }
-
 
         // Se verifica que no sean un nuevo MealTicket
         if (_rateType != null && txtAdults.Text != "" && txtMinors.Text != "" && _meQty >= 1)
         {
           txtTAdults.Text = string.Format("{0:$0.00}", CalculateAdult(((_rateType == null) ? 0 : _rateType.raID), ((_meQty >= 0) ? _meQty : 0), ((txtAdults.Text != "") ? Convert.ToInt32(txtAdults.Text) : 0)));
         }
-        //controlRateType = true;
-      //}
-      //else
-      //  controlRateType = false;
+      }
     }
     #endregion
 
@@ -218,68 +250,60 @@ namespace IM.Host.Forms
       }
 
       return Amt;
-    } 
+    }
     #endregion
 
-    private void validateFields()
+    #region validateFields
+    /// <summary>
+    /// Valida los campos obligatorios segun sea requerido
+    /// </summary>
+    /// <returns> False - Algun Campo Vacio | True - Campos llenados correctamente </returns>
+    /// <history>
+    /// [vipacheco] 01/04/2016 Created
+    /// </history>
+    private bool validateFields()
     {
-      if (frmMealTickets._pguId == 0 ) // Row New
+      MealTicketType _mealType = (MealTicketType)cboType.SelectedItem; //
+
+      if (frmMealTickets._pguId == 0)
       {
         RateType _rateType = (RateType)cboRateType.SelectedItem; //mera
-        MealTicketType _mealType = (MealTicketType)cboType.SelectedItem; //
         PersonnelShort _personnel = (PersonnelShort)cboCollaborator.SelectedItem;
         AgencyShort _agency = (AgencyShort)cboAgency.SelectedItem;
 
         if (_rateType == null)
         {
           UIHelper.ShowMessage("Select an option of rate type, please", MessageBoxImage.Information);
-          return;
+          return false;
         }
         else if (_rateType.raID >= 2 && _rateType.raID < 4 && _personnel == null)
         {
           UIHelper.ShowMessage("Select a collaborator, please", MessageBoxImage.Information);
-          return;
+          return false;
         }
-        else if (_rateType.raID == 4 && (_agency == null || _personnel == null))
+        else if (_rateType.raID == 4 && (_agency == null || txtRepresentative.Text == ""))
         {
           UIHelper.ShowMessage("Select an agency and write the representative name in the field for External option.", MessageBoxImage.Information);
-          return;
+          return false;
         }
-        else if (_mealType ==  null)
+        else if (_mealType == null)
         {
           UIHelper.ShowMessage("Select an option of meal type, please", MessageBoxImage.Information);
-          return;
+          return false;
         }
-
-        // Obtenemos el folio a asignar
-        int folioNew = 1 + BRMealTicketFolios.GetMaxMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, _rateType.raID);  // SetFolios(frmMealTickets._pQty, _mealType.myID, _rateType.raID);
-
-        int _meAdults = Convert.ToInt32((txtAdults.Text == "") ? "0" : txtAdults.Text.Substring(1, txtAdults.Text.Length - 1));
-        int _meMinors = Convert.ToInt32((txtAdults.Text == "") ? "0" : txtMinors.Text.Substring(1, txtMinors.Text.Length - 1));
-
-        MealTicket _newMealticket = new MealTicket
-        {
-          meD = dtpDate.Value.Value.Date,
-          megu = frmMealTickets._pguId,
-          meQty = frmMealTickets._pQty,
-          meType = _mealType.myID,
-          meAdults = _meAdults,
-          meMinors = _meMinors
-
-        };
-
-
       }
-      else // Edicion, Agregar a un guestID con MealTicket creado!
+      else
       {
-
+        if (_mealType == null)
+        {
+          UIHelper.ShowMessage("Select an option of meal type, please", MessageBoxImage.Information);
+          return false;
+        }
       }
-    }
 
-    private int SetFolios(int pmeQty, string pmeType, int pmera)
-    {
-      return 0;
-    }
+      return true;
+    } 
+    #endregion
 
     #region cboType_SelectionChanged
     private void cboType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -347,12 +371,153 @@ namespace IM.Host.Forms
           txtTMinors.Text = string.Format("{0:$0.00}", Convert.ToDouble(_minors));
         }
       }
-    } 
+    }
     #endregion
 
+    #region btnSave_Click
+    /// <summary>
+    /// Guarda la informacion proporcionada!
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 23/03/2016 Created
+    /// </history>
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
-      validateFields();
+      if (validateFields())
+      {
+        RateType _rateType = (RateType)cboRateType.SelectedItem; 
+        MealTicketType _mealType = (MealTicketType)cboType.SelectedItem; 
+        PersonnelShort _personnel = (PersonnelShort)cboCollaborator.SelectedItem;
+        AgencyShort _agency = (AgencyShort)cboAgency.SelectedItem;
+
+        int _meAdults = Convert.ToInt32((txtAdults.Text == "") ? "0" : txtAdults.Text);
+        int _meMinors = Convert.ToInt32((txtAdults.Text == "") ? "0" : txtMinors.Text);
+        string _meTAdultsString = txtTAdults.Text.Substring(1, txtTAdults.Text.Length - 1);
+        string _meTMinorsString = txtTMinors.Text.Substring(1, txtTMinors.Text.Length - 1);
+
+        // Row New with GuestID == 0
+        if (modeOpen == EnumModeOpen.Add && frmMealTickets._pguId == 0)
+        {
+          // Obtenemos el folio a asignar
+          int folioNew = 1 + BRMealTicketFolios.GetMaxMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, _rateType.raID);
+
+          MealTicket _newMealticket = CreateMealTicket(_rateType, _mealType, _personnel, _agency, _meAdults, _meMinors, _meTAdultsString, _meTMinorsString, folioNew);
+
+          //Actualizamos el folio!
+          BRMealTicketFolios.UpdateMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, _rateType.raID, folioNew + "");
+
+          //Guardamos el Meal Ticket Creado
+          BRMealTickets.InsertNewMealTicket(_newMealticket);
+        }
+        // Edition Row with GuestID == 0
+        else if (modeOpen == EnumModeOpen.Edit && frmMealTickets._pguId == 0)
+        {
+          int folio = Convert.ToInt32(_mealTicketCurrency.meFolios);
+
+          // Creamos el Meal Ticket con el guestID
+          _mealTicketCurrency.meD = dtpDate.Value.Value.Date;
+          _mealTicketCurrency.megu = frmMealTickets._pguId;
+          _mealTicketCurrency.meQty = frmMealTickets._pQty;
+          _mealTicketCurrency.meType = _mealType.myID;
+          _mealTicketCurrency.meAdults = _meAdults;
+          _mealTicketCurrency.meMinors = _meMinors;
+          _mealTicketCurrency.meFolios = folio + "";
+          _mealTicketCurrency.meTAdults = Convert.ToDecimal(_meTAdultsString);
+          _mealTicketCurrency.meTMinors = Convert.ToDecimal(_meTMinorsString);
+          _mealTicketCurrency.meComments = txtComments.Text;
+          _mealTicketCurrency.mesr = App.User.SalesRoom.srID;
+          _mealTicketCurrency.meCanc = chkCancel.IsChecked.Value;
+          _mealTicketCurrency.mera = _rateType.raID;
+          _mealTicketCurrency.mepe = cboCollaborator.IsVisible ? _personnel.peID : null;
+          _mealTicketCurrency.mePrinted = chkPrinted.IsChecked.Value;
+          _mealTicketCurrency.meag = cboAgency.IsVisible ? _agency.agID : null;
+          _mealTicketCurrency.merep = txtRepresentative.IsVisible ? txtRepresentative.Text : null;
+          _mealTicketCurrency.meAuthorizedBy = App.User.User.peID;
+
+          //Actualizamos el folio!
+          BRMealTicketFolios.UpdateMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, _rateType.raID, _mealTicketCurrency.meFolios);
+
+          // Insertamos el nuevo Meal Ticket con el folio asignado
+          BRMealTickets.UpdateMealTicket(_mealTicketCurrency);
+        }
+        // Row New with GuestID != 0
+        if (modeOpen == EnumModeOpen.PreviewEdit && frmMealTickets._pguId != 0)
+        {
+          // Obtenemos el folio a asignar
+          int folioNew = 1 + BRMealTicketFolios.GetMaxMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, 1);
+
+          MealTicket _newMealticket = CreateMealTicket(_rateType, _mealType, _personnel, _agency, _meAdults, _meMinors, _meTAdultsString, _meTMinorsString, folioNew);
+
+          //Actualizamos el folio!
+          BRMealTicketFolios.UpdateMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, 1, folioNew + "");
+
+          //Guardamos el Meal Ticket Creado
+          BRMealTickets.InsertNewMealTicket(_newMealticket);
+        }
+        // Edition Row with GuestID != 0
+        else if (modeOpen == EnumModeOpen.Preview && frmMealTickets._pguId != 0)
+        {
+          int folio = Convert.ToInt32(_mealTicketCurrency.meFolios);
+
+          // Creamos el Meal Ticket con el guestID
+          _mealTicketCurrency.meD = dtpDate.Value.Value.Date;
+          _mealTicketCurrency.megu = frmMealTickets._pguId;
+          _mealTicketCurrency.meQty = frmMealTickets._pQty;
+          _mealTicketCurrency.meType = _mealType.myID;
+          _mealTicketCurrency.meAdults = _meAdults;
+          _mealTicketCurrency.meMinors = _meMinors;
+          _mealTicketCurrency.meFolios = folio + "";
+          _mealTicketCurrency.meTAdults = Convert.ToDecimal(_meTAdultsString);
+          _mealTicketCurrency.meTMinors = Convert.ToDecimal(_meTMinorsString);
+          _mealTicketCurrency.meComments = txtComments.Text;
+          _mealTicketCurrency.mesr = App.User.SalesRoom.srID;
+          _mealTicketCurrency.meCanc = chkCancel.IsChecked.Value;
+          _mealTicketCurrency.mera = 1;
+          _mealTicketCurrency.mepe = cboCollaborator.IsVisible ? _personnel.peID : null;
+          _mealTicketCurrency.mePrinted = chkPrinted.IsChecked.Value;
+          _mealTicketCurrency.meag = cboAgency.IsVisible ? _agency.agID : null;
+          _mealTicketCurrency.merep = txtRepresentative.IsVisible ? txtRepresentative.Text : null;
+          _mealTicketCurrency.meAuthorizedBy = App.User.User.peID;
+
+          //Actualizamos el folio!
+          BRMealTicketFolios.UpdateMealTicketFolio(App.User.SalesRoom.srID, _mealType.myID, 1, _mealTicketCurrency.meFolios);
+
+          // Insertamos el nuevo Meal Ticket con el folio asignado
+          BRMealTickets.UpdateMealTicket(_mealTicketCurrency);
+        }
+        //Actualizamos el campo guMealTicket del Guest
+        BRGuests.UpdateFieldguMealTicket(true, frmMealTickets._pguId);
+
+        Close();
+      }
     }
+
+    private MealTicket CreateMealTicket(RateType _rateType, MealTicketType _mealType, PersonnelShort _personnel, AgencyShort _agency, int _meAdults, int _meMinors, string _meTAdultsString, string _meTMinorsString, int folioNew)
+    {
+      return new MealTicket
+      {
+        meD = dtpDate.Value.Value.Date,
+        megu = frmMealTickets._pguId,
+        meQty = frmMealTickets._pQty,
+        meType = _mealType.myID,
+        meAdults = _meAdults,
+        meMinors = _meMinors,
+        meFolios = folioNew + "",
+        meTAdults = Convert.ToDecimal(_meTAdultsString),
+        meTMinors = Convert.ToDecimal(_meTMinorsString),
+        meComments = txtComments.Text,
+        mesr = App.User.SalesRoom.srID,
+        meCanc = chkCancel.IsChecked.Value,
+        mera = cboRateType.IsVisible ? _rateType.raID : 1,
+        mepe = cboCollaborator.IsVisible ? _personnel.peID : null,
+        mePrinted = chkPrinted.IsChecked.Value,
+        meag = cboAgency.IsVisible ? _agency.agID : null,
+        merep = txtRepresentative.IsVisible ? txtRepresentative.Text : null,
+        meAuthorizedBy = App.User.User.peID
+      };
+    }
+    #endregion
   }
 }

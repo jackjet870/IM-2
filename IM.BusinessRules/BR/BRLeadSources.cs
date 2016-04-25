@@ -128,5 +128,35 @@ namespace IM.BusinessRules.BR
 
     #endregion GetLeadSourcesById
 
+    #region GetLeadSourceByID
+    /// <summary>
+    /// Obtienen un Lead Source por un ID especificado
+    /// </summary>
+    /// <param name="leadSourceID"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 11/Abril/2016 Created
+    /// </history>
+    public static LeadSource GetLeadSourceByID(string leadSourceID)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.LeadSources.Where(x => x.lsID == leadSourceID).SingleOrDefault();
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+    } 
+    #endregion
+
   }
 }

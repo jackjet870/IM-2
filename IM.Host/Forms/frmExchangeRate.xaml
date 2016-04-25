@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmExchangeRate"
         mc:Ignorable="d"
+        Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
         Title="Exchange Rate" Height="353" Width="735" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded">
 
     <!--#region RECURSOS WINDOW-->

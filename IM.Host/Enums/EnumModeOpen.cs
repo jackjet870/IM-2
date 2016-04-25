@@ -12,6 +12,7 @@
     Add = 1,
     Edit,
     Preview,
-    Search
+    Search,
+    PreviewEdit
   }
 }
