@@ -14,6 +14,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Linq.Dynamic;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -279,9 +280,45 @@ namespace IM.Base.Helpers
           ptfField.Compact = rowFormat.Compact;
           ptfField.ShowAll = rowFormat.showAll;
         }
+
         ptfField.SubtotalTop = rowFormat.SubtotalTop;
         ptfField.SubTotalFunctions = rowFormat.SubTotalFunctions;
         ptfField.Sort = rowFormat.Sort;
+
+        #region Formato
+
+        if (rowFormat.Format != EnumFormatTypeExcel.General)
+        {
+          //Formato
+          PropertyInfo highlightedItemProperty = ptfField.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "TopNode");
+          XmlElement ptfFieldXml = (XmlElement)highlightedItemProperty.GetValue(ptfField, null);
+          var styles = pivotTable.WorkSheet.Workbook.Styles;
+          ExcelNumberFormatXml nFormatXml = styles.NumberFormats.ToList().Find(x => x.Format == GetFormat(rowFormat));
+
+          //Si existe el Formato
+          if (nFormatXml != null)
+          {
+            XmlAttribute numFmtIdAttrib = pivotTable.PivotTableXml.CreateAttribute("numFmtId");
+            numFmtIdAttrib.Value = nFormatXml.NumFmtId.ToString();
+            ptfFieldXml.Attributes.Append(numFmtIdAttrib);
+          }
+        }
+
+        #endregion Formato
+
+        #region Salto de linea
+
+        if (rowFormat.InsertBlankRow)
+        {
+          //Insertar salto de linea
+          PropertyInfo highlightedItemProperty = ptfField.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "TopNode");
+          XmlElement ptfFieldXml = (XmlElement)highlightedItemProperty.GetValue(ptfField, null);
+          XmlAttribute insertBlankRowIdAttrib = pivotTable.PivotTableXml.CreateAttribute("insertBlankRow");
+          insertBlankRowIdAttrib.Value = "1";
+          ptfFieldXml.Attributes.Append(insertBlankRowIdAttrib);
+        }
+
+        #endregion Salto de linea
       });
 
       //Asignamos el valor que se mostrara en las columnas.
@@ -932,6 +969,7 @@ namespace IM.Base.Helpers
           case EnumFormatTypeExcel.DecimalNumber:
           case EnumFormatTypeExcel.Date:
           case EnumFormatTypeExcel.Time:
+          case EnumFormatTypeExcel.Month:
             tableStyle.Style.Numberformat.Format = GetFormat(new ExcelFormatTable { Format = item.Format });
             break;
 
@@ -988,6 +1026,10 @@ namespace IM.Base.Helpers
 
         case EnumFormatTypeExcel.Time:
           format = "hh:mm AM/PM";
+          break;
+
+        case EnumFormatTypeExcel.Month:
+          format = "[$-409]mmmm";
           break;
       }
 
