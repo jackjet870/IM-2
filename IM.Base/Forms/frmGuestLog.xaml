@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.Inhouse"
-        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Inhouse.frmGuestLog"
+        xmlns:local="clr-namespace:IM.Base.Forms"
+        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
+        x:Class="IM.Base.Forms.frmGuestLog"
         mc:Ignorable="d" Background="Beige"  ResizeMode="NoResize" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
         Title="Guest Log" ShowInTaskbar="False"  Height="297.736" Width="846.792" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Window.Resources>

@@ -219,7 +219,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        dbContext.USP_OR_SaveGuestMovement(guestId, StrToEnums.EumGuestsMovementsTypeToString(guestMovementType), changedBy, computerName, iPAddress);
+        dbContext.USP_OR_SaveGuestMovement(guestId, EnumToListHelper.GetEnumDescription(guestMovementType), changedBy, computerName, iPAddress);
       }
     }
     #endregion
@@ -625,7 +625,7 @@ namespace IM.BusinessRules.BR
             dbContext.USP_OR_SaveGuestLog(guest.guID, lsHoursDif, changedBy);
 
             //guardamos el movimiento de contactacion del huesped
-            dbContext.USP_OR_SaveGuestMovement(guest.guID, StrToEnums.EumGuestsMovementsTypeToString(guestMovementType), changedBy, computerName, iPAddress);
+            dbContext.USP_OR_SaveGuestMovement(guest.guID, EnumToListHelper.GetEnumDescription(guestMovementType), changedBy, computerName, iPAddress);
 
             respuesta = dbContext.SaveChanges();
             transaction.Commit();

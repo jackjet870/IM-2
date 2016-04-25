@@ -1,4 +1,6 @@
-﻿namespace IM.Model.Enums
+﻿using System.ComponentModel;
+
+namespace IM.Model.Enums
 {
   /// <summary>
   /// Enumerado para el manejo de los diferentes tipos de movimientos de huespedes
@@ -8,9 +10,14 @@
   /// </history>
   public enum EnumGuestsMovementsType
   {
+    [Description("CN")]
     Contact,
+    [Description("BK")]
     Booking,
+    [Description("SH")]
     Show,
+    [Description("SL")]
     Sale,
+
   }
 }

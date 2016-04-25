@@ -4,7 +4,6 @@ using IM.BusinessRules.BR;
 using IM.Inhouse.Classes;
 using IM.Inhouse.Forms;
 using IM.Model;
-using IM.Model.Classes;
 using IM.Model.Enums;
 using System;
 using System.Collections.Generic;
@@ -15,11 +14,8 @@ using System.Windows.Data;
 using System.Windows.Input;
 using IM.Services.Helpers;
 using IM.Services.WirePRService;
-using IM.Services.CallCenterService;
 using IM.Inhouse.Reports;
 using System.IO;
-using System.Collections;
-using System.Windows.Documents;
 using IM.Model.Helpers;
 using System.Data;
 
@@ -230,9 +226,9 @@ namespace IM.Inhouse
     /// <summary>
     /// Valida los datos para desplegar el formulario de contactacion
     /// </summary>
-    /// <param name="CheckIn"></param>
-    /// <param name="Contact"></param>
-    /// <param name="CheckOutD"></param>
+    /// <param name="CheckIn">Si ya hizo CheckIn</param>
+    /// <param name="Contact"> Si ya esta contactado</param>
+    /// <param name="CheckOutD">Fecha de contactación</param>
     /// <returns></returns>
     ///<history>[jorcanche] 13/03/2016</history>
     private bool ValidateContact(bool CheckIn, bool Contact, DateTime CheckOutD)
@@ -575,7 +571,7 @@ namespace IM.Inhouse
       if (ValidateContact(guCheckIn, guInfo, guCheckOutD))
       {
         StaStart("Loading Contact´s Info...");
-        frmContact frmCont = new frmContact(guID);
+        frmContact frmCont = new frmContact(guID,App.User);
         frmCont.Owner = this;
         frmCont.ShowInTaskbar = false;
         StaEnd();
@@ -815,8 +811,8 @@ namespace IM.Inhouse
         case EnumScreen.Arrivals:
           if (dgGuestArrival.Items.Count > 0)
           {
-            List<RptArrivals> arrivals = BRGeneralReports.GetRptArrivals(dtpDate.SelectedDate.Value, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup);
-            ReportsToExcel.ArrivalsToExcel(arrivals, dtpDate.SelectedDate.Value);
+            List<RptArrivals> arrivals = BRGeneralReports.GetRptArrivals(dtpDate.Value.Value, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup);
+            ReportsToExcel.ArrivalsToExcel(arrivals, dtpDate.Value.Value);
             hasData = true;
           }
           break;
@@ -833,13 +829,13 @@ namespace IM.Inhouse
           {
             if (!WithGifts) //Si no se mando nada o mando falso
             {
-              List<RptPremanifest> premanifest = BRGeneralReports.GetRptPremanifest(dtpDate.SelectedDate.Value, App.User.LeadSource.lsID, _markets, _onGroup);
+              List<RptPremanifest> premanifest = BRGeneralReports.GetRptPremanifest(dtpDate.Value.Value, App.User.LeadSource.lsID, _markets, _onGroup);
               ReportsToExcel.PremanifestToExcel(premanifest);
               hasData = true;
             }
             else
             {
-              List<RptPremanifestWithGifts> withGifts = BRGeneralReports.GetRptPremanifestWithGifts(dtpDate.SelectedDate.Value, App.User.LeadSource.lsID, _markets, _onGroup);
+              List<RptPremanifestWithGifts> withGifts = BRGeneralReports.GetRptPremanifestWithGifts(dtpDate.Value.Value, App.User.LeadSource.lsID, _markets, _onGroup);
               ReportsToExcel.PremanifestWithGiftsToExcel(withGifts);
               hasData = true;
             }
@@ -926,7 +922,7 @@ namespace IM.Inhouse
       txtLocation.Text = App.User.Location.loN;
 
       //Cargamos la fecha actual del servidor
-      dtpDate.SelectedDate = BRHelpers.GetServerDate().Date;
+      dtpDate.Value = BRHelpers.GetServerDate().Date;
 
       //Inicializamos las variables de los DataGrids
       _guestArrivalViewSource = ((CollectionViewSource)(this.FindResource("guestArrivalViewSource")));
@@ -1002,7 +998,7 @@ namespace IM.Inhouse
         //Cuando el usuario ingresa una fecha invalida
         MessageBox.Show("Specify the Date", "date invalidates", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         //Y le asignamos la fecha del servidor (la actual hora actual)
-        dtpDate.SelectedDate = BRHelpers.GetServerDate();
+        dtpDate.Value = BRHelpers.GetServerDate();
       }
       else
       {
@@ -1232,7 +1228,7 @@ namespace IM.Inhouse
       }
       if (show)//Si no se cancelo en nungun momento se muestra el formulario
       {
-        frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.SelectedDate.Value, action);
+        frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.Value.Value, action);
         frmGgGu.ShowDialog();
         Guest gu = BRGuests.GetGuest(guID);
         group = gu.guGroup;
@@ -1344,7 +1340,6 @@ namespace IM.Inhouse
     #endregion
 
     #region chkGuestsGroupsAviables
-
     private void chkGuestsGroupsAvailables_Click(object sender, RoutedEventArgs e)
     {
       bool show = true;
@@ -1397,7 +1392,7 @@ namespace IM.Inhouse
       }
       if (show)//Si no se cancelo en nungun momento se muestra el formulario
       {
-        frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.SelectedDate.Value, action);
+        frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.Value.Value.Date, action);
         frmGgGu.ShowDialog();
         Guest gu = BRGuests.GetGuest(guID);
         group = gu.guGroup;
@@ -1567,7 +1562,7 @@ namespace IM.Inhouse
       }
       if (show)//Si no se cancelo en nungun momento se muestra el formulario
       {
-        frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.SelectedDate.Value, action);
+        frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.Value.Value, action);
         frmGgGu.ShowDialog();
         Guest gu = BRGuests.GetGuest(guID);
         group = gu.guGroup;
@@ -1746,7 +1741,7 @@ namespace IM.Inhouse
       }
       if (show)//Si no se cancelo en nungun momento se muestra el formulario
       {
-        frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.SelectedDate.Value, action);
+        frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.Value.Value, action);
         frmGgGu.ShowDialog();
         Guest gu = BRGuests.GetGuest(guID);
         group = gu.guGroup;
@@ -1805,7 +1800,7 @@ namespace IM.Inhouse
     {
       var txt = sender as TextBox;
       txt.Focus();
-    }
+    } 
     #endregion
 
     #region btnRefresh_Click
@@ -1865,134 +1860,35 @@ namespace IM.Inhouse
     {
       //RPTInvitation();
     }
-    #endregion
-
-    //public void RPTInvitation()
-    //{
-    //  //Traemos la informacion del store y la almacenamos en un procedimiento
-    //  InvitationData invitationData = BRInvitation.RptInvitationData(7751973);
-
-    //  //Determinamos el Lenguaje
-    //  LanguageHelper.IDLanguage = invitationData.Invitation.gula;
-
-    //  //Modificamos el tamaño de las condiciones de la invitación (Pie de Informe "itRTFFooter")
-    //  //invitationData.Invitation.itRTFFooter = ChangedPropertyRTF(invitationData.Invitation.itRTFFooter);
-    //  //var s = invitationData.Invitation.itRTFFooter
-
-    //  //Le damos memoria al reporte de Invitacion
-    //  var rptInvi = new rptInvitation();
-
-    //  //Le agregamos la informacion 
-    //  rptInvi.SetDataSource(TableHelper.GetDataTableFromList(ObjectHelper.ObjectToList(invitationData.Invitation)));
-
-    //  //Cargamos los subreportes
-    //  rptInvi.Subreports["rptInvitationGuests.rpt"].SetDataSource(TableHelper.GetDataTableFromList(invitationData.InvitationGuest));
-    //  rptInvi.Subreports["rptInvitationDeposits.rpt"].SetDataSource(invitationData.InvitationDeposit);
-    //  rptInvi.Subreports["rptInvitationGifts.rpt"].SetDataSource(TableHelper.GetDataTableFromList(invitationData.InvitationGift));
-
-    //  //Cargamos las Etiquetas 
-    //  lblInvitation(rptInvi);
-
-    //  //Cargamos el Viewer
-    //  var _frmViewer = new frmViewer(rptInvi);
-    //  _frmViewer.ShowDialog();
-    //}
-
-    //public void lblInvitation(rptInvitation rptInv)
-    //{       
-    //  //Etiquetas de Depositos
-    //  rptInv.SetParameterValue("lblDeposits", LanguageHelper.GetMessage(EnumMessage.msgLblDeposits));
-    //  rptInv.SetParameterValue("lblDeposit", LanguageHelper.GetMessage(EnumMessage.msgLblDeposit));
-    //  rptInv.SetParameterValue("lblCurrency", LanguageHelper.GetMessage(EnumMessage.msgLblCurrency));    
-    //  //Depositos quemados
-    //  rptInv.SetParameterValue("lblDepositBurned", LanguageHelper.GetMessage(EnumMessage.msgLblDepositBurned));
-    //  //************************************************************************************************
-
-    //  //Etiquetas de Regalos      
-    //  rptInv.SetParameterValue("lblGifts", LanguageHelper.GetMessage(EnumMessage.msgLblGifts));
-    //  rptInv.SetParameterValue("lblQuantityGifts", LanguageHelper.GetMessage(EnumMessage.msgLblQuantityAbbreviation));
-    //  rptInv.SetParameterValue("lblGift", LanguageHelper.GetMessage(EnumMessage.msgLblGift));
-    //  //************************************************************************************************
-
-    //  //Etiquetas Invitados
-    //  rptInv.SetParameterValue("lblGuests", LanguageHelper.GetMessage(EnumMessage.msgLblGuests));
-    //  rptInv.SetParameterValue("lblLastName", LanguageHelper.GetMessage(EnumMessage.msgLblLastName));
-    //  rptInv.SetParameterValue("lblFirstName", LanguageHelper.GetMessage(EnumMessage.msgLblFirstName));
-    //  rptInv.SetParameterValue("lblAge", LanguageHelper.GetMessage(EnumMessage.msgLblAge));
-    //  rptInv.SetParameterValue("lblMaritalStatus", LanguageHelper.GetMessage(EnumMessage.msgLblMaritalStatus));
-    //  rptInv.SetParameterValue("lblOccupation", LanguageHelper.GetMessage(EnumMessage.msgLblOccupation));
-    //  //************************************************************************************************
-      
-    //  //Numero de membresia
-    //  rptInv.SetParameterValue("lblMembershipNum", LanguageHelper.GetMessage(EnumMessage.msgLblMembershipNum));
-    //  //Fecha
-    //  rptInv.SetParameterValue("lblDate", LanguageHelper.GetMessage(EnumMessage.msgLblDate));
-    //  //Hora
-    //  rptInv.SetParameterValue("lblTime", LanguageHelper.GetMessage(EnumMessage.msgLblTime));
-    //  //Agencia
-    //  rptInv.SetParameterValue("lblAgency", LanguageHelper.GetMessage(EnumMessage.msgLblAgency));
-    //  //Pais
-    //  rptInv.SetParameterValue("lblCountry", LanguageHelper.GetMessage(EnumMessage.msgLblCountry));
-    //  //Hotel
-    //  rptInv.SetParameterValue("lblHotel", LanguageHelper.GetMessage(EnumMessage.msgLblHotel));
-    //  //Numero de habitación
-    //  rptInv.SetParameterValue("lblRoomNum", LanguageHelper.GetMessage(EnumMessage.msgLblRoomNum));
-    //  //Pax
-    //  rptInv.SetParameterValue("lblPax", LanguageHelper.GetMessage(EnumMessage.msgLblPax));
-    //  //Location
-    //  rptInv.SetParameterValue("lblLocation", LanguageHelper.GetMessage(EnumMessage.msgLblLocation));
-    //  //Guest Service
-    //  rptInv.SetParameterValue("lblGuestService", LanguageHelper.GetMessage(EnumMessage.msgLblGuestService));
-    //  //Notas
-    //  rptInv.SetParameterValue("lblNotes", LanguageHelper.GetMessage(EnumMessage.msgLblNotes));
-    //  //Fecha y hora
-    //  rptInv.SetParameterValue("lblDateTime", BRHelpers.GetServerDate());
-    //  //Cambiado por
-    //  rptInv.SetParameterValue("lblChangedBy", App.User.User.peID);
-    //}
-
-    public string ChangedPropertyRTF(string rtf)
-    {
-      //using (MemoryStream ms = new MemoryStream())
-      //{
-        var rtbRTF = new System.Windows.Forms.RichTextBox();
-
-        rtbRTF.Rtf = rtf;
-
-         rtbRTF.SelectionFont = new System.Drawing.Font("Arial", 13);
-         rtbRTF.Font = rtbRTF.SelectionFont;
-        //rtbRTF.Font = rtbRTF.SelectionFont;
-
-        // rtbRTF.SelectAll();
-        return rtbRTF.Rtf.ToString();
-        //rtbRTF.Selection.ApplyPropertyValue(Inline.FontSizeProperty, new System.Drawing.Size(FontSize, FontSize));
-
-        //  TextRange textRange = new TextRange(rtbRTF.Document.ContentStart, rtbRTF.Document.ContentEnd);
-        //  textRange.Save(ms, DataFormats.Rtf);
-        //  return System.Text.Encoding.Default.GetString(ms.ToArray());
-      //}
-    }
-
-    public string SetRtf(string document)
-    {
-      var documentBytes = System.Text.Encoding.UTF8.GetBytes(document);
-      using (var reader = new MemoryStream(documentBytes))
-      {
-        RichTextBox rtb = new RichTextBox();
-        reader.Position = 0;
-        rtb.SelectAll();
-        rtb.Selection.Load(reader, DataFormats.Rtf);
-        rtb.FontSize = 14;
-
-        return rtb.SelectionBrush.ToString() ; ;
-      }
-    }
+    #endregion   
 
     #region btnWithGifts_Click
 
     private void btnWithGifts_Click(object sender, RoutedEventArgs e)
     {
       CreateExcelReport(true);
+    }
+
+    private void dtpDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+      //Obtener el valor actual del que tiene el dtpDate
+      var picker = sender as Xceed.Wpf.Toolkit.DateTimePicker;
+      if (!picker.Value.HasValue)
+      {
+        //Cuando el usuario ingresa una fecha invalida
+        MessageBox.Show("Specify the Date", "date invalidates", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        //Y le asignamos la fecha del servidor (la actual hora actual)
+        dtpDate.Value = BRHelpers.GetServerDate();
+      }
+      else
+      {
+        //le asignamos el valor del dtpDate a la variable global para que otro control tenga acceso al valor actual del dtpDate
+        _serverDate = picker.Value.Value;
+        //Cargamos el grid del tab que esta seleccionado
+        txtOccupancy.Text = BRLeadSources.GetOccupationLeadSources(picker.Value.Value, App.User.Location.loID);
+        LoadGrid();
+        //gprInfo.BindingGroup.GetValue                 
+      }
     } 
 
     #endregion
@@ -2059,7 +1955,7 @@ namespace IM.Inhouse
     #region btnGroups_Click
     private void btnGrouos_Click(object sender, RoutedEventArgs e)
     {
-      Forms.frmGuestsGroups frmGroups = new frmGuestsGroups(0, 0, 0, dtpDate.SelectedDate.Value, EnumAction.Search);
+      Forms.frmGuestsGroups frmGroups = new frmGuestsGroups(0, 0, 0, dtpDate.Value.Value, EnumAction.Search);
       frmGroups.ShowDialog();
     }
     #endregion

@@ -391,7 +391,6 @@ namespace IM.SalesPR.Forms
         {
           cbxPersonnel.Text = "No data found";
         }
-
       }
 
 
@@ -406,7 +405,7 @@ namespace IM.SalesPR.Forms
     public void LoadPersonnel()
     {
       StaStart("Loading Personnel...");
-      DoGetPersonnel(App.User.LeadSource.lsID, Model.Classes.StrToEnums.EnumRoleToString(EnumRole.PR));
+      DoGetPersonnel(App.User.LeadSource.lsID, Model.Helpers.EnumToListHelper.GetEnumDescription(EnumRole.PR));
     }
     #endregion
   }

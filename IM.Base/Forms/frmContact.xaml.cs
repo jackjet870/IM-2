@@ -1,26 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Model.Classes;
 using IM.Model;
-using IM.Base.Forms;
 using IM.BusinessRules.BR;
 using IM.Model.Enums;
 using IM.Base.Helpers;
-using System.Net;
 
-
-namespace IM.Inhouse
+namespace IM.Base.Forms
 {
   /// <summary>
   /// Interaction logic for frmContact.xaml
@@ -31,7 +18,7 @@ namespace IM.Inhouse
 
     private int _guestID;
     private Guest _guest;
-    private UserData _user;
+    private UserData _userLoguedo,_userPrimero;
     private bool _searchPRByTxt;
     public bool _wasSave;
 
@@ -57,19 +44,18 @@ namespace IM.Inhouse
 
     #region Constructores y destructores
 
-    public frmContact(int guestID)
+    public frmContact(int guestID,UserData userData)
     {
       InitializeComponent();
       _guestID = guestID;
-      lblUserName.Content = App.User.User.peN;
+      lblUserName.Content = userData.User.peN;
+      _userPrimero = userData;
       _guest = BRGuests.GetGuest(_guestID);
     }
 
     #endregion
 
-    #region Metodos
-
-   
+    #region Metodos   
 
     #region Validate
     public bool Validate()
@@ -95,13 +81,19 @@ namespace IM.Inhouse
     #region Eventos del formulario
 
     #region btnEdit_Click
+    /// <summary>
+    /// Abre login para modificar cintactación
+    /// </summary>
+    /// <historyy>
+    /// [jorcanche] 24/04/2016
+    /// </historyy>
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
       frmLogin log = new frmLogin(null, false, EnumLoginType.Normal, false);
-      if (App.User.AutoSign)
+      if (_userPrimero.AutoSign)
       {
         //App.User.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);
-        log.userData = App.User;
+        log.userData = _userPrimero;
       }
       log.ShowDialog();
       if (log.IsAuthenticated)
@@ -110,7 +102,7 @@ namespace IM.Inhouse
         {         
           if (_guest.guInfo == false || (log.userData.HasRole(EnumRole.PRCaptain) || log.userData.HasRole(EnumRole.PRSupervisor)))
           {
-            _user = log.userData;
+            _userLoguedo = log.userData;
             txtguInfoD.Text = BRHelpers.GetServerDate().Date.ToString();
             btnSave.IsEnabled = cboguPRInfo.IsEnabled = true;
             txtguPRInfo.IsReadOnly = false;
@@ -129,6 +121,12 @@ namespace IM.Inhouse
     #endregion
 
     #region cboguPRInfo_SelectionChanged
+    /// <summary>
+    /// Abre login para modificar cintactación
+    /// </summary>
+    /// <historyy>
+    /// [jorcanche] 24/04/2016
+    /// </historyy>
     private void cboguPRInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       if (cboguPRInfo.SelectedIndex != -1 || txtguPRInfo.Text == string.Empty)
@@ -195,11 +193,11 @@ namespace IM.Inhouse
     #region Window_Loaded
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      cboguPRInfo.ItemsSource = BRPersonnel.GetPersonnel(App.User.Location.loID, "ALL", "PR");
+      cboguPRInfo.ItemsSource = BRPersonnel.GetPersonnel(_userPrimero.Location.loID, "ALL", "PR");
       Guest _guest = BRGuests.GetGuest(_guestID);
       if (_guest.guInfoD.HasValue)
       {
-        txtguInfoD.Text = _guest.guInfoD.Value.Date.ToString();
+        txtguInfoD.Text = _guest.guInfoD.Value.Date.ToString("dd-MM-yyyy");
       }
    
       if (_guest.guPRInfo != string.Empty)
@@ -218,7 +216,7 @@ namespace IM.Inhouse
       if (Validate())
       {
         //guardamos la informacion de contacto
-        _guest.guloInfo = _user.User.peID;
+        _guest.guloInfo = _userLoguedo.User.peID;
         _guest.guPRInfo = txtguPRInfo.Text;
         _guest.guInfoD = Convert.ToDateTime(txtguInfoD.Text).Date;
         _guest.guInfo = true;     
@@ -227,7 +225,7 @@ namespace IM.Inhouse
         //Si hubo un erro al ejecutar el metodo SaveGuestContact nos devolvera 0, indicando que ningun paso 
         //se realizo, es decir ni se guardo el Guest, el Log ni los movimientos de este, siendo así ya no modificamos la variable
         //_wasSaved que es la que indica que se guardo el Avail.
-        if (BRGuests.SaveGuestContact(_guest, App.User.LeadSource.lsHoursDif, _user.User.peID,
+        if (BRGuests.SaveGuestContact(_guest, _userPrimero.LeadSource.lsHoursDif, _userLoguedo.User.peID,
             EnumGuestsMovementsType.Contact,Environment.MachineName.ToString(),ComputerHelper.GetIPMachine()) != 0)
         {
           //Modificamos las variable indicando que si se guardo la variable

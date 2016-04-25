@@ -2,16 +2,19 @@
 using IM.Base.Helpers;
 using IM.Model.Classes;
 using IM.Model.Enums;
+using IM.Outhouse.Forms;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace IM.Inhouse
+
+namespace IM.Outhouse
 {
   /// <summary>
   /// Interaction logic for App.xaml
   /// </summary>
   public partial class App : Application
   {
+
     #region Propiedades
 
     public static UserData User;
@@ -23,15 +26,13 @@ namespace IM.Inhouse
     /// Constructor de la aplicacion
     /// </summary>
     /// <history>
-    ///   [wtorres]  09/Mar/2016 Created
+    ///   [jorcache]  22/04/2016 Created
     /// </history>
     public App() : base()
     {
-      this.Dispatcher.UnhandledException += App_UnhandledException;
+      Dispatcher.UnhandledException += App_UnhandledException;
     }
     #endregion
-
-    #region Metodos
 
     #region OnStartup
     /// <summary>
@@ -43,27 +44,28 @@ namespace IM.Inhouse
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Inhouse");
-      //frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location,true, EnumProgram.Inhouse);
+      frmSplash frmSplash = new frmSplash("Outhouse");
+      // frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true,EnumProgram.Outhouse);
       frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;        
-        frmInhouse frmMain = new frmInhouse();
+        User = frmLogin.userData;
+        frmOuthouse frmMain = new frmOuthouse();
         frmMain.ShowDialog();
         frmSplash.Close();
       }
     }
     #endregion
 
+
     #region App_UnhandledException
     /// <summary>
     /// Despliega los mensajes de error de la aplicacion
     /// </summary>
     /// <history>
-    ///   [wtorres]  09/Mar/2016 Created
+    ///   [jorcanche]  22/04/2016 Created
     /// </history>
     private void App_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
@@ -77,6 +79,6 @@ namespace IM.Inhouse
     }
     #endregion
 
-    #endregion
+
   }
 }

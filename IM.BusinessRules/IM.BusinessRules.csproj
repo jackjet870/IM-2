@@ -79,6 +79,7 @@
     <Compile Include="BR\BRGiftsReceiptsPacks.cs" />
     <Compile Include="BR\BRGiftsReceiptsPayments.cs" />
     <Compile Include="BR\BRGraph.cs" />
+    <Compile Include="BR\BRGuestOutPremanifest.cs" />
     <Compile Include="BR\BRGuestsAdditional.cs" />
     <Compile Include="BR\BRGuests.cs" />
     <Compile Include="BR\BRGuestsGroups.cs" />

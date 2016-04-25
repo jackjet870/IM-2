@@ -41,7 +41,7 @@ namespace IM.ProcessorOuthouse.Forms
   
      _lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter,-1);
       _lstPaymentType = BRPaymentTypes.GetPaymentTypes(1);
-      _lstPRs = BRPersonnel.GetPersonnel("MPS", "ALL" ,Model.Classes.StrToEnums.EnumRoleToString(Model.Enums.EnumRole.PR),1);
+      _lstPRs = BRPersonnel.GetPersonnel("MPS", "ALL" , EnumToListHelper.GetEnumDescription(EnumRole.PR),1);
       _lstFoliosInvitationOuthouse = BRFoliosInvitationsOuthouse.GetFoliosInvittionsOutside(nStatus: 1);
       //_lstPRs = BRPersonnel.GetPersonnel("App.userData.LeadSource.lsID","ALL","PR",1,"ALL");
 

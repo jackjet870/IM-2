@@ -75,6 +75,12 @@
     <Compile Include="Forms\frmGuest.xaml.cs">
       <DependentUpon>frmGuest.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmContact.xaml.cs">
+      <DependentUpon>frmContact.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmGuestLog.xaml.cs">
+      <DependentUpon>frmGuestLog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\ExecuteCommandHelper.cs" />
     <Compile Include="Helpers\LanguageHelper.cs" />
     <Compile Include="Classes\Parametros.cs" />
@@ -187,7 +193,15 @@
     <Resource Include="Images\User.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Forms\frmGuest.xaml">
+ 	<Page Include="Forms\frmGuest.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\frmContact.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmGuestLog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

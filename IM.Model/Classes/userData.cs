@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using IM.Model.Enums;
 using IM.Model.Classes;
+using IM.Model.Helpers;
 
 namespace IM.Model.Classes
 {
@@ -41,7 +42,7 @@ namespace IM.Model.Classes
     /// </history>
     public bool HasPermission(EnumPermission permission, EnumPermisionLevel level)
     {
-      return this.Permissions.Exists(p => p.pppm == StrToEnums.EnumPermisoToString(permission) && p.pppl >= (int)level);
+      return this.Permissions.Exists(p => p.pppm == EnumToListHelper.GetEnumDescription(permission) && p.pppl >= (int)level);
     }
 
     #endregion
@@ -57,7 +58,7 @@ namespace IM.Model.Classes
     /// </history>
     public bool HasRole(EnumRole role)
     {
-      return this.Roles.Exists(p => p.prro == StrToEnums.EnumRoleToString(role));
+      return this.Roles.Exists(p => p.prro == EnumToListHelper.GetEnumDescription(role));
     }
     #endregion
 

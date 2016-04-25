@@ -395,7 +395,7 @@ namespace IM.SalesCloser.Forms
     public void LoadPersonnel()
     {
       StaStart("Loading Personnel...");
-      DoGetPersonnel(App.User.SalesRoom.srID, StrToEnums.EnumRoleToString(EnumRole.Closer));
+      DoGetPersonnel(App.User.SalesRoom.srID, Model.Helpers.EnumToListHelper.GetEnumDescription(EnumRole.Closer));
     }
     #endregion
   }

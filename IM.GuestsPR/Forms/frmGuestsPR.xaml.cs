@@ -422,7 +422,7 @@ namespace IM.GuestsPR.Forms
     public void LoadPersonnel()
     {
       StaStart("Loading personnel...");
-      DoGetPersonnel(App.User.LeadSource.lsID, Model.Classes.StrToEnums.EnumRoleToString(EnumRole.PR));
+      DoGetPersonnel(App.User.LeadSource.lsID, Model.Helpers.EnumToListHelper.GetEnumDescription(EnumRole.PR));
     }
 
     #endregion
