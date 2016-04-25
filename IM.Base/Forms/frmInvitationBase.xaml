@@ -14,11 +14,11 @@
         <CollectionViewSource x:Key="guestStatusTypeViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GuestStatusType}, CreateList=True}"/>
         <CollectionViewSource x:Key="objInvitCreditCardViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:objInvitCreditCard}, CreateList=True}"/>
         <CollectionViewSource x:Key="creditCardTypeViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:CreditCardType}, CreateList=True}"/>
-        <CollectionViewSource x:Key="objInvitBookingDepositViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:objInvitBookingDeposit}, CreateList=True}"/>
         <CollectionViewSource x:Key="currencyViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:Currency}, CreateList=True}"/>
         <CollectionViewSource x:Key="paymentTypeViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:PaymentType}, CreateList=True}"/>
         <CollectionViewSource x:Key="objInvitAdditionalGuestViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:objInvitAdditionalGuest}, CreateList=True}"/>
         <CollectionViewSource x:Key="paymentPlaceViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:PaymentPlace}, CreateList=True}"/>
+        <CollectionViewSource x:Key="objInvitBookingDepositViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:objInvitBookingDeposit}, CreateList=True}"/>
 
     </Window.Resources>
 
@@ -536,61 +536,59 @@
                             </Grid.RowDefinitions>
 
                             <!--#region GRID DEPOSITOS-->
-                            <DataGrid Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="3" Name="dtgDeposits" AutoGenerateColumns="False"
-                                      CanUserAddRows="True" PreviewTextInput="dtgDeposits_PreviewTextInput" CellEditEnding="dtgDeposits_CellEditEnding"
-                                      ItemsSource="{Binding Source={StaticResource objInvitBookingDepositViewSource}}" >
+                            <DataGrid Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="3" Name="dtgDeposits"
+                                      AutoGenerateColumns="False" CanUserAddRows="True" CanUserSortColumns="False"
+                                      PreviewTextInput="dtgDeposits_PreviewTextInput" CellEditEnding="dtgDeposits_CellEditEnding"
+                                      ItemsSource="{Binding Source={StaticResource objInvitBookingDepositViewSource}}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="bdID" Binding="{Binding bdID}" Visibility="Hidden"/>
                                     <DataGridTextColumn Header="Deposits" Binding="{Binding bdAmount, StringFormat='#.00', ValidatesOnDataErrors=True}" Width="70"/>
                                     <DataGridTextColumn Header="Received" Binding="{Binding bdReceived,StringFormat='#.00', ValidatesOnDataErrors=True}" Width="70"/>
                                     <DataGridTextColumn Header="CxC" Width="70" IsReadOnly="True"/>
-                                    <DataGridComboBoxColumn x:Name="cmbCurrencyDeposit" Width="90"
-                                                                            DisplayMemberPath="cuN" SelectedValuePath="cuID"  Header="Currency"
-                                                                        SelectedValueBinding="{Binding bdcu, ValidatesOnDataErrors=True}"
-                                                                        ItemsSource="{Binding Source={StaticResource currencyViewSource}}">
+                                    <DataGridComboBoxColumn Header="Currency" Width="90" DisplayMemberPath="cuN" SelectedValuePath="cuID"
+                                                            SelectedValueBinding="{Binding bdcu, ValidatesOnDataErrors=True}"
+                                                            ItemsSource="{Binding Source={StaticResource currencyViewSource}}">
                                         <DataGridComboBoxColumn.EditingElementStyle>
                                             <Style TargetType="ComboBox">
                                                 <Setter Property="IsEditable" Value="True"/>
                                             </Style>
                                         </DataGridComboBoxColumn.EditingElementStyle>
                                     </DataGridComboBoxColumn>
-                                    <DataGridComboBoxColumn x:Name="cmbPaymentTypeDeposit" Width="90"
-                                                                            DisplayMemberPath="ptN" SelectedValuePath="ptID"  Header="Payment Type"
-                                                                        SelectedValueBinding="{Binding bdpt, ValidatesOnDataErrors=True}"
-                                                                        ItemsSource="{Binding Source={StaticResource paymentTypeViewSource}}">
+                                    <DataGridComboBoxColumn Header="Payment Type" Width="90" DisplayMemberPath="ptN" SelectedValuePath="ptID"
+                                                            SelectedValueBinding="{Binding bdpt, ValidatesOnDataErrors=True}"
+                                                            ItemsSource="{Binding Source={StaticResource paymentTypeViewSource}}">
                                         <DataGridComboBoxColumn.EditingElementStyle>
                                             <Style TargetType="ComboBox">
                                                 <Setter Property="IsEditable" Value="True"/>
                                             </Style>
                                         </DataGridComboBoxColumn.EditingElementStyle>
                                     </DataGridComboBoxColumn>
-                                    <DataGridComboBoxColumn x:Name="cmbRefundPlace" Width="90"
-                                                                        DisplayMemberPath="pcN" SelectedValuePath="pcID"  Header="Refund Placee"
-                                                                        SelectedValueBinding="{Binding bdpc, ValidatesOnDataErrors=True}"
-                                                                        ItemsSource="{Binding Source={StaticResource paymentPlaceViewSource}}">
+                                    <DataGridComboBoxColumn Header="Refund Place" Width="90" DisplayMemberPath="pcN" SelectedValuePath="pcID"
+                                                            SelectedValueBinding="{Binding bdpc, ValidatesOnDataErrors=True}"
+                                                            ItemsSource="{Binding Source={StaticResource paymentPlaceViewSource}}">
                                         <DataGridComboBoxColumn.EditingElementStyle>
                                             <Style TargetType="ComboBox">
                                                 <Setter Property="IsEditable" Value="True"/>
                                             </Style>
                                         </DataGridComboBoxColumn.EditingElementStyle>
                                     </DataGridComboBoxColumn>
-                                    <DataGridComboBoxColumn x:Name="cmbCreditCardDeposit" SelectedValueBinding="{Binding bdcc, ValidatesOnDataErrors=True}"
-                                                                            DisplayMemberPath="ccN" SelectedValuePath="ccID"  Header="Credit Card" Width="90"
-                                                                     ItemsSource="{Binding Source={StaticResource creditCardTypeViewSource}}">
+                                    <DataGridComboBoxColumn Header="Credit Card" Width="90" DisplayMemberPath="ccN" SelectedValuePath="ccID"
+                                                            SelectedValueBinding="{Binding bdcc,ValidatesOnDataErrors=True}"
+                                                            ItemsSource="{Binding Source={StaticResource creditCardTypeViewSource}}">
                                         <DataGridComboBoxColumn.EditingElementStyle>
                                             <Style TargetType="ComboBox">
                                                 <Setter Property="IsEditable" Value="True"/>
                                             </Style>
                                         </DataGridComboBoxColumn.EditingElementStyle>
                                     </DataGridComboBoxColumn>
-                                    <DataGridTextColumn x:Name="txtbdCardNumber" Header="Card Number" Binding="{Binding bdCardNum, ValidatesOnDataErrors=True}"/>
+                                    <DataGridTextColumn Header="Card Number" Binding="{Binding bdCardNum, ValidatesOnDataErrors=True}"/>
                                     <DataGridTextColumn Header="Expiration" Binding="{Binding bdExpD, ValidatesOnDataErrors=True}"/>
                                     <DataGridTextColumn Header="Authorizathion ID" Binding="{Binding bdAuth, ValidatesOnDataErrors=True}"/>
                                     <DataGridTextColumn Header="Folio CxC" Binding="{Binding bdFolioCXC, ValidatesOnDataErrors=True}"/>
                                     <DataGridTextColumn Header="User CxC" Binding="{Binding bdUserCXC, ValidatesOnDataErrors=True}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Entry CxC" Binding="{Binding bdEntryDCXC, ValidatesOnDataErrors=True, StringFormat={}{0:dd/MM/yyyy}}" IsReadOnly="True"/>
-
                                 </DataGrid.Columns>
+
                             </DataGrid>
                             <!--#endregion-->
 

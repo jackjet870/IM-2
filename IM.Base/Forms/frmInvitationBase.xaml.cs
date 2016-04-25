@@ -139,9 +139,9 @@ namespace IM.Base.Forms
       BackupOriginalValues();
       EnableControls();
 
-      _serverDateTime = IM.BusinessRules.BR.BRHelpers.GetServerDate();
+      _serverDateTime = BRHelpers.GetServerDate();
       _bookingDate = txtBookingDate.SelectedDate.HasValue ? txtBookingDate.SelectedDate.Value : (DateTime?)null;
-      _closeDate = IM.BusinessRules.BR.BRConfiguration.GetCloseDate();
+      _closeDate = BRConfiguration.GetCloseDate();
 
       if (!_closeDate.HasValue && _bookingDate.HasValue && (_bookingDate <= _closeDate.Value)) //no permitimos modificar invitaciones en fechas cerradas
       {
@@ -765,16 +765,7 @@ namespace IM.Base.Forms
           var iggi = e.EditingElement as ComboBox;
           if (!String.IsNullOrEmpty(iggi.SelectedValue.ToString()))
           {
-            var gift = IM.BusinessRules.BR.BRGifts.GetGiftId(iggi.SelectedValue.ToString());
-            if(gift!= null && _qtyGift > gift.giMaxQty)
-            {
-              string error = String.Format("The maximu quantity authorized of the gift {0} has been exceeded.\n Max authotized = {1}", gift.giN, gift.giMaxQty);
-              Helpers.UIHelper.ShowMessage(error);
-              e.EditingElement.Focus();
-              e.Cancel = true;
-            }
-            else
-              _lstObjInvitGift[e.Row.GetIndex()].igAdults = 1;
+            _lstObjInvitGift[e.Row.GetIndex()].igAdults = 1;
           }
           break;
         case "igAdults":
@@ -2242,7 +2233,7 @@ namespace IM.Base.Forms
     /// </summary>
     private void LoadDepositGrid()
     {
-      var deposits = IM.BusinessRules.BR.BRBookingDeposits.GetBookingDeposits(_guestID);
+      var deposits = BRBookingDeposits.GetBookingDeposits(_guestID);
 
       _lstObjInvitBookingDeposit = deposits.Select(c => new objInvitBookingDeposit
       {
@@ -2267,7 +2258,7 @@ namespace IM.Base.Forms
       _lstDeposits = deposits;  // esta lista mantiene los registros de la base de datos sin modificaciones.
 
       objInvitBookingDepositViewSource = (CollectionViewSource)this.FindResource("objInvitBookingDepositViewSource");
-      objInvitBookingDepositViewSource.Source = _lstObjInvitBookingDeposit.OrderBy(c=> c.bdID);
+      objInvitBookingDepositViewSource.Source = _lstObjInvitBookingDeposit;
     }
 
     /// Carga la información del Grid de las tarjetas de crédito de los invitados
@@ -2877,18 +2868,18 @@ namespace IM.Base.Forms
       {
         foreach (var row in _lstObjInvitGift)
         {
-          var gift = IM.BusinessRules.BR.BRGifts.GetGiftId(row.iggi);
+          var gift = BRGifts.GetGiftId(row.iggi);
           if (row.igQty > gift.giMaxQty)
           {
             string error = String.Format("The maximu quantity authorized of the gift {0} has been exceeded.\n Max authotized = {1}", gift.giN, gift.giMaxQty);
-            Helpers.UIHelper.ShowMessage(error, title: title);
+            UIHelper.ShowMessage(error, title: title);
             res = false;
             break;
           }
         }
       }
-
-      if (!res)
+      
+if (!res)
       {
         tbiGeneral.IsSelected = true;
         dtgGifts.Focus();
@@ -3400,8 +3391,6 @@ namespace IM.Base.Forms
     #endregion
 
     #endregion
-
-    
   }
 }
 
