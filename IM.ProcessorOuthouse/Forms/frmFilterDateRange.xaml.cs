@@ -11,6 +11,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using IM.ProcessorOuthouse.Classes;
+using IM.Model.Classes;
+
 
 namespace IM.ProcessorOuthouse.Forms
 {
@@ -41,11 +43,12 @@ namespace IM.ProcessorOuthouse.Forms
   
      _lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter,-1);
       _lstPaymentType = BRPaymentTypes.GetPaymentTypes(1);
-      _lstPRs = BRPersonnel.GetPersonnel("MPS", "ALL" , EnumToListHelper.GetEnumDescription(EnumRole.PR),1);
+    
+      var x = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, EnumProgram.Outhouse).Select(y => y.lsID);
+      _lstPRs = BRPersonnel.GetPersonnel(string.Join(",", x), roles: EnumToListHelper.GetEnumDescription(EnumRole.PR), status: 0);
+
       _lstFoliosInvitationOuthouse = BRFoliosInvitationsOuthouse.GetFoliosInvittionsOutside(nStatus: 1);
-      //_lstPRs = BRPersonnel.GetPersonnel("App.userData.LeadSource.lsID","ALL","PR",1,"ALL");
-
-
+  
       cboSaveCourtesyTours.ItemsSource = EnumToListHelper.GetList<EnumSaveCourtesyTours>();
       cboExternal.ItemsSource = EnumToListHelper.GetList<EnumExternalInvitation>();
       cboFolSeries.ItemsSource = _lstFoliosInvitationOuthouse;
@@ -65,7 +68,7 @@ namespace IM.ProcessorOuthouse.Forms
     private FolioInvitationOuthouse _folioInvOutFilter = new FolioInvitationOuthouse();
     private ChargeTo _chargeToFilter = new ChargeTo();
     public bool _blnOK = false;
-
+    private UserData _user;
     public frmProcessorOuthouse frmPO = new frmProcessorOuthouse();
     #endregion
 

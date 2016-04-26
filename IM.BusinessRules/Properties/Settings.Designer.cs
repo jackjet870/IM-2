@@ -418,5 +418,17 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_RptProductionByGiftInvitationSalesRoom_Timeout"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_OR_RptProductionByAgeOutside_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByAgeOutside_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByAgeOutside_Timeout"] = value;
+            }
+        }
     }
 }

@@ -786,6 +786,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
+        dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByAgeOutside_Timeout;
         return dbContext.USP_OR_RptProductionByAgeOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
       }
     }
@@ -1065,6 +1066,57 @@ namespace IM.BusinessRules.BR
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_RptProductionByNationalitySalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToByte(saveCourtesyTours)).ToList();
+      }
+    }
+    #endregion
+
+    #region GetRptProductionbyPRSalesRoomOuthouse
+    /// <summary>
+    ///  Obtiene los datos para el reporte de produccion por PR y sala (Outside)
+    /// </summary>
+    /// <param name="dtmStart">Fecha desde</param>
+    /// <param name="dtmEnd">Fecha hasta</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <param name="PRs">Claves de PRs</param>
+    /// <param name="program">Clave de Programa</param>
+    /// <param name="filterDeposit">
+    /// Filtro de positos. 0. Sin filtro, 1. Con deposito(Deposits), 2. Sin deposito (Flyers),
+    /// 3. Con deposito y shows sin deposito (Deposits & Flyers Show) 
+    /// </param>
+    /// <param name="basedOnBooking">Indica si se debe basar en la fecha de booking</param>
+    /// <history>
+    ///   [vku] 25/Abr/2016 Created
+    /// </history>
+    public static List<RptProductionByPRSalesRoomOuthouse> GetRptProductionByPRSalesRoomOuthouse(DateTime dtmStart, DateTime dtmEnd, String leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposit = EnumFilterDeposit.fdAll, EnumBasedOnBooking basedOnBooking = EnumBasedOnBooking.bobNoBasedOnBooking)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptProductionByPRSalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposit), Convert.ToBoolean(basedOnBooking)).ToList();
+      }
+    }
+    #endregion
+
+    #region GetRptProductionbyPRContacOuthouse
+    /// <summary>
+    ///  Obtiene los datos de production por PR de contactos (Outside)
+    /// </summary>
+    /// <param name="dtmStart">Fecha desde</param>
+    /// <param name="dtmEnd">Fecha hasta</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <param name="PRs">Claves de PRs</param>
+    /// <param name="program">Clave de programa</param>
+    /// <param name="filterDeposit">
+    /// Filtro de positos. 0. Sin filtro, 1. Con deposito(Deposits), 2. Sin deposito (Flyers),
+    /// 3. Con deposito y shows sin deposito (Deposits & Flyers Show) 
+    /// </param>
+    /// <history>
+    ///   [vku] 25/Abr/2016 Created
+    /// </history>
+    public static List<RptProductionByPRContactOuthouse> GetProductionByPRContactOuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptProductionByPRContactOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
       }
     }
     #endregion
