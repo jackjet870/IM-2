@@ -4487,5 +4487,35 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionByPRSalesRoomOuthouse>("USP_OR_RptProductionByPRSalesRoomOutside", dateFromParameter, dateToParameter, leadSourcesParameter, pRsParameter, programParameter, filterDepositParameter, basedOnBookingParameter);
         }
+    
+        public virtual ObjectResult<UserLogin> USP_IM_Login(Nullable<byte> loginType, string user, string password, string place)
+        {
+            var loginTypeParameter = loginType.HasValue ?
+                new ObjectParameter("LoginType", loginType) :
+                new ObjectParameter("LoginType", typeof(byte));
+    
+            var userParameter = user != null ?
+                new ObjectParameter("User", user) :
+                new ObjectParameter("User", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("Password", password) :
+                new ObjectParameter("Password", typeof(string));
+    
+            var placeParameter = place != null ?
+                new ObjectParameter("Place", place) :
+                new ObjectParameter("Place", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<UserLogin>("USP_IM_Login", loginTypeParameter, userParameter, passwordParameter, placeParameter);
+        }
+    
+        public virtual int USP_OR_DeleteGuest(Nullable<int> guest)
+        {
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_DeleteGuest", guestParameter);
+        }
     }
 }

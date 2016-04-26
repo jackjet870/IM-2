@@ -30,6 +30,8 @@ namespace IM.Model
         public string bdUserCXC { get; set; }
         public Nullable<System.DateTime> bdEntryDCXC { get; set; }
         public string bdExpD { get; set; }
+        public string bdds { get; set; }
+        public Nullable<System.DateTime> bdD { get; set; }
     
         public virtual CreditCardType CreditCardType { internal get; set; }
         public virtual PaymentPlace PaymentPlace { internal get; set; }
