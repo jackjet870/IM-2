@@ -35,7 +35,6 @@ namespace IM.Model
         public bool loAnimacion { get; set; }
         public bool loFlyers { get; set; }
         public string lolc { get; set; }
-        public string loBankAffiliation { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GiftsReceipt> GiftsReceipts { internal get; set; }

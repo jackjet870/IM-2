@@ -1199,7 +1199,6 @@
           <Property Name="loAnimacion" Type="bit" Nullable="false" />
           <Property Name="loFlyers" Type="bit" Nullable="false" />
           <Property Name="lolc" Type="varchar" MaxLength="10" />
-          <Property Name="loBankAffiliation" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="LocationsCategories">
           <Key>
@@ -9725,7 +9724,6 @@
           <NavigationProperty Name="SalesLogs" Relationship="Self.FK_SalesLog_Locations" FromRole="Locations" ToRole="SalesLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="TeamsGuestServices" Relationship="Self.FK_TeamsGuestServices_Locations" FromRole="Locations" ToRole="TeamsGuestServices" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Gifts" Relationship="Self.GiftsByLoc" FromRole="Locations" ToRole="Gifts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <Property Name="loBankAffiliation" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="LocationCategory">
           <Key>
@@ -21339,7 +21337,6 @@
           <EntitySetMapping Name="Locations">
             <EntityTypeMapping TypeName="IMModel.Location">
               <MappingFragment StoreEntitySet="Locations">
-                <ScalarProperty Name="loBankAffiliation" ColumnName="loBankAffiliation" />
                 <ScalarProperty Name="loID" ColumnName="loID" />
                 <ScalarProperty Name="loN" ColumnName="loN" />
                 <ScalarProperty Name="lols" ColumnName="lols" />
