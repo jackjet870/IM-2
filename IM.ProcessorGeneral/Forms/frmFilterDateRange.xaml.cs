@@ -424,25 +424,25 @@ namespace IM.ProcessorGeneral.Forms
       pnlDtmEnd.IsEnabled = false;
       switch (selected)
       {
-        case EnumPredefinedDate.daToday:
+        case EnumPredefinedDate.Today:
           dtmStart.Value = dtmEnd.Value = today;
           break;
 
-        case EnumPredefinedDate.daYesterday:
+        case EnumPredefinedDate.Yesterday:
           dtmStart.Value = dtmEnd.Value = today.Date.AddDays(-1);
           break;
 
-        case EnumPredefinedDate.daThisWeek:
+        case EnumPredefinedDate.ThisWeek:
           dtmStart.Value = today.AddDays((DayOfWeek.Monday - today.DayOfWeek));
           dtmEnd.Value = today.AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
           break;
 
-        case EnumPredefinedDate.daPreviousWeek:
+        case EnumPredefinedDate.PreviousWeek:
           dtmStart.Value = today.AddDays(-7).AddDays(DayOfWeek.Monday - today.DayOfWeek);
           dtmEnd.Value = today.AddDays(-7).AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
           break;
 
-        case EnumPredefinedDate.daThisHalf:
+        case EnumPredefinedDate.ThisHalf:
           if (today.Day <= 15)
           {
             dtmStart.Value = new DateTime(today.Year, today.Month, 1);
@@ -454,7 +454,7 @@ namespace IM.ProcessorGeneral.Forms
           }
           break;
 
-        case EnumPredefinedDate.daPreviousHalf:
+        case EnumPredefinedDate.PreviousHalf:
 
           if (today.Day <= 15)
           {
@@ -476,22 +476,22 @@ namespace IM.ProcessorGeneral.Forms
           }
           break;
 
-        case EnumPredefinedDate.daThisMonth:
+        case EnumPredefinedDate.ThisMonth:
           dtmStart.Value = new DateTime(today.Year, today.Month, 1);
           dtmEnd.Value = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
           break;
 
-        case EnumPredefinedDate.daPreviousMonth:
+        case EnumPredefinedDate.PreviousMonth:
           dtmStart.Value = new DateTime(today.Year, today.Month - 1, 1);
           dtmEnd.Value = new DateTime(today.Year, today.Month - 1, DateTime.DaysInMonth(today.Year, today.Month - 1));
           break;
 
-        case EnumPredefinedDate.daThisYear:
+        case EnumPredefinedDate.ThisYear:
           dtmStart.Value = new DateTime(today.Year, 1, 1);
           dtmEnd.Value = new DateTime(today.Year, 12, 31);
           break;
 
-        case EnumPredefinedDate.daPreviousYear:
+        case EnumPredefinedDate.PreviousYear:
           dtmStart.Value = new DateTime(today.Year - 1, 1, 1);
           dtmEnd.Value = new DateTime(today.Year - 1, 12, 31);
           break;
@@ -532,7 +532,7 @@ namespace IM.ProcessorGeneral.Forms
     public void ConfigurarFomulario(bool blnSalesRoom = false, bool blnAllSalesRoom = false, bool blnGifts = false, bool blnAllGifts = false,
       bool blnCategories = false, bool blnAllCategories = false, bool blnPrograms = false, bool blnAllPrograms = false,
       bool blnRatetypes = false, bool blnAllRatetypes = false, bool blnLeadSources = false, bool blnAllLeadSources = false,
-      bool blnOneDate = false, bool blnOnlyOneRegister = false, EnumPeriod enumPeriod = EnumPeriod.pdNone,
+      bool blnOneDate = false, bool blnOnlyOneRegister = false, EnumPeriod enumPeriod = EnumPeriod.None,
       EnumProgram enumPrograms = EnumProgram.All, bool blnOnePeriod = false, EnumBasedOnArrival enumBasedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival,
       EnumQuinellas enumQuinellas = EnumQuinellas.quNoQuinellas, EnumDetailGifts enumDetailGifts = EnumDetailGifts.dgNoDetailGifts, EnumSaveCourtesyTours? enumSaveCourtesyTours = null,
       EnumSalesByMemberShipType enumSalesByMemberShipType = EnumSalesByMemberShipType.sbmNoDetail, EnumBasedOnBooking enumBasedOnBooking = EnumBasedOnBooking.bobNoBasedOnBooking,
@@ -663,7 +663,7 @@ namespace IM.ProcessorGeneral.Forms
         switch (enumPeriod)
         {
           //Sin periodo
-          case EnumPeriod.pdNone:
+          case EnumPeriod.None:
             cboDate.Items.Add("Today");
             cboDate.Items.Add("Yesterday");
             cboDate.Items.Add("This week");
@@ -677,7 +677,7 @@ namespace IM.ProcessorGeneral.Forms
             break;
 
           //Semanal
-          case EnumPeriod.pdWeekly:
+          case EnumPeriod.Weekly:
             cboDate.Items.Add("This week");
             cboDate.Items.Add("Previous week");
             cboDate.Items.Add("Two weeks ago");
@@ -686,7 +686,7 @@ namespace IM.ProcessorGeneral.Forms
             break;
 
           //Mensual
-          case EnumPeriod.pdMonthly:
+          case EnumPeriod.Monthly:
             cboDate.Items.Add("This month");
             cboDate.Items.Add("Previous month");
             cboDate.Items.Add("Two months ago");

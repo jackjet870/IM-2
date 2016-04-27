@@ -1,17 +1,17 @@
-﻿using System;
+﻿using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
+using IM.Model.Enums;
+using IM.ProcessorOuthouse.Classes;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using IM.Model.Enums;
-using IM.BusinessRules.BR;
-using IM.Model;
-using System.Data;
-using IM.Base.Helpers;
-using System.IO;
-using IM.ProcessorOuthouse.Classes;
-using System.Diagnostics;
 
 namespace IM.ProcessorOuthouse.Forms
 {
@@ -25,15 +25,18 @@ namespace IM.ProcessorOuthouse.Forms
   public partial class frmProcessorOuthouse : Window
   {
     #region Constructor
+
     public frmProcessorOuthouse()
     {
       InitializeComponent();
       ConfigGrds();
       lblUserName.Content = App.User.User.peN;
     }
-    #endregion
+
+    #endregion Constructor
 
     #region Atributos
+
     private frmFilterDateRange _frmFilter;
     private bool _blnOneDate;
     private bool _blnOnlyOneRegister;
@@ -60,13 +63,15 @@ namespace IM.ProcessorOuthouse.Forms
     public EnumExternalInvitation _enumExternalInvitation = EnumExternalInvitation.extExclude;
     public string _folFrom = "";
     public string _folTo = "";
-    #endregion
+
+    #endregion Atributos
 
     #region Metodos
 
     #region ConfigGrds
+
     /// <summary>
-    /// Se configuran los treeview, agregando 
+    /// Se configuran los treeview, agregando
     /// los reportes.
     /// </summary>
     /// <history>
@@ -75,6 +80,7 @@ namespace IM.ProcessorOuthouse.Forms
     private void ConfigGrds()
     {
       #region Grid RptsByLeadSource
+
       ListCollectionView lstRptsByLeadSource = new ListCollectionView(new List<dynamic>{
         new {rptName="Deposits Payment by PR" },
         new {rptName="Gifts Received by Sales Room" },
@@ -111,9 +117,11 @@ namespace IM.ProcessorOuthouse.Forms
         new {rptName="Unlinked Sales"}
       }.OrderBy(c => c.rptName).ToList());
       grdRptsByLeadSource.ItemsSource = lstRptsByLeadSource;
-      #endregion
+
+      #endregion Grid RptsByLeadSource
 
       #region Grid RptsByPR
+
       ListCollectionView lstRptsByPR = new ListCollectionView(new List<dynamic>{
         new {rptName="Production by Age"},
         new {rptName="Production by Age & Sales Room"},
@@ -137,9 +145,11 @@ namespace IM.ProcessorOuthouse.Forms
         new {rptName="Production by Wave & Sales Room"}
       }.OrderBy(c => c.rptName).ToList());
       grdRptsByPR.ItemsSource = lstRptsByPR;
-      #endregion
+
+      #endregion Grid RptsByPR
 
       #region Grid OtherRpts
+
       ListCollectionView lstOtherRpts = new ListCollectionView(new List<dynamic>{
         new {rptName="Folios Invitations Outhouse"},
         new {rptName="Folios Invitations Outhouse by PR"},
@@ -147,13 +157,16 @@ namespace IM.ProcessorOuthouse.Forms
         new {rptName="Folios CXC"}
       }.OrderBy(c => c.rptName).ToList());
       grdOtherRpts.ItemsSource = lstOtherRpts;
-      #endregion
+
+      #endregion Grid OtherRpts
 
       StatusBarReg.Content = string.Format("{0} Reports", lstRptsByLeadSource.Count + lstRptsByPR.Count + lstOtherRpts.Count);
     }
-    #endregion
+
+    #endregion ConfigGrds
 
     #region PrepareReportByLeadSource
+
     /// <summary>
     /// Prepara un reporte por LeadSource
     /// </summary>
@@ -167,26 +180,28 @@ namespace IM.ProcessorOuthouse.Forms
       if (grdRptsByLeadSource.SelectedItems.Count < 0)
         return;
 
-        WaitMessage(true, "Loading Date Range Window...");
-    
+      WaitMessage(true, "Loading Date Range Window...");
+
       ///Se obtiene el nombre del reporte
       strReport = ((dynamic)grdRptsByLeadSource.SelectedItem).rptName;
- 
+
       _blnOneDate = false;
       _blnOnlyOneRegister = false;
 
       switch (strReport)
       {
         case "PR Payment Commissions":
-         // _blnOnlyOneRegister = true;
-        break;
+          // _blnOnlyOneRegister = true;
+          break;
       }
 
       OpenFilterDateRangeLS(strReport);
     }
-    #endregion
+
+    #endregion PrepareReportByLeadSource
 
     #region PrepareReportByPR
+
     /// <summary>
     /// Prepara un reporte por PR
     /// </summary>
@@ -197,10 +212,10 @@ namespace IM.ProcessorOuthouse.Forms
     {
       String strReport = "";
       if (grdRptsByPR.SelectedItems.Count < 0)
-      return;
+        return;
 
       WaitMessage(true, "Loading Date Range Window...");
-     
+
       strReport = ((dynamic)grdRptsByPR.SelectedItem).rptName;
       _blnOneDate = false;
       _blnOnlyOneRegister = false;
@@ -231,9 +246,11 @@ namespace IM.ProcessorOuthouse.Forms
       }
       OpenFilterDateRangePR(strReport);
     }
-    #endregion
+
+    #endregion PrepareReportByPR
 
     #region PrepareOtherReports
+
     /// <summary>
     /// Prepara un reporte de Others
     /// </summary>
@@ -247,7 +264,7 @@ namespace IM.ProcessorOuthouse.Forms
         return;
 
       WaitMessage(true, "Loading Date Range Window...");
-   
+
       strReport = ((dynamic)grdOtherRpts.SelectedItem).rptName;
       _blnOneDate = false;
       _blnOnlyOneRegister = false;
@@ -262,9 +279,11 @@ namespace IM.ProcessorOuthouse.Forms
       }
       OpenFilterDateRangeOtherReport(strReport);
     }
-    #endregion
+
+    #endregion PrepareOtherReports
 
     #region OpenFilterDateRangeLS
+
     /// <summary>
     /// Abre la ventan frmFilterDateRange con los controles configurados
     /// segun el reporte seleccionado por LeadSource
@@ -278,13 +297,14 @@ namespace IM.ProcessorOuthouse.Forms
       _frmFilter.frmPO = this;
       switch (strReport)
       {
-  
         case "Deposits Payment by PR":
-            _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnPaymentTypes: true, blnAllPaymentTypes: true);
-            break;
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnPaymentTypes: true, blnAllPaymentTypes: true);
+          break;
+
         case "Gifts Received by Sales Room":
-            _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnChargeTo: true, blnGifts: true, blnAllChargeTo: true, blnAllGifts: true);
-            break;
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnChargeTo: true, blnGifts: true, blnAllChargeTo: true, blnAllGifts: true);
+          break;
+
         case "Guests Show No Presented Invitation":
         case "Production by Age":
         case "Production by Age & Sales Room":
@@ -302,22 +322,27 @@ namespace IM.ProcessorOuthouse.Forms
         case "Production by Wave & Sales Room":
         case "Unlinked Sales":
           _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true);
-            break;
-        case "PR Payment Commissions":
-          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSourcesPaymentComm: true, blnAllLeadSourcePaymentComm: true, enumPeriod : EnumPeriod.pdWeekly );
           break;
+
+        case "PR Payment Commissions":
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSourcesPaymentComm: true, blnAllLeadSourcePaymentComm: true, enumPeriod: EnumPeriod.Weekly);
+          break;
+
         case "Production by Agency":
         case "Production by Agency & Sales Room":
-            _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, enumSalesByMemberShipType: EnumSalesByMemberShipType.sbmDetail);
-            break;
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, enumSalesByMemberShipType: EnumSalesByMemberShipType.sbmDetail);
+          break;
+
         case "Production by Gift (Invitation)":
         case "Production by Gift (Invitation) & Sales Room":
-            _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnGiftProdGift: true, blnAllGiftProdGift: true);
-            break;
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnGiftProdGift: true, blnAllGiftProdGift: true);
+          break;
+
         case "Production by Nationality":
         case "Production by Nationality & Sales Room":
-            _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, enumSaveCourtesyTours: EnumSaveCourtesyTours.sctIncludeSaveCourtesyTours);
-            break; 
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, enumSaveCourtesyTours: EnumSaveCourtesyTours.sctIncludeSaveCourtesyTours);
+          break;
+
         case "Production by PR":
         case "Production by PR & Sales Room":
         case "Production by PR & Sales Room (Deposits & Flyers Show)":
@@ -326,8 +351,8 @@ namespace IM.ProcessorOuthouse.Forms
         case "Production by PR (Deposits & Flyers Show)":
         case "Production by PR (Deposits)":
         case "Production by PR (Flyers)":
-            _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, enumBasedOnBooking: EnumBasedOnBooking.bobBasedOnBooking);
-            break;
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, enumBasedOnBooking: EnumBasedOnBooking.bobBasedOnBooking);
+          break;
       }
 
       WaitMessage(false);
@@ -337,14 +362,17 @@ namespace IM.ProcessorOuthouse.Forms
         ShowLeadSourceReport(strReport);
         _frmFilter.Close();
       }
-      else {
+      else
+      {
         _frmFilter.Close();
         _frmFilter = null;
       }
     }
-    #endregion
+
+    #endregion OpenFilterDateRangeLS
 
     #region ShowLeadSourceReport
+
     /// <summary>
     ///  Muestra un reporte por lead source
     /// </summary>
@@ -364,6 +392,7 @@ namespace IM.ProcessorOuthouse.Forms
       switch (strReport)
       {
         #region Deposits Payment By PR
+
         case "Deposits Payment by PR":
           List<object> lstRptDepositsPaymentByPR = BRReportsByLeadSource.GetRptDepositsPaymentByPR(
             _frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
@@ -383,9 +412,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing Outhouse");
           }
           break;
-        #endregion
+
+        #endregion Deposits Payment By PR
 
         #region Gifts Received by Sales Room
+
         case "Gifts Received by Sales Room":
           List<object> lstRptGiftsReceivedBySR = BRReportsByLeadSource.GetRptGiftsReceivedBySR(
           _frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
@@ -405,9 +436,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
           }
           break;
-        #endregion
+
+        #endregion Gifts Received by Sales Room
 
         #region Guests Show No Presented Invitation
+
         case "Guests Show No Presented Invitation":
           List<GuestShowNoPresentedInvitation> lstRptGuestsShowNoPresentedInvitation = BRReportsByLeadSource.GetRptGuestsShowNoPresentedInvitation(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdLeadSources.SelectedItems.OfType<LeadSourceByUser>().Select(c => c.lsID)));
           if (lstRptGuestsShowNoPresentedInvitation.Count > 0)
@@ -421,9 +454,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
           }
           break;
-        #endregion
+
+        #endregion Guests Show No Presented Invitation
 
         #region PR Payment Commissions
+
         case "PR Payment Commissions":
           List<RptProductionByPROuthouse> lstRptProductionByPROuthouseComm = BRReportsByLeadSource.GetRptProductionByPROuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSourcesPaymentComm.SelectedItems.Cast<LeadSource>().Select(c => c.lsID).ToList()),
@@ -443,9 +478,11 @@ namespace IM.ProcessorOuthouse.Forms
           }
 
           break;
-        #endregion
 
-        #region Production by Age 
+        #endregion PR Payment Commissions
+
+        #region Production by Age
+
         case "Production by Age":
           List<RptProductionByAgeOuthouse> lstRptProductionByAgeOuthouse = BRReportsByLeadSource.GetRptProductionByAge(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -464,9 +501,10 @@ namespace IM.ProcessorOuthouse.Forms
           }
           break;
 
-        #endregion
+        #endregion Production by Age
 
         #region Production by Age & Sales Room
+
         case "Production by Age & Sales Room":
           List<RptProductionByAgeSalesRoomOuthouse> lstRptProductionByAgeSalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByAgeSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -484,9 +522,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
           }
           break;
-        #endregion
+
+        #endregion Production by Age & Sales Room
 
         #region Production by Agency
+
         case "Production by Agency":
           List<RptProductionByAgencyOuthouse> lstRptProductionByAgencyOuthouse = BRReportsByLeadSource.GetRptProductionByAgencyOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -505,9 +545,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
           }
           break;
-        #endregion
+
+        #endregion Production by Agency
 
         #region Production by Agency & Sales Room
+
         case "Production by Agency & Sales Room":
           List<RptProductionByAgencySalesRoomOuthouse> lstRptProductionByAgencySalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByAgencySalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -525,9 +567,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
           }
           break;
-        #endregion
+
+        #endregion Production by Agency & Sales Room
 
         #region Production by Agency, Market & Hotel
+
         case "Production by Agency, Market & Hotel":
           List<RptProductionByAgencyMarketHotelOuthouse> lstRptProductionByAgencyMarketHotelOuthouse = BRReportsByLeadSource.GetRptProductionByAgencyMarketHotelOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -545,9 +589,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
           }
           break;
-        #endregion
+
+        #endregion Production by Agency, Market & Hotel
 
         #region Production by Couple Type
+
         case "Production by Couple Type":
           List<RptProductionByCoupleTypeOuthouse> lstRptProductionByCoupleTypeOuthouse = BRReportsByLeadSource.GetRptProductionByCoupleTypeOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -565,9 +611,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
           }
           break;
-        #endregion
+
+        #endregion Production by Couple Type
 
         #region Production by Couple Type & Sales Room
+
         case "Production by Couple Type & Sales Room":
           List<RptProductionByCoupleTypeSalesRoomOuthouse> lstRptProductionByCoupleTypeSalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByCoupleTypeSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -585,9 +633,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
           }
           break;
-        #endregion
+
+        #endregion Production by Couple Type & Sales Room
 
         #region Production by Gift (Invitation)
+
         case "Production by Gift (Invitation)":
           List<RptProductionByGiftInvitation> lstRptProductionByGiftInvitation = BRReportsByLeadSource.GetRptProductionByGiftInvitation(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -607,9 +657,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthose");
           }
           break;
-        #endregion
+
+        #endregion Production by Gift (Invitation)
 
         #region Production by Gift (Invitation) & Sales Room
+
         case "Production by Gift (Invitation) & Sales Room":
           List<RptProductionByGiftInvitationSalesRoom> lstRptProductionByGiftInvitationSalesRoom = BRReportsByLeadSource.GetRptProductionByGiftInvitationSalesRoom(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -629,9 +681,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
           }
           break;
-        #endregion
+
+        #endregion Production by Gift (Invitation) & Sales Room
 
         #region Production by Guest Status
+
         case "Production by Guest Status":
           List<RptProductionByGuestStatusOuthouse> lstRptProductionByGuestStatusOuthouse = BRReportsByLeadSource.GetRptProductionByGuestStatusOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -649,9 +703,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
           }
           break;
-        #endregion
+
+        #endregion Production by Guest Status
 
         #region Production by Nationality
+
         case "Production by Nationality":
           List<RptProductionByNationalityOuthouse> lstRptProductionByNationalityOuthouse = BRReportsByLeadSource.GetRptProductionByNationalityOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -670,9 +726,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
           }
           break;
-        #endregion
+
+        #endregion Production by Nationality
 
         #region Production by Nationality & Sales Room
+
         case "Production by Nationality & Sales Room":
           List<RptProductionByNationalitySalesRoomOuthouse> lstRptProductionByNationalitySalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByNationalitySalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -691,9 +749,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
           }
           break;
-        #endregion
+
+        #endregion Production by Nationality & Sales Room
 
         #region Production by PR
+
         case "Production by PR":
           List<RptProductionByPROuthouse> lstRptProductionByPROuthouse = BRReportsByLeadSource.GetRptProductionByPROuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -712,9 +772,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing");
           }
           break;
-        #endregion
+
+        #endregion Production by PR
 
         #region Production by PR & Sales Room
+
         case "Production by PR & Sales Room":
           List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -733,9 +795,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing");
           }
           break;
-        #endregion
+
+        #endregion Production by PR & Sales Room
 
         #region Production by PR & Sales Room (Deposits & Flyers Show)
+
         case "Production by PR & Sales Room (Deposits & Flyers Show)":
           List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomDepositsFlyersShow = BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -754,9 +818,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing");
           }
           break;
-        #endregion
+
+        #endregion Production by PR & Sales Room (Deposits & Flyers Show)
 
         #region Production by PR & Sales Room (Deposits)
+
         case "Production by PR Sales Room (Deposits)":
           List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomDeposits = BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -775,9 +841,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing");
           }
           break;
-        #endregion
+
+        #endregion Production by PR & Sales Room (Deposits)
 
         #region Production by PR & Sales Room (Flyers)
+
         case "Production by PR & Sales Room (Flyers)":
           List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomFlyers = BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -796,9 +864,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing");
           }
           break;
-        #endregion
+
+        #endregion Production by PR & Sales Room (Flyers)
 
         #region Production by PR (Deposits & Flyers Show)
+
         case "Production by PR (Deposits & Flyers Show)":
           List<RptProductionByPROuthouse> lstRptProductionByPRDepositsFlyersShowOuthouse = BRReportsByLeadSource.GetRptProductionByPROuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -817,9 +887,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing");
           }
           break;
-        #endregion
+
+        #endregion Production by PR (Deposits & Flyers Show)
 
         #region Production by PR (Deposits)
+
         case "Production by PR (Deposits)":
           List<RptProductionByPROuthouse> lstRptProductionByPRDepositsOuthouse = BRReportsByLeadSource.GetRptProductionByPROuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
                string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -838,9 +910,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing");
           }
           break;
-        #endregion
+
+        #endregion Production by PR (Deposits)
 
         #region Production by PR (Flyers)
+
         case "Production by PR (Flyers)":
           List<RptProductionByPROuthouse> lstRptProductionByPRFlyersOuthouse = BRReportsByLeadSource.GetRptProductionByPROuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
                string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -859,9 +933,11 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing");
           }
           break;
-        #endregion
+
+        #endregion Production by PR (Flyers)
 
         #region Production by PR Contact
+
         case "Production by PR Contact":
           List<RptProductionByPRContactOuthouse> lstRptProductionByPRContactOuthouse = BRReportsByLeadSource.GetProductionByPRContactOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
                string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
@@ -879,8 +955,8 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing");
           }
           break;
-          #endregion
 
+          #endregion Production by PR Contact
       }
 
       if (finfo != null)
@@ -889,11 +965,12 @@ namespace IM.ProcessorOuthouse.Forms
       }
 
       WaitMessage(false);
-
     }
-    #endregion
+
+    #endregion ShowLeadSourceReport
 
     #region OpenFilterDateRangePR
+
     /// <summary>
     /// Abre la ventan frmFilterDateRange con los controles configurados
     /// segun el reporte seleccionado por PR
@@ -921,18 +998,22 @@ namespace IM.ProcessorOuthouse.Forms
         case "Production by Wave & Sales Room":
           _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnPRs: true);
           break;
+
         case "Production by Gift (Invitation)":
         case "Production by Gift (Invitation) & Sales Room":
           _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnPRs: true, blnGiftProdGift: true, blnAllGiftProdGift: true);
           break;
+
         case "Production by Agency":
         case "Production by Agency & Sales Room":
           _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnPRs: true, enumSalesByMemberShipType: EnumSalesByMemberShipType.sbmDetail);
           break;
+
         case "Production by Nationality":
         case "Production by Nationality & Sales Room":
           _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnPRs: true, blnGifts: true, blnAllGifts: true, enumSaveCourtesyTours: EnumSaveCourtesyTours.sctExcludeSaveCourtesyTours);
           break;
+
         case "Production by PR & Sales Room (Deposits & Flyers Show)":
         case "Production by PR (Deposits & Flyers Show)":
           _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnPRs: true, blnGifts: true, blnAllGifts: true, enumBasedOnBooking: EnumBasedOnBooking.bobBasedOnBooking);
@@ -946,14 +1027,17 @@ namespace IM.ProcessorOuthouse.Forms
         ShowByPRReport(strReport);
         _frmFilter.Close();
       }
-      else {
+      else
+      {
         _frmFilter.Close();
         _frmFilter = null;
       }
     }
-    #endregion
+
+    #endregion OpenFilterDateRangePR
 
     #region ShowByPRReport
+
     /// <summary>
     ///  Muestra un reporte por PR
     /// </summary>
@@ -973,6 +1057,7 @@ namespace IM.ProcessorOuthouse.Forms
       switch (strReport)
       {
         #region Production by Age
+
         case "Production by Age":
           List<RptProductionByAgeOuthouse> lstRptProductionByAgeOuthouse = BRReportsByLeadSource.GetRptProductionByAge(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             "ALL",
@@ -990,7 +1075,8 @@ namespace IM.ProcessorOuthouse.Forms
             UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
           }
           break;
-          #endregion
+
+          #endregion Production by Age
       }
 
       if (finfo != null)
@@ -1000,9 +1086,11 @@ namespace IM.ProcessorOuthouse.Forms
 
       WaitMessage(false);
     }
-    #endregion
+
+    #endregion ShowByPRReport
 
     #region OpenFIlterDateRangeOtherReport
+
     /// <summary>
     /// Abre la ventan frmFilterDateRange con los controles configurados
     /// segun el reporte seleccionado por LeadSource
@@ -1021,6 +1109,7 @@ namespace IM.ProcessorOuthouse.Forms
         case "Folios Invitations Outhouse by PR":
           _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnPRs: true, blnUseDates: true, blnChkUsedate: true, blnFolSeries: true, blnFolFrom: true, blnFolTo: true, blnAllFolios: true);
           break;
+
         case "Folios CxC by PR":
         case "Folios CXC":
           _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, blnPRs: true, blnUseDates: true, blnChkUsedate: true, blnFolFrom: true, blnFolTo: true, blnAllFolios: true);
@@ -1034,9 +1123,11 @@ namespace IM.ProcessorOuthouse.Forms
         _frmFilter.Close();
       }
     }
-    #endregion
+
+    #endregion OpenFIlterDateRangeOtherReport
 
     #region ShowOtherReport
+
     /// <summary>
     ///  Muestra otros reportes
     /// </summary>
@@ -1046,11 +1137,12 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     public void ShowOtherReport(string strReport)
     {
-
     }
-    #endregion
+
+    #endregion ShowOtherReport
 
     #region WaitMessage
+
     /// <summary>
     /// Indica en la barra de estado que se inicio un proceso
     /// </summary>
@@ -1064,13 +1156,15 @@ namespace IM.ProcessorOuthouse.Forms
       this.Cursor = (show) ? Cursors.Wait : null;
       UIHelper.ForceUIToUpdate();
     }
-    #endregion
 
-    #endregion
+    #endregion WaitMessage
+
+    #endregion Metodos
 
     #region eventos
 
     #region btnPrintRptByLeadSource_Click
+
     /// <summary>
     /// Imprime un reporte por LeadSource
     /// </summary>
@@ -1081,9 +1175,11 @@ namespace IM.ProcessorOuthouse.Forms
     {
       PrepareReportByLeadSource();
     }
-    #endregion
+
+    #endregion btnPrintRptByLeadSource_Click
 
     #region btnPrintRptByPR_Click
+
     /// <summary>
     /// Imprime un reporte por PR
     /// </summary>
@@ -1094,9 +1190,11 @@ namespace IM.ProcessorOuthouse.Forms
     {
       PrepareReportByPR();
     }
-    #endregion
+
+    #endregion btnPrintRptByPR_Click
 
     #region btnPrintOtherRpts_Click
+
     /// <summary>
     /// Imprime un reporte de Others
     /// </summary>
@@ -1107,9 +1205,11 @@ namespace IM.ProcessorOuthouse.Forms
     {
       PrepareOtherReports();
     }
-    #endregion
+
+    #endregion btnPrintOtherRpts_Click
 
     #region btnExit_Click
+
     /// <summary>
     /// Cierra la aplicacion Processor Outhouse
     /// </summary>
@@ -1120,9 +1220,11 @@ namespace IM.ProcessorOuthouse.Forms
     {
       App.Current.Shutdown();
     }
-    #endregion
+
+    #endregion btnExit_Click
 
     #region grdrptLeadSources_dblClick
+
     /// <summary>
     /// Se abre frmDateRange al hacer doble clic a un reporte por leadsource
     /// </summary>
@@ -1133,9 +1235,11 @@ namespace IM.ProcessorOuthouse.Forms
     {
       PrepareReportByLeadSource();
     }
-    #endregion
+
+    #endregion grdrptLeadSources_dblClick
 
     #region grdrptByPR_dblClick
+
     /// <summary>
     ///   Se abre frmDateRange al hacer doble clic a un reporte por PR
     /// </summary>
@@ -1146,9 +1250,11 @@ namespace IM.ProcessorOuthouse.Forms
     {
       PrepareReportByPR();
     }
-    #endregion
+
+    #endregion grdrptByPR_dblClick
 
     #region grdOtherRpt_dblClick
+
     /// <summary>
     ///   Se abre frmDateRange al hacer doble clic a un reporte de Others
     /// </summary>
@@ -1159,9 +1265,9 @@ namespace IM.ProcessorOuthouse.Forms
     {
       PrepareOtherReports();
     }
-    #endregion
 
-    #endregion
+    #endregion grdOtherRpt_dblClick
 
+    #endregion eventos
   }
 }

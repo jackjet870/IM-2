@@ -197,47 +197,58 @@ namespace IM.ProcessorInhouse.Forms
     /// Modifica los rangos de fecha de los datepicker, según la opcion seleccionada.
     /// </summary>
     /// <history>
-    /// [edgrodriguez] 11/03/2016 Created
+    /// [aalcocer] 11/03/2016 Created
     /// </history>
     private void cboDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      EnumPredefinedDate selected = (EnumPredefinedDate)((ComboBox)e.OriginalSource).SelectedIndex;
+      EnumPredefinedDate selected = (EnumPredefinedDate)((ComboBox)e.OriginalSource).SelectedValue;
       DateTime today = BRHelpers.GetServerDate();
       pnlDtmStart.IsEnabled = false;
       pnlDtmEnd.IsEnabled = false;
       switch (selected)
       {
-        case EnumPredefinedDate.daToday:
+        case EnumPredefinedDate.Today:
           dtmStart.Value = dtmEnd.Value = today;
           break;
 
-        case EnumPredefinedDate.daYesterday:
+        case EnumPredefinedDate.Yesterday:
           dtmStart.Value = dtmEnd.Value = today.Date.AddDays(-1);
           break;
 
-        case EnumPredefinedDate.daThisWeek:
+        case EnumPredefinedDate.ThisWeek:
           dtmStart.Value = today.AddDays((DayOfWeek.Monday - today.DayOfWeek));
           dtmEnd.Value = today.AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
           break;
 
-        case EnumPredefinedDate.daPreviousWeek:
+        case EnumPredefinedDate.PreviousWeek:
           dtmStart.Value = today.AddDays(-7).AddDays(DayOfWeek.Monday - today.DayOfWeek);
           dtmEnd.Value = today.AddDays(-7).AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
           break;
 
-        case EnumPredefinedDate.daThisHalf:
+        case EnumPredefinedDate.TwoWeeksAgo:
+          dtmStart.Value = today.AddDays(-14).AddDays(DayOfWeek.Monday - today.DayOfWeek);
+          dtmEnd.Value = today.AddDays(-14).AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
+          break;
+
+        case EnumPredefinedDate.ThreeWeeksAgo:
+          dtmStart.Value = today.AddDays(-21).AddDays(DayOfWeek.Monday - today.DayOfWeek);
+          dtmEnd.Value = today.AddDays(-21).AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
+          break;
+
+        case EnumPredefinedDate.ThisHalf:
           if (today.Day <= 15)
           {
             dtmStart.Value = new DateTime(today.Year, today.Month, 1);
             dtmEnd.Value = new DateTime(today.Year, today.Month, 15);
           }
-          else {
+          else
+          {
             dtmStart.Value = new DateTime(today.Year, today.Month, 16);
             dtmEnd.Value = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
           }
           break;
 
-        case EnumPredefinedDate.daPreviousHalf:
+        case EnumPredefinedDate.PreviousHalf:
 
           if (today.Day <= 15)
           {
@@ -259,22 +270,32 @@ namespace IM.ProcessorInhouse.Forms
           }
           break;
 
-        case EnumPredefinedDate.daThisMonth:
+        case EnumPredefinedDate.ThisMonth:
           dtmStart.Value = new DateTime(today.Year, today.Month, 1);
           dtmEnd.Value = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
           break;
 
-        case EnumPredefinedDate.daPreviousMonth:
+        case EnumPredefinedDate.PreviousMonth:
           dtmStart.Value = new DateTime(today.Year, today.Month - 1, 1);
           dtmEnd.Value = new DateTime(today.Year, today.Month - 1, DateTime.DaysInMonth(today.Year, today.Month - 1));
           break;
 
-        case EnumPredefinedDate.daThisYear:
+        case EnumPredefinedDate.TwoMonthsAgo:
+          dtmStart.Value = new DateTime(today.Year, today.Month - 2, 1);
+          dtmEnd.Value = new DateTime(today.Year, today.Month - 2, DateTime.DaysInMonth(today.Year, today.Month - 2));
+          break;
+
+        case EnumPredefinedDate.ThreeMonthsAgo:
+          dtmStart.Value = new DateTime(today.Year, today.Month - 3, 1);
+          dtmEnd.Value = new DateTime(today.Year, today.Month - 3, DateTime.DaysInMonth(today.Year, today.Month - 3));
+          break;
+
+        case EnumPredefinedDate.ThisYear:
           dtmStart.Value = new DateTime(today.Year, 1, 1);
           dtmEnd.Value = new DateTime(today.Year, 12, 31);
           break;
 
-        case EnumPredefinedDate.daPreviousYear:
+        case EnumPredefinedDate.PreviousYear:
           dtmStart.Value = new DateTime(today.Year - 1, 1, 1);
           dtmEnd.Value = new DateTime(today.Year - 1, 12, 31);
           break;
@@ -356,11 +377,11 @@ namespace IM.ProcessorInhouse.Forms
         bool blnChargeTo = false, bool blnAllChargeTo = false, bool blnGifts = false, bool blnAllGifts = false,
         bool blnMarkets = false, bool blnAllMarkets = false, bool blnAgencies = false, bool blnAllAgencies = false,
         bool blnCountries = false, bool blnAllCountries = false, bool blnGiftsQuantity = false, bool blnAllGiftsQuantity = false,
-        EnumPeriod enumPeriod = EnumPeriod.pdNone, EnumProgram program = EnumProgram.All, EnumBasedOnArrival? enumBasedOnArrival = null,
+        EnumPeriod enumPeriod = EnumPeriod.None, EnumProgram program = EnumProgram.All, EnumBasedOnArrival? enumBasedOnArrival = null,
         EnumBasedOnBooking? enumBasedOnBooking = null, EnumQuinellas? enumQuinellas = null, EnumDetailGifts? enumDetailGifts = null,
         EnumSalesByMemberShipType? enumSalesByMemberShipType = null, EnumStatus? enumStatus = null, EnumGiftsReceiptType? enumGiftsReceiptType = null,
         string strGuestID = null, EnumGiftSale? enumGiftSale = null, EnumSaveCourtesyTours? enumSaveCourtesyTours = null,
-        EnumExternalInvitation? enumExternalInvitation = null, bool blnClub = false, bool blnNight = false, bool blnLsHotelNotNull = false)
+        EnumExternalInvitation? enumExternalInvitation = null, bool blnClub = false, bool blnNight = false, bool blnLsHotelNotNull = false, bool blnAgencyMonthly = false)
     {
       ConfigureDates(blnOneDate, enumPeriod);
 
@@ -398,15 +419,9 @@ namespace IM.ProcessorInhouse.Forms
       }
       if (blnChargeTo) _lstCharteTo = BRChargeTos.GetChargeTos();
 
-      if (blnAgencies) _lstAgencies = BRAgencies.GetAgencies();
+      if (blnAgencies) _lstAgencies = !blnAgencyMonthly ? BRAgencies.GetAgencies() : BRAgencies.GetAgenciesByIds(GetSettings.ProductionByAgencyMonthly());
 
       if (blnMarkets) _lstMarkets = BRMarkets.GetMarkets(1);
-
-      //if (blnAgencies)
-      //{
-      //  List<string> _productionByAgencyMonthly = GetSettings.ProductionByAgencyMonthly();
-      //  _lstAgencies = BRAgencies.GetAgenciesShortById(_productionByAgencyMonthly);
-      //}
 
       if (blnClub) cboClub.ItemsSource = BRClubs.GetClubs(nStatus: 1);
 
@@ -570,58 +585,53 @@ namespace IM.ProcessorInhouse.Forms
     /// </summary>
     /// <history>
     /// [aalcocer] 16/Mar/2016 Created
+    /// [aalcocer
     /// </history>
     private void ConfigureDates(bool blnOneDate, EnumPeriod enumPeriod)
     {
+      Dictionary<EnumPredefinedDate, string> dictionaryPredefinedDate = EnumToListHelper.GetList<EnumPredefinedDate>();
+
+      cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.DatesSpecified));
+
+      switch (enumPeriod)
+      {
+        //Sin periodo
+        case EnumPeriod.None:
+
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.Today));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.Yesterday));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisWeek));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousWeek));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisHalf));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousHalf));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisMonth));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousMonth));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisYear));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousYear));
+          break;
+
+        //Semanal
+        case EnumPeriod.Weekly:
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisWeek));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousWeek));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.TwoWeeksAgo));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThreeWeeksAgo));
+          Title += $" ({EnumToListHelper.GetEnumDescription(enumPeriod)})";
+          break;
+
+        //Mensual
+        case EnumPeriod.Monthly:
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisMonth));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousMonth));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.TwoMonthsAgo));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThreeMonthsAgo));
+          Title += $" ({EnumToListHelper.GetEnumDescription(enumPeriod)})";
+          break;
+      }
+      cboDate.SelectedIndex = 0;
       //Si es un rango de fechas.
-      if (!blnOneDate)
-      {
-        cboDate.IsEnabled = true;
-        pnlDtmEnd.IsEnabled = true;
-        cboDate.Items.Add("Dates Specified");
-        switch (enumPeriod)
-        {
-          //Sin periodo
-          case EnumPeriod.pdNone:
-            cboDate.Items.Add("Today");
-            cboDate.Items.Add("Yesterday");
-            cboDate.Items.Add("This week");
-            cboDate.Items.Add("Previous week");
-            cboDate.Items.Add("This half");
-            cboDate.Items.Add("Previous half");
-            cboDate.Items.Add("This month");
-            cboDate.Items.Add("Previous month");
-            cboDate.Items.Add("This year");
-            cboDate.Items.Add("Previous year");
-            break;
-
-          //Semanal
-          case EnumPeriod.pdWeekly:
-            cboDate.Items.Add("This week");
-            cboDate.Items.Add("Previous week");
-            cboDate.Items.Add("Two weeks ago");
-            cboDate.Items.Add("Three weeks ago");
-            Title += " (Weekly)";
-            break;
-
-          //Mensual
-          case EnumPeriod.pdMonthly:
-            cboDate.Items.Add("This month");
-            cboDate.Items.Add("Previous month");
-            cboDate.Items.Add("Two months ago");
-            cboDate.Items.Add("Three months ago");
-            Title += " (Monthly)";
-            break;
-        }
-        cboDate.SelectedIndex = 0;
-      }
-      else
-      {
-        cboDate.Items.Add("Dates Specified");
-        cboDate.SelectedIndex = 0;
-        cboDate.IsEnabled = false;
-        pnlDtmEnd.IsEnabled = false;
-      }
+      cboDate.IsEnabled = !blnOneDate;
+      pnlDtmEnd.IsEnabled = !blnOneDate;
     }
 
     #endregion ConfigureDates
@@ -677,9 +687,18 @@ namespace IM.ProcessorInhouse.Forms
         frmIH._lstMarkets = grdMarkets.SelectedItems.Cast<MarketShort>().Select(c => c.mkID).ToList();
       if (pnlAgencies.IsVisible)
         frmIH._lstAgencies = grdAgencies.SelectedItems.Cast<Agency>().Select(c => c.agID).ToList();
+      if (pnlChargeTo.IsVisible)
+        frmIH._lstCharteTo = grdChargeTo.SelectedItems.Cast<ChargeTo>().Select(c => c.ctID).ToList();
+      if (pnlGifts.IsVisible)
+        frmIH._lstGifts = grdGifts.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList();
+      if (pnlGiftsQuantity.IsVisible)
+        frmIH._lstGiftsQuantity = grdGiftsQuantity.Items.Cast<GiftQuantity>().Where(x => x.include).ToDictionary(x => x.giID, x => x.quantity);
 
-      frmIH._cboDateSelected = cboDate.SelectedValue.ToString();
-      frmIH._dtmStart = dtmStart.Value.Value;
+      frmIH._cboDateSelected = ((KeyValuePair<EnumPredefinedDate, string>)cboDate.SelectedItem).Key;
+      if (pnlDtmEnd.IsEnabled)
+        frmIH._dtmStart = dtmStart.Value.Value;
+      else
+        frmIH._dtmInit = dtmStart.Value.Value;
       frmIH._dtmEnd = dtmEnd.Value.Value;
       frmIH._enumBasedOnArrival = (chkBasedOnArrival.IsChecked.Value) ? EnumBasedOnArrival.boaBasedOnArrival : EnumBasedOnArrival.boaNoBasedOnArrival;
       frmIH._enumQuinellas = (chkQuinellas.IsChecked.Value) ? EnumQuinellas.quQuinellas : EnumQuinellas.quNoQuinellas;
@@ -733,9 +752,37 @@ namespace IM.ProcessorInhouse.Forms
         if (grdAgencies.SelectedItems.Count == grdAgencies.Items.Count)
           chkAllAgencies.IsChecked = true;
       }
+      if (pnlChargeTo.Visibility == Visibility.Visible && frmIH._lstCharteTo.Any())
+      {
+        chkAllChargeTo.IsChecked = false;
+        frmIH._lstCharteTo.ForEach(c => grdChargeTo.SelectedItems.Add(_lstCharteTo.SingleOrDefault(x => x.ctID == c)));
+        if (grdChargeTo.SelectedItems.Count == grdChargeTo.Items.Count)
+          chkAllChargeTo.IsChecked = true;
+      }
+      if (pnlGifts.Visibility == Visibility.Visible && frmIH._lstGifts.Any())
+      {
+        chkAllGifts.IsChecked = false;
+        frmIH._lstGifts.ForEach(c => grdGifts.SelectedItems.Add(_lstGifts.SingleOrDefault(x => x.giID == c)));
+        if (grdGifts.SelectedItems.Count == grdGifts.Items.Count)
+          chkAllGifts.IsChecked = true;
+      }
+      if (pnlGiftsQuantity.Visibility == Visibility.Visible && frmIH._lstGiftsQuantity.Any())
+      {
+        chkAllGiftsQuantity.IsChecked = false;
+        frmIH._lstGiftsQuantity.ToList().ForEach(x =>
+        {
+          GiftQuantity giftQuantity = grdGiftsQuantity.Items.Cast<GiftQuantity>().SingleOrDefault(q => q.giID == x.Key);
+          if (giftQuantity != null)
+            giftQuantity.include = true;
+        });
 
-      cboDate.SelectedValue = frmIH._cboDateSelected ?? "Dates Specified";
-      dtmStart.Value = frmIH._dtmStart;
+        if (grdGiftsQuantity.Items.Cast<GiftQuantity>().Count(c => c.include) == grdGiftsQuantity.Items.Count)
+          chkAllGiftsQuantity.IsChecked = true;
+      }
+
+      cboDate.SelectedValue = cboDate.Items.Cast<KeyValuePair<EnumPredefinedDate, string>>().Any(c => c.Key == frmIH._cboDateSelected) ? frmIH._cboDateSelected : EnumPredefinedDate.DatesSpecified;
+
+      dtmStart.Value = pnlDtmEnd.IsEnabled ? frmIH._dtmStart : frmIH._dtmInit;
       dtmEnd.Value = frmIH._dtmEnd;
       chkBasedOnArrival.IsChecked = Convert.ToBoolean(frmIH._enumBasedOnArrival);
       chkQuinellas.IsChecked = Convert.ToBoolean(frmIH._enumQuinellas);
@@ -768,6 +815,12 @@ namespace IM.ProcessorInhouse.Forms
         return "No Agency is selected";
       if (pnlPersonnel.Visibility == Visibility.Visible && grdPersonnel.SelectedItems.Count == 0)
         return "No PR is selected.";
+      if (pnlChargeTo.Visibility == Visibility.Visible && grdChargeTo.SelectedItems.Count == 0)
+        return "No Charge To is selected.";
+      if (pnlGifts.Visibility == Visibility.Visible && grdGifts.SelectedItems.Count == 0)
+        return "No Gift is selected.";
+      if (pnlGiftsQuantity.Visibility == Visibility.Visible && grdGiftsQuantity.Items.Cast<GiftQuantity>().Any(x => x.include))
+        return "No Gift is selected.";
       if (pnlDtmEnd.IsEnabled && dtmEnd.Value.Value < dtmStart.Value.Value)
         return "End date must be greater than start date.";
       return string.Empty;

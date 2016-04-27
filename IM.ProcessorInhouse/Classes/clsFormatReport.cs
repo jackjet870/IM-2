@@ -47,7 +47,7 @@ namespace IM.ProcessorInhouse.Classes
     {
       return new List<ExcelFormatTable>
       {
-        new ExcelFormatTable {Title = "PR", Axis = ePivotFieldAxis.Row, Order =0, Compact = true, Outline = true},
+        new ExcelFormatTable {Title = "PR", Axis = ePivotFieldAxis.Row, Order =0, Compact = true, Outline = true, InsertBlankRow = true},
          new ExcelFormatTable {Title = "Qty", Axis = ePivotFieldAxis.Row, Order = 4, Alignment = ExcelHorizontalAlignment.Right,Format = EnumFormatTypeExcel.Number},
         new ExcelFormatTable {Title = "Gift ID", Axis = ePivotFieldAxis.Row, Order = 2, Alignment = ExcelHorizontalAlignment.Right, Sort = eSortType.Descending},
         new ExcelFormatTable {Title = "Gift Name", Axis = ePivotFieldAxis.Row, Order = 3},
@@ -853,5 +853,176 @@ namespace IM.ProcessorInhouse.Classes
     }
 
     #endregion GetProductionByNationalityMarketOriginallyAvailableInhouseFormat
+
+    #region GetRptProductionByGiftQuantityFormat
+
+    ///<summary>
+    /// Formato para el reporte Production by Gift & Quantity
+    /// </summary>
+    /// <returns><list type="ExcelFormatTable"></list></returns>
+    /// <history>
+    /// [aalcocer] 19/04/2016 Created
+    /// </history>
+    internal static List<ExcelFormatTable> GetRptProductionByGiftQuantityFormat()
+    {
+      return new List<ExcelFormatTable>
+      {
+        new ExcelFormatTable{Title = "Gift",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true},
+        new ExcelFormatTable{Title = "PR ID",Order = 1, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable{Title = "PR Name",Order = 2, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable {Title = "Quantity", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Amount", Order = 1, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency},
+        new ExcelFormatTable {Title = "Books", Order = 2, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Directs", Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "T Books", Order = 4, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Deposits", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Shows", Order = 6, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+         new ExcelFormatTable {Title = "IO", Order = 7, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "T Shows", Order = 8, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "SG", Order = 10, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+
+        new ExcelFormatTable {Title = "Sales", PropertyName = "Sales Total", Order = 11, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="TOTAL"},
+        new ExcelFormatTable {Title = "Amount ",  PropertyName = "Amount Total", Order = 12, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency ,SuperHeader="TOTAL"},
+        new ExcelFormatTable {Title = "Sales ", PropertyName = "Sales PR", Order = 13, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="PR"},
+        new ExcelFormatTable {Title = "Amount  ", PropertyName = "Amount PR", Order = 14, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="PR"},
+        new ExcelFormatTable {Title = "Sales  ", PropertyName = "Sales Self Gen", Order = 15, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number , SuperHeader="SELF GEN"},
+        new ExcelFormatTable {Title = "Amount   ", PropertyName = "Amount Self Gen", Order = 16, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency , SuperHeader="SELF GEN"},
+
+       new ExcelFormatTable {Title = "Sh%",Order = 9 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Books =0,0,Shows/Books)" },
+        new ExcelFormatTable { Title = "Cl%", Order = 18, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF('T Shows' =0,0,'Sales Total'/'T Shows')" },
+        new ExcelFormatTable { Title = "Eff", Order = 17, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('T Shows' =0,0,'Amount Total'/'T Shows')" },
+        new ExcelFormatTable { Title = "Avg Sale", Order = 19, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('Sales Total' = 0,0,'Amount Total'/'Sales Total')" }
+      };
+    }
+
+    #endregion GetRptProductionByGiftQuantityFormat
+
+    #region GetRptGiftsReceivedBySRFormat
+
+    ///<summary>
+    /// Formato para el reporte Gifts Received by Sales Room
+    /// </summary>
+    /// <returns><list type="ExcelFormatTable"></list></returns>
+    /// <history>
+    /// [aalcocer] 22/04/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> GetRptGiftsReceivedBySRFormat()
+    {
+      return new List<ExcelFormatTable>()
+      {
+      new ExcelFormatTable() { Title = "Sales Room", PropertyName = "SalesRoom", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 1, IsGroup = true ,SubTotalFunctions = eSubTotalFunctions.Default },
+      new ExcelFormatTable() { Title = "Gift ID", PropertyName = "Gift", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 2, },
+      new ExcelFormatTable() { Title = "Gift Name", PropertyName= "GiftN", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 3, },
+      new ExcelFormatTable() { Title = "Quantity", PropertyName = "Quantity" , Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 4,  },
+      new ExcelFormatTable() { Title = "Couples", PropertyName = "Couples", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 5, },
+      new ExcelFormatTable() { Title = "Adults", PropertyName = "Adults", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 6, },
+      new ExcelFormatTable() { Title = "Minors", PropertyName = "Minors" , Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 7, },
+      new ExcelFormatTable() { Title = "Currency", PropertyName = "cuN", Format=EnumFormatTypeExcel.General,Alignment=ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Column, Order = 2, Sort = eSortType.Ascending },
+      new ExcelFormatTable() { Title = "Amount", PropertyName = "Amount" ,Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 1, Function = DataFieldFunctions.Sum, },
+      };
+    }
+
+    #endregion GetRptGiftsReceivedBySRFormat
+
+    #region GetRptUnavailableMotivesByAgencyFormat
+
+    ///<summary>
+    /// Formato para el reporte  Unavailable Motives By Agency
+    /// </summary>
+    /// <returns><list type="ExcelFormatTable"></list></returns>
+    /// <history>
+    /// [aalcocer] 22/04/2016 Created
+    /// </history>
+    internal static List<ExcelFormatTable> GetRptUnavailableMotivesByAgencyFormat()
+    {
+      return new List<ExcelFormatTable>
+      {
+        new ExcelFormatTable{Title = "Unavail Motive",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true},
+        new ExcelFormatTable{Title = "Market",Order = 1, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true, Compact = true},
+        new ExcelFormatTable{Title = "AgencyID",Order = 2, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable {Title = "Agency", Order = 3, Axis = ePivotFieldAxis.Row},
+
+        new ExcelFormatTable {Title = "Arrivals", Order = 0,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Right },
+        new ExcelFormatTable {Title = "% Arrivals",Order = 1, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Percent, Alignment = ExcelHorizontalAlignment.Right },
+        new ExcelFormatTable {Title = "ByUser", Order = 2, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Right }
+      };
+    }
+
+    #endregion GetRptUnavailableMotivesByAgencyFormat
+
+    #region GetRptShowFactorByBookingDateFormat
+
+    ///<summary>
+    /// Formato para el reporte  Show Factor by Booking Date
+    /// </summary>
+    /// <returns><list type="ExcelFormatTable"></list></returns>
+    /// <history>
+    /// [aalcocer] 22/04/2016 Created
+    /// </history>
+    internal static List<ExcelFormatTable> GetRptShowFactorByBookingDateFormat()
+    {
+      return new List<ExcelFormatTable>
+      {
+        new ExcelFormatTable{Title = "Category",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true},
+        new ExcelFormatTable{Title = "Agency ID",Order = 1, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable{Title = "Agency Name",Order = 2, Axis = ePivotFieldAxis.Row},
+
+        new ExcelFormatTable {Title = "Diff", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Right},
+        new ExcelFormatTable {Title = "Books", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Right},
+        new ExcelFormatTable {Title = "Shows",Order = 2, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Right},
+        new ExcelFormatTable {Title = "IO", Order = 4, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Right},
+        new ExcelFormatTable {Title = "WO", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Right},
+
+        new ExcelFormatTable {Title = "Sh%",Order = 3 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Books =0,0,Shows/Books)" , Alignment = ExcelHorizontalAlignment.Right}
+      };
+    }
+
+    #endregion GetRptShowFactorByBookingDateFormat
+
+    #region GetRptProductionByAgencyMonthlyFormat
+
+    ///<summary>
+    /// Formato para el reporte Production by Agency (Monthly)
+    /// </summary>
+    /// <returns><list type="ExcelFormatTable"></list></returns>
+    /// <history>
+    /// [aalcocer] 25/04/2016 Created
+    /// </history>
+    internal static List<ExcelFormatTable> GetRptProductionByAgencyMonthlyFormat()
+    {
+      return new List<ExcelFormatTable>
+      {
+        new ExcelFormatTable{Title = "Year",Order = 0, Axis = ePivotFieldAxis.Row, Outline = true,Compact = true},
+        new ExcelFormatTable{Title = "Agency",Order = 1, Axis = ePivotFieldAxis.Row, Outline = true, Compact = true,InsertBlankRow = true},
+        new ExcelFormatTable{Title = "Lead Source",Order = 2, Axis = ePivotFieldAxis.Row, SubTotalFunctions = eSubTotalFunctions.Default, Outline = true, Compact = true, InsertBlankRow = true},
+        new ExcelFormatTable{Title = "Month",Order = 3, Axis = ePivotFieldAxis.Row,Format = EnumFormatTypeExcel.Month,Sort = eSortType.Ascending},
+        new ExcelFormatTable {Title = "Arrivs", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Conts", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Avails",Order = 2, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Books", Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "T Books", Order = 7, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Shows", Order = 9, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "T Shows", Order = 10, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+
+        new ExcelFormatTable {Title = "Sales", Order = 12, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number },
+        new ExcelFormatTable {Title = "VOL",  Order = 13, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency},
+
+        new ExcelFormatTable {Title = "C%",Order = 14,Axis = ePivotFieldAxis.Values, Format= EnumFormatTypeExcel.Percent, Formula = "IF('T Shows' =0,0,Sales/'T Shows')" },
+        new ExcelFormatTable { Title = "Eff", Order = 15, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('T Shows' =0,0,VOL/'T Shows')" },
+      };
+    }
+
+    #endregion GetRptProductionByAgencyMonthlyFormat
+
+    public static List<ExcelFormatTable> GetGraphUnavailableArrivalsFormat()
+    {
+      return new List<ExcelFormatTable>
+      {
+        new ExcelFormatTable{Title = "Motive",Order = 0, Axis = ePivotFieldAxis.Column},
+        new ExcelFormatTable{Title = "%",Order = 1, Axis = ePivotFieldAxis.Row, Alignment = ExcelHorizontalAlignment.Center, Format = EnumFormatTypeExcel.Percent},
+        new ExcelFormatTable{Title = "By User",Order = 2, Axis = ePivotFieldAxis.Row, Alignment = ExcelHorizontalAlignment.Right, Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Arrivals", Order = 3, Axis = ePivotFieldAxis.Values, Alignment = ExcelHorizontalAlignment.Right },
+      };
+    }
   }
 }

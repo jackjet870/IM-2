@@ -204,36 +204,25 @@ namespace IM.BusinessRules.BR
 
     #endregion SaveAgency
 
-    #region GetAgenciesShortById
+    #region GetAgenciesByIds
 
     /// <summary>
-    ///Método para obtener una lista de Agencias por id.
+    ///Método para obtener una lista de Agencias por ids.
     /// </summary>
     /// <param name="agIDList">Lista de id de Agency</param>
-    /// <returns>List<AgencyShort></returns>
+    /// <returns><list type="Agency"></list></returns>
     /// <history>
     /// [aalcocer] 23/03/2016 Created
+    /// [aalcocer] 20/04/2016 Modified. devuelve listado de  Agency en ves de AgencyShort
     /// </history>
-    public static List<AgencyShort> GetAgenciesShortById(IEnumerable<string> agIDList)
+    public static List<Agency> GetAgenciesByIds(IEnumerable<string> agIDList)
     {
-      List<AgencyShort> lstgetAgencies;
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        lstgetAgencies = dbContext.Agencies.Where(x => agIDList.Contains(x.agID)).
-          Select(x => new
-          {
-            x.agID,
-            x.agN
-          }).AsEnumerable().
-          Select(x => new AgencyShort
-          {
-            agID = x.agID,
-            agN = x.agN
-          }).ToList();
+        return dbContext.Agencies.Where(x => agIDList.Contains(x.agID)).ToList();
       }
-      return lstgetAgencies;
     }
 
-    #endregion GetAgenciesShortById
+    #endregion GetAgenciesByIds
   }
 }

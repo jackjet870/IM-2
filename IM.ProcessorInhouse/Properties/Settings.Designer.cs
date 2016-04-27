@@ -25,21 +25,6 @@ namespace IM.ProcessorInhouse.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>$100PMREGP - 10</string>\r\n  <string>LIMOUSINET - 1</string>\r\n</ArrayOfStri" +
-            "ng>")]
-        public global::System.Collections.Specialized.StringCollection ProductionByGiftQuantity {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ProductionByGiftQuantity"]));
-            }
-            set {
-                this["ProductionByGiftQuantity"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
   <string>GOGO-T</string>
@@ -70,6 +55,21 @@ namespace IM.ProcessorInhouse.Properties {
             }
             set {
                 this["ProductionByAgencyMonthly"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>10 - $100PMREGP</string>\r\n  <string>1 - LIMOUSINET</string>\r\n</ArrayOfStri" +
+            "ng>")]
+        public global::System.Collections.Specialized.StringCollection ProductionByGiftQuantity {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ProductionByGiftQuantity"]));
+            }
+            set {
+                this["ProductionByGiftQuantity"] = value;
             }
         }
     }

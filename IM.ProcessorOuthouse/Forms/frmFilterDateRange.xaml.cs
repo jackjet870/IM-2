@@ -1,8 +1,10 @@
 ﻿using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
+using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using IM.ProcessorOuthouse.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,9 +12,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using IM.ProcessorOuthouse.Classes;
-using IM.Model.Classes;
-
 
 namespace IM.ProcessorOuthouse.Forms
 {
@@ -25,8 +24,8 @@ namespace IM.ProcessorOuthouse.Forms
   /// </history>
   public partial class frmFilterDateRange : Window
   {
-
     #region Contructor
+
     public frmFilterDateRange()
     {
       InitializeComponent();
@@ -40,23 +39,25 @@ namespace IM.ProcessorOuthouse.Forms
 
       List<string> _paymentComm = GetSettings.PRPaymentCommissions();
       _lstLeadSourcesPaymentComm = BRLeadSources.GetLeadSourceById(_paymentComm);
-  
-     _lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter,-1);
+
+      _lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter, -1);
       _lstPaymentType = BRPaymentTypes.GetPaymentTypes(1);
-    
+
       var x = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, EnumProgram.Outhouse).Select(y => y.lsID);
       _lstPRs = BRPersonnel.GetPersonnel(string.Join(",", x), roles: EnumToListHelper.GetEnumDescription(EnumRole.PR), status: 0);
 
       _lstFoliosInvitationOuthouse = BRFoliosInvitationsOuthouse.GetFoliosInvittionsOutside(nStatus: 1);
-  
+
       cboSaveCourtesyTours.ItemsSource = EnumToListHelper.GetList<EnumSaveCourtesyTours>();
       cboExternal.ItemsSource = EnumToListHelper.GetList<EnumExternalInvitation>();
       cboFolSeries.ItemsSource = _lstFoliosInvitationOuthouse;
       this.PreviewKeyDown += new KeyEventHandler(Close_KeyPreviewESC);
     }
-    #endregion
+
+    #endregion Contructor
 
     #region Atributos
+
     private List<LeadSourceByUser> _lstLeadSources = new List<LeadSourceByUser>();
     private List<LeadSource> _lstLeadSourcesPaymentComm = new List<LeadSource>();
     private List<PaymentType> _lstPaymentType = new List<PaymentType>();
@@ -64,17 +65,19 @@ namespace IM.ProcessorOuthouse.Forms
     private List<ChargeTo> _lstChargeTo = new List<ChargeTo>();
     private List<GiftShort> _lstGifts, _lstGiftsProdGift = new List<GiftShort>();
     private List<FolioInvitationOuthouse> _lstFoliosInvitationOuthouse = new List<FolioInvitationOuthouse>();
-    private List<FolioCxCPR> _lstRangeFolios= new List<FolioCxCPR>();
+    private List<FolioCxCPR> _lstRangeFolios = new List<FolioCxCPR>();
     private FolioInvitationOuthouse _folioInvOutFilter = new FolioInvitationOuthouse();
     private ChargeTo _chargeToFilter = new ChargeTo();
     public bool _blnOK = false;
     private UserData _user;
     public frmProcessorOuthouse frmPO = new frmProcessorOuthouse();
-    #endregion
+
+    #endregion Atributos
 
     #region Metodos
 
     #region ConfigureGridsPanels
+
     /// <summary>
     /// Configura los Grids LeadSources, Formas de pago, cargar a y regalos
     /// </summary>
@@ -108,9 +111,11 @@ namespace IM.ProcessorOuthouse.Forms
       StatusBarNumLS.Content = (blnLeadSources) ? string.Format("{0}/{1} Selected LeadSources", 0, _lstLeadSources.Count) : "";
       StatusBarNumLSPC.Content = (blnLeadSourcesPaymentComm) ? string.Format("{0}/{1} Selected LeadSources", 0, _lstLeadSourcesPaymentComm.Count) : "";
     }
-    #endregion
+
+    #endregion ConfigureGridsPanels
 
     #region ConfigureForm
+
     /// <summary>
     /// Configura los controles del formulario
     /// </summary>
@@ -120,7 +125,7 @@ namespace IM.ProcessorOuthouse.Forms
     public void ConfigureForm(bool blnLeadSource = false, bool blnLeadSourcesPaymentComm = false, bool blnAllLeadSource = false, bool blnAllLeadSourcePaymentComm = false,
       bool blnPaymentTypes = false, bool blnAllPaymentTypes = false, bool blnPRs = false, bool blnAllPRs = false,
       bool blnChargeTo = false, bool blnAllChargeTo = false, bool blnGifts = false, bool blnAllGifts = false, bool blnGiftProdGift = false, bool blnAllGiftProdGift = false, bool blnRangeFolios = false, bool blnAllRangeFolios = false,
-      bool blnOneDate = false, bool blnOnlyOneRegister = false, bool blnChkUsedate = false, EnumPeriod enumPeriod = EnumPeriod.pdNone,
+      bool blnOneDate = false, bool blnOnlyOneRegister = false, bool blnChkUsedate = false, EnumPeriod enumPeriod = EnumPeriod.None,
       EnumProgram enumPrograms = EnumProgram.All, bool blnOnePeriod = false, EnumBasedOnArrival enumBasedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival,
       EnumQuinellas enumQuinellas = EnumQuinellas.quNoQuinellas, EnumDetailGifts enumDetailGifts = EnumDetailGifts.dgNoDetailGifts, EnumSaveCourtesyTours? enumSaveCourtesyTours = null,
       EnumSalesByMemberShipType enumSalesByMemberShipType = EnumSalesByMemberShipType.sbmNoDetail, EnumBasedOnBooking enumBasedOnBooking = EnumBasedOnBooking.bobNoBasedOnBooking,
@@ -134,9 +139,11 @@ namespace IM.ProcessorOuthouse.Forms
         enumSalesByMemberShipType, enumBasedOnBooking, enumExternalInvitation, blnFolSeries, blnFolFrom, blnFolTo, blnUseDates, blnAllFolios);
       LoadUserFilters();
     }
-    #endregion
+
+    #endregion ConfigureForm
 
     #region ConfigureDates
+
     /// <summary>
     /// Configura los controles de fecha
     /// </summary>
@@ -154,7 +161,7 @@ namespace IM.ProcessorOuthouse.Forms
         switch (enumPeriod)
         {
           ///Sin periodo
-          case EnumPeriod.pdNone:
+          case EnumPeriod.None:
             cboDate.Items.Add("Today");
             cboDate.Items.Add("Yesterday");
             cboDate.Items.Add("This week");
@@ -168,7 +175,7 @@ namespace IM.ProcessorOuthouse.Forms
             break;
 
           //Semanal
-          case EnumPeriod.pdWeekly:
+          case EnumPeriod.Weekly:
             cboDate.Items.Add("This week");
             cboDate.Items.Add("Previous week");
             cboDate.Items.Add("Two weeks ago");
@@ -177,7 +184,7 @@ namespace IM.ProcessorOuthouse.Forms
             break;
 
           //Mensual
-          case EnumPeriod.pdMonthly:
+          case EnumPeriod.Monthly:
             cboDate.Items.Add("This month");
             cboDate.Items.Add("Previous month");
             cboDate.Items.Add("Two months ago");
@@ -195,9 +202,11 @@ namespace IM.ProcessorOuthouse.Forms
         pnlDtmEnd.IsEnabled = false;
       }
     }
-    #endregion
+
+    #endregion ConfigureDates
 
     #region ConfigureSelection
+
     /// <summary>
     /// Configura el modo de seleccion de los grids(Multiseleccion ó Solo un registro).
     /// Activa o desactiva los controles checkbox dependiendo el modo de seleccion configurado.
@@ -215,9 +224,11 @@ namespace IM.ProcessorOuthouse.Forms
       grdGifts.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       grdGiftsProdGift.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
     }
-    #endregion
+
+    #endregion ConfigureSelection
 
     #region ConfigureCheckboxSelectAll
+
     /// <summary>
     /// Valida los checkbox para seleccionar todos los registros de los Grids
     /// </summary>
@@ -244,9 +255,11 @@ namespace IM.ProcessorOuthouse.Forms
       chkAllGiftsProdGift.IsEnabled = (blnOnlyOneRegister) ? false : true;
       chkUseDates.IsEnabled = (blnOnlyOneRegister) ? false : true;
     }
-    #endregion
+
+    #endregion ConfigureCheckboxSelectAll
 
     #region ConfigureFilters
+
     /// <summary>
     /// Configura los controles para los filtros de los reportes
     /// </summary>
@@ -265,19 +278,20 @@ namespace IM.ProcessorOuthouse.Forms
       chkBasedOnBooking.Visibility = (enumBasedOnBooking == EnumBasedOnBooking.bobBasedOnBooking) ? Visibility.Visible : Visibility.Collapsed;
       cboExternal.Visibility = (enumExternalInvitation != null) ? Visibility.Visible : Visibility.Collapsed;
 
-      
       txtFolFrom.Visibility = lblFolFrom.Visibility = (blnFolFrom) ? Visibility.Visible : Visibility.Collapsed;
       txtFolTo.Visibility = lblFolTo.Visibility = (blnFolTo) ? Visibility.Visible : Visibility.Collapsed;
-      chkUseDates.Visibility =  (blnUseDates) ? Visibility.Visible : Visibility.Collapsed;
+      chkUseDates.Visibility = (blnUseDates) ? Visibility.Visible : Visibility.Collapsed;
       chkAllFolios.Visibility = (blnAllFolios) ? Visibility.Visible : Visibility.Collapsed;
-     
+
       cboSaveCourtesyTours.Visibility = (enumSaveCourtesyTours != null) ? Visibility.Visible : Visibility.Collapsed;
       cboExternal.Visibility = (enumExternalInvitation != null) ? Visibility.Visible : Visibility.Collapsed;
       cboFolSeries.Visibility = lblFolSeries.Visibility = (blnFolSeries) ? Visibility.Visible : Visibility.Collapsed;
     }
-    #endregion
+
+    #endregion ConfigureFilters
 
     #region SaveFrmFilterValues
+
     /// <summary>
     ///  Guarda los datos seleccionados por el usuario
     /// </summary>
@@ -301,7 +315,7 @@ namespace IM.ProcessorOuthouse.Forms
       if (!chkAllGiftsProdGift.IsChecked.Value)
         frmPO._lstGiftsProdGift = grdGiftsProdGift.SelectedItems.Cast<GiftShort>().Select(c => grdGiftsProdGift.Items.IndexOf(c)).ToList();
       frmPO._cboDateSelected = cboDate.SelectedValue.ToString();
-    //  frmPO._cboFolSeriesSelected = cboFolSeries.SelectedValue.ToString();
+      //  frmPO._cboFolSeriesSelected = cboFolSeries.SelectedValue.ToString();
       frmPO._dtmStart = dtmStart.Value.Value;
       frmPO._dtmEnd = dtmEnd.Value.Value;
       frmPO._enumBasedOnArrival = (chkBasedOnArrival.IsChecked.Value) ? EnumBasedOnArrival.boaBasedOnArrival : EnumBasedOnArrival.boaNoBasedOnArrival;
@@ -313,11 +327,12 @@ namespace IM.ProcessorOuthouse.Forms
       frmPO._folTo = txtFolTo.Text;
       frmPO._enumSaveCourtesyTours = ((KeyValuePair<EnumSaveCourtesyTours, string>)cboSaveCourtesyTours.SelectedItem).Key;
       frmPO._enumExternalInvitation = ((KeyValuePair<EnumExternalInvitation, string>)cboExternal.SelectedItem).Key;
-
     }
-    #endregion
+
+    #endregion SaveFrmFilterValues
 
     #region LoadUserFilters
+
     /// <summary>
     /// Obtiene los filtros que el usuario habiá seleccionado
     /// y los aplica al formulario.
@@ -392,11 +407,12 @@ namespace IM.ProcessorOuthouse.Forms
       cboFolSeries.SelectedValue = frmPO._cboFolSeriesSelected;
       cboSaveCourtesyTours.SelectedValue = frmPO._enumSaveCourtesyTours;
       cboExternal.SelectedValue = frmPO._enumExternalInvitation;
- 
     }
-    #endregion
+
+    #endregion LoadUserFilters
 
     #region ValidateFields
+
     /// <summary>
     /// Valida si los grid tienen al menos un elemento seleccionado.
     /// </summary>
@@ -423,13 +439,15 @@ namespace IM.ProcessorOuthouse.Forms
       else
         return "";
     }
-    #endregion
 
-    #endregion
+    #endregion ValidateFields
+
+    #endregion Metodos
 
     #region Eventos
 
     #region chkAllLeadSources_Checked
+
     /// <summary>
     ///  Valida si el checkbox ALL fua activo o desactivado para seleccionar o
     ///  deselecionar la lista leadsources
@@ -444,14 +462,17 @@ namespace IM.ProcessorOuthouse.Forms
         grdLeadSources.SelectAll();
         grdLeadSources.IsEnabled = false;
       }
-      else {
+      else
+      {
         grdLeadSources.UnselectAll();
         grdLeadSources.IsEnabled = true;
       }
     }
-    #endregion
+
+    #endregion chkAllLeadSources_Checked
 
     #region grdLeadSources_SelectionChanged
+
     /// <summary>
     ///  Barra de estado de leadsources al seleccionar
     /// </summary>
@@ -462,9 +483,11 @@ namespace IM.ProcessorOuthouse.Forms
     {
       StatusBarNumLS.Content = string.Format("{0}/{1} Selected LeadSources", grdLeadSources.SelectedItems.Count, grdLeadSources.Items.Count);
     }
-    #endregion
+
+    #endregion grdLeadSources_SelectionChanged
 
     #region chkAllLeadSourcesPaymentComm_Checked
+
     /// <summary>
     ///  Valida si el checkbox ALL fua activo o desactivado para seleccionar o
     ///  deselecionar la lista leadsources
@@ -479,14 +502,17 @@ namespace IM.ProcessorOuthouse.Forms
         grdLeadSourcesPaymentComm.SelectAll();
         grdLeadSourcesPaymentComm.IsEnabled = false;
       }
-      else {
+      else
+      {
         grdLeadSourcesPaymentComm.UnselectAll();
         grdLeadSourcesPaymentComm.IsEnabled = true;
       }
     }
-    #endregion
+
+    #endregion chkAllLeadSourcesPaymentComm_Checked
 
     #region grdLeadSourcesPaymentComm_SelectionChanged
+
     /// <summary>
     ///  Barra de estado de leadsources al seleccionar
     /// </summary>
@@ -497,9 +523,11 @@ namespace IM.ProcessorOuthouse.Forms
     {
       StatusBarNumLSPC.Content = string.Format("{0}/{1} Selected LeadSources", grdLeadSourcesPaymentComm.SelectedItems.Count, grdLeadSourcesPaymentComm.Items.Count);
     }
-    #endregion
+
+    #endregion grdLeadSourcesPaymentComm_SelectionChanged
 
     #region chkAllPaymentTypes_Checked
+
     /// <summary>
     ///  Valida si el checkbox ALL fua activo o desactivado para seleccionar o
     ///  deselecionar la lista formas de pago
@@ -520,9 +548,11 @@ namespace IM.ProcessorOuthouse.Forms
         grdPaymentTypes.IsEnabled = true;
       }
     }
-    #endregion
+
+    #endregion chkAllPaymentTypes_Checked
 
     #region grdPaymentTypes_SelectionChanged
+
     /// <summary>
     ///  Barra de estado tipos de pago al seleccionar
     /// </summary>
@@ -533,9 +563,11 @@ namespace IM.ProcessorOuthouse.Forms
     {
       StatusBarNumPT.Content = string.Format("{0}/{1} Selected PaymentTypes", grdPaymentTypes.SelectedItems.Count, grdPaymentTypes.Items.Count);
     }
-    #endregion
+
+    #endregion grdPaymentTypes_SelectionChanged
 
     #region chkAllPR_Checked
+
     /// <summary>
     ///  Valida si el checkbox ALL fua activo o desactivado para seleccionar o
     ///  deselecionar la lista PRs
@@ -556,9 +588,11 @@ namespace IM.ProcessorOuthouse.Forms
         grdPR.IsEnabled = true;
       }
     }
-    #endregion
+
+    #endregion chkAllPR_Checked
 
     #region grdPR_SelectionChanged
+
     /// <summary>
     ///  Barra de estado PR al seleccionar
     /// </summary>
@@ -569,9 +603,11 @@ namespace IM.ProcessorOuthouse.Forms
     {
       StatusBarNumPR.Content = string.Format("{0}/{1} Selected PRs", grdPR.SelectedItems.Count, grdPR.Items.Count);
     }
-    #endregion
+
+    #endregion grdPR_SelectionChanged
 
     #region chkAllChargeTo_Checked
+
     /// <summary>
     ///  Valida si el checkbox ALL fua activo o desactivado para seleccionar o
     ///  deselecionar la lista Cargar a
@@ -592,9 +628,11 @@ namespace IM.ProcessorOuthouse.Forms
         grdChargeTo.IsEnabled = true;
       }
     }
-    #endregion
+
+    #endregion chkAllChargeTo_Checked
 
     #region grdChargeTo_SelectionChanged
+
     /// <summary>
     ///  Barra de estado cargar a al seleccionar
     /// </summary>
@@ -605,9 +643,11 @@ namespace IM.ProcessorOuthouse.Forms
     {
       StatusBarNumCT.Content = string.Format("{0}/{1} Selected Charge To", grdChargeTo.SelectedItems.Count, grdChargeTo.Items.Count);
     }
-    #endregion
+
+    #endregion grdChargeTo_SelectionChanged
 
     #region chkAllGifts_Checked
+
     /// <summary>
     ///  Valida si el checkbox ALL fua activo o desactivado para seleccionar o
     ///  deselecionar la lista regalos
@@ -628,9 +668,11 @@ namespace IM.ProcessorOuthouse.Forms
         grdGifts.IsEnabled = true;
       }
     }
-    #endregion
+
+    #endregion chkAllGifts_Checked
 
     #region grdGifts_SelectionChanged
+
     /// <summary>
     ///  Barra de estado regalos al seleccionar
     /// </summary>
@@ -641,9 +683,11 @@ namespace IM.ProcessorOuthouse.Forms
     {
       StatusBarNumG.Content = string.Format("{0}/{1} Selected Gifts", grdGifts.SelectedItems.Count, grdGifts.Items.Count);
     }
-    #endregion
+
+    #endregion grdGifts_SelectionChanged
 
     #region chkAllGiftsProdGift_Checked
+
     /// <summary>
     ///  Valida si el checkbox ALL fua activo o desactivado para seleccionar o
     ///  deselecionar la lista regalos
@@ -664,9 +708,11 @@ namespace IM.ProcessorOuthouse.Forms
         grdGiftsProdGift.IsEnabled = true;
       }
     }
-    #endregion
+
+    #endregion chkAllGiftsProdGift_Checked
 
     #region grdGiftsProdGift_SelectionChanged
+
     /// <summary>
     ///  Barra de estado regalos al seleccionar
     /// </summary>
@@ -677,9 +723,11 @@ namespace IM.ProcessorOuthouse.Forms
     {
       StatusBarNumGPG.Content = string.Format("{0}/{1} Selected Gifts", grdGiftsProdGift.SelectedItems.Count, grdGiftsProdGift.Items.Count);
     }
-    #endregion
+
+    #endregion grdGiftsProdGift_SelectionChanged
 
     #region chkUseDates_Checked
+
     /// <summary>
     ///  Valida si se habilitan el filtro de fechas
     /// </summary>
@@ -701,9 +749,11 @@ namespace IM.ProcessorOuthouse.Forms
         dtmEnd.IsEnabled = false;
       }
     }
-    #endregion
+
+    #endregion chkUseDates_Checked
 
     #region cboDate_SelectionChanged
+
     /// <summary>
     /// Modifica los rangos de fecha de los datepicker, según la opcion seleccionada.
     /// </summary>
@@ -718,32 +768,38 @@ namespace IM.ProcessorOuthouse.Forms
       pnlDtmEnd.IsEnabled = false;
       switch (selected)
       {
-        case EnumPredefinedDate.daToday:
+        case EnumPredefinedDate.Today:
           dtmStart.Value = dtmEnd.Value = today;
           break;
-        case EnumPredefinedDate.daYesterday:
+
+        case EnumPredefinedDate.Yesterday:
           dtmStart.Value = dtmEnd.Value = today.Date.AddDays(-1);
           break;
-        case EnumPredefinedDate.daThisWeek:
+
+        case EnumPredefinedDate.ThisWeek:
           dtmStart.Value = today.AddDays((DayOfWeek.Monday - today.DayOfWeek));
           dtmEnd.Value = today.AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
           break;
-        case EnumPredefinedDate.daPreviousWeek:
+
+        case EnumPredefinedDate.PreviousWeek:
           dtmStart.Value = today.AddDays(-7).AddDays(DayOfWeek.Monday - today.DayOfWeek);
           dtmEnd.Value = today.AddDays(-7).AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
           break;
-        case EnumPredefinedDate.daThisHalf:
+
+        case EnumPredefinedDate.ThisHalf:
           if (today.Day <= 15)
           {
             dtmStart.Value = new DateTime(today.Year, today.Month, 1);
             dtmEnd.Value = new DateTime(today.Year, today.Month, 15);
           }
-          else {
+          else
+          {
             dtmStart.Value = new DateTime(today.Year, today.Month, 16);
             dtmEnd.Value = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
           }
           break;
-        case EnumPredefinedDate.daPreviousHalf:
+
+        case EnumPredefinedDate.PreviousHalf:
 
           if (today.Day <= 15)
           {
@@ -764,30 +820,37 @@ namespace IM.ProcessorOuthouse.Forms
             dtmEnd.Value = new DateTime(today.Year, today.Month, 15);
           }
           break;
-        case EnumPredefinedDate.daThisMonth:
+
+        case EnumPredefinedDate.ThisMonth:
           dtmStart.Value = new DateTime(today.Year, today.Month, 1);
           dtmEnd.Value = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
           break;
-        case EnumPredefinedDate.daPreviousMonth:
+
+        case EnumPredefinedDate.PreviousMonth:
           dtmStart.Value = new DateTime(today.Year, today.Month - 1, 1);
           dtmEnd.Value = new DateTime(today.Year, today.Month - 1, DateTime.DaysInMonth(today.Year, today.Month - 1));
           break;
-        case EnumPredefinedDate.daThisYear:
+
+        case EnumPredefinedDate.ThisYear:
           dtmStart.Value = new DateTime(today.Year, 1, 1);
           dtmEnd.Value = new DateTime(today.Year, 12, 31);
           break;
-        case EnumPredefinedDate.daPreviousYear:
+
+        case EnumPredefinedDate.PreviousYear:
           dtmStart.Value = new DateTime(today.Year - 1, 1, 1);
           dtmEnd.Value = new DateTime(today.Year - 1, 12, 31);
           break;
+
         default:
           pnlDtmStart.IsEnabled = pnlDtmEnd.IsEnabled = true;
           break;
       }
     }
-    #endregion
+
+    #endregion cboDate_SelectionChanged
 
     #region btnOK_Click
+
     /// <summary>
     /// Devuelve un booleano para saber si se ha terminado de
     /// realizar su proceso de filtrado.
@@ -807,9 +870,11 @@ namespace IM.ProcessorOuthouse.Forms
       else
         UIHelper.ShowMessage(message);
     }
-    #endregion
+
+    #endregion btnOK_Click
 
     #region btnCancel_Click
+
     /// <summary>
     /// Devuelve un booleano para saber si se ha terminado de
     /// realizar su proceso de filtrado.
@@ -822,17 +887,21 @@ namespace IM.ProcessorOuthouse.Forms
       _blnOK = false;
       Close();
     }
-    #endregion
+
+    #endregion btnCancel_Click
 
     #region Close_keyPreview
+
     private void Close_KeyPreviewESC(object sender, KeyEventArgs e)
     {
       if (e.Key == Key.Escape)
         Close();
     }
-    #endregion
+
+    #endregion Close_keyPreview
 
     #region Window_Closing
+
     /// <summary>
     /// Guarda los valores de cada control, antes de cerrar el formulario.
     /// </summary>
@@ -843,8 +912,9 @@ namespace IM.ProcessorOuthouse.Forms
     {
       SaveFrmFilterValues();
     }
-    #endregion
 
-    #endregion
+    #endregion Window_Closing
+
+    #endregion Eventos
   }
 }
