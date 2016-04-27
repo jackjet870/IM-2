@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace IM.ProcessorInhouse.Classes
 {
@@ -460,6 +459,46 @@ namespace IM.ProcessorInhouse.Classes
 
     #endregion ExportRptProductionByDeskInhouses
 
+    #region ExportRptProductionByGiftQuantities
+
+    /// <summary>
+    /// Obtiene los datos para exportar a Excel el reporte de RptProductionByGiftQuantity
+    /// </summary>
+    /// <param name="reportname">Nombre del reporte</param>
+    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="listRptProductionByGiftQuantities">Lista de datos para el reporte.</param>
+    /// <returns></returns>
+    public static FileInfo ExportRptProductionByGiftQuantities(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptProductionByGiftQuantity> listRptProductionByGiftQuantities)
+    {
+      var listRptProductionByDeskInhousesAux = listRptProductionByGiftQuantities.Select(c => new
+      {
+        Gift = c.GiftID + "  " + c.GiftN,
+        c.PRID,
+        c.PRN,
+        c.Quantity,
+        c.Amount,
+        c.GrossBooks,
+        c.Directs,
+        TBooks = c.Books,
+        c.Deposits,
+        c.GrossShows,
+        c.InOuts,
+        TShows = c.Shows,
+        c.SelfGens,
+        c.Sales_TOTAL,
+        c.SalesAmount_TOTAL,
+        c.Sales_PR,
+        c.SalesAmount_PR,
+        c.Sales_SELFGEN,
+        c.SalesAmount_SELFGEN
+      }).ToList();
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByDeskInhousesAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByGiftQuantityFormat(), true, showRowHeaders: true);
+    }
+
+    #endregion ExportRptProductionByGiftQuantities
+
     #region ExportRptProductionByGroupInhouses
 
     /// <summary>
@@ -835,5 +874,174 @@ namespace IM.ProcessorInhouse.Classes
     }
 
     #endregion ExportRptRepsPaymentSummaries
+
+    #region ExportRptGiftsReceivedBySR
+
+    /// <summary>
+    /// Obtiene los datos para exportar a Excel el reporte de RptGiftsReceivedBySR
+    /// </summary>
+    /// <param name="reportname">Nombre del reporte</param>
+    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="lstRptGiftsReceivedBySR">Lista de datos para el reporte.</param>
+    /// <returns>FileInfo</returns>
+    /// <history>
+    /// [aalcocer] 22/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptGiftsReceivedBySR(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<object> lstRptGiftsReceivedBySR)
+    {
+      var lstGiftsReceivedBySR = lstRptGiftsReceivedBySR[0] as List<RptGiftsReceivedBySR>;
+      var curriencies = lstRptGiftsReceivedBySR[1] as List<Currency>;
+
+      var lstGifRecBySRWithCu = (from giftRecBySR in lstGiftsReceivedBySR
+                                 join cu in curriencies on giftRecBySR.Currency equals cu.cuID
+                                 select new
+                                 {
+                                   giftRecBySR.SalesRoom,
+                                   giftRecBySR.Gift,
+                                   giftRecBySR.GiftN,
+                                   giftRecBySR.Quantity,
+                                   giftRecBySR.Couples,
+                                   giftRecBySR.Adults,
+                                   giftRecBySR.Minors,
+                                   cu.cuN,
+                                   giftRecBySR.Amount,
+                                 }).OrderBy(c => c.cuN).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu);
+      return EpplusHelper.createExcelCustomPivot(dtData, filters, reportname, dateRangeFileNameRep, clsFormatReport.GetRptGiftsReceivedBySRFormat(), blnShowSubtotal: true);
+    }
+
+    #endregion ExportRptGiftsReceivedBySR
+
+    #region ExportRptUnavailableMotivesByAgencies
+
+    /// <summary>
+    /// Obtiene los datos para exportar a Excel el reporte de RptUnavailableMotivesByAgency
+    /// </summary>
+    /// <param name="reportname">Nombre del reporte</param>
+    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="listRptUnavailableMotivesByAgencies">Lista de datos para el reporte.</param>
+    /// <returns>FileInfo</returns>
+    /// <history>
+    /// [aalcocer] 22/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptUnavailableMotivesByAgencies(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptUnavailableMotivesByAgency> listRptUnavailableMotivesByAgencies)
+    {
+      var listRptUnavailableMotivesByAgenciesAux = listRptUnavailableMotivesByAgencies.Select(c => new
+      {
+        c.UnavailMot,
+        c.Market,
+        c.agID,
+        c.Agency,
+        c.Arrivals,
+        c.ArrivalsPercentage,
+        c.ByUser
+      }).ToList();
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptUnavailableMotivesByAgenciesAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptUnavailableMotivesByAgencyFormat(), true, showRowHeaders: true);
+    }
+
+    #endregion ExportRptUnavailableMotivesByAgencies
+
+    #region ExportRptShowFactorByBookingDates
+
+    /// <summary>
+    /// Obtiene los datos para exportar a Excel el reporte de RptShowFactorByBookingDate
+    /// </summary>
+    /// <param name="reportname">Nombre del reporte</param>
+    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="listRptShowFactorByBookingDates">Lista de datos para el reporte.</param>
+    /// <returns>FileInfo</returns>
+    /// <history>
+    /// [aalcocer] 22/Abr/2016 Created
+    /// </history>
+    public static FileInfo ExportRptShowFactorByBookingDates(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptShowFactorByBookingDate> listRptShowFactorByBookingDates)
+    {
+      var listRptShowFactorByBookingDatesAux = listRptShowFactorByBookingDates.Select(c => new
+      {
+        c.Group,
+        c.Agency,
+        c.AgencyN,
+        c.Difference,
+        c.Books,
+        c.Shows,
+        c.InOuts,
+        c.WalkOuts
+      }).ToList();
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptShowFactorByBookingDatesAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptShowFactorByBookingDateFormat(), true, showRowHeaders: true);
+    }
+
+    #endregion ExportRptShowFactorByBookingDates
+
+    #region ExportRptProductionByAgencyMonthly
+
+    /// <summary>
+    /// Obtiene los datos para exportar a Excel el reporte de RptProductionByAgencyMonthly
+    /// </summary>
+    /// <param name="reportname">Nombre del reporte</param>
+    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="listRptProductionByAgencyMonthly">Lista de datos para el reporte.</param>
+    /// <returns>FileInfo</returns>
+    /// <history>
+    /// [aalcocer] 25/Abr/2016 Created
+    /// </history>
+    internal static FileInfo ExportRptProductionByAgencyMonthly(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptProductionByAgencyMonthly> listRptProductionByAgencyMonthly)
+    {
+      //Se pone el valor AgencyN a los que no tienen valor y que sean del mismo AgencyID
+      listRptProductionByAgencyMonthly.
+        Where(c => string.IsNullOrEmpty(c.AgencyN)).ToList().
+        ForEach(c => c.AgencyN =
+        listRptProductionByAgencyMonthly.FirstOrDefault(a => a.Agency == c.Agency && !string.IsNullOrEmpty(a.AgencyN))?.AgencyN);
+
+      var listRptProductionByAgencyMonthlyAux = listRptProductionByAgencyMonthly.
+        OrderBy(c => c.Year).ThenBy(c => c.AgencyTotal).ThenBy(c => c.Agency).
+        ThenBy(c => c.LeadSourceTotal).ThenBy(c => c.LeadSource).ThenBy(c => c.Month).
+        Select(c => new
+        {
+          c.Year,
+          Agency = c.Agency + "  " + c.AgencyN,
+          c.LeadSource,
+          Month = new DateTime(Convert.ToInt32(c.Year), Convert.ToInt32(c.Month), 1),
+          c.Arrivals,
+          c.Contacts,
+          c.Availables,
+          Books = c.GrossBooks,
+          TBooks = c.Books,
+          Shows = c.GrossShows,
+          TShows = c.Shows,
+          c.Sales,
+          c.SalesAmount
+        }).ToList();
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByAgencyMonthlyAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByAgencyMonthlyFormat(), showRowHeaders: true);
+    }
+
+    #endregion ExportRptProductionByAgencyMonthly
+
+    public static FileInfo ExportGraphNotBookingArrival(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, Tuple<GraphTotals, List<GraphNotBookingArrivals>, List<GraphNotBookingArrivals>> listGraphNotBookingArrivals)
+    {
+      return null;
+    }
+
+    public static FileInfo ExportGraphProduction(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, Tuple<GraphMaximum, List<GraphProduction_Weeks>, List<GraphProduction_Months>> lisGraphProduction)
+    {
+      return null;
+    }
+
+    public static FileInfo ExportGraphUnavailableArrivals(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, Tuple<GraphTotals, List<GraphUnavailableArrivals>, List<GraphUnavailableArrivals>> listGraphUnavailableArrivals)
+    {
+      var list1 = listGraphUnavailableArrivals.Item2.Select(c => new { c.UnavailableMotiveN, c.Percentage, c.ByUser, c.Arrivals }).ToList();
+      var list2 = listGraphUnavailableArrivals.Item3.Select(c => new { c.UnavailableMotiveN, c.Percentage, c.ByUser, c.Arrivals }).ToList();
+
+      DataTable dtData1 = TableHelper.GetDataTableFromList(list1, replaceStringNullOrWhiteSpace: true);
+      DataTable dtData2 = TableHelper.GetDataTableFromList(list2, replaceStringNullOrWhiteSpace: true);
+      return null;
+      //return EpplusHelper.CreateGraphExcel(filters, listGraphUnavailableArrivals.Item1, dtData1, dtData2, reportname, dateRangeFileNameRep, clsFormatReport.GetGraphUnavailableArrivalsFormat(), clsFormatReport.GetGraphUnavailableArrivalsFormat());
+    }
   }
 }

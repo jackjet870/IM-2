@@ -3,19 +3,29 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.MailOuts.Forms"
         xmlns:Classes="clr-namespace:IM.MailOuts.Classes" x:Class="IM.MailOuts.Forms.frmMailOuts"
-        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
 		mc:Ignorable="d"
 		Title="MailOuts" Height="440" Width="1150" WindowState="Maximized" WindowStartupLocation="CenterScreen"
 		KeyDown="frmMailOuts_KeyDown" ContentRendered="frmMailOuts_ContentRendered" Loaded="frmMailOuts_Loaded" IsKeyboardFocusedChanged="frmMailOuts_IsKeyboardFocusedChanged">
 
     <Window.Resources>
         <!--#region ViewSource-->
-        <CollectionViewSource x:Key="languageShortViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:LanguageShort}, CreateList=True}" />
-        <CollectionViewSource x:Key="mailOutTextByLeadSourceViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:MailOutTextByLeadSource}, CreateList=True}" />
+        <CollectionViewSource x:Key="languageViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:Language}, CreateList=True}" />
+        <CollectionViewSource x:Key="mailOutTextViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:MailOutText}, CreateList=True}" />
         <CollectionViewSource x:Key="objGuestsMailOutsViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestsMailOuts}, CreateList=True}" />
         <!--#endregion-->
+        <Style TargetType="{x:Type DataGrid}">
+            <Setter Property="AlternatingRowBackground" Value="LightGray" />
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{x:Static SystemColors.HighlightColor}" />
+            </Style.Resources>
+        </Style>
+        <Style TargetType="{x:Type ListBox}">
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{x:Static SystemColors.HighlightColor}" />
+            </Style.Resources>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -73,11 +83,11 @@
             <!--#region Lista de Mailt Outs Text y Languages-->
             <GroupBox x:Name="grbMailOuts" Grid.Column="2">
                 <StackPanel Orientation="Horizontal">
-                    <StackPanel Width="150"  Margin="5,0,0,0" DataContext="{StaticResource mailOutTextByLeadSourceViewSource}">
+                    <StackPanel Width="150"  Margin="5,0,0,0" DataContext="{StaticResource mailOutTextViewSource}">
                         <TextBlock Text="Mail Outs" HorizontalAlignment="Center" />
                         <ListBox x:Name="ltsbMailOuts"  ItemsSource="{Binding}" Height="60" DisplayMemberPath="mtmoCode" SelectedValuePath="mtmoCode" />
                     </StackPanel>
-                    <StackPanel Width="150" Margin="5,0,0,0"  DataContext="{StaticResource languageShortViewSource}">
+                    <StackPanel Width="150" Margin="5,0,0,0"  DataContext="{StaticResource languageViewSource}">
                         <TextBlock Text="Languages" HorizontalAlignment="Center" />
                         <ListBox  x:Name="ltsbLanguages" DisplayMemberPath="laN" SelectedValuePath="laID" ItemsSource="{Binding}" Height="60" />
                     </StackPanel>
@@ -192,9 +202,9 @@
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridComboBoxColumn Header="Mail Out" SelectedValueBinding="{Binding gumo}" SelectedValuePath="mtmoCode" DisplayMemberPath="mtmoCode"
-					ItemsSource="{Binding Source={StaticResource mailOutTextByLeadSourceViewSource}}" />
+					ItemsSource="{Binding Source={StaticResource mailOutTextViewSource}}" />
                 <DataGridComboBoxColumn Header="Language" SelectedValueBinding="{Binding gula}" SelectedValuePath="laID" DisplayMemberPath="laN"
-					ItemsSource="{Binding Source={StaticResource languageShortViewSource}}" />
+					ItemsSource="{Binding Source={StaticResource languageViewSource}}" />
                 <DataGridCheckBoxColumn Header="Print" Binding="{Binding gumoA}" />
                 <DataGridTextColumn Header="Comments" Binding="{Binding guComments}"  IsReadOnly="True" Width="*" />
             </DataGrid.Columns>

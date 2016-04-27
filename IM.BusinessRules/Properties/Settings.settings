@@ -104,5 +104,23 @@
     <Setting Name="USP_OR_RptProductionByAgeOutside_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">120</Value>
     </Setting>
+    <Setting Name="USP_OR_GraphNotBookingArrivals_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptUnavailableMotivesByAgency_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptShowFactorByBookingDate_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByAgencyMonthly_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
+    </Setting>
+    <Setting Name="USP_OR_GraphUnavailableArrivals_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_GraphProduction_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

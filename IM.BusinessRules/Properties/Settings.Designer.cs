@@ -430,5 +430,76 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_RptProductionByAgeOutside_Timeout"] = value;
             }
         }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_GraphNotBookingArrivals_Timeout {
+            get {
+                return ((int)(this["USP_OR_GraphNotBookingArrivals_Timeout"]));
+            }
+            set {
+                this["USP_OR_GraphNotBookingArrivals_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptUnavailableMotivesByAgency_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptUnavailableMotivesByAgency_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptUnavailableMotivesByAgency_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptShowFactorByBookingDate_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptShowFactorByBookingDate_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptShowFactorByBookingDate_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_OR_RptProductionByAgencyMonthly_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByAgencyMonthly_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByAgencyMonthly_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_GraphUnavailableArrivals_Timeout {
+            get {
+                return ((int)(this["USP_OR_GraphUnavailableArrivals_Timeout"]));
+            }
+            set {
+                this["USP_OR_GraphUnavailableArrivals_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_GraphProduction_Timeout {
+            get {
+                return ((int)(this["USP_OR_GraphProduction_Timeout"]));
+            }
+            set {
+                this["USP_OR_GraphProduction_Timeout"] = value;
+            }
+        }
     }
 }

@@ -197,7 +197,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <ComboBox Name="cboDate" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="21" Margin="10 5 10 5" SelectionChanged="cboDate_SelectionChanged" />
+                    <ComboBox Name="cboDate" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="21" Margin="10 5 10 5" DisplayMemberPath="Value" SelectedValuePath="Key" SelectionChanged="cboDate_SelectionChanged" />
                     <Label Grid.Row="1" VerticalAlignment="Center" Content="From" HorizontalContentAlignment="Right" FontWeight="Bold" />
                     <Grid Name="pnlDtmStart" Grid.Row="1" Grid.Column="1">
                         <xctk:DateTimePicker Name="dtmStart" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" Value="{x:Static sys:DateTime.Today}" Format="Custom" FormatString="ddd d MMM yyyy" Width="130" />

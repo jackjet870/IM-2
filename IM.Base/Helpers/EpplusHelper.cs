@@ -948,7 +948,7 @@ namespace IM.Base.Helpers
     {
       ExcelWorkbook excelWorkbook = tableData.WorkSheet.Workbook;
       //Agregamos estilo a los Headers de la Tabla
-      ExcelNamedStyleXml namedStyle = excelWorkbook.Styles.CreateNamedStyle("HeaderRowCellStyle");
+      ExcelNamedStyleXml namedStyle = excelWorkbook.Styles.CreateNamedStyle(tableData.Name + "HeaderRowCellStyle");
       namedStyle.Style.Font.Bold = true;
       namedStyle.Style.Font.Size = 14;
       tableData.HeaderRowCellStyle = namedStyle.Name;
@@ -956,7 +956,7 @@ namespace IM.Base.Helpers
       int contColumn = 0;
       foreach (ExcelFormatTable item in formatColumns)
       {
-        ExcelNamedStyleXml tableStyle = excelWorkbook.Styles.CreateNamedStyle("TableColumnStyle" + contColumn);
+        ExcelNamedStyleXml tableStyle = excelWorkbook.Styles.CreateNamedStyle(tableData.Name + "TableColumnStyle" + contColumn);
         tableStyle.Style.HorizontalAlignment = item.Alignment;
         switch (item.Format)
         {

@@ -20,6 +20,7 @@ namespace IM.MailOuts.Forms
   /// </summary>
   /// <history>
   /// [aalcocer] 24/02/2016 Created
+  /// [aalcocer] 21/04/2016 Modified. Se cambian los tipos de entidades de las listas de _ltsLanguages y _ltsMailOutTexts.
   /// </history>
   public partial class frmMailOuts : Window
   {
@@ -28,11 +29,11 @@ namespace IM.MailOuts.Forms
     private DateTime _dtmServerdate = new DateTime();
     private List<GuestMailOutsText> _guestMailOutsText = new List<GuestMailOutsText>();
     private List<GuestMailOut> _ltsGuestsMailOuts = new List<GuestMailOut>();
-    private List<LanguageShort> _ltsLanguages = new List<LanguageShort>();
-    private List<MailOutTextByLeadSource> _ltsMailOutTextsByLeadSource = new List<MailOutTextByLeadSource>();
+    private List<Language> _ltsLanguages = new List<Language>();
+    private List<MailOutText> _ltsMailOutTexts = new List<MailOutText>();
     private rptMailOuts _rptMailOuts = new rptMailOuts();
-    private CollectionViewSource _languageShortViewSource;
-    private CollectionViewSource _mailOutTextByLeadSourceViewSource;
+    private CollectionViewSource _languageViewSource;
+    private CollectionViewSource _mailOutTextViewSource;
     private CollectionViewSource _objGuestsMailOutsViewSource;
 
     #endregion Atributos
@@ -98,8 +99,8 @@ namespace IM.MailOuts.Forms
     {
       dtgDatos.SelectedItems.OfType<GuestMailOut>().ToList().ForEach(item =>
       {
-        item.gula = ((LanguageShort)ltsbLanguages.SelectedItem).laID;
-        item.gumo = ((MailOutTextByLeadSource)ltsbMailOuts.SelectedItem).mtmoCode;
+        item.gula = ((Language)ltsbLanguages.SelectedItem).laID;
+        item.gumo = ((MailOutText)ltsbMailOuts.SelectedItem).mtmoCode;
       });
 
       dtgDatos.Items.Refresh();
@@ -195,8 +196,8 @@ namespace IM.MailOuts.Forms
       txtUser.Text = App.User.User.peN;
       txtLocation.Text = App.User.LeadSource.lsN;
       _objGuestsMailOutsViewSource = ((CollectionViewSource)(this.FindResource("objGuestsMailOutsViewSource")));
-      _languageShortViewSource = ((CollectionViewSource)(this.FindResource("languageShortViewSource")));
-      _mailOutTextByLeadSourceViewSource = ((CollectionViewSource)(this.FindResource("mailOutTextByLeadSourceViewSource")));
+      _languageViewSource = ((CollectionViewSource)(this.FindResource("languageViewSource")));
+      _mailOutTextViewSource = ((CollectionViewSource)(this.FindResource("mailOutTextViewSource")));
     }
 
     /// <summary>
@@ -210,14 +211,14 @@ namespace IM.MailOuts.Forms
     {
       //armamos la lista del combo de idiomas
       StaStart("Loading languages...");
-      _ltsLanguages = BRLanguages.GetLanguages(1);
-      _languageShortViewSource.Source = _ltsLanguages;
+      _ltsLanguages = BRLanguages.GetLanguages(nStatus: 1);
+      _languageViewSource.Source = _ltsLanguages;
 
       //cargamos los mail outs
       StaStart("Loading mail outs...");
-      _ltsMailOutTextsByLeadSource = BRMailOutTexts.GetMailOutTextsByLeadSource(App.User.LeadSource.lsID, true);
+      _ltsMailOutTexts = BRMailOutTexts.GetMailOutTexts(App.User.LeadSource.lsID, status: 1);
 
-      _mailOutTextByLeadSourceViewSource.Source = _ltsMailOutTextsByLeadSource.Where(x => x.mtla == "EN");
+      _mailOutTextViewSource.Source = _ltsMailOutTexts.Where(x => x.mtla == "EN");
 
       // procesamos los huespedes para asignarle automaticamente un mail out en base a los criterios definidos
       BRMailOuts.ProcessMailOuts(App.User.LeadSource.lsID);
@@ -265,10 +266,11 @@ namespace IM.MailOuts.Forms
     {
       Thread.CurrentThread.CurrentCulture = new CultureInfo("es-MX");
 
-      string strPrintedBy = App.User.User.peID + " " + String.Format("{0:ddd dd MMM yy }", DateTime.Now) + " " + DateTime.Now.ToShortTimeString();
+      string strPrintedBy = App.User.User.peID + " " + string.Format("{0:ddd dd MMM yy }", DateTime.Now) + " " + DateTime.Now.ToShortTimeString();
 
       _guestMailOutsText = (from gmo in dtgDatos.Items.OfType<GuestMailOut>()
-                            join mot in _ltsMailOutTextsByLeadSource on new { a = gmo.gumo, b = gmo.gula } equals new { a = mot.mtmoCode, b = mot.mtla }
+                            join mot in _ltsMailOutTexts on new { a = gmo.gumo, b = gmo.gula } equals new { a = mot.mtmoCode, b = mot.mtla }
+                            join lan in _ltsLanguages on mot.mtla equals lan.laID
                             where gmo.gumo != null && gmo.gula != null && gmo.gumoA
                             select new GuestMailOutsText
                             {
@@ -277,12 +279,13 @@ namespace IM.MailOuts.Forms
                               Replace("<PickUp>", gmo.guPickUpT?.ToShortTimeString() ?? "<PickUp>").
                               Replace("<Agency>", gmo.guag).Replace("<RoomNum>", gmo.guRoomNum).Replace("<PRCode>", gmo.guPRInvit1).Replace("<PRName>", gmo.peN).
                               Replace("<PrintedBy>", strPrintedBy),
-                              MrMrs = mot.laMrMrs,
+                              MrMrs = lan.laMrMrs,
                               LastName = gmo.guLastName1,
-                              Room = mot.laRoom,
+                              Room = lan.laRoom,
                               RoomNum = gmo.guRoomNum
                             }).ToList();
       _rptMailOuts.Load();
+
       _rptMailOuts.SetDataSource(_guestMailOutsText);
     }
 

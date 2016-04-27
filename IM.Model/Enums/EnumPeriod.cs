@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace IM.Model.Enums
 {
@@ -11,11 +7,16 @@ namespace IM.Model.Enums
   /// </summary>
   ///  <history>
   /// [edgrodriguez] 03/Mar/2016 Created
+  /// [aalcocer]     22/04/2016  Modified. Se cambian los nombres y se agrega Descripcion
   /// </history>
   public enum EnumPeriod
   {
-    pdNone,
-    pdWeekly,
-    pdMonthly
+    None,
+
+    [Description("Weekly")]
+    Weekly,
+
+    [Description("Monthly")]
+    Monthly
   }
 }

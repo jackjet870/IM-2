@@ -158,8 +158,8 @@
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\IM.MailOuts.Classes.ObjGuestsMailOuts.datasource" />
-    <None Include="Properties\DataSources\IM.Model.LanguageShort.datasource" />
-    <None Include="Properties\DataSources\IM.Model.MailOutTextByLeadSource.datasource" />
+    <None Include="Properties\DataSources\IM.Model.Language.datasource" />
+    <None Include="Properties\DataSources\IM.Model.MailOutText.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

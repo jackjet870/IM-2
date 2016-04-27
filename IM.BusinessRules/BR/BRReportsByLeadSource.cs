@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace IM.BusinessRules.BR
 {
-  public class BRReportsByLeadSource
+  public static class BRReportsByLeadSource
   {
     #region GetRptCostByPR
 
@@ -156,6 +156,194 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion GetRptRepsPaymentSummaries
+
+    #region GetRptProductionByGiftQuantities
+
+    /// <summary>
+    /// Devuelve los datos para el reporte de produccion por regalo y cantidad
+    /// </summary>
+    /// <param name="dtmStart">Fecha desde</param>
+    /// <param name="dtmEnd">Fecha hasta</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <param name="giftsQuantitys">Lista de cantidades y regalos. Por ejemplo: 2-GORRAS,5-PLAYERAS,3-BATAS</param>
+    /// <param name="considerQuinellas">Indica si se debe considerar quinielas</param>
+    /// <param name="basedOnArrival">Indica si se debe basar en la fecha de llegada</param>
+    /// <returns><list type="RptProductionByGiftQuantity"></list></returns>
+    /// <history>
+    /// [aalcocer] 19/04/2016 Created
+    /// </history>
+    public static List<RptProductionByGiftQuantity> GetRptProductionByGiftQuantities(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
+      Dictionary<string, int> giftsQuantitys, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByGiftQuantity_Timeout;
+        return dbContext.USP_OR_RptProductionByGiftQuantity(dtmStart, dtmEnd, string.Join(",", leadSources), string.Join(",", giftsQuantitys.Select(c => c.Value + "-" + c.Key)),
+          Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival)).ToList();
+      }
+    }
+
+    #endregion GetRptProductionByGiftQuantities
+
+    #region GetGraphNotBookingArrival
+
+    /// <summary>
+    /// Devuelve los datos para el reporte de llegadas no booking
+    /// </summary>
+    /// <param name="dtmStart">Fecha desde de la semana</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <returns><!--Tuple<GraphTotals, List<GraphNotBookingArrivals>, List<GraphNotBookingArrivals>>--></returns>
+    /// <history>
+    /// [aalcocer] 21/04/2016 Created
+    /// </history>
+    public static Tuple<GraphTotals, List<GraphNotBookingArrivals>, List<GraphNotBookingArrivals>> GetGraphNotBookingArrival(DateTime dtmStart, IEnumerable<string> leadSources)
+    {
+      GraphTotals graphTotals;
+      List<GraphNotBookingArrivals> graphNotBookingArrivalsWeek = new List<GraphNotBookingArrivals>();
+      List<GraphNotBookingArrivals> graphNotBookingArrivalsMonth = new List<GraphNotBookingArrivals>();
+
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.Database.CommandTimeout = Settings.Default.USP_OR_GraphNotBookingArrivals_Timeout;
+        var resGraphNotBookingArrivalsTotals = dbContext.USP_OR_GraphNotBookingArrivals(dtmStart, string.Join(",", leadSources));
+        graphTotals = resGraphNotBookingArrivalsTotals.SingleOrDefault();
+
+        var resGraphNotBookingArrivalsWeek = resGraphNotBookingArrivalsTotals.GetNextResult<GraphNotBookingArrivals>();
+        graphNotBookingArrivalsWeek.AddRange(resGraphNotBookingArrivalsWeek);
+
+        var resGraphNotBookingArrivalsMonth = resGraphNotBookingArrivalsWeek.GetNextResult<GraphNotBookingArrivals>();
+        graphNotBookingArrivalsMonth.AddRange(resGraphNotBookingArrivalsMonth);
+      }
+      return (graphNotBookingArrivalsWeek.Any() || graphNotBookingArrivalsMonth.Any()) ? Tuple.Create(graphTotals, graphNotBookingArrivalsWeek, graphNotBookingArrivalsMonth) : null;
+    }
+
+    #endregion GetGraphNotBookingArrival
+
+    #region GetGraphUnavailableArrivals
+
+    /// <summary>
+    /// Devuelve los datos para la grafica de llegadas no disponibles
+    /// </summary>
+    /// <param name="dtmStart">Fecha desde de la semana</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <returns><!--Tuple<GraphTotals, List<GraphUnavailableArrivals>, List<GraphUnavailableArrivals>>--></returns>
+    /// <history>
+    /// [aalcocer] 21/04/2016 Created
+    /// </history>
+    public static Tuple<GraphTotals, List<GraphUnavailableArrivals>, List<GraphUnavailableArrivals>> GetGraphUnavailableArrivals(DateTime dtmStart, IEnumerable<string> leadSources)
+    {
+      GraphTotals graphTotals;
+      List<GraphUnavailableArrivals> graphUnavailableArrivalsWeek = new List<GraphUnavailableArrivals>();
+      List<GraphUnavailableArrivals> graphUnavailableArrivalsMonth = new List<GraphUnavailableArrivals>();
+
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.Database.CommandTimeout = Settings.Default.USP_OR_GraphUnavailableArrivals_Timeout;
+        var resGraphTotals = dbContext.USP_OR_GraphUnavailableArrivals(dtmStart, string.Join(",", leadSources));
+        graphTotals = resGraphTotals.SingleOrDefault();
+
+        var resGraphUnavailableArrivalsWeek = resGraphTotals.GetNextResult<GraphUnavailableArrivals>();
+        graphUnavailableArrivalsWeek.AddRange(resGraphUnavailableArrivalsWeek);
+
+        var resGraphUnavailableArrivalsMonth = resGraphUnavailableArrivalsWeek.GetNextResult<GraphUnavailableArrivals>();
+        graphUnavailableArrivalsMonth.AddRange(resGraphUnavailableArrivalsMonth);
+      }
+      return (graphUnavailableArrivalsWeek.Any() || graphUnavailableArrivalsMonth.Any()) ? Tuple.Create(graphTotals, graphUnavailableArrivalsWeek, graphUnavailableArrivalsMonth) : null;
+    }
+
+    #endregion GetGraphUnavailableArrivals
+
+    #region GetGraphProduction
+
+    /// <summary>
+    /// Devuelve los datos para la grafica de produccion
+    /// </summary>
+    /// <param name="dtmStart">Fecha desde de la semana</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <param name="considerQuinellas">Indica si se debe considerar quinielas</param>
+    /// <param name="basedOnArrival">Indica si se debe basar en la fecha de llegada</param>
+    /// <returns><!--Tuple<GraphMaximum, List<GraphProduction_Weeks>, List<GraphProduction_Months>>--></returns>
+    /// <history>
+    /// [aalcocer] 21/04/2016 Created
+    /// </history>
+    public static Tuple<GraphMaximum, List<GraphProduction_Weeks>, List<GraphProduction_Months>> GetGraphProduction(DateTime dtmStart, IEnumerable<string> leadSources,
+      EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+    {
+      GraphMaximum graphMaximum;
+      List<GraphProduction_Weeks> listGraphProductionWeeks = new List<GraphProduction_Weeks>();
+      List<GraphProduction_Months> listGraphProductionMonths = new List<GraphProduction_Months>();
+
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.Database.CommandTimeout = Settings.Default.USP_OR_GraphProduction_Timeout;
+        var resGraphProductionWeeks = dbContext.USP_OR_GraphProduction(dtmStart, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival));
+        listGraphProductionWeeks.AddRange(resGraphProductionWeeks);
+
+        var resGraphProductionMonths = resGraphProductionWeeks.GetNextResult<GraphProduction_Months>();
+        listGraphProductionMonths.AddRange(resGraphProductionMonths);
+
+        var resGraphMaximum = resGraphProductionMonths.GetNextResult<GraphMaximum>();
+        graphMaximum = resGraphMaximum.SingleOrDefault();
+      }
+      return Tuple.Create(graphMaximum, listGraphProductionWeeks, listGraphProductionMonths);
+    }
+
+    #endregion GetGraphProduction
+
+    #region GetRptUnavailableMotivesByAgencies
+
+    /// <summary>
+    /// Devuelve los datos para el reporte de Unavailable Motives by Angency
+    /// </summary>
+    /// <param name="dtmStart">Fecha desde</param>
+    /// <param name="dtmEnd">Fecha hasta</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <param name="markets">Claves de mercados</param>
+    /// <param name="agencies">Claves de agencias</param>
+    /// <returns><list type="RptUnavailableMotivesByAgency"></list></returns>
+    /// <history>
+    /// [aalcocer] 21/04/2016 Created
+    /// </history>
+    public static List<RptUnavailableMotivesByAgency> GetRptUnavailableMotivesByAgencies(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
+      IEnumerable<string> markets = null, IEnumerable<string> agencies = null)
+    {
+      if (markets == null || !markets.Any())
+        markets = new[] { "ALL" };
+
+      if (agencies == null || !agencies.Any())
+        agencies = new[] { "ALL" };
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptUnavailableMotivesByAgency_Timeout;
+        return dbContext.USP_OR_RptUnavailableMotivesByAgency(dtmStart, dtmEnd, string.Join(",", leadSources), string.Join(",", markets), string.Join(",", agencies)).ToList();
+      }
+    }
+
+    #endregion GetRptUnavailableMotivesByAgencies
+
+    #region GetRptShowFactorByBookingDates
+
+    /// <summary>
+    /// Devuelve los datos para el reporte de porcentaje de show por fecha de booking
+    /// </summary>
+    /// <param name="dtmStart">Fecha desde</param>
+    /// <param name="dtmEnd">Fecha hasta</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <param name="considerQuinellas">Indica si se debe considerar quinielas</param>
+    /// <returns><list type="RptShowFactorByBookingDate"></list></returns>
+    /// <history>
+    /// [aalcocer] 21/04/2016 Created
+    /// </history>
+    public static List<RptShowFactorByBookingDate> GetRptShowFactorByBookingDates(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptShowFactorByBookingDate_Timeout;
+        return dbContext.USP_OR_RptShowFactorByBookingDate(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas)).ToList();
+      }
+    }
+
+    #endregion GetRptShowFactorByBookingDates
 
     #region Inhouse
 
@@ -674,7 +862,6 @@ namespace IM.BusinessRules.BR
         var lstGuest = dbContext.Guests.Where(c => c.guInvit).ToList();
         var lstBookingDeposits = dbContext.BookingDeposits.ToList();
 
-
         var lstDepositsPaymentByPR = dbContext.USP_OR_RptDepositsPaymentByPR(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), paymentTypes, Convert.ToByte(filtDeposit)).ToList();
         var lstDepPayByPRWhithGuest = (from dpsitPayByPR in lstDepositsPaymentByPR.Select(c => c.PR).Distinct()
                                        join gu in lstGuest on dpsitPayByPR equals gu.guPRInvit1
@@ -742,6 +929,7 @@ namespace IM.BusinessRules.BR
     #endregion GetRptGuestsShowNoPresentedInvitation
 
     #region GetRptProductionByPROuthouse
+
     /// <summary>
     /// Obtiene los datos para el reporte de produccion por PR (Outside)
     /// </summary>
@@ -752,7 +940,7 @@ namespace IM.BusinessRules.BR
     /// <param name="program">Clave de Programa</param>
     /// <param name="filterDeposit">
     /// Filtro de positos. 0. Sin filtro, 1. Con deposito(Deposits), 2. Sin deposito (Flyers),
-    /// 3. Con deposito y shows sin deposito (Deposits & Flyers Show) 
+    /// 3. Con deposito y shows sin deposito (Deposits & Flyers Show)
     /// </param>
     /// <param name="basedOnBooking">Indica si se debe basar en la fecha de booking</param>
     /// <history>
@@ -766,7 +954,8 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_RptProductionByPROutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(programa), Convert.ToByte(filterDeposit), Convert.ToBoolean(basedOnBooking)).ToList();
       }
     }
-    #endregion
+
+    #endregion GetRptProductionByPROuthouse
 
     #region GetRptProductionByAge
 
@@ -794,6 +983,7 @@ namespace IM.BusinessRules.BR
     #endregion GetRptProductionByAge
 
     #region GetRptProductionByAgeSalesRoomOuthouse
+
     /// <summary>
     ///   Obtiene los datos para el reporte de produccion por edad y sala (Outside)
     /// </summary>
@@ -816,9 +1006,11 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_RptProductionByAgeSalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposit)).ToList();
       }
     }
-    #endregion
+
+    #endregion GetRptProductionByAgeSalesRoomOuthouse
 
     #region GetRptProductionByAgencyOuthouse
+
     /// <summary>
     ///   Obtiene los datos para el reporte de produccion por agencia (Outside)
     /// </summary>
@@ -841,9 +1033,11 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_RptProductionByAgencyOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToBoolean(salesByMemberShipType)).ToList();
       }
     }
-    #endregion
+
+    #endregion GetRptProductionByAgencyOuthouse
 
     #region GetRptProductionByAgencySalesRoomOuthouse
+
     /// <summary>
     ///  Obtiene los datos para el reporte de produccion por agencia y sala (Outside)
     /// </summary>
@@ -866,9 +1060,11 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_RptProductionByAgencySalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToBoolean(salesByMemberShipType)).ToList();
       }
     }
-    #endregion
+
+    #endregion GetRptProductionByAgencySalesRoomOuthouse
 
     #region GetRptProductionByAgencyMarketHotelOuthouse
+
     /// <summary>
     /// Obtiene los datos para el reporte de produccion por agencia, mercado y hotel (Outside)
     /// </summary>
@@ -891,9 +1087,11 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_RptProductionByAgencyMarketHotelOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposit)).ToList();
       }
     }
-    #endregion
+
+    #endregion GetRptProductionByAgencyMarketHotelOuthouse
 
     #region GetRptProductionByCoupleTypeOuthouse
+
     /// <summary>
     ///  Obtiene los datos para el reporte de produccion por tipo de pareja (Outside)
     /// </summary>
@@ -915,9 +1113,11 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_RptProductionByCoupleTypeOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
       }
     }
-    #endregion
+
+    #endregion GetRptProductionByCoupleTypeOuthouse
 
     #region GetRptProductionByCoupleTypeSalesRoomOuthouse
+
     /// <summary>
     ///  Obtiene los datos para el reporte de produccion por tipo de pareja y sala (Outside)
     /// </summary>
@@ -939,9 +1139,11 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_RptProductionByCoupleTypeSalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
       }
     }
-    #endregion
+
+    #endregion GetRptProductionByCoupleTypeSalesRoomOuthouse
 
     #region GetRptProductionByGiftInvitation
+
     /// <summary>
     ///   Obtiene los datos para el reporte de produccion por regalo de invitacion
     /// </summary>
@@ -961,13 +1163,15 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-         dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByGiftInvitation_Timeout;
+        dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByGiftInvitation_Timeout;
         return dbContext.USP_OR_RptProductionByGiftInvitation(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), gifts, Convert.ToByte(filterDeposits)).ToList();
       }
     }
-    #endregion
+
+    #endregion GetRptProductionByGiftInvitation
 
     #region GetRptProductionByGiftInvitationSalesRoom
+
     /// <summary>
     ///   Obtiene los datos para el reporte de produccion por regalo de invitacion y sala
     /// </summary>
@@ -990,11 +1194,13 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_RptProductionByGiftInvitationSalesRoom(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), gifts, Convert.ToByte(filterDeposits)).ToList();
       }
     }
-    #endregion
+
+    #endregion GetRptProductionByGiftInvitationSalesRoom
 
     #region GetProductionByGuestStatusOuthouse
+
     /// <summary>
-    ///   Obtiene los datos para el reporte de produccion por estatus de huesped (Outside) 
+    ///   Obtiene los datos para el reporte de produccion por estatus de huesped (Outside)
     /// </summary>
     /// <param name="dtmStart">Fecha desde</param>
     /// <param name="dtmEnd">Fecha hasta</param>
@@ -1014,9 +1220,11 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_RptProductionByGuestStatusOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
       }
     }
-    #endregion
+
+    #endregion GetProductionByGuestStatusOuthouse
 
     #region GetProductionByNationalityOuthouse
+
     /// <summary>
     ///   Obtiene los datos para el reporte de produccion por nacionalidad (outside)
     /// </summary>
@@ -1034,16 +1242,18 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [vku] 22/Abr/2016 Created
     /// </history>
-    public static List<RptProductionByNationalityOuthouse> GetRptProductionByNationalityOuthouse(DateTime dtmStart, DateTime dtmEnd,string leadSources, string PRs,EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSaveCourtesyTours saveCourtesyTours = EnumSaveCourtesyTours.sctIncludeSaveCourtesyTours)
+    public static List<RptProductionByNationalityOuthouse> GetRptProductionByNationalityOuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSaveCourtesyTours saveCourtesyTours = EnumSaveCourtesyTours.sctIncludeSaveCourtesyTours)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         return dbContext.USP_OR_RptProductionByNationalityOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToByte(saveCourtesyTours)).ToList();
       }
     }
-    #endregion
+
+    #endregion GetProductionByNationalityOuthouse
 
     #region GetProductionByNationalitySalesRoomOuthouse
+
     /// <summary>
     ///  Obtienes los datos para el reporte de produccion por nacionalidad y sala (Outside)
     /// </summary>
@@ -1068,9 +1278,11 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_RptProductionByNationalitySalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToByte(saveCourtesyTours)).ToList();
       }
     }
-    #endregion
+
+    #endregion GetProductionByNationalitySalesRoomOuthouse
 
     #region GetRptProductionbyPRSalesRoomOuthouse
+
     /// <summary>
     ///  Obtiene los datos para el reporte de produccion por PR y sala (Outside)
     /// </summary>
@@ -1081,7 +1293,7 @@ namespace IM.BusinessRules.BR
     /// <param name="program">Clave de Programa</param>
     /// <param name="filterDeposit">
     /// Filtro de positos. 0. Sin filtro, 1. Con deposito(Deposits), 2. Sin deposito (Flyers),
-    /// 3. Con deposito y shows sin deposito (Deposits & Flyers Show) 
+    /// 3. Con deposito y shows sin deposito (Deposits & Flyers Show)
     /// </param>
     /// <param name="basedOnBooking">Indica si se debe basar en la fecha de booking</param>
     /// <history>
@@ -1094,9 +1306,11 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_RptProductionByPRSalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposit), Convert.ToBoolean(basedOnBooking)).ToList();
       }
     }
-    #endregion
+
+    #endregion GetRptProductionbyPRSalesRoomOuthouse
 
     #region GetRptProductionbyPRContacOuthouse
+
     /// <summary>
     ///  Obtiene los datos de production por PR de contactos (Outside)
     /// </summary>
@@ -1107,7 +1321,7 @@ namespace IM.BusinessRules.BR
     /// <param name="program">Clave de programa</param>
     /// <param name="filterDeposit">
     /// Filtro de positos. 0. Sin filtro, 1. Con deposito(Deposits), 2. Sin deposito (Flyers),
-    /// 3. Con deposito y shows sin deposito (Deposits & Flyers Show) 
+    /// 3. Con deposito y shows sin deposito (Deposits & Flyers Show)
     /// </param>
     /// <history>
     ///   [vku] 25/Abr/2016 Created
@@ -1119,8 +1333,9 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_RptProductionByPRContactOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
       }
     }
-    #endregion
 
-    #endregion
+    #endregion GetRptProductionbyPRContacOuthouse
+
+    #endregion Outhouse
   }
 }
