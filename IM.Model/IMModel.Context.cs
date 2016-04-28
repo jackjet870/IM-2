@@ -4517,5 +4517,54 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_DeleteGuest", guestParameter);
         }
+    
+        public virtual ObjectResult<RptProductionByMember> USP_OR_RptProductionByMember(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string pRs, string program, string application, Nullable<decimal> company, Nullable<int> club, Nullable<bool> onlyWholesalers, Nullable<bool> considerQuinellas, Nullable<bool> basedOnArrival)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var pRsParameter = pRs != null ?
+                new ObjectParameter("PRs", pRs) :
+                new ObjectParameter("PRs", typeof(string));
+    
+            var programParameter = program != null ?
+                new ObjectParameter("Program", program) :
+                new ObjectParameter("Program", typeof(string));
+    
+            var applicationParameter = application != null ?
+                new ObjectParameter("Application", application) :
+                new ObjectParameter("Application", typeof(string));
+    
+            var companyParameter = company.HasValue ?
+                new ObjectParameter("Company", company) :
+                new ObjectParameter("Company", typeof(decimal));
+    
+            var clubParameter = club.HasValue ?
+                new ObjectParameter("Club", club) :
+                new ObjectParameter("Club", typeof(int));
+    
+            var onlyWholesalersParameter = onlyWholesalers.HasValue ?
+                new ObjectParameter("OnlyWholesalers", onlyWholesalers) :
+                new ObjectParameter("OnlyWholesalers", typeof(bool));
+    
+            var considerQuinellasParameter = considerQuinellas.HasValue ?
+                new ObjectParameter("ConsiderQuinellas", considerQuinellas) :
+                new ObjectParameter("ConsiderQuinellas", typeof(bool));
+    
+            var basedOnArrivalParameter = basedOnArrival.HasValue ?
+                new ObjectParameter("BasedOnArrival", basedOnArrival) :
+                new ObjectParameter("BasedOnArrival", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionByMember>("USP_OR_RptProductionByMember", dateFromParameter, dateToParameter, leadSourcesParameter, pRsParameter, programParameter, applicationParameter, companyParameter, clubParameter, onlyWholesalersParameter, considerQuinellasParameter, basedOnArrivalParameter);
+        }
     }
 }
