@@ -304,7 +304,7 @@
                                 <DataGrid Grid.ColumnSpan="3" Grid.Row="0" Name="dtgGifts"  AutoGenerateColumns="False"
                                                         CanUserAddRows="True" CanUserSortColumns="False"
                                                         CellEditEnding="cellEditEnding"
-                                                        ItemsSource="{Binding Source={StaticResource objInvitGiftViewSource}}" PreviewTextInput="dtgGifts_PreviewTextInput">
+                                                        ItemsSource="{Binding Source={StaticResource objInvitGiftViewSource}}" PreviewTextInput="dtgGifts_PreviewTextInput" RowEditEnding="dtgGifts_RowEditEnding">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Binding="{Binding igQty, ValidatesOnDataErrors=True}" Header="Qty"/>
                                         <DataGridTextColumn Binding="{Binding iggi}" Header="iggi" Visibility="Hidden"/>

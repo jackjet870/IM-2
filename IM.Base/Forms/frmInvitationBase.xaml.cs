@@ -13,6 +13,7 @@ using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Base.Reports;
+using System.Text;
 
 namespace IM.Base.Forms
 {
@@ -759,12 +760,14 @@ namespace IM.Base.Forms
           else
           {
             _qtyGift = qty;
+            _lstObjInvitGift[e.Row.GetIndex()].igQty = qty;
           }
           break;
         case "iggi":
           var iggi = e.EditingElement as ComboBox;
-          if (!String.IsNullOrEmpty(iggi.SelectedValue.ToString()))
+          if (iggi.SelectedValue != null && !String.IsNullOrEmpty(iggi.SelectedValue.ToString()))
           {
+            _lstObjInvitGift[e.Row.GetIndex()].iggi = iggi.SelectedValue.ToString();
             _lstObjInvitGift[e.Row.GetIndex()].igAdults = 1;
           }
           break;
@@ -790,8 +793,6 @@ namespace IM.Base.Forms
           }
           break;
       }
-      CalculateCostsPrices();
-      CalculateTotalGifts();
     }
 
     /// <summary>
@@ -801,10 +802,18 @@ namespace IM.Base.Forms
     /// <param name="e"></param>
     private void dtgGifts_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
     {
-      if (e.Text == ".")
-        e.Handled = false;
-      else if (!char.IsDigit(e.Text, e.Text.Length - 1))
-        e.Handled = true;
+      switch (dtgGifts.CurrentCell.Column.SortMemberPath)
+      {
+        case "igQty":
+        case "igAdults":
+        case "igMinors":
+        case "igExtraAdults":
+          if (e.Text == ".")
+            e.Handled = false;
+          else if (!char.IsDigit(e.Text, e.Text.Length - 1))
+            e.Handled = true;
+        break;
+      }
     }
     #endregion
 
@@ -1869,7 +1878,7 @@ namespace IM.Base.Forms
       guestStatusTypeViewSource.Source = IM.BusinessRules.BR.BRGuests.GetGuestStatusType(1);
 
       giftShortViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("giftShortViewSource")));
-      giftShortViewSource.Source = IM.BusinessRules.BR.BRGifts.GetGifts();
+      giftShortViewSource.Source = IM.BusinessRules.BR.BRGifts.GetGifts(_user.Location == null ? "ALL":_user.Location.loID, 1);
       #endregion
 
     }
@@ -2114,7 +2123,7 @@ namespace IM.Base.Forms
 
     #endregion
 
-    #region Métodos para cargar ComboBoxes
+    #region Métodos genéricos para cargar ComboBoxes
 
     /// <summary>
     /// Carga los combos de la forma
@@ -2866,20 +2875,29 @@ namespace IM.Base.Forms
 
       if (res)
       {
+        var msjErrorGifts = new StringBuilder();
         foreach (var row in _lstObjInvitGift)
         {
           var gift = BRGifts.GetGiftId(row.iggi);
           if (row.igQty > gift.giMaxQty)
           {
-            string error = String.Format("The maximu quantity authorized of the gift {0} has been exceeded.\n Max authotized = {1}", gift.giN, gift.giMaxQty);
-            UIHelper.ShowMessage(error, title: title);
+            msjErrorGifts.Append(String.Format("The maximu quantity authorized of the gift {0} has been exceeded.\n Max authotized = {1} \n", gift.giN, gift.giMaxQty));
             res = false;
             break;
           }
         }
+        if(msjErrorGifts.Length > 0)
+        {
+          msjErrorGifts.Append("Do you want to modify the gifts?");
+          if(MessageBox.Show(msjErrorGifts.ToString(), title, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+          {
+            res = true;
+          }
+        }
+        
       }
       
-if (!res)
+      if (!res)
       {
         tbiGeneral.IsSelected = true;
         dtgGifts.Focus();
@@ -3351,8 +3369,9 @@ if (!res)
 
       foreach(var row in _lstObjInvitGift)
       {
+        
         // calculamos el costo del regalo
-        cost = row.igPriceA + row.igPriceA;
+        cost = row.igPriceA + row.igPriceM;
 
         //calculamos el precio del regalo
         price = row.igPriceAdult + row.igPriceMinor + row.igPriceExtraAdult;
@@ -3391,6 +3410,12 @@ if (!res)
     #endregion
 
     #endregion
+
+    private void dtgGifts_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      CalculateCostsPrices();
+      CalculateTotalGifts();
+    }
   }
 }
 
