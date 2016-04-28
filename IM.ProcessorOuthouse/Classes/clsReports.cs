@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
+using IM.Model.Classes;
 using System.IO;
 using IM.Base.Helpers;
 using System.Data;
@@ -10,9 +11,9 @@ namespace IM.ProcessorOuthouse.Classes
 {
   public class clsReports
   {
-    #region ExportRptDepositsPaymentTypes
+    #region ExportRptDepositsPaymentByPR
     /// <summary>
-    ///  Obtiene los datos para exportar a excel el reporte DepositsPaymentTypesByPR
+    ///  Obtiene los datos para exportar a excel el reporte DepositsPaymentByPR
     /// </summary>
     /// <param name="strReport">Nombre del reporte</param>
     /// <param name="dateRangeFileName">Rango de fechas</param>
@@ -21,40 +22,49 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///   [vku] 07/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptDepositsPaymentByPR(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<object> lstRptDepositsPaymentByPR)
+    public static FileInfo ExportRptDepositsPaymentByPR(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, DepositsPaymentByPRData lstRptDepositsPaymentByPR)
     {
-      var lstDepPyPR = lstRptDepositsPaymentByPR[0] as List<RptDepositsPaymentByPR>;
-      var lstGuests = lstRptDepositsPaymentByPR[1] as List<Guest>;
-      var lstBookDep = lstRptDepositsPaymentByPR[3] as List<BookingDeposit>; 
-      var depPayPRwhitGuestBookDep = (from deppyPR in lstDepPyPR
-                               join gu in lstGuests.Where(c => c.guInvit) on deppyPR.PR equals gu.guPRInvit1
-                               join bookDep in lstBookDep on gu.guID equals bookDep.bdgu
-                               select new
-                               {
-                                 deppyPR.PR,
-                                 deppyPR.PRN,
-                                 deppyPR.Books,
-                                 deppyPR.InOuts,
-                                 deppyPR.GrossBooks,
-                                 deppyPR.ShowsFactor,
-                                 deppyPR.GrossShows,
-                                 gu.guID,
-                                 guName = string.Format("{0}, {1}", gu.guLastName1, gu.guFirstName1),
-                                 gu.guBookD,
-                                 gu.guOutInvitNum,
-                                 gu.guls,
-                                 gu.gusr,
-                                 gu.guHotel,
-                                 bookDep.bdpc,
-                                 deppyPR.SalesAmount,
-                                 deppyPR.Efficiency,
-                                 bookDep.bdAmount,
-                                 bookDep.bdReceived,          
-                              })
-                              .ToList();
+      var lstDepositsPaymentByPR =  lstRptDepositsPaymentByPR.DepositsPaymentByPR;
+      var lstDepositsPaymentByPRDeposits = lstRptDepositsPaymentByPR.DepositsPaymentByPR_Deposit;
+      var lstCurrencies = lstRptDepositsPaymentByPR.Currencies;
+      var lstPaymentTypes = lstRptDepositsPaymentByPR.PaymentTypes;
+ 
+      var lstDepositsPayments = (from paymentByPR in lstDepositsPaymentByPR
+                                 join paymentByPRDep in lstDepositsPaymentByPRDeposits on paymentByPR.PR equals paymentByPRDep.PR
+                                 join cu in lstCurrencies on paymentByPRDep.bdcu equals cu.cuID
+                                 join payType in lstPaymentTypes on paymentByPRDep.bdpt equals payType.ptID
+                                 select new
+                                 {
+                                   paymentByPR.Category,
+                                   paymentByPRDep.bdpc,
+                                   paymentByPR.PaymentSchemaFactor,
+                                   paymentByPR.PR,
+                                   paymentByPR.PRN,
+                                   paymentByPRDep.guID,
+                                   paymentByPRDep.guName,
+                                   paymentByPRDep.guBookD,
+                                   paymentByPRDep.guOutInvitNum,
+                                   paymentByPRDep.guls,
+                                   paymentByPRDep.gusr,
+                                   paymentByPRDep.guHotel,
+                                   RefundIn = paymentByPRDep.bdpc,
+                                   paymentByPR.SalesAmount,
+                                   paymentByPRDep.tpshow,
+                                   paymentByPR.Books,
+                                   paymentByPR.InOuts,
+                                   paymentByPR.GrossBooks,
+                                   paymentByPR.GrossShows,
+                                   paymentByPR.ShowsFactor,
+                                   paymentByPR.Efficiency,
+                                   cu.cuN,
+                                   payType.ptN,
+                                   paymentByPRDep.bdAmount,
+                                   paymentByPRDep.bdReceived,
+                                   paymentByPRDep.topay,
+                                 }).ToList();
 
-      DataTable dtData = TableHelper.GetDataTableFromList(lstRptDepositsPaymentByPR);
-      return EpplusHelper.CreateGeneralRptExcel(filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptDepositsPaymentByPR());
+      DataTable dtData = TableHelper.GetDataTableFromList(lstDepositsPayments, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptDepositsPaymentByPR(), showRowGrandTotal: true);
     }
     #endregion
 
@@ -90,8 +100,8 @@ namespace IM.ProcessorOuthouse.Classes
                                    giftRecBySR.Amount,
                                  }).OrderBy(c => c.cuN).ToList();
 
-      DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu);
-      return EpplusHelper.createExcelCustomPivot(dtData, filters, strReport, dateRangeFileName, clsFormatReport.rptGiftsRecivedBySR(), blnShowSubtotal: true);
+      DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptGiftsRecivedBySR(), showRowGrandTotal: true);
 
 
 
@@ -164,7 +174,7 @@ namespace IM.ProcessorOuthouse.Classes
     }
     #endregion
 
-    #region ExportRptProductionByAge
+    #region ExportRptProductionByAgeOuthouse
     /// <summary>
     ///  Obtiene los datos para el reporte ProductionByAge
     /// </summary>
@@ -175,7 +185,7 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///   [vku] 13/abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptProductionByAge(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionByAgeOuthouse> lstRptProductionByAgeOuthouse)
+    public static FileInfo ExportRptProductionByAgeOuthouse(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionByAgeOuthouse> lstRptProductionByAgeOuthouse)
     {    
       var lstRptProductionByAgeOuthouseAux = lstRptProductionByAgeOuthouse.Select(c => new
       {

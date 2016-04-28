@@ -41,7 +41,7 @@ namespace IM.ProcessorOuthouse.Forms
       _lstLeadSourcesPaymentComm = BRLeadSources.GetLeadSourceById(_paymentComm);
 
       _lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter, -1);
-      _lstPaymentType = BRPaymentTypes.GetPaymentTypes(1);
+      _lstPaymentType = BRPaymentTypes.GetPaymentTypes(-1);
 
       var x = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, EnumProgram.Outhouse).Select(y => y.lsID);
       _lstPRs = BRPersonnel.GetPersonnel(string.Join(",", x), roles: EnumToListHelper.GetEnumDescription(EnumRole.PR), status: 0);

@@ -1,5 +1,6 @@
 ﻿using IM.BusinessRules.Properties;
 using IM.Model;
+using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using System;
@@ -855,22 +856,58 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [vku] 07/Abr/2016 Created
     /// </history>
-    public static List<object> GetRptDepositsPaymentByPR(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, string paymentTypes = "ALL", EnumFilterDeposit filtDeposit = EnumFilterDeposit.fdAll)
+    public static List<object> GetRptDepositsPaymentByPR(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, string paymentTypes = "ALL", EnumFilterDeposit filterDeposit = EnumFilterDeposit.fdAll)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        var lstGuest = dbContext.Guests.Where(c => c.guInvit).ToList();
-        var lstBookingDeposits = dbContext.BookingDeposits.ToList();
+        var resDepositsPaymentByPR = dbContext.USP_OR_RptDepositsPaymentByPR(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), paymentTypes, Convert.ToByte(filterDeposit));
+        RptDepositsPaymentByPR DepositsPaymentByPR = resDepositsPaymentByPR.FirstOrDefault();
 
-        var lstDepositsPaymentByPR = dbContext.USP_OR_RptDepositsPaymentByPR(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), paymentTypes, Convert.ToByte(filtDeposit)).ToList();
-        var lstDepPayByPRWhithGuest = (from dpsitPayByPR in lstDepositsPaymentByPR.Select(c => c.PR).Distinct()
-                                       join gu in lstGuest on dpsitPayByPR equals gu.guPRInvit1
-                                       select gu).ToList();
-        var lstBookingDepWithGuest = (from gu in lstGuest.Select(c => c.guID).Distinct()
-                                      join bookingDep in lstBookingDeposits on gu equals bookingDep.bdgu
-                                      select bookingDep).ToList();
+        var resDepositsPaymentByPRDeposits = resDepositsPaymentByPR.GetNextResult<RptDepositsPaymentByPR_Deposit>();
+        RptDepositsPaymentByPR_Deposit DepositsPaymentByPRDeposits = resDepositsPaymentByPRDeposits.FirstOrDefault();
 
-        return new List<object> { lstDepositsPaymentByPR, lstDepPayByPRWhithGuest, lstBookingDepWithGuest };
+        List<object> lstObj = new List<object>();
+        lstObj.Add(DepositsPaymentByPR);
+        lstObj.Add(DepositsPaymentByPRDeposits);
+
+        return lstObj;
+      }
+    }
+
+    public static DepositsPaymentByPRData GetRptDepositsPaymentByPRData(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, string paymentTypes = "ALL", EnumFilterDeposit filterDeposit = EnumFilterDeposit.fdAll)
+    {
+      DepositsPaymentByPRData DepositsPaymentByPRData = new DepositsPaymentByPRData();
+      DepositsPaymentByPRData.DepositsPaymentByPR = new List<RptDepositsPaymentByPR>();
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var resDepositsPaymentByPR = dbContext.USP_OR_RptDepositsPaymentByPR(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), paymentTypes, Convert.ToByte(filterDeposit));
+        DepositsPaymentByPRData.DepositsPaymentByPR = resDepositsPaymentByPR.ToList();
+
+        var resDepositsPaymentByPRDeposits = resDepositsPaymentByPR.GetNextResult<RptDepositsPaymentByPR_Deposit>();
+        DepositsPaymentByPRData.DepositsPaymentByPR_Deposit = resDepositsPaymentByPRDeposits.ToList();
+
+        List<CurrencyShort> currencies = (from payByPRdep in DepositsPaymentByPRData.DepositsPaymentByPR_Deposit.Select(c => c.bdcu).Distinct()
+                      join cu in dbContext.Currencies on payByPRdep equals cu.cuID
+                      select new CurrencyShort
+                      {
+                        cuID = cu.cuID,
+                        cuN = cu.cuN,
+                      }).ToList();
+           
+                           
+        List<PaymentTypeShort> paymentType = (from payByPRdep in DepositsPaymentByPRData.DepositsPaymentByPR_Deposit.Select(c => c.bdpt).Distinct()
+                           join pT in dbContext.PaymentTypes on payByPRdep equals pT.ptID
+                           select new PaymentTypeShort
+                           {
+                            ptID = pT.ptID,
+                            ptN = pT.ptN,
+                           }).ToList();
+
+        DepositsPaymentByPRData.Currencies = currencies;
+        DepositsPaymentByPRData.PaymentTypes = paymentType;
+        
+        return DepositsPaymentByPRData;
+
       }
     }
 

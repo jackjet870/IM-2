@@ -12,6 +12,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using IM.Model.Classes;
 
 namespace IM.ProcessorOuthouse.Forms
 {
@@ -394,14 +395,14 @@ namespace IM.ProcessorOuthouse.Forms
         #region Deposits Payment By PR
 
         case "Deposits Payment by PR":
-          List<object> lstRptDepositsPaymentByPR = BRReportsByLeadSource.GetRptDepositsPaymentByPR(
+            DepositsPaymentByPRData lstRptDepositsPaymentByPR = BRReportsByLeadSource.GetRptDepositsPaymentByPRData(
             _frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
-            string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
+            "ALL",
             EnumProgram.Outhouse,
             string.Join(",", _frmFilter.grdPaymentTypes.SelectedItems.Cast<PaymentType>().Select(c => c.ptID).ToList()),
             EnumFilterDeposit.fdDepositShowsNoDeposit);
-          if (_lstPaymentTypes.Any())
+          if (lstRptDepositsPaymentByPR!=null)
           {
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
             filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList())));
@@ -493,7 +494,7 @@ namespace IM.ProcessorOuthouse.Forms
           {
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
             filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList())));
-            finfo = clsReports.ExportRptProductionByAge(strReport, dateRangeFileNameRep, filters, lstRptProductionByAgeOuthouse);
+            finfo = clsReports.ExportRptProductionByAgeOuthouse(strReport, dateRangeFileNameRep, filters, lstRptProductionByAgeOuthouse);
           }
           else
           {
@@ -1068,7 +1069,7 @@ namespace IM.ProcessorOuthouse.Forms
           {
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
             filters.Add(new Tuple<string, string>("PR", _frmFilter.grdPR.SelectedItems.Count == _frmFilter.grdPR.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList())));
-            finfo = clsReports.ExportRptProductionByAge(strReport, dateRangeFileNameRep, filters, lstRptProductionByAgeOuthouse);
+            finfo = clsReports.ExportRptProductionByAgeOuthouse(strReport, dateRangeFileNameRep, filters, lstRptProductionByAgeOuthouse);
           }
           else
           {
@@ -1076,7 +1077,47 @@ namespace IM.ProcessorOuthouse.Forms
           }
           break;
 
-          #endregion Production by Age
+        #endregion Production by Age
+
+        #region Production by Age & Sales Room
+        case "Production by Age & Sales Room":
+          List<RptProductionByAgeSalesRoomOuthouse> lstRptProductionByAgeSalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByAgeSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+            "ALL",
+            string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit);
+          if(lstRptProductionByAgeSalesRoomOuthouse.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("PR", _frmFilter.grdPR.SelectedItems.Count == _frmFilter.grdPR.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList())));
+            finfo = clsReports.ExportRptProductionByAgeSalesRoomOuthouse(strReport, dateRangeFileNameRep, filters, lstRptProductionByAgeSalesRoomOuthouse);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
+          }
+          break;
+        #endregion
+
+        #region Production by Agency, Market & Hotel
+        case "Production by Agency, Market & Hotel":
+          List<RptProductionByAgencyMarketHotelOuthouse> lstRptProductionByAgencyMarketHotelOuthouse = BRReportsByLeadSource.GetRptProductionByAgencyMarketHotelOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+            "ALL",
+             string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
+             EnumProgram.Outhouse,
+             EnumFilterDeposit.fdDepositShowsNoDeposit);
+          if (lstRptProductionByAgencyMarketHotelOuthouse.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("PR", _frmFilter.grdPR.SelectedItems.Count == _frmFilter.grdPR.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList())));
+            finfo = clsReports.ExportRptProductionByAgencyMarketHotelOuthouse(strReport, dateRangeFileNameRep, filters, lstRptProductionByAgencyMarketHotelOuthouse);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
+          }
+          break;
+          #endregion
       }
 
       if (finfo != null)
