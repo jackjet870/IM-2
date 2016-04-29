@@ -5,6 +5,7 @@
     preview = 1,
     add,
     edit,
-    search
+    search,
+    deleted
   }
 }

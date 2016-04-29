@@ -416,6 +416,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmScoreRulesTypes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmScoreRuleTypeDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmSearch.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -686,11 +694,101 @@
     <Compile Include="Forms\frmScoreRulesConcepts.xaml.cs">
       <DependentUpon>frmScoreRulesConcepts.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmScoreRulesTypes.xaml.cs">
+      <DependentUpon>frmScoreRulesTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmScoreRuleTypeDetail.xaml.cs">
+      <DependentUpon>frmScoreRuleTypeDetail.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmSearch.xaml.cs">
       <DependentUpon>frmSearch.xaml</DependentUpon>
     </Compile>
+    <Page Include="Forms\frmShowProgramDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmShowPrograms.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmSourcePaymentDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmSourcePayments.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmTeamLog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmTeamsLogDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmTourTimeSchemaDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmTourTimesSchemas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmUnderPaymentMotiveDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmUnderPaymentMotives.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmWarehouseDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmWarehouses.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\frmShowProgramDetail.xaml.cs">
+      <DependentUpon>frmShowProgramDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmShowPrograms.xaml.cs">
+      <DependentUpon>frmShowPrograms.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSourcePaymentDetail.xaml.cs">
+      <DependentUpon>frmSourcePaymentDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSourcePayments.xaml.cs">
+      <DependentUpon>frmSourcePayments.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmTeamLog.xaml.cs">
+      <DependentUpon>frmTeamLog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmTeamsLogDetail.xaml.cs">
+      <DependentUpon>frmTeamsLogDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmTourTimeSchemaDetail.xaml.cs">
+      <DependentUpon>frmTourTimeSchemaDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmTourTimesSchemas.xaml.cs">
+      <DependentUpon>frmTourTimesSchemas.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmUnderPaymentMotiveDetail.xaml.cs">
+      <DependentUpon>frmUnderPaymentMotiveDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmUnderPaymentMotives.xaml.cs">
+      <DependentUpon>frmUnderPaymentMotives.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmWarehouseDetail.xaml.cs">
+      <DependentUpon>frmWarehouseDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmWarehouses.xaml.cs">
+      <DependentUpon>frmWarehouses.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

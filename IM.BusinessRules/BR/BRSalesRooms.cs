@@ -110,16 +110,26 @@ namespace IM.BusinessRules.BR
     /// <param name="nStatus">-1. Todos | 0. Inactivos | 1. Activos</param>
     /// <param name="nAppointment">-1. Todos | 0. Is Not Apooinment | 1. Is Appoinment</param>
     /// <param name="salesRoom">Objeto con filtros adicionales</param>
+    /// <param name="blnTeamLog">Sirve para utilizar la consulta para TeamsLog</param>
     /// <returns>Lista de tipo sales Room</returns>
     /// <history>
     /// [emoguel] created 21/04/2016
+    /// [emoguel] modified 27/04/2016--->Se agregó el parametro blnTeamLog
     /// </history>
-    public static List<SalesRoom> GetSalesRooms(int nStatus=-1,int nAppointment=-1, SalesRoom salesRoom=null)
+    public static List<SalesRoom> GetSalesRooms(int nStatus=-1,int nAppointment=-1, SalesRoom salesRoom=null, bool blnTeamLog=false)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from sr in dbContext.SalesRooms
                     select sr;        
+
+        if(blnTeamLog)
+        {
+          query = from ts in dbContext.TeamsSalesmen
+                  from sr in dbContext.SalesRooms.Where(sr => sr.srID == ts.tssr).DefaultIfEmpty().Distinct()
+                  select sr;
+          
+        }
         
         if(nStatus!=-1)//Filtro por Estatus
         {
@@ -186,7 +196,7 @@ namespace IM.BusinessRules.BR
           {
             try
             {
-              SalesRoom salesRoomVal = dbContext.SalesRooms.Where(sr => sr.srCEBEID == salesRoom.srID).FirstOrDefault();
+              SalesRoom salesRoomVal = dbContext.SalesRooms.Where(sr => sr.srID == salesRoom.srID).FirstOrDefault();
               if(salesRoomVal!=null)
               {
                 return -1;
@@ -205,6 +215,7 @@ namespace IM.BusinessRules.BR
                 {
                   dbContext.USP_OR_AddAccessAdministrator("SR");
                   dbContext.SaveChanges();
+                  nRes = 1;
                   transaction.Commit();
                 }
                 else

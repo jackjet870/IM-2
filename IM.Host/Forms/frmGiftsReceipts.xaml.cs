@@ -144,7 +144,7 @@ namespace IM.Host.Forms
       _dsBanks.Source = BRBanks.GetBanks(1);
 
       // Obtenemos los Source Payments
-      _dsSourcePayments.Source = BRSourcePayments.GetSourcesPayments(1);
+      _dsSourcePayments.Source = BRSourcePayments.GetSourcePayments(1);
 
       // Obtenemos las salas
       _dsSalesRooms.Source = BRSalesRooms.GetSalesRooms(1);

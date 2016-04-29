@@ -82,6 +82,7 @@ namespace IM.Administrator.Forms
         lstMenu.Add(new { nombre = "Efficiency Types", img = "pack://application:,,,/IM.Base;component/Images/positioning.png", form = "frmEfficiencyTypes" });
         lstMenu.Add(new { nombre = "Payment Places", img = "pack://application:,,,/IM.Base;component/Images/money.ico", form = "frmPaymentPlaces" });
         lstMenu.Add(new { nombre = "Periods", img = "pack://application:,,,/IM.Base;component/Images/IconDate.png", form = "frmPeriods" });
+        lstMenu.Add(new { nombre = "Sources Payments", img = "pack://application:,,,/IM.Base;component/Images/money.ico", form = "frmSourcePayments" });
       }
       #endregion
 
@@ -136,6 +137,7 @@ namespace IM.Administrator.Forms
       if(App.User.HasPermission(EnumPermission.Motives,EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add(new { nombre = "Not Booking Motives", img = "pack://application:,,,/IM.Base;component/Images/DateTime_Forbidden.png", form = "frmNotBookingMotives" });
+        lstMenu.Add(new { nombre = "Under Payment  Motives", img = "pack://application:,,,/IM.Base;component/Images/Forbidden.png", form = "frmUnderPaymentMotives" });
       }
       #endregion
 
@@ -144,6 +146,7 @@ namespace IM.Administrator.Forms
       {
         lstMenu.Add(new { nombre = "Posts", img = "pack://application:,,,/IM.Base;component/Images/Posts.png", form = "frmPosts" });
         lstMenu.Add(new { nombre = "Posts Log", img = "pack://application:,,,/IM.Base;component/Images/Log.ico", form = "frmPostsLog" });
+        lstMenu.Add(new { nombre = "Teams Log", img = "pack://application:,,,/IM.Base;component/Images/Log.ico", form = "frmTeamsLog" });
       }
       #endregion
 
@@ -163,6 +166,8 @@ namespace IM.Administrator.Forms
         lstMenu.Add(new { nombre = "Room Types", img = "pack://application:,,,/IM.Base;component/Images/Bedroom.png", form = "frmRoomTypes" });
         lstMenu.Add(new { nombre = "Sale Types", img = "pack://application:,,,/IM.Base;component/Images/money.ico", form = "frmSaleTypes" });
         lstMenu.Add(new { nombre = "Score Rules Concepts", img = "pack://application:,,,/IM.Base;component/Images/Score.gif", form = "frmScoreRulesConcepts" });
+        lstMenu.Add(new { nombre = "Score Rules Types", img = "pack://application:,,,/IM.Base;component/Images/Score.gif", form = "frmScoreRulesTypes" });
+        lstMenu.Add(new { nombre = "Show Programs", img = "pack://application:,,,/IM.Base;component/Images/Catalog.ico", form = "frmShowPrograms" });
       }
       #endregion
 
@@ -173,10 +178,24 @@ namespace IM.Administrator.Forms
       }
       #endregion
 
+      #region TourTimes
+      if(App.User.HasPermission(EnumPermission.TourTimes,EnumPermisionLevel.ReadOnly))
+      {
+        lstMenu.Add(new { nombre = "Tour Times Schemas", img = "pack://application:,,,/IM.Base;component/Images/IconDate.png", form = "frmTourTimesSchemas" });
+      }
+      #endregion
+
       #region Catalogos Default
       lstMenu.Add(new { nombre = "Payment Schemas", img = "pack://application:,,,/IM.Base;component/Images/Payment.png", form = "frmPaymentSchemas" });
       lstMenu.Add(new { nombre = "Payment Types", img = "pack://application:,,,/IM.Base;component/Images/Payment.png", form = "frmPaymentTypes" });
       lstMenu.Add(new { nombre = "Refund Types", img = "pack://application:,,,/IM.Base;component/Images/Money_Bag.png", form = "frmRefundTypes" });
+      #endregion
+
+      #region
+      if(App.User.HasPermission(EnumPermission.Warehouses,EnumPermisionLevel.ReadOnly))
+      {
+        lstMenu.Add(new { nombre = "Warehouses", img = "pack://application:,,,/IM.Base;component/Images/Warehouse.png", form = "frmWarehouses" });
+      }
       #endregion
 
       lstMenuAdm.ItemsSource = lstMenu;

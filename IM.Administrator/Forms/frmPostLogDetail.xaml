@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="Post Log Detail" SizeToContent="WidthAndHeight" DataContext="{Binding postLog}">
+        Title="Post Log Detail" SizeToContent="WidthAndHeight">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
         <Grid.ColumnDefinitions>
@@ -31,7 +31,6 @@
         <!--#region Datos-->
         <TextBox Name="txtppID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" Text="{Binding ppID}" CharacterCasing="Upper" IsEnabled="False" Margin="0,0,0,15" Width="235" />        
         <TextBox Name="txtppDT" Grid.Column="1" Grid.Row="1" Tag="Date/Time" Height="27" VerticalAlignment="Stretch" Text="{Binding ppDT}"  IsEnabled="False" Margin="0,0,0,15" />
-        <!--<TextBox Name="txtppDT2" Grid.Column="1" Grid.Row="1" Height="27" VerticalAlignment="Stretch" Margin="0,0,0,15" MaxLength="21" Visibility="Hidden"/>-->
         <DatePicker Name="dpppDT" Grid.Column="1"  Grid.Row="1" Height="27" VerticalAlignment="Stretch" Margin="0,0,0,15" Visibility="Hidden"/>
         <ComboBox Name="cmbppChangedBy" Grid.Column="1" Grid.Row="2" Tag="Changed By" Height="27" VerticalAlignment="Top" DisplayMemberPath="peN" SelectedValuePath="peID" SelectedValue="{Binding ppChangedBy}" IsEnabled="False" Margin="0,0,0,15" Width="235"/>
         <ComboBox Name="cmbpppe" Grid.Column="1" Grid.Row="3" Tag="Person" Height="27" VerticalAlignment="Top" DisplayMemberPath="peN" SelectedValuePath="peID" SelectedValue="{Binding pppe}" IsEnabled="False" Margin="0,0,0,15" Width="235"/>

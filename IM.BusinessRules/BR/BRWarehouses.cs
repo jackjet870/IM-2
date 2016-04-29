@@ -71,7 +71,74 @@ namespace IM.BusinessRules.BR
 
         return query.OrderBy(wh => wh.whN).ToList();
       }
-    } 
+    }
+    #endregion
+
+    #region SaveWarehouse
+    /// <summary>
+    /// Guarda|Actualiza un registro en el catalogo
+    /// </summary>
+    /// <param name="warehouse">Objeto a guardar</param>
+    /// <param name="blnUpdate">True. Actualiza | False. Inserta</param>
+    /// <returns>-1 Existe un registro con el mismo ID | 0. No se guardó | 1. Se guardó</returns>
+    /// <history>
+    /// [emoguel] created 22/04/2016
+    /// </history>
+    public static int SaveWarehouse(Warehouse warehouse, bool blnUpdate)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        int nRes = 0;
+        #region Update
+        if (blnUpdate)
+        {
+          dbContext.Entry(warehouse).State = System.Data.Entity.EntityState.Modified;
+          return dbContext.SaveChanges();
+        }
+        #endregion
+        #region Add
+        else
+        {
+          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              Warehouse warehouseVal = dbContext.Warehouses.Where(wh => wh.whID == warehouse.whID).FirstOrDefault();
+              if (warehouseVal != null)
+              {
+                return -1;
+              }
+              else
+              {
+                
+
+                dbContext.Warehouses.Add(warehouse);
+                if (dbContext.SaveChanges() > 0)
+                {
+                  dbContext.USP_OR_AddAccessAdministrator("WH");
+                  dbContext.SaveChanges();
+                  nRes = 1;
+                  transaction.Commit();
+                }
+                else
+                {
+                  transaction.Rollback();
+                  return 0;
+                }
+              }
+            }
+            catch
+            {
+              transaction.Rollback();
+              nRes = 0;
+            }
+          }
+        }
+        #endregion
+        return nRes;
+
+      }
+    }
     #endregion
   }
 }

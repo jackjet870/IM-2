@@ -150,14 +150,13 @@ namespace IM.Base.Helpers
         EntityTypeBase entityTypeBase = EntityHelper.GetEntityTypeBase(type);
         foreach (PropertyInfo pi in type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => !pi.GetMethod.IsVirtual))//recorremos las propiedades
         {            
-          EdmMember edm = entityTypeBase.Members.Where(em => em.Name == pi.Name).FirstOrDefault();//Obtenemos el edmMember            
-
+          EdmMember edm = entityTypeBase.Members.Where(em => em.Name == pi.Name).FirstOrDefault();//Obtenemos el edmMember                      
           Facet facet;
           Control control = lstControls.Where(cl => cl.Name == "txt" + pi.Name).FirstOrDefault();//buscamos si existe el control          
           if (control != null)//Verifcamos que tengamos un control
           {
             TextBox txt = control as TextBox;//Convertimos el control a texbox
-            TypeCode typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(pi.PropertyType) ?? pi.PropertyType);
+            TypeCode typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(pi.PropertyType) ?? pi.PropertyType);            
             switch (typeCode)
             {
               #region String
@@ -303,9 +302,6 @@ namespace IM.Base.Helpers
     }
     #endregion
 
-    #region UiSetDatacontext
-
-    #endregion
     #region UiSetDatacontext
     /// <summary>
     /// Asigna el datacontex a cada control del formulario dependiendo del ID y del tipo de dato

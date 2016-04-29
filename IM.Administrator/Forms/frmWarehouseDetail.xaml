@@ -1,11 +1,11 @@
-﻿<Window x:Class="IM.Administrator.Forms.frmSaleTypeDetail"
+﻿<Window x:Class="IM.Administrator.Forms.frmWarehouseDetail"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ResizeMode="NoResize"
         mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="Sale Type Detail" SizeToContent="WidthAndHeight" DataContext="{Binding saleType}">
+        Title="Warehouse Detail" SizeToContent="WidthAndHeight">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
         <Grid.ColumnDefinitions>
@@ -23,18 +23,17 @@
         <!--#region títulos-->
         <Label Grid.Column="0" Grid.Row="0">ID</Label>
         <Label Grid.Column="0" Grid.Row="1">Description</Label>
-        <Label Grid.Column="0" Grid.Row="2" >Category</Label>
+        <Label Grid.Column="0" Grid.Row="2" >Area</Label>
         <Label Name="lblStatus" Visibility="Collapsed" Grid.Column="0" Grid.Row="3">Status</Label>
         <!--#endregion-->
         <!--#region Datos-->
-        <TextBox Name="txtstID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" Text="{Binding stID}" CharacterCasing="Upper" IsEnabled="False" Width="235" Margin="0,0,0,15" />
-        <TextBox Name="txtstN" Grid.Column="1" Grid.Row="1" Tag="description" Height="27" VerticalAlignment="Top" Text="{Binding stN}" Width="235" Margin="0,0,0,15" />
-        <ComboBox Name="cmbststc" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" DisplayMemberPath="stcN" SelectedValuePath="stcID" SelectedValue="{Binding ststc}" Width="235" Margin="0,0,0,15"/>
+        <TextBox Name="txtwhID" Grid.Column="1" Grid.Row="0" Tag="ID" Height="27" VerticalAlignment="Top" Text="{Binding whID}" CharacterCasing="Upper" Width="235" Margin="0,0,0,15" />
+        <TextBox Name="txtwhN" Grid.Column="1" Grid.Row="1" Tag="description" Height="27" VerticalAlignment="Top" Text="{Binding whN}" Width="235" Margin="0,0,0,15" />
+        <ComboBox Name="cmbwhar" Grid.Column="1"  Grid.Row="2" Tag="Area" Height="27" VerticalAlignment="Top" DisplayMemberPath="arN" SelectedValuePath="arID" SelectedValue="{Binding whar}" Width="235" Margin="0,0,0,15"/>
         <ComboBox Name="cmbStatus" Grid.Column="1" Grid.Row="3" Visibility="Collapsed" Margin="0,0,0,15" Height="27" VerticalAlignment="Top" IsEnabled="True" DisplayMemberPath="sName" SelectedValuePath="sValue" Width="235"/>
-        <CheckBox Name="chkstA" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" IsChecked="{Binding stA}" Height="13" >Active</CheckBox>
-        <CheckBox Name="chkstUpdate" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" IsChecked="{Binding stUpdate}" Height="13" >Update</CheckBox>
+        <CheckBox Name="chkwhA" Grid.Column="1" Grid.Row="3" VerticalAlignment="Top" IsChecked="{Binding whA}" Height="13" >Active</CheckBox>
 
-        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7" HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept" />
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7" HorizontalAlignment="Right" Click="btnAccept_Click" Visibility="Hidden" Content="_Accept" />
         <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>

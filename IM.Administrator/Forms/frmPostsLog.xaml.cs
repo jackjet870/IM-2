@@ -268,7 +268,7 @@ namespace IM.Administrator.Forms
             }
             List<PostLog> lstPostLog = (List<PostLog>)dgrPostsLog.ItemsSource;
             lstPostLog.RemoveAll(pp => lstPostsLogDel.Contains(pp));
-            dgrPostsLog.Items.Refresh();
+            dgrPostsLog.Items.Refresh();              
           }
         }
       }

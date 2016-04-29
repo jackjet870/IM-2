@@ -105,56 +105,49 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if(enumMode!=EnumMode.preview)
+      btnAccept.Focus();      
+      if(enumMode==EnumMode.search)
       {
-        if(enumMode==EnumMode.search)
+        if (dpppDT.SelectedDate != null)
         {
-          if (dpppDT.SelectedDate != null)
-          {
-            blnDate = true;
-            postLog.ppDT = Convert.ToDateTime(dpppDT.SelectedDate);
-          }
-          else
-          {
-            blnDate = false;
-          }
-          DialogResult = true;
+          blnDate = true;
+          postLog.ppDT = Convert.ToDateTime(dpppDT.SelectedDate);
+        }
+        else
+        {
+          blnDate = false;
+        }
+        DialogResult = true;
+        Close();
+      }
+      else
+      {
+        if(ObjectHelper.IsEquals(postLog,oldPostLog) && enumMode!=EnumMode.add)
+        {
           Close();
         }
         else
         {
-          if(ObjectHelper.IsEquals(postLog,oldPostLog) && enumMode!=EnumMode.add)
+          #region Insertar|Agregar
+          string strMsj = ValidateHelper.ValidateForm(this, "Post Log");
+          if (strMsj == "")
           {
-            Close();
+            int nRes = BRPostsLog.SavePostLog(postLog, (enumMode == EnumMode.edit));
+            UIHelper.ShowMessageResult("PostLog", nRes);
+            if (nRes == 1)
+            {
+              postLog = BRPostsLog.GetPostsLog(postLog).FirstOrDefault();
+              DialogResult = true;
+              Close();
+            } 
+              
           }
           else
           {
-            #region Insertar|Agregar
-            string strMsj = ValidateHelper.ValidateForm(this, "Post Log");
-            if (strMsj == "")
-            {
-              int nRes = BRPostsLog.SavePostLog(postLog, (enumMode == EnumMode.edit));
-              UIHelper.ShowMessageResult("PostLog", nRes);
-              if (nRes == 1)
-              {
-                postLog = BRPostsLog.GetPostsLog(postLog).FirstOrDefault();
-                DialogResult = true;
-                Close();
-              } 
-              
-            }
-            else
-            {
-              UIHelper.ShowMessage(strMsj);
-            }
-            #endregion
+            UIHelper.ShowMessage(strMsj);
           }
+          #endregion
         }
-      }
-      else
-      {
-        Close();
       }
     } 
     #endregion

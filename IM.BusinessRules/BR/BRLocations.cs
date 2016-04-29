@@ -34,18 +34,25 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="nStatus">-1. Todos los registros | 0. Registros inactivos | 1.Registros Activos</param>
     /// <param name="location">Objeto con filtros adicionales</param>
+    /// <param name="blnTeamsLog">para devolver la consulta que llena el combo en TeamsLog</param>
     /// <returns>Lista de tipo Location</returns>
     /// <history>
     /// [emoguel] created 01/04/2016
+    /// [emoguel] modified 27/04/2016 Se agregó el parametro blnTeamsLog para cargar el combobos de Locations en teamLog
     /// </history>
-    public static List<Location> GetLocations(int nStatus=-1,Location location=null)
+    public static List<Location> GetLocations(int nStatus=-1,Location location=null, bool blnTeamsLog=false)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from lo in dbContext.Locations
                     select lo;
-
-        if(nStatus!=-1)//Filtro por estatus
+        if (blnTeamsLog)
+        {
+          query = from tg in dbContext.TeamsGuestServices
+                  from lo in dbContext.Locations.Where(lo => lo.loID == tg.tglo).DefaultIfEmpty().Distinct()
+                  select lo;
+        }
+        if (nStatus!=-1)//Filtro por estatus
         {
           bool blnEstatus = Convert.ToBoolean(nStatus);
           query = query.Where(lo => lo.loA == blnEstatus);

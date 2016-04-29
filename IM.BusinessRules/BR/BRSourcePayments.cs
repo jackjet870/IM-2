@@ -1,35 +1,54 @@
-﻿using IM.Model;
-using IM.Model.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IM.Model;
+using IM.Model.Helpers;
+
 
 namespace IM.BusinessRules.BR
 {
   public class BRSourcePayments
   {
-
-    #region GetSourcesPayments
+    #region GetSourcePayments
     /// <summary>
-    /// Obtiene la lista de sources payments de acuerdo al estatus
+    /// Obtiene registro del catalogo SourcePayments
     /// </summary>
-    /// <param name="status"></param>
-    /// <returns></returns>
+    /// <param name="nStatus">-1. Todos | 0. Inactivos | 1. Activos</param>
+    /// <param name="sourcePayment">Objeto con filtros adicionales</param>
+    /// <returns>Lista de tipo Source Payments</returns>
     /// <history>
-    /// [vipacheco] 15/Abril/2016 Created
+    /// [emoguel] created 26/04/2016
     /// </history>
-    public static List<SourcePayment> GetSourcesPayments(int status = -1)
+    public static List<SourcePayment> GetSourcePayments(int nStatus = -1, SourcePayment sourcePayment = null)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        bool _status = Convert.ToBoolean(status);
+        var query = from sb in dbContext.SourcePayments
+                    select sb;
 
-        return dbContext.SourcePayments.Where(x => x.sbA == _status).ToList();
+        if (nStatus != -1)//Filtro por estatus
+        {
+          bool blnStatus = Convert.ToBoolean(nStatus);
+          query = query.Where(sb => sb.sbA == blnStatus);
+        }
+
+        if (sourcePayment != null)
+        {
+          if (!string.IsNullOrWhiteSpace(sourcePayment.sbID))//Filtro por ID
+          {
+            query = query.Where(sb => sb.sbID == sourcePayment.sbID);
+          }
+
+          if (!string.IsNullOrWhiteSpace(sourcePayment.sbN))//Filtro por descripción
+          {
+            query = query.Where(sb => sb.sbN.Contains(sourcePayment.sbN));
+          }
+        }
+
+        return query.OrderBy(sb => sb.sbN).ToList();
       }
-    } 
-    #endregion
+    }
 
+    #endregion
   }
 }
