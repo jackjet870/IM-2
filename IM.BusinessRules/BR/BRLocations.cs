@@ -88,45 +88,5 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion
-
-    #region SaveLocation
-    /// <summary>
-    /// Guarda|Actualiza un registro en el catalogo Locations
-    /// </summary>
-    /// <param name="location">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza | False. Agrega</param>
-    /// <returns>0. No se guardó | 1. Se guardó correctamente | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 01/04/2016
-    /// </history>
-    public static int SaveLocation(Location location,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Update
-        if (blnUpdate)
-        {
-          dbContext.Entry(location).State = System.Data.Entity.EntityState.Modified;
-        }
-        #endregion
-        #region Insert
-        else
-        {
-          Location locationVal = dbContext.Locations.Where(lo => lo.loID == location.loID).FirstOrDefault();
-          if(locationVal!=null)//Existe un registro con el mismo ID
-          {
-            return -1;
-          }
-          else//Insertar el registro
-          {
-            dbContext.Locations.Add(location);
-          }
-        } 
-        #endregion
-
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

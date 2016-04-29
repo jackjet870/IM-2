@@ -49,45 +49,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SavePlaceType
-    /// <summary>
-    /// Save PlaceTypes
-    /// </summary>
-    /// <param name="placeType">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza | False. Agrega</param>
-    /// <returns>0. No se guardó | 1. Se guardó | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 11/04/2016
-    /// </history>
-    public static int SavePlaceType(PlaceType placeType, bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Update
-        if (blnUpdate)
-        {
-          dbContext.Entry(placeType).State = System.Data.Entity.EntityState.Modified;
-        }
-        #endregion
-        #region Insert
-        else
-        {
-          PlaceType placeTypeVal = dbContext.PlaceTypes.Where(py => py.pyID == placeType.pyID).FirstOrDefault();
-          if(placeTypeVal!=null)//Validamos que no exista un registro con el mismo ID
-          {
-            return -1;
-          }
-          else
-          {
-            dbContext.PlaceTypes.Add(placeType);
-          }
-        } 
-        #endregion
-
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

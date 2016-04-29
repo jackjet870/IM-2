@@ -172,21 +172,22 @@ namespace IM.Administrator.Forms
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
       Computer computer = (Computer)dgrComputers.SelectedItem;
-      frmComputerDetail frmComputerDetail = new frmComputerDetail();
-      frmComputerDetail.Owner = this;
-      frmComputerDetail.mode = EnumMode.edit;
-      frmComputerDetail.oldComputer = computer;
-      if (frmComputerDetail.ShowDialog() == true)
+      frmComputerDetail frmComDetail = new frmComputerDetail();
+      frmComDetail.Owner = this;
+      frmComDetail.mode = EnumMode.edit;
+      frmComDetail.oldComputer = computer;
+      frmComDetail.ShowDialog();
+      if ( frmComDetail.DialogResult== true)
       {        
         List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
         int nIndex = 0;        
-        if (!ValidateFilters(frmComputerDetail.computer))//Validamos que cumpla con los filtros
+        if (!ValidateFilters(frmComDetail.computer))//Validamos que cumpla con los filtros
         {
           lstComputers.Remove(computer);//Quitamos el registro de la lista
         }
         else
         {
-          ObjectHelper.CopyProperties(computer, frmComputerDetail.computer);
+          ObjectHelper.CopyProperties(computer, frmComDetail.computer);
           lstComputers.Sort((x, y) => string.Compare(x.cpN, y.cpN));//ordenamos la lista     
           nIndex = lstComputers.IndexOf(computer);
         }                   

@@ -13,9 +13,11 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmComputerDetail : Window
   {
+    #region Variables
     public Computer computer = new Computer();//Objeto a guardar
     public Computer oldComputer = new Computer();//Objeto con los datos iniciales
-    public EnumMode mode;
+    public EnumMode mode; 
+    #endregion
     public frmComputerDetail()
     {
       InitializeComponent();
@@ -35,12 +37,12 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(computer, oldComputer);
       LoadDesks();
-      DataContext = computer;
       UIHelper.SetUpControls(computer, this);
-      if (mode==EnumMode.add)
+      if (mode == EnumMode.add)
       {
         txtcpID.IsEnabled = true;
-      }      
+      }
+      DataContext = computer;
     }
     #endregion
 
@@ -75,20 +77,21 @@ namespace IM.Administrator.Forms
     private void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
-      if(ObjectHelper.IsEquals(computer,oldComputer) && mode!=EnumMode.add)
+      if (ObjectHelper.IsEquals(computer, oldComputer) && mode != EnumMode.add)
       {
         Close();
       }
+      else
       {
         int nRes = 0;
         string sMsj = ValidateHelper.ValidateForm(this, "Computer");
 
-        
+
         if (sMsj == "")
         {
-          nRes = BRComputers.SaveComputer(computer, ((mode == EnumMode.edit)));
+          nRes = BREntities.OperationEntity(computer, mode);
           UIHelper.ShowMessageResult("Coomputer", nRes);
-          if(nRes==1)
+          if (nRes > 0)
           {
             DialogResult = true;
             Close();
@@ -113,7 +116,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if(mode!=EnumMode.preview)
+      if (mode != EnumMode.preview)
       {
         if (!ObjectHelper.IsEquals(computer, oldComputer))
         {

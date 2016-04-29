@@ -109,29 +109,13 @@ namespace IM.Administrator.Forms
           
           if(strMsj=="")
           {
-            nRes = BRLocations.SaveLocation(location, (enumMode == EnumMode.edit));
-            #region respuesta
-            switch (nRes)
+            nRes = BREntities.OperationEntity(location, enumMode);
+            UIHelper.ShowMessageResult("Location", nRes);
+            if(nRes>0)
             {
-              case 0:
-                {
-                  UIHelper.ShowMessage("Location not saved.");
-                  break;
-                }
-              case 1:
-                {
-                  UIHelper.ShowMessage("Location successfully saved.");
-                  DialogResult = true;
-                  Close();
-                  break;
-                }
-              case 2:
-                {
-                  UIHelper.ShowMessage("Location ID already exist please select another one.");
-                  break;
-                }
+              DialogResult = true;
+              Close();
             }
-            #endregion
           }
           else
           {

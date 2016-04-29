@@ -68,46 +68,7 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SaveCountry
-    /// <summary>
-    /// Agrega|actualiza un registro en el catalogo countries
-    /// </summary>
-    /// <param name="country">Objeto a guardar en la BD</param>
-    /// <param name="blnUpdate">True. Actualiza | False. Agrega</param>
-    /// <returns>0. No se guardó | 1. Guardado correctamente | -1.Se tiene un objeto con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 16/03/2016
-    /// </history>
-    public static int SaveCountry(Country country,bool blnUpdate)
-    {
-      int nRes = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        if(blnUpdate)//Si es actualizar
-        {
-          dbContext.Entry(country).State = System.Data.Entity.EntityState.Modified;
-          nRes = dbContext.SaveChanges();
-        }
-        else//Si es insertar
-        {
-          Country countryValid = dbContext.Countries.Where(co => co.coID == country.coID).FirstOrDefault<Country>();
-          if (countryValid != null)//Existe un registro con el mismo ID
-          {
-            nRes = -1;
-          }
-          else
-          {
-            dbContext.Countries.Add(country);
-            nRes = dbContext.SaveChanges();
-          }
-        }
-      }
-
-      return nRes;
-    }
-        #endregion
-
+    
     #region TransferAddCountries
 
         /// <summary>

@@ -254,7 +254,7 @@ namespace IM.Administrator.Forms
 
         if (msgResult == MessageBoxResult.Yes)
         {
-          int nRes = BRPostsLog.DeletePostsLog(lstPostsLogDel);
+          int nRes = BREntities.OperationEntities(lstPostsLogDel, System.Data.Entity.EntityState.Deleted);
 
           if (nRes > 0)
           {

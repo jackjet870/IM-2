@@ -119,9 +119,9 @@ namespace IM.Administrator.Forms
         string strMsj = ValidateHelper.ValidateForm(this, "Reason For Cancellation Of Folio");
         if(strMsj=="")
         {
-          int nRes = BRReasonCancellationFolios.SaveReasonCancellationFolio(reasonCancellationFolio, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(reasonCancellationFolio, enumMode);
           UIHelper.ShowMessageResult("Reason For Cancellation Of Folio", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

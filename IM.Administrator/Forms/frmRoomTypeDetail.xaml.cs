@@ -81,9 +81,9 @@ namespace IM.Administrator.Forms
         string strMsj = ValidateHelper.ValidateForm(this, "Room Type");
         if(strMsj=="")
         {
-          int nRes = BRRoomTypes.SaveRoomType(roomType, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(roomType, enumMode);
           UIHelper.ShowMessageResult("Room Type", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

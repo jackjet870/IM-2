@@ -54,45 +54,6 @@ namespace IM.BusinessRules.BR
       return lstCharge;
       
     }
-    #endregion
-
-    #region SaveChargeTo
-    /// <summary>
-    /// Funcion que guarda|actualiza un registro en el catalogo ChargeTo
-    /// </summary>
-    /// <param name="chargeTo">Entidad a guardar en la BD</param>
-    /// <param name="blnUpd">true. Actualizar | false. Insertar</param>
-    /// <returns>0. No se guardó el registro | 1. El registro se guardó | -1.- Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [Emoguel] 01/03/2016
-    /// </history>
-    public static int SaveChargeTo(ChargeTo chargeTo,bool blnUpd)
-    {
-      
-      int nRes = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        if (blnUpd)//Actualizar
-        {
-          dbContext.Entry(chargeTo).State = System.Data.Entity.EntityState.Modified;
-          nRes = dbContext.SaveChanges();
-        }
-        else//Insertar
-        {
-          ChargeTo chargeToVal = dbContext.ChargeTos.Where(c => c.ctID == chargeTo.ctID).FirstOrDefault();
-          if(chargeToVal!=null)//Validamos que no exista un registro con el mismo ID
-          {
-            nRes = -1;
-          }
-          else
-          {
-            dbContext.ChargeTos.Add(chargeTo);
-            nRes = dbContext.SaveChanges();
-          }
-        }
-      }
-      return nRes;
-    }
-    #endregion
+    #endregion    
   }
 }

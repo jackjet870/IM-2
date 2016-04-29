@@ -84,9 +84,9 @@ namespace IM.Administrator.Forms
         string strMsj = ValidateHelper.ValidateForm(this, "Period");
         if (strMsj == "")
         {
-          int nRes = BRPeriods.SavePeriod(period, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(period, enumMode);
           UIHelper.ShowMessageResult("Period", nRes);
-          if (nRes == 1)
+          if (nRes > 0)
           {
             DialogResult = true;
             Close();

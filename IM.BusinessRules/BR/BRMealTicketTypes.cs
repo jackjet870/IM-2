@@ -51,46 +51,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SaveMealTicketTypes
-    /// <summary>
-    /// Actualiza|Agrega un registro al catalogo de MealTicketType
-    /// </summary>
-    /// <param name="mealTicketType">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza | False. Agrega un registro</param>
-    /// <returns>0. No se guardó el registro | 1. Se guardó el registro | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 04/04/2016
-    /// </history>
-    public static int SaveMealTicketTypes(MealTicketType mealTicketType,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Update
-        if (blnUpdate)//Si es actualizar
-        {
-          dbContext.Entry(mealTicketType).State = System.Data.Entity.EntityState.Modified;
-        } 
-        #endregion
-        #region Insert
-        else//Insert
-        {
-          MealTicketType mealTicketTypeVal = dbContext.MealTicketTypes.Where(my => my.myID == mealTicketType.myID).FirstOrDefault();
-
-          if(mealTicketTypeVal!=null)//Verificar si existe un registro con el mismo ID
-          {
-            return -1;
-          }
-          else
-          {
-            dbContext.MealTicketTypes.Add(mealTicketType);
-          }
-        }
-        #endregion
-
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

@@ -61,44 +61,6 @@ namespace IM.BusinessRules.BR
         
     #endregion
 
-    #region SaveCurrency
-    /// <summary>
-    /// Actualiza|agrega un registro al catalogo de currencies
-    /// </summary>
-    /// <param name="currency">objeto a guardar en la BD</param>
-    /// <param name="blnUpd">true. para actualizar | false. para agregar</param>
-    /// <returns>0. No se pudo guardar el registro | 1. El registro se guardo | -1.- Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [Emoguel] created 07/03/2016
-    /// </history>
-    public static int saveCurrency(Currency currency,bool blnUpd)
-    {
-      int nRes = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        if(blnUpd)//Actualizar
-        {
-          dbContext.Entry(currency).State = System.Data.Entity.EntityState.Modified;
-          nRes=dbContext.SaveChanges();
-        }
-        else//Insertar
-        {
-          Currency currencyVal = dbContext.Currencies.Where(c=>c.cuID==currency.cuID).FirstOrDefault();
-          if(currencyVal!=null)//Existe un registro con el mismo ID
-          {
-            nRes = -1;
-          }
-          else//NO existe un registro con el mismo ID
-          {
-            dbContext.Currencies.Add(currency);
-            nRes = dbContext.SaveChanges();
-          }
-        }
-      }
-      return nRes;
-    }
-    #endregion
-
     #region GetCurrencyId
     /// <summary>
     /// Obtiene una moneda en específico

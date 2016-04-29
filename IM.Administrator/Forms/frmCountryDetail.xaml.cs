@@ -97,10 +97,10 @@ namespace IM.Administrator.Forms
 
         if (sMsj == "")
         {
-          nRes = BRCountries.SaveCountry(country, (mode == EnumMode.edit));
+          nRes = BREntities.OperationEntity<Country>(country, mode);
 
           UIHelper.ShowMessageResult("Country", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

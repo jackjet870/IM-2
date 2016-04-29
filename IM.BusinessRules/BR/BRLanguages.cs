@@ -67,44 +67,5 @@ namespace IM.BusinessRules.BR
     }
     #endregion
     #endregion
-
-    #region SaveLanguages
-    /// <summary>
-    /// Actualiza|Guarda un registro en el catalogo Languages
-    /// </summary>
-    /// <param name="language">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza | False. Inserta</param>
-    /// <returns>0. No se guardó | 1. registro guardado | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 30/03/2016
-    /// </history>
-    public static int SaveLanguage(Language language,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Update
-        if (blnUpdate)//Actualizar
-        {
-          dbContext.Entry(language).State = System.Data.Entity.EntityState.Modified;
-        }
-        #endregion
-        #region Insert
-        else//insertar
-        {
-          Language languageVal = dbContext.Languages.Where(la => la.laID == language.laID).FirstOrDefault();
-          if(languageVal!=null)//Validamos si existe un objeto con el mismo nombre}
-          {
-            return -1;//Existe un registro con el mismo nombre
-          }
-          else
-          {
-            dbContext.Languages.Add(language);            
-          }
-        }
-        #endregion        
-        return dbContext.SaveChanges();        
-      }
-    }
-    #endregion
   }
 }

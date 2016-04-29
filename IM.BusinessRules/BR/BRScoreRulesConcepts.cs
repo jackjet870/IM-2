@@ -45,45 +45,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SaveScoreRuleConcept
-    /// <summary>
-    /// Agrega|Actualiza un registro en el catalogo ScoreRulesConcepts
-    /// </summary>
-    /// <param name="scoreRuleConcept">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Agrega | False. Actualiza</param>
-    /// <returns>0. No se guardó | 1. Se guardó  | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 23/04/2016
-    /// </history>
-    public static int SaveScoreRuleConcept(ScoreRuleConcept scoreRuleConcept, bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region
-        if(blnUpdate)
-        {
-          dbContext.Entry(scoreRuleConcept).State = System.Data.Entity.EntityState.Modified;
-        }
-        #endregion
-        #region Add
-        else
-        {
-          ScoreRuleConcept scoreRuleConceptVal = dbContext.ScoreRulesConcepts.Where(sp => sp.spID == scoreRuleConcept.spID).FirstOrDefault();
-          if(scoreRuleConceptVal!=null)//Verificamos si existe un registro con el mismo ID
-          {
-            return -1;
-          }
-          else//Agregamos
-          {
-            dbContext.ScoreRulesConcepts.Add(scoreRuleConcept);
-          }
-        } 
-        #endregion
-
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

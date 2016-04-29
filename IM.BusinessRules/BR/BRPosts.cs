@@ -48,45 +48,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SavePost
-    /// <summary>
-    /// Agrega|Actualiza un reistro en el catalogo Posts
-    /// </summary>
-    /// <param name="post">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza | False. Agrega</param>
-    /// <returns>0. No se guardó | 1. se guardó | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 11/04/2016
-    /// </history>
-    public static int SavePost(Post post,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Update
-        if (blnUpdate)
-        {
-          dbContext.Entry(post).State = System.Data.Entity.EntityState.Modified;
-        } 
-        #endregion
-        #region Add
-        else
-        {
-          Post postVal = dbContext.Posts.Where(po => po.poID == post.poID).FirstOrDefault();
-          if(postVal!=null)//verficamos si existe un registro con el mismo ID
-          {
-            return -1;
-          }
-          else
-          {
-            dbContext.Posts.Add(post);
-          }
-        } 
-        #endregion
-
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

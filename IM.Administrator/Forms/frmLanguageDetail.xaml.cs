@@ -125,9 +125,9 @@ namespace IM.Administrator.Forms
 
         if (strMsj == "")//Validar si hay cmapos vacios
         {
-          nRes = BRLanguages.SaveLanguage(language, (enumMode == EnumMode.edit));
+          nRes = BREntities.OperationEntity(language, enumMode);
           UIHelper.ShowMessageResult("Language", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

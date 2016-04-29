@@ -77,7 +77,7 @@ namespace IM.Administrator.Forms
         string strMsj = ValidateHelper.ValidateForm(this, "Score Rule Concept");
         if (strMsj == "")
         {
-          int nRes = BRScoreRulesConcepts.SaveScoreRuleConcept(scoreRuleConcept, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(scoreRuleConcept, enumMode);
           UIHelper.ShowMessageResult("Score Rule Concept", nRes);
           if(nRes>0)
           {

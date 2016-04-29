@@ -113,9 +113,9 @@ namespace IM.Administrator.Forms
 
           if (strMsj == "")//Guardar
           {
-            nRes= BRHotels.SaveHotel(hotel, (enumMode == EnumMode.edit));
+            nRes = BREntities.OperationEntity(hotel, enumMode);
             UIHelper.ShowMessageResult("Hotel", nRes);
-            if(nRes==1)
+            if(nRes>0)
             {
               hotel = BRHotels.GetHotels(hotel, blnInclude: true).FirstOrDefault();
               DialogResult = true;

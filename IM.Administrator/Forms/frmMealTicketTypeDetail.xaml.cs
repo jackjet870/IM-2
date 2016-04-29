@@ -80,9 +80,9 @@ namespace IM.Administrator.Forms
         string strMsj = ValidateHelper.ValidateForm(this,"Meal Ticket Detail");
         if(strMsj=="")
         {
-          int nRes = BRMealTicketTypes.SaveMealTicketTypes(mealTicketType,(enumMode==EnumMode.edit));
+          int nRes = BREntities.OperationEntity(mealTicketType, enumMode);
           UIHelper.ShowMessageResult("Meal Ticket Detail", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

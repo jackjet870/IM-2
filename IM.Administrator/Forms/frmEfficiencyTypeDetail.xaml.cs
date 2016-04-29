@@ -85,9 +85,9 @@ namespace IM.Administrator.Forms
         string strMsj = ValidateHelper.ValidateForm(this, "Efficiency Type");
         if (strMsj == "")
         {
-          nRes = BREfficiencyTypes.SaveEfficiencyType(efficiencyType, (enumMode == EnumMode.edit));
+          nRes = BREntities.OperationEntity(efficiencyType, enumMode);
           UIHelper.ShowMessageResult("Efficiency Type", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

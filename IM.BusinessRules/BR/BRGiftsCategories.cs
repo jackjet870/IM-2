@@ -49,45 +49,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SaveGiftCategory
-    /// <summary>
-    /// Agrega|Actualiza un registro en el catalogo GiftsCategs
-    /// </summary>
-    /// <param name="giftCategory">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza | False. Agrega</param>
-    /// <returns>0. No se guardó | 1.Se guardó correctamente | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 23/03/2016
-    /// </history>
-    public static int SaveGiftCategory(GiftCategory giftCategory,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Actualizar
-        if (blnUpdate)//Si es actualizar
-        {
-          dbContext.Entry(giftCategory).State = System.Data.Entity.EntityState.Modified;
-        }
-        #endregion
-        #region Insertar
-        else//Si es insertar
-        {
-          GiftCategory giftCategoryVal = dbContext.GiftsCategories.Where(gc => gc.gcID == giftCategory.gcID).FirstOrDefault();
-          if(giftCategoryVal!=null)//Si existe un registro con el mismo ID
-          {
-            return -1;
-          }
-          else//Se agrega
-          {
-            dbContext.GiftsCategories.Add(giftCategory);
-          }
-        }
-        #endregion
-
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

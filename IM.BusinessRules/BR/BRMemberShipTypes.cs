@@ -53,45 +53,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SaveMeberShipType
-    /// <summary>
-    /// Guarda|Actualiza un registro en el catalogo MembershipTypes
-    /// </summary>
-    /// <param name="memberShipType">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza | False. Inserta</param>
-    /// <returns>0. No se guardó | 1. se guardó correctamente | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 04/04/2016
-    /// </history>
-    public static int SaveMemberShipType(MembershipType memberShipType,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Update
-        if (blnUpdate)//si es actualizar
-        {
-          dbContext.Entry(memberShipType).State = System.Data.Entity.EntityState.Modified;
-        }
-        #endregion
-        #region Insert
-        else
-        {
-          MembershipType memberShipTypeVal = dbContext.MembershipTypes.Where(mt => mt.mtID == memberShipType.mtID).FirstOrDefault();
-          if(memberShipTypeVal!=null)//Verificar que se tenga un objeto
-          {
-            return -1;
-          }
-          else//insertar
-          {
-            dbContext.MembershipTypes.Add(memberShipType);
-          }
-        }
-        #endregion
-
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

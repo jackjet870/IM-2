@@ -80,9 +80,9 @@ namespace IM.Administrator.Forms
         string strMsj = ValidateHelper.ValidateForm(this, "Refund Type");
         if(strMsj=="")
         {
-          int nRes = BRRefundTypes.SaveRefundType(refundType, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(refundType, enumMode);
           UIHelper.ShowMessageResult("Refund Type", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

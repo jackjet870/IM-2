@@ -38,7 +38,7 @@ namespace IM.Administrator.Forms
         int nRes = 0;
         if (sMsj == "")//Todos los campos estan llenos
         {
-          nRes = BRContracts.SaveContract(contract, (mode == EnumMode.edit));
+          nRes = BREntities.OperationEntity<Contract>(contract, mode);
           UIHelper.ShowMessageResult("Contract", nRes);
           if(nRes==1)
           {

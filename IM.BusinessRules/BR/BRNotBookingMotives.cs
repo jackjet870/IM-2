@@ -50,38 +50,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SaveNotBookingMotive
-    /// <summary>
-    /// Guarda|Actualiza un registro en el catalogo NotBookingMotive 
-    /// </summary>
-    /// <param name="notBookingMotive">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza | False. Inserta</param>
-    /// <returns>0. No se guardó | 1. Se guardó </returns>
-    /// <history>
-    /// [emoguel] created 05/04/2016
-    /// </history>
-    public static int SaveNotBookingMotive(NotBookingMotive notBookingMotive,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-
-        #region Update
-        if (blnUpdate)//SI es actualizar
-        {
-          dbContext.Entry(notBookingMotive).State = System.Data.Entity.EntityState.Modified;
-        }
-        #endregion
-        #region Insert
-        else//Insertar
-        {
-          dbContext.NotBookingMotives.Add(notBookingMotive);
-        } 
-        #endregion
-
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

@@ -43,9 +43,9 @@ namespace IM.Administrator.Forms
           string strMsj = ValidateHelper.ValidateForm(this, "Payment Place");
           if(strMsj=="")
           {
-            int nRes = BRPaymentPlaces.SavePaymentPlace(paymentPlace, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(paymentPlace, enumMode);
             UIHelper.ShowMessageResult("PaymentPlaces", nRes);
-            if(nRes==1)
+            if(nRes>0)
             {
               DialogResult = true;
               Close();

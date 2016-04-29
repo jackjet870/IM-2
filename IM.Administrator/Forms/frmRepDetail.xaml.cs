@@ -113,9 +113,9 @@ namespace IM.Administrator.Forms
         string strMsj = ValidateHelper.ValidateForm(this, "Rep");
         if (strMsj == "")
         {
-          int nRes = BRReps.SaveReps(rep, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(rep, enumMode);
           UIHelper.ShowMessageResult("Rep", nRes);
-          if (nRes == 1)
+          if (nRes >0)
           {
             DialogResult = true;
             Close();

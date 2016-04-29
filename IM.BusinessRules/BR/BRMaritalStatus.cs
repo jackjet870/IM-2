@@ -51,46 +51,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SaveMaritalStatus
-    /// <summary>
-    /// Agregra|Actualiza un registro del catalogo MStatus
-    /// </summary>
-    /// <param name="maritalStatus">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza | False. Inserta</param>
-    /// <returns>0. No se guardó | 1. Se guardó correctamente | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 01/04/2016
-    /// </history>
-    public static int SaveMaritalStatus(MaritalStatus maritalStatus,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Actualizar
-        if (blnUpdate)//Actualizar
-        {
-          dbContext.Entry(maritalStatus).State = System.Data.Entity.EntityState.Modified;
-        } 
-        #endregion
-        #region Insertar
-        else//Insertar
-        {
-          MaritalStatus marStatusVal = dbContext.MaritalStatusList.Where(ms => ms.msID == maritalStatus.msID).FirstOrDefault();
-
-          if (marStatusVal != null)//Validamos que no exista registro con el mismoID
-          {
-            return -1;
-          }
-          else
-          {
-            dbContext.MaritalStatusList.Add(maritalStatus);
-          }
-        } 
-        #endregion
-
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

@@ -97,9 +97,9 @@ namespace IM.Administrator.Forms
           string strMsj = ValidateHelper.ValidateForm(this, "Sale Type");
           if(strMsj=="")
           {
-            int nRes = BRSaleTypes.SaveSaleType(saleType, (enumMode == EnumMode.edit));
+            int nRes = BREntities.OperationEntity(saleType, enumMode);
             UIHelper.ShowMessageResult("Sale Type", nRes);
-            if(nRes==1)
+            if(nRes>0)
             {
               DialogResult = true;
               Close();

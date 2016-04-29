@@ -76,9 +76,9 @@ namespace IM.Administrator.Forms
         int nRes = 0;
         if (sMsj == "")//Todos los campos estan llenos
         {
-          nRes = BRCreditCardTypes.SaveCreditCardType(creditCardType, (mode == EnumMode.edit));
+          nRes = BREntities.OperationEntity<CreditCardType>(creditCardType, mode);
           UIHelper.ShowMessageResult("Credit Card Type", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

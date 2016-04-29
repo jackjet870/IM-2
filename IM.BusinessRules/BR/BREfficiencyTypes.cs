@@ -47,39 +47,6 @@ namespace IM.BusinessRules.BR
         return query.OrderBy(eft => eft.etN).ToList();
       }
     }
-    #endregion
-
-    #region SaveEfficiencyType
-    /// <summary>
-    /// Guarda|Actualiza un registro en el catalogo efficiencyTypes
-    /// </summary>
-    /// <param name="efficiencyType">Objeto a guardar</param>
-    /// <param name="blnUpdate">true. Actualiza | false. Inserta</param>
-    /// <returns></returns>
-    public static int SaveEfficiencyType(EfficiencyType efficiencyType,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        if (blnUpdate)//Si es actualizar
-        {
-          dbContext.Entry(efficiencyType).State = System.Data.Entity.EntityState.Modified;
-          return dbContext.SaveChanges();
-        }
-        else//Si es Insertar
-        {
-          EfficiencyType efficiencyTypeVal = dbContext.EfficiencyTypes.Where(eft => eft.etID == efficiencyType.etID).FirstOrDefault();
-          if(efficiencyTypeVal!=null)//Si existe un registro con el mismo id
-          {
-            return -1;
-          }
-          else//Insertar
-          {
-            dbContext.EfficiencyTypes.Add(efficiencyType);
-            return dbContext.SaveChanges();
-          }
-        }
-      }
-    }
-    #endregion
+    #endregion    
   }
 }

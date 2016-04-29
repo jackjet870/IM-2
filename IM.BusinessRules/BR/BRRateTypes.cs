@@ -66,25 +66,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SaveRateType
-    /// <summary>
-    /// Agrega|Actualiza un registro en el catalogo RateTypes
-    /// </summary>
-    /// <param name="rateType">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza| False. Agrega</param>
-    /// <returns>0. No se guardó | 1. Se guardó correctamente</returns>
-    /// <history>
-    /// [emoguel] created 13/04/2016
-    /// </history>
-    public static int SaveRateType(RateType rateType,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        dbContext.Entry(rateType).State = (blnUpdate) ? EntityState.Modified : EntityState.Added;
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

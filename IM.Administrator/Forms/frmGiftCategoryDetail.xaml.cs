@@ -121,9 +121,9 @@ namespace IM.Administrator.Forms
         string strMsj = ValidateHelper.ValidateForm(this, "Gift Category");        
         if (strMsj == "")
         {
-          int nRes = BRGiftsCategories.SaveGiftCategory(giftCategory, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(giftCategory, enumMode);
           UIHelper.ShowMessageResult("Gift Category", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

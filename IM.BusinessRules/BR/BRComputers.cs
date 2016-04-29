@@ -46,36 +46,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-    
-    #region SaveComputer
-    /// <summary>
-    /// Agrega|Actualiza un registro al catalogo Computers
-    /// </summary>
-    /// <param name="computer">Objeto a guardar</param>
-    /// <returns>0. No se guardo | 1. Guardado correctamente | -1. Existe un registro con el mismo ID</returns>
-    public static int SaveComputer(Computer computer,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        if (blnUpdate)//Si es actualizar
-        {
-          dbContext.Entry(computer).State = System.Data.Entity.EntityState.Modified;
-        }
-        else//Si es agregar
-        {
-          Computer computerVal = dbContext.Computers.Where(cp => cp.cpID == computer.cpID).FirstOrDefault();
-          if (computerVal == null)
-          {//Guardar
-            dbContext.Computers.Add(computer);
-          }
-          else//Existe un registro con el mismo ID
-          {
-            return -1;
-          }
-        }
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

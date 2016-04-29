@@ -83,7 +83,7 @@ namespace IM.Administrator.Forms
         if (sMsj == "")
         {
 
-          nRes = BRChargeTos.SaveChargeTo(chargeTo, (mode == EnumMode.edit));
+          nRes = BREntities.OperationEntity<ChargeTo>(chargeTo, mode);
 
           UIHelper.ShowMessageResult("Charge To", nRes);
           if(nRes==1)

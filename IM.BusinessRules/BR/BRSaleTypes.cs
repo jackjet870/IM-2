@@ -53,45 +53,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SaveSaleType
-    /// <summary>
-    /// Guarda|Actualiza un registro en el catalogo SaleTypes
-    /// </summary>
-    /// <param name="saleType">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza | False. Inserta</param>
-    /// <returns>0. No se guardó | 1. Se guardó  | -1. existe un registro con el mismo ID </returns>
-    /// <history>
-    /// [emoguel] created 19/04/2016
-    /// </history>
-    public static int SaveSaleType(SaleType saleType, bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Update
-        if (blnUpdate)//Actualizar
-        {
-          dbContext.Entry(saleType).State = System.Data.Entity.EntityState.Modified;
-        }
-        #endregion
-        #region Add
-        else//Add
-        {
-          SaleType saleTypeVal = dbContext.SaleTypes.Where(st => st.stID == saleType.stID).FirstOrDefault();
-          if(saleTypeVal!=null)//Verificamos que no exista un registro con el mismo ID
-          {
-            return -1;
-          }
-          else//Agregar el registro
-          {
-            dbContext.SaleTypes.Add(saleType);
-          }
-        } 
-        #endregion
-
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

@@ -3,14 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.Administrator.Forms"
-        mc:Ignorable="d" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" DataContext="{Binding computer}"
-        Title="Computer Detail" Height="248" Width="338" ResizeMode="NoResize" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
+        xmlns:local="clr-namespace:IM.Administrator.Forms" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" ResizeMode="NoResize"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        Title="Computer Detail" Height="248" Width="338" >
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="71"/>
-            <ColumnDefinition Width="81*"/>
+            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="75*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="44"/>
@@ -32,7 +32,7 @@
         <TextBox Name="txtcpIPAddress" Grid.Column="1" Grid.Row="2" Height="27" VerticalAlignment="Top" Text="{Binding cpIpAddress}"  IsEnabled="False" />
         <ComboBox Name="cmbDesk" Grid.Column="1" Grid.Row="3" Height="27" VerticalAlignment="Top" DisplayMemberPath="dkN" SelectedValuePath="dkID" SelectedValue="{Binding cpdk}"/>
 
-        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Command="{Binding btnAccept_Click}" Content="_Accept"/>
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept"/>
         <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="4" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>

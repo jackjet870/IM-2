@@ -85,9 +85,9 @@ namespace IM.Administrator.Forms
         string strMsj = ValidateHelper.ValidateForm(this, "Post");
         if (strMsj == "")
         {
-          int nRes = BRPosts.SavePost(post, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(post, enumMode);
           UIHelper.ShowMessageResult("Post", nRes);
-          if (nRes == 1)
+          if (nRes >0)
           {
             DialogResult = true;
             Close();

@@ -53,46 +53,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SavePaymentPlace
-    /// <summary>
-    /// Agrega|Actualiza un registro en el catalogo paymentPlaces
-    /// </summary>
-    /// <param name="paymentPlace">Objeto a guarda</param>
-    /// <param name="blnUpdate">True. Actualiza | False. Agrega</param>
-    /// <returns>0. No se guardó | 1. Se guardó | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 05/04/2016
-    /// </history>
-    public static int SavePaymentPlace(PaymentPlace paymentPlace,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Actualizar
-        if (blnUpdate)//Si es actualizar
-        {
-          dbContext.Entry(paymentPlace).State = System.Data.Entity.EntityState.Modified;
-        } 
-        #endregion
-        #region Insertar
-        else//Insertar
-        {
-          PaymentPlace paymentPlaceVal = dbContext.PaymentPlaces.Where(pc => pc.pcID == paymentPlace.pcID).FirstOrDefault();
-
-          if(paymentPlaceVal!=null)//Verificamos que no haya un registro con el mismo ID
-          {
-            return -1;
-          }
-          else//insertar
-          {
-            dbContext.PaymentPlaces.Add(paymentPlaceVal);
-
-          }
-        } 
-        #endregion
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

@@ -114,9 +114,9 @@ namespace IM.Administrator.Forms
         }
         if (strMsj=="")
         {
-          int nRes = BRPermissionsLevels.SavePermissions(permissionLevel, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(permissionLevel, enumMode);
           UIHelper.ShowMessageResult("Permission Level", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

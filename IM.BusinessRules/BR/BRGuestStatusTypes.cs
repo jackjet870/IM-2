@@ -68,47 +68,6 @@ namespace IM.BusinessRules.BR
     } 
     #endregion
 
-    #region SaveGuestStatusType
-    /// <summary>
-    /// Guarda|actualiza un registro en el catalogo GuestStatus
-    /// </summary>
-    /// <param name="guestStatusType">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza | false. Inserta</param>
-    /// <returns>0. registro no guardado | 1. Registro guardado | -1. existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 24/03/2016
-    /// </history>
-    public static int SaveGuestStatusType(GuestStatusType guestStatusType,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Update
-        if (blnUpdate)//Actualizar
-        {
-          dbContext.Entry(guestStatusType).State = System.Data.Entity.EntityState.Modified;
-        }
-        #endregion
-        #region insert
-        else//insertar
-        {
-          GuestStatusType guestStatusTypeVal = dbContext.GuestsStatusTypes.Where(gs => gs.gsID == guestStatusType.gsID).FirstOrDefault();
-
-          if(guestStatusTypeVal!=null)//Se valida si existe un registro con el mismo ID
-          {
-            return -1;//Existe un registro con el mismo ID
-          }
-          else//crear el registro nuevo
-          {
-            dbContext.GuestsStatusTypes.Add(guestStatusType);
-          }
-        }
-        #endregion
-
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
-
     #region GuestStatustypeId
     /// <summary>
     /// Obtiene el tipo de  estatus del invitado por su ID

@@ -81,9 +81,9 @@ namespace IM.Administrator.Forms
         }
         if(strMsj=="")
         {
-          int nRes = BRReimpresionMotives.SaveReimpresionMotive(reimpresionMotive, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(reimpresionMotive, enumMode);
           UIHelper.ShowMessageResult("Reimpresion Motive", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

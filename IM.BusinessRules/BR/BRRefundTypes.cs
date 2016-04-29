@@ -48,44 +48,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SaveRefundType
-    /// <summary>
-    /// Agrega|Actualiza un registro en el catalogo RefunType
-    /// </summary>
-    /// <param name="refundType">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza  | False. Inserta</param>
-    /// <returns>0. No se guardó | 1. Se guardó | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 14/04/2016
-    /// </history>
-    public static int SaveRefundType(RefundType refundType, bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Update
-        if (blnUpdate)
-        {
-          dbContext.Entry(refundType).State = System.Data.Entity.EntityState.Modified;
-        }
-        #endregion
-        #region Insert
-        else
-        {
-          RefundType refundTypeVal = dbContext.RefundTypes.Where(rf => rf.rfID == refundType.rfID).FirstOrDefault();
-          if (refundTypeVal != null)//Validamos que no exista un registro con el mismo ID
-          {
-            return -1;
-          }
-          else//insertar
-          {
-            dbContext.RefundTypes.Add(refundType);
-          }
-        }
-        #endregion
-        return dbContext.SaveChanges();
-      }
-    } 
-    #endregion
   }
 }

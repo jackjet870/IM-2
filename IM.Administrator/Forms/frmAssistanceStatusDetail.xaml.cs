@@ -69,11 +69,12 @@ namespace IM.Administrator.Forms
 
         if (sMsj == "")//Validar si hay cmapos vacios
         {
-          nRes = BRAssistancesStatus.SaveAssitanceStatus((mode == EnumMode.edit), assistance);
+          nRes = BREntities.OperationEntity(assistance, mode);
 
           UIHelper.ShowMessageResult("Assistance Status", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
+            DialogResult = true;
             Close();
           }
         }

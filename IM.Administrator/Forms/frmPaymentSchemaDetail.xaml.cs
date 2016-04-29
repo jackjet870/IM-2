@@ -85,9 +85,9 @@ namespace IM.Administrator.Forms
 
         if(strMsj=="")
         {
-          int nRes = BRPaymentSchemas.SavePaymentSchema(paymentSchema, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(paymentSchema, enumMode);
           UIHelper.ShowMessageResult("Payment Schema", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

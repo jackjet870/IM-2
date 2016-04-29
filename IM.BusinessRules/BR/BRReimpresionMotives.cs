@@ -47,44 +47,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SaveReimpresionMotive
-    /// <summary>
-    /// Actualiza|Agrega un registro al catalogo ReimpresionMotives
-    /// </summary>
-    /// <param name="reimpresionMotive">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza  | False. Agrega</param>
-    /// <returns>0. No se guardó | 1. Se guardó | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 16/04/2016
-    /// </history>
-    public static int SaveReimpresionMotive(ReimpresionMotive reimpresionMotive,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Update
-        if (blnUpdate)//Actualizar
-        {
-          dbContext.Entry(reimpresionMotive).State = System.Data.Entity.EntityState.Modified;
-        }
-        #endregion
-        #region Add
-        else
-        {
-          ReimpresionMotive reimpresionMotVal = dbContext.ReimpresionMotives.Where(rm => rm.rmID == reimpresionMotive.rmID).FirstOrDefault();
-          if(reimpresionMotVal!=null)//Validar si existe un registro con el mismo ID
-          {
-            return -1;
-          }
-          else//Agregar
-          {
-            dbContext.ReimpresionMotives.Add(reimpresionMotive);
-          }
-        } 
-        #endregion
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

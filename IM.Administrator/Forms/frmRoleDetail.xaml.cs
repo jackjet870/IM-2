@@ -80,9 +80,9 @@ namespace IM.Administrator.Forms
         string strMsj = ValidateHelper.ValidateForm(this, "Roles");
         if (strMsj == "")
         {
-          int nRes = BRRoles.SaveRole(role, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(role, enumMode);
           UIHelper.ShowMessageResult("Roles", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

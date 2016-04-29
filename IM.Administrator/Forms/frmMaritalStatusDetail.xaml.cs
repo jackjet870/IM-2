@@ -85,9 +85,9 @@ namespace IM.Administrator.Forms
         string strMsj = ValidateHelper.ValidateForm(this, "Marital Status");
         if(strMsj=="")
         {
-          int nRes = BRMaritalStatus.SaveMaritalStatus(maritalStatus, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(maritalStatus, enumMode);
           UIHelper.ShowMessageResult("Marital Status",nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

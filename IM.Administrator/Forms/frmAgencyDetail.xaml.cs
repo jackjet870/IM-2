@@ -111,7 +111,7 @@ namespace IM.Administrator.Forms
           }
           #endregion
           UIHelper.ShowMessageResult("Agency", nRes);    
-          if((nRes==2 && enumMode!=EnumMode.add) || nRes==1 )
+          if(nRes>0 )
           {
             DialogResult = true;
             Close();

@@ -113,9 +113,9 @@ namespace IM.Administrator.Forms
           #endregion
           if (strMsj == "")
           {
-            int nRes = BRMemberShipTypes.SaveMemberShipType(membershipType, (enumMode == EnumMode.edit));
+            int nRes = BREntities.OperationEntity(membershipType, enumMode);
             UIHelper.ShowMessageResult("Membership Type", nRes);
-            if (nRes == 1)
+            if (nRes >0)
             {
               DialogResult = true;
               Close();

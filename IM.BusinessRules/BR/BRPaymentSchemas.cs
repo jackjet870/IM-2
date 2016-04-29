@@ -49,27 +49,6 @@ namespace IM.BusinessRules.BR
         return query.OrderBy(pas => pas.pasN).ToList();
       }
     }
-    #endregion
-
-    #region SavePaymentSchema
-    /// <summary>
-    /// Agrega|Actualiza un registro en el catalogo PaymentSchemas
-    /// </summary>
-    /// <param name="paymentSchema">Objeto a guardar</param>
-    /// <param name="blUpdate">True. Actualiza | False. Inserta</param>
-    /// <returns>0. No se guardó | 1. se guardó</returns>
-    /// <history>
-    /// [emoguel] created 06/04/2016
-    /// </history>
-    public static int SavePaymentSchema(PaymentSchema paymentSchema,bool blUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        dbContext.Entry(paymentSchema).State = (blUpdate) ? EntityState.Modified : EntityState.Added;        
-
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
+    #endregion    
   }
 }

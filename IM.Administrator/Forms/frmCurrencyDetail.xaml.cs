@@ -81,10 +81,11 @@ namespace IM.Administrator.Forms
         if (sMsj == "")//Validar si hay cmapos vacios
         {
 
-          nRes = BRCurrencies.saveCurrency(currency, (mode == EnumMode.edit));
+          nRes = BREntities.OperationEntity(currency, mode);
           UIHelper.ShowMessageResult("Currency", nRes);
-          if(nRes==1)
+          if (nRes > 0)
           {
+            DialogResult = true;
             Close();
           }
           

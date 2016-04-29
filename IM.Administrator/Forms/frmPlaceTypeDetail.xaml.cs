@@ -80,9 +80,9 @@ namespace IM.Administrator.Forms
         string strMsj = ValidateHelper.ValidateForm(this, "Place Type");
         if (strMsj=="")
         {
-          int nRes = BRPlaceTypes.SavePlaceType(placeType, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(placeType, enumMode);
           UIHelper.ShowMessageResult("Place Type", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

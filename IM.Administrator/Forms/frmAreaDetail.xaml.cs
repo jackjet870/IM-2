@@ -88,7 +88,7 @@ namespace IM.Administrator.Forms
         
         if (sMsj == "")
         {
-          nRes = BRAreas.SaveArea((mode == EnumMode.edit), area);
+          nRes = BREntities.OperationEntity<Area>(area, mode);
 
           UIHelper.ShowMessageResult("Area", nRes);
           if(nRes==1)

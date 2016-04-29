@@ -72,9 +72,9 @@ namespace IM.Administrator.Forms
 
         if (strMsj=="")
         {
-          nRes = BRGuestStatusTypes.SaveGuestStatusType(guestStaTyp, (enumMode == EnumMode.edit));
+          nRes = BREntities.OperationEntity(guestStaTyp, enumMode);
           UIHelper.ShowMessageResult("Guest Status Type", nRes);
-          if (nRes == 1)
+          if (nRes >0)
           {
             DialogResult = true;
             Close();

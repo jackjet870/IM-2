@@ -132,9 +132,9 @@ namespace IM.Administrator.Forms
           string strMsj = ValidateHelper.ValidateForm(this, "Post Log");
           if (strMsj == "")
           {
-            int nRes = BRPostsLog.SavePostLog(postLog, (enumMode == EnumMode.edit));
+            int nRes = BREntities.OperationEntity(postLog, enumMode);
             UIHelper.ShowMessageResult("PostLog", nRes);
-            if (nRes == 1)
+            if (nRes>0)
             {
               postLog = BRPostsLog.GetPostsLog(postLog).FirstOrDefault();
               DialogResult = true;

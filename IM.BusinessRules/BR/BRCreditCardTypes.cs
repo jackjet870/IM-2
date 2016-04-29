@@ -47,45 +47,7 @@ namespace IM.BusinessRules.BR
         return query.OrderBy(cct=>cct.ccN).ToList();
       }
     }
-    #endregion
-
-    #region SaveCreditCarType
-    /// <summary>
-    /// Agrega | actualiza un regsitro en el catalogo de Credit card types
-    /// </summary>
-    /// <param name="creditCardType">Objeto a agregar o actualiza en la BD</param>
-    /// <param name="blnUpd">boleano para saber si se va a actualziar o agregar</param>
-    /// <returns>0. No se guardó el registro | 1. El registro se guardó | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [Emoguel] created 07/03/2016
-    /// </history>
-    public static int SaveCreditCardType(CreditCardType creditCardType, bool blnUpd)
-    {
-      int nRes = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        if (blnUpd)//Si es alctualizar
-        {
-          dbContext.Entry(creditCardType).State = System.Data.Entity.EntityState.Modified;
-          nRes = dbContext.SaveChanges();
-        }
-        else//Si es Agregar
-        {
-          CreditCardType creditCardTypeVal = dbContext.CreditCardTypes.Where(cct => cct.ccID == creditCardType.ccID).FirstOrDefault();
-          if (creditCardTypeVal != null)//Existe un registro con el mismo ID
-          {
-            nRes = -1;
-          }
-          else//Agregar a la BD
-          {
-            dbContext.CreditCardTypes.Add(creditCardType);
-            nRes = dbContext.SaveChanges();
-          }
-        }
-      }
-      return nRes;
-    }
-    #endregion
+    #endregion    
 
     #region GetCreditCardTypeId
     /// <summary>

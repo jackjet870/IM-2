@@ -86,9 +86,9 @@ namespace IM.Administrator.Forms
         string strMsj = ValidateHelper.ValidateForm(this, "Region");
         if(strMsj=="")
         {
-          int nRes = BRRegions.SaveRegion(region, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(region, enumMode);
           UIHelper.ShowMessageResult("Region", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

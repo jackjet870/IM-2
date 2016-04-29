@@ -48,44 +48,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SavePeriod
-    /// <summary>
-    /// Guarda1 Actualiza un registro en el catalogo Periods
-    /// </summary>
-    /// <param name="period">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza | False. Agrega</param>
-    /// <returns>0. No se guardó | 1. Se guardó | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 07/04/2016
-    /// </history>
-    public static int SavePeriod(Period period,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Update
-        if (blnUpdate)//Si es actualizar
-        {
-          dbContext.Entry(period).State = System.Data.Entity.EntityState.Modified;
-        }
-        #endregion
-        #region Add
-        else
-        {
-          Period periodVal = dbContext.Periods.Where(pd => pd.pdID == period.pdID).FirstOrDefault();
-          if(periodVal!=null)//Validar si existe un registro con el mismo ID
-          {
-            return -1;
-          }
-          else
-          {
-            dbContext.Periods.Add(period);
-          }
-        } 
-        #endregion
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

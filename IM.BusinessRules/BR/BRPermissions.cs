@@ -49,45 +49,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SavePermission
-    /// <summary>
-    /// Actualiza|Agrega un registro en el catalogo Permissions
-    /// </summary>
-    /// <param name="permission">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza | false. Agrega</param>
-    /// <returns>0. No se guardó | 1. Se guardó  | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 07/06/2016
-    /// </history>
-    public static int SavePermission(Permission permission,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Update
-        if (blnUpdate)//SI es actualiza
-        {
-          dbContext.Entry(permission).State = System.Data.Entity.EntityState.Modified;
-        }
-        #endregion
-        #region Add
-        else
-        {
-          Permission permissionVal = dbContext.Permissions.Where(pm => pm.pmID == permission.pmID).FirstOrDefault();
-          if(permissionVal!=null)//Verificamos si existe un registro con el mismo ID
-          {
-            return -1;
-          }
-          else
-          {
-            dbContext.Permissions.Add(permission);
-          }
-        } 
-        #endregion
-
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

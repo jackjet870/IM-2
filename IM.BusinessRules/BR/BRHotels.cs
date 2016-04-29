@@ -64,47 +64,5 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
-    #region SaveHotel
-    /// <summary>
-    /// Actualiza|inserta un registro en el catalogo Hotels
-    /// </summary>
-    /// <param name="hotel">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza | False. Inserta</param>
-    /// <returns>0. No se guardó | 1.Se guardó correctamente | -1.Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 29/03/2016
-    /// </history>
-    public static int SaveHotel(Hotel hotel, bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        
-        #region Update
-        if (blnUpdate)//Si es actualizar
-        {
-          dbContext.Entry(hotel).State= EntityState.Modified;                        
-        }
-        #endregion
-        #region Insert
-        else//Si es insertar
-        {
-          Hotel hotelValid = dbContext.Hotels.Where(ho => ho.hoID == hotel.hoID).FirstOrDefault();
-
-          if (hotelValid != null)//Si existe un registro con el mismo ID
-          {
-            return -1;
-          }
-          else//Si no existe un registro con el mismo ID
-          {
-            dbContext.Hotels.Add(hotel);
-          }
-        }
-        #endregion
-        
-        return dbContext.SaveChanges();        
-      }
-    }
-      #endregion
-
     }
   }

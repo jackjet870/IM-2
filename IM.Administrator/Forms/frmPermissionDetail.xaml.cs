@@ -76,9 +76,9 @@ namespace IM.Administrator.Forms
         string strMsj = ValidateHelper.ValidateForm(this, "Permission");
         if(strMsj=="")
         {
-          int nRes = BRPermissions.SavePermission(permission, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(permission, enumMode);
           UIHelper.ShowMessageResult("Permission", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();

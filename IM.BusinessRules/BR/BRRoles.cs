@@ -48,45 +48,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-     #region SaveRole
-    /// <summary>
-    /// Actualiza|Agrega un registro en el catalogo Roles
-    /// </summary>
-    /// <param name="role">Objeto a guardar</param>
-    /// <param name="blnUpdate">True. Actualiza | False. Inserta</param>
-    /// <returns>0.no se guardó | 1. Se guardó | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 19/04/2016
-    /// </history>
-    public static int SaveRole(Role role,bool blnUpdate)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Update
-        if (blnUpdate)//Actualizar
-        {
-          dbContext.Entry(role).State = System.Data.Entity.EntityState.Modified;
-        } 
-        #endregion
-        #region Add
-        else
-        {
-          Role roleVal = dbContext.Roles.Where(ro => ro.roID == role.roID).FirstOrDefault();
-          if(roleVal!=null)//Verificamos si existe un registro con el mismo ID
-          {
-            return -1;
-          }
-          else//Agregamos
-          {
-            dbContext.Roles.Add(role);
-          }
-        } 
-        #endregion
-
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

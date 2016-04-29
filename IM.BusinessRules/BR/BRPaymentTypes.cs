@@ -68,45 +68,5 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region SavePaymentType
-    /// <summary>
-    /// Agrega|Actualiza un registro en el catalogo PaymentTypes
-    /// </summary>
-    /// <param name="paymentType">Objeto a guardar</param>
-    /// <param name="blnUpdtae">True. Actualiza | False. Agrega</param>
-    /// <returns>0. No se guardó | 1. Se guardó | -1. Existe un registro con el mismo ID</returns>
-    /// <history>
-    /// [emoguel] created 06/04/2016
-    /// </history>
-    public static int SavePaymentType(PaymentType paymentType,bool blnUpdtae)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        #region Update
-        if (blnUpdtae)
-        {
-          dbContext.Entry(paymentType).State = System.Data.Entity.EntityState.Modified;
-        }
-        #endregion
-        #region Add
-        else
-        {
-          PaymentType paymentTypeVal = dbContext.PaymentTypes.Where(pt => pt.ptID == paymentType.ptID).FirstOrDefault();
-          if(paymentTypeVal!=null)//Validamos que no si existe un registro con el mismo ID
-          {
-            return -1;
-          }
-          else//agregar
-          {
-            dbContext.PaymentTypes.Add(paymentType);
-          }
-        } 
-        #endregion
-
-        return dbContext.SaveChanges();
-      }
-    }
-    #endregion
   }
 }

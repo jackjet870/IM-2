@@ -80,9 +80,9 @@ namespace IM.Administrator.Forms
         strMsj = ValidateHelper.ValidateForm(this, "Rate Type");
         if(strMsj=="")
         {
-          int nRes= BRRateTypes.SaveRateType(rateType, (enumMode == EnumMode.edit));
+          int nRes = BREntities.OperationEntity(rateType, enumMode);
           UIHelper.ShowMessageResult("Rate Type", nRes);
-          if(nRes==1)
+          if(nRes>0)
           {
             DialogResult = true;
             Close();
