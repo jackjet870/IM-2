@@ -185,7 +185,7 @@ namespace IM.Launcher.Forms
           Process.Start(String.Format("{0}\\IM.MailOuts.exe", path));
           break;
         case EnumMenu.Outhouse:
-          UIHelper.ShowMessage("Coming soon..");
+          Process.Start(String.Format("{0}\\IM.Outhouse.exe", path));
           break;
         case EnumMenu.Host:
           Process.Start(String.Format("{0}\\IM.Host.exe", path));
