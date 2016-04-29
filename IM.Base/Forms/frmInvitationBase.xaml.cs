@@ -2879,9 +2879,9 @@ namespace IM.Base.Forms
         foreach (var row in _lstObjInvitGift)
         {
           var gift = BRGifts.GetGiftId(row.iggi);
-          if (row.igQty > gift.giMaxQty)
+          if (gift.giMaxQty > 0 && row.igQty > gift.giMaxQty)
           {
-            msjErrorGifts.Append(String.Format("The maximu quantity authorized of the gift {0} has been exceeded.\n Max authotized = {1} \n", gift.giN, gift.giMaxQty));
+            msjErrorGifts.Append(String.Format("The maximum quantity authorized of the gift {0} has been exceeded.\n Max authotized = {1} \n", gift.giN, gift.giMaxQty));
             res = false;
             break;
           }
@@ -2889,7 +2889,12 @@ namespace IM.Base.Forms
         if(msjErrorGifts.Length > 0)
         {
           msjErrorGifts.Append("Do you want to modify the gifts?");
-          if(MessageBox.Show(msjErrorGifts.ToString(), title, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+          var msgRes = MessageBox.Show(msjErrorGifts.ToString(), title, MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+          if (msgRes != MessageBoxResult.No)
+          {
+            res = false;
+          }
+          else 
           {
             res = true;
           }
