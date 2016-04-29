@@ -5826,6 +5826,13 @@
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_IM_RptLoginLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="Location" Type="varchar" Mode="In" />
+          <Parameter Name="PCName" Type="varchar" Mode="In" />
+          <Parameter Name="Personnel" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_IM_RptWeeklyGiftsItemsSimple" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="StartDate" Type="datetime" Mode="In" />
           <Parameter Name="EndDate" Type="datetime" Mode="In" />
@@ -16564,7 +16571,7 @@
             <Parameter Name="Program" Mode="In" Type="String" />
             <Parameter Name="FilterDeposit" Mode="In" Type="Byte" />
             <Parameter Name="SalesByMembershipType" Mode="In" Type="Boolean" />
-          </FunctionImport>
+            </FunctionImport>
           <FunctionImport Name="USP_OR_RptProductionByCoupleTypeOutside" ReturnType="Collection(IMModel.RptProductionByCoupleTypeOuthouse)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -16780,7 +16787,7 @@
             <Parameter Name="Program" Mode="In" Type="String" />
             <Parameter Name="FilterDeposit" Mode="In" Type="Byte" />
             <Parameter Name="SalesByMembershipType" Mode="In" Type="Boolean" />
-          </FunctionImport>
+            </FunctionImport>
           <FunctionImport Name="USP_OR_RptProductionByGiftInvitation" ReturnType="Collection(IMModel.RptProductionByGiftInvitation)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -16972,6 +16979,13 @@
             <Parameter Name="OnlyWholesalers" Mode="In" Type="Boolean" />
             <Parameter Name="ConsiderQuinellas" Mode="In" Type="Boolean" />
             <Parameter Name="BasedOnArrival" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_IM_RptLoginLog" ReturnType="Collection(IMModel.RptLoginLog)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="Location" Mode="In" Type="String" />
+            <Parameter Name="PCName" Mode="In" Type="String" />
+            <Parameter Name="Personnel" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -20276,6 +20290,13 @@
           <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptLoginLog">
+          <Property Type="DateTime" Name="Date_Time" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Location" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="PC" Nullable="false" MaxLength="20" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -26728,6 +26749,17 @@
                 <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_IM_RptLoginLog" FunctionName="IMModel.Store.USP_IM_RptLoginLog">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptLoginLog">
+                <ScalarProperty Name="Date_Time" ColumnName="Date/Time" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PC" ColumnName="PC" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

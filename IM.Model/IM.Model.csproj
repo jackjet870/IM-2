@@ -775,6 +775,9 @@
     <Compile Include="RptInvitation_Guest.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptLoginLog.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptMealTickets.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

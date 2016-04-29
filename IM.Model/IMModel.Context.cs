@@ -4566,5 +4566,30 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionByMember>("USP_OR_RptProductionByMember", dateFromParameter, dateToParameter, leadSourcesParameter, pRsParameter, programParameter, applicationParameter, companyParameter, clubParameter, onlyWholesalersParameter, considerQuinellasParameter, basedOnArrivalParameter);
         }
+    
+        public virtual ObjectResult<RptLoginLog> USP_IM_RptLoginLog(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string location, string pCName, string personnel)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var locationParameter = location != null ?
+                new ObjectParameter("Location", location) :
+                new ObjectParameter("Location", typeof(string));
+    
+            var pCNameParameter = pCName != null ?
+                new ObjectParameter("PCName", pCName) :
+                new ObjectParameter("PCName", typeof(string));
+    
+            var personnelParameter = personnel != null ?
+                new ObjectParameter("Personnel", personnel) :
+                new ObjectParameter("Personnel", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptLoginLog>("USP_IM_RptLoginLog", dateFromParameter, dateToParameter, locationParameter, pCNameParameter, personnelParameter);
+        }
     }
 }
