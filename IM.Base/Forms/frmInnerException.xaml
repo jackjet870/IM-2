@@ -1,7 +1,7 @@
 ﻿<Window x:Class="IM.Base.Forms.frmInnerException"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                Title="Inner Exception" Height="350.764" Width="453" Background="SkyBlue" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" Icon="/IM.Base;component/Images/Error.png">
+                Title="Inner Exception" Height="350.764" Width="453" Background="SkyBlue" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" Icon="/IM.Base;component/Images/Error.png" Topmost="True">
   <Grid>
     <Label Content="Message:" Margin="10,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
     <TextBox x:Name="txtMessage" Margin="10,36,10,0" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.CanContentScroll="True" Height="83" VerticalAlignment="Top"/>
