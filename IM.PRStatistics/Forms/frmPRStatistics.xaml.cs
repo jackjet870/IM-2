@@ -8,14 +8,11 @@ using System.Windows.Media;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.PRStatistics.Utilities;
-using OfficeOpenXml.Style;
 using System.IO;
 using System.Diagnostics;
 using System.Data;
-using IM.Model.Classes;
 using IM.Base.Forms;
 using IM.Base.Helpers;
-using IM.Model.Enums;
 
 namespace IM.PRStatistics.Forms
 {
@@ -25,7 +22,7 @@ namespace IM.PRStatistics.Forms
   public partial class frmPRStatistics : Window
   {
     #region Propiedades y Atributos
-    List<Tuple<string,string>> filterTuple= null; // Agrega los filtros de busqueda
+    List<Tuple<string,string>> filterTuple; // Agrega los filtros de busqueda
     public ExecuteCommandHelper LoadCatalogList { get; set; }
     #endregion
 
@@ -35,7 +32,7 @@ namespace IM.PRStatistics.Forms
     /// Constructor
     /// </summary>
     /// <history>
-    /// [wtorres]  15/Mar/2016 Modified. Elimine el parametro userData
+    /// [wtorres]  15/Mar/2016 Modified. Elimine el parametro UserData
     /// </history>
     public frmPRStatistics()
     {
@@ -98,7 +95,6 @@ namespace IM.PRStatistics.Forms
       List<RptPRStats> lstRptStats = dtgr.DataContext as List<RptPRStats>;
       if (lstRptStats != null )
       {
-        string dateRange = DateHelper.DateRange(dtpkFrom.SelectedDate.Value,dtpkTo.SelectedDate.Value);
         string dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
         FileInfo templatePath = new FileInfo(string.Concat(Directory.GetCurrentDirectory(), "\\ReportTemplate\\RptPRStatistics.xlsx"));
         DataTable dt = TableHelper.GetDataTableFromList(lstRptStats);
@@ -134,7 +130,7 @@ namespace IM.PRStatistics.Forms
     /// </history>
     private void imgButtonExit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      this.Close();
+      Close();
     }
     #endregion
 
@@ -205,7 +201,7 @@ namespace IM.PRStatistics.Forms
     {
       lblStatusBarMessage.Content = message;
       imgStatusBarMessage.Visibility = Visibility.Visible;
-      this.Cursor = Cursors.Wait;
+      Cursor = Cursors.Wait;
       
     }
 
@@ -215,12 +211,11 @@ namespace IM.PRStatistics.Forms
     /// <history>
     /// [erosado] 08/Mar/2016 Created
     /// </history>
-    /// <param name="message">mensaje</param>
     private void StaEnd()
     {
       lblStatusBarMessage.Content = null;
       imgStatusBarMessage.Visibility = Visibility.Hidden;
-      this.Cursor = null;
+      Cursor = null;
     }
 
     /// <summary>
@@ -246,7 +241,7 @@ namespace IM.PRStatistics.Forms
     /// </history>
     public void DoGetLeadSources(string user)
     {
-      Task.Factory.StartNew(() => BRLeadSources.GetLeadSourcesByUser(user, EnumProgram.All, "ALL"))
+      Task.Factory.StartNew(() => BRLeadSources.GetLeadSourcesByUser(user))
       .ContinueWith(
       (task1) =>
       {
@@ -283,7 +278,7 @@ namespace IM.PRStatistics.Forms
     /// </history>
     public void DoGetSalesRooms(string user)
     {
-      Task.Factory.StartNew(() => BRSalesRooms.GetSalesRoomsByUser(user, "ALL"))
+      Task.Factory.StartNew(() => BRSalesRooms.GetSalesRoomsByUser(user))
       .ContinueWith(
       (task1) =>
       {
@@ -448,7 +443,7 @@ namespace IM.PRStatistics.Forms
         {
           if (task1.IsCompleted)
           {
-            List<Model.RptPRStats> data = task1.Result;
+            List<RptPRStats> data = task1.Result;
             if (data.Count > 0)
             {
               dtgr.DataContext = data;
@@ -486,24 +481,24 @@ namespace IM.PRStatistics.Forms
         switch (chbxName)
         {
           case "All Lead Sources":
-            this.lsbxLeadSources.IsEnabled = false;
-            this.lsbxLeadSources.SelectAll();
+            lsbxLeadSources.IsEnabled = false;
+            lsbxLeadSources.SelectAll();
             break;
           case "All Sales Rooms":
-            this.lsbxSalesRooms.IsEnabled = false;
-            this.lsbxSalesRooms.SelectAll();
+            lsbxSalesRooms.IsEnabled = false;
+            lsbxSalesRooms.SelectAll();
             break;
           case "All Countries":
-            this.lsbxCountries.IsEnabled = false;
-            this.lsbxCountries.SelectAll();
+            lsbxCountries.IsEnabled = false;
+            lsbxCountries.SelectAll();
             break;
           case "All Agencies":
-            this.lsbxAgencies.IsEnabled = false;
-            this.lsbxAgencies.SelectAll();
+            lsbxAgencies.IsEnabled = false;
+            lsbxAgencies.SelectAll();
             break;
           case "All Markets":
-            this.lsbxMarkets.IsEnabled = false;
-            this.lsbxMarkets.SelectAll();
+            lsbxMarkets.IsEnabled = false;
+            lsbxMarkets.SelectAll();
             break;
           default:
             break;
@@ -525,24 +520,24 @@ namespace IM.PRStatistics.Forms
         switch (chbxName)
         {
           case "All Lead Sources":
-            this.lsbxLeadSources.IsEnabled = true;
-            this.lsbxLeadSources.UnselectAll();
+            lsbxLeadSources.IsEnabled = true;
+            lsbxLeadSources.UnselectAll();
             break;
           case "All Sales Rooms":
-            this.lsbxSalesRooms.IsEnabled = true;
-            this.lsbxSalesRooms.UnselectAll();
+            lsbxSalesRooms.IsEnabled = true;
+            lsbxSalesRooms.UnselectAll();
             break;
           case "All Countries":
-            this.lsbxCountries.IsEnabled = true;
-            this.lsbxCountries.UnselectAll();
+            lsbxCountries.IsEnabled = true;
+            lsbxCountries.UnselectAll();
             break;
           case "All Agencies":
-            this.lsbxAgencies.IsEnabled = true;
-            this.lsbxAgencies.UnselectAll();
+            lsbxAgencies.IsEnabled = true;
+            lsbxAgencies.UnselectAll();
             break;
           case "All Markets":
-            this.lsbxMarkets.IsEnabled = true;
-            this.lsbxMarkets.UnselectAll();
+            lsbxMarkets.IsEnabled = true;
+            lsbxMarkets.UnselectAll();
             break;
           default:
             break;

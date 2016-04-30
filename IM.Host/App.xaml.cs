@@ -45,7 +45,7 @@ namespace IM.Host
       frmSplash frmSplash = new frmSplash("Host");
 
       //Creamos el tipo de login que se necesita!
-      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.SalesRoom, true);
+      var frmLogin = new frmLogin(frmSplash, EnumLoginType.SalesRoom,changePassword: true, autoSign: true, validatePermission:true, permission:EnumPermission.Host, permissionLevel:EnumPermisionLevel.ReadOnly);
 
       //Mostramos el Splash
       frmSplash.Show();
@@ -55,7 +55,7 @@ namespace IM.Host
 
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;
+        User = frmLogin.UserData;
         frmHost frmMain = new frmHost();
         frmMain.ShowDialog();
         frmSplash.Close();

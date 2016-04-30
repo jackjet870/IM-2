@@ -41,7 +41,7 @@ namespace IM.InventoryMovements
     /// Constructor
     /// </summary>
     /// <history>
-    /// [wtorres]  14/Mar/2016 Modified. Elimine el parametro userData
+    /// [wtorres]  14/Mar/2016 Modified. Elimine el parametro UserData
     /// </history>
     public frmInventoryMovements()
     {

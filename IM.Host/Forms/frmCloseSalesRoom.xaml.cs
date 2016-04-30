@@ -32,7 +32,7 @@ namespace IM.Host.Forms
     /// </history>
     public frmCloseSalesRoom(Window pHost, DateTime serverDate)
     {
-      //_userData = userData;
+      //_userData = UserData;
       _serverDate = serverDate;
 
       InitializeComponent();

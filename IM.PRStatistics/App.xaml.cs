@@ -41,12 +41,12 @@ namespace IM.PRStatistics
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("PR Statistics");
-      frmLogin frmLogin = new frmLogin(frmSplash, true);
+      frmLogin frmLogin = new frmLogin(frmSplash, changePassword: true, validatePermission:true, permission:EnumPermission.PRInvitations, permissionLevel:EnumPermisionLevel.Special);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;
+        User = frmLogin.UserData;
         frmPRStatistics frmMain = new frmPRStatistics();
         frmMain.ShowDialog();
         frmSplash.Close();

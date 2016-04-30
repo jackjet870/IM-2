@@ -41,12 +41,12 @@ namespace IM.Administrator
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Administrator");
-      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Normal);
+      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Normal, validateRole:true, role:EnumRole.Manager);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;
+        User = frmLogin.UserData;
         if (User.HasRole(EnumRole.Manager))
         {
           EventManager.RegisterClassHandler(typeof(AccessText), AccessKeyManager.AccessKeyPressedEvent, new RoutedEventHandler(keyManager_keyPressed));

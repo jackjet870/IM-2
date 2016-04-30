@@ -89,20 +89,20 @@ namespace IM.Base.Forms
     /// </historyy>
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
-      frmLogin log = new frmLogin(null, false, EnumLoginType.Normal, false);
+      frmLogin log = new frmLogin(null, EnumLoginType.Normal, changePassword: false, autoSign: false);
       if (_userPrimero.AutoSign)
       {
         //App.User.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);
-        log.userData = _userPrimero;
+        log.UserData = _userPrimero;
       }
       log.ShowDialog();
       if (log.IsAuthenticated)
       {
-        if (log.userData.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard))
+        if (log.UserData.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard))
         {         
-          if (_guest.guInfo == false || (log.userData.HasRole(EnumRole.PRCaptain) || log.userData.HasRole(EnumRole.PRSupervisor)))
+          if (_guest.guInfo == false || (log.UserData.HasRole(EnumRole.PRCaptain) || log.UserData.HasRole(EnumRole.PRSupervisor)))
           {
-            _userLoguedo = log.userData;
+            _userLoguedo = log.UserData;
             txtguInfoD.Text = BRHelpers.GetServerDate().Date.ToString();
             btnSave.IsEnabled = cboguPRInfo.IsEnabled = true;
             txtguPRInfo.IsReadOnly = false;

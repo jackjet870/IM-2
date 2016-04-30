@@ -41,12 +41,12 @@ namespace IM.MailOuts
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Mail Outs");
-      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true);
+      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, EnumProgram.Inhouse, changePassword: true, autoSign: true, permission:EnumPermission.Register, permissionLevel:EnumPermisionLevel.Standard);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;
+        User = frmLogin.UserData;
         frmMailOuts frmMain = new frmMailOuts();
         frmMain.ShowDialog();
         frmSplash.Close();

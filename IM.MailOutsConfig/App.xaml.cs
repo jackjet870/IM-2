@@ -3,6 +3,7 @@ using System.Windows.Threading;
 using IM.Base.Forms;
 using IM.MailOutsConfig.Forms;
 using IM.Model.Classes;
+using IM.Model.Enums;
 
 namespace IM.MailOutsConfig
 {
@@ -43,12 +44,12 @@ namespace IM.MailOutsConfig
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Mail Outs Configuration");
-      frmLogin frmLogin = new frmLogin(frmSplash, true);
+      var frmLogin = new frmLogin(frmSplash,changePassword: true, validatePermission:true, permission:EnumPermission.MailOutsTexts, permissionLevel:EnumPermisionLevel.ReadOnly);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;
+        User = frmLogin.UserData;
         frmMailOutsTexts frmMain = new frmMailOutsTexts();
         frmMain.ShowDialog();
         frmSplash.Close();

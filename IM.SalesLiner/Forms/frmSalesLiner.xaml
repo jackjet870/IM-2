@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:IM.SalesLiner.Forms"
         mc:Ignorable="d"
          Title="Sales By Liner"
-    d:Height="768" d:Width="1024" WindowStartupLocation="CenterScreen" 
+        
+    d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
     Icon="/IM.SalesLiner;component/Images/IM.ico" WindowState="Maximized" WindowStyle="SingleBorderWindow"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">
     <Window.InputBindings>

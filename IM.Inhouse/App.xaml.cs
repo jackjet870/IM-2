@@ -45,12 +45,14 @@ namespace IM.Inhouse
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Inhouse");
       //frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location,true, EnumProgram.Inhouse);
-      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true);
+      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, EnumProgram.Inhouse, true,
+        changePassword: true, autoSign: true, permission: EnumPermission.Register,
+        permissionLevel: EnumPermisionLevel.ReadOnly);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;        
+        User = frmLogin.UserData;        
         frmInhouse frmMain = new frmInhouse();
         frmMain.ShowDialog();
         frmSplash.Close();

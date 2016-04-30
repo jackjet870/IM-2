@@ -1,7 +1,6 @@
 ﻿using IM.Base.Forms;
 using IM.Model.Classes;
 using IM.Model.Enums;
-using IM.SalesLiner.Forms;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -40,14 +39,14 @@ namespace IM.SalesLiner
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Sales by Liner");
-      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.SalesRoom, true);
+      var frmSplash = new frmSplash("Sales by Liner");
+      var frmLogin = new frmLogin(frmSplash, EnumLoginType.SalesRoom, changePassword:true, autoSign:true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;
-        Forms.frmSalesLiner frmMain = new Forms.frmSalesLiner();
+        User = frmLogin.UserData;
+        var frmMain = new Forms.frmSalesLiner();
         frmMain.ShowDialog();
         frmSplash.Close();
       }

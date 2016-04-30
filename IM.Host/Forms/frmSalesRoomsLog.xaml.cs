@@ -16,7 +16,7 @@ namespace IM.Host.Forms
 
     public frmSalesRoomsLog()
     {
-      //_userData = userData;
+      //_userData = UserData;
 
       InitializeComponent();
     }

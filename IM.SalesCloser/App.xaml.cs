@@ -43,12 +43,12 @@ namespace IM.SalesCloser
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Sales by Closer");
-      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.SalesRoom, true);
+      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.SalesRoom, changePassword: true, autoSign: true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;
+        User = frmLogin.UserData;
         frmSalesCloser frmMain = new frmSalesCloser();
         frmMain.ShowDialog();
         frmSplash.Close();

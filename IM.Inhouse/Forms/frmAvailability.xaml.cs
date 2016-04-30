@@ -319,14 +319,14 @@ namespace IM.Inhouse
       {
         //App.User.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);
         //MessageBox.Show(App.User.User.pePwd.ToString());
-        log.userData = App.User;
+        log.UserData = App.User;
       }
       log.ShowDialog();
       if (log.IsAuthenticated)
       {
-        if (log.userData.HasPermission(EnumPermission.Available, EnumPermisionLevel.ReadOnly))
+        if (log.UserData.HasPermission(EnumPermission.Available, EnumPermisionLevel.ReadOnly))
         {
-          _user = log.userData;
+          _user = log.UserData;
           txtguPRAvail.Text = _user.User.peID;
           txtguPRAvailName.Text = _user.User.peN;
           btnSave.IsEnabled = true;

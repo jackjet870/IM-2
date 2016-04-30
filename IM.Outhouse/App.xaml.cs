@@ -45,13 +45,15 @@ namespace IM.Outhouse
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Outhouse");
-      // frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true,EnumProgram.Outhouse);
-      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true);
+
+      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, EnumProgram.Outhouse, true, changePassword:true,
+        autoSign:true, permission:EnumPermission.PRInvitations, permissionLevel:EnumPermisionLevel.ReadOnly);
+
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;
+        User = frmLogin.UserData;
         frmOuthouse frmMain = new frmOuthouse();
         frmMain.ShowDialog();
         frmSplash.Close();

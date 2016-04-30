@@ -18,7 +18,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [wtorres]  07/Mar/2016 Created
     /// </history>
-    public static List<WarehouseByUser> GetWarehousesByUser(string user, string regions)
+    public static List<WarehouseByUser> GetWarehousesByUser(string user = "ALL", string regions="ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {

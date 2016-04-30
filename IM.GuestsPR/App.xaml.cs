@@ -40,13 +40,13 @@ namespace IM.GuestsPR
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      frmSplash frmSplash = new frmSplash("Guests by PR");
-      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true);
+      var frmSplash = new frmSplash("Guests by PR");
+      var frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, changePassword: true, autoSign: true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;
+        User = frmLogin.UserData;
         frmGuestsPR frmMain = new frmGuestsPR();
         frmMain.ShowDialog();
         frmSplash.Close();

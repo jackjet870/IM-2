@@ -40,12 +40,12 @@ namespace IM.InventoryMovements
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Inventory Movements");
-      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Warehouse);
+      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Warehouse, validatePermission:true, permission:EnumPermission.GiftsReceipts, permissionLevel:EnumPermisionLevel.Standard, changePassword:true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;
+        User = frmLogin.UserData;
         frmInventoryMovements frmMain = new frmInventoryMovements();
         frmMain.ShowDialog();
         frmSplash.Close();

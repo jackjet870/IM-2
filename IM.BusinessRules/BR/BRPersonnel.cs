@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     /// <returns></returns>
     public static UserData Login(EnumLoginType logintype, string user = "", string place = "")
     {
-      UserData userData = new UserData();
+      var userData = new UserData();
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var resUser = dbContext.USP_OR_Login(Convert.ToByte(logintype), user, place);
@@ -48,6 +48,7 @@ namespace IM.BusinessRules.BR
     #endregion
 
     #region ChangePassword
+
     /// <summary>
     /// Cambia el password del usuario.
     /// </summary>
@@ -102,9 +103,12 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.USP_OR_GetPersonnel(leadSources, salesRooms, roles, ((byte)status), permission, relationalOperator, ((int)level), dept).ToList();
+        return
+          dbContext.USP_OR_GetPersonnel(leadSources, salesRooms, roles, ((byte) status), permission, relationalOperator,
+            ((int) level), dept).ToList();
       }
     }
+
     #endregion
 
     #region GetPersonnelById
@@ -125,5 +129,62 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion
+
+    /// <summary>
+    /// Método para obtener los datos del usuario
+    /// como son datos principales, permisos, roles
+    /// e informacion específica segun el tipo de login.
+    /// </summary>
+    /// <param name="loginType">EnumLoginType</param>
+    /// <param name="user">Usuario</param>
+    /// <param name="psw">Contraseña</param>
+    /// <param name="place">Lugar</param>
+    /// <returns>UserData</returns>
+    /// <history>
+    /// [erosado] 26/04/2016  Created
+    /// </history>
+    public static UserData login2(EnumLoginType loginType, string user, string psw, string place = "")
+    {
+      //using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      //{
+      //  var personnel = dbContext.USP_IM_Login(Convert.ToByte(loginType), user, psw, place);
+      //  var userData = new UserData();
+      //  userData.User = personnel.FirstOrDefault();
+
+      //  if (userData.User == null) return null;
+      //  var resRoles = personnel.GetNextResult<RoleLogin>();
+      //  userData.Roles = resRoles.ToList();
+      //  var resPermissions = resRoles.GetNextResult<PermissionLogin>();
+      //  userData.Permissions = resPermissions.ToList();
+      //  var resSalesroom = resPermissions.GetNextResult<SalesRoomLogin>();
+      //  userData.SalesRoom = resSalesroom.FirstOrDefault();
+      //  var resLocation = resSalesroom.GetNextResult<LocationLogin>();
+      //  userData.Location = resLocation.FirstOrDefault();
+      //  var resLeadSource = resLocation.GetNextResult<LeadSourceLogin>();
+      //  userData.LeadSource = resLeadSource.FirstOrDefault();
+      //  var resWarehouse = resLeadSource.GetNextResult<WarehouseLogin>();
+      //  userData.Warehouse = resWarehouse.FirstOrDefault();
+      //  return userData;
+      //}
+      UserData userData = new UserData();
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var resUser = dbContext.USP_OR_Login(Convert.ToByte(loginType), user, place);
+        userData.User = resUser.FirstOrDefault();
+        var resRoles = resUser.GetNextResult<RoleLogin>();
+        userData.Roles = resRoles.ToList();
+        var resPermissions = resRoles.GetNextResult<PermissionLogin>();
+        userData.Permissions = resPermissions.ToList();
+        var resSalesroom = resPermissions.GetNextResult<SalesRoomLogin>();
+        userData.SalesRoom = resSalesroom.FirstOrDefault();
+        var resLocation = resSalesroom.GetNextResult<LocationLogin>();
+        userData.Location = resLocation.FirstOrDefault();
+        var resLeadSource = resLocation.GetNextResult<LeadSourceLogin>();
+        userData.LeadSource = resLeadSource.FirstOrDefault();
+        var resWarehouse = resLeadSource.GetNextResult<WarehouseLogin>();
+        userData.Warehouse = resWarehouse.FirstOrDefault();
+      }
+      return userData;
+    }
   }
 }

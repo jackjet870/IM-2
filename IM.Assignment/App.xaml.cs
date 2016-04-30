@@ -43,12 +43,12 @@ namespace IM.Assignment
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Assignment");
-      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true);
+      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location,EnumProgram.Inhouse, validatePermission:true ,changePassword: true, autoSign: true, permission:EnumPermission.Assignment, permissionLevel:EnumPermisionLevel.ReadOnly);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;
+        User = frmLogin.UserData;
         frmAssignment frmMain = new frmAssignment();
         frmMain.ShowDialog();
         frmSplash.Close();

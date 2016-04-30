@@ -127,16 +127,16 @@ namespace IM.SalesPR.Forms
     /// </history>
     private void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      var frmlogin = new frmLogin(blnChangePassword: true, loginType: EnumLoginType.Location, blnAutoSign: true);
+      var frmlogin = new frmLogin(loginType: EnumLoginType.Location, changePassword: true, autoSign: true);
       if (App.User.AutoSign)
       {
-        frmlogin.userData = App.User;
+        frmlogin.UserData = App.User;
       }
       frmlogin.ShowDialog();
 
       if (frmlogin.IsAuthenticated)
       {
-        App.User = frmlogin.userData;
+        App.User = frmlogin.UserData;
         LoadPersonnel();
       }
 

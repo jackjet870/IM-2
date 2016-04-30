@@ -8,8 +8,6 @@ using System.Windows.Media;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using System.Data;
-using System.IO;
 using System.Diagnostics;
 using IM.GuestsPR.Utilities;
 using IM.Base.Forms;
@@ -23,9 +21,8 @@ namespace IM.GuestsPR.Forms
   public partial class frmGuestsPR : Window
   {
     #region Propiedades, Atributos
-    List<bool> filtersBool = null;
-    List<Tuple<string, string>> filtersReport = null;
-
+    private List<bool> filtersBool;
+    private List<Tuple<string, string>> filtersReport;
     public ExecuteCommandHelper LoadCombo { get; set; }
     #endregion
 
@@ -63,8 +60,8 @@ namespace IM.GuestsPR.Forms
       StaStart("Loading data...");
       imgButtonOk.IsEnabled = false;
       filtersBool = new List<bool>();
-      string leadSource =(chkLeadSource.IsChecked == true ? "ALL": App.User.LeadSource.lsID);
-      PersonnelShort pr = cbxPersonnel.SelectedValue as PersonnelShort;
+      var leadSource =(chkLeadSource.IsChecked == true ? "ALL": App.User.LeadSource.lsID);
+      var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
       #region Check Filter for Report
       filtersReport = new List<Tuple<string, string>>();
 
@@ -76,15 +73,15 @@ namespace IM.GuestsPR.Forms
       filtersReport.Add(chkWithSale.IsChecked == true ? new Tuple<string, string>("With Sale", "YES") : new Tuple<string, string>("With Sale", "ALL"));
       filtersReport.Add(chkBasedOnArrival.IsChecked == true ? new Tuple<string, string>("Based On Arrival Date", "YES") : new Tuple<string, string>("Based On Arrival Date", "ALL"));
 
-      filtersBool.Add(chkAssign.IsChecked == true ? true : false);
-      filtersBool.Add(chkContact.IsChecked == true ? true : false);
-      filtersBool.Add(chkFollowUp.IsChecked == true ? true : false);
-      filtersBool.Add(chkInvitation.IsChecked == true ? true : false);
-      filtersBool.Add(chkShows.IsChecked == true ? true : false);
-      filtersBool.Add(chkWithSale.IsChecked == true ? true : false);
-      filtersBool.Add(chkBasedOnArrival.IsChecked == true ? true : false);
+      filtersBool.Add(chkAssign.IsChecked ?? false);
+      filtersBool.Add(chkContact.IsChecked ?? false);
+      filtersBool.Add(chkFollowUp.IsChecked ?? false);
+      filtersBool.Add(chkInvitation.IsChecked ?? false);
+      filtersBool.Add(chkShows.IsChecked ?? false);
+      filtersBool.Add(chkWithSale.IsChecked ?? false);
+      filtersBool.Add(chkBasedOnArrival.IsChecked ?? false);
       #endregion
-      DoGetGuestsByPR(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, leadSource, pr.peID, filtersBool);
+      DoGetGuestsByPR(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, leadSource, personnelShort.peID, filtersBool);
     }
     /// <summary>
     /// Evento que se lanza cuando generamos nuestro reporte boton Print
@@ -94,18 +91,16 @@ namespace IM.GuestsPR.Forms
     /// </history>
     private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      List<GuestByPR> listaGuestByPR = dtgr.DataContext as List<GuestByPR>;
+      var listaGuestByPR = dtgr.DataContext as List<GuestByPR>;
       if (listaGuestByPR != null)
       {
-        //Obtenemos dateRange
-        string dateRange = DateHelper.DateRange(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
-        string dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
+        var dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
         //Obtenemos el nombre del reporte y el dateRange
-        string rptName = "Guests By PR";
+        var rptName = "Guests By PR";
         //Obtenemos el dataTable con la lista formateada
-        DataTable dt = TableHelper.GetDataTableFromList(listaGuestByPR,true);
+        var dt = TableHelper.GetDataTableFromList(listaGuestByPR,true);
         //Creamos el reporte
-        FileInfo fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName, dateRangeFileName, UseFulMethods.getExcelFormatTable());
+        var fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName, dateRangeFileName, UseFulMethods.getExcelFormatTable());
 
         if (fi != null)
         {
@@ -125,7 +120,7 @@ namespace IM.GuestsPR.Forms
     /// </history>
     private void imgButtonAbout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      IM.Base.Forms.frmAbout formAbout = new Base.Forms.frmAbout();
+      var formAbout = new frmAbout();
       formAbout.ShowDialog();
     }
     /// <summary>
@@ -136,9 +131,8 @@ namespace IM.GuestsPR.Forms
     /// </history>
     private void imgButtonExit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      this.Close();
+      Close();
     }
-
     /// <summary>
     /// Evento de dispara cuando el usuario cambia de sesion en el modulo.
     /// </summary>
@@ -147,16 +141,17 @@ namespace IM.GuestsPR.Forms
     /// </history>
     private void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      frmLogin frmlogin = new frmLogin(blnChangePassword: true, loginType: EnumLoginType.Location, blnAutoSign: true);
+      var frmlogin = new frmLogin(loginType: EnumLoginType.Location, changePassword: true, autoSign: true);
       if (App.User.AutoSign)
       {
-        frmlogin.userData = App.User;
+        frmlogin.UserData = App.User;
       }
       frmlogin.ShowDialog();
 
       if (frmlogin.IsAuthenticated)
       {
-        App.User = frmlogin.userData;
+        App.User = frmlogin.UserData;
+        LoadPersonnel();
       }
 
     }
@@ -183,7 +178,7 @@ namespace IM.GuestsPR.Forms
     /// <param name="roles">rol del usuario loggeado</param>
     public void DoGetPersonnel(string leadSources, string roles)
     {
-      Task.Factory.StartNew(() => BRPersonnel.GetPersonnel(leadSources,"ALL",roles,1))
+      Task.Factory.StartNew(() => BRPersonnel.GetPersonnel(leadSources,"ALL",roles))
       .ContinueWith(
       (task1) =>
       {
@@ -198,7 +193,7 @@ namespace IM.GuestsPR.Forms
           if (task1.IsCompleted)
           {
             task1.Wait(1000);
-            List<PersonnelShort> data = task1.Result;
+            var data = task1.Result;
             if (data.Count > 0)
             {
               data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
@@ -243,12 +238,12 @@ namespace IM.GuestsPR.Forms
           if (task1.IsCompleted)
           {
             task1.Wait(1000);
-            List<GuestByPR> data = task1.Result;
+            var data = task1.Result;
             
             if (data.Count > 0)
             {
               dtgr.DataContext = data;
-              StatusBarReg.Content = string.Format("{0}/{1}", (dtgr.SelectedIndex + 1).ToString(), dtgr.Items.Count.ToString());
+              StatusBarReg.Content = $"{(dtgr.SelectedIndex + 1).ToString()}/{dtgr.Items.Count.ToString()}";
             }
             else
             {
@@ -335,7 +330,7 @@ namespace IM.GuestsPR.Forms
     {
       lblStatusBarMessage.Content = message;
       imgStatusBarMessage.Visibility = Visibility.Visible;
-      this.Cursor = Cursors.Wait;
+      Cursor = Cursors.Wait;
 
     }
 
@@ -345,12 +340,11 @@ namespace IM.GuestsPR.Forms
     /// <history>
     /// [erosado] 15/Mar/2016 Created
     /// </history>
-    /// <param name="message">mensaje</param>
     private void StaEnd()
     {
       lblStatusBarMessage.Content = null;
       imgStatusBarMessage.Visibility = Visibility.Hidden;
-      this.Cursor = null;
+      Cursor = null;
     }
 
     /// <summary>
@@ -380,15 +374,12 @@ namespace IM.GuestsPR.Forms
       txtbUserName.Text = App.User.User.peN;
       txtbLocation.Text = App.User.Location.loN;
       //Validamos permisos y restricciones para el combobox
-
-      if (App.User.HasPermission(Model.Enums.EnumPermission.PRInvitations, Model.Enums.EnumPermisionLevel.Special))
+      if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Special))
       {
         cbxPersonnel.IsEnabled = true;
         if (cbxPersonnel.Items.Count > 0)
         {
-          List<PersonnelShort> lstPS = cbxPersonnel.ItemsSource as List<PersonnelShort>;
-          int index = lstPS.FindIndex(x => x.peID.Equals(App.User.User.peID));
-          cbxPersonnel.SelectedIndex = index;
+          selectPersonnelInCombobox(App.User.User.peID);
         }
         else
         {
@@ -400,18 +391,13 @@ namespace IM.GuestsPR.Forms
         cbxPersonnel.IsEnabled = false;
         if (cbxPersonnel.Items.Count>0)
         {
-          List<PersonnelShort> lstPS = cbxPersonnel.ItemsSource as List<PersonnelShort>;
-          int index = lstPS.FindIndex(x => x.peID.Equals(App.User.User.peID));
-          cbxPersonnel.SelectedIndex = index;
+          selectPersonnelInCombobox(App.User.User.peID);
         }
         else
         {
           cbxPersonnel.Text = "No data found - Press Ctrl+F5 to load Data";
         }
-        
       }
-
-    
     }
     /// <summary>
     /// Carga personal en el combobox
@@ -423,6 +409,20 @@ namespace IM.GuestsPR.Forms
     {
       StaStart("Loading personnel...");
       DoGetPersonnel(App.User.LeadSource.lsID, Model.Helpers.EnumToListHelper.GetEnumDescription(EnumRole.PR));
+    }
+
+    /// <summary>
+    /// Busca en una lista y selecciona al personal
+    /// </summary>
+    /// <param name="user">peID</param>
+    /// <history>
+    /// [erosado] 25/04/2016
+    /// </history>
+    private void selectPersonnelInCombobox(string user)
+    {
+      var lstPS = cbxPersonnel.ItemsSource as List<PersonnelShort>;
+      var index = lstPS.FindIndex(x => x.peID.Equals(user));
+      cbxPersonnel.SelectedIndex = index != -1 ? index : 0;
     }
 
     #endregion

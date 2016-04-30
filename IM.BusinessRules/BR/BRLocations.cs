@@ -18,7 +18,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [wtorres]  07/Mar/2016 Created
     /// </history>
-    public static List<LocationByUser> GetLocationsByUser(string user, string programs)
+    public static List<LocationByUser> GetLocationsByUser(string user="All", string programs="All")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {

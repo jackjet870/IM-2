@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.GuestsPR.Forms"
         mc:Ignorable="d"
          Title="Guests By PR"
-    d:Height="768" d:Width="1024" WindowStartupLocation="CenterScreen" 
+    d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
     Icon="/IM.GuestsPR;component/Images/IM.ico" WindowState="Maximized" WindowStyle="SingleBorderWindow"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">
    
@@ -43,10 +43,10 @@
                 </Viewbox>
                 <TextBlock x:Name="txtbUserName" VerticalAlignment="Center"
                            Foreground="White" Grid.Column="1" Grid.Row="0"/>
-                <Viewbox Stretch="Uniform" Height="24" HorizontalAlignment="Stretch" Grid.Column="3" Grid.RowSpan="2">
+                <Viewbox Stretch="Uniform" Height="24" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
                     <Image x:Name="imageLogOut" Style="{StaticResource bImgLogin}" MouseLeftButtonDown="imageLogOut_MouseLeftButtonDown"/>
                 </Viewbox>
-                <TextBlock x:Name="txtbLocation" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="White" Grid.Row="1" Grid.ColumnSpan="2"/>
+                <TextBlock x:Name="txtbLocation" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="White" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
             </Grid>
         </Border>
         <!--#endregion-->
@@ -108,7 +108,6 @@
                     <CheckBox x:Name="chkShows"  Content="Shows" Margin="5" IsChecked="True"/>
                     <CheckBox x:Name="chkWithSale"  Content="With Sale" Margin="5"/>
                     <CheckBox x:Name="chkBasedOnArrival" Content="Based On Arrival Date" Margin="5"/>
-
                 </StackPanel>
             </StackPanel>
         </Border>

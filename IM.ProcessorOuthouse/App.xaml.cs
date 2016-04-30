@@ -39,12 +39,12 @@ namespace IM.ProcessorOuthouse
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Processor Outhouse");
-      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Normal);
+      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Normal,validateRole:true, role:EnumRole.Manager, changePassword:true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;
+        User = frmLogin.UserData;
         if (User.HasRole(EnumRole.Manager))
         {
           frmProcessorOuthouse frmMain = new frmProcessorOuthouse();

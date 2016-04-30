@@ -41,12 +41,12 @@ namespace IM.SalesPR
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Sales by PR");
-      frmLogin frmLogin = new frmLogin(frmSplash, true, EnumLoginType.Location, true);
+      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, changePassword: true, autoSign: true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
-        User = frmLogin.userData;
+        User = frmLogin.UserData;
         frmSalesPR frmMain = new frmSalesPR();
         frmMain.ShowDialog();
         frmSplash.Close();

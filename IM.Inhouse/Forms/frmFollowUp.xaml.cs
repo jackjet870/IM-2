@@ -144,20 +144,20 @@ namespace IM.Inhouse
     #region btnEdit_Click
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
-      frmLogin log = new frmLogin(null, false, EnumLoginType.Normal, false);
+      frmLogin log = new frmLogin(null, EnumLoginType.Normal, changePassword: false, autoSign: false);
       if (App.User.AutoSign)
       {
         //App.User.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);
-        log.userData = App.User;
+        log.UserData = App.User;
       }
       log.ShowDialog();
       if (log.IsAuthenticated)
       {
-        if (log.userData.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard))
+        if (log.UserData.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard))
         {
-          if (_guest.guFollow == false || (log.userData.HasRole(EnumRole.PRCaptain) || log.userData.HasRole(EnumRole.PRSupervisor)))
+          if (_guest.guFollow == false || (log.UserData.HasRole(EnumRole.PRCaptain) || log.UserData.HasRole(EnumRole.PRSupervisor)))
           {
-            _user = log.userData;
+            _user = log.UserData;
             txtguFollowD.Text = BRHelpers.GetServerDate().Date.ToString();
             btnSave.IsEnabled = cboguPRFollow.IsEnabled = true;
             txtguPRFollow.IsReadOnly = false;

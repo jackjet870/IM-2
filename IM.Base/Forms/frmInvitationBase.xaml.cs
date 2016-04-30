@@ -1140,7 +1140,7 @@ namespace IM.Base.Forms
       var login = new frmLogin();
       if (_user.AutoSign)
       {
-        login.userData = _user;
+        login.UserData = _user;
       }
       login.ShowDialog();
       if (!login.IsAuthenticated)

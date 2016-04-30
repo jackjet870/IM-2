@@ -44,7 +44,7 @@ namespace IM.MailOuts.Forms
     /// Constructor
     /// </summary>
     /// <history>
-    /// [wtorres]  15/Mar/2016 Modified. Elimine el parametro userData
+    /// [wtorres]  15/Mar/2016 Modified. Elimine el parametro UserData
     /// </history>
     public frmMailOuts()
     {

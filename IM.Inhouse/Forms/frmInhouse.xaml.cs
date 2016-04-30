@@ -457,17 +457,17 @@ namespace IM.Inhouse
     public frmLogin ValidateLogin()
     {
       //Validamos las credenciales del usuario y sus permisos 
-      frmLogin log = new frmLogin(null, false, EnumLoginType.Normal, false);
+      frmLogin log = new frmLogin(null, EnumLoginType.Normal, changePassword: false, autoSign: false);
       if (App.User.AutoSign)
       {
         //App.User.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);
-        log.userData = App.User;
+        log.UserData = App.User;
       }
       log.ShowDialog();
       if (log.IsAuthenticated)
       {
-        //log.userData.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);
-        if (log.userData.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard))
+        //log.UserData.User.pePwd = EncryptHelper.Encrypt(App.User.User.pePwd);
+        if (log.UserData.HasPermission(EnumPermission.Register, EnumPermisionLevel.Standard))
         {
           return log;
         }
@@ -1162,7 +1162,7 @@ namespace IM.Inhouse
         var log = ValidateLogin();
         if (log != null)
         {
-          frmBookingCancel bc = new frmBookingCancel(Arrival.guID, log.userData.User);
+          frmBookingCancel bc = new frmBookingCancel(Arrival.guID, log.UserData.User);
           bc.Owner = this;
           bc.ShowInTaskbar = false;
           if (!bc.ShowDialog().Value)
@@ -1325,7 +1325,7 @@ namespace IM.Inhouse
         if (log != null)
         {
           StaStart("loading Cancel invitation screen...");
-          frmBookingCancel bc = new frmBookingCancel(Available.guID, log.userData.User);
+          frmBookingCancel bc = new frmBookingCancel(Available.guID, log.UserData.User);
           bc.Owner = this;
           bc.ShowInTaskbar = false;
           StaEnd();
@@ -1494,7 +1494,7 @@ namespace IM.Inhouse
         var log = ValidateLogin();
         if (log != null)
         {
-          frmBookingCancel bc = new frmBookingCancel(Premanifest.guID, log.userData.User);
+          frmBookingCancel bc = new frmBookingCancel(Premanifest.guID, log.UserData.User);
           bc.Owner = this;
           bc.ShowInTaskbar = false;
           if (!bc.ShowDialog().Value)
@@ -1661,7 +1661,7 @@ namespace IM.Inhouse
         if (log != null)
         {
           StaStart("loading Cancel invitation screen...");
-          frmBookingCancel bc = new frmBookingCancel(Searched.guID, log.userData.User);
+          frmBookingCancel bc = new frmBookingCancel(Searched.guID, log.UserData.User);
           bc.Owner = this;
           bc.ShowInTaskbar = false;
           StaEnd();
@@ -1815,15 +1815,15 @@ namespace IM.Inhouse
     #region btnLogin_Click
     private void btnLogin_Click(object sender, RoutedEventArgs e)
     {
-      frmLogin log = new frmLogin(null, false, EnumLoginType.Location, true);
+      frmLogin log = new frmLogin(null, EnumLoginType.Location, changePassword: false, autoSign: true);
       if (App.User.AutoSign)
       {
-        log.userData = App.User;
+        log.UserData = App.User;
       }
       log.ShowDialog();
       if (log.IsAuthenticated)
       {
-        App.User = log.userData;
+        App.User = log.UserData;
         Inhouse_Loaded();
       }
     }
@@ -2030,7 +2030,7 @@ namespace IM.Inhouse
 
       var isChecked = chk.IsChecked.HasValue && chk.IsChecked.Value;
       chk.IsChecked = itema.guInvit;
-      //var userData = BRPersonnel.Login(EnumLoginType.Location, App.User.User.peID, App.User.Location.loID);
+      //var UserData = BRPersonnel.Login(EnumLoginType.Location, App.User.User.peID, App.User.Location.loID);
       var invit = new frmInvitationBase(EnumInvitationType.InHouse, App.User, itema.guID, !isChecked ? EnumInvitationMode.modOnlyRead : EnumInvitationMode.modAdd);
       invit.Owner = this;
       invit.ShowInTaskbar = false;
