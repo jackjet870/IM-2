@@ -535,9 +535,9 @@ namespace IM.Base.Forms
       var search = new frmSearchGuest(_user);
       search.Owner = this;
       bool? res = search.ShowDialog();
-      if (res.HasValue && res.Value && search.guestAdditional != null)
+      if (res.HasValue && res.Value && search.lstGuestAdd[0] != null)
       {
-        txtReservationNumber.Text = search.guestAdditional.guHReservID.ToString();
+        txtReservationNumber.Text = search.lstGuestAdd[0].guHReservID.ToString();
       }
     }
     #endregion

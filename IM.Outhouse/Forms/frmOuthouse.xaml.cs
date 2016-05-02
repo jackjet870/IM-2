@@ -148,7 +148,7 @@ namespace IM.Outhouse.Forms
           if (frmCont._wasSave)
           {
             StaStart("Save Contact's Info...");
-             dgGuestPremanifest.SelectedItems.OfType<GuestPremanifestOuthouse>().ToList().ForEach(item =>
+            dgGuestPremanifest.SelectedItems.OfType<GuestPremanifestOuthouse>().ToList().ForEach(item =>
             { item.guPRInfo = frmCont.PRInfo; item.guInfoD = frmCont.InfoD; item.guCheckIn = true; item.guInfo = true; });
             dgGuestPremanifest.Items.Refresh();
             StaEnd();
@@ -188,7 +188,7 @@ namespace IM.Outhouse.Forms
 
     private void guCommentsColumnArrival_LostFocus(object sender, RoutedEventArgs e)
     {
-      var txt = sender as TextBox;      
+      var txt = sender as TextBox;
       var row = dgGuestPremanifest.SelectedItem as GuestPremanifestOuthouse;
       Guest pre = BRGuests.GetGuest(row.guID);
       pre.guComments = txt.Text;
@@ -202,7 +202,7 @@ namespace IM.Outhouse.Forms
     }
 
     private void Invit_Click(object sender, RoutedEventArgs e)
-    {      
+    {
       var row = dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.CurrentPosition) as GuestPremanifestOuthouse;
       var chk = sender as CheckBox;
       if (!row.guCheckIn)
@@ -257,14 +257,14 @@ namespace IM.Outhouse.Forms
       else if (e.Key == Key.NumLock)
       {
         KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
-      }     
+      }
     }
     #endregion
 
     #region dgGuestPremanifest_PreviewKeyDown
     private void dgGuestPremanifest_PreviewKeyDown(object sender, KeyEventArgs e)
     {
-      if (dgGuestPremanifest != null)
+      if (dgGuestPremanifest != null && e.Key == Key.Delete)
       {
         var row = dgGuestPremanifest.SelectedItem as GuestPremanifestOuthouse;
         if (!row.guShow)
@@ -283,14 +283,14 @@ namespace IM.Outhouse.Forms
         }
         e.Handled = true;
       }
-    } 
+    }
     #endregion
 
     #region btnLogin_Click
     private void btnLogin_Click(object sender, RoutedEventArgs e)
     {
       // frmLogin log = new frmLogin(null,false, EnumLoginType.Location, true);
-      frmLogin log = new frmLogin(null, EnumLoginType.Location, program: EnumProgram.Outhouse, changePassword: false, autoSign: true,modeSwitchLoginUser:true);
+      frmLogin log = new frmLogin(null, EnumLoginType.Location, program: EnumProgram.Outhouse, changePassword: false, autoSign: true, modeSwitchLoginUser: true);
       if (App.User.AutoSign)
       {
         log.UserData = App.User;
@@ -331,7 +331,7 @@ namespace IM.Outhouse.Forms
         ShowInTaskbar = false
       };
       invit.ShowDialog();
-    } 
+    }
     #endregion
 
     #region btnAbout_Click
@@ -340,7 +340,7 @@ namespace IM.Outhouse.Forms
       frmAbout formAbout = new frmAbout();
       formAbout.ShowInTaskbar = false;
       formAbout.ShowDialog();
-    } 
+    }
     #endregion
 
     private void btnTransfer_Click(object sender, RoutedEventArgs e)
@@ -353,7 +353,7 @@ namespace IM.Outhouse.Forms
     {
       frmAssistance frmAssistance = new frmAssistance(EnumPlaceType.LeadSource, App.User);
       frmAssistance.ShowDialog();
-    } 
+    }
     #endregion
 
     #region btnDaysOff_Click

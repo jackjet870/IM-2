@@ -1815,7 +1815,7 @@ namespace IM.Inhouse
     #region btnLogin_Click
     private void btnLogin_Click(object sender, RoutedEventArgs e)
     {
-      frmLogin log = new frmLogin(null, EnumLoginType.Location, program:EnumProgram.Inhouse, changePassword: false, autoSign: true);
+      frmLogin log = new frmLogin(null, EnumLoginType.Location, program:EnumProgram.Inhouse, changePassword: false, autoSign: true,modeSwitchLoginUser: true);
       if (App.User.AutoSign)
       {
         log.UserData = App.User;
@@ -1889,7 +1889,12 @@ namespace IM.Inhouse
         LoadGrid();
         //gprInfo.BindingGroup.GetValue                 
       }
-    } 
+    }
+
+    private void btnExtInvit_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
 
     #endregion
 

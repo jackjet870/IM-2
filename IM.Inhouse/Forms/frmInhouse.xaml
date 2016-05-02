@@ -54,7 +54,7 @@
         <Grid Grid.Row="0" x:Name="GrdPanel" Background="SkyBlue">
             <Grid.ColumnDefinitions>
                 <!--Botenes del Formulario Principal-->
-                <ColumnDefinition  Width="35*"/>
+                <ColumnDefinition  Width="auto"/>
                 <!--Fecha y Boton de Buscar-->
                 <ColumnDefinition Width="Auto"/>
                 <!--Grupos Available, Contacted, Invited, On Group y Markets -->
@@ -67,6 +67,7 @@
             <GroupBox x:Name="grbMenu" Grid.Column="0" Header="Options"  VerticalAlignment="Top" FontWeight="Bold" Margin="10,5,5,0"  >
                 <Grid x:Name="grdOpciones" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -125,12 +126,12 @@
                             <TextBlock Text="DaysOff" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                 <!--   <Button x:Name="btnWithGifts" Grid.Column="8" Style="{StaticResource ResourceKey=btnOptions}"  Click="btnWithGifts_Click" >
+                    <Button x:Name="btnExtInvit" Grid.Column="8" Style="{StaticResource ResourceKey=BtnOptions}"  Click="btnExtInvit_Click" >
                         <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
-                            <TextBlock Text="Pre/Gifts" Style="{StaticResource ResourceKey=txtOptions}"/>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/Reports.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <TextBlock Text="Ext Inv" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
-                    </Button>-->
+                    </Button>
                 </Grid>
             </GroupBox>
             <!--#endregion-->
