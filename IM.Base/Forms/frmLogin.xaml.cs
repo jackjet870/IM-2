@@ -62,8 +62,8 @@ namespace IM.Base.Forms
       InitializeComponent();
       _splash = splash;
       _loginType = loginType;
-      places = getAllPlaces();//Cargamos los places
       _program = program;
+      places = getAllPlaces();//Cargamos los places
       _validatePermission = validatePermission;
       _validateRole = validateRole;
       _changePassword = changePassword;
@@ -258,7 +258,7 @@ namespace IM.Base.Forms
                       {
                         cmbPlace.SelectedValue = value;
                       }
-                      else{ cmbPlace.SelectedIndex = 0; }
+                      else { cmbPlace.SelectedIndex = 0; }
                     }
                     else
                     {
@@ -267,7 +267,7 @@ namespace IM.Base.Forms
                   }
                 }
                 else
-                { cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found";}
+                { cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found"; }
               }
               return false;
             }
@@ -332,7 +332,7 @@ namespace IM.Base.Forms
                   }
                 }
                 else
-                {cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found";}
+                { cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found"; }
               }
               return false;
             }
@@ -586,17 +586,17 @@ namespace IM.Base.Forms
           // Se llenan los textBox de user y Password con informacion de UserData
           txtUser.Text = UserData.User.peID;
           txtPassword.Password = UserData.User.pePwd;
-          loadLoginControls(UserData.User.peID, true,false);
+          loadLoginControls(UserData.User.peID, true, false);
         }
         else if (_iniFileHelper != null && string.Equals(txtUser.Text, _iniFileHelper.readText("Login", "UserName", "")))
         {// llena datos con config.
           txtUser.Text = _iniFileHelper.readText("Login", "UserName", "");
           txtPassword.Password = _iniFileHelper.readText("Login", "Password", "");
-          loadLoginControls(_iniFileHelper.readText("Login", "UserName", ""), false,true);
+          loadLoginControls(_iniFileHelper.readText("Login", "UserName", ""), false, true);
         }
         else
         { //Esperar la informacion que meta el usuario
-          loadLoginControls(txtUser.Text, false,false);
+          loadLoginControls(txtUser.Text, false, false);
         }
       }
       else// New Login
@@ -605,11 +605,11 @@ namespace IM.Base.Forms
         { // llena datos con config.
           txtUser.Text = _iniFileHelper.readText("Login", "UserName", "");
           txtPassword.Password = _iniFileHelper.readText("Login", "Password", "");
-          loadLoginControls(_iniFileHelper.readText("Login", "UserName", ""), false,true);
+          loadLoginControls(_iniFileHelper.readText("Login", "UserName", ""), false, true);
         }
         else
         { //Esperar la informacion que meta el usuario
-          loadLoginControls(txtUser.Text, false,false);
+          loadLoginControls(txtUser.Text, false, false);
         }
       }
     }
