@@ -532,7 +532,13 @@ namespace IM.Base.Forms
     /// </history>
     private void btnSearch_Click(object sender, RoutedEventArgs e)
     {
-
+      var search = new frmSearchGuest(_user);
+      search.Owner = this;
+      bool? res = search.ShowDialog();
+      if (res.HasValue && res.Value && search.guestAdditional != null)
+      {
+        txtReservationNumber.Text = search.guestAdditional.guHReservID.ToString();
+      }
     }
     #endregion
 
@@ -1193,6 +1199,10 @@ namespace IM.Base.Forms
         case EnumInvitationType.Regen:
           RegenControlsConfig();
           break;
+        case EnumInvitationType.External:
+          InHouseControlsConfig();
+          ExternalControlsConfig();
+          break;
       }
     }
 
@@ -1320,6 +1330,17 @@ namespace IM.Base.Forms
       lblBeforeInOut.Visibility = Visibility.Hidden;
       chkBeforeInOut.Visibility = Visibility.Hidden;
       grbElectronicPurse.Visibility = Visibility.Hidden;
+    }
+
+    /// <summary>
+    /// Oculta o habilita los controles necesarios para el módulo Regen
+    /// </summary>
+    /// <history>
+    /// [lchairez] 29/02/2016 Created.
+    /// </history>
+    private void ExternalControlsConfig()
+    {
+      btnSearch.IsEnabled = true;
     }
 
     /// <summary>
