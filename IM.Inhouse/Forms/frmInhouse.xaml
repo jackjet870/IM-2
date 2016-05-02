@@ -3,19 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.Inhouse"
-        xmlns:Classes="clr-namespace:IM.Inhouse.Classes"
-        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
+        xmlns:classes="clr-namespace:IM.Inhouse.Classes"
         x:Class="IM.Inhouse.frmInhouse"
         mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="Inhouse" x:Name="house" Width="1100"  Height="700"  WindowState="Maximized" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
+        Title="Inhouse" x:Name="House" Width="1100"  Height="700"  WindowState="Maximized" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
     <Window.Resources>
-        <CollectionViewSource x:Key="guestArrivalViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestArrival}, CreateList=True}"/>
-        <CollectionViewSource x:Key="guestAvailableViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestAvailable }, CreateList=True}"/>
-        <CollectionViewSource x:Key="guestPremanifestViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestPremanifest}, CreateList=True}"/>
-        <CollectionViewSource x:Key="guestSearchedViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:ObjGuestSearched}, CreateList=True}"/>
+        <CollectionViewSource x:Key="GuestArrivalViewSource" d:DesignSource="{d:DesignInstance {x:Type classes:ObjGuestArrival}, CreateList=True}"/>
+        <CollectionViewSource x:Key="GuestAvailableViewSource" d:DesignSource="{d:DesignInstance {x:Type classes:ObjGuestAvailable }, CreateList=True}"/>
+        <CollectionViewSource x:Key="GuestPremanifestViewSource" d:DesignSource="{d:DesignInstance {x:Type classes:ObjGuestPremanifest}, CreateList=True}"/>
+        <CollectionViewSource x:Key="GuestSearchedViewSource" d:DesignSource="{d:DesignInstance {x:Type classes:ObjGuestSearched}, CreateList=True}"/>
 
-        <Style TargetType="Button" x:Key="btnOptions">
+        <Style TargetType="Button" x:Key="BtnOptions">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="Width" Value="45"/>
@@ -53,7 +51,7 @@
         <!--#endregion-->
 
         <!--#region Controles principales del formulario-->
-        <Grid Grid.Row="0" x:Name="grdPanel" Background="SkyBlue">
+        <Grid Grid.Row="0" x:Name="GrdPanel" Background="SkyBlue">
             <Grid.ColumnDefinitions>
                 <!--Botenes del Formulario Principal-->
                 <ColumnDefinition  Width="35*"/>
@@ -79,60 +77,60 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="0" x:Name="colGifts"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="btnLogin" Grid.Column="0"   Style="{StaticResource ResourceKey=btnOptions}" Click="btnLogin_Click"  >
+                    <Button x:Name="btnLogin" Grid.Column="0"   Style="{StaticResource ResourceKey=BtnOptions}" Click="btnLogin_Click"  >
                         <StackPanel >
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Login.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Login" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnRefresh" Grid.Column="1" Style="{StaticResource ResourceKey=btnOptions}" Click="btnRefresh_Click">
+                    <Button x:Name="btnRefresh" Grid.Column="1" Style="{StaticResource ResourceKey=BtnOptions}" Click="btnRefresh_Click">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/refresh.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Refresh" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnPrint" Grid.Column="2" Style="{StaticResource ResourceKey=btnOptions}" Click="btnPrint_Click">
+                    <Button x:Name="btnPrint" Grid.Column="2" Style="{StaticResource ResourceKey=BtnOptions}" Click="btnPrint_Click">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Print" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnPreview" Grid.Column="3" Style="{StaticResource ResourceKey=btnOptions}" Click="btnPreview_Click" HorizontalAlignment="Right" Width="46" >
+                    <Button x:Name="btnPreview" Grid.Column="3" Style="{StaticResource ResourceKey=BtnOptions}" Click="btnPreview_Click" HorizontalAlignment="Right" Width="46" >
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Preview" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnGrouos" Grid.Column="4" Style="{StaticResource ResourceKey=btnOptions}"  Click="btnGrouos_Click" >
+                    <Button x:Name="btnGrouos" Grid.Column="4" Style="{StaticResource ResourceKey=BtnOptions}"  Click="btnGrouos_Click" >
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Guests.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Groups" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnAbout" Grid.Column="5"  Style="{StaticResource ResourceKey=btnOptions}" Click="btnAbout_Click">
+                    <Button x:Name="btnAbout" Grid.Column="5"  Style="{StaticResource ResourceKey=BtnOptions}" Click="btnAbout_Click" HorizontalAlignment="Right" Width="46">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/About.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="About" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnAssistance"  Grid.Column="6" Style="{StaticResource ResourceKey=btnOptions}"  Click="btnAssistance_Click" >
+                    <Button x:Name="btnAssistance"  Grid.Column="6" Style="{StaticResource ResourceKey=BtnOptions}"  Click="btnAssistance_Click" >
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Assistance.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Assist" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnDaysOff" Grid.Column="7" Style="{StaticResource ResourceKey=btnOptions}"  Click="btnDaysOff_Click" >
+                    <Button x:Name="btnDaysOff" Grid.Column="7" Style="{StaticResource ResourceKey=BtnOptions}"  Click="btnDaysOff_Click" >
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/DaysOff.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="DaysOff" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnWithGifts" Grid.Column="8" Style="{StaticResource ResourceKey=btnOptions}"  Click="btnWithGifts_Click" >
+                 <!--   <Button x:Name="btnWithGifts" Grid.Column="8" Style="{StaticResource ResourceKey=btnOptions}"  Click="btnWithGifts_Click" >
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Pre/Gifts" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
-                    </Button>
+                    </Button>-->
                 </Grid>
             </GroupBox>
             <!--#endregion-->
@@ -253,8 +251,8 @@
                 <Button Grid.Column="1" Name="btnAvailables" Click="btnAvailables_Clicked" FontSize="15" Background="#FFB8EAB5">Availables</Button>
                 <Button Grid.Column="2" Name="btnPremanifiest" Click="btnPremanifiest_Click" FontSize="15" Background="#FFCDF9CB" >Premanifest</Button>
             </Grid>
-            <ContentControl x:Name="ccArrivals"  Grid.Row="1" Visibility="Visible" DataContext="{StaticResource guestArrivalViewSource}">
-                <DataGrid x:Name="dgGuestArrival"  SelectionUnit ="FullRow"  SelectionMode="Single"  CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False"  SelectionChanged="dg_SelectionChanged">
+            <ContentControl x:Name="ccArrivals"  Grid.Row="1" Visibility="Visible" DataContext="{StaticResource GuestArrivalViewSource}">
+                <DataGrid x:Name="dgGuestArrival" CanUserDeleteRows="False"  SelectionUnit ="FullRow"  SelectionMode="Single"  CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False"  SelectionChanged="dg_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn"  Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -415,8 +413,8 @@
                 </DataGrid>
             </ContentControl>
 
-            <ContentControl x:Name="ccAvailables"   Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource guestAvailableViewSource}}">
-                <DataGrid x:Name="dgGuestAvailable"  CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  CanUserSortColumns="True" AutoGenerateColumns="False" Grid.ColumnSpan="2" Grid.Column="1" EnableRowVirtualization="True"  RowDetailsVisibilityMode="VisibleWhenSelected" SelectionChanged="dg_SelectionChanged" >
+            <ContentControl x:Name="ccAvailables"   Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource GuestAvailableViewSource}}">
+                <DataGrid x:Name="dgGuestAvailable"  CanUserDeleteRows="False"  CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  CanUserSortColumns="True" AutoGenerateColumns="False" Grid.ColumnSpan="2" Grid.Column="1" EnableRowVirtualization="True"  RowDetailsVisibilityMode="VisibleWhenSelected" SelectionChanged="dg_SelectionChanged" >
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn1" Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -554,8 +552,8 @@
                 </DataGrid>
             </ContentControl>
 
-            <ContentControl x:Name="ccPremanifest" Background="SkyBlue" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource guestPremanifestViewSource}}">
-                <DataGrid x:Name="dgGuestPremanifest"  CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"  EnableRowVirtualization="True"   RowDetailsVisibilityMode="Collapsed" SelectionChanged="dg_SelectionChanged">
+            <ContentControl x:Name="ccPremanifest" Background="SkyBlue" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource GuestPremanifestViewSource}}">
+                <DataGrid x:Name="dgGuestPremanifest" CanUserDeleteRows="False"   CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"  EnableRowVirtualization="True"   RowDetailsVisibilityMode="Collapsed" SelectionChanged="dg_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn2" Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -697,8 +695,8 @@
                 </DataGrid>
             </ContentControl>
 
-            <ContentControl x:Name="ccGetGuest" Background="SkyBlue" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource guestSearchedViewSource}}">
-                <DataGrid x:Name="guestSearchedDataGrid" CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"  EnableRowVirtualization="True"   RowDetailsVisibilityMode="VisibleWhenSelected" SelectionChanged="dg_SelectionChanged">
+            <ContentControl x:Name="ccGetGuest" Background="SkyBlue" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource GuestSearchedViewSource}}">
+                <DataGrid x:Name="guestSearchedDataGrid" CanUserDeleteRows="False"  CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"  EnableRowVirtualization="True"   RowDetailsVisibilityMode="VisibleWhenSelected" SelectionChanged="dg_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn3" Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>

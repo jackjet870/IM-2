@@ -46,8 +46,8 @@ namespace IM.Outhouse
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Outhouse");
 
-      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, EnumProgram.Outhouse, true, changePassword:true,
-        autoSign:true, permission:EnumPermission.PRInvitations, permissionLevel:EnumPermisionLevel.ReadOnly);
+      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, EnumProgram.Outhouse, true, changePassword: true,
+        autoSign: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.ReadOnly);
 
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);

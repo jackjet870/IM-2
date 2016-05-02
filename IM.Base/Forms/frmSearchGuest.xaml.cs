@@ -8,8 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using IM.Base.Classes;
+using IM.Model.Classes;
 
-namespace IM.Inhouse.Forms
+namespace IM.Base.Forms
 {
   /// <summary>
   /// Interaction logic for frmSearchGuest.xaml
@@ -21,8 +23,8 @@ namespace IM.Inhouse.Forms
     EnumProgram _program;
     Guest _guest;
     LeadSource _leadSource;
-    public List<Guest> _lstGuests;
-    frmGuestsGroups _parent;
+    private List<Guest> _lstGuests;
+    private UserData user; 
 
     #endregion
 
@@ -138,11 +140,11 @@ namespace IM.Inhouse.Forms
     #endregion
 
     #region Contructores y Destructores
-    public frmSearchGuest(EnumProgram program, frmGuestsGroups winParent)
+    public frmSearchGuest(UserData userdata, EnumProgram program = EnumProgram.All)
     {
       InitializeComponent();
       _program = program;
-      _parent = winParent;
+      user = userdata;
     }
     #endregion
     
@@ -159,7 +161,7 @@ namespace IM.Inhouse.Forms
       DateTime dt = BRHelpers.GetServerDate();
       dtpTo.SelectedDate = dt;
       dtpFrom.SelectedDate = dt.AddDays(-7);
-      cmbLeadSourse.SelectedValue = App.User.LeadSource.lsID;
+      cmbLeadSourse.SelectedValue = user.LeadSource.lsID;
       StatusBarReg.Content ="0 Guests";
     }
 

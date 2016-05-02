@@ -940,12 +940,12 @@ namespace IM.Base.Forms
       var search = new frmSearchGuest(_user);
       search.Owner = this;
       bool? res = search.ShowDialog();
-      if (res.HasValue && res.Value && search.guestAdditional != null)
+      if (res.HasValue && res.Value && search.lstGuestAdd != null)
       {
         var objAddGuest = new objInvitAdditionalGuest();
-        objAddGuest.guID = search.guestAdditional.guID;
-        objAddGuest.guLastName1 = search.guestAdditional.guLastName1;
-        objAddGuest.guFirstName1 = search.guestAdditional.guFirstName1;
+        objAddGuest.guID = search.lstGuestAdd[0].guID;
+        objAddGuest.guLastName1 = search.lstGuestAdd[0].guLastName1;
+        objAddGuest.guFirstName1 = search.lstGuestAdd[0].guFirstName1;
 
         _lstObjInvitAdditionalGuest.Add(objAddGuest);
         dtgAdditionalGuest.Items.Refresh();
@@ -970,21 +970,21 @@ namespace IM.Base.Forms
       var search = new frmSearchGuest(_user);
       search.Owner = this;
       bool? res = search.ShowDialog();
-      if (res.HasValue && res.Value && search.guestAdditional != null)
+      if (res.HasValue && res.Value && search.lstGuestAdd != null)
       {
         var objAddGuest = new objInvitAdditionalGuest();
-        objAddGuest.guID = search.guestAdditional.guID;
-        objAddGuest.guLastName1 = search.guestAdditional.guLastName1;
-        objAddGuest.guFirstName1 = search.guestAdditional.guFirstName1;
+        objAddGuest.guID = search.lstGuestAdd[0].guID;
+        objAddGuest.guLastName1 = search.lstGuestAdd[0].guLastName1;
+        objAddGuest.guFirstName1 = search.lstGuestAdd[0].guFirstName1;
 
         if (item != null)
         {
           var addGuest = _lstObjInvitAdditionalGuest.SingleOrDefault(g => g.guID == item.guID);
           if (addGuest != null)
           {
-            addGuest.guID = search.guestAdditional.guID;
-            addGuest.guLastName1 = search.guestAdditional.guLastName1;
-            addGuest.guFirstName1 = search.guestAdditional.guFirstName1;
+            addGuest.guID = search.lstGuestAdd[0].guID;
+            addGuest.guLastName1 = search.lstGuestAdd[0].guLastName1;
+            addGuest.guFirstName1 = search.lstGuestAdd[0].guFirstName1;
           }
         }
         else

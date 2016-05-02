@@ -9,6 +9,7 @@ using IM.Model;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
+using IM.Base.Forms;
 
 namespace IM.Inhouse.Forms
 {
@@ -348,10 +349,10 @@ namespace IM.Inhouse.Forms
     /// <history>[ECANUL] 01-04-2016 Created</history>
     void AddGuests()
     {
-      frmSearchGuest frmSGuest = new frmSearchGuest(EnumProgram.Inhouse, this);
+      frmSearchGuest frmSGuest = new frmSearchGuest(App.User,EnumProgram.Inhouse);
       frmSGuest.Owner = this;
       frmSGuest.ShowInTaskbar = false;
-      frmSGuest._lstGuests = new List<Guest>();
+      //frmSGuest._lstGuests = new List<Guest>();
       frmSGuest.lstGuestAdd = new List<Guest>();
 
       if (lstGuest == null) //Solo se abre desde el boton y se da new group

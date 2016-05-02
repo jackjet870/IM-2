@@ -7,10 +7,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Outhouse.Forms"
         xmlns:Classes="clr-namespace:IM.Model.Classes;assembly=IM.Model" 
-        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Loaded="Window_Loaded"
+        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Loaded="Window_Loaded" KeyDown="Window_KeyDown"
         Width="1100"  Height="700" Title="Outhouse" WindowState="Maximized" >
     <Window.Resources>
-        <CollectionViewSource x:Key="outPremanifestViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:OutPremanifest}, CreateList=True}"/>
+        <CollectionViewSource x:Key="outPremanifestViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:GuestPremanifestOuthouse}, CreateList=True}"/>
         <Style TargetType="{x:Type Button}" x:Key="btnOptions">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -52,61 +52,55 @@
             <!--#region Botones-->
             <GroupBox x:Name="grbMenu" Grid.Column="0" Header="Options">
                 <StackPanel Orientation="Horizontal" >
-                    <Button x:Name="btnLogin" Grid.Column="0" Style="{StaticResource ResourceKey=btnOptions}" >
+                    <Button x:Name="btnLogin" Grid.Column="0" Style="{StaticResource ResourceKey=btnOptions}" Click="btnLogin_Click" >
                         <StackPanel >
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Login.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Login" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnPrint" Grid.Column="2" Style="{StaticResource ResourceKey=btnOptions}" >
+                    <Button x:Name="btnPrint" Grid.Column="2" Style="{StaticResource ResourceKey=btnOptions}" Click="btnPrint_Click" >
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Print" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnPreview" Grid.Column="3" Style="{StaticResource ResourceKey=btnOptions}">
-                        <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
-                            <TextBlock Text="Preview" Style="{StaticResource ResourceKey=txtOptions}"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="btnRptDsr" Grid.Column="1" Style="{StaticResource ResourceKey=btnOptions}">
+                    <Button x:Name="btnRptDsr" Grid.Column="1" Style="{StaticResource ResourceKey=btnOptions}" Click="btnRptDsr_Click">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/refresh.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Rpt Dsr" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnNewInv" Grid.Column="8" Style="{StaticResource ResourceKey=btnOptions}">
+                    <Button x:Name="btnNewInv" Grid.Column="8" Style="{StaticResource ResourceKey=btnOptions}" Click="btnNewInv_Click">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png"  Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="New Inv" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnAbout" Grid.Column="5"  Style="{StaticResource ResourceKey=btnOptions}">
+                    <Button x:Name="btnAbout" Grid.Column="5"  Style="{StaticResource ResourceKey=btnOptions}" Click="btnAbout_Click">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/About.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="About" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnTransfer" Grid.Column="1" Style="{StaticResource ResourceKey=btnOptions}">
+                    <Button x:Name="btnTransfer" Grid.Column="1" Style="{StaticResource ResourceKey=btnOptions}" Click="btnTransfer_Click">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/refresh.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Transfer" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnAssistance"  Grid.Column="6" Style="{StaticResource ResourceKey=btnOptions}">
+                    <Button x:Name="btnAssistance"  Grid.Column="6" Style="{StaticResource ResourceKey=btnOptions}" Click="btnAssistance_Click">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Assistance.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Assist" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnDaysOff" Grid.Column="7" Style="{StaticResource ResourceKey=btnOptions}">
+                    <Button x:Name="btnDaysOff" Grid.Column="7" Style="{StaticResource ResourceKey=btnOptions}" Click="btnDaysOff_Click">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/DaysOff.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="DaysOff" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnReports" Grid.Column="8" Style="{StaticResource ResourceKey=btnOptions}">
+                    <Button x:Name="btnReports" Grid.Column="8" Style="{StaticResource ResourceKey=btnOptions}" Click="btnReports_Click">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png"  Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Reports" Style="{StaticResource ResourceKey=txtOptions}"/>
@@ -154,8 +148,8 @@
         <DataGrid DataContext="{StaticResource outPremanifestViewSource}" RowDetailsVisibilityMode="VisibleWhenSelected" 
                   Grid.Row="1" Background="#FFF4F5E2" x:Name="dgGuestPremanifest" SelectionUnit ="FullRow"  
                   SelectionMode="Single"  CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"
-                  AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False" FontSize="14" FontWeight="Medium"
-                  EnableRowVirtualization="True">
+                  AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False" CanUserDeleteRows="true" FontSize="14" FontWeight="Medium"
+                  EnableRowVirtualization="True"  PreviewKeyDown="dgGuestPremanifest_PreviewKeyDown">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="guStatusColumn"  Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" Visibility="Collapsed" >
                     <DataGridTextColumn.ElementStyle>
@@ -208,7 +202,7 @@
                 <DataGridTemplateColumn x:Name="guInvitColumn" IsReadOnly="False" Header="Invit" Width="auto">
                     <DataGridTemplateColumn.CellTemplate >
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding guInvit}"  HorizontalAlignment="Center" />
+                            <CheckBox IsChecked="{Binding guInvit}" Click="Invit_Click"  HorizontalAlignment="Center" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -226,7 +220,7 @@
                 </DataGridTemplateColumn>
                 <DataGridCheckBoxColumn x:Name="guShowColumn" IsReadOnly="False" Binding="{Binding guShow}" Header="Show Up" Width="auto"/>
                 <DataGridCheckBoxColumn x:Name="guSaleColumn" IsReadOnly="False" Binding="{Binding guSale}" Header="Sale" Width="auto"/>
-                <DataGridTemplateColumn  Header="Comments" Width="auto" IsReadOnly="False"  >
+                <DataGridTemplateColumn  Header="Comments" Width="*" IsReadOnly="False"  >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding guComments}"  />

@@ -5,92 +5,99 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Base.Forms"
         mc:Ignorable="d"
-        Title="Search Guest" Height="400" Width="800" Background="SkyBlue" ResizeMode="NoResize" ShowInTaskbar="False" Loaded="frmSearchGuest_Loaded">
-    <Grid Background="SkyBlue" ScrollViewer.CanContentScroll="True"
-          ScrollViewer.VerticalScrollBarVisibility="Visible">
+        Title="Search Guest" Height="400" Width="700" ShowInTaskbar="False" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="1.3*"/>
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <!--#region CRITERIOS DE BÚSQEUDA-->
-        <GroupBox Header="Search Criterial">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-
-                <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">Lead Source</Label>
-                <ComboBox Grid.Row="1" Grid.Column="0" Name="cmbLeadSources"></ComboBox>
-
-                <Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center">Name</Label>
-                <TextBox Grid.Row="1" Grid.Column="1" Name="txtName"></TextBox>
-
-                <Label Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center">Room</Label>
-                <TextBox Grid.Row="1" Grid.Column="2" Name="txtRoom" PreviewTextInput="PreviewTextInput"></TextBox>
-
-                <Label Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center">Reservation</Label>
-                <TextBox Grid.Row="1" Grid.Column="3" Name="txtReservation" PreviewTextInput="PreviewTextInput"></TextBox>
-
-                <Label Grid.Column="4" Grid.Row="0" HorizontalAlignment="Center">GUID</Label>
-                <TextBox Grid.Row="1" Grid.Column="4" Name="txtGuid" PreviewTextInput="PreviewTextInput"></TextBox>
-
-                <Label Grid.Column ="5" Grid.Row="0" HorizontalAlignment="Center">Arrival Date From</Label>
-                <DatePicker Grid.Row="1" Grid.Column="5" Name="dtpArrivalFrom"></DatePicker>
-
-                <Label Grid.Column ="6" Grid.Row="0" HorizontalAlignment="Center">Arrival Date To</Label>
-                <DatePicker Grid.Row="1" Grid.Column="6" Name="dtpArrivalTo"></DatePicker>
-
-                <Button Grid.Row="1" Grid.Column="7" Name="btnSearch" Click="btnSearch_Click">Search</Button>
-            </Grid>
-        </GroupBox>
+        <!--#region Search Criteria-->
+        <Grid x:Name="grdCriteria" Grid.Row="0" Margin="5,2,5,2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label x:Name="lblLeadSourse" Content="Lead Sourse" Grid.Column="0" Grid.Row="0"/>
+            <ComboBox x:Name="cmbLeadSourse" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"
+                      DisplayMemberPath="lsN" SelectedValuePath="lsID" 
+                      />
+            <Label x:Name="lblName" Grid.Row="0" Grid.Column="1" Content="Name"/>
+            <TextBox x:Name="txtName" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
+            <Label x:Name="lblRoom" Content="Room" Grid.Column="2" Grid.Row="0"/>
+            <TextBox x:Name="txtRoom" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1"/>
+            <Label x:Name="lblReservation" Content="Reservation" Grid.Column="3" Grid.Row="0"/>
+            <TextBox x:Name="txtReservation" VerticalAlignment="Center" Grid.Column="3" Grid.Row="1"/>
+            <Label x:Name="lblGUID" Content="GUID" Grid.Column="4" Grid.Row="0"/>
+            <TextBox x:Name="txtGUID" VerticalAlignment="Center" Grid.Column="4" Grid.Row="1"/>
+            <Label x:Name="lblDateFrom" Content="Arrival Date From" Grid.Column="5" Grid.Row="0"/>
+            <DatePicker x:Name="dtpFrom" VerticalAlignment="Center" Grid.Column="5" Grid.Row="1"/>
+            <Label x:Name="lblDateTo" Content="Arrival Date To" Grid.Column="6" Grid.Row="0"/>
+            <DatePicker x:Name="dtpTo" VerticalAlignment="Center" Grid.Column="6" Grid.Row="1"/>
+            <Button x:Name="btnSearch" Content="Search" Grid.RowSpan="2" Grid.Column="7" VerticalAlignment="Center" Click="btnSearch_Click"/>
+        </Grid>
         <!--#endregion-->
-
-        <!--#region GRID CON LOS RESULTADOS -->
-        <Grid Grid.Row="1">
-            <DataGrid Name="dtgGuests" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" IsReadOnly="True" MouseDoubleClick="dtgGuests_MouseDoubleClick">
+        
+        <!--#region gridGuests-->
+        <Grid x:Name="grdTable" Margin="5,5,5,5" Grid.Row="1">
+            <DataGrid x:Name="dtgGuests" HorizontalAlignment="Left" Margin="0,0,0,0" AutoGenerateColumns="False" DataContext="{Binding lstGuest}" CanUserAddRows="False" CanUserReorderColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="GUID" Binding="{Binding guID}"/>
-                    <DataGridTextColumn Header="Last Name" Binding="{Binding guLastName1}"/>
-                    <DataGridTextColumn Header="First Name" Binding="{Binding guFirstName1}"/>
-                    <DataGridTextColumn Header="LS" Binding="{Binding guls}"/>
-                    <DataGridTextColumn Header="Reservation" Binding="{Binding guHReservID }"/>
-                    <DataGridTextColumn Header="Hotel" Binding="{Binding guHotel }"/>
-                    <DataGridTextColumn Header="Room" Binding="{Binding guRoomNum }"/>
-                    <DataGridTextColumn Header="SR" Binding="{Binding gusr }"/>
-                    <DataGridTextColumn Header="PR" Binding="{Binding guPRInvit1 }"/>
-                    <DataGridTextColumn Header="Arrival" Binding="{Binding guCheckInD }"/>
-                    <DataGridTextColumn Header="Departure" Binding="{Binding guCheckOutD }"/>
-                    <DataGridTextColumn Header="Account" Binding="{Binding guAccountGiftsCard}"/>
+                    <DataGridTextColumn x:Name="guIDColumn" Width=".8*" Header="GUID" Binding="{Binding guID}" IsReadOnly="True" />
+                    <DataGridTextColumn x:Name="guLastName1Column" Width="1*" Header="Last Name" Binding="{Binding guLastName1}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="guFirstName1Column" Width="1*" Header="First Name" Binding="{Binding guFirstName1}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="gulsColumn" Width="1*" Header="LS" Binding="{Binding guls}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="guHReservIDColumn" Width="1*" Header="Reservation" Binding="{Binding guHReservID}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="guHotelColumn" Width="1*" Header="Hotel" Binding="{Binding guHotel}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="guRoomNumColumn" Width=".8*" Header="Room" Binding="{Binding guRoomNum}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="gusrColumn" Width="1*" Header="SR" Binding="{Binding gusr}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="guPRInvit1Column" Width="1*" Header="PR" Binding="{Binding guPRInvit1}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="guCheckInDColumn" Width="1*" Header="Arrival" Binding="{Binding guCheckInD}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="guCheckOutDColumn" Width="1*" Header="Departure" Binding="{Binding guCheckOutD}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="guAccountGiftsCardColumn" Width="1*" Header="Account" Binding="{Binding guAccountGiftsCard}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
         <!--#endregion-->
-
-        <!--#region BOTONES -->
-        <GroupBox Grid.Row="2">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100"/>
-                </Grid.ColumnDefinitions>
-
-                <Button Grid.Column="1" Name="btnOk" Click="btnOk_Click">Ok</Button>
-                <Button Grid.Column="2" Name="btnCancel" Click="btnCancel_Click">Cancel</Button>
-            </Grid>
-        </GroupBox>
+     
+        <!--#region Buttons-->
+        <Grid Grid.Row="2" x:Name="grdButtons">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="1.5*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="btnOK" Content="OK" Grid.Column="1" VerticalAlignment="Center" Margin="5,5" Click="btnOK_Click"/>
+            <Button x:Name="btnCancel" Content="Cancel" Grid.Column="2" VerticalAlignment="Center" Margin="5,5" Click="btnCancel_Click"/>
+        </Grid>
         <!--#endregion-->
+        
+        <!--#region Status Bar-->
+        <Grid Grid.Row="3">
+            <StatusBar x:Name="stbStatusBar">
+                <StatusBarItem x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
+                <StatusBarItem x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center" />
+                <StatusBarItem x:Name="StatusBarIns" Content="INS" Width="50" HorizontalContentAlignment="Center" />
+                <Separator />
+                <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Width="12" Height="12" Visibility="Visible" />
+                        <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" />
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem x:Name="StatusBarReg" Content="0/0" Width="80" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
+            </StatusBar>
+        </Grid>
+        <!--#endregion Status Bar-->
     </Grid>
 </Window>

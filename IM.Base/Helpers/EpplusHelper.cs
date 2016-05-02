@@ -199,7 +199,9 @@ namespace IM.Base.Helpers
       ExcelRangeBase rangeTable = wsData.Cells["A1"].LoadFromDataTable(dtData, true);
       //El contenido lo convertimos a una tabla
       ExcelTable table = wsData.Tables.Add(rangeTable, null);
-      table.TableStyle = TableStyles.None;
+      table.TableStyle = TableStyles
+        
+        .None;
       //Formateamos la tabla
       SetFormatTable(formatColumns.Where(c => !(c.Axis == ePivotFieldAxis.Values && !string.IsNullOrEmpty(c.Formula))).ToList(), ref table);
 

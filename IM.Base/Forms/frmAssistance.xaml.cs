@@ -1,29 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Globalization;
 using System.Linq;
 using System.Data;
-using System.Text;
-using System.Threading;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Classes;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using IM.Inhouse.Classes;
 using OfficeOpenXml.Style;
+using IM.Base.Classes;
 
-
-namespace IM.Inhouse.Forms
+namespace IM.Base.Forms
 {
   /// <summary>
   /// Interaction logic for frmAssistance.xaml
@@ -39,6 +29,7 @@ namespace IM.Inhouse.Forms
     List<AssistanceData> listAssistData;
     EnumPlaceType enumPalaceType;
     string palaceId;
+    UserData user;
 
     //Para el Excel
     private List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
@@ -47,15 +38,16 @@ namespace IM.Inhouse.Forms
     #endregion Atributos
 
     #region Constructores y destructores
-    public frmAssistance(EnumPlaceType pEnumPalaceType)
+    public frmAssistance(EnumPlaceType pEnumPalaceType, UserData userdata)
     {
       InitializeComponent();
       enumPalaceType = pEnumPalaceType;
       if (enumPalaceType == EnumPlaceType.LeadSource)
-        palaceId = App.User.LeadSource.lsID;
+        palaceId = userdata.LeadSource.lsID;
       else
-        palaceId = App.User.SalesRoom.srID;
+        palaceId = userdata.SalesRoom.srID;
       cmbWeeks.SelectedIndex = 1;
+      user = userdata;
     }
 
     #endregion Constructores y destructores 
@@ -108,7 +100,7 @@ namespace IM.Inhouse.Forms
     {
       DateTime dt;
       dt = GetFirstDayOfWeek(Date);
-    
+
       dtpStart.SelectedDate = dt;
       dt = dt.Date.AddDays(6);
       dtpEnd.SelectedDate = dt;
@@ -146,7 +138,7 @@ namespace IM.Inhouse.Forms
     /// <param name="mode">true Habilita | false Inabilita</param>
     void ChangeUseMode(bool mode)
     {//true Edit, False View
-      if(mode)
+      if (mode)
       {
         ///Inhabilita
         btnShow.IsEnabled = false;
@@ -165,7 +157,7 @@ namespace IM.Inhouse.Forms
         btnShow.IsEnabled = true;
         btnEdit.IsEnabled = true;
         cmbWeeks.IsEnabled = true;
-        if (cmbWeeks.SelectedIndex ==0)
+        if (cmbWeeks.SelectedIndex == 0)
         {
           dtpStart.IsEnabled = true;
           dtpEnd.IsEnabled = true;
@@ -195,10 +187,10 @@ namespace IM.Inhouse.Forms
         assistanceDataDataGrid.ItemsSource = listAssistData;
       else
       {
-        if (MessageBox.Show("There is no assistance for this week.\nWould you like to generate?","Assistance Inhouse", MessageBoxButton.YesNo,MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+        if (MessageBox.Show("There is no assistance for this week.\nWould you like to generate?", "Assistance Inhouse", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
         {
           List<PersonnelAssistance> lstPersonAssist = BRAssistance.GetPersonnelAssistance(enumPalaceType, palaceId, dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
-          
+
           lstPersonAssist.ForEach(c =>
           {
             AssistanceData assistance = new AssistanceData();
@@ -209,8 +201,8 @@ namespace IM.Inhouse.Forms
         }
       }
       StaEnd();
-    }   
-    
+    }
+
     /// <summary>
     /// Suma el numero de asistencias para actualizar el grid
     /// </summary>
@@ -222,7 +214,7 @@ namespace IM.Inhouse.Forms
       List<AssistanceData> assist = assistanceDataDataGrid.SelectedItems.OfType<AssistanceData>().ToList();
       if (assist[0].asMonday == "A" || assist[0].asMonday == "L")
         numAssist = numAssist + 1;
-      if(assist[0].asTuesday == "A" || assist[0].asTuesday == "L")
+      if (assist[0].asTuesday == "A" || assist[0].asTuesday == "L")
         numAssist = numAssist + 1;
       if (assist[0].asWednesday == "A" || assist[0].asWednesday == "L")
         numAssist = numAssist + 1;
@@ -285,7 +277,7 @@ namespace IM.Inhouse.Forms
     private void cmbWeeks_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
       int cmbSelected = cmbWeeks.SelectedIndex;
-      switch(cmbSelected)
+      switch (cmbSelected)
       {
         case 0: //El usuario escoge
           EnableDateTimes(true);
@@ -315,7 +307,7 @@ namespace IM.Inhouse.Forms
 
     private void dtpStart_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
-      ChangedtpDates( dtpStart.SelectedDate.Value);
+      ChangedtpDates(dtpStart.SelectedDate.Value);
     }
 
     private void dtpEnd_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -364,9 +356,9 @@ namespace IM.Inhouse.Forms
       StaStart("Loading assistances Excel...");
       btnToExcel.IsEnabled = false;
 
-      filters.Add(Tuple.Create("Lead Sourse", App.User.LeadSource.lsID));
+      filters.Add(Tuple.Create("Lead Sourse", user.LeadSource.lsID));
       listAssistData = BRAssistance.GetAssistance(enumPalaceType, palaceId, dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
-      if(listAssistData.Count>0)
+      if (listAssistData.Count > 0)
       {
         dt = TableHelper.GetDataTableFromList(listAssistData, true);
         rptName = "Assistance " + palaceId;

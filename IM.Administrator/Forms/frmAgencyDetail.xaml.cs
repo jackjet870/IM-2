@@ -16,7 +16,8 @@ namespace IM.Administrator.Forms
   {
     public Agency oldAgency = new Agency();//Objeto con los valores iniciales
     public Agency agency = new Agency();//Objeto para llenar el formulario    
-    private string _unavailableMotive;
+    private string 
+      _unavailableMotive;
     private string _Market;
     public EnumMode enumMode;
 

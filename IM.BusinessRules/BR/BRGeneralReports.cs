@@ -167,5 +167,21 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion GetRptProductionByAgencyMonthly
+    /// <summary>
+    /// Regresa un lista de tipo RptPremanifestOuthouse
+    /// </summary>
+    /// <param name="Date"></param>
+    /// <param name="LeadSource"></param>
+    ///<history>
+    ///[jorcanche] created 27/04/2016
+    ///</history>
+    public static List<RptPremanifestOuthouse> GetRptPremanifestOutSide(DateTime Date, string LeadSource)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptPremanifestOutside(Date, LeadSource).ToList();
+      }
+    }
+
   }
 }

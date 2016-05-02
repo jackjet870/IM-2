@@ -66,11 +66,18 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\AssistanceToAssistance.cs" />
     <Compile Include="Classes\objInvitAdditionalGuest.cs" />
     <Compile Include="Classes\objInvitBookingDeposit.cs" />
     <Compile Include="Classes\objInvitCreditCard.cs" />
     <Compile Include="Classes\objInvitGift.cs" />
     <Compile Include="Classes\objInvitGuestStatus.cs" />
+    <Compile Include="Forms\frmAssistance.xaml.cs">
+      <DependentUpon>frmAssistance.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmDaysOff.xaml.cs">
+      <DependentUpon>frmDaysOff.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\ComboBoxHelper.cs" />
     <Compile Include="Forms\frmGuest.xaml.cs">
       <DependentUpon>frmGuest.xaml</DependentUpon>
@@ -84,7 +91,7 @@
     <Compile Include="Helpers\ExecuteCommandHelper.cs" />
     <Compile Include="Helpers\LanguageHelper.cs" />
     <Compile Include="Classes\Parametros.cs" />
-    <Compile Include="Forms\frmSearchGuest.cs">
+    <Compile Include="Forms\frmSearchGuest.xaml.cs">
       <DependentUpon>frmSearchGuest.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmInnerException.xaml.cs">
@@ -193,7 +200,15 @@
     <Resource Include="Images\User.png" />
   </ItemGroup>
   <ItemGroup>
- 	<Page Include="Forms\frmGuest.xaml">
+    <Page Include="Forms\frmAssistance.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmDaysOff.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmGuest.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

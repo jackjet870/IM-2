@@ -200,7 +200,7 @@ namespace IM.BusinessRules.BR
       {
         return dbContext.USP_OR_GetGuestById(guestID).SingleOrDefault();
       }
-    } 
+    }
     #endregion
 
     #region SaveGuestMovement
@@ -299,7 +299,7 @@ namespace IM.BusinessRules.BR
             dbContext.InvitationsGifts.AddRange(invitation.NewGifts);
 
           //Actualizamos los regalos
-          if(invitation.UpdatedGifts != null)
+          if (invitation.UpdatedGifts != null)
           {
             foreach (var item in invitation.UpdatedGifts)
             {
@@ -321,7 +321,7 @@ namespace IM.BusinessRules.BR
               }
             }
           }
-          
+
 
           #endregion
 
@@ -330,7 +330,7 @@ namespace IM.BusinessRules.BR
           if (invitation.NewDeposits != null && invitation.NewDeposits.Any())
             dbContext.BookingDeposits.AddRange(invitation.NewDeposits);
 
-          if(invitation.UpdatedDeposits != null)
+          if (invitation.UpdatedDeposits != null)
           {
             foreach (var item in invitation.UpdatedDeposits)
             {
@@ -350,20 +350,20 @@ namespace IM.BusinessRules.BR
               dep.bdUserCXC = item.bdUserCXC;
             }
           }
-          
+
           #endregion
 
           #region Guest Status
           if (invitation.DeletedGuestStatus != null && invitation.DeletedGuestStatus.Any())
           {
 
-            foreach(var row in invitation.DeletedGuestStatus)
+            foreach (var row in invitation.DeletedGuestStatus)
             {
               var gs = dbContext.GuestsStatus.SingleOrDefault(g => g.gtgu == row.gtgu && g.gtgs == row.gtgs);
-              if(gs !=null)
+              if (gs != null)
                 dbContext.GuestsStatus.Remove(gs);
             }
-            
+
           }
 
           if (invitation.NewGuestStatus != null && invitation.NewGuestStatus.Any())
@@ -372,20 +372,20 @@ namespace IM.BusinessRules.BR
           #endregion
 
           #region Credit Cards
-          if(invitation.DeletedCreditCards != null && invitation.DeletedCreditCards.Any())
+          if (invitation.DeletedCreditCards != null && invitation.DeletedCreditCards.Any())
           {
             var g = invitation.DeletedCreditCards.First().gdgu;
-            var cc = dbContext.GuestsCreditCards.Where(c=> c.gdgu == g).ToList();
+            var cc = dbContext.GuestsCreditCards.Where(c => c.gdgu == g).ToList();
             dbContext.GuestsCreditCards.RemoveRange(cc);
           }
-          
-          if(invitation.NewCreditCards != null && invitation.NewCreditCards.Any())
+
+          if (invitation.NewCreditCards != null && invitation.NewCreditCards.Any())
             dbContext.GuestsCreditCards.AddRange(invitation.NewCreditCards);
-          
+
           #endregion
-          
+
           #region Additional Information
-          if(invitation.DeletedAdditional != null)
+          if (invitation.DeletedAdditional != null)
           {
             //Borramos los invitados adicionales
             foreach (var row in invitation.DeletedAdditional)
@@ -395,8 +395,8 @@ namespace IM.BusinessRules.BR
                 invitation.Guest.GuestsAdditional.Remove(guestAddit);
             }
           }
-          
-          if(invitation.NewAdditional != null)
+
+          if (invitation.NewAdditional != null)
           {
             //Agregamos un nuevo invitado adicional
             foreach (var item in invitation.NewAdditional)
@@ -406,12 +406,12 @@ namespace IM.BusinessRules.BR
                 invitation.Guest.GuestsAdditional.Add(guestAddit);
             }
           }
-          
+
           #endregion
 
           dbContext.SaveChanges();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
           throw ex;
         }
@@ -428,12 +428,12 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche] created 16/03/2016
     /// </history>
-    public static List<GuestSearched> GetGuests(DateTime dateFrom, DateTime dateTo, string leadSource, string name = "ALL", 
+    public static List<GuestSearched> GetGuests(DateTime dateFrom, DateTime dateTo, string leadSource, string name = "ALL",
                                                 string roomNumber = "ALL", string reservation = "ALL", int guestID = 0)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        dbContext.Database.CommandTimeout = 120;        
+        dbContext.Database.CommandTimeout = 120;
         return dbContext.USP_OR_GetGuests(dateFrom, dateTo, leadSource, name, roomNumber, reservation, guestID).ToList();
       }
     }
@@ -645,21 +645,21 @@ namespace IM.BusinessRules.BR
 
     public static List<Guest> GetSearchGuest(string leadSource, string name, string room, string reservacion, DateTime dtFrom, DateTime dtTo, string lsProgram)
     {
-      using(var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var guests = (from g in dbContext.Guests
-                     join ls in dbContext.LeadSources on g.guls equals ls.lsID
-                     where ls.lspg == lsProgram
-                          && (g.guCheckInD >= dtFrom && g.guCheckInD <= dtTo)
+                      join ls in dbContext.LeadSources on g.guls equals ls.lsID
+                      where ls.lspg == lsProgram
+                           && (g.guCheckInD >= dtFrom && g.guCheckInD <= dtTo)
                       select g).ToList();
-        if(!String.IsNullOrEmpty(leadSource))
+        if (!String.IsNullOrEmpty(leadSource))
         {
           guests = guests.Where(g => g.guls.Equals(leadSource)).ToList();
         }
 
         if (!String.IsNullOrEmpty(name))
         {
-          guests = guests.Where(g=> (g.guLastName1 != null && g.guLastName1.ToUpper().Contains(name))
+          guests = guests.Where(g => (g.guLastName1 != null && g.guLastName1.ToUpper().Contains(name))
                                 || (g.guFirstName1 != null && g.guFirstName1.ToUpper().Contains(name))
                                 || (g.guLastname2 != null && g.guLastname2.ToUpper().Contains(name))
                                 || (g.guFirstName2 != null && g.guFirstName2.ToUpper().Contains(name))).ToList();
@@ -721,8 +721,76 @@ namespace IM.BusinessRules.BR
         dbContext.Entry(_guest).State = System.Data.Entity.EntityState.Modified;
         dbContext.SaveChanges();
       }
-    } 
+    }
     #endregion
 
+    #region GetGuestPremanifestOuthouse
+    /// <summary>
+    /// Devuelve una Nota o varias dependiendo de cuantas tanga el Guest
+    /// </summary>
+    /// <param name="guId">Id a Guest</param>
+    /// <returns>Un listado de PRNotes</returns>
+    /// <history>
+    /// [jorcanche] created 22/03/2016
+    /// </history>    
+    public static List<GuestPremanifestOuthouse> GetGuestPremanifestOuthouse(bool bookinvit, DateTime Date, string LeadSource)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return (from G in dbContext.Guests
+                join Co in dbContext.Countries on G.guco equals Co.coID
+                join Ag in dbContext.Agencies on G.guag equals Ag.agID
+                where (bookinvit ? G.guBookD : G.guInvitD) == Date
+                where G.guls == LeadSource
+                orderby G.guBookT, G.guLastName1
+                select new GuestPremanifestOuthouse
+                {
+                  guStatus = G.guStatus,
+                  guID = G.guID,
+                  guCheckIn = G.guCheckIn,
+                  guRoomNum = G.guRoomNum,
+                  guLastName1 = G.guLastName1,
+                  guFirstName1 = G.guFirstName1,
+                  guCheckInD = G.guCheckInD,
+                  guCheckOutD = G.guCheckOutD,
+                  guco = G.guco,
+                  coN = Co.coN,
+                  guag = G.guag,
+                  agN = Ag.agN,
+                  guAvail = G.guAvail,
+                  guInfo = G.guInfo,
+                  guPRInfo = G.guPRInfo,
+                  guInfoD = G.guInfoD,
+                  guInvit = G.guInvit,
+                  guInvitD = G.guInvitD,
+                  guBookD = G.guBookD,
+                  guBookT = G.guBookT,
+                  guPRInvit1 = G.guPRInvit1,
+                  guMembershipNum = G.guMembershipNum,
+                  guBookCanc = G.guBookCanc,
+                  guShow = G.guShow,
+                  guSale = G.guSale,
+                  guComments = G.guComments,
+                  guPax = G.guPax
+                }).ToList();
+      }
+
+    }
+
+    #endregion
+
+
+    /// <summary>
+    /// Elimina un Guest
+    /// </summary>
+    /// <param name="guID"></param>
+    public static void DeleteGuest(int guID)
+    {      
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.USP_OR_DeleteGuest(guID);       
+      }
+    }
   }
+  
 }

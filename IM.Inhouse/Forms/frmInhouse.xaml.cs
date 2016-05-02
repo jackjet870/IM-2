@@ -925,10 +925,10 @@ namespace IM.Inhouse
       dtpDate.Value = BRHelpers.GetServerDate().Date;
 
       //Inicializamos las variables de los DataGrids
-      _guestArrivalViewSource = ((CollectionViewSource)(this.FindResource("guestArrivalViewSource")));
-      _guestAvailableViewSource = ((CollectionViewSource)(this.FindResource("guestAvailableViewSource")));
-      _guestPremanifestViewSource = ((CollectionViewSource)(this.FindResource("guestPremanifestViewSource")));
-      _guestSearchedViewSource = ((CollectionViewSource)(this.FindResource("guestSearchedViewSource")));
+      _guestArrivalViewSource = ((CollectionViewSource)(this.FindResource("GuestArrivalViewSource")));
+      _guestAvailableViewSource = ((CollectionViewSource)(this.FindResource("GuestAvailableViewSource")));
+      _guestPremanifestViewSource = ((CollectionViewSource)(this.FindResource("GuestPremanifestViewSource")));
+      _guestSearchedViewSource = ((CollectionViewSource)(this.FindResource("GuestSearchedViewSource")));
 
       //Cargamos los datagrids
       LoadGrid();
@@ -1815,7 +1815,7 @@ namespace IM.Inhouse
     #region btnLogin_Click
     private void btnLogin_Click(object sender, RoutedEventArgs e)
     {
-      frmLogin log = new frmLogin(null, EnumLoginType.Location, changePassword: false, autoSign: true);
+      frmLogin log = new frmLogin(null, EnumLoginType.Location, program:EnumProgram.Inhouse, changePassword: false, autoSign: true);
       if (App.User.AutoSign)
       {
         log.UserData = App.User;
@@ -1961,9 +1961,10 @@ namespace IM.Inhouse
     #endregion
 
     #region btnDaysOff_Click
+
     private void btnDaysOff_Click(object sender, RoutedEventArgs e)
     {
-      frmDaysOff frmDaysOff = new frmDaysOff(EnumTeamType.TeamPRs);
+      frmDaysOff frmDaysOff = new frmDaysOff(EnumTeamType.TeamPRs,App.User);
       frmDaysOff.ShowDialog();
     }
     #endregion
@@ -2011,7 +2012,7 @@ namespace IM.Inhouse
     #region btnAssistance_Click
     private void btnAssistance_Click(object sender, RoutedEventArgs e)
     {
-      Forms.frmAssistance frmAssistance = new Forms.frmAssistance(EnumPlaceType.LeadSource);
+      frmAssistance frmAssistance = new frmAssistance(EnumPlaceType.LeadSource,App.User);
       frmAssistance.ShowDialog();
     }
     #endregion

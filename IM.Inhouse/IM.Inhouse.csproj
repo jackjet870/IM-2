@@ -268,13 +268,9 @@
   <ItemGroup>
     <Compile Include="Classes\HelperToObjGuest.cs" />
     <Compile Include="Classes\ObjGuestArrival.cs" />
-    <Compile Include="Classes\AssistanceToAssistance.cs" />
     <Compile Include="Classes\ObjGuestAvailable.cs" />
     <Compile Include="Classes\ObjGuestPremanifest.cs" />
     <Compile Include="Classes\ObjGuestSearched.cs" />
-    <Compile Include="Forms\frmAssistance.xaml.cs">
-      <DependentUpon>frmAssistance.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Forms\frmBookingCancel.xaml.cs">
       <DependentUpon>frmBookingCancel.xaml</DependentUpon>
     </Compile>
@@ -284,17 +280,11 @@
     <Compile Include="Forms\frmFollowUp.xaml.cs">
       <DependentUpon>frmFollowUp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmDaysOff.xaml.cs">
-      <DependentUpon>frmDaysOff.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Forms\frmPRNotes.xaml.cs">
       <DependentUpon>frmPRNotes.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmGuestsGroups.xaml.cs">
       <DependentUpon>frmGuestsGroups.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmSearchGuest.xaml.cs">
-      <DependentUpon>frmSearchGuest.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSearchGuests.xaml.cs">
       <DependentUpon>frmSearchGuests.xaml</DependentUpon>
@@ -420,10 +410,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Forms\frmAssistance.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Forms\frmBookingCancel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -433,10 +419,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\frmFollowUp.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Forms\frmDaysOff.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -453,10 +435,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\frmGuestsGroups.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Forms\frmSearchGuest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
