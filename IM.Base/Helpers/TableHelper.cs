@@ -64,7 +64,7 @@ namespace IM.Base.Helpers
           if (showCheckMark)
             values[col] = (values[col].ToString().ToLower() == "true") ? "ü" : "";
           else
-            values[col] = (values[col].ToString().ToLower() == "true") ? "Yes" : " ";
+            values[col] = (values[col].ToString().ToLower() == "true") ? (object) "Yes" : DBNull.Value;
         });
 
         if (replaceStringNullOrWhiteSpace)

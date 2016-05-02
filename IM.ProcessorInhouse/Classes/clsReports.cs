@@ -909,7 +909,7 @@ namespace IM.ProcessorInhouse.Classes
                                  }).OrderBy(c => c.cuN).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu);
-      return EpplusHelper.createExcelCustomPivot(dtData, filters, reportname, dateRangeFileNameRep, clsFormatReport.GetRptGiftsReceivedBySRFormat(), blnShowSubtotal: true);
+      return EpplusHelper.CreateExcelCustomPivot(dtData, filters, reportname, dateRangeFileNameRep, clsFormatReport.GetRptGiftsReceivedBySRFormat(), blnShowSubtotal: true);
     }
 
     #endregion ExportRptGiftsReceivedBySR

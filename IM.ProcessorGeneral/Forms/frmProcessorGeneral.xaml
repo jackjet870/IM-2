@@ -44,7 +44,7 @@
             <ColumnDefinition Width="380"/>
         </Grid.ColumnDefinitions>
         <!--#region Reporte de Salas de Venta -->
-        <DataGrid Name="grdrptSalesRooms" Margin="20 50 0 0" AutoGenerateColumns="False" GridLinesVisibility="None" SelectionChanged="grdrptSalesRooms_SelectionChanged" SelectionMode="Single">
+        <DataGrid Name="grdrptSalesRooms" Margin="20 50 0 0" AutoGenerateColumns="False" GridLinesVisibility="None" SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding rptNombre}" IsReadOnly="True" Width="*">
                     <DataGridTextColumn.HeaderStyle>
@@ -120,6 +120,12 @@
                         </DataGridTextColumn.HeaderStyle>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="grdrptLeadSource_dblClick"/>
+                        <EventSetter Event="PreviewKeyDown" Handler="grdrptLeadSources_PreviewKeyDown"/>
+                    </Style>
+                </DataGrid.Resources>
             </DataGrid>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
@@ -131,7 +137,7 @@
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Name="btnPrintLS" Grid.Column="1" VerticalAlignment="Center">
+                <Button Name="btnPrintLS" Grid.Column="1" VerticalAlignment="Center" Click="btnPrintLS_Click">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left"/>
                         <AccessText Text="_Print"></AccessText>
@@ -142,7 +148,7 @@
             </Grid>
             <!--#endregion-->
             <!--#region Grid Reporte General -->
-            <DataGrid Name="grdrptGeneral" Grid.Row="3" AutoGenerateColumns="False" GridLinesVisibility="None" SelectionChanged="grdrptGeneral_SelectionChanged">
+            <DataGrid Name="grdrptGeneral" Grid.Row="3" AutoGenerateColumns="False" GridLinesVisibility="None" >
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding rptNombre}" IsReadOnly="True" Width="*">
                         <DataGridTextColumn.HeaderStyle>
@@ -171,7 +177,7 @@
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Name="btnPrintGral" Grid.Column="1" VerticalAlignment="Center">
+                <Button Name="btnPrintGral" Grid.Column="1" VerticalAlignment="Center" Click="btnPrintGral_Click">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left"/>
                         <AccessText Text="_Print"></AccessText>

@@ -29,7 +29,7 @@ namespace IM.Model.Classes
     public ePivotFieldAxis Axis { get; set; } = ePivotFieldAxis.None;
     public int Order { get; set; }
     public string Formula { get; set; }
-    public bool showAll { get; set; } = false;
+    public bool ShowAll { get; set; } = false;
     public eSortType Sort { get; set; } = eSortType.None;
     public string PropertyName { get; set; }
     public string SuperHeader { get; set; }

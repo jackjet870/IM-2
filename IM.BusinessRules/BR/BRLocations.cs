@@ -88,5 +88,25 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion
+
+    /// <summary>
+    /// Obtiene una lista de locations filtrados por Programa.
+    /// </summary>
+    /// <param name="program"> Programa "IH","OUT" </param>
+    /// <history>
+    /// [edgrodriguez] created 27/04/2016
+    /// </history>
+    public static List<Location> GetLocationsbyProgram(string program="ALL")
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var Locs= (from loc in dbContext.Locations
+          join ls in dbContext.LeadSources on loc.lols equals ls.lsID
+          where loc.loA && (program == "ALL" || ls.lspg == program)
+          select loc).OrderBy(c=>c.loN).ToList();
+
+        return Locs;
+      }
+    }
   }
 }

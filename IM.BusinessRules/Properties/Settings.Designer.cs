@@ -98,36 +98,36 @@ namespace IM.BusinessRules.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("120")]
-        public int UPS_OR_RptProductionBySalesRoom {
+        public int UPS_OR_RptProductionBySalesRoom_Timeout {
             get {
-                return ((int)(this["UPS_OR_RptProductionBySalesRoom"]));
+                return ((int)(this["UPS_OR_RptProductionBySalesRoom_Timeout"]));
             }
             set {
-                this["UPS_OR_RptProductionBySalesRoom"] = value;
+                this["UPS_OR_RptProductionBySalesRoom_Timeout"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("120")]
-        public int UPS_OR_RptProductionBySalesRoomMarket {
+        public int UPS_OR_RptProductionBySalesRoomMarket_Timeout {
             get {
-                return ((int)(this["UPS_OR_RptProductionBySalesRoomMarket"]));
+                return ((int)(this["UPS_OR_RptProductionBySalesRoomMarket_Timeout"]));
             }
             set {
-                this["UPS_OR_RptProductionBySalesRoomMarket"] = value;
+                this["UPS_OR_RptProductionBySalesRoomMarket_Timeout"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("90")]
-        public int UPS_OR_RptProductionBySalesRoomMarketSubmarket {
+        public int UPS_OR_RptProductionBySalesRoomMarketSubmarketTimeout {
             get {
-                return ((int)(this["UPS_OR_RptProductionBySalesRoomMarketSubmarket"]));
+                return ((int)(this["UPS_OR_RptProductionBySalesRoomMarketSubmarketTimeout"]));
             }
             set {
-                this["UPS_OR_RptProductionBySalesRoomMarketSubmarket"] = value;
+                this["UPS_OR_RptProductionBySalesRoomMarketSubmarketTimeout"] = value;
             }
         }
         

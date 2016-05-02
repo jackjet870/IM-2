@@ -107,6 +107,9 @@
     <Compile Include="Forms\frmFilterDateRange.xaml.cs">
       <DependentUpon>frmFilterDateRange.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmLoginLog.xaml.cs">
+      <DependentUpon>frmLoginLog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmProcessorGeneral.xaml.cs">
       <DependentUpon>frmProcessorGeneral.xaml</DependentUpon>
     </Compile>
@@ -139,6 +142,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Forms\frmFilterDateRange.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmLoginLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

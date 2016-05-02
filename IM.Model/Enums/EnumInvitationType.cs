@@ -12,6 +12,7 @@ namespace IM.Model.Enums
     OutHouse,
     Host,
     Animation,
-    Regen
+    Regen,
+    External
   }
 }

@@ -27,7 +27,21 @@ namespace IM.BusinessRules.BR
       {
         dbContext.USP_OR_SaveLoginLog(location, user, computerName);
       }
-    } 
+    }
+    #endregion
+
+    #region GetLoginsLogPCName
+    /// <summary>
+    /// Obtiene la lista de Nombres de Pc del historico de accesos.
+    /// </summary>
+    /// <history>[edgrodriguez] 27/04/2016</history>
+    public static List<string> GetLoginsLogPCName()
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.LoginsLogs.Select(c => c.llPCName).OrderBy(c=>c).Distinct().ToList();
+      }
+    }
     #endregion
   }
 }
