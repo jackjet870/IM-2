@@ -839,7 +839,6 @@ namespace IM.BusinessRules.BR
     #region Outhouse
 
     #region GetRptDepositsPaymentByPR
-
     /// <summary>
     ///  Obtiene los datos para el reporte de pago de depositos a los PRs (Comisiones de PRs de Outhouse)
     /// </summary>
@@ -856,24 +855,6 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [vku] 07/Abr/2016 Created
     /// </history>
-    public static List<object> GetRptDepositsPaymentByPR(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, string paymentTypes = "ALL", EnumFilterDeposit filterDeposit = EnumFilterDeposit.fdAll)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var resDepositsPaymentByPR = dbContext.USP_OR_RptDepositsPaymentByPR(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), paymentTypes, Convert.ToByte(filterDeposit));
-        RptDepositsPaymentByPR DepositsPaymentByPR = resDepositsPaymentByPR.FirstOrDefault();
-
-        var resDepositsPaymentByPRDeposits = resDepositsPaymentByPR.GetNextResult<RptDepositsPaymentByPR_Deposit>();
-        RptDepositsPaymentByPR_Deposit DepositsPaymentByPRDeposits = resDepositsPaymentByPRDeposits.FirstOrDefault();
-
-        List<object> lstObj = new List<object>();
-        lstObj.Add(DepositsPaymentByPR);
-        lstObj.Add(DepositsPaymentByPRDeposits);
-
-        return lstObj;
-      }
-    }
-
     public static DepositsPaymentByPRData GetRptDepositsPaymentByPRData(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, string paymentTypes = "ALL", EnumFilterDeposit filterDeposit = EnumFilterDeposit.fdAll)
     {
       DepositsPaymentByPRData DepositsPaymentByPRData = new DepositsPaymentByPRData();
@@ -1063,11 +1044,26 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [vku] 15/Abr/2016 Created
     /// </history>
-    public static List<RptProductionByAgencyOuthouse> GetRptProductionByAgencyOuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSalesByMemberShipType salesByMemberShipType = EnumSalesByMemberShipType.sbmNoDetail)
+    public static ProductionByAgencyOuthouseData GetRptProductionByAgencyOuthouseData(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSalesByMemberShipType salesByMemberShipType = EnumSalesByMemberShipType.sbmNoDetail)
     {
+      ProductionByAgencyOuthouseData ProductionByAgencyOuthouseData = new ProductionByAgencyOuthouseData();
+      ProductionByAgencyOuthouseData.ProductionByAgencyOuthouse = new List<RptProductionByAgencyOuthouse>();
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.USP_OR_RptProductionByAgencyOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToBoolean(salesByMemberShipType)).ToList();
+        dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByAgencyOutside_Timeout;
+
+        var resProductionByAgency = dbContext.USP_OR_RptProductionByAgencyOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToBoolean(salesByMemberShipType));
+        ProductionByAgencyOuthouseData.ProductionByAgencyOuthouse = resProductionByAgency.ToList();
+
+        if (Convert.ToBoolean(salesByMemberShipType))
+        {
+          var resProductionByAgencyMembershipType = resProductionByAgency.GetNextResult<MembershipTypeShort>();
+          ProductionByAgencyOuthouseData.MembershipTypes = resProductionByAgencyMembershipType.ToList();
+
+          var resProductionByAgencySalesMembershipType = resProductionByAgencyMembershipType.GetNextResult<RptProductionByAgencyOuthouse_SalesByMembershipType>();
+          ProductionByAgencyOuthouseData.ProductionByAgencyOuthouse_SalesByMembershipType = resProductionByAgencySalesMembershipType.ToList();
+        }
+        return ProductionByAgencyOuthouseData;
       }
     }
 
@@ -1228,6 +1224,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
+        dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByGiftInvitationSalesRoom_Timeout;
         return dbContext.USP_OR_RptProductionByGiftInvitationSalesRoom(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), gifts, Convert.ToByte(filterDeposits)).ToList();
       }
     }
@@ -1283,6 +1280,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
+        dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByNationalityOutside_Timeout;
         return dbContext.USP_OR_RptProductionByNationalityOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToByte(saveCourtesyTours)).ToList();
       }
     }

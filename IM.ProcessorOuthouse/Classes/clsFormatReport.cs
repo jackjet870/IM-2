@@ -19,7 +19,7 @@ namespace IM.ProcessorOuthouse.Classes
     {
       return new List<ExcelFormatTable>()
       {
-      new ExcelFormatTable() { Title = "Category", PropertyName = "Category", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 0, Outline = true,  SubTotalFunctions = eSubTotalFunctions.Default  },
+      new ExcelFormatTable() { Title = "Category", PropertyName = "Category", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 0, Outline = true,  SubTotalFunctions = eSubTotalFunctions.Default},
       new ExcelFormatTable() { Title = "Place", PropertyName = "bdpc", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 1,  Outline = true,  SubTotalFunctions = eSubTotalFunctions.Default },
       new ExcelFormatTable() { Title = "PaymentSchemaFactor", PropertyName = "PaymentSchemaFactor", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 2,  Outline = true,  SubTotalFunctions = eSubTotalFunctions.Default},
       new ExcelFormatTable() { Title = "PR ID", PropertyName = "PR", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 3 },
@@ -43,7 +43,6 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Sh%", PropertyName = "ShowsFactor", Format = EnumFormatTypeExcel.Percent, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 8, Formula = "IF('GrossBooks' =0,0,'GrossShows'/'GrossBooks')" },
       new ExcelFormatTable() { Title = "Eficiency", PropertyName = "Efficiency", Format=EnumFormatTypeExcel.Currency, Alignment=ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 19, Formula = "IF('GrossBooks' =0,0,'SalesAmount'/'GrossBooks')" },
 
-
       new ExcelFormatTable() { Title = "Currency", PropertyName = "cuN", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Center, Axis = ePivotFieldAxis.Column, Order = 1, Sort = eSortType.Ascending},
       new ExcelFormatTable() { Title = "PaymentType", PropertyName = "ptN", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Center, Axis = ePivotFieldAxis.Column, Order = 2, Sort = eSortType.Ascending },
 
@@ -65,7 +64,7 @@ namespace IM.ProcessorOuthouse.Classes
     {
       return new List<ExcelFormatTable>()
       {
-      new ExcelFormatTable() { Title = "Sales Room", PropertyName = "SalesRoom", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 1, Outline = true,SubTotalFunctions = eSubTotalFunctions.Default },
+      new ExcelFormatTable() { Title = "Sales Room", PropertyName = "SalesRoom", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 1, IsGroup = true, Outline = true,SubTotalFunctions = eSubTotalFunctions.Default },
       new ExcelFormatTable() { Title = "Gift ID", PropertyName = "Gift", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 2, },
       new ExcelFormatTable() { Title = "Gift Name", PropertyName= "GiftN", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 3, },
       new ExcelFormatTable() { Title = "Quantity", PropertyName = "Quantity" , Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 4,  },
@@ -74,7 +73,6 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Minors", PropertyName = "Minors" , Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 7, },
       new ExcelFormatTable() { Title = "Currency", PropertyName = "cuN", Format=EnumFormatTypeExcel.General,Alignment=ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Column, Order = 1, Sort = eSortType.Ascending },
       new ExcelFormatTable() { Title = "Amount", PropertyName = "Amount" ,Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values },
-
       };
     }
     #endregion
@@ -257,6 +255,45 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Eff", PropertyName = "Efficiency", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 23, Formula = "IF('Shows' =0,0,'SalesAmount_TOTAL'/'Shows')"},
       new ExcelFormatTable() { Title = "Cl%", PropertyName = "ClosingFactor", Format = EnumFormatTypeExcel.Percent, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 24, Formula = "IF('Shows' =0,0,'Sales_TOTAL'/'Shows')"},
       new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 25, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
+      };
+    }
+    #endregion
+
+    #region rptProductionByAgencySalesMembershipTypeOuthouse
+    /// <summary>
+    ///  Formato para el reporte productionByAgency details the Sales MembershipType
+    /// </summary>
+    /// <history>
+    ///   [vku] 28/Abr/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> rptProductionByAgencySalesMembershipTypeOuthouse()
+    {
+      return new List<ExcelFormatTable>()
+      {
+      new ExcelFormatTable() { Title = "Agency ID", PropertyName = "Agency", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 1  },
+      new ExcelFormatTable() { Title = "Agency", PropertyName = "Agency N", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 2  },
+      new ExcelFormatTable() { Title = "Books", PropertyName = "Books", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 3, } ,
+      new ExcelFormatTable() { Title = "IO", PropertyName= "InOuts", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 5, Function = DataFieldFunctions.Sum },
+      new ExcelFormatTable() { Title = "T Bk", PropertyName = "GrossBooks", Format=EnumFormatTypeExcel.Number,Alignment=ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 6, Function = DataFieldFunctions.Sum,  },
+      new ExcelFormatTable() { Title = "Shows", PropertyName = "Shows" , Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 7, Function = DataFieldFunctions.Sum, },
+      new ExcelFormatTable() { Title = "WO", PropertyName = "WalkOuts", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 8,  Function = DataFieldFunctions.Sum},
+      new ExcelFormatTable() { Title = "RT", PropertyName = "Tours", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 9,  Function = DataFieldFunctions.Sum, },
+      new ExcelFormatTable() { Title = "CT", PropertyName = "CourtesyTours", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 10,  Function = DataFieldFunctions.Sum,},
+      new ExcelFormatTable() { Title = "Save", PropertyName = "SaveTours", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 11,  Function = DataFieldFunctions.Sum },
+      new ExcelFormatTable() { Title = "T Tours", PropertyName = "TotalTours", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 12,  Function = DataFieldFunctions.Sum },
+      new ExcelFormatTable() { Title = "UPS", PropertyName = "UPS", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 13,  Function = DataFieldFunctions.Sum },
+
+      new ExcelFormatTable() { Title = "MembershipType", PropertyName = "mtN", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Center, Axis = ePivotFieldAxis.Column, Order = 14, Sort = eSortType.Ascending},
+      new ExcelFormatTable() { Title = "Sales", PropertyName = "Sales" ,Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 15, Function = DataFieldFunctions.Sum},
+      new ExcelFormatTable() { Title = "Amount", PropertyName = "SalesAmount", Format=EnumFormatTypeExcel.Currency, Alignment=ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 16, Function = DataFieldFunctions.Sum},
+      new ExcelFormatTable() { Title = "", PropertyName = "SalesAmount_CANCEL", Format=EnumFormatTypeExcel.Currency, Alignment=ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 19, Function = DataFieldFunctions.Sum, InsertBlankRow = true },
+
+
+      new ExcelFormatTable() { Title = "Sh%", PropertyName = "ShowsFactor", Format = EnumFormatTypeExcel.Percent, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 4, Formula = "IF('GrossBooks' =0,0,'Shows'/'GrossBooks')" },
+      new ExcelFormatTable() { Title = "Ca%", PropertyName = "CancelFactor", Format = EnumFormatTypeExcel.Percent, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 19, Formula = "IF(('SalesAmount_TOTAL'+'SalesAmount_CANCEL') =0,0,'SalesAmount_CANCEL'/('SalesAmount_TOTAL'+'SalesAmount_CANCEL'))"},
+      new ExcelFormatTable() { Title = "Eff", PropertyName = "Efficiency", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 20, Formula = "IF('Shows' =0,0,'SalesAmount_TOTAL'/'Shows')"},
+      new ExcelFormatTable() { Title = "Cl%", PropertyName = "ClosingFactor", Format = EnumFormatTypeExcel.Percent, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 21, Formula = "IF('Shows' =0,0,'Sales_TOTAL'/'Shows')"},
+      new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 22, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
       };
     }
     #endregion

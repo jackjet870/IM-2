@@ -430,6 +430,7 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_RptProductionByAgeOutside_Timeout"] = value;
             }
         }
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("60")]
@@ -499,6 +500,30 @@ namespace IM.BusinessRules.Properties {
             }
             set {
                 this["USP_OR_GraphProduction_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_OR_RptProductionByAgencyOutside_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByAgencyOutside_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByAgencyOutside_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptProductionByNationalityOutside_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByNationalityOutside_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByNationalityOutside_Timeout"] = value;
             }
         }
     }
