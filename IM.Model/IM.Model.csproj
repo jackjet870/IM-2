@@ -398,6 +398,7 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ConnectionHelper.cs" />
+    <Compile Include="Helpers\EntityMultipleResultSet.cs" />
     <Compile Include="Helpers\EnumToListHelper.cs" />
     <Compile Include="Hotel.cs">
       <DependentUpon>IMModel.tt</DependentUpon>

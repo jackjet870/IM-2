@@ -10,12 +10,32 @@ namespace IM.BusinessRules.BR
 {
   public static class BRGeneralReports
   {
+
+    #region Processor General
+
+    #region GetRptAgencies
+    /// <summary>
+    /// Obtiene los datos para el reporte Agencies.
+    /// </summary>
+    /// <returns> List<RptAgencies> </returns>
+    /// <history>
+    /// [edgrodriguez] 20/Abr/2016 Created
+    /// </history>
+    public static List<RptAgencies> GetRptAgencies()
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptAgencies().ToList();
+      }
+    }
+    #endregion
+
     #region GetRptPersonnel
 
     /// <summary>
     /// Obtiene el reporte de personal.
     /// </summary>
-    /// <returns> List<RptBookingsBySalesRoomProgramLeadSourceTime> </returns>
+    /// <returns> List<RptPersonnel> </returns>
     /// <history>
     /// [edgrodriguez] 16/Mar/2016 Created
     /// </history>
@@ -26,27 +46,131 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_RptPersonnel().ToList();
       }
     }
-
-    #endregion GetRptPersonnel
+    
+  #endregion
 
     #region GetRptGifts
 
+  /// <summary>
+  /// Obtiene el reporte de regalos.
+  /// </summary>
+  /// <returns> List<RptGifts> </returns>
+  /// <history>
+  /// [edgrodriguez] 16/Mar/2016 Created
+  /// </history>
+  public static List<RptGifts> GetRptGifts()
+  {
+    using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+    {
+      return dbContext.USP_OR_RptGifts().ToList();
+    }
+  }
+
+    #endregion
+
+    #region GetRptLoginsLog
+
     /// <summary>
-    /// Obtiene el reporte de regalos.
+    /// Obtiene el reporte Logins Log
     /// </summary>
-    /// <returns> List<RptBookingsBySalesRoomProgramLeadSourceTime> </returns>
+    /// <returns> List<RptGifts> </returns>
     /// <history>
-    /// [edgrodriguez] 16/Mar/2016 Created
+    /// [edgrodriguez] 27/Abr/2016 Created
     /// </history>
-    public static List<RptGifts> GetRptGifts()
+    public static List<RptLoginLog> GetRptLoginsLog(DateTime dtmStart, DateTime dtmEnd, string location="ALL", string pcname="ALL", string personnel="ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.USP_OR_RptGifts().ToList();
+        return dbContext.USP_IM_RptLoginLog(dtmStart, dtmEnd, location, pcname, personnel).ToList();
       }
     }
 
-    #endregion GetRptGifts
+    #endregion
+    
+    #region GetRptProductionByLeadSourceMarketMonthly
+    /// <summary>
+    /// Obtiene el reporte Production By Lead Source & Market(Monthly).
+    /// </summary>
+    /// <returns>List<RptProductionByLeadSourceMarketMonthly></returns>
+    /// <history>
+    /// [edgrodriguez] 21/Abr/2016 Created
+    /// </history>
+    public static List<RptProductionByLeadSourceMarketMonthly> GetRptProductionByLeadSourceMarketMonthly(DateTime? dtmStart, DateTime? dtmEnd, EnumQuinellas quinellas, EnumExternalInvitation external, EnumBasedOnArrival basedOnArrival, string leadSources = "ALL", string Program = "ALL")
+  {
+    using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+    {
+      return dbContext.USP_OR_RptProductionByLeadSourceMarketMonthly(dtmStart, dtmEnd, leadSources, Program, Convert.ToBoolean(quinellas), Convert.ToInt32(external), Convert.ToBoolean(basedOnArrival)).ToList();
+    }
+  }
+  #endregion
+
+    #region GetRptProductionReferral
+    /// <summary>
+    /// Obtiene el reporte Production Referral.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 22/Abr/2016 Created
+    /// </history>
+    public static List<RptProductionReferral> GetRptProductionReferral(DateTime? dtmStart, DateTime? dtmEnd)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptProductionReferral(dtmStart, dtmEnd).ToList();
+      }
+    }
+    #endregion
+
+    #region GetRptReps
+  /// <summary>
+  /// Obtiene el reporte Reps.
+  /// </summary>
+  /// <history>
+  /// [edgrodriguez] 23/Abr/2016 Created
+  /// </history>
+  public static List<Rep> GetRptReps()
+  {
+    using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+    {
+      return dbContext.Reps.ToList();
+    }
+  }
+  #endregion
+
+    #region GetRptSalesByProgramLeadSourceMarket
+  /// <summary>
+  /// Obtiene el reporte Sales By Program,LeadSource & Market.
+  /// </summary>
+  /// <history>
+  /// [edgrodriguez] 23/Abr/2016 Created
+  /// </history>
+  public static List<RptSalesByProgramLeadSourceMarket> GetRptSalesByProgramLeadSourceMarket(DateTime? dtmStart, DateTime? dtmEnd)
+  {
+    using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+    {
+      return dbContext.USP_OR_RptSalesByProgramLeadSourceMarket(dtmStart, dtmEnd).ToList();
+    }
+  }
+  #endregion
+
+    #region GetRptWarehouseMovements
+  /// <summary>
+  /// Obtiene el reporte de Warehouse Movements.
+  /// </summary>
+  /// <returns> List<RptWarehouseMovements> </returns>
+  /// <history>
+  /// [edgrodriguez] 26/Abr/2016 Created
+  /// </history>
+  public static List<RptWarehouseMovements> GetRptWarehouseMovements(DateTime? dtmStart, DateTime? dtmEnd, string whs)
+  {
+    using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+    {
+      return dbContext.sprptWhsMovs(dtmStart, dtmEnd, whs).ToList();
+    }
+  }
+    #endregion
+
+    #endregion
+
 
     #region GetRptArrivals
 

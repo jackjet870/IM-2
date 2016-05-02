@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Common.CommandTrees;
 using IM.Model;
 using IM.Model.Classes;
 using IM.Model.Enums;
@@ -22,25 +23,33 @@ namespace IM.BusinessRules.BR
     /// <param name="user"> Nombre de Usuario</param>
     /// <param name="place"> Nombre del lugar</param>
     /// <returns></returns>
+    /// <history>
+    /// [edgrodriguez] 30/Abr/2016 Modified. Se implemento nuevo proceso para obtener los multiples selects
+    /// que devuelve el StoreProcedure
+    /// </history>
     public static UserData Login(EnumLoginType logintype, string user = "", string place = "")
     {
       var userData = new UserData();
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        var resUser = dbContext.USP_OR_Login(Convert.ToByte(logintype), user, place);
-        userData.User = resUser.FirstOrDefault();
-        var resRoles = resUser.GetNextResult<RoleLogin>();
-        userData.Roles = resRoles.ToList();
-        var resPermissions = resRoles.GetNextResult<PermissionLogin>();
-        userData.Permissions = resPermissions.ToList();
-        var resSalesroom = resPermissions.GetNextResult<SalesRoomLogin>();
-        userData.SalesRoom = resSalesroom.FirstOrDefault();
-        var resLocation = resSalesroom.GetNextResult<LocationLogin>();
-        userData.Location = resLocation.FirstOrDefault();
-        var resLeadSource = resLocation.GetNextResult<LeadSourceLogin>();
-        userData.LeadSource = resLeadSource.FirstOrDefault();
-        var resWarehouse = resLeadSource.GetNextResult<WarehouseLogin>();
-        userData.Warehouse = resWarehouse.FirstOrDefault();
+        var resUser = dbContext.USP_OR_Login(Convert.ToByte(logintype), user, place)
+          .MultipleResults()
+         .With<UserLogin>()
+         .With<RoleLogin>()
+         .With<PermissionLogin>()
+         .With<SalesRoomLogin>()
+         .With<LocationLogin>()
+         .With<LeadSourceLogin>()
+         .With<WarehouseLogin>()
+         .GetValues();
+
+        userData.User = (resUser[0] as List<UserLogin>).FirstOrDefault();
+        userData.Roles = (resUser[1] as List<RoleLogin>);
+        userData.Permissions = (resUser[2] as List<PermissionLogin>);
+        userData.SalesRoom = (resUser[3] as List<SalesRoomLogin>).FirstOrDefault();
+        userData.Location = (resUser[4] as List<LocationLogin>).FirstOrDefault();
+        userData.LeadSource = (resUser[5] as List<LeadSourceLogin>).FirstOrDefault();
+        userData.Warehouse = (resUser[6] as List<WarehouseLogin>).FirstOrDefault();
       }
       return userData;
     }
@@ -124,7 +133,33 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.Personnels.Where(p => p.peID == id).FirstOrDefault();
+        return dbContext.Personnels.FirstOrDefault(p => p.peID == id);
+      }
+    }
+
+    #endregion
+
+    #region GetPersonnelAccess
+
+    /// <summary>
+    /// Obtiene una lista de accesos de personal
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez]  27/Abr/2016 Created
+    /// </history>
+    public static List<Personnel> GetPersonnelAccess()
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return (from pe in dbContext.Personnels
+          join pa in (from pa in dbContext.PersonnelAccessList
+            join ls in dbContext.LeadSources on pa.plLSSRID equals ls.lsID
+            where pa.plLSSR == "LS" && ls.lspg == "IH" && ls.lsA
+            select pa)
+            on pe.peID equals pa.plpe
+          where pe.peA
+          select pe
+          ).Distinct().OrderBy(c=>c.peN).ToList();
       }
     }
 

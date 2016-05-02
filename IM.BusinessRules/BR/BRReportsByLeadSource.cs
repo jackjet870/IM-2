@@ -1374,5 +1374,214 @@ namespace IM.BusinessRules.BR
     #endregion GetRptProductionbyPRContacOuthouse
 
     #endregion Outhouse
+
+    #region Processor General
+
+    #region GetRptDepositsBurnedGuests
+    /// <summary>
+    /// Obtiene el reporte Deposits Burned Guests
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="dtmEnd"></param>
+    /// <param name="leadSources"></param>
+    /// <returns> List<RptDepositsBurnedGuests> </returns>
+    /// <history>
+    ///   [edgrodriguez] 19/04/2016 Created
+    /// </history>
+    public static List<object> GetRptDepositsBurnedGuests(DateTime dtmStart, DateTime dtmEnd, string leadSources)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstguests= dbContext.USP_OR_RptDepositsBurnedGuests(dtmStart, dtmEnd, leadSources).ToList();
+
+        var currencies = (from gift in lstguests.Select(c => c.gucu).Distinct()
+                          join curr in dbContext.Currencies on gift equals curr.cuID
+                          select curr).ToList();
+        var payType = (from gift in lstguests.Select(c => c.gupt).Distinct()
+                       join payT in dbContext.PaymentTypes on gift equals payT.ptID
+                       select payT).ToList();
+
+        return (lstguests.Count > 0) ? new List<object> { lstguests, currencies, payType } : new List<object>();
+      }
+    }
+    #endregion
+
+    #region GetRptDepositRefunds
+    /// <summary>
+    /// Obtiene el reporte Deposits Refunds
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="dtmEnd"></param>
+    /// <param name="leadSources"></param>
+    /// <returns> List<RptDepositsBurnedGuests> </returns>
+    /// <history>
+    /// [edgrodriguez] 19/04/2016 Created
+    /// </history>
+    public static List<RptDepositRefund> GetRptDepositRefunds(DateTime dtmStart, DateTime dtmEnd, string leadSources="ALL")
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstDepRef = dbContext.USP_OR_RptDepositRefund(dtmStart, dtmEnd, leadSources).ToList();
+        return lstDepRef;     
+      }
+    }
+    #endregion
+
+    #region GetRptDepositByPR
+    /// <summary>
+    /// Obtiene el reporte Deposits By PR
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="dtmEnd"></param>
+    /// <param name="leadSources"></param>
+    /// <returns> List<object> </returns>
+    /// <history>
+    /// [edgrodriguez] 19/04/2016 Created
+    /// </history>
+    public static List<object> GetRptDepositByPR(DateTime dtmStart, DateTime dtmEnd, string leadSources)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstDepPR = dbContext.USP_OR_RptDepositsByPR(dtmStart, dtmEnd, leadSources).ToList();
+
+        var currencies = (from gift in lstDepPR.Select(c => c.gucu).Distinct()
+                          join curr in dbContext.Currencies on gift equals curr.cuID
+                          select curr).ToList();
+
+        var payType = (from gift in lstDepPR.Select(c => c.gupt).Distinct()
+                       join payT in dbContext.PaymentTypes on gift equals payT.ptID
+                       select payT).ToList();
+
+        return (lstDepPR.Count > 0) ? new List<object> { lstDepPR, currencies, payType } : new List<object>();
+      }
+    }
+    #endregion
+
+    #region GetRptDepositsNoShow
+    /// <summary>
+    /// Obtiene el reporte Deposits No Show
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="dtmEnd"></param>
+    /// <param name="leadSources"></param>
+    /// <returns> List<object> </returns>
+    /// <history>
+    /// [edgrodriguez] 19/04/2016 Created
+    /// </history>
+    public static List<object> GetRptDepositsNoShow(DateTime dtmStart, DateTime dtmEnd, string leadSources)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstDepNoShow = dbContext.USP_OR_RptDepositsNoShow(dtmStart, dtmEnd, leadSources).ToList();
+
+        var currencies = (from gift in lstDepNoShow.Select(c => c.gucu).Distinct()
+                          join curr in dbContext.Currencies on gift equals curr.cuID
+                          select curr).ToList();
+
+        var payType = (from gift in lstDepNoShow.Select(c => c.gupt).Distinct()
+                       join payT in dbContext.PaymentTypes on gift equals payT.ptID
+                       select payT).ToList();
+
+        return (lstDepNoShow.Count > 0) ? new List<object> { lstDepNoShow, currencies, payType } : new List<object>();
+      }
+    }
+    #endregion
+
+    #region GetRptInOutByPR
+    /// <summary>
+    /// Obtiene el reporte In & Out By PR
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="dtmEnd"></param>
+    /// <param name="leadSources"></param>
+    /// <returns> List<RptInOutByPR> </returns>
+    /// <history>
+    /// [edgrodriguez] 19/04/2016 Created
+    /// </history>
+    public static List<RptInOutByPR> GetRptInOutByPR(DateTime dtmStart, DateTime dtmEnd, string leadSources)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstInOutPR = dbContext.USP_OR_RptInOutByPR(dtmStart, dtmEnd, leadSources).ToList();
+        return lstInOutPR;
+      }
+    }
+    #endregion
+
+    #region GetRptPersonnelAccess
+    /// <summary>
+    /// Obtiene el reporte Personnel Access
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="dtmEnd"></param>
+    /// <param name="leadSources"></param>
+    /// <returns> List<RptPersonnelAccess> </returns>
+    /// <history>
+    /// [edgrodriguez] 19/04/2016 Created
+    /// </history>
+    public static List<RptPersonnelAccess> GetRptPersonnelAccess(string leadSources)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstPersonnelAccess = dbContext.USP_OR_RptPersonnelAccess(leadSources).ToList();
+        return lstPersonnelAccess;
+      }
+    }
+    #endregion
+
+    #region GetRptSelfGen
+    /// <summary>
+    /// Obtiene el reporte Personnel Access
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="dtmEnd"></param>
+    /// <param name="leadSources"></param>
+    /// <returns> Tuple<List<RptSelfGen>,List<Sale>, List<SaleType>> </returns>
+    /// <history>
+    /// [edgrodriguez] 25/04/2016 Created
+    /// </history>
+    public static Tuple<List<RptSelfGen>,List<Sale>, List<Personnel>>  GetRptSelfGen(DateTime dtmStart, DateTime dtmEnd, string leadSources)
+    {
+      List<string> lstLeadSources = leadSources.Split(',').ToList();
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstRptSelfGen = dbContext.sprptSelfGen(dtmStart, dtmEnd, leadSources).ToList();
+
+        var lstSales = (from s in dbContext.Sales
+          where (s.saD >= dtmStart && s.saD <= dtmEnd ||
+                 s.saProcD >= dtmStart && s.saProcD <= dtmEnd ||
+                 s.saCancelD >= dtmStart && s.saCancelD <= dtmEnd) &&
+                lstLeadSources.Contains(s.sals) && s.saSelfGen
+          select s
+          ).ToList();
+
+        var lstSaleType = (from s in lstSales.Select(c => c.sast).Distinct()
+          join st in dbContext.SaleTypes on s equals st.stID
+          select st
+          ).ToList();
+
+        lstSales.ForEach(c =>
+        {
+          c.sast = lstSaleType.First(st => st.stID == c.sast).ststc;
+        });
+
+        var lstPersonnel = (from pe in dbContext.Personnels
+          join sg in lstRptSelfGen.Select(c => c.guPRInvit1).Distinct() on pe.peID equals sg
+          select pe
+          ).Distinct().ToList();
+
+        lstPersonnel.AddRange((from pe in dbContext.Personnels
+                               join s in lstSales.Select(c => c.saPR1).Distinct() on pe.peID equals s
+                               select pe
+          ).Distinct().ToList());
+
+      return Tuple.Create(lstRptSelfGen, lstSales, lstPersonnel.Distinct().ToList());
+
+      }
+    }
+    #endregion
+
+    #endregion
+
   }
 }

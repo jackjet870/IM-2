@@ -4,8 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="clr-namespace:IM.ProcessorGeneral.Forms"
-        xmlns:System="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Date Range" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Closing="Window_Closing">
     <Window.Resources>
@@ -98,7 +96,7 @@
                     <DataGridTextColumn Width="*" Binding="{Binding raN}">
                         <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="{x:Type DataGridColumnHeader}">
-                                <Setter Property="Content" Value="RateTypes"/>
+                                <Setter Property="Content" Value="Rate Types"/>
                                 <Setter Property="FontWeight" Value="Bold"/>
                                 <Setter Property="HorizontalAlignment" Value="Center" />
                             </Style>
@@ -140,7 +138,7 @@
                     <DataGridTextColumn Width="*" Binding="{Binding lsN}">
                         <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="{x:Type DataGridColumnHeader}">
-                                <Setter Property="Content" Value="LeadSources"/>
+                                <Setter Property="Content" Value="Lead Sources"/>
                                 <Setter Property="FontWeight" Value="Bold"/>
                                 <Setter Property="HorizontalAlignment" Value="Center" />
                             </Style>
@@ -150,6 +148,27 @@
             </DataGrid>
             <StatusBar Height="30" Width="200" VerticalAlignment="Bottom">
                 <StatusBarItem x:Name="StatusBarNumLS" Content="" Width="200" HorizontalContentAlignment="Left" />
+            </StatusBar>
+        </StackPanel>
+        <!--#endregion-->
+        <!--#region Grid LeadSource -->
+        <StackPanel Name="pnlWarehouse" Width="auto" Height="auto" Grid.Column="5" Visibility="Visible">
+            <CheckBox Name="chkAllWarehouse" Content="All Warehouses" VerticalAlignment="Top" Margin="10" Checked="chkAllWarehouses_Checked" Unchecked="chkAllWarehouses_Checked"/>
+            <DataGrid Name="grdWarehouse" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdWareHouse_SelectionChanged" CanUserSortColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding whN}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Content" Value="WareHouses"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StatusBar Height="30" Width="200" VerticalAlignment="Bottom">
+                <StatusBarItem x:Name="StatusBarNumWh" Content="" Width="200" HorizontalContentAlignment="Left" />
             </StatusBar>
         </StackPanel>
         <!--#endregion-->
@@ -173,7 +192,7 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Border BorderThickness="1" BorderBrush="Gray" Grid.ColumnSpan="2" Grid.RowSpan="3" />
-                <ComboBox Name="cboDate" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="21" Margin="10 5 10 5" SelectionChanged="cboDate_SelectionChanged"></ComboBox>
+                <ComboBox Name="cboDate" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="21" Margin="10 5 10 5" DisplayMemberPath="Value" SelectedValuePath="Key" SelectionChanged="cboDate_SelectionChanged"></ComboBox>
                 <Label Grid.Row="1" VerticalAlignment="Center" Content="From" HorizontalContentAlignment="Right"></Label>
                 <Grid Name="pnlDtmStart" Grid.Row="1" Grid.Column="1">
                     <!--<DatePicker Name="dtmStart" HorizontalAlignment="Left" VerticalAlignment="Center" Width="180" DisplayDate="" SelectedDate="{x:Static sys:DateTime.Today}" Height="26" SelectedDateFormat="Long" />-->

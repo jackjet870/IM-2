@@ -14,11 +14,11 @@ namespace IM.Model.Enums
   /// [edgrodriguez] 05/Mar/2016 Created
   /// </history>
   public enum EnumExternalInvitation
-  {
-    [Description("Exclude External Invitation")]
-    extExclude,
+  {    
     [Description("Include External Invitation")]
     extInclude,
+    [Description("Exclude External Invitation")]
+    extExclude,
     [Description("Only External Invitation")]
     extOnly
   }
