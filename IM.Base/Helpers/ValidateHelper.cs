@@ -170,6 +170,7 @@ namespace IM.Base.Helpers
     /// <returns>cadena de texto con el mensaje de los campos vacios</returns>
     /// <history>
     /// [emoguel] created 01/04/2016
+    /// [erosado] Modified  02/05/2016  Se agrego la validacion de controles visibles y si es del tipo PasswordBox
     /// </history>
     public static string ValidateForm(UIElement container, string strForm)
     {
@@ -182,24 +183,36 @@ namespace IM.Base.Helpers
         if (control is TextBox)//Si es Textbox
         {
           TextBox txt = (TextBox)control;
-          if (string.IsNullOrWhiteSpace(txt.Text))
+          if (txt.IsVisible && string.IsNullOrWhiteSpace(txt.Text))
           {
-            strMsj += "specify the " + strForm +" "+ txt.Tag.ToString() + ". \n";
+            strMsj += "specify the " + strForm + " " + txt.Tag.ToString() + ". \n";
           }
         }
         #endregion
+
         #region Combobox
         else if (control is ComboBox)
         {
           ComboBox cmb = (ComboBox)control;
-          if (cmb.SelectedIndex < 0)
+          if (cmb.IsVisible && cmb.SelectedIndex < 0)
           {
-            strMsj += "specify the " + strForm +" "+cmb.Tag.ToString() + ". \n";
+            strMsj += "specify the " + strForm + " " + cmb.Tag.ToString() + ". \n";
           }
-        } 
+        }
+        #endregion
+
+        #region PasswordBox
+        else if (control is PasswordBox)
+        {
+          PasswordBox pwd = (PasswordBox)control;
+          if (pwd.IsVisible && string.IsNullOrWhiteSpace(pwd.Password))
+          {
+            strMsj += "specify the " + strForm + " " + pwd.Tag.ToString() + ". \n";
+          }
+        }
         #endregion
       }
-      if(strMsj!="")//Mandamos el foco al primer campo
+      if (strMsj!="")//Mandamos el foco al primer campo
       {
         lstControls.FirstOrDefault().Focus();
       }

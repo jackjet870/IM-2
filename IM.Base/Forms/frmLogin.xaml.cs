@@ -112,6 +112,8 @@ namespace IM.Base.Forms
     {
       //Validar que el usuario meta toda la informacion requerida para el Login
       var msj = ValidateHelper.ValidateForm(this, "Login");
+
+
       if (string.IsNullOrEmpty(msj))
       {
         var _encryptPassword = EncryptHelper.Encrypt(txtPassword.Password);
