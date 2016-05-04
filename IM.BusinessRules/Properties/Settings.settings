@@ -128,5 +128,17 @@
     <Setting Name="USP_OR_RptProductionByNationalityOutside_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
     </Setting>
+    <Setting Name="USP_OR_GetArrivals_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
+    </Setting>
+    <Setting Name="USP_OR_GetAvailables_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
+    </Setting>
+    <Setting Name="USP_OR_GetPremanifest_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
+    </Setting>
+    <Setting Name="USP_OR_GetGuests_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

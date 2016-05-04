@@ -26,6 +26,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
+        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetArrivals_Timeout;
         return dbContext.USP_OR_GetArrivals(Date, LeadSource, Markets, Available, Contacted, Invited, OnGroup).ToList();
       }
     }
@@ -47,6 +48,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
+        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetAvailables_Timeout;
         return dbContext.USP_OR_GetAvailables(Date, LeadSource, Markets, Contacted, Invited, OnGroup).ToList();
       }
     }
@@ -66,6 +68,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
+        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetPremanifest_Timeout;
         return dbContext.USP_OR_GetPremanifest(Date, LeadSource, Markets, OnGroup).ToList();
       }
     }
@@ -433,7 +436,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        dbContext.Database.CommandTimeout = 120;
+        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetGuests_Timeout;
         return dbContext.USP_OR_GetGuests(dateFrom, dateTo, leadSource, name, roomNumber, reservation, guestID).ToList();
       }
     }
@@ -499,6 +502,7 @@ namespace IM.BusinessRules.BR
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         lstGuest = new List<Guest>();
+        
         if (guest.guID != 0) //Si tiene GUID, solo se busca por eso y por LS
         {
           lstGuest = (from gu in dbContext.Guests
@@ -511,6 +515,7 @@ namespace IM.BusinessRules.BR
         { //Si envia El nombre o apellido del Huesped, Se busca por LS, Nombres o apellidos y por Fecha de llegada
           if (guest.guLastName1 != "" && guest.guLastName1 != null)
           {
+            
             lstGuest = (from gu in dbContext.Guests
                         join ls in dbContext.LeadSources
                         on gu.guls equals ls.lsID

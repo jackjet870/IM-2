@@ -106,6 +106,7 @@ namespace IM.Base.Forms
             txtguInfoD.Text = BRHelpers.GetServerDate().Date.ToString();
             btnSave.IsEnabled = cboguPRInfo.IsEnabled = true;
             txtguPRInfo.IsReadOnly = false;
+            lblUserName.Content = log.UserData.User.peN;
           }
           else
           {

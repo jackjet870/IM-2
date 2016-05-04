@@ -526,5 +526,53 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_RptProductionByNationalityOutside_Timeout"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_OR_GetArrivals_Timeout {
+            get {
+                return ((int)(this["USP_OR_GetArrivals_Timeout"]));
+            }
+            set {
+                this["USP_OR_GetArrivals_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_OR_GetAvailables_Timeout {
+            get {
+                return ((int)(this["USP_OR_GetAvailables_Timeout"]));
+            }
+            set {
+                this["USP_OR_GetAvailables_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_OR_GetPremanifest_Timeout {
+            get {
+                return ((int)(this["USP_OR_GetPremanifest_Timeout"]));
+            }
+            set {
+                this["USP_OR_GetPremanifest_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_OR_GetGuests_Timeout {
+            get {
+                return ((int)(this["USP_OR_GetGuests_Timeout"]));
+            }
+            set {
+                this["USP_OR_GetGuests_Timeout"] = value;
+            }
+        }
     }
 }

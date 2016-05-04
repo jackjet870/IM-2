@@ -58,17 +58,6 @@ namespace IM.BusinessRules.BR
         return lstObj;
       }
     }
-    //public static RptInvitation_Guest ValidateInvitationGuest(RptInvitation_Guest invGuest)
-    //{
-    //  invGuest.LastName = string.IsNullOrEmpty(invGuest.LastName)?"az ":invGuest.LastName;
-    //  invGuest.FirstName = string.IsNullOrEmpty(invGuest.FirstName) ? "az " : invGuest.FirstName;
-    //  //invGuest.Age = invGuest.Age == 0 ? 1 : invGuest.Age;
-    //  invGuest.MaritalStatus = string.IsNullOrEmpty(invGuest.MaritalStatus) ? "az " : invGuest.MaritalStatus;
-    //  invGuest.Occupation = string.IsNullOrEmpty(invGuest.Occupation) ? "az " : invGuest.Occupation;
-    //  return invGuest;
-    //}
-   // ResourceManager rm = new ResourceManager("CultureResources.StringResources", typeof(ResourceLanguage).Assembly);
-    
-
+   
   }
 }

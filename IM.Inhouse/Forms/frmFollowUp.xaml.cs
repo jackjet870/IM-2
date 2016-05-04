@@ -161,6 +161,7 @@ namespace IM.Inhouse
             txtguFollowD.Text = BRHelpers.GetServerDate().Date.ToString();
             btnSave.IsEnabled = cboguPRFollow.IsEnabled = true;
             txtguPRFollow.IsReadOnly = false;
+            lblUserName.Content = log.UserData.User.peN;
           }
           else
           {

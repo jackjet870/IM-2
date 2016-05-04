@@ -338,6 +338,7 @@ namespace IM.Inhouse
           {
             chkguOriginAvail.IsEnabled = true;
           }
+          lblUserName.Content = log.UserData.User.peN;
         }
         else
         {

@@ -44,14 +44,20 @@ namespace IM.BusinessRules.BR
     /// <returns>List<LeadSource></returns>
     /// <history>
     /// [aalcocer] 09/03/2016 Created
+    /// [jorcanche] 02/05/2016 Agrego el parametro EnumProgram para que se puede saleccionar
     /// </history>
-    public static List<LeadSource> GetLeadSources(int status = 0)
+    public static List<LeadSource> GetLeadSources(int status = 0, EnumProgram program = EnumProgram.All)
     {
+      var pro = EnumToListHelper.GetEnumDescription(program);
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.LeadSources.
-          Where(ls => status.Equals(1) ? ls.lsA : status.Equals(2) ? !ls.lsA : true).
-          OrderBy(ls => ls.lsN).ToList();
+        var query = dbContext.LeadSources.Where(ls => status.Equals(1) ? ls.lsA : status.Equals(2) ? !ls.lsA : true);
+
+        if (program != EnumProgram.All)
+        {
+          query = query.Where(ls => ls.lspg == ((program == EnumProgram.All) ? ls.lspg : pro));
+        }
+        return query.OrderBy(ls => ls.lsN).ToList();
       }
     }
 

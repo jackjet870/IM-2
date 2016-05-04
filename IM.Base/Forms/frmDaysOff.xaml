@@ -94,7 +94,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="btnShow" Content="Show" Grid.Column="0" Click="btnShow_Click" />
+                    <Button x:Name="btnShow" Content="Show" Grid.Column="0" Click="btnShow_Click" Height="40" VerticalAlignment="Top" />
                     <Button x:Name="btnEdit" Content="Edit" Grid.Column="2" IsEnabled="False" Click="btnEdit_Click"/>
                     <Button x:Name="btnSave" Content="Save" Grid.Column="3" IsEnabled="False" Click="btnSave_Click"/>
                     <Button x:Name="btnCalcel" Content="Calcel" Grid.Column="4" IsEnabled="False" Click="btnCalcel_Click"/>

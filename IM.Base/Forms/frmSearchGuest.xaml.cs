@@ -35,12 +35,16 @@ namespace IM.Base.Forms
 
     #endregion
 
-    #region Metodos
-
-    void LoadCombo()
+    #region Contructores y Destructores
+    public frmSearchGuest(UserData userdata, EnumProgram program = EnumProgram.Inhouse)
     {
-      cmbLeadSourse.ItemsSource = BRLeadSources.GetLeadSources(1);
+      InitializeComponent();
+      _program = program;
+      user = userdata;      
     }
+    #endregion
+
+    #region Metodos
 
     /// <summary>
     /// Llena datos para crear la clausula Where.
@@ -73,6 +77,7 @@ namespace IM.Base.Forms
         _guest.guCheckInD = Convert.ToDateTime(dtpFrom.SelectedDate.Value.ToShortDateString());
         _guest.guCheckOutD = Convert.ToDateTime(dtpTo.SelectedDate.Value.ToShortDateString()); //Deberia ser CheckInD tambien pero se usa este para hacer el between
         _guest.guls = cmbLeadSourse.SelectedValue.ToString(); //Toma el LeadSource del Combo Obligado siempre se busca por LS
+        _guest.gusr = (_program == EnumProgram.Outhouse) ? (cmbSalesRoom.SelectedIndex > -1)?cmbSalesRoom.SelectedValue.ToString(): _guest.gusr : _guest.gusr;
         //Se usa si se tiene un Where Antes
         //if (false)
         //  guest.guID = guest.guID;
@@ -106,12 +111,7 @@ namespace IM.Base.Forms
     /// <history>[ECANUL] 01-04-2016 Created</history>
     void LoadReturnList()
     {
-      StaStart("Loading Selected Guests...");
-      _lstGuests = dtgGuests.SelectedItems.OfType<Guest>().ToList();
-      if (_lstGuests.Count == 0)
-        MessageBox.Show("No se han seleccionado Huespedes");
-      //lstGuest = dtgGuests.SelectedItems
-      StaEnd();
+     
     }
 
     /// <summary>
@@ -139,16 +139,10 @@ namespace IM.Base.Forms
 
     #endregion
 
-    #region Contructores y Destructores
-    public frmSearchGuest(UserData userdata, EnumProgram program = EnumProgram.All)
-    {
-      InitializeComponent();
-      _program = program;
-      user = userdata;
-    }
-    #endregion
-    
+
+
     #region Eventos del Formulario
+    
 
     private void btnSearch_Click(object sender, RoutedEventArgs e)
     {
@@ -157,21 +151,49 @@ namespace IM.Base.Forms
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      LoadCombo();
-      DateTime dt = BRHelpers.GetServerDate();
-      dtpTo.SelectedDate = dt;
-      dtpFrom.SelectedDate = dt.AddDays(-7);
-      cmbLeadSourse.SelectedValue = user.LeadSource.lsID;
+      cmbLeadSourse.ItemsSource = BRLeadSources.GetLeadSources(1, _program);     
+      dtpTo.SelectedDate = BRHelpers.GetServerDate().Date; 
+      dtpFrom.SelectedDate = BRHelpers.GetServerDate().AddDays(-7).Date;
+      cmbLeadSourse.SelectedValue = user.LeadSource.lsID;      
       StatusBarReg.Content ="0 Guests";
+      if (_program == EnumProgram.Outhouse)
+      {
+        cmbSalesRoom.ItemsSource = BRSalesRooms.GetSalesRooms(1);
+        cmbSalesRoom.SelectedIndex = -1;
+        btnCancel.Visibility = guBookD.Visibility = guHReservIDColumn.Visibility = guAccountGiftsCardColumn.Visibility = Visibility.Collapsed;         
+        btnOK.Content = "Transfer";
+        Width = 940;
+        guBookD.Visibility = spSR.Visibility = Visibility.Visible;
+        lblDateFrom.Content = "Book D. From";
+        lblDateTo.Content = "Book D. To";
+        guIDColumn.Header = "ID";
+        dtgGuests.SelectionUnit = System.Windows.Controls.DataGridSelectionUnit.FullRow;
+        dtgGuests.SelectionMode = System.Windows.Controls.DataGridSelectionMode.Single;
+        guCheckInDColumn.Header = "Check In Date";
+        guCheckOutDColumn.Header = "Check Out Date";        
+      }
     }
 
     private void btnOK_Click(object sender, RoutedEventArgs e)
     {
-      LoadReturnList();
+      if (dtgGuests.SelectedItems.Count == 0)
+      {
+        MessageBox.Show("Select at least one Guest", "IM OutHouse");
+        return;
+      }
+      if (_program == EnumProgram.Outhouse && !user.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.Standard))
+      {
+        MessageBox.Show("Account has only read access.");
+        return;
+      }
+      StaStart("Loading Selected Guests...");
+      _lstGuests = dtgGuests.SelectedItems.OfType<Guest>().ToList();
+      StaEnd();
       lstGuestAdd = _lstGuests;
       dtgGuests.ItemsSource = _lstGuests;
+
       Close();
-      cancel = false;
+         cancel = false; 
     }
 
     private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -197,6 +219,10 @@ namespace IM.Base.Forms
     }
 
     #endregion
-    
+
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      cancel = true;
+    }
   }
 }
