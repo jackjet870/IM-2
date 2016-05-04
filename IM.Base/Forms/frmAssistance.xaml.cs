@@ -21,12 +21,15 @@ namespace IM.Base.Forms
   public partial class frmAssistance : Window
   {
     #region Atributos
+
+    private bool _isNew;
+    
     CollectionViewSource assistanceViewSource;
     CollectionViewSource assistanceDataViewSource;
     CollectionViewSource assistanceStatusViewSource;
     private DateTime _dtmServerDate = new DateTime();
     List<AssistanceStatus> lstAssistStatus;
-    List<AssistanceData> listAssistData;
+    private List<AssistanceData> _listAssistData;
     EnumPlaceType enumPalaceType;
     string palaceId;
     UserData user;
@@ -176,28 +179,30 @@ namespace IM.Base.Forms
     void LoadGrid()
     {
       StaStart("Loading Assistance List...");
-      listAssistData = BRAssistance.GetAssistance(enumPalaceType, palaceId, dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
+      _listAssistData = BRAssistance.GetAssistance(enumPalaceType, palaceId, dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
       assistanceDataViewSource = ((CollectionViewSource)(this.FindResource("assistanceDataViewSource")));
       assistanceStatusViewSource = ((CollectionViewSource)(this.FindResource("assistanceStatusViewSource")));
       assistanceViewSource = ((CollectionViewSource)(this.FindResource("assistanceViewSource")));
       AssistanceStatus ast = new AssistanceStatus();
       lstAssistStatus = BRAssistancesStatus.GetAssitanceStatus(ast, 1);
       assistanceStatusViewSource.Source = lstAssistStatus;
-      if (listAssistData.Count != 0)
-        assistanceDataDataGrid.ItemsSource = listAssistData;
+      if (_listAssistData.Count != 0)
+      {
+        assistanceDataDataGrid.ItemsSource = _listAssistData;
+        _isNew = false;
+      }
       else
       {
         if (MessageBox.Show("There is no assistance for this week.\nWould you like to generate?", "Assistance Inhouse", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
         {
           List<PersonnelAssistance> lstPersonAssist = BRAssistance.GetPersonnelAssistance(enumPalaceType, palaceId, dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
-
           lstPersonAssist.ForEach(c =>
           {
-            AssistanceData assistance = new AssistanceData();
-            assistance = AssistanceToAssistance.ConvertPersonnelAssistanceToAssistanceData(c);
-            listAssistData.Add(assistance);
+            var assistance = AssistanceToAssistance.ConvertPersonnelAssistanceToAssistanceData(c);
+            _listAssistData.Add(assistance);
           });
-          assistanceDataDataGrid.ItemsSource = listAssistData;
+          _isNew = true;
+          assistanceDataDataGrid.ItemsSource = _listAssistData;
         }
       }
       StaEnd();
@@ -233,14 +238,17 @@ namespace IM.Base.Forms
     /// <summary>
     /// Guarda las Asistencias de un periodo de fechas del personal del lugar
     /// </summary>
-    /// <history>[ECANUL] 22-03-2016 CREATED</history>
+    /// <history>
+    /// [ecanul] 22/03/2016 Created
+    /// [ecanul] 04/05/2016 Modificated Ahora indica si es Nuevo o Modificacion antes de guardar, Usa el BR BREntities
+    /// </history>
     void SaveAssistances()
     {
       StaStart("Saving Data...");
       int nres = 0;
-      listAssistData.ForEach(c =>
+      _listAssistData.ForEach(c =>
       {
-        nres = BRAssistance.SaveAssistanceList(AssistanceToAssistance.ConvertAssistanceDataToAssistance(c));
+        nres = BREntities.OperationEntity(AssistanceToAssistance.ConvertAssistanceDataToAssistance(c), _isNew ? EnumMode.add : EnumMode.edit);
       });
       ChangeUseMode(false);
       MessageBox.Show("Saved Assistence", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -357,10 +365,10 @@ namespace IM.Base.Forms
       btnToExcel.IsEnabled = false;
 
       filters.Add(Tuple.Create("Lead Sourse", user.LeadSource.lsID));
-      listAssistData = BRAssistance.GetAssistance(enumPalaceType, palaceId, dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
-      if (listAssistData.Count > 0)
+      _listAssistData = BRAssistance.GetAssistance(enumPalaceType, palaceId, dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
+      if (_listAssistData.Count > 0)
       {
-        dt = TableHelper.GetDataTableFromList(listAssistData, true);
+        dt = TableHelper.GetDataTableFromList(_listAssistData, true);
         rptName = "Assistance " + palaceId;
         string dateRange = DateHelper.DateRange(dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
         string dateRangeFileName = DateHelper.DateRangeFileName(dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);

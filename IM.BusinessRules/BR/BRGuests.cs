@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
@@ -26,7 +27,6 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetArrivals_Timeout;
         return dbContext.USP_OR_GetArrivals(Date, LeadSource, Markets, Available, Contacted, Invited, OnGroup).ToList();
       }
     }
@@ -48,7 +48,6 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetAvailables_Timeout;
         return dbContext.USP_OR_GetAvailables(Date, LeadSource, Markets, Contacted, Invited, OnGroup).ToList();
       }
     }
@@ -68,7 +67,6 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetPremanifest_Timeout;
         return dbContext.USP_OR_GetPremanifest(Date, LeadSource, Markets, OnGroup).ToList();
       }
     }
@@ -436,7 +434,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetGuests_Timeout;
+        dbContext.Database.CommandTimeout = 120;
         return dbContext.USP_OR_GetGuests(dateFrom, dateTo, leadSource, name, roomNumber, reservation, guestID).ToList();
       }
     }
@@ -495,69 +493,52 @@ namespace IM.BusinessRules.BR
     /// <param name="guest">Guest con informacion para buscar</param>
     /// <param name="leadSource">LS.lspg en el cual se hara la busqueda</param>
     /// <returns>Lista de Guests Encontrados</returns>
-    /// <history>[ECANUL] 01-04-2016 Created</history>
-    public static List<Guest> GetSearchGuestByLS(Guest guest, LeadSource leadSource)
+    /// <history>
+    /// [ecanul] 01/04/2016 Created
+    /// [ecanul] 04/05/2016 Modificated Optimizado el Where
+    /// </history>
+    public static List<Guest> GetSearchGuestByLs(Guest guest, LeadSource leadSource)
     {
-      List<Guest> lstGuest;
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        lstGuest = new List<Guest>();
+        var query = (from gu in dbContext.Guests
+          join ls in dbContext.LeadSources
+            on gu.guls equals ls.lsID
+          where ls.lspg == leadSource.lspg
+          select gu);
         
         if (guest.guID != 0) //Si tiene GUID, solo se busca por eso y por LS
         {
-          lstGuest = (from gu in dbContext.Guests
-                      join ls in dbContext.LeadSources
-                      on gu.guls equals ls.lsID
-                      where ls.lspg == leadSource.lspg && gu.guID == guest.guID
-                      select gu).ToList();
+          query = query.Where(gu => gu.guID == guest.guID);
         }
         else //Si no se tiene GUID se busca por los siguentes criterios
-        { //Si envia El nombre o apellido del Huesped, Se busca por LS, Nombres o apellidos y por Fecha de llegada
-          if (guest.guLastName1 != "" && guest.guLastName1 != null)
+        {
+          //siempre se busca por fechas y leadSourse
+          query = query.Where(gu => gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD
+                                    && gu.guls == guest.guls);
+          //Si envia El nombre o apellido del Huesped, Se busca por Nombres o apellidos
+          if (!string.IsNullOrEmpty(guest.guLastName1))
           {
-            
-            lstGuest = (from gu in dbContext.Guests
-                        join ls in dbContext.LeadSources
-                        on gu.guls equals ls.lsID
-                        where ls.lspg == leadSource.lspg &&
-                        (gu.guLastName1.Contains(guest.guLastName1) || gu.guFirstName1.Contains(guest.guFirstName1)
-                        || gu.guLastname2.Contains(guest.guLastname2) || gu.guFirstName2.Contains(guest.guFirstName2))
-                        && gu.guls == guest.guls
-                        && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
-                        orderby gu.guls, gu.guLastName1
-                        select gu).ToList();
-          }  //Si tiene el numero de habitacion
-          else if (guest.guRoomNum != "" && guest.guRoomNum != null)
+            query = query.Where(gu => (gu.guLastName1 != null && gu.guLastName1.ToUpper().Contains(guest.guLastName1))
+                                      ||
+                                      (gu.guFirstName1 != null && gu.guFirstName1.ToUpper().Contains(guest.guFirstName1))
+                                      ||
+                                      (gu.guLastname2 != null && gu.guLastname2.ToUpper().Contains(guest.guLastname2))
+                                      ||
+                                      (gu.guFirstName2 != null && gu.guFirstName2.ToUpper().Contains(guest.guFirstName2)));
+          }  
+          //Si tiene el numero de habitacion
+          if (!string.IsNullOrEmpty(guest.guRoomNum))
           {
-            lstGuest = (from gu in dbContext.Guests
-                        join ls in dbContext.LeadSources
-                        on gu.guls equals ls.lsID
-                        where ls.lspg == leadSource.lspg && gu.guRoomNum == guest.guRoomNum
-                        && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
-                        && gu.guls == guest.guls
-                        select gu).ToList();
-          } //Si tiene el numero de reservacion
-          else if (guest.guHReservID != "" && guest.guHReservID != null)
+            query = query.Where(gu => gu.guRoomNum != null && gu.guRoomNum.Contains(guest.guRoomNum));
+          } 
+          //Si tiene el numero de reservacion
+          if (!string.IsNullOrEmpty(guest.guHReservID))
           {
-            lstGuest = (from gu in dbContext.Guests
-                        join ls in dbContext.LeadSources
-                        on gu.guls equals ls.lsID
-                        where ls.lspg == leadSource.lspg && gu.guHReservID == guest.guHReservID
-                        && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
-                        && gu.guls == guest.guls
-                        select gu).ToList();
-          }
-          else //si no puso nada en los texbos solo se busca por LS y El rango de fechas
-          {
-            lstGuest = (from gu in dbContext.Guests
-                        join ls in dbContext.LeadSources
-                        on gu.guls equals ls.lsID
-                        where ls.lspg == leadSource.lspg && gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD
-                        && gu.guls == guest.guls
-                        select gu).ToList();
+            query = query.Where(gu => gu.guHReservID != null && gu.guHReservID.Contains(guest.guHReservID));
           }
         }
-        return lstGuest;
+        return query.ToList();
       }
     }
     #endregion

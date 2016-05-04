@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Enums;
-using IM.Model.Classes;
 using IM.Model.Helpers;
 
 namespace IM.BusinessRules.BR
@@ -49,33 +48,6 @@ namespace IM.BusinessRules.BR
         return dbContext.USP_OR_GetPersonnelAssistance(strPalaceType, PalaceID, dateStart, DateEnd).ToList();
       }
     }
-    #endregion
-
-    #region SaveAssistanceList
-    /// <summary>
-    /// Guarda La asistencia del personal del lugar
-    /// </summary>
-    /// <param name="assist">Empleado a Guardar</param>
-    /// <returns>Entero con la confirmacion de la operacion</returns>
-    /// <history>[ECANUL] 22-03-2016 CREATED</history>
-    public static int SaveAssistanceList(Assistance assist)
-    {
-      int res;
-      using (var dbcontext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        try
-        {
-          dbcontext.Entry(assist).State = System.Data.Entity.EntityState.Modified;
-          res = dbcontext.SaveChanges();
-        }
-        catch
-        {
-          dbcontext.Assistances.Add(assist);
-          res = dbcontext.SaveChanges();
-        }
-      }
-      return res;
-    } 
     #endregion
   }
 }

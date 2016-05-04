@@ -177,6 +177,7 @@
     <Compile Include="Enums\EnumMessage.cs" />
     <Compile Include="Enums\EnumPermission.cs" />
     <Compile Include="Enums\EnumPlaceType.cs" />
+    <Compile Include="Enums\EnumPredefinedDateWeekly.cs" />
     <Compile Include="Enums\EnumProgram.cs" />
     <Compile Include="Enums\EnumRole.cs" />
     <Compile Include="Enums\EnumBasedOnArrival.cs" />
