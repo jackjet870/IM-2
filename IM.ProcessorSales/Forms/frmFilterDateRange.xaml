@@ -7,13 +7,13 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Date Range" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        Icon="pack://application:,,,/IM.ProcessorSales;component/Images/IM.ico">
+        Icon="pack://application:,,,/IM.ProcessorSales;component/Images/IM.ico" ShowInTaskbar="False">
     <Window.Resources>
         <Style TargetType="{x:Type DataGrid}">
             <Setter Property="AutoGenerateColumns" Value="False" />
             <Setter Property="GridLinesVisibility" Value="None" />
             <Setter Property="Width" Value="200" />
-            <Setter Property="Height" Value="350" />
+            <Setter Property="Height" Value="220" />
             <Setter Property="Margin" Value="10 5 10 25" />
             <Setter Property="AlternatingRowBackground" Value="LightGray" />
             <!-- <EventSetter Event="SelectionChanged" Handler="grd_SelectionChanged" /> -->

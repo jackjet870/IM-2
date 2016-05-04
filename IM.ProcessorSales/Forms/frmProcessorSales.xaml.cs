@@ -22,12 +22,25 @@ namespace IM.ProcessorSales.Forms
   {
     #region Atributos
 
-    private frmFilterDateRange _frmFilter;
-    private bool _oneDate, _onlyOnRegister;
+    #region Constantes
+    private const string FilterDate = "FilterDate";
+    #endregion
+
+    #region Privados
     
+    private frmFilterDateRange _frmFilter;
+    private IniFileHelper _iniFieldHelper;
+    private bool _oneDate, _onlyOnRegister, _allPrograms, _allSegments, _allSalesRoom;
+    private string _salesman;
+    private EnumRptRoomSales _rptRoomSales;
+    private EnumRptSalesRoomAndSalesman _rptSalesman;
+
+    #endregion
+
+    #region Publicos
 
     //Fechas Predefinidas
-    public  EnumPredefinedDate predefinedDate;
+    public EnumPredefinedDate predefinedDate;
 
     //Listas para los reportes
     public List<string> lstSalesRoom = new List<string>();
@@ -36,40 +49,18 @@ namespace IM.ProcessorSales.Forms
     public List<GoalsHelpper> lstGoals = new List<GoalsHelpper>();
     public List<MultiDateHelpper> lstMultiDate = new List<MultiDateHelpper>();
     public List<PersonnelShort> lstPersonnel = new List<PersonnelShort>();
+
+    //Filtros para los reportes
     public EnumBasedOnArrival basedOnArrival;
     public EnumQuinellas quinellas;
     public DateTime dtmStart, dtmEnd;
-    public decimal goal;
-    public bool groupedByTeams, includeAllSalesmen;
-    public bool pr, liner, closer, exit;
-
-    private bool _allSalesRoom;
-
-    //Variables para el filtro de fechas, salas y meta
-
     public string salesRoom;
-    //Variables para el filtro de multi fechas, salas y metas
-    private List<string> _lstDateRanges = new List<string>();
+    public decimal goal;
+    public bool groupedByTeams, includeAllSalesmen, pr, liner, closer, exit;
 
-    private IniFileHelper _iniFieldHelper;
-
-    //Variables para el filtro de fechas, salas y equipos
+    #endregion Publicos
     
-
-    //Variables para el filtro de fechas, salas y vendedor
-    private string _salesman, _salesmanName, _salesmenRoles;
-    
-
-    //Segmentos y Programas seleccionados
-    private bool _allPrograms, _allSegments;
-
-    private const string FilterDate = "FilterDate";
-
-
-    private EnumRptRoomSales _rptRoomSales;
-    private EnumRptSalesRoomAndSalesman _rptSalesman;
-
-    #endregion
+    #endregion Atributos
 
     #region Metodos
 
@@ -98,11 +89,16 @@ namespace IM.ProcessorSales.Forms
     /// <summary>
     /// Carga un archivo Configuration.ini
     /// </summary>
-    private void LoadIniField()
+    /// <history>
+    /// [ecanul] 22/04/2016 Created
+    /// </history>
+    private bool LoadIniField()
     {
       string archivo = AppContext.BaseDirectory + "\\Configuration.ini";
-      if (!File.Exists(archivo)) return;
+      if (!File.Exists(archivo))
+        return false;
       _iniFieldHelper = new IniFileHelper(archivo);
+      return true;
     }
     #endregion
 
@@ -115,19 +111,36 @@ namespace IM.ProcessorSales.Forms
     /// </history>
     private void GetFirstDayValue()
     {
-      DateTime serverDate = BRHelpers.GetServerDate();
-      // Fecha Inicial
-      dtmStart = new DateTime(serverDate.Year, serverDate.Month,1);
-      //FechaFinal
-      dtmEnd = serverDate;
       //carga las fechas desde el archivo de configuracion
-      if (_iniFieldHelper == null) return;
       dtmStart = _iniFieldHelper.readDate(FilterDate, "DateStart", dtmStart);
       dtmEnd = _iniFieldHelper.readDate(FilterDate, "DateEnd", dtmEnd);
       salesRoom = _iniFieldHelper.readText(FilterDate, "SalesRoom", string.Empty);
       if (!string.IsNullOrEmpty(salesRoom))
         lstSalesRoom.Add(salesRoom);
     }
+    #endregion
+
+    #region SetUpIniField
+    
+    /// <summary>
+    /// Carga los valores de un archivo de configuracion
+    /// </summary>
+    /// <history>
+    /// [ecanul] 04/05/2016 Created
+    /// </history>
+    private void SetUpIniField()
+    {
+      //si el archivo de configuracion existe configura los parametros
+      if (!LoadIniField()) return;
+      GetFirstDayValue();
+      goal = Convert.ToDecimal(_iniFieldHelper.readDouble(FilterDate, "Goal", 0));
+      groupedByTeams = _iniFieldHelper.readBool(FilterDate, "GroupedByTeams", false);
+      includeAllSalesmen = _iniFieldHelper.readBool(FilterDate, "IncludeAllSalesmen", false);
+      _salesman = _iniFieldHelper.readText(FilterDate, "Salesman", string.Empty);
+      //Se limpia el archivo de confiuguracion
+      _iniFieldHelper = null;
+    } 
+
     #endregion
 
     #region SetupParameters
@@ -137,25 +150,25 @@ namespace IM.ProcessorSales.Forms
     /// </summary>
     /// <history>
     /// [ecanul] 22/04/2016 Created
+    /// [ecanul] 04/05/2016 Modificated, Corregido error con archivo de configuracion 
     /// </history>
     private void SetupParameters()
     {
-      // Obtenemos las fechas iniciales de los reportes
-      GetFirstDayValue();
+      DateTime serverDate = BRHelpers.GetServerDate();
+      // Fecha Inicial
+      dtmStart = new DateTime(serverDate.Year, serverDate.Month, 1);
+      //FechaFinal
+      dtmEnd = serverDate;
 
-      goal = Convert.ToDecimal(_iniFieldHelper.readDouble(FilterDate, "Goal", 0));
-      groupedByTeams = _iniFieldHelper.readBool(FilterDate, "GroupedByTeams", false);
-      includeAllSalesmen = _iniFieldHelper.readBool(FilterDate, "IncludeAllSalesmen", false);
+      _allSalesRoom = false;
 
-      _salesman = _iniFieldHelper.readText(FilterDate, "Salesman", string.Empty);
 
+      // Obtenemos los valores de un archivo de configuracion
+      SetUpIniField();
       //roles de vendedores
       pr = liner = closer= exit = true;
-
-      //Todos los segmentos
+      //segmentos y programas
       _allSegments = _allPrograms = true;
-
-      _iniFieldHelper = null;
     }
 
     #endregion
@@ -395,23 +408,23 @@ namespace IM.ProcessorSales.Forms
 
     #endregion
 
-    #region Metodos del formulario
+    #region Eventos del formulario
     
     #region Window_KeyDown
 
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
-      if (e.Key == Key.Capital)
+      switch (e.Key)
       {
-        KeyboardHelper.CkeckKeysPress(statusBarCap, Key.Capital);
-      }
-      else if (e.Key == Key.Insert)
-      {
-        KeyboardHelper.CkeckKeysPress(statusBarIns, Key.Insert);
-      }
-      else if (e.Key == Key.NumLock)
-      {
-        KeyboardHelper.CkeckKeysPress(statusBarNum, Key.NumLock);
+        case Key.Capital:
+          KeyboardHelper.CkeckKeysPress(statusBarCap, Key.Capital);
+          break;
+        case Key.Insert:
+          KeyboardHelper.CkeckKeysPress(statusBarIns, Key.Insert);
+          break;
+        case Key.NumLock:
+          KeyboardHelper.CkeckKeysPress(statusBarNum, Key.NumLock);
+          break;
       }
     }
 
@@ -421,7 +434,6 @@ namespace IM.ProcessorSales.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       StaStart("Load Form...");
-      LoadIniField();
       LoadGrids();
       SetupParameters();
       lblUserName.Content = App.User.User.peN;

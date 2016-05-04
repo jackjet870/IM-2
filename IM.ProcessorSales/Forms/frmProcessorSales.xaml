@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Processor Sales" Height="650" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" 
+        Title="Processor Sales" Height="565" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" 
         Icon="pack://application:,,,/IM.ProcessorSales;component/Images/IM.ico" 
         Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="FrmProcessorSales_Closing">
     <Window.Resources>
@@ -19,10 +19,6 @@
         <Style TargetType="{x:Type DataGridRow}">
             <EventSetter Event="MouseDoubleClick" Handler="grdrpt_MouseDoubleClick"/>
             <EventSetter Event="KeyDown" Handler="grdrpt_PreviewKeyDown"/>
-            <!--<EventSetter Event="MouseDoubleClick"/>
-            Handler="grdrpt_MouseDoubleClick"-->
-            <!--<EventSetter Event="PreviewKeyDown"  />
-            Handler="grdrp_PreviewKeyDown"-->
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="LightBlue" />
@@ -60,6 +56,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+           
             <!--#region SalesRoom-->
             <Grid x:Name="grdSalesRooms" Grid.Column="0" Margin="5">
                 <DataGrid x:Name="dtgSalesRoom">

@@ -22,13 +22,11 @@ namespace IM.ProcessorSales.Forms
 
     //BANDERA PARA EVITAR CONFLICTO ENTRE LOS EVENTOS txtSalesman_TextChanged Y cmbSalesman_SelectionChanged 
     private bool _changecmb = true;
-
     private DateTime _dtStart;
     private DateTime _dtEnd;
     private string _salesRoom = string.Empty;
     private EnumPeriod _period;
     private bool _onePeriod;
-
     private List<SalesRoomByUser> _lstSalesRoomByUsers;
     private List<Program> _lstPrograms;
     private List<SegmentByAgency> _lstSegmentByAgencies;
@@ -57,10 +55,10 @@ namespace IM.ProcessorSales.Forms
     {
       //Se optiene el dia de la semana de la fecha actual
       DayOfWeek dayOfWeek = currentDate.DayOfWeek;
-      ///Como el primer día de la semana es el 0 (Lunes), construimos
-      ///un array para conocer los días que hay que restar de la fecha.
-      ///Así, si es Lunes (0) restaremos 6 días, si es Domingo(6)
-      ///restaremos 5 días, y si es Martes (1) restaremos 0 días.
+      //Como el primer día de la semana es el 0 (Lunes), construimos
+      //un array para conocer los días que hay que restar de la fecha.
+      //Así, si es Lunes (0) restaremos 6 días, si es Domingo(6)
+      //restaremos 5 días, y si es Martes (1) restaremos 0 días.
       int[] dias = { 6, 0, 1, 2, 3, 4, 5 };
       //De la fecha actual se restan los dias coorespondientes
       return currentDate.Subtract(new TimeSpan(dias[Convert.ToInt32(dayOfWeek)], 0, 0, 0));
@@ -414,7 +412,7 @@ namespace IM.ProcessorSales.Forms
         dtgSalesRoom.SelectedItem = (from sr in _lstSalesRoomByUsers where sr.srID == _salesRoom select sr).FirstOrDefault();
       }
       //  frmPrs.lstSalesRoom.ForEach(c => dtgSalesRoom.SelectedItems.Add(_lstSalesRoomByUsers.SingleOrDefault(x => x.srID == c)));
-      
+
       if (grdGoal.Visibility == Visibility.Visible && frmPrs.goal != 0)
         txtGoal.Text = frmPrs.goal.ToString();
 
@@ -575,7 +573,7 @@ namespace IM.ProcessorSales.Forms
 
     #endregion
 
-    #region Metodos del Formulario
+    #region Eventos del Formulario
 
     #region chbx_Checked
 
@@ -614,34 +612,44 @@ namespace IM.ProcessorSales.Forms
 
     #endregion
 
+    #region dtgSalesRoom_SelectionChanged
     private void dtgSalesRoom_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       statusBarNumSalesRoom.Content = $"{dtgSalesRoom.SelectedItems.Count}/{dtgSalesRoom.Items.Count} Sales Rooms selected";
     }
+    #endregion
 
+    #region dtgPrograms_SelectionChanged
     private void dtgPrograms_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       statusBarNumPg.Content = $"{dtgPrograms.SelectedItems.Count}/{dtgPrograms.Items.Count} Programs selected";
     }
+    #endregion
 
+    #region dtgSegments_SelectionChanged
     private void dtgSegments_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       statusBarNumSegments.Content = $"{dtgSegments.SelectedItems.Count}/{dtgSegments.Items.Count} Segments selected";
     }
+    #endregion
 
+    #region chkSalesRoom_Checked
     private void chkSalesRoom_Checked(object sender, RoutedEventArgs e)
     {
-       int count = _lstGoals.Count(item => item.isCheck);
+      int count = _lstGoals.Count(item => item.isCheck);
       statusBarNumSalesRoomConcentrate.Content = $"{count}/{dtgSalesRoomConcentrate.Items.Count} Sales Rooms selected";
     }
+    #endregion
 
+    #region btnCancel_Click
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       ok = false;
-      //SaveFilterValues();
       Close();
     }
+    #endregion
 
+    #region btnOk_Click
     private void btnOk_Click(object sender, RoutedEventArgs e)
     {
       string message = ValidateFields();
@@ -654,13 +662,17 @@ namespace IM.ProcessorSales.Forms
       else
         UIHelper.ShowMessage(message);
     }
+    #endregion
 
+    #region txtGoal_PreviewTextInput
     private void txtGoal_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
     {
       if (!char.IsDigit(e.Text, e.Text.Length - 1))
         e.Handled = true;
     }
+    #endregion
 
+    #region cmbSalesman_SelectionChanged
     private void cmbSalesman_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       if (_changecmb)
@@ -668,15 +680,18 @@ namespace IM.ProcessorSales.Forms
       else
         _changecmb = true;
     }
+    #endregion
 
+    #region txtSalesman_TextChanged
     private void txtSalesman_TextChanged(object sender, TextChangedEventArgs e)
     {
       cmbSalesman.SelectedValue = txtSalesman.Text;
       _changecmb = false;
-    }
+    } 
+    #endregion
 
     #region cmbSalesman_PreviewMouseDown
-    
+
     /// <summary>
     /// Al dar click al combo la bandera siempre sera positiva
     /// </summary>
@@ -691,6 +706,7 @@ namespace IM.ProcessorSales.Forms
 
     #endregion
 
+    #region cmbDate_SelectionChanged
     private void cmbDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       EnumPredefinedDate select = (EnumPredefinedDate)((ComboBox)e.OriginalSource).SelectedValue;
@@ -798,14 +814,17 @@ namespace IM.ProcessorSales.Forms
           break;
       }
     }
+    #endregion
 
+    #region dateTime_ValueChanged
     private void dateTime_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
       var picker = sender as DateTimePicker;
       if (picker == null) return;
       DateTime date = (DateTime)picker.Value;
       ChangeDates(date);
-    }
+    } 
+    #endregion
 
     #endregion
 
