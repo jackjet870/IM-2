@@ -203,7 +203,7 @@ namespace IM.Launcher.Forms
           Process.Start(String.Format("{0}\\IM.ProcessorGeneral.exe", path));
           break;
         case EnumMenu.ProcessorSales:
-          UIHelper.ShowMessage("Coming soon..");
+          Process.Start(String.Format("{0}\\IM.ProcessorSales.exe", path));
           break;
         case EnumMenu.PRStatistics:
           Process.Start(String.Format("{0}\\IM.PRStatistics.exe", path));
