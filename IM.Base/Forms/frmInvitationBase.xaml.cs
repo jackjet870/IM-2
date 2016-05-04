@@ -46,6 +46,8 @@ namespace IM.Base.Forms
     private Invitation invitation;
     private EnumInvitationType _invitationType;
     private UserData _user;
+    private LocationLogin _locationLogin;
+    private LeadSourceLogin _leadSourceLogin;
     
     #region Regalos
     CollectionViewSource objInvitGiftViewSource;
@@ -98,6 +100,7 @@ namespace IM.Base.Forms
     private bool _bookingCancel;
     private decimal _qtyGift;
     private bool _isCCPaymentPay = false;
+    private bool _allowReschedule = true;
     #endregion
 
     #region Constructores y destructores
@@ -107,7 +110,7 @@ namespace IM.Base.Forms
       InitializeComponent();
     }
 
-    public frmInvitationBase(IM.Model.Enums.EnumInvitationType invitationType, UserData userData, int guestID, EnumInvitationMode invitationMode)
+    public frmInvitationBase(IM.Model.Enums.EnumInvitationType invitationType, UserData userData, int guestID, EnumInvitationMode invitationMode, bool allowReschedule = true)
     {
       WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
 
@@ -115,6 +118,9 @@ namespace IM.Base.Forms
       this._user = userData;
       this._guestID = guestID;
       this._invitationMode = invitationMode;
+      this._allowReschedule = allowReschedule;
+      this._locationLogin = userData.Location;
+      this._leadSourceLogin = userData.LeadSource;
       InitializeComponent();
     }
 
@@ -131,15 +137,6 @@ namespace IM.Base.Forms
     /// </history>
     private void frmInvitationBase_Loaded(object sender, RoutedEventArgs e)
     {
-      if (_invitationMode == EnumInvitationMode.modAdd)//' si el huesped no ha sido invitado
-      {
-        ValidateEdit();
-      }
-      ControlsConfiguration();
-      LoadControls();
-      BackupOriginalValues();
-      EnableControls();
-
       _serverDateTime = BRHelpers.GetServerDate();
       _bookingDate = txtBookingDate.SelectedDate.HasValue ? txtBookingDate.SelectedDate.Value : (DateTime?)null;
       _closeDate = BRConfiguration.GetCloseDate();
@@ -559,15 +556,15 @@ namespace IM.Base.Forms
         if (chkShow.IsChecked.HasValue && !chkShow.IsChecked.Value)
         {
           _invitationMode = EnumInvitationMode.modEdit;
-          EnableControls();
         }
         else
         {
           Helpers.UIHelper.ShowMessage("Guest has made Show");
           //establecemos el modo lectura
           _invitationMode = EnumInvitationMode.modOnlyRead;
-          EnableControls();
         }
+        AssignUser();
+        EnableControls();
       }
 
       _wasPressedEditButton = false;
@@ -820,6 +817,17 @@ namespace IM.Base.Forms
             e.Handled = true;
         break;
       }
+    }
+    
+    /// <summary>
+    /// Calcula el valor de los regalos al cambiar de renglón
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void dtgGifts_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      CalculateCostsPrices();
+      CalculateTotalGifts();
     }
     #endregion
 
@@ -1134,6 +1142,28 @@ namespace IM.Base.Forms
 
     #endregion
 
+    #region Métodos públicos
+    public bool AccessValidate()
+    {
+      bool res = true;
+      
+      if (_invitationMode == EnumInvitationMode.modAdd)//' si el huesped no ha sido invitado
+      {
+        res = ValidateEdit();
+      }
+
+      if (res)
+      {
+        ControlsConfiguration();
+        LoadControls();
+        BackupOriginalValues();
+        EnableControls();
+      }
+
+      return res;
+    }
+    #endregion
+
     #region Métodos privados
 
     #region Métodos de permisos
@@ -1143,7 +1173,7 @@ namespace IM.Base.Forms
     /// <returns>Boolean</returns>
     private bool ValidateEdit()
     {
-      var login = new frmLogin();
+      var login = new frmLogin(loginType: EnumLoginType.Normal, program: EnumProgram.Inhouse, validatePermission: false,modeSwitchLoginUser:true);
       if (_user.AutoSign)
       {
         login.UserData = _user;
@@ -1155,6 +1185,7 @@ namespace IM.Base.Forms
         this.Close();
         return false;
       }
+      //_user = login.UserData;
       // validamos que tenga permiso estandar de invitaciones
       bool permission = false;
       if (_invitationType == EnumInvitationType.Host)
@@ -1169,6 +1200,24 @@ namespace IM.Base.Forms
         return false;
       }
 
+      //validamos si tiene el usuario permiso sobre la locacion que se está trabajando
+      if(login.UserData.Location == null)
+      {
+        var locationByUser = BRLocations.GetLocationsByUser(login.UserData.User.peID);
+        if(locationByUser.FirstOrDefault(l=> l.loID == _user.Location.loID) == null)
+        {
+          Helpers.UIHelper.ShowMessage("You do not have sufficient permissions to modify the invitation");
+          this.Close();
+          return false;
+        }
+        else //Asignamos el nuevo Usuario
+        {
+          _user = login.UserData;
+          _user.Location = _locationLogin;
+          _user.LeadSource = _leadSourceLogin;
+        }
+      }
+      
       return true;
     }
     #endregion
@@ -1852,11 +1901,11 @@ namespace IM.Base.Forms
       var languages = IM.BusinessRules.BR.BRLanguages.GetLanguages(1);
       LoadComboBox(languages, cmbLanguage, "la", "ES");
 
-      var personnels = IM.BusinessRules.BR.BRPersonnel.GetPersonnel(_user.LeadSource.lsID, roles:"PR");
+      var personnels = IM.BusinessRules.BR.BRPersonnel.GetPersonnel(_user.LeadSource != null ? _user.LeadSource.lsID : _leadSourceLogin.lsID, roles:"PR");
       LoadComboBox(personnels, cmbPR, "pe");
 
       var hotels = IM.BusinessRules.BR.BRHotels.GetHotels(nStatus:1);
-      LoadComboBox(hotels, cmbHotel, "hoID", "hoID", _user.Location.loN);
+      LoadComboBox(hotels, cmbHotel, "hoID", "hoID", _user.Location!= null ? _user.Location.loN : _locationLogin.loN);
       LoadComboBox(hotels, cmbResort, "hoID", "hoID", String.Empty);
 
       var agencies = IM.BusinessRules.BR.BRAgencies.GetAgencies(1);
@@ -2329,6 +2378,13 @@ namespace IM.Base.Forms
       
     }
 
+    #endregion
+
+    #region Método para asignación de Usuario
+    private void AssignUser()
+    {
+      lblUser.Content = _user.User.peN;
+    }
     #endregion
 
     #endregion
@@ -3222,7 +3278,7 @@ namespace IM.Base.Forms
     {
       bool res = true;
       string errorMessage = String.Empty;
-      if (!res) return false;// si se permite reschedule
+      if (!_allowReschedule) return false;// si se permite reschedule
 
       if (!txtRescheduleDate.IsEnabled)// si se puede modificar la fecha de reschedule
         return false;
@@ -3437,11 +3493,7 @@ namespace IM.Base.Forms
 
     #endregion
 
-    private void dtgGifts_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-    {
-      CalculateCostsPrices();
-      CalculateTotalGifts();
-    }
+
   }
 }
 
