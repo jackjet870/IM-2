@@ -93,7 +93,7 @@ namespace IM.Base.Forms
     {
       StaStart("Loading Guests...");
       CreateWhere();
-      _lstGuests = BRGuests.GetSearchGuestByLS(_guest, _leadSource);
+      _lstGuests = BRGuests.GetSearchGuestByLs(_guest, _leadSource);
       if (_lstGuests.Count != 0)
         dtgGuests.ItemsSource = _lstGuests;
 
