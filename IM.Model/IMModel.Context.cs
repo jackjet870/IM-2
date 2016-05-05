@@ -4657,5 +4657,107 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGiftsReceipts>("USP_OR_RptGiftsReceipts", dateFromParameter, dateToParameter, salesRoomsParameter, categoriesParameter, giftsParameter, statusParameter, giftReceiptTypeParameter, guestIdParameter);
         }
+    
+        public virtual ObjectResult<RptDailySalesDetail> USP_OR_RptDailySalesDetail(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptDailySalesDetail>("USP_OR_RptDailySalesDetail", dateFromParameter, dateToParameter, salesRoomParameter);
+        }
+    
+        public virtual ObjectResult<RptDailySalesHeader> USP_OR_RptDailySalesHeader(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptDailySalesHeader>("USP_OR_RptDailySalesHeader", dateFromParameter, dateToParameter, salesRoomParameter);
+        }
+    
+        public virtual ObjectResult<RptStatisticsByLocation> USP_OR_RptStatsByLocation(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsByLocation>("USP_OR_RptStatsByLocation", dateFromParameter, dateToParameter, salesRoomParameter);
+        }
+    
+        public virtual ObjectResult<RptStatisticsByLocationMonthly> USP_OR_RptStatsByLocationMonthly(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsByLocationMonthly>("USP_OR_RptStatsByLocationMonthly", dateFromParameter, dateToParameter, salesRoomParameter);
+        }
+    
+        public virtual ObjectResult<RptStatisticsBySalesRoomLocation> USP_OR_RptStatsBySalesRoomLocation(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsBySalesRoomLocation>("USP_OR_RptStatsBySalesRoomLocation", dateFromParameter, dateToParameter, salesRoomParameter);
+        }
+    
+        public virtual ObjectResult<RptSalesByLocationMonthly> USP_OR_RptSalesByLocationMonthly(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptSalesByLocationMonthly>("USP_OR_RptSalesByLocationMonthly", dateFromParameter, dateToParameter, salesRoomParameter);
+        }
     }
 }

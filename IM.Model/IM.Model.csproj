@@ -680,6 +680,12 @@
     <Compile Include="RptDailyGiftSimple.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptDailySalesDetail.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptDailySalesHeader.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptDepositRefund.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -962,6 +968,9 @@
     <Compile Include="RptRepsPaymentSummary.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptSalesByLocationMonthly.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptSalesByProgramLeadSourceMarket.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -969,6 +978,15 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptShowFactorByBookingDate.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptStatisticsByLocation.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptStatisticsByLocationMonthly.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptStatisticsBySalesRoomLocation.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptTaxisIn.cs">
