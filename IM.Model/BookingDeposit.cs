@@ -23,7 +23,7 @@ namespace IM.Model
         public string bdpc { get; set; }
         public string bdcc { get; set; }
         public string bdCardNum { get; set; }
-        public Nullable<int> bdAuth { get; set; }
+        public string bdAuth { get; set; }
         public Nullable<bool> bdRefund { get; set; }
         public Nullable<int> bddr { get; set; }
         public Nullable<int> bdFolioCXC { get; set; }

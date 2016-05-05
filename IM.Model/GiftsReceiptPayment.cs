@@ -22,6 +22,7 @@ namespace IM.Model
         public string gysb { get; set; }
         public string gype { get; set; }
         public string gybk { get; set; }
+        public int gyID { get; set; }
     
         public virtual Bank Bank { internal get; set; }
         public virtual Currency Currency { internal get; set; }

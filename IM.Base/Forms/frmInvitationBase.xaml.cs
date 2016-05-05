@@ -3056,7 +3056,7 @@ namespace IM.Base.Forms
               break;
             }
           }
-          else if (!row.bdAuth.HasValue)
+          else if (!string.IsNullOrEmpty(row.bdAuth))
           {
             Helpers.UIHelper.ShowMessage("Input the Authorizathion number", title: title);
             res = false;

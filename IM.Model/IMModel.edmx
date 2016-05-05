@@ -104,7 +104,7 @@
           <Property Name="bdcc" Type="varchar" MaxLength="10" />
           <Property Name="bdCardNum" Type="varchar" MaxLength="4" />
           <Property Name="bdExpD" Type="varchar" MaxLength="5" />
-          <Property Name="bdAuth" Type="int" />
+          <Property Name="bdAuth" Type="varchar" MaxLength="7" />
           <Property Name="bdRefund" Type="bit" />
           <Property Name="bddr" Type="int" />
           <Property Name="bdFolioCXC" Type="int" />
@@ -615,11 +615,7 @@
         </EntityType>
         <EntityType Name="GiftsReceiptsPayments">
           <Key>
-            <PropertyRef Name="gygr" />
-            <PropertyRef Name="gypt" />
-            <PropertyRef Name="gycu" />
-            <PropertyRef Name="gysb" />
-            <PropertyRef Name="gybk" />
+            <PropertyRef Name="gyID" />
           </Key>
           <Property Name="gygr" Type="int" Nullable="false" />
           <Property Name="gypt" Type="varchar" MaxLength="10" Nullable="false" />
@@ -628,7 +624,8 @@
           <Property Name="gyRefund" Type="money" Nullable="false" />
           <Property Name="gysb" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="gype" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="gybk" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="gybk" Type="varchar" MaxLength="10" />
+          <Property Name="gyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="Goals">
           <Key>
@@ -3199,7 +3196,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_GiftsReceiptsPayments_Banks">
-          <End Role="Banks" Type="Self.Banks" Multiplicity="1" />
+          <End Role="Banks" Type="Self.Banks" Multiplicity="0..1" />
           <End Role="GiftsReceiptsPayments" Type="Self.GiftsReceiptsPayments" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Banks">
@@ -5806,6 +5803,16 @@
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="sprptCloserStatsNoDNG" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sprptLinerStatsNoDNG" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="sprptSelfGen" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -6353,6 +6360,24 @@
           <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
           <Parameter Name="Categories" Type="varchar" Mode="In" />
           <Parameter Name="Gifts" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptGiftsManifest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+          <Parameter Name="Categories" Type="varchar" Mode="In" />
+          <Parameter Name="Gifts" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptGiftsReceipts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+          <Parameter Name="Categories" Type="varchar" Mode="In" />
+          <Parameter Name="Gifts" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+          <Parameter Name="GiftReceiptType" Type="tinyint" Mode="In" />
+          <Parameter Name="GuestId" Type="int" Mode="In" />
         </Function>
         <Function Name="USP_OR_RptGiftsReceiptsPayments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -8490,7 +8515,7 @@
           <Property Name="bdpc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="bdcc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="bdCardNum" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
-          <Property Name="bdAuth" Type="Int32" />
+          <Property Name="bdAuth" Type="String" MaxLength="7" FixedLength="false" Unicode="false" Nullable="true"/>
           <Property Name="bdRefund" Type="Boolean" />
           <Property Name="bddr" Type="Int32" />
           <Property Name="bdFolioCXC" Type="Int32" />
@@ -9086,11 +9111,7 @@
         </EntityType>
         <EntityType Name="GiftsReceiptPayment">
           <Key>
-            <PropertyRef Name="gygr" />
-            <PropertyRef Name="gypt" />
-            <PropertyRef Name="gycu" />
-            <PropertyRef Name="gysb" />
-            <PropertyRef Name="gybk" />
+            <PropertyRef Name="gyID" />
           </Key>
           <Property Name="gygr" Type="Int32" Nullable="false" />
           <Property Name="gypt" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
@@ -9099,13 +9120,14 @@
           <Property Name="gyRefund" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="gysb" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="gype" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="gybk" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="gybk" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Bank" Relationship="Self.FK_GiftsReceiptsPayments_Banks" FromRole="GiftsReceiptsPayments" ToRole="Banks" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Currency" Relationship="Self.FK_GiftsReceiptsPayments_Currencies" FromRole="GiftsReceiptsPayments" ToRole="Currencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GiftsReceipt" Relationship="Self.FK_GiftsReceiptsPayments_GiftsReceipts" FromRole="GiftsReceiptsPayments" ToRole="GiftsReceipts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="PaymentType" Relationship="Self.FK_GiftsReceiptsPayments_PaymentTypes" FromRole="GiftsReceiptsPayments" ToRole="PaymentTypes" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Personnel" Relationship="Self.FK_GiftsReceiptsPayments_Personnel" FromRole="GiftsReceiptsPayments" ToRole="Personnel" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="SourcePayment" Relationship="Self.FK_GiftsReceiptsPayments_SourcePayments" FromRole="GiftsReceiptsPayments" ToRole="SourcePayments" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="gyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="Goal">
           <Key>
@@ -11243,7 +11265,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_GiftsReceiptsPayments_Banks">
-          <End Role="Banks" Type="Self.Bank" Multiplicity="1" />
+          <End Role="Banks" Type="Self.Bank" Multiplicity="0..1" />
           <End Role="GiftsReceiptsPayments" Type="IMModel.GiftsReceiptPayment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Banks">
@@ -16987,6 +17009,32 @@
             <Parameter Name="PCName" Mode="In" Type="String" />
             <Parameter Name="Personnel" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_RptGiftsManifest">
+            <ReturnType Type="Collection(IMModel.RptGiftsManifest)"/>
+            <ReturnType Type="Collection(IMModel.GiftForReceipts)"/>
+            <ReturnType Type="Collection(IMModel.CurrencyShort)"/>
+            <ReturnType Type="Collection(IMModel.PaymentTypeShort)"/>
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+            <Parameter Name="Categories" Mode="In" Type="String" />
+            <Parameter Name="Gifts" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptGiftsReceipts" >
+            <ReturnType Type="Collection(IMModel.RptGiftsReceipts)"/>
+            <ReturnType Type="Collection(IMModel.GiftForReceipts)"/>
+            <ReturnType Type="Collection(IMModel.CurrencyShort)"/>
+            <ReturnType Type="Collection(IMModel.PaymentTypeShort)"/>
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+            <Parameter Name="Categories" Mode="In" Type="String" />
+            <Parameter Name="Gifts" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="Byte" />
+            <Parameter Name="GiftReceiptType" Mode="In" Type="Byte" />
+            <Parameter Name="GuestId" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -20298,6 +20346,85 @@
           <Property Type="String" Name="Name" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="PC" Nullable="false" MaxLength="20" />
         </ComplexType>
+        <ComplexType Name="RptGiftsManifest">
+          <Property Type="Int32" Name="GuestID" Nullable="true" />
+          <Property Type="String" Name="ReservID" Nullable="true" MaxLength="15" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Guest" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Guest2" Nullable="true" MaxLength="20" />
+          <Property Type="Decimal" Name="Pax" Nullable="false" Precision="4" Scale="1" />
+          <Property Type="String" Name="Agency" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Membership" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Location" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PRN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Host" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="HostN" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="ReceiptID" Nullable="false" />
+          <Property Type="Boolean" Name="Show" Nullable="true" />
+          <Property Type="String" Name="HotelBurned" Nullable="true" MaxLength="30" />
+          <Property Type="Boolean" Name="Cancel" Nullable="false" />
+          <Property Type="DateTime" Name="CancelledDate" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="Deposited" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="Burned" Nullable="false" Precision="19" />
+          <Property Type="String" Name="Currency" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="PaymentType" Nullable="false" MaxLength="10" />
+          <Property Type="Decimal" Name="TaxiOut" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="TaxiOutDiff" Nullable="false" Precision="19" />
+          <Property Type="String" Name="Gift" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="Quantity" Nullable="false" />
+          <Property Type="Int32" Name="Adults" Nullable="false" />
+          <Property Type="Int32" Name="Minors" Nullable="false" />
+          <Property Type="String" Name="Folios" Nullable="false" MaxLength="100" />
+          <Property Type="Decimal" Name="PriceAdults" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="PriceMinors" Nullable="false" Precision="19" />
+          <Property Type="String" Name="Comments" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="GiftForReceipts">
+          <Property Type="String" Name="giID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="giN" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="giShortN" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="giWFolio" Nullable="false" />
+          <Property Type="Boolean" Name="giWPax" Nullable="false" />
+          <Property Type="String" Name="gigc" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="giO" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="RptGiftsReceipts">
+          <Property Type="Int32" Name="GuestID" Nullable="true" />
+          <Property Type="String" Name="ReservID" Nullable="true" MaxLength="15" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Guest" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Guest2" Nullable="true" MaxLength="20" />
+          <Property Type="Decimal" Name="Pax" Nullable="false" Precision="4" Scale="1" />
+          <Property Type="String" Name="Agency" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Membership" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Location" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PRN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Host" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="HostN" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="ReceiptID" Nullable="false" />
+          <Property Type="Boolean" Name="Show" Nullable="true" />
+          <Property Type="String" Name="HotelBurned" Nullable="true" MaxLength="30" />
+          <Property Type="Boolean" Name="Cancel" Nullable="false" />
+          <Property Type="DateTime" Name="CancelledDate" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="WithCost" Nullable="true" />
+          <Property Type="Decimal" Name="PublicPrice" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Deposited" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="Burned" Nullable="false" Precision="19" />
+          <Property Type="String" Name="Currency" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="PaymentType" Nullable="false" MaxLength="10" />
+          <Property Type="Decimal" Name="TaxiOut" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="TaxiOutDiff" Nullable="false" Precision="19" />
+          <Property Type="String" Name="Gift" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="Quantity" Nullable="false" />
+          <Property Type="Int32" Name="Adults" Nullable="false" />
+          <Property Type="Int32" Name="Minors" Nullable="false" />
+          <Property Type="String" Name="Folios" Nullable="false" MaxLength="100" />
+          <Property Type="Decimal" Name="PriceAdults" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="PriceMinors" Nullable="false" Precision="19" />
+          <Property Type="String" Name="Comments" Nullable="true" MaxLength="100" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -20910,6 +21037,7 @@
           <EntitySetMapping Name="GiftsReceiptsPayments">
             <EntityTypeMapping TypeName="IMModel.GiftsReceiptPayment">
               <MappingFragment StoreEntitySet="GiftsReceiptsPayments">
+                <ScalarProperty Name="gyID" ColumnName="gyID" />
                 <ScalarProperty Name="gygr" ColumnName="gygr" />
                 <ScalarProperty Name="gypt" ColumnName="gypt" />
                 <ScalarProperty Name="gycu" ColumnName="gycu" />
@@ -26760,6 +26888,130 @@
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="PC" ColumnName="PC" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptGiftsManifest" FunctionName="IMModel.Store.USP_OR_RptGiftsManifest" >
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptGiftsManifest">
+                <ScalarProperty Name="GuestID" ColumnName="GuestID" />
+                <ScalarProperty Name="ReservID" ColumnName="ReservID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Guest" ColumnName="Guest" />
+                <ScalarProperty Name="Guest2" ColumnName="Guest2" />
+                <ScalarProperty Name="Pax" ColumnName="Pax" />
+                <ScalarProperty Name="Agency" ColumnName="Agency" />
+                <ScalarProperty Name="Membership" ColumnName="Membership" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="PR" ColumnName="PR" />
+                <ScalarProperty Name="PRN" ColumnName="PRN" />
+                <ScalarProperty Name="Host" ColumnName="Host" />
+                <ScalarProperty Name="HostN" ColumnName="HostN" />
+                <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
+                <ScalarProperty Name="Show" ColumnName="Show" />
+                <ScalarProperty Name="HotelBurned" ColumnName="HotelBurned" />
+                <ScalarProperty Name="Cancel" ColumnName="Cancel" />
+                <ScalarProperty Name="CancelledDate" ColumnName="CancelledDate" />
+                <ScalarProperty Name="Deposited" ColumnName="Deposited" />
+                <ScalarProperty Name="Burned" ColumnName="Burned" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="TaxiOut" ColumnName="TaxiOut" />
+                <ScalarProperty Name="TaxiOutDiff" ColumnName="TaxiOutDiff" />
+                <ScalarProperty Name="Gift" ColumnName="Gift" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Adults" ColumnName="Adults" />
+                <ScalarProperty Name="Minors" ColumnName="Minors" />
+                <ScalarProperty Name="Folios" ColumnName="Folios" />
+                <ScalarProperty Name="PriceAdults" ColumnName="PriceAdults" />
+                <ScalarProperty Name="PriceMinors" ColumnName="PriceMinors" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GiftForReceipts">
+                <ScalarProperty Name="giID" ColumnName="giID" />
+                <ScalarProperty Name="giN" ColumnName="giN" />
+                <ScalarProperty Name="giShortN" ColumnName="giShortN" />
+                <ScalarProperty Name="giWFolio" ColumnName="giWFolio" />
+                <ScalarProperty Name="giWPax" ColumnName="giWPax" />
+                <ScalarProperty Name="gigc" ColumnName="gigc" />
+                <ScalarProperty Name="giO" ColumnName="giO" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.CurrencyShort">
+                <ScalarProperty Name="cuID" ColumnName="cuID" />
+                <ScalarProperty Name="cuN" ColumnName="cuN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.PaymentTypeShort">
+                <ScalarProperty Name="ptID" ColumnName="ptID" />
+                <ScalarProperty Name="ptN" ColumnName="ptN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptGiftsReceipts" FunctionName="IMModel.Store.USP_OR_RptGiftsReceipts" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptGiftsReceipts">
+                <ScalarProperty Name="GuestID" ColumnName="GuestID" />
+                <ScalarProperty Name="ReservID" ColumnName="ReservID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Guest" ColumnName="Guest" />
+                <ScalarProperty Name="Guest2" ColumnName="Guest2" />
+                <ScalarProperty Name="Pax" ColumnName="Pax" />
+                <ScalarProperty Name="Agency" ColumnName="Agency" />
+                <ScalarProperty Name="Membership" ColumnName="Membership" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="PR" ColumnName="PR" />
+                <ScalarProperty Name="PRN" ColumnName="PRN" />
+                <ScalarProperty Name="Host" ColumnName="Host" />
+                <ScalarProperty Name="HostN" ColumnName="HostN" />
+                <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
+                <ScalarProperty Name="Show" ColumnName="Show" />
+                <ScalarProperty Name="HotelBurned" ColumnName="HotelBurned" />
+                <ScalarProperty Name="Cancel" ColumnName="Cancel" />
+                <ScalarProperty Name="CancelledDate" ColumnName="CancelledDate" />
+                <ScalarProperty Name="WithCost" ColumnName="WithCost" />
+                <ScalarProperty Name="PublicPrice" ColumnName="PublicPrice" />
+                <ScalarProperty Name="Deposited" ColumnName="Deposited" />
+                <ScalarProperty Name="Burned" ColumnName="Burned" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="TaxiOut" ColumnName="TaxiOut" />
+                <ScalarProperty Name="TaxiOutDiff" ColumnName="TaxiOutDiff" />
+                <ScalarProperty Name="Gift" ColumnName="Gift" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Adults" ColumnName="Adults" />
+                <ScalarProperty Name="Minors" ColumnName="Minors" />
+                <ScalarProperty Name="Folios" ColumnName="Folios" />
+                <ScalarProperty Name="PriceAdults" ColumnName="PriceAdults" />
+                <ScalarProperty Name="PriceMinors" ColumnName="PriceMinors" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GiftForReceipts">
+                <ScalarProperty Name="giID" ColumnName="giID" />
+                <ScalarProperty Name="giN" ColumnName="giN" />
+                <ScalarProperty Name="giShortN" ColumnName="giShortN" />
+                <ScalarProperty Name="giWFolio" ColumnName="giWFolio" />
+                <ScalarProperty Name="giWPax" ColumnName="giWPax" />
+                <ScalarProperty Name="gigc" ColumnName="gigc" />
+                <ScalarProperty Name="giO" ColumnName="giO" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.CurrencyShort">
+                <ScalarProperty Name="cuID" ColumnName="cuID" />
+                <ScalarProperty Name="cuN" ColumnName="cuN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.PaymentTypeShort">
+                <ScalarProperty Name="ptID" ColumnName="ptID" />
+                <ScalarProperty Name="ptN" ColumnName="ptN" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

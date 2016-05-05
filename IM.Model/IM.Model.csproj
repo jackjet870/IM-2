@@ -247,6 +247,9 @@
     <Compile Include="GiftCategory.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="GiftForReceipts.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="GiftInventory.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -735,6 +738,12 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptGiftsCertificates.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGiftsManifest.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGiftsReceipts.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptGiftsReceiptsPayments.cs">

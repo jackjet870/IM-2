@@ -4591,5 +4591,71 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptLoginLog>("USP_IM_RptLoginLog", dateFromParameter, dateToParameter, locationParameter, pCNameParameter, personnelParameter);
         }
+    
+        public virtual ObjectResult<RptGiftsManifest> USP_OR_RptGiftsManifest(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms, string categories, string gifts, Nullable<byte> status)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            var categoriesParameter = categories != null ?
+                new ObjectParameter("Categories", categories) :
+                new ObjectParameter("Categories", typeof(string));
+    
+            var giftsParameter = gifts != null ?
+                new ObjectParameter("Gifts", gifts) :
+                new ObjectParameter("Gifts", typeof(string));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGiftsManifest>("USP_OR_RptGiftsManifest", dateFromParameter, dateToParameter, salesRoomsParameter, categoriesParameter, giftsParameter, statusParameter);
+        }
+    
+        public virtual ObjectResult<RptGiftsReceipts> USP_OR_RptGiftsReceipts(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms, string categories, string gifts, Nullable<byte> status, Nullable<byte> giftReceiptType, Nullable<int> guestId)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            var categoriesParameter = categories != null ?
+                new ObjectParameter("Categories", categories) :
+                new ObjectParameter("Categories", typeof(string));
+    
+            var giftsParameter = gifts != null ?
+                new ObjectParameter("Gifts", gifts) :
+                new ObjectParameter("Gifts", typeof(string));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(byte));
+    
+            var giftReceiptTypeParameter = giftReceiptType.HasValue ?
+                new ObjectParameter("GiftReceiptType", giftReceiptType) :
+                new ObjectParameter("GiftReceiptType", typeof(byte));
+    
+            var guestIdParameter = guestId.HasValue ?
+                new ObjectParameter("GuestId", guestId) :
+                new ObjectParameter("GuestId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGiftsReceipts>("USP_OR_RptGiftsReceipts", dateFromParameter, dateToParameter, salesRoomsParameter, categoriesParameter, giftsParameter, statusParameter, giftReceiptTypeParameter, guestIdParameter);
+        }
     }
 }

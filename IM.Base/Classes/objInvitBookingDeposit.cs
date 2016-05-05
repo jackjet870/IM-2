@@ -12,7 +12,7 @@ namespace IM.Base.Classes
       {
         return String.Concat(this[bdAmount.ToString()], " ", this[bdReceived.ToString()], "  ", this[bdcu]
                             , " ", this[bdpt], " ", this[bdcc], " ", this[bdCardNum], " ", this[bdExpD]
-                            , " ", this[bdAuth.HasValue ? bdAuth.Value.ToString() : String.Empty], " ", this[bdFolioCXC.HasValue ?  bdFolioCXC.Value.ToString() : String.Empty]);
+                            , " ", this[!string.IsNullOrEmpty(bdAuth) ? bdAuth : String.Empty], " ", this[bdFolioCXC.HasValue ?  bdFolioCXC.Value.ToString() : String.Empty]);
       }
     }
 
