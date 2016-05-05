@@ -574,5 +574,17 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_GetGuests_Timeout"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int USP_OR_RptProductionByPRSalesRoomOutside_Timeout {
+            get {
+                return ((int)(this["USP_OR_RptProductionByPRSalesRoomOutside_Timeout"]));
+            }
+            set {
+                this["USP_OR_RptProductionByPRSalesRoomOutside_Timeout"] = value;
+            }
+        }
     }
 }

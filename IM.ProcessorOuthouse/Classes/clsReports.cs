@@ -730,6 +730,8 @@ namespace IM.ProcessorOuthouse.Classes
         c.Shows,
         c.Sales_PROC,
         c.SalesAmount_PROC,
+        c.Sales_OOP,
+        c.SalesAmount_OOP,
         c.Sales_PEND,
         c.SalesAmount_PEND,
         c.Sales_CANCEL,
@@ -792,6 +794,24 @@ namespace IM.ProcessorOuthouse.Classes
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByPRContactOuthouseAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByPRContactOuthouse(), showRowGrandTotal: true);
+    }
+    #endregion
+
+    #region ExportRptFoliosInvitationByDateFolio
+    /// <summary>
+    ///  Obtiene los datos para el reporte FoliosInvitationByDateFolio
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <param name="dateRangeFileName">Rango de fechas</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="lstRptFoliosInvitationByDateFolio">Lista de Folios Invitation</param>
+    /// <history>
+    ///   [vku] 03/May/2016 Created
+    /// </history>
+    public static FileInfo ExportRptFoliosInvitationByDateFolio(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptFoliosInvitationByDateFolio> lstRptFoliosInvitationByDateFolio)
+    {
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptFoliosInvitationByDateFolio);
+      return EpplusHelper.CreateGeneralRptExcel(filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptFoliosInvitationByDateFolio());
     }
     #endregion
   }

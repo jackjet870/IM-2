@@ -1371,6 +1371,29 @@ namespace IM.BusinessRules.BR
 
     #endregion GetRptProductionbyPRContacOuthouse
 
+    #region GetRptFoliosInvitationByDateFolio
+    /// <summary>
+    ///   Obtiene los datos para el reporte de Folios invitations Outhouse
+    /// </summary>
+    /// <param name="dtmStart">Fecha desde</param>
+    /// <param name="dtmEnd">Fecha hasta</param>
+    /// <param name="serie">Serie</param>
+    /// <param name="folioFrom">Folio desde</param>
+    /// <param name="folioTo">Folio hasta</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <param name="PRs">Claves de PRs</param>
+    /// <history>
+    ///   [vku] 03/May/2016 Created
+    /// </history>
+    public static List<RptFoliosInvitationByDateFolio> GetRptFoliosInvitationByDateFolio(DateTime? dtmStart, DateTime? dtmEnd, string serie, string folioFrom, string folioTo, string leadSources = "ALL", string PRs = "ALL")
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptFoliosInvitationByDateFolio(dtmStart, dtmEnd, serie, Convert.ToInt32(folioFrom), Convert.ToInt32(folioTo), leadSources, PRs).ToList();
+      }
+    }
+    #endregion
+
     #endregion Outhouse
 
     #region Processor General

@@ -46,11 +46,15 @@ namespace IM.ProcessorOuthouse.Forms
       var x = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, EnumProgram.Outhouse).Select(y => y.lsID);
       _lstPRs = BRPersonnel.GetPersonnel(string.Join(",", x), roles: EnumToListHelper.GetEnumDescription(EnumRole.PR), status: 0);
 
-      _lstFoliosInvitationOuthouse = BRFoliosInvitationsOuthouse.GetFoliosInvittionsOutside(nStatus: 1);
+      _lstFoliosInvitationOuthouse = BRFoliosInvitationsOuthouse.GetFoliosInvittionsOutside(nStatus: 1).ToList();
+      _lstFoliosInvitationOuthouse.Insert(0, new FolioInvitationOuthouse { fiID = 0, fiSerie = "ALL", fiFrom = 0, fiTo = 0, fiA = Convert.ToBoolean(1) });
+      cboFolSeries.ItemsSource = _lstFoliosInvitationOuthouse.Select(c => c.fiSerie).Distinct();
+      txtFolFrom.PreviewTextInput += TextBoxHelper.IntTextInput;
+      txtFolTo.PreviewTextInput += TextBoxHelper.IntTextInput;
 
       cboSaveCourtesyTours.ItemsSource = EnumToListHelper.GetList<EnumSaveCourtesyTours>();
       cboExternal.ItemsSource = EnumToListHelper.GetList<EnumExternalInvitation>();
-      cboFolSeries.ItemsSource = _lstFoliosInvitationOuthouse;
+      
       this.PreviewKeyDown += new KeyEventHandler(Close_KeyPreviewESC);
     }
 
@@ -152,55 +156,49 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     private void ConfigureDates(bool blnOneDate, EnumPeriod enumPeriod)
     {
-      ///Si es un rango de fechas.
-      if (!blnOneDate)
-      {
-        cboDate.IsEnabled = true;
-        pnlDtmEnd.IsEnabled = true;
-        cboDate.Items.Add("Dates Specified");
-        switch (enumPeriod)
-        {
-          ///Sin periodo
-          case EnumPeriod.None:
-            cboDate.Items.Add("Today");
-            cboDate.Items.Add("Yesterday");
-            cboDate.Items.Add("This week");
-            cboDate.Items.Add("Previous week");
-            cboDate.Items.Add("This half");
-            cboDate.Items.Add("Previous half");
-            cboDate.Items.Add("This month");
-            cboDate.Items.Add("Previous month");
-            cboDate.Items.Add("This year");
-            cboDate.Items.Add("Previous year");
-            break;
+      Dictionary<EnumPredefinedDate, string> dictionaryPredefinedDate = EnumToListHelper.GetList<EnumPredefinedDate>();
 
-          //Semanal
-          case EnumPeriod.Weekly:
-            cboDate.Items.Add("This week");
-            cboDate.Items.Add("Previous week");
-            cboDate.Items.Add("Two weeks ago");
-            cboDate.Items.Add("Three weeks ago");
-            Title += " (Weekly)";
-            break;
+      cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.DatesSpecified));
 
-          //Mensual
-          case EnumPeriod.Monthly:
-            cboDate.Items.Add("This month");
-            cboDate.Items.Add("Previous month");
-            cboDate.Items.Add("Two months ago");
-            cboDate.Items.Add("Three months ago");
-            Title += " (Monthly)";
-            break;
-        }
-        cboDate.SelectedIndex = 0;
-      }
-      else
+      switch (enumPeriod)
       {
-        cboDate.Items.Add("Dates Specified");
-        cboDate.SelectedIndex = 0;
-        cboDate.IsEnabled = false;
-        pnlDtmEnd.IsEnabled = false;
+        //Sin periodo
+        case EnumPeriod.None:
+
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.Today));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.Yesterday));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisWeek));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousWeek));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisHalf));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousHalf));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisMonth));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousMonth));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisYear));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousYear));
+          break;
+
+        //Semanal
+        case EnumPeriod.Weekly:
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisWeek));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousWeek));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.TwoWeeksAgo));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThreeWeeksAgo));
+          Title += $" ({EnumToListHelper.GetEnumDescription(enumPeriod)})";
+          break;
+
+        //Mensual
+        case EnumPeriod.Monthly:
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisMonth));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousMonth));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.TwoMonthsAgo));
+          cboDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThreeMonthsAgo));
+          Title += $" ({EnumToListHelper.GetEnumDescription(enumPeriod)})";
+          break;
       }
+      cboDate.SelectedIndex = 0;
+      //Si es un rango de fechas.
+      cboDate.IsEnabled = !blnOneDate;
+      pnlDtmEnd.IsEnabled = !blnOneDate;
     }
 
     #endregion ConfigureDates
@@ -278,6 +276,7 @@ namespace IM.ProcessorOuthouse.Forms
       chkBasedOnBooking.Visibility = (enumBasedOnBooking == EnumBasedOnBooking.bobBasedOnBooking) ? Visibility.Visible : Visibility.Collapsed;
       cboExternal.Visibility = (enumExternalInvitation != null) ? Visibility.Visible : Visibility.Collapsed;
 
+      
       txtFolFrom.Visibility = lblFolFrom.Visibility = (blnFolFrom) ? Visibility.Visible : Visibility.Collapsed;
       txtFolTo.Visibility = lblFolTo.Visibility = (blnFolTo) ? Visibility.Visible : Visibility.Collapsed;
       chkUseDates.Visibility = (blnUseDates) ? Visibility.Visible : Visibility.Collapsed;
@@ -314,8 +313,8 @@ namespace IM.ProcessorOuthouse.Forms
         frmPO._lstGifts = grdGifts.SelectedItems.Cast<GiftShort>().Select(c => grdGifts.Items.IndexOf(c)).ToList();
       if (!chkAllGiftsProdGift.IsChecked.Value)
         frmPO._lstGiftsProdGift = grdGiftsProdGift.SelectedItems.Cast<GiftShort>().Select(c => grdGiftsProdGift.Items.IndexOf(c)).ToList();
-      frmPO._cboDateSelected = cboDate.SelectedValue.ToString();
-      //  frmPO._cboFolSeriesSelected = cboFolSeries.SelectedValue.ToString();
+      frmPO._cboDateSelected = (EnumPredefinedDate)cboDate.SelectedValue;
+      frmPO._cboFolSeriesSelected = cboFolSeries.SelectedValue.ToString();
       frmPO._dtmStart = dtmStart.Value.Value;
       frmPO._dtmEnd = dtmEnd.Value.Value;
       frmPO._enumBasedOnArrival = (chkBasedOnArrival.IsChecked.Value) ? EnumBasedOnArrival.boaBasedOnArrival : EnumBasedOnArrival.boaNoBasedOnArrival;
@@ -323,8 +322,8 @@ namespace IM.ProcessorOuthouse.Forms
       frmPO._enumQuinellas = (chkQuinellas.IsChecked.Value) ? EnumQuinellas.quQuinellas : EnumQuinellas.quNoQuinellas;
       frmPO._enumDetailsGift = (chkDetailGifts.IsChecked.Value) ? EnumDetailGifts.dgDetailGifts : EnumDetailGifts.dgNoDetailGifts;
       frmPO._enumSalesByMemberShipType = (chkSalesByMembershipType.IsChecked.Value) ? EnumSalesByMemberShipType.sbmDetail : EnumSalesByMemberShipType.sbmNoDetail;
-      frmPO._folFrom = txtFolFrom.Text;
-      frmPO._folTo = txtFolTo.Text;
+      frmPO._folFrom = (txtFolFrom.Text!=null) ? txtFolFrom.Text : "0" ;
+      frmPO._folTo = (txtFolTo.Text!=null) ? txtFolTo.Text : "0";
       frmPO._enumSaveCourtesyTours = ((KeyValuePair<EnumSaveCourtesyTours, string>)cboSaveCourtesyTours.SelectedItem).Key;
       frmPO._enumExternalInvitation = ((KeyValuePair<EnumExternalInvitation, string>)cboExternal.SelectedItem).Key;
     }
@@ -392,7 +391,8 @@ namespace IM.ProcessorOuthouse.Forms
         });
       }
 
-      cboDate.SelectedValue = (frmPO._cboDateSelected != null) ? frmPO._cboDateSelected : "Dates Specified";
+      cboDate.SelectedValue = frmPO._cboDateSelected ?? EnumPredefinedDate.DatesSpecified;
+      cboFolSeries.SelectedValue = (frmPO._cboFolSeriesSelected != null) ? frmPO._cboFolSeriesSelected : "ALL";
       dtmStart.Value = frmPO._dtmStart;
       dtmEnd.Value = frmPO._dtmEnd;
       chkBasedOnArrival.IsChecked = (frmPO._enumBasedOnArrival == EnumBasedOnArrival.boaBasedOnArrival) ? true : false;
@@ -401,10 +401,9 @@ namespace IM.ProcessorOuthouse.Forms
       chkDetailGifts.IsChecked = (frmPO._enumDetailsGift == EnumDetailGifts.dgDetailGifts) ? true : false;
       chkSalesByMembershipType.IsChecked = (frmPO._enumSalesByMemberShipType == EnumSalesByMemberShipType.sbmDetail) ? true : false;
 
-      txtFolFrom.Text = frmPO._folFrom;
-      txtFolTo.Text = frmPO._folTo;
+      txtFolFrom.Text = (frmPO._folFrom != null) ? frmPO._folFrom : "0";
+      txtFolTo.Text = (frmPO._folTo != null) ? frmPO._folTo : "0";
 
-      cboFolSeries.SelectedValue = frmPO._cboFolSeriesSelected;
       cboSaveCourtesyTours.SelectedValue = frmPO._enumSaveCourtesyTours;
       cboExternal.SelectedValue = frmPO._enumExternalInvitation;
     }

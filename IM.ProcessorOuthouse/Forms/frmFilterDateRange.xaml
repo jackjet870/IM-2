@@ -18,7 +18,7 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
- 
+
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical" Name="pnlLeadSources" Width="auto" Height="auto" Grid.Column="0" Visibility="Visible">
             <CheckBox Name="chkAllLeadSources" Content="All Lead Sources" VerticalAlignment="Top" Margin="10" Checked="chkAllLeadSources_Checked" Unchecked="chkAllLeadSources_Checked"/>
@@ -39,7 +39,7 @@
                 <StatusBarItem x:Name="StatusBarNumLS" Content="" Width="200" HorizontalContentAlignment="Left" />
             </StatusBar>
         </StackPanel>
-        
+
         <StackPanel Orientation="Vertical" Name="pnlLeadSourcesPaymentComm" Width="auto" Height="auto" Grid.Column="1" Visibility="Visible">
             <CheckBox Name="chkAllLeadSourcesPaymentComm" Content="All Lead Sources" VerticalAlignment="Top" Margin="10" Checked="chkAllLeadSourcesPaymentComm_Checked" Unchecked="chkAllLeadSourcesPaymentComm_Checked"/>
             <DataGrid Name="grdLeadSourcesPaymentComm" AutoGenerateColumns="False" GridLinesVisibility="None" Margin="10 5 10 25" Width="200" Height="350" IsReadOnly="True" SelectionChanged="grdLeadSourcesPaymentComm_SelectionChanged">
@@ -188,7 +188,7 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Border BorderThickness="1" BorderBrush="Gray" Grid.ColumnSpan="2" Grid.RowSpan="3" />
-                <ComboBox Name="cboDate" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="21" Margin="10 5 10 5" SelectionChanged="cboDate_SelectionChanged"></ComboBox>
+                <ComboBox Name="cboDate" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="21" Margin="10 5 10 5" DisplayMemberPath="Value" SelectedValuePath="Key" SelectionChanged="cboDate_SelectionChanged"></ComboBox>
                 <Label Grid.Row="1" VerticalAlignment="Center" Content="From" HorizontalContentAlignment="Right"></Label>
                 <Grid Name="pnlDtmStart" Grid.Row="1" Grid.Column="1">
                     <!--<DatePicker Name="dtmStart" HorizontalAlignment="Left" VerticalAlignment="Center" Width="180" DisplayDate="" SelectedDate="{x:Static sys:DateTime.Today}" Height="26" SelectedDateFormat="Long" />-->
@@ -221,17 +221,17 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
-                
+
 
 
                 </Grid.RowDefinitions>
                 <CheckBox Grid.Row="0" x:Name="chkUseDates" Content="Use dates"  Margin="5" Grid.ColumnSpan="2" Checked="chkUseDates_Checked" Unchecked="chkUseDates_Checked"/>
-                <Label x:Name="lblFolSeries" Grid.Row="1" VerticalAlignment="Center" Content="Serie" HorizontalContentAlignment="Right" Grid.ColumnSpan="2" Margin="0,0,150,0"></Label>
-                <ComboBox Name="cboFolSeries" ItemsSource="{Binding Path=FolioInvitationOuthouse}" Grid.Row="1" Grid.ColumnSpan="2" Margin="89,0,10,0" DisplayMemberPath="fiSerie" SelectedValuePath="fiSerie" Height="21" VerticalAlignment="Top"></ComboBox>
-                <Label x:Name="lblFolFrom" Grid.Row="2" VerticalAlignment="Center" Content="Folios From" HorizontalContentAlignment="Right" Grid.ColumnSpan="2" Margin="0,0,150,0"></Label>
-                <TextBox Grid.Row ="2" x:Name="txtFolFrom" Height="22" TextWrapping="Wrap" Text="" Margin="89,1,10,0" Grid.ColumnSpan="2"/>
-                <Label x:Name="lblFolTo" Grid.Row="3" VerticalAlignment="Center" Content="Folios To" HorizontalContentAlignment="Right" Grid.ColumnSpan="2" Margin="0,0,150,0"/>
-                <TextBox Grid.Row ="3" x:Name="txtFolTo" Height="22" TextWrapping="Wrap" Text="" Margin="89,1,10,0" Grid.ColumnSpan="2"/>
+                <Label x:Name="lblFolSeries" Grid.Row="1" VerticalAlignment="Center" Content="Serie" HorizontalContentAlignment="Right" HorizontalAlignment="Right" Width="89" Margin="0,0,6,0"/>
+                <ComboBox Name="cboFolSeries" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,10,0" Height="21" VerticalAlignment="Top" HorizontalAlignment="Right" Width="130"/>
+                <Label x:Name="lblFolFrom" Grid.Row="2" VerticalAlignment="Center" Content="Folios From" HorizontalContentAlignment="Right" HorizontalAlignment="Right" Width="89" Margin="0,0,6,0"/>
+                <TextBox Grid.Row ="2" x:Name="txtFolFrom" Height="22" TextWrapping="Wrap" Margin="0,1,10,0" Grid.ColumnSpan="2" HorizontalAlignment="Right" Width="130" VerticalAlignment="Top"/>
+                <Label x:Name="lblFolTo" Grid.Row="3" VerticalAlignment="Center" Content="Folios To" HorizontalContentAlignment="Right" HorizontalAlignment="Right" Width="89" Margin="0,0,6,0"/>
+                <TextBox Grid.Row ="3" x:Name="txtFolTo" Height="22" TextWrapping="Wrap" Text="" Margin="0,1,10,0" Grid.ColumnSpan="2" HorizontalAlignment="Right" Width="130"/>
                 <CheckBox Grid.Row="4" x:Name="chkAllFolios" Content="All"  Margin="5" Grid.ColumnSpan="2"/>
             </Grid>
 
