@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
 using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
@@ -27,6 +26,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
+        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetArrivals_Timeout;
         return dbContext.USP_OR_GetArrivals(Date, LeadSource, Markets, Available, Contacted, Invited, OnGroup).ToList();
       }
     }
@@ -48,6 +48,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
+        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetAvailables_Timeout;
         return dbContext.USP_OR_GetAvailables(Date, LeadSource, Markets, Contacted, Invited, OnGroup).ToList();
       }
     }
@@ -67,6 +68,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
+        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetPremanifest_Timeout;
         return dbContext.USP_OR_GetPremanifest(Date, LeadSource, Markets, OnGroup).ToList();
       }
     }
@@ -434,7 +436,7 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        dbContext.Database.CommandTimeout = 120;
+        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetGuests_Timeout;
         return dbContext.USP_OR_GetGuests(dateFrom, dateTo, leadSource, name, roomNumber, reservation, guestID).ToList();
       }
     }
@@ -485,63 +487,89 @@ namespace IM.BusinessRules.BR
       return lstGuests;
     }
     #endregion
-
-    #region GetSearchGuestByLS
+    
     /// <summary>
-    /// Obtiene una lista de Guest resultado de una busqueda con parametros
+    /// Trae los huespedes segun los parametros
     /// </summary>
-    /// <param name="guest">Guest con informacion para buscar</param>
-    /// <param name="leadSource">LS.lspg en el cual se hara la busqueda</param>
-    /// <returns>Lista de Guests Encontrados</returns>
+    /// <param name="leadsource"></param>
+    /// <param name="salesRoom"></param>
+    /// <param name="name"></param>
+    /// <param name="room"></param>
+    /// <param name="reservation"></param>
+    /// <param name="guid"></param>
+    /// <param name="from"></param>
+    /// <param name="to"></param>
+    /// <param name="program"></param>
+    /// <returns>Listado de Guest</returns>
     /// <history>
-    /// [ecanul] 01/04/2016 Created
-    /// [ecanul] 04/05/2016 Modificated Optimizado el Where
+    /// [ECANUL] 01-04-2016 Created
+    /// [jorcanche] 04/05/2016 Simplificado
     /// </history>
-    public static List<Guest> GetSearchGuestByLs(Guest guest, LeadSource leadSource)
+    public static List<Guest> GetSearchGuestByLS( string leadsource,string salesRoom, string name,string room, string reservation,int guid, DateTime from, DateTime to, EnumProgram program,  string PR)
     {
+      var pro = EnumToListHelper.GetEnumDescription(program);
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        var query = (from gu in dbContext.Guests
-          join ls in dbContext.LeadSources
-            on gu.guls equals ls.lsID
-          where ls.lspg == leadSource.lspg
-          select gu);
-        
-        if (guest.guID != 0) //Si tiene GUID, solo se busca por eso y por LS
+        var query = from gu in dbContext.Guests
+                    join ls in dbContext.LeadSources
+                    on gu.guls equals ls.lsID
+                    //busqueda por program
+                    where ls.lspg == (program == EnumProgram.Outhouse? ls.lspg: pro)
+                    select gu;
+        //Busqueda por clave de huesped
+        if (guid != 0)
         {
-          query = query.Where(gu => gu.guID == guest.guID);
+         query = query.Where(gu => gu.guID == guid);
         }
-        else //Si no se tiene GUID se busca por los siguentes criterios
-        {
-          //siempre se busca por fechas y leadSourse
-          query = query.Where(gu => gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD
-                                    && gu.guls == guest.guls);
-          //Si envia El nombre o apellido del Huesped, Se busca por Nombres o apellidos
-          if (!string.IsNullOrEmpty(guest.guLastName1))
+        else
+        { //Busqueda por nombre y aprellido
+          if (!string.IsNullOrWhiteSpace(name))
           {
-            query = query.Where(gu => (gu.guLastName1 != null && gu.guLastName1.ToUpper().Contains(guest.guLastName1))
-                                      ||
-                                      (gu.guFirstName1 != null && gu.guFirstName1.ToUpper().Contains(guest.guFirstName1))
-                                      ||
-                                      (gu.guLastname2 != null && gu.guLastname2.ToUpper().Contains(guest.guLastname2))
-                                      ||
-                                      (gu.guFirstName2 != null && gu.guFirstName2.ToUpper().Contains(guest.guFirstName2)));
-          }  
-          //Si tiene el numero de habitacion
-          if (!string.IsNullOrEmpty(guest.guRoomNum))
-          {
-            query = query.Where(gu => gu.guRoomNum != null && gu.guRoomNum.Contains(guest.guRoomNum));
-          } 
-          //Si tiene el numero de reservacion
-          if (!string.IsNullOrEmpty(guest.guHReservID))
-          {
-            query = query.Where(gu => gu.guHReservID != null && gu.guHReservID.Contains(guest.guHReservID));
+            query = query.Where(gu => gu.guLastName1.Contains(name)  ||
+                                      gu.guFirstName1.Contains(name) ||
+                                      gu.guLastname2.Contains(name)  ||
+                                      gu.guLastname2.Contains(name));
           }
+          //Busqueda por Lead Source
+          if (!string.IsNullOrEmpty(leadsource))
+          {
+            query = query.Where(gu => gu.guls == leadsource);
+          }
+          //Busqueda por sala
+          if (!string.IsNullOrEmpty(salesRoom))
+          {
+            query = query.Where(gu => gu.gusr == salesRoom);
+          }
+          //Busqueda por numero de habitacion
+          if (!string.IsNullOrEmpty(room))
+          {
+            query = query.Where(gu => gu.guRoomNum.Contains(room));
+          }
+          //Busqueda por folio de reservacion
+          if (!string.IsNullOrEmpty(reservation))
+          {
+            query = query.Where(gu => gu.guHReservID == reservation);
+          }
+          if (!string.IsNullOrEmpty(PR))
+          {
+            query = query.Where(gu => gu.guPRInvit1 == PR);
+          }
+          //Busqueda por fecha de llegada
+          
+          query = query.Where(gu => 
+                          (program == EnumProgram.Outhouse ? gu.guBookD: gu.guCheckInD) >= from && 
+                          (program == EnumProgram.Outhouse ? gu.guBookD: gu.guCheckInD) <= to);    
         }
-        return query.ToList();
+        //Si se utiliza en el modulo Outhouse quiere decir que es una busqueda de un huesped con 
+        //invitacion para transferir y de ser así se utiliza esta condicion si se utiliza en Inhouse no se 
+        //utiliza esta condicion
+        if (program == EnumProgram.Outhouse)
+        {
+          query = query.Where(gu => gu.guInvit == true  && gu.guShow == false );
+        }
+        return query.OrderBy(gu => gu.gusr).ThenBy(gu => gu.guBookD).ThenBy(gu => gu.guLastName1).ToList();
       }
     }
-    #endregion
 
     #region SaveChangedOfGuest
     /// <summary>
@@ -769,6 +797,9 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Elimina un Guest
     /// </summary>
+    /// <history>
+    /// [jorcanche] 04/05/2016 created
+    /// </history>
     /// <param name="guID"></param>
     public static void DeleteGuest(int guID)
     {      

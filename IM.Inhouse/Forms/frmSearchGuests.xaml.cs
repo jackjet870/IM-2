@@ -103,7 +103,7 @@ namespace IM.Inhouse.Forms
     {
       if (dtpStart.SelectedDate.Value > dtpEnd.SelectedDate.Value)
       {
-        MessageBox.Show("Start Date can not be greater than End Date.", "Date", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        UIHelper.ShowMessage("Start Date can not be greater than End Date.", MessageBoxImage.Exclamation, "Date");
         DateTime dt = dtpEnd.SelectedDate.Value.AddDays(-1);
         dtpStart.SelectedDate = dt; 
         dtpStart.Focus();

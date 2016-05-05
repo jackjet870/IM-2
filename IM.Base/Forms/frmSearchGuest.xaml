@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Base.Forms"
         mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="Search Guest" Background="Beige"  Width="830" Height="450" ShowInTaskbar="False" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+        Title="Search Guest" Background="Beige"  Width="808" Height="450" ShowInTaskbar="False" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     <Window.Resources>
         <Style TargetType="Label">
             <Setter Property="FontSize" Value="11"/>
@@ -42,21 +42,25 @@
                     <Label x:Name="lblRoom" Content="Room"/>
                     <TextBox x:Name="txtRoom" Width="80"/>
                 </StackPanel>
-                <StackPanel Style="{StaticResource ResourceKey=sp}">
+                <StackPanel Style="{StaticResource ResourceKey=sp}" Name="spPR"  Visibility="Collapsed">
+                    <Label x:Name="lblPr" Content="PR"/>
+                    <TextBox x:Name="txtPR" Width="80"/>
+                </StackPanel>
+                <StackPanel Style="{StaticResource ResourceKey=sp}" Name="spReservation">
                     <Label x:Name="lblReservation" Content="Reservation" Width="80" />
                     <TextBox x:Name="txtReservation"/>
                 </StackPanel>
                 <StackPanel Style="{StaticResource ResourceKey=sp}">
                     <Label x:Name="lblGUID" Content="GUID" />
-                    <TextBox x:Name="txtGUID"  Width="80"/>
+                    <TextBox x:Name="txtGUID"  Width="80" KeyDown="txtGUID_KeyDown"/>
                 </StackPanel>
                 <StackPanel Style="{StaticResource ResourceKey=sp}">
-                    <Label x:Name="lblDateFrom" Content="Arrival Date From" />
-                    <DatePicker x:Name="dtpFrom" />
+                    <Label x:Name="lblDateFrom" Content="Arrival Date From"  />
+                    <DatePicker x:Name="dtpFrom" SelectedDateChanged="dtpFrom_SelectedDateChanged"   />
                 </StackPanel>
                 <StackPanel Style="{StaticResource ResourceKey=sp}">
                     <Label x:Name="lblDateTo" Content="Arrival Date To"/>
-                    <DatePicker x:Name="dtpTo" />
+                    <DatePicker x:Name="dtpTo" SelectedDateChanged="dtpTo_SelectedDateChanged" />
                 </StackPanel>
                 <Button  x:Name="btnSearch" Content="Search" Click="btnSearch_Click"  VerticalAlignment="Center" Width="60" FontSize="12" FontWeight="Black" Margin="5,0,5,0"/>
             </StackPanel>
