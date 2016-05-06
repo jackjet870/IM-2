@@ -7073,6 +7073,12 @@
           <Parameter Name="Active" Type="bit" Mode="In" />
           <Parameter Name="Action" Type="int" Mode="In" />
         </Function>
+        <Function Name="USP_OR_ValidateFolioCxCPR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PR" Type="varchar" Mode="In" />
+          <Parameter Name="From" Type="int" Mode="In" />
+          <Parameter Name="To" Type="int" Mode="In" />
+          <Parameter Name="isCancel" Type="bit" Mode="In" />
+        </Function>
         <Function Name="USP_OR_ValidateFolioInvitationOutside" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Serie" Type="varchar" Mode="In" />
           <Parameter Name="Number" Type="int" Mode="In" />
@@ -17106,6 +17112,12 @@
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_ValidateFolioCxCPR" ReturnType="Collection(IMModel.ValidateFolioCxCPR)">
+            <Parameter Name="PR" Mode="In" Type="String" />
+            <Parameter Name="From" Mode="In" Type="Int32" />
+            <Parameter Name="To" Mode="In" Type="Int32" />
+            <Parameter Name="isCancel" Mode="In" Type="Boolean" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -20577,6 +20589,10 @@
           <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="ValidateFolioCxCPR">
+          <Property Type="Boolean" Name="Result" Nullable="true" />
+          <Property Type="String" Name="PR" Nullable="true" MaxLength="150" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -27271,6 +27287,14 @@
                 <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_ValidateFolioCxCPR" FunctionName="IMModel.Store.USP_OR_ValidateFolioCxCPR">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.ValidateFolioCxCPR">
+                <ScalarProperty Name="Result" ColumnName="Result" />
+                <ScalarProperty Name="PR" ColumnName="PR" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
