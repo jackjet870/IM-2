@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Data.Entity.Validation;
 
 namespace IM.BusinessRules.BR
 {
-    public class BRTransfer
-    {
+    
+  public class BRTransfer
+  {
     #region Start
     /// <summary>
     /// Indica que la transferencia de reservaciones ha iniciado, toma las zonas activas
@@ -1106,12 +1108,98 @@ namespace IM.BusinessRules.BR
 
     public static int DeleteReservationsCancelled()
     {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        try
         {
-            return dbContext.USP_OR_TransferDeleteReservationsCancelled();
+          return dbContext.USP_OR_TransferDeleteReservationsCancelled();
         }
+        catch (DbEntityValidationException ex)
+        {
+          var errorMessages = ex.EntityValidationErrors
+            .SelectMany(x => x.ValidationErrors)
+            .Select(x => x.ErrorMessage);
+          var fullErrorMessage = string.Join("; ", errorMessages);
+          var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+          throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+        }
+      }
     }
     #endregion
 
+    #region DeleteTransfer
+
+    /// <summary>
+    /// Elimina los registros de la tabla de transferencias.
+    /// </summary>
+    /// <hystory>
+    /// [michan] 16/04/2016  created
+    /// </hystory>
+
+    public static int DeleteTransfer()
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_TransferDeleteTransfer();
+      }
     }
+    #endregion
+
+    #region GetTransfer
+
+    /// <summary>
+    /// Trae rodos los registros de la tabla de transferencias.
+    /// </summary>
+    /// <hystory>
+    /// [michan] 16/04/2016  created
+    /// </hystory>
+
+    public static List<Transfer> GetTransfer()
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_TransferGetTransfer().ToList();
+      }
+    }
+    #endregion
+
+    public static int AddReservation(Transfer transfer)
+    {
+      int status = 0;
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        try
+        {
+          dbContext.Transfers.Add(transfer);
+          status = dbContext.SaveChanges();
+        }
+        catch(DbEntityValidationException ex)
+        {
+          var errorMessages = ex.EntityValidationErrors
+            .SelectMany(x => x.ValidationErrors)
+            .Select(x => x.ErrorMessage);
+          var fullErrorMessage = string.Join("; ", errorMessages);
+          var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+          throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+        }
+      }
+      return status;
+    }
+
+    public static bool ExistReservation(string leadSource, string tHReservID)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        bool status = false;
+        var query = (from transfer in dbContext.Transfers where transfer.tls == leadSource && transfer.tHReservID == tHReservID select transfer).FirstOrDefault();
+        if (query != null)
+        {
+          status = true;
+        }
+        return status;
+
+
+      }
+    }
+  }
 }

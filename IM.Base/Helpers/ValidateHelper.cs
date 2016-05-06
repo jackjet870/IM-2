@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+
 
 namespace IM.Base.Helpers
 {
@@ -219,6 +221,34 @@ namespace IM.Base.Helpers
       return strMsj.TrimEnd('\n');
     }
 
+    #endregion
+
+    #region IsValidEmail
+    /// <summary>
+    /// Valida la dirección de correo electronico que sea correcta
+    /// </summary>
+    /// <param name="strEmail">Correo electronico a validar</param>
+    /// <returns>Retorna falso si no es correcto en su caso verdadero si es correcto</returns>
+    public static bool IsValidEmail(string strEmail)
+    {
+      string emailFormat = "\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
+
+      if (Regex.IsMatch(strEmail, emailFormat))
+      {
+        if (Regex.Replace(strEmail, strEmail, String.Empty).Length == 0)
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+      }
+      else
+      {
+        return false;
+      }
+    }
     #endregion
   }
 }

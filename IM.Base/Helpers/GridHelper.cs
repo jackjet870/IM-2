@@ -16,11 +16,13 @@ namespace IM.Base.Helpers
     /// </summary>
     /// <param name="grid">Grid para seleccionar el registro</param>
     /// <param name="nIndex">index del registro</param>
+    /// <param name="column">Columna a seleccionar</param>
     /// <history>
     /// [emoguel] created 15/03/2016
     /// [emoguel] modified 23/03/2016 Se agregó la validacion HasItems
+    /// [michan] modified 28/04/2016 Se agregó el parametro de la columna a seleccionar
     /// </history>
-    public static void SelectRow(DataGrid grid, int nIndex)
+    public static void SelectRow(DataGrid grid, int nIndex, int? column = 0)
     {
       if (nIndex > -1)
       {
@@ -28,8 +30,10 @@ namespace IM.Base.Helpers
         grid.SelectedIndex = nIndex;
         if (grid.SelectedItem != null)
         {
+          grid.ScrollIntoView(grid.Items[nIndex]);
+          grid.UpdateLayout();
           grid.ScrollIntoView(grid.SelectedItem);
-          grid.CurrentCell = new DataGridCellInfo(grid.SelectedItem, grid.Columns[0]);
+          grid.CurrentCell = new DataGridCellInfo(grid.SelectedItem, grid.Columns[column.Value]);
         }
       }
     }

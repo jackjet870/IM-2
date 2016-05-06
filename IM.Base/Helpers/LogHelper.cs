@@ -141,7 +141,7 @@ namespace IM.Base.Helpers
     ///</history>
     public static bool ExistFile(string path)
     {
-      string pathFile = @path;
+      string pathFile = path;
       bool notificationStatus = false;
       try
       {
@@ -167,7 +167,7 @@ namespace IM.Base.Helpers
     ///</history>
     public static bool CreateFile(string path)
     {
-      string pathFile = @path;
+      string pathFile = path;
       bool status = false;
       try
       {
@@ -198,7 +198,7 @@ namespace IM.Base.Helpers
       try
       {
 
-        XmlTextWriter writeXML = new XmlTextWriter(@path, System.Text.Encoding.UTF8);
+        XmlTextWriter writeXML = new XmlTextWriter(path, System.Text.Encoding.UTF8);
 
         writeXML.Formatting = Formatting.Indented;
         writeXML.Indentation = 2;
@@ -281,10 +281,8 @@ namespace IM.Base.Helpers
     ///</history>
     public static List<Transaction> ReadXML(string pathFile)
     {
-      string path = pathFile.Replace(@"\", @"\\");
-
-
-      XDocument xdoc = XDocument.Load(@path);
+      string path = pathFile;//.Replace(@"\", @"\\");
+      XDocument xdoc = XDocument.Load(path);
       List<Transaction> listTransactions =
           (from transaction in xdoc.Descendants("Transaction")
            select new Transaction
@@ -313,7 +311,7 @@ namespace IM.Base.Helpers
 
       while (dateTo <= dateFrom)
       {
-        string pathFile = @path + "\\" + "Log" + "\\" + "Log" + logName + "(" + dateTo.ToString("yyyy") + ")" + "\\" + "Log" + logName + "(" + DateHelper.GetMonthName(dateTo.Month) + ")" + "\\" + "Log" + logName + "" + dateTo.ToString("dd") + ".xml";
+        string pathFile = path + "Log" + "\\" + "Log" + logName + "(" + dateTo.ToString("yyyy") + ")" + "\\" + "Log" + logName + "(" + DateHelper.GetMonthName(dateTo.Month) + ")" + "\\" + "Log" + logName + "" + dateTo.ToString("dd") + ".xml";
         if (ExistFile(pathFile))
         {
 

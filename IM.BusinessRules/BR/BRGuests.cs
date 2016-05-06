@@ -808,6 +808,18 @@ namespace IM.BusinessRules.BR
         dbContext.USP_OR_DeleteGuest(guID);       
       }
     }
+
+    public static Guest GetGuestValidForTransfer(string guHReservID, string gulsOriginal)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        //Revisamos si ya existe en Guest
+        Guest guest = dbContext.Guests.Where(g => g.guHReservID == guHReservID && g.gulsOriginal == gulsOriginal).FirstOrDefault();
+        return guest;
+
+      }
+
+    }
   }
   
 }

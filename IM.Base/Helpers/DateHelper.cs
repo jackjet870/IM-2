@@ -153,7 +153,8 @@ namespace IM.Base.Helpers
     public static bool IsRangeHours(TimeSpan currentTime, TimeSpan stratTime, TimeSpan endTime)
     {
       bool _response = false;
-      if (currentTime.CompareTo(stratTime) > -1 && currentTime.CompareTo(endTime) < 1)
+      Console.WriteLine(currentTime.CompareTo(stratTime) + " " + currentTime.CompareTo(endTime));
+      if ((currentTime.CompareTo(stratTime) > -1) && (currentTime.CompareTo(endTime) < 1))
       {
         _response = true;
       }
@@ -171,7 +172,7 @@ namespace IM.Base.Helpers
     public static bool IsRangeTime(DateTime currentTime, DateTime compareTime)
     {
       bool _response = false;
-      if ((currentTime.Hour == compareTime.Hour) && (currentTime.Minute == currentTime.Minute))
+      if ((currentTime.Hour == compareTime.Hour) && (currentTime.Minute == compareTime.Minute))
       {
         _response = true;
       }
@@ -259,6 +260,142 @@ namespace IM.Base.Helpers
       catch
       {
         return "Desconocido";
+      }
+    }
+    #endregion
+
+    #region GetAge
+    /// <summary>
+    /// Metodo que calcula la edad de un huesped
+    /// </summary>
+    /// <param name="BirthDate"></param>
+    /// <returns>Byte</returns>
+    public static byte GetAge(DateTime? BirthDate = null)
+    {
+      //Obtengo la diferencia en años.
+      byte age = 0;
+      DateTime today = DateTime.Now;
+      if (BirthDate != null && BirthDate < today)
+      {
+        int year = today.Year - BirthDate.Value.Year;
+        //Obtengo la fecha de cumpleaños de este año.
+        BirthDate = BirthDate.Value.AddYears(year);
+        //Le resto un año si la fecha actual es anterior 
+        //al día de nacimiento.
+        if (today.CompareTo(BirthDate) > 0)
+        {
+          year--;
+        }
+        age = (byte)year;
+      }
+      return age;
+    }
+    #endregion
+
+    #region IsDefaultDate 
+    /// <summary>
+    /// Indica si una fecha es la fecha default
+    /// </summary>
+    /// <param name="BirthDate"></param>
+    /// <returns>bool</returns>
+    /// <history>
+    /// [michan]  20/04/2016 created
+    /// </history>
+    public static DateTime? IsDefaultDate(DateTime BirthDate)
+    {
+      //si no es la fecha default (01/01/1900)
+      DateTime? date = null;      
+      if (BirthDate.Year > 1900)
+      {
+        date = BirthDate;
+      }
+      return date;
+    }
+    #endregion
+
+    #region StringDate
+    /// <summary>
+    /// Devuelve una etiqueta de rango de fechas.
+    /// </summary>
+    /// <param name="dtmStart">Fecha de inicio</param>
+    /// <param name="dtmEnd">Fecha de fin</param>
+    /// <returns>Retorna la etiqueta en un string </returns>
+    /// <history>
+    /// [michan]  22/04/2016 created
+    /// </history>
+    public static string StringDate(DateTime dtmStart, DateTime? dtmEnd = null)
+    {
+      string stringdate = String.Format("{0:MMM d, yyyy}", dtmStart); ;
+      if (dtmEnd != null)
+      {
+        int result = dtmStart.CompareTo(dtmEnd.Value);
+        if (result < 0)
+        {
+          stringdate = StringYear(dtmStart, dtmEnd.Value);
+        }
+        else if (result > 0)
+        {
+          stringdate = StringYear(dtmStart, dtmEnd.Value);
+        }
+      }
+      return stringdate;
+    }
+    #endregion
+
+    #region StringYear
+    /// <summary>
+    /// Retorna una etiqueta de un rango diferenciando el año.
+    /// </summary>
+    /// <param name="dtmStart">Fecha de inicio</param>
+    /// <param name="dtmEnd">Fecha de fin</param>
+    /// <returns>Etiqueta en string de la fechas</returns>
+    /// <history>
+    /// [michan]  22/04/2016 created
+    /// </history>
+    public static string StringYear(DateTime dtmStart, DateTime dtmEnd)
+    {
+      int year = int.Parse(dtmStart.Year.ToString()).CompareTo(int.Parse(dtmEnd.Year.ToString()));
+      if (year < 0)
+      {
+        return String.Format("{0:MMM d, yyyy}", dtmStart) + " to " + String.Format("{0:MMM d, yyyy}", dtmEnd);
+      }
+      else if (year == 0)
+      {
+        return StringMonth(dtmStart, dtmEnd);
+      }
+      else
+      {
+        return StringMonth(dtmStart, dtmEnd);
+      }
+    }
+    #endregion
+
+    #region StringMonth
+    /// <summary>
+    /// Etiqueta de un rango de fechas diferenciando el mes.
+    /// </summary>
+    /// <param name="dtmStart">Fecha de inicio</param>
+    /// <param name="dtmEnd">Fecha de fin</param>
+    /// <returns>Retorna la equiqueta en string</returns>
+    /// <history>
+    /// [michan]  22/04/2016 created
+    /// </history>
+    public static string StringMonth(DateTime dtmStart, DateTime dtmEnd)
+    {
+      int month = int.Parse(dtmStart.Month.ToString()).CompareTo(int.Parse(dtmEnd.Month.ToString()));
+      
+      if (month < 0)
+      {
+        return String.Format("{0:MMM d}", dtmStart) + " to " + String.Format("{0:MMM d, yyyy}", dtmEnd);
+      }
+      else if (month > 0)
+      {
+        return String.Format("{0:d}", dtmEnd) + " to " + String.Format("{0:MMM d, yyyy}", dtmStart);
+      }
+      else
+      {
+        return String.Format("{0:d}", dtmStart) + " to " + String.Format("{0:MMM d, yyyy}", dtmEnd);
+
       }
     }
     #endregion
