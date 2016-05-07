@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("IM.Styles")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Amazon.com")]
+[assembly: AssemblyCompany("Palace Resorts")]
 [assembly: AssemblyProduct("IM.Styles")]
-[assembly: AssemblyCopyright("Copyright © Amazon.com 2016")]
+[assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -18,7 +18,7 @@ namespace IM.Styles.UserControls
   /// <summary>
   /// Interaction logic for RichTextBoxToolBar1.xaml
   /// </summary>
-  public partial class RichTextBoxToolBar1 : UserControl
+  public partial class ToolBarRtfStyle : UserControl
   {
     #region Eventos
     public event EventHandler eLoadRTF;
@@ -33,7 +33,7 @@ namespace IM.Styles.UserControls
     public event EventHandler eColorPick;
     #endregion
 
-    public RichTextBoxToolBar1()
+    public ToolBarRtfStyle()
     {
       InitializeComponent();
     }

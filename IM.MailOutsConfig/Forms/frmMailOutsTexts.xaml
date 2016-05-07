@@ -134,7 +134,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal">
                 <!--#region  RichTextBoxToolBar2-->
-                <UC:RichTextBoxToolBar2 Name="ucRichTextBoxToolBar2"  Visibility="Collapsed"  Height="40"/>
+                <UC:ToolBarRtfFontStyle Name="ucRichTextBoxToolBar2"  Visibility="Collapsed"  Height="40"/>
                 <!--#endregion-->
                 
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Stretch" >
@@ -206,7 +206,7 @@
             </Grid.RowDefinitions>
 
             <!--#region  RichTextBoxToolBar1-->
-            <UC:RichTextBoxToolBar1 Grid.Column="0" Name="ucRichTextBoxToolBar1" Visibility="Collapsed" Width="30"/>
+            <UC:ToolBarRtfStyle Grid.Column="0" Name="ucRichTextBoxToolBar1" Visibility="Collapsed" Width="30"/>
             <!--#endregion-->
 
             <!--#region Contenido RichTextBox-->

@@ -17,14 +17,13 @@ namespace IM.Styles.UserControls
   /// <summary>
   /// Interaction logic for RichTextBoxToolBar2.xaml
   /// </summary>
-  public partial class RichTextBoxToolBar2 : UserControl
+  public partial class ToolBarRtfFontStyle : UserControl
   {
     public event EventHandler eChangeFontSize;
     public event EventHandler eChangeFontFamily;
 
-    public RichTextBoxToolBar2()
+    public ToolBarRtfFontStyle()
     {
-      
       InitializeComponent();
       loadFontSizeAndFontFamilies();
     }
@@ -57,6 +56,7 @@ namespace IM.Styles.UserControls
     private void loadFontSizeAndFontFamilies()
     {
       //Load Font Families
+      
       cbxfontFamilies.ItemsSource = System.Drawing.FontFamily.Families.Select(s => s.Name).ToArray();
       cbxfontFamilies.SelectedIndex = 0;
 

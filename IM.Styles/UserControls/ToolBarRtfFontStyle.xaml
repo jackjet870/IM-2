@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="IM.Styles.UserControls.RichTextBoxToolBar2"
+﻿<UserControl x:Class="IM.Styles.UserControls.ToolBarRtfFontStyle"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -13,7 +13,7 @@
                 <ComboBox x:FieldModifier="public" x:Name="cbxfontSize" Width="40" Height="24" Margin="5" ToolTip="Font Size" 
                           SelectionChanged="cbxfontSize_SelectionChanged"/>
                 <TextBlock Text="Font Family" VerticalAlignment="Center"/>
-                <ComboBox x:FieldModifier="public" x:Name="cbxfontFamilies" Width="150" Height="24"  Margin="5" ToolTip="Font Family" 
+                <ComboBox x:FieldModifier="public"  x:Name="cbxfontFamilies" Width="150" Height="24"  Margin="5" ToolTip="Font Family" 
                           SelectionChanged="cbxfontFamilies_SelectionChanged"/>
             </StackPanel>
         </Border>
