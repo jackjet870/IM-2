@@ -63,7 +63,7 @@ namespace IM.Base.Forms
       _splash = splash;
       _loginType = loginType;
       _program = program;
-      places = getAllPlaces();//Cargamos los places
+      if(_loginType != EnumLoginType.Normal) places = getAllPlaces();//Cargamos los places
       _validatePermission = validatePermission;
       _validateRole = validateRole;
       _changePassword = changePassword;

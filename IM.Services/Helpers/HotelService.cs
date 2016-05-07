@@ -3,6 +3,8 @@ using IM.Base.Helpers;
 using IM.Services.HotelService;
 using PalaceResorts.Common.PalaceTools;
 using System.Windows;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace IM.Services.Helpers
 {
@@ -30,7 +32,7 @@ namespace IM.Services.Helpers
                   //creamos una instancia del servicio
                   _service = new ServiceInterface();
                   _service.Url = ConfigHelper.GetString("Hotel.URL");
-                  _service.Timeout = int.Parse(ConfigHelper.GetString("TimeOutWebService"));
+                  Current.Timeout = int.Parse(ConfigHelper.GetString("TimeOutWebService"));
                   // insertamos las cabeceras de autenticacion
                   RequestHeader requestHander = new RequestHeader();
                   requestHander.Headers = ServiceHelper.GetSecurityTokenHeaders();
@@ -58,38 +60,35 @@ namespace IM.Services.Helpers
       /// <history>
       /// [michan] 14/04/2016  Created
       /// </history>
-      public static ReservationOrigosTransfer GetReservationsByArrivalDate(string zone, DateTime dateFrom, DateTime dateTo, string hotels)
-          {
-            
-              QueryRequest request = new QueryRequest();
-              ReservationOrigosTransferResponse response = new ReservationOrigosTransferResponse();
-              ReservationOrigosTransfer data = null;
-           
-              //configuramos el Request
-              request.Zona = zone;
-              request.Desde = dateFrom;
-              request.Hasta = dateTo;
-              request.Hotel = hotels;
+      public static List<ReservationOrigosTransfer> GetReservationsByArrivalDate(string zone, DateTime dateFrom, DateTime dateTo, string hotels)
+      {
+        List<ReservationOrigosTransfer> lstOrigosTransfer=null;
+        QueryRequest request = new QueryRequest();
+        ReservationOrigosTransferResponse response = new ReservationOrigosTransferResponse();
+        //configuramos el Request
+        request.Zona = zone;
+        request.Desde = dateFrom;
+        request.Hasta = dateTo;
+        request.Hotel = hotels;
+        
+        //invocamos al servicio web
+        response = Current.GetReservationsByArrivalDate(request);
+       
+        //Si ocurrio un error 
+        if (response.HasErrors)
+        {
+            UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetReservationsByArrivalDate");
+        }
 
-              //invocamos al servicio web
-            
-              response = Current.GetReservationsByArrivalDate(request);
+        if (response.Data.Length > 0)
+        {
+          lstOrigosTransfer = response.Data?.Cast<ReservationOrigosTransfer>().ToList();
+        }
 
-              //Si ocurrio un error 
-              if (response.HasErrors)
-              {
-                  UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetReservationsByArrivalDate");
-              }
+        return lstOrigosTransfer;
+      }
+      #endregion
 
-              if (response.Data.Length > 0)
-              {
-                  data = response.Data[0];
-              }
-
-              return data;
-          }
-          #endregion
-
-          #endregion
+      #endregion
     }
 }

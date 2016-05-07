@@ -473,7 +473,13 @@ namespace IM.ProcessorSales.Forms
     private void SaveFilterValues()
     {
       if (pnlSalesRoom.IsVisible)
-        frmPrs.lstSalesRoom = dtgSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(x => x.srID).ToList();
+        if (chkAllSalesRoom.IsChecked.Value)
+        {
+          frmPrs.lstSalesRoom.Clear();
+          frmPrs.lstSalesRoom.Add("All");
+        }
+        else
+          frmPrs.lstSalesRoom = dtgSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(x => x.srID).ToList();
 
       if (pnlProggrams.IsVisible)
         frmPrs.lstPrograms = dtgPrograms.SelectedItems.Cast<Program>().Select(x => x.pgID).ToList();

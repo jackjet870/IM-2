@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="IM.Styles.UserControls.RichTextBoxToolBar1"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IM.Styles.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" Width="35">
+    <Grid>
+        <!--#region  Menu Edicion Texto-->
+        <StackPanel Name="stkTextTools">
+            <Border x:Name="imgLoadRTF" Style="{StaticResource brdImageTextButtons}" ToolTip="Load RTF From File" MouseLeftButtonDown="imgLoadRTF_MouseLeftButtonDown" Margin="0,5,0,0">
+                <Viewbox Stretch="Uniform">
+                    <Image x:Name="imagLoadRTF" Source="pack://application:,,,/IM.Styles;component/Images/BOpen.png"/>
+                </Viewbox>
+            </Border>
+            <Border x:Name="imgExportRTF" Style="{StaticResource brdImageTextButtons}" ToolTip="Export RTF" MouseLeftButtonDown="imgExportRTF_MouseLeftButtonDown" Margin="0,5,0,0">
+                <Viewbox Stretch="Uniform" >
+                    <Image x:Name="imagExportRTF" Source="pack://application:,,,/IM.Styles;component/Images/BExport.png"/>
+                </Viewbox>
+            </Border>
+            <Border x:Name="imgTextBold" Style="{StaticResource brdImageTextButtons}" ToolTip="Bold" MouseLeftButtonDown="imgTextBold_MouseLeftButtonDown" Margin="0,5,0,0">
+                <Viewbox Stretch="Uniform">
+                    <Image x:Name="imagTextBold" Source="pack://application:,,,/IM.Styles;component/Images/BBold.png"/>
+                </Viewbox>
+            </Border>
+            <Border x:Name="imgTextItalic" Style="{StaticResource brdImageTextButtons}" ToolTip="Italic" MouseLeftButtonDown="imgTextItalic_MouseLeftButtonDown" Margin="0,5,0,0">
+                <Viewbox Stretch="Uniform">
+                    <Image x:Name="imagTextItalic" Source="pack://application:,,,/IM.Styles;component/Images/BItalic.png"/>
+                </Viewbox>
+            </Border>
+            <Border x:Name="imgTextUnderLine" Style="{StaticResource brdImageTextButtons}" ToolTip="UnderLine" MouseLeftButtonDown="imgTextUnderLine_MouseLeftButtonDown" Margin="0,5,0,0">
+                <Viewbox Stretch="Uniform">
+                    <Image x:Name="imagTextUnderLine" Source="pack://application:,,,/IM.Styles;component/Images/BUnderLine.png"/>
+                </Viewbox>
+            </Border>
+            <Border x:Name="imgTextStrikeOut" Style="{StaticResource brdImageTextButtons}" ToolTip="StrikeOut" MouseLeftButtonDown="imgTextStrikeOut_MouseLeftButtonDown" Margin="0,5,0,0">
+                <Viewbox Stretch="Uniform">
+                    <Image x:Name="imagTextStrikeOut" Source="pack://application:,,,/IM.Styles;component/Images/BStrikeOut.png"/>
+                </Viewbox>
+            </Border>
+
+            <Border x:Name="imgTextLeft" Style="{StaticResource brdImageTextButtons}" ToolTip="Text Alignment Left" MouseLeftButtonDown="imgTextLeft_MouseLeftButtonDown" Margin="0,5,0,0">
+                <Viewbox Stretch="Uniform">
+                    <Image x:Name="imagTextLeft" Source="pack://application:,,,/IM.Styles;component/Images/BLeft.png"/>
+                </Viewbox>
+            </Border>
+            <Border x:Name="imgTextCenter" Style="{StaticResource brdImageTextButtons}" ToolTip="Text Alignment Center" MouseLeftButtonDown="imgTextCenter_MouseLeftButtonDown" Margin="0,5,0,0">
+                <Viewbox Stretch="Uniform">
+                    <Image x:Name="imagTextCenter" Source="pack://application:,,,/IM.Styles;component/Images/BCenter.png"/>
+                </Viewbox>
+            </Border>
+            <Border x:Name="imgTextRight" Style="{StaticResource brdImageTextButtons}" ToolTip="Text Alignment Right" MouseLeftButtonDown="imgTextRight_MouseLeftButtonDown" Margin="0,5,0,0">
+                <Viewbox Stretch="Uniform">
+                    <Image x:Name="imagTextRight" Source="pack://application:,,,/IM.Styles;component/Images/BRight.png"/>
+                </Viewbox>
+            </Border>
+            <Border x:Name="imgColorPick" Style="{StaticResource brdImageTextButtons}" ToolTip="Font Color" MouseLeftButtonDown="imgColorPick_MouseLeftButtonDown" Margin="0,5,0,0">
+                <Viewbox Stretch="Uniform">
+                    <Image x:Name="imagColorPick" Source="pack://application:,,,/IM.Styles;component/Images/BColorPick.png"/>
+                </Viewbox>
+            </Border>
+
+        </StackPanel>
+        <!--#endregion-->
+    </Grid>
+</UserControl>
