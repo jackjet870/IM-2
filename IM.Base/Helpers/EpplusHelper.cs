@@ -678,8 +678,25 @@ namespace IM.Base.Helpers
           //Recorremos las columnas.
           formatTableColumns.ForEach(format =>
             {
-              //Aplicamos el formato al celda.
-              wsData.Cells[rowNumber, format.Order].Style.Numberformat.Format = GetFormat(format.Format);
+              EnumFormatTypeExcel subtotalFormat = format.Format;
+              if (format.SubtotalWithCero)
+              {
+                switch (format.Format)
+                {
+                  case EnumFormatTypeExcel.Number:
+                    subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
+                    break;
+                  case EnumFormatTypeExcel.DecimalNumber:
+                    subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
+                    break;
+                  case EnumFormatTypeExcel.Percent:
+                    subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
+                    break;
+                }
+              }
+
+              //Le aplicacamos el formato a la celda.
+              wsData.Cells[rowNumber, format.Order].Style.Numberformat.Format = GetFormat(subtotalFormat);
               //S no es una columna calculada.
               if (!format.IsCalculated)
               {
@@ -955,7 +972,23 @@ namespace IM.Base.Helpers
               var format = formatTable.First(ft => ft.PropertyName == ((col.Length == 1) ? col[0] : col[formatTable.Count(f => f.Axis == ePivotFieldAxis.Column)]));
               if (!format.IsGroup)
               {
-                wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(format.Format);
+                EnumFormatTypeExcel subtotalFormat = format.Format;
+                if (format.SubtotalWithCero)
+                {
+                  switch (format.Format)
+                  {
+                    case EnumFormatTypeExcel.Number:
+                      subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
+                      break;
+                    case EnumFormatTypeExcel.DecimalNumber:
+                      subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
+                      break;
+                    case EnumFormatTypeExcel.Percent:
+                      subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
+                      break;
+                  }
+                }
+                wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(subtotalFormat);
                 switch (format.SubTotalFunctions)
                 {
                   case eSubTotalFunctions.Sum:
@@ -1000,7 +1033,23 @@ namespace IM.Base.Helpers
             var format = formatTable.First(ft => ft.PropertyName == ((col.Length == 1) ? col[0] : col[formatTable.Count(f => f.Axis == ePivotFieldAxis.Column)]));
             if (!format.IsGroup)
             {
-              wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(format.Format);
+              EnumFormatTypeExcel subtotalFormat = format.Format;
+              if (format.SubtotalWithCero)
+              {
+                switch (format.Format)
+                {
+                  case EnumFormatTypeExcel.Number:
+                    subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
+                    break;
+                  case EnumFormatTypeExcel.DecimalNumber:
+                    subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
+                    break;
+                  case EnumFormatTypeExcel.Percent:
+                    subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
+                    break;
+                }
+              }
+              wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(subtotalFormat);
               switch (format.Function)
               {
                 case DataFieldFunctions.Sum:
