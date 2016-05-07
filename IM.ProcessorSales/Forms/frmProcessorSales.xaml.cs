@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using IM.Base.Helpers;
 using System.Linq;
@@ -27,11 +28,14 @@ namespace IM.ProcessorSales.Forms
     #endregion
 
     #region Privados
-    
+    //Formulario de filtros
     private frmFilterDateRange _frmFilter;
+    //Archivo de configuracion
     private IniFileHelper _iniFieldHelper;
+    //Detalles de los filtros
     private bool _oneDate, _onlyOnRegister, _allPrograms, _allSegments, _allSalesRoom;
     private string _salesman;
+    //Listado de reportes
     private EnumRptRoomSales _rptRoomSales;
     private EnumRptSalesRoomAndSalesman _rptSalesman;
 
@@ -173,6 +177,61 @@ namespace IM.ProcessorSales.Forms
 
     #endregion
 
+    /// <summary>
+    /// Muestra el reporte de Sales Room Seleccionado
+    /// </summary>
+    /// <history>
+    /// [ecanul] 05/05/2016 Created
+    /// </history>
+    private void ShowReportBySalesRoom()
+    {
+      FileInfo file = null;
+      //Deberia validarse con 
+      string dateRange = _oneDate
+        ? DateHelper.DateRange(lstMultiDate[0].dtStart, lstMultiDate[0].dtEnd)
+        : DateHelper.DateRange(dtmStart, dtmEnd);
+      string dateRangeFileName = _oneDate
+        ? DateHelper.DateRangeFileName(lstMultiDate[0].dtStart, lstMultiDate[0].dtEnd)
+        : DateHelper.DateRangeFileName(dtmStart, dtmEnd);
+      string reporteName = EnumToListHelper.GetEnumDescription(_rptRoomSales);
+      List<Tuple<string, string>> filters = new List<Tuple<string, string>>
+      {
+        new Tuple<string, string>("Date Range", dateRange)
+      };
+      //Si es de solo un registro El sales Room es unico, si no Se toma por Todos o por los seleccionados
+      if (_onlyOnRegister)
+        filters.Add(new Tuple<string, string>("Sales Room", lstSalesRoom[0]));
+      else
+        filters.Add(new Tuple<string, string>("Sales Room",
+          _frmFilter.dtgSalesRoom.Items.Count == lstSalesRoom.Count ? "All" : string.Join(",", lstSalesRoom)));
+
+      List<dynamic> list = new List<dynamic>();
+      StaStart("Loading report...");
+
+      switch (_rptRoomSales)
+      {
+        #region Manifest
+        case EnumRptRoomSales.Manifest:
+
+          break;
+        #endregion
+
+        #region StatsByLocationAndSalesRoom
+        case EnumRptRoomSales.StatsByLocationAndSalesRoom:
+          list.AddRange(BRReportsBySalesRoom.GetRptStatisticsBySalesRoomLocation(dtmStart, dtmEnd, lstSalesRoom));
+          if (list.Count > 0)
+            file = Reports.RptStatisticsBySalesRoomLocation(reporteName, dateRangeFileName, filters, list.Cast<RptStatisticsBySalesRoomLocation>().ToList());
+          break; 
+          #endregion
+      }
+
+      if (file != null)
+        Process.Start(file.FullName);
+
+      StaEnd();
+    }
+
+
     #region ShowDateRangeSr
     /// <summary>
     /// Muestra el filtro por Sales Room
@@ -197,7 +256,9 @@ namespace IM.ProcessorSales.Forms
             allSalesRoom: _allSalesRoom);
           break;
         case EnumRptRoomSales.StatsBySegmentsCategoriesMultiDatesRanges:
-          _frmFilter.ConfigForm(dtmStart, dtmEnd, salesRoom, oneDate: true, groupByTeams: groupedByTeams,
+          //Se usa para indicar que no se mostrara el filtro de datos y que las fechas se usaran las que tenga el grid
+          _oneDate = true; 
+          _frmFilter.ConfigForm(dtmStart, dtmEnd, salesRoom, oneDate: _oneDate, groupByTeams: groupedByTeams,
             shGroupsByTeams: true, allSalesmen: includeAllSalesmen, shAllSalesmen: true, shSr: false,
             shMultiDateRanges: true);
           break;
@@ -242,7 +303,7 @@ namespace IM.ProcessorSales.Forms
       _frmFilter.ShowDialog();
       StaEnd();
       if (!_frmFilter.ok) return;
-      //muestraReportes
+      ShowReportBySalesRoom();
       _frmFilter.Close();
 
     }

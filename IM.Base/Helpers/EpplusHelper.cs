@@ -18,6 +18,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
 
 namespace IM.Base.Helpers
 {
@@ -289,7 +290,7 @@ namespace IM.Base.Helpers
             PropertyInfo highlightedItemProperty = ptfField.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "TopNode");
             XmlElement ptfFieldXml = (XmlElement)highlightedItemProperty.GetValue(ptfField, null);
             var styles = pivotTable.WorkSheet.Workbook.Styles;
-            ExcelNumberFormatXml nFormatXml = styles.NumberFormats.ToList().Find(x => x.Format == GetFormat(rowFormat));
+            ExcelNumberFormatXml nFormatXml = styles.NumberFormats.ToList().Find(x => x.Format == GetFormat(rowFormat.Format));
 
             //Si existe el Formato
             if (nFormatXml != null)
@@ -331,7 +332,7 @@ namespace IM.Base.Helpers
             valueField.BaseItem = 0;
             valueField.Function = valueFormat.Function;
           }
-          valueField.Format = GetFormat(valueFormat);
+          valueField.Format = GetFormat(valueFormat.Format);
           valueField.Field.Sort = valueFormat.Sort;
         });
 
@@ -585,7 +586,7 @@ namespace IM.Base.Helpers
                   wsData.Cells[rowNumber, drColumn].Formula = GetFormula(formatTable, row.Formula, rowNumber);
                 }
                 //Aplicamos el formato a la celda.
-                wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(row);
+                wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(row.Format);
                 drColumn++;
               });
             rowNumber++;
@@ -598,9 +599,26 @@ namespace IM.Base.Helpers
             int dataIniRow = rowNumber - values[groupheaders[i]].Count;
             //Recorremos las columnas.
             formatTableColumns.ForEach(format =>
-              {
+            {
+              EnumFormatTypeExcel subtotalFormat = format.Format;
+                if (format.SubtotalWithCero)
+                {
+                  switch (format.Format)
+                  {
+                  case EnumFormatTypeExcel.Number:
+                      subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
+                      break;
+                  case EnumFormatTypeExcel.DecimalNumber:
+                      subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
+                      break;
+                  case EnumFormatTypeExcel.Percent:
+                      subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
+                      break;
+                  }
+                }
+
                 //Le aplicacamos el formato a la celda.
-                wsData.Cells[rowNumber, format.Order].Style.Numberformat.Format = GetFormat(format);
+                wsData.Cells[rowNumber, format.Order].Style.Numberformat.Format = GetFormat(subtotalFormat);
                 //Si no es calculada aplicamos la funcion configurada.
                 if (!format.IsCalculated)
                 {
@@ -647,7 +665,7 @@ namespace IM.Base.Helpers
             {
               //Asignamos el valor y formato a la celda. 
               wsData.Cells[rowNumber, drColumn].Value = dr[row.PropertyName];
-              wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(row);
+              wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(row.Format);
               drColumn++;
             });
           rowNumber++;
@@ -661,7 +679,7 @@ namespace IM.Base.Helpers
           formatTableColumns.ForEach(format =>
             {
               //Aplicamos el formato al celda.
-              wsData.Cells[rowNumber, format.Order].Style.Numberformat.Format = GetFormat(format);
+              wsData.Cells[rowNumber, format.Order].Style.Numberformat.Format = GetFormat(format.Format);
               //S no es una columna calculada.
               if (!format.IsCalculated)
               {
@@ -921,7 +939,7 @@ namespace IM.Base.Helpers
               if (!formatCol.IsGroup)
               {
                 wsData.Cells[rowNumber, drColumn].Value = dr[lstHeaders.IndexOf(col)];
-                wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(formatCol);
+                wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(formatCol.Format);
                 drColumn++;
               }
             });
@@ -937,7 +955,7 @@ namespace IM.Base.Helpers
               var format = formatTable.First(ft => ft.PropertyName == ((col.Length == 1) ? col[0] : col[formatTable.Count(f => f.Axis == ePivotFieldAxis.Column)]));
               if (!format.IsGroup)
               {
-                wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(format);
+                wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(format.Format);
                 switch (format.SubTotalFunctions)
                 {
                   case eSubTotalFunctions.Sum:
@@ -967,7 +985,7 @@ namespace IM.Base.Helpers
           {
             var formatCol = formatTable.First(ft => ft.PropertyName == ((col.Length == 1) ? col[0] : col[formatTable.Count(f => f.Axis == ePivotFieldAxis.Column)]));
             wsData.Cells[rowNumber, drColumn].Value = dr[lstHeaders.IndexOf(col)];
-            wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(formatCol);
+            wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(formatCol.Format);
             drColumn++;
           });
           rowNumber++;
@@ -982,7 +1000,7 @@ namespace IM.Base.Helpers
             var format = formatTable.First(ft => ft.PropertyName == ((col.Length == 1) ? col[0] : col[formatTable.Count(f => f.Axis == ePivotFieldAxis.Column)]));
             if (!format.IsGroup)
             {
-              wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(format);
+              wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(format.Format);
               switch (format.Function)
               {
                 case DataFieldFunctions.Sum:
@@ -1050,7 +1068,7 @@ namespace IM.Base.Helpers
           case EnumFormatTypeExcel.Date:
           case EnumFormatTypeExcel.Time:
           case EnumFormatTypeExcel.Month:
-            tableStyle.Style.Numberformat.Format = GetFormat(new ExcelFormatTable { Format = item.Format });
+            tableStyle.Style.Numberformat.Format = GetFormat( item.Format );
             break;
 
           case EnumFormatTypeExcel.Boolean:
@@ -1071,21 +1089,26 @@ namespace IM.Base.Helpers
     /// <summary>
     ///   Se obtiene el formato de la columna.
     /// </summary>
-    /// <param name="item">Formato de Excel.</param>
+    /// <param name="item">Enumerado del formato de excel.</param>
     /// <returns>string</returns>
     /// <history>
     ///   [edgrodriguez] 24/03/2016  Created.
+    ///   [ecanul] 07/05/2016 Modificated -  Ahora pide el enumerado del formato y  no la celda de excel completa
     /// </history>
-    private static string GetFormat(ExcelFormatTable item)
+    private static string GetFormat(EnumFormatTypeExcel item)
     {
       string format = "";
-      switch (item.Format)
+      switch (item)
       {
         case EnumFormatTypeExcel.General:
           break;
 
         case EnumFormatTypeExcel.Percent:
           format = "0.0 %;-0.0 %;";
+          break;
+
+        case EnumFormatTypeExcel.PercentWithCero:
+          format = "0.0 %;-0.0 %;0 %";
           break;
 
         case EnumFormatTypeExcel.Currency:
@@ -1096,8 +1119,16 @@ namespace IM.Base.Helpers
           format = "#";
           break;
 
+        case EnumFormatTypeExcel.NumberWithCero:
+          format = "#;-#;0";
+          break;
+
         case EnumFormatTypeExcel.DecimalNumber:
           format = "0.00;-0.00;";
+          break;
+
+        case EnumFormatTypeExcel.DecimalNumberWithCero:
+          format = "0.00; -0.00; 0.00";
           break;
 
         case EnumFormatTypeExcel.Date:
@@ -1301,16 +1332,16 @@ namespace IM.Base.Helpers
       dataField.Attributes.Append(baseItemAttrib);
 
       var styles = pivotTable.WorkSheet.Workbook.Styles;
-      ExcelNumberFormatXml nFormatXml = styles.NumberFormats.ToList().Find(x => x.Format == GetFormat(formatTable));
+      ExcelNumberFormatXml nFormatXml = styles.NumberFormats.ToList().Find(x => x.Format == GetFormat(formatTable.Format));
 
       //Si no existe el Formato se crea uno
       if (nFormatXml == null)
       {
         ExcelPivotTableDataField dataFieldAux = pivotTable.DataFields.First();
         string formatAux = dataFieldAux.Format;
-        dataFieldAux.Format = GetFormat(formatTable);
+        dataFieldAux.Format = GetFormat(formatTable.Format);
         dataFieldAux.Format = formatAux;
-        nFormatXml = styles.NumberFormats.ToList().Find(x => x.Format == GetFormat(formatTable));
+        nFormatXml = styles.NumberFormats.ToList().Find(x => x.Format == GetFormat(formatTable.Format));
       }
 
       XmlAttribute numFmtIdAttrib = pivotTable.PivotTableXml.CreateAttribute("numFmtId");

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using IM.BusinessRules.Properties;
 using IM.Model;
 using IM.Model.Helpers;
 using IM.Model.Enums;
@@ -921,6 +922,31 @@ namespace IM.BusinessRules.BR
         return lstTaxisOut;
       }
     }
+    #endregion
+
+    #endregion
+
+    #region Processor Sales
+
+    #region StatsBySalesRoomLocation
+    /// <summary>
+    /// Deviuelve un listado de Statics nu Sales Room Location 
+    /// </summary>
+    /// <param name="dtStart">Fecha de inicio</param>
+    /// <param name="dtEnd">Fecha fin</param>
+    /// <param name="salesRoom">Listado de Sales Room para crear el reporte</param>
+    /// <history>
+    /// [ecanul] 06/05/2016 Created
+    /// </history>
+    public static List<RptStatisticsBySalesRoomLocation> GetRptStatisticsBySalesRoomLocation(DateTime dtStart,
+      DateTime dtEnd, IEnumerable<string> salesRoom)
+    {
+      using (var dbcontext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbcontext.USP_OR_RptStatsBySalesRoomLocation(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
+      }
+    }
+
     #endregion
 
     #endregion

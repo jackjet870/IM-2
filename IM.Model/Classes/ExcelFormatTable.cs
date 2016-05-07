@@ -20,6 +20,7 @@ namespace IM.Model.Classes
   {
     public string Title { get; set; }
     public EnumFormatTypeExcel Format { get; set; } = EnumFormatTypeExcel.General;
+    public bool SubtotalWithCero { get; set; } = false;
     public ExcelHorizontalAlignment Alignment { get; set; } = ExcelHorizontalAlignment.Left;
     public DataFieldFunctions Function { get; set; } = DataFieldFunctions.None;
     public eSubTotalFunctions SubTotalFunctions { get; set; } = eSubTotalFunctions.None;
