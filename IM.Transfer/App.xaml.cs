@@ -27,7 +27,7 @@ namespace IM.Transfer
     protected override void OnStartup(StartupEventArgs e)
       {
         frmTransferLauncher _frm = new frmTransferLauncher();
-        _frm.ShowInTaskbar = false;
+        _frm.ShowInTaskbar = true;
         _frm.ShowDialog();
       }
     #endregion

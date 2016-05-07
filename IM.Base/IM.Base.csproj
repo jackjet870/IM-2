@@ -124,6 +124,7 @@
     <Compile Include="Helpers\DateHelper.cs" />
     <Compile Include="Helpers\EntityHelper.cs" />
     <Compile Include="Helpers\EpplusHelper.cs" />
+    <Compile Include="Helpers\NotifyIconHelper.cs" />
     <Compile Include="Helpers\TableHelper.cs" />
     <Compile Include="Helpers\GridHelper.cs" />
     <Compile Include="Helpers\KeyboardHelper.cs" />

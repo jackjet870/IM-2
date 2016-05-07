@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Threading;
 using System.Windows.Input;
 using System.Windows.Forms;
-using IM.Transfer.Clases;
+
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Services.Helpers;
@@ -87,8 +87,8 @@ namespace IM.Transfer.Forms
     #endregion
 
     #region lblTextLast and lblTextLast
-    public static string lblTextLast = "Last Transfer ";
-    public static string lblTextNext = "Next Transfer ";
+    public static string lblTextLast = "Last ";
+    public static string lblTextNext = "Next ";
     #endregion
 
     #region blnuseBand, blnTwoNight, blnOneNight
@@ -655,14 +655,8 @@ namespace IM.Transfer.Forms
       //Fecha de salida
       transfer.tCheckOutD = reservationOrigosTransfer.Departure;
       //Correo electronico
-      if (ValidateHelper.IsValidEmail(reservationOrigosTransfer.Email))
-      {
-        transfer.tEmail = reservationOrigosTransfer.Email;
-      }
-      else
-      {
-        transfer.tEmail = "";
-      }
+      transfer.tEmail = (ValidateHelper.IsValidEmail(reservationOrigosTransfer.Email)) ? reservationOrigosTransfer.Email : "";
+      
 
       //Ciudad
       transfer.tCity = Trim(reservationOrigosTransfer.City);
@@ -724,7 +718,7 @@ namespace IM.Transfer.Forms
       //Motivo de indisponibilidad (0 - AVAILABLE)
       transfer.tum = 0;
       //Disponibilidad (No disponible)
-      transfer.tmk = "?";
+      //transfer.tmk = reservationOrigosTransfer.;
       transfer.tAvail = false;
       //Idioma
       transfer.tla = "EN";
@@ -1420,7 +1414,6 @@ namespace IM.Transfer.Forms
     /// </history>
     public void ReloadExchangeRate()
     {
-      AddLogGridExchangeRate("Finished", "Finish Exchange Rate");
       AddValueProgressBarExchangeRate(value: 0);
       blnRunOrCancellExchangeRate = false;
       blnRunTransfer = false;
@@ -1681,7 +1674,6 @@ namespace IM.Transfer.Forms
       {
         UpdateLabelStatusExchangeRate("STOP");
       }
-      AddLogGridExchangeRate("Finished", "Process finished");
       UpdateLabelStatusExchangeRate("STAND BY");
     }
     #endregion
@@ -1791,6 +1783,7 @@ namespace IM.Transfer.Forms
         AddLogGridExchangeRate("Warning", "Exchange rate does not exists for day");
         //CancellWorkerExchangeRate();
       }
+      AddLogGridExchangeRate("Finish", "Process Finished.");
       ReloadExchangeRate();
     }
     #endregion
@@ -1806,7 +1799,7 @@ namespace IM.Transfer.Forms
       LoadDataGRidExchangeRate();
       LoadDataGRidReservations();
       InitializerProgressBar();
-
+      //this.Icon = new System.Windows.Media.Imaging.BitmapImage(new Uri(@"M:\PalaceResorts\Client4.6\IntelligenceMarketing\IM.Base\Images\IM.ico")); //new System.Drawing.Icon(@"M:\PalaceResorts\Client4.6\IntelligenceMarketing\IM.Base\Images\IM.ico");
       var thisApp = Assembly.GetExecutingAssembly();
       AssemblyName name = new AssemblyName(thisApp.FullName);
       this.Title = " Inteligence Marketing Transfer v"+name.Version;
@@ -1844,15 +1837,19 @@ namespace IM.Transfer.Forms
         //notifyIcon = NotifyIconHelper.Notify(this);// Creamos el objeto notifyicon
         if (notifyIcon != null)
         {
-          notifyIcon.ShowBalloonTip(500);
+          notifyIcon.ContextMenu.MenuItems[0].Visible = true;
+          notifyIcon.ShowBalloonTip(400);
         }
       }
       else if (this.WindowState == WindowState.Normal)
       {
-        notifyIcon.Visible = false;
-        this.ShowInTaskbar = true;
+        
         this.Show();
         this.Activate();
+        notifyIcon.Visible = false;
+        this.ShowInTaskbar = true;
+        
+        //this.Activate();
       }
     }
     #endregion
@@ -2045,6 +2042,7 @@ namespace IM.Transfer.Forms
           {
             lblStatusReservations.Foreground = Brushes.Black;
             lblStatusReservations.Background = Brushes.Transparent;
+            lblStatusReservations.BorderBrush = Brushes.Transparent;
           }
           if (brdStatusReservations != null)
           {
@@ -2075,6 +2073,7 @@ namespace IM.Transfer.Forms
           {
             lblStatusExchangeRate.Foreground = Brushes.Black;
             lblStatusExchangeRate.Background = Brushes.Transparent;
+            lblStatusExchangeRate.BorderBrush = Brushes.Transparent;
           }
           if (brdStatusExchangeRate != null)
           {
@@ -2092,37 +2091,6 @@ namespace IM.Transfer.Forms
       {
         dispatcherBlinkLabelExchangeRate.Start();
       }
-    }
-
-    public void Blink(DispatcherTimer dispatcherTime, System.Windows.Controls.Label lblName, System.Windows.Controls.Border brdName, bool? blnStatus = true)
-    {
-      if (dispatcherTime != null && !blnStatus.Value)
-      {
-        dispatcherTime.Stop();
-        if (!dispatcherTime.IsEnabled)
-        {
-          if(lblName != null)
-          {
-            lblName.Foreground = Brushes.Black;
-            lblName.Background = Brushes.Transparent;
-          }
-          if(brdName != null)
-          {
-            brdName.Background = Brushes.Transparent;
-            brdName.BorderBrush = Brushes.Black;
-          }
-        }
-      }
-      else if (dispatcherTime == null && blnStatus.Value)
-      {
-        dispatcherTime = BlinkLabel(lblName: lblName, brdName: brdName);
-        dispatcherTime.Start();
-      }
-      else if (dispatcherTime != null && blnStatus.Value)
-      {
-        dispatcherTime.Start();
-      }
-      
     }
 
     #region BlinkLabel 
