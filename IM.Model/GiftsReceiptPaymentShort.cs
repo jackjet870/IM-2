@@ -22,5 +22,6 @@ namespace IM.Model
         public string gysb { get; set; }
         public string gype { get; set; }
         public string UserName { get; set; }
+        public int gyID { get; set; }
     }
 }

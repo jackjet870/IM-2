@@ -18465,10 +18465,11 @@
           <Property Type="Decimal" Name="gyRefund" Nullable="false" Precision="19" />
           <Property Type="String" Name="gycu" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="gypt" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="gybk" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="gybk" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="gysb" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="gype" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="UserName" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="gyID" Nullable="false" />
         </ComplexType>
         <ComplexType Name="RptDepositsPaymentByPR_Deposit">
           <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
@@ -24610,6 +24611,7 @@
                 <ScalarProperty Name="gysb" ColumnName="gysb" />
                 <ScalarProperty Name="gype" ColumnName="gype" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="gyID" ColumnName="gyID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
