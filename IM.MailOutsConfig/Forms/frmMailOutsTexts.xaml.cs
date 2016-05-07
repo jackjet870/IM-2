@@ -19,13 +19,16 @@ using IM.Model.Enums;
 using Cursors = System.Windows.Input.Cursors;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MenuItem = System.Windows.Controls.MenuItem;
+using IM.Styles.Interfaces;
+using IM.Styles.Classes;
+using System;
 
 namespace IM.MailOutsConfig.Forms
 {
   /// <summary>
   /// Interaction logic for frmMailOutsTexts.xaml
   /// </summary>
-  public partial class frmMailOutsTexts : Window
+  public partial class frmMailOutsTexts : Window, IRichTextBoxToolBar
   {
     #region Propiedades, Atributos
     private rptMailOuts _rptMailOuts = new rptMailOuts(); //Reporte
@@ -37,6 +40,22 @@ namespace IM.MailOutsConfig.Forms
     {
       InitializeComponent();
       RefreshDataSource = new ExecuteCommandHelper(x => LoadDataSource());
+
+      #region Manejadores de Eventos
+      ucRichTextBoxToolBar1.eColorPick += new EventHandler(ColorPick);
+      ucRichTextBoxToolBar1.eExportRTF += new EventHandler(ExportRTF);
+      ucRichTextBoxToolBar1.eLoadRTF += new EventHandler(LoadRTF);
+      ucRichTextBoxToolBar1.eTextBold += new EventHandler(TextBold);
+      ucRichTextBoxToolBar1.eTextCenter += new EventHandler(TextCenter);
+      ucRichTextBoxToolBar1.eTextItalic += new EventHandler(TextItalic);
+      ucRichTextBoxToolBar1.eTextLeft += new EventHandler(TextLeft);
+      ucRichTextBoxToolBar1.eTextRight += new EventHandler(TextRight);
+      ucRichTextBoxToolBar1.eTextStrikeOut += new EventHandler(TextStrikeOut);
+      ucRichTextBoxToolBar1.eTextUnderLine += new EventHandler(TextUnderLine);
+      ucRichTextBoxToolBar2.eChangeFontFamily += new EventHandler(ChangeFontFamily);
+      ucRichTextBoxToolBar2.eChangeFontSize += new EventHandler(ChangeFontSize);
+      #endregion
+
     }
 
     #region Eventos de la ventana
@@ -49,8 +68,6 @@ namespace IM.MailOutsConfig.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       LoadDataSource();
-      // Cargamos el tipo de fuentes
-      loadFontSizeAndFontFamilies();
       //Agregamos la informacion del usuario en la interfaz
       txtbUserName.Text = App.User.User.peN;
     }
@@ -439,197 +456,6 @@ namespace IM.MailOutsConfig.Forms
     }
     #endregion
 
-    #region ToolBar RichTextBox
-    /// <summary>
-    /// Carga un archivo RTF al RIchTextBox
-    /// </summary>
-    /// <history>
-    /// [erosado] 07/04/2016  Created
-    /// </history>
-    private void imgLoadRTF_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      UIRichTextBoxHelper.LoadRTF(ref richTextBox);
-    }
-    /// <summary>
-    /// Exporta el contenido del RichTextBox a un archivo RTF
-    /// </summary>
-    /// <history>
-    /// [erosado] 06/04/2016
-    /// </history>
-    private void imgExportRTF_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      UIRichTextBoxHelper.ExportRTF(ref richTextBox);
-    }
-    /// <summary>
-    /// Cambia la letra del texto seleccionado en el richtextbox
-    /// </summary>
-    /// <history>
-    /// [erosado] 06/04/2016
-    /// </history>
-    private void cbxfontFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      if (cbxfontFamilies.SelectedItem != null)
-        richTextBox.Selection.ApplyPropertyValue(TextElement.FontFamilyProperty, cbxfontFamilies.SelectedItem);
-    }
-    /// <summary>
-    /// Cambia a negritas el texto seleccionado en el richtextbox
-    /// </summary>
-    /// <history>
-    /// [erosado] 06/04/2016
-    /// </history>
-    private void imgTextBold_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      object temp = richTextBox.Selection.GetPropertyValue(TextElement.FontWeightProperty);
-      if (temp != null)
-      {
-        if (!temp.Equals(FontWeights.Bold))
-        {
-          richTextBox.Selection.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
-        }
-        else
-        {
-          richTextBox.Selection.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Normal);
-        }
-      }
-    }
-    /// <summary>
-    /// Cambia a italica el texto seleccionado en el richtextbox
-    /// </summary>
-    /// <history>
-    /// [erosado] 06/04/2016
-    /// </history>
-    private void imgTextItalic_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      object temp = richTextBox.Selection.GetPropertyValue(TextElement.FontStyleProperty);
-      if (temp != null)
-      {
-        if (!temp.Equals(FontStyles.Italic))
-        {
-          richTextBox.Selection.ApplyPropertyValue(TextElement.FontStyleProperty, FontStyles.Italic);
-        }
-        else
-        {
-          richTextBox.Selection.ApplyPropertyValue(TextElement.FontStyleProperty, FontStyles.Normal);
-        }
-      }
-    }
-    /// <summary>
-    /// Cambia a Subrayado el texto seleccionado en el richtextbox
-    /// </summary>
-    /// <history>
-    /// [erosado] 06/04/2016
-    /// </history>
-    private void imgTextUnderLine_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      object temp = richTextBox.Selection.GetPropertyValue(Inline.TextDecorationsProperty);
-      if (temp != null)
-      {
-        if (!temp.Equals(TextDecorations.Underline))
-        {
-          richTextBox.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
-        }
-        else
-        {
-          richTextBox.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, null);
-        }
-      }
-    }
-    /// <summary>
-    /// Cambia a Tachado el texto seleccionado en el richtextbox
-    /// </summary>
-    /// <history>
-    /// [erosado] 06/04/2016
-    /// </history>
-    private void imgTextStrikeOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      object temp = richTextBox.Selection.GetPropertyValue(Inline.TextDecorationsProperty);
-      if (temp != null)
-      {
-        if (!temp.Equals(TextDecorations.Strikethrough))
-        {
-          richTextBox.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Strikethrough);
-        }
-        else
-        {
-          richTextBox.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, null);
-        }
-      }
-    }
-    /// <summary>
-    /// Cambia el tamaño del texto seleccionado en el richtextbox
-    /// </summary>
-    /// <history>
-    /// [erosado] 06/04/2016
-    /// </history>
-    private void cbxfontSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      richTextBox.Selection.ApplyPropertyValue(TextElement.FontSizeProperty, cbxfontSize.SelectedItem.ToString());
-    }
-
-    private void imgTextLeft_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      if (!richTextBox.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left))
-      {
-        richTextBox.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
-      }
-      else
-      {
-        richTextBox.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
-      }
-    }
-    /// <summary>
-    /// Centra  el texto seleccionado en el richtextbox
-    /// </summary>
-    /// <history>
-    /// [erosado] 06/04/2016
-    /// </history>
-    private void imgTextCenter_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      if (!richTextBox.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center))
-      {
-        richTextBox.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Center);
-      }
-      else
-      {
-        richTextBox.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
-      }
-    }
-    /// <summary>
-    /// Alinea a la derecha  el texto seleccionado en el richtextbox
-    /// </summary>
-    /// <history>
-    /// [erosado] 06/04/2016
-    /// </history>
-    private void imgTextRight_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      if (!richTextBox.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right))
-      {
-        richTextBox.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Right);
-      }
-      else
-      {
-        richTextBox.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
-      }
-    }
-    /// <summary>
-    /// Cambia el color de el texto seleccionado en el richtextbox
-    /// </summary>
-    /// <history>
-    /// [erosado] 06/04/2016
-    /// </history>
-    private void imgColorPick_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-      ColorDialog colorDialog = new ColorDialog();
-      if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-      {
-        SolidColorBrush scb = new SolidColorBrush(Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B));
-        TextRange range = new TextRange(richTextBox.Selection.Start, richTextBox.Selection.End);
-        range.ApplyPropertyValue(TextElement.ForegroundProperty, scb);
-      }
-
-    }
-    #endregion
-
     #region Add Labels
     /// <summary>
     /// Se encarga de agregar etiquetas al rtf desde MenuItem
@@ -753,27 +579,6 @@ namespace IM.MailOutsConfig.Forms
       _rptMailOuts.SetDataSource(_guestMailOutsText);
     }
     /// <summary>
-    /// Carga la información de Font size y font Familie en los combos
-    /// </summary>
-    /// <history>
-    /// [erosado] 08/04/2016  Created
-    /// </history>
-    public void loadFontSizeAndFontFamilies()
-    {
-      //Load Font Families
-      cbxfontFamilies.ItemsSource = System.Drawing.FontFamily.Families.Select(s => s.Name).ToArray();
-      cbxfontFamilies.SelectedIndex = 0;
-
-      //Load FontSize
-      List<int> fontSize = new List<int>();
-      for (int i = 4; i <= 72; i++)
-      {
-        fontSize.Add(i);
-      }
-      cbxfontSize.ItemsSource = fontSize;
-      cbxfontSize.SelectedIndex = 0;
-    }
-    /// <summary>
     /// Activa el modo Edicion del richTextBox
     /// </summary>
     /// <history>
@@ -792,8 +597,8 @@ namespace IM.MailOutsConfig.Forms
       richTextBox.IsReadOnly = false;
 
       txtEditMode.Visibility = Visibility.Visible;
-      stkTextTools.Visibility = Visibility.Visible;
-      brdFontsStyle.Visibility = Visibility.Visible;
+      ucRichTextBoxToolBar1.Visibility = Visibility.Visible;
+      ucRichTextBoxToolBar2.Visibility = Visibility.Visible;
     }
     /// <summary>
     /// Desactiva el modo Edicion del richTextBox
@@ -814,8 +619,8 @@ namespace IM.MailOutsConfig.Forms
       richTextBox.IsReadOnly = true;
 
       txtEditMode.Visibility = Visibility.Collapsed;
-      stkTextTools.Visibility = Visibility.Hidden;
-      brdFontsStyle.Visibility = Visibility.Collapsed;
+      ucRichTextBoxToolBar1.Visibility = Visibility.Hidden;
+      ucRichTextBoxToolBar2.Visibility = Visibility.Collapsed;
     }
     /// <summary>
     /// Carga LeadSource & Lenguages
@@ -831,8 +636,69 @@ namespace IM.MailOutsConfig.Forms
       //Cargamos Lenguage
       DoGetLanguages();
     }
-
     #endregion
-    
+
+    #region IRichTextBoxToolBar
+    public void ChangeFontFamily(object sender, EventArgs e)
+    {
+      RichTextBoxToolBar.OnChangeFontFamily(ref richTextBox, ref ucRichTextBoxToolBar2.cbxfontFamilies);
+    }
+
+    public void ChangeFontSize(object sender, EventArgs e)
+    {
+      RichTextBoxToolBar.OnChangeFontSize(ref richTextBox, ref ucRichTextBoxToolBar2.cbxfontSize);
+    }
+
+    public void ColorPick(object sender, EventArgs e)
+    {
+      RichTextBoxToolBar.OnColorPick(ref richTextBox);
+    }
+
+    public void ExportRTF(object sender, EventArgs e)
+    {
+      RichTextBoxToolBar.OnExportRTF(ref richTextBox);
+    }
+
+    public void LoadRTF(object sender, EventArgs e)
+    {
+      RichTextBoxToolBar.OnLoadRTF(ref richTextBox);
+    }
+
+    public void TextBold(object sender, EventArgs e)
+    {
+      RichTextBoxToolBar.OnTextBold(ref richTextBox);
+    }
+
+    public void TextCenter(object sender, EventArgs e)
+    {
+      RichTextBoxToolBar.OnTextCenter(ref richTextBox);
+    }
+
+    public void TextItalic(object sender, EventArgs e)
+    {
+      RichTextBoxToolBar.OnTextItalic(ref richTextBox);
+    }
+
+    public void TextLeft(object sender, EventArgs e)
+    {
+      RichTextBoxToolBar.OnTextLeft(ref richTextBox);
+    }
+
+    public void TextRight(object sender, EventArgs e)
+    {
+      RichTextBoxToolBar.OnTextRight(ref richTextBox);
+    }
+
+    public void TextStrikeOut(object sender, EventArgs e)
+    {
+      RichTextBoxToolBar.OnTextStrikeOut(ref richTextBox);
+    }
+
+    public void TextUnderLine(object sender, EventArgs e)
+    {
+      RichTextBoxToolBar.OnTextUnderLine(ref richTextBox);
+    }
+    #endregion
+
   }
 }

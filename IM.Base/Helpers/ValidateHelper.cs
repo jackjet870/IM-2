@@ -187,7 +187,7 @@ namespace IM.Base.Helpers
           TextBox txt = (TextBox)control;
           if (txt.IsVisible && string.IsNullOrWhiteSpace(txt.Text))
           {
-            strMsj += "specify the " + strForm + " " + txt.Tag.ToString() + ". \n";
+            strMsj += "Specify the " + strForm + " " + txt.Tag.ToString() + ". \n";
           }
         }
         #endregion
@@ -198,7 +198,7 @@ namespace IM.Base.Helpers
           ComboBox cmb = (ComboBox)control;
           if (cmb.IsVisible && cmb.SelectedIndex < 0)
           {
-            strMsj += "specify the " + strForm + " " + cmb.Tag.ToString() + ". \n";
+            strMsj += "Specify the " + strForm + " " + cmb.Tag.ToString() + ". \n";
           }
         }
         #endregion
@@ -209,7 +209,7 @@ namespace IM.Base.Helpers
           PasswordBox pwd = (PasswordBox)control;
           if (pwd.IsVisible && string.IsNullOrWhiteSpace(pwd.Password))
           {
-            strMsj += "specify the " + strForm + " " + pwd.Tag.ToString() + ". \n";
+            strMsj += "Specify the " + strForm + " " + pwd.Tag.ToString() + ". \n";
           }
         }
         #endregion

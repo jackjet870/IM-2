@@ -4,6 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.MailOutsConfig.Forms"
+        
+        xmlns:UC="clr-namespace:IM.Styles.UserControls;assembly=IM.Styles"
+        
         mc:Ignorable="d"
           Title="Mail Outs Configuration"
     d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
@@ -130,18 +133,11 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal">
-                <Border x:Name="brdFontsStyle" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Grid.Column="0" Visibility="Collapsed">
-                    <StackPanel Orientation="Horizontal" Margin="1" >
-                        <TextBlock Text="Font Size" VerticalAlignment="Center"/>
-                        <ComboBox x:Name="cbxfontSize" Width="40" Height="24" Margin="5" ToolTip="Font Size" 
-                          SelectionChanged="cbxfontSize_SelectionChanged"/>
-                        <TextBlock Text="Font Family" VerticalAlignment="Center"/>
-                        <ComboBox x:Name="cbxfontFamilies" Width="150" Height="24"  Margin="5" ToolTip="Font Family" 
-                          SelectionChanged="cbxfontFamilies_SelectionChanged"/>
-                    </StackPanel>
-                </Border>
+                <!--#region  RichTextBoxToolBar2-->
+                <UC:RichTextBoxToolBar2 Name="ucRichTextBoxToolBar2"  Visibility="Collapsed"  Height="40"/>
+                <!--#endregion-->
                 
-                    <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Stretch" >
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Stretch" >
                         <Border x:Name="imgSave" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgSave_MouseLeftButtonDown" ToolTip="Save" IsEnabled="False">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Stretch="Uniform" Width="20">
@@ -208,62 +204,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
-            <!--#region  Menu Edicion Texto-->
-            <StackPanel Grid.Column="0" Name="stkTextTools" Visibility="Hidden">
-                <Border x:Name="imgLoadRTF" Style="{StaticResource brdImageTextButtons}" ToolTip="Load RTF From File" MouseLeftButtonDown="imgLoadRTF_MouseLeftButtonDown" Margin="0,5,0,0">
-                    <Viewbox Stretch="Uniform">
-                        <Image x:Name="imagLoadRTF" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BOpen.png"/>
-                    </Viewbox>
-                </Border>
-                <Border x:Name="imgExportRTF" Style="{StaticResource brdImageTextButtons}" ToolTip="Export RTF" MouseLeftButtonDown="imgExportRTF_MouseLeftButtonDown" Margin="0,5,0,0">
-                    <Viewbox Stretch="Uniform" >
-                        <Image x:Name="imagExportRTF" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BExport.png"/>
-                    </Viewbox>
-                </Border>
-                <Border x:Name="imgTextBold" Style="{StaticResource brdImageTextButtons}" ToolTip="Bold" MouseLeftButtonDown="imgTextBold_MouseLeftButtonDown" Margin="0,5,0,0">
-                    <Viewbox Stretch="Uniform">
-                        <Image x:Name="imagTextBold" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BBold.png"/>
-                    </Viewbox>
-                </Border>
-                <Border x:Name="imgTextItalic" Style="{StaticResource brdImageTextButtons}" ToolTip="Italic" MouseLeftButtonDown="imgTextItalic_MouseLeftButtonDown" Margin="0,5,0,0">
-                    <Viewbox Stretch="Uniform">
-                        <Image x:Name="imagTextItalic" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BItalic.png"/>
-                    </Viewbox>
-                </Border>
-                <Border x:Name="imgTextUnderLine" Style="{StaticResource brdImageTextButtons}" ToolTip="UnderLine" MouseLeftButtonDown="imgTextUnderLine_MouseLeftButtonDown" Margin="0,5,0,0">
-                    <Viewbox Stretch="Uniform">
-                        <Image x:Name="imagTextUnderLine" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BUnderLine.png"/>
-                    </Viewbox>
-                </Border>
-                <Border x:Name="imgTextStrikeOut" Style="{StaticResource brdImageTextButtons}" ToolTip="StrikeOut" MouseLeftButtonDown="imgTextStrikeOut_MouseLeftButtonDown" Margin="0,5,0,0">
-                    <Viewbox Stretch="Uniform">
-                        <Image x:Name="imagTextStrikeOut" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BStrikeOut.png"/>
-                    </Viewbox>
-                </Border>
 
-                <Border x:Name="imgTextLeft" Style="{StaticResource brdImageTextButtons}" ToolTip="Text Alignment Left" MouseLeftButtonDown="imgTextLeft_MouseLeftButtonDown" Margin="0,5,0,0">
-                    <Viewbox Stretch="Uniform">
-                        <Image x:Name="imagTextLeft" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BLeft.png"/>
-                    </Viewbox>
-                </Border>
-                <Border x:Name="imgTextCenter" Style="{StaticResource brdImageTextButtons}" ToolTip="Text Alignment Center" MouseLeftButtonDown="imgTextCenter_MouseLeftButtonDown" Margin="0,5,0,0">
-                    <Viewbox Stretch="Uniform">
-                        <Image x:Name="imagTextCenter" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BCenter.png"/>
-                    </Viewbox>
-                </Border>
-                <Border x:Name="imgTextRight" Style="{StaticResource brdImageTextButtons}" ToolTip="Text Alignment Right" MouseLeftButtonDown="imgTextRight_MouseLeftButtonDown" Margin="0,5,0,0">
-                    <Viewbox Stretch="Uniform">
-                        <Image x:Name="imagTextRight" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BRight.png"/>
-                    </Viewbox>
-                </Border>
-                <Border x:Name="imgColorPick" Style="{StaticResource brdImageTextButtons}" ToolTip="Font Color" MouseLeftButtonDown="imgColorPick_MouseLeftButtonDown" Margin="0,5,0,0">
-                    <Viewbox Stretch="Uniform">
-                        <Image x:Name="imagColorPick" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BColorPick.png"/>
-                    </Viewbox>
-                </Border>
-              
-            </StackPanel>
+            <!--#region  RichTextBoxToolBar1-->
+            <UC:RichTextBoxToolBar1 Grid.Column="0" Name="ucRichTextBoxToolBar1" Visibility="Collapsed" Width="30"/>
             <!--#endregion-->
 
             <!--#region Contenido RichTextBox-->
