@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:IM.Styles.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="300" Width="35">
+    <UserControl.Resources>
+        <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/sRichTextFormatMenu.xaml"/>
+    </UserControl.Resources>
     <Grid>
         <!--#region  Menu Edicion Texto-->
         <StackPanel Name="stkTextTools">
