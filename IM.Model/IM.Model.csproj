@@ -1148,10 +1148,10 @@
     <Compile Include="UserLogin.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="ValidateFolioCxCPR.cs">
+    <Compile Include="ValidationData.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="ValidationData.cs">
+    <Compile Include="ValidationFolioData.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Warehouse.cs">

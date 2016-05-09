@@ -4760,7 +4760,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptSalesByLocationMonthly>("USP_OR_RptSalesByLocationMonthly", dateFromParameter, dateToParameter, salesRoomParameter);
         }
     
-        public virtual ObjectResult<ValidateFolioCxCPR> USP_OR_ValidateFolioCxCPR(string pR, Nullable<int> from, Nullable<int> to, Nullable<bool> isCancel)
+        public virtual ObjectResult<ValidationFolioData> USP_OR_ValidateFolioCxCPR(string pR, Nullable<int> from, Nullable<int> to, Nullable<bool> isCancel)
         {
             var pRParameter = pR != null ?
                 new ObjectParameter("PR", pR) :
@@ -4778,7 +4778,32 @@ namespace IM.Model
                 new ObjectParameter("isCancel", isCancel) :
                 new ObjectParameter("isCancel", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ValidateFolioCxCPR>("USP_OR_ValidateFolioCxCPR", pRParameter, fromParameter, toParameter, isCancelParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ValidationFolioData>("USP_OR_ValidateFolioCxCPR", pRParameter, fromParameter, toParameter, isCancelParameter);
+        }
+    
+        public virtual ObjectResult<ValidationFolioData> USP_OR_ValidateFolioInvOutPR(string pR, string serie, Nullable<int> from, Nullable<int> to, Nullable<bool> isCancel)
+        {
+            var pRParameter = pR != null ?
+                new ObjectParameter("PR", pR) :
+                new ObjectParameter("PR", typeof(string));
+    
+            var serieParameter = serie != null ?
+                new ObjectParameter("Serie", serie) :
+                new ObjectParameter("Serie", typeof(string));
+    
+            var fromParameter = from.HasValue ?
+                new ObjectParameter("From", from) :
+                new ObjectParameter("From", typeof(int));
+    
+            var toParameter = to.HasValue ?
+                new ObjectParameter("To", to) :
+                new ObjectParameter("To", typeof(int));
+    
+            var isCancelParameter = isCancel.HasValue ?
+                new ObjectParameter("isCancel", isCancel) :
+                new ObjectParameter("isCancel", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ValidationFolioData>("USP_OR_ValidateFolioInvOutPR", pRParameter, serieParameter, fromParameter, toParameter, isCancelParameter);
         }
     }
 }

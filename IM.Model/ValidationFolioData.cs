@@ -11,7 +11,7 @@ namespace IM.Model
 {
     using System;
     
-    public partial class ValidateFolioCxCPR
+    public partial class ValidationFolioData
     {
         public Nullable<bool> Result { get; set; }
         public string PR { get; set; }

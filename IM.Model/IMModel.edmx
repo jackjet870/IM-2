@@ -7091,6 +7091,13 @@
           <Parameter Name="Active" Type="bit" Mode="In" />
           <Parameter Name="Action" Type="int" Mode="In" />
         </Function>
+        <Function Name="USP_OR_ValidateFolioInvOutPR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PR" Type="varchar" Mode="In" />
+          <Parameter Name="Serie" Type="varchar" Mode="In" />
+          <Parameter Name="From" Type="int" Mode="In" />
+          <Parameter Name="To" Type="int" Mode="In" />
+          <Parameter Name="isCancel" Type="bit" Mode="In" />
+        </Function>
         <Function Name="USP_OR_ValidateFolioReservation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
           <Parameter Name="Folio" Type="varchar" Mode="In" />
@@ -17112,8 +17119,15 @@
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="USP_OR_ValidateFolioCxCPR" ReturnType="Collection(IMModel.ValidateFolioCxCPR)">
+          <FunctionImport Name="USP_OR_ValidateFolioCxCPR" ReturnType="Collection(IMModel.ValidationFolioData)">
             <Parameter Name="PR" Mode="In" Type="String" />
+            <Parameter Name="From" Mode="In" Type="Int32" />
+            <Parameter Name="To" Mode="In" Type="Int32" />
+            <Parameter Name="isCancel" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_ValidateFolioInvOutPR" ReturnType="Collection(IMModel.ValidationFolioData)">
+            <Parameter Name="PR" Mode="In" Type="String" />
+            <Parameter Name="Serie" Mode="In" Type="String" />
             <Parameter Name="From" Mode="In" Type="Int32" />
             <Parameter Name="To" Mode="In" Type="Int32" />
             <Parameter Name="isCancel" Mode="In" Type="Boolean" />
@@ -20591,7 +20605,7 @@
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
         </ComplexType>
-        <ComplexType Name="ValidateFolioCxCPR">
+        <ComplexType Name="ValidationFolioData">
           <Property Type="Boolean" Name="Result" Nullable="true" />
           <Property Type="String" Name="PR" Nullable="true" MaxLength="150" />
         </ComplexType>
@@ -27294,7 +27308,15 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_ValidateFolioCxCPR" FunctionName="IMModel.Store.USP_OR_ValidateFolioCxCPR">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.ValidateFolioCxCPR">
+              <ComplexTypeMapping TypeName="IMModel.ValidationFolioData">
+                <ScalarProperty Name="Result" ColumnName="Result" />
+                <ScalarProperty Name="PR" ColumnName="PR" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_ValidateFolioInvOutPR" FunctionName="IMModel.Store.USP_OR_ValidateFolioInvOutPR">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.ValidationFolioData">
                 <ScalarProperty Name="Result" ColumnName="Result" />
                 <ScalarProperty Name="PR" ColumnName="PR" />
               </ComplexTypeMapping>
