@@ -19533,21 +19533,21 @@
           <Property Name="tFirstName" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="tLastName" Type="String" MaxLength="65" FixedLength="false" Unicode="false" />
           <Property Name="tRoomNum" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Name="tPax" Type="Decimal" Nullable="false" Precision="4" Scale="1" />
+          <Property Name="tPax" Type="Decimal" Nullable="false" Precision="4" Scale="1" DefaultValue="0" />
           <Property Name="tCheckInD" Type="DateTime" Precision="3" />
           <Property Name="tCheckOutD" Type="DateTime" Precision="3" />
-          <Property Name="tcoID" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="tcoN" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="tagID" Type="String" Nullable="false" MaxLength="35" FixedLength="false" Unicode="false" />
-          <Property Name="tagN" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="tOnGroup" Type="Boolean" Nullable="false" />
-          <Property Name="tComplim" Type="Boolean" Nullable="false" />
-          <Property Name="tVIP" Type="Boolean" Nullable="false" />
-          <Property Name="tMember" Type="Boolean" Nullable="false" />
-          <Property Name="tum" Type="Byte" Nullable="false" />
-          <Property Name="tmk" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="tAvail" Type="Boolean" Nullable="false" />
-          <Property Name="tla" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="tcoID" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" DefaultValue="UNKNOWN" />
+          <Property Name="tcoN" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" DefaultValue="UNKNOWN" />
+          <Property Name="tagID" Type="String" Nullable="false" MaxLength="35" FixedLength="false" Unicode="false" DefaultValue="UNKNOWN" />
+          <Property Name="tagN" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" DefaultValue="UNKNOWN" />
+          <Property Name="tOnGroup" Type="Boolean" Nullable="false" DefaultValue="False" />
+          <Property Name="tComplim" Type="Boolean" Nullable="false" DefaultValue="False" />
+          <Property Name="tVIP" Type="Boolean" Nullable="false" DefaultValue="False" />
+          <Property Name="tMember" Type="Boolean" Nullable="false" DefaultValue="False" />
+          <Property Name="tum" Type="Byte" Nullable="false" DefaultValue="0" />
+          <Property Name="tmk" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" DefaultValue="AGENCIES" />
+          <Property Name="tAvail" Type="Boolean" Nullable="false" DefaultValue="False" />
+          <Property Name="tla" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" DefaultValue="EN" />
           <Property Name="toagID" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
           <Property Name="tocoID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="tGuestStatus" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
@@ -19563,7 +19563,7 @@
           <Property Name="tEditDT" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="tHotel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="tCCType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tDivResConsec" Type="Byte" Nullable="false" />
+          <Property Name="tDivResConsec" Type="Byte" Nullable="false" DefaultValue="0" />
           <Property Name="tDivResLeadSource" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="tDivResResNum" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="tGuestRef" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
@@ -19579,8 +19579,8 @@
           <Property Name="tEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="tCity" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="tState" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Name="tCompany" Type="Decimal" Nullable="false" Precision="2" Scale="0" />
-          <Property Name="tIdProfileOpera" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="tCompany" Type="Decimal" Nullable="false" Precision="2" Scale="0" DefaultValue="0" />
+          <Property Name="tIdProfileOpera" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" DefaultValue="" />
           <Property Name="trt" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="trtN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="tcnN" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />

@@ -14,6 +14,27 @@ namespace IM.Model
     
     public partial class Transfer
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Transfer()
+        {
+            this.tPax = 0m;
+            this.tcoID = "UNKNOWN";
+            this.tcoN = "UNKNOWN";
+            this.tagID = "UNKNOWN";
+            this.tagN = "UNKNOWN";
+            this.tOnGroup = false;
+            this.tComplim = false;
+            this.tVIP = false;
+            this.tMember = false;
+            this.tum = 0;
+            this.tmk = "AGENCIES";
+            this.tAvail = false;
+            this.tla = "EN";
+            this.tDivResConsec = 0;
+            this.tCompany = 0m;
+            this.tIdProfileOpera = "";
+        }
+    
         public string tls { get; set; }
         public string tHReservID { get; set; }
         public string tFirstName { get; set; }

@@ -313,6 +313,9 @@
     <Compile Include="GraphNotBookingArrivals.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="GraphProductionByPR.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="GraphProduction_Months.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -320,9 +323,6 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="GraphTotals.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="GraphProductionByPR.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="GraphUnavailableArrivals.cs">

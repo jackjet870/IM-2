@@ -54,7 +54,7 @@ namespace IM.Launcher.Forms
       AssemblyName name = new AssemblyName(thisApp.FullName);
 
       lblVersion.Content = "Launcher v" + name.Version;
-      //lsbLauncher.ItemsSource = BuildLauncher();
+      lsbLauncher.ItemsSource = BuildLauncher();
     }
     #endregion
 
