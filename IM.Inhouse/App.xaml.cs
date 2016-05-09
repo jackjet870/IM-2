@@ -53,7 +53,7 @@ namespace IM.Inhouse
       if (frmLogin.IsAuthenticated)
       {
         User = frmLogin.UserData;        
-        frmInhouse frmMain = new frmInhouse();
+        Forms.frmInhouse frmMain = new Forms.frmInhouse();
         frmMain.ShowDialog();
         frmSplash.Close();
       }

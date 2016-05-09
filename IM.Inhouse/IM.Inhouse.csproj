@@ -394,6 +394,7 @@
     <None Include="packages.config" />
     <None Include="Properties\DataSources\IM.Model.AssistanceData.datasource" />
     <None Include="Properties\DataSources\IM.Model.AssistanceStatus.datasource" />
+    <None Include="Properties\DataSources\IM.Model.GiftsReceiptPayment.datasource" />
     <None Include="Properties\DataSources\IM.Model.Guest.datasource" />
     <None Include="Properties\DataSources\IM.Model.GuestArrival.datasource" />
     <None Include="Properties\DataSources\IM.Model.GuestsGroup.datasource" />
