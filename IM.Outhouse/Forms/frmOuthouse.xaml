@@ -64,12 +64,6 @@
                             <TextBlock Text="Print" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnRptDsr" Grid.Column="1" Style="{StaticResource ResourceKey=btnOptions}" Click="btnRptDsr_Click">
-                        <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/refresh.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
-                            <TextBlock Text="Rpt Dsr" Style="{StaticResource ResourceKey=txtOptions}"/>
-                        </StackPanel>
-                    </Button>
                     <Button x:Name="btnNewInv" Grid.Column="8" Style="{StaticResource ResourceKey=btnOptions}" Click="btnNewInv_Click">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png"  Style="{StaticResource ResourceKey=ImageOptions}"/>
@@ -100,13 +94,6 @@
                             <TextBlock Text="DaysOff" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnReports" Grid.Column="8" Style="{StaticResource ResourceKey=btnOptions}" Click="btnReports_Click">
-                        <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png"  Style="{StaticResource ResourceKey=ImageOptions}"/>
-                            <TextBlock Text="Reports" Style="{StaticResource ResourceKey=txtOptions}"/>
-                        </StackPanel>
-                    </Button>
-
                 </StackPanel>
             </GroupBox>
             <!--#endregion-->
@@ -149,7 +136,7 @@
                   Grid.Row="1" Background="#FFF4F5E2" x:Name="dgGuestPremanifest" SelectionUnit ="FullRow"  
                   SelectionMode="Single"  CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"
                   AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False" CanUserDeleteRows="true" FontSize="14" FontWeight="Medium"
-                  EnableRowVirtualization="True"  PreviewKeyDown="dgGuestPremanifest_PreviewKeyDown">
+                  EnableRowVirtualization="True"  PreviewKeyDown="dgGuestPremanifest_PreviewKeyDown" Margin="-3,2,3,20" Grid.RowSpan="2">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="guStatusColumn"  Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" Visibility="Collapsed" >
                     <DataGridTextColumn.ElementStyle>
@@ -218,8 +205,8 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridCheckBoxColumn x:Name="guShowColumn" IsReadOnly="False" Binding="{Binding guShow}" Header="Show Up" Width="auto"/>
-                <DataGridCheckBoxColumn x:Name="guSaleColumn" IsReadOnly="False" Binding="{Binding guSale}" Header="Sale" Width="auto"/>
+                <DataGridCheckBoxColumn x:Name="guShowColumn" IsReadOnly="True" Binding="{Binding guShow}" Header="Show Up" Width="auto"/>
+                <DataGridCheckBoxColumn x:Name="guSaleColumn" IsReadOnly="True" Binding="{Binding guSale}" Header="Sale" Width="auto"/>
                 <DataGridTemplateColumn  Header="Comments" Width="*" IsReadOnly="False"  >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

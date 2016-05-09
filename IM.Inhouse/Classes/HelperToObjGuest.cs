@@ -28,76 +28,34 @@ namespace IM.Inhouse.Classes
     {
       //Sin Check-In
       if (!guCheckIn)
-      {
         return 8;
-      }
-      else
-      {
-        //Check Out
-        if (guCheckOutD < BRHelpers.GetServerDate().Date)
-        {
-          return 7;
-        }
-        else
-        {
-          //Invitacion
-          if (!guAvail)
-          {
-            return 6;
-          }
-          else
-          {
-            //Inv. Cancelada
-            if (guInvit && guBookCanc)
-            {
-              return 5;
-            }
-            else
-            {
-              //Inv. No Show
-              if (guInvit && guBookD < BRHelpers.GetServerDate().Date && !guShow)
-              {
-                return 4;
-              }
-              else
-              {
-                //Inv. Show
-                if (guInvit && guShow)
-                {
-                  return 3;
-                }
-                else
-                {
-                  //Invitado en stand-by
-                  if (guInvit)
-                  {
-                    return 2;
-                  }
-                  else
-                  {
-                    //Info
-                    if (guInfo)
-                    {
-                      return 1;
-                    }
-                    else
-                    {
-                      //Disponible
-                      if (guAvail)
-                      {
-                        return 0;
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      //Sin Check-In
-      return 8;
-    }
+      //Check Out
+      if (guCheckOutD < BRHelpers.GetServerDate().Date)
+        return 7;
+      //Invitacion
+      if (!guAvail)
+        return 6;
+      //Inv. Cancelada
+      if (guInvit && guBookCanc)
+        return 5;
+      //Inv. No Show
+      if (guInvit && guBookD < BRHelpers.GetServerDate().Date && !guShow)
+        return 4;
+      //Inv. Show
+      if (guInvit && guShow)
+        return 3;
+      //Invitado en stand-by
+      if (guInvit)
+        return 2;
+      //Info
+      if (guInfo)
+        return 1;
+      //Disponible
+      return guAvail?  0 : 8;
+    }                   
+
+    
+
     #endregion
 
     #region ColorStatus

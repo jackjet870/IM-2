@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:classes="clr-namespace:IM.Inhouse.Classes"
-        x:Class="IM.Inhouse.frmInhouse"
+        x:Class="IM.Inhouse.Forms.frmInhouse"
         mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
         Title="Inhouse" x:Name="House" Width="1100"  Height="700"  WindowState="Maximized" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
     <Window.Resources>
@@ -19,13 +19,13 @@
             <Setter Property="Width" Value="45"/>
             <Setter Property="Background" Value="White"/>
         </Style>
-        
+
         <Style TargetType="Image" x:Key="ImageOptions">
             <Setter Property="Width" Value="24"/>
             <Setter Property="Height" Value="24"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
-        
+
         <Style TargetType="TextBlock" x:Key="txtOptions">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="9"/>
@@ -37,14 +37,16 @@
         </Style>
 
         <Style TargetType="GroupBox">
-            <Setter Property="Height" Value="75"/>
+            <Setter Property="Height" Value="auto"/>
+            <Setter Property="Margin" Value="4,5,4,5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
     </Window.Resources>
 
     <Grid>
         <!--#region  Configuración del Grid Principal -->
         <Grid.RowDefinitions>
-            <RowDefinition Height="95"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="86*"/>
             <RowDefinition Height="AUTO"/>
         </Grid.RowDefinitions>
@@ -64,21 +66,21 @@
             </Grid.ColumnDefinitions>
 
             <!--#region Botones-->
-            <GroupBox x:Name="grbMenu" Grid.Column="0" Header="Options"  VerticalAlignment="Top" FontWeight="Bold" Margin="10,5,5,0"  >
-                <Grid x:Name="grdOpciones" VerticalAlignment="Center">
+            <GroupBox x:Name="grbMenu" Grid.Column="0" Header="Options">
+                <Grid x:Name="grdOpciones">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="0" x:Name="colGifts"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="btnLogin" Grid.Column="0"   Style="{StaticResource ResourceKey=BtnOptions}" Click="btnLogin_Click"  >
+                    <Button x:Name="btnLogin" Grid.Column="0" Style="{StaticResource ResourceKey=BtnOptions}" Click="btnLogin_Click"  >
                         <StackPanel >
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Login.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Login" Style="{StaticResource ResourceKey=txtOptions}"/>
@@ -90,16 +92,10 @@
                             <TextBlock Text="Refresh" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnPrint" Grid.Column="2" Style="{StaticResource ResourceKey=BtnOptions}" Click="btnPrint_Click">
+                    <Button x:Name="btnPrint" Grid.Column="2"  Style="{StaticResource ResourceKey=BtnOptions}" Click="btnPrint_Click" HorizontalAlignment="Left" Margin="0,2,0,1">
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Print" Style="{StaticResource ResourceKey=txtOptions}"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="btnPreview" Grid.Column="3" Style="{StaticResource ResourceKey=BtnOptions}" Click="btnPreview_Click" HorizontalAlignment="Right" Width="46" >
-                        <StackPanel>
-                            <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png" Style="{StaticResource ResourceKey=ImageOptions}"/>
-                            <TextBlock Text="Preview" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
                     <Button x:Name="btnGrouos" Grid.Column="4" Style="{StaticResource ResourceKey=BtnOptions}"  Click="btnGrouos_Click" >
@@ -126,7 +122,7 @@
                             <TextBlock Text="DaysOff" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnExtInvit" Grid.Column="8" Style="{StaticResource ResourceKey=BtnOptions}"  Click="btnExtInvit_Click" >
+                    <Button x:Name="btnExtInvit" Grid.Column="8" Style="{StaticResource ResourceKey=BtnOptions}"  Click="btnExtInvit_Click" HorizontalAlignment="Right" Margin="0,0,0,1" >
                         <StackPanel>
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Reports.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Ext Inv" Style="{StaticResource ResourceKey=txtOptions}"/>
@@ -165,28 +161,28 @@
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <GroupBox Grid.Column="0" Header ="Available" Margin="5" x:Name="gprAvailable"  >
+                <GroupBox Grid.Column="0" Header ="Available"  x:Name="gprAvailable"  >
                     <StackPanel Orientation="Vertical">
                         <RadioButton Checked="rb_Checked" TabIndex="1"  x:Name="rbNoAvailable" Content="  No"  Margin="2.5"/>
                         <RadioButton Checked="rb_Checked" TabIndex="2"   x:Name="rbYesAvailable" Content="  Yes" Margin="2.5"/>
                         <RadioButton Checked="rb_Checked" TabIndex="3"   x:Name="rbBothAvailable" Content="  Both" IsChecked="True" Margin="2.5"/>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Grid.Column="1" Header ="Contacted" Margin="5" x:Name="gprInfo">
+                <GroupBox Grid.Column="1" Header ="Contacted" x:Name="gprInfo">
                     <StackPanel Orientation="Vertical">
                         <RadioButton Checked="rb_Checked" TabIndex="1" x:Name="rbNoInfo" Content="  No"  Margin="2.5"/>
                         <RadioButton Checked="rb_Checked" TabIndex="2" x:Name="rbYesInfo" Content="  Yes" Margin="2.5"/>
                         <RadioButton Checked="rb_Checked" TabIndex="3" x:Name="rbBothInfo" Content="  Both" IsChecked="True" Margin="2.5"/>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Grid.Column="2" Header ="Invited" Margin="5" x:Name="gprInvited">
+                <GroupBox Grid.Column="2" Header ="Invited"  x:Name="gprInvited">
                     <StackPanel Orientation="Vertical">
                         <RadioButton Checked="rb_Checked" TabIndex="1" x:Name="rbNoInvited" Content="  No" Margin="2.5"/>
                         <RadioButton Checked="rb_Checked" TabIndex="2" x:Name="rbYesInvited" Content="  Yes" Margin="2.5"/>
                         <RadioButton Checked="rb_Checked" TabIndex="3" x:Name="rbBothInvited" Content="  Both" IsChecked="True" Margin="2.5"/>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Grid.Column="3" Header ="On Group" Margin="5"  x:Name="gprOngroup">
+                <GroupBox Grid.Column="3" Header ="On Group"  x:Name="gprOngroup">
                     <StackPanel Orientation="Vertical">
                         <RadioButton Checked="rb_Checked"  TabIndex="1" x:Name="rbNoOnGroup" Content="  No" Margin="2.5"/>
                         <RadioButton Checked="rb_Checked"  TabIndex="2" x:Name="rbYesOnGroup" Content="  Yes" Margin="2.5"/>
@@ -194,7 +190,7 @@
                     </StackPanel>
                 </GroupBox>
 
-                <ListView Grid.Column="4"  Margin="4" FontSize="10" Width="70" Height="75"  x:Name="listMarkets" Background="DarkSeaGreen"  SelectionChanged="listMarkets_SelectionChanged">
+                <ListView Grid.Column="4"  Margin="4" Width="Auto" Height="Auto"  x:Name="listMarkets" Background="DarkSeaGreen"  SelectionChanged="listMarkets_SelectionChanged">
                     <ListView.View>
                         <GridView>
                             <!--<GridViewColumn x:Name="mkIDColumn" Width="80" Header="mk ID" DisplayMemberBinding="{Binding mkID}"  />-->
@@ -211,21 +207,21 @@
             <!--#endregion-->
 
             <!--#region Informacion del Usuario -->
-            <GroupBox x:Name="grbInfUser" Grid.Column="3" Header="Informartion User" FontWeight="Bold"  Margin="10,0,10,5">
+            <GroupBox x:Name="grbInfUser" Grid.Column="3" Header="Informartion User" FontWeight="Bold">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="38"/>
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition  Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <Image Grid.Column="0" Grid.RowSpan="2" Source="pack://application:,,,/IM.Base;component/Images/User.png" Width="37" Height="50"/>
-                    <TextBlock Grid.Column="1" Grid.Row="0" x:Name="txtUser" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Width="220"><Run Text="USUARIO"/></TextBlock>
-                    <TextBlock Grid.Column="1" Grid.Row="1" x:Name="txtLocation" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"  Width="220"><Run Text="NOMBRE LOCACION"/></TextBlock>
-                    <TextBlock Grid.Column="1" Grid.Row="2" x:Name="txtOccupancy" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"  Width="220"><Run Text="OCCUPANCY 0:00%"/></TextBlock>
+                    <TextBlock Grid.Column="1" Grid.Row="0" x:Name="txtUser" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold">USUARIO</TextBlock>
+                    <TextBlock Grid.Column="1" Grid.Row="1" x:Name="txtLocation" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold">NOMBRE LOCACION</TextBlock>
+                    <TextBlock Grid.Column="1" Grid.Row="2" x:Name="txtOccupancy" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold">OCCUPANCY 0:00%</TextBlock>
                 </Grid>
             </GroupBox>
             <!--#endregion-->
@@ -275,11 +271,11 @@
                         <DataGridTextColumn x:Name="guHReservIDColumn" Binding="{Binding guHReservID}" IsReadOnly="false"  Header="Reserv. #" />
                         <DataGridTextColumn x:Name="guIdProfileOperaColumn" IsReadOnly="True" Binding="{Binding guIdProfileOpera}" Header="Opera ID" Width="auto"/>
                         <DataGridTemplateColumn x:Name="reservationColumn"   IsReadOnly="True"  Header="Rsv" Width="auto">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
                                     <Image Height="18" Source="{Binding ReservacionImage}" MouseLeftButtonUp="ReservationArrival_MouseLeftButtonUp" />
                                 </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn x:Name="guCheckInColumn" IsReadOnly="False"  Header="In" Width="auto" >
                             <DataGridTemplateColumn.CellTemplate >
@@ -346,11 +342,11 @@
                         <DataGridTextColumn x:Name="gaguColumn" IsReadOnly="True" Binding="{Binding gagu}" Header="Main Inv" Width="auto"/>
                         <!--<DataGridCheckBoxColumn x:Name="guGroupColumn" IsReadOnly="False" Binding="{Binding guGroup}" Header="Grp" Width="auto"/>-->
                         <DataGridTemplateColumn x:Name="guGroupColumn" IsReadOnly="False" Header="Grp" Width="auto">
-                        <DataGridTemplateColumn.CellTemplate >
-                            <DataTemplate>
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
                                     <CheckBox IsChecked="{Binding guGroup}" Click="chkGuestsGroupsArrivals_Click" HorizontalAlignment="Center" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn x:Name="groupNColumn" IsReadOnly="True" Binding="{Binding GroupN}" Header="Grp Name" Width="auto"/>
                         <DataGridTemplateColumn x:Name="equityColumn" IsReadOnly="True"  Header="Equity" Width="auto">

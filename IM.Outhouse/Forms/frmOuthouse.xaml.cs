@@ -12,6 +12,7 @@ using IM.Base.Forms;
 using IM.Model;
 using System.Collections.Generic;
 using IM.Outhouse.Classes;
+using System.Threading.Tasks;
 
 namespace IM.Outhouse.Forms
 {
@@ -20,6 +21,7 @@ namespace IM.Outhouse.Forms
   /// </summary>
   public partial class frmOuthouse
   {
+
     #region Atributos
 
     private CollectionViewSource _outPremanifestViewSource;
@@ -28,10 +30,20 @@ namespace IM.Outhouse.Forms
 
     #endregion
 
+    #region Contructores Y destructores
+    /// <summary>
+    /// Contructor de Outhouse
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 05/05/2016 created
+    /// </history>
     public frmOuthouse()
     {
       InitializeComponent();
     }
+    #endregion
+
+    #region Metodos
 
     #region ValidateContact
     /// <summary>
@@ -66,50 +78,76 @@ namespace IM.Outhouse.Forms
     }
     #endregion
 
-    private void dtpDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    #region ValidateInvitation
+    /// <summary>
+    /// Valida los datos para desplegar el formulario de invitaciones
+    /// </summary>
+    /// <param name="gucheckIn">Indica si ya hizo CheckIn el huesped</param>
+    /// <returns>bool</returns>
+    /// <history>
+    /// [jorcanche] 06/05/2016 created
+    /// </history>
+    private bool ValidateInvitation(bool gucheckIn)
     {
-      //Obtener el valor actual del que tiene dtpDate
-      var picker = sender as Xceed.Wpf.Toolkit.DateTimePicker;
-      if (picker != null && !picker.Value.HasValue)
+      //Validamos que el huesped haya hecho Chek In
+      if (!gucheckIn)
       {
-        //cuando el ususario ingresa un afecha invalida
-        MessageBox.Show("Specify  the Date", "Date invalidates", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        //Y le asignamos la fecha del servidor (la hora actual)
-        dtpDate.Value = BRHelpers.GetServerDate();
+        UIHelper.ShowMessage("Guest has not made Check-In", title: "Outhouse");
+        return false;
       }
-      else
+      //Validamos que tenga minimo permisos de lectura de invitaciones 
+      if (App.User.HasPermission(EnumPermission.PRInvitations, EnumPermisionLevel.ReadOnly))
       {
-        //le asignamos el valor del dtpDate a la variable global para que otro control tenga acceso al valor actual
-        if (picker != null) _serverDate = picker.Value.Value;
-        //Cargamos el grid 
-        LoadGrid();
+        UIHelper.ShowMessage("You has not Permission of 'PR Invitation'");
+        return false;
       }
-    }
-    #region LoadGrid
-    private void LoadGrid()
-    {
-      if (_outPremanifestViewSource != null)
-        _outPremanifestViewSource.Source = BRGuests.GetGuestPremanifestOuthouse(_bookInvit, _serverDate, App.User.Location.loID);
+      return true;
     }
     #endregion
 
-    private void rbt_Checked(object sender, RoutedEventArgs e)
+    #region LoadGrid
+    /// <summary>
+    /// Carga el DataGrid que contiene los Guest Premanifest de Outhouse
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 05/05/2016 created
+    /// </history>
+    private void LoadGrid()
     {
-      var rb = sender as RadioButton;
-      if (rb != null) _bookInvit = Convert.ToBoolean(rb.TabIndex);
-      LoadGrid();
+      if (_outPremanifestViewSource != null)
+        //_outPremanifestViewSource.Source = BRGuests.GetGuestPremanifestOuthouse(_bookInvit, _serverDate, App.User.Location.loID);
+        Task.Factory.StartNew(() => BRGuests.GetGuestPremanifestOuthouse(_bookInvit, _serverDate, App.User.Location.loID))
+         .ContinueWith(
+         (LoadGuestsOutSide) =>
+         {
+           if (LoadGuestsOutSide.IsFaulted)
+           {
+             UIHelper.ShowMessage(LoadGuestsOutSide.Exception.InnerException.Message, MessageBoxImage.Error);
+             StaEnd();
+             return false;
+           }
+           else
+           {
+             if (LoadGuestsOutSide.IsCompleted)
+             {
+               LoadGuestsOutSide.Wait(1000);
+               _outPremanifestViewSource.Source = LoadGuestsOutSide.Result;
+             }
+             StaEnd();
+             return false;
+           }
+         },
+         TaskScheduler.FromCurrentSynchronizationContext()
+          );
     }
-
-    private void btnRefresh_Click(object sender, RoutedEventArgs e)
-    {
-      LoadGrid();
-    }
-
-    private void Window_Loaded(object sender, RoutedEventArgs e)
-    {
-      LoadOuthouse();
-    }
-
+    #endregion
+ 
+    #region LoadOuthouse
+    /// <summary>
+    /// Carga e incializa la variables cuando es invocado el metodo
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
     private void LoadOuthouse()
     {
       //Cargamos las variables del usuario
@@ -130,6 +168,119 @@ namespace IM.Outhouse.Forms
       //Cargamos el DataGrid  
       LoadGrid();
     }
+    #endregion
+
+    #region StaStart
+    /// <summary>
+    /// Indica en la barra de estado que se inicio un proceso
+    /// </summary>
+    /// <param name="message">mensaje a mostrar</param>
+    /// <history>
+    /// [jorcanche] 05/04/2016 Created 
+    /// </history>
+    private void StaStart(string message)
+    {
+      lblStatusBarMessage.Text = message;
+      imgStatusBarMessage.Visibility = Visibility.Visible;
+      this.Cursor = Cursors.Wait;
+    }
+    #endregion
+
+    #region StaEnd
+    /// <summary>
+    /// Indica en la barra de estado que se finalizo un proceso
+    /// </summary>
+    /// <history>[jorcanche] 05/04/2016 Created</history>
+    private void StaEnd()
+    {
+      lblStatusBarMessage.Text = null;
+      imgStatusBarMessage.Visibility = Visibility.Hidden;
+      this.Cursor = null;
+    }
+    #endregion
+
+    #endregion
+
+    #region Eventos
+
+    #region dtpDate_ValueChanged
+    /// <summary>
+    /// Valida que se ingrese un fecha con formato correcto
+    /// </summary>
+    /// <history>
+    /// [jorcanche] 05/05/2016 created
+    /// </history>
+    private void dtpDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+      //Obtener el valor actual del que tiene dtpDate
+      var picker = sender as Xceed.Wpf.Toolkit.DateTimePicker;
+      if (picker != null && !picker.Value.HasValue)
+      {
+        //cuando el ususario ingresa un afecha invalida
+        MessageBox.Show("Specify  the Date", "Date invalidates", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        //Y le asignamos la fecha del servidor (la hora actual)
+        dtpDate.Value = BRHelpers.GetServerDate();
+      }
+      else
+      {
+        //le asignamos el valor del dtpDate a la variable global para que otro control tenga acceso al valor actual
+        if (picker != null) _serverDate = picker.Value.Value;
+        //Cargamos el grid 
+        LoadGrid();
+      }
+    }
+    #endregion
+
+    #region rbt_Checked
+    /// <summary>
+    /// Manipula los Guest premanifest de Outhouse segun el check que seleccione
+    /// ya sea Book D o Invit D
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
+    private void rbt_Checked(object sender, RoutedEventArgs e)
+    {
+      var rb = sender as RadioButton;
+      if (rb != null) _bookInvit = Convert.ToBoolean(rb.TabIndex);
+      LoadGrid();
+    }
+    #endregion
+
+    #region btnRefresh_Click
+    /// <summary>
+    /// Funciona para refrescar el Grid por si hay una modificación en la base
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
+    private void btnRefresh_Click(object sender, RoutedEventArgs e)
+    {
+      LoadGrid();
+    }
+
+    #endregion
+
+    #region Window_Loaded
+    /// <summary>
+    /// Carga todos los paramatros e inicializa las variables
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+      LoadOuthouse();
+    }
+    #endregion
+
+    #region Info_Click
+    /// <summary>
+    /// Valida la el check y lo que necesite antes de abrir el formulario de contactación
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
     private void Info_Click(object sender, RoutedEventArgs e)
     {
       var chkguInfo = sender as CheckBox;
@@ -158,92 +309,67 @@ namespace IM.Outhouse.Forms
       }
       StaEnd();
     }
-
-    #region StaStart
-    /// <summary>
-    /// Indica en la barra de estado que se inicio un proceso
-    /// </summary>
-    /// <param name="message">mensaje a mostrar</param>
-    /// <history>[jorcanche] 05/04/2016 Created </history>
-    private void StaStart(string message)
-    {
-      lblStatusBarMessage.Text = message;
-      imgStatusBarMessage.Visibility = Visibility.Visible;
-      this.Cursor = Cursors.Wait;
-    }
     #endregion
 
-    #region StaEnd
+    #region guCommentsColumnArrival_LostFocus
     /// <summary>
-    /// Indica en la barra de estado que se finalizo un proceso
+    /// Cuando se pierde el Focus de los comentarios lo guarda en la base lo que se halla escrito
     /// </summary>
-    /// <history>[jorcanche] 05/04/2016 Created</history>
-    private void StaEnd()
-    {
-      lblStatusBarMessage.Text = null;
-      imgStatusBarMessage.Visibility = Visibility.Hidden;
-      this.Cursor = null;
-    }
-    #endregion
-
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
     private void guCommentsColumnArrival_LostFocus(object sender, RoutedEventArgs e)
     {
-      var txt = sender as TextBox;
+      var txt = sender as TextBox;    
       var row = dgGuestPremanifest.SelectedItem as GuestPremanifestOuthouse;
       Guest pre = BRGuests.GetGuest(row.guID);
       pre.guComments = txt.Text;
       BRGuests.SaveGuest(pre);
     }
+    #endregion
 
+    #region guCommentsColumnArrival_Loaded
+    /// <summary>
+    /// Cuando se incializa le asigna el focus a la celda de comentarios 
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
     private void guCommentsColumnArrival_Loaded(object sender, RoutedEventArgs e)
     {
       var txt = sender as TextBox;
       txt.Focus();
     }
+    #endregion
 
+    #region Invit_Click
+    /// <summary>
+    /// Valida e Inicializa el formulario de invitación
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
     private void Invit_Click(object sender, RoutedEventArgs e)
     {
       var row = dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.CurrentPosition) as GuestPremanifestOuthouse;
-      var chk = sender as CheckBox;
-      if (!row.guCheckIn)
+      var chkInv = sender as CheckBox;
+      chkInv.IsChecked = !chkInv.IsChecked.Value;
+      //Si los datos son validos
+      if (ValidateInvitation(row.guCheckIn))
       {
-        MessageBox.Show("Guest has not made Check In");
-        chk.IsChecked = false;
-        return;
+        var inv = new  frmInvitationBase(EnumInvitationType.OutHouse,App.User,row.guID,EnumInvitationMode.modEdit);
+        inv.ShowDialog();       
       }
-
-      var isChecked = chk.IsChecked.HasValue && chk.IsChecked.Value;
-      chk.IsChecked = row.guInvit;
-      //var userData = BRPersonnel.Login(EnumLoginType.Location, App.User.User.peID, App.User.Location.loID);
-      var invit = new frmInvitationBase(EnumInvitationType.OutHouse, App.User, row.guID,
-        !isChecked ? EnumInvitationMode.modOnlyRead : EnumInvitationMode.modAdd)
-      {
-        Owner = this,
-        ShowInTaskbar = false
-      };
-      var res = invit.ShowDialog();
-      row.guInvit = row.guInvit || (res.HasValue && res.Value);
-      chk.IsChecked = row.guInvit;
     }
-
-    //Valida los datos para desplegar el formulario de invitacion
-    private bool ValidateRow(bool guCheckIn)
-    {
-      //Validamos que el huesped haya hecho Check In 
-      if (!guCheckIn)
-      {
-        return false;
-      }
-      //Validamos que no sea un huesped adicional
-      //if ()
-      //{
-
-      //}
-      return true;
-    }
-
+    #endregion
 
     #region Window_KeyDown
+    /// <summary>
+    /// Se aplica cada vez que se presiona las teclas de Numlock, Insert y Capital
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key == Key.Capital)
@@ -262,6 +388,12 @@ namespace IM.Outhouse.Forms
     #endregion
 
     #region dgGuestPremanifest_PreviewKeyDown
+    /// <summary>
+    /// Se aplica cada vez que se quiere eliminar un guest en el grid presionando la tecla Delete
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
     private void dgGuestPremanifest_PreviewKeyDown(object sender, KeyEventArgs e)
     {
       if (dgGuestPremanifest != null && e.Key == Key.Delete)
@@ -287,6 +419,12 @@ namespace IM.Outhouse.Forms
     #endregion
 
     #region btnLogin_Click
+    /// <summary>
+    /// Inicializa de nuevo el login para cambioar de LeadSource o de Usuario
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
     private void btnLogin_Click(object sender, RoutedEventArgs e)
     {
       // frmLogin log = new frmLogin(null,false, EnumLoginType.Location, true);
@@ -304,6 +442,13 @@ namespace IM.Outhouse.Forms
     }
     #endregion
 
+    #region btnPrint_Click
+    /// <summary>
+    /// Imprime el reporte de Guests Premanifest Outhouse según lo que esta visualizando el DataGrid
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
     private void btnPrint_Click(object sender, RoutedEventArgs e)
     {
       if (dgGuestPremanifest.Items.Count > 0)
@@ -316,13 +461,15 @@ namespace IM.Outhouse.Forms
         MessageBox.Show("There is no data", "IM Outhouse");
       }
     }
-
-    private void btnRptDsr_Click(object sender, RoutedEventArgs e)
-    {
-
-    }
+    #endregion
 
     #region btnNewInv_Click
+    /// <summary>
+    /// Abre el formulario de invitación para agrear una nueva
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
     private void btnNewInv_Click(object sender, RoutedEventArgs e)
     {
       var invit = new frmInvitationBase(EnumInvitationType.OutHouse, App.User, 0, EnumInvitationMode.modAdd)
@@ -335,6 +482,11 @@ namespace IM.Outhouse.Forms
     #endregion
 
     #region btnAbout_Click
+    /// <summary>
+    /// Abre la ventana de About en donde informa datos generales del IM
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void btnAbout_Click(object sender, RoutedEventArgs e)
     {
       frmAbout formAbout = new frmAbout();
@@ -343,6 +495,13 @@ namespace IM.Outhouse.Forms
     }
     #endregion
 
+    #region btnTransfer_Click
+    /// <summary>
+    /// Abre el formulario que funciona para buscar un Guest y lo transfiere al OutHouse que esta actual
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
     private void btnTransfer_Click(object sender, RoutedEventArgs e)
     {
       frmSearchGuest frmsearchGuest = new frmSearchGuest(App.User, EnumProgram.Outhouse);
@@ -370,8 +529,15 @@ namespace IM.Outhouse.Forms
         }
       }
     }
+    #endregion
 
     #region btnAssistance_Click
+    /// <summary>
+    /// Abre el formulario de asistencia 
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
     private void btnAssistance_Click(object sender, RoutedEventArgs e)
     {
       frmAssistance frmAssistance = new frmAssistance(EnumPlaceType.LeadSource, App.User);
@@ -380,6 +546,12 @@ namespace IM.Outhouse.Forms
     #endregion
 
     #region btnDaysOff_Click
+    /// <summary>
+    /// Abre el formulario de DaysOff
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 05/05/2016
+    /// </history>
     private void btnDaysOff_Click(object sender, RoutedEventArgs e)
     {
       frmDaysOff frmDaysOff = new frmDaysOff(EnumTeamType.TeamPRs, App.User);
@@ -387,10 +559,7 @@ namespace IM.Outhouse.Forms
     }
     #endregion
 
-    private void btnReports_Click(object sender, RoutedEventArgs e)
-    {
-
-    }
+    #endregion
 
   }
 }
