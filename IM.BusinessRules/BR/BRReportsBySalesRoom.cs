@@ -927,10 +927,30 @@ namespace IM.BusinessRules.BR
     #endregion
 
     #region Processor Sales
+    
+    #region GetRptStatisticsByLocation
+    /// <summary>
+    /// Devuelve un listado de Statics by Location
+    /// </summary>
+    /// <param name="dtStart"></param>
+    /// <param name="dtEnd"></param>
+    /// <param name="salesRoom"></param>
+    /// <history>
+    /// [ecanul] 07/05/2016 Created
+    /// </history>
+    public static List<RptStatisticsByLocation> GetRptStatisticsByLocation(DateTime dtStart, DateTime dtEnd,
+      IEnumerable<string> salesRoom)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptStatsByLocation(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
+      }
+    } 
+    #endregion
 
     #region StatsBySalesRoomLocation
     /// <summary>
-    /// Deviuelve un listado de Statics nu Sales Room Location 
+    /// Deviuelve un listado de Statics by Sales Room Location 
     /// </summary>
     /// <param name="dtStart">Fecha de inicio</param>
     /// <param name="dtEnd">Fecha fin</param>

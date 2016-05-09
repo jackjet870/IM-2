@@ -204,10 +204,8 @@ namespace IM.ProcessorSales.Forms
       else
         filters.Add(new Tuple<string, string>("Sales Room",
           _frmFilter.dtgSalesRoom.Items.Count == lstSalesRoom.Count ? "All" : string.Join(",", lstSalesRoom)));
-
       List<dynamic> list = new List<dynamic>();
       StaStart("Loading report...");
-
       switch (_rptRoomSales)
       {
         #region Manifest
@@ -216,17 +214,27 @@ namespace IM.ProcessorSales.Forms
           break;
         #endregion
 
+        #region StatsByLocation
+        case EnumRptRoomSales.StatsByLocation:
+          list.AddRange(BRReportsBySalesRoom.GetRptStatisticsByLocation(dtmStart, dtmEnd, lstSalesRoom));
+          if (list.Count > 0)
+            file = Reports.RptStatisticsByLocation(reporteName, dateRangeFileName, filters, list.Cast<RptStatisticsByLocation>().ToList());
+          break;
+        #endregion
+       
         #region StatsByLocationAndSalesRoom
         case EnumRptRoomSales.StatsByLocationAndSalesRoom:
           list.AddRange(BRReportsBySalesRoom.GetRptStatisticsBySalesRoomLocation(dtmStart, dtmEnd, lstSalesRoom));
           if (list.Count > 0)
             file = Reports.RptStatisticsBySalesRoomLocation(reporteName, dateRangeFileName, filters, list.Cast<RptStatisticsBySalesRoomLocation>().ToList());
           break; 
-          #endregion
+        #endregion
       }
 
       if (file != null)
         Process.Start(file.FullName);
+      else
+        UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
 
       StaEnd();
     }

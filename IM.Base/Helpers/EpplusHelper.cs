@@ -1142,7 +1142,9 @@ namespace IM.Base.Helpers
     /// <returns>string</returns>
     /// <history>
     ///   [edgrodriguez] 24/03/2016  Created.
-    ///   [ecanul] 07/05/2016 Modificated -  Ahora pide el enumerado del formato y  no la celda de excel completa
+    ///   [ecanul] 07/05/2016 Modified -  Ahora pide el enumerado del formato y  no la celda de excel completa,
+    ///                 Aregados valores para PercentWithCero, NumberWithCero, DecimalNumberWithCero
+    ///   [ecanul] 09/05/2016 Modified - Agregado caso Id, para enumerar los tipo Id
     /// </history>
     private static string GetFormat(EnumFormatTypeExcel item)
     {
@@ -1151,7 +1153,7 @@ namespace IM.Base.Helpers
       {
         case EnumFormatTypeExcel.General:
           break;
-
+        //#,#00.00;-#,#00.00;
         case EnumFormatTypeExcel.Percent:
           format = "0.0 %;-0.0 %;";
           break;
@@ -1165,19 +1167,19 @@ namespace IM.Base.Helpers
           break;
 
         case EnumFormatTypeExcel.Number:
-          format = "#";
+          format = "#,##0;-#,##0;";
           break;
 
         case EnumFormatTypeExcel.NumberWithCero:
-          format = "#;-#;0";
+          format = "#,##0;-#,##0;0";
           break;
 
         case EnumFormatTypeExcel.DecimalNumber:
-          format = "0.00;-0.00;";
+          format = "#,#00.00;-#,#00.00;";
           break;
 
         case EnumFormatTypeExcel.DecimalNumberWithCero:
-          format = "0.00; -0.00; 0.00";
+          format = "#,#00.00;-#,#00.00; 0.00";
           break;
 
         case EnumFormatTypeExcel.Date:
@@ -1190,6 +1192,10 @@ namespace IM.Base.Helpers
 
         case EnumFormatTypeExcel.Month:
           format = "[$-409]mmmm";
+          break;
+
+        case EnumFormatTypeExcel.Id:
+          format = "#";
           break;
       }
 

@@ -13,6 +13,7 @@ namespace IM.Model.Enums
   /// [erosado] 12/Mar/2016 Created
   /// [erosado] 17/Mar/2016 Modified Se agregaron los tipos Boolean y Date
   /// [ecanul] 06/05/2016 Modified Se agregaron los tipos PercentWithCero, NumberWithCero, DecimalNumberWithCero
+  /// [ecanuñ] 09/05/2016 Modified Se agrego el valor Id, para enumerar los campos tipo ID
   /// </history>
   public enum EnumFormatTypeExcel
   {
@@ -27,6 +28,7 @@ namespace IM.Model.Enums
     Boolean,
     Date,
     Time,
-    Month
+    Month,
+    Id
   }
 }

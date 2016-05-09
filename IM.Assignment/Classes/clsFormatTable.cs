@@ -34,10 +34,10 @@ namespace IM.Assignment.Classes
       format.Clear();
       format.Add(new ExcelFormatTable() { Title = "In", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
       format.Add(new ExcelFormatTable() { Title = "Out", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
-      format.Add(new ExcelFormatTable() { Title = "Room", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+      format.Add(new ExcelFormatTable() { Title = "Room", Format = EnumFormatTypeExcel.Id, Alignment = ExcelHorizontalAlignment.Left });
       format.Add(new ExcelFormatTable() { Title = "Last Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
       format.Add(new ExcelFormatTable() { Title = "First Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      format.Add(new ExcelFormatTable() { Title = "Agency ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+      format.Add(new ExcelFormatTable() { Title = "Agency ID", Format = EnumFormatTypeExcel.Id, Alignment = ExcelHorizontalAlignment.Left });
       format.Add(new ExcelFormatTable() { Title = "Agency", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
       format.Add(new ExcelFormatTable() { Title = "Member #", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
       format.Add(new ExcelFormatTable() { Title = "01", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
@@ -59,15 +59,15 @@ namespace IM.Assignment.Classes
     public static List<ExcelFormatTable> getExcelFormatTableGenAsignyArvls()
     {
       format.Clear();
-      format.Add(new ExcelFormatTable() { Title = "ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+      format.Add(new ExcelFormatTable() { Title = "ID", Format = EnumFormatTypeExcel.Id, Alignment = ExcelHorizontalAlignment.Left });
       format.Add(new ExcelFormatTable() { Title = "Check In D", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left });
       format.Add(new ExcelFormatTable() { Title = "In", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Left });
-      format.Add(new ExcelFormatTable() { Title = "Room", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+      format.Add(new ExcelFormatTable() { Title = "Room", Format = EnumFormatTypeExcel.Id, Alignment = ExcelHorizontalAlignment.Left });
       format.Add(new ExcelFormatTable() { Title = "Last Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
       format.Add(new ExcelFormatTable() { Title = "First Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
       format.Add(new ExcelFormatTable() { Title = "PR ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
       format.Add(new ExcelFormatTable() { Title = "PR N Assigned", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-      format.Add(new ExcelFormatTable() { Title = "Agency ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+      format.Add(new ExcelFormatTable() { Title = "Agency ID", Format = EnumFormatTypeExcel.Id, Alignment = ExcelHorizontalAlignment.Left });
       format.Add(new ExcelFormatTable() { Title = "Agency", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
       format.Add(new ExcelFormatTable() { Title = "Member #", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
       format.Add(new ExcelFormatTable() { Title = "Gross", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });

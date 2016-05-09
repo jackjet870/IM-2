@@ -24,7 +24,7 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "PaymentSchemaFactor", PropertyName = "PaymentSchemaFactor", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 2,  Outline = true,  SubTotalFunctions = eSubTotalFunctions.Default},
       new ExcelFormatTable() { Title = "PR ID", PropertyName = "PR", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 3 },
       new ExcelFormatTable() { Title = "PR Name", PropertyName = "PRN", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 4 },
-      new ExcelFormatTable() { Title = "Guest ID", PropertyName = "guID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left,  Axis = ePivotFieldAxis.Row, Order = 10 },
+      new ExcelFormatTable() { Title = "Guest ID", PropertyName = "guID", Format = EnumFormatTypeExcel.Id, Alignment = ExcelHorizontalAlignment.Left,  Axis = ePivotFieldAxis.Row, Order = 10 },
       new ExcelFormatTable() { Title = "Guest Name", PropertyName = "guName", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 11 },
       new ExcelFormatTable() { Title = "Book Date", PropertyName = "guBookD", Format = EnumFormatTypeExcel.Date, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 12 },
       new ExcelFormatTable() { Title = "Out. Inv.", PropertyName = "guOutInvitNum", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 13 },
@@ -88,7 +88,7 @@ namespace IM.ProcessorOuthouse.Classes
     public static List<ExcelFormatTable> rptGuestsShowNoPresentedInvitation()
     {
       return new List<ExcelFormatTable>() {
-      new ExcelFormatTable() { Title = "Guest ID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left },
+      new ExcelFormatTable() { Title = "Guest ID", Format = EnumFormatTypeExcel.Id, Alignment = ExcelHorizontalAlignment.Left },
       new ExcelFormatTable() { Title = "Lead Source", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
       new ExcelFormatTable() { Title = "Out Invit", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left },
       new ExcelFormatTable() { Title = "Last Name", Format=EnumFormatTypeExcel.General,Alignment=ExcelHorizontalAlignment.Left },

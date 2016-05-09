@@ -143,7 +143,7 @@ namespace IM.Inhouse.Classes
 
         format.Add(new ExcelFormatTable() { Title = "SR", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "LS", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "GUID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "GUID", Format = EnumFormatTypeExcel.Id, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Hotel", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Room", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "LastName", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
@@ -196,7 +196,7 @@ namespace IM.Inhouse.Classes
 
         format.Add(new ExcelFormatTable() { Title = "Sales Room", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Location", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
-        format.Add(new ExcelFormatTable() { Title = "GUID", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left });
+        format.Add(new ExcelFormatTable() { Title = "GUID", Format = EnumFormatTypeExcel.Id, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "LS", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Room", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
         format.Add(new ExcelFormatTable() { Title = "Name", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left });
