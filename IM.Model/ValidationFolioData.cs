@@ -13,7 +13,7 @@ namespace IM.Model
     
     public partial class ValidationFolioData
     {
-        public Nullable<bool> Result { get; set; }
+        public Nullable<int> Result { get; set; }
         public string PR { get; set; }
     }
 }

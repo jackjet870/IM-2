@@ -20606,7 +20606,7 @@
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="ValidationFolioData">
-          <Property Type="Boolean" Name="Result" Nullable="true" />
+          <Property Type="Int32" Name="Result" Nullable="true" />
           <Property Type="String" Name="PR" Nullable="true" MaxLength="150" />
         </ComplexType>
       </Schema>
