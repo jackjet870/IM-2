@@ -8554,7 +8554,7 @@
           <Property Name="bkN" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="bkA" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="GiftsReceiptsPayments" Relationship="Self.FK_GiftsReceiptsPayments_Banks" FromRole="Banks" ToRole="GiftsReceiptsPayments" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="SalesRooms" Relationship="Self.BanksBySalesRooms" FromRole="Banks" ToRole="SalesRooms" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="SalesRooms" Relationship="Self.BanksBySalesRooms" FromRole="Banks" ToRole="SalesRooms" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="BookingDeposit">
           <Key>
