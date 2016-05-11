@@ -589,13 +589,10 @@ namespace IM.MailOutsConfig.Forms
       cbxLeadSource.IsEnabled = false;
       cbxLanguage.IsEnabled = false;
       lsbxMailOuts.IsEnabled = false;
-
       imgEdit.IsEnabled = false;
-
       imgSave.IsEnabled = true;
       imgCancel.IsEnabled = true;
       richTextBox.IsReadOnly = false;
-
       txtEditMode.Visibility = Visibility.Visible;
       ucRichTextBoxToolBar1.Visibility = Visibility.Visible;
       ucRichTextBoxToolBar2.Visibility = Visibility.Visible;
@@ -611,13 +608,10 @@ namespace IM.MailOutsConfig.Forms
       cbxLeadSource.IsEnabled = true;
       cbxLanguage.IsEnabled = true;
       lsbxMailOuts.IsEnabled = true;
-
       imgEdit.IsEnabled = true;
-
       imgCancel.IsEnabled = false;
       imgSave.IsEnabled = false;
       richTextBox.IsReadOnly = true;
-
       txtEditMode.Visibility = Visibility.Collapsed;
       ucRichTextBoxToolBar1.Visibility = Visibility.Hidden;
       ucRichTextBoxToolBar2.Visibility = Visibility.Collapsed;
@@ -632,7 +626,7 @@ namespace IM.MailOutsConfig.Forms
     {
       StaStart("Loading LeadSources & Languages...");
       //Cargamos LeadSource
-      DoGetLeadSources("EROSADO");
+      DoGetLeadSources(App.User.User.peID);
       //Cargamos Lenguage
       DoGetLanguages();
     }

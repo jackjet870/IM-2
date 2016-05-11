@@ -1965,6 +1965,14 @@ namespace IM.Inhouse.Forms
 
     private void btnExtInvit_Click(object sender, RoutedEventArgs e)
     {
+      //Edder
+      var frmInvitation = new frmInvitationBase(EnumInvitationType.External,App.User, 0,EnumInvitationMode.modAdd);
+      frmInvitation.Owner = this;
+      
+      if (frmInvitation.AccessValidate())
+      {
+        var res = frmInvitation.ShowDialog();
+      }
     }
 
     #endregion

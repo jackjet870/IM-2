@@ -624,7 +624,7 @@ namespace IM.MailOutsConfig.Forms
     {
       StaStart("Loading LeadSources, Markets, Agencies, Countries ...");
       //Cargamos LeadSource
-      DoGetLeadSources("EROSADO");
+      DoGetLeadSources(App.User.User.peID);
       //Cargamos Markets
       DoGetMarkets();
       //Cargamos Agencies
