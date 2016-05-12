@@ -659,6 +659,9 @@
     <Compile Include="RptBookingsBySalesRoomProgramTime.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptCloserStatistics.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptConcentrateDailySales.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -798,6 +801,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptInvitation_Guest.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptLinerStatistics.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptLoginLog.cs">
