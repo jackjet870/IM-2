@@ -969,6 +969,67 @@ namespace IM.BusinessRules.BR
 
     #endregion
 
+    #region GetRptStaticsByLocationMonthly
+    /// <summary>
+    /// Devuelve un listado de StaticsByLocationMonthly
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicio</param>
+    /// <param name="dtEnd">Fecha Fin </param>
+    /// <param name="salesRoom">Sales Room</param>
+    /// <history>
+    /// [ecanul] 10/05/2016 Created
+    /// </history>
+    public static List<RptStatisticsByLocationMonthly> GetRptStaticsByLocationMonthly(DateTime dtStart, DateTime dtEnd,
+      IEnumerable<string> salesRoom)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptStatsByLocationMonthly(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
+      }
+    }
+    #endregion
+
+    #region GetRptSalesByLocationMonthly
+    /// <summary>
+    /// Devuelve un listado de SalesByLocationMonthly
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicio</param>
+    /// <param name="dtEnd">Fecha Fin </param>
+    /// <param name="salesRoom">Sales Room</param>
+    /// <history>
+    /// [ecanul] 10/05/2016 Created
+    /// </history>
+    public static List<RptSalesByLocationMonthly> GetRptSalesByLocationMonthly(DateTime dtStart, DateTime dtEnd,
+      IEnumerable<string> salesRoom)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptSalesByLocationMonthly(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
+      }
+    }
+    #endregion
+
+    #region GetRptDailySalesDetail
+    /// <summary>
+    /// Devuelve un listado de RptDailySalesDetail
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicio</param>
+    /// <param name="dtEnd">Fecha Fin </param>
+    /// <param name="salesRoom">Sales Room</param>
+    /// <history>
+    /// [ecanul] 11/05/2016 Created
+    /// </history>
+    public static List<RptDailySalesDetail> GetRptDailySalesDetail(DateTime dtStart, DateTime dtEnd,
+      IEnumerable<string> salesRoom)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptDailySalesDetail_Timeout;
+        return dbContext.USP_OR_RptDailySalesDetail(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
+      }
+    }
+    #endregion
+
     #endregion
   }
 }

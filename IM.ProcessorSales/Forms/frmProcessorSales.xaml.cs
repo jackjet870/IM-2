@@ -187,23 +187,33 @@ namespace IM.ProcessorSales.Forms
     {
       FileInfo file = null;
       //Deberia validarse con 
+      #region Datos del reporte
       string dateRange = _oneDate
-        ? DateHelper.DateRange(lstMultiDate[0].dtStart, lstMultiDate[0].dtEnd)
-        : DateHelper.DateRange(dtmStart, dtmEnd);
+          ? DateHelper.DateRange(lstMultiDate[0].dtStart, lstMultiDate[0].dtEnd)
+          : DateHelper.DateRange(dtmStart, dtmEnd);
       string dateRangeFileName = _oneDate
         ? DateHelper.DateRangeFileName(lstMultiDate[0].dtStart, lstMultiDate[0].dtEnd)
         : DateHelper.DateRangeFileName(dtmStart, dtmEnd);
       string reporteName = EnumToListHelper.GetEnumDescription(_rptRoomSales);
+      #endregion
+
+      #region Filtro(s)
       List<Tuple<string, string>> filters = new List<Tuple<string, string>>
       {
         new Tuple<string, string>("Date Range", dateRange)
-      };
-      //Si es de solo un registro El sales Room es unico, si no Se toma por Todos o por los seleccionados
-      if (_onlyOnRegister)
-        filters.Add(new Tuple<string, string>("Sales Room", lstSalesRoom[0]));
-      else
-        filters.Add(new Tuple<string, string>("Sales Room",
-          _frmFilter.dtgSalesRoom.Items.Count == lstSalesRoom.Count ? "All" : string.Join(",", lstSalesRoom)));
+      }; 
+      //Si es cualquier reporte menos Concentrate Daily Sales o Multidate (porque sus grids son diferentes) se agrega de manera comun
+      if (_rptRoomSales != EnumRptRoomSales.ConcerntrateDailySales && _rptRoomSales != EnumRptRoomSales.StatsBySegmentsCategoriesMultiDatesRanges)
+      {
+        //Si es de solo un registro El sales Room es unico, si no Se toma por Todos o por los seleccionados
+        if (_onlyOnRegister)
+          filters.Add(new Tuple<string, string>("Sales Room", lstSalesRoom[0]));
+        else
+          filters.Add(new Tuple<string, string>("Sales Room",
+            _frmFilter.dtgSalesRoom.Items.Count == lstSalesRoom.Count ? "All" : string.Join(",", lstSalesRoom)));
+      }
+      #endregion
+
       List<dynamic> list = new List<dynamic>();
       StaStart("Loading report...");
       switch (_rptRoomSales)
@@ -221,14 +231,46 @@ namespace IM.ProcessorSales.Forms
             file = Reports.RptStatisticsByLocation(reporteName, dateRangeFileName, filters, list.Cast<RptStatisticsByLocation>().ToList());
           break;
         #endregion
-       
+
+        #region StatsByLocationMonthly
+        case EnumRptRoomSales.StatsByLocationMonthly:
+          list.AddRange(BRReportsBySalesRoom.GetRptStaticsByLocationMonthly(dtmStart, dtmEnd, lstSalesRoom));
+          if (list.Count > 0)
+            file = Reports.RptStaticsByLocationMonthly(reporteName, dateRangeFileName, filters, list.Cast<RptStatisticsByLocationMonthly>().ToList());
+          break;
+        #endregion
+
+        #region SalesByLocationMonthly
+        case EnumRptRoomSales.SalesByLocationMonthly:
+          list.AddRange(BRReportsBySalesRoom.GetRptSalesByLocationMonthly(dtmStart, dtmEnd, lstSalesRoom));
+          if (list.Count > 0)
+            file = Reports.RptSalesByLocationMonthly(reporteName, dateRangeFileName, filters, list.Cast<RptSalesByLocationMonthly>().ToList());
+          break; 
+        #endregion
+
         #region StatsByLocationAndSalesRoom
         case EnumRptRoomSales.StatsByLocationAndSalesRoom:
           list.AddRange(BRReportsBySalesRoom.GetRptStatisticsBySalesRoomLocation(dtmStart, dtmEnd, lstSalesRoom));
           if (list.Count > 0)
             file = Reports.RptStatisticsBySalesRoomLocation(reporteName, dateRangeFileName, filters, list.Cast<RptStatisticsBySalesRoomLocation>().ToList());
-          break; 
+          break;
         #endregion
+
+        case EnumRptRoomSales.ConcerntrateDailySales:
+          #region FiltroSalesRoomConcentrate
+          lstSalesRoom.AddRange(lstGoals.Select(c => c.salesRoom.srID));
+          filters.Add(new Tuple<string, string>("Sales Room", string.Join("/",lstGoals.Select(c=> c.salesRoom.srID).ToList()))); 
+          #endregion
+          //Se hace la consulta por cada item dentro del listado
+          foreach (var item in lstGoals)
+          {
+            list.AddRange(BRReportsBySalesRoom.GetRptDailySalesDetail(dtmStart,dtmEnd,lstGoals.Select(c=>c.salesRoom.srID).Where(x=> x== item.salesRoom.srID).ToList()));
+          }
+
+          if (list.Count > 0)
+            UIHelper.ShowMessage("");
+
+          break;
       }
 
       if (file != null)

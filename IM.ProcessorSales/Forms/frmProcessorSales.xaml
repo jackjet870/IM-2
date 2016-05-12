@@ -142,7 +142,7 @@
                         <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" />
                     </StackPanel>
                 </StatusBarItem>
-                <StatusBarItem x:Name="statusBarReg" Content="0/0" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
+                <StatusBarItem x:Name="statusBarReg" Content="0/0" Width="auto" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
             </StatusBar>
         </Grid>
         <!--#endregion Status Bar-->

@@ -143,5 +143,8 @@
     <Setting Name="USP_OR_RptProductionByPRSalesRoomOutside_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
     </Setting>
+    <Setting Name="USP_OR_RptDailySalesDetail_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

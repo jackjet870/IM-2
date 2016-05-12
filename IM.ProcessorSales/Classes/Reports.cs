@@ -33,7 +33,7 @@ namespace IM.ProcessorSales.Classes
 
     #endregion
 
-    #region ExportRptStatisticsBySalesRoomLocation
+    #region RptStatisticsBySalesRoomLocation
     /// <summary>
     /// Obtiene los datos para exportar a excel el reporte de Statics by Sales Room Location
     /// </summary>
@@ -71,6 +71,93 @@ namespace IM.ProcessorSales.Classes
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, dateRangeFileName, FormatReport.RptStatisticsBySalesRoomLocation(), true, showRowHeaders: true);
     }
 
+    #endregion
+
+    #region RptStaticsByLocationMonthly
+    /// <summary>
+    /// Obtiene los datos para exportar a excel el reporte Statics by Location Monthly
+    /// </summary>
+    /// <param name="report">Nombre del reporte</param>
+    /// <param name="dateRangeFileName">Rango de fechas</param>
+    /// <param name="filters">Listado de filtros</param>
+    /// <param name="lstReport">Contenido del reporte</param>
+    /// <history>
+    /// [ecanul] 10/05/2016 Created
+    /// </history>
+    public static FileInfo RptStaticsByLocationMonthly(string report, string dateRangeFileName,
+      List<Tuple<string, string>> filters, List<RptStatisticsByLocationMonthly> lstReport)
+    {
+      var customList =
+        lstReport.Select(
+          c => new
+          {
+            c.Program,
+            c.Location,
+            c.SalesAmountPrevious,
+            c.UPSPrevious,
+            c.Goal,
+            c.Books,
+            c.GrossUPS,
+            c.Directs,
+            c.Shows,
+            c.SalesAmount,
+            c.Sales
+          }).ToList();
+      var dtData = TableHelper.GetDataTableFromList(customList, true, false);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, dateRangeFileName, FormatReport.RptStatisticsByLocationMonthly(), true);
+    }
+
+    #endregion
+
+    #region RptSalesByLocationMonthly
+    /// <summary>
+    /// Obtiene los datos para exportar a excel el reporte Sales by Location Monthly
+    /// </summary>
+    /// <param name="report">Nombre del reporte</param>
+    /// <param name="dateRangefileName">Rango de fechas</param>
+    /// <param name="filters">Listado de filtros</param>
+    /// <param name="lstReport">Contenido del reporte</param>
+    /// <history>
+    /// [ecanul] 10/05/2016 Created
+    /// </history>
+    public static FileInfo RptSalesByLocationMonthly(string report, string dateRangefileName,
+      List<Tuple<string, string>> filters, List<RptSalesByLocationMonthly> lstReport)
+    {
+      var customList =
+        lstReport.Select(
+          c =>
+            new {c.Location, c.Year, c.MonthN, c.Shows, c.Sales, c.SalesAmountTotal, c.SalesAmountCancel, c.SalesAmount})
+          .ToList();
+      var dtData = TableHelper.GetDataTableFromList(customList, true, false);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, dateRangefileName,
+        FormatReport.RptSalesByLocationMonthly(), true);
+    }
+    #endregion
+
+    #region RptConcentrateDailySales
+
+    //public static FileInfo RptConcentrateDailySales(string report, string dateRangeFileName,
+    //  List<Tuple<string, string>> filters, List<RptDailySalesDetail> lstReport, List<GoalsHelpper> goals)
+    //{
+    //  foreach (var goal in goals)
+    //  {
+    //    var customList =
+    //      lstReport.Select(
+    //        c =>
+    //          new
+    //          {
+    //            SRoom = goal.salesRoom.srN,
+    //            goal.goal,
+    //            c.Shows /*UPS*/,
+    //            c.SalesRegular,
+    //            c.SalesExit,
+    //            c.SalesVIP,
+    //            sales = (c.SalesRegular + c.SalesExit + c.SalesVIP)
+
+    //          })
+    //        .ToList();
+    //  }
+    //}
     #endregion
 
     #endregion

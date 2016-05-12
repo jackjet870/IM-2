@@ -230,6 +230,112 @@ namespace IM.ProcessorSales.Classes
 
     #endregion
 
+    #region RptStatisticsByLocationMonthly
+    /// <summary>
+    /// Formato para el reporte Statics by Location Monthly
+    /// </summary>
+    /// <history>
+    /// [ecanul] 10/05/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> RptStatisticsByLocationMonthly()
+    {
+      return new List<ExcelFormatTable>()
+      {
+        new ExcelFormatTable() {Title = "Program", Order = 0, Axis = ePivotFieldAxis.Row, Compact = true, Outline = true, SubTotalFunctions = eSubTotalFunctions.Default, InsertBlankRow = true},
+        new ExcelFormatTable() { Title = "Location", Order = 1, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable() {Title = "Volume Previous", Order = 0, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
+        new ExcelFormatTable() {Title = "Shows Previous", Order = 1, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable() {Title = "Goal", Order = 2, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
+        new ExcelFormatTable() {Title = "Books", Order = 3, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable() {Title = "Shows ", Order = 4, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number },
+        new ExcelFormatTable() {Title = "Directs", Order = 6, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable() {Title = "Total Shows", Order = 7, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable() {Title = "Volume", Order = 8, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
+        new ExcelFormatTable() {Title = "Sales", Order = 9, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
+
+        new ExcelFormatTable()
+        {
+          Title = "Sh%",
+          Order = 5,
+          Axis = ePivotFieldAxis.Values,
+          Format = EnumFormatTypeExcel.Percent,
+          Formula = "IF('Books'=0,0,'Shows '/'Books')"
+        },
+        new ExcelFormatTable
+        {
+          Title = "EFF",
+          Order = 10,
+          Axis = ePivotFieldAxis.Values,
+          Format = EnumFormatTypeExcel.DecimalNumber,
+          Formula = "IF('Total Shows'=0,0,'Volume'/'Total Shows')"
+        },
+        new ExcelFormatTable
+        {
+          Title = "C%",
+          Order = 11,
+          Axis = ePivotFieldAxis.Values,
+          Format = EnumFormatTypeExcel.Percent,
+          Formula = "IF('Total Shows'=0,0,'Sales'/'Total Shows')"
+        },
+        new ExcelFormatTable
+        {
+          Title = "AV/S",
+          Order = 12,
+          Axis = ePivotFieldAxis.Values,
+          Format = EnumFormatTypeExcel.DecimalNumber,
+          Formula = "IF(Sales =0,0,Volume/Sales)"
+        }
+      };
+    }
+    #endregion
+
+    #region RptSalesByLocationMonthly
+    /// <summary>
+    /// Formato para el reporte Sales by Location Monthly
+    /// </summary>
+    /// <history>
+    /// [ecanul] 10/05/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> RptSalesByLocationMonthly()
+    {
+      return new List<ExcelFormatTable>()
+      {
+        new ExcelFormatTable() { Title = "Location", Order = 0, Axis = ePivotFieldAxis.Row, Compact = true, Outline = true, SubTotalFunctions = eSubTotalFunctions.Default, InsertBlankRow = true},
+        new ExcelFormatTable() { Title = "Year", Order = 1, Axis = ePivotFieldAxis.Row, Compact = true, Outline = true},
+        new ExcelFormatTable() {Title = "Month", Order = 2, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable() {Title = "Shows", Order = 0, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number },
+        new ExcelFormatTable() {Title = "Sales", Order = 1, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable() {Title = "Volume", Order = 2, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
+        new ExcelFormatTable() {Title = "Cancel", Order = 3, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
+        new ExcelFormatTable() {Title = "V/N after CXL", Order = 4, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
+        new ExcelFormatTable
+        {
+          Title = "AV/S",
+          Order = 5,
+          Axis = ePivotFieldAxis.Values,
+          Format = EnumFormatTypeExcel.DecimalNumber,
+          Formula = "IF('Sales' =0,0,'V/N after CXL'/'Sales')"
+        },
+        new ExcelFormatTable
+        {
+          Title = "C%",
+          Order = 6,
+          Axis = ePivotFieldAxis.Values,
+          Format = EnumFormatTypeExcel.Percent,
+          Formula = "IF(Shows=0,0,Sales/Shows)"
+        },
+        new ExcelFormatTable
+        {
+          Title = "EFF",
+          Order = 7,
+          Axis = ePivotFieldAxis.Values,
+          Format = EnumFormatTypeExcel.DecimalNumber,
+          Formula = "IF('Shows' =0,0,'V/N after CXL'/'Shows')"
+        }
+      };
+    }
+    #endregion
+
     #endregion
   }
 }
