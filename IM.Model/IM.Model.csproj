@@ -241,6 +241,9 @@
     <Compile Include="FolioInvitationOuthousePRCancellation.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="GetGiftsReceiptsAdditional.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Gift.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -654,6 +657,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptBookingsBySalesRoomProgramTime.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptConcentrateDailySales.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptCostByPR.cs">

@@ -135,6 +135,12 @@ namespace IM.Model
             this.Efficiencies = new HashSet<Efficiency>();
             this.Roles = new HashSet<Role>();
             this.BookingDeposits = new HashSet<BookingDeposit>();
+            this.Guests_FTB1 = new HashSet<Guest>();
+            this.Guests_FTB2 = new HashSet<Guest>();
+            this.Guests_FTB3 = new HashSet<Guest>();
+            this.Sales_FTB1 = new HashSet<Sale>();
+            this.Sales_FTB2 = new HashSet<Sale>();
+            this.Sales_FTB3 = new HashSet<Sale>();
         }
     
         public string peID { get; set; }
@@ -393,5 +399,17 @@ namespace IM.Model
         public virtual ICollection<Role> Roles { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BookingDeposit> BookingDeposits { internal get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Guest> Guests_FTB1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Guest> Guests_FTB2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Guest> Guests_FTB3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sale> Sales_FTB1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sale> Sales_FTB2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sale> Sales_FTB3 { get; set; }
     }
 }

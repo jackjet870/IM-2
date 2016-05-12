@@ -4805,5 +4805,31 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ValidationFolioData>("USP_OR_ValidateFolioInvOutPR", pRParameter, serieParameter, fromParameter, toParameter, isCancelParameter);
         }
+    
+        public virtual ObjectResult<GetGiftsReceiptsAdditional> USP_IM_GetGiftsReceiptsAdditional(Nullable<int> guestID)
+        {
+            var guestIDParameter = guestID.HasValue ?
+                new ObjectParameter("GuestID", guestID) :
+                new ObjectParameter("GuestID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetGiftsReceiptsAdditional>("USP_IM_GetGiftsReceiptsAdditional", guestIDParameter);
+        }
+    
+        public virtual ObjectResult<RptConcentrateDailySales> USP_IM_RptConcentrateDailySales(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string listSalesRoom)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var listSalesRoomParameter = listSalesRoom != null ?
+                new ObjectParameter("ListSalesRoom", listSalesRoom) :
+                new ObjectParameter("ListSalesRoom", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptConcentrateDailySales>("USP_IM_RptConcentrateDailySales", dateFromParameter, dateToParameter, listSalesRoomParameter);
+        }
     }
 }

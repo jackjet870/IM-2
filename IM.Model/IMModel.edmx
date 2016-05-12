@@ -924,6 +924,9 @@
           <Property Name="guPresentedInvitation" Type="bit" />
           <Property Name="guLastNameOriginal" Type="varchar" MaxLength="65" />
           <Property Name="guFirstNameOriginal" Type="varchar" MaxLength="40" />
+          <Property Name="guFTB1" Type="varchar" MaxLength="10" />
+          <Property Name="guFTB2" Type="varchar" MaxLength="10" />
+          <Property Name="guFTB3" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="GuestsAdditional">
           <Key>
@@ -1810,6 +1813,9 @@
           <Property Name="saNewAmountWithVAT" Type="money" Nullable="false" />
           <Property Name="saGrossAmountWithVAT" Type="money" Nullable="false" />
           <Property Name="saVATRate" Type="money" />
+          <Property Name="saFTB1" Type="varchar" MaxLength="10" />
+          <Property Name="saFTB2" Type="varchar" MaxLength="10" />
+          <Property Name="saFTB3" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="SalesAmountRanges">
           <Key>
@@ -3675,6 +3681,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Guests_Personnel_FrontToBack1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guFTB1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_FrontToBack2">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guFTB2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_FrontToBack3">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guFTB3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Guests_Personnel_GiftsHost">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
           <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
@@ -4887,6 +4929,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Sales_Personnel_FrontToBack1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="saFTB1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sales_Personnel_FrontToBack2">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="saFTB2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sales_Personnel_FrontToBack3">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="saFTB3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Sales_Personnel_Liner1">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
           <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
@@ -5823,11 +5901,19 @@
           <Parameter Name="endD" Type="datetime" Mode="In" />
           <Parameter Name="WH0" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_IM_GetGiftsReceiptsAdditional" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GuestID" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_IM_Login" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LoginType" Type="tinyint" Mode="In" />
           <Parameter Name="User" Type="varchar" Mode="In" />
           <Parameter Name="Password" Type="varchar" Mode="In" />
           <Parameter Name="Place" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_IM_RptConcentrateDailySales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="ListSalesRoom" Type="varchar(max)" Mode="In" />
         </Function>
         <Function Name="USP_IM_RptDailyGiftSimple" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="datetime" Mode="In" />
@@ -7747,6 +7833,18 @@
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Guests" EntitySet="Guests" />
           </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_FrontToBack1" Association="Self.FK_Guests_Personnel_FrontToBack1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_FrontToBack2" Association="Self.FK_Guests_Personnel_FrontToBack2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_FrontToBack3" Association="Self.FK_Guests_Personnel_FrontToBack3">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
           <AssociationSet Name="FK_Guests_Personnel_GiftsHost" Association="Self.FK_Guests_Personnel_GiftsHost">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Guests" EntitySet="Guests" />
@@ -8148,6 +8246,18 @@
             <End Role="Sales" EntitySet="Sales" />
           </AssociationSet>
           <AssociationSet Name="FK_Sales_Personnel_Exit2" Association="Self.FK_Sales_Personnel_Exit2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Personnel_FrontToBack1" Association="Self.FK_Sales_Personnel_FrontToBack1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Personnel_FrontToBack2" Association="Self.FK_Sales_Personnel_FrontToBack2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Personnel_FrontToBack3" Association="Self.FK_Sales_Personnel_FrontToBack3">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Sales" EntitySet="Sales" />
           </AssociationSet>
@@ -9531,6 +9641,12 @@
           <NavigationProperty Name="GuestMain" Relationship="Self.GuestsAdditional" FromRole="Guests" ToRole="Guests1" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GuestsAdditional" Relationship="Self.GuestsAdditional" FromRole="Guests1" ToRole="Guests" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GuestsGroups" Relationship="Self.GuestsGroupsIntegrants" FromRole="Guests" ToRole="GuestsGroups" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="guFTB1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guFTB2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guFTB3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Personnel_FTB1" Relationship="IMModel.FK_Guests_Personnel_FrontToBack1" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FTB2" Relationship="IMModel.FK_Guests_Personnel_FrontToBack2" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FTB3" Relationship="IMModel.FK_Guests_Personnel_FrontToBack3" FromRole="Guest" ToRole="Personnel" />
         </EntityType>
         <EntityType Name="GuestCreditCard">
           <Key>
@@ -10272,6 +10388,12 @@
           <NavigationProperty Name="Efficiencies" Relationship="Self.EfficiencySalesmen" FromRole="Personnel" ToRole="Efficiency" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Roles" Relationship="Self.PersonnelRoles" FromRole="Personnel" ToRole="Roles" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="BookingDeposits" Relationship="IMModel.FK_BookingDeposits_Personnel_CxC" FromRole="Personnel" ToRole="BookingDeposit" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="Guests_FTB1" Relationship="IMModel.FK_Guests_Personnel_FrontToBack1" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests_FTB2" Relationship="IMModel.FK_Guests_Personnel_FrontToBack2" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests_FTB3" Relationship="IMModel.FK_Guests_Personnel_FrontToBack3" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Sales_FTB1" Relationship="IMModel.FK_Sales_Personnel_FrontToBack1" FromRole="Personnel" ToRole="Sale" />
+          <NavigationProperty Name="Sales_FTB2" Relationship="IMModel.FK_Sales_Personnel_FrontToBack2" FromRole="Personnel" ToRole="Sale" />
+          <NavigationProperty Name="Sales_FTB3" Relationship="IMModel.FK_Sales_Personnel_FrontToBack3" FromRole="Personnel" ToRole="Sale" />
         </EntityType>
         <EntityType Name="PersonnelPermission">
           <Key>
@@ -10568,6 +10690,12 @@
           <NavigationProperty Name="SalesLogs_Reference" Relationship="Self.FK_SalesLog_Sales_Reference" FromRole="Sales" ToRole="SalesLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="SalesmenChanges" Relationship="Self.FK_SalesmenChanges_Sales" FromRole="Sales" ToRole="SalesmenChanges" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="SalesSalesmen" Relationship="Self.FK_SalesSalesmen_Sales" FromRole="Sales" ToRole="SalesSalesmen" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <Property Name="saFTB1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="saFTB2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="saFTB3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Personnel_FTB1" Relationship="IMModel.FK_Sales_Personnel_FrontToBack1" FromRole="Sale" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FTB2" Relationship="IMModel.FK_Sales_Personnel_FrontToBack2" FromRole="Sale" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FTB3" Relationship="IMModel.FK_Sales_Personnel_FrontToBack3" FromRole="Sale" ToRole="Personnel" />
         </EntityType>
         <EntityType Name="SalesAmountRange">
           <Key>
@@ -17132,6 +17260,38 @@
             <Parameter Name="To" Mode="In" Type="Int32" />
             <Parameter Name="isCancel" Mode="In" Type="Boolean" />
           </FunctionImport>
+          <AssociationSet Name="FK_Guests_Personnel_FrontToBack1" Association="IMModel.FK_Guests_Personnel_FrontToBack1">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_FrontToBack2" Association="IMModel.FK_Guests_Personnel_FrontToBack2">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_FrontToBack3" Association="IMModel.FK_Guests_Personnel_FrontToBack3">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Personnel_FrontToBack1" Association="IMModel.FK_Sales_Personnel_FrontToBack1">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Sale" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Personnel_FrontToBack2" Association="IMModel.FK_Sales_Personnel_FrontToBack2">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Sale" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Personnel_FrontToBack3" Association="IMModel.FK_Sales_Personnel_FrontToBack3">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Sale" EntitySet="Sales" />
+          </AssociationSet>
+          <FunctionImport Name="USP_IM_GetGiftsReceiptsAdditional" ReturnType="Collection(IMModel.GetGiftsReceiptsAdditional)">
+            <Parameter Name="GuestID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_IM_RptConcentrateDailySales" ReturnType="Collection(IMModel.RptConcentrateDailySales)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="ListSalesRoom" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -20609,6 +20769,97 @@
           <Property Type="Int32" Name="Result" Nullable="true" />
           <Property Type="String" Name="PR" Nullable="true" MaxLength="150" />
         </ComplexType>
+        <Association Name="FK_Guests_Personnel_FrontToBack1">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guFTB1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_FrontToBack2">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guFTB2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_FrontToBack3">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guFTB3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sales_Personnel_FrontToBack1">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Sale" Role="Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="saFTB1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sales_Personnel_FrontToBack2">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Sale" Role="Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="saFTB2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sales_Personnel_FrontToBack3">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Sale" Role="Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="saFTB3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="GetGiftsReceiptsAdditional">
+          <Property Type="Int32" Name="gagu" Nullable="false" />
+          <Property Type="Boolean" Name="Generate" Nullable="true" />
+          <Property Type="Int32" Name="gaAdditional" Nullable="false" />
+          <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="guFirstName1" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="grID" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="RptConcentrateDailySales">
+          <Property Type="String" Name="SalesRoom" Nullable="true" MaxLength="300" />
+          <Property Type="Int32" Name="UPS" Nullable="true" />
+          <Property Type="Int32" Name="Sales" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmountOPP" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SalesAmountFall" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SalesAmountCancel" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SalesAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="DownPact" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="DownColl" Nullable="true" Precision="19" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -21309,6 +21560,9 @@
           <EntitySetMapping Name="Guests">
             <EntityTypeMapping TypeName="IMModel.Guest">
               <MappingFragment StoreEntitySet="Guests">
+                <ScalarProperty Name="guFTB3" ColumnName="guFTB3" />
+                <ScalarProperty Name="guFTB2" ColumnName="guFTB2" />
+                <ScalarProperty Name="guFTB1" ColumnName="guFTB1" />
                 <ScalarProperty Name="guID" ColumnName="guID" />
                 <ScalarProperty Name="guHReservID" ColumnName="guHReservID" />
                 <ScalarProperty Name="guls" ColumnName="guls" />
@@ -22245,6 +22499,9 @@
           <EntitySetMapping Name="Sales">
             <EntityTypeMapping TypeName="IMModel.Sale">
               <MappingFragment StoreEntitySet="Sales">
+                <ScalarProperty Name="saFTB3" ColumnName="saFTB3" />
+                <ScalarProperty Name="saFTB2" ColumnName="saFTB2" />
+                <ScalarProperty Name="saFTB1" ColumnName="saFTB1" />
                 <ScalarProperty Name="saID" ColumnName="saID" />
                 <ScalarProperty Name="saMembershipNum" ColumnName="saMembershipNum" />
                 <ScalarProperty Name="sagu" ColumnName="sagu" />
@@ -27319,6 +27576,33 @@
               <ComplexTypeMapping TypeName="IMModel.ValidationFolioData">
                 <ScalarProperty Name="Result" ColumnName="Result" />
                 <ScalarProperty Name="PR" ColumnName="PR" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_IM_GetGiftsReceiptsAdditional" FunctionName="IMModel.Store.USP_IM_GetGiftsReceiptsAdditional">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetGiftsReceiptsAdditional">
+                <ScalarProperty Name="gagu" ColumnName="gagu" />
+                <ScalarProperty Name="Generate" ColumnName="Generate" />
+                <ScalarProperty Name="gaAdditional" ColumnName="gaAdditional" />
+                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
+                <ScalarProperty Name="guFirstName1" ColumnName="guFirstName1" />
+                <ScalarProperty Name="grID" ColumnName="grID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_IM_RptConcentrateDailySales" FunctionName="IMModel.Store.USP_IM_RptConcentrateDailySales">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptConcentrateDailySales">
+                <ScalarProperty Name="SalesRoom" ColumnName="SalesRoom" />
+                <ScalarProperty Name="UPS" ColumnName="UPS" />
+                <ScalarProperty Name="Sales" ColumnName="Sales" />
+                <ScalarProperty Name="SalesAmountOPP" ColumnName="SalesAmountOPP" />
+                <ScalarProperty Name="SalesAmountFall" ColumnName="SalesAmountFall" />
+                <ScalarProperty Name="SalesAmountCancel" ColumnName="SalesAmountCancel" />
+                <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
+                <ScalarProperty Name="DownPact" ColumnName="DownPact" />
+                <ScalarProperty Name="DownColl" ColumnName="DownColl" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

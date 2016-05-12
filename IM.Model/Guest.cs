@@ -236,6 +236,9 @@ namespace IM.Model
         public Nullable<bool> guPresentedInvitation { get; set; }
         public string guLastNameOriginal { get; set; }
         public string guFirstNameOriginal { get; set; }
+        public string guFTB1 { get; set; }
+        public string guFTB2 { get; set; }
+        public string guFTB3 { get; set; }
     
         public virtual Agency Agency { internal get; set; }
         public virtual Club Club { internal get; set; }
@@ -298,5 +301,8 @@ namespace IM.Model
         public virtual ICollection<Guest> GuestsAdditional { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GuestsGroup> GuestsGroups { get; set; }
+        public virtual Personnel Personnel_FTB1 { get; set; }
+        public virtual Personnel Personnel_FTB2 { get; set; }
+        public virtual Personnel Personnel_FTB3 { get; set; }
     }
 }

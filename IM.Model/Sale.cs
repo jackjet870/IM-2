@@ -88,6 +88,9 @@ namespace IM.Model
         public decimal saNewAmountWithVAT { get; set; }
         public decimal saGrossAmountWithVAT { get; set; }
         public Nullable<decimal> saVATRate { get; set; }
+        public string saFTB1 { get; set; }
+        public string saFTB2 { get; set; }
+        public string saFTB3 { get; set; }
     
         public virtual Guest Guest { internal get; set; }
         public virtual LeadSource LeadSource { internal get; set; }
@@ -124,5 +127,8 @@ namespace IM.Model
         public virtual ICollection<SalesmanChange> SalesmenChanges { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SalesSalesman> SalesSalesmen { internal get; set; }
+        public virtual Personnel Personnel_FTB1 { get; set; }
+        public virtual Personnel Personnel_FTB2 { get; set; }
+        public virtual Personnel Personnel_FTB3 { get; set; }
     }
 }
