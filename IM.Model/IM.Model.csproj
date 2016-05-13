@@ -665,6 +665,9 @@
     <Compile Include="RptConcentrateDailySales.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptContactBookShowQuinellas.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptCostByPR.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -923,6 +926,9 @@
     <Compile Include="RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptProductionByMonth.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptProductionByNationalityInhouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -984,6 +990,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptSalesByProgramLeadSourceMarket.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptScoreByPR.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptSelfGen.cs">

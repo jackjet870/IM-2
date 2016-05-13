@@ -5920,6 +5920,13 @@
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="ListSalesRoom" Type="varchar(max)" Mode="In" />
         </Function>
+        <Function Name="USP_IM_RptContactBookShowQuinellas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
+          <Parameter Name="External" Type="int" Mode="In" />
+          <Parameter Name="BasedOnArrival" Type="bit" Mode="In" />
+        </Function>
         <Function Name="USP_IM_RptDailyGiftSimple" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
@@ -6821,6 +6828,20 @@
           <Parameter Name="ConsiderQuinellas" Type="bit" Mode="In" />
           <Parameter Name="BasedOnArrival" Type="bit" Mode="In" />
         </Function>
+        <Function Name="USP_OR_RptProductionByMonth" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
+          <Parameter Name="ConsiderQuinellas" Type="bit" Mode="In" />
+          <Parameter Name="Market" Type="varchar" Mode="In" />
+          <Parameter Name="ConsiderNights" Type="bit" Mode="In" />
+          <Parameter Name="NightsFrom" Type="int" Mode="In" />
+          <Parameter Name="NightsTo" Type="int" Mode="In" />
+          <Parameter Name="Agency" Type="varchar" Mode="In" />
+          <Parameter Name="ConsiderOriginallyAvailable" Type="bit" Mode="In" />
+          <Parameter Name="External" Type="int" Mode="In" />
+          <Parameter Name="BasedOnArrival" Type="bit" Mode="In" />
+        </Function>
         <Function Name="USP_OR_RptProductionByNationalityInhouse" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -6973,6 +6994,12 @@
         <Function Name="USP_OR_RptSalesByProgramLeadSourceMarket" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptScoreByPR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="LeadSources" Type="varchar" Mode="In" />
+          <Parameter Name="ConsiderQuinellas" Type="bit" Mode="In" />
         </Function>
         <Function Name="USP_OR_RptShowFactorByBookingDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -17312,6 +17339,33 @@
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="SalesRooms" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_IM_RptContactBookShowQuinellas" ReturnType="Collection(IMModel.RptContactBookShowQuinellas)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="External" Mode="In" Type="Int32" />
+            <Parameter Name="BasedOnArrival" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptProductionByMonth" ReturnType="Collection(IMModel.RptProductionByMonth)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="ConsiderQuinellas" Mode="In" Type="Boolean" />
+            <Parameter Name="Market" Mode="In" Type="String" />
+            <Parameter Name="ConsiderNights" Mode="In" Type="Boolean" />
+            <Parameter Name="NightsFrom" Mode="In" Type="Int32" />
+            <Parameter Name="NightsTo" Mode="In" Type="Int32" />
+            <Parameter Name="Agency" Mode="In" Type="String" />
+            <Parameter Name="ConsiderOriginallyAvailable" Mode="In" Type="Boolean" />
+            <Parameter Name="External" Mode="In" Type="Int32" />
+            <Parameter Name="BasedOnArrival" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptScoreByPR" ReturnType="Collection(IMModel.RptScoreByPR)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="ConsiderQuinellas" Mode="In" Type="Boolean" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -20906,6 +20960,8 @@
           <Property Type="Decimal" Name="AvgSales" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="TotalProc" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="CancelF" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ProcSales" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ProcAmount" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="RptCloserStatistics">
           <Property Type="String" Name="saCloser" Nullable="true" MaxLength="10" />
@@ -20927,6 +20983,63 @@
           <Property Type="Decimal" Name="AvgSales" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="TotalProc" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="CancelF" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptProductionByMonth">
+          <Property Type="Int32" Name="Year" Nullable="true" />
+          <Property Type="Int32" Name="Month" Nullable="true" />
+          <Property Type="Int32" Name="Arrivals" Nullable="true" />
+          <Property Type="Int32" Name="Contacts" Nullable="true" />
+          <Property Type="Decimal" Name="ContactsFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Availables" Nullable="true" />
+          <Property Type="Decimal" Name="AvailablesFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="GrossBooks" Nullable="true" />
+          <Property Type="Int32" Name="Books" Nullable="true" />
+          <Property Type="Decimal" Name="BooksFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="GrossShows" Nullable="true" />
+          <Property Type="Int32" Name="Shows" Nullable="true" />
+          <Property Type="Decimal" Name="ShowsFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ShowsArrivalsFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales" Nullable="true" />
+          <Property Type="Int32" Name="SalesAmount" Nullable="true" />
+          <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptContactBookShowQuinellas">
+          <Property Type="String" Name="Market" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Filter" Nullable="true" MaxLength="15" />
+          <Property Type="Int32" Name="Year" Nullable="true" />
+          <Property Type="Int32" Name="Month" Nullable="true" />
+          <Property Type="Int32" Name="Arrivals" Nullable="true" />
+          <Property Type="Int32" Name="Contacts" Nullable="true" />
+          <Property Type="Decimal" Name="ContactsFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Availables" Nullable="true" />
+          <Property Type="Decimal" Name="AvailablesFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="GrossBooks" Nullable="true" />
+          <Property Type="Int32" Name="Books" Nullable="true" />
+          <Property Type="Decimal" Name="BooksFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="GrossShows" Nullable="true" />
+          <Property Type="Int32" Name="Shows" Nullable="true" />
+          <Property Type="Decimal" Name="ShowsFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ShowsArrivalsFactor" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales" Nullable="true" />
+          <Property Type="Int32" Name="SalesAmount" Nullable="true" />
+          <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+          <Property Type="String" Name="LeadSource" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="RptScoreByPR">
+          <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PRN" Nullable="false" MaxLength="40" />
+          <Property Type="String" Name="ScoreRuleType" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="ScoreRuleTypeN" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="ScoreRule" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ScoreRuleN" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="ScoreRuleConcept" Nullable="false" />
+          <Property Type="String" Name="ScoreRuleConceptN" Nullable="true" MaxLength="30" />
+          <Property Type="Decimal" Name="Shows" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Score" Nullable="true" Precision="19" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -27727,6 +27840,77 @@
                 <ScalarProperty Name="AvgSales" ColumnName="AvgSales" />
                 <ScalarProperty Name="TotalProc" ColumnName="TotalProc" />
                 <ScalarProperty Name="CancelF" ColumnName="CancelF" />
+                <ScalarProperty Name="ProcSales" ColumnName="ProcSales" />
+                <ScalarProperty Name="ProcAmount" ColumnName="ProcAmount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_IM_RptContactBookShowQuinellas" FunctionName="IMModel.Store.USP_IM_RptContactBookShowQuinellas" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptContactBookShowQuinellas">
+                <ScalarProperty Name="Market" ColumnName="Market" />
+                <ScalarProperty Name="Filter" ColumnName="Filter" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Arrivals" ColumnName="Arrivals" />
+                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
+                <ScalarProperty Name="ContactsFactor" ColumnName="ContactsFactor" />
+                <ScalarProperty Name="Availables" ColumnName="Availables" />
+                <ScalarProperty Name="AvailablesFactor" ColumnName="AvailablesFactor" />
+                <ScalarProperty Name="GrossBooks" ColumnName="GrossBooks" />
+                <ScalarProperty Name="Books" ColumnName="Books" />
+                <ScalarProperty Name="BooksFactor" ColumnName="BooksFactor" />
+                <ScalarProperty Name="GrossShows" ColumnName="GrossShows" />
+                <ScalarProperty Name="Shows" ColumnName="Shows" />
+                <ScalarProperty Name="ShowsFactor" ColumnName="ShowsFactor" />
+                <ScalarProperty Name="ShowsArrivalsFactor" ColumnName="ShowsArrivalsFactor" />
+                <ScalarProperty Name="Sales" ColumnName="Sales" />
+                <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
+                <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+                <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+                <ScalarProperty Name="LeadSource" ColumnName="LeadSource" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptProductionByMonth" FunctionName="IMModel.Store.USP_OR_RptProductionByMonth">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptProductionByMonth">
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Arrivals" ColumnName="Arrivals" />
+                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
+                <ScalarProperty Name="ContactsFactor" ColumnName="ContactsFactor" />
+                <ScalarProperty Name="Availables" ColumnName="Availables" />
+                <ScalarProperty Name="AvailablesFactor" ColumnName="AvailablesFactor" />
+                <ScalarProperty Name="GrossBooks" ColumnName="GrossBooks" />
+                <ScalarProperty Name="Books" ColumnName="Books" />
+                <ScalarProperty Name="BooksFactor" ColumnName="BooksFactor" />
+                <ScalarProperty Name="GrossShows" ColumnName="GrossShows" />
+                <ScalarProperty Name="Shows" ColumnName="Shows" />
+                <ScalarProperty Name="ShowsFactor" ColumnName="ShowsFactor" />
+                <ScalarProperty Name="ShowsArrivalsFactor" ColumnName="ShowsArrivalsFactor" />
+                <ScalarProperty Name="Sales" ColumnName="Sales" />
+                <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
+                <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+                <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptScoreByPR" FunctionName="IMModel.Store.USP_OR_RptScoreByPR" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptScoreByPR">
+                <ScalarProperty Name="PR" ColumnName="PR" />
+                <ScalarProperty Name="PRN" ColumnName="PRN" />
+                <ScalarProperty Name="ScoreRuleType" ColumnName="ScoreRuleType" />
+                <ScalarProperty Name="ScoreRuleTypeN" ColumnName="ScoreRuleTypeN" />
+                <ScalarProperty Name="ScoreRule" ColumnName="ScoreRule" />
+                <ScalarProperty Name="ScoreRuleN" ColumnName="ScoreRuleN" />
+                <ScalarProperty Name="ScoreRuleConcept" ColumnName="ScoreRuleConcept" />
+                <ScalarProperty Name="ScoreRuleConceptN" ColumnName="ScoreRuleConceptN" />
+                <ScalarProperty Name="Shows" ColumnName="Shows" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

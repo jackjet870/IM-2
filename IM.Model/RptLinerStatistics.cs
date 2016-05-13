@@ -38,5 +38,7 @@ namespace IM.Model
         public Nullable<decimal> AvgSales { get; set; }
         public Nullable<decimal> TotalProc { get; set; }
         public Nullable<decimal> CancelF { get; set; }
+        public Nullable<decimal> ProcSales { get; set; }
+        public Nullable<decimal> ProcAmount { get; set; }
     }
 }

@@ -4865,5 +4865,104 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptLinerStatistics>("USP_IM_RptLinerStatistics", dateFromParameter, dateToParameter, salesRoomsParameter);
         }
+    
+        public virtual ObjectResult<RptContactBookShowQuinellas> USP_IM_RptContactBookShowQuinellas(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, Nullable<int> external, Nullable<bool> basedOnArrival)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var externalParameter = external.HasValue ?
+                new ObjectParameter("External", external) :
+                new ObjectParameter("External", typeof(int));
+    
+            var basedOnArrivalParameter = basedOnArrival.HasValue ?
+                new ObjectParameter("BasedOnArrival", basedOnArrival) :
+                new ObjectParameter("BasedOnArrival", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptContactBookShowQuinellas>("USP_IM_RptContactBookShowQuinellas", dateFromParameter, dateToParameter, leadSourcesParameter, externalParameter, basedOnArrivalParameter);
+        }
+    
+        public virtual ObjectResult<RptProductionByMonth> USP_OR_RptProductionByMonth(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, Nullable<bool> considerQuinellas, string market, Nullable<bool> considerNights, Nullable<int> nightsFrom, Nullable<int> nightsTo, string agency, Nullable<bool> considerOriginallyAvailable, Nullable<int> external, Nullable<bool> basedOnArrival)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var considerQuinellasParameter = considerQuinellas.HasValue ?
+                new ObjectParameter("ConsiderQuinellas", considerQuinellas) :
+                new ObjectParameter("ConsiderQuinellas", typeof(bool));
+    
+            var marketParameter = market != null ?
+                new ObjectParameter("Market", market) :
+                new ObjectParameter("Market", typeof(string));
+    
+            var considerNightsParameter = considerNights.HasValue ?
+                new ObjectParameter("ConsiderNights", considerNights) :
+                new ObjectParameter("ConsiderNights", typeof(bool));
+    
+            var nightsFromParameter = nightsFrom.HasValue ?
+                new ObjectParameter("NightsFrom", nightsFrom) :
+                new ObjectParameter("NightsFrom", typeof(int));
+    
+            var nightsToParameter = nightsTo.HasValue ?
+                new ObjectParameter("NightsTo", nightsTo) :
+                new ObjectParameter("NightsTo", typeof(int));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var considerOriginallyAvailableParameter = considerOriginallyAvailable.HasValue ?
+                new ObjectParameter("ConsiderOriginallyAvailable", considerOriginallyAvailable) :
+                new ObjectParameter("ConsiderOriginallyAvailable", typeof(bool));
+    
+            var externalParameter = external.HasValue ?
+                new ObjectParameter("External", external) :
+                new ObjectParameter("External", typeof(int));
+    
+            var basedOnArrivalParameter = basedOnArrival.HasValue ?
+                new ObjectParameter("BasedOnArrival", basedOnArrival) :
+                new ObjectParameter("BasedOnArrival", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionByMonth>("USP_OR_RptProductionByMonth", dateFromParameter, dateToParameter, leadSourcesParameter, considerQuinellasParameter, marketParameter, considerNightsParameter, nightsFromParameter, nightsToParameter, agencyParameter, considerOriginallyAvailableParameter, externalParameter, basedOnArrivalParameter);
+        }
+    
+        public virtual ObjectResult<RptScoreByPR> USP_OR_RptScoreByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, Nullable<bool> considerQuinellas)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourcesParameter = leadSources != null ?
+                new ObjectParameter("LeadSources", leadSources) :
+                new ObjectParameter("LeadSources", typeof(string));
+    
+            var considerQuinellasParameter = considerQuinellas.HasValue ?
+                new ObjectParameter("ConsiderQuinellas", considerQuinellas) :
+                new ObjectParameter("ConsiderQuinellas", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptScoreByPR>("USP_OR_RptScoreByPR", dateFromParameter, dateToParameter, leadSourcesParameter, considerQuinellasParameter);
+        }
     }
 }
