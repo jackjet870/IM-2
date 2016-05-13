@@ -230,7 +230,7 @@ namespace IM.Launcher.Forms
           Process.Start(String.Format("{0}\\IM.MailOutsConfig.exe", path));
           break;
         case EnumMenu.InvitationsConfig:
-          UIHelper.ShowMessage("Coming soon..");
+          Process.Start(String.Format("{0}\\IM.InvitConfig.exe", path));
           break;
         case EnumMenu.PrinterConfig:
           var printer = new PrinterCfg();
