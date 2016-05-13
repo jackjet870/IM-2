@@ -680,6 +680,9 @@
     <Compile Include="RptCxCDeposits.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptCxCExcel.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptCxCGifts.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

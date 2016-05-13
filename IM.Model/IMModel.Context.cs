@@ -4964,5 +4964,22 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptScoreByPR>("USP_OR_RptScoreByPR", dateFromParameter, dateToParameter, leadSourcesParameter, considerQuinellasParameter);
         }
+    
+        public virtual ObjectResult<RptCxCExcel> USP_OR_RptCxCExcel(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptCxCExcel>("USP_OR_RptCxCExcel", dateFromParameter, dateToParameter, salesRoomParameter);
+        }
     }
 }
