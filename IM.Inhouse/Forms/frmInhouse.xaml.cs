@@ -15,6 +15,8 @@ using IM.Model.Enums;
 using IM.Model.Helpers;
 using IM.Services.Helpers;
 using IM.Services.WirePRService;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace IM.Inhouse.Forms
 {
@@ -49,7 +51,6 @@ namespace IM.Inhouse.Forms
     #region Metodos
 
     #region EnabledCtrls
-
     /// <summary>
     /// Configura los controles para que esten habilitados o deshabilidatos cuando se presionan los TabsControl
     /// </summary>
@@ -75,16 +76,13 @@ namespace IM.Inhouse.Forms
     #endregion
 
     #region LoadGrid
-
     /// <summary>
     /// Metodo que sirve para carga los DataGrid's segun su estado de Visibilidad
     /// </summary>
     ///<history>[jorcanche] 15/03/2016 </history>
     private void LoadGrid()
     {
-      if (_guestArrivalViewSource == null || _guestPremanifestViewSource == null || _guestAvailableViewSource == null)
-        return;
-      StaStart("Loading Data...");
+      if (_guestArrivalViewSource == null || _guestPremanifestViewSource == null || _guestAvailableViewSource == null) return;
       switch (_screen)
       {
         case EnumScreen.Arrivals: //GuestArrival
@@ -110,7 +108,6 @@ namespace IM.Inhouse.Forms
         default:
           throw new ArgumentOutOfRangeException();
       }
-      StaEnd();
     }
 
     #endregion
@@ -279,8 +276,7 @@ namespace IM.Inhouse.Forms
           //Determinamos el caso 
           var itemGuestArrival = guest as GuestArrival;
           //Validamos
-          if (itemGuestArrival != null &&
-              ValidateCheckIn(itemGuestArrival.guCheckIn, itemGuestArrival.guCheckInD, itemGuestArrival.guCheckOutD))
+          if (itemGuestArrival != null && ValidateCheckIn(itemGuestArrival.guCheckIn, itemGuestArrival.guCheckInD, itemGuestArrival.guCheckOutD))
           {
             //determinamos si el huesped debe estar como disponible
             if (itemGuestArrival.guum == 0)
@@ -489,8 +485,7 @@ namespace IM.Inhouse.Forms
     /// </summary>
     /// <param name="dg">Datagrid</param>
     /// <param name="sender"> Instancia del CheckBox</param>
-    public void OpenInfo(DataGrid dg, bool guCheckIn, bool guInfo, DateTime guCheckOutD, int guID, object sender,
-      int tipo )
+    public void OpenInfo(DataGrid dg, bool guCheckIn, bool guInfo, DateTime guCheckOutD, int guID, object sender,int tipo )
     {
       var chkguInfo = sender as CheckBox;
       chkguInfo.IsChecked = !chkguInfo.IsChecked.Value;
@@ -538,8 +533,7 @@ namespace IM.Inhouse.Forms
             item.guCheckIn = true;
             item.guInfo = true;
           });
-          dg.Items.Refresh();
-          //LoadGrid();
+          dg.Items.Refresh();          
           break;
         case 2:
           dg.SelectedItems.OfType<GuestAvailable>().ToList().ForEach(item =>
@@ -884,25 +878,18 @@ namespace IM.Inhouse.Forms
     {
       //Guardamos el log del login 
       BRLoginLogs.SaveGuestLog(App.User.Location.loID, App.User.User.peID, Environment.MachineName.ToString());
-
       //Cargamos la variable de Occupancy
-      txtOccupancy.Text =
-        BRLeadSources.GetOccupationLeadSources(BRHelpers.GetServerDate().Date, App.User.Location.loID).ToString();
-      ;
-
+      txtOccupancy.Text = BRLeadSources.GetOccupationLeadSources(BRHelpers.GetServerDate().Date, App.User.Location.loID).ToString();  
       //Indicamos al statusbar que me muestre cierta informacion cuando oprimimos cierto teclado
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
-
-      StaStart("Load Inhouse...");
+      StaStart("Load Catalogs Inhouse...");
       //Cargamos las variables del usuario
       txtUser.Text = App.User.User.peN;
       txtLocation.Text = App.User.Location.loN;
-
       //Cargamos la fecha actual del servidor
       dtpDate.Value = BRHelpers.GetServerDate().Date;
-
       //Inicializamos las variables de los DataGrids
       _guestArrivalViewSource = ((CollectionViewSource) (this.FindResource("GuestArrivalViewSource")));
       _guestAvailableViewSource = ((CollectionViewSource) (this.FindResource("GuestAvailableViewSource")));
@@ -914,9 +901,7 @@ namespace IM.Inhouse.Forms
 
       //Cargamos el listado de markets
       listMarkets.ItemsSource = BRMarkets.GetMarkets(1);
-
-      StaEnd();
-
+      
       //Abrimos el visualizador de  noticias    
       var win = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x is frmNotices);
       if (win != null)
@@ -940,7 +925,7 @@ namespace IM.Inhouse.Forms
     /// <history> [jorcanche] 09/03/2016 </history>
     private void listMarkets_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      int cont = 0;
+      StaStart("Load Guest´s by Market"); int cont = 0;
       _markets = string.Empty;
       var selectedItems = listMarkets.SelectedItems;
       foreach (MarketShort selectedItem in selectedItems)
@@ -1988,11 +1973,9 @@ namespace IM.Inhouse.Forms
     private void btnArrivals_Clicked(object sender, RoutedEventArgs e)
     {
       StaStart("Loading Arrival...");
-      EnabledCtrls(true, true, true, true);
-      // DataGridVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Hidden, Visibility.Hidden);
-      _screen = EnumScreen.Arrivals;
+      EnabledCtrls(true, true, true, true);     
+      _screen = EnumScreen.Arrivals; // DataGridVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Hidden, Visibility.Hidden);
       LoadGrid();
-      StaEnd();
       //oculta el boton btnWitGifts que exporta el reporte Premanifest WithGifts
       ShowbtnWitGifts(false);
     }
@@ -2008,11 +1991,9 @@ namespace IM.Inhouse.Forms
     private void btnAvailables_Clicked(object sender, RoutedEventArgs e)
     {
       StaStart("Loading Available...");
-      EnabledCtrls(false, false, true, true);
-      // DataGridVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Hidden, Visibility.Hidden);
-      _screen = EnumScreen.Availables;
-      LoadGrid();
-      StaEnd();
+      EnabledCtrls(false, false, true, true);      
+      _screen = EnumScreen.Availables;// DataGridVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Hidden, Visibility.Hidden);
+      LoadGrid();     
       //oculta el boton btnWitGifts que exporta el reporte Premanifest WithGifts
       ShowbtnWitGifts(false);
     }
@@ -2020,7 +2001,6 @@ namespace IM.Inhouse.Forms
     #endregion
 
     #region btnPremanifiest_Click
-
     /// <summary>
     ///Evento que ocurre cuando se oprime el boton Premanifest y ejecuta las configuaraciones 
     /// </summary>
@@ -2028,22 +2008,18 @@ namespace IM.Inhouse.Forms
     private void btnPremanifiest_Click(object sender, RoutedEventArgs e)
     {
       StaStart("Loading Premanifest...");
-      EnabledCtrls(false, true, false, false);
-      // DataGridVisibility(Visibility.Hidden, Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
-      _screen = EnumScreen.Premanifest;
+      EnabledCtrls(false, true, false, false);      
+      _screen = EnumScreen.Premanifest;// DataGridVisibility(Visibility.Hidden, Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
       LoadGrid();
-      StaEnd();
       //Muestra el boton btnWitGifts que exporta el reporte Premanifest WithGifts
       ShowbtnWitGifts(true);
     }
-
     #endregion
 
     #region btnGroups_Click
-
     private void btnGrouos_Click(object sender, RoutedEventArgs e)
     {
-      Forms.frmGuestsGroups frmGroups = new frmGuestsGroups(0, 0, 0, dtpDate.Value.Value, EnumAction.Search);
+      frmGuestsGroups frmGroups = new frmGuestsGroups(0, 0, 0, dtpDate.Value.Value, EnumAction.Search);
       frmGroups.ShowDialog();
     }
 
@@ -2069,32 +2045,30 @@ namespace IM.Inhouse.Forms
     /// </history>
     private void btnSearchGuest_Click(object sender, RoutedEventArgs e)
     {
+      StaStart("loading Searcheds...");
+      //StaStart("loading Searched...");
       frmSearchGuests SearchGuests = new frmSearchGuests();
       SearchGuests.Owner = this;
-      SearchGuests.ShowInTaskbar = false;
       //Validamos que se halla cerrado la ventana 
-      if (!SearchGuests.ShowDialog().Value)
+      StaEnd();
+      SearchGuests.ShowDialog();
+      //Validamos que le halla dado aceptar y no Cerrar ventana.
+      if (!SearchGuests._Cancel)
       {
-        //Validamos que le halla dado aceptar y no Cerrar ventana.
-        if (!SearchGuests._Cancel)
-        {
-          StaStart("loading Searched...");
-          //Traemos los Datos
-          _guestDateTo = SearchGuests._dateTo;
-          _guestdateFrom = SearchGuests._dateFrom;
-          _guestGuid = SearchGuests._guestID;
-          _guestName = SearchGuests._name;
-          _guestRoom = SearchGuests._room;
-          _guestReservation = SearchGuests._reservation;
-          //Manipulamos los controlos 
-          EnabledCtrls(false, false, false, false, false, false);
-          //DataGridVisibility(Visibility.Hidden, Visibility.Hidden, Visibility.Hidden, Visibility.Visible);
-          _screen = EnumScreen.Search;
-          LoadGrid();
-          StaEnd();
-          //oculta el boton btnWitGifts que exporta el reporte Premanifest WithGifts
-          ShowbtnWitGifts(false);
-        }
+        StaStart("loading Searched...");
+        //Traemos los Datos
+        _guestDateTo = SearchGuests._dateTo;
+        _guestdateFrom = SearchGuests._dateFrom;
+        _guestGuid = SearchGuests._guestID;
+        _guestName = SearchGuests._name;
+        _guestRoom = SearchGuests._room;
+        _guestReservation = SearchGuests._reservation;
+        //Manipulamos los controlos 
+        EnabledCtrls(false, false, false, false, false, false);
+        _screen = EnumScreen.Search;        
+        LoadGrid();
+        //oculta el boton btnWitGifts que exporta el reporte Premanifest WithGifts
+        ShowbtnWitGifts(false);
       }
     }
 
@@ -2165,127 +2139,127 @@ namespace IM.Inhouse.Forms
 
     private void DoGetScreenArrivals()
     {
-      _guestArrivalViewSource.Source =
-        BRGuests.GetGuestsArrivals(_serverDate, App.User.LeadSource.lsID, _markets, _available, _info, _invited,
-          _onGroup).Select(parent => new ObjGuestArrival(parent)).ToList();
-      //  Task.Factory.StartNew(() =>
-      //     BRGuests.GetGuestsArrivals(_serverDate, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup).
-      //     Select(parent => new ObjGuestArrival(parent)).ToList()).ContinueWith(
-      //     (LoadGuestsInhouse) =>
-      //     {
-      //       if (LoadGuestsInhouse.IsFaulted)
-      //       {
-      //         UIHelper.ShowMessage(LoadGuestsInhouse.Exception.InnerException.Message, MessageBoxImage.Error);
-      //         StaEnd();
-      //         return false;
-      //       }
-      //       else
-      //       {
-      //         if (LoadGuestsInhouse.IsCompleted)
-      //         {
-      //           LoadGuestsInhouse.Wait(1000);
-      //           _guestArrivalViewSource.Source = LoadGuestsInhouse.Result;
-      //         }
-      //         StaEnd();
-      //         return false;
-      //       }
-      //     },
-      //     TaskScheduler.FromCurrentSynchronizationContext()
-      //      );
+      //_guestArrivalViewSource.Source =
+      //  BRGuests.GetGuestsArrivals(_serverDate, App.User.LeadSource.lsID, _markets, _available, _info, _invited,
+      //    _onGroup).Select(parent => new ObjGuestArrival(parent)).ToList();
+      Task.Factory.StartNew(() =>
+         BRGuests.GetGuestsArrivals(_serverDate, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup).
+         Select(parent => new ObjGuestArrival(parent)).ToList()).ContinueWith(
+         (LoadGuestsInhouse) =>
+         {
+           if (LoadGuestsInhouse.IsFaulted)
+           {
+             UIHelper.ShowMessage(LoadGuestsInhouse.Exception.InnerException.Message, MessageBoxImage.Error);
+             StaEnd();
+             return false;
+           }
+           else
+           {
+             if (LoadGuestsInhouse.IsCompleted)
+             {
+               LoadGuestsInhouse.Wait(1000);
+               _guestArrivalViewSource.Source = LoadGuestsInhouse.Result;
+             }
+             StaEnd();
+             return false;
+           }
+         },
+         TaskScheduler.FromCurrentSynchronizationContext()
+          );
     }
 
     private void DoGetScreenPremanifest()
     {
-      _guestPremanifestViewSource.Source =
-        BRGuests.GetGuestsPremanifest(_serverDate, App.User.LeadSource.lsID, _markets, _onGroup)
-          .Select(parent => new ObjGuestPremanifest(parent))
-          .ToList();
-      //Task.Factory.StartNew(() =>
-      //         BRGuests.GetGuestsPremanifest(_serverDate, App.User.LeadSource.lsID, _markets, _onGroup)
-      //      .Select(parent => new ObjGuestPremanifest(parent)).ToList()).ContinueWith(
-      //   (LoadGuestsInhouse) =>
-      //   {
-      //     if (LoadGuestsInhouse.IsFaulted)
-      //     {
-      //       UIHelper.ShowMessage(LoadGuestsInhouse.Exception.InnerException.Message, MessageBoxImage.Error);
-      //       StaEnd();
-      //       return false;
-      //     }
-      //     else
-      //     {
-      //       if (LoadGuestsInhouse.IsCompleted)
-      //       {
-      //         LoadGuestsInhouse.Wait(1000);
-      //         _guestPremanifestViewSource.Source = LoadGuestsInhouse.Result;
-      //       }
-      //       StaEnd();
-      //       return false;
-      //     }
-      //   },
-      //   TaskScheduler.FromCurrentSynchronizationContext()
-      //    ); 
+      //_guestPremanifestViewSource.Source =
+      //  BRGuests.GetGuestsPremanifest(_serverDate, App.User.LeadSource.lsID, _markets, _onGroup)
+      //    .Select(parent => new ObjGuestPremanifest(parent))
+      //    .ToList();
+      Task.Factory.StartNew(() =>
+               BRGuests.GetGuestsPremanifest(_serverDate, App.User.LeadSource.lsID, _markets, _onGroup)
+            .Select(parent => new ObjGuestPremanifest(parent)).ToList()).ContinueWith(
+         (LoadGuestsInhouse) =>
+         {
+           if (LoadGuestsInhouse.IsFaulted)
+           {
+             UIHelper.ShowMessage(LoadGuestsInhouse.Exception.InnerException.Message, MessageBoxImage.Error);
+             StaEnd();
+             return false;
+           }
+           else
+           {
+             if (LoadGuestsInhouse.IsCompleted)
+             {
+               LoadGuestsInhouse.Wait(1000);
+               _guestPremanifestViewSource.Source = LoadGuestsInhouse.Result;
+             }
+             StaEnd();
+             return false;
+           }
+         },
+         TaskScheduler.FromCurrentSynchronizationContext()
+          );
     }
 
     private void DoGetScreenAvailables()
     {
-      _guestAvailableViewSource.Source =
-        BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited,
-          _onGroup).Select(parent => new ObjGuestAvailable(parent)).ToList();
-      //Task.Factory.StartNew(() =>
-      //     BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup)
-      //     .Select(parent => new ObjGuestAvailable(parent)).ToList()).ContinueWith(
-      //   (LoadGuestsInhouse) =>
-      //   {
-      //     if (LoadGuestsInhouse.IsFaulted)
-      //     {
-      //       UIHelper.ShowMessage(LoadGuestsInhouse.Exception.InnerException.Message, MessageBoxImage.Error);
-      //       StaEnd();
-      //       return false;
-      //     }
-      //     else
-      //     {
-      //       if (LoadGuestsInhouse.IsCompleted)
-      //       {
-      //         LoadGuestsInhouse.Wait(1000);
-      //         _guestAvailableViewSource.Source = LoadGuestsInhouse.Result;
-      //       }
-      //       StaEnd();
-      //       return false;
-      //     }
-      //   },
-      //   TaskScheduler.FromCurrentSynchronizationContext()
-      //    );
+      //_guestAvailableViewSource.Source =
+      //  BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited,
+      //    _onGroup).Select(parent => new ObjGuestAvailable(parent)).ToList();
+      Task.Factory.StartNew(() =>
+           BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup)
+           .Select(parent => new ObjGuestAvailable(parent)).ToList()).ContinueWith(
+         (LoadGuestsInhouse) =>
+         {
+           if (LoadGuestsInhouse.IsFaulted)
+           {
+             UIHelper.ShowMessage(LoadGuestsInhouse.Exception.InnerException.Message, MessageBoxImage.Error);
+             StaEnd();
+             return false;
+           }
+           else
+           {
+             if (LoadGuestsInhouse.IsCompleted)
+             {
+               LoadGuestsInhouse.Wait(1000);
+               _guestAvailableViewSource.Source = LoadGuestsInhouse.Result;
+             }
+             StaEnd();
+             return false;
+           }
+         },
+         TaskScheduler.FromCurrentSynchronizationContext()
+          );
     }
 
     private void DoGetScreenSearched()
     {
-      _guestSearchedViewSource.Source =
-        BRGuests.GetGuests(_guestdateFrom, _guestDateTo, App.User.LeadSource.lsID, _guestName, _guestRoom,
-          _guestReservation, _guestGuid).Select(parent => new ObjGuestSearched(parent)).ToList();
-      //Task.Factory.StartNew(() =>
-      //   BRGuests.GetGuests(_guestdateFrom, _guestDateTo, App.User.LeadSource.lsID, _guestName, _guestRoom, _guestReservation, _guestGuid)
-      //      .Select(parent => new ObjGuestSearched(parent)).ToList()).ContinueWith(
-      //   (LoadGuestsInhouse) =>
-      //   {
-      //     if (LoadGuestsInhouse.IsFaulted)
-      //     {
-      //       UIHelper.ShowMessage(LoadGuestsInhouse.Exception.InnerException.Message, MessageBoxImage.Error);
-      //       StaEnd();
-      //       return false;
-      //     }
-      //     else
-      //     {
-      //       if (LoadGuestsInhouse.IsCompleted)
-      //       {
-      //         LoadGuestsInhouse.Wait(1000);
-      //         _guestSearchedViewSource.Source = LoadGuestsInhouse.Result;
-      //       }
-      //       StaEnd();
-      //       return false;
-      //     }
-      //   },
-      //   TaskScheduler.FromCurrentSynchronizationContext()
-      //    );
+      //_guestSearchedViewSource.Source =
+      //  BRGuests.GetGuests(_guestdateFrom, _guestDateTo, App.User.LeadSource.lsID, _guestName, _guestRoom,
+      //    _guestReservation, _guestGuid).Select(parent => new ObjGuestSearched(parent)).ToList();
+      Task.Factory.StartNew(() =>
+         BRGuests.GetGuests(_guestdateFrom, _guestDateTo, App.User.LeadSource.lsID, _guestName, _guestRoom, _guestReservation, _guestGuid)
+            .Select(parent => new ObjGuestSearched(parent)).ToList()).ContinueWith(
+         (LoadGuestsInhouse) =>
+         {
+           if (LoadGuestsInhouse.IsFaulted)
+           {
+             UIHelper.ShowMessage(LoadGuestsInhouse.Exception.InnerException.Message, MessageBoxImage.Error);
+             StaEnd();
+             return false;
+           }
+           else
+           {
+             if (LoadGuestsInhouse.IsCompleted)
+             {
+               LoadGuestsInhouse.Wait(1000);
+               _guestSearchedViewSource.Source = LoadGuestsInhouse.Result;
+             }
+             StaEnd();
+             return false;
+           }
+         },
+         TaskScheduler.FromCurrentSynchronizationContext()     
+          );
     }
 
     #endregion

@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AssistanceToAssistance.cs" />
+    <Compile Include="Helpers\RptInvitationHelper.cs" />
     <Compile Include="Classes\objInvitAdditionalGuest.cs" />
     <Compile Include="Classes\objInvitBookingDeposit.cs" />
     <Compile Include="Classes\objInvitCreditCard.cs" />

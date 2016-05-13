@@ -190,7 +190,7 @@
                     </StackPanel>
                 </GroupBox>
 
-                <ListView Grid.Column="4"  Margin="4" Width="Auto" Height="Auto"  x:Name="listMarkets" Background="DarkSeaGreen"  SelectionChanged="listMarkets_SelectionChanged">
+                <ListView Grid.Column="4" SelectionMode="Multiple" VerticalAlignment="Center" Margin="4" Width="Auto" Height="Auto"  x:Name="listMarkets" Background="DarkSeaGreen"  SelectionChanged="listMarkets_SelectionChanged">
                     <ListView.View>
                         <GridView>
                             <!--<GridViewColumn x:Name="mkIDColumn" Width="80" Header="mk ID" DisplayMemberBinding="{Binding mkID}"  />-->

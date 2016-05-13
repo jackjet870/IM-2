@@ -56,6 +56,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.ProcessorSales", "IM.Pro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.Styles", "IM.Styles\IM.Styles.csproj", "{BAD29979-3E8D-4913-8DD0-EDEBC8AF85A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IM.InvitConfig", "IM.InvitConfig\IM.InvitConfig.csproj", "{F81185F3-005E-4A5D-B203-2B4B5A1F4440}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -264,6 +266,14 @@ Global
 		{BAD29979-3E8D-4913-8DD0-EDEBC8AF85A7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BAD29979-3E8D-4913-8DD0-EDEBC8AF85A7}.Release|x86.ActiveCfg = Release|Any CPU
 		{BAD29979-3E8D-4913-8DD0-EDEBC8AF85A7}.Release|x86.Build.0 = Release|Any CPU
+		{F81185F3-005E-4A5D-B203-2B4B5A1F4440}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F81185F3-005E-4A5D-B203-2B4B5A1F4440}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F81185F3-005E-4A5D-B203-2B4B5A1F4440}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F81185F3-005E-4A5D-B203-2B4B5A1F4440}.Debug|x86.Build.0 = Debug|Any CPU
+		{F81185F3-005E-4A5D-B203-2B4B5A1F4440}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F81185F3-005E-4A5D-B203-2B4B5A1F4440}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F81185F3-005E-4A5D-B203-2B4B5A1F4440}.Release|x86.ActiveCfg = Release|Any CPU
+		{F81185F3-005E-4A5D-B203-2B4B5A1F4440}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -10,7 +10,10 @@ namespace IM.Base.Classes
     /// </summary>
     /// <param name="assistData">Item AssistanceData</param>
     /// <returns>Clase Assistance con valores de AssistanceData</returns>
-    /// <history>[ECANUL] 22-03-2016 CREATED</history>
+    /// <history>
+    /// [ECANUL] 22-03-2016 CREATED
+    /// [jorcanche] 11/04/2016 Cambio de lugar la clase de Inhouse a base
+    /// </history>
     public static Assistance ConvertAssistanceDataToAssistance (AssistanceData assistData)
     {
       Assistance assistance = new Assistance();
