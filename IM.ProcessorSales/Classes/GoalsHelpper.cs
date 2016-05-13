@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace IM.ProcessorSales.Classes
 {
-  public class GoalsHelpper : INotifyPropertyChanged
+  public class GoalsHelpper : RptConcentrateDailySales, INotifyPropertyChanged
   {
     private bool _isCheck;
 
@@ -15,7 +15,7 @@ namespace IM.ProcessorSales.Classes
 
     public SalesRoomByUser salesRoom { get; set; }
 
-    public decimal goal { get; set; }
+    public decimal? goal { get; set; }
 
     public event PropertyChangedEventHandler PropertyChanged;
     private void onChanged(string prop)

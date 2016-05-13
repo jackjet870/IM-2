@@ -1030,6 +1030,27 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    #region GetRptConcentrateDailySales
+    /// <summary>
+    /// Devuelve un listado de GetRptConcentrateDailySales
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicio</param>
+    /// <param name="dtEnd">Fecha Fin </param>
+    /// <param name="salesRoom">Sales Room</param>
+    /// <history>
+    /// [ecanul] 11/05/2016 Created
+    /// </history>
+    public static List<RptConcentrateDailySales> GetRptConcentrateDailySales(DateTime dtStart, DateTime dtEnd,
+      IEnumerable<string> salesRoom)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptConcentrateDailySales_TimeOut;
+        return dbContext.USP_IM_RptConcentrateDailySales(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
+      }
+    }
+    #endregion
+
     #endregion
   }
 }

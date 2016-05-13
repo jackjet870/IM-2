@@ -261,11 +261,12 @@ namespace IM.ProcessorSales.Forms
           lstSalesRoom.AddRange(lstGoals.Select(c => c.salesRoom.srID));
           filters.Add(new Tuple<string, string>("Sales Room", string.Join("/",lstGoals.Select(c=> c.salesRoom.srID).ToList()))); 
           #endregion
-          //Se hace la consulta por cada item dentro del listado
-          foreach (var item in lstGoals)
-          {
-            list.AddRange(BRReportsBySalesRoom.GetRptDailySalesDetail(dtmStart,dtmEnd,lstGoals.Select(c=>c.salesRoom.srID).Where(x=> x== item.salesRoom.srID).ToList()));
-          }
+          
+          list.AddRange(BRReportsBySalesRoom.GetRptConcentrateDailySales(dtmStart,dtmEnd,lstGoals.Select(c=>c.salesRoom.srID).ToList()));
+
+          if (list.Count > 0)
+            file = Reports.RptConcentrateDailySales(reporteName, dateRangeFileName, filters,
+              list.Cast<RptConcentrateDailySales>().ToList(), lstGoals);
 
           if (list.Count > 0)
             UIHelper.ShowMessage("");

@@ -336,6 +336,57 @@ namespace IM.ProcessorSales.Classes
     }
     #endregion
 
+    #region RptConcentrateDailySales
+    /// <summary>
+    /// Formato para el reporte RptConcentrateDailySales
+    /// </summary>
+    /// <history>
+    /// [ecanul] 13/05/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> RptConcentrateDailySales()
+    {
+      return new List<ExcelFormatTable>()
+      {
+        new ExcelFormatTable() { Title = "SalesRoom", Order = 0, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable() {Title = "Goal", Order = 0, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero },
+        new ExcelFormatTable() {Title = "Diference", Order = 1, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero},
+        new ExcelFormatTable() {Title = "UPS", Order = 2, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.NumberWithCero },
+        new ExcelFormatTable() {Title = "Sales", Order = 3, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.NumberWithCero},
+        new ExcelFormatTable() {Title = "Proc", Order = 4, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero},
+        new ExcelFormatTable() {Title = "OPP", Order = 5, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero},
+        new ExcelFormatTable() {Title = "Fall", Order = 6, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero},
+        new ExcelFormatTable() {Title = "Cxld", Order = 7, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero},
+        new ExcelFormatTable() {Title = "Total Proc", Order = 8, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero},
+        new ExcelFormatTable() {Title = "Pact", Order = 12, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.PercentWithCero},
+        new ExcelFormatTable() {Title = "Collect", Order = 13, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.PercentWithCero},
+        new ExcelFormatTable
+        {
+          Title = "C%",
+          Order = 9,
+          Axis = ePivotFieldAxis.Values,
+          Format = EnumFormatTypeExcel.Percent,
+          Formula = "IF(UPS=0,0,Sales/UPS)"
+        },
+        new ExcelFormatTable
+        {
+          Title = "EFF",
+          Order = 10,
+          Axis = ePivotFieldAxis.Values,
+          Format = EnumFormatTypeExcel.DecimalNumber,
+          Formula = "IF('UPS' =0,0,'Total Proc'/'UPS')"
+        },
+        new ExcelFormatTable
+        {
+          Title = "AV/S",
+          Order = 11,
+          Axis = ePivotFieldAxis.Values,
+          Format = EnumFormatTypeExcel.DecimalNumber,
+          Formula = "IF('Sales' =0,0,'Total Proc'/'Sales')"
+        }
+      };
+    }
+    #endregion
+
     #endregion
   }
 }

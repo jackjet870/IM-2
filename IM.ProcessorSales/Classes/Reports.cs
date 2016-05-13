@@ -136,28 +136,55 @@ namespace IM.ProcessorSales.Classes
 
     #region RptConcentrateDailySales
 
-    //public static FileInfo RptConcentrateDailySales(string report, string dateRangeFileName,
-    //  List<Tuple<string, string>> filters, List<RptDailySalesDetail> lstReport, List<GoalsHelpper> goals)
-    //{
-    //  foreach (var goal in goals)
-    //  {
-    //    var customList =
-    //      lstReport.Select(
-    //        c =>
-    //          new
-    //          {
-    //            SRoom = goal.salesRoom.srN,
-    //            goal.goal,
-    //            c.Shows /*UPS*/,
-    //            c.SalesRegular,
-    //            c.SalesExit,
-    //            c.SalesVIP,
-    //            sales = (c.SalesRegular + c.SalesExit + c.SalesVIP)
+    /// <summary>
+    /// Obtiene los datos para exportar a excel el reporte RptConcentrateDailySales
+    /// </summary>
+    /// <param name="report">Nombre del reporte</param>
+    /// <param name="dateRangeFileName">Rango de fechas</param>
+    /// <param name="filters">Listado de filtros</param>
+    /// <param name="lstReport">Contenido del reporte</param>
+    /// <param name="goals">Listado de Goals para comparar</param>
+    /// <history>
+    /// [ecanul] 13/05/2016 Created
+    /// </history>
+    public static FileInfo RptConcentrateDailySales(string report, string dateRangeFileName,
+      List<Tuple<string, string>> filters, List<RptConcentrateDailySales> lstReport, List<GoalsHelpper> goals)
+    {
+      //List<dynamic> diList = new List<dynamic>();
+      
+      for (var i = 0; i < lstReport.Count; i++)
+      {
+        goals[i].SalesRoom = lstReport[i].SalesRoom;
+        goals[i].UPS = lstReport[i].UPS;
+        goals[i].Sales = lstReport[i].Sales;
+        goals[i].SalesAmountOPP = lstReport[i].SalesAmountOPP;
+        goals[i].SalesAmountFall = lstReport[i].SalesAmountFall;
+        goals[i].SalesAmountCancel = lstReport[i].SalesAmountCancel;
+        goals[i].SalesAmount = lstReport[i].SalesAmount;
+        goals[i].DownPact = lstReport[i].DownPact;
+        goals[i].DownColl = lstReport[i].DownColl;
+      }
 
-    //          })
-    //        .ToList();
-    //  }
-    //}
+      var customList = goals.Select(c => new
+      {
+        c.SalesRoom,
+        Goal = c.goal == 0 ? null : c.goal,
+        Difference = (c.goal - c.SalesAmount),
+        UPS = c.UPS == 0 ? null : c.UPS,
+        Sales = c.Sales == 0 ? null : c.Sales,
+        Proc = (c.SalesAmount - c.SalesAmountOPP) == 0 ? null : (c.SalesAmount - c.SalesAmountOPP),
+        OPP = c.SalesAmountOPP == 0 ? null : c.SalesAmountOPP,
+        Fall = c.SalesAmountFall == 0 ? null : c.SalesAmountFall,
+        Cancel = c.SalesAmountCancel == 0 ? null : c.SalesAmountCancel,
+        TotalProc = c.SalesAmount == 0 ? null : c.SalesAmount,
+        Pact = c.DownPact == 0 ? null : c.DownPact,
+        Collect = c.DownColl == 0 ? null : c.DownColl
+      }).ToList();
+      
+      var dtData = TableHelper.GetDataTableFromList(customList, true, false);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, dateRangeFileName,
+        FormatReport.RptConcentrateDailySales(), true);
+    }
     #endregion
 
     #endregion
