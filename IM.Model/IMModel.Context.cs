@@ -5221,5 +5221,44 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ValidationData>("USP_OR_ValidateSale", changedByParameter, passwordParameter, saleParameter, membershipNumberParameter, guestParameter, saleTypeParameter, salesRoomParameter, locationParameter, pR1Parameter, pR2Parameter, pR3Parameter, pRCaptain1Parameter, pRCaptain2Parameter, pRCaptain3Parameter, liner1Parameter, liner2Parameter, linerCaptainParameter, closer1Parameter, closer2Parameter, closer3Parameter, closerCaptainParameter, exit1Parameter, exit2Parameter, podiumParameter, vLOParameter);
         }
+    
+        public virtual ObjectResult<Nullable<decimal>> USP_OR_CalculateTotalsGiftsInvitation(Nullable<int> guestID)
+        {
+            var guestIDParameter = guestID.HasValue ?
+                new ObjectParameter("GuestID", guestID) :
+                new ObjectParameter("GuestID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("USP_OR_CalculateTotalsGiftsInvitation", guestIDParameter);
+        }
+    
+        public virtual int USP_OR_UpdateCharge(Nullable<int> guestID, Nullable<decimal> charge, Nullable<decimal> adjustment)
+        {
+            var guestIDParameter = guestID.HasValue ?
+                new ObjectParameter("GuestID", guestID) :
+                new ObjectParameter("GuestID", typeof(int));
+    
+            var chargeParameter = charge.HasValue ?
+                new ObjectParameter("Charge", charge) :
+                new ObjectParameter("Charge", typeof(decimal));
+    
+            var adjustmentParameter = adjustment.HasValue ?
+                new ObjectParameter("Adjustment", adjustment) :
+                new ObjectParameter("Adjustment", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateCharge", guestIDParameter, chargeParameter, adjustmentParameter);
+        }
+    
+        public virtual int USP_OR_UpdateGiftsReceiptDetailPromotionPVPCancel(Nullable<int> receipt, string gift)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            var giftParameter = gift != null ?
+                new ObjectParameter("Gift", gift) :
+                new ObjectParameter("Gift", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateGiftsReceiptDetailPromotionPVPCancel", receiptParameter, giftParameter);
+        }
     }
 }

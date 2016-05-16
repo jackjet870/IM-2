@@ -5954,6 +5954,9 @@
         <Function Name="USP_OR_AddAccessAdministrator" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PlaceType" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_CalculateTotalsGiftsInvitation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GuestID" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_CancelGiftsReceipt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Receipt" Type="int" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
@@ -7177,6 +7180,11 @@
         <Function Name="USP_OR_TransferUpdateTransferUnavailableMotivesByNewMember" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_TransferUpdateTransferUnavailableMotivesByPax" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_TransferUpdateTransferUnavailableMotivesByTransfer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="USP_OR_UpdateCharge" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GuestID" Type="int" Mode="In" />
+          <Parameter Name="Charge" Type="money" Mode="In" />
+          <Parameter Name="Adjustment" Type="money" Mode="In" />
+        </Function>
         <Function Name="USP_OR_UpdateExchangeRate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="Currency" Type="varchar" Mode="In" />
@@ -7198,6 +7206,10 @@
           <Parameter Name="Receipt" Type="int" Mode="In" />
           <Parameter Name="Gift" Type="varchar" Mode="In" />
           <Parameter Name="PromotionPVP" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_UpdateGiftsReceiptDetailPromotionPVPCancel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+          <Parameter Name="Gift" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_UpdateGiftsReceiptDetailRoomChargeOpera" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Receipt" Type="int" Mode="In" />
@@ -17443,7 +17455,7 @@
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_DeleteSale">
-            <Parameter Name="Sale" Mode="In" Type="Int32" />
+          <Parameter Name="Sale" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetSales" ReturnType="Collection(IMModel.SaleShort)">
             <Parameter Name="Guest" Mode="In" Type="Int32" />
@@ -17507,6 +17519,18 @@
             <Parameter Name="Exit2" Mode="In" Type="String" />
             <Parameter Name="Podium" Mode="In" Type="String" />
             <Parameter Name="VLO" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_CalculateTotalsGiftsInvitation" ReturnType="Collection(Decimal)">
+            <Parameter Name="GuestID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateCharge">
+            <Parameter Name="GuestID" Mode="In" Type="Int32" />
+            <Parameter Name="Charge" Mode="In" Type="Decimal" />
+            <Parameter Name="Adjustment" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateGiftsReceiptDetailPromotionPVPCancel">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Gift" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -28152,6 +28176,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_CalculateTotalsGiftsInvitation" FunctionName="IMModel.Store.USP_OR_CalculateTotalsGiftsInvitation" />
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateCharge" FunctionName="IMModel.Store.USP_OR_UpdateCharge" />
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateGiftsReceiptDetailPromotionPVPCancel" FunctionName="IMModel.Store.USP_OR_UpdateGiftsReceiptDetailPromotionPVPCancel" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
