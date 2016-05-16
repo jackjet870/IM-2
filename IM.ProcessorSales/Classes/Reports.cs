@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using IM.Base.Helpers;
 using IM.Model;
+using IM.Model.Enums;
 
 namespace IM.ProcessorSales.Classes
 {
@@ -135,7 +136,6 @@ namespace IM.ProcessorSales.Classes
     #endregion
 
     #region RptConcentrateDailySales
-
     /// <summary>
     /// Obtiene los datos para exportar a excel el reporte RptConcentrateDailySales
     /// </summary>
@@ -147,11 +147,10 @@ namespace IM.ProcessorSales.Classes
     /// <history>
     /// [ecanul] 13/05/2016 Created
     /// </history>
-    public static FileInfo RptConcentrateDailySales(string report, string dateRangeFileName,
+    public static FileInfo RptConcentrateDailySales(string report, string dateRangeFileName, DateTime date,
       List<Tuple<string, string>> filters, List<RptConcentrateDailySales> lstReport, List<GoalsHelpper> goals)
     {
-      //List<dynamic> diList = new List<dynamic>();
-      
+      #region Llena Datos
       for (var i = 0; i < lstReport.Count; i++)
       {
         goals[i].SalesRoom = lstReport[i].SalesRoom;
@@ -164,7 +163,9 @@ namespace IM.ProcessorSales.Classes
         goals[i].DownPact = lstReport[i].DownPact;
         goals[i].DownColl = lstReport[i].DownColl;
       }
+      #endregion
 
+      #region Seleccion de datos necesarios
       var customList = goals.Select(c => new
       {
         c.SalesRoom,
@@ -180,10 +181,33 @@ namespace IM.ProcessorSales.Classes
         Pact = c.DownPact == 0 ? null : c.DownPact,
         Collect = c.DownColl == 0 ? null : c.DownColl
       }).ToList();
-      
+      #endregion
+
+      #region CreateExtraFieldHeader
+      //Se obtiene el total de las metas (Goals)
+      decimal goal = Convert.ToDecimal(customList.Select(c => c.Goal).Sum());
+
+      //Se obtiene el total de dias del mes
+      var totDays = DateTime.DaysInMonth(date.Year, date.Month);
+      //Se obtiene el pronostocp
+      decimal forecast = goal / totDays * date.Day;
+      // Se obtiene la diferencia
+      var diference = Convert.ToDecimal(customList.Select(c => c.TotalProc).Sum() - forecast);
+      //Redondeamos los resultados a 2 decimales
+      forecast = decimal.Round(forecast, 2);
+      diference = decimal.Round(diference, 2);
+      //Creamos los ExtraHeader
+      List<Tuple<string, string, EnumFormatTypeExcel>> prueba = new List<Tuple<string, string, EnumFormatTypeExcel>>
+      {
+        new Tuple<string, string,EnumFormatTypeExcel>("Goal", goal.ToString(),EnumFormatTypeExcel.DecimalNumberWithCero),
+        new Tuple<string, string,EnumFormatTypeExcel>("Forecast", forecast.ToString(),EnumFormatTypeExcel.DecimalNumberWithCero),
+        new Tuple<string, string,EnumFormatTypeExcel>("Difference", diference.ToString(),EnumFormatTypeExcel.DecimalNumberWithCero)
+      }; 
+      #endregion
+
       var dtData = TableHelper.GetDataTableFromList(customList, true, false);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, dateRangeFileName,
-        FormatReport.RptConcentrateDailySales(), true);
+        FormatReport.RptConcentrateDailySales(), true, extraFieldHeader: prueba, numRows: 3);
     }
     #endregion
 

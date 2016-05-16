@@ -38,6 +38,8 @@ namespace IM.Base.Helpers
     /// <param name="reportName">Nombre del reporte</param>
     /// <param name="dateRangeFileName">Nombre del reporte</param>
     /// <param name="formatColumns">Lista de ExcelFormatTable donde definimos ("Titulo de la columna",IM.Model.Enums.EnumFormatTypeExcel, OfficeOpenXml.Style.Enum.ExcelHorizontalAlignment) </param>
+    /// <param name="extraFieldHeader"></param>
+    /// <param name="numRows"></param>
     /// <returns>FileInfo con el path para abrir el excel</returns>
     /// <history>
     ///   [erosado] 12/Mar/2016 Created.
@@ -51,7 +53,8 @@ namespace IM.Base.Helpers
     /// [aalcocer] 16/04/2016 Modified. Se cambia el contenido del reporte en a una tabla con encabezados integrado.
     ///                                 Se agrega la  opcion de mostrar totales de la tabla
     /// </history>
-    public static FileInfo CreateGeneralRptExcel(List<Tuple<string, string>> filter, DataTable dt, string reportName, string dateRangeFileName, List<ExcelFormatTable> formatColumns)
+    public static FileInfo CreateGeneralRptExcel(List<Tuple<string, string>> filter, DataTable dt, string reportName, string dateRangeFileName, List<ExcelFormatTable> formatColumns,
+      List<Tuple<string, string, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows=0)
     {
       #region Variables Atributos, Propiedades
 
@@ -72,7 +75,7 @@ namespace IM.Base.Helpers
       #region Report SuperHeader
 
       //Creamos la cabecera del reporte (Titulos, Filtros, Fecha y Hora de Impresion)
-      CreateReportHeader(filter, reportName, ref ws, ref filasTotalesFiltros);
+      CreateReportHeader(filter, reportName, ref ws, ref filasTotalesFiltros,extraFieldHeader,numRows);
 
       #endregion Report SuperHeader
 
@@ -82,7 +85,7 @@ namespace IM.Base.Helpers
       ws.InsertRow(filasTotalesFiltros + 3, dt.Rows.Count);
 
       //Agregamos el contenido empezando en la fila
-      ExcelRangeBase range = ws.Cells[filasTotalesFiltros + 5, 1].LoadFromDataTable(dt, true);
+      ExcelRangeBase range = ws.Cells[filasTotalesFiltros + 1, 1].LoadFromDataTable(dt, true);
       //El contenido lo convertimos a una tabla
       ExcelTable table = ws.Tables.Add(range, null);
       table.TableStyle = TableStyles.Medium2;
@@ -171,7 +174,8 @@ namespace IM.Base.Helpers
     /// </history>
     public static FileInfo CreatePivotRptExcel(bool isPivot, List<Tuple<string, string>> filters, DataTable dtData,
       string reportName, string dateRangeFileName,
-      List<ExcelFormatTable> formatColumns, bool showRowGrandTotal = false, bool showColumnGrandTotal = false, bool showRowHeaders = false)
+      List<ExcelFormatTable> formatColumns, bool showRowGrandTotal = false, bool showColumnGrandTotal = false, bool showRowHeaders = false,
+      List<Tuple<string, string, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0)
     {
       ExcelPackage pk = new ExcelPackage();
       //Preparamos la hoja donde escribiremos
@@ -181,8 +185,7 @@ namespace IM.Base.Helpers
       wsData.Hidden = eWorkSheetHidden.Hidden;
 
       int totalFilterRows = 0;
-
-      CreateReportHeader(filters, reportName, ref wsPivot, ref totalFilterRows);
+      CreateReportHeader(filters, reportName, ref wsPivot, ref totalFilterRows, extraFieldHeader, numRows);
 
       //Renombramos las columnas.
       dtData.Columns.Cast<DataColumn>().ToList().ForEach(c =>
@@ -201,7 +204,7 @@ namespace IM.Base.Helpers
       SetFormatTable(formatColumns.Where(c => !(c.Axis == ePivotFieldAxis.Values && !string.IsNullOrEmpty(c.Formula))).ToList(), ref table);
 
       //Cargamos la tabla dinamica.
-      ExcelPivotTable pivotTable = wsPivot.PivotTables.Add(wsPivot.Cells[totalFilterRows + 5, 1],
+      ExcelPivotTable pivotTable = wsPivot.PivotTables.Add(wsPivot.Cells[totalFilterRows +1 , 1],
         wsData.Cells[1, 1, wsData.Dimension.End.Row, wsData.Dimension.End.Column], Regex.Replace(reportName, "[^a-zA-Z0-9_]+", ""));
 
       if (isPivot)
@@ -422,16 +425,17 @@ namespace IM.Base.Helpers
     /// </history>
     public static FileInfo CreateExcelCustom(DataTable dtTable, List<Tuple<string, string>> filters, string reportName,
       string dateRangeFileName, List<ExcelFormatTable> formatTable, bool blnColumnGrandTotal = false,
-      bool blnRowGrandTotal = false, bool blnShowSubtotal = false)
+      bool blnRowGrandTotal = false, bool blnShowSubtotal = false,
+      List<Tuple<string, string, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0)
     {
       ExcelPackage pk = new ExcelPackage();
       var wsData = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
       int totalFilterRows = 0;
 
       //Creamos el encabezado
-      CreateReportHeader(filters, reportName, ref wsData, ref totalFilterRows);
+      CreateReportHeader(filters, reportName, ref wsData, ref totalFilterRows, extraFieldHeader, numRows);
 
-      int rowNumber = totalFilterRows + 5;
+      int rowNumber = totalFilterRows + 1;
       int columnNumber = 1;
       
       //Obtenemos las columnas y las ordenamos.
@@ -755,17 +759,18 @@ namespace IM.Base.Helpers
     /// </history>
     public static FileInfo CreateExcelCustomPivot(DataTable dtTable, List<Tuple<string, string>> filters,
       string reportName, string dateRangeFileName, List<ExcelFormatTable> formatTable, bool blnColumnGrandTotal = false,
-      bool blnRowGrandTotal = false, bool blnShowSubtotal = false)
+      bool blnRowGrandTotal = false, bool blnShowSubtotal = false,
+      List<Tuple<string, string, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0)
     {
       ExcelPackage pk = new ExcelPackage();
       var wsData = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
       int totalFilterRows = 0;
 
       //Creamos el encabezado del reporte. Filtros, Titulo.
-      CreateReportHeader(filters, reportName, ref wsData, ref totalFilterRows);
+      CreateReportHeader(filters, reportName, ref wsData, ref totalFilterRows, extraFieldHeader, numRows);
 
       //Obtenemos la fila inicial. Para dibujar la tabla.
-      int rowNumber = totalFilterRows + 5 + formatTable.Count(c => c.Axis == ePivotFieldAxis.Column);
+      int rowNumber = totalFilterRows + 1 + formatTable.Count(c => c.Axis == ePivotFieldAxis.Column);
 
       //Obtenemos la tabla ya con las columnas pivote.
       DataTable pivotedTable = GetPivotTable(formatTable, dtTable);
@@ -1179,7 +1184,7 @@ namespace IM.Base.Helpers
           break;
 
         case EnumFormatTypeExcel.DecimalNumberWithCero:
-          format = "#,#00.00;-#,#00.00; 0.00";
+          format = "#,##0.00;-#,##0.00; 0.00";
           break;
 
         case EnumFormatTypeExcel.Date:
@@ -1206,18 +1211,24 @@ namespace IM.Base.Helpers
 
     #region Create ReportHeader
 
-    /// <summary>
-    /// Crea la cabecera para el reporte
-    /// </summary>
-    /// <param name="filterList">Lista de filtros</param>
-    /// <param name="reportName">Nombre del reporte</param>
-    /// <param name="ws">ExcelWorkdsheet</param>
-    /// <param name="totalFilterRows">totalFilterRows</param>
-    ///
-    private static void CreateReportHeader(List<Tuple<string, string>> filterList, string reportName, ref ExcelWorksheet ws, ref int totalFilterRows)
+    ///  <summary>
+    ///  Crea la cabecera para el reporte
+    ///  </summary>
+    ///  <param name="filterList">Lista de filtros</param>
+    ///  <param name="reportName">Nombre del reporte</param>
+    ///  <param name="ws">ExcelWorkdsheet</param>
+    ///  <param name="totalFilterRows">totalFilterRows</param>
+    /// <param name="extraFieldHeader">List<Tuple<string, string, EnumFormatTypeExcel>> "Titilo","Valor",Formato de Celda</param>
+    /// <param name="numRows">Numero de Rows por Columna</param>
+    /// <history>
+    /// 
+    /// [ecanul] 16/05/2016 Modified Agregados parametros extraFieldHeader y numRows para agregar detalles al Header de los reportes
+    /// </history>
+    private static void CreateReportHeader(List<Tuple<string, string>> filterList, string reportName, 
+      ref ExcelWorksheet ws, ref int totalFilterRows, List<Tuple<string, string, EnumFormatTypeExcel>> extraFieldHeader, int numRows)
     {
       double filterNumber = filterList.Count;
-
+     
       #region Titulo del reporte
 
       //Agregamos el Nombre de la Aplicacion en las columnas combinadas A:C en la fila 1
@@ -1283,13 +1294,73 @@ namespace IM.Base.Helpers
       #region Datos de la impresion
 
       //Agregamos la etiqueta
-      ws.Cells[totalFilterRows + 2, 1].Value = "Print Date Time";
-      ws.Cells[totalFilterRows + 2, 1].Style.Font.Bold = true;
+
+      totalFilterRows += 2;
+
+      ws.Cells[totalFilterRows, 1].Value = "Print Date Time";
+      ws.Cells[totalFilterRows, 1].Style.Font.Bold = true;
 
       //Agregamos el valor de fecha y hora de impresion
-      ws.Cells[totalFilterRows + 2, 2].Value = string.Format("{0:MM/dd/yyyy hh:mm:ss}", DateTime.Now);
+      ws.Cells[totalFilterRows, 2].Value = string.Format("{0:MM/dd/yyyy hh:mm:ss}", DateTime.Now);
 
       #endregion Datos de la impresion
+
+      #region ExtraHeaderFile
+      //Si el parametro extraFieldHeader tiene algo 
+      if (extraFieldHeader != null && extraFieldHeader.Count > 0)
+      {
+        //Saltamos 2 lineas Para iniciar SubHeader
+        totalFilterRows += 2;
+        /** La idea es que quede de la siguiente manera 
+         * /-/-/ /-/-/
+         * /-/-/ /-/-/
+         * /-/-/ /-/-/
+         **/
+        //Inserta desde el ultimo numero utilizado,cantidad de rows solicitada por el usuario
+        ws.InsertRow(totalFilterRows, numRows);
+        int staRow = totalFilterRows; //Deberia de ser 5
+        int col = 1; //Siempre empieza en 1
+        double count = 0; //Contador de vueltas del foreach
+        foreach (var item in extraFieldHeader)
+        {
+          ExcelBorderStyle style = ExcelBorderStyle.Thin;
+          //wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(subtotalFormat);
+          #region HeaderName
+          ws.Cells[staRow, col].Value = item.Item1;
+          ws.Cells[staRow, col].Style.Font.Bold = true;
+          //estilos
+          ws.Cells[staRow, col].Style.Border.Top.Style = style;
+          ws.Cells[staRow, col].Style.Border.Left.Style = style;
+          ws.Cells[staRow, col].Style.Border.Bottom.Style = style;
+          ws.Cells[staRow, col].Style.Border.Right.Style = style;          
+          #endregion
+
+          #region HeaderValue
+          ws.Cells[staRow, col + 1].Value = item.Item2;
+          //Estilos
+          ws.Cells[staRow, col + 1].Style.Border.Top.Style = style;
+          ws.Cells[staRow, col + 1].Style.Border.Left.Style = style;
+          ws.Cells[staRow, col + 1].Style.Border.Bottom.Style = style;
+          ws.Cells[staRow, col + 1].Style.Border.Right.Style = style;
+          ws.Cells[staRow, col].Style.Numberformat.Format = GetFormat(item.Item3);
+          #endregion
+
+          count++; //Incrementa el contador
+          if (count < numRows)
+            staRow++;
+          else
+          {
+            staRow = 5;
+            col = col + 3;
+            count = 0;
+          }
+        }
+        totalFilterRows += numRows - 1;
+      }
+      #endregion
+
+      //Se saltan 2 lineas desde donde quedo (Fila 3 si es sin subheader o 3 + numRows)
+      totalFilterRows += 2;
     }
 
     #endregion Create ReportHeader

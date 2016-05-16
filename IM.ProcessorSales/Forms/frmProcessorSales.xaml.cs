@@ -256,22 +256,20 @@ namespace IM.ProcessorSales.Forms
           break;
         #endregion
 
+        #region ConcerntrateDailySales
         case EnumRptRoomSales.ConcerntrateDailySales:
           #region FiltroSalesRoomConcentrate
           lstSalesRoom.AddRange(lstGoals.Select(c => c.salesRoom.srID));
-          filters.Add(new Tuple<string, string>("Sales Room", string.Join("/",lstGoals.Select(c=> c.salesRoom.srID).ToList()))); 
+          filters.Add(new Tuple<string, string>("Sales Room", string.Join("/", lstGoals.Select(c => c.salesRoom.srID).ToList())));
           #endregion
-          
-          list.AddRange(BRReportsBySalesRoom.GetRptConcentrateDailySales(dtmStart,dtmEnd,lstGoals.Select(c=>c.salesRoom.srID).ToList()));
+
+          list.AddRange(BRReportsBySalesRoom.GetRptConcentrateDailySales(dtmStart, dtmEnd, lstGoals.Select(c => c.salesRoom.srID).ToList()));
 
           if (list.Count > 0)
-            file = Reports.RptConcentrateDailySales(reporteName, dateRangeFileName, filters,
+            file = Reports.RptConcentrateDailySales(reporteName, dateRangeFileName, dtmEnd, filters,
               list.Cast<RptConcentrateDailySales>().ToList(), lstGoals);
-
-          if (list.Count > 0)
-            UIHelper.ShowMessage("");
-
-          break;
+          break; 
+          #endregion
       }
 
       if (file != null)
