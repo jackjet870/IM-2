@@ -4981,5 +4981,245 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptCxCExcel>("USP_OR_RptCxCExcel", dateFromParameter, dateToParameter, salesRoomParameter);
         }
+    
+        public virtual int USP_OR_DeleteSale(Nullable<int> sale)
+        {
+            var saleParameter = sale.HasValue ?
+                new ObjectParameter("Sale", sale) :
+                new ObjectParameter("Sale", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_DeleteSale", saleParameter);
+        }
+    
+        public virtual ObjectResult<SaleShort> USP_OR_GetSales(Nullable<int> guest, Nullable<int> sale, string membership, string name, string leadSource, string salesRoom, Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo)
+        {
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            var saleParameter = sale.HasValue ?
+                new ObjectParameter("Sale", sale) :
+                new ObjectParameter("Sale", typeof(int));
+    
+            var membershipParameter = membership != null ?
+                new ObjectParameter("Membership", membership) :
+                new ObjectParameter("Membership", typeof(string));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleShort>("USP_OR_GetSales", guestParameter, saleParameter, membershipParameter, nameParameter, leadSourceParameter, salesRoomParameter, dateFromParameter, dateToParameter);
+        }
+    
+        public virtual int USP_OR_SaveSaleLog(Nullable<int> sale, Nullable<short> hoursDif, string changedBy)
+        {
+            var saleParameter = sale.HasValue ?
+                new ObjectParameter("Sale", sale) :
+                new ObjectParameter("Sale", typeof(int));
+    
+            var hoursDifParameter = hoursDif.HasValue ?
+                new ObjectParameter("HoursDif", hoursDif) :
+                new ObjectParameter("HoursDif", typeof(short));
+    
+            var changedByParameter = changedBy != null ?
+                new ObjectParameter("ChangedBy", changedBy) :
+                new ObjectParameter("ChangedBy", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveSaleLog", saleParameter, hoursDifParameter, changedByParameter);
+        }
+    
+        public virtual int USP_OR_SaveSalesmenChanges(Nullable<int> sale, string authorizedBy, string madeBy, string role, Nullable<byte> position, string oldSalesman, string newSalesman)
+        {
+            var saleParameter = sale.HasValue ?
+                new ObjectParameter("Sale", sale) :
+                new ObjectParameter("Sale", typeof(int));
+    
+            var authorizedByParameter = authorizedBy != null ?
+                new ObjectParameter("AuthorizedBy", authorizedBy) :
+                new ObjectParameter("AuthorizedBy", typeof(string));
+    
+            var madeByParameter = madeBy != null ?
+                new ObjectParameter("MadeBy", madeBy) :
+                new ObjectParameter("MadeBy", typeof(string));
+    
+            var roleParameter = role != null ?
+                new ObjectParameter("Role", role) :
+                new ObjectParameter("Role", typeof(string));
+    
+            var positionParameter = position.HasValue ?
+                new ObjectParameter("Position", position) :
+                new ObjectParameter("Position", typeof(byte));
+    
+            var oldSalesmanParameter = oldSalesman != null ?
+                new ObjectParameter("OldSalesman", oldSalesman) :
+                new ObjectParameter("OldSalesman", typeof(string));
+    
+            var newSalesmanParameter = newSalesman != null ?
+                new ObjectParameter("NewSalesman", newSalesman) :
+                new ObjectParameter("NewSalesman", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveSalesmenChanges", saleParameter, authorizedByParameter, madeByParameter, roleParameter, positionParameter, oldSalesmanParameter, newSalesmanParameter);
+        }
+    
+        public virtual int USP_OR_UpdateGuestSale(Nullable<int> guestID, Nullable<bool> sale)
+        {
+            var guestIDParameter = guestID.HasValue ?
+                new ObjectParameter("GuestID", guestID) :
+                new ObjectParameter("GuestID", typeof(int));
+    
+            var saleParameter = sale.HasValue ?
+                new ObjectParameter("Sale", sale) :
+                new ObjectParameter("Sale", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateGuestSale", guestIDParameter, saleParameter);
+        }
+    
+        public virtual int USP_OR_UpdateGuestSalesmen(Nullable<int> guestID, Nullable<int> saleID)
+        {
+            var guestIDParameter = guestID.HasValue ?
+                new ObjectParameter("GuestID", guestID) :
+                new ObjectParameter("GuestID", typeof(int));
+    
+            var saleIDParameter = saleID.HasValue ?
+                new ObjectParameter("SaleID", saleID) :
+                new ObjectParameter("SaleID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateGuestSalesmen", guestIDParameter, saleIDParameter);
+        }
+    
+        public virtual int USP_OR_UpdateSaleUpdated(Nullable<int> saleID, Nullable<bool> updated)
+        {
+            var saleIDParameter = saleID.HasValue ?
+                new ObjectParameter("SaleID", saleID) :
+                new ObjectParameter("SaleID", typeof(int));
+    
+            var updatedParameter = updated.HasValue ?
+                new ObjectParameter("Updated", updated) :
+                new ObjectParameter("Updated", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateSaleUpdated", saleIDParameter, updatedParameter);
+        }
+    
+        public virtual ObjectResult<ValidationData> USP_OR_ValidateSale(string changedBy, string password, Nullable<int> sale, string membershipNumber, Nullable<int> guest, string saleType, string salesRoom, string location, string pR1, string pR2, string pR3, string pRCaptain1, string pRCaptain2, string pRCaptain3, string liner1, string liner2, string linerCaptain, string closer1, string closer2, string closer3, string closerCaptain, string exit1, string exit2, string podium, string vLO)
+        {
+            var changedByParameter = changedBy != null ?
+                new ObjectParameter("ChangedBy", changedBy) :
+                new ObjectParameter("ChangedBy", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("Password", password) :
+                new ObjectParameter("Password", typeof(string));
+    
+            var saleParameter = sale.HasValue ?
+                new ObjectParameter("Sale", sale) :
+                new ObjectParameter("Sale", typeof(int));
+    
+            var membershipNumberParameter = membershipNumber != null ?
+                new ObjectParameter("MembershipNumber", membershipNumber) :
+                new ObjectParameter("MembershipNumber", typeof(string));
+    
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            var saleTypeParameter = saleType != null ?
+                new ObjectParameter("SaleType", saleType) :
+                new ObjectParameter("SaleType", typeof(string));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var locationParameter = location != null ?
+                new ObjectParameter("Location", location) :
+                new ObjectParameter("Location", typeof(string));
+    
+            var pR1Parameter = pR1 != null ?
+                new ObjectParameter("PR1", pR1) :
+                new ObjectParameter("PR1", typeof(string));
+    
+            var pR2Parameter = pR2 != null ?
+                new ObjectParameter("PR2", pR2) :
+                new ObjectParameter("PR2", typeof(string));
+    
+            var pR3Parameter = pR3 != null ?
+                new ObjectParameter("PR3", pR3) :
+                new ObjectParameter("PR3", typeof(string));
+    
+            var pRCaptain1Parameter = pRCaptain1 != null ?
+                new ObjectParameter("PRCaptain1", pRCaptain1) :
+                new ObjectParameter("PRCaptain1", typeof(string));
+    
+            var pRCaptain2Parameter = pRCaptain2 != null ?
+                new ObjectParameter("PRCaptain2", pRCaptain2) :
+                new ObjectParameter("PRCaptain2", typeof(string));
+    
+            var pRCaptain3Parameter = pRCaptain3 != null ?
+                new ObjectParameter("PRCaptain3", pRCaptain3) :
+                new ObjectParameter("PRCaptain3", typeof(string));
+    
+            var liner1Parameter = liner1 != null ?
+                new ObjectParameter("Liner1", liner1) :
+                new ObjectParameter("Liner1", typeof(string));
+    
+            var liner2Parameter = liner2 != null ?
+                new ObjectParameter("Liner2", liner2) :
+                new ObjectParameter("Liner2", typeof(string));
+    
+            var linerCaptainParameter = linerCaptain != null ?
+                new ObjectParameter("LinerCaptain", linerCaptain) :
+                new ObjectParameter("LinerCaptain", typeof(string));
+    
+            var closer1Parameter = closer1 != null ?
+                new ObjectParameter("Closer1", closer1) :
+                new ObjectParameter("Closer1", typeof(string));
+    
+            var closer2Parameter = closer2 != null ?
+                new ObjectParameter("Closer2", closer2) :
+                new ObjectParameter("Closer2", typeof(string));
+    
+            var closer3Parameter = closer3 != null ?
+                new ObjectParameter("Closer3", closer3) :
+                new ObjectParameter("Closer3", typeof(string));
+    
+            var closerCaptainParameter = closerCaptain != null ?
+                new ObjectParameter("CloserCaptain", closerCaptain) :
+                new ObjectParameter("CloserCaptain", typeof(string));
+    
+            var exit1Parameter = exit1 != null ?
+                new ObjectParameter("Exit1", exit1) :
+                new ObjectParameter("Exit1", typeof(string));
+    
+            var exit2Parameter = exit2 != null ?
+                new ObjectParameter("Exit2", exit2) :
+                new ObjectParameter("Exit2", typeof(string));
+    
+            var podiumParameter = podium != null ?
+                new ObjectParameter("Podium", podium) :
+                new ObjectParameter("Podium", typeof(string));
+    
+            var vLOParameter = vLO != null ?
+                new ObjectParameter("VLO", vLO) :
+                new ObjectParameter("VLO", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ValidationData>("USP_OR_ValidateSale", changedByParameter, passwordParameter, saleParameter, membershipNumberParameter, guestParameter, saleTypeParameter, salesRoomParameter, locationParameter, pR1Parameter, pR2Parameter, pR3Parameter, pRCaptain1Parameter, pRCaptain2Parameter, pRCaptain3Parameter, liner1Parameter, liner2Parameter, linerCaptainParameter, closer1Parameter, closer2Parameter, closer3Parameter, closerCaptainParameter, exit1Parameter, exit2Parameter, podiumParameter, vLOParameter);
+        }
     }
 }

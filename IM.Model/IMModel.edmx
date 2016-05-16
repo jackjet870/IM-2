@@ -5977,6 +5977,9 @@
         <Function Name="USP_OR_DeleteGuest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Guest" Type="int" Mode="In" />
         </Function>
+        <Function Name="USP_OR_DeleteSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Sale" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetAgencies" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
         </Function>
@@ -6182,6 +6185,16 @@
           <Parameter Name="Markets" Type="varchar" Mode="In" />
           <Parameter Name="PRGuests" Type="bit" Mode="In" />
           <Parameter Name="PRMembers" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetSales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Guest" Type="int" Mode="In" />
+          <Parameter Name="Sale" Type="int" Mode="In" />
+          <Parameter Name="Membership" Type="varchar" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="LeadSource" Type="varchar" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetSalesByCloser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -7080,6 +7093,20 @@
           <Parameter Name="User" Type="varchar" Mode="In" />
           <Parameter Name="ComputerName" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_SaveSaleLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Sale" Type="int" Mode="In" />
+          <Parameter Name="HoursDif" Type="smallint" Mode="In" />
+          <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_SaveSalesmenChanges" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Sale" Type="int" Mode="In" />
+          <Parameter Name="AuthorizedBy" Type="varchar" Mode="In" />
+          <Parameter Name="MadeBy" Type="varchar" Mode="In" />
+          <Parameter Name="Role" Type="varchar" Mode="In" />
+          <Parameter Name="Position" Type="tinyint" Mode="In" />
+          <Parameter Name="OldSalesman" Type="varchar" Mode="In" />
+          <Parameter Name="NewSalesman" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_SaveSalesRoomLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
           <Parameter Name="HoursDif" Type="smallint" Mode="In" />
@@ -7177,6 +7204,14 @@
           <Parameter Name="Gift" Type="varchar" Mode="In" />
           <Parameter Name="TransactionTypeOpera" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_UpdateGuestSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GuestID" Type="int" Mode="In" />
+          <Parameter Name="Sale" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_UpdateGuestSalesmen" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GuestID" Type="int" Mode="In" />
+          <Parameter Name="SaleID" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_UpdateMealTicketFolio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
           <Parameter Name="MealTicketType" Type="varchar" Mode="In" />
@@ -7186,6 +7221,10 @@
         <Function Name="USP_OR_UpdateRoomChargesConsecutive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Hotel" Type="varchar" Mode="In" />
           <Parameter Name="Folio" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_UpdateSaleUpdated" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SaleID" Type="int" Mode="In" />
+          <Parameter Name="Updated" Type="bit" Mode="In" />
         </Function>
         <Function Name="USP_OR_ValidateChangedBy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
@@ -7239,6 +7278,33 @@
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
           <Parameter Name="GiftsHost" Type="varchar" Mode="In" />
           <Parameter Name="Personnel" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_ValidateSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varchar" Mode="In" />
+          <Parameter Name="Sale" Type="int" Mode="In" />
+          <Parameter Name="MembershipNumber" Type="varchar" Mode="In" />
+          <Parameter Name="Guest" Type="int" Mode="In" />
+          <Parameter Name="SaleType" Type="varchar" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="Location" Type="varchar" Mode="In" />
+          <Parameter Name="PR1" Type="varchar" Mode="In" />
+          <Parameter Name="PR2" Type="varchar" Mode="In" />
+          <Parameter Name="PR3" Type="varchar" Mode="In" />
+          <Parameter Name="PRCaptain1" Type="varchar" Mode="In" />
+          <Parameter Name="PRCaptain2" Type="varchar" Mode="In" />
+          <Parameter Name="PRCaptain3" Type="varchar" Mode="In" />
+          <Parameter Name="Liner1" Type="varchar" Mode="In" />
+          <Parameter Name="Liner2" Type="varchar" Mode="In" />
+          <Parameter Name="LinerCaptain" Type="varchar" Mode="In" />
+          <Parameter Name="Closer1" Type="varchar" Mode="In" />
+          <Parameter Name="Closer2" Type="varchar" Mode="In" />
+          <Parameter Name="Closer3" Type="varchar" Mode="In" />
+          <Parameter Name="CloserCaptain" Type="varchar" Mode="In" />
+          <Parameter Name="Exit1" Type="varchar" Mode="In" />
+          <Parameter Name="Exit2" Type="varchar" Mode="In" />
+          <Parameter Name="Podium" Type="varchar" Mode="In" />
+          <Parameter Name="VLO" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="IMModelStoreContainer">
           <EntitySet Name="Activities" EntityType="Self.Activities" Schema="dbo" store:Type="Tables" />
@@ -17376,6 +17442,72 @@
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_DeleteSale">
+            <Parameter Name="Sale" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetSales" ReturnType="Collection(IMModel.SaleShort)">
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="Sale" Mode="In" Type="Int32" />
+            <Parameter Name="Membership" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="LeadSource" Mode="In" Type="String" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_SaveSaleLog">
+            <Parameter Name="Sale" Mode="In" Type="Int32" />
+            <Parameter Name="HoursDif" Mode="In" Type="Int16" />
+            <Parameter Name="ChangedBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_SaveSalesmenChanges">
+            <Parameter Name="Sale" Mode="In" Type="Int32" />
+            <Parameter Name="AuthorizedBy" Mode="In" Type="String" />
+            <Parameter Name="MadeBy" Mode="In" Type="String" />
+            <Parameter Name="Role" Mode="In" Type="String" />
+            <Parameter Name="Position" Mode="In" Type="Byte" />
+            <Parameter Name="OldSalesman" Mode="In" Type="String" />
+            <Parameter Name="NewSalesman" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateGuestSale">
+            <Parameter Name="GuestID" Mode="In" Type="Int32" />
+            <Parameter Name="Sale" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateGuestSalesmen">
+            <Parameter Name="GuestID" Mode="In" Type="Int32" />
+            <Parameter Name="SaleID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateSaleUpdated">
+            <Parameter Name="SaleID" Mode="In" Type="Int32" />
+            <Parameter Name="Updated" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_ValidateSale" ReturnType="Collection(IMModel.ValidationData)">
+            <Parameter Name="ChangedBy" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="Sale" Mode="In" Type="Int32" />
+            <Parameter Name="MembershipNumber" Mode="In" Type="String" />
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="SaleType" Mode="In" Type="String" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="Location" Mode="In" Type="String" />
+            <Parameter Name="PR1" Mode="In" Type="String" />
+            <Parameter Name="PR2" Mode="In" Type="String" />
+            <Parameter Name="PR3" Mode="In" Type="String" />
+            <Parameter Name="PRCaptain1" Mode="In" Type="String" />
+            <Parameter Name="PRCaptain2" Mode="In" Type="String" />
+            <Parameter Name="PRCaptain3" Mode="In" Type="String" />
+            <Parameter Name="Liner1" Mode="In" Type="String" />
+            <Parameter Name="Liner2" Mode="In" Type="String" />
+            <Parameter Name="LinerCaptain" Mode="In" Type="String" />
+            <Parameter Name="Closer1" Mode="In" Type="String" />
+            <Parameter Name="Closer2" Mode="In" Type="String" />
+            <Parameter Name="Closer3" Mode="In" Type="String" />
+            <Parameter Name="CloserCaptain" Mode="In" Type="String" />
+            <Parameter Name="Exit1" Mode="In" Type="String" />
+            <Parameter Name="Exit2" Mode="In" Type="String" />
+            <Parameter Name="Podium" Mode="In" Type="String" />
+            <Parameter Name="VLO" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -21080,6 +21212,13 @@
           <Property Type="String" Name="grAuthorizedBy" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="AuthName" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="CxCComments" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SaleShort">
+          <Property Type="Int32" Name="saID" Nullable="false" />
+          <Property Type="String" Name="saMembershipNum" Nullable="false" MaxLength="10" />
+          <Property Type="DateTime" Name="saD" Nullable="false" Precision="23" />
+          <Property Type="String" Name="stN" Nullable="true" MaxLength="30" />
+          <Property Type="Boolean" Name="saCancel" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -27985,6 +28124,31 @@
                 <ScalarProperty Name="grAuthorizedBy" ColumnName="grAuthorizedBy" />
                 <ScalarProperty Name="AuthName" ColumnName="AuthName" />
                 <ScalarProperty Name="CxCComments" ColumnName="CxCComments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_DeleteSale" FunctionName="IMModel.Store.USP_OR_DeleteSale" />
+          <FunctionImportMapping FunctionImportName="USP_OR_GetSales" FunctionName="IMModel.Store.USP_OR_GetSales">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.SaleShort">
+                <ScalarProperty Name="saID" ColumnName="saID" />
+                <ScalarProperty Name="saMembershipNum" ColumnName="saMembershipNum" />
+                <ScalarProperty Name="saD" ColumnName="saD" />
+                <ScalarProperty Name="stN" ColumnName="stN" />
+                <ScalarProperty Name="saCancel" ColumnName="saCancel" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_SaveSaleLog" FunctionName="IMModel.Store.USP_OR_SaveSaleLog" />
+          <FunctionImportMapping FunctionImportName="USP_OR_SaveSalesmenChanges" FunctionName="IMModel.Store.USP_OR_SaveSalesmenChanges" />
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateGuestSale" FunctionName="IMModel.Store.USP_OR_UpdateGuestSale" />
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateGuestSalesmen" FunctionName="IMModel.Store.USP_OR_UpdateGuestSalesmen" />
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateSaleUpdated" FunctionName="IMModel.Store.USP_OR_UpdateSaleUpdated" />
+          <FunctionImportMapping FunctionImportName="USP_OR_ValidateSale" FunctionName="IMModel.Store.USP_OR_ValidateSale">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.ValidationData">
+                <ScalarProperty Name="Focus" ColumnName="Focus" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
