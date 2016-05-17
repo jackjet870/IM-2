@@ -1,10 +1,10 @@
-﻿using System.Reflection;
-using System.Linq;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Metadata.Edm;
-using System;
+using System.Linq;
+using System.Reflection;
 
-namespace IM.Base.Helpers
+namespace IM.Model.Helpers
 {
   public class ObjectHelper
   {
@@ -19,7 +19,7 @@ namespace IM.Base.Helpers
     /// [emoguel] created 12/03/2016
     /// [emoguel] modified se agrego una bandera para clonar las propiedades "Virtual"
     /// </history>
-    public static void CopyProperties <T> (T objNew, T ObjOld,bool blnIsVirtual=false)
+    public static void CopyProperties<T>(T objNew, T ObjOld, bool blnIsVirtual = false)
     {
       if (objNew != null && ObjOld != null)
       {
@@ -91,7 +91,7 @@ namespace IM.Base.Helpers
         }
       }
       return false;
-    } 
+    }
     #endregion
 
     #region CompareList

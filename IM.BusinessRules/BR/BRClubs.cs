@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -23,8 +24,8 @@ namespace IM.BusinessRules.BR
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        var query = from cb in dbContext.Clubs
-                    select cb;
+        var query = (from cb in dbContext.Clubs
+                    select cb);
 
         if (nStatus != -1)//Filtro por estatus
         {
@@ -41,13 +42,84 @@ namespace IM.BusinessRules.BR
 
           if (!string.IsNullOrWhiteSpace(club.clN))//Filtro por nombre
           {
-            query = query.Where(cb => cb.clN == club.clN);
+            query = query.Where(cb => cb.clN.Contains(club.clN));
           }
         }
 
         return query.OrderBy(cb=>cb.clN).ToList();
       }
-    } 
+    }
+    #endregion
+
+    #region SaveClub
+    /// <summary>
+    /// Agrega|Actualiza un club
+    /// </summary>
+    /// <param name="club">Objeto a guardar</param>
+    /// <param name="blnUpdate">True. Actualiza | False. guarda</param>
+    /// <param name="lstAdd">Agencias a agregar</param>
+    /// <param name="lstDel">Agencias a eliminar</param>
+    /// <returns>0. No se guardó | -1. Existe un registro con el mismo ID | >0 Se guardó</returns>
+    /// <history>
+    /// [emoguel] created 03/05/2016
+    /// </history>
+    public static int SaveClub(Club club, bool blnUpdate,List<Agency> lstAdd, List<Agency>lstDel)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        int nRes = 0;
+        using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        {
+          try
+          {
+            #region Update
+            if (blnUpdate)
+            {
+              dbContext.Entry(club).State = EntityState.Modified;
+            }
+            #endregion
+
+            #region Add
+            else
+            {
+              Club clubVal = dbContext.Clubs.Where(cl => cl.clID == club.clID).FirstOrDefault();
+              if (clubVal != null)//Validar que no exista un registro con el mismo ID
+              {
+                return -1;
+              }
+              else
+              {
+                dbContext.Clubs.Add(club);
+              }
+            }
+            #endregion
+
+            #region Agencies Add
+            if (lstAdd.Count > 0)
+            {
+              dbContext.Agencies.AsEnumerable().Where(ag => lstAdd.Any(agg => agg.agID == ag.agID)).ToList().ForEach(ag => ag.agcl = club.clID);
+            }
+            #endregion
+
+            #region Agencies Delete
+            if (lstDel.Count > 0)
+            {
+              dbContext.Agencies.AsEnumerable().Where(ag => lstDel.Any(agg => agg.agID == ag.agID)).ToList().ForEach(ag => ag.agcl = null);
+            }
+            #endregion
+
+            nRes = dbContext.SaveChanges();
+            transaction.Commit();
+            return nRes;
+          }
+          catch(Exception e)
+          {
+            transaction.Rollback();
+            return 0;
+          }
+        }        
+      }
+    }
     #endregion
   }
 }

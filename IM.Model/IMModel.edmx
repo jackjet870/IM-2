@@ -10089,7 +10089,7 @@
           <NavigationProperty Name="SalesLogs" Relationship="Self.FK_SalesLog_LeadSources" FromRole="LeadSources" ToRole="SalesLog" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="ScoreRuleByLeadSource" Relationship="Self.FK_ScoreRulesByLeadSource_LeadSources" FromRole="LeadSources" ToRole="ScoreRulesByLeadSource" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="ScoreRulesByLeadSourceDetails" Relationship="Self.FK_ScoreRulesByLeadSourceDetail_LeadSources" FromRole="LeadSources" ToRole="ScoreRulesByLeadSourceDetail" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="Agencies" Relationship="Self.LeadSourcesByAgencies" FromRole="LeadSources" ToRole="Agencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="Agencies" Relationship="Self.LeadSourcesByAgencies" FromRole="LeadSources" ToRole="Agencies" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Notices" Relationship="Self.NoticesByLeadSource" FromRole="LeadSources" ToRole="Notices" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="Location">
@@ -10562,7 +10562,7 @@
           <NavigationProperty Name="TeamsSalesmen" Relationship="Self.FK_TeamsSalesmen_Personnel" FromRole="Personnel" ToRole="TeamsSalesmen" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="WarehouseMovements" Relationship="Self.FK_WhsMovs_Personnel" FromRole="Personnel" ToRole="WhsMovs" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Efficiencies" Relationship="Self.EfficiencySalesmen" FromRole="Personnel" ToRole="Efficiency" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="Roles" Relationship="Self.PersonnelRoles" FromRole="Personnel" ToRole="Roles" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="Roles" Relationship="Self.PersonnelRoles" FromRole="Personnel" ToRole="Roles" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="BookingDeposits" Relationship="IMModel.FK_BookingDeposits_Personnel_CxC" FromRole="Personnel" ToRole="BookingDeposit" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Guests_FTB1" Relationship="IMModel.FK_Guests_Personnel_FrontToBack1" FromRole="Personnel" ToRole="Guest" />
           <NavigationProperty Name="Guests_FTB2" Relationship="IMModel.FK_Guests_Personnel_FrontToBack2" FromRole="Personnel" ToRole="Guest" />

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace IM.Model.Enums
 {
@@ -12,14 +8,24 @@ namespace IM.Model.Enums
   /// </summary>
   /// <history>
   /// [edgrodriguez] 02/Mar/2016 Created
+  /// [emoguel] 10/05/2016 Modified
   /// </history>
   public enum EnumPredefinedDateMonthly
-  {
-    dmAllDates = -1,
-    dmDatesSpecified,
-    dmThisMonth,
-    dmPreviousMonth,
-    dm2MonthsAgo,
-    dm3MonthsAgo
+  {   
+
+    [Description("Dates Specified")]
+    DatesSpecified,
+
+    [Description("This month")]
+    ThisMonth,
+
+    [Description("Previous month")]
+    PreviousMonth,    
+
+    [Description("Two months ago")]
+    TwoMonthsAgo,
+
+    [Description("Three months ago")]
+    PreviousWeek,
   }
 }

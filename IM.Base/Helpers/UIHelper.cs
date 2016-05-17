@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
+using IM.Model.Helpers;
 
 namespace IM.Base.Helpers
 {
@@ -141,7 +142,7 @@ namespace IM.Base.Helpers
     /// <history>
     /// [emoguel] created 08/04/2016
     /// </history>
-    public static void SetUpControls(object obj, Window ui, EnumMode enumMode=EnumMode.preview)
+    public static void SetUpControls(object obj, UIElement ui, EnumMode enumMode=EnumMode.preview)
     {
       List<Control> lstControls = GetChildParentCollection<Control>(ui);//Obtenemos la lista de controles del contenedor      
 

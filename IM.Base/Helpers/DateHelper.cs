@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
+using IM.Model.Enums;
+using IM.BusinessRules.BR;
 
 namespace IM.Base.Helpers
 {
@@ -398,6 +400,123 @@ namespace IM.Base.Helpers
 
       }
     }
+    #endregion
+
+
+    #region GetDateRange
+    /// <summary>
+    /// Devuelve una fecha inicial y una fecha final
+    /// dependiendo del EnumPredefinedDate seleccionado
+    /// </summary>
+    /// <param name="dateSelected"></param>
+    /// <returns></returns>
+    public static Tuple<DateTime, DateTime> GetDateRange(EnumPredefinedDate dateSelected)
+    {
+      DateTime today = BRHelpers.GetServerDate();
+      DateTime dtmStart;
+      DateTime dtmEnd;
+      switch (dateSelected)
+      {
+        case EnumPredefinedDate.Today:
+          dtmStart = dtmEnd = today;
+          break;
+
+        case EnumPredefinedDate.Yesterday:
+          dtmStart = dtmEnd = today.Date.AddDays(-1);
+          break;
+
+        case EnumPredefinedDate.ThisWeek:
+          dtmStart = today.AddDays((DayOfWeek.Monday - today.DayOfWeek));
+          dtmEnd = today.AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
+          break;
+
+        case EnumPredefinedDate.PreviousWeek:
+          dtmStart = today.AddDays(-7).AddDays(DayOfWeek.Monday - today.DayOfWeek);
+          dtmEnd = today.AddDays(-7).AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
+          break;
+
+        case EnumPredefinedDate.TwoWeeksAgo:
+          dtmStart = today.AddDays(-14).AddDays(DayOfWeek.Monday - today.DayOfWeek);
+          dtmEnd = today.AddDays(-14).AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
+          break;
+
+        case EnumPredefinedDate.ThreeWeeksAgo:
+          dtmStart = today.AddDays(-21).AddDays(DayOfWeek.Monday - today.DayOfWeek);
+          dtmEnd = today.AddDays(-21).AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
+          break;
+
+        case EnumPredefinedDate.ThisHalf:
+          if (today.Day <= 15)
+          {
+            dtmStart = new DateTime(today.Year, today.Month, 1);
+            dtmEnd = new DateTime(today.Year, today.Month, 15);
+          }
+          else
+          {
+            dtmStart = new DateTime(today.Year, today.Month, 16);
+            dtmEnd = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
+          }
+          break;
+
+        case EnumPredefinedDate.PreviousHalf:
+
+          if (today.Day <= 15)
+          {
+            if (today.Month > 1)
+            {
+              dtmStart = new DateTime(today.Year, today.Month - 1, 16);
+              dtmEnd = new DateTime(today.Year, today.Month - 1, DateTime.DaysInMonth(today.Year, today.Month - 1));
+            }
+            else
+            {
+              dtmStart = new DateTime(today.Year - 1, 12, 16);
+              dtmEnd = new DateTime(today.Year - 1, 12, 31);
+            }
+          }
+          else
+          {
+            dtmStart = new DateTime(today.Year, today.Month, 1);
+            dtmEnd = new DateTime(today.Year, today.Month, 15);
+          }
+          break;
+
+        case EnumPredefinedDate.ThisMonth:
+          dtmStart = new DateTime(today.Year, today.Month, 1);
+          dtmEnd = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
+          break;
+
+        case EnumPredefinedDate.PreviousMonth:
+          dtmStart = new DateTime(today.Year, today.Month - 1, 1);
+          dtmEnd = new DateTime(today.Year, today.Month - 1, DateTime.DaysInMonth(today.Year, today.Month - 1));
+          break;
+
+        case EnumPredefinedDate.TwoMonthsAgo:
+          dtmStart = new DateTime(today.Year, today.Month - 2, 1);
+          dtmEnd = new DateTime(today.Year, today.Month - 2, DateTime.DaysInMonth(today.Year, today.Month - 2));
+          break;
+
+        case EnumPredefinedDate.ThreeMonthsAgo:
+          dtmStart = new DateTime(today.Year, today.Month - 3, 1);
+          dtmEnd = new DateTime(today.Year, today.Month - 3, DateTime.DaysInMonth(today.Year, today.Month - 3));
+          break;
+
+        case EnumPredefinedDate.ThisYear:
+          dtmStart = new DateTime(today.Year, 1, 1);
+          dtmEnd = new DateTime(today.Year, 12, 31);
+          break;
+
+        case EnumPredefinedDate.PreviousYear:
+          dtmStart = new DateTime(today.Year - 1, 1, 1);
+          dtmEnd = new DateTime(today.Year - 1, 12, 31);
+          break;
+
+        default:
+          dtmStart = dtmEnd = today;
+          break;
+      }
+
+      return Tuple.Create(dtmStart, dtmEnd);
+    } 
     #endregion
   }
 }

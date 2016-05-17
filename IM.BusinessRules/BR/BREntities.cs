@@ -103,18 +103,19 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 27/04/2016
     /// </history>
-    public static int OperationEntities<T>(List<T> lstEntities, EntityState state) where T : class
+    public static int OperationEntities<T>(List<T> lstEntities, EnumMode enumMode) where T : class
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         int nRes = 0;
         using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
         {
+          #region Transacción
           try
           {
             lstEntities.ForEach(item =>
             {
-              dbContext.Entry(item).State = state;
+              dbContext.Entry(item).State = (enumMode==EnumMode.add)?EntityState.Added:(enumMode==EnumMode.edit)?EntityState.Modified:EntityState.Deleted;
             });
             nRes = dbContext.SaveChanges();
             transaction.Commit();
@@ -123,7 +124,8 @@ namespace IM.BusinessRules.BR
           {
             nRes = 0;
             transaction.Rollback();
-          }
+          } 
+          #endregion
         }
         return nRes;
       }

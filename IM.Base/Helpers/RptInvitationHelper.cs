@@ -1,9 +1,9 @@
 ﻿using IM.Base.Forms;
-using IM.Base.Helpers;
 using IM.Base.Reports;
 using IM.BusinessRules.BR;
 using IM.Model.Classes;
 using IM.Model.Enums;
+using IM.Model.Helpers;
 
 namespace IM.Base.Helpers
 {

@@ -126,7 +126,7 @@ namespace IM.Graph.Forms
     private void Window_ContentRendered(object sender, EventArgs e)
     {
       this.Cursor = Cursors.Wait;
-      List<LeadSource> leadsources = BRLeadSources.GetLeadSources(1);
+      List<LeadSource> leadsources = BRLeadSources.GetLeadSources(1,Model.Enums.EnumProgram.All);
       cmbPlace.ItemsSource = leadsources;
       this.Cursor = null;
     }

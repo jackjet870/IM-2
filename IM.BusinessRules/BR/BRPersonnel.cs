@@ -95,9 +95,9 @@ namespace IM.BusinessRules.BR
     /// <param name="salesRooms">Salas de ventas</param>
     /// <param name="roles">Roles</param>
     /// <param name="status">Estatus.
-    /// -1  Todos
     /// 0 Inactivos
     /// 1 Activos
+    /// 2 Todos
     /// </param>
     /// <param name="permission">Permiso</param>
     /// <param name="relationalOperator">Operador logico</param>
@@ -137,6 +137,47 @@ namespace IM.BusinessRules.BR
       }
     }
 
+    #endregion
+
+    #region GetPersonnels
+    /// <summary>
+    /// Obtiene registros del catalogo Perssonels
+    /// </summary>
+    /// <param name="nStatus">-1. Todos | 0. Inactivos | 1. Inactivos</param>
+    /// <param name="personnel">Objeto con los filtros adicionales</param>
+    /// <returns>Lista de tipo Personnel</returns>
+    /// <history>
+    /// [emoguel] created 03/05/2016
+    /// </history>
+    public static List<Personnel> GetPersonnels(int nStatus = -1, Personnel personnel = null)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var query = from pe in dbContext.Personnels
+                    select pe;
+
+        if (nStatus != -1)//Filtro por estatus
+        {
+          bool blnStatus = Convert.ToBoolean(nStatus);
+          query = query.Where(pe => pe.peA == blnStatus);
+        }
+
+        if (personnel != null)
+        {
+          if (!string.IsNullOrWhiteSpace(personnel.peID))//Filtro por ID
+          {
+            query = query.Where(pe => pe.peID == personnel.peID);
+          }
+
+          if (!string.IsNullOrWhiteSpace(personnel.pede))//Filtro por dept
+          {
+            query = query.Where(pe => pe.pede == personnel.pede);
+          }
+        }
+
+        return query.OrderBy(pe => pe.peN).ToList();
+      }
+    } 
     #endregion
 
     #region GetPersonnelAccess
@@ -220,6 +261,18 @@ namespace IM.BusinessRules.BR
         userData.Warehouse = resWarehouse.FirstOrDefault();
       }
       return userData;
+    }
+
+    public static List<PersonnelShort> GetPersonnelByRole(string prRol)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var query = from p in dbContext.Personnels
+                    where p.Roles.Where(r => r.roID == prRol).Count() > 0
+                    select p;
+
+        return query.ToList().Select(p => new PersonnelShort { peID = p.peID, peN = p.peN }).ToList();
+      }
     }
   }
 }

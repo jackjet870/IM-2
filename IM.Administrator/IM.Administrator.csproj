@@ -39,14 +39,6 @@
     <ApplicationIcon>Images\IM.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -69,6 +61,22 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Forms\frmAgencyDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmBankDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmBanks.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmClubDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmClubs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -144,6 +152,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmDeptDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmDepts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmDeskDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -164,6 +180,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmFolioCXCPRDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmFoliosCxCPR.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmFoliosCXC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -176,11 +200,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Forms\frmFoliosInvitationsOuthouseByPR.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmFoliosInvitationsOuthousePRDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmGiftCategoryDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\frmGiftsCategories.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmGoals.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -196,6 +232,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmHotelGroupDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmHotelGroups.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmHotels.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -207,6 +251,14 @@
     <Page Include="Forms\frmLanguages.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\frmLeadSources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmLeadSourceDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\frmLocationDetail.xaml">
       <SubType>Designer</SubType>
@@ -435,6 +487,18 @@
     <Compile Include="Forms\frmAgencyDetail.xaml.cs">
       <DependentUpon>frmAgencyDetail.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmBankDetail.xaml.cs">
+      <DependentUpon>frmBankDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmBanks.xaml.cs">
+      <DependentUpon>frmBanks.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmClubDetail.xaml.cs">
+      <DependentUpon>frmClubDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmClubs.xaml.cs">
+      <DependentUpon>frmClubs.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmComputerDetail.xaml.cs">
       <DependentUpon>frmComputerDetail.xaml</DependentUpon>
     </Compile>
@@ -489,6 +553,12 @@
     <Compile Include="Forms\frmCurrencies.xaml.cs">
       <DependentUpon>frmCurrencies.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmDeptDetail.xaml.cs">
+      <DependentUpon>frmDeptDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmDepts.xaml.cs">
+      <DependentUpon>frmDepts.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmDeskDetail.xaml.cs">
       <DependentUpon>frmDeskDetail.xaml</DependentUpon>
     </Compile>
@@ -505,6 +575,12 @@
     <Compile Include="Forms\frmFolioCXCDetail.xaml.cs">
       <DependentUpon>frmFolioCXCDetail.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmFolioCXCPRDetail.xaml.cs">
+      <DependentUpon>frmFolioCXCPRDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmFoliosCxCPR.xaml.cs">
+      <DependentUpon>frmFoliosCxCPR.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmFoliosCXC.xaml.cs">
       <DependentUpon>frmFoliosCXC.xaml</DependentUpon>
     </Compile>
@@ -514,11 +590,20 @@
     <Compile Include="Forms\frmFoliosInvitationsOuthouse.xaml.cs">
       <DependentUpon>frmFoliosInvitationsOuthouse.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmFoliosInvitationsOuthouseByPR.xaml.cs">
+      <DependentUpon>frmFoliosInvitationsOuthouseByPR.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmFoliosInvitationsOuthousePRDetail.xaml.cs">
+      <DependentUpon>frmFoliosInvitationsOuthousePRDetail.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmGiftCategoryDetail.xaml.cs">
       <DependentUpon>frmGiftCategoryDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmGiftsCategories.xaml.cs">
       <DependentUpon>frmGiftsCategories.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmGoals.xaml.cs">
+      <DependentUpon>frmGoals.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmGuestStatusTypeDetail.xaml.cs">
       <DependentUpon>frmGuestStatusTypeDetail.xaml</DependentUpon>
@@ -529,6 +614,12 @@
     <Compile Include="Forms\frmHotelDetail.xaml.cs">
       <DependentUpon>frmHotelDetail.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmHotelGroupDetail.xaml.cs">
+      <DependentUpon>frmHotelGroupDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmHotelGroups.xaml.cs">
+      <DependentUpon>frmHotelGroups.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmHotels.xaml.cs">
       <DependentUpon>frmHotels.xaml</DependentUpon>
     </Compile>
@@ -537,6 +628,12 @@
     </Compile>
     <Compile Include="Forms\frmLanguages.xaml.cs">
       <DependentUpon>frmLanguages.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmLeadSources.xaml.cs">
+      <DependentUpon>frmLeadSources.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmLeadSourceDetail.xaml.cs">
+      <DependentUpon>frmLeadSourceDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmLocationDetail.xaml.cs">
       <DependentUpon>frmLocationDetail.xaml</DependentUpon>
@@ -806,7 +903,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

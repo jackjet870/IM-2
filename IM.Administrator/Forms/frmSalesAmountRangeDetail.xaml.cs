@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,6 +7,7 @@ using IM.Model;
 using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
+using IM.Model.Helpers;
 
 namespace IM.Administrator.Forms
 {

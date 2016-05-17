@@ -6,6 +6,7 @@ using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model;
+using IM.Model.Helpers;
 
 namespace IM.Administrator.Forms
 {
@@ -213,7 +214,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void LoadLeadSource()
     {
-      List<LeadSource> lstLeadSource = BRLeadSources.GetLeadSources(1);
+      List<LeadSource> lstLeadSource = BRLeadSources.GetLeadSources(1,EnumProgram.All);
       cmblols.ItemsSource = lstLeadSource;
     }
     #endregion

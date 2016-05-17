@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using System.Linq;
+using System;
 
 namespace IM.Base.Helpers
 {
@@ -79,5 +80,57 @@ namespace IM.Base.Helpers
 
     #endregion
 
+    #region ConfigureDates
+    /// <summary>
+    /// Carga el combobox de Predefined Date dependiendo el tipo de periodo
+    /// </summary>
+    /// <param name="cmbDate">Combobox a llenar</param>
+    /// <param name="enumPeriod">Tipo de periodo</param>
+    /// <param name="selectedCmb">index a seleccionar en el combo</param>
+    /// <history>
+    /// [emoguel] created 11/05/2016
+    /// </history>
+    public static void ConfigureDates(ComboBox cmbDate, EnumPeriod enumPeriod, int selectedCmb = 0)
+    {
+      Dictionary<EnumPredefinedDate, string> dictionaryPredefinedDate = EnumToListHelper.GetList<EnumPredefinedDate>();
+      cmbDate.Items.Clear();
+      cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.DatesSpecified));
+
+      switch (enumPeriod)
+      {
+        //Sin periodo
+        case EnumPeriod.None:
+
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.Today));
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.Yesterday));
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisWeek));
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousWeek));
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisHalf));
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousHalf));
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisMonth));
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousMonth));
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisYear));
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousYear));
+          break;
+
+        //Semanal
+        case EnumPeriod.Weekly:
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisWeek));
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousWeek));
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.TwoWeeksAgo));
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThreeWeeksAgo));
+          break;
+
+        //Mensual
+        case EnumPeriod.Monthly:
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThisMonth));
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.PreviousMonth));
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.TwoMonthsAgo));
+          cmbDate.Items.Add(dictionaryPredefinedDate.Single(c => c.Key == EnumPredefinedDate.ThreeMonthsAgo));
+          break;
+      }
+      cmbDate.SelectedIndex = selectedCmb;
+    } 
+    #endregion
   }
 }

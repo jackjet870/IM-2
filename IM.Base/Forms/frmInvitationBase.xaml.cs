@@ -8,12 +8,12 @@ using System.Windows.Data;
 using IM.Model.Enums;
 using System.Globalization;
 using IM.Base.Classes;
-using IM.Base.Enums;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Base.Reports;
 using System.Text;
+using IM.Model.Helpers;
 
 namespace IM.Base.Forms
 {

@@ -7,6 +7,7 @@ using IM.Services.Helpers;
 using System;
 using System.Linq;
 using System.Windows;
+using IM.Model.Helpers;
 
 namespace IM.Inhouse.Classes
 {

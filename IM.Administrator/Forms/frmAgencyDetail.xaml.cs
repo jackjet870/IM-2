@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using IM.Model;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
+using IM.Model.Helpers;
 
 namespace IM.Administrator.Forms
 {
@@ -15,10 +15,7 @@ namespace IM.Administrator.Forms
   public partial class frmAgencyDetail : Window
   {
     public Agency oldAgency = new Agency();//Objeto con los valores iniciales
-    public Agency agency = new Agency();//Objeto para llenar el formulario    
-    private string 
-      _unavailableMotive;
-    private string _Market;
+    public Agency agency = new Agency();//Objeto para llenar el formulario 
     public EnumMode enumMode;
 
     public frmAgencyDetail()
@@ -104,8 +101,8 @@ namespace IM.Administrator.Forms
               }
             case EnumMode.edit:
               {
-                bool blnMarkets = ((agency.agmk.ToString() != _Market) ? true : false);
-                bool blnUnMot = ((agency.agum.ToString() != _unavailableMotive) ? true : false);
+                bool blnMarkets = ((agency.agmk.ToString() != oldAgency.agmk.ToString()) ? true : false);
+                bool blnUnMot = ((agency.agum.ToString() != oldAgency.agum.ToString()) ? true : false);
                 nRes = BRAgencies.SaveAgency(agency, true, blnUnMot, blnMarkets);
                 break;
               }

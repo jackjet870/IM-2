@@ -6,6 +6,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.Model;
 using IM.BusinessRules.BR;
+using IM.Model.Helpers;
 
 namespace IM.Administrator.Forms
 {
@@ -254,7 +255,7 @@ namespace IM.Administrator.Forms
 
         if (msgResult == MessageBoxResult.Yes)
         {
-          int nRes = BREntities.OperationEntities(lstPostsLogDel, System.Data.Entity.EntityState.Deleted);
+          int nRes = BREntities.OperationEntities(lstPostsLogDel, EnumMode.deleted);
 
           if (nRes > 0)
           {

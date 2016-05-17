@@ -1,14 +1,9 @@
-﻿using IM.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IM.Model.Helpers;
-using System.Data.Entity.Infrastructure;
+﻿using System;
 using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Entity.Infrastructure;
+using System.Linq;
 
-namespace IM.Base.Helpers
+namespace IM.Model.Helpers
 {
   public class EntityHelper
   {
@@ -35,7 +30,7 @@ namespace IM.Base.Helpers
             .ElementType;//Obtenemos el objeto
         return elementType;
       }
-    } 
+    }
     #endregion
   }
 }

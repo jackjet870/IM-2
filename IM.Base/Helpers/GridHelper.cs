@@ -22,7 +22,7 @@ namespace IM.Base.Helpers
     /// [emoguel] modified 23/03/2016 Se agregó la validacion HasItems
     /// [michan] modified 28/04/2016 Se agregó el parametro de la columna a seleccionar
     /// </history>
-    public static void SelectRow(DataGrid grid, int nIndex, int? column = 0)
+    public static void SelectRow(DataGrid grid, int nIndex, int? column = 0,bool blnEdit=false)
     {
       if (nIndex > -1)
       {
@@ -34,6 +34,10 @@ namespace IM.Base.Helpers
           grid.UpdateLayout();
           grid.ScrollIntoView(grid.SelectedItem);
           grid.CurrentCell = new DataGridCellInfo(grid.SelectedItem, grid.Columns[column.Value]);
+          if(blnEdit)
+          {
+            grid.BeginEdit();
+          }
         }
       }
     }

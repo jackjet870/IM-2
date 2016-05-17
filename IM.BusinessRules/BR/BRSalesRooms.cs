@@ -298,8 +298,7 @@ namespace IM.BusinessRules.BR
             return null;
         }
       }
-    } 
+    }
     #endregion
-
   }
 }

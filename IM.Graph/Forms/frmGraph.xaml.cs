@@ -91,7 +91,7 @@ namespace IM.Graph.Forms
       LoadFromFile();
 
       // Lead Source
-      cmbLS.ItemsSource = BRLeadSources.GetLeadSources(1);
+      cmbLS.ItemsSource = BRLeadSources.GetLeadSources(1,Model.Enums.EnumProgram.All);
       cmbLS.SelectedValue = _leadsource.lsID;
       // Realiza la gráfica
       DoGraph();

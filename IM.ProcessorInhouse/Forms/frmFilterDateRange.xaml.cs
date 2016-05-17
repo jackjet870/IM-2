@@ -395,7 +395,7 @@ namespace IM.ProcessorInhouse.Forms
         _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program);
         if (blnLsHotelNotNull)
         {
-          var lstLsIDHotelNotNull = BRLeadSources.GetLeadSources(1).
+          var lstLsIDHotelNotNull = BRLeadSources.GetLeadSources(1,EnumProgram.All).
               Where(x => x.lsHotel != null).
               Select(x => x.lsID);
           _lstLeadSources = _lstLeadSources.Where(x => lstLsIDHotelNotNull.Contains(x.lsID)).ToList();

@@ -35,6 +35,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 08/03/2016
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
+    /// [emoguel] modified 02/05/2016--->Se agrega el filtro por Club
     /// </history>
     public static List<Agency> GetAgencies(Agency agency = null, int nStatus = -1)
     {
@@ -64,6 +65,11 @@ namespace IM.BusinessRules.BR
           if (!string.IsNullOrWhiteSpace(agency.agse))//Filtro segment by agency
           {
             query = query.Where(ag => ag.agse == agency.agse);
+          }
+
+          if(agency.agcl!=null && agency.agcl > 0)//Filtro por Club
+          {
+            query = query.Where(ag => ag.agcl == agency.agcl);
           }
         }
         return query.OrderBy(ag => ag.agN).ToList();
