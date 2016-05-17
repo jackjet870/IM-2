@@ -54,7 +54,7 @@ namespace IM.Base.Helpers
     ///                                 Se agrega la  opcion de mostrar totales de la tabla
     /// </history>
     public static FileInfo CreateGeneralRptExcel(List<Tuple<string, string>> filter, DataTable dt, string reportName, string dateRangeFileName, List<ExcelFormatTable> formatColumns,
-      List<Tuple<string, string, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows=0)
+      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows=0)
     {
       #region Variables Atributos, Propiedades
 
@@ -175,7 +175,7 @@ namespace IM.Base.Helpers
     public static FileInfo CreatePivotRptExcel(bool isPivot, List<Tuple<string, string>> filters, DataTable dtData,
       string reportName, string dateRangeFileName,
       List<ExcelFormatTable> formatColumns, bool showRowGrandTotal = false, bool showColumnGrandTotal = false, bool showRowHeaders = false,
-      List<Tuple<string, string, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0)
+      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0)
     {
       ExcelPackage pk = new ExcelPackage();
       //Preparamos la hoja donde escribiremos
@@ -426,7 +426,7 @@ namespace IM.Base.Helpers
     public static FileInfo CreateExcelCustom(DataTable dtTable, List<Tuple<string, string>> filters, string reportName,
       string dateRangeFileName, List<ExcelFormatTable> formatTable, bool blnColumnGrandTotal = false,
       bool blnRowGrandTotal = false, bool blnShowSubtotal = false,
-      List<Tuple<string, string, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0)
+      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0)
     {
       ExcelPackage pk = new ExcelPackage();
       var wsData = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
@@ -760,7 +760,7 @@ namespace IM.Base.Helpers
     public static FileInfo CreateExcelCustomPivot(DataTable dtTable, List<Tuple<string, string>> filters,
       string reportName, string dateRangeFileName, List<ExcelFormatTable> formatTable, bool blnColumnGrandTotal = false,
       bool blnRowGrandTotal = false, bool blnShowSubtotal = false,
-      List<Tuple<string, string, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0)
+      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0)
     {
       ExcelPackage pk = new ExcelPackage();
       var wsData = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
@@ -1218,14 +1218,14 @@ namespace IM.Base.Helpers
     ///  <param name="reportName">Nombre del reporte</param>
     ///  <param name="ws">ExcelWorkdsheet</param>
     ///  <param name="totalFilterRows">totalFilterRows</param>
-    /// <param name="extraFieldHeader">List<Tuple<string, string, EnumFormatTypeExcel>> "Titilo","Valor",Formato de Celda</param>
+    /// <param name="extraFieldHeader">List<Tuple<string, dynamic, EnumFormatTypeExcel>> "Titilo","Valor",Formato de Celda</param>
     /// <param name="numRows">Numero de Rows por Columna</param>
     /// <history>
     /// 
     /// [ecanul] 16/05/2016 Modified Agregados parametros extraFieldHeader y numRows para agregar detalles al Header de los reportes
     /// </history>
     private static void CreateReportHeader(List<Tuple<string, string>> filterList, string reportName, 
-      ref ExcelWorksheet ws, ref int totalFilterRows, List<Tuple<string, string, EnumFormatTypeExcel>> extraFieldHeader, int numRows)
+      ref ExcelWorksheet ws, ref int totalFilterRows, List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader, int numRows)
     {
       double filterNumber = filterList.Count;
      
@@ -1342,7 +1342,7 @@ namespace IM.Base.Helpers
           ws.Cells[staRow, col + 1].Style.Border.Left.Style = style;
           ws.Cells[staRow, col + 1].Style.Border.Bottom.Style = style;
           ws.Cells[staRow, col + 1].Style.Border.Right.Style = style;
-          ws.Cells[staRow, col].Style.Numberformat.Format = GetFormat(item.Item3);
+          ws.Cells[staRow, col + 1].Style.Numberformat.Format = GetFormat(item.Item3);
           #endregion
 
           count++; //Incrementa el contador

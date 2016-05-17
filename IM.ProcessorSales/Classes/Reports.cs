@@ -165,7 +165,7 @@ namespace IM.ProcessorSales.Classes
       }
       #endregion
 
-      #region Seleccion de datos necesarios
+      #region BodyReport
       var customList = goals.Select(c => new
       {
         c.SalesRoom,
@@ -181,6 +181,7 @@ namespace IM.ProcessorSales.Classes
         Pact =  c.DownPact,
         Collect = c.DownColl
       }).ToList();
+      var dtData = TableHelper.GetDataTableFromList(customList, true, false);
       #endregion
 
       #region CreateExtraFieldHeader
@@ -197,15 +198,14 @@ namespace IM.ProcessorSales.Classes
       forecast = decimal.Round(forecast, 2);
       diference = decimal.Round(diference, 2);
       //Creamos los ExtraHeader
-      List<Tuple<string, string, EnumFormatTypeExcel>> extraHeader = new List<Tuple<string, string, EnumFormatTypeExcel>>
+      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraHeader = new List<Tuple<string, dynamic, EnumFormatTypeExcel>>
       {
-        new Tuple<string, string,EnumFormatTypeExcel>("Goal", goal.ToString(),EnumFormatTypeExcel.DecimalNumberWithCero),
-        new Tuple<string, string,EnumFormatTypeExcel>("Forecast", forecast.ToString(),EnumFormatTypeExcel.DecimalNumberWithCero),
-        new Tuple<string, string,EnumFormatTypeExcel>("Difference", diference.ToString(),EnumFormatTypeExcel.DecimalNumberWithCero)
+        new Tuple<string, dynamic,EnumFormatTypeExcel>("Goal", goal.ToString(),EnumFormatTypeExcel.DecimalNumberWithCero),
+        new Tuple<string, dynamic,EnumFormatTypeExcel>("Forecast", forecast.ToString(),EnumFormatTypeExcel.DecimalNumberWithCero),
+        new Tuple<string, dynamic,EnumFormatTypeExcel>("Difference", diference.ToString(),EnumFormatTypeExcel.DecimalNumberWithCero)
       }; 
       #endregion
-
-      var dtData = TableHelper.GetDataTableFromList(customList, true, false);
+      
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, dateRangeFileName,
         FormatReport.RptConcentrateDailySales(), true, extraFieldHeader: extraHeader, numRows: 3);
     }
@@ -220,12 +220,16 @@ namespace IM.ProcessorSales.Classes
     /// <param name="filters">Listado de filtros</param>
     /// <param name="lstReport">Contenido del reporte</param>
     /// <param name="reportHeader">Listado de report Header</param>
+    /// <param name="dtStart">Fecha inicial del reporte</param>
+    /// <param name="dtEnd">Fecha final del reporte</param>
     /// <history>
-    /// [ecanul] 17/05/2016 Created
+    /// [ecanul] 16/05/2016 Created
+    /// [ecanul] 17/05/2016 Modified Ahora tiene Header
     /// </history>
     public static FileInfo RptDailySales(string report, string dateRangeFileName, List<Tuple<string, string>> filters, 
-      List<RptDailySalesDetail> lstReport, List<RptDailySalesHeader> reportHeader)
+      List<RptDailySalesDetail> lstReport, List<RptDailySalesHeader> reportHeader, DateTime dtStart, DateTime dtEnd, decimal goal)
     {
+      #region BodyReport
       var customList = lstReport.Select(c => new
       {
         c.Date, //0
@@ -239,13 +243,50 @@ namespace IM.ProcessorSales.Classes
         Fall = c.CnxSalesAmount, //7
         Cxld = c.SalesAmountCancel, //8
         TotalProc = c.SalesAmount, //9
-        Pact =c.DownPact,//13
+        Pact = c.DownPact,//13
         Collect = c.DownColl//14
       }).ToList();
       var dtData = TableHelper.GetDataTableFromList(customList, true, false);
+      #endregion
+
+      #region ReportExtraHeader
+      //Actual
+      var dateRangeCurrent= dateRangeFileName;
+      var shows = Convert.ToInt32(reportHeader[0].Shows);
+      var salesAount = Convert.ToDecimal(reportHeader[0].SalesAmount);
+      var eff = salesAount / shows;
+      //Prev
+      var dateRangePrev = DateHelper.DateRange(dtStart.AddYears(-1), dtEnd.AddYears(-1));
+      var shPrev = Convert.ToInt32(reportHeader[0].ShowsPrevious);
+      var SaPrev = Convert.ToDecimal(reportHeader[0].SalesAmountPrevious);
+      var effPrev = SaPrev / shPrev;
+      //Info
+      var forecast = goal / DateTime.DaysInMonth(dtEnd.Year, dtEnd.Month) * dtEnd.Day;
+      var diference = salesAount - forecast;
+      
+      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraHeader = new List<Tuple<string, dynamic, EnumFormatTypeExcel>>
+      {
+        //Prev
+        new Tuple<string, dynamic, EnumFormatTypeExcel>(dateRangePrev, string.Empty,EnumFormatTypeExcel.General),
+        new Tuple<string, dynamic, EnumFormatTypeExcel>("Volumen", decimal.Round(SaPrev,2),EnumFormatTypeExcel.Currency),
+        new Tuple<string, dynamic, EnumFormatTypeExcel>("Efficiency", decimal.Round(effPrev,2) ,EnumFormatTypeExcel.DecimalNumberWithCero),
+        new Tuple<string, dynamic, EnumFormatTypeExcel>("Toured", shPrev ,EnumFormatTypeExcel.NumberWithCero),
+        //Current
+        new Tuple<string, dynamic, EnumFormatTypeExcel>(dateRangeCurrent, string.Empty,EnumFormatTypeExcel.General),
+        new Tuple<string, dynamic, EnumFormatTypeExcel>("Volumen", decimal.Round(salesAount,2),EnumFormatTypeExcel.Currency),
+        new Tuple<string, dynamic, EnumFormatTypeExcel>("Efficiency", decimal.Round(eff,2) ,EnumFormatTypeExcel.DecimalNumberWithCero),
+        new Tuple<string, dynamic, EnumFormatTypeExcel>("Toured", shows ,EnumFormatTypeExcel.NumberWithCero),
+        //Info
+        new Tuple<string, dynamic, EnumFormatTypeExcel>(string.Empty, string.Empty,EnumFormatTypeExcel.General),
+        new Tuple<string, dynamic, EnumFormatTypeExcel>("Goal", goal,EnumFormatTypeExcel.DecimalNumberWithCero),
+        new Tuple<string, dynamic, EnumFormatTypeExcel>("Forecast", forecast,EnumFormatTypeExcel.DecimalNumberWithCero),
+        new Tuple<string, dynamic, EnumFormatTypeExcel>("Difference", diference,EnumFormatTypeExcel.DecimalNumberWithCero)
+      };
+
+      #endregion
 
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, dateRangeFileName,
-       FormatReport.RptDailySales(), true);
+       FormatReport.RptDailySales(), true, extraFieldHeader: extraHeader, numRows: 4);
     }
     #endregion
 

@@ -276,7 +276,8 @@ namespace IM.ProcessorSales.Forms
           list.AddRange(BRReportsBySalesRoom.GetRptDailySalesDetail(dtmStart, dtmEnd, lstSalesRoom));
           List<RptDailySalesHeader> lstHeader = BRReportsBySalesRoom.GetRptDailySalesHeader(dtmStart, dtmEnd, lstSalesRoom);
           if (list.Count > 0 && lstHeader.Count > 0)
-            file = Reports.RptDailySales(reporteName, dateRange, filters, list.Cast<RptDailySalesDetail>().ToList(), lstHeader);
+            file = Reports.RptDailySales(reporteName, dateRange, filters, list.Cast<RptDailySalesDetail>().ToList(), 
+              lstHeader, dtmStart,dtmEnd,goal);
           break; 
           #endregion
 
