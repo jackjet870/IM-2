@@ -10043,10 +10043,10 @@
           <Property Name="lsRunTrans" Type="Boolean" Nullable="false" />
           <Property Name="lsTransDT" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="lsTransBridgeDT" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="lsEfficiencyTh" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="lsShowFactorTh" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="lsBookFactorTh" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="lsShowsTh" Type="Int32" Nullable="false" />
+          <Property Name="lsEfficiencyTh" Type="Decimal" Precision="19" Scale="4" Nullable="false" DefaultValue="1200" />
+          <Property Name="lsShowFactorTh" Type="Decimal" Precision="19" Scale="4" Nullable="false" DefaultValue="0.6" />
+          <Property Name="lsBookFactorTh" Type="Decimal" Precision="19" Scale="4" Nullable="false" DefaultValue="55" />
+          <Property Name="lsShowsTh" Type="Int32" Nullable="false" DefaultValue="10" />
           <Property Name="lsDBMaint" Type="Boolean" Nullable="false" />
           <Property Name="lsA" Type="Boolean" Nullable="false" />
           <Property Name="lsStartD" Type="DateTime" Precision="3" />
@@ -10059,7 +10059,7 @@
           <Property Name="lsNTPath" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
           <Property Name="lsIHEStdFile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="lsCommand1" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="lsProcesar" Type="Boolean" Nullable="false" />
+          <Property Name="lsProcesar" Type="Boolean" Nullable="false" DefaultValue="True" />
           <Property Name="lsMaxAuthGifts" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="lsHotel" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="lsso" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -10072,7 +10072,7 @@
           <Property Name="lsho" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="lsUseSistur" Type="Boolean" Nullable="false" />
           <Property Name="lsPropertyOpera" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="lsCECOID" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="lsCECOID" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" DefaultValue="" />
           <NavigationProperty Name="Area" Relationship="Self.FK_LeadSources_Areas" FromRole="LeadSources" ToRole="Areas" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GiftsReceipts" Relationship="Self.FK_GiftsReceipts_LeadSources" FromRole="LeadSources" ToRole="GiftsReceipts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Hotel" Relationship="Self.FK_LeadSources_Hotels" FromRole="LeadSources" ToRole="Hotels" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />

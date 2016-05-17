@@ -17,6 +17,12 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public LeadSource()
         {
+            this.lsEfficiencyTh = 1200m;
+            this.lsShowFactorTh = 0.6m;
+            this.lsBookFactorTh = 55m;
+            this.lsShowsTh = 10;
+            this.lsProcesar = true;
+            this.lsCECOID = "";
             this.GiftsReceipts = new HashSet<GiftsReceipt>();
             this.InvitationsTexts = new HashSet<InvitationText>();
             this.MailOuts = new HashSet<MailOut>();
