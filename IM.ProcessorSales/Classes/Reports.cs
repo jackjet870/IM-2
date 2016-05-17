@@ -169,17 +169,17 @@ namespace IM.ProcessorSales.Classes
       var customList = goals.Select(c => new
       {
         c.SalesRoom,
-        Goal = c.goal == 0 ? null : c.goal,
+        Goal = c.goal,
         Difference = (c.goal - c.SalesAmount),
-        UPS = c.UPS == 0 ? null : c.UPS,
-        Sales = c.Sales == 0 ? null : c.Sales,
-        Proc = (c.SalesAmount - c.SalesAmountOPP) == 0 ? null : (c.SalesAmount - c.SalesAmountOPP),
-        OPP = c.SalesAmountOPP == 0 ? null : c.SalesAmountOPP,
-        Fall = c.SalesAmountFall == 0 ? null : c.SalesAmountFall,
-        Cancel = c.SalesAmountCancel == 0 ? null : c.SalesAmountCancel,
-        TotalProc = c.SalesAmount == 0 ? null : c.SalesAmount,
-        Pact = c.DownPact == 0 ? null : c.DownPact,
-        Collect = c.DownColl == 0 ? null : c.DownColl
+        UPS = c.UPS,
+        Sales = c.Sales,
+        Proc = c.SalesAmount - c.SalesAmountOPP,
+        OPP =  c.SalesAmountOPP,
+        Fall = c.SalesAmountFall,
+        Cancel = c.SalesAmountCancel,
+        TotalProc =  c.SalesAmount,
+        Pact =  c.DownPact,
+        Collect = c.DownColl
       }).ToList();
       #endregion
 
@@ -197,7 +197,7 @@ namespace IM.ProcessorSales.Classes
       forecast = decimal.Round(forecast, 2);
       diference = decimal.Round(diference, 2);
       //Creamos los ExtraHeader
-      List<Tuple<string, string, EnumFormatTypeExcel>> prueba = new List<Tuple<string, string, EnumFormatTypeExcel>>
+      List<Tuple<string, string, EnumFormatTypeExcel>> extraHeader = new List<Tuple<string, string, EnumFormatTypeExcel>>
       {
         new Tuple<string, string,EnumFormatTypeExcel>("Goal", goal.ToString(),EnumFormatTypeExcel.DecimalNumberWithCero),
         new Tuple<string, string,EnumFormatTypeExcel>("Forecast", forecast.ToString(),EnumFormatTypeExcel.DecimalNumberWithCero),
@@ -207,7 +207,45 @@ namespace IM.ProcessorSales.Classes
 
       var dtData = TableHelper.GetDataTableFromList(customList, true, false);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, dateRangeFileName,
-        FormatReport.RptConcentrateDailySales(), true, extraFieldHeader: prueba, numRows: 3);
+        FormatReport.RptConcentrateDailySales(), true, extraFieldHeader: extraHeader, numRows: 3);
+    }
+    #endregion
+
+    #region RptDailySales
+    /// <summary>
+    /// Obtiene los datos para exportar a excel el reporte RptDailySales
+    /// </summary>
+    /// <param name="report">Nombre del reporte</param>
+    /// <param name="dateRangeFileName">Rango de fechas</param>
+    /// <param name="filters">Listado de filtros</param>
+    /// <param name="lstReport">Contenido del reporte</param>
+    /// <param name="reportHeader">Listado de report Header</param>
+    /// <history>
+    /// [ecanul] 17/05/2016 Created
+    /// </history>
+    public static FileInfo RptDailySales(string report, string dateRangeFileName, List<Tuple<string, string>> filters, 
+      List<RptDailySalesDetail> lstReport, List<RptDailySalesHeader> reportHeader)
+    {
+      var customList = lstReport.Select(c => new
+      {
+        c.Date, //0
+        UPS = c.Shows, //0
+        Sale = c.SalesRegular, //1
+        Exit = c.SalesExit, //2
+        VIP = c.SalesVIP, //3
+        TotalSales = c.SalesRegular + c.SalesExit + c.SalesVIP, //Sales 4
+        Proc = c.SalesAmount - c.SalesAmountOOP, //5
+        OOP = c.SalesAmountOOP, //6
+        Fall = c.CnxSalesAmount, //7
+        Cxld = c.SalesAmountCancel, //8
+        TotalProc = c.SalesAmount, //9
+        Pact =c.DownPact,//13
+        Collect = c.DownColl//14
+      }).ToList();
+      var dtData = TableHelper.GetDataTableFromList(customList, true, false);
+
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, report, dateRangeFileName,
+       FormatReport.RptDailySales(), true);
     }
     #endregion
 

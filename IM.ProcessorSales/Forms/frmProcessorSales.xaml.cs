@@ -245,7 +245,7 @@ namespace IM.ProcessorSales.Forms
           list.AddRange(BRReportsBySalesRoom.GetRptSalesByLocationMonthly(dtmStart, dtmEnd, lstSalesRoom));
           if (list.Count > 0)
             file = Reports.RptSalesByLocationMonthly(reporteName, dateRangeFileName, filters, list.Cast<RptSalesByLocationMonthly>().ToList());
-          break; 
+          break;
         #endregion
 
         #region StatsByLocationAndSalesRoom
@@ -268,8 +268,18 @@ namespace IM.ProcessorSales.Forms
           if (list.Count > 0)
             file = Reports.RptConcentrateDailySales(reporteName, dateRangeFileName, dtmEnd, filters,
               list.Cast<RptConcentrateDailySales>().ToList(), lstGoals);
+          break;
+        #endregion
+
+        #region DailySales
+        case EnumRptRoomSales.DailySales:
+          list.AddRange(BRReportsBySalesRoom.GetRptDailySalesDetail(dtmStart, dtmEnd, lstSalesRoom));
+          List<RptDailySalesHeader> lstHeader = BRReportsBySalesRoom.GetRptDailySalesHeader(dtmStart, dtmEnd, lstSalesRoom);
+          if (list.Count > 0 && lstHeader.Count > 0)
+            file = Reports.RptDailySales(reporteName, dateRange, filters, list.Cast<RptDailySalesDetail>().ToList(), lstHeader);
           break; 
           #endregion
+
       }
 
       if (file != null)

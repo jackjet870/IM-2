@@ -17,6 +17,8 @@ namespace IM.Base.Helpers
   /// </summary>
   /// <history>
   ///   [wtorres]  01/03/2016 Created
+  ///   
+  ///   [ecanul] 17/05/2016 Modified Agregado metodo GetErrorMessage
   /// </history>
   public class UIHelper
   {
@@ -414,8 +416,24 @@ namespace IM.Base.Helpers
         #endregion
       }
 
-    } 
+    }
     #endregion
+
+    #region GetMessageError
+    /// <summary>
+    /// Obtiene el Mensaje Original o mas bajo (InnerException) de un error
+    /// </summary>
+    /// <param name="exception"></param>
+    /// [ecanul] 17/05/2016 Created
+    public static string GetMessageError(Exception exception)
+    {
+      string message = exception.Message;
+      if (exception.InnerException == null) return message;
+      message = GetMessageError(exception.InnerException);
+      return message;
+    }
+    #endregion
+
     #endregion Metodos
   }
 }

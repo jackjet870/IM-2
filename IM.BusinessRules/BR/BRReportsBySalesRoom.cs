@@ -1009,6 +1009,25 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    #region GetRptDailySalesHeader
+    /// <summary>
+    /// Devuelve un listado de RptDailySalesDetail
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicio</param>
+    /// <param name="dtEnd">Fecha Fin </param>
+    /// <param name="salesRoom">Sales Room</param>
+    /// <history>
+    /// [ecanul] 16/05/2016 Created
+    /// </history>
+    public static List<RptDailySalesHeader> GetRptDailySalesHeader(DateTime dtStart, DateTime dtEnd, IEnumerable<string>salesRoom)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptDailySalesHeader(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
+      }
+    }
+    #endregion
+
     #region GetRptDailySalesDetail
     /// <summary>
     /// Devuelve un listado de RptDailySalesDetail

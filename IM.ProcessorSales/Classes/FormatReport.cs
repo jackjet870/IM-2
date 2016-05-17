@@ -347,7 +347,7 @@ namespace IM.ProcessorSales.Classes
     {
       return new List<ExcelFormatTable>()
       {
-        new ExcelFormatTable() { Title = "SalesRoom", Order = 0, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable() {Title = "SalesRoom", Order = 0, Axis = ePivotFieldAxis.Row},
         new ExcelFormatTable() {Title = "Goal", Order = 0, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero },
         new ExcelFormatTable() {Title = "Diference", Order = 1, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumberWithCero},
         new ExcelFormatTable() {Title = "UPS", Order = 2, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.NumberWithCero },
@@ -382,6 +382,75 @@ namespace IM.ProcessorSales.Classes
           Axis = ePivotFieldAxis.Values,
           Format = EnumFormatTypeExcel.DecimalNumber,
           Formula = "IF('Sales' =0,0,'Total Proc'/'Sales')"
+        }
+      };
+    }
+    #endregion
+
+    #region RptDailySales
+    /// <summary>
+    /// Formato para el reporte RptConcentrateDailySales
+    /// </summary>
+    /// <history>
+    /// [ecanul] 16/05/2016 Created
+    /// </history>
+    public static List<ExcelFormatTable> RptDailySales()
+    {
+      return new List<ExcelFormatTable>()
+      {
+        //new ExcelFormatTable() {Title = "Rasd", Order = 0, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable() {Title = "Date", Order = 0, Axis = ePivotFieldAxis.Row, Format = EnumFormatTypeExcel.Date},
+        new ExcelFormatTable() {Title = "UPS", Order = 0, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number },
+        new ExcelFormatTable() {Title = "Sale", Order = 1, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable() {Title = "Exit", Order = 2, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable() {Title = "VIP", Order = 3, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable() {Title = "Total Sale", Order = 4, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable() {Title = "Proc ", Order = 5, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
+        new ExcelFormatTable() {Title = "OPP", Order = 6, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
+        new ExcelFormatTable() {Title = "Fall", Order = 7, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
+        new ExcelFormatTable() {Title = "Cxld", Order = 8, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
+        new ExcelFormatTable() {Title = "Total Proc", Order = 9, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.DecimalNumber},
+        new ExcelFormatTable() {Title = "Pact", Order = 13, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency,},
+        new ExcelFormatTable() {Title = "Collect", Order = 14, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency},
+        new ExcelFormatTable
+        {
+          Title = "C%",
+          Order = 10,
+          Axis = ePivotFieldAxis.Values,
+          Format = EnumFormatTypeExcel.Percent,
+          Formula = "IF(UPS=0,0,Sale/UPS)"
+        },
+        new ExcelFormatTable
+        {
+          Title = "EFF",
+          Order = 11,
+          Axis = ePivotFieldAxis.Values,
+          Format = EnumFormatTypeExcel.DecimalNumber,
+          Formula = "IF('UPS' =0,0,'Total Proc'/'UPS')"
+        },
+        new ExcelFormatTable
+        {
+          Title = "AV/S",
+          Order = 12,
+          Axis = ePivotFieldAxis.Values,
+          Format = EnumFormatTypeExcel.DecimalNumber,
+          Formula = "IF('Total Sale' =0,0,'Total Proc'/'Total Sale')"
+        },
+        new ExcelFormatTable
+        {
+          Title = "Pact Factor",
+          Order = 15,
+          Axis = ePivotFieldAxis.Values,
+          Format = EnumFormatTypeExcel.Percent,
+          Formula = "IF('Pact'=0,0,IF('Total Proc'=0,0,'Pact'/1.1/'Total Proc'))"
+        },
+         new ExcelFormatTable
+        {
+          Title = "Collect Factor",
+          Order = 15,
+          Axis = ePivotFieldAxis.Values,
+          Format = EnumFormatTypeExcel.Percent,
+          Formula = "IF('Collect'=0,0,IF('Total Proc'=0,0,'Collect'/1.1/'Total Proc'))"
         }
       };
     }

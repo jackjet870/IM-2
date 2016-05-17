@@ -1387,7 +1387,14 @@ namespace IM.Base.Helpers
       if (saveFileDialog.ShowDialog() == true)
       {
         FileInfo name = new FileInfo(saveFileDialog.FileName);
-        pk.SaveAs(name);
+        try
+        { pk.SaveAs(name); }
+        catch (Exception e)
+        {
+          string message = UIHelper.GetMessageError(e);
+          UIHelper.ShowMessage(message, System.Windows.MessageBoxImage.Error);
+          return null;
+        }
         pk.Dispose();
         return name;
       }
@@ -1396,8 +1403,7 @@ namespace IM.Base.Helpers
         pk.Dispose();
         return null;
       }
-    }
-
+    }    
     #endregion SaveExcel
 
     #region AddCalculatedField
