@@ -31,23 +31,19 @@ namespace IM.Base.Helpers
     ///                                      Se hizo modificaciones en el proceso de creacion del datatable.
     /// [aalcocer] 11/Abr/2016 Modified. Opcion para reemplazar campos vacios.
     /// [wtorres]  15/Abr/2016 Modified. Movido desde el GridHelper y renombrado. Antes se llamaba GetDatatableFromGrid
+    /// [aalcocer] 17/Abr/2016 Modified. Corregido, ahora solo sustituye campos vacios de tipo string con el parametro "replaceStringNullOrWhiteSpace"
     /// </history>
     public static DataTable GetDataTableFromList<T>(List<T> lst, bool changeDataTypeBoolToString = false,
       bool showCheckMark = true, bool replaceStringNullOrWhiteSpace = false)
     {
       DataTable table = new DataTable();
       List<PropertyDescriptor> properties = TypeDescriptor.GetProperties(typeof(T)).Cast<PropertyDescriptor>().ToList();
-      List<int> columnsChanged = new List<int>();
-
       properties.ForEach(propInfo =>
       {
         Type type = Nullable.GetUnderlyingType(propInfo.PropertyType) ?? propInfo.PropertyType;
         //Cambia las columnas booleanas a string
         if (changeDataTypeBoolToString && (type == typeof(bool) || type == typeof(bool?)))
-        {
           table.Columns.Add(propInfo.Name, typeof(string));
-          columnsChanged.Add(properties.IndexOf(propInfo));
-        }
         else if (type == typeof(string))
           table.Columns.Add(new DataColumn { ColumnName = propInfo.Name, DataType = type, DefaultValue = (replaceStringNullOrWhiteSpace || showCheckMark) ? "" : "-" });
         else
@@ -56,31 +52,23 @@ namespace IM.Base.Helpers
 
       lst.ForEach(c =>
       {
-        DataRow row = table.NewRow();
-        var values = properties.Select(v => v.GetValue(c) ?? DBNull.Value).ToArray();
-
-        columnsChanged.ForEach(col =>
+        object[] values = new object[properties.Count];
+        for (int i = 0; i < values.Length; i++)
         {
-          if (showCheckMark)
-            values[col] = (values[col].ToString().ToLower() == "true") ? "ü" : "";
-          else
-            values[col] = (values[col].ToString().ToLower() == "true") ? (object) "Yes" : DBNull.Value;
-        });
-
-        if (replaceStringNullOrWhiteSpace)
-        {
-          for (int i = 0; i < values.Length; i++)
-            if (string.IsNullOrWhiteSpace(values[i].ToString()))
-              values[i] = "-";
+          object value = properties[i].GetValue(c) ?? DBNull.Value;
+          Type type = Nullable.GetUnderlyingType(properties[i].PropertyType) ?? properties[i].PropertyType;
+          if (changeDataTypeBoolToString && (type == typeof(bool) || type == typeof(bool?)))
+            value = showCheckMark ? (value.ToString().ToLower() == "true" ? "ü" : "") : (value.ToString().ToLower() == "true" ? (object)"Yes" : DBNull.Value);
+          if (replaceStringNullOrWhiteSpace && type == typeof(string) && string.IsNullOrWhiteSpace(value.ToString()))
+            value = "-";
+          values[i] = value;
         }
-
-        row.ItemArray = values;
-        table.Rows.Add(row);
+        table.Rows.Add(values);
       });
 
       return table;
     }
 
-    #endregion
+    #endregion GetDataTableFromList
   }
 }

@@ -71,9 +71,6 @@
     <Setting Name="USP_OR_RptRepsPaymentSummary_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
     </Setting>
-    <Setting Name="USP_OR_RptCostByPR_Timeout" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">60</Value>
-    </Setting>
     <Setting Name="USP_OR_RptCostByPRWithDetailGifts_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
     </Setting>
@@ -119,9 +116,6 @@
     <Setting Name="USP_OR_GraphUnavailableArrivals_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
     </Setting>
-    <Setting Name="USP_OR_GraphProduction_Timeout" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">60</Value>
-    </Setting>
     <Setting Name="USP_OR_RptProductionByAgencyOutside_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">120</Value>
     </Setting>
@@ -148,6 +142,21 @@
     </Setting>
     <Setting Name="USP_IM_RptConcentrateDailySales_TimeOut" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">120</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptCostByPR_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
+    </Setting>
+    <Setting Name="USP_OR_GraphProduction_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByMember_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">180</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptProductionByMonth_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="USP_OR_RptScoreByPR_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
     </Setting>
   </Settings>
 </SettingsFile>

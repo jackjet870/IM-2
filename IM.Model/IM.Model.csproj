@@ -112,7 +112,9 @@
     <Compile Include="Classes\NoteGuest.cs" />
     <Compile Include="Classes\InvitationData.cs" />
     <Compile Include="Classes\GuestPremanifestOuthouse.cs" />
+    <Compile Include="Classes\ProductionByAgencyInhouseData.cs" />
     <Compile Include="Classes\ProductionByAgencyOuthouseData.cs" />
+    <Compile Include="Classes\ScoreByPRData.cs" />
     <Compile Include="Classes\UserData.cs" />
     <Compile Include="Classes\UserNormalLogin.cs" />
     <Compile Include="Club.cs">

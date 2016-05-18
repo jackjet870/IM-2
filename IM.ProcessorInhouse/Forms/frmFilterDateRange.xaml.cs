@@ -51,11 +51,8 @@ namespace IM.ProcessorInhouse.Forms
     public frmFilterDateRange()
     {
       InitializeComponent();
-      cboStatus.ItemsSource = EnumToListHelper.GetList<EnumStatus>();
       cboSaveCourtesyTours.ItemsSource = EnumToListHelper.GetList<EnumSaveCourtesyTours>();
       cboExternal.ItemsSource = EnumToListHelper.GetList<EnumExternalInvitation>();
-      cboGiftsReceiptType.ItemsSource = EnumToListHelper.GetList<EnumGiftsReceiptType>();
-      cboGiftSale.ItemsSource = EnumToListHelper.GetList<EnumGiftSale>();
       PreviewKeyDown += Close_KeyPreviewESC;
     }
 
@@ -304,6 +301,8 @@ namespace IM.ProcessorInhouse.Forms
           pnlDtmStart.IsEnabled = pnlDtmEnd.IsEnabled = true;
           break;
       }
+      dtmStart.Value = dtmStart.Value.Value.Date;
+      dtmEnd.Value = dtmEnd.Value.Value.Date;
     }
 
     #endregion cboDate_SelectionChanged
@@ -372,16 +371,17 @@ namespace IM.ProcessorInhouse.Forms
     /// <history>
     /// [aalcocer] 03/Mar/2016 Created
     /// </history>
-    public void ConfigurarFomulario(bool blnOneDate, bool blnOnlyOneRegister, bool blnOnePeriod = false,
+    public void ConfigurarFomulario(bool blnOneDate, bool blnOnlyOneRegister,
         bool blnPersonnel = false, bool blnAllPersonnel = false, bool blnLeadSources = false, bool blnAllLeadSources = false,
         bool blnChargeTo = false, bool blnAllChargeTo = false, bool blnGifts = false, bool blnAllGifts = false,
         bool blnMarkets = false, bool blnAllMarkets = false, bool blnAgencies = false, bool blnAllAgencies = false,
         bool blnCountries = false, bool blnAllCountries = false, bool blnGiftsQuantity = false, bool blnAllGiftsQuantity = false,
         EnumPeriod enumPeriod = EnumPeriod.None, EnumProgram program = EnumProgram.All, EnumBasedOnArrival? enumBasedOnArrival = null,
         EnumBasedOnBooking? enumBasedOnBooking = null, EnumQuinellas? enumQuinellas = null, EnumDetailGifts? enumDetailGifts = null,
-        EnumSalesByMemberShipType? enumSalesByMemberShipType = null, EnumStatus? enumStatus = null, EnumGiftsReceiptType? enumGiftsReceiptType = null,
-        string strGuestID = null, EnumGiftSale? enumGiftSale = null, EnumSaveCourtesyTours? enumSaveCourtesyTours = null,
-        EnumExternalInvitation? enumExternalInvitation = null, bool blnClub = false, bool blnNight = false, bool blnLsHotelNotNull = false, bool blnAgencyMonthly = false)
+        EnumSalesByMemberShipType? enumSalesByMemberShipType = null,
+        EnumSaveCourtesyTours? enumSaveCourtesyTours = null,
+        EnumExternalInvitation? enumExternalInvitation = null, bool blnClub = false, bool blnNight = false, bool blnLsHotelNotNull = false, bool blnAgencyMonthly = false,
+        bool blnOnlyWholesalers = false)
     {
       ConfigureDates(blnOneDate, enumPeriod);
 
@@ -395,7 +395,7 @@ namespace IM.ProcessorInhouse.Forms
         _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program);
         if (blnLsHotelNotNull)
         {
-          var lstLsIDHotelNotNull = BRLeadSources.GetLeadSources(1,EnumProgram.All).
+          var lstLsIDHotelNotNull = BRLeadSources.GetLeadSources(1, EnumProgram.All).
               Where(x => x.lsHotel != null).
               Select(x => x.lsID);
           _lstLeadSources = _lstLeadSources.Where(x => lstLsIDHotelNotNull.Contains(x.lsID)).ToList();
@@ -429,8 +429,7 @@ namespace IM.ProcessorInhouse.Forms
       ConfigureGridPanels(blnPersonnel, blnLeadSources, blnChargeTo, blnGifts, blnGiftsQuantity, blnMarkets, blnAgencies, blnCountries);
       ConfigureSelection(blnOnlyOneRegister);
       ConfigureCheckboxSelectAll(blnOnlyOneRegister, blnAllPersonnel, blnAllLeadSources, blnAllChargeTo, blnAllGifts, blnAllGiftsQuantity, blnAllMarkets, blnAllAgencies, blnAllCountries);
-      ConfigureFilters(enumBasedOnArrival, enumBasedOnBooking, enumQuinellas, enumDetailGifts, enumSalesByMemberShipType,
-          enumStatus, enumGiftsReceiptType, strGuestID, enumGiftSale, enumSaveCourtesyTours, enumExternalInvitation, blnClub, blnNight);
+      ConfigureFilters(enumBasedOnArrival, enumBasedOnBooking, enumQuinellas, enumDetailGifts, enumSalesByMemberShipType, enumSaveCourtesyTours, enumExternalInvitation, blnClub, blnNight, blnOnlyWholesalers);
       LoadUserFilters();
     }
 
@@ -448,8 +447,7 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void ConfigureFilters(EnumBasedOnArrival? enumBasedOnArrival, EnumBasedOnBooking? enumBasedOnBooking,
         EnumQuinellas? enumQuinellas, EnumDetailGifts? enumDetailGifts, EnumSalesByMemberShipType? enumSalesByMemberShipType,
-        EnumStatus? enumStatus, EnumGiftsReceiptType? enumGiftsReceiptType, string strGuestID, EnumGiftSale? enumGiftSale,
-        EnumSaveCourtesyTours? enumSaveCourtesyTours, EnumExternalInvitation? enumExternalInvitation, bool blnClub, bool blnNight)
+        EnumSaveCourtesyTours? enumSaveCourtesyTours, EnumExternalInvitation? enumExternalInvitation, bool blnClub, bool blnNight, bool blnOnlyWholesalers)
     {
       if (enumBasedOnArrival != null)
         chkBasedOnArrival.IsChecked = Convert.ToBoolean(enumBasedOnArrival);
@@ -476,26 +474,6 @@ namespace IM.ProcessorInhouse.Forms
       else
         chkSalesByMembershipType.Visibility = Visibility.Collapsed;
 
-      if (enumStatus != null)
-        cboStatus.SelectedValue = enumStatus;
-      else
-        cboStatus.Visibility = lblStatus.Visibility = Visibility.Collapsed;
-
-      if (enumGiftsReceiptType != null)
-        cboGiftsReceiptType.SelectedValue = enumGiftsReceiptType;
-      else
-        cboGiftsReceiptType.Visibility = lblGiftReceiptType.Visibility = Visibility.Collapsed;
-
-      if (strGuestID != null)
-        txtGuestID.Text = strGuestID;
-      else
-        txtGuestID.Visibility = lblGuestID.Visibility = Visibility.Collapsed;
-
-      if (enumGiftSale != null)
-        cboGiftSale.SelectedValue = enumGiftSale;
-      else
-        cboGiftSale.Visibility = lblGiftSale.Visibility = Visibility.Collapsed;
-
       if (enumSaveCourtesyTours != null)
         cboSaveCourtesyTours.SelectedValue = enumSaveCourtesyTours;
       else
@@ -508,6 +486,9 @@ namespace IM.ProcessorInhouse.Forms
 
       if (!blnClub)
         brdClub.Visibility = Visibility.Collapsed;
+
+      if (!blnOnlyWholesalers)
+        chkOnlyWholesalers.Visibility = Visibility.Collapsed;
 
       txtStartN.Visibility = txtEndN.Visibility = lblNights.Visibility = lblNigths2.Visibility = blnNight ? Visibility.Visible : Visibility.Collapsed;
     }
@@ -695,7 +676,7 @@ namespace IM.ProcessorInhouse.Forms
         frmIH._lstGiftsQuantity = grdGiftsQuantity.Items.Cast<GiftQuantity>().Where(x => x.include).ToDictionary(x => x.giID, x => x.quantity);
 
       frmIH._cboDateSelected = ((KeyValuePair<EnumPredefinedDate, string>)cboDate.SelectedItem).Key;
-      if (pnlDtmEnd.IsEnabled)
+      if (cboDate.IsEnabled)
         frmIH._dtmStart = dtmStart.Value.Value;
       else
         frmIH._dtmInit = dtmStart.Value.Value;
@@ -704,8 +685,10 @@ namespace IM.ProcessorInhouse.Forms
       frmIH._enumQuinellas = (chkQuinellas.IsChecked.Value) ? EnumQuinellas.quQuinellas : EnumQuinellas.quNoQuinellas;
       frmIH._enumDetailsGift = (chkDetailGifts.IsChecked.Value) ? EnumDetailGifts.dgDetailGifts : EnumDetailGifts.dgNoDetailGifts;
       frmIH._enumSalesByMemberShipType = (chkSalesByMembershipType.IsChecked.Value) ? EnumSalesByMemberShipType.sbmDetail : EnumSalesByMemberShipType.sbmNoDetail;
-      frmIH._enumStatus = ((KeyValuePair<EnumStatus, string>)cboStatus.SelectedItem).Key;
-      frmIH._guestID = txtGuestID.Text;
+      frmIH._blnOnlyWholesalers = Convert.ToBoolean(chkOnlyWholesalers.IsChecked);
+      frmIH._strApplication = txtApplication.Text;
+      frmIH._iCompany = Convert.ToInt32(txtCompany.Text);
+      frmIH._club = (Club)cboClub.SelectedItem;
       frmIH._enumSaveCourtesyTours = ((KeyValuePair<EnumSaveCourtesyTours, string>)cboSaveCourtesyTours.SelectedItem).Key;
       frmIH._enumExternalInvitation = ((KeyValuePair<EnumExternalInvitation, string>)cboExternal.SelectedItem).Key;
     }
@@ -788,8 +771,11 @@ namespace IM.ProcessorInhouse.Forms
       chkQuinellas.IsChecked = Convert.ToBoolean(frmIH._enumQuinellas);
       chkDetailGifts.IsChecked = Convert.ToBoolean(frmIH._enumDetailsGift);
       chkSalesByMembershipType.IsChecked = Convert.ToBoolean(frmIH._enumSalesByMemberShipType);
-      cboStatus.SelectedValue = frmIH._enumStatus;
-      txtGuestID.Text = frmIH._guestID;
+      chkOnlyWholesalers.IsChecked = frmIH._blnOnlyWholesalers;
+      txtApplication.Text = frmIH._strApplication;
+      txtCompany.Text = $"{frmIH._iCompany}";
+      if (frmIH._club != null)
+        cboClub.SelectedValue = frmIH._club.clID;
       cboSaveCourtesyTours.SelectedValue = frmIH._enumSaveCourtesyTours;
       cboExternal.SelectedValue = frmIH._enumExternalInvitation;
     }

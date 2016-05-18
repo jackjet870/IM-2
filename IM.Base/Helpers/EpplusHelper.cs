@@ -1,7 +1,9 @@
-﻿using IM.Model.Classes;
+﻿using IM.Model;
+using IM.Model.Classes;
 using IM.Model.Enums;
 using Microsoft.Win32;
 using OfficeOpenXml;
+using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Style.XmlAccess;
 using OfficeOpenXml.Table;
@@ -18,7 +20,6 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
 
 namespace IM.Base.Helpers
 {
@@ -54,7 +55,7 @@ namespace IM.Base.Helpers
     ///                                 Se agrega la  opcion de mostrar totales de la tabla
     /// </history>
     public static FileInfo CreateGeneralRptExcel(List<Tuple<string, string>> filter, DataTable dt, string reportName, string dateRangeFileName, List<ExcelFormatTable> formatColumns,
-      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows=0)
+      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0)
     {
       #region Variables Atributos, Propiedades
 
@@ -75,7 +76,7 @@ namespace IM.Base.Helpers
       #region Report SuperHeader
 
       //Creamos la cabecera del reporte (Titulos, Filtros, Fecha y Hora de Impresion)
-      CreateReportHeader(filter, reportName, ref ws, ref filasTotalesFiltros,extraFieldHeader,numRows);
+      CreateReportHeader(filter, reportName, ref ws, ref filasTotalesFiltros, extraFieldHeader, numRows);
 
       #endregion Report SuperHeader
 
@@ -198,13 +199,13 @@ namespace IM.Base.Helpers
       //El contenido lo convertimos a una tabla
       ExcelTable table = wsData.Tables.Add(rangeTable, null);
       table.TableStyle = TableStyles
-        
+
         .None;
       //Formateamos la tabla
       SetFormatTable(formatColumns.Where(c => !(c.Axis == ePivotFieldAxis.Values && !string.IsNullOrEmpty(c.Formula))).ToList(), ref table);
 
       //Cargamos la tabla dinamica.
-      ExcelPivotTable pivotTable = wsPivot.PivotTables.Add(wsPivot.Cells[totalFilterRows +1 , 1],
+      ExcelPivotTable pivotTable = wsPivot.PivotTables.Add(wsPivot.Cells[totalFilterRows + 1, 1],
         wsData.Cells[1, 1, wsData.Dimension.End.Row, wsData.Dimension.End.Column], Regex.Replace(reportName, "[^a-zA-Z0-9_]+", ""));
 
       if (isPivot)
@@ -225,25 +226,17 @@ namespace IM.Base.Helpers
         #region Formato Tabular
 
         if (!showRowHeaders) //Se maneja en formato XML ya que Epplus no cuenta con la propiedad para modificarlo.
-            pivotTable.PivotTableXml.DocumentElement.LastChild.Attributes["showRowHeaders"].Value = "0";
+          pivotTable.PivotTableXml.DocumentElement.LastChild.Attributes["showRowHeaders"].Value = "0";
 
-        pivotTable.Compact = false; 
+        pivotTable.Compact = false;
         pivotTable.CompactData = true;
         pivotTable.Outline = false;
         pivotTable.OutlineData = false;
         pivotTable.Indent = 0;
         pivotTable.ShowMemberPropertyTips = false;
         pivotTable.DataOnRows = false;
-        pivotTable.RowGrandTotals = showRowGrandTotal;
-        pivotTable.ShowDrill = false;
-        pivotTable.EnableDrill = false;
-        pivotTable.ColumGrandTotals = showColumnGrandTotal;
-
-        pivotTable.DataCaption = string.Empty;
 
         pivotTable.MultipleFieldFilters = true;
-        pivotTable.GridDropZones = false;
-        pivotTable.TableStyle = TableStyles.Medium13;
 
         ExcelFormatTable fistsRow = formatColumns.Where(c => c.Axis == ePivotFieldAxis.Row && !c.Compact)
           .OrderBy(c => c.Order).FirstOrDefault();
@@ -251,6 +244,17 @@ namespace IM.Base.Helpers
 
         #endregion Formato Tabular
       }
+
+      //Mostrar Totales por Columna
+      pivotTable.ColumGrandTotals = showColumnGrandTotal;
+      //Mostrar Totales por Fila
+      pivotTable.RowGrandTotals = showRowGrandTotal;
+
+      pivotTable.TableStyle = TableStyles.Medium13;
+      pivotTable.ShowDrill = false;
+      pivotTable.EnableDrill = false;
+      pivotTable.GridDropZones = false;
+      pivotTable.DataCaption = string.Empty;
 
       //Asignamos las columnas para realizar el pivote
       formatColumns.Where(c => c.Axis == ePivotFieldAxis.Column)
@@ -264,6 +268,27 @@ namespace IM.Base.Helpers
           ptfField.SubtotalTop = col.SubtotalTop;
           ptfField.SubTotalFunctions = col.SubTotalFunctions;
           ptfField.Sort = col.Sort;
+
+          #region Formato
+
+          if (col.Format != EnumFormatTypeExcel.General)
+          {
+            //Formato
+            PropertyInfo highlightedItemProperty = ptfField.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "TopNode");
+            XmlElement ptfFieldXml = (XmlElement)highlightedItemProperty.GetValue(ptfField, null);
+            var styles = pivotTable.WorkSheet.Workbook.Styles;
+            ExcelNumberFormatXml nFormatXml = styles.NumberFormats.ToList().Find(x => x.Format == GetFormat(col.Format));
+
+            //Si existe el Formato
+            if (nFormatXml != null)
+            {
+              XmlAttribute numFmtIdAttrib = pivotTable.PivotTableXml.CreateAttribute("numFmtId");
+              numFmtIdAttrib.Value = nFormatXml.NumFmtId.ToString();
+              ptfFieldXml.Attributes.Append(numFmtIdAttrib);
+            }
+          }
+
+          #endregion Formato
         });
 
       //Asignamos las filas que se mostraran.
@@ -339,17 +364,10 @@ namespace IM.Base.Helpers
           valueField.Field.Sort = valueFormat.Sort;
         });
 
-      //Agregamos valores calculados
+      // Agregamos valores calculados
       formatColumns.Where(c => c.Axis == ePivotFieldAxis.Values && !string.IsNullOrEmpty(c.Formula))
-        .OrderBy(c => c.Order)
-        .ToList()
-        .ForEach(valueCalculated =>
-        {
-          if (!isPivot)
-          {
-            pivotTable.AddCalculatedField(valueCalculated);
-          }
-        });
+        .OrderBy(c => c.Order).ToList()
+        .ForEach(valueCalculated => pivotTable.AddCalculatedField(valueCalculated));
 
       //Agregamos SuperHeader fuera del Pivote
       if (formatColumns.Any(c => c.SuperHeader != null))
@@ -437,7 +455,7 @@ namespace IM.Base.Helpers
 
       int rowNumber = totalFilterRows + 1;
       int columnNumber = 1;
-      
+
       //Obtenemos las columnas y las ordenamos.
       var formatTableColumns = formatTable.Where(c => !c.IsGroup && c.Order > 0)
         .OrderBy(row => row.Order).ToList();
@@ -453,9 +471,9 @@ namespace IM.Base.Helpers
           wsData.Cells[rowNumber, columnNumber].Style.Font.Bold = true;
           wsData.Cells[rowNumber, columnNumber].Style.Font.Size = 12;
           columnNumber++;
-        }); 
+        });
 
-      #endregion
+      #endregion Creando Headers
 
       //Si existe algun grupo
       if (formatTable.Any(c => c.IsGroup))
@@ -463,15 +481,18 @@ namespace IM.Base.Helpers
         #region Simple con Agrupado
 
         #region Formato para encabezados de grupo
+
         //Formato para los encabezados de grupo.
         List<ExcelFormatGroupHeaders> backgroundColorGroups = new List<ExcelFormatGroupHeaders> {
             new ExcelFormatGroupHeaders { BackGroundColor="#004E48", FontBold = true, TextAligment = ExcelHorizontalAlignment.Center },
             new ExcelFormatGroupHeaders { BackGroundColor="#147F79", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
             new ExcelFormatGroupHeaders { BackGroundColor="#2D8B85", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
             new ExcelFormatGroupHeaders { BackGroundColor="#4CA09A", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left } };
-        #endregion
+
+        #endregion Formato para encabezados de grupo
 
         #region Obtenemos los encabezados de grupo y sus valores
+
         //Creamos la sentencia Linq para obtener los campos que se agruparán.
         var qfields = string.Join(", ", formatTable
           .Where(c => c.IsGroup)
@@ -513,8 +534,8 @@ namespace IM.Base.Helpers
         }
 
         rowNumber++;
-        #endregion
 
+        #endregion Obtenemos los encabezados de grupo y sus valores
 
         //Obtenemos la cantidad de columnas.
         int totalColumns = formatTable.Count(c => !c.IsGroup);
@@ -572,12 +593,12 @@ namespace IM.Base.Helpers
               }
             }
           }
-          
+
           //Obtenemos los valores segun el encabezado actual.
           values[groupheaders[i]].ToList().ForEach(dr =>
           {
             int drColumn = 1;
-           //Recorremos las columnas
+            //Recorremos las columnas
             formatTableColumns.ForEach(row =>
               {
                 //Si la columna no es calculada.
@@ -605,50 +626,54 @@ namespace IM.Base.Helpers
             formatTableColumns.ForEach(format =>
             {
               EnumFormatTypeExcel subtotalFormat = format.Format;
-                if (format.SubtotalWithCero)
+              if (format.SubtotalWithCero)
+              {
+                switch (format.Format)
                 {
-                  switch (format.Format)
-                  {
                   case EnumFormatTypeExcel.Number:
-                      subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
-                      break;
+                    subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
+                    break;
+
                   case EnumFormatTypeExcel.DecimalNumber:
-                      subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
-                      break;
+                    subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
+                    break;
+
                   case EnumFormatTypeExcel.Percent:
-                      subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
-                      break;
-                  }
+                    subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
+                    break;
                 }
+              }
 
-                //Le aplicacamos el formato a la celda.
-                wsData.Cells[rowNumber, format.Order].Style.Numberformat.Format = GetFormat(subtotalFormat);
-                //Si no es calculada aplicamos la funcion configurada.
-                if (!format.IsCalculated)
+              //Le aplicacamos el formato a la celda.
+              wsData.Cells[rowNumber, format.Order].Style.Numberformat.Format = GetFormat(subtotalFormat);
+              //Si no es calculada aplicamos la funcion configurada.
+              if (!format.IsCalculated)
+              {
+                switch (format.SubTotalFunctions)
                 {
-                  switch (format.SubTotalFunctions)
-                  {
-                    case eSubTotalFunctions.Sum:
-                      wsData.Cells[rowNumber, format.Order].Formula = "=SUM(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
-                      break;
+                  case eSubTotalFunctions.Sum:
+                    wsData.Cells[rowNumber, format.Order].Formula = "=SUM(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
+                    break;
 
-                    case eSubTotalFunctions.Avg:
-                      wsData.Cells[rowNumber, format.Order].Formula = "=AVERAGE(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
-                      break;
-                    case eSubTotalFunctions.Count:
-                      if (format.Format == EnumFormatTypeExcel.General)
-                        wsData.Cells[rowNumber, format.Order].Formula = "=COUNTA(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
-                      break;
-                  }
+                  case eSubTotalFunctions.Avg:
+                    wsData.Cells[rowNumber, format.Order].Formula = "=AVERAGE(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
+                    break;
+
+                  case eSubTotalFunctions.Count:
+                    if (format.Format == EnumFormatTypeExcel.General)
+                      wsData.Cells[rowNumber, format.Order].Formula = "=COUNTA(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
+                    break;
                 }
-                else
-                  //Obtenemos la formula.
-                  wsData.Cells[rowNumber, format.Order].Formula = GetFormula(formatTable, format.Formula, rowNumber);
-              });
+              }
+              else
+                //Obtenemos la formula.
+                wsData.Cells[rowNumber, format.Order].Formula = GetFormula(formatTable, format.Formula, rowNumber);
+            });
             rowNumber++;
           }
-          rowNumber++; 
-          #endregion
+          rowNumber++;
+
+          #endregion Dibujamos los grupos y sus valores
         }
         //Ajustamos todas las columnas a su contenido.
         wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
@@ -667,7 +692,7 @@ namespace IM.Base.Helpers
           //Recorremos las columnas.
           formatTableColumns.ForEach(row =>
             {
-              //Asignamos el valor y formato a la celda. 
+              //Asignamos el valor y formato a la celda.
               wsData.Cells[rowNumber, drColumn].Value = dr[row.PropertyName];
               wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(row.Format);
               drColumn++;
@@ -690,9 +715,11 @@ namespace IM.Base.Helpers
                   case EnumFormatTypeExcel.Number:
                     subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
                     break;
+
                   case EnumFormatTypeExcel.DecimalNumber:
                     subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
                     break;
+
                   case EnumFormatTypeExcel.Percent:
                     subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
                     break;
@@ -714,6 +741,7 @@ namespace IM.Base.Helpers
                   case DataFieldFunctions.Average:
                     wsData.Cells[rowNumber, format.Order].Formula = "=AVERAGE(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
                     break;
+
                   case DataFieldFunctions.Count:
                     if (format.Format == EnumFormatTypeExcel.General)
                       wsData.Cells[rowNumber, format.Order].Formula = "=COUNTA(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
@@ -802,7 +830,7 @@ namespace IM.Base.Helpers
         {
           //Obtenemos la fila inicial para dibujar el encabezado.
           int rowHeader = rowNumber - (item.Length - 1);
-          //Obtenemos el siguiente arreglo de encabezados.        
+          //Obtenemos el siguiente arreglo de encabezados.
           string[] itemNext = (lstHeaders.IndexOf(item) + 1 < lstHeaders.Count) ? lstHeaders[lstHeaders.IndexOf(item) + 1] : null;
 
           //Si el arreglo posterior contiene valore.
@@ -810,7 +838,7 @@ namespace IM.Base.Helpers
           {
             //Recorremos la lista.
             for (int i = 0; i < item.Length; i++)
-            {              
+            {
               if (i < item.Length - 1)
               {
                 //Si el encabezado de la lista actual es igual al encabezado de la lista posterior.
@@ -907,7 +935,7 @@ namespace IM.Base.Helpers
           if (!headers.Contains(groups))
           {
             headers.Add(groups);
-            values.Add(groups, ((IEnumerable<DataRow>) item.Values).ToList());
+            values.Add(groups, ((IEnumerable<DataRow>)item.Values).ToList());
           }
         }
         //Obtenemos la cantidad de columnas.
@@ -985,9 +1013,11 @@ namespace IM.Base.Helpers
                     case EnumFormatTypeExcel.Number:
                       subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
                       break;
+
                     case EnumFormatTypeExcel.DecimalNumber:
                       subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
                       break;
+
                     case EnumFormatTypeExcel.Percent:
                       subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
                       break;
@@ -1046,9 +1076,11 @@ namespace IM.Base.Helpers
                   case EnumFormatTypeExcel.Number:
                     subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
                     break;
+
                   case EnumFormatTypeExcel.DecimalNumber:
                     subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
                     break;
+
                   case EnumFormatTypeExcel.Percent:
                     subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
                     break;
@@ -1079,6 +1111,279 @@ namespace IM.Base.Helpers
     }
 
     #endregion CreateExcelCustomPivot
+
+    #region UpdateTableExcel
+
+    /// <summary>
+    /// Actualiza una tabla de un Stream de un archivo de Excel
+    /// </summary>
+    /// <param name="template">Stream del archivo excel</param>
+    /// <param name="dt">DataTable con la tabla a actualizar (El nombre del DataTable debe ser el mismo que el nombre de la tabla de excel)</param>
+    /// <returns>Stream</returns>
+    /// <history>
+    /// [aalcocer]  03/05/2016 Created.
+    /// </history>
+    public static Stream UpdateTableExcel(Stream template, DataTable dt)
+    {
+      using (var pk = new ExcelPackage(template))
+      {
+        //Preparamos la hoja donde escribiremos la tabla
+        ExcelWorksheet ws = pk.Workbook.Worksheets.ToList().First(w => w.Tables.Any(t => t.Name == dt.TableName));
+
+        ExcelTable table = ws.Tables[dt.TableName];
+        ExcelCellAddress start = table.Address.Start;
+        ExcelRange body = ws.Cells[start.Row + 1, start.Column];
+        ExcelRangeBase outRange = body.LoadFromDataTable(dt, false);
+
+        string newRange = $"{start.Address}:{outRange.End.Address}";
+
+        XmlElement tableElement = table.TableXml.DocumentElement;
+        if (tableElement != null)
+        {
+          tableElement.Attributes["ref"].Value = newRange;
+          XmlElement xmlElement = tableElement["autoFilter"];
+          if (xmlElement != null) xmlElement.Attributes["ref"].Value = newRange;
+        }
+        pk.Save();
+        template = pk.Stream;
+      }
+
+      return template;
+    }
+
+    #endregion UpdateTableExcel
+
+    #region CreateExcelFromTemplate
+
+    /// <summary>
+    /// Crea un reporte en Excel a partir de un Stream de Excel. Se agrega Filtros, Nombre de reporte, contenido, datos de impresion y nombre del sistema al archivo
+    /// </summary>
+    /// <param name="filter">Filtros aplicados al reporte.</param>
+    /// <param name="template">Stream del archivo excel</param>
+    /// <param name="reportName">Nombre del Reporte.</param>
+    /// <param name="dateRangeFileName">Nombre del archivo del reporte</param>
+    /// <returns>FileInfo</returns>
+    /// <history>
+    /// [aalcocer]  03/05/2016 Created.
+    /// </history>
+    public static FileInfo CreateExcelFromTemplate(List<Tuple<string, string>> filter, Stream template, string reportName, string dateRangeFileName)
+    {
+      #region Variables Atributos, Propiedades
+
+      FileInfo pathFinalFile = null;
+      ExcelPackage pk = new ExcelPackage(template);
+      //Preparamos la hoja donde escribiremos
+      ExcelWorksheet ws = pk.Workbook.Worksheets.First(w => w.Hidden == eWorkSheetHidden.Visible);
+      ws.Name = Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " ");
+
+      //Filas Para los filtros
+      int FilasTotalesFiltros = 0;
+
+      #endregion Variables Atributos, Propiedades
+
+      #region Report SuperHeader
+
+      //Creamos la cabecera del reporte (Titulos, Filtros, Fecha y Hora de Impresion)
+      CreateReportHeader(filter, reportName, ref ws, ref FilasTotalesFiltros, null, 0);
+
+      #endregion Report SuperHeader
+
+      #region Formato de columnas Centrar y AutoAjustar
+
+      //Auto Ajuste de columnas de  acuerdo a su contenido
+      ws.Cells[ws.Dimension.Address].AutoFitColumns();
+      //Centramos el titulo de la aplicacion
+      ws.Cells[1, 1, 1, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+      //Centramos el titulo del reporte
+      ws.Cells[1, 4, 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+      //Centramos La etiqueta Filters
+      if (filter.Count > 0)
+      {
+        ws.Cells[2, 1, FilasTotalesFiltros + 1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        ws.Cells[2, 1, FilasTotalesFiltros + 1, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+      }
+
+      string suggestedFilaName = string.Concat(reportName, " ", dateRangeFileName);
+
+      #endregion Formato de columnas Centrar y AutoAjustar
+
+      #region Generamos y Retornamos la ruta del archivo EXCEL
+
+      pathFinalFile = SaveExcel(pk, suggestedFilaName);
+
+      return pathFinalFile;
+
+      #endregion Generamos y Retornamos la ruta del archivo EXCEL
+    }
+
+    #endregion CreateExcelFromTemplate
+
+    #region CreateGraphExcel
+
+    /// <summary>
+    ///Crea un reporte en excel que tiene  tabla de datos de semana y mes con su grafica.
+    /// De los reportes Not Booking Arrivals (Graphic) y  Unavailable Arrivals (Graphic)
+    /// </summary>
+    /// <param name="filter">Tupla de filtros: item1 = Nombre del filtro - item2 =filtros separados por comas (bp,mbp)</param>
+    /// <param name="graphTotals">Tiene los totales del la semana y el mex</param>
+    /// <param name="reportName">Nombre del reporte</param>
+    /// <param name="dateRangeFileName">Nombre del reporte con fecha</param>
+    /// <param name="tupleGraph1">tuple la semana: item1:Rango de fecha de la semana - item2:DataTable con la informacion de la semana - item3:Lista de ExcelFormatTable donde definimos la estructura</param>
+    /// <param name="tupleGraph2">tuple la semana: item1:Rango de fecha del mes- item2:DataTable con la informacion del mes - item3:Lista de ExcelFormatTable donde definimos la estructura</param>
+    /// <returns>FileInfo con el path para abrir el excel</returns>
+    /// <history>
+    ///   [aalcocer] 27/04/2016 Created.
+    /// </history>
+    public static FileInfo CreateGraphExcel(List<Tuple<string, string>> filter, GraphTotals graphTotals, string reportName, string dateRangeFileName, Tuple<string, DataTable, List<ExcelFormatTable>> tupleGraph1, Tuple<string, DataTable, List<ExcelFormatTable>> tupleGraph2)
+    {
+      #region Variables Atributos, Propiedades
+
+      FileInfo pathFinalFile = null;
+      ExcelPackage pk = new ExcelPackage();
+      //Preparamos la hoja donde escribiremos
+      ExcelWorksheet ws = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
+
+      //Filas Para los filtros
+      int filasTotalesFiltros = 0;
+      int filasTotales = 0;
+
+      //Renombramos las columnas.
+      tupleGraph1.Item2.Columns.Cast<DataColumn>().ToList().ForEach(c =>
+      {
+        c.ColumnName = tupleGraph1.Item3[tupleGraph1.Item2.Columns.IndexOf(c)].Title;
+      });
+
+      tupleGraph2.Item2.Columns.Cast<DataColumn>().ToList().ForEach(c =>
+      {
+        c.ColumnName = tupleGraph2.Item3[tupleGraph2.Item2.Columns.IndexOf(c)].Title;
+      });
+
+      #endregion Variables Atributos, Propiedades
+
+      #region Report SuperHeader
+
+      //Creamos la cabecera del reporte (Titulos, Filtros, Fecha y Hora de Impresion)
+      CreateReportHeader(filter, reportName, ref ws, ref filasTotalesFiltros, null, 0);
+
+      #endregion Report SuperHeader
+
+      #region Contenido del reporte
+
+      filasTotales += filasTotalesFiltros + 6;
+
+      #region tabla 1
+
+      //Agregamos el contenido empezando en la fila
+      ExcelRangeBase range = ws.Cells[filasTotales, 1].LoadFromDataTable(tupleGraph1.Item2, true);
+      //El contenido lo convertimos a una tabla
+      ExcelTable table = ws.Tables.Add(range, null);
+      table.TableStyle = TableStyles.Medium2;
+
+      //Formateamos la tabla
+      SetFormatTable(tupleGraph1.Item3, ref table);
+      //Agregamos el SuperHeader del la tabla
+      range = ws.Cells[table.Address.Start.Row - 1, table.Address.Start.Column, table.Address.Start.Row - 1, table.Address.End.Column];
+      range.Merge = true;
+      range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+      range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#004E48"));
+      range.Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
+      range.Style.Font.Size = 14;
+      range.Style.Font.Bold = true;
+      range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+      range.Value = tupleGraph1.Item1;
+
+      //Agregamos el grafico
+      var chart = ws.Drawings.AddChart("chart" + table.Name, eChartType.BarClustered) as ExcelBarChart;
+      if (chart != null)
+      {
+        chart.Title.Text = "Total: " + graphTotals.TotalW;
+        chart.SetPosition(table.Address.Start.Row - 2, 0, table.Address.End.Column + 1, 0);
+        chart.SetSize(640, 40 + 20 * table.Address.Rows);
+        chart.DataLabel.ShowValue = true;
+        chart.DataLabel.ShowPercent = true;
+        chart.Style = eChartStyle.Style26;
+        chart.Legend.Remove();
+        chart.Series.Add($"{table.Name}[{tupleGraph1.Item3.First(c => c.Axis == ePivotFieldAxis.Values).Title}]", $"{table.Name}[{tupleGraph1.Item3.First(c => c.Axis == ePivotFieldAxis.Column).Title}]");
+
+        chart.Axis[0].Orientation = eAxisOrientation.MaxMin;
+        chart.Axis[1].Deleted = true;
+      }
+
+      #endregion tabla 1
+
+      filasTotales += table.Address.Rows + 6;
+
+      #region tabla 2
+
+      //Agregamos el contenido empezando en la fila
+      range = ws.Cells[filasTotales, 1].LoadFromDataTable(tupleGraph2.Item2, true);
+      //El contenido lo convertimos a una tabla
+      table = ws.Tables.Add(range, null);
+      table.TableStyle = TableStyles.Medium2;
+
+      //Formateamos la tabla
+      SetFormatTable(tupleGraph2.Item3, ref table);
+      //Agregamos el SuperHeader del la tabla
+      range = ws.Cells[table.Address.Start.Row - 1, table.Address.Start.Column, table.Address.Start.Row - 1, table.Address.End.Column];
+      range.Merge = true;
+      range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+      range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#004E48"));
+      range.Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
+      range.Style.Font.Size = 14;
+      range.Style.Font.Bold = true;
+      range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+      range.Value = tupleGraph2.Item1;
+
+      chart = ws.Drawings.AddChart("chart" + table.Name, eChartType.BarClustered) as ExcelBarChart;
+      if (chart != null)
+      {
+        chart.Title.Text = "Total: " + graphTotals.TotalM;
+        chart.SetPosition(table.Address.Start.Row - 2, 0, table.Address.End.Column + 1, 0);
+        chart.SetSize(640, 40 + 20 * table.Address.Rows);
+        chart.DataLabel.ShowValue = true;
+        chart.DataLabel.ShowPercent = true;
+        chart.Style = eChartStyle.Style26;
+        chart.Legend.Remove();
+        chart.Series.Add($"{table.Name}[{tupleGraph2.Item3.First(c => c.Axis == ePivotFieldAxis.Values).Title}]", $"{table.Name}[{tupleGraph2.Item3.First(c => c.Axis == ePivotFieldAxis.Column).Title}]");
+
+        chart.Axis[0].Orientation = eAxisOrientation.MaxMin;
+        chart.Axis[1].Deleted = true;
+      }
+
+      #endregion tabla 2
+
+      #endregion Contenido del reporte
+
+      #region Formato de columnas Centrar y AutoAjustar
+
+      //Auto Ajuste de columnas de  acuerdo a su contenido
+      ws.Cells[ws.Dimension.Address].AutoFitColumns();
+      //Centramos el titulo de la aplicacion
+      ws.Cells[1, 1, 1, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+      //Centramos el titulo del reporte
+      ws.Cells[1, 4, 1, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+      //Centramos La etiqueta Filters
+      if (filter.Count > 0)
+      {
+        ws.Cells[2, 1, filasTotalesFiltros + 1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        ws.Cells[2, 1, filasTotalesFiltros + 1, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+      }
+
+      #endregion Formato de columnas Centrar y AutoAjustar
+
+      #region Generamos y Retornamos la ruta del archivo EXCEL
+
+      string suggestedFilaName = string.Concat(reportName, " ", dateRangeFileName);
+      pathFinalFile = SaveExcel(pk, suggestedFilaName);
+
+      return pathFinalFile;
+
+      #endregion Generamos y Retornamos la ruta del archivo EXCEL
+    }
+
+    #endregion CreateGraphExcel
 
     #endregion Public Methods
 
@@ -1122,7 +1427,7 @@ namespace IM.Base.Helpers
           case EnumFormatTypeExcel.Date:
           case EnumFormatTypeExcel.Time:
           case EnumFormatTypeExcel.Month:
-            tableStyle.Style.Numberformat.Format = GetFormat( item.Format );
+            tableStyle.Style.Numberformat.Format = GetFormat(item.Format);
             break;
 
           case EnumFormatTypeExcel.Boolean:
@@ -1221,14 +1526,14 @@ namespace IM.Base.Helpers
     /// <param name="extraFieldHeader">List<Tuple<string, dynamic, EnumFormatTypeExcel>> "Titilo","Valor",Formato de Celda</param>
     /// <param name="numRows">Numero de Rows por Columna</param>
     /// <history>
-    /// 
+    ///
     /// [ecanul] 16/05/2016 Modified Agregados parametros extraFieldHeader y numRows para agregar detalles al Header de los reportes
     /// </history>
-    private static void CreateReportHeader(List<Tuple<string, string>> filterList, string reportName, 
+    private static void CreateReportHeader(List<Tuple<string, string>> filterList, string reportName,
       ref ExcelWorksheet ws, ref int totalFilterRows, List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader, int numRows)
     {
       double filterNumber = filterList.Count;
-     
+
       #region Titulo del reporte
 
       //Agregamos el Nombre de la Aplicacion en las columnas combinadas A:C en la fila 1
@@ -1306,12 +1611,13 @@ namespace IM.Base.Helpers
       #endregion Datos de la impresion
 
       #region ExtraHeaderFile
-      //Si el parametro extraFieldHeader tiene algo 
+
+      //Si el parametro extraFieldHeader tiene algo
       if (extraFieldHeader != null && extraFieldHeader.Count > 0)
       {
         //Saltamos 2 lineas Para iniciar SubHeader
         totalFilterRows += 2;
-        /** La idea es que quede de la siguiente manera 
+        /** La idea es que quede de la siguiente manera
          * /-/-/ /-/-/
          * /-/-/ /-/-/
          * /-/-/ /-/-/
@@ -1325,17 +1631,21 @@ namespace IM.Base.Helpers
         {
           ExcelBorderStyle style = ExcelBorderStyle.Thin;
           //wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(subtotalFormat);
+
           #region HeaderName
+
           ws.Cells[staRow, col].Value = item.Item1;
           ws.Cells[staRow, col].Style.Font.Bold = true;
           //estilos
           ws.Cells[staRow, col].Style.Border.Top.Style = style;
           ws.Cells[staRow, col].Style.Border.Left.Style = style;
           ws.Cells[staRow, col].Style.Border.Bottom.Style = style;
-          ws.Cells[staRow, col].Style.Border.Right.Style = style;          
-          #endregion
+          ws.Cells[staRow, col].Style.Border.Right.Style = style;
+
+          #endregion HeaderName
 
           #region HeaderValue
+
           ws.Cells[staRow, col + 1].Value = item.Item2;
           //Estilos
           ws.Cells[staRow, col + 1].Style.Border.Top.Style = style;
@@ -1343,7 +1653,8 @@ namespace IM.Base.Helpers
           ws.Cells[staRow, col + 1].Style.Border.Bottom.Style = style;
           ws.Cells[staRow, col + 1].Style.Border.Right.Style = style;
           ws.Cells[staRow, col + 1].Style.Numberformat.Format = GetFormat(item.Item3);
-          #endregion
+
+          #endregion HeaderValue
 
           count++; //Incrementa el contador
           if (count < numRows)
@@ -1357,7 +1668,8 @@ namespace IM.Base.Helpers
         }
         totalFilterRows += numRows - 1;
       }
-      #endregion
+
+      #endregion ExtraHeaderFile
 
       //Se saltan 2 lineas desde donde quedo (Fila 3 si es sin subheader o 3 + numRows)
       totalFilterRows += 2;
@@ -1403,7 +1715,8 @@ namespace IM.Base.Helpers
         pk.Dispose();
         return null;
       }
-    }    
+    }
+
     #endregion SaveExcel
 
     #region AddCalculatedField
@@ -1609,11 +1922,11 @@ namespace IM.Base.Helpers
         rowList = rowList.OrderBy(x => x.Field<object>(rowFields[index].PropertyName)).ToList();
       // Gets the list of columns .(dot) separated.
       var colList = (from x in sourceTable.AsEnumerable()
-        select new
-        {
-          Name = columnFields.Select(n => x.Field<object>(n.PropertyName))
-            .Aggregate((a, b) => a += Separator + b.ToString())
-        })
+                     select new
+                     {
+                       Name = columnFields.Select(n => x.Field<object>(n.PropertyName))
+                         .Aggregate((a, b) => a += Separator + b.ToString())
+                     })
         .Distinct()
         .Distinct()
         .OrderBy(m => m.Name);
@@ -1798,7 +2111,7 @@ namespace IM.Base.Helpers
       return qTable;
     }
 
-    #endregion GetFormula
+    #endregion SortDatatable
 
     #endregion Private Methods
   }
