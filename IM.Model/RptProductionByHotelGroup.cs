@@ -33,5 +33,7 @@ namespace IM.Model
         public Nullable<decimal> ClosingFactor { get; set; }
         public Nullable<decimal> Efficiency { get; set; }
         public Nullable<decimal> AverageSale { get; set; }
+        public Nullable<int> Sales_PEND { get; set; }
+        public Nullable<decimal> SalesAmount_PEND { get; set; }
     }
 }
