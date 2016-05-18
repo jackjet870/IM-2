@@ -21378,6 +21378,8 @@
           <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_PEND" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_PEND" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="RptProductionByHotel">
           <Property Type="String" Name="HotelID" Nullable="false" MaxLength="30" />
@@ -21399,6 +21401,8 @@
           <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_PEND" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_PEND" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="RptProductionByHotelGroup">
           <Property Type="String" Name="HotelID" Nullable="false" MaxLength="30" />
@@ -21421,6 +21425,8 @@
           <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_PEND" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_PEND" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="RptProductionByHotelGroupSalesRoom">
           <Property Type="String" Name="HotelID" Nullable="false" MaxLength="30" />
@@ -21445,6 +21451,8 @@
           <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_PEND" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_PEND" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="RptProductionByHotelSalesRoom">
           <Property Type="String" Name="HotelID" Nullable="false" MaxLength="30" />
@@ -21468,6 +21476,8 @@
           <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_PEND" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_PEND" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="RptProductionByWave">
           <Property Type="String" Name="BookTime" Nullable="false" MaxLength="50" />
@@ -21490,6 +21500,8 @@
           <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_PEND" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_PEND" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="RptProductionByWaveSalesRoom">
           <Property Type="String" Name="BookTime" Nullable="false" MaxLength="50" />
@@ -21513,6 +21525,8 @@
           <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="Sales_PEND" Nullable="true" />
+          <Property Type="Decimal" Name="SalesAmount_PEND" Nullable="true" Precision="19" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -28473,6 +28487,8 @@
                 <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+                <ScalarProperty Name="Sales_PEND" ColumnName="Sales_PEND" />
+                <ScalarProperty Name="SalesAmount_PEND" ColumnName="SalesAmount_PEND" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -28498,6 +28514,8 @@
                 <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+                <ScalarProperty Name="Sales_PEND" ColumnName="Sales_PEND" />
+                <ScalarProperty Name="SalesAmount_PEND" ColumnName="SalesAmount_PEND" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -28524,6 +28542,8 @@
                 <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+                <ScalarProperty Name="Sales_PEND" ColumnName="Sales_PEND" />
+                <ScalarProperty Name="SalesAmount_PEND" ColumnName="SalesAmount_PEND" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -28552,6 +28572,8 @@
                 <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+                <ScalarProperty Name="Sales_PEND" ColumnName="Sales_PEND" />
+                <ScalarProperty Name="SalesAmount_PEND" ColumnName="SalesAmount_PEND" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -28579,6 +28601,8 @@
                 <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+                <ScalarProperty Name="Sales_PEND" ColumnName="Sales_PEND" />
+                <ScalarProperty Name="SalesAmount_PEND" ColumnName="SalesAmount_PEND" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -28605,6 +28629,8 @@
                 <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+                <ScalarProperty Name="Sales_PEND" ColumnName="Sales_PEND" />
+                <ScalarProperty Name="SalesAmount_PEND" ColumnName="SalesAmount_PEND" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -28632,6 +28658,8 @@
                 <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
+                <ScalarProperty Name="Sales_PEND" ColumnName="Sales_PEND" />
+                <ScalarProperty Name="SalesAmount_PEND" ColumnName="SalesAmount_PEND" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
