@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
-using IM.Model.Classes;
+﻿using IM.Model.Classes;
 using IM.Model.Enums;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Table.PivotTable;
+using System.Collections.Generic;
 
 namespace IM.ProcessorOuthouse.Classes
 {
   public class clsFormatReport
   {
     #region rptDepositsPaymentByPR
+
     /// <summary>
     ///  Formato para el reporte DepositsPaymentByPR
     /// </summary>
@@ -51,9 +52,11 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Payment", PropertyName = "topay", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values }
       };
     }
-    #endregion
+
+    #endregion rptDepositsPaymentByPR
 
     #region rptGiftsReceivedBySR
+
     /// <summary>
     ///  Formato para el reporte GiftsReceivedBySR
     /// </summary>
@@ -62,22 +65,25 @@ namespace IM.ProcessorOuthouse.Classes
     /// </history>
     public static List<ExcelFormatTable> rptGiftsRecivedBySR()
     {
-      return new List<ExcelFormatTable>()
+      return new List<ExcelFormatTable>
       {
-      new ExcelFormatTable() { Title = "Sales Room", PropertyName = "SalesRoom", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 1, IsGroup = true, Outline = true,SubTotalFunctions = eSubTotalFunctions.Default },
-      new ExcelFormatTable() { Title = "Gift ID", PropertyName = "Gift", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 2, },
-      new ExcelFormatTable() { Title = "Gift Name", PropertyName= "GiftN", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 3, },
-      new ExcelFormatTable() { Title = "Quantity", PropertyName = "Quantity" , Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 4,  },
-      new ExcelFormatTable() { Title = "Couples", PropertyName = "Couples", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 5, },
-      new ExcelFormatTable() { Title = "Adults", PropertyName = "Adults", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 6, },
-      new ExcelFormatTable() { Title = "Minors", PropertyName = "Minors" , Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 7, },
-      new ExcelFormatTable() { Title = "Currency", PropertyName = "cuN", Format=EnumFormatTypeExcel.General,Alignment=ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Column, Order = 1, Sort = eSortType.Ascending },
-      new ExcelFormatTable() { Title = "Amount", PropertyName = "Amount" ,Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values },
+      new ExcelFormatTable { Title = "Sales Room", PropertyName = "SalesRoom", Format = EnumFormatTypeExcel.General, Axis = ePivotFieldAxis.Row, Order = 1, IsGroup = true  },
+      new ExcelFormatTable { Title = "Gift ID", PropertyName = "Gift", Format = EnumFormatTypeExcel.Number,  Axis = ePivotFieldAxis.Row, Order = 2, },
+      new ExcelFormatTable { Title = "Gift Name", PropertyName= "GiftN", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 3, },
+      new ExcelFormatTable { Title = "Quantity", PropertyName = "Quantity" , Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Right, Axis = ePivotFieldAxis.Row, Order = 4, SubTotalFunctions =eSubTotalFunctions.Sum },
+      new ExcelFormatTable { Title = "Couples", PropertyName = "Couples", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Right, Axis = ePivotFieldAxis.Row, Order = 5, SubTotalFunctions =eSubTotalFunctions.Sum},
+      new ExcelFormatTable { Title = "Adults", PropertyName = "Adults", Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Right, Axis = ePivotFieldAxis.Row, Order = 6, SubTotalFunctions =eSubTotalFunctions.Sum},
+      new ExcelFormatTable { Title = "Minors", PropertyName = "Minors" , Format = EnumFormatTypeExcel.Number, Alignment = ExcelHorizontalAlignment.Right, Axis = ePivotFieldAxis.Row, Order = 7, SubTotalFunctions =eSubTotalFunctions.Sum },
+      new ExcelFormatTable { Title = "cuID", PropertyName = "cuID", Format=EnumFormatTypeExcel.General,Alignment=ExcelHorizontalAlignment.Center, Axis = ePivotFieldAxis.Column, Order = 8, Sort = eSortType.Ascending, IsVisible = false},
+      new ExcelFormatTable { Title = "Currency", PropertyName = "cuN", Format=EnumFormatTypeExcel.General,Alignment=ExcelHorizontalAlignment.Center, Axis = ePivotFieldAxis.Column, Order = 9},
+      new ExcelFormatTable { Title = "Amount", PropertyName = "Amount" ,Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Right, Axis = ePivotFieldAxis.Values, Order = 10, SubTotalFunctions =eSubTotalFunctions.Sum },
       };
     }
-    #endregion
+
+    #endregion rptGiftsReceivedBySR
 
     #region rptGuestsShowNoPresentedInvitation
+
     /// <summary>
     ///  Formato para el reporte GuestsShowNoPresentedInvitation
     /// </summary>
@@ -100,9 +106,11 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Payment Type", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left }
       };
     }
-    #endregion
+
+    #endregion rptGuestsShowNoPresentedInvitation
 
     #region rptProductionByPROuthouse
+
     /// <summary>
     ///  Formato para el reporte Production by PR
     /// </summary>
@@ -143,9 +151,10 @@ namespace IM.ProcessorOuthouse.Classes
       };
     }
 
-    #endregion
+    #endregion rptProductionByPROuthouse
 
     #region rptProductionByAge
+
     /// <summary>
     /// Formato para el reporte ProductionByAge
     /// </summary>
@@ -178,9 +187,11 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 18, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
       };
     }
-    #endregion
+
+    #endregion rptProductionByAge
 
     #region rptProductionByAgeSalesRoomOuthouse
+
     /// <summary>
     /// Formato para el reporte ProductionByAgeSalesRoomOuthouse
     /// </summary>
@@ -212,12 +223,13 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Eff", PropertyName = "Efficiency", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 16, Formula = "IF('Shows' =0,0,'SalesAmount_TOTAL'/'Shows')"},
       new ExcelFormatTable() { Title = "Cl%", PropertyName = "ClosingFactor", Format = EnumFormatTypeExcel.Percent, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 17, Formula = "IF('Shows' =0,0,'Sales_TOTAL'/'Shows')"},
       new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 18, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
-
       };
     }
-    #endregion
+
+    #endregion rptProductionByAgeSalesRoomOuthouse
 
     #region rptProductionByAgencyOuthouse
+
     /// <summary>
     ///  Formato para el reporte ProductionByAgencyOuthouse
     /// </summary>
@@ -257,9 +269,11 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 25, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
       };
     }
-    #endregion
+
+    #endregion rptProductionByAgencyOuthouse
 
     #region rptProductionByAgencySalesMembershipTypeOuthouse
+
     /// <summary>
     ///  Formato para el reporte productionByAgency details the Sales MembershipType
     /// </summary>
@@ -288,7 +302,6 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Amount", PropertyName = "SalesAmount", Format=EnumFormatTypeExcel.Currency, Alignment=ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 16, Function = DataFieldFunctions.Sum},
       new ExcelFormatTable() { Title = "", PropertyName = "SalesAmount_CANCEL", Format=EnumFormatTypeExcel.Currency, Alignment=ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 19, Function = DataFieldFunctions.Sum, InsertBlankRow = true },
 
-
       new ExcelFormatTable() { Title = "Sh%", PropertyName = "ShowsFactor", Format = EnumFormatTypeExcel.Percent, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 4, Formula = "IF('GrossBooks' =0,0,'Shows'/'GrossBooks')" },
       new ExcelFormatTable() { Title = "Ca%", PropertyName = "CancelFactor", Format = EnumFormatTypeExcel.Percent, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 19, Formula = "IF(('SalesAmount_TOTAL'+'SalesAmount_CANCEL') =0,0,'SalesAmount_CANCEL'/('SalesAmount_TOTAL'+'SalesAmount_CANCEL'))"},
       new ExcelFormatTable() { Title = "Eff", PropertyName = "Efficiency", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 20, Formula = "IF('Shows' =0,0,'SalesAmount_TOTAL'/'Shows')"},
@@ -296,9 +309,11 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Row, Order = 22, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
       };
     }
-    #endregion
+
+    #endregion rptProductionByAgencySalesMembershipTypeOuthouse
 
     #region rptProductionByAgencySalesRoomOuthouse
+
     /// <summary>
     ///  Formato para el reporte ProductionByAgencySalesRoom
     /// </summary>
@@ -339,9 +354,11 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 25, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
       };
     }
-    #endregion
+
+    #endregion rptProductionByAgencySalesRoomOuthouse
 
     #region rptProductionByAgencyMarketHotelOuthouse
+
     /// <summary>
     ///   Formato para el reporte ProductionByAgencyMarketHotelOuthouse
     /// </summary>
@@ -377,9 +394,11 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 20, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
       };
     }
-    #endregion
+
+    #endregion rptProductionByAgencyMarketHotelOuthouse
 
     #region rptProductionByCoupleTypeOuthouse
+
     /// <summary>
     ///  Formato para el reporte ProductionByCoupleTypeOuthouse
     /// </summary>
@@ -412,9 +431,11 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 18, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
       };
     }
-    #endregion
+
+    #endregion rptProductionByCoupleTypeOuthouse
 
     #region rptProductionByCoupleTypeSalesRoomOuthouse
+
     /// <summary>
     ///   Formato para el reporte ProductionByCoupleTypeSalesRoomOuthouse
     /// </summary>
@@ -448,9 +469,11 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 18, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
       };
     }
-    #endregion
+
+    #endregion rptProductionByCoupleTypeSalesRoomOuthouse
 
     #region rptProductionByGiftInvitation
+
     /// <summary>
     ///  Formato para el reporte ProductionByGiftInvitation
     /// </summary>
@@ -484,9 +507,11 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 18, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
       };
     }
-    #endregion
+
+    #endregion rptProductionByGiftInvitation
 
     #region rptProductionByGiftInvitationSalesRoom
+
     /// <summary>
     ///   Formato para el reporte de produccion por regalo de invitacion y sala
     /// </summary>
@@ -521,9 +546,11 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 19, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
       };
     }
-      #endregion
+
+    #endregion rptProductionByGiftInvitationSalesRoom
 
     #region rptProductionByGuestStatusOuthouse
+
     /// <summary>
     ///  Formato para el reporte de produccion por estatus de huesped
     /// </summary>
@@ -557,9 +584,11 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 18, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
       };
     }
-    #endregion
+
+    #endregion rptProductionByGuestStatusOuthouse
 
     #region rptProductionByNationalityOuthouse
+
     /// <summary>
     ///  Formato para el reporte de produccion por nacionalidad
     /// </summary>
@@ -592,9 +621,11 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 18, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
       };
     }
-    #endregion
+
+    #endregion rptProductionByNationalityOuthouse
 
     #region rptProductionByNationalitySalesRoomOuthouse
+
     /// <summary>
     ///  Formato para el reporte  por nacionalidad y sala
     /// </summary>
@@ -628,14 +659,16 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 18, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
       };
     }
-    #endregion
+
+    #endregion rptProductionByNationalitySalesRoomOuthouse
 
     #region rptProductionByPRSalesRoomOuthouse
+
     /// <summary>
     ///  Formato para el reportee ProductionByPRSalesRoom
     /// </summary>
     /// <history>
-    ///   [vku] 25/Abr/2016 Created 
+    ///   [vku] 25/Abr/2016 Created
     /// </history>
     public static List<ExcelFormatTable> rptProductionByPRSalesRoomOuthouse()
     {
@@ -674,9 +707,10 @@ namespace IM.ProcessorOuthouse.Classes
       };
     }
 
-    #endregion
+    #endregion rptProductionByPRSalesRoomOuthouse
 
     #region rptProductionByPRContactOuthouse
+
     /// <summary>
     ///  Formato para el reporte ProductionByPRContact
     /// </summary>
@@ -716,9 +750,11 @@ namespace IM.ProcessorOuthouse.Classes
       new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.Currency, Alignment = ExcelHorizontalAlignment.Left, Axis = ePivotFieldAxis.Values, Order = 25, Formula = "IF('Sales_TOTAL' =0,0,'SalesAmount_TOTAL'/'Sales_TOTAL')"},
       };
     }
-    #endregion
+
+    #endregion rptProductionByPRContactOuthouse
 
     #region rptFoliosInvitationByDateFolio
+
     /// <summary>
     ///  Formato para el reporte FoliosInvitationByDateFolio
     /// </summary>
@@ -737,7 +773,7 @@ namespace IM.ProcessorOuthouse.Classes
         new ExcelFormatTable() { Title = "Lead Source", Axis = ePivotFieldAxis.Row },
       };
     }
-    #endregion
+
+    #endregion rptFoliosInvitationByDateFolio
   }
 }
-

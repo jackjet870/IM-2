@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using IM.Model.Classes;
+﻿using IM.Model.Classes;
 using IM.Model.Enums;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Table.PivotTable;
+using System.Collections.Generic;
 
 namespace IM.ProcessorGeneral.Classes
 {
@@ -13,6 +13,7 @@ namespace IM.ProcessorGeneral.Classes
     #region Bookings
 
     #region RptBookingsBySalesRoomProgramTime
+
     /// <summary>
     /// Formato para el reporte Bookings By Sales Room, Program & Time
     /// </summary>
@@ -29,9 +30,11 @@ new ExcelFormatTable() { Title="Time", Axis = ePivotFieldAxis.Column, Order = 1,
 new ExcelFormatTable() { Title = "Books", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 1 }
       };
     }
-    #endregion
+
+    #endregion RptBookingsBySalesRoomProgramTime
 
     #region RptBookingsBySalesRoomProgramLeadSourceTime
+
     /// <summary>
     /// Formato para el reporte Bookings By Sales Room, Program, Lead Sources & Time
     /// </summary>
@@ -49,9 +52,10 @@ new ExcelFormatTable() { Title = "Time", Axis = ePivotFieldAxis.Column, Order = 
 new ExcelFormatTable() { Title = "Books", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 1 }
       };
     }
-    #endregion
 
-    #endregion
+    #endregion RptBookingsBySalesRoomProgramLeadSourceTime
+
+    #endregion Bookings
 
     #region CxC
 
@@ -101,9 +105,10 @@ new ExcelFormatTable() { Title = "Receipt Comments", Axis = ePivotFieldAxis.Row,
       };
     }
 
-    #endregion
+    #endregion RptCxC
 
     #region RptCxcDeposits
+
     /// <summary>
     /// Formato para el reporte CxC Deposits
     /// </summary>
@@ -130,9 +135,11 @@ new ExcelFormatTable() { Title = "CxC Currency", Axis = ePivotFieldAxis.Row, Ord
 new ExcelFormatTable() { Title = "Currency", Axis = ePivotFieldAxis.Column, Order = 1, Sort = eSortType.Ascending }
       };
     }
-    #endregion
+
+    #endregion RptCxcDeposits
 
     #region RptCxcGifts
+
     /// <summary>
     /// Formato para el reporte CxCGifts
     /// </summary>
@@ -153,20 +160,21 @@ new ExcelFormatTable() {  Title="GUID" ,PropertyName = "grgu", Axis = ePivotFiel
 new ExcelFormatTable() {  Title="Guest Name" ,PropertyName = "grGuest", Axis = ePivotFieldAxis.Row, Order = 9 },
 new ExcelFormatTable() {  Title="Gift",PropertyName = "Gift", Axis = ePivotFieldAxis.Column, Order = 1 },
 new ExcelFormatTable() {  Title="Gift Name",PropertyName = "giN", Axis = ePivotFieldAxis.Column, Order = 2 },
-new ExcelFormatTable() {  Title="Quantity" ,PropertyName = "Quantity", Format = EnumFormatTypeExcel.Number,Function = DataFieldFunctions.Sum, Axis = ePivotFieldAxis.Values, Order = 1 },
-new ExcelFormatTable() {  Title="Adults" ,PropertyName = "Adults", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 10 },
-new ExcelFormatTable() {  Title="Minors" ,PropertyName = "Minors", Format=EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 11 },
-new ExcelFormatTable() {  Title="Folios" ,PropertyName = "Folios", Axis = ePivotFieldAxis.Values, Order = 3 },
-new ExcelFormatTable() {  Title="Cost" ,PropertyName = "Cost", Format = EnumFormatTypeExcel.Currency,Function= DataFieldFunctions.Sum, Axis = ePivotFieldAxis.Values, Order = 2 },
-new ExcelFormatTable() {  Title="Rcpt Date" ,PropertyName = "grD", Format=EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 12},
-new ExcelFormatTable() {  Title="USD" ,PropertyName = "CostUS", Format = EnumFormatTypeExcel.Currency,Function = DataFieldFunctions.Sum, Axis = ePivotFieldAxis.Row, Order = 13 },
-new ExcelFormatTable() {  Title="Exch. Rate" ,PropertyName = "exExchRate", Axis = ePivotFieldAxis.Row, Order = 14 },
-new ExcelFormatTable() {  Title="MX" ,PropertyName = "CostMX", Format=EnumFormatTypeExcel.Currency,Function = DataFieldFunctions.Sum, Axis = ePivotFieldAxis.Row, Order = 15 },
-new ExcelFormatTable() {  Title="Member #" ,PropertyName = "grMemberNum", Axis = ePivotFieldAxis.Row, Order = 16 },
-new ExcelFormatTable() {  Title="Comments"  ,PropertyName = "grCxCComments", Axis = ePivotFieldAxis.Row, Order = 17 }
+new ExcelFormatTable() {  Title="Quantity" ,PropertyName = "Quantity", Format = EnumFormatTypeExcel.Number,Function = DataFieldFunctions.Sum, Axis = ePivotFieldAxis.Values, Order = 10 },
+new ExcelFormatTable() {  Title="Adults" ,PropertyName = "Adults", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 13 },
+new ExcelFormatTable() {  Title="Minors" ,PropertyName = "Minors", Format=EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Row, Order = 14 },
+new ExcelFormatTable() {  Title="Folios" ,PropertyName = "Folios", Axis = ePivotFieldAxis.Values, Order = 12 },
+new ExcelFormatTable() {  Title="Cost" ,PropertyName = "Cost", Format = EnumFormatTypeExcel.Currency,Function= DataFieldFunctions.Sum, Axis = ePivotFieldAxis.Values, Order = 11 },
+new ExcelFormatTable() {  Title="Rcpt Date" ,PropertyName = "grD", Format=EnumFormatTypeExcel.Date, Axis = ePivotFieldAxis.Row, Order = 15},
+new ExcelFormatTable() {  Title="USD" ,PropertyName = "CostUS", Format = EnumFormatTypeExcel.Currency,Function = DataFieldFunctions.Sum, Axis = ePivotFieldAxis.Row, Order = 16 },
+new ExcelFormatTable() {  Title="Exch. Rate" ,PropertyName = "exExchRate", Axis = ePivotFieldAxis.Row, Order = 17 },
+new ExcelFormatTable() {  Title="MX" ,PropertyName = "CostMX", Format=EnumFormatTypeExcel.Currency,Function = DataFieldFunctions.Sum, Axis = ePivotFieldAxis.Row, Order = 18 },
+new ExcelFormatTable() {  Title="Member #" ,PropertyName = "grMemberNum", Axis = ePivotFieldAxis.Row, Order = 19 },
+new ExcelFormatTable() {  Title="Comments"  ,PropertyName = "grCxCComments", Axis = ePivotFieldAxis.Row, Order = 20 }
       };
     }
-    #endregion
+
+    #endregion RptCxcGifts
 
     #region RptCxcNotAuthorized
 
@@ -194,7 +202,7 @@ new ExcelFormatTable() { Title = "CxC", PropertyName = "CxC", Format = EnumForma
       };
     }
 
-    #endregion
+    #endregion RptCxcNotAuthorized
 
     #region RptCxcPayments
 
@@ -229,9 +237,9 @@ new ExcelFormatTable() { Title = "Amt MXN", PropertyName = "AmountMXN", Format =
       };
     }
 
-    #endregion
+    #endregion RptCxcPayments
 
-    #endregion
+    #endregion CxC
 
     #region Deposits
 
@@ -268,7 +276,7 @@ new ExcelFormatTable() { Title = "CxC", Format = EnumFormatTypeExcel.DecimalNumb
       };
     }
 
-    #endregion
+    #endregion RptDeposits
 
     #region RptBurnedDeposits
 
@@ -292,17 +300,17 @@ new ExcelFormatTable() { Title = "SR", PropertyName = "grsr", Axis = ePivotField
 new ExcelFormatTable() { Title = "PR", PropertyName = "grpe", Axis = ePivotFieldAxis.Row, Order = 9 },
 new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN", Axis = ePivotFieldAxis.Row, Order = 10 },
 new ExcelFormatTable() { Title = "Host", PropertyName = "grHost", Axis = ePivotFieldAxis.Row, Order = 11 },
-new ExcelFormatTable() { Title = "Comments", PropertyName = "grComments", Axis = ePivotFieldAxis.Row, Order = 12 },
+new ExcelFormatTable() { Title = "Comments", PropertyName = "grComments", Axis = ePivotFieldAxis.Row, Order = 16 },
 new ExcelFormatTable() { Title = "Currency", PropertyName = "cuN", Axis = ePivotFieldAxis.Column, Order = 1 },
 new ExcelFormatTable() { Title = "Payment Type", PropertyName = "ptN", Axis = ePivotFieldAxis.Column, Order = 2 },
-new ExcelFormatTable() { Title = "Burned", PropertyName = "grDepositTwisted", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 1, Function = DataFieldFunctions.Sum  },
-new ExcelFormatTable() { Title = "Member #", PropertyName = "memberNum", Axis = ePivotFieldAxis.Row, Order = 13 },
-new ExcelFormatTable() { Title = "Processable", PropertyName = "procAmount", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Row, Order = 14, Function = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Pending", PropertyName = "pendAmount", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Row, Order = 15, Function = DataFieldFunctions.Sum  }
+new ExcelFormatTable() { Title = "Burned", PropertyName = "grDepositTwisted", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 15, Function = DataFieldFunctions.Sum  },
+new ExcelFormatTable() { Title = "Member #", PropertyName = "memberNum", Axis = ePivotFieldAxis.Row, Order = 12 },
+new ExcelFormatTable() { Title = "Processable", PropertyName = "procAmount", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Row, Order = 13, Function = DataFieldFunctions.Sum },
+new ExcelFormatTable() { Title = "Pending", PropertyName = "pendAmount", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Row, Order = 14, Function = DataFieldFunctions.Sum  }
       };
     }
 
-    #endregion
+    #endregion RptBurnedDeposits
 
     #region RptBurnedDepositsByResorts
 
@@ -329,14 +337,14 @@ new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN", Axis = ePivotF
 new ExcelFormatTable() { Title = "Host", PropertyName = "grHost", Axis = ePivotFieldAxis.Row, Order = 12 },
 new ExcelFormatTable() { Title = "Currency", PropertyName = "cuN", Axis = ePivotFieldAxis.Column, Order = 1 },
 new ExcelFormatTable() { Title = "Payment Type", PropertyName = "ptN", Axis = ePivotFieldAxis.Column, Order = 2 },
-new ExcelFormatTable() { Title = "Burned", PropertyName = "grDepositTwisted", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 13, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum  },
-new ExcelFormatTable() { Title = "Member #", PropertyName = "memberNum", Axis = ePivotFieldAxis.Row, Order = 14 },
-new ExcelFormatTable() { Title = "Processable", PropertyName = "procAmount", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Row, Order = 15, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Pending", PropertyName = "pendAmount", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Row, Order = 16, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum  }
+new ExcelFormatTable() { Title = "Burned", PropertyName = "grDepositTwisted", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 16, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum  },
+new ExcelFormatTable() { Title = "Member #", PropertyName = "memberNum", Axis = ePivotFieldAxis.Row, Order = 13 },
+new ExcelFormatTable() { Title = "Processable", PropertyName = "procAmount", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Row, Order = 14, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Pending", PropertyName = "pendAmount", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Row, Order = 15, Function = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum  }
       };
     }
 
-    #endregion
+    #endregion RptBurnedDepositsByResorts
 
     #region RptPaidDeposits
 
@@ -363,14 +371,14 @@ new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN", Axis = ePivotF
 new ExcelFormatTable() { Title = "Host", PropertyName = "grHost", Axis = ePivotFieldAxis.Row, Order = 12 },
 new ExcelFormatTable() { Title = "Currency", PropertyName = "cuN", Axis = ePivotFieldAxis.Column, Order = 1 },
 new ExcelFormatTable() { Title = "Payment Type", PropertyName = "ptN", Axis = ePivotFieldAxis.Column, Order = 2 },
-new ExcelFormatTable() { Title = "Deposit", PropertyName = "grDeposit", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 1, Function = DataFieldFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Burned", PropertyName = "grDepositTwisted", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 2, Function = DataFieldFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum }
+new ExcelFormatTable() { Title = "Deposit", PropertyName = "grDeposit", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 13, Function = DataFieldFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum },
+new ExcelFormatTable() { Title = "Burned", PropertyName = "grDepositTwisted", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 14, Function = DataFieldFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum }
       };
     }
 
-    #endregion
+    #endregion RptPaidDeposits
 
-    #endregion
+    #endregion Deposits
 
     #region Gift
 
@@ -394,7 +402,7 @@ new ExcelFormatTable() { Title = "Location", PropertyName = "grlo", Axis = ePivo
       };
     }
 
-    #endregion
+    #endregion RptDailyGiftSimple
 
     #region RptGiftsByCategory
 
@@ -417,7 +425,7 @@ new ExcelFormatTable() { Title = "Category", PropertyName = "Category",Axis = eP
       };
     }
 
-    #endregion
+    #endregion RptGiftsByCategory
 
     #region RptGiftsByCategoryProgram
 
@@ -435,13 +443,13 @@ new ExcelFormatTable() { Title = "Total Quantity", PropertyName = "TotalQty", Fo
 new ExcelFormatTable() { Title = "Unit Cost", PropertyName = "UnitCost", Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 3, SubTotalFunctions = eSubTotalFunctions.Sum },
 new ExcelFormatTable() { Title = "Total Cost", PropertyName = "TotalCost",Format = EnumFormatTypeExcel.Currency, Axis = ePivotFieldAxis.Row, Order = 4, SubTotalFunctions = eSubTotalFunctions.Sum },
 new ExcelFormatTable() { Title = "Quantity", PropertyName = "Quantity", Format = EnumFormatTypeExcel.Number, Axis = ePivotFieldAxis.Values, Order = 1, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum },
-new ExcelFormatTable() { Title = "Day", PropertyName = "Day", Axis = ePivotFieldAxis.Column, Order = 1 },
+new ExcelFormatTable() { Title = "Day", PropertyName = "Day", Axis = ePivotFieldAxis.Column, Order = 1, Sort = eSortType.Ascending},
 new ExcelFormatTable() { Title = "Program", PropertyName = "Program",Axis = ePivotFieldAxis.Row, IsGroup = true, Order = 1 },
 new ExcelFormatTable() { Title = "Category", PropertyName = "Category",Axis = ePivotFieldAxis.Row, IsGroup = true, Order = 2 }
       };
     }
 
-    #endregion
+    #endregion RptGiftsByCategoryProgram
 
     #region RptGiftsCertificates
 
@@ -476,7 +484,7 @@ new ExcelFormatTable() { Title = "Comments", PropertyName = "Comments", Axis = e
       };
     }
 
-    #endregion
+    #endregion RptGiftsCertificates
 
     #region RptGiftsReceiptsPayments
 
@@ -492,14 +500,14 @@ new ExcelFormatTable() { Title = "Comments", PropertyName = "Comments", Axis = e
 new ExcelFormatTable() { Title = "Source", PropertyName = "Source", Axis = ePivotFieldAxis.Row, Order = 1 },
 new ExcelFormatTable() { Title = "Amount", PropertyName = "Amount", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 1, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum },
 new ExcelFormatTable() { Title = "Amount US", PropertyName = "AmountUS", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Row, Order = 2, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "PaymentType", PropertyName = "PaymentType", Axis = ePivotFieldAxis.Column, Order = 1 },
-new ExcelFormatTable() { Title = "Currency", PropertyName = "Currency", Axis = ePivotFieldAxis.Column, Order = 2 },
+new ExcelFormatTable() { Title = "PaymentType", PropertyName = "PaymentType", Axis = ePivotFieldAxis.Column, Order = 1, Sort = eSortType.Ascending},
+new ExcelFormatTable() { Title = "Currency", PropertyName = "Currency", Axis = ePivotFieldAxis.Column, Order = 2, Sort = eSortType.Ascending},
 new ExcelFormatTable() { Title = "GroupSource1", PropertyName = "GroupSource1", Axis = ePivotFieldAxis.Row, IsGroup = true, Order = 1 },
 new ExcelFormatTable() { Title = "GroupSource2", PropertyName = "GroupSource2", Axis = ePivotFieldAxis.Row, IsGroup= true, Order = 2 }
       };
     }
 
-    #endregion
+    #endregion RptGiftsReceiptsPayments
 
     #region RptGiftsReceiptsPayments
 
@@ -543,7 +551,7 @@ new ExcelFormatTable() { Title = "Comments", PropertyName = "Comments" }
       };
     }
 
-    #endregion
+    #endregion RptGiftsReceiptsPayments
 
     #region RptGiftsUsedBySistur
 
@@ -587,7 +595,7 @@ new ExcelFormatTable() { Title = "CeCos", PropertyName = "Cecos", Order = 25 }
       };
     }
 
-    #endregion
+    #endregion RptGiftsUsedBySistur
 
     #region RptWeeklyGiftSimple
 
@@ -607,9 +615,9 @@ new ExcelFormatTable() { Title = "Quantity", PropertyName = "Qty", Format = Enum
       };
     }
 
-    #endregion
+    #endregion RptWeeklyGiftSimple
 
-    #endregion
+    #endregion Gift
 
     #region Guests
 
@@ -634,7 +642,7 @@ new ExcelFormatTable() { Title = "Market Segment", PropertyName = "mksN", Axis =
       };
     }
 
-    #endregion
+    #endregion RptGuestCeco
 
     #region RptGuestNoBuyers
 
@@ -661,7 +669,7 @@ new ExcelFormatTable() { Title = "Country", PropertyName = "CountryN", Axis = eP
       };
     }
 
-    #endregion
+    #endregion RptGuestNoBuyers
 
     #region RptInOut
 
@@ -706,7 +714,7 @@ new ExcelFormatTable() { Title = "Comments", PropertyName = "Comments", Axis = e
       };
     }
 
-    #endregion
+    #endregion RptInOut
 
     #region RptGuestNoShow
 
@@ -737,9 +745,9 @@ new ExcelFormatTable() { Title = "Book Cancel", PropertyName = "guBookCanc", For
       };
     }
 
-    #endregion
+    #endregion RptGuestNoShow
 
-    #endregion
+    #endregion Guests
 
     #region Meal Tickets
 
@@ -783,7 +791,7 @@ new ExcelFormatTable() { Title = "Representative", PropertyName = "merep", Axis 
       };
     }
 
-    #endregion
+    #endregion RptMealTickets
 
     #region RptMealTicketsByHost
 
@@ -825,7 +833,7 @@ new ExcelFormatTable() { Title = "Representative", PropertyName = "merep", Axis 
       };
     }
 
-    #endregion
+    #endregion RptMealTicketsByHost
 
     #region RptMealTicketsCost
 
@@ -848,9 +856,9 @@ new ExcelFormatTable() { Title = "$ Total", PropertyName = "TotalAmount", Format
       };
     }
 
-    #endregion
+    #endregion RptMealTicketsCost
 
-    #endregion
+    #endregion Meal Tickets
 
     #region Memberships
 
@@ -900,7 +908,7 @@ new ExcelFormatTable() { Title = "Total Proc", PropertyName = "TotalProcAmount",
       };
     }
 
-    #endregion
+    #endregion RptMemberships
 
     #region RptMembershipsByAgencyMarket
 
@@ -937,7 +945,7 @@ new ExcelFormatTable() { Title = "$ EDP", PropertyName = "saDownPaymentPaid", Fo
       };
     }
 
-    #endregion
+    #endregion RptMembershipsByAgencyMarket
 
     #region RptMembershipsByHost
 
@@ -971,9 +979,9 @@ new ExcelFormatTable() { Title = "Total Proc", PropertyName = "TotalProcAmount",
       };
     }
 
-    #endregion
+    #endregion RptMembershipsByHost
 
-    #endregion
+    #endregion Memberships
 
     #region Production
 
@@ -1003,7 +1011,7 @@ new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Forma
       };
     }
 
-    #endregion
+    #endregion RptProductionBySalesRoom
 
     #region RptProductionBySalesRoomMarket
 
@@ -1032,7 +1040,7 @@ new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Forma
       };
     }
 
-    #endregion
+    #endregion RptProductionBySalesRoomMarket
 
     #region RptProductionBySalesRoomMarketSubMarket
 
@@ -1063,7 +1071,7 @@ new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Forma
       };
     }
 
-    #endregion
+    #endregion RptProductionBySalesRoomMarketSubMarket
 
     #region RptProductionByShowProgram
 
@@ -1092,7 +1100,7 @@ new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Forma
       };
     }
 
-    #endregion
+    #endregion RptProductionByShowProgram
 
     #region RptProductionByShowProgramProgram
 
@@ -1122,9 +1130,9 @@ new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Forma
       };
     }
 
-    #endregion
+    #endregion RptProductionByShowProgramProgram
 
-    #endregion
+    #endregion Production
 
     #region Taxis
 
@@ -1155,7 +1163,7 @@ new ExcelFormatTable() { Title = "Comments", PropertyName = "guWComments", Order
       };
     }
 
-    #endregion
+    #endregion RptTaxisIn
 
     #region RptTaxisOut
 
@@ -1183,16 +1191,16 @@ new ExcelFormatTable() { Title = "Comments", PropertyName = "guWComments", Order
       };
     }
 
-    #endregion
+    #endregion RptTaxisOut
 
-    #endregion
+    #endregion Taxis
 
-
-    #endregion
+    #endregion Reports by Sales Room
 
     #region Reports by Lead Source
 
     #region rptDepositsBurnedGuests
+
     /// <summary>
     /// Formato para el reporte Deposits Burned Guests
     /// </summary>
@@ -1212,14 +1220,16 @@ new ExcelFormatTable() { Title = "SR", PropertyName = "gusr", Axis = ePivotField
 new ExcelFormatTable() { Title = "PR", PropertyName = "guPRInvit1", Axis = ePivotFieldAxis.Row, Order = 8 },
 new ExcelFormatTable() { Title = "Out Invit", PropertyName = "guOutInvitNum", Axis = ePivotFieldAxis.Row, Order = 2},
 new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN", Axis = ePivotFieldAxis.Row, Order = 9 },
-new ExcelFormatTable() { Title = "Currency", PropertyName = "gucu", Axis = ePivotFieldAxis.Column, Order = 1 },
-new ExcelFormatTable() { Title = "Payment Type", PropertyName = "gupt", Axis = ePivotFieldAxis.Column, Order = 2 },
-new ExcelFormatTable() { Title = "Burned", PropertyName = "guDepositTwisted", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 1, AggregateFunction = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum }
+new ExcelFormatTable() { Title = "Currency", PropertyName = "gucu", Axis = ePivotFieldAxis.Column, Order = 1,Sort =eSortType.Ascending },
+new ExcelFormatTable() { Title = "Payment Type", PropertyName = "gupt", Axis = ePivotFieldAxis.Column, Order = 2, Sort =eSortType.Descending },
+new ExcelFormatTable() { Title = "Burned", PropertyName = "guDepositTwisted", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 10, AggregateFunction = DataFieldFunctions.Sum, SubTotalFunctions = eSubTotalFunctions.Sum }
       };
     }
-    #endregion
+
+    #endregion rptDepositsBurnedGuests
 
     #region rptDepositRefunds
+
     /// <summary>
     /// Formato para el reporte Deposit Refunds
     /// </summary>
@@ -1248,9 +1258,11 @@ new ExcelFormatTable() { Title = "Expiration Date", PropertyName = "bdExpD", Ord
 new ExcelFormatTable() { Title = "Authorization", PropertyName = "bdAuth", Format = EnumFormatTypeExcel.Number, Order = 18 }
       };
     }
-    #endregion
+
+    #endregion rptDepositRefunds
 
     #region RptDepositByPr
+
     /// <summary>
     /// Formato para el reporte Deposit By PR
     /// </summary>
@@ -1270,16 +1282,18 @@ new ExcelFormatTable() { Title = "SR", PropertyName = "gusr", Axis = ePivotField
 new ExcelFormatTable() { Title = "PR", PropertyName = "guPRInvit1", Axis = ePivotFieldAxis.Row, IsGroup = true, Order = 1 },
 new ExcelFormatTable() { Title = "Out Invit", PropertyName = "guOutInvitNum", Axis = ePivotFieldAxis.Row, Order = 3 },
 new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN" },
-new ExcelFormatTable() { Title = "Currrency", PropertyName = "gucu", Axis = ePivotFieldAxis.Column, Order = 1},
-new ExcelFormatTable() { Title = "Payment Type", PropertyName = "gupt", Axis = ePivotFieldAxis.Column, Order = 2 },
-new ExcelFormatTable() { Title = "Deposited", PropertyName = "guDeposit", Format= EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 1, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Received", PropertyName = "guDepositReceived", Format= EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 2, SubTotalFunctions = eSubTotalFunctions.Sum },
-new ExcelFormatTable() { Title = "Burned", PropertyName = "guDepositTwisted", Format= EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 3, SubTotalFunctions = eSubTotalFunctions.Sum }
+new ExcelFormatTable() { Title = "Currrency", PropertyName = "gucu", Axis = ePivotFieldAxis.Column, Order = 1, Sort = eSortType.Ascending},
+new ExcelFormatTable() { Title = "Payment Type", PropertyName = "gupt", Axis = ePivotFieldAxis.Column, Order = 2, Sort = eSortType.Descending},
+new ExcelFormatTable() { Title = "Deposited", PropertyName = "guDeposit", Format= EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 9, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Received", PropertyName = "guDepositReceived", Format= EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 10, SubTotalFunctions = eSubTotalFunctions.Sum },
+new ExcelFormatTable() { Title = "Burned", PropertyName = "guDepositTwisted", Format= EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 11, SubTotalFunctions = eSubTotalFunctions.Sum }
       };
     }
-    #endregion
+
+    #endregion RptDepositByPr
 
     #region rptDepositsNoShow
+
     /// <summary>
     /// Formato para el reporte Deposits No Show
     /// </summary>
@@ -1306,9 +1320,11 @@ new ExcelFormatTable() { Title = "Received", PropertyName = "guDepositReceived",
 new ExcelFormatTable() { Title = "Burned", PropertyName = "guDepositTwisted", Format= EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 3, SubTotalFunctions = eSubTotalFunctions.Sum }
       };
     }
-    #endregion
+
+    #endregion rptDepositsNoShow
 
     #region rptInOutByPR
+
     /// <summary>
     /// Formato para el reporte In & Out By PR
     /// </summary>
@@ -1348,7 +1364,8 @@ new ExcelFormatTable() { Title = "Host", PropertyName = "Host", Order = 25 },
 new ExcelFormatTable() { Title = "Comments", PropertyName = "Comments", Order = 26 }
       };
     }
-    #endregion
+
+    #endregion rptInOutByPR
 
     #region RptPaidDepositsByPR
 
@@ -1375,12 +1392,12 @@ new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN"},
 new ExcelFormatTable() { Title = "Host", PropertyName = "grHost", Axis = ePivotFieldAxis.Row, Order = 11 },
 new ExcelFormatTable() { Title = "Currency", PropertyName = "cuN", Axis = ePivotFieldAxis.Column, Order = 1 },
 new ExcelFormatTable() { Title = "Payment Type", PropertyName = "ptN", Axis = ePivotFieldAxis.Column, Order = 2 },
-new ExcelFormatTable() { Title = "Deposit", PropertyName = "grDeposit", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 1, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum },
-        new ExcelFormatTable() { Title = "Burned", PropertyName = "grDepositTwisted", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 2, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum }
+new ExcelFormatTable() { Title = "Deposit", PropertyName = "grDeposit", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 12, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum },
+        new ExcelFormatTable() { Title = "Burned", PropertyName = "grDepositTwisted", Format = EnumFormatTypeExcel.DecimalNumber, Axis = ePivotFieldAxis.Values, Order = 13, SubTotalFunctions = eSubTotalFunctions.Sum, AggregateFunction = DataFieldFunctions.Sum }
       };
     }
 
-    #endregion
+    #endregion RptPaidDepositsByPR
 
     #region RptPersonnelAccess
 
@@ -1417,7 +1434,7 @@ new ExcelFormatTable() { Title = "Admin", PropertyName = "Administrator", Order 
       };
     }
 
-    #endregion
+    #endregion RptPersonnelAccess
 
     #region RptSelfGen
 
@@ -1454,13 +1471,14 @@ new ExcelFormatTable() { Title = "Pending Amount", PropertyName = "PendingAmount
       };
     }
 
-    #endregion
+    #endregion RptSelfGen
 
-    #endregion
+    #endregion Reports by Lead Source
 
     #region General Reports
 
     #region rptAgencies
+
     /// <summary>
     /// Formato para el reporte Agencies
     /// </summary>
@@ -1480,9 +1498,13 @@ new ExcelFormatTable() { Title = "Rep",  },
 new ExcelFormatTable() { Title = "Active", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center }
       };
     }
-    #endregion 
+
+    #endregion rptAgencies
+
+
 
     #region rptGifts
+
     /// <summary>
     /// Formato para el reporte general de Gifts
     /// </summary>
@@ -1508,9 +1530,11 @@ new ExcelFormatTable() { Title = "Pax", Format = EnumFormatTypeExcel.Boolean, Al
 new ExcelFormatTable() { Title = "Active", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center }
       };
     }
-    #endregion
+
+    #endregion rptGifts
 
     #region RptLoginsLog
+
     /// <summary>
     /// Formato para el reporte general Logins Log
     /// </summary>
@@ -1527,9 +1551,11 @@ new ExcelFormatTable() { Title = "Name" },
 new ExcelFormatTable() { Title = "PC" }
       };
     }
-    #endregion
+
+    #endregion RptLoginsLog
 
     #region rptPersonnel
+
     /// <summary>
     /// Formato para el reporte general de Personnel
     /// </summary>
@@ -1566,9 +1592,13 @@ new ExcelFormatTable() { Title = "Manager", Format = EnumFormatTypeExcel.Boolean
 new ExcelFormatTable() { Title = "Admin", Format = EnumFormatTypeExcel.Boolean, Alignment = ExcelHorizontalAlignment.Center, Order = 25 }
       };
     }
-    #endregion 
+
+    #endregion rptPersonnel
+
+
 
     #region rptProductionByLeadSourceMarketMonthly
+
     /// <summary>
     /// Formato para el reporte general Production By Lead Source & Market(Monthly)
     /// </summary>
@@ -1612,9 +1642,11 @@ new ExcelFormatTable() { Title = "UPS", PropertyName = "UPS", Format = EnumForma
 new ExcelFormatTable() { Title = "Avg Sale", PropertyName = "AverageSale", Format = EnumFormatTypeExcel.DecimalNumber, Order = 26, IsCalculated = true, Formula = "IF([Sales]=0,0,[SalesAmount]/[Sales])" }
       };
     }
-    #endregion
+
+    #endregion rptProductionByLeadSourceMarketMonthly
 
     #region rptProductionReferral
+
     /// <summary>
     /// Formato para el reporte Production Referral
     /// </summary>
@@ -1638,7 +1670,9 @@ new ExcelFormatTable() { Title = "Avg Sale",  PropertyName = "AverageSale", Form
       };
     }
 
-    #endregion 
+    #endregion rptProductionReferral
+
+
 
     #region RptReps
 
@@ -1657,7 +1691,9 @@ new ExcelFormatTable() { Title = "Avg Sale",  PropertyName = "AverageSale", Form
       };
     }
 
-    #endregion 
+    #endregion RptReps
+
+
 
     #region RptSalesByProgramLeadSourceMarket
 
@@ -1686,7 +1722,9 @@ new ExcelFormatTable() { Title = "Avg Sale",  PropertyName = "AverageSale", Form
       };
     }
 
-    #endregion 
+    #endregion RptSalesByProgramLeadSourceMarket
+
+
 
     #region RptWarehouseMovements
 
@@ -1709,9 +1747,10 @@ new ExcelFormatTable() { Title = "Avg Sale",  PropertyName = "AverageSale", Form
       };
     }
 
-    #endregion 
+    #endregion RptWarehouseMovements
 
-    #endregion
 
+
+    #endregion General Reports
   }
 }

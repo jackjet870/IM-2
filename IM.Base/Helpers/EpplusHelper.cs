@@ -25,6 +25,8 @@ namespace IM.Base.Helpers
 {
   public static class EpplusHelper
   {
+    private static char separator = '_';
+
     #region Public Methods
 
     #region CreateGeneralRptExcel
@@ -214,10 +216,6 @@ namespace IM.Base.Helpers
 
         //Mostrar Encabezados
         pivotTable.ShowHeaders = true;
-        //Mostrar Totales por Columna
-        pivotTable.ColumGrandTotals = showColumnGrandTotal;
-        //Mostrar Totales por Fila
-        pivotTable.RowGrandTotals = showRowGrandTotal;
 
         #endregion Formato Esquematico
       }
@@ -784,6 +782,7 @@ namespace IM.Base.Helpers
     /// <returns> FileInfo </returns>
     /// <history>
     ///   [edgrodriguez] 11/04/2016  Created.
+    ///   [aalcocer]    18/05/2016 Modified. Se agregan columnas calculadas
     /// </history>
     public static FileInfo CreateExcelCustomPivot(DataTable dtTable, List<Tuple<string, string>> filters,
       string reportName, string dateRangeFileName, List<ExcelFormatTable> formatTable, bool blnColumnGrandTotal = false,
@@ -806,9 +805,9 @@ namespace IM.Base.Helpers
       #region Creando Headers
 
       //Obtenemos los encabezados de la tabla pivote.
-      List<string[]> lstHeaders = pivotedTable.Columns.OfType<DataColumn>().Select(c => c.ColumnName.Split('|')).ToList();
+      List<string[]> lstHeaders = pivotedTable.Columns.OfType<DataColumn>().Select(c => c.ColumnName.Split(separator)).ToList();
       //Obtenemos la cantidad maxima de superheaders.
-      int[] iniValue = new int[pivotedTable.Columns.OfType<DataColumn>().Max(c => c.ColumnName.Split('|').Length - 1)];
+      int[] iniValue = new int[pivotedTable.Columns.OfType<DataColumn>().Max(c => c.ColumnName.Split(separator).Length - 1)];
       int columnNumber = 1;
       //Recorremos los encabezados.
       foreach (string[] item in lstHeaders)
@@ -817,11 +816,15 @@ namespace IM.Base.Helpers
         if (item.Length == 1)
         {
           //Si no es un grupo.
-          if (!formatTable.First(c => c.PropertyName == item[0]).IsGroup)
+          if (!formatTable.First(c => c.PropertyName == item.First()).IsGroup)
           {
             //Dibujamos el encabezado y aplicamos formato.
-            wsData.Cells[rowNumber, columnNumber].Value = formatTable.First(c => c.PropertyName == item[0]).Title;
-            wsData.Cells[rowNumber, columnNumber].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            using (ExcelRange range = wsData.Cells[rowNumber, columnNumber])
+            {
+              range.Value = formatTable.First(c => c.PropertyName == item.First()).Title;
+              range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+              range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+            }
             columnNumber++;
           }
         }
@@ -834,34 +837,42 @@ namespace IM.Base.Helpers
           string[] itemNext = (lstHeaders.IndexOf(item) + 1 < lstHeaders.Count) ? lstHeaders[lstHeaders.IndexOf(item) + 1] : null;
 
           //Si el arreglo posterior contiene valore.
-          if (itemNext != null)
+          if (itemNext != null && itemNext.Length == item.Length)
           {
             //Recorremos la lista.
             for (int i = 0; i < item.Length; i++)
             {
               if (i < item.Length - 1)
               {
-                //Si el encabezado de la lista actual es igual al encabezado de la lista posterior.
-                if (item[i] == itemNext[i])
+                //Si el encabezado de la lista actual es igual al encabezado de la lista posterior y Si pertenecen al mismo encabezado superior
+                if (item[i] == itemNext[i] && (i == 0 || item[i - 1] == itemNext[i - 1]))
                 {
                   //Aumentamos la cantidad de celdas a combinar. (MERGE)
                   iniValue[i] = iniValue[i] + 1;
                 }
                 //Si el encabezado de la lista actual es diferente al encabezado de la lista posterior.
-                else if (item[i] != itemNext[i])
+                else
                 {
-                  //Dibujamos el encabezado.
-                  wsData.Cells[rowHeader, columnNumber - iniValue[i], rowHeader, columnNumber].Value = item[i];
-                  //Combinamos las celdas.
-                  wsData.Cells[rowHeader, columnNumber - iniValue[i], rowHeader, columnNumber].Merge = true;
-                  wsData.Cells[rowHeader, columnNumber - iniValue[i], rowHeader, columnNumber].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                  using (ExcelRange range = wsData.Cells[rowHeader, columnNumber - iniValue[i], rowHeader, columnNumber])
+                  {
+                    //Dibujamos el encabezado.
+                    range.Value = item[i];
+                    //Combinamos las celdas.
+                    range.Merge = true;
+                    range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+                  }
                   iniValue[i] = 0;//Reiniciamos el contador de celdas a combinar.
                 }
               }
               else if (i == item.Length - 1)
               {
-                wsData.Cells[rowHeader, columnNumber].Value = formatTable.First(c => c.PropertyName == item[i]).Title;
-                wsData.Cells[rowHeader, columnNumber].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                using (ExcelRange range = wsData.Cells[rowHeader, columnNumber])
+                {
+                  range.Value = formatTable.First(c => c.PropertyName == item[i]).Title;
+                  range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                  range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+                }
               }
               rowHeader++;
             }
@@ -874,17 +885,25 @@ namespace IM.Base.Helpers
             {
               if (i < item.Length - 1)
               {
-                //Dibujamos el encabezado
-                wsData.Cells[rowHeader, columnNumber - iniValue[i], rowHeader, columnNumber].Value = item[i];
-                //Combinamos las celdas.
-                wsData.Cells[rowHeader, columnNumber - iniValue[i], rowHeader, columnNumber].Merge = true;
-                wsData.Cells[rowHeader, columnNumber - iniValue[i], rowHeader, columnNumber].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                iniValue[i] = 0;//Reiciamos el contador de celdas a combinar.
+                using (ExcelRange range = wsData.Cells[rowHeader, columnNumber - iniValue[i], rowHeader, columnNumber])
+                {
+                  //Dibujamos el encabezado.
+                  range.Value = item[i];
+                  //Combinamos las celdas.
+                  range.Merge = true;
+                  range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                  range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+                }
+                iniValue[i] = 0;//Reiniciamos el contador de celdas a combinar.
               }
               else if (i == item.Length - 1)
               {
-                wsData.Cells[rowHeader, columnNumber].Value = formatTable.First(c => c.PropertyName == item[i]).Title;
-                wsData.Cells[rowHeader, columnNumber].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                using (ExcelRange range = wsData.Cells[rowHeader, columnNumber])
+                {
+                  range.Value = formatTable.First(c => c.PropertyName == item[i]).Title;
+                  range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                  range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+                }
               }
               rowHeader++;
             }
@@ -917,12 +936,16 @@ namespace IM.Base.Helpers
           .OrderBy(c => c.Order).Select(x => "Key." + x.PropertyName + ((x.Sort == eSortType.Descending) ? " desc" : " asc")));
 
         //Obtenemos las agrupaciones y los registros de cada agrupacion.
-        var qTable = pivotedTable
+        var qTableaux = pivotedTable
           .AsEnumerable()
           .AsQueryable()
-          .GroupBy("new(" + qfields + ")", "it")
-          .OrderBy(qOrder)
-          .Select("new(Key as qgroup, it as Values)");
+          .GroupBy("new(" + qfields + ")", "it");
+        if (qOrder != "")
+        {
+          qTableaux = qTableaux.OrderBy(qOrder);
+        }
+
+        var qTable = qTableaux.Select("new(Key as qgroup, it as Values)");
         //Lista con los headers de cada agrupacion.
         List<string> headers = new List<string>();
         Dictionary<string, List<DataRow>> values = new Dictionary<string, List<DataRow>>();
@@ -931,7 +954,7 @@ namespace IM.Base.Helpers
           //obtenemos los grupos.
           object gKey = item.qgroup;
           //Concatenamos los grupos
-          var groups = string.Join("|", gKey.GetType().GetProperties().Select(c => c.GetValue(gKey).ToString()).ToList());
+          var groups = string.Join(separator.ToString(), gKey.GetType().GetProperties().Select(c => c.GetValue(gKey).ToString()).ToList());
           if (!headers.Contains(groups))
           {
             headers.Add(groups);
@@ -942,7 +965,7 @@ namespace IM.Base.Helpers
         int totalColumns = pivotedTable.Columns.Count - (formatTable.Count(c => c.IsGroup) - 1);
         for (int i = 0; i < headers.Count; i++)
         {
-          string[] posAct = headers[i].Split('|');
+          string[] posAct = headers[i].Split(separator);
           if (i == 0)
           {
             for (int j = 0; j < posAct.Length; j++)
@@ -959,7 +982,7 @@ namespace IM.Base.Helpers
           }
           else if (i > 0)
           {
-            string[] posAnt = headers[i - 1].Split('|');
+            string[] posAnt = headers[i - 1].Split(separator);
             for (int j = 0; j < posAct.Length; j++)
             {
               if (posAct[j] != posAnt[j])
@@ -985,10 +1008,16 @@ namespace IM.Base.Helpers
                 formatTable.First(
                   ft =>
                     ft.PropertyName ==
-                    ((col.Length == 1) ? col[0] : col[formatTable.Count(f => f.Axis == ePivotFieldAxis.Column)]));
+                    ((col.Length == 1) ? col[0] : col[col.Length - 1]));
               if (!formatCol.IsGroup)
               {
-                wsData.Cells[rowNumber, drColumn].Value = dr[lstHeaders.IndexOf(col)];
+                if (!formatCol.IsCalculated)
+                  wsData.Cells[rowNumber, drColumn].Value = dr[lstHeaders.IndexOf(col)];
+                else
+                {
+                  //Obtenemos la formula de la columna calculada.
+                  wsData.Cells[rowNumber, drColumn].Formula = GetFormula(pivotedTable, formatCol.Formula, rowNumber);
+                }
                 wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(formatCol.Format);
                 drColumn++;
               }
@@ -1002,7 +1031,7 @@ namespace IM.Base.Helpers
             int drColumn = 1;
             lstHeaders.ForEach(col =>
             {
-              var format = formatTable.First(ft => ft.PropertyName == ((col.Length == 1) ? col[0] : col[formatTable.Count(f => f.Axis == ePivotFieldAxis.Column)]));
+              var format = formatTable.First(ft => ft.PropertyName == ((col.Length == 1) ? col[0] : col[col.Length - 1]));
               if (!format.IsGroup)
               {
                 EnumFormatTypeExcel subtotalFormat = format.Format;
@@ -1024,12 +1053,28 @@ namespace IM.Base.Helpers
                   }
                 }
                 wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(subtotalFormat);
-                switch (format.SubTotalFunctions)
+                //Si no es calculada aplicamos la funcion configurada.
+                if (!format.IsCalculated)
                 {
-                  case eSubTotalFunctions.Sum:
-                    wsData.Cells[rowNumber, drColumn].Formula = "=SUM(" + wsData.Cells[dataIniRow, drColumn, rowNumber - 1, drColumn].Address + ")";
-                    break;
+                  switch (format.SubTotalFunctions)
+                  {
+                    case eSubTotalFunctions.Sum:
+                      wsData.Cells[rowNumber, drColumn].Formula = "=SUM(" + wsData.Cells[dataIniRow, drColumn, rowNumber - 1, drColumn].Address + ")";
+                      break;
+
+                    case eSubTotalFunctions.Avg:
+                      wsData.Cells[rowNumber, drColumn].Formula = "=AVERAGE(" + wsData.Cells[dataIniRow, drColumn, rowNumber - 1, drColumn].Address + ")";
+                      break;
+
+                    case eSubTotalFunctions.Count:
+                      if (format.Format == EnumFormatTypeExcel.General)
+                        wsData.Cells[rowNumber, drColumn].Formula = "=COUNTA(" + wsData.Cells[dataIniRow, drColumn, rowNumber - 1, drColumn].Address + ")";
+                      break;
+                  }
                 }
+                else
+                  //Obtenemos la formula.
+                  wsData.Cells[rowNumber, drColumn].Formula = GetFormula(pivotedTable, format.Formula, rowNumber);
                 drColumn++;
               }
             });
@@ -1051,7 +1096,7 @@ namespace IM.Base.Helpers
           int drColumn = 1;
           lstHeaders.ForEach(col =>
           {
-            var formatCol = formatTable.First(ft => ft.PropertyName == ((col.Length == 1) ? col[0] : col[formatTable.Count(f => f.Axis == ePivotFieldAxis.Column)]));
+            var formatCol = formatTable.First(ft => ft.PropertyName == ((col.Length == 1) ? col[0] : col[col.Length - 1]));
             wsData.Cells[rowNumber, drColumn].Value = dr[lstHeaders.IndexOf(col)];
             wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(formatCol.Format);
             drColumn++;
@@ -1065,7 +1110,7 @@ namespace IM.Base.Helpers
           int drColumn = 1;
           lstHeaders.ForEach(col =>
           {
-            var format = formatTable.First(ft => ft.PropertyName == ((col.Length == 1) ? col[0] : col[formatTable.Count(f => f.Axis == ePivotFieldAxis.Column)]));
+            var format = formatTable.First(ft => ft.PropertyName == (col.Length == 1 ? col.First() : col[formatTable.Count(f => f.Axis == ePivotFieldAxis.Column && f.IsVisible)]));
             if (!format.IsGroup)
             {
               EnumFormatTypeExcel subtotalFormat = format.Format;
@@ -1473,7 +1518,7 @@ namespace IM.Base.Helpers
           break;
 
         case EnumFormatTypeExcel.Currency:
-          format = "_-$ #,##0.00_-;-$ #,##0.00_-;_-$*  - ??_-;_-@_-";
+          format = "_-$ #,##0.00_-;-$ #,##0.00_-;_-$*  - ??_-;_-$*  - _-";
           break;
 
         case EnumFormatTypeExcel.Number:
@@ -1493,7 +1538,7 @@ namespace IM.Base.Helpers
           break;
 
         case EnumFormatTypeExcel.Date:
-          format = "dd/MM/yyyy";
+          format = "dd/MM/yyyy;;;";
           break;
 
         case EnumFormatTypeExcel.Time:
@@ -1897,85 +1942,106 @@ namespace IM.Base.Helpers
     /// </summary>
     /// <returns> DataTable </returns>
     /// <history>
-    ///   [edgrodriguez] 12/03/2016  Created.
+    /// [edgrodriguez] 12/03/2016  Created. Se agragan columnas antes y despues pivote, los encabezados se ordenan
+    /// [aalcocer] 18/05/2016 Modified.
     /// </history>
     private static DataTable GetPivotTable(List<ExcelFormatTable> formatTable, DataTable sourceTable)
     {
       DataTable dt = new DataTable();
 
-      ExcelFormatTable[] rowFields = formatTable.Where(c => c.Axis != ePivotFieldAxis.Column && c.Axis != ePivotFieldAxis.Values).ToArray();
-      ExcelFormatTable[] columnFields = formatTable.Where(c => c.Axis == ePivotFieldAxis.Column).OrderBy(c => c.Order).ToArray();
-      ExcelFormatTable[] dataFields = formatTable.Where(c => c.Axis == ePivotFieldAxis.Values).OrderBy(c => c.Order).ToArray();
+      List<ExcelFormatTable> rowFields = formatTable.Where(c => c.Axis != ePivotFieldAxis.Column && c.Axis != ePivotFieldAxis.Values).ToList();
+      List<ExcelFormatTable> columnFields = formatTable.Where(c => c.Axis == ePivotFieldAxis.Column).OrderBy(c => c.Order).ToList();
+      List<ExcelFormatTable> dataFields = formatTable.Where(c => c.Axis == ePivotFieldAxis.Values).OrderBy(c => c.Order).ToList();
 
+      //Nombra a las columnas con campo vacio para posterior quitarlas
       columnFields.ToList().ForEach(c =>
       {
         sourceTable.AsEnumerable().ToList().ForEach(dr =>
         {
-          if (dr[c.PropertyName] == null || dr[c.PropertyName] == DBNull.Value || dr[c.PropertyName].ToString() == "")
+          if (dr[c.PropertyName] == null || dr[c.PropertyName] == DBNull.Value || string.IsNullOrWhiteSpace(dr[c.PropertyName].ToString()))
             dr[c.PropertyName] = "NULL";
         });
       });
 
-      string Separator = "|";
-      var rowList = sourceTable.DefaultView.ToTable(true, rowFields.Select(c => c.PropertyName).ToArray()).AsEnumerable().ToList();
-      for (int index = rowFields.Count() - 1; index >= 0; index--)
-        rowList = rowList.OrderBy(x => x.Field<object>(rowFields[index].PropertyName)).ToList();
-      // Gets the list of columns .(dot) separated.
-      var colList = (from x in sourceTable.AsEnumerable()
-                     select new
-                     {
-                       Name = columnFields.Select(n => x.Field<object>(n.PropertyName))
-                         .Aggregate((a, b) => a += Separator + b.ToString())
-                     })
-        .Distinct()
-        .Distinct()
-        .OrderBy(m => m.Name);
+      //Datos no pivote
+      var rowList = sourceTable.DefaultView.ToTable(true, rowFields.Select(c => c.PropertyName).ToArray()).AsEnumerable().AsEnumerable().ToList();
 
-      foreach (var s in rowFields)
+      // Lista de columnas separados por un caracter
+      var columDataRowList = sourceTable.DefaultView.ToTable(true, columnFields.Select(c => c.PropertyName).ToArray()).AsEnumerable().ToList();
+      //ordenar las columnas
+      columDataRowList = columDataRowList.CopyToDataTable().SortDatatable(columnFields).AsEnumerable().ToList();
+
+      var colList = columDataRowList.Select(x =>
+        {
+          var list = columnFields.Where(n => n.IsVisible).Select(n => x.Field<object>(n.PropertyName)).ToList();
+          return new
+          {
+            Name = string.Join(separator.ToString(), list)
+          };
+        }).Distinct().ToList();
+
+      //Columnas antes del pivote
+      var rowFieldsBefore = rowFields.Where(c => !c.IsGroup && c.Order <= dataFields.Min(d => d.Order)).OrderBy(c => c.Order).ToList();
+      rowFieldsBefore.ForEach(s =>
       {
         DataColumn sourcecol = sourceTable.Columns.OfType<DataColumn>().First(c => c.ColumnName == s.PropertyName);
         dt.Columns.Add(s.PropertyName, sourcecol.DataType);
-      }
+      });
 
-      foreach (var col in colList)
-        foreach (var dataF in dataFields)
+      //Columnas pivote
+      colList.ForEach(col =>
         {
-          DataColumn sourcecol = sourceTable.Columns.OfType<DataColumn>().First(c => c.ColumnName == dataF.PropertyName);
-          dt.Columns.Add(col.Name.ToString() + Separator + dataF.PropertyName, sourcecol.DataType);
-        } // Cretes the result columns.//
+          dataFields.ForEach(dataF =>
+          {
+            DataColumn sourcecol = sourceTable.Columns.OfType<DataColumn>().First(c => c.ColumnName == dataF.PropertyName);
+            dt.Columns.Add(col.Name.ToString() + separator + dataF.PropertyName, sourcecol.DataType);
+          });// Cretes the result columns.//
+        });
 
-      foreach (var rowName in rowList)
+      //Columnas despues del pivote
+      rowFields.Where(c => !rowFieldsBefore.Contains(c)).OrderBy(c => c.IsGroup).ThenBy(c => c.Order).ToList().ForEach(s =>
+      {
+        DataColumn sourcecol = sourceTable.Columns.OfType<DataColumn>().First(c => c.ColumnName == s.PropertyName);
+        dt.Columns.Add(s.PropertyName, sourcecol.DataType);
+      });
+
+      rowList.ForEach(rowName =>
       {
         DataRow row = dt.NewRow();
         string strFilter = string.Empty;
 
-        foreach (var field in rowFields)
+        rowFields.ForEach(field =>
         {
           row[field.PropertyName] = rowName[field.PropertyName];
           if (rowName[field.PropertyName] != DBNull.Value)
-            strFilter += " and " + field.PropertyName + " = '" + rowName[field.PropertyName].ToString() + "'";
-        }
+            strFilter += " and [" + field.PropertyName + "] = '" + rowName[field.PropertyName].ToString() + "'";
+        });
+
         strFilter = strFilter.Substring(5);
 
-        foreach (var col in colList)
+        colList.ForEach(col =>
         {
           string filter = strFilter;
-          string[] strColValues = col.Name.ToString().Split(Separator.ToCharArray(), StringSplitOptions.None);
+          string[] strColValues = col.Name.ToString().Split(separator);
 
-          for (int i = 0; i < columnFields.Length; i++)
-
-            filter += " and " + columnFields[i].PropertyName + " = '" + strColValues[i] + "'";
-          foreach (var dataF in dataFields)
+          columnFields.Where(n => n.IsVisible).Select((value, index) => new { Value = value, Index = index }).ToList().ForEach(item =>
           {
-            string colN = col.Name.ToString() + Separator + dataF.PropertyName;
-            row[colN] = GetData(filter, dataF, sourceTable);
-          }
-        }
+            filter += " and [" + item.Value.PropertyName + "] = '" + strColValues[item.Index] + "'";
+          });
+
+          dataFields.ForEach(dataF =>
+          {
+            string colN = col.Name.ToString() + separator + dataF.PropertyName;
+            var data = GetData(filter, dataF, sourceTable);
+            row[colN] = data ?? DBNull.Value;
+          });
+        });
 
         dt.Rows.Add(row);
-      }
+      });
+
       //Eliminamos las columnas con valores Nulos.
-      var deleteNullCol = dt.Columns.OfType<DataColumn>().ToList().Where(c => c.ColumnName.Split(Separator.ToCharArray(), StringSplitOptions.None).Contains("NULL")).ToList();
+      var deleteNullCol = dt.Columns.OfType<DataColumn>().ToList().Where(c => c.ColumnName.Split(separator).Contains("NULL")).ToList();
       deleteNullCol.ForEach(c => dt.Columns.Remove(c.ColumnName));
 
       return dt;
@@ -2080,6 +2146,28 @@ namespace IM.Base.Helpers
       return formula;
     }
 
+    /// <summary>
+    /// Obtiene la formula para asignar a una celda.
+    /// </summary>
+    /// <param name="dataTable">Datatable con las columnas ordenadas</param>
+    /// <param name="formula">formula</param>
+    /// <param name="rowNumber">posicion de row de la celda</param>
+    /// <returns> string </returns>
+    /// <history>
+    ///   [aalcocer] 18/05/2016  Created.
+    /// </history>
+    private static string GetFormula(DataTable dataTable, string formula, int rowNumber)
+    {
+      var columns = Regex.Matches(formula, @"(\[.*?\])+");
+      foreach (var match in columns)
+      {
+        var dataColumn = dataTable.Columns.Cast<DataColumn>().First(c => c.ColumnName == match.ToString().Replace("[", "").Replace("]", ""));
+        formula = formula.Replace(match.ToString(), GetExcelColumnName(dataColumn.Ordinal + 1) + rowNumber);
+      }
+
+      return formula;
+    }
+
     #endregion GetFormula
 
     #region SortDatatable
@@ -2093,7 +2181,7 @@ namespace IM.Base.Helpers
     /// <history>
     ///   [edgrodriguez] 15/03/2016  Created.
     /// </history>
-    private static DataTable SortDatatable(List<ExcelFormatTable> formatTable, DataTable dt)
+    private static DataTable SortDatatable(this DataTable dt, List<ExcelFormatTable> formatTable)
     {
       if (formatTable.All(c => c.Sort == eSortType.None))
         return dt;
@@ -2104,11 +2192,10 @@ namespace IM.Base.Helpers
         .OrderBy(c => c.Order).Select(x => x.PropertyName + ((x.Sort == eSortType.Descending) ? " desc" : " asc")));
 
       //Obtenemos las agrupaciones y los registros de cada agrupacion.
-      var qTable = dt
-        .AsEnumerable()
-        .OrderBy(qOrder).CopyToDataTable();
+      var qTable = dt.DefaultView;
+      qTable.Sort = qOrder;
 
-      return qTable;
+      return qTable.ToTable();
     }
 
     #endregion SortDatatable

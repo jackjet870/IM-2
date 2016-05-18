@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using IM.Base.Helpers;
 using IM.Model;
 using IM.Model.Classes;
-using System.IO;
-using IM.Base.Helpers;
-using System.Data;
 using IM.Model.Enums;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
 
 namespace IM.ProcessorOuthouse.Classes
 {
   public class clsReports
   {
     #region ExportRptDepositsPaymentByPR
+
     /// <summary>
     ///  Obtiene los datos para exportar a excel el reporte DepositsPaymentByPR
     /// </summary>
@@ -25,11 +26,11 @@ namespace IM.ProcessorOuthouse.Classes
     /// </history>
     public static FileInfo ExportRptDepositsPaymentByPR(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, DepositsPaymentByPRData lstRptDepositsPaymentByPR)
     {
-      var lstDepositsPaymentByPR =  lstRptDepositsPaymentByPR.DepositsPaymentByPR;
+      var lstDepositsPaymentByPR = lstRptDepositsPaymentByPR.DepositsPaymentByPR;
       var lstDepositsPaymentByPRDeposits = lstRptDepositsPaymentByPR.DepositsPaymentByPR_Deposit;
       var lstCurrencies = lstRptDepositsPaymentByPR.Currencies;
       var lstPaymentTypes = lstRptDepositsPaymentByPR.PaymentTypes;
- 
+
       var lstDepositsPayments = (from paymentByPR in lstDepositsPaymentByPR
                                  join paymentByPRDep in lstDepositsPaymentByPRDeposits on paymentByPR.PR equals paymentByPRDep.PR
                                  join cu in lstCurrencies on paymentByPRDep.bdcu equals cu.cuID
@@ -67,9 +68,11 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstDepositsPayments, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptDepositsPaymentByPR(), showRowGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptDepositsPaymentByPR
 
     #region ExportRptGiftsReceivedBySR
+
     /// <summary>
     ///  Obtiene los datos para el reporte GiftsReceivedBySR
     /// </summary>
@@ -81,10 +84,10 @@ namespace IM.ProcessorOuthouse.Classes
     ///   [vku] 11/Abr/2016 Created
     /// </history>
     public static FileInfo ExportRptGiftsReceivedBySR(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<object> lstRptGiftsReceivedBySR)
-     {
-
-      var lstGiftsReceivedBySR = lstRptGiftsReceivedBySR[0] as List<RptGiftsReceivedBySR>;
-      var curriencies = lstRptGiftsReceivedBySR[1] as List<Currency>;
+    {
+      List<RptGiftsReceivedBySR> lstGiftsReceivedBySR = new List<RptGiftsReceivedBySR>();
+      lstGiftsReceivedBySR.AddRange((IEnumerable<RptGiftsReceivedBySR>)lstRptGiftsReceivedBySR[0]);
+      List<Currency> curriencies = lstRptGiftsReceivedBySR[1] as List<Currency>;
 
       var lstGifRecBySRWithCu = (from giftRecBySR in lstGiftsReceivedBySR
                                  join cu in curriencies on giftRecBySR.Currency equals cu.cuID
@@ -97,20 +100,35 @@ namespace IM.ProcessorOuthouse.Classes
                                    giftRecBySR.Couples,
                                    giftRecBySR.Adults,
                                    giftRecBySR.Minors,
+                                   cuID = "A" + cu.cuID,
                                    cu.cuN,
                                    giftRecBySR.Amount,
-                                 }).OrderBy(c => c.cuN).ToList();
+                                 }).ToList();
 
-      DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreateExcelCustomPivot(dtData, filters, strReport, dateRangeFileName, clsFormatReport.rptGiftsRecivedBySR(), blnShowSubtotal: true, blnRowGrandTotal: true, blnColumnGrandTotal: true);
+      var lstGifRecBySRWithCuTotal = lstGiftsReceivedBySR.Select(giftRecBySR => new
+      {
+        giftRecBySR.SalesRoom,
+        giftRecBySR.Gift,
+        giftRecBySR.GiftN,
+        giftRecBySR.Quantity,
+        giftRecBySR.Couples,
+        giftRecBySR.Adults,
+        giftRecBySR.Minors,
+        cuID = "B",
+        cuN = "Total",
+        Amount = lstGiftsReceivedBySR.Where(c => c.SalesRoom == giftRecBySR.SalesRoom && c.Gift == giftRecBySR.Gift).Sum(c => c.Amount)
+      }).Distinct().ToList();
 
+      lstGifRecBySRWithCu.AddRange(lstGifRecBySRWithCuTotal);
 
-
-      // return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptGiftsRecivedBySR(), showRowGrandTotal: true);
+      DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu);
+      return EpplusHelper.CreateExcelCustomPivot(dtData, filters, strReport, dateRangeFileName, clsFormatReport.rptGiftsRecivedBySR(), blnShowSubtotal: true, blnRowGrandTotal: true);
     }
-     #endregion
+
+    #endregion ExportRptGiftsReceivedBySR
 
     #region ExportRptGuestsShowNoPresentedInvitation
+
     /// <summary>
     ///  Obtiene los datos para el reporte GuestsShowNoPresentedInvitation
     /// </summary>
@@ -126,9 +144,11 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptGuestsShowNoPresentedInvitation);
       return EpplusHelper.CreateGeneralRptExcel(filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptGuestsShowNoPresentedInvitation());
     }
-    #endregion
+
+    #endregion ExportRptGuestsShowNoPresentedInvitation
 
     #region ExportRptProductionByPROuthouse
+
     /// <summary>
     ///  Obtiene los datos  para el reporte ProductionByPROuthouse
     /// </summary>
@@ -173,9 +193,11 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByPROuthouseAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByPR(), showRowGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptProductionByPROuthouse
 
     #region ExportRptProductionByAgeOuthouse
+
     /// <summary>
     ///  Obtiene los datos para el reporte ProductionByAge
     /// </summary>
@@ -187,7 +209,7 @@ namespace IM.ProcessorOuthouse.Classes
     ///   [vku] 13/abr/2016 Created
     /// </history>
     public static FileInfo ExportRptProductionByAgeOuthouse(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionByAgeOuthouse> lstRptProductionByAgeOuthouse)
-    {    
+    {
       var lstRptProductionByAgeOuthouseAux = lstRptProductionByAgeOuthouse.Select(c => new
       {
         c.Age,
@@ -213,9 +235,11 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByAgeOuthouseAux);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByAge(), showRowGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptProductionByAgeOuthouse
 
     #region ExportRptProductionByAgeSalesRoomOuthouse
+
     /// <summary>
     ///  Obtiene los datos para el reporte ProductionByAgeSalesRoomOuthouse
     /// </summary>
@@ -254,9 +278,11 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByAgeSalesRoomOuthouseAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByAgeSalesRoomOuthouse(), showRowGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptProductionByAgeSalesRoomOuthouse
 
     #region ExportRptProductionByAgencyOuthouse
+
     /// <summary>
     ///  Obtiene los datos para el reporte ProductionByAgencyOuthouse
     /// </summary>
@@ -271,18 +297,35 @@ namespace IM.ProcessorOuthouse.Classes
     {
       DataTable dtData = null;
       var lstProductionByAgency = lstRptProductionByAgencyOuthouse.ProductionByAgencyOuthouse;
-       if (!Convert.ToBoolean(salesByMemberShipType))
+      if (!Convert.ToBoolean(salesByMemberShipType))
       {
         var lstProductionByAgencyAux = lstProductionByAgency.Select(c => new
         {
-          c.Agency, c.AgencyN, c.Books,
-          c.InOuts, c.GrossBooks, c.Shows,
-          c.WalkOuts, c.Tours, c.CourtesyTours,
-          c.SaveTours, c.TotalTours, c.UPS,
-          c.Sales_PROC, c.SalesAmount_PROC, c.Sales_OOP, c.SalesAmount_OOP,
-          c.Sales_CANCEL, c.SalesAmount_CANCEL, c.Sales_TOTAL,
-          c.SalesAmount_TOTAL, c.ShowsFactor, c.CancelFactor,
-          c.Efficiency, c.ClosingFactor, c.AverageSale
+          c.Agency,
+          c.AgencyN,
+          c.Books,
+          c.InOuts,
+          c.GrossBooks,
+          c.Shows,
+          c.WalkOuts,
+          c.Tours,
+          c.CourtesyTours,
+          c.SaveTours,
+          c.TotalTours,
+          c.UPS,
+          c.Sales_PROC,
+          c.SalesAmount_PROC,
+          c.Sales_OOP,
+          c.SalesAmount_OOP,
+          c.Sales_CANCEL,
+          c.SalesAmount_CANCEL,
+          c.Sales_TOTAL,
+          c.SalesAmount_TOTAL,
+          c.ShowsFactor,
+          c.CancelFactor,
+          c.Efficiency,
+          c.ClosingFactor,
+          c.AverageSale
         }).ToList();
         dtData = TableHelper.GetDataTableFromList(lstProductionByAgencyAux, replaceStringNullOrWhiteSpace: true);
       }
@@ -292,40 +335,42 @@ namespace IM.ProcessorOuthouse.Classes
         var lstMembershipType = lstRptProductionByAgencyOuthouse.MembershipTypes;
 
         var lstProductionByAgencySalesMembershipTypeAux = (from prodbyAgency in lstProductionByAgency
-                                                    join prodByAgencyMemshipType in lstProductionByAgencySalesMembershipType on prodbyAgency.Agency equals prodByAgencyMemshipType.Agency
-                                                    join mt in lstMembershipType on prodByAgencyMemshipType.MembershipType equals mt.mtID
-                                                    select new
-                                                    {
-                                                      prodbyAgency.Agency,
-                                                      prodbyAgency.AgencyN,
-                                                      prodbyAgency.Books,
-                                                      prodbyAgency.InOuts,
-                                                      prodbyAgency.GrossBooks,
-                                                      prodbyAgency.Shows,
-                                                      prodbyAgency.WalkOuts,
-                                                      prodbyAgency.Tours,
-                                                      prodbyAgency.CourtesyTours,
-                                                      prodbyAgency.SaveTours,
-                                                      prodbyAgency.TotalTours,
-                                                      prodbyAgency.UPS,
-                                                      mt.mtN,
-                                                      prodByAgencyMemshipType.Sales,
-                                                      prodByAgencyMemshipType.SalesAmount,
-                                                      prodbyAgency.SalesAmount_CANCEL,
-                                                      prodbyAgency.ShowsFactor,
-                                                      prodbyAgency.CancelFactor,
-                                                      prodbyAgency.Efficiency,
-                                                      prodbyAgency.ClosingFactor,
-                                                      prodbyAgency.AverageSale
-                                                    }).ToList();
+                                                           join prodByAgencyMemshipType in lstProductionByAgencySalesMembershipType on prodbyAgency.Agency equals prodByAgencyMemshipType.Agency
+                                                           join mt in lstMembershipType on prodByAgencyMemshipType.MembershipType equals mt.mtID
+                                                           select new
+                                                           {
+                                                             prodbyAgency.Agency,
+                                                             prodbyAgency.AgencyN,
+                                                             prodbyAgency.Books,
+                                                             prodbyAgency.InOuts,
+                                                             prodbyAgency.GrossBooks,
+                                                             prodbyAgency.Shows,
+                                                             prodbyAgency.WalkOuts,
+                                                             prodbyAgency.Tours,
+                                                             prodbyAgency.CourtesyTours,
+                                                             prodbyAgency.SaveTours,
+                                                             prodbyAgency.TotalTours,
+                                                             prodbyAgency.UPS,
+                                                             mt.mtN,
+                                                             prodByAgencyMemshipType.Sales,
+                                                             prodByAgencyMemshipType.SalesAmount,
+                                                             prodbyAgency.SalesAmount_CANCEL,
+                                                             prodbyAgency.ShowsFactor,
+                                                             prodbyAgency.CancelFactor,
+                                                             prodbyAgency.Efficiency,
+                                                             prodbyAgency.ClosingFactor,
+                                                             prodbyAgency.AverageSale
+                                                           }).ToList();
 
         dtData = TableHelper.GetDataTableFromList(lstProductionByAgencySalesMembershipTypeAux, replaceStringNullOrWhiteSpace: true);
       }
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, salesByMemberShipType == EnumSalesByMemberShipType.sbmNoDetail  ? clsFormatReport.rptProductionByAgencyOuthouse() : clsFormatReport.rptProductionByAgencySalesMembershipTypeOuthouse(), showRowGrandTotal: true, showColumnGrandTotal: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, salesByMemberShipType == EnumSalesByMemberShipType.sbmNoDetail ? clsFormatReport.rptProductionByAgencyOuthouse() : clsFormatReport.rptProductionByAgencySalesMembershipTypeOuthouse(), showRowGrandTotal: true, showColumnGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptProductionByAgencyOuthouse
 
     #region ExportRptProductionByAgencySalesRoomOuthouse
+
     /// <summary>
     ///   Obtiene los datos para el reporte ProductionByAgencySalesRoomOuthouse
     /// </summary>
@@ -370,19 +415,21 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByAgencySalesRoomOuthouseAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByAgencySalesRoomOuthouse(), showRowGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptProductionByAgencySalesRoomOuthouse
 
     #region ExportRptProductionByAgencyMarketHotelOuthouse
-      /// <summary>
-      ///  Obtiene los datos para el reporte ProductionByAgencyMarketHotelOuthouse
-      /// </summary>
-      /// <param name="strReport">Nombre del reporte</param>
-      /// <param name="dateRangeFileName">Rango de fechas</param>
-      /// <param name="filters">Filtros</param>
-      /// <param name="lstRptProductionByAgencyMarketHotelOuthouse">Lista de produccion por agencia, mercado y hotel</param>
-      /// <history>
-      ///   [vku] 15/Abr/2016 Created
-      /// </history>
+
+    /// <summary>
+    ///  Obtiene los datos para el reporte ProductionByAgencyMarketHotelOuthouse
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <param name="dateRangeFileName">Rango de fechas</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="lstRptProductionByAgencyMarketHotelOuthouse">Lista de produccion por agencia, mercado y hotel</param>
+    /// <history>
+    ///   [vku] 15/Abr/2016 Created
+    /// </history>
     public static FileInfo ExportRptProductionByAgencyMarketHotelOuthouse(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionByAgencyMarketHotelOuthouse> lstRptProductionByAgencyMarketHotelOuthouse)
     {
       var lstRptProductionByAgencyMarketHotelOuthouseAux = lstRptProductionByAgencyMarketHotelOuthouse.Select(c => new
@@ -413,9 +460,11 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByAgencyMarketHotelOuthouseAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByAgencyMarketHotelOuthouse(), showRowGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptProductionByAgencyMarketHotelOuthouse
 
     #region ExportRptProductionByCoupleTypeOuthouse
+
     /// <summary>
     ///  Obtiene los datos para el reporte ProductionByCoupleTypeOuthouse
     /// </summary>
@@ -453,9 +502,11 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByCoupleTypeOuthouseAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByCoupleTypeOuthouse(), showRowGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptProductionByCoupleTypeOuthouse
 
     #region ExportRptProductionByCoupleTypeSalesRoomOuthouse
+
     /// <summary>
     ///  Obtiene los datos para el reporte ProductionByCoupleTypeSalesRoomOuthouse
     /// </summary>
@@ -494,9 +545,11 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByCoupleTypeSalesRoomOuthouseAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByCoupleTypeSalesRoomOuthouse(), showRowGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptProductionByCoupleTypeSalesRoomOuthouse
 
     #region ExportRptProductionByGiftInvitation
+
     /// <summary>
     ///   Obtiene los datos para el reporte ProductionByGiftInvitation
     /// </summary>
@@ -535,9 +588,11 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByGiftInvitationAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByGiftInvitation(), showRowGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptProductionByGiftInvitation
 
     #region ExportRptProductionByGiftInvitationSalesRoom
+
     /// <summary>
     ///   Obtiene los datos para el reporte ProductionByGiftInvitationSalesRoom
     /// </summary>
@@ -577,9 +632,11 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByGiftInvitationSalesRoomAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByGiftInvitationSalesRoom(), showRowGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptProductionByGiftInvitationSalesRoom
 
     #region ExportRptProductionByGuestStatusOuthouse
+
     /// <summary>
     ///   Obtiene los datos para el reporte ProductionByGuestStatusOuthouse
     /// </summary>
@@ -618,9 +675,11 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByGuestStatusOuthouseAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByGuestStatusOuthouse(), showRowGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptProductionByGuestStatusOuthouse
 
     #region ExportRptProductionByNationalityOuthouse
+
     /// <summary>
     ///  Obtienes los datos para el reporte ExportRptProductionByNationalityOuthouse
     /// </summary>
@@ -658,9 +717,11 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByNationalityOuthouseAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByNationalityOuthouse(), showRowGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptProductionByNationalityOuthouse
 
     #region ExportRptProductionByNationalitySalesRoomOuthouse
+
     /// <summary>
     ///  Obtiene los datos para el reporte ProductionByNationalitySalesRoomOuthouse
     /// </summary>
@@ -699,9 +760,11 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByNationalitySalesRoomOuthouseAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByNationalitySalesRoomOuthouse(), showRowGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptProductionByNationalitySalesRoomOuthouse
 
     #region ExportRptProductionByPRSalesRoomOuthouse
+
     /// <summary>
     ///  Obtiene los datos para el reporte ProductionByPRSalesRoom
     /// <param name="strReport">Nombre del reporte</param>
@@ -748,9 +811,11 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByPRSalesRoomOuthouseAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByPRSalesRoomOuthouse(), showRowGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptProductionByPRSalesRoomOuthouse
 
     #region ExportRptProductionByPRContactOuthouse
+
     /// <summary>
     ///  Obtiene los datos para el reporte ProductionByPRContact
     /// </summary>
@@ -795,9 +860,11 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByPRContactOuthouseAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByPRContactOuthouse(), showRowGrandTotal: true);
     }
-    #endregion
+
+    #endregion ExportRptProductionByPRContactOuthouse
 
     #region ExportRptFoliosInvitationByDateFolio
+
     /// <summary>
     ///  Obtiene los datos para el reporte FoliosInvitationByDateFolio
     /// </summary>
@@ -813,6 +880,7 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptFoliosInvitationByDateFolio);
       return EpplusHelper.CreateGeneralRptExcel(filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptFoliosInvitationByDateFolio());
     }
-    #endregion
+
+    #endregion ExportRptFoliosInvitationByDateFolio
   }
 }

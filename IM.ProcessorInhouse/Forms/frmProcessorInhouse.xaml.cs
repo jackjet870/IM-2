@@ -286,7 +286,7 @@ namespace IM.ProcessorInhouse.Forms
       _dtmStart = new DateTime(_serverDate.Year, _serverDate.Month, 1);
 
       // obtenemos la fecha de inicio de la semana
-      _dtmInit = DateHelper.GetStartWeek(_serverDate.AddDays(-7));
+      _dtmInit = DateHelper.GetStartWeek(_serverDate.AddDays(-7)).Date;
 
       //Fecha final
       _dtmEnd = _serverDate.Date;
