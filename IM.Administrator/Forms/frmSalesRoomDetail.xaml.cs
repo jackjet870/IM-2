@@ -217,10 +217,11 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 22/04/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void LoadCurrency()
+    private async void LoadCurrency()
     {
-      List<Currency> lstCurrency = BRCurrencies.GetCurrencies();
+      List<Currency> lstCurrency = await BRCurrencies.GetCurrencies();
       if(enumMode==EnumMode.search && lstCurrency.Count>0)
       {
         lstCurrency.Insert(0, new Currency { cuID = "", cuN = "" });
@@ -235,10 +236,11 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 22/04/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void LoadBoss()
+    private async void LoadBoss()
     {       
-      List<PersonnelShort> lstPersonnel = BRPersonnel.GetPersonnel(roles: "Boss");
+      List<PersonnelShort> lstPersonnel =await BRPersonnel.GetPersonnel(roles: "Boss");
       cmbsrBoss.ItemsSource = lstPersonnel;
     }
     #endregion

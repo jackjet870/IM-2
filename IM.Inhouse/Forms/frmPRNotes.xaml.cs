@@ -77,7 +77,7 @@ namespace IM.Inhouse.Forms
         {
           //De no ser así informamos que no se guardo la información por algun motivo
           UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
-            MessageBoxImage.Error, "Information can not keep");   
+            MessageBoxImage.Error, "Information can not keep");
         }
         CleanControls();
         _CreatingNote = false;
@@ -92,11 +92,19 @@ namespace IM.Inhouse.Forms
     #endregion
 
     #region Window_Loaded
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// </history>
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       EnabledControls(true, true, false);
       //Cargamos los PR
-      cbopnPR.ItemsSource = BRPersonnel.GetPersonnel(App.User.Location.loID, "ALL", "PR");
+      cbopnPR.ItemsSource = await BRPersonnel.GetPersonnel(App.User.Location.loID, "ALL", "PR");
       // desplegamos los datos del huesped
       txtguID.Text = _guest.guID.ToString();
       txtguLastName1.Text = _guest.guLastName1;
@@ -187,7 +195,7 @@ namespace IM.Inhouse.Forms
         txtpnPR.Text = App.User.User.peID;
         cbopnPR.SelectedValue = App.User.User.peID;
         txtPwd.Password = App.User.User.pePwd;
-      }      
+      }
       EnabledControls(false, false, true);
       //ingresamos la fecha en el campo 
       txtpnDT.Text = BRHelpers.GetServerDate().ToString();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,14 +18,19 @@ namespace IM.BusinessRules.BR
     /// <returns>List<CountryShort></returns>
     /// <hystory>
     /// [erosado] 08/03/2016  created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </hystory>
-
-    public static List<CountryShort> GetCountries(int status)
+    public async static Task<List<CountryShort>> GetCountries(int status)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<CountryShort> result = null;
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetCountries(Convert.ToByte(status)).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.USP_OR_GetCountries(Convert.ToByte(status)).ToList();
+        }
+      });
+      return result;
     }
     #endregion
 
@@ -39,17 +45,17 @@ namespace IM.BusinessRules.BR
     /// [emoguel] created 14/03/2016
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
     /// </history>
-    public static List<Country> GetCountries(Country country=null,int nStatus=-1)
+    public static List<Country> GetCountries(Country country = null, int nStatus = -1)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from ct in dbContext.Countries
                     select ct;
 
-        if(nStatus!=-1)//Filtro por status
+        if (nStatus != -1)//Filtro por status
         {
           bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(ct=>ct.coA==blnStatus);
+          query = query.Where(ct => ct.coA == blnStatus);
         }
 
         if (country != null)//Valida si se tiene un objeto
@@ -61,31 +67,31 @@ namespace IM.BusinessRules.BR
 
           if (!string.IsNullOrWhiteSpace(country.coN))//Filtro por descripcion(Nombre)
           {
-            query=query.Where(ct => ct.coN.Contains(country.coN));
+            query = query.Where(ct => ct.coN.Contains(country.coN));
           }
         }
         return query.OrderBy(ct => ct.coN).ToList();
       }
     }
     #endregion
-    
+
     #region TransferAddCountries
 
-        /// <summary>
-        /// Agrega las paises en el proceso de transferencia
-        /// </summary>
-        /// <hystory>
-        /// [michan] 13/04/2016  created
-        /// </hystory>
+    /// <summary>
+    /// Agrega las paises en el proceso de transferencia
+    /// </summary>
+    /// <hystory>
+    /// [michan] 13/04/2016  created
+    /// </hystory>
 
-        public static int TransferAddCountries()
+    public static int TransferAddCountries()
     {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-        {
-            return dbContext.USP_OR_TransferAddCountries();
-        }
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_TransferAddCountries();
+      }
     }
     #endregion
 
-    }
+  }
 }

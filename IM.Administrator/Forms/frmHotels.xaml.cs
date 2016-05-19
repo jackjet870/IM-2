@@ -234,10 +234,11 @@ namespace IM.Administrator.Forms
     /// <param name="nIndex">Index que va a seleccionar</param>
     /// <history>
     /// [emoguel] created 29/03/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void LoadHotels(Hotel hotel=null)
+    private async void LoadHotels(Hotel hotel=null)
     {
-      List<Hotel> lstHotels = BRHotels.GetHotels(_hotelFilter, _nStatus,true);
+      List<Hotel> lstHotels = await BRHotels.GetHotels(_hotelFilter, _nStatus,true);
       dgrHotels.ItemsSource = lstHotels;
       int nIndex =0;
       if(hotel!=null && lstHotels.Count>0)

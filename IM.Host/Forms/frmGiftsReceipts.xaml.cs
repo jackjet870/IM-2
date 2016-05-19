@@ -89,7 +89,15 @@ namespace IM.Host.Forms
       InitializeComponent();
     }
 
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [erosado] 19/05/2016  Modified. Se agregó Asincronía
+    /// </history>
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       _dsGiftsReceiptsShort = ((CollectionViewSource)(this.FindResource("dsGiftsReceiptsShort")));
       _dsGiftsReceipt = ((CollectionViewSource)(this.FindResource("dsGiftsReceipt")));
@@ -113,28 +121,28 @@ namespace IM.Host.Forms
 
 
       // Obtenemos los colaboradores
-      _dsPersonnel_Offered.Source = BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);
+      _dsPersonnel_Offered.Source = await BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);
 
-      _dsPersonnel_Gifts.Source = BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);
+      _dsPersonnel_Gifts.Source =await BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);
 
       // Obtenemos los Charge To
       _lstChargeTo = BRChargeTos.GetChargeTos();
       _dsChargeTo.Source = _lstChargeTo;
 
       //Obtenemos los Parments Types
-      _dsPaymentType.Source = BRPaymentTypes.GetPaymentTypes(1);
+      _dsPaymentType.Source = await BRPaymentTypes.GetPaymentTypes(1);
 
       // Obtenemos las Monedas de la CxC de PR
-      _dsCurrencyPRDeposit.Source = BRCurrencies.GetCurrencies(null, 1);
+      _dsCurrencyPRDeposit.Source =await BRCurrencies.GetCurrencies(null, 1);
 
       // Obtenemos las Monedas de la CxC de Taxi Out
-      _dsCurrencyTaxiOut.Source = BRCurrencies.GetCurrencies(null, 1);
+      _dsCurrencyTaxiOut.Source =await BRCurrencies.GetCurrencies(null, 1);
 
       // Obtenemos las monedas
-      _dsCurrency.Source = BRCurrencies.GetCurrencies(null, 1);
+      _dsCurrency.Source =await BRCurrencies.GetCurrencies(null, 1);
 
       // Obtenemos las monedas para los deposits
-      _dsCurrencyDeposits.Source = BRCurrencies.GetCurrencies(null, 1);
+      _dsCurrencyDeposits.Source = await BRCurrencies.GetCurrencies(null, 1);
 
       //Obtenemos los regalos
       _lstGifts = BRGifts.GetGifts(1);
@@ -150,7 +158,7 @@ namespace IM.Host.Forms
       _dsSalesRooms.Source = BRSalesRooms.GetSalesRooms(1);
 
       // Obtenemos los hoteles
-      _dsHotel.Source = BRHotels.GetHotels(null, 1);
+      _dsHotel.Source = await BRHotels.GetHotels(null, 1);
 
       // Ocultamos los botones edicion de grid's
       controlBottonEditionGifts(Visibility.Hidden, Visibility.Hidden, Visibility.Hidden, Visibility.Hidden);

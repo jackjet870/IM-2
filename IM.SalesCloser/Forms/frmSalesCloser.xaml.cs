@@ -167,36 +167,23 @@ namespace IM.SalesCloser.Forms
     /// [erosado] 24/Mar/2016 Created
     /// </history>
 
-    public void DoGetPersonnel(string salesRooms, string roles)
+    public async void DoGetPersonnel(string salesRooms, string roles)
     {
-      Task.Factory.StartNew(() => BRPersonnel.GetPersonnel("ALL", salesRooms, roles, 1))
-      .ContinueWith(
-      (task1) =>
+      try
       {
-        if (task1.IsFaulted)
+        List<PersonnelShort> data = await BRPersonnel.GetPersonnel("ALL", salesRooms, roles, 1);
+        if (data.Count > 0)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          return false;
+          data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
+          cbxPersonnel.ItemsSource = data;
         }
-        else
-        {
-          if (task1.IsCompleted)
-          {
-            List<PersonnelShort> data = task1.Result;
-            if (data.Count > 0)
-            {
-              data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
-              cbxPersonnel.ItemsSource = data;
-            }
-            setNewUserLogin();
-          }
-          StaEnd();
-          return false;
-        }
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+        setNewUserLogin();
+        StaEnd();
+      }
+      catch (Exception ex)
+      {
+        throw;
+      }
     }
 
     /// <summary>

@@ -9,6 +9,7 @@ using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
+using System;
 
 namespace IM.MailOutsConfig.Forms
 {
@@ -221,38 +222,29 @@ namespace IM.MailOutsConfig.Forms
     /// </summary>
     /// <history>
     /// [erosado] 20/04/2016 Created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    public void DoGetCountries()
+    public async void DoGetCountries()
     {
-      Task.Factory.StartNew(() => BRCountries.GetCountries(1))
-      .ContinueWith(
-      task1 =>
+      try
       {
-        if (task1.IsFaulted)
+        List<CountryShort> data = await BRCountries.GetCountries(1);
+        if (data.Count > 0)
         {
-          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          return false;
+          data.Insert(0, new CountryShort { coN = "ANY ONE", coID = "ANY ONE" });
+          cbxCountry.ItemsSource = data;
+          cbxCountry.SelectedIndex = 0;
         }
-        if (task1.IsCompleted)
+        else
         {
-          List<CountryShort> data = task1.Result;
-          if (data.Count > 0)
-          {
-            data.Insert(0, new CountryShort { coN = "ANY ONE", coID = "ANY ONE" });
-            cbxCountry.ItemsSource = data;
-            cbxCountry.SelectedIndex = 0;
-          }
-          else
-          {
-            cbxCountry.Text = "No data found - Press Ctrl+F5 to load Data";
-          }
+          cbxCountry.Text = "No data found - Press Ctrl+F5 to load Data";
         }
         StaEnd();
-        return false;
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
     }
 
     /// <summary>
@@ -260,39 +252,29 @@ namespace IM.MailOutsConfig.Forms
     /// </summary>
     /// <history>
     /// [erosado] 20/04/2016 Created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    public void DoGetAgencies()
+    public async void DoGetAgencies()
     {
-      Task.Factory.StartNew(() => BRAgencies.GetAgencies(1))
-      .ContinueWith(
-      task1 =>
+      try
       {
-        if (task1.IsFaulted)
+        List<AgencyShort> data = await BRAgencies.GetAgencies(1);
+        if (data.Count > 0)
         {
-          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          return false;
+          data.Insert(0, new AgencyShort { agN = "ANY ONE", agID = "ANY ONE" });
+          cbxAgency.ItemsSource = data;
+          cbxAgency.SelectedIndex = 0;
         }
-        if (task1.IsCompleted)
+        else
         {
-          task1.Wait(1000);
-          List<AgencyShort> data = task1.Result;
-          if (data.Count > 0)
-          {
-            data.Insert(0, new AgencyShort { agN = "ANY ONE", agID = "ANY ONE" });
-            cbxAgency.ItemsSource = data;
-            cbxAgency.SelectedIndex = 0;
-          }
-          else
-          {
-            cbxAgency.Text="No data found - Press Ctrl+F5 to load Data";
-          }
+          cbxAgency.Text = "No data found - Press Ctrl+F5 to load Data";
         }
         StaEnd();
-        return false;
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
     }
     /// <summary>
     /// Obtiene el catalogo de Markets

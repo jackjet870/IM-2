@@ -3,6 +3,7 @@ using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -14,12 +15,21 @@ namespace IM.BusinessRules.BR
     /// Obtiene el catalogo de agencias
     /// </summary>
     /// <param name="status"> 0- Sin filtro, 1-Activos, 2. Inactivos </param>
-    public static List<AgencyShort> GetAgencies(int status)
+    /// <history>
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// </history>
+    public async static Task<List<AgencyShort>> GetAgencies(int status)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<AgencyShort> result = null;
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetAgencies(Convert.ToByte(status)).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result= dbContext.USP_OR_GetAgencies(Convert.ToByte(status)).ToList();
+        }
+      });
+
+      return result;
     }
 
     #endregion GetAgencies
@@ -67,7 +77,7 @@ namespace IM.BusinessRules.BR
             query = query.Where(ag => ag.agse == agency.agse);
           }
 
-          if(agency.agcl!=null && agency.agcl > 0)//Filtro por Club
+          if (agency.agcl != null && agency.agcl > 0)//Filtro por Club
           {
             query = query.Where(ag => ag.agcl == agency.agcl);
           }

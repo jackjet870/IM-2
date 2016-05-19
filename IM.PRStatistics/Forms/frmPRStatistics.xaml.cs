@@ -255,7 +255,7 @@ namespace IM.PRStatistics.Forms
         {
           if (task1.IsCompleted)
           {
-            task1.Wait(1000);
+            
             List<LeadSourceByUser> data = task1.Result;
             if (data.Count > 0)
             {
@@ -313,36 +313,23 @@ namespace IM.PRStatistics.Forms
     /// <history>
     /// [erosado] 08/Mar/2016 Created
     /// </history>
-    public void DoGetCountries()
+    public async void DoGetCountries()
     {
-      Task.Factory.StartNew(() => BRCountries.GetCountries(1))
-      .ContinueWith(
-      (task1) =>
+      try
       {
-        if (task1.IsFaulted)
+        List<CountryShort> data =await BRCountries.GetCountries(1);
+        if (data.Count > 0)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          return false;
+          lsbxCountries.DataContext = data;
+          chbxCountries.IsChecked = true;
         }
-        else
-        {
-          if (task1.IsCompleted)
-          {
-            task1.Wait(1000);
-            List<CountryShort> data = task1.Result;
-            if (data.Count > 0)
-            {
-              lsbxCountries.DataContext = data;
-              chbxCountries.IsChecked = true;
-            }
-          }
-          StaEnd();
-          return false;
-        }
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+        StaEnd();
+      }
+      catch (Exception ex)
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
     }
 
     /// <summary>
@@ -351,36 +338,23 @@ namespace IM.PRStatistics.Forms
     /// <history>
     /// [erosado] 08/Mar/2016 Created
     /// </history>
-    public void DoGetAgencies()
+    public async void DoGetAgencies()
     {
-      Task.Factory.StartNew(() => BRAgencies.GetAgencies(1))
-      .ContinueWith(
-      (task1) =>
+      try
       {
-        if (task1.IsFaulted)
-        {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          return false;
-        }
-        else
-        {
-          if (task1.IsCompleted)
+          List<AgencyShort> data =await BRAgencies.GetAgencies(1);
+          if (data.Count > 0)
           {
-            task1.Wait(1000);
-            List<AgencyShort> data = task1.Result;
-            if (data.Count > 0)
-            {
-              lsbxAgencies.DataContext = data;
-              chbxAgencies.IsChecked = true;
-            }
+            lsbxAgencies.DataContext = data;
+            chbxAgencies.IsChecked = true;
           }
-          StaEnd();
-          return false;
-        }
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+        StaEnd();
+      }
+      catch (Exception ex )
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
     }
     /// <summary>
     /// Obtiene el catalogo de Markets

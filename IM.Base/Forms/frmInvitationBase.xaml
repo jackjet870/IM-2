@@ -4,7 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Base.Forms"
-        xmlns:Classes="clr-namespace:IM.Base.Classes" xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Base.Forms.frmInvitationBase"
+        xmlns:Classes="clr-namespace:IM.Base.Classes"
+        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
+        x:Class="IM.Base.Forms.frmInvitationBase"
         mc:Ignorable="d"
         Title="Invitation" Height="730" Width="700" MinHeight="700" Loaded="frmInvitationBase_Loaded" ShowInTaskbar="False">
     <Window.Resources>
@@ -31,7 +33,7 @@
         <TabControl Grid.Row="0">
             <!--#region TAB General-->
             <TabItem Header="General" Name="tbiGeneral" Height="29" VerticalAlignment="Bottom">
-                <Grid Background="SkyBlue" Name="grdGeneral">
+                <Grid Background="SkyBlue" Name="grdGeneral" Margin="-5,10,5,-10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5"></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>

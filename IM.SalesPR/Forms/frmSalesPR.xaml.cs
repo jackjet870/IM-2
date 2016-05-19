@@ -164,38 +164,25 @@ namespace IM.SalesPR.Forms
     /// <param name="roles">rol del usuario loggeado</param>
     /// <history>
     /// [erosado] 22/Mar/2016 Created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    
-    public void DoGetPersonnel(string leadSources, string roles)
+    public async void DoGetPersonnel(string leadSources, string roles)
     {
-      Task.Factory.StartNew(() => BRPersonnel.GetPersonnel(leadSources, "ALL", roles))
-      .ContinueWith(
-      (task1) =>
+      try
       {
-        if (task1.IsFaulted)
+        var data =await  BRPersonnel.GetPersonnel(leadSources, "ALL", roles);
+        if (data.Count > 0)
         {
-          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          return false;
+          data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
+          cbxPersonnel.ItemsSource = data;
         }
-        else
-        {
-          if (task1.IsCompleted)
-          {
-            var data = task1.Result;
-            if (data.Count > 0)
-            {
-              data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
-              cbxPersonnel.ItemsSource = data;
-            }
-            SetNewUserLogin();
-          }
-          StaEnd();
-          return false;
-        }
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+        SetNewUserLogin();
+        StaEnd();
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
     }
 
     /// <summary>
@@ -211,7 +198,7 @@ namespace IM.SalesPR.Forms
     /// </history>
     public void DoGetSalesByPr(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, bool searchBySalePr)
     {
-      Task.Factory.StartNew(() => BRSales.GetSalesByPR(dateFrom, dateTo, leadSources, PR,searchBySalePr))
+      Task.Factory.StartNew(() => BRSales.GetSalesByPR(dateFrom, dateTo, leadSources, PR, searchBySalePr))
       .ContinueWith(
       (task1) =>
       {

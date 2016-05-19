@@ -39,11 +39,18 @@ namespace IM.ProcessorGeneral.Forms
     /// </summary>
     /// <history>
     /// [edgrodriguez] 03/Mar/2016 Created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
     public frmFilterDateRange()
     {
       InitializeComponent();
-      _lstGifts = BRGifts.GetGifts();
+      LoadCatalog();
+      PreviewKeyDown += Close_KeyPreviewESC;
+    }
+
+    private async void LoadCatalog()
+    {
+      _lstGifts = await BRGifts.GetGifts();
       _lstGiftsCate = BRGifts.GetGiftsCategories();
       _lstSalesRoom = BRSalesRooms.GetSalesRoomsByUser(App.User.User.peID);
       _lstPrograms = BRPrograms.GetPrograms();
@@ -56,7 +63,6 @@ namespace IM.ProcessorGeneral.Forms
       cboExternal.ItemsSource = EnumToListHelper.GetList<EnumExternalInvitation>();
       cboGiftsReceiptType.ItemsSource = EnumToListHelper.GetList<EnumGiftsReceiptType>();
       cboGiftSale.ItemsSource = EnumToListHelper.GetList<EnumGiftSale>();
-      PreviewKeyDown += Close_KeyPreviewESC;
     }
 
     #endregion Constructor

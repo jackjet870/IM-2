@@ -222,7 +222,7 @@ namespace IM.Administrator.Forms
     {
       PaymentType paymentType = (PaymentType)dgrPaymentTypes.SelectedItem;
       LoadPaymentTypes(paymentType);
-    } 
+    }
     #endregion
     #endregion
 
@@ -234,11 +234,12 @@ namespace IM.Administrator.Forms
     /// <param name="paymentType">Objeto a seleccionar</param>
     /// <history>
     /// [emoguel] created 06/04/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void LoadPaymentTypes(PaymentType paymentType = null)
+    private async void LoadPaymentTypes(PaymentType paymentType = null)
     {
       int nIndex = 0;
-      List<PaymentType> lstPaymentTypes = BRPaymentTypes.GetPaymentTypes(_nStatus, _paymentTypeFilter);
+      List<PaymentType> lstPaymentTypes = await BRPaymentTypes.GetPaymentTypes(_nStatus, _paymentTypeFilter);
       dgrPaymentTypes.ItemsSource = lstPaymentTypes;
       if (lstPaymentTypes.Count > 0 && paymentType != null)
       {

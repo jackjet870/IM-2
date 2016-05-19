@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -20,45 +21,52 @@ namespace IM.BusinessRules.BR
     /// [Emoguel] created 07/03/2016
     /// [vipacheco] 10/03/2016 Modified --> Se agregó validacion de Object Currency vacía.
     /// [vipacheco] 11/03/2016 Modified --> Se agregó parametro nuevo para excluir alguna lista currencies en especifico por su ID
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    public static List<Currency> GetCurrencies(Currency currency=null, int nStatus=-1, List<string> exceptCurrencyID = null)
+    public async static Task<List<Currency>> GetCurrencies(Currency currency = null, int nStatus = -1, List<string> exceptCurrencyID = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<Currency> result = null;
+      await Task.Run(() =>
       {
-        var query = from c in dbContext.Currencies
-                    select c;
-
-        if(nStatus!=-1)//filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnEstatus = Convert.ToBoolean(nStatus);
+          var query = from c in dbContext.Currencies
+                      select c;
 
-          if (exceptCurrencyID != null) // Verifica si se desea excluir alguna currency en especifico
+          if (nStatus != -1)//filtro por estatus
           {
-            query = query.Where(c => !exceptCurrencyID.Contains(c.cuID) && c.cuID != "US" && c.cuA == blnEstatus);
+            bool blnEstatus = Convert.ToBoolean(nStatus);
+
+            if (exceptCurrencyID != null) // Verifica si se desea excluir alguna currency en especifico
+            {
+              query = query.Where(c => !exceptCurrencyID.Contains(c.cuID) && c.cuID != "US" && c.cuA == blnEstatus);
+            }
+            else
+            {
+              query = query.Where(c => c.cuA == blnEstatus);
+            }
           }
-          else
+
+          if (currency != null)
           {
-            query = query.Where(c => c.cuA == blnEstatus);
+            if (!string.IsNullOrWhiteSpace(currency.cuID))//Filtro por ID
+            {
+              query = query.Where(c => c.cuID == currency.cuID);
+            }
+
+            if (!string.IsNullOrWhiteSpace(currency.cuN))//filtro por nombre
+            {
+              query = query.Where(c => c.cuN.Contains(currency.cuN));
+            }
           }
+
+          result = query.OrderBy(c => c.cuN).ToList();
         }
+      });
 
-        if(currency != null)
-        {
-          if (!string.IsNullOrWhiteSpace(currency.cuID))//Filtro por ID
-          {
-            query = query.Where(c => c.cuID == currency.cuID);
-          }
-
-          if (!string.IsNullOrWhiteSpace(currency.cuN))//filtro por nombre
-          {
-            query = query.Where(c => c.cuN.Contains(currency.cuN));
-          }
-        }
-        
-        return query.OrderBy(c=>c.cuN).ToList();
-      }
+      return result;
     }
-        
+
     #endregion
 
     #region GetCurrencyId

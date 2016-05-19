@@ -58,7 +58,7 @@ namespace IM.SalesLiner.Forms
       imgButtonOk.IsEnabled = false;
       var linerPersonalShort = cbxPersonnel.SelectedValue as PersonnelShort;
       filtersReport = new List<Tuple<string, string>>();
-      filtersReport.Add(new Tuple<string, string>("Liner", string.Concat(linerPersonalShort.peID," - ",linerPersonalShort.peN)));
+      filtersReport.Add(new Tuple<string, string>("Liner", string.Concat(linerPersonalShort.peID, " - ", linerPersonalShort.peN)));
 
       DoGetSalesByLiner(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, App.User.SalesRoom.srID, linerPersonalShort.peID);
     }
@@ -159,37 +159,25 @@ namespace IM.SalesLiner.Forms
     /// <param name="roles">rol del usuario loggeado</param>
     /// <history>
     /// [erosado] 23/Mar/2016 Created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    public void DoGetPersonnel(string salesRooms, string roles)
+    public async void DoGetPersonnel(string salesRooms, string roles)
     {
-      Task.Factory.StartNew(() => BRPersonnel.GetPersonnel("ALL", salesRooms, roles))
-      .ContinueWith(
-      (task1) =>
+      try
       {
-        if (task1.IsFaulted)
+        var data = await BRPersonnel.GetPersonnel("ALL", salesRooms, roles);
+        if (data.Count > 0)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          return false;
+          data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
+          cbxPersonnel.ItemsSource = data;
         }
-        else
-        {
-          if (task1.IsCompleted)
-          {
-            var data = task1.Result;
-            if (data.Count > 0)
-            {
-              data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
-              cbxPersonnel.ItemsSource = data;
-            }
-            setNewUserLogin();
-          }
-          StaEnd();
-          return false;
-        }
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+        setNewUserLogin();
+        StaEnd();
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
     }
 
     /// <summary>
@@ -340,7 +328,7 @@ namespace IM.SalesLiner.Forms
       CkeckKeysPress(StatusBarNum, Key.NumLock);
     }
     #endregion
-    
+
     #region Metodos
     /// <summary>
     /// Este metodo se encarga de validar y actualizar los permisos del usuario logeado sobre el sistema

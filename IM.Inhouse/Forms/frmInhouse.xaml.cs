@@ -1948,16 +1948,25 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    private void btnExtInvit_Click(object sender, RoutedEventArgs e)
+    private async void btnExtInvit_Click(object sender, RoutedEventArgs e)
     {
       //Edder
-      var frmInvitation = new frmInvitationBase(EnumInvitationType.External,App.User, 0,EnumInvitationMode.modAdd);
-      frmInvitation.Owner = this;
-      
-      if (frmInvitation.AccessValidate())
-      {
-        var res = frmInvitation.ShowDialog();
-      }
+      //var frmInvitation = new frmInvitationBase(EnumInvitationType.External,App.User, 0,EnumInvitationMode.modAdd);
+      //var frmInvitation = new frmInvitation(EnumInvitationType.InHouse, App.User,0,EnumInvitationMode.modAdd);
+      //frmInvitation.Owner = this;
+      //frmInvitation.ShowDialog();
+
+      //var j = await BRAgencies.GetAgencies2(1);
+
+      //List<AgencyShort> k = j.Result as List<AgencyShort>;
+
+      //MessageBox.Show(j?[0].agN);
+
+
+      //if (frmInvitation.AccessValidate())
+      //{
+      //  var res = frmInvitation.ShowDialog();
+      //}
     }
 
     #endregion

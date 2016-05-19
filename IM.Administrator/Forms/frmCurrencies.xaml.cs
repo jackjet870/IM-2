@@ -225,11 +225,12 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [Emoguel] created 08/03/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    protected void LoadCurrencies(Currency currency=null)
+    protected async void LoadCurrencies(Currency currency=null)
     {
       int nIndex = 0;
-      List<Currency> lstCurrencies = BRCurrencies.GetCurrencies(_currencyFilter, _nStatus);
+      List<Currency> lstCurrencies =await BRCurrencies.GetCurrencies(_currencyFilter, _nStatus);
       dgrCurrencies.ItemsSource = lstCurrencies;
       if(currency!=null && lstCurrencies.Count>0)
       {

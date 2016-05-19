@@ -60,7 +60,7 @@ namespace IM.GuestsPR.Forms
       StaStart("Loading data...");
       imgButtonOk.IsEnabled = false;
       filtersBool = new List<bool>();
-      var leadSource =(chkLeadSource.IsChecked == true ? "ALL": App.User.LeadSource.lsID);
+      var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : App.User.LeadSource.lsID);
       var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
       #region Check Filter for Report
       filtersReport = new List<Tuple<string, string>>();
@@ -69,7 +69,7 @@ namespace IM.GuestsPR.Forms
       filtersReport.Add(chkContact.IsChecked == true ? new Tuple<string, string>("Contacts", "YES") : new Tuple<string, string>("Contacts", "ALL"));
       filtersReport.Add(chkFollowUp.IsChecked == true ? new Tuple<string, string>("Follow Up", "YES") : new Tuple<string, string>("Follow Up", "ALL"));
       filtersReport.Add(chkInvitation.IsChecked == true ? new Tuple<string, string>("Invitation", "YES") : new Tuple<string, string>("Invitation", "ALL"));
-      filtersReport.Add(chkShows.IsChecked == true ? new Tuple<string, string>("Shows","YES"):new Tuple<string, string>("Shows", "ALL"));
+      filtersReport.Add(chkShows.IsChecked == true ? new Tuple<string, string>("Shows", "YES") : new Tuple<string, string>("Shows", "ALL"));
       filtersReport.Add(chkWithSale.IsChecked == true ? new Tuple<string, string>("With Sale", "YES") : new Tuple<string, string>("With Sale", "ALL"));
       filtersReport.Add(chkBasedOnArrival.IsChecked == true ? new Tuple<string, string>("Based On Arrival Date", "YES") : new Tuple<string, string>("Based On Arrival Date", "ALL"));
 
@@ -98,7 +98,7 @@ namespace IM.GuestsPR.Forms
         //Obtenemos el nombre del reporte y el dateRange
         var rptName = "Guests By PR";
         //Obtenemos el dataTable con la lista formateada
-        var dt = TableHelper.GetDataTableFromList(listaGuestByPR,true);
+        var dt = TableHelper.GetDataTableFromList(listaGuestByPR, true);
         //Creamos el reporte
         var fi = EpplusHelper.CreateGeneralRptExcel(filtersReport, dt, rptName, dateRangeFileName, UseFulMethods.getExcelFormatTable());
 
@@ -176,37 +176,27 @@ namespace IM.GuestsPR.Forms
     /// </summary>
     /// <param name="leadSources">filtro leadsources</param>
     /// <param name="roles">rol del usuario loggeado</param>
-    public void DoGetPersonnel(string leadSources, string roles)
+    /// <history>
+    /// [erosado] Created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// </history>
+    public async void DoGetPersonnel(string leadSources, string roles)
     {
-      Task.Factory.StartNew(() => BRPersonnel.GetPersonnel(leadSources,"ALL",roles))
-      .ContinueWith(
-      (task1) =>
+      try
       {
-        if (task1.IsFaulted)
+        var data = await BRPersonnel.GetPersonnel(leadSources, "ALL", roles);
+        if (data.Count > 0)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          return false;
+          data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
+          cbxPersonnel.ItemsSource = data;
         }
-        else
-        {
-          if (task1.IsCompleted)
-          {
-            task1.Wait(1000);
-            var data = task1.Result;
-            if (data.Count > 0)
-            {
-              data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
-              cbxPersonnel.ItemsSource = data;
-            }
-            setNewUserLogin();
-          }
-          StaEnd();
-          return false;
-        }
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+        setNewUserLogin();
+        StaEnd();
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
     }
 
     /// <summary>
@@ -220,9 +210,9 @@ namespace IM.GuestsPR.Forms
     /// <history>
     /// [erosado] 16/Mar/2016 Created
     /// </history>
-    public void DoGetGuestsByPR(DateTime dateFrom,DateTime dateTo,string leadSources, string PR, List<bool> filters)
+    public void DoGetGuestsByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, List<bool> filters)
     {
-      Task.Factory.StartNew(() => BRGuests.GetGuestsByPR(dateFrom,dateTo,leadSources,PR,filters))
+      Task.Factory.StartNew(() => BRGuests.GetGuestsByPR(dateFrom, dateTo, leadSources, PR, filters))
       .ContinueWith(
       (task1) =>
       {
@@ -239,7 +229,7 @@ namespace IM.GuestsPR.Forms
           {
             task1.Wait(1000);
             var data = task1.Result;
-            
+
             if (data.Count > 0)
             {
               dtgr.DataContext = data;
@@ -389,7 +379,7 @@ namespace IM.GuestsPR.Forms
       else
       {
         cbxPersonnel.IsEnabled = false;
-        if (cbxPersonnel.Items.Count>0)
+        if (cbxPersonnel.Items.Count > 0)
         {
           selectPersonnelInCombobox(App.User.User.peID);
         }

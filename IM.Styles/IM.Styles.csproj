@@ -69,6 +69,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\sTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ToolBarRtfStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -114,7 +118,20 @@
     <Resource Include="Images\BStrikeOut.png" />
     <Resource Include="Images\BUnderLine.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\BAbout.png" />
+    <Resource Include="Images\BExit.png" />
+    <Resource Include="Images\BKey.png" />
+    <Resource Include="Images\BPrinter.png" />
+    <Resource Include="Images\BSearch.png" />
+    <Resource Include="Images\BUser.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BCancel.png" />
+    <Resource Include="Images\BEdit.png" />
+    <Resource Include="Images\BLog.png" />
+    <Resource Include="Images\BSave.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

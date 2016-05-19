@@ -190,10 +190,11 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 12/05/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void LoadHotels()
+    private async void LoadHotels()
     {
-      List<Hotel> lstAllHotels = BRHotels.GetHotels(nStatus: 1);      
+      List<Hotel> lstAllHotels =await BRHotels.GetHotels(nStatus: 1);      
       List<Hotel> lstHotels =(hotelGroup.hgID!=null)? lstAllHotels.Where(ho => ho.hoGroup == hotelGroup.hgID).ToList():new List<Hotel>();
       _oldHotels = lstHotels.ToList();
       dgrHotels.ItemsSource = lstHotels;

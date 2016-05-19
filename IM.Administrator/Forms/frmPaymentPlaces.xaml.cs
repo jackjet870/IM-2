@@ -228,7 +228,7 @@ namespace IM.Administrator.Forms
     {
       PaymentPlace paymentPlace = (PaymentPlace)dgrPaymentPlace.SelectedItem;
       LoadPaymentPlaces(paymentPlace);
-    } 
+    }
     #endregion
     #endregion
 
@@ -240,11 +240,12 @@ namespace IM.Administrator.Forms
     /// <param name="paymentPlace">Objeto a seleccionar</param>
     /// <history>
     /// [emoguel] created 06/04/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void LoadPaymentPlaces(PaymentPlace paymentPlace = null)
+    private async void LoadPaymentPlaces(PaymentPlace paymentPlace = null)
     {
       int nIndex = 0;
-      List<PaymentPlace> lstPaymentPlace = BRPaymentPlaces.GetPaymentPlaces(_nStatus, _paymentPlaceFilter);
+      List<PaymentPlace> lstPaymentPlace =await BRPaymentPlaces.GetPaymentPlaces(_nStatus, _paymentPlaceFilter);
       dgrPaymentPlace.ItemsSource = lstPaymentPlace;
       if (lstPaymentPlace.Count > 0 && paymentPlace != null)
       {

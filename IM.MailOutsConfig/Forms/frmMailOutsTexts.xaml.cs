@@ -257,37 +257,28 @@ namespace IM.MailOutsConfig.Forms
     /// </summary>
     /// <history>
     /// [erosado] 07/04/2016  Created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    public void DoGetLanguages()
+    public async void DoGetLanguages()
     {
-      Task.Factory.StartNew(() => BRLanguages.GetLanguages(1))
-      .ContinueWith(
-      task1 =>
+      try
       {
-        if (task1.IsFaulted)
+        var data = await BRLanguages.GetLanguages(1);
+        if (data.Count > 0)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error, "Mail Outs Configuration");
-          StaEnd();
-          return false;
+          cbxLanguage.ItemsSource = data;
+          cbxLanguage.SelectedIndex = 0;
         }
-        if (task1.IsCompleted)
+        else
         {
-          List<LanguageShort> data = task1.Result;
-          if (data.Count > 0)
-          {
-            cbxLanguage.ItemsSource = data;
-            cbxLanguage.SelectedIndex = 0;
-          }
-          else
-          {
-            cbxLanguage.Text = "No data found - Press Ctrl+F5 to load Data";
-          }
+          cbxLanguage.Text = "No data found - Press Ctrl+F5 to load Data";
         }
         StaEnd();
-        return false;
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error, "Mail Outs Configuration");
+      }
     }
     /// <summary>
     /// Obtiene la lista de MailOutText por LeadSourceID y LanguageID

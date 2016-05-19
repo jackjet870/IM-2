@@ -265,15 +265,13 @@ namespace IM.Host.Forms
     /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 10/03/2016 Created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-
       List<string> _exceptCurency = new List<string> { "US" };
-
       //Obtenemos la lista de Currencies
-      _listCurrencies = BRCurrencies.GetCurrencies(null, 1, _exceptCurency);
-
+      _listCurrencies =await BRCurrencies.GetCurrencies(null, 1, _exceptCurency);
       currencyViewSource.Source = _listCurrencies;
     }
     #endregion

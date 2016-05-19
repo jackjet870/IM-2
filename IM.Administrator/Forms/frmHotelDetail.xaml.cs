@@ -97,8 +97,9 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 30/03/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó Asincronía
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
       if (enumMode!=EnumMode.search)
@@ -118,7 +119,8 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Hotel", nRes);
             if(nRes>0)
             {
-              hotel = BRHotels.GetHotels(hotel, blnInclude: true).FirstOrDefault();
+              var r =await BRHotels.GetHotels(hotel, blnInclude: true);
+              hotel = r.FirstOrDefault();
               DialogResult = true;
               Close();
             }

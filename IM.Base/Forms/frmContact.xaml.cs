@@ -192,9 +192,17 @@ namespace IM.Base.Forms
     #endregion
 
     #region Window_Loaded
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// </history>
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      cboguPRInfo.ItemsSource = BRPersonnel.GetPersonnel(_userPrimero.Location.loID, "ALL", "PR");
+      cboguPRInfo.ItemsSource =await BRPersonnel.GetPersonnel(_userPrimero.Location.loID, "ALL", "PR");
       Guest _guest = BRGuests.GetGuest(_guestID);
       if (_guest.guInfoD.HasValue)
       {

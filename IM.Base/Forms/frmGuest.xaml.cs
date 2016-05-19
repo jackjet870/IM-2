@@ -264,7 +264,10 @@ namespace IM.Base.Forms
     /// <summary>
     /// Carga los controles comunes de todos los tipos de invitación
     /// </summary>
-    private void LoadCommonControls()
+    /// <history>
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// </history>
+    private async void LoadCommonControls()
     {
       #region User
       txtUser.Text = _user.User.peID;
@@ -273,20 +276,20 @@ namespace IM.Base.Forms
 
       #region ComboBoxes
 
-      var agencies = IM.BusinessRules.BR.BRAgencies.GetAgencies(1);
+      var agencies = await IM.BusinessRules.BR.BRAgencies.GetAgencies(1);
       LoadComboBox(agencies, cmbAgency, "ag");
 
-      var maritalStatus = IM.BusinessRules.BR.BRMaritalStatus.GetMaritalStatus(1);
+      var maritalStatus = await IM.BusinessRules.BR.BRMaritalStatus.GetMaritalStatus(1);
       LoadComboBox(maritalStatus, cmbMaritalStatusGuest1, "ms");
       LoadComboBox(maritalStatus, cmbMaritalStatusGuest2, "ms");
 
       //Combo Guest Estatus
       guestStatusTypeViewSource = ((CollectionViewSource)(this.FindResource("guestStatusTypeViewSource")));
-      guestStatusTypeViewSource.Source = BRGuests.GetGuestStatusType(1);
+      guestStatusTypeViewSource.Source = await BRGuests.GetGuestStatusType(1);
 
       //Combo Regalos
       giftShortViewSource = ((CollectionViewSource)(this.FindResource("giftShortViewSource")));
-      giftShortViewSource.Source = BRGifts.GetGifts();
+      giftShortViewSource.Source = await BRGifts.GetGifts();
       #endregion
 
     }

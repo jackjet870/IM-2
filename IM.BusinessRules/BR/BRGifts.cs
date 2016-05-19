@@ -3,6 +3,7 @@ using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -19,18 +20,21 @@ namespace IM.BusinessRules.BR
     /// 2. Inactivos.</param>
     /// <history>
     /// [edgrodriguez] 24/Feb/2016 Created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    public static List<GiftShort> GetGifts(string location = "ALL", int Status = 0)
+    public async static Task<List<GiftShort>> GetGifts(string location = "ALL", int Status = 0)
     {
-      List<GiftShort> lstgetGifs = new List<GiftShort>();
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<GiftShort> result = null;
+      await Task.Run(() =>
       {
-        //dbContext.Database.CommandTimeout = 180;
-        var dx = dbContext.USP_OR_GetGifts(location, Convert.ToByte(Status));
-        lstgetGifs = dx.ToList();
-      }
-      return lstgetGifs;
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.USP_OR_GetGifts(location, Convert.ToByte(Status)).ToList();
+        }
+      });
+      return result;
     }
+
 
     #endregion GetGifts
 
@@ -50,7 +54,7 @@ namespace IM.BusinessRules.BR
         bool _status = Convert.ToBoolean(status);
         return dbContext.Gifts.Where(x => x.giA == _status).ToList();
       }
-    } 
+    }
     #endregion
 
     #region GetGiftsCategories
@@ -185,7 +189,7 @@ namespace IM.BusinessRules.BR
       {
         return dbContext.Gifts.Where(x => x.giA == true && _listGiftsID.Select(s => s.gegi).Contains(x.giID)).ToList();
       }
-    } 
+    }
     #endregion
   }
 }

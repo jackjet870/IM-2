@@ -5,6 +5,7 @@ using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using IM.Model.Classes;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -160,13 +161,21 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="status"></param>
     /// <returns></returns>
-    public static List<GuestStatusType> GetGuestStatusType(int status)
+    /// <history>
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// </history>
+    public async static Task<List<GuestStatusType>> GetGuestStatusType(int status)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<GuestStatusType> result = null;
+      await Task.Run(() =>
       {
-        bool statusGuestStatus = Convert.ToBoolean(status);
-        return dbContext.GuestsStatusTypes.Where(gs => gs.gsA == statusGuestStatus).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          bool statusGuestStatus = Convert.ToBoolean(status);
+          result = dbContext.GuestsStatusTypes.Where(gs => gs.gsA == statusGuestStatus).ToList();
+        }
+      });
+      return result;
     }
     #endregion
 
@@ -487,7 +496,7 @@ namespace IM.BusinessRules.BR
       return lstGuests;
     }
     #endregion
-    
+
     /// <summary>
     /// Trae los huespedes segun los parametros
     /// </summary>
@@ -505,7 +514,7 @@ namespace IM.BusinessRules.BR
     /// [ECANUL] 01-04-2016 Created
     /// [jorcanche] 04/05/2016 Simplificado
     /// </history>
-    public static List<Guest> GetSearchGuestByLS( string leadsource,string salesRoom, string name,string room, string reservation,int guid, DateTime from, DateTime to, EnumProgram program,  string PR)
+    public static List<Guest> GetSearchGuestByLS(string leadsource, string salesRoom, string name, string room, string reservation, int guid, DateTime from, DateTime to, EnumProgram program, string PR)
     {
       var pro = EnumToListHelper.GetEnumDescription(program);
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
@@ -514,20 +523,20 @@ namespace IM.BusinessRules.BR
                     join ls in dbContext.LeadSources
                     on gu.guls equals ls.lsID
                     //busqueda por program
-                    where ls.lspg == (program == EnumProgram.Outhouse? ls.lspg: pro)
+                    where ls.lspg == (program == EnumProgram.Outhouse ? ls.lspg : pro)
                     select gu;
         //Busqueda por clave de huesped
         if (guid != 0)
         {
-         query = query.Where(gu => gu.guID == guid);
+          query = query.Where(gu => gu.guID == guid);
         }
         else
         { //Busqueda por nombre y aprellido
           if (!string.IsNullOrWhiteSpace(name))
           {
-            query = query.Where(gu => gu.guLastName1.Contains(name)  ||
+            query = query.Where(gu => gu.guLastName1.Contains(name) ||
                                       gu.guFirstName1.Contains(name) ||
-                                      gu.guLastname2.Contains(name)  ||
+                                      gu.guLastname2.Contains(name) ||
                                       gu.guLastname2.Contains(name));
           }
           //Busqueda por Lead Source
@@ -555,17 +564,17 @@ namespace IM.BusinessRules.BR
             query = query.Where(gu => gu.guPRInvit1 == PR);
           }
           //Busqueda por fecha de llegada
-          
-          query = query.Where(gu => 
-                          (program == EnumProgram.Outhouse ? gu.guBookD: gu.guCheckInD) >= from && 
-                          (program == EnumProgram.Outhouse ? gu.guBookD: gu.guCheckInD) <= to);    
+
+          query = query.Where(gu =>
+                          (program == EnumProgram.Outhouse ? gu.guBookD : gu.guCheckInD) >= from &&
+                          (program == EnumProgram.Outhouse ? gu.guBookD : gu.guCheckInD) <= to);
         }
         //Si se utiliza en el modulo Outhouse quiere decir que es una busqueda de un huesped con 
         //invitacion para transferir y de ser así se utiliza esta condicion si se utiliza en Inhouse no se 
         //utiliza esta condicion
         if (program == EnumProgram.Outhouse)
         {
-          query = query.Where(gu => gu.guInvit == true  && gu.guShow == false );
+          query = query.Where(gu => gu.guInvit == true && gu.guShow == false);
         }
         return query.OrderBy(gu => gu.gusr).ThenBy(gu => gu.guBookD).ThenBy(gu => gu.guLastName1).ToList();
       }
@@ -802,10 +811,10 @@ namespace IM.BusinessRules.BR
     /// </history>
     /// <param name="guID"></param>
     public static void DeleteGuest(int guID)
-    {      
+    {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        dbContext.USP_OR_DeleteGuest(guID);       
+        dbContext.USP_OR_DeleteGuest(guID);
       }
     }
 
@@ -821,5 +830,5 @@ namespace IM.BusinessRules.BR
 
     }
   }
-  
+
 }

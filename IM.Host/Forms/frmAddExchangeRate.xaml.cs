@@ -37,12 +37,13 @@ namespace IM.Host.Forms
     /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 11/03/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       _dsCurrenciesAvailable = ((CollectionViewSource)(this.FindResource("currencyViewSource")));
         
-      _dsCurrenciesAvailable.Source = BRCurrencies.GetCurrencies(null, 1, _listExchangeRate);
+      _dsCurrenciesAvailable.Source =await BRCurrencies.GetCurrencies(null, 1, _listExchangeRate);
     }
 
     /// <summary>

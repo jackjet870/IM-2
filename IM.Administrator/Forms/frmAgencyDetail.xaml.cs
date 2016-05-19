@@ -259,10 +259,15 @@ namespace IM.Administrator.Forms
     #endregion
 
     #region LoadCountries
-
-    protected void LoadCountries()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <history>
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// </history>
+    protected async void LoadCountries()
     {
-      List<CountryShort> lstCountries = BRCountries.GetCountries(1);
+      List<CountryShort> lstCountries =await BRCountries.GetCountries(1);
       cmbCountri.ItemsSource = lstCountries;
     }
     #endregion

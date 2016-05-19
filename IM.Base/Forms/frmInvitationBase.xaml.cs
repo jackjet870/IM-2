@@ -1787,51 +1787,54 @@ namespace IM.Base.Forms
     /// <summary>
     /// Carga los controles comunes de todos los tipos de invitación
     /// </summary>
-    private void LoadCommonControls()
+    /// <history>
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// </history>
+    private async void LoadCommonControls()
     {
       #region User
       lblUser.Content = _user.User.peN;
       #endregion
 
       #region ComboBoxes
-      var languages = IM.BusinessRules.BR.BRLanguages.GetLanguages(1);
+      var languages = await IM.BusinessRules.BR.BRLanguages.GetLanguages(1);
       LoadComboBox(languages, cmbLanguage, "la", "ES");
 
-      var personnels = IM.BusinessRules.BR.BRPersonnel.GetPersonnel(_user.LeadSource != null ? _user.LeadSource.lsID : _leadSourceLogin.lsID, roles:"PR");
+      var personnels = await IM.BusinessRules.BR.BRPersonnel.GetPersonnel(_user.LeadSource != null ? _user.LeadSource.lsID : _leadSourceLogin.lsID, roles:"PR");
       LoadComboBox(personnels, cmbPR, "pe");
 
-      var hotels = IM.BusinessRules.BR.BRHotels.GetHotels(nStatus:1);
+      var hotels = await IM.BusinessRules.BR.BRHotels.GetHotels(nStatus:1);
       LoadComboBox(hotels, cmbHotel, "hoID", "hoID", _user.Location!= null ? _user.Location.loN : _locationLogin.loN);
       LoadComboBox(hotels, cmbResort, "hoID", "hoID", String.Empty);
 
-      var agencies = IM.BusinessRules.BR.BRAgencies.GetAgencies(1);
+      var agencies = await IM.BusinessRules.BR.BRAgencies.GetAgencies(1);
       LoadComboBox(agencies, cmbAgency, "ag");
 
-      var countries = IM.BusinessRules.BR.BRCountries.GetCountries(1);
+      var countries = await IM.BusinessRules.BR.BRCountries.GetCountries(1);
       LoadComboBox(countries, cmbCountry, "co");
 
-      var currencies = IM.BusinessRules.BR.BRCurrencies.GetCurrencies(null, 1);
+      var currencies =await IM.BusinessRules.BR.BRCurrencies.GetCurrencies(null, 1);
       LoadComboBox(currencies, cmbCurrency, "cu", "US");
       //Combo del Grid de Depositos
       currencyViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("currencyViewSource")));
       currencyViewSource.Source = currencies;
 
-      var paymentTypes = IM.BusinessRules.BR.BRPaymentTypes.GetPaymentTypes(1);
+      var paymentTypes = await IM.BusinessRules.BR.BRPaymentTypes.GetPaymentTypes(1);
       LoadComboBox(paymentTypes, cmbPaymentType, "pt", "CS");
       //Combo del Grid de Depositos
       paymentTypeViewSource = ((CollectionViewSource)(this.FindResource("paymentTypeViewSource")));
       paymentTypeViewSource.Source = paymentTypes;
 
       //Combo del Grid de Depositos
-      var paymentePlaces = BRPaymentPlaces.GetPaymentPlaces();
+      var paymentePlaces =await BRPaymentPlaces.GetPaymentPlaces();
       paymentPlaceViewSource = ((CollectionViewSource)(this.FindResource("paymentPlaceViewSource")));
       paymentPlaceViewSource.Source = paymentePlaces;
 
-      var maritalStatus = IM.BusinessRules.BR.BRMaritalStatus.GetMaritalStatus(1);
+      var maritalStatus =await IM.BusinessRules.BR.BRMaritalStatus.GetMaritalStatus(1);
       LoadComboBox(maritalStatus, cmbMaritalStatusGuest1, "ms");
       LoadComboBox(maritalStatus, cmbMaritalStatusGuest2, "ms");
 
-      var creditCards = IM.BusinessRules.BR.BRCreditCardTypes.GetCreditCardTypes(null, -1);
+      var creditCards = await IM.BusinessRules.BR.BRCreditCardTypes.GetCreditCardTypes(null, -1);
       
       //Combo del Grid de Depositos
       creditCardTypeDepositViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("creditCardTypeViewSource")));
@@ -1841,10 +1844,10 @@ namespace IM.Base.Forms
       creditCardTypeViewSource.Source = creditCards;
 
       guestStatusTypeViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("guestStatusTypeViewSource")));
-      guestStatusTypeViewSource.Source = IM.BusinessRules.BR.BRGuests.GetGuestStatusType(1);
+      guestStatusTypeViewSource.Source = await IM.BusinessRules.BR.BRGuests.GetGuestStatusType(1);
 
       giftShortViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("giftShortViewSource")));
-      giftShortViewSource.Source = IM.BusinessRules.BR.BRGifts.GetGifts(_user.Location == null ? "ALL":_user.Location.loID, 1);
+      giftShortViewSource.Source = await IM.BusinessRules.BR.BRGifts.GetGifts(_user.Location == null ? "ALL":_user.Location.loID, 1);
       #endregion
 
     }
@@ -2043,10 +2046,11 @@ namespace IM.Base.Forms
     /// </summary>
     /// <history>
     /// [lchairez] 29/02/2016 Created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void LoadOutHouseControls()
+    private async void LoadOutHouseControls()
     {
-      var personnels = IM.BusinessRules.BR.BRPersonnel.GetPersonnel(_user.LeadSource.lsID);
+      var personnels =await IM.BusinessRules.BR.BRPersonnel.GetPersonnel(_user.LeadSource.lsID);
       LoadComboBox(personnels, cmbPRContract, "pe");
 
       var salesRooms = IM.BusinessRules.BR.BRSalesRooms.GetSalesRooms(0);

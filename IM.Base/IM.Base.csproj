@@ -87,6 +87,9 @@
     <Compile Include="Forms\frmDaysOff.xaml.cs">
       <DependentUpon>frmDaysOff.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmInvitation.xaml.cs">
+      <DependentUpon>frmInvitation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\ComboBoxHelper.cs" />
     <Compile Include="Forms\frmGuest.xaml.cs">
       <DependentUpon>frmGuest.xaml</DependentUpon>
@@ -228,6 +231,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Forms\frmInvitation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmSearchGuest.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -277,6 +284,10 @@
     <ProjectReference Include="..\IM.Model\IM.Model.csproj">
       <Project>{4d0c8faf-7eeb-4a36-9826-e190a0d9fe72}</Project>
       <Name>IM.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IM.Styles\IM.Styles.csproj">
+      <Project>{bad29979-3e8d-4913-8dd0-edebc8af85a7}</Project>
+      <Name>IM.Styles</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

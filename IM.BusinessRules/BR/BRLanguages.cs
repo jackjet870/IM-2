@@ -4,6 +4,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System.Data.Entity.Validation;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,14 +18,20 @@ namespace IM.BusinessRules.BR
     /// <param name="status">0- Sin filtro, 1-Activos, 2. Inactivos</param>
     /// <returns>List<Model.GetLanguages></returns>
     /// <history>
-    ///   [aalcocer] 24/02/2016 Created
+    /// [aalcocer] 24/02/2016 Created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    public static List<LanguageShort> GetLanguages(int status)
+    public async static Task<List<LanguageShort>> GetLanguages(int status)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<LanguageShort> result = null;
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetLanguages(Convert.ToByte(status)).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result=  dbContext.USP_OR_GetLanguages(Convert.ToByte(status)).ToList();
+        }
+      });
+      return result;
     }
 
     #region GetLanguages

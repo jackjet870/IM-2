@@ -112,14 +112,15 @@ namespace IM.InvitConfig.Forms
     /// </summary>
     ///<history>
     ///[jorcanche] created 12/05/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     ///</history>
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       EnableControls(true, false, true, false);
       StaStart("Load LeadSource...");
       cmbLeadSource.ItemsSource = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID);
       StaStart("Load Languages...");
-      cmbLanguage.ItemsSource = BRLanguages.GetLanguages(1);
+      cmbLanguage.ItemsSource =await BRLanguages.GetLanguages(1);
       cmbLanguage.SelectedIndex = cmbLeadSource.SelectedIndex = 0;
       StaEnd();
     } 

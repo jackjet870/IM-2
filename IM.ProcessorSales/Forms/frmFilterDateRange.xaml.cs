@@ -340,8 +340,9 @@ namespace IM.ProcessorSales.Forms
     /// <param name="exit">chkLiner</param>
     /// <history>
     /// [ecanul] 27/04/2016 Created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void ConfigureFilters(EnumBasedOnArrival? basedOnArrival, EnumQuinellas? quinellas, bool shGroup, bool group, bool shAllSalesmen, bool allSalesmen, bool isGoal, decimal? goal,
+    private async void ConfigureFilters(EnumBasedOnArrival? basedOnArrival, EnumQuinellas? quinellas, bool shGroup, bool group, bool shAllSalesmen, bool allSalesmen, bool isGoal, decimal? goal,
       //seccion salesman
       bool isSalesman, bool shRoles, bool pr, bool liner, bool closer, bool exit)
     {
@@ -374,7 +375,7 @@ namespace IM.ProcessorSales.Forms
       if (isSalesman)
       {
         //cmb
-        _lstPersonnels = BRPersonnel.GetPersonnel("All", "All", "PR,LINER,CLOSER,EXIT", 1, "All", "=",
+        _lstPersonnels =await BRPersonnel.GetPersonnel("All", "All", "PR,LINER,CLOSER,EXIT", 1, "All", "=",
           EnumPermisionLevel.None, "All");
         cmbSalesman.ItemsSource = _lstPersonnels;
         //roles

@@ -38,11 +38,19 @@ namespace IM.Host.Forms
     public frmMealTicketsDetail()
     {
       InitializeComponent();
-    } 
+    }
     #endregion
 
     #region Window_Loaded
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// </history>
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       _dsRateType = ((CollectionViewSource)(this.FindResource("dsRateType")));
       _dsPersonnel = ((CollectionViewSource)(this.FindResource("dsPersonnel")));
@@ -96,9 +104,9 @@ namespace IM.Host.Forms
       //  Obtenemos los tipos de tarifa
       _dsRateType.Source = BRRateTypes.GetRateTypes(new RateType { raID = 1 }, 1, true, true);
       // Obtenemos los colaboradores
-      _dsPersonnel.Source = BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);
+      _dsPersonnel.Source = await BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);
       // Obtenemos las agencias
-      _dsAgency.Source = BRAgencies.GetAgencies(1);
+      _dsAgency.Source =await BRAgencies.GetAgencies(1);
       // Obtenemos los tipos de cupones de comida.
       _dsMealTicketType.Source = BRMealTicketTypes.GetMealTicketType();
     }

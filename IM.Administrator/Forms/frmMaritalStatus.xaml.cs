@@ -228,7 +228,7 @@ namespace IM.Administrator.Forms
     {
       MaritalStatus maritalStatus = (MaritalStatus)dgrMaritalStatus.SelectedItem;
       LoadMaritalStatus(maritalStatus);
-    } 
+    }
     #endregion
     #endregion
 
@@ -240,11 +240,12 @@ namespace IM.Administrator.Forms
     /// <param name="maritalStatus">Objeto para seleccionar con el recharge</param>
     /// <history>
     /// [emoguel] created 01/04/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void LoadMaritalStatus(MaritalStatus maritalStatus = null)
+    private async void LoadMaritalStatus(MaritalStatus maritalStatus = null)
     {
       int nIndex = 0;
-      List<MaritalStatus> lstMaritalStatus = BRMaritalStatus.GetMaritalStatus(_nStatus, _MaritaStaFilter);
+      List<MaritalStatus> lstMaritalStatus =await BRMaritalStatus.GetMaritalStatus(_nStatus, _MaritaStaFilter);
       dgrMaritalStatus.ItemsSource = lstMaritalStatus;
       if (lstMaritalStatus.Count > 0 && maritalStatus != null)
       {

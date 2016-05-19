@@ -289,8 +289,9 @@ namespace IM.InventoryMovements
     /// </summary>
     /// <history>
     /// [edgrodriguez] 18/Feb/2016 Created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void InicializarGrdNew()
+    private async void InicializarGrdNew()
     {
       _lstobjWhsMovs = new List<objWhsMovs>();
       objWhsMovsViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("objWhsMovsViewSource")));
@@ -298,7 +299,7 @@ namespace IM.InventoryMovements
       objWhsMovsViewSource.Source = _lstobjWhsMovs;
       getGiftsViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("getGiftsViewSource")));
       // Load data by setting the CollectionViewSource.Source property:
-      getGiftsViewSource.Source = BRGifts.GetGifts(App.User.Warehouse.whID, 1);
+      getGiftsViewSource.Source =await BRGifts.GetGifts(App.User.Warehouse.whID, 1);
     }
     #endregion
   }

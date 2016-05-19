@@ -32,11 +32,12 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [Emoguel] created 07/003/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    protected void LoadCreditCardTypes(CreditCardType creditCardType=null)
+    protected async void LoadCreditCardTypes(CreditCardType creditCardType=null)
     {
       int nIndex = 0;
-      List<CreditCardType> lstCreditCardTypes = BRCreditCardTypes.GetCreditCardTypes(_creditCardTypeFilter, _nStatus);
+      List<CreditCardType> lstCreditCardTypes =await BRCreditCardTypes.GetCreditCardTypes(_creditCardTypeFilter, _nStatus);
       dgrCreditCard.ItemsSource = lstCreditCardTypes;
       if(creditCardType!=null && lstCreditCardTypes.Count>0)
       {

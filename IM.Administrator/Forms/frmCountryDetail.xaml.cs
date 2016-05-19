@@ -170,10 +170,11 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 15/03/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void LoadLanguages()
+    private async void LoadLanguages()
     {
-      List<LanguageShort> lstLanguages = BRLanguages.GetLanguages(0);
+      List<LanguageShort> lstLanguages =await BRLanguages.GetLanguages(0);
       cmbLang.ItemsSource = lstLanguages;
     }
     #endregion    

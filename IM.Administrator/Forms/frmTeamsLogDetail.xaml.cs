@@ -273,7 +273,7 @@ namespace IM.Administrator.Forms
           }
       }
 
-    } 
+    }
     #endregion
 
     #endregion
@@ -285,10 +285,11 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 27/04/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void LoadPersonnels()
+    private async void LoadPersonnels()
     {
-      List<PersonnelShort> lstPersonnel = BRPersonnel.GetPersonnel();
+      List<PersonnelShort> lstPersonnel =await BRPersonnel.GetPersonnel();
       if(enumMode==EnumMode.search)
       {
         lstPersonnel.Insert(0, new PersonnelShort { peID = "", peN = "" });

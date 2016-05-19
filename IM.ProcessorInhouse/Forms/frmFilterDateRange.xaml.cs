@@ -370,8 +370,9 @@ namespace IM.ProcessorInhouse.Forms
     /// </summary>
     /// <history>
     /// [aalcocer] 03/Mar/2016 Created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    public void ConfigurarFomulario(bool blnOneDate, bool blnOnlyOneRegister,
+    public async void ConfigurarFomulario(bool blnOneDate, bool blnOnlyOneRegister, bool blnOnePeriod = false,
         bool blnPersonnel = false, bool blnAllPersonnel = false, bool blnLeadSources = false, bool blnAllLeadSources = false,
         bool blnChargeTo = false, bool blnAllChargeTo = false, bool blnGifts = false, bool blnAllGifts = false,
         bool blnMarkets = false, bool blnAllMarkets = false, bool blnAgencies = false, bool blnAllAgencies = false,
@@ -388,20 +389,20 @@ namespace IM.ProcessorInhouse.Forms
       if (blnPersonnel)
       {
         var x = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program).Select(y => y.lsID);
-        _lstPersonnel = BRPersonnel.GetPersonnel(string.Join(",", x), roles: "PR", status: 0);
+        _lstPersonnel =await BRPersonnel.GetPersonnel(string.Join(",", x), roles: "PR", status: 0);
       }
       if (blnLeadSources)
       {
         _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program);
         if (blnLsHotelNotNull)
         {
-          var lstLsIDHotelNotNull = BRLeadSources.GetLeadSources(1, EnumProgram.All).
+          var lstLsIDHotelNotNull = BRLeadSources.GetLeadSources(1,EnumProgram.All).
               Where(x => x.lsHotel != null).
               Select(x => x.lsID);
           _lstLeadSources = _lstLeadSources.Where(x => lstLsIDHotelNotNull.Contains(x.lsID)).ToList();
         }
       }
-      if (blnGifts) _lstGifts = BRGifts.GetGifts();
+      if (blnGifts) _lstGifts = await BRGifts.GetGifts();
       if (blnGiftsQuantity)
       {
         Dictionary<string, int> _productionByGiftQuantity = GetSettings.ProductionByGiftQuantity();
@@ -447,7 +448,7 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void ConfigureFilters(EnumBasedOnArrival? enumBasedOnArrival, EnumBasedOnBooking? enumBasedOnBooking,
         EnumQuinellas? enumQuinellas, EnumDetailGifts? enumDetailGifts, EnumSalesByMemberShipType? enumSalesByMemberShipType,
-        EnumSaveCourtesyTours? enumSaveCourtesyTours, EnumExternalInvitation? enumExternalInvitation, bool blnClub, bool blnNight, bool blnOnlyWholesalers)
+       EnumSaveCourtesyTours? enumSaveCourtesyTours, EnumExternalInvitation? enumExternalInvitation, bool blnClub, bool blnNight, bool blnOnlyWholesalers)
     {
       if (enumBasedOnArrival != null)
         chkBasedOnArrival.IsChecked = Convert.ToBoolean(enumBasedOnArrival);
@@ -474,6 +475,7 @@ namespace IM.ProcessorInhouse.Forms
       else
         chkSalesByMembershipType.Visibility = Visibility.Collapsed;
 
+     
       if (enumSaveCourtesyTours != null)
         cboSaveCourtesyTours.SelectedValue = enumSaveCourtesyTours;
       else

@@ -317,10 +317,11 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 16/05/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void LoadHotels()
+    private async void LoadHotels()
     {
-      List<Hotel> lstHotels = BRHotels.GetHotels(nStatus: 1);
+      List<Hotel> lstHotels =await BRHotels.GetHotels(nStatus: 1);
       cmbHotels.ItemsSource = lstHotels;
     }
     #endregion
@@ -421,10 +422,11 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 16/05/2016
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void LoadBoss()
+    private async void LoadBoss()
     {
-      List<PersonnelShort> lstBoss = BRPersonnel.GetPersonnel(roles: EnumToListHelper.GetEnumDescription(EnumRole.Boss));
+      List<PersonnelShort> lstBoss = await BRPersonnel.GetPersonnel(roles: EnumToListHelper.GetEnumDescription(EnumRole.Boss));
       cmblsBoss.ItemsSource = lstBoss;
     }
     #endregion

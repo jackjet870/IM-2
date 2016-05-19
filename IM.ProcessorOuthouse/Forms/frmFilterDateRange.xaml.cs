@@ -29,8 +29,20 @@ namespace IM.ProcessorOuthouse.Forms
     public frmFilterDateRange()
     {
       InitializeComponent();
+      LoadCatalog();
+      this.PreviewKeyDown += new KeyEventHandler(Close_KeyPreviewESC);
+    }
 
-      _lstGifts = BRGifts.GetGifts();
+    /// <summary>
+    /// Carga los catalogos
+    /// </summary>
+    /// <history>
+    /// [erosado] 19/05/2016  Created
+    /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// </history>
+    private async void LoadCatalog()
+    {
+      _lstGifts = await BRGifts.GetGifts();
 
       List<string> _prodByGift = GetSettings.ProductionByGift();
       _lstGiftsProdGift = BRGifts.GetGiftsShortById(_prodByGift);
@@ -41,10 +53,10 @@ namespace IM.ProcessorOuthouse.Forms
       _lstLeadSourcesPaymentComm = BRLeadSources.GetLeadSourceById(_paymentComm);
 
       _lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter, -1);
-      _lstPaymentType = BRPaymentTypes.GetPaymentTypes(-1);
+      _lstPaymentType =await BRPaymentTypes.GetPaymentTypes(-1);
 
       var x = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, EnumProgram.Outhouse).Select(y => y.lsID);
-      _lstPRs = BRPersonnel.GetPersonnel(string.Join(",", x), roles: EnumToListHelper.GetEnumDescription(EnumRole.PR), status: 0);
+      _lstPRs =await BRPersonnel.GetPersonnel(string.Join(",", x), roles: EnumToListHelper.GetEnumDescription(EnumRole.PR), status: 0);
 
       _lstFoliosInvitationOuthouse = BRFoliosInvitationsOuthouse.GetFoliosInvittionsOutside(nStatus: 1).ToList();
       _lstFoliosInvitationOuthouse.Insert(0, new FolioInvitationOuthouse { fiID = 0, fiSerie = "ALL", fiFrom = 0, fiTo = 0, fiA = Convert.ToBoolean(1) });
@@ -54,8 +66,6 @@ namespace IM.ProcessorOuthouse.Forms
 
       cboSaveCourtesyTours.ItemsSource = EnumToListHelper.GetList<EnumSaveCourtesyTours>();
       cboExternal.ItemsSource = EnumToListHelper.GetList<EnumExternalInvitation>();
-      
-      this.PreviewKeyDown += new KeyEventHandler(Close_KeyPreviewESC);
     }
 
     #endregion Contructor
