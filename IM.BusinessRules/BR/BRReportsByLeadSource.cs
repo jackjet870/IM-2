@@ -443,6 +443,36 @@ namespace IM.BusinessRules.BR
 
     #endregion GetRptProductionByMonths
 
+    #region GetRptContactBookShowQuinellas
+
+    /// <summary>
+    /// Devuelve los datos para el reporte de contactacion, book y show considerando quinielas
+    /// </summary>
+    /// <param name="dtmStart">Fecha desde</param>
+    /// <param name="dtmEnd">Fecha hasta</param>
+    /// <param name="leadSources">Claves de Lead Sources</param>
+    /// <param name="external">Filtro de invitaciones externas
+    /// 0. Sin filtro
+    /// 1. Excluir invitaciones externas
+    /// 2. Solo invitaciones externas
+    /// </param>
+    /// <param name="basedOnArrival">Indica si se debe basar en la fecha de llegada</param>
+    /// <returns><list type="RptContactBookShowQuinellas"></list></returns>
+    /// <history>
+    /// [aalcocer] 13/05/2016 Created
+    /// </history>
+    public static List<RptContactBookShowQuinellas> GetRptContactBookShowQuinellas(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
+      EnumExternalInvitation external = EnumExternalInvitation.extInclude, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByMonth_Timeout;
+        return dbContext.USP_IM_RptContactBookShowQuinellas(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToInt16(external), Convert.ToBoolean(basedOnArrival)).ToList();
+      }
+    }
+
+    #endregion GetRptContactBookShowQuinellas
+
     #region Inhouse
 
     #region GetProductionByAgeInhouses

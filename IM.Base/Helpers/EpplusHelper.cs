@@ -171,9 +171,10 @@ namespace IM.Base.Helpers
     ///   [edgrodriguez] 17/03/2016 Modified. Se agregó el parametros IsPivot, para indicar si se obtendra una tabla simple o una tabla de tipo pivot.
     ///   [edgrodriguez] 23/03/2016 Modified. Se agregó validaciones para reportes con varios campos Valor, se hizo un cambio en la edición del pivot desde el xml.
     ///                                       Se cambio el formateo de columnas desde un método.
-    ///   [aalocer]      01/04/2016 Modified. Se agregó validaciones que las columnas y valores tomen un determinado formato, se agrega la opcion de insertar valores calculados.
-    ///   [aalocer]      11/04/2016 Modified. Se agrega la opción de insertar Superheaders y borders a columnas.
+    ///   [aalcocer]     01/04/2016 Modified. Se agregó validaciones que las columnas y valores tomen un determinado formato, se agrega la opcion de insertar valores calculados.
+    ///   [aalcocer]     11/04/2016 Modified. Se agrega la opción de insertar Superheaders y borders a columnas.
     ///   [aalcocer]     16/04/2016 Modified. Se agrego la opcion de mostrar encabezado especial para la primera columna de la tabla
+    ///   [aalcocer]     23/05/2016 Modified. Se agrega la opcion de mostrar distintos cálculos en los campos de valores de tabla dinámica
     /// </history>
     public static FileInfo CreatePivotRptExcel(bool isPivot, List<Tuple<string, string>> filters, DataTable dtData,
       string reportName, string dateRangeFileName,
@@ -253,6 +254,8 @@ namespace IM.Base.Helpers
       pivotTable.EnableDrill = false;
       pivotTable.GridDropZones = false;
       pivotTable.DataCaption = string.Empty;
+      pivotTable.ErrorCaption = "0";
+      pivotTable.ShowError = true;
 
       //Asignamos las columnas para realizar el pivote
       formatColumns.Where(c => c.Axis == ePivotFieldAxis.Column)
@@ -360,6 +363,7 @@ namespace IM.Base.Helpers
           }
           valueField.Format = GetFormat(valueFormat.Format);
           valueField.Field.Sort = valueFormat.Sort;
+          valueField.SetDataFieldShowDataAsAttribute(pivotTable, valueFormat.DataFieldShowDataAs);
         });
 
       // Agregamos valores calculados
@@ -2199,6 +2203,45 @@ namespace IM.Base.Helpers
     }
 
     #endregion SortDatatable
+
+    #region SetDataFieldShowDataAsAttribute
+
+    /// <summary>
+    /// Mostrar distintos cálculos en los campos de valores de tabla dinámica
+    /// EPPlus no soporta " Mostrar valores como" para los vaores de la tabla dinamica.
+    /// </summary>
+    /// <param name="dataField">Campo de dato de la tabla dinamica</param>
+    /// <param name="pivot">tabla dinamica</param>
+    /// <param name="showDataAs">Tipo del calculo a mostrar</param>
+    /// <history>
+    ///   [aalcocer] 23/05/2016  Created.
+    /// </history>
+    private static void SetDataFieldShowDataAsAttribute(this ExcelPivotTableDataField dataField, ExcelPivotTable pivot, EnumDataFieldShowDataAs showDataAs)
+    {
+      if (pivot != null & pivot.DataFields != null && pivot.DataFields.Contains(dataField))
+      {
+        string showDataAsAttributeValue = Enum.GetName(typeof(EnumDataFieldShowDataAs), showDataAs);
+        var xml = pivot.PivotTableXml;
+        XmlNodeList elements = xml.GetElementsByTagName("dataField");
+
+        foreach (XmlNode elem in elements)
+        {
+          XmlAttribute fldAttribute = elem.Attributes["fld"];
+          if (fldAttribute != null && fldAttribute.Value == dataField.Index.ToString())
+          {
+            XmlAttribute showDataAsAttribute = elem.Attributes["showDataAs"];
+            if (showDataAsAttribute == null)
+            {
+              showDataAsAttribute = xml.CreateAttribute("showDataAs");
+              elem.Attributes.InsertAfter(showDataAsAttribute, fldAttribute);
+            }
+            showDataAsAttribute.Value = showDataAsAttributeValue;
+          }
+        }
+      }
+    }
+
+    #endregion SetDataFieldShowDataAsAttribute
 
     #endregion Private Methods
   }

@@ -170,6 +170,7 @@
     </Compile>
     <Compile Include="Enums\EnumAction.cs" />
     <Compile Include="Enums\EnumClub.cs" />
+    <Compile Include="Enums\EnumDataFieldShowDataAs.cs" />
     <Compile Include="Enums\EnumFilterDeposit.cs" />
     <Compile Include="Enums\EnumFormatTypeExcel.cs" />
     <Compile Include="Enums\EnumGiftsType.cs" />

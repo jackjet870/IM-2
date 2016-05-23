@@ -1389,56 +1389,67 @@ namespace IM.ProcessorInhouse.Classes
 
     #endregion ExportRptScoreByPrs
 
-    //internal static FileInfo ExportRptContactBookShowQuinellas(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptContactBookShowQuinellas> listRptContactBookShowQuinellas)
-    //{
-    //  var listRptContactBookShowQuinellasAux = listRptContactBookShowQuinellas.Select(c => new
-    //  {
-    //    c.Year,
-    //    Month = new DateTime(Convert.ToInt32(c.Year), Convert.ToInt32(c.Month), 1),
-    //    c.LeadSource,
-    //    c.Market,
-    //    c.Filter,
-    //    c.Arrivals,
-    //    c.Contacts,
-    //    c.Availables,
-    //    c.GrossBooks,
-    //    TBooks = c.Books,
-    //    c.GrossShows,
-    //    TShows = c.Shows,
-    //    c.Sales,
-    //    c.SalesAmount
-    //  }).ToList();
+    internal static FileInfo ExportRptContactBookShowQuinellas(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptContactBookShowQuinellas> listRptContactBookShowQuinellas)
+    {
+      var total = listRptContactBookShowQuinellas.Where(c => c.Subgroup.ToUpper() == "TOTAL").ToList();
+      var partial = listRptContactBookShowQuinellas.Where(c => !total.Contains(c)).ToList();
 
-    //  var partial = listRptContactBookShowQuinellasAux.Where(d => d.Filter.ToUpper() != "TOTAL").ToList();
-    //  var total = listRptContactBookShowQuinellasAux.Where(d => d.Filter.ToUpper() == "TOTAL").ToList();
+      var other = new List<RptContactBookShowQuinellas>();
 
-    //  var other = (from t in total
-    //               join p in partial on new { t.Market, t.LeadSource, t.Year, t.Month } equals new { p.Market, p.LeadSource, p.Year, p.Month }
-    //               select new
-    //               {
-    //                 t.Year,
-    //                 t.Month,
-    //                 t.LeadSource,
-    //                 t.Market,
-    //                 Filter = "OTROS",
-    //                 Arrivals = t.Arrivals - p.Arrivals,
-    //                 Contacts = t.Contacts - p.Contacts,
-    //                 Availables = t.Availables - p.Availables,
-    //                 GrossBooks = t.GrossBooks - p.GrossBooks,
-    //                 TBooks = t.TBooks - p.TBooks,
-    //                 GrossShows = t.GrossShows - p.GrossShows,
-    //                 TShows = t.TShows - p.TShows,
-    //                 Sales = t.Sales - p.Sales,
-    //                 SalesAmount = t.SalesAmount - p.SalesAmount
-    //               }).ToList();
+      total.ForEach(c =>
+      {
+        if (partial.Any(p => p.Market == c.Market))
+        {
+          var otherAux = partial
+          .SingleOrDefault(p => p.Market == c.Market && p.Year == c.Year && p.Month == c.Month && p.LeadSource == c.LeadSource);
 
-    //  listRptContactBookShowQuinellasAux.Clear();
-    //  listRptContactBookShowQuinellasAux.AddRange(partial);
-    //  listRptContactBookShowQuinellasAux.AddRange(other);
-    //  listRptContactBookShowQuinellasAux.AddRange(total);
+          other.Add(new RptContactBookShowQuinellas
+          {
+            Group = c.Group,
+            Market = c.Market,
+            Subgroup = "OTROS",
+            Year = c.Year,
+            Month = c.Month,
+            znN = c.znN,
+            LeadSource = c.LeadSource,
+            Arrivals = c.Arrivals - (otherAux == null ? 0 : otherAux.Arrivals),
+            Contacts = c.Contacts - (otherAux == null ? 0 : otherAux.Contacts),
+            Availables = c.Availables - (otherAux == null ? 0 : otherAux.Availables),
+            GrossBooks = c.GrossBooks - (otherAux == null ? 0 : otherAux.GrossBooks),
+            Books = c.Books - (otherAux == null ? 0 : otherAux.Books),
+            GrossShows = c.GrossShows - (otherAux == null ? 0 : otherAux.GrossShows),
+            Shows = c.Shows - (otherAux == null ? 0 : otherAux.Shows),
+            Sales = c.Sales - (otherAux == null ? 0 : otherAux.Sales),
+            SalesAmount = c.SalesAmount - (otherAux == null ? 0 : otherAux.SalesAmount),
+          });
+        }
+      });
 
-    //  DataTable dtData = TableHelper.GetDataTableFromList(listRptContactBookShowQuinellasAux, replaceStringNullOrWhiteSpace: true);
-    //  return EpplusHelper.CreateExcelCustomPivot(dtData, filters, reportname, dateRangeFileNameRep, clsFormatReport.GetRptContactBookShowQuinellasFormat());
-    //}
+      total.RemoveAll(x => other.Select(o => o.Market).Contains(x.Market));
+
+      var listRptContactBookShowQuinellasAux = partial.Union(other).Union(total).Select(c => new
+      {
+        c.Group,
+        c.Market,
+        c.Subgroup,
+        c.Year,
+        Month = new DateTime(Convert.ToInt32(c.Year), Convert.ToInt32(c.Month), 1),
+        c.znN,
+        c.LeadSource,
+        c.Arrivals,
+        c.Contacts,
+        c.Availables,
+        c.GrossBooks,
+        TBooks = c.Books,
+        c.GrossShows,
+        TShows = c.Shows,
+        c.Sales,
+        c.SalesAmount,
+        TotalFactor = c.Arrivals
+      }).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(listRptContactBookShowQuinellasAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(true, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptContactBookShowQuinellasFormat(), true);
+    }
   }
 }

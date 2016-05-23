@@ -772,7 +772,7 @@ namespace IM.ProcessorInhouse.Forms
           }
           else
           {
-            //list.AddRange(BRReportsByLeadSource.GetRptContactBookShowQuinellas(_dtmStart, _dtmEnd, _lstLeadSources, _enumExternalInvitation, _enumBasedOnArrival));
+            list.AddRange(BRReportsByLeadSource.GetRptContactBookShowQuinellas(_dtmStart, _dtmEnd, _lstLeadSources, _enumExternalInvitation, _enumBasedOnArrival));
             if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
             else
             {
@@ -782,7 +782,7 @@ namespace IM.ProcessorInhouse.Forms
               if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
               if (Convert.ToBoolean(_enumExternalInvitation)) filters.Add(new Tuple<string, string>(EnumToListHelper.GetEnumDescription(_enumExternalInvitation), string.Empty));
 
-              //finfo = clsReports.ExportRptContactBookShowQuinellas(reportname, dateRangeFileNameRep, filters, list.Cast<RptContactBookShowQuinellas>().ToList());
+              finfo = clsReports.ExportRptContactBookShowQuinellas(reportname, dateRangeFileNameRep, filters, list.Cast<RptContactBookShowQuinellas>().ToList());
             }
           }
           break;

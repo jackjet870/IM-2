@@ -15,6 +15,7 @@ namespace IM.Model.Classes
   /// [edgrodriguez]  15/04/2016 Modified. Se agrega la propiedad IsCalculated
   /// [aalcocer]      18/04/2016 Modified. Se agrega la propiedad TotalsRowFunction
   /// [aalcocer]      17/05/2016 Modified. Se agrega la propiedad IsVisible, por default verdadero
+  /// [aalcocer]      23/05/2016 Modified. Se agrega la propiedad DataFieldShowDataAs
   /// </history>
   public class ExcelFormatTable
   {
@@ -40,5 +41,6 @@ namespace IM.Model.Classes
     public RowFunctions TotalsRowFunction { get; set; } = RowFunctions.None;
     public bool InsertBlankRow { get; set; } = false;
     public bool IsVisible { get; set; } = true;
+    public EnumDataFieldShowDataAs DataFieldShowDataAs { get; set; } = EnumDataFieldShowDataAs.Normal;
   }
 }

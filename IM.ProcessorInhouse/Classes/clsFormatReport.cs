@@ -1232,48 +1232,52 @@ namespace IM.ProcessorInhouse.Classes
 
     #endregion RptScoreByPR
 
-    //#region GetRptContactBookShowQuinellasFormat
+    #region GetRptContactBookShowQuinellasFormat
 
-    /////<summary>
-    ///// Formato para el reporte Ocupation,Contact, books & Shows (Quinellas)
-    ///// </summary>
-    ///// <returns><list type="ExcelFormatTable"></list></returns>
-    ///// <history>
-    ///// [aalcocer] 07/05/2016 Created
-    ///// </history>
-    //internal static List<ExcelFormatTable> GetRptContactBookShowQuinellasFormat()
-    //{
-    //  return new List<ExcelFormatTable>
-    //  {
-    //    new ExcelFormatTable{Title = "Year",Order = 0, Axis = ePivotFieldAxis.Column, SubTotalFunctions = eSubTotalFunctions.Default},
-    //    new ExcelFormatTable{Title = "Month",Order = 1, Axis = ePivotFieldAxis.Column, Format = EnumFormatTypeExcel.Month, SubTotalFunctions = eSubTotalFunctions.Default},
-    //    new ExcelFormatTable{Title = "LeadSource",Order = 2, Axis = ePivotFieldAxis.Column},
+    ///<summary>
+    /// Formato para el reporte Ocupation,Contact, books & Shows (Quinellas)
+    /// </summary>
+    /// <returns><list type="ExcelFormatTable"></list></returns>
+    /// <history>
+    /// [aalcocer] 07/05/2016 Created
+    /// </history>
+    internal static List<ExcelFormatTable> GetRptContactBookShowQuinellasFormat()
+    {
+      return new List<ExcelFormatTable>
+      {
+        new ExcelFormatTable{Title = "Group",Order = 0, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable{Title = "Market",Order = 1, Axis = ePivotFieldAxis.Row, SubTotalFunctions = eSubTotalFunctions.Default, InsertBlankRow=true},
+        new ExcelFormatTable{Title = "Subgroup",Order = 1, Axis = ePivotFieldAxis.Row, InsertBlankRow=true },
 
-    //    new ExcelFormatTable{Title = "Market",Order = 0, Axis = ePivotFieldAxis.Row},
-    //    new ExcelFormatTable{Title = "Filter",Order = 1, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable{Title = "Year",Order = 0, Axis = ePivotFieldAxis.Column, SubTotalFunctions = eSubTotalFunctions.Default},
+        new ExcelFormatTable{Title = "Month",Order = 1, Axis = ePivotFieldAxis.Column, Format = EnumFormatTypeExcel.Month, SubTotalFunctions = eSubTotalFunctions.Default},
+        new ExcelFormatTable{Title = "Zone",Order = 2, Axis = ePivotFieldAxis.Column, SubTotalFunctions = eSubTotalFunctions.Default},
+        new ExcelFormatTable{Title = "LeadSource",Order = 3, Axis = ePivotFieldAxis.Column},
 
-    //    new ExcelFormatTable {Title = "Llegadas", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-    //    new ExcelFormatTable {Title = "Contactos", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-    //    new ExcelFormatTable {Title = "Disponibles",Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-    //    new ExcelFormatTable {Title = "Books", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-    //    new ExcelFormatTable {Title = "Total Books", Order = 6, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-    //    new ExcelFormatTable {Title = "Shows", Order = 8, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-    //    new ExcelFormatTable {Title = "Total Shows", Order = 9, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Llegadas", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Contactos", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Disponibles",Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Books", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Total Books", Order = 6, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Shows", Order = 8, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Total Shows", Order = 9, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
 
-    //    new ExcelFormatTable {Title = "No. Ventas", Order =12, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
-    //    new ExcelFormatTable {Title = "Volumen de ventas", Order = 14, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency},
+        new ExcelFormatTable {Title = "No. Ventas", Order =12, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
+        new ExcelFormatTable {Title = "Volumen de ventas", Order = 14, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency},
+        new ExcelFormatTable { Title = "% Total", Order = 18, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, DataFieldShowDataAs=EnumDataFieldShowDataAs.PercentOfCol },
 
-    //    new ExcelFormatTable {Title = "% Contactación",Order = 2,Axis = ePivotFieldAxis.Values, Format= EnumFormatTypeExcel.Percent, Formula = "IF(Llegadas =0,0,Contactos/Llegadas)" },
-    //    new ExcelFormatTable {Title = "% Disponibles",Order = 4 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Contactos =0,0,Disponibles/Contactos)" },
-    //    new ExcelFormatTable {Title = "% Books",Order = 7 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Disponibles =0,0,'Total Books'/Disponibles)" },
-    //   new ExcelFormatTable {Title = "% Shows",Order = 10,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Books =0,0,Shows/Books)" },
-    //   new ExcelFormatTable {Title = "% Shows/Llegadas",Order = 11,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Llegadas =0,0,Shows/Llegadas)" },
-    //    new ExcelFormatTable { Title = "% Cierre", Order = 13, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF('Total Shows' =0,0,'No. Ventas'/'Total Shows')" },
-    //    new ExcelFormatTable { Title = "Eficiencia", Order = 15, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('Total Shows' =0,0,'Volumen de ventas'/'Total Shows')" },
-    //    new ExcelFormatTable { Title = "Venta promedio", Order = 15, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('No. Ventas' = 0,0,'Volumen de ventas'/'No. Ventas')" }
-    //  };
-    //}
+        new ExcelFormatTable {Title = "% Contactación",Order = 2,Axis = ePivotFieldAxis.Values, Format= EnumFormatTypeExcel.Percent, Formula = "IF(Llegadas =0,0,Contactos/Llegadas)" },
+        new ExcelFormatTable {Title = "% Disponibles",Order = 4 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Contactos =0,0,Disponibles/Contactos)" },
+        new ExcelFormatTable {Title = "% Books",Order = 7 ,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Disponibles =0,0,'Total Books'/Disponibles)" },
+       new ExcelFormatTable {Title = "% Shows",Order = 10,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Books =0,0,Shows/Books)" },
+       new ExcelFormatTable {Title = "% Shows/Llegadas",Order = 11,Axis = ePivotFieldAxis.Values,Format= EnumFormatTypeExcel.Percent, Formula = "IF(Llegadas =0,0,Shows/Llegadas)" },
+        new ExcelFormatTable { Title = "% Cierre", Order = 13, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF('Total Shows' =0,0,'No. Ventas'/'Total Shows')" },
+        new ExcelFormatTable { Title = "Eficiencia", Order = 16, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('Total Shows' =0,0,'Volumen de ventas'/'Total Shows')" },
+        new ExcelFormatTable { Title = "Venta promedio", Order = 15, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('No. Ventas' = 0,0,'Volumen de ventas'/'No. Ventas')" },
+        new ExcelFormatTable { Title = "Total", Order = 17, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Number, Formula = "Llegadas" },
+      };
+    }
 
-    //#endregion GetRptContactBookShowQuinellasFormat
+    #endregion GetRptContactBookShowQuinellasFormat
   }
 }
