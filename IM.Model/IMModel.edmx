@@ -21285,7 +21285,6 @@
         </ComplexType>
         <ComplexType Name="RptContactBookShowQuinellas">
           <Property Type="String" Name="Market" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="Filter" Nullable="true" MaxLength="15" />
           <Property Type="Int32" Name="Year" Nullable="true" />
           <Property Type="Int32" Name="Month" Nullable="true" />
           <Property Type="Int32" Name="Arrivals" Nullable="true" />
@@ -21306,6 +21305,10 @@
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
           <Property Type="String" Name="LeadSource" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Group" Nullable="false" MaxLength="40" />
+          <Property Type="String" Name="Subgroup" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="znID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="znN" Nullable="false" MaxLength="30" />
         </ComplexType>
         <ComplexType Name="RptScoreByPR">
           <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
@@ -28336,7 +28339,6 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.RptContactBookShowQuinellas">
                 <ScalarProperty Name="Market" ColumnName="Market" />
-                <ScalarProperty Name="Filter" ColumnName="Filter" />
                 <ScalarProperty Name="Year" ColumnName="Year" />
                 <ScalarProperty Name="Month" ColumnName="Month" />
                 <ScalarProperty Name="Arrivals" ColumnName="Arrivals" />
@@ -28357,6 +28359,10 @@
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="AverageSale" ColumnName="AverageSale" />
                 <ScalarProperty Name="LeadSource" ColumnName="LeadSource" />
+                <ScalarProperty Name="Group" ColumnName="Group" />
+                <ScalarProperty Name="Subgroup" ColumnName="Subgroup" />
+                <ScalarProperty Name="znID" ColumnName="znID" />
+                <ScalarProperty Name="znN" ColumnName="znN" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

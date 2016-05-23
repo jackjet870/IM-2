@@ -14,7 +14,6 @@ namespace IM.Model
     public partial class RptContactBookShowQuinellas
     {
         public string Market { get; set; }
-        public string Filter { get; set; }
         public Nullable<int> Year { get; set; }
         public Nullable<int> Month { get; set; }
         public Nullable<int> Arrivals { get; set; }
@@ -35,5 +34,9 @@ namespace IM.Model
         public Nullable<decimal> Efficiency { get; set; }
         public Nullable<decimal> AverageSale { get; set; }
         public string LeadSource { get; set; }
+        public string Group { get; set; }
+        public string Subgroup { get; set; }
+        public string znID { get; set; }
+        public string znN { get; set; }
     }
 }
