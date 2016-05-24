@@ -5463,5 +5463,22 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptProductionByWaveSalesRoom>("USP_IM_RptProductionByWaveSalesRoom", dateFromParameter, dateToParameter, leadSourcesParameter, pRsParameter, programParameter, filterDepositParameter);
         }
+    
+        public virtual ObjectResult<RptWeeklyMonthlyHostess_ByPR> USP_IM_RptWeeklyMonthlyHostess(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptWeeklyMonthlyHostess_ByPR>("USP_IM_RptWeeklyMonthlyHostess", dateFromParameter, dateToParameter, salesRoomsParameter);
+        }
     }
 }

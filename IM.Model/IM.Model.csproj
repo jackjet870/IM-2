@@ -1054,6 +1054,12 @@
     <Compile Include="RptWeeklyGiftsItemsSimple.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptWeeklyMonthlyHostess_ByPR.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptWeeklyMonthlyHostess_ByTourTime.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Sale.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
