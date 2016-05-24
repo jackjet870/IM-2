@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="IMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="IMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Activities">
           <Key>
             <PropertyRef Name="acID" />
@@ -6564,6 +6564,11 @@
           <Parameter Name="Gifts" Type="varchar" Mode="In" />
           <Parameter Name="Status" Type="tinyint" Mode="In" />
         </Function>
+        <Function Name="USP_OR_RptGiftsManifestCancel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_RptGiftsReceipts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -8747,7 +8752,8 @@
             <End Role="WhsMovs" EntitySet="WhsMovs" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="IMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -16085,10 +16091,10 @@
             <End Role="SalesRooms" EntitySet="SalesRooms" />
           </AssociationSet>
           <FunctionImport Name="USP_OR_GetCountries" ReturnType="Collection(IMModel.CountryShort)">
-          <Parameter Name="Status" Mode="In" Type="Byte" />
+            <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetAgencies" ReturnType="Collection(IMModel.AgencyShort)">
-          <Parameter Name="Status" Mode="In" Type="Byte" />
+            <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetArrivals" ReturnType="Collection(IMModel.GuestArrival)">
             <Parameter Name="Date" Mode="In" Type="DateTime" />
@@ -16124,7 +16130,7 @@
             <Parameter Name="guBookD" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetLanguages" ReturnType="Collection(IMModel.LanguageShort)">
-          <Parameter Name="Status" Mode="In" Type="Byte" />
+            <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetLeadSourcesByUser" ReturnType="Collection(IMModel.LeadSourceByUser)">
             <Parameter Name="User" Mode="In" Type="String" />
@@ -16140,7 +16146,7 @@
             <Parameter Name="mtA" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetMarkets" ReturnType="Collection(IMModel.MarketShort)">
-          <Parameter Name="Status" Mode="In" Type="Byte" />
+            <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_Login">
             <ReturnType Type="Collection(IMModel.UserLogin)" />
@@ -16153,16 +16159,16 @@
             <Parameter Name="LoginType" Mode="In" Type="Byte" />
             <Parameter Name="User" Mode="In" Type="String" />
             <Parameter Name="Place" Mode="In" Type="String" />
-            </FunctionImport>
+          </FunctionImport>
           <FunctionImport Name="USP_OR_GetSalesRoomsByUser" ReturnType="Collection(IMModel.SalesRoomByUser)">
             <Parameter Name="User" Mode="In" Type="String" />
             <Parameter Name="Regions" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetSalesRoom" ReturnType="Collection(IMModel.SalesRoomCloseDates)">
-          <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetSalesRooms" ReturnType="Collection(IMModel.SalesRoomShort)">
-          <Parameter Name="Status" Mode="In" Type="Byte" />
+            <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetWhsMovs" ReturnType="Collection(IMModel.WarehouseMovementShort)">
             <Parameter Name="wmwh" Mode="In" Type="String" />
@@ -16194,7 +16200,7 @@
             <Parameter Name="Markets" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_ActualizarFechasTemporadas">
-          <Parameter Name="CurrentYear" Mode="In" Type="Int32" />
+            <Parameter Name="CurrentYear" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_CloseGiftsReceipts">
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
@@ -16213,10 +16219,10 @@
             <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetExchangeRateLog" ReturnType="Collection(IMModel.ExchangeRateLogData)">
-          <Parameter Name="Currency" Mode="In" Type="String" />
+            <Parameter Name="Currency" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetExchangeRatesWithPesosByDate" ReturnType="Collection(IMModel.ExchangeRateData)">
-          <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GraphProductionByPR" ReturnType="Collection(IMModel.GraphProductionByPR)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
@@ -16224,7 +16230,7 @@
             <Parameter Name="LeadSource" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_InsertExchangeRate">
-          <Parameter Name="CurrentDate" Mode="In" Type="DateTime" />
+            <Parameter Name="CurrentDate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_SaveSalesRoomLog">
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
@@ -16242,14 +16248,14 @@
             <Parameter Name="Dept" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetSalesRoomLog" ReturnType="Collection(IMModel.SalesRoomLogData)">
-          <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_RptBookingsBySalesRoomProgramTime" ReturnType="Collection(IMModel.RptBookingsBySalesRoomProgramTime)">
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="SalesRooms" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGuestLog" ReturnType="Collection(IMModel.GuestLogData)">
-          <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_SaveLoginLog">
             <Parameter Name="Location" Mode="In" Type="String" />
@@ -16500,7 +16506,7 @@
             <Parameter Name="Program" Mode="In" Type="String" />
             <Parameter Name="PaymentTypes" Mode="In" Type="String" />
             <Parameter Name="FilterDeposit" Mode="In" Type="Byte" />
-            </FunctionImport>
+          </FunctionImport>
           <FunctionImport Name="USP_OR_RptGiftsReceivedBySR">
             <ReturnType Type="Collection(IMModel.RptGiftsReceivedBySR)" />
             <ReturnType Type="Collection(IMModel.CurrencyShort)" />
@@ -16509,7 +16515,7 @@
             <Parameter Name="LeadSources" Mode="In" Type="String" />
             <Parameter Name="ChargeTo" Mode="In" Type="String" />
             <Parameter Name="Gifts" Mode="In" Type="String" />
-            </FunctionImport>
+          </FunctionImport>
           <FunctionImport Name="USP_OR_RptProductionByAgeOutside" ReturnType="Collection(IMModel.RptProductionByAgeOuthouse)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -16532,7 +16538,7 @@
             <ReturnType Type="Collection(IMModel.GraphNotBookingArrivals)" />
             <Parameter Name="DateFromWeek" Mode="In" Type="DateTime" />
             <Parameter Name="LeadSources" Mode="In" Type="String" />
-            </FunctionImport>
+          </FunctionImport>
           <FunctionImport Name="USP_OR_RptProductionByAgeInhouse" ReturnType="Collection(IMModel.RptProductionByAgeInhouse)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -16562,7 +16568,7 @@
             <Parameter Name="OnlyQuinellas" Mode="In" Type="Boolean" />
             <Parameter Name="External" Mode="In" Type="Int32" />
             <Parameter Name="BasedOnArrival" Mode="In" Type="Boolean" />
-            </FunctionImport>
+          </FunctionImport>
           <FunctionImport Name="USP_OR_RptProductionByContractAgencyInhouse" ReturnType="Collection(IMModel.RptProductionByContractAgencyInhouse)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -16582,12 +16588,12 @@
             <Parameter Name="BasedOnArrival" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetLeadSourcesByZoneBoss" ReturnType="Collection(IMModel.LeadSourceShort)">
-          <Parameter Name="Zone" Mode="In" Type="String" />
+            <Parameter Name="Zone" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetZonesTransfer" ReturnType="Collection(IMModel.ZoneTransfer)" />
           <FunctionImport Name="USP_OR_TransferStart" ReturnType="Collection(IMModel.TransferStartData)" />
           <FunctionImport Name="USP_OR_TransferStopZone">
-          <Parameter Name="Zone" Mode="In" Type="String" />
+            <Parameter Name="Zone" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_TransferUpdateGuestsAvailables">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
@@ -16609,7 +16615,7 @@
             <Parameter Name="Reservation" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetCxCPayments" ReturnType="Collection(IMModel.CxCPaymentShort)">
-          <Parameter Name="GiftReceiptID" Mode="In" Type="String" />
+            <Parameter Name="GiftReceiptID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGiftsInvitationWithoutReceipt" ReturnType="Collection(IMModel.GiftInvitationWithoutReceipt)">
             <Parameter Name="Guest" Mode="In" Type="Int32" />
@@ -16625,7 +16631,7 @@
             <Parameter Name="LeadSources" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGiftsReceiptPayments" ReturnType="Collection(IMModel.GiftsReceiptPaymentShort)">
-          <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_Occupation" ReturnType="Collection(String)">
             <Parameter Name="Date" Mode="In" Type="DateTime" />
@@ -16668,7 +16674,7 @@
             <Parameter Name="SalesRooms" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGuestById" ReturnType="Collection(IMModel.GuestShort)">
-          <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_RptMealTickets" ReturnType="Collection(IMModel.RptMealTickets)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
@@ -16873,13 +16879,13 @@
             <Parameter Name="Package" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGiftsReceiptDetailPromotionsOpera" ReturnType="Collection(IMModel.GiftsReceiptDetailPromotionsOpera)">
-          <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGiftsReceiptDetailPromotionsPVP" ReturnType="Collection(IMModel.GiftsReceiptDetailPromotionsSistur)">
-          <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGiftsReceiptDetailRoomChargesOpera" ReturnType="Collection(IMModel.GiftsReceiptDetailRoomChargesOpera)">
-          <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGiftsReceiptPackage" ReturnType="Collection(IMModel.GiftsReceiptPackage)">
             <Parameter Name="Receipt" Mode="In" Type="Int32" />
@@ -16903,7 +16909,7 @@
             <Parameter Name="ReimpresionMotive" Mode="In" Type="Byte" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_UpdateGiftReceiptsReimpresionNumber">
-          <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_UpdateGiftsReceiptDetailPromotionOpera">
             <Parameter Name="Receipt" Mode="In" Type="Int32" />
@@ -16956,7 +16962,7 @@
             <Parameter Name="Program" Mode="In" Type="String" />
             <Parameter Name="FilterDeposit" Mode="In" Type="Byte" />
             <Parameter Name="SalesByMembershipType" Mode="In" Type="Boolean" />
-            </FunctionImport>
+          </FunctionImport>
           <FunctionImport Name="USP_OR_RptProductionByCoupleTypeOutside" ReturnType="Collection(IMModel.RptProductionByCoupleTypeOuthouse)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -17136,7 +17142,7 @@
             <Parameter Name="Categories" Mode="In" Type="String" />
             <Parameter Name="Gifts" Mode="In" Type="String" />
             <Parameter Name="Sale" Mode="In" Type="Byte" />
-            </FunctionImport>
+          </FunctionImport>
           <FunctionImport Name="USP_OR_RptGiftsUsedBySistur" ReturnType="Collection(IMModel.RptGiftsUsedBySistur)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -17150,7 +17156,7 @@
             <Parameter Name="LeadSources" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_RptPersonnelAccess" ReturnType="Collection(IMModel.RptPersonnelAccess)">
-          <Parameter Name="LeadSources" Mode="In" Type="String" />
+            <Parameter Name="LeadSources" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_RptDepositsNoShow" ReturnType="Collection(IMModel.RptDepositsNoShow)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
@@ -17172,7 +17178,7 @@
             <Parameter Name="Program" Mode="In" Type="String" />
             <Parameter Name="FilterDeposit" Mode="In" Type="Byte" />
             <Parameter Name="SalesByMembershipType" Mode="In" Type="Boolean" />
-            </FunctionImport>
+          </FunctionImport>
           <FunctionImport Name="USP_OR_RptProductionByGiftInvitation" ReturnType="Collection(IMModel.RptProductionByGiftInvitation)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -17229,14 +17235,14 @@
             <Parameter Name="LeadSources" Mode="In" Type="String" />
             <Parameter Name="ConsiderQuinellas" Mode="In" Type="Boolean" />
             <Parameter Name="BasedOnArrival" Mode="In" Type="Boolean" />
-            </FunctionImport>
+          </FunctionImport>
           <FunctionImport Name="USP_OR_GraphUnavailableArrivals">
             <ReturnType Type="Collection(IMModel.GraphTotals)" />
             <ReturnType Type="Collection(IMModel.GraphUnavailableArrivals)" />
             <ReturnType Type="Collection(IMModel.GraphUnavailableArrivals)" />
             <Parameter Name="DateFromWeek" Mode="In" Type="DateTime" />
             <Parameter Name="LeadSources" Mode="In" Type="String" />
-            </FunctionImport>
+          </FunctionImport>
           <FunctionImport Name="USP_OR_RptProductionByAgencyMonthly" ReturnType="Collection(IMModel.RptProductionByAgencyMonthly)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -17281,7 +17287,7 @@
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_AddAccessAdministrator">
-          <Parameter Name="PlaceType" Mode="In" Type="String" />
+            <Parameter Name="PlaceType" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_RptFoliosCXC" ReturnType="Collection(IMModel.RptFoliosCXC)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
@@ -17348,9 +17354,9 @@
             <Parameter Name="User" Mode="In" Type="String" />
             <Parameter Name="Password" Mode="In" Type="String" />
             <Parameter Name="Place" Mode="In" Type="String" />
-            </FunctionImport>
+          </FunctionImport>
           <FunctionImport Name="USP_OR_DeleteGuest">
-          <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_RptProductionByMember" ReturnType="Collection(IMModel.RptProductionByMember)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
@@ -17383,7 +17389,7 @@
             <Parameter Name="Categories" Mode="In" Type="String" />
             <Parameter Name="Gifts" Mode="In" Type="String" />
             <Parameter Name="Status" Mode="In" Type="Byte" />
-            </FunctionImport>
+          </FunctionImport>
           <FunctionImport Name="USP_OR_RptGiftsReceipts" >
             <ReturnType Type="Collection(IMModel.RptGiftsReceipts)"/>
             <ReturnType Type="Collection(IMModel.GiftForReceipts)"/>
@@ -17397,7 +17403,7 @@
             <Parameter Name="Status" Mode="In" Type="Byte" />
             <Parameter Name="GiftReceiptType" Mode="In" Type="Byte" />
             <Parameter Name="GuestId" Mode="In" Type="Int32" />
-            </FunctionImport>
+          </FunctionImport>
           <FunctionImport Name="USP_OR_RptDailySalesDetail" ReturnType="Collection(IMModel.RptDailySalesDetail)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -17466,7 +17472,7 @@
             <End Role="Sale" EntitySet="Sales" />
           </AssociationSet>
           <FunctionImport Name="USP_IM_GetGiftsReceiptsAdditional" ReturnType="Collection(IMModel.GetGiftsReceiptsAdditional)">
-          <Parameter Name="GuestID" Mode="In" Type="Int32" />
+            <Parameter Name="GuestID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_IM_RptConcentrateDailySales" ReturnType="Collection(IMModel.RptConcentrateDailySales)">
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
@@ -17516,7 +17522,7 @@
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_DeleteSale">
-          <Parameter Name="Sale" Mode="In" Type="Int32" />
+            <Parameter Name="Sale" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetSales" ReturnType="Collection(IMModel.SaleShort)">
             <Parameter Name="Guest" Mode="In" Type="Int32" />
@@ -17582,7 +17588,7 @@
             <Parameter Name="VLO" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_CalculateTotalsGiftsInvitation" ReturnType="Collection(Decimal)">
-          <Parameter Name="GuestID" Mode="In" Type="Int32" />
+            <Parameter Name="GuestID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_UpdateCharge">
             <Parameter Name="GuestID" Mode="In" Type="Int32" />
@@ -17652,6 +17658,15 @@
           <FunctionImport Name="USP_IM_RptWeeklyMonthlyHostess" >
             <ReturnType Type="Collection(IMModel.RptWeeklyMonthlyHostess_ByPR)"/>
             <ReturnType Type="Collection(IMModel.RptWeeklyMonthlyHostess_ByTourTime)"/>
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRooms" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptGiftsManifestCancel" >
+            <ReturnType Type="Collection(IMModel.RptGiftsManifestCancel)"/>
+            <ReturnType Type="Collection(IMModel.RptGiftsManifestCancel_Gifts)"/>
+            <ReturnType Type="Collection(IMModel.RptGiftsManifestCancel_Currency)"/>
+            <ReturnType Type="Collection(IMModel.PaymentTypeShort)"/>
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="SalesRooms" Mode="In" Type="String" />
@@ -21562,6 +21577,37 @@
           <Property Type="Int32" Name="guShow" Nullable="true" />
           <Property Type="Int32" Name="guDirect" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="RptGiftsManifestCancel">
+          <Property Type="Int32" Name="grgu" Nullable="true" />
+          <Property Type="String" Name="grGuest" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="grsr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="grlo" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="grHost" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="grID" Nullable="false" />
+          <Property Type="DateTime" Name="grD" Nullable="false" Precision="23" />
+          <Property Type="Decimal" Name="grDeposit" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="grDepositTwisted" Nullable="false" Precision="19" />
+          <Property Type="String" Name="grcu" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="grpt" Nullable="false" MaxLength="10" />
+          <Property Type="Decimal" Name="grTaxiOut" Nullable="false" Precision="19" />
+          <Property Type="String" Name="gegi" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="geQty" Nullable="true" />
+          <Property Type="String" Name="geFolios" Nullable="true" MaxLength="100" />
+          <Property Type="Decimal" Name="gePriceA" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="gePriceM" Nullable="false" Precision="19" />
+          <Property Type="String" Name="grComments" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="RptGiftsManifestCancel_Gifts">
+          <Property Type="String" Name="giID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="giN" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="giWFolio" Nullable="true" />
+          <Property Type="String" Name="gigc" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="RptGiftsManifestCancel_Currency">
+          <Property Type="String" Name="cuID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="cuN" Nullable="true" MaxLength="20" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -25329,7 +25375,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_RptProductionByAgencyInhouse" FunctionName="IMModel.Store.USP_OR_RptProductionByAgencyInhouse">
-          <ResultMapping>
+            <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.RptProductionByAgencyInhouse">
                 <ScalarProperty Name="Agency" ColumnName="Agency" />
                 <ScalarProperty Name="AgencyN" ColumnName="AgencyN" />
@@ -26507,7 +26553,7 @@
           <FunctionImportMapping FunctionImportName="USP_OR_UpdateGiftsReceiptDetailRoomChargeOpera" FunctionName="IMModel.Store.USP_OR_UpdateGiftsReceiptDetailRoomChargeOpera" />
           <FunctionImportMapping FunctionImportName="USP_OR_UpdateRoomChargesConsecutive" FunctionName="IMModel.Store.USP_OR_UpdateRoomChargesConsecutive" />
           <FunctionImportMapping FunctionImportName="USP_OR_ValidateGiftsReceipt" FunctionName="IMModel.Store.USP_OR_ValidateGiftsReceipt">
-          <ResultMapping>
+            <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.ValidationData">
                 <ScalarProperty Name="Focus" ColumnName="Focus" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
@@ -26551,7 +26597,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_RptProductionByAgencyOutside" FunctionName="IMModel.Store.USP_OR_RptProductionByAgencyOutside">
-          <ResultMapping>
+            <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.RptProductionByAgencyOuthouse">
                 <ScalarProperty Name="Agency" ColumnName="Agency" />
                 <ScalarProperty Name="AgencyN" ColumnName="AgencyN" />
@@ -27187,7 +27233,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_RptGiftsSale" FunctionName="IMModel.Store.USP_OR_RptGiftsSale" >
-          <ResultMapping>
+            <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.RptGiftsSale">
                 <ScalarProperty Name="Program" ColumnName="Program" />
                 <ScalarProperty Name="Receipt" ColumnName="Receipt" />
@@ -27369,7 +27415,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_RptProductionByAgencySalesRoomOutside" FunctionName="IMModel.Store.USP_OR_RptProductionByAgencySalesRoomOutside">
-          <ResultMapping>
+            <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.RptProductionByAgencySalesRoomOuthouse">
                 <ScalarProperty Name="Agency" ColumnName="Agency" />
                 <ScalarProperty Name="AgencyN" ColumnName="AgencyN" />
@@ -27414,7 +27460,7 @@
                 <ScalarProperty Name="SalesRoom" ColumnName="SalesRoom" />
                 <ScalarProperty Name="MembershipType" ColumnName="MembershipType" />
                 <ScalarProperty Name="Sales" ColumnName="Sales" />
-                 <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
+                <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -27569,7 +27615,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_GraphProduction" FunctionName="IMModel.Store.USP_OR_GraphProduction" >
-          <ResultMapping>
+            <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.GraphProduction_Weeks">
                 <ScalarProperty Name="Period" ColumnName="Period" />
                 <ScalarProperty Name="Arrivals" ColumnName="Arrivals" />
@@ -27611,7 +27657,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_GraphUnavailableArrivals" FunctionName="IMModel.Store.USP_OR_GraphUnavailableArrivals" >
-          <ResultMapping>
+            <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.GraphTotals">
                 <ScalarProperty Name="MaxGraphW" ColumnName="MaxGraphW" />
                 <ScalarProperty Name="MaxGraphM" ColumnName="MaxGraphM" />
@@ -27934,7 +27980,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_IM_Login" FunctionName="IMModel.Store.USP_IM_Login">
-          <ResultMapping>
+            <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.UserLogin">
                 <ScalarProperty Name="peID" ColumnName="peID" />
                 <ScalarProperty Name="peN" ColumnName="peN" />
@@ -28036,7 +28082,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_RptGiftsManifest" FunctionName="IMModel.Store.USP_OR_RptGiftsManifest" >
-          <ResultMapping>
+            <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.RptGiftsManifest">
                 <ScalarProperty Name="GuestID" ColumnName="GuestID" />
                 <ScalarProperty Name="ReservID" ColumnName="ReservID" />
@@ -28274,7 +28320,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_ValidateFolioInvOutPR" FunctionName="IMModel.Store.USP_OR_ValidateFolioInvOutPR">
-          <ResultMapping>
+            <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.ValidationFolioData">
                 <ScalarProperty Name="Result" ColumnName="Result" />
                 <ScalarProperty Name="PR" ColumnName="PR" />
@@ -28701,7 +28747,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_IM_RptWeeklyMonthlyHostess" FunctionName="IMModel.Store.USP_IM_RptWeeklyMonthlyHostess">
-           <ResultMapping>
+            <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.RptWeeklyMonthlyHostess_ByPR">
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="guls" ColumnName="guls" />
@@ -28722,6 +28768,51 @@
                 <ScalarProperty Name="guBook" ColumnName="guBook" />
                 <ScalarProperty Name="guShow" ColumnName="guShow" />
                 <ScalarProperty Name="guDirect" ColumnName="guDirect" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptGiftsManifestCancel" FunctionName="IMModel.Store.USP_OR_RptGiftsManifestCancel" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptGiftsManifestCancel">
+                <ScalarProperty Name="grgu" ColumnName="grgu" />
+                <ScalarProperty Name="grGuest" ColumnName="grGuest" />
+                <ScalarProperty Name="grsr" ColumnName="grsr" />
+                <ScalarProperty Name="grlo" ColumnName="grlo" />
+                <ScalarProperty Name="grHost" ColumnName="grHost" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="grID" ColumnName="grID" />
+                <ScalarProperty Name="grD" ColumnName="grD" />
+                <ScalarProperty Name="grDeposit" ColumnName="grDeposit" />
+                <ScalarProperty Name="grDepositTwisted" ColumnName="grDepositTwisted" />
+                <ScalarProperty Name="grcu" ColumnName="grcu" />
+                <ScalarProperty Name="grpt" ColumnName="grpt" />
+                <ScalarProperty Name="grTaxiOut" ColumnName="grTaxiOut" />
+                <ScalarProperty Name="gegi" ColumnName="gegi" />
+                <ScalarProperty Name="geQty" ColumnName="geQty" />
+                <ScalarProperty Name="geFolios" ColumnName="geFolios" />
+                <ScalarProperty Name="gePriceA" ColumnName="gePriceA" />
+                <ScalarProperty Name="gePriceM" ColumnName="gePriceM" />
+                <ScalarProperty Name="grComments" ColumnName="grComments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptGiftsManifestCancel_Gifts">
+                <ScalarProperty Name="giID" ColumnName="giID" />
+                <ScalarProperty Name="giN" ColumnName="giN" />
+                <ScalarProperty Name="giWFolio" ColumnName="giWFolio" />
+                <ScalarProperty Name="gigc" ColumnName="gigc" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptGiftsManifestCancel_Currency">
+                <ScalarProperty Name="cuID" ColumnName="cuID" />
+                <ScalarProperty Name="cuN" ColumnName="cuN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.PaymentTypeShort">
+                <ScalarProperty Name="ptID" ColumnName="ptID" />
+                <ScalarProperty Name="ptN" ColumnName="ptN" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

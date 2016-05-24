@@ -769,6 +769,15 @@
     <Compile Include="RptGiftsManifest.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptGiftsManifestCancel.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGiftsManifestCancel_Currency.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGiftsManifestCancel_Gifts.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptGiftsReceipts.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
