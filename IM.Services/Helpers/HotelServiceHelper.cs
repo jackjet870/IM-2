@@ -5,10 +5,11 @@ using PalaceResorts.Common.PalaceTools;
 using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IM.Services.Helpers
 {
-    public class HotelService
+    public class HotelServiceHelper
     {
       #region Atributos
 
@@ -27,20 +28,20 @@ namespace IM.Services.Helpers
       {
           get
           {
-              if (_service == null)
-              {
-                  //creamos una instancia del servicio
-                  _service = new ServiceInterface();
-                  _service.Url = ConfigHelper.GetString("Hotel.URL");
-                  Current.Timeout = int.Parse(ConfigHelper.GetString("TimeOutWebService"));
-                  // insertamos las cabeceras de autenticacion
-                  RequestHeader requestHander = new RequestHeader();
-                  requestHander.Headers = ServiceHelper.GetSecurityTokenHeaders();
-                  _service.RequestHeaderValue = requestHander;
-
-              }
-
-              return _service;
+        
+          if (_service == null)
+          {
+            //creamos una instancia del servicio
+            _service = new ServiceInterface();
+            _service.Url = ConfigHelper.GetString("Hotel.URL");
+            Current.Timeout = int.Parse(ConfigHelper.GetString("TimeOutWebService"));
+            // insertamos las cabeceras de autenticacion
+            RequestHeader requestHander = new RequestHeader();
+            requestHander.Headers = ServiceHelper.GetSecurityTokenHeaders();
+            _service.RequestHeaderValue = requestHander;
+          }
+        
+        return _service;
 
           }
       }
@@ -60,9 +61,13 @@ namespace IM.Services.Helpers
       /// <history>
       /// [michan] 14/04/2016  Created
       /// </history>
-      public static List<ReservationOrigosTransfer> GetReservationsByArrivalDate(string zone, DateTime dateFrom, DateTime dateTo, string hotels)
+      public static async Task<List<ReservationOrigosTransfer>> GetReservationsByArrivalDate(string zone, DateTime dateFrom, DateTime dateTo, string hotels, System.Threading.CancellationToken? cancelToken)
       {
-        List<ReservationOrigosTransfer> lstOrigosTransfer=null;
+      List<ReservationOrigosTransfer> lstOrigosTransfer=null;
+      // validamos si se cancelo la actualizacion
+      cancelToken.Value.ThrowIfCancellationRequested();
+      await Task.Run(() =>
+      {
         QueryRequest request = new QueryRequest();
         ReservationOrigosTransferResponse response = new ReservationOrigosTransferResponse();
         //configuramos el Request
@@ -70,22 +75,15 @@ namespace IM.Services.Helpers
         request.Desde = dateFrom;
         request.Hasta = dateTo;
         request.Hotel = hotels;
-        
         //invocamos al servicio web
-        response = Current.GetReservationsByArrivalDate(request);
-       
-        //Si ocurrio un error 
-        if (response.HasErrors)
-        {
-            UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetReservationsByArrivalDate");
-        }
+        response = Current.GetReservationsByArrivalDate(request);//GetReservationsByArrivalDate
 
         if (response.Data.Length > 0)
         {
           lstOrigosTransfer = response.Data?.Cast<ReservationOrigosTransfer>().ToList();
         }
-
-        return lstOrigosTransfer;
+      });
+      return lstOrigosTransfer;
       }
       #endregion
 

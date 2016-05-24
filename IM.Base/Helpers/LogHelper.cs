@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using IM.Base.Helpers;
-using System.Windows;
+
 
 namespace IM.Base.Helpers
 {
@@ -32,12 +32,14 @@ namespace IM.Base.Helpers
     ///<history>
     ///[michan] 14/04/2016 Created
     ///</history>
-    public static string GetPath()
+    public static string GetPath(string strLogName, DateTime? dtmDate = null)
     {
       //string path = AppDomain.CurrentDomain.BaseDirectory.ToString();
       //string path = Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory()));
+      if (dtmDate == null) dtmDate = DateTime.Now;
       string path = AppContext.BaseDirectory.ToString();
-      return path;
+      string pathFile = Path.Combine(Path.Combine(Path.Combine(path, "Log"), $"Log{strLogName}({dtmDate.Value.ToString("yyyy")})"), $"Log{strLogName}({DateHelper.GetMonthName(dtmDate.Value.Month)})");
+      return pathFile;
     }
     #endregion
 
@@ -48,36 +50,20 @@ namespace IM.Base.Helpers
     ///<history>
     ///[michan] 14/04/2016 Created
     ///</history>
-    public static string ExistDirectory(string logName, DateTime date)
+    public static string ExistDirectory(string strLogName, DateTime dtmDate)
     {
-      string path = GetPath();
-      string namePathFolderLogYear = "Log" + logName + "(" + date.ToString("yyyy") + ")";
-      string namePathFolderLogMonth = "Log" + logName + "(" + DateHelper.GetMonthName(date.Month) + ")";
-      string namePathFileLog = "Log" + logName + date.ToString("dd") + ".xml";
-      string pathFolder = Path.Combine(path, "Log");
-      string pathFolderYear = Path.Combine(pathFolder, namePathFolderLogYear);
-      string pathFolderMonth = Path.Combine(pathFolderYear, namePathFolderLogMonth);
-      string fileLogDay = Path.Combine(pathFolderMonth, namePathFileLog);
-      Task.Factory.StartNew(() =>
-      {
-        if (!ExistFolder(pathFolder))//valida la que exista la carpeta "Log"
+      string pathFolder = GetPath(strLogName, dtmDate);
+      string fileLogDay = Path.Combine(pathFolder, $"Log{strLogName}{dtmDate.ToString("dd")}.xml");
+        if (!ExistFolder(pathFolder))//valida en la carpeta del año exista la carpeta del mes pasado en la fecha.
         {
-          CreateFolder(pathFolder);//si no la encuetra la crea
-        }
-        if (!ExistFolder(pathFolderYear))//Valida que exista dentro de la carpeta "Log", la carpeta de logs por año.
-        {
-          CreateFolder(pathFolderYear);// si no encuestra la carpeta se crea.
-        }
-        if (!ExistFolder(pathFolderMonth))//valida en la carpeta del año exista la carpeta del mes pasado en la fecha.
-        {
-          CreateFolder(pathFolderMonth);//si no existe la carpeta del mes se crea
+          CreateFolder(pathFolder);//si no existe la carpeta del mes se crea
         }
         if (!ExistFile(fileLogDay))// valida la existencia del archivo de log del día.
         {
           //CreateFile(fileLogDay);
           CreateXmlTransactions(fileLogDay);//si no existe se crea el archivo.
         }
-      });
+      
       return fileLogDay;
     }
     #endregion
@@ -197,23 +183,19 @@ namespace IM.Base.Helpers
       bool status = false;
       try
       {
-
         XmlTextWriter writeXML = new XmlTextWriter(path, System.Text.Encoding.UTF8);
-
         writeXML.Formatting = Formatting.Indented;
         writeXML.Indentation = 2;
         writeXML.WriteStartDocument(false);
         writeXML.WriteComment("Transactions List");
-
         writeXML.WriteStartElement("Transactions");
         writeXML.WriteEndElement();
         writeXML.WriteEndDocument();
         writeXML.Close();
         status = true;
       }
-      catch (Exception eror)
+      catch (Exception)
       {
-        UIHelper.ShowMessage(eror.Message.ToString(), MessageBoxImage.Error);
         status = false;
       }
 
@@ -232,12 +214,9 @@ namespace IM.Base.Helpers
     public static Transaction AddTransaction(string nameLog, DateTime date, string logLevel, string message)
     {
       Transaction newItemTransaction = new Transaction();
-
       XmlDocument XmlDoc;
       XmlNode Raiz;
       XmlNode ident;
-      
-
       try
       {
         XmlDoc = new XmlDocument();
@@ -304,24 +283,24 @@ namespace IM.Base.Helpers
     ///<history>
     ///[michan] 14/04/2016 Created
     ///</history>
-    public static List<Transaction> LoadHistoryLog(string logName, DateTime dateFrom, DateTime dateTo)
+    public async static Task<List<Transaction>> LoadHistoryLog(string strLogName, DateTime dateFrom, DateTime dateTo)
     {
       List<Transaction> listTransactions = new List<Transaction>();
-      string path = GetPath();
-
-      while (dateTo <= dateFrom)
-      {
-        string pathFile = path + "Log" + "\\" + "Log" + logName + "(" + dateTo.ToString("yyyy") + ")" + "\\" + "Log" + logName + "(" + DateHelper.GetMonthName(dateTo.Month) + ")" + "\\" + "Log" + logName + "" + dateTo.ToString("dd") + ".xml";
-        if (ExistFile(pathFile))
+      await Task.Run(() => { 
+        while (dateTo <= dateFrom)
         {
+        
+          string pathFile = Path.Combine(GetPath(strLogName, dateTo), $"Log{strLogName}{dateTo.ToString("dd")}.xml");
+          if (ExistFile(pathFile))
+          {
+            List<Transaction> listTransaction = ReadXML(pathFile);
+            if (listTransaction != null || listTransaction.Count > 0)
+              listTransactions = listTransactions.Concat(listTransaction).ToList();
+          }
 
-          List<Transaction> listTransaction = ReadXML(pathFile);
-
-          listTransactions = listTransactions.Concat(listTransaction).ToList();
+          dateTo = dateTo.AddDays(1);
         }
-
-        dateTo = dateTo.AddDays(1);
-      }
+      });
       return listTransactions;
     }
     #endregion

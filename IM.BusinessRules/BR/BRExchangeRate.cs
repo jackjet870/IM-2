@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -41,24 +42,27 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 07/03/2016 Created
     /// </history>
-    public static void InsertExchangeRate(DateTime serverDate)
+    public async static void InsertExchangeRate(DateTime serverDate)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      await Task.Run(() =>
       {
-        #region Transaction
-        using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          try
+          #region Transaction
+          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            dbContext.USP_OR_InsertExchangeRate(serverDate);
+            try
+            {
+              dbContext.USP_OR_InsertExchangeRate(serverDate);
+            }
+            catch
+            {
+              transaction.Rollback();
+            }
           }
-          catch
-          {
-            transaction.Rollback();
-          }
+          #endregion
         }
-        #endregion
-      }
+      });
     }
     #endregion
 
@@ -121,13 +125,12 @@ namespace IM.BusinessRules.BR
       {
         return dbContext.USP_OR_GetExchangeRatesByDate(_date, currency).ToList();
       }
-    } 
+    }
     #endregion
 
     #region UpdateExchangeRate
-
     /// <summary>
-    /// Función para actualizar un Exchange Rate
+    /// Actualiza el tipo de cambio al mismo de la intranet
     /// </summary>
     /// <param name="date">Fecha</param>
     /// <param name="currency">Moneda</param>
@@ -136,12 +139,26 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [michan] 06/04/2016 Created
     /// </history>
-    public static void UpdateExchangeRate(DateTime? date, string currency, decimal? exchangeRate)
+    public async static Task UpdateExchangeRate(DateTime? date, string currency, decimal? exchangeRate)
     {
+      
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            dbContext.USP_OR_UpdateExchangeRate(date, currency, exchangeRate);
+          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+          {
+            try
+            {
+              dbContext.USP_OR_UpdateExchangeRate(date, currency, exchangeRate);
+            }
+            catch
+            {
+              transaction.Rollback();
+            }
+          }
         }
+      });
     }
 
     #endregion

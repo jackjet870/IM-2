@@ -4,6 +4,10 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System.Data.Entity.Validation;
+using IM.BusinessRules.Properties;
+using System.Data.Entity.Core;
+using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,13 +22,17 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [michan] 13/Abril/2016 Created
     /// </history>
-    public static List<TransferStartData> Start()
+    public static async Task<List<TransferStartData>> Start()
     {
+      List < TransferStartData> listData = null;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferStart().ToList();
-
+          listData = dbContext.USP_OR_TransferStart().ToList();
         }
+      });
+      return listData;
     }
     #endregion
 
@@ -36,18 +44,21 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [michan] 13/Abril/2016 Created
     /// </history>
-    public static void Stop()
+    public async static Task<int> Stop()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            dbContext.USP_OR_TransferStop();
-
+          response = dbContext.USP_OR_TransferStop();
         }
+      });
+      return response;
     }
 #endregion
 
     #region StopZone
-
     /// <summary>
     /// Indica que la transferencia de reservaciones de una zona ha terminado
     /// </summary>
@@ -56,270 +67,318 @@ namespace IM.BusinessRules.BR
     ///   [michan] 24/02/2016 Created
     /// </history>
     /// 
-    public static void StopZone(string zone)
+    public async static Task<int> StopZone(string zone)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      int response = 0;
+      await Task.Run(() =>
       {
-        dbContext.USP_OR_TransferStopZone(zone);
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          response = dbContext.USP_OR_TransferStopZone(zone);
+        }
+      });
+      return response;
     }
 
     #endregion
 
     #region AddCountries
-
     /// <summary>
     /// Agrega las paises en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int AddCountries()
+    public async static Task<int> AddCountries()
+    {
+      int response = 0;
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-            {
-                return dbContext.USP_OR_TransferAddCountries();
-            }
+          response = dbContext.USP_OR_TransferAddCountries();
         }
-        #endregion
+      });
+      return response;
+    }
+    #endregion
 
     #region AddCountriesHotel
-
     /// <summary>
     /// Agrega los paises del sistema Hotel en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int AddCountriesHotel()
+    public async static Task<int> AddCountriesHotel()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferAddCountriesHotel();
+          response = dbContext.USP_OR_TransferAddCountriesHotel();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateCountriesNames
-
     /// <summary>
     /// Actualiza las descripciones de los paises en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateCountriesNames()
+    public async static Task<int> UpdateCountriesNames()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateCountriesNames();
+          response = dbContext.USP_OR_TransferUpdateCountriesNames();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateCountriesHotelNames
-
     /// <summary>
     /// Actualiza las descripciones de los paises del sistema de Hotel en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateCountriesHotelNames()
+    public async static Task<int> UpdateCountriesHotelNames()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateCountriesHotelNames();
+          response = dbContext.USP_OR_TransferUpdateCountriesHotelNames();
         }
+      });
+      return response;
     }
     #endregion
 
     #region AddAgencies
-
     /// <summary>
     /// Agrega las agencias en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int AddAgencies()
+    public async static Task<int> AddAgencies()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferAddAgencies();
+          response = dbContext.USP_OR_TransferAddAgencies();
         }
+      });
+      return response;
     }
     #endregion
 
     #region AddAgenciesHotel
-
     /// <summary>
     /// Actualiza las descripciones de los paises del sistema de Hotel en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int AddAgenciesHotel()
+    public async static Task<int> AddAgenciesHotel()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferAddAgenciesHotel();
+          response = dbContext.USP_OR_TransferAddAgenciesHotel();
         }
+      }); 
+      return response;
     }
     #endregion
 
     #region UpdateAgenciesNames
-
     /// <summary>
     /// Actualiza las descripciones de las agencias en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateAgenciesNames()
+    public async static Task<int> UpdateAgenciesNames()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateAgenciesNames();
+          response = dbContext.USP_OR_TransferUpdateAgenciesNames();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateAgenciesHotelNames
-
     /// <summary>
     /// Actualiza las descripciones de las agencias del sistema de Hotel en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateAgenciesHotelNames()
+    public async static Task<int> UpdateAgenciesHotelNames()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateAgenciesHotelNames();
+          response = dbContext.USP_OR_TransferUpdateAgenciesHotelNames();
         }
+      });
+      return response;
     }
     #endregion
 
     #region AddRoomTypes
-
     /// <summary>
     /// Agrega los tipos de habitacion en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int AddRoomTypes()
+    public async static Task<int> AddRoomTypes()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferAddRoomTypes();
+          response = dbContext.USP_OR_TransferAddRoomTypes();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateRoomTypesNames
-
     /// <summary>
     /// Actualiza las descripciones de los tipos de habitacion en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateRoomTypesNames()
+    public async static Task<int> UpdateRoomTypesNames()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateRoomTypesNames();
+          response = dbContext.USP_OR_TransferUpdateRoomTypesNames();
         }
+      });
+      return response;
     }
     #endregion
 
     #region AddContracts
-
     /// <summary>
     /// Agrega los contratos en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int AddContracts()
+    public async static Task<int> AddContracts()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferAddContracts();
+          response = dbContext.USP_OR_TransferAddContracts();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateContractsNames
-
     /// <summary>
     /// Actualiza las descripciones de los tipos de habitacion en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateContractsNames()
+    public async static Task<int> UpdateContractsNames()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateContractsNames();
+          response = dbContext.USP_OR_TransferUpdateContractsNames();
         }
+      });
+      return response;
     }
     #endregion
 
     #region AddGroups
-
     /// <summary>
     /// Agrega los grupos en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int AddGroups()
+    public async static Task<int> AddGroups()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferAddGroups();
+          response = dbContext.USP_OR_TransferAddGroups();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGroupsNames
-
     /// <summary>
     /// Actualiza las descripciones de los grupos en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateGroupsNames()
+    public async static Task<int> UpdateGroupsNames()
     {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      int response = 0;
+      
+        await Task.Run(() =>
         {
-            return dbContext.USP_OR_TransferUpdateGroupsNames();
-        }
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          {
+            response = dbContext.USP_OR_TransferUpdateGroupsNames();
+          }
+        });
+      
+      return response;
     }
     #endregion
 
     #region UpdateTransferCountries
-
     /// <summary>
     /// Actualizar países de reservaciones migradas en el proceso de transferencia
     /// Actualiza las países de las reservaciones migradas
@@ -327,18 +386,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateTransferCountries()
+    public async static Task<int> UpdateTransferCountries()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateTransferCountries();
+          response = dbContext.USP_OR_TransferUpdateTransferCountries();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateTransferAgencies
-
     /// <summary>
     /// Actualizar agencias de reservaciones migradas en el proceso de transferencia
     /// Actualiza las agencias de las reservaciones migradas
@@ -346,18 +408,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateTransferAgencies()
+    public async static Task<int> UpdateTransferAgencies()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateTransferAgencies();
+          response = dbContext.USP_OR_TransferUpdateTransferAgencies();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateTransferLanguages
-
     /// <summary>
     /// Actualizar idiomas de reservaciones migradas en el proceso de transferencia
     /// Actualiza los idiomas de las reservaciones migradas
@@ -365,18 +430,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateTransferLanguages()
+    public async static Task<int> UpdateTransferLanguages()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateTransferLanguages();
+          response = dbContext.USP_OR_TransferUpdateTransferLanguages();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateTransferMarkets
-
     /// <summary>
     /// Actualizar mercado de reservaciones migradas en el proceso de transferencia
     /// Actualiza el mercado de reservaciones migradas
@@ -384,18 +452,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateTransferMarkets()
+    public async static Task<int> UpdateTransferMarkets()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateTransferMarkets();
+          response = dbContext.USP_OR_TransferUpdateTransferMarkets();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateTransferUnavailableMotivesByGroups
-
     /// <summary>
     /// Actualizar motivo de indisponibilidad de reservaciones migradas por grupos en el proceso de transferencia
     /// Actualiza el motivo de indisponibilidad de reservaciones migradas por grupos (2 = WITH GROUP)
@@ -403,18 +474,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateTransferUnavailableMotivesByGroups()
+    public async static Task<int> UpdateTransferUnavailableMotivesByGroups()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByGroups();
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByGroups();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateTransferUnavailableMotivesByAgency
-
     /// <summary>
     /// Actualizar motivo de indisponibilidad de reservaciones migradas por agencia en el proceso de transferencia
     /// Actualiza el motivo de indisponibilidad de reservaciones migradas por agencia
@@ -422,18 +496,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateTransferUnavailableMotivesByAgency()
+    public async static Task<int> UpdateTransferUnavailableMotivesByAgency()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByAgency();
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByAgency();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateTransferUnavailableMotivesByCountry
-
     /// <summary>
     /// Actualizar motivo de indisponibilidad de reservaciones migradas por país en el proceso de transferencia
     /// Actualiza el motivo de indisponibilidad de reservaciones migradas por país
@@ -441,36 +518,42 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateTransferUnavailableMotivesByCountry()
+    public async static Task<int> UpdateTransferUnavailableMotivesByCountry()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByCountry();
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByCountry();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateTransferUnavailableMotivesByContract
-
     /// <summary>
     /// Actualiza el motivo de indisponibilidad de reservaciones migradas por contrato en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateTransferUnavailableMotivesByContract()
+    public async static Task<int> UpdateTransferUnavailableMotivesByContract()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByContract();
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByContract();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateTransferUnavailableMotivesBy1Night
-
     /// <summary>
     /// Actualizar motivo de indisponibilidad de reservaciones migradas por 1 noche en el proceso de transferencia
     /// Actualiza el motivo de indisponibilidad de reservaciones migradas por 1 noche (1 - JUST ONE NIGHT)
@@ -478,18 +561,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateTransferUnavailableMotivesBy1Night()
+    public async static Task<int> UpdateTransferUnavailableMotivesBy1Night()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesBy1Night();
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesBy1Night();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateTransferUnavailableMotivesBy2Nights
-
     /// <summary>
     /// Actualizar motivo de indisponibilidad de reservaciones migradas por 2 noches en el proceso de transferencia
     /// Actualiza el motivo de indisponibilidad de reservaciones migradas por 2 noches (13 - JUST TWO NIGHTS)
@@ -497,18 +583,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateTransferUnavailableMotivesBy2Nights()
+    public async static Task<int> UpdateTransferUnavailableMotivesBy2Nights()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesBy2Nights();
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesBy2Nights();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateTransferUnavailableMotivesByTransfer
-
     /// <summary>
     /// Actualizar motivo de indisponibilidad de reservaciones migradas por transferencia en el proceso de transferencia
     /// Actualiza el motivo de indisponibilidad de reservaciones migradas por transferencia (24 = TRANSFER)
@@ -516,18 +605,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateTransferUnavailableMotivesByTransfer()
+    public async static Task<int> UpdateTransferUnavailableMotivesByTransfer()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByTransfer();
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByTransfer();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateTransferUnavailableMotivesByNewMember
-
     /// <summary>
     /// Actualizar motivo de indisponibilidad de reservaciones migradas por ser nuevo socio en el proceso de transferencia
     /// Actualiza el motivo de indisponibilidad de reservaciones migradas por ser nuevo socio (18 = NEW MEMBER)
@@ -536,36 +628,42 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateTransferUnavailableMotivesByNewMember()
+    public async static Task<int> UpdateTransferUnavailableMotivesByNewMember()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByNewMember();
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByNewMember();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateTransferUnavailableMotivesByPax
-
     /// <summary>
     /// Actualiza el motivo de indisponibilidad de reservaciones migradas por pax (35 - PAX)
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateTransferUnavailableMotivesByPax()
+    public async static Task<int> UpdateTransferUnavailableMotivesByPax()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByPax();
+          response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByPax();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateTransferAvailability
-
     /// <summary>
     /// Actualizar disponibilidad de las reservaciones migradas en el proceso de transferencia
     /// Actualiza la disponibilidad de las reservaciones migradas
@@ -573,18 +671,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateTransferAvailability()
+    public async static Task<int> UpdateTransferAvailability()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateTransferAvailability();
+          response = dbContext.USP_OR_TransferUpdateTransferAvailability();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsRoomNumbers
-
     /// <summary>
     /// Actualiza los numeros de habitacion de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
@@ -593,18 +694,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsRoomNumbers()
+    public async static Task<int> UpdateGuestsRoomNumbers()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsRoomNumbers();
+          response = dbContext.USP_OR_TransferUpdateGuestsRoomNumbers();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsRoomTypes
-
     /// <summary>
     /// Actualiza los tipos de habitacion de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
@@ -612,18 +716,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsRoomTypes()
+    public async static Task<int> UpdateGuestsRoomTypes()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsRoomTypes();
+          response = dbContext.USP_OR_TransferUpdateGuestsRoomTypes();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsCreditCards
-
     /// <summary>
     /// Actualiza las tarjetas de credito de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
@@ -631,18 +738,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsCreditCards()
+    public async static Task<int> UpdateGuestsCreditCards()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsCreditCards();
+          response = dbContext.USP_OR_TransferUpdateGuestsCreditCards();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsLastNames
-
     /// <summary>
     /// Actualiza los apellidos de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
@@ -651,18 +761,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsLastNames()
+    public async static Task<int> UpdateGuestsLastNames()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsLastNames();
+          response = dbContext.USP_OR_TransferUpdateGuestsLastNames();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsFirstNames
-
     /// <summary>
     /// Actualiza los nombres de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
@@ -671,18 +784,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsFirstNames()
+    public async static Task<int> UpdateGuestsFirstNames()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsFirstNames();
+          response = dbContext.USP_OR_TransferUpdateGuestsFirstNames();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsCheckInDates
-
     /// <summary>
     /// Actualiza las fechas de llegada de huespedes en el proceso de transferencia
     /// La restriccion para actualizar la fecha de llegada es que no haya sido invitado en lugar de que no haya hecho Check In
@@ -691,18 +807,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsCheckInDates()
+    public async static Task<int>  UpdateGuestsCheckInDates()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsCheckInDates();
+          response = dbContext.USP_OR_TransferUpdateGuestsCheckInDates();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsCheckIns
-
     /// <summary>
     /// Actualiza los check ins de huespedes en el proceso de transferencia
     /// Si  el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
@@ -710,18 +829,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsCheckIns()
+    public async static Task<int>  UpdateGuestsCheckIns()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsCheckIns();
+          response = dbContext.USP_OR_TransferUpdateGuestsCheckIns();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsCheckIns
-
     /// <summary>
     /// Actualiza las fechas de salida de huespedes en el proceso de transferencia
     /// Actualiza el nuevo campo que tiene la fecha de salida del sistema de Hotel (guCheckOutHotelD)
@@ -731,258 +853,285 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsCheckOutDates()
+    public async static Task<int>  UpdateGuestsCheckOutDates()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsCheckOutDates();
+          response = dbContext.USP_OR_TransferUpdateGuestsCheckOutDates();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsEmails
-
     /// <summary>
     /// Actualiza los correos electronicos de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
-    /// 
     /// </summary>
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsEmails()
+    public async static Task<int>  UpdateGuestsEmails()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsEmails();
+          response = dbContext.USP_OR_TransferUpdateGuestsEmails();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsCities
-
     /// <summary>
     /// Actualiza las ciudades de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
-    /// 
     /// </summary>
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsCities()
+    public async static Task<int>  UpdateGuestsCities()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsCities();
+          response = dbContext.USP_OR_TransferUpdateGuestsCities();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsStates
-
     /// <summary>
     /// Actualiza los estados de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
-    /// 
     /// </summary>
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsStates()
+    public async static Task<int>  UpdateGuestsStates()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsStates();
+          response = dbContext.USP_OR_TransferUpdateGuestsStates();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsCountries
-
     /// <summary>
     /// Actualiza los paises de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
-    /// 
     /// </summary>
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsCountries()
+    public async static Task<int>  UpdateGuestsCountries()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsCountries();
+          response = dbContext.USP_OR_TransferUpdateGuestsCountries();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsCheckOutsEarly
-
     /// <summary>
     /// Verifica las salidas anticipadas de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
-    /// 
     /// </summary>
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsCheckOutsEarly()
+    public async static Task<int>  UpdateGuestsCheckOutsEarly()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsCheckOutsEarly();
+          response = dbContext.USP_OR_TransferUpdateGuestsCheckOutsEarly();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsGuestTypes
-
     /// <summary>
     /// Actualiza los tipos de huesped de los huespedes en el proceso de transferencia (se usa el campo opcional 2)
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
-    /// 
     /// </summary>
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsGuestTypes()
+    public async static Task<int>  UpdateGuestsGuestTypes()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsGuestTypes();
+          response = dbContext.USP_OR_TransferUpdateGuestsGuestTypes();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsContracts
-
     /// <summary>
     /// Actualiza los contratos de huespedes en el proceso de transferencia (se usa el campo opcional 1)
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
-    /// 
     /// </summary>
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsContracts()
+    public async static Task<int>  UpdateGuestsContracts()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsContracts();
+          response = dbContext.USP_OR_TransferUpdateGuestsContracts();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsBirthDates
-
     /// <summary>
     /// Actualiza las fechas de nacimiento de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
-    /// 
     /// </summary>
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsBirthDates()
+    public async static Task<int>  UpdateGuestsBirthDates()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsBirthDates();
+          response = dbContext.USP_OR_TransferUpdateGuestsBirthDates();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsAges
-
     /// <summary>
     /// Actualiza las edades de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
-    /// 
     /// </summary>
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsAges()
+    public async static Task<int>  UpdateGuestsAges()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsAges();
+          response = dbContext.USP_OR_TransferUpdateGuestsAges();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsPax
-
     /// <summary>
     /// Actualiza el pax de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
-    /// 
     /// </summary>
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsPax()
+    public async static Task<int>  UpdateGuestsPax()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsPax();
-        }
+          response = dbContext.USP_OR_TransferUpdateGuestsPax();
+        } 
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsReservationTypes
-
     /// <summary>
     /// Actualiza el tipo de reservacion de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
-    /// 
     /// </summary>
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsReservationTypes()
+    public async static Task<int>  UpdateGuestsReservationTypes()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsReservationTypes();
+          response = dbContext.USP_OR_TransferUpdateGuestsReservationTypes();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsIdProfileOpera
-
     /// <summary>
     /// Actualiza los id's de perfiles de Opera de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
-    /// 
     /// </summary>
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsIdProfileOpera()
+    public async static Task<int>  UpdateGuestsIdProfileOpera()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsIdProfileOpera();
+          response = dbContext.USP_OR_TransferUpdateGuestsIdProfileOpera();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsAgencies
-
     /// <summary>
     /// Actualiza las agencias de huespedes en el proceso de transferencia
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
@@ -990,36 +1139,42 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsAgencies()
+    public async static Task<int>  UpdateGuestsAgencies()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsAgencies();
+          response = dbContext.USP_OR_TransferUpdateGuestsAgencies();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsMarkets
-
     /// <summary>
     /// Actualiza los mercados de huespedes en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsMarkets()
+    public async static Task<int>  UpdateGuestsMarkets()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsMarkets();
+          response = dbContext.USP_OR_TransferUpdateGuestsMarkets();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsAvailabilityUnavailableMotives
-
     /// <summary>
     /// Actualiza la disponibilidad y los motivos de indisponibilidad de huespedes en el proceso de transferencia
     /// Actualiza el campo de disponible por sistema
@@ -1028,18 +1183,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsAvailabilityUnavailableMotives()
+    public async static Task<int>  UpdateGuestsAvailabilityUnavailableMotives()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsAvailabilityUnavailableMotives();
+          response = dbContext.USP_OR_TransferUpdateGuestsAvailabilityUnavailableMotives();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsUnavailableMotives1NightRevert
-
     /// <summary>
     /// Actualiza los motivos de indisponibilidad de huespedes (revirtiendo la disponibilidad por una noche) (1 - JUST ONE NIGHT)
     /// Si el Lead Sorce usa Opera se valida que el huesped tenga perfil de Opera
@@ -1047,18 +1205,21 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsUnavailableMotives1NightRevert()
+    public async static Task<int>  UpdateGuestsUnavailableMotives1NightRevert()
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsUnavailableMotives1NightRevert();
+          response = dbContext.USP_OR_TransferUpdateGuestsUnavailableMotives1NightRevert();
         }
+      });
+      return response;
     }
     #endregion
 
     #region UpdateGuestsAvailables
-
     /// <summary>
     /// Actualiza la disponibilidad de huespedes disponibles en el proceso de transferencia.
     /// Actualiza el campo de disponible por sistema.
@@ -1068,138 +1229,141 @@ namespace IM.BusinessRules.BR
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static int UpdateGuestsAvailables(DateTime? dateFrom, DateTime? dateTo)
+    public async static Task<int>  UpdateGuestsAvailables(DateTime? dateFrom, DateTime? dateTo)
     {
+      int response = 0;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferUpdateGuestsAvailables(dateFrom, dateTo);
+          response = dbContext.USP_OR_TransferUpdateGuestsAvailables(dateFrom, dateTo);
         }
+      });
+      return response;
     }
     #endregion
 
     #region AddGuests
-
     /// <summary>
     /// Agrega las reservaciones en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 14/04/2016  created
     /// </hystory>
-
-    public static List<int> AddGuests()
+    public async static Task<List<int>> AddGuests()
     {
+      List < int > response = null;
+      await Task.Run(() =>
+      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-            return dbContext.USP_OR_TransferAddGuests().Where(x => x.HasValue).Select(x => (int)x).ToList();
-            //.Select(s => (s)).ToList();//.ToList();
+          response = dbContext.USP_OR_TransferAddGuests().Where(x => x.HasValue).Select(x => (int)x).ToList();
         }
+      });
+      return response;
     }
     #endregion
 
     #region DeleteReservationsCancelled
-
     /// <summary>
     /// Elimina las reservaciones canceladas en el proceso de transferencia
     /// </summary>
     /// <hystory>
     /// [michan] 13/04/2016  created
     /// </hystory>
-
-    public static int DeleteReservationsCancelled()
+    public async static Task<int>  DeleteReservationsCancelled()
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      int response = 0;
+      await Task.Run(() =>
       {
-        try
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          return dbContext.USP_OR_TransferDeleteReservationsCancelled();
+          dbContext.Database.CommandTimeout = Settings.Default.USP_OR_TransferDeleteReservationsCancelled_Timeout;
+          response =  dbContext.USP_OR_TransferDeleteReservationsCancelled();
         }
-        catch (DbEntityValidationException ex)
-        {
-          var errorMessages = ex.EntityValidationErrors
-            .SelectMany(x => x.ValidationErrors)
-            .Select(x => x.ErrorMessage);
-          var fullErrorMessage = string.Join("; ", errorMessages);
-          var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
-          throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
-        }
-      }
+      });
+      return response;
     }
     #endregion
 
     #region DeleteTransfer
-
     /// <summary>
     /// Elimina los registros de la tabla de transferencias.
     /// </summary>
     /// <hystory>
     /// [michan] 16/04/2016  created
     /// </hystory>
-
-    public static int DeleteTransfer()
+    public async static Task<int>  DeleteTransfer()
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      int response = 0;
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_TransferDeleteTransfer();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          response = dbContext.USP_OR_TransferDeleteTransfer();
+        }
+      });
+      return response;
     }
     #endregion
 
     #region GetTransfer
-
     /// <summary>
     /// Trae rodos los registros de la tabla de transferencias.
     /// </summary>
     /// <hystory>
     /// [michan] 16/04/2016  created
     /// </hystory>
-
-    public static List<Transfer> GetTransfer()
+    public async static Task<List<Transfer>> GetTransfer()
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<Transfer> response = null;
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_TransferGetTransfer().ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          response = dbContext.USP_OR_TransferGetTransfer().ToList();
+        }
+      });
+      return response;
     }
     #endregion
 
-    public static int AddReservation(Transfer transfer)
+    #region AddReservation
+    /// <summary>
+    /// Agrega una nueva reservacion en la tabla de osTrasnfer
+    /// </summary>
+    /// <param name="transfer">Entidad transferencia</param>
+    /// <returns>Retorna un entero si se realizo el guardado</returns>
+    public async static Task<int>  AddReservation(Transfer transfer)
     {
-      int status = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        try
+      int response = 0;
+      
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
           dbContext.Transfers.Add(transfer);
-          status = dbContext.SaveChanges();
+          response = await dbContext.SaveChangesAsync(); //SaveChanges()
         }
-        catch(DbEntityValidationException ex)
-        {
-          var errorMessages = ex.EntityValidationErrors
-            .SelectMany(x => x.ValidationErrors)
-            .Select(x => x.ErrorMessage);
-          var fullErrorMessage = string.Join("; ", errorMessages);
-          var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
-          throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
-        }
-      }
-      return status;
+      
+      return response;
     }
+    #endregion
 
-    public static bool ExistReservation(string leadSource, string tHReservID)
+    #region ExistReservation
+    /// <summary>
+    /// Valida si existe la reservación en la tabla de trasnferencias
+    /// </summary>
+    /// <param name="leadSource">valor para tls</param>
+    /// <param name="tHReservID">valor para tHReservID</param>
+    /// <returns></returns>
+    public async static Task<bool> ExistReservation(string leadSource, string tHReservID)
     {
+      bool status = true;
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        bool status = false;
-        var query = (from transfer in dbContext.Transfers where transfer.tls == leadSource && transfer.tHReservID == tHReservID select transfer).FirstOrDefault();
-        if (query != null)
-        {
-          status = true;
-        }
-        return status;
-
-
+        status = await dbContext.Transfers.AnyAsync(transfer => transfer.tls == leadSource && transfer.tHReservID == tHReservID);
       }
+      return  status;
     }
+    #endregion
   }
 }

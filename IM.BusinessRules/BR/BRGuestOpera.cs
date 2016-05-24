@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model.Helpers;
 using IM.Model;
-
-
+using System.Threading.Tasks;
+using System.Data.Entity;
 namespace IM.BusinessRules.BR
 {
   public class BRGuestOpera
@@ -16,27 +16,27 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [michan] 19/04/2016 Created
     /// </history>
-    public static int SaveGuestOpera(GuestOpera guestOpera, bool? insert = true)
+    public async static Task<int> SaveGuestOpera(GuestOpera guestOpera, bool? insert = true)
     {
+      int status = 0;
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        int status = 0;
-        
         if (insert != false)
         {
           //Si no existe, se agrega
           dbContext.GuestsOpera.Add(guestOpera);
-          status = dbContext.SaveChanges();
+          status = await dbContext.SaveChangesAsync();
         }
         else
         {
           //Si ya existe, se actualiza el valor
           //dbContext.GuestsOpera.Attach(guestOpera);
           dbContext.Entry(guestOpera).State = System.Data.Entity.EntityState.Modified;
-          status = dbContext.SaveChanges();
+          status = await dbContext.SaveChangesAsync();
         }
-        return status;
       }
+      
+      return status;
     }
     #endregion
 
@@ -49,13 +49,14 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [michan] 19/04/2016 Created
     /// </history>
-    public static GuestOpera GetGuestOpera(int guID)
+    public async static Task<GuestOpera> GetGuestOpera(int guID)
     {
-
+      GuestOpera guestOpera = null;
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.GuestsOpera.Where(go => go.gogu == guID).FirstOrDefault();
+        guestOpera = await dbContext.GuestsOpera.SingleOrDefaultAsync(go => go.gogu == guID);
       }
+      return guestOpera;
     }
     #endregion
   }

@@ -58,7 +58,7 @@
   <ItemGroup>
     <Compile Include="Helpers\CallCenterHelper.cs" />
     <Compile Include="Helpers\ClubesHelper.cs" />
-    <Compile Include="Helpers\HotelService.cs" />
+    <Compile Include="Helpers\HotelServiceHelper.cs" />
     <Compile Include="Helpers\ServiceHelper.cs" />
     <Compile Include="Helpers\IntranetHelper.cs" />
     <Compile Include="Helpers\WirePRHelper.cs" />

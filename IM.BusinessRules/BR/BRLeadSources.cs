@@ -82,12 +82,17 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [michan] 14/04/2016 Created
     /// </history>
-    public static List<LeadSourceShort> GetLeadSourcesByZoneBoss(string zone)
+    public async static Task<List<LeadSourceShort>> GetLeadSourcesByZoneBoss(string zone)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List < LeadSourceShort > leadSourceShort  = null;
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetLeadSourcesByZoneBoss(zone).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          leadSourceShort = dbContext.USP_OR_GetLeadSourcesByZoneBoss(zone).ToList();
+        }
+      });
+      return leadSourceShort;
     }
 
     #endregion GetLeadSources

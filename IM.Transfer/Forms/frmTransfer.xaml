@@ -6,59 +6,61 @@
         xmlns:local="clr-namespace:IM.Transfer.Forms"
         mc:Ignorable="d"
         WindowStyle="SingleBorderWindow"
-        StateChanged="Window_StateChanged"
-        Title="Intelligence Marketing Trasnfers" Height="614.5" Width="863.682" Loaded="Window_Loaded" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Icon="/IM.Transfer;component/Images/IM.ico" Closing="Window_Closing" KeyDown="Window_KeyDown">
+        
+        Title="Intelligence Marketing Trasnfers" Height="614.5" Width="863.682" Loaded="Window_Loaded" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Icon="/IM.Transfer;component/Images/IM.ico">
+  <!--StateChanged="Window_StateChanged"-->
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="125*"/>
-      <ColumnDefinition Width="120*"/>
-      <ColumnDefinition Width="749*"/>
-      <ColumnDefinition Width="66*"/>
+      <ColumnDefinition Width="101*"/>
+      <ColumnDefinition Width="97*"/>
+      <ColumnDefinition Width="417*"/>
+      <ColumnDefinition Width="189*"/>
+      <ColumnDefinition Width="54*"/>
     </Grid.ColumnDefinitions>
-    <Label x:Name="lblTitle" Content="Intelligence Marketing Transfer" HorizontalAlignment="Left"  Margin="59,2,0,0" VerticalAlignment="Top" Width="388" FontSize="21.333" FontWeight="Bold" FontFamily="Arial Black" Height="39" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="2"/>
-    <Label x:Name="lblDate" Content="Date" HorizontalAlignment="Right" Margin="0,13,53,0" VerticalAlignment="Top" Width="96" FontSize="13.333" FontStyle="Italic" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
-    <Label x:Name="lblStatusExchangeRate" Content="Status" HorizontalAlignment="Left" Margin="494,63,0,0" VerticalAlignment="Top" Width="150" Grid.Column="2" FontSize="9.333" FontWeight="Bold" FontFamily="Engravers MT" Height="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.ColumnSpan="2"/>
-    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="21" Margin="49,17,0,0" VerticalAlignment="Top" Width="92" CornerRadius="10" Grid.ColumnSpan="2"/>
-    <Label x:Name="lblLastTransferReservations" Content="lblLastTransferReservations" Grid.Column="2" HorizontalAlignment="Left" Margin="315,487,0,0" VerticalAlignment="Top" Width="327" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
+    <Label x:Name="lblTitle" Content="Intelligence Marketing Transfer" HorizontalAlignment="Left"  Margin="59,2,0,0" VerticalAlignment="Top" Width="388" FontSize="21.333" FontWeight="Bold" FontFamily="Arial Black" Height="39" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="2" Grid.ColumnSpan="2"/>
+    <Label x:Name="lblDate" Content="Date" HorizontalAlignment="Right" Margin="0,10,89,0" VerticalAlignment="Top" Width="96" FontSize="13.333" FontStyle="Italic" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
+    <Label x:Name="lblStatusExchangeRate" Content="Status" HorizontalAlignment="Left" Margin="79,320,0,0" VerticalAlignment="Top" Width="150" Grid.Column="3" FontSize="9.333" FontWeight="Bold" FontFamily="Engravers MT" Height="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.ColumnSpan="2"/>
+    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="21" Margin="13,14,0,0" VerticalAlignment="Top" Width="92" CornerRadius="10" Grid.ColumnSpan="2"/>
+    <Label x:Name="lblLastTransferReservations" Content="lblLastTransferReservations" Grid.Column="2" HorizontalAlignment="Left" Margin="316,242,0,0" VerticalAlignment="Top" Width="327" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="3"/>
 
 
-    <DataGrid HeadersVisibility="Column" x:Name="grdLogExchangeRate" ColumnWidth="*" ItemsSource="{Binding}" HorizontalAlignment="Left" Margin="13,98,0,0" VerticalAlignment="Top" Height="142" Width="831" Grid.ColumnSpan="4" AlternatingRowBackground="#FFE8BBBB" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="True" 
+    <DataGrid HeadersVisibility="Column" x:Name="grdLogExchangeRate" ColumnWidth="*" ItemsSource="{Binding}" HorizontalAlignment="Left" Margin="16,353,0,0" VerticalAlignment="Top" Height="142" Width="831" Grid.ColumnSpan="5" AlternatingRowBackground="#FFE8BBBB" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="True" 
           CanUserResizeRows="False" CanUserSortColumns="True" BorderBrush="Aquamarine" IsReadOnly="True" BorderThickness="3,3,3,3">
       <DataGrid.Columns>
-        <DataGridTextColumn Binding="{Binding Date, Mode=OneWay}" Width="1*" IsReadOnly="True"  Header="Date" SortMemberPath="Date"/>
-        <DataGridTextColumn Binding="{Binding LogLevel, Mode=OneWay}" Width="1*" IsReadOnly="True" Header="Log" SortMemberPath="LogLevel"/>
-        <DataGridTextColumn Binding="{Binding Message, Mode=OneWay, NotifyOnTargetUpdated=True}" Width="Auto" IsReadOnly="True" Header="Message" SortMemberPath="Message"/>
+        <DataGridTextColumn Binding="{Binding Date, Mode=OneWay}" Width="150" IsReadOnly="True"  Header="Date" SortMemberPath="Date"/>
+        <DataGridTextColumn Binding="{Binding LogLevel, Mode=OneWay}" Width="55" IsReadOnly="True" Header="Log" SortMemberPath="LogLevel"/>
+        <DataGridTextColumn Binding="{Binding Message, Mode=OneWay, NotifyOnTargetUpdated=True}" Width="*" IsReadOnly="True" Header="Message" SortMemberPath="Message"/>
       </DataGrid.Columns>
     </DataGrid>
-    <DataGrid HeadersVisibility="Column" x:Name="grdLogReservations" ColumnWidth="*" DataContext="{Binding}" ItemsSource="{Binding}" HorizontalAlignment="Left" Margin="13,342,0,0" VerticalAlignment="Top" Height="142" Width="831" AlternatingRowBackground="#FFE8BBBB" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="True" 
-          CanUserResizeRows="True" CanUserSortColumns="True" BorderBrush="Aquamarine" IsReadOnly="True" Grid.ColumnSpan="4" UseLayoutRounding="False" FontWeight="ExtraLight" BorderThickness="3,3,3,3">
+    <DataGrid HeadersVisibility="Column" x:Name="grdLogReservations" ColumnWidth="*" DataContext="{Binding}" ItemsSource="{Binding}" HorizontalAlignment="Left" Margin="16,98,0,0" VerticalAlignment="Top" Height="142" Width="831" AlternatingRowBackground="#FFE8BBBB" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="True" 
+          CanUserResizeRows="True" CanUserSortColumns="True" BorderBrush="Aquamarine" IsReadOnly="True" Grid.ColumnSpan="5" UseLayoutRounding="False" FontWeight="ExtraLight" BorderThickness="3,3,3,3">
       <DataGrid.Columns>
-        <DataGridTextColumn Binding="{Binding Date, Mode=OneWay}" Width="200*" IsReadOnly="True"  Header="Date" SortMemberPath="Date"/>
-        <DataGridTextColumn Binding="{Binding LogLevel, Mode=OneWay}" Width="80*" IsReadOnly="True" Header="Log" SortMemberPath="LogLevel"/>
-        <DataGridTextColumn Binding="{Binding Message, Mode=OneWay, NotifyOnTargetUpdated=True}" Width="Auto"  IsReadOnly="True" Header="Message" SortMemberPath="Message"/>
+        <DataGridTextColumn Binding="{Binding Date, Mode=OneWay}" Width="150" IsReadOnly="True"  Header="Date" SortMemberPath="Date"/>
+        <DataGridTextColumn Binding="{Binding LogLevel, Mode=OneWay}" Width="55" IsReadOnly="True" Header="Log" SortMemberPath="LogLevel"/>
+        <DataGridTextColumn Binding="{Binding Message, Mode=OneWay, NotifyOnTargetUpdated=True}" Width="*"  IsReadOnly="True" Header="Message" SortMemberPath="Message"/>
       </DataGrid.Columns>
     </DataGrid>
-    <Label x:Name="lblTitleExchangeRate" Content="Exchange Rate" HorizontalAlignment="Left" Margin="135,63,0,0" VerticalAlignment="Top" FontSize="16" FontFamily="Arial Black" Width="166" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-    <Label x:Name="lblLastTransferExchangeRate" Content="lblLastTransferReservations" Grid.Column="2" HorizontalAlignment="Left" Margin="339,241,0,0" VerticalAlignment="Top" Width="303" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
-    <Label x:Name="lblTitleExchangeRate_Copy" Content="Reservations" HorizontalAlignment="Left" Margin="153,312,0,0" VerticalAlignment="Top" FontSize="16" FontFamily="Arial Black" Width="133" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-    <Label x:Name="lblTransferReservations" Content="lblTransferReservations" HorizontalAlignment="Left" Margin="17,483,0,0" VerticalAlignment="Top" Width="266" VerticalContentAlignment="Center" Grid.ColumnSpan="3"/>
+    <Label x:Name="lblTitleExchangeRate" Content="Exchange Rate" HorizontalAlignment="Left" Margin="134,324,0,0" VerticalAlignment="Top" FontSize="16" FontFamily="Arial Black" Width="166" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+    <Label x:Name="lblLastTransferExchangeRate" Content="lblLastTransferReservations" Grid.Column="2" HorizontalAlignment="Left" Margin="333,497,0,0" VerticalAlignment="Top" Width="303" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="3"/>
+    <Label x:Name="lblTitleExchangeRate_Copy" Content="Reservations" HorizontalAlignment="Left" Margin="152,71,0,0" VerticalAlignment="Top" FontSize="16" FontFamily="Arial Black" Width="133" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+    <Label x:Name="lblTransferReservations" Content="lblTransferReservations" HorizontalAlignment="Left" Margin="22,240,0,0" VerticalAlignment="Top" Width="266" VerticalContentAlignment="Center" Grid.ColumnSpan="3"/>
 
-    <Button x:Name="btnReservations" Content="Run Reservations" Grid.Column="2" HorizontalAlignment="Left" Margin="472,548,0,0" VerticalAlignment="Top" Width="130" Height="25" Click="btnReservations_Click"/>
-    <Button x:Name="btnExchangeRate" Content="Run Exchange Rate" Grid.Column="2" HorizontalAlignment="Left" Margin="313,546,0,0" VerticalAlignment="Top" Width="126" Height="25" Click="btnExchangeRate_Click"/>
-    <Label x:Name="lblStatusReservations" Content="Status" HorizontalAlignment="Left" Margin="494,303,0,0" VerticalAlignment="Top" Width="150" Grid.Column="2" FontSize="9.333" FontWeight="Bold" FontFamily="Engravers MT" Height="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.ColumnSpan="2"/>
-    <Border x:Name="brdStatusReservations" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="20" Margin="506,311,0,0" VerticalAlignment="Top" Width="129" CornerRadius="10" Grid.Column="2" Grid.ColumnSpan="2"/>
-    <ProgressBar x:Name="progresBarExchangeRate" HorizontalAlignment="Left" Height="16" Margin="16,77,0,0" VerticalAlignment="Top" Width="121" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Foreground="#E59472CF"/>
-    <Label x:Name="label" Content="Label" HorizontalAlignment="Left" Margin="13,43,0,0" VerticalAlignment="Top" Height="9" Width="835" Grid.ColumnSpan="4" Background="#FF785E5E"/>
-    <ProgressBar x:Name="progresBarReservations" HorizontalAlignment="Left" Height="15" Margin="17,321,0,0" VerticalAlignment="Top" Width="119" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2">
+    <Button x:Name="btnReservations" Content="Update Reservations" Grid.Column="3" HorizontalAlignment="Left" Margin="54,554,0,0" VerticalAlignment="Top" Width="175" Height="25" Click="btnReservations_Click" Grid.ColumnSpan="2"/>
+    <Button x:Name="btnExchangeRate" Content="Update Exchange Rate" Grid.Column="2" HorizontalAlignment="Left" Margin="269,554,0,0" VerticalAlignment="Top" Width="175" Height="25" Click="btnExchangeRate_Click" Grid.ColumnSpan="2"/>
+    <Label x:Name="lblStatusReservations" Content="Status" HorizontalAlignment="Left" Margin="77,62,0,0" VerticalAlignment="Top" Width="150" Grid.Column="3" FontSize="9.333" FontWeight="Bold" FontFamily="Engravers MT" Height="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.ColumnSpan="2"/>
+    <Border x:Name="brdStatusReservations" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="20" Margin="89,70,0,0" VerticalAlignment="Top" Width="129" CornerRadius="10" Grid.Column="3" Grid.ColumnSpan="2"/>
+    <ProgressBar x:Name="progresBarExchangeRate" HorizontalAlignment="Left" Height="16" Margin="26,333,0,0" VerticalAlignment="Top" Width="121" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Foreground="#E59472CF"/>
+    <Label x:Name="label" Content="Label" HorizontalAlignment="Left" Margin="13,43,0,0" VerticalAlignment="Top" Height="9" Width="835" Grid.ColumnSpan="5" Background="#FF785E5E"/>
+    <ProgressBar x:Name="progresBarReservations" HorizontalAlignment="Left" Height="15" Margin="22,82,0,0" VerticalAlignment="Top" Width="119" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2">
       <ProgressBar.Foreground>
         <SolidColorBrush Color="#E58B51E0"/>
       </ProgressBar.Foreground>
     </ProgressBar>
-    <Label x:Name="lblPorcentProgresBarReservations" Content="Label" HorizontalAlignment="Right" Margin="0,317,10,0" VerticalAlignment="Top" FontWeight="Bold" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="10.667" Height="19"/>
-    <Border x:Name="brdStatusExchangeRate" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="18" Margin="507,71,0,0" VerticalAlignment="Top" Width="129" CornerRadius="10" Grid.Column="2" Grid.ColumnSpan="2"/>
-    <Label x:Name="lblNextTransferReservations" Content="lblNextTransferReservations" Grid.Column="2" HorizontalAlignment="Left" Margin="315,512,0,0" VerticalAlignment="Top" Width="327" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
-    <Label x:Name="lblNextTransferExchangeRate" Content="lblNextTransferExchangeRate" Grid.Column="2" HorizontalAlignment="Left" Margin="339,263,0,0" VerticalAlignment="Top" Width="303" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
-    <Label x:Name="lblPorcentProgresBar" Content="Label" HorizontalAlignment="Left" Margin="60,75,0,0" VerticalAlignment="Top" FontWeight="Bold" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="10.667" Height="19"/>
+    <Label x:Name="lblPorcentProgresBarReservations" Content="Label" HorizontalAlignment="Right" Margin="0,78,5,0" VerticalAlignment="Top" FontWeight="Bold" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="10.667" Height="19"/>
+    <Border x:Name="brdStatusExchangeRate" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="18" Margin="92,328,0,0" VerticalAlignment="Top" Width="129" CornerRadius="10" Grid.Column="3" Grid.ColumnSpan="2"/>
+    <Label x:Name="lblNextTransferReservations" Content="lblNextTransferReservations" Grid.Column="2" HorizontalAlignment="Left" Margin="316,256,0,0" VerticalAlignment="Top" Width="327" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="3"/>
+    <Label x:Name="lblNextTransferExchangeRate" Content="lblNextTransferExchangeRate" Grid.Column="2" HorizontalAlignment="Left" Margin="333,517,0,0" VerticalAlignment="Top" Width="303" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="3"/>
+    <Label x:Name="lblPorcentProgressExchangeRate" Content="0 %" HorizontalAlignment="Left" Margin="70,330,0,0" VerticalAlignment="Top" FontWeight="Bold" FontFamily="Tw Cen MT Condensed Extra Bold" FontSize="10.667" Height="19"/>
   </Grid>
 
 

@@ -135,7 +135,6 @@
     <Compile Include="Helpers\ConvertHelper.cs" />
     <Compile Include="Helpers\DateHelper.cs" />
     <Compile Include="Helpers\EpplusHelper.cs" />
-    <Compile Include="Helpers\NotifyIconHelper.cs" />
     <Compile Include="Helpers\TableHelper.cs" />
     <Compile Include="Helpers\GridHelper.cs" />
     <Compile Include="Helpers\KeyboardHelper.cs" />
@@ -150,6 +149,7 @@
     <Compile Include="Helpers\IniFileHelper.cs" />
     <Compile Include="Helpers\UIRichTextBoxHelper.cs" />
     <Compile Include="Helpers\ValidateHelper.cs" />
+    <Compile Include="Helpers\WindowsHelper.cs" />
     <Compile Include="Interfaces\IMetodosPublicos.cs" />
     <Compile Include="Language\ResLanguage.Designer.cs">
       <DependentUpon>ResLanguage.resx</DependentUpon>

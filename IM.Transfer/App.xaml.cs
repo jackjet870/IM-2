@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Threading;
 using IM.Base.Forms;
-
+using IM.Base.Helpers;
 namespace IM.Transfer
 {
   /// <summary>
@@ -21,16 +21,24 @@ namespace IM.Transfer
     {
       this.Dispatcher.UnhandledException += App_UnhandledException;
     }
-  #endregion
+
+    #endregion
 
     #region OnStartup
     protected override void OnStartup(StartupEventArgs e)
-      {
-        frmTransferLauncher _frm = new frmTransferLauncher();
-        _frm.ShowInTaskbar = true;
-        _frm.ShowDialog();
-      }
+    {
+      //EventManager.RegisterClassHandler(typeof(Window), Window.KeyDownEvent, new RoutedEventHandler(KeyDown));
+      frmTransferLauncher _frm = new frmTransferLauncher();
+      _frm.ShowInTaskbar = true;
+      _frm.ShowDialog();
+      
+    }
     #endregion
+
+    protected override void OnExit(ExitEventArgs e)
+    {
+      base.OnExit(e);
+    }
 
     #region App_UnhandledException
     /// <summary>

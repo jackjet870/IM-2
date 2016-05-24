@@ -818,16 +818,27 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    public static Guest GetGuestValidForTransfer(string guHReservID, string gulsOriginal)
+    /// <summary>
+    /// Valida si existe el guesta en los registros. Si existe retorna el registro.
+    /// </summary>
+    /// <param name="guHReservID">ID de la reservación</param>
+    /// <param name="gulsOriginal">ID del guest</param>
+    /// <returns>Resgistro del Guest</returns>
+    /// <history>
+    /// [michan]  20/04/2016  Created
+    /// </history>
+    public async static Task<Guest> GetGuestValidForTransfer(string guHReservID, string gulsOriginal)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      Guest guest = null;
+      await Task.Run(() =>
       {
-        //Revisamos si ya existe en Guest
-        Guest guest = dbContext.Guests.Where(g => g.guHReservID == guHReservID && g.gulsOriginal == gulsOriginal).FirstOrDefault();
-        return guest;
-
-      }
-
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          //Revisamos si ya existe en Guest
+          guest = dbContext.Guests.Where(g => g.guHReservID == guHReservID && g.gulsOriginal == gulsOriginal).FirstOrDefault();
+        }
+      });
+      return guest;
     }
   }
 
