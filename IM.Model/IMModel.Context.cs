@@ -5481,7 +5481,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptWeeklyMonthlyHostess_ByPR>("USP_IM_RptWeeklyMonthlyHostess", dateFromParameter, dateToParameter, salesRoomsParameter);
         }
     
-        public virtual ObjectResult<PaymentTypeShort> USP_OR_RptGiftsManifestCancel(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms)
+        public virtual ObjectResult<RptGiftsManifestCancel> USP_OR_RptGiftsManifestCancel(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms)
         {
             var dateFromParameter = dateFrom.HasValue ?
                 new ObjectParameter("DateFrom", dateFrom) :
@@ -5495,7 +5495,7 @@ namespace IM.Model
                 new ObjectParameter("SalesRooms", salesRooms) :
                 new ObjectParameter("SalesRooms", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PaymentTypeShort>("USP_OR_RptGiftsManifestCancel", dateFromParameter, dateToParameter, salesRoomsParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGiftsManifestCancel>("USP_OR_RptGiftsManifestCancel", dateFromParameter, dateToParameter, salesRoomsParameter);
         }
     }
 }

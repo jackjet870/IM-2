@@ -17665,7 +17665,7 @@
           <FunctionImport Name="USP_OR_RptGiftsManifestCancel" >
             <ReturnType Type="Collection(IMModel.RptGiftsManifestCancel)"/>
             <ReturnType Type="Collection(IMModel.RptGiftsManifestCancel_Gifts)"/>
-            <ReturnType Type="Collection(IMModel.RptGiftsManifestCancel_Currency)"/>
+            <ReturnType Type="Collection(IMModel.CurrencyShort)"/>
             <ReturnType Type="Collection(IMModel.PaymentTypeShort)"/>
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
@@ -21603,10 +21603,6 @@
           <Property Type="String" Name="giN" Nullable="true" MaxLength="50" />
           <Property Type="Boolean" Name="giWFolio" Nullable="true" />
           <Property Type="String" Name="gigc" Nullable="true" MaxLength="10" />
-        </ComplexType>
-        <ComplexType Name="RptGiftsManifestCancel_Currency">
-          <Property Type="String" Name="cuID" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="cuN" Nullable="true" MaxLength="20" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -28804,7 +28800,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.RptGiftsManifestCancel_Currency">
+              <ComplexTypeMapping TypeName="IMModel.CurrencyShort">
                 <ScalarProperty Name="cuID" ColumnName="cuID" />
                 <ScalarProperty Name="cuN" ColumnName="cuN" />
               </ComplexTypeMapping>
