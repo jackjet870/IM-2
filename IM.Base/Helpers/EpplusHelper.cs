@@ -1,6 +1,7 @@
 ﻿using IM.Model;
 using IM.Model.Classes;
 using IM.Model.Enums;
+using IM.Model.Helpers;
 using Microsoft.Win32;
 using OfficeOpenXml;
 using OfficeOpenXml.Drawing.Chart;
@@ -363,7 +364,8 @@ namespace IM.Base.Helpers
           }
           valueField.Format = GetFormat(valueFormat.Format);
           valueField.Field.Sort = valueFormat.Sort;
-          valueField.SetDataFieldShowDataAsAttribute(pivotTable, valueFormat.DataFieldShowDataAs);
+          if (valueFormat.DataFieldShowDataAs != EnumDataFieldShowDataAs.Normal)
+            valueField.SetDataFieldShowDataAsAttribute(pivotTable, valueFormat.DataFieldShowDataAs);
         });
 
       // Agregamos valores calculados
@@ -2220,7 +2222,7 @@ namespace IM.Base.Helpers
     {
       if (pivot != null & pivot.DataFields != null && pivot.DataFields.Contains(dataField))
       {
-        string showDataAsAttributeValue = Enum.GetName(typeof(EnumDataFieldShowDataAs), showDataAs);
+        string showDataAsAttributeValue = EnumToListHelper.GetEnumDescription(showDataAs);
         var xml = pivot.PivotTableXml;
         XmlNodeList elements = xml.GetElementsByTagName("dataField");
 
