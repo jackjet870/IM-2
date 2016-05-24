@@ -17,7 +17,7 @@ namespace IM.Base.Forms
   public partial class frmLogin : Window
   {
     #region Propiedades y Atributos
-    readonly dynamic places;
+    dynamic places;
     readonly Window _splash;
     readonly EnumLoginType _loginType;
     readonly bool _changePassword;
@@ -63,7 +63,7 @@ namespace IM.Base.Forms
       _splash = splash;
       _loginType = loginType;
       _program = program;
-      if(_loginType != EnumLoginType.Normal) places = getAllPlaces();//Cargamos los places
+      //if (_loginType != EnumLoginType.Normal) getAllPlaces();//Cargamos los places
       _validatePermission = validatePermission;
       _validateRole = validateRole;
       _changePassword = changePassword;
@@ -187,31 +187,6 @@ namespace IM.Base.Forms
 
     #region Async Methods
 
-    #region GetAllPlaces
-    /// <summary>
-    /// Obtiene todos los place y los mantiene en memoria para utilizarlos posteriormente
-    /// </summary>
-    /// <returns>lista dynamica</returns>
-    /// <history>
-    /// [erosado] 29/04/2016  Created
-    /// </history>
-    private dynamic getAllPlaces()
-    {
-      switch (_loginType)
-      {
-        case EnumLoginType.Normal:
-          break;
-        case EnumLoginType.SalesRoom:
-          return Task.Factory.StartNew(() => BRSalesRooms.GetSalesRoomsByUser()).Result;
-        case EnumLoginType.Warehouse:
-          return Task.Factory.StartNew(() => BRWarehouses.GetWarehousesByUser()).Result;
-        case EnumLoginType.Location:
-          return Task.Factory.StartNew(() => BRLocations.GetLocationsByUser(programs: EnumToListHelper.GetEnumDescription(_program))).Result;
-      }
-      return null;
-    }
-    #endregion
-
     #region DoGetWareHousesByUser
     /// <summary>
     /// Obtiene la lista de WareHouses dependiendo el IdUsuraio
@@ -221,59 +196,47 @@ namespace IM.Base.Forms
     /// [erosado] 14/04/2016  Modified Se agrego la seleccion de datos desde el archivo Configuration.ini
     /// [erosado] 14/04/2016  Se modifico para busque en la fuente de datos que esta en memoria places.
     /// </history>
-    public void DoGetWareHousesByUser(string IdUsuario, bool Autosign, bool ConfigurationIni)
+    public async void DoGetWareHousesByUser(string IdUsuario, bool Autosign, bool ConfigurationIni)
     {
-      Task.Factory.StartNew(() => ((IEnumerable)places).Cast<WarehouseByUser>().Where(x => x.plpe == IdUsuario).ToList())
-        .ContinueWith(
-          (task1) =>
+      try
+      {
+        var data = await BRWarehouses.GetWarehousesByUser(IdUsuario);
+        if (data.Count > 0)
+        {//Llena la informacion en el combo
+          cmbPlace.ItemsSource = data;
+          cmbPlace.SelectedValuePath = "whID";
+          cmbPlace.DisplayMemberPath = "whN";
+          cmbPlace.IsEnabled = true;
+          if (Autosign)
           {
-            if (task1.IsFaulted)
+            var lstPS = cmbPlace.ItemsSource as List<WarehouseByUser>;
+            int index = lstPS.FindIndex(x => x.whN.Equals(UserData.Warehouse.whN));
+            cmbPlace.SelectedIndex = index;
+          }
+          else
+          {
+            if (ConfigurationIni)
             {
-              UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
-              return false;
+              var value = _iniFileHelper.readText("Login", "Warehouse", "");
+              if (!string.IsNullOrEmpty(value))
+              {
+                cmbPlace.SelectedValue = value;
+              }
+              else { cmbPlace.SelectedIndex = 0; }
             }
             else
             {
-              if (task1.IsCompleted)
-              {
-                var data = task1.Result;
-                if (data.Count > 0)
-                {//Llena la informacion en el combo
-                  cmbPlace.ItemsSource = data;
-                  cmbPlace.SelectedValuePath = "whID";
-                  cmbPlace.DisplayMemberPath = "whN";
-                  cmbPlace.IsEnabled = true;
-                  if (Autosign)
-                  {
-                    var lstPS = cmbPlace.ItemsSource as List<WarehouseByUser>;
-                    int index = lstPS.FindIndex(x => x.whN.Equals(UserData.Warehouse.whN));
-                    cmbPlace.SelectedIndex = index;
-                  }
-                  else
-                  {
-                    if (ConfigurationIni)
-                    {
-                      var value = _iniFileHelper.readText("Login", "Warehouse", "");
-                      if (!string.IsNullOrEmpty(value))
-                      {
-                        cmbPlace.SelectedValue = value;
-                      }
-                      else { cmbPlace.SelectedIndex = 0; }
-                    }
-                    else
-                    {
-                      cmbPlace.SelectedIndex = 0;
-                    }
-                  }
-                }
-                else
-                { cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found"; }
-              }
-              return false;
+              cmbPlace.SelectedIndex = 0;
             }
-          },
-          TaskScheduler.FromCurrentSynchronizationContext()
-        );
+          }
+        }
+        else
+        { cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found"; }
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
     }
     #endregion
 
@@ -285,60 +248,50 @@ namespace IM.Base.Forms
     /// [erosado] 19/Mar/2016 Created
     /// [erosado] 14/04/2016  Modified Se agrego la seleccion de datos desde el archivo Configuration.ini
     /// </history>
-    public void DoGetLocationsByUser(string IdUsuario, bool Autosign, bool ConfigurationIni)
+    public async void DoGetLocationsByUser(string IdUsuario, bool Autosign, bool ConfigurationIni)
     {
-      Task.Factory.StartNew(() => ((IEnumerable)places).Cast<LocationByUser>().Where(x => x.plpe == IdUsuario).ToList())
-        .ContinueWith(
-          (task1) =>
+
+      try
+      {
+        var data = await Task.Run(() => BRLocations.GetLocationsByUser(IdUsuario));
+        if (data.Count > 0)
+        {
+          cmbPlace.ItemsSource = data;
+          cmbPlace.SelectedValuePath = "loID";
+          cmbPlace.DisplayMemberPath = "loN";
+          cmbPlace.IsEnabled = true;
+
+          if (Autosign)
           {
-            if (task1.IsFaulted)
+            var lstPS = cmbPlace.ItemsSource as List<LocationByUser>;
+            int index = lstPS.FindIndex(x => x.loN.Equals(UserData.Location.loN));
+            cmbPlace.SelectedIndex = index;
+          }
+          else
+          {
+            if (ConfigurationIni)
             {
-              UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
-              return false;
+              var value = _iniFileHelper.readText("Login", "Location", "");
+              if (!string.IsNullOrEmpty(value))
+              {
+                cmbPlace.SelectedValue = value;
+              }
+              else { cmbPlace.SelectedIndex = 0; }
             }
             else
             {
-              if (task1.IsCompleted)
-              {
-                var data = task1.Result;
-                if (data.Count > 0)
-                {
-                  cmbPlace.ItemsSource = data;
-                  cmbPlace.SelectedValuePath = "loID";
-                  cmbPlace.DisplayMemberPath = "loN";
-                  cmbPlace.IsEnabled = true;
-
-                  if (Autosign)
-                  {
-                    var lstPS = cmbPlace.ItemsSource as List<LocationByUser>;
-                    int index = lstPS.FindIndex(x => x.loN.Equals(UserData.Location.loN));
-                    cmbPlace.SelectedIndex = index;
-                  }
-                  else
-                  {
-                    if (ConfigurationIni)
-                    {
-                      var value = _iniFileHelper.readText("Login", "Location", "");
-                      if (!string.IsNullOrEmpty(value))
-                      {
-                        cmbPlace.SelectedValue = value;
-                      }
-                      else { cmbPlace.SelectedIndex = 0; }
-                    }
-                    else
-                    {
-                      cmbPlace.SelectedIndex = 0;
-                    }
-                  }
-                }
-                else
-                { cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found"; }
-              }
-              return false;
+              cmbPlace.SelectedIndex = 0;
             }
-          },
-          TaskScheduler.FromCurrentSynchronizationContext()
-        );
+          }
+        }
+        else
+        { cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found"; }
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
+             
     }
     #endregion
 
@@ -350,62 +303,50 @@ namespace IM.Base.Forms
     /// [erosado] 19/Mar/2016 Created
     /// [erosado] 14/04/2016  Modified Se agrego la seleccion de datos desde el archivo Configuration.ini
     /// </history>
-    public void DoGetSalesRoomsByUser(string IdUsuario, bool Autosign, bool ConfigurationIni)
+    public async void DoGetSalesRoomsByUser(string IdUsuario, bool Autosign, bool ConfigurationIni)
     {
-      Task.Factory.StartNew(() => ((IEnumerable)places).Cast<SalesRoomByUser>().Where(x => x.plpe == IdUsuario).ToList())
-        .ContinueWith(
-          (task1) =>
+      try
+      {
+        var data = await BRSalesRooms.GetSalesRoomsByUser(IdUsuario);
+        if (data.Count > 0)
+        {
+          cmbPlace.ItemsSource = data;
+          cmbPlace.SelectedValuePath = "srID";
+          cmbPlace.DisplayMemberPath = "srN";
+          cmbPlace.IsEnabled = true;
+          if (Autosign)
           {
-            if (task1.IsFaulted)
+            var lstPS = cmbPlace.ItemsSource as List<SalesRoomByUser>;
+            int index = lstPS.FindIndex(x => x.srN.Equals(UserData.SalesRoom.srN));
+            cmbPlace.SelectedIndex = index;
+          }
+          else
+          {
+            if (ConfigurationIni)
             {
-              UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
-              return false;
+              var value = _iniFileHelper.readText("Login", "SalesRoom", "");
+              if (!string.IsNullOrEmpty(value))
+              {
+                cmbPlace.SelectedValue = value;
+              }
+              else { cmbPlace.SelectedIndex = 0; }
             }
             else
             {
-              if (task1.IsCompleted)
-              {
-                var data = task1.Result;
-                if (data.Count > 0)
-                {
-                  cmbPlace.ItemsSource = data;
-                  cmbPlace.SelectedValuePath = "srID";
-                  cmbPlace.DisplayMemberPath = "srN";
-                  cmbPlace.IsEnabled = true;
-                  if (Autosign)
-                  {
-                    var lstPS = cmbPlace.ItemsSource as List<SalesRoomByUser>;
-                    int index = lstPS.FindIndex(x => x.srN.Equals(UserData.SalesRoom.srN));
-                    cmbPlace.SelectedIndex = index;
-                  }
-                  else
-                  {
-                    if (ConfigurationIni)
-                    {
-                      var value = _iniFileHelper.readText("Login", "SalesRoom", "");
-                      if (!string.IsNullOrEmpty(value))
-                      {
-                        cmbPlace.SelectedValue = value;
-                      }
-                      else { cmbPlace.SelectedIndex = 0; }
-                    }
-                    else
-                    {
-                      cmbPlace.SelectedIndex = 0;
-                    }
-                  }
-                }
-                else
-                {
-                  cmbPlace.IsEnabled = false;
-                  cmbPlace.Text = "No data found";
-                }
-              }
-              return false;
+              cmbPlace.SelectedIndex = 0;
             }
-          },
-          TaskScheduler.FromCurrentSynchronizationContext()
-        );
+          }
+        }
+        else
+        {
+          cmbPlace.IsEnabled = false;
+          cmbPlace.Text = "No data found";
+        }
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
     }
     #endregion
 

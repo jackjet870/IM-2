@@ -332,10 +332,11 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 16/05/2016
+    /// [edgrodriguez] 21/05/2016 Modified. El metodo GetPrograms se volvió asincrónico.
     /// </history>
-    private void LoadPrograms()
+    private async void LoadPrograms()
     {
-      List<Program> lstPrograms = BRPrograms.GetPrograms();
+      List<Program> lstPrograms = await BRPrograms.GetPrograms();
       if(enumMode==EnumMode.search)
       {
         lstPrograms.Insert(0, new Program { pgID = "", pgN = "" });

@@ -3,6 +3,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,13 +18,19 @@ namespace IM.BusinessRules.BR
     /// <param name="regions">Region o default('ALL') </param>
     /// <history>
     /// [wtorres]  07/Mar/2016 Created
+    /// [edgrodriguez] 21/05/2016 Modified. El metodo se volvió asincrónico.
     /// </history>
-    public static List<WarehouseByUser> GetWarehousesByUser(string user="ALL", string regions="ALL")
+    public async static Task<List<WarehouseByUser>> GetWarehousesByUser(string user="ALL", string regions="ALL")
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<WarehouseByUser> result = new List<WarehouseByUser>();
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetWarehousesByUser(user, regions).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.USP_OR_GetWarehousesByUser(user, regions).ToList();
+        }
+      });
+      return result;
     }
 
     #endregion

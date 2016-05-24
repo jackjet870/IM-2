@@ -151,34 +151,29 @@ namespace IM.MailOutsConfig.Forms
     /// </summary>
     /// <history>
     /// [erosado] 07/04/2016  Created
+    /// [edgrodriguez] 21/05/2016 Modified. El metodo GetLeadSourcesByUser se volvió asincrónico.
     /// </history>
     /// <param name="user">loginUserID</param>
-    public void DoGetLeadSources(string user)
+    public async void DoGetLeadSources(string user)
     {
-      Task.Factory.StartNew(() => BRLeadSources.GetLeadSourcesByUser(user, EnumProgram.Inhouse))
-      .ContinueWith(
-      task1 =>
+      try
       {
-        if (task1.IsFaulted)
+        List<LeadSourceByUser> data = await BRLeadSources.GetLeadSourcesByUser(user, EnumProgram.Inhouse);
+        if (data.Count > 0)
         {
-          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error, "Mail Outs Configuration");
-          StaEnd();
-          return false;
+          cbxLeadSource.ItemsSource = data;
+          cbxLeadSource.SelectedIndex = 0;
         }
-        if (task1.IsCompleted)
+        else
         {
-          List<LeadSourceByUser> data = task1.Result;
-          if (data.Count > 0)
-          {
-            cbxLeadSource.ItemsSource = data;
-            cbxLeadSource.SelectedIndex = 0;
-          }
+          cbxLeadSource.Text = "No data found - Press Ctrl+F5 to load Data";
         }
         StaEnd();
-        return false;
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
     }
 
     /// <summary>

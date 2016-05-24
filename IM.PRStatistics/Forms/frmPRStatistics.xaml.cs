@@ -238,36 +238,26 @@ namespace IM.PRStatistics.Forms
     /// </summary>
     /// <history>
     /// [erosado] 08/Mar/2016 Created
+    /// [edgrodriguez] 21/May/2016 Modified El método GetLeadSourcesByUser se volvió asincrónico.
     /// </history>
-    public void DoGetLeadSources(string user)
+    public async void DoGetLeadSources(string user)
     {
-      Task.Factory.StartNew(() => BRLeadSources.GetLeadSourcesByUser(user))
-      .ContinueWith(
-      (task1) =>
+      try
       {
-        if (task1.IsFaulted)
+
+        List<LeadSourceByUser> data = await BRLeadSources.GetLeadSourcesByUser(user);
+        if (data.Count > 0)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          return false;
+          lsbxLeadSources.DataContext = data;
         }
-        else
-        {
-          if (task1.IsCompleted)
-          {
-            
-            List<LeadSourceByUser> data = task1.Result;
-            if (data.Count > 0)
-            {
-              lsbxLeadSources.DataContext = data;
-            }
-          }
+
+        StaEnd();
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
           StaEnd();
-          return false;
-        }
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+      }
     }
 
     /// <summary>
@@ -276,36 +266,24 @@ namespace IM.PRStatistics.Forms
     /// <history>
     /// [erosado] 08/Mar/2016 Created
     /// </history>
-    public void DoGetSalesRooms(string user)
+    public async void DoGetSalesRooms(string user)
     {
-      Task.Factory.StartNew(() => BRSalesRooms.GetSalesRoomsByUser(user))
-      .ContinueWith(
-      (task1) =>
+      try
       {
-        if (task1.IsFaulted)
+        List<SalesRoomByUser> data = await BRSalesRooms.GetSalesRoomsByUser(user);
+        if (data.Count > 0)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          return false;
+          lsbxSalesRooms.DataContext = data;
+          chbxSalesRooms.IsChecked = true;
         }
-        else
-        {
-          if (task1.IsCompleted)
-          {
-            task1.Wait(1000);
-            List<SalesRoomByUser> data = task1.Result;
-            if (data.Count > 0)
-            {
-              lsbxSalesRooms.DataContext = data;
-              chbxSalesRooms.IsChecked = true;
-            }
-          }
-          StaEnd();
-          return false;
-        }
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+        StaEnd();
+      }
+      catch (Exception ex)
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
+      
     }
     /// <summary>
     /// Obtiene el catalogo de countries

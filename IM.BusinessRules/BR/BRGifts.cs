@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<GiftShort>> GetGifts(string location = "ALL", int Status = 0)
     {
-      List<GiftShort> result = null;
+      List<GiftShort> result = new List<GiftShort>();
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
@@ -69,23 +69,29 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 07/03/2016 Created
     /// </history>
-    public static List<GiftCategory> GetGiftsCategories(int Status = 0)
+    public async static Task<List<GiftCategory>> GetGiftsCategories(int Status = 0)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<GiftCategory> result = new List<GiftCategory>();
+      await Task.Run(() =>
       {
-        var lstGiftsCateg = dbContext.GiftsCategories;
-        switch (Status)
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          case 1:
-            return lstGiftsCateg.Where(c => c.gcA == true).ToList();
-
-          case 2:
-            return lstGiftsCateg.Where(c => c.gcA == false).ToList();
-
-          default:
-            return lstGiftsCateg.ToList();
+          var lstGiftsCateg = dbContext.GiftsCategories;
+          switch (Status)
+          {
+            case 1:
+              result = lstGiftsCateg.Where(c => c.gcA == true).ToList();
+              break;
+            case 2:
+              result = lstGiftsCateg.Where(c => c.gcA == false).ToList();
+              break;
+            default:
+              result = lstGiftsCateg.ToList();
+              break;
+          }
         }
-      }
+      });
+      return result;
     }
 
     #endregion GetGiftsCategories

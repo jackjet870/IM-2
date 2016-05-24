@@ -5,11 +5,14 @@ using IM.BusinessRules.Properties;
 using IM.Model;
 using IM.Model.Helpers;
 using IM.Model.Enums;
+using System.Collections;
 
 namespace IM.BusinessRules.BR
 {
   public class BRReportsBySalesRoom
   {
+
+    #region Processor General
 
     #region Bookings
 
@@ -64,9 +67,29 @@ namespace IM.BusinessRules.BR
     /// <param name="salesRooms">Sala de Venta</param>
     /// <returns> List<RptCxC> </returns>
     /// <history>
+    /// [edgrodriguez] 17/May/2016 Created
+    /// </history>
+    public static List<RptCxCExcel> GetRptCxC(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_RptCxCExcel(dtmStart, dtmEnd, salesRooms).ToList();
+      }
+    }
+    #endregion
+
+    #region GetRptCxCByType
+    /// <summary>
+    /// Obtiene el reporte de CxC By Type por Sala de ventas.
+    /// </summary>
+    /// <param name="dtmStart">Fecha Inicial</param>
+    /// <param name="dtmEnd">Fecha Final</param>
+    /// <param name="salesRooms">Sala de Venta</param>
+    /// <returns> List<RptCxC> </returns>
+    /// <history>
     /// [edgrodriguez] 22/Mar/2016 Created
     /// </history>
-    public static List<RptCxC> GetRptCxC(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
+    public static List<RptCxC> GetRptCxCByType(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -122,7 +145,7 @@ namespace IM.BusinessRules.BR
                      join gift in dbContext.Gifts on gRcpt.Gift equals gift.giID
                      select gift).ToList();
 
-        return lstGiftReceipt.Count > 0 ? new List<object> { lstGiftReceipt, gifts }: new List<object>();
+        return lstGiftReceipt.Count > 0 ? new List<object> { lstGiftReceipt, gifts } : new List<object>();
       }
     }
     #endregion
@@ -288,11 +311,33 @@ namespace IM.BusinessRules.BR
                             (gRctp.grDepositTwisted > 0 || (gu.guHotelB != "" && gu.guHotelB != null))
                             select new
                             {
-                              gRctp.grID,
-                              gSale
+                              gRctp,
+                              gSale,
+                              gu,
+                              per
                             })
-                            .GroupBy(c => c.grID)
-                            .ToDictionary(c => c.Key, c => c.Select(s => s.gSale).ToList());
+                            .GroupBy(c => c.gRctp.grID)
+                            .ToDictionary(c => c.Key, c => c.Select(s => new Tuple<RptDepositsBurnedByResort, Sale>(
+                            new RptDepositsBurnedByResort
+                            {
+                              grID = s.gRctp.grID,
+                              grNum = s.gRctp.grNum,
+                              grD = s.gRctp.grD,
+                              grgu = s.gRctp.grgu,
+                              grGuest = s.gRctp.grGuest,
+                              grHotel = s.gRctp.grHotel,
+                              guHotelB = s.gu.guHotelB,
+                              grlo = s.gRctp.grlo,
+                              grsr = s.gRctp.grsr,
+                              grpe = s.gRctp.grpe,
+                              peN = s.per.peN,
+                              grcu = s.gRctp.grcu,
+                              grpt = s.gRctp.grpt,
+                              grHost = s.gRctp.grHost,
+                              grDepositTwisted = s.gRctp.grDepositTwisted
+                            }, s.gSale)).ToList());
+
+
 
         return (giftReceipts.Count > 0) ? new List<object> { giftReceipts, currencies, paymentsType, saleReceipts } : new List<object>();
       }
@@ -310,7 +355,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 05/Abr/2016 Created
     /// </history>
-    public static List<object> GetRptPaidDeposits(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms="ALL", string leadSources= "ALL")
+    public static List<object> GetRptPaidDeposits(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL", string leadSources = "ALL")
     {
       List<string> salesRoom = salesRooms.Split(',').ToList();
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
@@ -414,7 +459,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    public static List<object> GetRptGiftsCertificates(DateTime? dtmStart,DateTime? dtmEnd, string salesRooms, string categories="ALL", string gifts="ALL")
+    public static List<object> GetRptGiftsCertificates(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms, string categories = "ALL", string gifts = "ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -423,11 +468,79 @@ namespace IM.BusinessRules.BR
         var currencies = (from gift in DailyGiftCertificates.Select(c => c.Currency).Distinct()
                           join curr in dbContext.Currencies on gift equals curr.cuID
                           select curr).ToList();
-        var payType= (from gift in DailyGiftCertificates.Select(c => c.PaymentType).Distinct()
-                      join payT in dbContext.PaymentTypes on gift equals payT.ptID
-                      select payT).ToList();
+        var payType = (from gift in DailyGiftCertificates.Select(c => c.PaymentType).Distinct()
+                       join payT in dbContext.PaymentTypes on gift equals payT.ptID
+                       select payT).ToList();
 
         return DailyGiftCertificates.Count > 0 ? new List<object> { DailyGiftCertificates, currencies, payType } : new List<object>();
+      }
+    }
+
+    #endregion
+
+    #region GetRptGiftsManifest
+    /// <summary>
+    /// Obtiene el reporte de Gifts Manifest.
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="dtmEnd"></param>
+    /// <param name="salesRooms"></param>
+    /// <param name="categories"></param>
+    /// <param name="gifts"></param>
+    /// <param name="status"></param>
+    /// <returns> List<object> </returns>
+    /// <history>
+    /// [edgrodriguez] 10/May/2016 Created
+    /// </history>
+    public static List<IEnumerable> GetRptGiftsManifest(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms, string categories = "ALL", string gifts = "ALL", EnumStatus status = EnumStatus.staAll)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        //Obtenemos los certificados de regalo.
+        var lstGiftsManifest = dbContext.USP_OR_RptGiftsManifest(dtmStart, dtmEnd, salesRooms, categories, gifts, Convert.ToByte(status))
+          .MultipleResults()
+          .With<RptGiftsManifest>()
+          .With<GiftForReceipts>()
+          .With<CurrencyShort>()
+          .With<PaymentTypeShort>()
+          .GetValues();
+
+        return ((lstGiftsManifest[0] as List<RptGiftsManifest>).Count > 0) ? lstGiftsManifest : new List<IEnumerable>();
+
+      }
+    }
+
+    #endregion
+
+    #region GetRptGiftsMReceipts
+    /// <summary>
+    /// Obtiene el reporte de Gifts Receipts.
+    /// </summary>
+    /// <param name="dtmStart"></param>
+    /// <param name="dtmEnd"></param>
+    /// <param name="salesRooms"></param>
+    /// <param name="categories"></param>
+    /// <param name="gifts"></param>
+    /// <param name="status"></param>
+    /// <returns> List<object> </returns>
+    /// <history>
+    /// [edgrodriguez] 11/May/2016 Created
+    /// </history>
+    public static List<IEnumerable> GetRptGiftsMReceipts(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms, string categories = "ALL", string gifts = "ALL", EnumStatus status = EnumStatus.staAll, EnumGiftsReceiptType giftReceiptType = EnumGiftsReceiptType.grtAll, int guestID = 0)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        //Obtenemos los certificados de regalo.
+        var lstGiftsManifest = dbContext.USP_OR_RptGiftsReceipts(dtmStart, dtmEnd, salesRooms, categories, gifts, Convert.ToByte(status), Convert.ToByte(giftReceiptType), guestID)
+          .MultipleResults()
+          .With<RptGiftsReceipts>()
+          .With<GiftForReceipts>()
+          .With<CurrencyShort>()
+          .With<PaymentTypeShort>()
+          .GetValues();
+
+        return ((lstGiftsManifest[0] as List<RptGiftsReceipts>).Count > 0) ? lstGiftsManifest : new List<IEnumerable>();
+
       }
     }
 
@@ -484,7 +597,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    public static List<RptGiftsSale> GetRptGiftsSale(DateTime dtmStart, DateTime dtmEnd, string salesRooms = "ALL", string categories = "ALL", string gifts = "ALL", EnumGiftSale sale = Model.Enums.EnumGiftSale.gsAll)
+    public static List<IEnumerable> GetRptGiftsSale(DateTime dtmStart, DateTime dtmEnd, string salesRooms = "ALL", string categories = "ALL", string gifts = "ALL", EnumGiftSale sale = Model.Enums.EnumGiftSale.gsAll)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -498,7 +611,7 @@ namespace IM.BusinessRules.BR
           .With<PaymentTypeShort>()
           .GetValues();
 
-        return new List<RptGiftsSale>();
+        return (query[0] as List<RptGiftsSale>).Count > 0 ? query : new List<IEnumerable>();
       }
     }
 
@@ -517,7 +630,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 16/Abr/2016 Created
     /// </history>
-    public static List<RptGiftsUsedBySistur> GetRptGiftsUsedBySistur(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL", string programs="ALL", string leadsources="ALL")
+    public static List<RptGiftsUsedBySistur> GetRptGiftsUsedBySistur(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL", string programs = "ALL", string leadsources = "ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -540,7 +653,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 08/Abr/2016 Created
     /// </history>
-    public static List<RptWeeklyGiftsItemsSimple> GetRptWeeklyGiftsItemsSimple(DateTime? dtmStart, string salesRooms="ALL")
+    public static List<RptWeeklyGiftsItemsSimple> GetRptWeeklyGiftsItemsSimple(DateTime? dtmStart, string salesRooms = "ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -615,6 +728,22 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    //#region GetRptGuestManifest
+    ///// <summary>
+    ///// Obtiene el reporte Guest Manifest por Sala de ventas.
+    ///// </summary>
+    ///// <param name="dtmStart"></param>
+    ///// <param name="salesRooms"></param>
+    ///// <returns> List<RptInOut> </returns>
+    ///// <history>
+    ///// [edgrodriguez] 09/Abr/2016 Created
+    ///// </history>
+    //public static List<RptInOut> GetRptGuestManifest(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms)
+    //{
+
+    //}
+    //#endregion
+
     #region GetRptGuestNoShows
     /// <summary>
     /// Obtiene el reporte de Guest No Show por Sala de ventas.
@@ -649,7 +778,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 11/Abr/2016 Created
     /// </history>
-    public static List<RptMealTickets> GetRptMealTickets(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms, bool? cancelled, string rateTypes="ALL")
+    public static List<RptMealTickets> GetRptMealTickets(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms, bool? cancelled, string rateTypes = "ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -669,7 +798,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 11/Abr/2016 Created
     /// </history>
-    public static List<RptMealTicketsCost> GetRptMealTicketsCost(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms, string rateTypes="ALL")
+    public static List<RptMealTicketsCost> GetRptMealTicketsCost(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms, string rateTypes = "ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -701,7 +830,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 11/Abr/2016 Created
     /// </history>
-    public static List<RptMemberships> GetRptMemberships(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms="ALL", string leadSources = "ALL")
+    public static List<RptMemberships> GetRptMemberships(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL", string leadSources = "ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -724,7 +853,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 11/Abr/2016 Created
     /// </history>
-    public static List<RptMembershipsByAgencyMarket> GetRptMembershipsByAgencyMarket(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms="ALL")
+    public static List<RptMembershipsByAgencyMarket> GetRptMembershipsByAgencyMarket(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -882,6 +1011,52 @@ namespace IM.BusinessRules.BR
 
     #endregion
 
+    #region Salesmen
+
+    #region GetRptCloserStatistics
+    /// <summary>
+    /// Obtiene el reporte Production By SalesRoom.
+    /// </summary>
+    /// <param name="dtmStart">Fecha Inicial</param>
+    /// <param name="dtmEnd">Fecha Final</param>
+    /// <param name="salesRooms"> Filtro de Sales Room</param>
+    /// <returns> List<RptCloserStatistics> </returns>
+    /// <history>
+    /// [edgrodriguez] 12/May/2016 Created.
+    /// </history>
+    public static List<RptCloserStatistics> GetRptCloserStatistics(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL")
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstCloserStatistics = dbContext.USP_IM_RptCloserStatistics(dtmStart, dtmEnd, salesRooms).ToList();
+        return lstCloserStatistics;
+      }
+    }
+    #endregion
+
+    #region GetRptLinerStatistics
+    /// <summary>
+    /// Obtiene el reporte Production By SalesRoom.
+    /// </summary>
+    /// <param name="dtmStart">Fecha Inicial</param>
+    /// <param name="dtmEnd">Fecha Final</param>
+    /// <param name="salesRooms"> Filtro de Sales Room</param>
+    /// <returns> List<RptCloserStatistics> </returns>
+    /// <history>
+    /// [edgrodriguez] 12/May/2016 Created.
+    /// </history>
+    public static List<RptLinerStatistics> GetRptLinerStatistics(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL")
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstLinerStatistics = dbContext.USP_IM_RptLinerStatistics(dtmStart, dtmEnd, salesRooms).ToList();
+        return lstLinerStatistics;
+      }
+    }
+    #endregion
+
+    #endregion
+
     #region Taxis
 
     #region GetRptTaxisIn
@@ -894,7 +1069,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [edgrodriguez] 16/Abr/2016 Created.
     /// </history>
-    public static List<RptTaxisIn> GetRptTaxisIn(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms="ALL")
+    public static List<RptTaxisIn> GetRptTaxisIn(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -914,7 +1089,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [edgrodriguez] 16/Abr/2016 Created.
     /// </history>
-    public static List<RptTaxisOut> GetRptTaxisOut(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms="ALL")
+    public static List<RptTaxisOut> GetRptTaxisOut(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -926,8 +1101,10 @@ namespace IM.BusinessRules.BR
 
     #endregion
 
+    #endregion
+
     #region Processor Sales
-    
+
     #region GetRptStatisticsByLocation
     /// <summary>
     /// Devuelve un listado de Statics by Location
@@ -945,7 +1122,7 @@ namespace IM.BusinessRules.BR
       {
         return dbContext.USP_OR_RptStatsByLocation(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
       }
-    } 
+    }
     #endregion
 
     #region StatsBySalesRoomLocation
@@ -1019,7 +1196,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [ecanul] 16/05/2016 Created
     /// </history>
-    public static List<RptDailySalesHeader> GetRptDailySalesHeader(DateTime dtStart, DateTime dtEnd, IEnumerable<string>salesRoom)
+    public static List<RptDailySalesHeader> GetRptDailySalesHeader(DateTime dtStart, DateTime dtEnd, IEnumerable<string> salesRoom)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {

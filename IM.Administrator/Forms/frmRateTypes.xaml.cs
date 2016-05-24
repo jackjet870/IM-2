@@ -235,11 +235,12 @@ namespace IM.Administrator.Forms
     /// <param name="ratType">Objeto a seleccionar en el grid</param>
     /// <history>
     /// [emoguel] created 13/04/2016
+    /// [edgrodriguez] 21/05/2016 Modified. El método GetRateTypes se volvió asincrónico.
     /// </history>
-    private void LoadRateTypes(RateType rateType = null)
+    private async void LoadRateTypes(RateType rateType = null)
     {
       int nIndex = 0;
-      List<RateType> lstRateTypes = BRRateTypes.GetRateTypes(_rateTypeFilter, _nStatus, orderByraN: true);
+      List<RateType> lstRateTypes = await BRRateTypes.GetRateTypes(_rateTypeFilter, _nStatus, orderByraN: true);
       dgrRateTypes.ItemsSource = lstRateTypes;
       if (lstRateTypes.Count > 0 && rateType != null)
       {

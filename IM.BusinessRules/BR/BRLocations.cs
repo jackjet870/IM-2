@@ -3,6 +3,8 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System;
+using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -89,24 +91,27 @@ namespace IM.BusinessRules.BR
 
     #endregion
 
+    #region GetLocationsByProgram
     /// <summary>
     /// Obtiene una lista de locations filtrados por Programa.
     /// </summary>
     /// <param name="program"> Programa "IH","OUT" </param>
     /// <history>
     /// [edgrodriguez] created 27/04/2016
+    /// [edgrodriguez] modified 23/05/2016 Se agregó asincronia.
     /// </history>
-    public static List<Location> GetLocationsbyProgram(string program="ALL")
+    public async static Task<List<Location>> GetLocationsbyProgram(string program = "ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        var Locs= (from loc in dbContext.Locations
-          join ls in dbContext.LeadSources on loc.lols equals ls.lsID
-          where loc.loA && (program == "ALL" || ls.lspg == program)
-          select loc).OrderBy(c=>c.loN).ToList();
+        var Locs = (from loc in dbContext.Locations
+                    join ls in dbContext.LeadSources on loc.lols equals ls.lsID
+                    where loc.loA && (program == "ALL" || ls.lspg == program)
+                    select loc).OrderBy(c => c.loN);
 
-        return Locs;
+        return await Locs.ToListAsync();
       }
-    }
+    } 
+    #endregion
   }
 }

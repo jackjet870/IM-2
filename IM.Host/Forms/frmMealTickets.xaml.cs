@@ -54,6 +54,7 @@ namespace IM.Host.Forms
     /// <param name="e"></param>
     /// <history>
     /// [erosado] 19/05/2016  Modified. Se agregó Asincronía
+    /// [edgrodriguez] 21/05/2016 Modified. El método GetRateTypes se volvió asincrónico.
     /// </history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
@@ -64,7 +65,7 @@ namespace IM.Host.Forms
       _dsMealTicketType = ((CollectionViewSource)(this.FindResource("dsMealTicketType")));
 
       //  Obtenemos los tipos de tarifa
-      _dsRateType.Source = BRRateTypes.GetRateTypes(new RateType { raID=1}, 1, true, true);
+      _dsRateType.Source = await BRRateTypes.GetRateTypes(new RateType { raID=1}, 1, true, true);
 
       // Obtenemos los colaboradores
       _dsPersonnel.Source = await BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);

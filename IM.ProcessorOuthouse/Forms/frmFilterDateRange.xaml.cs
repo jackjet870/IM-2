@@ -39,6 +39,7 @@ namespace IM.ProcessorOuthouse.Forms
     /// <history>
     /// [erosado] 19/05/2016  Created
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// [edgrodriguez] 21/May/2016 Modified El método GetLeadSourcesByUser se volvió asincrónico.
     /// </history>
     private async void LoadCatalog()
     {
@@ -47,7 +48,7 @@ namespace IM.ProcessorOuthouse.Forms
       List<string> _prodByGift = GetSettings.ProductionByGift();
       _lstGiftsProdGift = BRGifts.GetGiftsShortById(_prodByGift);
 
-      _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, EnumProgram.Outhouse, "ALL");
+      _lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, EnumProgram.Outhouse, "ALL");
 
       List<string> _paymentComm = GetSettings.PRPaymentCommissions();
       _lstLeadSourcesPaymentComm = BRLeadSources.GetLeadSourceById(_paymentComm);
@@ -55,7 +56,7 @@ namespace IM.ProcessorOuthouse.Forms
       _lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter, -1);
       _lstPaymentType =await BRPaymentTypes.GetPaymentTypes(-1);
 
-      var x = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, EnumProgram.Outhouse).Select(y => y.lsID);
+      var x = (await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, EnumProgram.Outhouse)).Select(y => y.lsID).ToList();
       _lstPRs =await BRPersonnel.GetPersonnel(string.Join(",", x), roles: EnumToListHelper.GetEnumDescription(EnumRole.PR), status: 0);
 
       _lstFoliosInvitationOuthouse = BRFoliosInvitationsOuthouse.GetFoliosInvittionsOutside(nStatus: 1).ToList();

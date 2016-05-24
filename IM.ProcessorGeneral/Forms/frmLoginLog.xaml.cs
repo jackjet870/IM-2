@@ -32,9 +32,6 @@ namespace IM.ProcessorGeneral.Forms
     public frmLoginLog()
     {
       InitializeComponent();
-      _locations= BRLocations.GetLocationsbyProgram("IH");
-      _pcNames = BRLoginLogs.GetLoginsLogPCName();
-      _personnels = BRPersonnel.GetPersonnelAccess();
     }
 
     /// <summary>
@@ -45,15 +42,9 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void FrmLoginLog_OnContentRendered(object sender, EventArgs e)
     {
-      //Agregamos valores null
-      _locations.Insert(0, new Location {loID = ""});
-      _pcNames.Insert(0, "");
-      //_personnels.Insert(0, new Personnel {peID = ""});
-
-      cbLocation.ItemsSource = _locations;
-      cbPcName.ItemsSource = _pcNames;
-      cbPersonnel.ItemsSource = _personnels;
-
+      LoadPersonnel();
+      LoadPcNames();
+      LoadLocations();
     }
 
     /// <summary>
@@ -101,10 +92,10 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 28/Abr/2016 Created
     /// </history>
-    private void BtnApplyFilter_OnClick(object sender, RoutedEventArgs e)
+    private async void BtnApplyFilter_OnClick(object sender, RoutedEventArgs e)
     {
       lstLoginsLog = ((CollectionViewSource) (FindResource("lstRptLoginsLog")));
-      lstLoginsLog.Source = BRGeneralReports.GetRptLoginsLog(dtmStart.SelectedDate.Value, dtmEnd.SelectedDate.Value,
+      lstLoginsLog.Source = await BRGeneralReports.GetRptLoginsLog(dtmStart.SelectedDate.Value, dtmEnd.SelectedDate.Value,
         (cbLocation.Text != "") ? cbLocation.SelectedValue.ToString() : "ALL",
         (cbPcName.Text != "") ? cbPcName.SelectedValue.ToString() : "ALL",
         (cbPersonnel.Text != "") ? cbPersonnel.SelectedValue.ToString() : "ALL");
@@ -131,6 +122,44 @@ namespace IM.ProcessorGeneral.Forms
       Process.Start(EpplusHelper.CreateGeneralRptExcel(filters, dtRptLoginsLog, "Logins Log",
         DateHelper.DateRangeFileName(dtmStart.SelectedDate.Value, dtmEnd.SelectedDate.Value),
         clsFormatReport.RptLoginsLog()).FullName);
+    }
+
+    /// <summary>
+    /// Carga y configuracion de Locations.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 23/May/2016 Created
+    /// </history>
+    private async void LoadLocations()
+    {
+      _locations= await BRLocations.GetLocationsbyProgram("IH");
+      _locations.Insert(0, new Location { loID = "" });
+      cbLocation.ItemsSource = _locations;
+    }
+
+    /// <summary>
+    /// Carga y configuracion de PCNames.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 23/May/2016 Created
+    /// </history>
+    private async void LoadPcNames()
+    {
+      _pcNames = await BRLoginLogs.GetLoginsLogPCName();
+      _pcNames.Insert(0, "");
+      cbPcName.ItemsSource = _pcNames;
+    }
+
+    /// <summary>
+    /// Carga y configuracion de Personnels.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 23/May/2016 Created
+    /// </history>
+    private async void LoadPersonnel()
+    {
+      _personnels = await BRPersonnel.GetPersonnelAccess();
+      cbPersonnel.ItemsSource = _personnels;
     }
   }
 }

@@ -199,8 +199,9 @@ namespace IM.ProcessorSales.Forms
     /// <param name="weeks">Weeks</param>
     /// <history>
     /// [ecanul] 26/04/2016 Created
+    /// [edgrodriguez] 21/05/2016 Modified. El metodo GetPrograms se volvió asincrónico.
     /// </history>
-    private void ConfigureGrids(bool sr, bool programs, bool segments, bool multidate, bool concentrate, bool weeks)
+    private async void ConfigureGrids(bool sr, bool programs, bool segments, bool multidate, bool concentrate, bool weeks)
     {
       #region Visibilidad de los grids
 
@@ -215,7 +216,7 @@ namespace IM.ProcessorSales.Forms
       #endregion
       
       //Carga salesRoom
-      _lstSalesRoomByUsers = BRSalesRooms.GetSalesRoomsByUser(App.User.User.peID);
+      _lstSalesRoomByUsers = await BRSalesRooms.GetSalesRoomsByUser(App.User.User.peID);
      
       //Si tiene SR
       dtgSalesRoom.ItemsSource = (sr) ? _lstSalesRoomByUsers : null;
@@ -224,7 +225,7 @@ namespace IM.ProcessorSales.Forms
       //Si tiene Programs
       if (programs)
       {
-        _lstPrograms = BRPrograms.GetPrograms();
+        _lstPrograms = await BRPrograms.GetPrograms();
         dtgPrograms.ItemsSource = _lstPrograms;
       }
 

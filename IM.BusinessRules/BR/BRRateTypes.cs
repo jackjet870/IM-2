@@ -4,6 +4,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -21,9 +22,10 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 08/03/2016 Created
     /// [vipacheco] 18/03/2016 Modified --> Se agregó parametro raIDMayorA para la busqueda mayor a ese ID especificado
-    /// [emoguel] 13/04/2016 Modified--->Se modificaron los tipos de variable y nombe de los parametros ID ((RateType)rateType) y raA ((int)nStatus) 
+    /// [emoguel] 13/04/2016 Modified--->Se modificaron los tipos de variable y nombe de los parametros ID ((RateType)rateType) y raA ((int)nStatus)
+    /// [edgrodriguez] 21/05/2016 Modified. El método se volvió asincrónico.
     /// </history>
-    public static List<RateType> GetRateTypes(RateType rateType=null, int nStatus = -1, bool raIDMayorA = false, bool orderByraN = false)
+    public async static Task<List<RateType>> GetRateTypes(RateType rateType=null, int nStatus = -1, bool raIDMayorA = false, bool orderByraN = false)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -42,7 +44,7 @@ namespace IM.BusinessRules.BR
           {
             if (raIDMayorA)
             {
-              query = query.Where(ra => ra.raID > ra.raID);//id mayor a
+              query = query.Where(ra => ra.raID > rateType.raID);//id mayor a
             }
             else
             {
@@ -62,7 +64,7 @@ namespace IM.BusinessRules.BR
           query = query.OrderBy(ra => ra.raN);
         }        
 
-        return query.ToList();
+        return await query.ToListAsync();
       }
     }
     #endregion

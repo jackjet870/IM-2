@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -34,12 +35,16 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene la lista de Nombres de Pc del historico de accesos.
     /// </summary>
-    /// <history>[edgrodriguez] 27/04/2016</history>
-    public static List<string> GetLoginsLogPCName()
+    /// <history>
+    /// [edgrodriguez] 27/04/2016 Created
+    /// [edgrodriguez] 23/05/2016 Modified Se agrego asincronia.
+    /// </history>
+    public async static Task<List<string>> GetLoginsLogPCName()
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.LoginsLogs.Select(c => c.llPCName).OrderBy(c=>c).Distinct().ToList();
+        var query = dbContext.LoginsLogs.Select(c => c.llPCName).OrderBy(c=>c).Distinct();
+        return await query.ToListAsync();
       }
     }
     #endregion

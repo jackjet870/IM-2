@@ -4,6 +4,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -39,14 +40,21 @@ namespace IM.BusinessRules.BR
     /// </hystory>
     /// <history>
     /// [edgrodriguez] 29/Feb/2016 Created
-    /// [edgrodriguez] 04/Mar/2016 Modified //Se agregarón los valores default.
+    /// [edgrodriguez] 04/Mar/2016 Modified Se agregarón los valores default.
+    /// [edgrodriguez] 21/May/2016 Modified El método se volvio asincrónico.
     /// </history>
-    public static List<SalesRoomByUser> GetSalesRoomsByUser(string user = "ALL", string regions = "ALL")
+    public async static Task<List<SalesRoomByUser>> GetSalesRoomsByUser(string user = "ALL", string regions = "ALL")
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<SalesRoomByUser> result = new List<SalesRoomByUser>();
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetSalesRoomsByUser(user, regions).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.USP_OR_GetSalesRoomsByUser(user, regions).ToList();
+        }
+      });
+
+      return result;
     }
 
     #endregion

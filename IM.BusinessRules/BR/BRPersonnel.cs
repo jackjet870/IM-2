@@ -7,6 +7,7 @@ using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -193,20 +194,23 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <history>
     /// [edgrodriguez]  27/Abr/2016 Created
+    /// [edgrodriguez] 23/May/2016 Modified Se agrego asincronia.
     /// </history>
-    public static List<Personnel> GetPersonnelAccess()
+    public async static Task<List<Personnel>> GetPersonnelAccess()
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return (from pe in dbContext.Personnels
-          join pa in (from pa in dbContext.PersonnelAccessList
-            join ls in dbContext.LeadSources on pa.plLSSRID equals ls.lsID
-            where pa.plLSSR == "LS" && ls.lspg == "IH" && ls.lsA
-            select pa)
-            on pe.peID equals pa.plpe
-          where pe.peA
-          select pe
-          ).Distinct().OrderBy(c=>c.peN).ToList();
+        var query = (from pe in dbContext.Personnels
+                     join pa in (from pa in dbContext.PersonnelAccessList
+                                 join ls in dbContext.LeadSources on pa.plLSSRID equals ls.lsID
+                                 where pa.plLSSR == "LS" && ls.lspg == "IH" && ls.lsA
+                                 select pa)
+                       on pe.peID equals pa.plpe
+                     where pe.peA
+                     select pe
+          ).Distinct().OrderBy(c => c.peN);
+
+        return await query.ToListAsync();
       }
     }
 
@@ -227,44 +231,25 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static UserData login2(EnumLoginType loginType, string user, string psw, string place = "")
     {
-      //using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      //{
-      //  var personnel = dbContext.USP_IM_Login(Convert.ToByte(loginType), user, psw, place);
-      //  var userData = new UserData();
-      //  userData.User = personnel.FirstOrDefault();
-
-      //  if (userData.User == null) return null;
-      //  var resRoles = personnel.GetNextResult<RoleLogin>();
-      //  userData.Roles = resRoles.ToList();
-      //  var resPermissions = resRoles.GetNextResult<PermissionLogin>();
-      //  userData.Permissions = resPermissions.ToList();
-      //  var resSalesroom = resPermissions.GetNextResult<SalesRoomLogin>();
-      //  userData.SalesRoom = resSalesroom.FirstOrDefault();
-      //  var resLocation = resSalesroom.GetNextResult<LocationLogin>();
-      //  userData.Location = resLocation.FirstOrDefault();
-      //  var resLeadSource = resLocation.GetNextResult<LeadSourceLogin>();
-      //  userData.LeadSource = resLeadSource.FirstOrDefault();
-      //  var resWarehouse = resLeadSource.GetNextResult<WarehouseLogin>();
-      //  userData.Warehouse = resWarehouse.FirstOrDefault();
-      //  return userData;
-      //}
       UserData userData = new UserData();
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        var resUser = dbContext.USP_OR_Login(Convert.ToByte(loginType), user, place);
-        userData.User = resUser.FirstOrDefault();
-        var resRoles = resUser.GetNextResult<RoleLogin>();
-        userData.Roles = resRoles.ToList();
-        var resPermissions = resRoles.GetNextResult<PermissionLogin>();
-        userData.Permissions = resPermissions.ToList();
-        var resSalesroom = resPermissions.GetNextResult<SalesRoomLogin>();
-        userData.SalesRoom = resSalesroom.FirstOrDefault();
-        var resLocation = resSalesroom.GetNextResult<LocationLogin>();
-        userData.Location = resLocation.FirstOrDefault();
-        var resLeadSource = resLocation.GetNextResult<LeadSourceLogin>();
-        userData.LeadSource = resLeadSource.FirstOrDefault();
-        var resWarehouse = resLeadSource.GetNextResult<WarehouseLogin>();
-        userData.Warehouse = resWarehouse.FirstOrDefault();
+        var resUser = dbContext.USP_OR_Login(Convert.ToByte(loginType), user, place).MultipleResults()
+          .With<UserLogin>()
+          .With<RoleLogin>()
+          .With<PermissionLogin>()
+          .With<SalesRoomLogin>()
+          .With<LocationLogin>()
+          .With<LeadSourceLogin>()
+          .With<WarehouseLogin>()
+          .GetValues();
+        userData.User = resUser[0].Cast<UserLogin>().FirstOrDefault();
+        userData.Roles = resUser[1].Cast<RoleLogin>().ToList();
+        userData.Permissions = resUser[2].Cast<PermissionLogin>().ToList();
+        userData.SalesRoom = resUser[3].Cast<SalesRoomLogin>().FirstOrDefault();
+        userData.Location = resUser[4].Cast<LocationLogin>().FirstOrDefault();
+        userData.LeadSource = resUser[5].Cast<LeadSourceLogin>().FirstOrDefault();
+        userData.Warehouse = resUser[6].Cast<WarehouseLogin>().FirstOrDefault();
       }
       return userData;
     }

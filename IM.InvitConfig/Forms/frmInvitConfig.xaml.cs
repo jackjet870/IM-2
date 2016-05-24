@@ -113,12 +113,13 @@ namespace IM.InvitConfig.Forms
     ///<history>
     ///[jorcanche] created 12/05/2016
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// [edgrodriguez] 21/May/2016 Modified El método GetLeadSourcesByUser se volvió asincrónico.
     ///</history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       EnableControls(true, false, true, false);
       StaStart("Load LeadSource...");
-      cmbLeadSource.ItemsSource = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID);
+      cmbLeadSource.ItemsSource = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID);
       StaStart("Load Languages...");
       cmbLanguage.ItemsSource =await BRLanguages.GetLanguages(1);
       cmbLanguage.SelectedIndex = cmbLeadSource.SelectedIndex = 0;

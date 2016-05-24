@@ -14,7 +14,7 @@ namespace IM.Model.Enums
     staAll,
     [Description("Actives")]
     staActives,
-    [Description("Inactives")]
+    [Description("Cancelled")]
     staInactives
   }
 }

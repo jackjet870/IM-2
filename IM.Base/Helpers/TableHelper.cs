@@ -21,6 +21,7 @@ namespace IM.Base.Helpers
     /// <param name="lst">Lista tipada</param>
     /// <param name="showCheckMark"> false: Cambia las columnas booleanas a string y convierte la palabra </param>
     /// <param name="replaceStringNullOrWhiteSpace">Cambia las columnas string vacias a "-" </param>
+    /// <param name="sortFields">Ordena los campos segun la direccion especificada. "Campo1 asc, Campo2 desc"</param>
     /// <returns>DataTable</returns>
     /// <history>
     /// [erosado] 12/Mar/2016  Created.
@@ -31,19 +32,22 @@ namespace IM.Base.Helpers
     ///                                      Se hizo modificaciones en el proceso de creacion del datatable.
     /// [aalcocer] 11/Abr/2016 Modified. Opcion para reemplazar campos vacios.
     /// [wtorres]  15/Abr/2016 Modified. Movido desde el GridHelper y renombrado. Antes se llamaba GetDatatableFromGrid
-    /// [aalcocer] 17/Abr/2016 Modified. Corregido, ahora solo sustituye campos vacios de tipo string con el parametro "replaceStringNullOrWhiteSpace"
     /// </history>
     public static DataTable GetDataTableFromList<T>(List<T> lst, bool changeDataTypeBoolToString = false,
       bool showCheckMark = true, bool replaceStringNullOrWhiteSpace = false)
     {
       DataTable table = new DataTable();
-      List<PropertyDescriptor> properties = TypeDescriptor.GetProperties(typeof(T)).Cast<PropertyDescriptor>().ToList();
+      Type t = lst[0].GetType();
+      List<PropertyDescriptor> properties = TypeDescriptor.GetProperties(t).Cast<PropertyDescriptor>().ToList();
+
       properties.ForEach(propInfo =>
       {
         Type type = Nullable.GetUnderlyingType(propInfo.PropertyType) ?? propInfo.PropertyType;
         //Cambia las columnas booleanas a string
         if (changeDataTypeBoolToString && (type == typeof(bool) || type == typeof(bool?)))
+        {
           table.Columns.Add(propInfo.Name, typeof(string));
+        }
         else if (type == typeof(string))
           table.Columns.Add(new DataColumn { ColumnName = propInfo.Name, DataType = type, DefaultValue = (replaceStringNullOrWhiteSpace || showCheckMark) ? "" : "-" });
         else
@@ -69,6 +73,6 @@ namespace IM.Base.Helpers
       return table;
     }
 
-    #endregion GetDataTableFromList
+    #endregion
   }
 }

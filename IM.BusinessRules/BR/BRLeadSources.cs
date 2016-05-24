@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -24,14 +25,21 @@ namespace IM.BusinessRules.BR
     /// [erosado] 08/03/2016  created
     /// [aalcocer] 17/03/2016 Modified. Agregado parametros por default
     /// [erosado] 07/04/2016  Modified. Se cambio el parametro string Progam a EnumPrograms
+    /// [edgrodriguez] 21/May/2016 Modified. El método se volvio asincrónico.
     /// </hystory>
 
-    public static List<LeadSourceByUser> GetLeadSourcesByUser(string user, EnumProgram program = EnumProgram.All, string regions = "ALL")
+    public async static Task<List<LeadSourceByUser>> GetLeadSourcesByUser(string user, EnumProgram program = EnumProgram.All, string regions = "ALL")
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<LeadSourceByUser> result = new List<LeadSourceByUser>();
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetLeadSourcesByUser(user, EnumToListHelper.GetEnumDescription(program), regions).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.USP_OR_GetLeadSourcesByUser(user, EnumToListHelper.GetEnumDescription(program), regions).ToList();
+        }
+      });
+
+      return result;
     }
 
     #endregion GetLeadSourcesByUser

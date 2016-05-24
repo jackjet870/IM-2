@@ -5,6 +5,7 @@ using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -29,7 +30,7 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion GetRptAgencies
+    #endregion
 
     #region GetRptPersonnel
 
@@ -48,7 +49,7 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion GetRptPersonnel
+    #endregion
 
     #region GetRptGifts
 
@@ -67,7 +68,7 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion GetRptGifts
+    #endregion
 
     #region GetRptLoginsLog
 
@@ -78,15 +79,20 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 27/Abr/2016 Created
     /// </history>
-    public static List<RptLoginLog> GetRptLoginsLog(DateTime dtmStart, DateTime dtmEnd, string location = "ALL", string pcname = "ALL", string personnel = "ALL")
+    public async static Task<List<RptLoginLog>> GetRptLoginsLog(DateTime dtmStart, DateTime dtmEnd, string location = "ALL", string pcname = "ALL", string personnel = "ALL")
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<RptLoginLog> result = new List<RptLoginLog>();
+      await Task.Run(() =>
       {
-        return dbContext.USP_IM_RptLoginLog(dtmStart, dtmEnd, location, pcname, personnel).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.USP_IM_RptLoginLog(dtmStart, dtmEnd, location, pcname, personnel).ToList();
+        }
+      });
+      return result;
     }
 
-    #endregion GetRptLoginsLog
+    #endregion
 
     #region GetRptProductionByLeadSourceMarketMonthly
 
@@ -105,7 +111,7 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion GetRptProductionByLeadSourceMarketMonthly
+    #endregion
 
     #region GetRptProductionReferral
 
@@ -123,7 +129,7 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion GetRptProductionReferral
+    #endregion
 
     #region GetRptReps
 
@@ -141,7 +147,7 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion GetRptReps
+    #endregion
 
     #region GetRptSalesByProgramLeadSourceMarket
 
@@ -159,7 +165,7 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion GetRptSalesByProgramLeadSourceMarket
+    #endregion
 
     #region GetRptWarehouseMovements
 
@@ -178,9 +184,9 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion GetRptWarehouseMovements
+    #endregion
 
-    #endregion Processor General
+    #endregion
 
     #region GetRptArrivals
 
@@ -275,9 +281,9 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion GetRptPremanifestWithGifts
-
+    
     #region Processor Inhouse
-
+    
     #region GetRptProductionByAgencyMonthly
 
     /// <summary>
@@ -303,7 +309,7 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion GetRptProductionByAgencyMonthly
-
+    
     #region GetRptProductionByMembers
 
     /// <summary>

@@ -371,6 +371,7 @@ namespace IM.ProcessorInhouse.Forms
     /// <history>
     /// [aalcocer] 03/Mar/2016 Created
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
+    /// [edgrodriguez] 21/May/2016 Modified El método GetLeadSourcesByUser se volvió asincrónico.
     /// </history>
     public async void ConfigurarFomulario(bool blnOneDate, bool blnOnlyOneRegister, bool blnOnePeriod = false,
         bool blnPersonnel = false, bool blnAllPersonnel = false, bool blnLeadSources = false, bool blnAllLeadSources = false,
@@ -388,12 +389,12 @@ namespace IM.ProcessorInhouse.Forms
 
       if (blnPersonnel)
       {
-        var x = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program).Select(y => y.lsID);
+        var x = (await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program)).Select(y => y.lsID);
         _lstPersonnel =await BRPersonnel.GetPersonnel(string.Join(",", x), roles: "PR", status: 0);
       }
       if (blnLeadSources)
       {
-        _lstLeadSources = BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program);
+        _lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program);
         if (blnLsHotelNotNull)
         {
           var lstLsIDHotelNotNull = BRLeadSources.GetLeadSources(1,EnumProgram.All).
