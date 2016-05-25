@@ -339,10 +339,11 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 10/05/2016
+    /// [erosado] 24/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void LoadSalesRooms()
+    private async void LoadSalesRooms()
     {
-      List<SalesRoomShort> lstSalesRoom = BRSalesRooms.GetSalesRooms(1);
+      List<SalesRoomShort> lstSalesRoom =await BRSalesRooms.GetSalesRooms(1);
       cmbLoc.ItemsSource = lstSalesRoom;
     }
     #endregion

@@ -5,6 +5,7 @@ using IM.Model;
 using IM.Model.Helpers;
 using System.Data.Entity.Validation;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -28,7 +29,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          result=  dbContext.USP_OR_GetLanguages(Convert.ToByte(status)).ToList();
+          result = dbContext.USP_OR_GetLanguages(Convert.ToByte(status)).ToList();
         }
       });
       return result;

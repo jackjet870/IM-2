@@ -1948,13 +1948,13 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    private async void btnExtInvit_Click(object sender, RoutedEventArgs e)
+    private void btnExtInvit_Click(object sender, RoutedEventArgs e)
     {
       //Edder
       //var frmInvitation = new frmInvitationBase(EnumInvitationType.External,App.User, 0,EnumInvitationMode.modAdd);
-      //var frmInvitation = new frmInvitation(EnumInvitationType.InHouse, App.User,0,EnumInvitationMode.modAdd);
-      //frmInvitation.Owner = this;
-      //frmInvitation.ShowDialog();
+      var frmInvitation = new frmInvitation(EnumInvitationType.InHouse, App.User,0,EnumInvitationMode.modAdd);
+      frmInvitation.Owner = this;
+      frmInvitation.ShowDialog();
 
       //var j = await BRAgencies.GetAgencies2(1);
 
@@ -2097,6 +2097,7 @@ namespace IM.Inhouse.Forms
 
     private void ChkInvit_Click(object sender, RoutedEventArgs e)
     {
+      //luis
       GuestArrival itema =
         dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
       var chk = sender as CheckBox;

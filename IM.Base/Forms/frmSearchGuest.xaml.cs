@@ -116,11 +116,19 @@ namespace IM.Base.Forms
       }
       else //validamos las fechas
         return ValidateDateRange();
-    } 
+    }
     #endregion
 
     #region Window_Loaded
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [erosado] 24/05/2016  Modified. Se agregó asincronía
+    /// </history>
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       cmbLeadSourse.ItemsSource = BRLeadSources.GetLeadSources(1, _program);
       dtpTo.SelectedDate = BRHelpers.GetServerDate().Date;
@@ -129,7 +137,7 @@ namespace IM.Base.Forms
       StatusBarReg.Content = "0 Guests";
       if (_program == EnumProgram.Outhouse)
       {
-        cmbSalesRoom.ItemsSource = BRSalesRooms.GetSalesRooms(1);
+        cmbSalesRoom.ItemsSource = await BRSalesRooms.GetSalesRooms(1);
         cmbSalesRoom.SelectedIndex = -1;
         spReservation.Visibility = btnCancel.Visibility = guBookD.Visibility = guHReservIDColumn.Visibility = guAccountGiftsCardColumn.Visibility = Visibility.Collapsed;
         btnOK.Content = "Transfer";

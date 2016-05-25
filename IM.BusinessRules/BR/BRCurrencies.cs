@@ -4,6 +4,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -25,46 +26,38 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<Currency>> GetCurrencies(Currency currency = null, int nStatus = -1, List<string> exceptCurrencyID = null)
     {
-      List<Currency> result = null;
-      await Task.Run(() =>
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        var query = from c in dbContext.Currencies
+                    select c;
+
+        if (nStatus != -1)//filtro por estatus
         {
-          var query = from c in dbContext.Currencies
-                      select c;
+          bool blnEstatus = Convert.ToBoolean(nStatus);
 
-          if (nStatus != -1)//filtro por estatus
+          if (exceptCurrencyID != null) // Verifica si se desea excluir alguna currency en especifico
           {
-            bool blnEstatus = Convert.ToBoolean(nStatus);
-
-            if (exceptCurrencyID != null) // Verifica si se desea excluir alguna currency en especifico
-            {
-              query = query.Where(c => !exceptCurrencyID.Contains(c.cuID) && c.cuID != "US" && c.cuA == blnEstatus);
-            }
-            else
-            {
-              query = query.Where(c => c.cuA == blnEstatus);
-            }
+            query = query.Where(c => !exceptCurrencyID.Contains(c.cuID) && c.cuID != "US" && c.cuA == blnEstatus);
           }
-
-          if (currency != null)
+          else
           {
-            if (!string.IsNullOrWhiteSpace(currency.cuID))//Filtro por ID
-            {
-              query = query.Where(c => c.cuID == currency.cuID);
-            }
-
-            if (!string.IsNullOrWhiteSpace(currency.cuN))//filtro por nombre
-            {
-              query = query.Where(c => c.cuN.Contains(currency.cuN));
-            }
+            query = query.Where(c => c.cuA == blnEstatus);
           }
-
-          result = query.OrderBy(c => c.cuN).ToList();
         }
-      });
+        if (currency != null)
+        {
+          if (!string.IsNullOrWhiteSpace(currency.cuID))//Filtro por ID
+          {
+            query = query.Where(c => c.cuID == currency.cuID);
+          }
 
-      return result;
+          if (!string.IsNullOrWhiteSpace(currency.cuN))//filtro por nombre
+          {
+            query = query.Where(c => c.cuN.Contains(currency.cuN));
+          }
+        }
+        return await query.OrderBy(c => c.cuN).ToListAsync();
+      }
     }
 
     #endregion

@@ -15,6 +15,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/sTabControl.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/sRichTextFormatMenu.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/tComboBox.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -179,7 +180,11 @@
                                                     </StackPanel>
                                                     <StackPanel  VerticalAlignment="Center" Margin="3,0">
                                                         <TextBlock Text="Language" TextAlignment="Center"/>
-                                                        <ComboBox Name="cmbLanguage" Width="120"/>
+                                                        <ComboBox Name="cmbLanguage" Width="120" ItemsSource="{Binding}" TextSearch.TextPath="{Binding laID}">
+                                                            <ComboBox.ItemTemplate>
+                                                                <StaticResource ResourceKey="tLanguagesComboBox"/>
+                                                            </ComboBox.ItemTemplate>
+                                                        </ComboBox>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -233,7 +238,11 @@
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="Marital Status" TextAlignment="Center"/>
-                                                <ComboBox Name="cmbMaritalStatusGuest1" Width="100"/>
+                                                <ComboBox Name="cmbMaritalStatusGuest1" Width="100">
+                                                    <ComboBox.ItemTemplate>
+                                                        <StaticResource ResourceKey="tMaritalComboBox"/>
+                                                    </ComboBox.ItemTemplate>
+                                                </ComboBox>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="Ocupation" TextAlignment="Center"/>
@@ -269,7 +278,11 @@
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="Marital Status" TextAlignment="Center"/>
-                                                <ComboBox Name="cmbMaritalStatusGuest2" Width="100"/>
+                                                <ComboBox Name="cmbMaritalStatusGuest2" Width="100">
+                                                    <ComboBox.ItemTemplate>
+                                                        <StaticResource ResourceKey="tMaritalComboBox"/>
+                                                    </ComboBox.ItemTemplate>
+                                                </ComboBox>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="Ocupation" TextAlignment="Center"/>
@@ -317,7 +330,11 @@
                                                     </StackPanel>
                                                     <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
                                                         <TextBlock Text="PR Name" />
-                                                        <ComboBox Name="cmbPRContract" Width="120" />
+                                                        <ComboBox Name="cmbPRContract" Width="120" >
+                                                            <ComboBox.ItemTemplate>
+                                                                <StaticResource ResourceKey="tPersonnelComboBox"/>
+                                                            </ComboBox.ItemTemplate>
+                                                        </ComboBox>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -330,7 +347,11 @@
                                                     </StackPanel>
                                                     <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
                                                         <TextBlock Text="PR Name" />
-                                                        <ComboBox Name="cmbPR" Width="120" />
+                                                        <ComboBox Name="cmbPR" Width="120" >
+                                                            <ComboBox.ItemTemplate>
+                                                                <StaticResource ResourceKey="tPersonnelComboBox"/>
+                                                            </ComboBox.ItemTemplate>
+                                                        </ComboBox>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -346,7 +367,11 @@
                                                     </StackPanel>
                                                     <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
                                                         <TextBlock Text="Sale Room" />
-                                                        <ComboBox Name="cmbSalesRoomsName" Width="120" />
+                                                        <ComboBox Name="cmbSalesRoomsName" Width="120" >
+                                                            <ComboBox.ItemTemplate>
+                                                                <StaticResource ResourceKey="tSalesRoomsComboBox"/>
+                                                            </ComboBox.ItemTemplate>
+                                                        </ComboBox>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -359,7 +384,11 @@
                                                     </StackPanel>
                                                     <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
                                                         <TextBlock  Text="Location Name" />
-                                                        <ComboBox Name="cmbLocationName" Width="120" />
+                                                        <ComboBox Name="cmbLocationName" Width="120" >
+                                                            <ComboBox.ItemTemplate>
+                                                                <StaticResource ResourceKey="tSalesRoomsComboBox"/>
+                                                            </ComboBox.ItemTemplate>
+                                                        </ComboBox>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>

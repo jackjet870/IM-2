@@ -6,6 +6,7 @@ using IM.Model.Enums;
 using IM.Model.Helpers;
 using IM.Model.Classes;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -166,16 +167,11 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<GuestStatusType>> GetGuestStatusType(int status)
     {
-      List<GuestStatusType> result = null;
-      await Task.Run(() =>
-      {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
           bool statusGuestStatus = Convert.ToBoolean(status);
-          result = dbContext.GuestsStatusTypes.Where(gs => gs.gsA == statusGuestStatus).ToList();
+          return await dbContext.GuestsStatusTypes.Where(gs => gs.gsA == statusGuestStatus).ToListAsync();
         }
-      });
-      return result;
     }
     #endregion
 

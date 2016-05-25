@@ -73,6 +73,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\tComboBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ToolBarRtfStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -131,6 +135,11 @@
     <Resource Include="Images\BEdit.png" />
     <Resource Include="Images\BLog.png" />
     <Resource Include="Images\BSave.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BCopy.png" />
+    <Resource Include="Images\BCut.png" />
+    <Resource Include="Images\BPaste.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using System.Data.Entity;
 namespace IM.BusinessRules.BR
 {
   public class BRGifts
@@ -159,16 +159,16 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GiftShort> GetGiftsShortById(IEnumerable<string> giIDList)
     {
-      List<GiftShort> lstgetGifs;
+
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        lstgetGifs = dbContext.Gifts.Where(x => giIDList.Contains(x.giID)).
+        return dbContext.Gifts.Where(x => giIDList.Contains(x.giID)).
           Select(x => new
           {
             x.giID,
             x.giN,
             x.gigc
-          }).AsEnumerable().
+          }).
           Select(x => new GiftShort
           {
             giID = x.giID,
@@ -176,7 +176,7 @@ namespace IM.BusinessRules.BR
             gigc = x.gigc
           }).ToList();
       }
-      return lstgetGifs;
+
     }
 
     #endregion GetGiftsShortById

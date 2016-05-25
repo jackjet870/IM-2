@@ -9,7 +9,6 @@
     d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
     Icon="/IM.GuestsPR;component/Images/IM.ico" WindowState="Maximized" WindowStyle="SingleBorderWindow"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">
-   
     <Window.InputBindings>
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,
             AncestorType={x:Type Window}}, Path=LoadCombo}" Key="F5" Modifiers="Ctrl"/>
@@ -60,7 +59,7 @@
                     <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=DateRange}"/>
                     <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
                     <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=DateRange}"/>
-                    <ComboBox x:Name="cbxPersonnel" Style="{StaticResource cbxPersonnel}" TextSearch.TextPath="peID">
+                    <ComboBox x:Name="cbxPersonnel" Style="{StaticResource cbxPersonnel}" TextSearch.TextPath="peID" >
                         <ComboBox.ItemTemplate>
                             <StaticResource ResourceKey="comboBoxTemplate"/>
                         </ComboBox.ItemTemplate>

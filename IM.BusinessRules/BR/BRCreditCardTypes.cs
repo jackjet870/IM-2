@@ -4,6 +4,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -23,37 +24,31 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<CreditCardType>> GetCreditCardTypes(CreditCardType creditCardType = null, int nStatus = -1)
     {
-      List<CreditCardType> result = null;
-      await Task.Run(() =>
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        var query = from cct in dbContext.CreditCardTypes select cct;
+
+        if (nStatus != -1)//Validación por estatus
         {
-          var query = from cct in dbContext.CreditCardTypes select cct;
-
-          if (nStatus != -1)//Validación por estatus
-          {
-            bool blnEstatus = Convert.ToBoolean(nStatus);
-            query = query.Where(cct => cct.ccA == blnEstatus);
-          }
-
-          if (creditCardType != null)//Valida si se tiene un obejto
-          {
-            if (!string.IsNullOrWhiteSpace(creditCardType.ccID))//Validación por ID
-            {
-              query = query.Where(cct => cct.ccID == creditCardType.ccID);
-            }
-
-            if (!string.IsNullOrWhiteSpace(creditCardType.ccN))//Validación por nombre/Descripción
-            {
-              query = query.Where(cct => cct.ccN.Contains(creditCardType.ccN));
-            }
-          }
-
-          result = query.OrderBy(cct => cct.ccN).ToList();
+          bool blnEstatus = Convert.ToBoolean(nStatus);
+          query = query.Where(cct => cct.ccA == blnEstatus);
         }
-      });
 
-      return result;
+        if (creditCardType != null)//Valida si se tiene un obejto
+        {
+          if (!string.IsNullOrWhiteSpace(creditCardType.ccID))//Validación por ID
+          {
+            query = query.Where(cct => cct.ccID == creditCardType.ccID);
+          }
+
+          if (!string.IsNullOrWhiteSpace(creditCardType.ccN))//Validación por nombre/Descripción
+          {
+            query = query.Where(cct => cct.ccN.Contains(creditCardType.ccN));
+          }
+        }
+        return await query.OrderBy(cct => cct.ccN).ToListAsync();
+      }
+
     }
     #endregion    
 

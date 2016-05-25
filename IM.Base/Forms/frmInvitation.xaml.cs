@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using IM.Model;
+﻿using System.Windows;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
-using System.Diagnostics;
-using IM.Base.Forms;
 using IM.Model.Enums;
 using IM.Model.Classes;
-using System.Windows.Data;
-using IM.Base.Classes;
 
 namespace IM.Base.Forms
 {
@@ -38,18 +27,15 @@ namespace IM.Base.Forms
       _user = User;
       _guestId = GuestId;
       _invitationMode = InvitationMode;
+
       InitializeComponent();
+      LoadCatalog();
       // LoadCombo = new ExecuteCommandHelper(); sirve para cargar la informacion deseada al preciosar combinacion de teclas
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       ControlsConfiguration(_invitationType);//Cargamos la UI dependiendo del tipo de Invitacion
-
-      LoadCatalog();
-
-      //MessageBox.Show("sadasd");
-
     }
 
     #region Metodos
@@ -81,37 +67,19 @@ namespace IM.Base.Forms
 
     private async void LoadCatalog()
     {
-      cmbLanguage.ItemsSource = await BRLanguages.GetLanguages(1);
-      cmbMaritalStatusGuest1.ItemsSource =
-      cmbMaritalStatusGuest2.ItemsSource =await BRMaritalStatus.GetMaritalStatus(1);
-      cmbPR.ItemsSource = 
-      cmbPRContract.ItemsSource = await BRPersonnel.GetPersonnel(_user.User.peID, roles: "PR");
-      cmbOtherInfoHotel.ItemsSource = await BRHotels.GetHotels(nStatus: 1);
-      cmbOtherInfoAgency.ItemsSource = await BRAgencies.GetAgencies(1);
-      cmbOtherInfoCountry.ItemsSource = await BRCountries.GetCountries(1);
-      cmbChangeStatus.ItemsSource = await BRGuests.GetGuestStatusType(1);
-      cmbCurrency.ItemsSource = await BRCurrencies.GetCurrencies(nStatus: 1);
-
+      var _languages = await BRLanguages.GetLanguages(1);
+      var _maritalStatus =await BRMaritalStatus.GetMaritalStatus(1);
+      var _personnel = await BRPersonnel.GetPersonnel(_user.User.peID, roles: "PR");
+      var _hotels = await BRHotels.GetHotels(nStatus: 1);
+      var _agencies = await BRAgencies.GetAgencies(1);
+      var _countries = await BRCountries.GetCountries(1);
+      var _guestStatusTypes= await BRGuests.GetGuestStatusType(1);
+      var _currencies = await BRCurrencies.GetCurrencies(nStatus: 1);
       var _paymenTypes = await BRPaymentTypes.GetPaymentTypes(1);
       var _paymentPlaces = await BRPaymentPlaces.GetPaymentPlaces();
-      cmbCreditCards.ItemsSource =await BRCreditCardTypes.GetCreditCardTypes();
-      cmbGifts.ItemsSource = await BRGifts.GetGifts(_user.Location == null ? "ALL" : _user.Location.loID, 1);
-
-
-
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-        
-
+      var _creditCardTypes =await BRCreditCardTypes.GetCreditCardTypes();
+      var _gifts = await BRGifts.GetGifts(_user.Location == null ? "ALL" : _user.Location.loID, 1);
+      var _salesRooms = BRSalesRooms.GetSalesRooms(0);
     }
     #endregion
 

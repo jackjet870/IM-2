@@ -175,10 +175,11 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 01/04/2016
+    /// [erosado] 24/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void LoadSalesRoom()
+    private async void LoadSalesRoom()
     {
-      List<SalesRoomShort> lstSalesRoom = BRSalesRooms.GetSalesRooms(1);
+      List<SalesRoomShort> lstSalesRoom = await BRSalesRooms.GetSalesRooms(1);
       if(enumMode==EnumMode.search && lstSalesRoom.Count>0)
       {
         lstSalesRoom.Insert(0, new SalesRoomShort { srID = "", srN = "" });

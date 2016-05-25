@@ -4,6 +4,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -23,38 +24,29 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<PaymentType>> GetPaymentTypes(int status = -1, PaymentType paymentType = null)
     {
-      List<PaymentType> result = null;
-      await Task.Run(() =>
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        var query = from pt in dbContext.PaymentTypes
+                    select pt;
+        if (status != -1)//Filtro por estatus
         {
-          var query = from pt in dbContext.PaymentTypes
-                      select pt;
-          if (status != -1)//Filtro por estatus
-          {
-            bool blnStatus = Convert.ToBoolean(status);
-            query = query.Where(pt => pt.ptA == blnStatus);
-          }
-
-          #region Filtros adicionales
-          if (paymentType != null)
-          {
-            if (!string.IsNullOrWhiteSpace(paymentType.ptID))//filtro por ID
-            {
-              query = query.Where(pt => pt.ptID == paymentType.ptID);
-            }
-
-            if (!string.IsNullOrWhiteSpace(paymentType.ptN))//Filtro por descripcion
-            {
-              query = query.Where(pt => pt.ptN.Contains(paymentType.ptN));
-            }
-          }
-          #endregion
-
-          result = query.OrderBy(pt => pt.ptN).ToList();
+          bool blnStatus = Convert.ToBoolean(status);
+          query = query.Where(pt => pt.ptA == blnStatus);
         }
-      });
-      return result;
+        if (paymentType != null)
+        {
+          if (!string.IsNullOrWhiteSpace(paymentType.ptID))//filtro por ID
+          {
+            query = query.Where(pt => pt.ptID == paymentType.ptID);
+          }
+
+          if (!string.IsNullOrWhiteSpace(paymentType.ptN))//Filtro por descripcion
+          {
+            query = query.Where(pt => pt.ptN.Contains(paymentType.ptN));
+          }
+        }
+        return await query.OrderBy(pt => pt.ptN).ToListAsync();
+      }
     }
     #endregion
 

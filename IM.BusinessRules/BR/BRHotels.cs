@@ -25,12 +25,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<Hotel>> GetHotels(Hotel hotel = null, int nStatus = -1,bool blnInclude = false)
     {
-      //List<Hotel> result = null;
-     //return await Task.Run(() =>
-     // {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-        {
-       return await Task.Run(() =>
+         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
           var query = (from ho in dbContext.Hotels
                        select ho);
@@ -60,12 +55,8 @@ namespace IM.BusinessRules.BR
               query = query.Where(ho => ho.hoar == hotel.hoar);
             }
           }
-           return query.OrderBy(ho => ho.hoID).ToList();
-        });
+            return await query.OrderBy(ho => ho.hoID).ToListAsync();
         }
-
-      //}) ;
-      //return result;
     }
     #endregion
 

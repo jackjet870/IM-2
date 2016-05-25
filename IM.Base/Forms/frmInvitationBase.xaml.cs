@@ -2035,9 +2035,9 @@ namespace IM.Base.Forms
     /// <history>
     /// [lchairez] 29/02/2016 Created
     /// </history>
-    private void LoadInHouseControls()
+    private async void LoadInHouseControls()
     {
-      var salesRooms = IM.BusinessRules.BR.BRSalesRooms.GetSalesRooms(0);
+      var salesRooms = await IM.BusinessRules.BR.BRSalesRooms.GetSalesRooms(0);
       LoadComboBox(salesRooms, cmbSalesRoom, "sr");
     }
 
@@ -2053,7 +2053,7 @@ namespace IM.Base.Forms
       var personnels =await IM.BusinessRules.BR.BRPersonnel.GetPersonnel(_user.LeadSource.lsID);
       LoadComboBox(personnels, cmbPRContract, "pe");
 
-      var salesRooms = IM.BusinessRules.BR.BRSalesRooms.GetSalesRooms(0);
+      var salesRooms = await IM.BusinessRules.BR.BRSalesRooms.GetSalesRooms(0);
       LoadComboBox(salesRooms, cmbSalesRoom, "sr");
 
     }

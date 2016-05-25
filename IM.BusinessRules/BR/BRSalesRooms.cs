@@ -17,12 +17,15 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="status"> 0- Sin filtro, 1-Activos, 2. Inactivos </param>
     /// <returns>List<Model.GetSalesRooms></returns>
-    public static List<SalesRoomShort> GetSalesRooms(int status)
+    public async static Task<List<SalesRoomShort>> GetSalesRooms(int status)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetSalesRooms(Convert.ToByte(status)).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          return dbContext.USP_OR_GetSalesRooms(Convert.ToByte(status)).ToList();
+        }
+      });
     }
 
     #endregion
@@ -124,47 +127,47 @@ namespace IM.BusinessRules.BR
     /// [emoguel] created 21/04/2016
     /// [emoguel] modified 27/04/2016--->Se agregó el parametro blnTeamLog
     /// </history>
-    public static List<SalesRoom> GetSalesRooms(int nStatus=-1,int nAppointment=-1, SalesRoom salesRoom=null, bool blnTeamLog=false)
+    public static List<SalesRoom> GetSalesRooms(int nStatus = -1, int nAppointment = -1, SalesRoom salesRoom = null, bool blnTeamLog = false)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from sr in dbContext.SalesRooms
-                    select sr;        
+                    select sr;
 
-        if(blnTeamLog)
+        if (blnTeamLog)
         {
           query = from ts in dbContext.TeamsSalesmen
                   from sr in dbContext.SalesRooms.Where(sr => sr.srID == ts.tssr).DefaultIfEmpty().Distinct()
                   select sr;
-          
+
         }
-        
-        if(nStatus!=-1)//Filtro por Estatus
+
+        if (nStatus != -1)//Filtro por Estatus
         {
           bool blnStatus = Convert.ToBoolean(nStatus);
           query = query.Where(sr => sr.srA == blnStatus);
         }
-        if(nAppointment!=-1)//Filtro por ApointMent
+        if (nAppointment != -1)//Filtro por ApointMent
         {
           bool blnAppointment = Convert.ToBoolean(nAppointment);
           query = query.Where(sr => sr.srAppointment == blnAppointment);
         }
 
-        if(salesRoom!=null)
+        if (salesRoom != null)
         {
-          if(!string.IsNullOrWhiteSpace(salesRoom.srID))//Filtro por ID
+          if (!string.IsNullOrWhiteSpace(salesRoom.srID))//Filtro por ID
           {
             query = query.Where(sr => sr.srID == salesRoom.srID);
           }
-          if(!string.IsNullOrWhiteSpace(salesRoom.srN))//Filtro por descripción
+          if (!string.IsNullOrWhiteSpace(salesRoom.srN))//Filtro por descripción
           {
             query = query.Where(sr => sr.srN.Contains(salesRoom.srN));
           }
-          if(!string.IsNullOrWhiteSpace(salesRoom.srar))
+          if (!string.IsNullOrWhiteSpace(salesRoom.srar))
           {
             query = query.Where(sr => sr.srar == salesRoom.srar);
           }
-          if(!string.IsNullOrWhiteSpace(salesRoom.srcu))
+          if (!string.IsNullOrWhiteSpace(salesRoom.srcu))
           {
             query = query.Where(sr => sr.srcu == salesRoom.srcu);
           }
@@ -185,7 +188,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 22/04/2016
     /// </history>
-    public static int SaveSalesRoom(SalesRoom salesRoom,bool blnUpdate)
+    public static int SaveSalesRoom(SalesRoom salesRoom, bool blnUpdate)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -205,13 +208,13 @@ namespace IM.BusinessRules.BR
             try
             {
               SalesRoom salesRoomVal = dbContext.SalesRooms.Where(sr => sr.srID == salesRoom.srID).FirstOrDefault();
-              if(salesRoomVal!=null)
+              if (salesRoomVal != null)
               {
                 return -1;
               }
               else
               {
-                var GetDate= BRHelpers.GetServerDate();
+                var GetDate = BRHelpers.GetServerDate();
                 salesRoom.srGiftsRcptCloseD = GetDate;
                 salesRoom.srCxCCloseD = GetDate;
                 salesRoom.srShowsCloseD = GetDate;
@@ -236,7 +239,7 @@ namespace IM.BusinessRules.BR
             catch
             {
               transaction.Rollback();
-              nRes= 0;
+              nRes = 0;
             }
           }
         }
@@ -247,7 +250,7 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
-#region GetSalesRoomByID
+    #region GetSalesRoomByID
     /// <summary>
     /// Obtiene los registros de un Sales Room por su ID
     /// </summary>
