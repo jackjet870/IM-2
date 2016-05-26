@@ -188,6 +188,8 @@ namespace IM.BusinessRules.BR
 
     #endregion
 
+    #region Inhouse
+
     #region GetRptArrivals
 
     /// <summary>
@@ -280,8 +282,10 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion GetRptPremanifestWithGifts
+    #endregion GetRptPremanifestWithGifts 
     
+    #endregion
+
     #region Processor Inhouse
     
     #region GetRptProductionByAgencyMonthly
@@ -349,6 +353,7 @@ namespace IM.BusinessRules.BR
 
     #endregion Processor Inhouse
 
+    #region Outhouse
     /// <summary>
     /// Regresa un lista de tipo RptPremanifestOuthouse
     /// </summary>
@@ -363,6 +368,7 @@ namespace IM.BusinessRules.BR
       {
         return dbContext.USP_OR_RptPremanifestOutside(Date, LeadSource).ToList();
       }
-    }
+    } 
+    #endregion
   }
 }

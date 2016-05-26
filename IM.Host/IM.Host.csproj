@@ -94,6 +94,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\GiftsReceiptsValidationGrid.cs" />
+    <Compile Include="Enums\enumMode.cs" />
+    <Compile Include="Enums\EnumSale.cs" />
     <Compile Include="Forms\frmGiftsReceiptsDetail.xaml.cs">
       <DependentUpon>frmGiftsReceiptsDetail.xaml</DependentUpon>
     </Compile>
@@ -236,9 +238,11 @@
     <None Include="Properties\DataSources\IM.Model.Hotel.datasource" />
     <None Include="Properties\DataSources\IM.Model.MealTicket.datasource" />
     <None Include="Properties\DataSources\IM.Model.MealTicketType.datasource" />
+    <None Include="Properties\DataSources\IM.Model.Payment.datasource" />
     <None Include="Properties\DataSources\IM.Model.PaymentType.datasource" />
     <None Include="Properties\DataSources\IM.Model.Personnel2.datasource" />
     <None Include="Properties\DataSources\IM.Model.RateType.datasource" />
+    <None Include="Properties\DataSources\IM.Model.SaleShort.datasource" />
     <None Include="Properties\DataSources\IM.Model.SalesRoomLog.datasource" />
     <None Include="Properties\DataSources\IM.Model.SalesRoomShort.datasource" />
     <None Include="Properties\DataSources\IM.Model.SourcePayment.datasource" />

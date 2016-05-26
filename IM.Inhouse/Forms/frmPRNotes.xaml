@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Inhouse.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Inhouse.Forms.frmPRNotes"
         mc:Ignorable="d" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="PR Notes"  SizeToContent="WidthAndHeight"  Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="PR Notes" ShowInTaskbar="False" SizeToContent="WidthAndHeight"  Loaded="Window_Loaded" Closing="Window_Closing">
     <Window.Resources>
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="FontSize" Value="12"/>

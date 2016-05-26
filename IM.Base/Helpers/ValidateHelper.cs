@@ -235,7 +235,7 @@ namespace IM.Base.Helpers
 
       if (Regex.IsMatch(strEmail, emailFormat))
       {
-        if (Regex.Replace(strEmail, strEmail, String.Empty).Length == 0)
+        if (Regex.Replace(strEmail, strEmail, string.Empty).Length == 0)
         {
           return true;
         }

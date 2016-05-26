@@ -15,7 +15,6 @@ using IM.Model.Enums;
 using IM.Model.Helpers;
 using IM.Services.Helpers;
 using IM.Services.WirePRService;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace IM.Inhouse.Forms
@@ -266,86 +265,42 @@ namespace IM.Inhouse.Forms
     /// Valida el tipo de guest y determina si el husped debe estar como disponible
     /// </summary>
     /// <history>[jorcanche] 15/03/2016 </history>
-    /// <param name="guest"></param>
-    /// <param name="typeGuest"></param>
-    public bool CheckIn(object guest, int typeGuest)
+    public bool CheckIn(DataGrid dg)
     {
-      switch (typeGuest)
+      var items = dg.SelectedItem;
+      int nIndex = dg.SelectedIndex;
+      int nColumn = dg.CurrentCell.Column.DisplayIndex;
+      Type t = items.GetType();
+      //Validamos
+      if (items != null && ValidateCheckIn((bool)t.GetProperty("guCheckIn").GetValue(items),        
+                                          (DateTime)t.GetProperty("guCheckInD").GetValue(items),
+                                          (DateTime)t.GetProperty("guCheckOutD").GetValue(items)))
       {
-        case 1:
-          //Determinamos el caso 
-          var itemGuestArrival = guest as GuestArrival;
-          //Validamos
-          if (itemGuestArrival != null && ValidateCheckIn(itemGuestArrival.guCheckIn, itemGuestArrival.guCheckInD, itemGuestArrival.guCheckOutD))
-          {
-            //determinamos si el huesped debe estar como disponible
-            if (itemGuestArrival.guum == 0)
-            {
-              dgGuestArrival.SelectedItems.OfType<GuestArrival>().ToList().ForEach(item => { item.guAvail = true; });
-              dgGuestArrival.Items.Refresh();
-            }
-            SaveAvailGuest(itemGuestArrival.guID);
-            //Si no hubo problema en las validaciones mandamos el valor que obtuvo al hacer click en el checkbox          
-            return itemGuestArrival.guCheckIn;
-          }
-          //despalomeamos el checkbox porque no se pude hacer el checkin
-          return false;
-
-        case 3:
-          var itemGuestPremanifest = guest as GuestPremanifest;
-          if (itemGuestPremanifest != null &&
-              ValidateCheckIn(itemGuestPremanifest.guCheckIn, itemGuestPremanifest.guCheckInD,
-                itemGuestPremanifest.guCheckOutD))
-          {
-            //determinamos si el huesped debe estar como disponible   
-            if (BRGuests.GetGuest(itemGuestPremanifest.guID).guum.Equals(0))
-            {
-              dgGuestPremanifest.SelectedItems.OfType<GuestPremanifest>().ToList().ForEach(item => item.guAvail = true);
-              dgGuestPremanifest.Items.Refresh();
-            }
-            SaveAvailGuest(itemGuestPremanifest.guID);
-            //Si no hubo problema en las validaciones mandamos el valor que obtuvo al hacer click en el checkbox          
-            return itemGuestPremanifest.guCheckIn;
-          }
-          //despalomeamos el checkbox porque no se pude hacer el checkin
-          return false;
-        default:
-          var itemGuestSearched = guest as GuestSearched;
-          if (itemGuestSearched != null &&
-              ValidateCheckIn(itemGuestSearched.guCheckIn, itemGuestSearched.guCheckInD, itemGuestSearched.guCheckOutD))
-          {
-            //determinamos si el huesped debe estar como disponible
-            if (itemGuestSearched.guum == 0)
-            {
-              guestSearchedDataGrid.SelectedItems.OfType<GuestSearched>().ToList().ForEach(item => item.guAvail = true);
-              guestSearchedDataGrid.Items.Refresh();
-            }
-            SaveAvailGuest(itemGuestSearched.guID);
-            //Si no hubo problema en las validaciones mandamos el valor que obtuvo al hacer click en el checkbox          
-            return itemGuestSearched.guCheckIn;
-          }
-          //despalomeamos el checkbox porque no se pude hacer el checkin
-          return false;
+        #region Updated DataGrid
+        //Determinamos si el huesped debe estar como disponible
+        var guum = t.Name != "ObjGuestPremanifest" ? (byte)t.GetProperty("guum").GetValue(items) :
+                                                    BRGuests.GetGuest((int)t.GetProperty("guID").GetValue(items)).guum;
+        if (guum.Equals(0))
+        {
+          t.GetProperty("guAvail").SetValue(items, true);
+          dg.Items.Refresh();
+        } 
+        #endregion
+        #region Save DataBase
+        var editGuest = BRGuests.GetGuest((int)t.GetProperty("guID").GetValue(items));
+        editGuest.guCheckIn = true;
+        editGuest.guAvail = guum.Equals(0) ? true : false;
+        BRGuests.SaveGuest(editGuest);
+        #endregion
+        GridHelper.SelectRow(dg, nIndex, nColumn);
+        //Si no hubo problema en las validaciones mandamos el valor que obtuvo al hacer click en el checkbox     
+        return (bool)t.GetProperty("guCheckIn").GetValue(items);
       }
+      //despalomeamos el checkbox porque no se pude hacer el checkin
+      return false;
     }
 
     #endregion
-
-    #region SaveAvailGuest
-
-    /// <summary>
-    /// Guarda en la base el CheckIn y el Avail
-    /// </summary>
-    /// <history>[jorcanche] 10/03/2016</history>
-    /// <param name="guid">Id del Guest</param>
-    public void SaveAvailGuest(int guid)
-    {
-      var guest = BRGuests.GetGuest(guid);
-      guest.guCheckIn = true;
-      guest.guAvail = true;
-      BRGuests.SaveGuest(guest);
-      LoadGrid();
-    }
 
     #endregion
 
@@ -396,8 +351,7 @@ namespace IM.Inhouse.Forms
       {
         return log;
       }
-      UIHelper.ShowMessage("You do not have the required permissions to perform this operation.",
-        MessageBoxImage.Asterisk, "Permissions");
+      UIHelper.ShowMessage("You do not have the required permissions to perform this operation.", MessageBoxImage.Asterisk, "Permissions");
       return null;
     }
 
@@ -422,58 +376,28 @@ namespace IM.Inhouse.Forms
           var itemGuestArrival = guest as GuestArrival;
           if (itemGuestArrival != null)
             EquityHelpers.EquityReport(itemGuestArrival.guMembershipNum, itemGuestArrival.guCompany,
-              (int) itemGuestArrival.agcl, (int) itemGuestArrival.gucl);
+              (int)itemGuestArrival.agcl, (int)itemGuestArrival.gucl);
           break;
         case 2:
           var itemGuestAvailable = guest as GuestAvailable;
           if (itemGuestAvailable != null)
             EquityHelpers.EquityReport(itemGuestAvailable.guMembershipNum, itemGuestAvailable.guCompany,
-              (int) itemGuestAvailable.agcl, (int) itemGuestAvailable.gucl);
+              (int)itemGuestAvailable.agcl, (int)itemGuestAvailable.gucl);
           break;
         case 3:
           var itemGuestPremanifest = guest as GuestPremanifest;
           if (itemGuestPremanifest != null)
             EquityHelpers.EquityReport(itemGuestPremanifest.guMembershipNum, itemGuestPremanifest.guCompany,
-              (int) itemGuestPremanifest.agcl, (int) itemGuestPremanifest.gucl);
+              (int)itemGuestPremanifest.agcl, (int)itemGuestPremanifest.gucl);
           break;
         case 4:
           var itemGuestSearched = guest as GuestSearched;
           if (itemGuestSearched != null)
             EquityHelpers.EquityReport(itemGuestSearched.guMembershipNum, itemGuestSearched.guCompany,
-              (int) itemGuestSearched.agcl, (int) itemGuestSearched.gucl);
+              (int)itemGuestSearched.agcl, (int)itemGuestSearched.gucl);
           break;
       }
       StaEnd();
-    }
-
-    #endregion
-
-    #region Reservation
-
-    /// <summary>
-    /// Muestra el reporte de la reservacion del Guest
-    /// </summary>
-    /// <param name="dg">Ingresar el Datagrid</param>
-    /// <history>
-    /// [jorcanche] 04/04/2016
-    /// </history>
-    public void Reservation(DataGrid dg)
-    {
-      var guest = dg.Items[dg.Items.CurrentPosition] as GuestArrival;
-      if (string.IsNullOrEmpty(guest?.gulsOriginal) || string.IsNullOrEmpty(guest.guHReservID)) return;
-      //obtenemos los datos del reporte del servicio de Wire PR
-      var reservation = WirePRHelper.GetRptReservationOrigos(guest.gulsOriginal, guest.guHReservID);
-      if (reservation == null)
-        UIHelper.ShowMessage("Reservation not found", MessageBoxImage.Error);
-      else
-      {
-        var rpt = new rptReservation();
-        var reporte = new List<RptReservationOrigos> {reservation};
-        rpt.Load();
-        rpt.SetDataSource(reporte);
-        var frmViewer = new frmViewer(rpt);
-        frmViewer.ShowDialog();
-      }
     }
 
     #endregion
@@ -485,7 +409,7 @@ namespace IM.Inhouse.Forms
     /// </summary>
     /// <param name="dg">Datagrid</param>
     /// <param name="sender"> Instancia del CheckBox</param>
-    public void OpenInfo(DataGrid dg, bool guCheckIn, bool guInfo, DateTime guCheckOutD, int guID, object sender,int tipo )
+    public void OpenInfo(DataGrid dg, bool guCheckIn, bool guInfo, DateTime guCheckOutD, int guID, object sender)
     {
       var chkguInfo = sender as CheckBox;
       chkguInfo.IsChecked = !chkguInfo.IsChecked.Value;
@@ -495,86 +419,30 @@ namespace IM.Inhouse.Forms
         StaStart("Loading Contact´s Info...");
         frmContact frmCont = new frmContact(guID, App.User);
         frmCont.Owner = this;
-        frmCont.ShowInTaskbar = false;
-        StaEnd();
-        if (!frmCont.ShowDialog().Value)
+        frmCont.ShowDialog();
+        if (frmCont._wasSave)
         {
-          if (frmCont._wasSave)
-          {
-            StaStart("Save Contact´s Info...");
-            UpdateGridInfo(tipo, dg, frmCont);
-            StaEnd();
-          }
+          StaStart("Save Contact´s Info...");
+          #region Update
+          var item = dg.SelectedItem;
+          Type t = item.GetType();
+          t.GetProperty("guPRInfo").SetValue(item, frmCont.PRInfo);
+          t.GetProperty("guCheckIn").SetValue(item, true);
+          t.GetProperty("guInfo").SetValue(item, true);
+          if (t.Name != "ObjGuestPremanifest") t.GetProperty("guInfoD").SetValue(item, frmCont.InfoD);
+          dg.Items.Refresh();
+          GridHelper.SelectRow(dg, dg.SelectedIndex, dg.CurrentCell.Column.DisplayIndex); 
+          #endregion
         }
-        StaEnd();
       }
       StaEnd();
     }
 
     #endregion
 
-    #region UpdateGridInfo
-
-    /// <summary>
-    /// Actualiza el datagrid segun el los parametros ingresados
-    /// </summary>
-    /// <param name="tipo">Tipo de Guest: Arrival, Premanifest, Avail, Searched</param>
-    /// <param name="dg"> DataGrid </param>
-    /// <param name="frmCont">Formulario de contactacion</param>
-    public void UpdateGridInfo(int tipo, DataGrid dg, frmContact frmCont)
-    {
-      switch (tipo)
-      {
-        case 1:
-          dg.SelectedItems.OfType<GuestArrival>().ToList().ForEach(item =>
-          {
-            item.guPRInfo = frmCont.PRInfo;
-            item.guInfoD = frmCont.InfoD;
-            item.guCheckIn = true;
-            item.guInfo = true;
-          });
-          dg.Items.Refresh();          
-          break;
-        case 2:
-          dg.SelectedItems.OfType<GuestAvailable>().ToList().ForEach(item =>
-          {
-            item.guPRInfo = frmCont.PRInfo;
-            item.guInfoD = frmCont.InfoD;
-            item.guCheckIn = true;
-            item.guInfo = true;
-          });
-          dg.Items.Refresh();
-          //LoadGrid();
-          break;
-        case 3:
-          dg.SelectedItems.OfType<GuestPremanifest>().ToList().ForEach(item =>
-          {
-            item.guPRInfo = frmCont.PRInfo;
-            item.guCheckIn = true;
-            item.guInfo = true;
-          });
-          dg.Items.Refresh();
-          //LoadGrid();
-          break;
-        case 4:
-          dg.SelectedItems.OfType<GuestSearched>().ToList().ForEach(item =>
-          {
-            item.guPRInfo = frmCont.PRInfo;
-            item.guInfoD = frmCont.InfoD;
-            item.guCheckIn = true;
-            item.guInfo = true;
-          });
-          dg.Items.Refresh();
-          //LoadGrid();
-          break;
-      }
-    }
-
-    #endregion
-
     #region OpenAvail
 
-    public void OpenAvail(DataGrid dg, int guID, bool guCheckIn, object sender, int tipo)
+    public void OpenAvail(DataGrid dg, int guID, bool guCheckIn, object sender)
     {
       var chkguAvail = sender as CheckBox;
       chkguAvail.IsChecked = !chkguAvail.IsChecked.Value;
@@ -585,16 +453,23 @@ namespace IM.Inhouse.Forms
         frmAvail.Owner = this;
         frmAvail.ShowInTaskbar = false;
         StaEnd();
-        if (!frmAvail.ShowDialog().Value)
+        frmAvail.ShowDialog();
+        if (frmAvail._wasSaved)
         {
-          if (frmAvail._wasSaved)
+          StaStart("Save Information´s Availability...");
+          // Actualiza los datos del grid despues de guardar la informacion de disponibilidad PR de Disponibilidad y si se marco como no disponible 
+          #region Updated
+          var item = dg.SelectedItem;
+          Type t = item.GetType();
+          if (t.Name != "ObjGuestPremanifest")
           {
-            StaStart("Save Information´s Availability...");
-            //Descripcion: Actualiza los datos del grid despues de guardar la informacion de disponibilidad
-            //PR de Disponibilidad y si se marco como no disponible 
-            UpdateGridAvail(tipo, dg, frmAvail);
-            StaEnd();
+            t.GetProperty("guPRAvail").SetValue(item, frmAvail.guPRAvail);
+            t.GetProperty("guum").SetValue(item, frmAvail.guum);
           }
+          t.GetProperty("guAvail").SetValue(item, frmAvail.Avail);
+          dg.Items.Refresh();
+          GridHelper.SelectRow(dg, dg.SelectedIndex, dg.CurrentCell.Column.DisplayIndex); 
+          #endregion
         }
       }
       StaEnd();
@@ -602,56 +477,9 @@ namespace IM.Inhouse.Forms
 
     #endregion
 
-    #region UpdateGridAvail
-
-    public void UpdateGridAvail(int tipo, DataGrid dg, frmAvailability frmAvail)
-    {
-      switch (tipo)
-      {
-        case 1:
-          dg.SelectedItems.OfType<GuestArrival>().ToList().ForEach(item =>
-          {
-            item.guPRAvail = frmAvail.guPRAvail;
-            item.guum = frmAvail.guum;
-            item.guAvail = frmAvail.Avail;
-          });
-          dg.Items.Refresh();
-          //LoadGrid();
-          break;
-        case 2:
-          dg.SelectedItems.OfType<ObjGuestAvailable>().ToList().ForEach(item =>
-          {
-            item.guPRAvail = frmAvail.guPRAvail;
-            item.guum = frmAvail.guum;
-            item.guAvail = frmAvail.Avail;
-          });
-          dg.Items.Refresh();
-          //LoadGrid();
-          break;
-        case 3:
-          dg.SelectedItems.OfType<GuestPremanifest>().ToList().ForEach(item => { item.guAvail = frmAvail.Avail; });
-          dg.Items.Refresh();
-          //LoadGrid();
-          break;
-        case 4:
-          dg.SelectedItems.OfType<GuestSearched>().ToList().ForEach(item =>
-          {
-            item.guPRAvail = frmAvail.guPRAvail;
-            item.guum = frmAvail.guum;
-            item.guAvail = frmAvail.Avail;
-          });
-          dg.Items.Refresh();
-          //LoadGrid();
-          break;
-      }
-    }
-
-    #endregion
-
     #region OpenFollow
 
-    public void OpenFollow(DataGrid dg, bool guCheckIn, bool guInfo, bool guFollow, bool guAvail, bool guInvit,
-      DateTime guCheckOutD, int guID, object sender, int tipo)
+    public void OpenFollow(DataGrid dg, bool guCheckIn, bool guInfo, bool guFollow, bool guAvail, bool guInvit, DateTime guCheckOutD, int guID, object sender)
     {
       var chkkFollow = sender as CheckBox;
       chkkFollow.IsChecked = !chkkFollow.IsChecked.Value;
@@ -662,79 +490,28 @@ namespace IM.Inhouse.Forms
         frmFoll.Owner = this;
         frmFoll.ShowInTaskbar = false;
         StaEnd();
-        if (!frmFoll.ShowDialog().Value)
+        frmFoll.ShowDialog();
+        if (frmFoll._wasSaved)
         {
-          if (frmFoll._wasSaved)
-          {
-            StaStart("Save Follow up screen");
-            UpdateGridFollow(tipo, dg, frmFoll);
-            //LoadGrid();
-            StaEnd();
-          }
+          StaStart("Save Follow up screen");
+          #region Updated
+          var item = dg.SelectedItem;
+          Type t = item.GetType();
+          t.GetProperty("guFollowD").SetValue(item, frmFoll.FollowD);
+          t.GetProperty("guPRFollow").SetValue(item, frmFoll.PRFollow);
+          t.GetProperty("guFollow").SetValue(item, true);
+          t.GetProperty("guAvail").SetValue(item, true);
+          t.GetProperty("guInfo").SetValue(item, true);
+          dg.Items.Refresh();
+          GridHelper.SelectRow(dg, dg.SelectedIndex, dg.CurrentCell.Column.DisplayIndex); 
+          #endregion
+          StaEnd();
         }
       }
     }
 
     #endregion
 
-    #region UpdateGridFollow
-
-    public void UpdateGridFollow(int tipo, DataGrid dg, frmFollowUp frmFoll)
-    {
-      switch (tipo)
-      {
-        case 1:
-          dg.SelectedItems.OfType<GuestArrival>().ToList().ForEach(item =>
-          {
-            item.guFollowD = frmFoll.FollowD;
-            item.guPRFollow = frmFoll.PRFollow;
-            item.guFollow = true;
-            item.guAvail = true;
-            item.guInfo = true;
-          });
-          dg.Items.Refresh();
-          //LoadGrid();
-          break;
-        case 2:
-          dg.SelectedItems.OfType<GuestAvailable>().ToList().ForEach(item =>
-          {
-            item.guFollowD = frmFoll.FollowD;
-            item.guPRFollow = frmFoll.PRFollow;
-            item.guFollow = true;
-            item.guAvail = true;
-            item.guInfo = true;
-          });
-          dg.Items.Refresh();
-          //LoadGrid();
-          break;
-        case 3:
-          dg.SelectedItems.OfType<GuestPremanifest>().ToList().ForEach(item =>
-          {
-            item.guFollowD = frmFoll.FollowD;
-            item.guPRFollow = frmFoll.PRFollow;
-            item.guFollow = true;
-            item.guAvail = true;
-            item.guInfo = true;
-          });
-          dg.Items.Refresh();
-          //LoadGrid();
-          break;
-        case 4:
-          dg.SelectedItems.OfType<GuestSearched>().ToList().ForEach(item =>
-          {
-            item.guFollowD = frmFoll.FollowD;
-            item.guPRFollow = frmFoll.PRFollow;
-            item.guFollow = true;
-            item.guAvail = true;
-            item.guInfo = true;
-          });
-          dg.Items.Refresh();
-          //LoadGrid();
-          break;
-      }
-    }
-
-    #endregion
 
     #region ShowbtnWitGifts
 
@@ -808,7 +585,6 @@ namespace IM.Inhouse.Forms
           }
           break;
       }
-
       if (hasData) //Muestra mensaje para informar que el reporte ha sido generado con exito
         UIHelper.ShowMessage("Generated Report", MessageBoxImage.Information, "Inhouse");
       else //Si el Grid esta vacio
@@ -848,8 +624,6 @@ namespace IM.Inhouse.Forms
 
     #endregion
 
-    #endregion
-
     #region Eventos del formulario
 
     #region Window_Loaded
@@ -857,8 +631,6 @@ namespace IM.Inhouse.Forms
     /// <summary>
     /// Carga los controles que necesitamos 
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       Inhouse_Loaded();
@@ -879,7 +651,7 @@ namespace IM.Inhouse.Forms
       //Guardamos el log del login 
       BRLoginLogs.SaveGuestLog(App.User.Location.loID, App.User.User.peID, Environment.MachineName.ToString());
       //Cargamos la variable de Occupancy
-      txtOccupancy.Text = BRLeadSources.GetOccupationLeadSources(BRHelpers.GetServerDate().Date, App.User.Location.loID).ToString();  
+      txtOccupancy.Text = BRLeadSources.GetOccupationLeadSources(BRHelpers.GetServerDate().Date, App.User.Location.loID).ToString();
       //Indicamos al statusbar que me muestre cierta informacion cuando oprimimos cierto teclado
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
@@ -891,17 +663,17 @@ namespace IM.Inhouse.Forms
       //Cargamos la fecha actual del servidor
       dtpDate.Value = BRHelpers.GetServerDate().Date;
       //Inicializamos las variables de los DataGrids
-      _guestArrivalViewSource = ((CollectionViewSource) (this.FindResource("GuestArrivalViewSource")));
-      _guestAvailableViewSource = ((CollectionViewSource) (this.FindResource("GuestAvailableViewSource")));
-      _guestPremanifestViewSource = ((CollectionViewSource) (this.FindResource("GuestPremanifestViewSource")));
-      _guestSearchedViewSource = ((CollectionViewSource) (this.FindResource("GuestSearchedViewSource")));
+      _guestArrivalViewSource = ((CollectionViewSource)(this.FindResource("GuestArrivalViewSource")));
+      _guestAvailableViewSource = ((CollectionViewSource)(this.FindResource("GuestAvailableViewSource")));
+      _guestPremanifestViewSource = ((CollectionViewSource)(this.FindResource("GuestPremanifestViewSource")));
+      _guestSearchedViewSource = ((CollectionViewSource)(this.FindResource("GuestSearchedViewSource")));
 
       //Cargamos los datagrids
       LoadGrid();
 
       //Cargamos el listado de markets
       listMarkets.ItemsSource = BRMarkets.GetMarkets(1);
-      
+
       //Abrimos el visualizador de  noticias    
       var win = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x is frmNotices);
       if (win != null)
@@ -920,25 +692,24 @@ namespace IM.Inhouse.Forms
     /// <summary>
     /// ocurre el evento cuando se selecciona uno o mas mercados, los enlista en una cadena separados por comas
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history> [jorcanche] 09/03/2016 </history>
+    /// <history>
+    /// [jorcanche] 09/03/2016 
+    /// </history>
     private void listMarkets_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      StaStart("Load Guest´s by Market"); int cont = 0;
+      int cont = 0;
       _markets = string.Empty;
       var selectedItems = listMarkets.SelectedItems;
       foreach (MarketShort selectedItem in selectedItems)
       {
-        cont = cont + 1;
-        _markets += selectedItem.mkID.ToString();
+        cont = cont + 1; _markets += selectedItem.mkID.ToString();
         if (selectedItems.Count > 1 && cont < selectedItems.Count)
         {
           _markets = _markets + ",";
         }
       }
       _markets = selectedItems.Count == 0 ? "ALL" : _markets;
-      LoadGrid();
+      StaStart("Load Guest´s by Markets: " + _markets); LoadGrid();
     }
 
     #region dtpDate_SelectedDateChanged
@@ -1017,6 +788,7 @@ namespace IM.Inhouse.Forms
           _info = 2;
           break;
       }
+      if (stbStatusBar != null) StaStart("Load Guest´s by " + ck.GroupName);
       LoadGrid();
     }
 
@@ -1037,10 +809,8 @@ namespace IM.Inhouse.Forms
       //Se debe igualar el valor del check al valor que arroje las validaciones
       var chk = sender as CheckBox;
       if (chk.IsChecked.Value)
-      {
-        chk.IsChecked =
-          CheckIn((dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem))), 1);
-      }
+        chk.IsChecked = CheckIn(dgGuestArrival);
+      // GridHelper.SelectRow(dgGuestArrival, dgGuestArrival.SelectedIndex,dgGuestArrival.CurrentColumn.DisplayIndex)
     }
 
     #endregion
@@ -1050,14 +820,13 @@ namespace IM.Inhouse.Forms
     /// <summary>
     /// Evento que ocurre cuando se selecciona alguna fila en la columna Avail del datagrid Arrival
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>[jorcanche] 09/01/2015</history></historyZ>
+    /// <history>
+    /// [jorcanche] 09/01/2015
+    /// </history>
     private void ChkguAvailArrival_Click(object sender, RoutedEventArgs e)
     {
-      var Arrival =
-        dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
-      OpenAvail(dgGuestArrival, Arrival.guID, Arrival.guCheckIn, sender, 1);
+      var Arrival = dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
+      OpenAvail(dgGuestArrival, Arrival.guID, Arrival.guCheckIn, sender);
     }
 
     #endregion
@@ -1067,14 +836,14 @@ namespace IM.Inhouse.Forms
     /// <summary>
     /// Evento que ocurre cuando se selecciona alguna fila en la columna Info del datagrid Arrival
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>[jorcanche] 09/02/2015</history>
+    /// <history>
+    /// [jorcanche] 09/02/2015
+    /// </history>
     private void ChkguInfoArrival_Click(object sender, RoutedEventArgs e)
     {
       var Arrival =
         dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
-      OpenInfo(dgGuestArrival, Arrival.guCheckIn, Arrival.guInfo, Arrival.guCheckOutD, Arrival.guID, sender, 1);
+      OpenInfo(dgGuestArrival, Arrival.guCheckIn, Arrival.guInfo, Arrival.guCheckOutD, Arrival.guID, sender);
     }
 
     #endregion
@@ -1084,16 +853,13 @@ namespace IM.Inhouse.Forms
     /// <summary>
     /// Evento que ocurre cuando se selecciona alguna fila en la columna FollowUp del datagrid Arrival
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <hitory>[jorcanche] 09/03/2015</hitory>
+    /// <hitory>
+    /// [jorcanche] 09/03/2015
+    /// </hitory>
     private void ChkFollowArrival_Click(object sender, RoutedEventArgs e)
     {
-      //StaStart("Loading Follow Up screen...");
-      var Arrival =
-        dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
-      OpenFollow(dgGuestArrival, Arrival.guCheckIn, Arrival.guInfo, Arrival.guFollow, Arrival.guAvail, Arrival.guInvit,
-        Arrival.guCheckOutD, Arrival.guID, sender, 1);
+      var Arrival = dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
+      OpenFollow(dgGuestArrival, Arrival.guCheckIn, Arrival.guInfo, Arrival.guFollow, Arrival.guAvail, Arrival.guInvit,Arrival.guCheckOutD, Arrival.guID, sender);
     }
 
     #endregion
@@ -1108,13 +874,12 @@ namespace IM.Inhouse.Forms
         frmPRNotes prnote = new frmPRNotes(Arrival.guID);
         prnote.Owner = this;
         prnote.ShowInTaskbar = false;
-        if (!prnote.ShowDialog().Value)
+        prnote.ShowDialog(); 
+          
+        if (prnote._saveNote)
         {
-          if (prnote._saveNote)
-          {
-            dgGuestArrival.SelectedItems.OfType<ObjGuestArrival>().ToList().ForEach(item => item.guPRNote = true);
-            dgGuestArrival.Items.Refresh();
-          }
+          dgGuestArrival.SelectedItems.OfType<ObjGuestArrival>().ToList().ForEach(item => item.guPRNote = true);
+          dgGuestArrival.Items.Refresh();
         }
       }
     }
@@ -1138,9 +903,7 @@ namespace IM.Inhouse.Forms
           bc.ShowInTaskbar = false;
           if (!bc.ShowDialog().Value)
           {
-            dgGuestArrival.SelectedItems.OfType<GuestArrival>()
-              .ToList()
-              .ForEach(item => item.guBookCanc = bc._cancelado.Value);
+            dgGuestArrival.SelectedItems.OfType<GuestArrival>().ToList().ForEach(item => item.guBookCanc = bc._cancelado.Value);
             dgGuestArrival.Items.Refresh();
           }
         }
@@ -1220,7 +983,20 @@ namespace IM.Inhouse.Forms
 
     private void ReservationArrival_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
-      Reservation(dgGuestArrival);
+      var guest = dgGuestArrival.Items[dgGuestArrival.Items.CurrentPosition] as GuestArrival;
+      if (string.IsNullOrEmpty(guest?.gulsOriginal) || string.IsNullOrEmpty(guest.guHReservID)) return;
+      //obtenemos los datos del reporte del servicio de Wire PR
+      var reservation = WirePRHelper.GetRptReservationOrigos(guest.gulsOriginal, guest.guHReservID);
+      if (reservation == null)
+        UIHelper.ShowMessage("Reservation not found", MessageBoxImage.Error);
+      else
+      {
+        var rpt = new rptReservation();
+        var reporte = new List<RptReservationOrigos> { reservation };
+        rpt.SetDataSource(reporte);
+        var frmViewer = new frmViewer(rpt);
+        frmViewer.ShowDialog();
+      }
     }
 
     #endregion
@@ -1252,9 +1028,8 @@ namespace IM.Inhouse.Forms
 
     private void ChkguAvailAvailable_Click(object sender, RoutedEventArgs e)
     {
-      var Avilable =
-        dgGuestAvailable.Items.GetItemAt(dgGuestAvailable.Items.IndexOf(dgGuestAvailable.CurrentItem)) as GuestAvailable;
-      OpenAvail(dgGuestAvailable, Avilable.guID, Avilable.guCheckIn, sender, 2);
+      var Avilable =  dgGuestAvailable.Items.GetItemAt(dgGuestAvailable.Items.IndexOf(dgGuestAvailable.CurrentItem)) as GuestAvailable;
+      OpenAvail(dgGuestAvailable, Avilable.guID, Avilable.guCheckIn, sender);
     }
 
     #endregion
@@ -1265,7 +1040,7 @@ namespace IM.Inhouse.Forms
     {
       var Available =
         dgGuestAvailable.Items.GetItemAt(dgGuestAvailable.Items.IndexOf(dgGuestAvailable.CurrentItem)) as GuestAvailable;
-      OpenInfo(dgGuestAvailable, Available.guCheckIn, Available.guInfo, Available.guCheckOutD, Available.guID, sender, 2);
+      OpenInfo(dgGuestAvailable, Available.guCheckIn, Available.guInfo, Available.guCheckOutD, Available.guID, sender);
     }
 
     #endregion
@@ -1277,8 +1052,7 @@ namespace IM.Inhouse.Forms
       //StaStart("Loading Follow Up screen...");
       var Available =
         dgGuestAvailable.Items.GetItemAt(dgGuestAvailable.Items.IndexOf(dgGuestAvailable.CurrentItem)) as GuestAvailable;
-      OpenFollow(dgGuestAvailable, Available.guCheckIn, Available.guInfo, Available.guFollow, Available.guAvail,
-        Available.guInvit, Available.guCheckOutD, Available.guID, sender, 2);
+      OpenFollow(dgGuestAvailable, Available.guCheckIn, Available.guInfo, Available.guFollow, Available.guAvail,Available.guInvit, Available.guCheckOutD, Available.guID, sender);
     }
 
     #endregion
@@ -1292,14 +1066,11 @@ namespace IM.Inhouse.Forms
         var Arrival = dgGuestAvailable.SelectedItem as GuestAvailable;
         frmPRNotes prnote = new frmPRNotes(Arrival.guID);
         prnote.Owner = this;
-        prnote.ShowInTaskbar = false;
-        if (!prnote.ShowDialog().Value)
+        prnote.ShowDialog();
+        if (prnote._saveNote)
         {
-          if (prnote._saveNote)
-          {
-            dgGuestAvailable.SelectedItems.OfType<GuestAvailable>().ToList().ForEach(item => item.guPRNote = true);
-            dgGuestAvailable.Items.Refresh();
-          }
+          dgGuestAvailable.SelectedItems.OfType<GuestAvailable>().ToList().ForEach(item => item.guPRNote = true);
+          dgGuestAvailable.Items.Refresh();
         }
       }
     }
@@ -1421,48 +1192,27 @@ namespace IM.Inhouse.Forms
 
     private void ChkguCheckInPremanifest_Click(object sender, RoutedEventArgs e)
     {
-      //Se debe igualar el valor del check al valor que arroje las validaciones
       var chk = sender as CheckBox;
       if (chk.IsChecked.Value)
-      {
-        chk.IsChecked =
-          CheckIn(dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)),
-            3);
-      }
+        chk.IsChecked = CheckIn(dgGuestPremanifest);
     }
 
     #endregion
 
     #region ChkguAvailPremanifest_Click
-
     private void ChkguAvailPremanifest_Click(object sender, RoutedEventArgs e)
     {
-      //StaStart("Loading Information´s Availability...");
-      var Premanifest =
-        dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)) as
-          GuestPremanifest;
-      OpenAvail(dgGuestPremanifest, Premanifest.guID, Premanifest.guCheckIn, sender, 3);
+      var Premanifest = dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)) as GuestPremanifest;
+      OpenAvail(dgGuestPremanifest, Premanifest.guID, Premanifest.guCheckIn, sender);
     }
-
     #endregion
 
     #region ChkguInfoPremanifest_Click
 
     private void ChkguInfoPremanifest_Click(object sender, RoutedEventArgs e)
     {
-      GuestArrival itema =
-        dgGuestArrival.Items.GetItemAt(dgGuestArrival.Items.IndexOf(dgGuestArrival.CurrentItem)) as GuestArrival;
-      var chk = sender as CheckBox; //bool? con = ck.IsChecked;
-      var userData = BRPersonnel.Login(Model.Enums.EnumLoginType.Location, App.User.User.peID, App.User.Location.loID);
-      var invit = new frmInvitationBase(EnumInvitationType.InHouse, userData, itema.guID,
-        !chk.IsChecked.Value ? EnumInvitationMode.modOnlyRead : EnumInvitationMode.modAdd);
-      var res = invit.ShowDialog();
-      chk.IsChecked = (res.HasValue && res.Value) || itema.guInvit;
-      var Premanifest =
-        dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)) as
-          GuestPremanifest;
-      OpenInfo(dgGuestPremanifest, Premanifest.guCheckIn, Premanifest.guInfo, Premanifest.guCheckOutD, Premanifest.guID,
-        sender, 3);
+      var Premanifest = dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)) as GuestPremanifest;
+      OpenInfo(dgGuestPremanifest, Premanifest.guCheckIn, Premanifest.guInfo, Premanifest.guCheckOutD, Premanifest.guID, sender);
     }
 
     #endregion
@@ -1471,12 +1221,8 @@ namespace IM.Inhouse.Forms
 
     private void ChkguFollowPremanifest_Click(object sender, RoutedEventArgs e)
     {
-      //StaStart("Loading Follow Up screen...");
-      var Premanifest =
-        dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)) as
-          GuestPremanifest;
-      OpenFollow(dgGuestPremanifest, Premanifest.guCheckIn, Premanifest.guInfo, Premanifest.guFollow,
-        Premanifest.guAvail, Premanifest.guInvit, Premanifest.guCheckOutD, Premanifest.guID, sender, 3);
+      var Premanifest = dgGuestPremanifest.Items.GetItemAt(dgGuestPremanifest.Items.IndexOf(dgGuestPremanifest.CurrentItem)) as GuestPremanifest;
+      OpenFollow(dgGuestPremanifest, Premanifest.guCheckIn, Premanifest.guInfo, Premanifest.guFollow, Premanifest.guAvail, Premanifest.guInvit, Premanifest.guCheckOutD, Premanifest.guID, sender);
     }
 
     #endregion
@@ -1490,16 +1236,11 @@ namespace IM.Inhouse.Forms
         var Arrival = dgGuestPremanifest.SelectedItem as GuestPremanifest;
         frmPRNotes prnote = new frmPRNotes(Arrival.guID);
         prnote.Owner = this;
-        prnote.ShowInTaskbar = false;
-        if (!prnote.ShowDialog().Value)
+        prnote.ShowDialog();
+        if (prnote._saveNote)
         {
-          if (prnote._saveNote)
-          {
-            dgGuestPremanifest.SelectedItems.OfType<ObjGuestPremanifest>()
-              .ToList()
-              .ForEach(item => item.guPRNote = true);
-            dgGuestPremanifest.Items.Refresh();
-          }
+          dgGuestPremanifest.SelectedItems.OfType<ObjGuestPremanifest>().ToList().ForEach(item => item.guPRNote = true);
+          dgGuestPremanifest.Items.Refresh();
         }
       }
     }
@@ -1513,8 +1254,7 @@ namespace IM.Inhouse.Forms
       var Premanifest = dgGuestPremanifest.Items[dgGuestPremanifest.Items.CurrentPosition] as GuestPremanifest;
       var chk = sender as CheckBox;
       chk.IsChecked = !chk.IsChecked.Value;
-      if (ValidateCancelInvitation(Premanifest.guCheckIn, Premanifest.guCheckOutD, Premanifest.guInvit,
-        Premanifest.guShow))
+      if (ValidateCancelInvitation(Premanifest.guCheckIn, Premanifest.guCheckOutD, Premanifest.guInvit, Premanifest.guShow))
       {
         StaStart("loading Cancel invitation screen...");
         var log = ValidateLogin();
@@ -1523,13 +1263,9 @@ namespace IM.Inhouse.Forms
           frmBookingCancel bc = new frmBookingCancel(Premanifest.guID, log.UserData.User);
           bc.Owner = this;
           bc.ShowInTaskbar = false;
-          if (!bc.ShowDialog().Value)
-          {
-            dgGuestPremanifest.SelectedItems.OfType<GuestPremanifest>()
-              .ToList()
-              .ForEach(item => item.guBookCanc = bc._cancelado.Value);
-            dgGuestPremanifest.Items.Refresh();
-          }
+          bc.ShowDialog();
+          dgGuestPremanifest.SelectedItems.OfType<GuestPremanifest>().ToList().ForEach(item => item.guBookCanc = bc._cancelado.Value);
+          dgGuestPremanifest.Items.Refresh();
         }
       }
     }
@@ -1625,9 +1361,7 @@ namespace IM.Inhouse.Forms
       //Se debe igualar el valor del check al valor que arroje las validaciones
       var chk = sender as CheckBox;
       if (chk.IsChecked.Value)
-      {
-        chk.IsChecked = CheckIn(guestSearchedDataGrid.Items[guestSearchedDataGrid.Items.CurrentPosition], 4);
-      }
+        chk.IsChecked = CheckIn(guestSearchedDataGrid);
     }
 
     #endregion
@@ -1636,11 +1370,8 @@ namespace IM.Inhouse.Forms
 
     private void ChkguAvailGetGuest_Click(object sender, RoutedEventArgs e)
     {
-      //StaStart("Loading Information´s Availability...");
-      var Searched =
-        guestSearchedDataGrid.Items.GetItemAt(guestSearchedDataGrid.Items.IndexOf(guestSearchedDataGrid.CurrentItem)) as
-          GuestSearched;
-      OpenAvail(dgGuestPremanifest, Searched.guID, Searched.guCheckIn, sender, 4);
+      var Searched = guestSearchedDataGrid.Items.GetItemAt(guestSearchedDataGrid.Items.IndexOf(guestSearchedDataGrid.CurrentItem)) as GuestSearched;
+      OpenAvail(guestSearchedDataGrid, Searched.guID, Searched.guCheckIn, sender);
     }
 
     #endregion
@@ -1649,11 +1380,8 @@ namespace IM.Inhouse.Forms
 
     private void ChkguInfoGetGuest_Click(object sender, RoutedEventArgs e)
     {
-      var Searched =
-        guestSearchedDataGrid.Items.GetItemAt(guestSearchedDataGrid.Items.IndexOf(guestSearchedDataGrid.CurrentItem)) as
-          GuestSearched;
-      OpenInfo(guestSearchedDataGrid, Searched.guCheckIn, Searched.guInfo, Searched.guCheckOutD, Searched.guID, sender,
-        4);
+      var Searched = guestSearchedDataGrid.Items.GetItemAt(guestSearchedDataGrid.Items.IndexOf(guestSearchedDataGrid.CurrentItem)) as GuestSearched;
+      OpenInfo(guestSearchedDataGrid, Searched.guCheckIn, Searched.guInfo, Searched.guCheckOutD, Searched.guID, sender);
     }
 
     #endregion
@@ -1662,11 +1390,8 @@ namespace IM.Inhouse.Forms
 
     private void ChkguFollowGetGuest_Click(object sender, RoutedEventArgs e)
     {
-      var Searched =
-        guestSearchedDataGrid.Items.GetItemAt(guestSearchedDataGrid.Items.IndexOf(guestSearchedDataGrid.CurrentItem)) as
-          GuestSearched;
-      OpenFollow(guestSearchedDataGrid, Searched.guCheckIn, Searched.guInfo, Searched.guFollow, Searched.guAvail,
-        Searched.guInvit, Searched.guCheckOutD, Searched.guID, sender, 4);
+      var Searched = guestSearchedDataGrid.Items.GetItemAt(guestSearchedDataGrid.Items.IndexOf(guestSearchedDataGrid.CurrentItem)) as GuestSearched;
+      OpenFollow(guestSearchedDataGrid, Searched.guCheckIn, Searched.guInfo, Searched.guFollow, Searched.guAvail, Searched.guInvit, Searched.guCheckOutD, Searched.guID, sender);
     }
 
     #endregion
@@ -1680,23 +1405,13 @@ namespace IM.Inhouse.Forms
         var Arrival = guestSearchedDataGrid.SelectedItem as GuestSearched;
         frmPRNotes prnote = new frmPRNotes(Arrival.guID);
         prnote.Owner = this;
-        prnote.ShowInTaskbar = false;
-        if (!prnote.ShowDialog().Value)
+        prnote.ShowDialog();
+        if (prnote._saveNote)
         {
-          if (prnote._saveNote)
-          {
-            guestSearchedDataGrid.SelectedItems.OfType<ObjGuestSearched>()
-              .ToList()
-              .ForEach(item => item.guPRNote = true);
-            guestSearchedDataGrid.Items.Refresh();
-          }
+          guestSearchedDataGrid.SelectedItems.OfType<ObjGuestSearched>().ToList().ForEach(item => item.guPRNote = true);
+          guestSearchedDataGrid.Items.Refresh();
         }
       }
-    }
-
-
-    private void CheckBox_Click(object sender, RoutedEventArgs e)
-    {
     }
 
     #endregion
@@ -1718,13 +1433,9 @@ namespace IM.Inhouse.Forms
           bc.Owner = this;
           bc.ShowInTaskbar = false;
           StaEnd();
-          if (!bc.ShowDialog().Value)
-          {
-            guestSearchedDataGrid.SelectedItems.OfType<GuestSearched>()
-              .ToList()
-              .ForEach(item => item.guBookCanc = bc._cancelado.Value);
-            guestSearchedDataGrid.Items.Refresh();
-          }
+          bc.ShowDialog();
+          guestSearchedDataGrid.SelectedItems.OfType<GuestSearched>().ToList().ForEach(item => item.guBookCanc = bc._cancelado.Value);
+          guestSearchedDataGrid.Items.Refresh();
         }
       }
     }
@@ -1755,10 +1466,7 @@ namespace IM.Inhouse.Forms
       GuestsGroup gg = new GuestsGroup();
       EnumAction action;
 
-      GuestSearched itema =
-        guestSearchedDataGrid.Items.GetItemAt(guestSearchedDataGrid.Items.IndexOf(guestSearchedDataGrid.CurrentItem)) as
-          GuestSearched;
-
+      GuestSearched itema = guestSearchedDataGrid.Items.GetItemAt(guestSearchedDataGrid.Items.IndexOf(guestSearchedDataGrid.CurrentItem)) as GuestSearched;
       action = EnumAction.None;
       guID = itema.guID;
       group = itema.guGroup;
@@ -1872,7 +1580,6 @@ namespace IM.Inhouse.Forms
     {
       StaStart("Loading...");
       LoadGrid();
-      StaEnd();
     }
 
     #endregion
@@ -1982,7 +1689,7 @@ namespace IM.Inhouse.Forms
     private void btnArrivals_Clicked(object sender, RoutedEventArgs e)
     {
       StaStart("Loading Arrival...");
-      EnabledCtrls(true, true, true, true);     
+      EnabledCtrls(true, true, true, true);
       _screen = EnumScreen.Arrivals; // DataGridVisibility(Visibility.Visible, Visibility.Hidden, Visibility.Hidden, Visibility.Hidden);
       LoadGrid();
       //oculta el boton btnWitGifts que exporta el reporte Premanifest WithGifts
@@ -2000,9 +1707,9 @@ namespace IM.Inhouse.Forms
     private void btnAvailables_Clicked(object sender, RoutedEventArgs e)
     {
       StaStart("Loading Available...");
-      EnabledCtrls(false, false, true, true);      
+      EnabledCtrls(false, false, true, true);
       _screen = EnumScreen.Availables;// DataGridVisibility(Visibility.Hidden, Visibility.Visible, Visibility.Hidden, Visibility.Hidden);
-      LoadGrid();     
+      LoadGrid();
       //oculta el boton btnWitGifts que exporta el reporte Premanifest WithGifts
       ShowbtnWitGifts(false);
     }
@@ -2017,7 +1724,7 @@ namespace IM.Inhouse.Forms
     private void btnPremanifiest_Click(object sender, RoutedEventArgs e)
     {
       StaStart("Loading Premanifest...");
-      EnabledCtrls(false, true, false, false);      
+      EnabledCtrls(false, true, false, false);
       _screen = EnumScreen.Premanifest;// DataGridVisibility(Visibility.Hidden, Visibility.Hidden, Visibility.Visible, Visibility.Hidden);
       LoadGrid();
       //Muestra el boton btnWitGifts que exporta el reporte Premanifest WithGifts
@@ -2074,7 +1781,7 @@ namespace IM.Inhouse.Forms
         _guestReservation = SearchGuests._reservation;
         //Manipulamos los controlos 
         EnabledCtrls(false, false, false, false, false, false);
-        _screen = EnumScreen.Search;        
+        _screen = EnumScreen.Search;
         LoadGrid();
         //oculta el boton btnWitGifts que exporta el reporte Premanifest WithGifts
         ShowbtnWitGifts(false);
@@ -2149,13 +1856,9 @@ namespace IM.Inhouse.Forms
 
     private void DoGetScreenArrivals()
     {
-      //_guestArrivalViewSource.Source =
-      //  BRGuests.GetGuestsArrivals(_serverDate, App.User.LeadSource.lsID, _markets, _available, _info, _invited,
-      //    _onGroup).Select(parent => new ObjGuestArrival(parent)).ToList();
       Task.Factory.StartNew(() =>
-         BRGuests.GetGuestsArrivals(_serverDate, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup).
-         Select(parent => new ObjGuestArrival(parent)).ToList()).ContinueWith(
-         (LoadGuestsInhouse) =>
+         BRGuests.GetGuestsArrivals(_serverDate, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup).Select(parent => new ObjGuestArrival(parent)).ToList()).
+         ContinueWith((LoadGuestsInhouse) =>
          {
            if (LoadGuestsInhouse.IsFaulted)
            {
@@ -2173,17 +1876,11 @@ namespace IM.Inhouse.Forms
              StaEnd();
              return false;
            }
-         },
-         TaskScheduler.FromCurrentSynchronizationContext()
-          );
+         }, TaskScheduler.FromCurrentSynchronizationContext());
     }
 
     private void DoGetScreenPremanifest()
     {
-      //_guestPremanifestViewSource.Source =
-      //  BRGuests.GetGuestsPremanifest(_serverDate, App.User.LeadSource.lsID, _markets, _onGroup)
-      //    .Select(parent => new ObjGuestPremanifest(parent))
-      //    .ToList();
       Task.Factory.StartNew(() =>
                BRGuests.GetGuestsPremanifest(_serverDate, App.User.LeadSource.lsID, _markets, _onGroup)
             .Select(parent => new ObjGuestPremanifest(parent)).ToList()).ContinueWith(
@@ -2212,13 +1909,9 @@ namespace IM.Inhouse.Forms
 
     private void DoGetScreenAvailables()
     {
-      //_guestAvailableViewSource.Source =
-      //  BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited,
-      //    _onGroup).Select(parent => new ObjGuestAvailable(parent)).ToList();
       Task.Factory.StartNew(() =>
-           BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup)
-           .Select(parent => new ObjGuestAvailable(parent)).ToList()).ContinueWith(
-         (LoadGuestsInhouse) =>
+           BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup).Select(parent => new ObjGuestAvailable(parent)).ToList()).
+           ContinueWith((LoadGuestsInhouse) =>
          {
            if (LoadGuestsInhouse.IsFaulted)
            {
@@ -2236,19 +1929,13 @@ namespace IM.Inhouse.Forms
              StaEnd();
              return false;
            }
-         },
-         TaskScheduler.FromCurrentSynchronizationContext()
-          );
+         }, TaskScheduler.FromCurrentSynchronizationContext());
     }
 
     private void DoGetScreenSearched()
     {
-      //_guestSearchedViewSource.Source =
-      //  BRGuests.GetGuests(_guestdateFrom, _guestDateTo, App.User.LeadSource.lsID, _guestName, _guestRoom,
-      //    _guestReservation, _guestGuid).Select(parent => new ObjGuestSearched(parent)).ToList();
       Task.Factory.StartNew(() =>
-         BRGuests.GetGuests(_guestdateFrom, _guestDateTo, App.User.LeadSource.lsID, _guestName, _guestRoom, _guestReservation, _guestGuid)
-            .Select(parent => new ObjGuestSearched(parent)).ToList()).ContinueWith(
+         BRGuests.GetGuests(_guestdateFrom, _guestDateTo, App.User.LeadSource.lsID, _guestName, _guestRoom, _guestReservation, _guestGuid).Select(parent => new ObjGuestSearched(parent)).ToList()).ContinueWith(
          (LoadGuestsInhouse) =>
          {
            if (LoadGuestsInhouse.IsFaulted)
@@ -2267,14 +1954,9 @@ namespace IM.Inhouse.Forms
              StaEnd();
              return false;
            }
-         },
-         TaskScheduler.FromCurrentSynchronizationContext()     
-          );
+         }, TaskScheduler.FromCurrentSynchronizationContext());
     }
 
     #endregion
-
   }
 }
-  
-

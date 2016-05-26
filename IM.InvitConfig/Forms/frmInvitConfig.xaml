@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.InvitConfig.Forms"
         xmlns:Controls="clr-namespace:IM.Styles.UserControls;assembly=IM.Styles"
         mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" WindowStartupLocation="CenterScreen"
-        Title="frmInvitConfig" Height="650" Width="900" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing">
+        Title="Invit Config" Height="650" Width="900" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Margin" Value="5"/>

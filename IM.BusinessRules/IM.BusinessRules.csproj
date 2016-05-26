@@ -112,6 +112,7 @@
     <Compile Include="BR\BRNotBookingMotives.cs" />
     <Compile Include="BR\BRNotices.cs" />
     <Compile Include="BR\BRPaymentPlaces.cs" />
+    <Compile Include="BR\BRPayments.cs" />
     <Compile Include="BR\BRPaymentSchemas.cs" />
     <Compile Include="BR\BRPaymentTypes.cs" />
     <Compile Include="BR\BRNotes.cs" />
