@@ -46,14 +46,14 @@ namespace IM.ProcessorOuthouse.Forms
       _lstGifts = await BRGifts.GetGifts();
 
       List<string> _prodByGift = GetSettings.ProductionByGift();
-      _lstGiftsProdGift = BRGifts.GetGiftsShortById(_prodByGift);
+      _lstGiftsProdGift =await BRGifts.GetGiftsShortById(_prodByGift);
 
       _lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, EnumProgram.Outhouse, "ALL");
 
       List<string> _paymentComm = GetSettings.PRPaymentCommissions();
       _lstLeadSourcesPaymentComm = BRLeadSources.GetLeadSourceById(_paymentComm);
 
-      _lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter, -1);
+      _lstChargeTo = await BRChargeTos.GetChargeTos(_chargeToFilter, -1);
       _lstPaymentType =await BRPaymentTypes.GetPaymentTypes(-1);
 
       var x = (await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, EnumProgram.Outhouse)).Select(y => y.lsID).ToList();

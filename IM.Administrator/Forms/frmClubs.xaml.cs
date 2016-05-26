@@ -238,14 +238,14 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 02/05/2016
     /// </history>
-    private void LoadClubs(Club club = null)
+    private async void LoadClubs(Club club = null)
     {
-      int nIndex = 0;      
-      List<Club> lstClubs = BRClubs.GetClubs(_clubFilter, _nStatus);
+      int nIndex = 0;
+      List<Club> lstClubs = await BRClubs.GetClubs(_clubFilter, _nStatus);
       dgrClubs.ItemsSource = lstClubs;
-      if (lstClubs.Count > 0 && club!=null)
+      if (lstClubs.Count > 0 && club != null)
       {
-        club = lstClubs.Where(cl => cl.clID == club.clID).FirstOrDefault();
+        club = lstClubs.FirstOrDefault(cl => cl.clID == club.clID);
         nIndex = lstClubs.IndexOf(club);
       }
       GridHelper.SelectRow(dgrClubs, nIndex);

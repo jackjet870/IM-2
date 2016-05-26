@@ -646,7 +646,7 @@ namespace IM.Inhouse.Forms
     /// <history>
     /// [jorcanche] 11/04/2016
     /// </history>
-    private void Inhouse_Loaded()
+    private async void Inhouse_Loaded()
     {
       //Guardamos el log del login 
       BRLoginLogs.SaveGuestLog(App.User.Location.loID, App.User.User.peID, Environment.MachineName.ToString());
@@ -672,7 +672,7 @@ namespace IM.Inhouse.Forms
       LoadGrid();
 
       //Cargamos el listado de markets
-      listMarkets.ItemsSource = BRMarkets.GetMarkets(1);
+      listMarkets.ItemsSource = await BRMarkets.GetMarkets(1);
 
       //Abrimos el visualizador de  noticias    
       var win = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x is frmNotices);

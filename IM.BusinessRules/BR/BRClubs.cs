@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using IM.Model;
+﻿using IM.Model;
 using IM.Model.Helpers;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
   public class BRClubs
   {
     #region GetClubs
+
     /// <summary>
     /// Devuelve registros del catalogo Clubs
     /// </summary>
@@ -19,39 +21,48 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 03/11/2016
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
+    /// [aalcocer] 25/05/2016  Modified. Se agregó asincronía
     /// </history>
-    public static List<Club> GetClubs(Club club=null, int nStatus = -1)
+    public static async Task<List<Club>> GetClubs(Club club = null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      var result = new List<Club>();
+
+      await Task.Run(() =>
       {
-        var query = (from cb in dbContext.Clubs
-                    select cb);
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnEstatus = Convert.ToBoolean(nStatus);
-          query = query.Where(cb => cb.clA == blnEstatus);
-        }
+          var query = (from cb in dbContext.Clubs
+                       select cb);
 
-        if (club != null)//Si se tiene un objeto
-        {
-          if (club.clID > 0)//Filtro por ID
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(cb => cb.clID == club.clID);
+            bool blnEstatus = Convert.ToBoolean(nStatus);
+            query = query.Where(cb => cb.clA == blnEstatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(club.clN))//Filtro por nombre
+          if (club != null)//Si se tiene un objeto
           {
-            query = query.Where(cb => cb.clN.Contains(club.clN));
-          }
-        }
+            if (club.clID > 0)//Filtro por ID
+            {
+              query = query.Where(cb => cb.clID == club.clID);
+            }
 
-        return query.OrderBy(cb=>cb.clN).ToList();
-      }
+            if (!string.IsNullOrWhiteSpace(club.clN))//Filtro por nombre
+            {
+              query = query.Where(cb => cb.clN.Contains(club.clN));
+            }
+          }
+
+          result = query.OrderBy(cb => cb.clN).ToList();
+        }
+      });
+      return result;
     }
-    #endregion
+
+    #endregion GetClubs
 
     #region SaveClub
+
     /// <summary>
     /// Agrega|Actualiza un club
     /// </summary>
@@ -63,7 +74,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 03/05/2016
     /// </history>
-    public static int SaveClub(Club club, bool blnUpdate,List<Agency> lstAdd, List<Agency>lstDel)
+    public static int SaveClub(Club club, bool blnUpdate, List<Agency> lstAdd, List<Agency> lstDel)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -73,13 +84,16 @@ namespace IM.BusinessRules.BR
           try
           {
             #region Update
+
             if (blnUpdate)
             {
               dbContext.Entry(club).State = EntityState.Modified;
             }
-            #endregion
+
+            #endregion Update
 
             #region Add
+
             else
             {
               Club clubVal = dbContext.Clubs.Where(cl => cl.clID == club.clID).FirstOrDefault();
@@ -92,34 +106,40 @@ namespace IM.BusinessRules.BR
                 dbContext.Clubs.Add(club);
               }
             }
-            #endregion
+
+            #endregion Add
 
             #region Agencies Add
+
             if (lstAdd.Count > 0)
             {
               dbContext.Agencies.AsEnumerable().Where(ag => lstAdd.Any(agg => agg.agID == ag.agID)).ToList().ForEach(ag => ag.agcl = club.clID);
             }
-            #endregion
+
+            #endregion Agencies Add
 
             #region Agencies Delete
+
             if (lstDel.Count > 0)
             {
               dbContext.Agencies.AsEnumerable().Where(ag => lstDel.Any(agg => agg.agID == ag.agID)).ToList().ForEach(ag => ag.agcl = null);
             }
-            #endregion
+
+            #endregion Agencies Delete
 
             nRes = dbContext.SaveChanges();
             transaction.Commit();
             return nRes;
           }
-          catch(Exception e)
+          catch (Exception e)
           {
             transaction.Rollback();
             return 0;
           }
-        }        
+        }
       }
     }
-    #endregion
+
+    #endregion SaveClub
   }
 }

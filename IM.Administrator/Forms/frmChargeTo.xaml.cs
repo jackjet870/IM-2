@@ -220,14 +220,14 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [Emoguel] created 02/03/2016
     /// </history>
-    protected void LoadChargeTo(ChargeTo chargeTo = null)
+    protected async void LoadChargeTo(ChargeTo chargeTo = null)
     {
       int nIndex = 0;
-      List<ChargeTo> lstChargeTo = BRChargeTos.GetChargeTos(_chargeToFilter, _nStatus);
+      List<ChargeTo> lstChargeTo = await BRChargeTos.GetChargeTos(_chargeToFilter, _nStatus);
       dgrChargeTo.ItemsSource = lstChargeTo;
-      if (chargeTo != null && lstChargeTo.Count>0)
+      if (chargeTo != null && lstChargeTo.Count > 0)
       {
-        chargeTo= lstChargeTo.Where(ch => ch.ctID == chargeTo.ctID).FirstOrDefault();
+        chargeTo = lstChargeTo.FirstOrDefault(ch => ch.ctID == chargeTo.ctID);
         nIndex = lstChargeTo.IndexOf(chargeTo);
       }
       GridHelper.SelectRow(dgrChargeTo, nIndex);

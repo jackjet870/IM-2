@@ -426,7 +426,7 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void AbrirFilterDateRangeLS()
     {
-      _frmFilter = new frmFilterDateRange { frmIH = this };
+      _frmFilter = new frmFilterDateRange { _frmIh = this };
 
       #region Abriendo FrmFilter segun reporte seleccionado.
 
@@ -553,7 +553,7 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void AbrirFilterDateRangePR()
     {
-      _frmFilter = new frmFilterDateRange { frmIH = this };
+      _frmFilter = new frmFilterDateRange { _frmIh = this };
 
       #region Abriendo FrmFilter segun reporte seleccionado.
 
@@ -588,7 +588,7 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void AbrirFilterDateRangeGeneral()
     {
-      _frmFilter = new frmFilterDateRange { frmIH = this };
+      _frmFilter = new frmFilterDateRange { _frmIh = this };
 
       #region Abriendo FrmFilter segun reporte seleccionado.
 
@@ -631,9 +631,10 @@ namespace IM.ProcessorInhouse.Forms
     ///   Muestra el reporte seleccionado
     /// </summary>
     /// <history>
-    ///   [aalcocer] 23/Mar/2016 Created
+    /// [aalcocer] 23/Mar/2016 Created
+    /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    private void ShowLeadSourceReport()
+    private async void ShowLeadSourceReport()
     {
       FileInfo finfo = null;
       string dateRange = _blnOneDate ? DateHelper.DateRange(_dtmInit, _dtmInit.AddDays(6)) : DateHelper.DateRange(_dtmStart, _dtmEnd);
@@ -651,11 +652,11 @@ namespace IM.ProcessorInhouse.Forms
         case EnumRptLeadSource.CostbyPR:
           if (!Convert.ToBoolean(_enumDetailsGift))
           {
-            list.AddRange(BRReportsByLeadSource.GetRptCostByPR(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas));
+            list.AddRange(await BRReportsByLeadSource.GetRptCostByPR(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas));
             if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
             else
             {
-              filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
+              filters.Add(new Tuple<string, string>("Lead Sources",
                 _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
               if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
 
@@ -664,7 +665,7 @@ namespace IM.ProcessorInhouse.Forms
           }
           else
           {
-            list.AddRange(BRReportsByLeadSource.GetRptCostByPRWithDetailGifts(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas));
+            list.AddRange(await BRReportsByLeadSource.GetRptCostByPRWithDetailGifts(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas));
             if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
             else
             {
@@ -683,7 +684,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Follow Up by Agency
 
         case EnumRptLeadSource.FollowUpbyAgency:
-          list.AddRange(BRReportsByLeadSource.GetRptFollowUpByAgencies(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GetRptFollowUpByAgencies(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -701,7 +702,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Follow Up by PR
 
         case EnumRptLeadSource.FollowUpbyPR:
-          list.AddRange(BRReportsByLeadSource.GeRptFollowUpByPRs(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GeRptFollowUpByPRs(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -740,7 +741,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Not Booking Arrivals (Graphic)
 
         case EnumRptLeadSource.NotBookingArrivalsGraphic:
-          list.Add(BRReportsByLeadSource.GetGraphNotBookingArrival(_dtmInit, _lstLeadSources));
+          list.Add(await BRReportsByLeadSource.GetGraphNotBookingArrival(_dtmInit, _lstLeadSources));
           if (list.First() == null) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -758,7 +759,7 @@ namespace IM.ProcessorInhouse.Forms
         case EnumRptLeadSource.OccupationContactBookShow:
           if (!Convert.ToBoolean(_enumQuinellas))
           {
-            list.AddRange(BRReportsByLeadSource.GetRptProductionByMonths(_dtmStart, _dtmEnd, _lstLeadSources, external: _enumExternalInvitation, basedOnArrival: _enumBasedOnArrival));
+            list.AddRange(await BRReportsByLeadSource.GetRptProductionByMonths(_dtmStart, _dtmEnd, _lstLeadSources, external: _enumExternalInvitation, basedOnArrival: _enumBasedOnArrival));
             if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
             else
             {
@@ -772,7 +773,7 @@ namespace IM.ProcessorInhouse.Forms
           }
           else
           {
-            list.AddRange(BRReportsByLeadSource.GetRptContactBookShowQuinellas(_dtmStart, _dtmEnd, _lstLeadSources, _enumExternalInvitation, _enumBasedOnArrival));
+            list.AddRange(await BRReportsByLeadSource.GetRptContactBookShowQuinellas(_dtmStart, _dtmEnd, _lstLeadSources, _enumExternalInvitation, _enumBasedOnArrival));
             if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
             else
             {
@@ -792,7 +793,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production (Graphic)
 
         case EnumRptLeadSource.ProductionGraphic:
-          list.Add(BRReportsByLeadSource.GetGraphProduction(_dtmInit, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
+          list.Add(await BRReportsByLeadSource.GetGraphProduction(_dtmInit, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
           if (list.First() == null) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -810,7 +811,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Age
 
         case EnumRptLeadSource.ProductionbyAge:
-          list.AddRange(BRReportsByLeadSource.GetProductionByAgeInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GetProductionByAgeInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -828,7 +829,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Age, Market & Originally Available
 
         case EnumRptLeadSource.ProductionbyAgeMarketOriginallyAvailable:
-          list.AddRange(BRReportsByLeadSource.GetProductionByAgeMarketOriginallyAvailableInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GetProductionByAgeMarketOriginallyAvailableInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -846,7 +847,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Agency
 
         case EnumRptLeadSource.ProductionbyAgency:
-          list.Add(BRReportsByLeadSource.GetRptProductionByAgencyInhouses(_dtmStart, _dtmEnd, _lstLeadSources,
+          list.Add(await BRReportsByLeadSource.GetRptProductionByAgencyInhouses(_dtmStart, _dtmEnd, _lstLeadSources,
             _enumQuinellas, salesByMembershipType: _enumSalesByMemberShipType, basedOnArrival: _enumBasedOnArrival,
             external: _enumExternalInvitation));
 
@@ -868,7 +869,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Agency (Nights)
 
         case EnumRptLeadSource.ProductionbyAgencyNights:
-          list.Add(BRReportsByLeadSource.GetRptProductionByAgencyInhouses(_dtmStart, _dtmEnd, _lstLeadSources,
+          list.Add(await BRReportsByLeadSource.GetRptProductionByAgencyInhouses(_dtmStart, _dtmEnd, _lstLeadSources,
             _enumQuinellas, true, Convert.ToInt32(_frmFilter.txtStartN.Text), Convert.ToInt32(_frmFilter.txtEndN.Text), _enumSalesByMemberShipType,
             basedOnArrival: _enumBasedOnArrival, external: _enumExternalInvitation));
           if (!list.Cast<ProductionByAgencyInhouseData>().First().ProductionByAgencyInhouses.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
@@ -889,7 +890,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Agency (Only Quinellas)
 
         case EnumRptLeadSource.ProductionbyAgencyOnlyQuinellas:
-          list.Add(BRReportsByLeadSource.GetRptProductionByAgencyInhouses(_dtmStart, _dtmEnd, _lstLeadSources,
+          list.Add(await BRReportsByLeadSource.GetRptProductionByAgencyInhouses(_dtmStart, _dtmEnd, _lstLeadSources,
            _enumQuinellas, salesByMembershipType: _enumSalesByMemberShipType, basedOnArrival: _enumBasedOnArrival,
            external: _enumExternalInvitation, onlyQuinellas: true));
           if (!list.Cast<ProductionByAgencyInhouseData>().First().ProductionByAgencyInhouses.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
@@ -910,7 +911,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Contract & Agency
 
         case EnumRptLeadSource.ProductionbyContractAgency:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByContractAgencyInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _lstMarkets, _lstAgencies, _enumQuinellas));
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByContractAgencyInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _lstMarkets, _lstAgencies, _enumQuinellas));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -929,7 +930,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Contract, Agency, Market & Originally Available
 
         case EnumRptLeadSource.ProductionbyContractAgencyMarketOriginallyAvailable:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByContractAgencyMarketOriginallyAvailableInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _lstMarkets, _lstAgencies, _enumQuinellas));
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByContractAgencyMarketOriginallyAvailableInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _lstMarkets, _lstAgencies, _enumQuinellas));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -949,7 +950,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Couple Type
 
         case EnumRptLeadSource.ProductionbyCoupleType:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByCoupleTypeInhouses(_dtmStart, _dtmEnd, _lstLeadSources, considerQuinellas: _enumQuinellas, basedOnArrival: _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByCoupleTypeInhouses(_dtmStart, _dtmEnd, _lstLeadSources, considerQuinellas: _enumQuinellas, basedOnArrival: _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -967,7 +968,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Desk
 
         case EnumRptLeadSource.ProductionbyDesk:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByDeskInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByDeskInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -985,7 +986,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Gift & Quantity
 
         case EnumRptLeadSource.ProductionbyGiftQuantity:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByGiftQuantities(_dtmStart, _dtmEnd, _lstLeadSources, _lstGiftsQuantity, _enumQuinellas,
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByGiftQuantities(_dtmStart, _dtmEnd, _lstLeadSources, _lstGiftsQuantity, _enumQuinellas,
             _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
@@ -1005,7 +1006,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Group
 
         case EnumRptLeadSource.ProductionbyGroup:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByGroupInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByGroupInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1023,7 +1024,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Guest Status
 
         case EnumRptLeadSource.ProductionbyGuestStatus:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByGuestStatusInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByGuestStatusInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1041,7 +1042,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Member Type & Agency
 
         case EnumRptLeadSource.ProductionbyMemberTypeAgency:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByMemberTypeAgencyInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _lstMarkets, _lstAgencies, _enumQuinellas, _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByMemberTypeAgencyInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _lstMarkets, _lstAgencies, _enumQuinellas, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1061,7 +1062,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Member Type, Agency, Market & Originally Available
 
         case EnumRptLeadSource.ProductionbyMemberTypeAgencyMarketOriginallyAvailable:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _lstMarkets, _lstAgencies, _enumQuinellas, _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _lstMarkets, _lstAgencies, _enumQuinellas, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1081,7 +1082,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Nationality
 
         case EnumRptLeadSource.ProductionbyNationality:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByNationalityInhouses(_dtmStart, _dtmEnd, _lstLeadSources, considerQuinellas: _enumQuinellas, basedOnArrival: _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityInhouses(_dtmStart, _dtmEnd, _lstLeadSources, considerQuinellas: _enumQuinellas, basedOnArrival: _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1099,7 +1100,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Nationality, Market & Originally Available
 
         case EnumRptLeadSource.ProductionbyNationalityMarketOriginallyAvailable:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByNationalityMarketOriginallyAvailableInhouses(_dtmStart, _dtmEnd, _lstLeadSources, considerQuinellas: _enumQuinellas, filterSaveCourtesyTours: _enumSaveCourtesyTours, basedOnArrival: _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityMarketOriginallyAvailableInhouses(_dtmStart, _dtmEnd, _lstLeadSources, considerQuinellas: _enumQuinellas, filterSaveCourtesyTours: _enumSaveCourtesyTours, basedOnArrival: _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1118,7 +1119,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by PR
 
         case EnumRptLeadSource.ProductionbyPR:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByPRInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByPRInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1136,7 +1137,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by PR & Group
 
         case EnumRptLeadSource.ProductionbyPRGroup:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByPRGroupInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByPRGroupInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1154,7 +1155,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by PR & Sales Room
 
         case EnumRptLeadSource.ProductionbyPRSalesRoom:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByPRSalesRoomInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByPRSalesRoomInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1172,7 +1173,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Reps Payment
 
         case EnumRptLeadSource.RepsPayment:
-          list.AddRange(BRReportsByLeadSource.GetRptRepsPayments(_dtmStart, _dtmEnd, _lstLeadSources));
+          list.AddRange(await BRReportsByLeadSource.GetRptRepsPayments(_dtmStart, _dtmEnd, _lstLeadSources));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1188,7 +1189,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Reps Payment Summary
 
         case EnumRptLeadSource.RepsPaymentSummary:
-          list.AddRange(BRReportsByLeadSource.GetRptRepsPaymentSummaries(_dtmStart, _dtmEnd, _lstLeadSources));
+          list.AddRange(await BRReportsByLeadSource.GetRptRepsPaymentSummaries(_dtmStart, _dtmEnd, _lstLeadSources));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1204,7 +1205,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Score by PR
 
         case EnumRptLeadSource.ScorebyPR:
-          list.Add(BRReportsByLeadSource.GetRptScoreByPrs(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas));
+          list.Add(await BRReportsByLeadSource.GetRptScoreByPrs(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas));
           if (!list.Cast<ScoreByPRData>().First().ScoreByPR.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1221,7 +1222,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Show Factor by Booking Date
 
         case EnumRptLeadSource.ShowFactorbyBookingDate:
-          list.AddRange(BRReportsByLeadSource.GetRptShowFactorByBookingDates(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas));
+          list.AddRange(await BRReportsByLeadSource.GetRptShowFactorByBookingDates(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1238,7 +1239,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Unavailable Arrivals (Graphic)
 
         case EnumRptLeadSource.UnavailableArrivalsGraphic:
-          list.Add(BRReportsByLeadSource.GetGraphUnavailableArrivals(_dtmInit, _lstLeadSources));
+          list.Add(await BRReportsByLeadSource.GetGraphUnavailableArrivals(_dtmInit, _lstLeadSources));
           if (list.First() == null) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1253,7 +1254,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Unavailable Motives By Agency
 
         case EnumRptLeadSource.UnavailableMotivesByAgency:
-          list.AddRange(BRReportsByLeadSource.GetRptUnavailableMotivesByAgencies(_dtmStart, _dtmEnd, _lstLeadSources, _lstMarkets, _lstAgencies));
+          list.AddRange(await BRReportsByLeadSource.GetRptUnavailableMotivesByAgencies(_dtmStart, _dtmEnd, _lstLeadSources, _lstMarkets, _lstAgencies));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1287,9 +1288,10 @@ namespace IM.ProcessorInhouse.Forms
     ///   Muestra el reporte seleccionado por PR
     /// </summary>
     /// <history>
-    ///   [aalcocer] 23/Mar/2016 Created
+    /// [aalcocer] 23/Mar/2016 Created
+    /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    private void ShowPRReport()
+    private async void ShowPRReport()
     {
       FileInfo finfo = null;
       string dateRange = _blnOneDate ? DateHelper.DateRange(_dtmStart, _dtmStart) : DateHelper.DateRange(_dtmStart, _dtmEnd);
@@ -1305,7 +1307,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Couple Type
 
         case EnumRptPR.ProductionbyCoupleType:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByCoupleTypeInhouses(_dtmStart, _dtmEnd, new[] { "ALL" }, _lstPersonnel, _enumProgram, _enumQuinellas, _enumBasedOnArrival));
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByCoupleTypeInhouses(_dtmStart, _dtmEnd, new[] { "ALL" }, _lstPersonnel, _enumProgram, _enumQuinellas, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1322,7 +1324,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Nationality
 
         case EnumRptPR.ProductionbyNationality:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByNationalityInhouses(_dtmStart, _dtmEnd, new[] { "ALL" }, _lstPersonnel,
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityInhouses(_dtmStart, _dtmEnd, new[] { "ALL" }, _lstPersonnel,
             _enumProgram, _enumQuinellas, _enumSaveCourtesyTours, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
@@ -1340,7 +1342,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Nationality, Market & Originally Available
 
         case EnumRptPR.ProductionbyNationalityMarketOriginallyAvailable:
-          list.AddRange(BRReportsByLeadSource.GetRptProductionByNationalityMarketOriginallyAvailableInhouses(_dtmStart, _dtmEnd, new[] { "ALL" }, _lstPersonnel,
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityMarketOriginallyAvailableInhouses(_dtmStart, _dtmEnd, new[] { "ALL" }, _lstPersonnel,
            _enumProgram, _enumQuinellas, _enumSaveCourtesyTours, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
@@ -1371,9 +1373,10 @@ namespace IM.ProcessorInhouse.Forms
     ///   Muestra el reporte seleccionado
     /// </summary>
     /// <history>
-    ///   [aalcocer] 22/04/2016 Created
+    /// [aalcocer] 22/04/2016 Created
+    /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    private void ShowGeneralReport()
+    private async void ShowGeneralReport()
     {
       FileInfo finfo = null;
       string dateRange = _blnOneDate ? DateHelper.DateRange(_dtmStart, _dtmStart) : DateHelper.DateRange(_dtmStart, _dtmEnd);
@@ -1389,7 +1392,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Agency (Monthly)
 
         case EnumRptGeneral.ProductionbyAgencyMonthly:
-          list.AddRange(BRGeneralReports.GetRptProductionByAgencyMonthly(_dtmStart, _dtmEnd, _lstAgencies, _enumQuinellas, _enumBasedOnArrival));
+          list.AddRange(await BRGeneralReports.GetRptProductionByAgencyMonthly(_dtmStart, _dtmEnd, _lstAgencies, _enumQuinellas, _enumBasedOnArrival));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
           {
@@ -1406,7 +1409,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Member
 
         case EnumRptGeneral.ProductionbyMember:
-          list.AddRange(BRGeneralReports.GetRptProductionByMembers(_dtmStart, _dtmEnd, new[] { "ALL" }, program: _enumProgram, company: _iCompany,
+          list.AddRange(await BRGeneralReports.GetRptProductionByMembers(_dtmStart, _dtmEnd, new[] { "ALL" }, program: _enumProgram, company: _iCompany,
             club: _club, aplication: _strApplication, onlyWholesalers: _blnOnlyWholesalers, considerQuinellas: _enumQuinellas, basedOnArrival: _enumBasedOnArrival));
 
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);

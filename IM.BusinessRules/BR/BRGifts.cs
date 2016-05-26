@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Data.Entity;
+
 namespace IM.BusinessRules.BR
 {
   public class BRGifts
@@ -35,10 +35,10 @@ namespace IM.BusinessRules.BR
       return result;
     }
 
-
     #endregion GetGifts
 
     #region GetGifts
+
     /// <summary>
     /// Obtiene todos los gifts activos
     /// </summary>
@@ -55,7 +55,8 @@ namespace IM.BusinessRules.BR
         return dbContext.Gifts.Where(x => x.giA == _status).ToList();
       }
     }
-    #endregion
+
+    #endregion GetGifts
 
     #region GetGiftsCategories
 
@@ -82,9 +83,11 @@ namespace IM.BusinessRules.BR
             case 1:
               result = lstGiftsCateg.Where(c => c.gcA == true).ToList();
               break;
+
             case 2:
               result = lstGiftsCateg.Where(c => c.gcA == false).ToList();
               break;
+
             default:
               result = lstGiftsCateg.ToList();
               break;
@@ -153,35 +156,41 @@ namespace IM.BusinessRules.BR
     ///Método para obtener una lista de Regalos por id.
     /// </summary>
     /// <param name="giIDList">Lista de id de Gits</param>
-    /// <returns>List<GiftShort></returns>
+    /// <returns><list type="GiftShort"></list></returns>
     /// <history>
     /// [aalcocer] 23/03/2016 Created
+    /// [aalcocer] 25/05/2016  Modified. Se agregó asincronía
     /// </history>
-    public static List<GiftShort> GetGiftsShortById(IEnumerable<string> giIDList)
+    public static async Task<List<GiftShort>> GetGiftsShortById(IEnumerable<string> giIDList)
     {
-
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      var result = new List<GiftShort>();
+      await Task.Run(() =>
       {
-        return dbContext.Gifts.Where(x => giIDList.Contains(x.giID)).
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.Gifts.Where(x => giIDList.Contains(x.giID)).
           Select(x => new
           {
             x.giID,
             x.giN,
             x.gigc
-          }).
+          }).AsEnumerable().
           Select(x => new GiftShort
           {
             giID = x.giID,
             giN = x.giN,
             gigc = x.gigc
           }).ToList();
-      }
+        }
+      });
 
+      return result;
     }
 
     #endregion GetGiftsShortById
 
     #region GetGiftsInputList
+
     /// <summary>
     /// Obtiene Gifts de una lista de gifts ingresada
     /// </summary>
@@ -196,6 +205,8 @@ namespace IM.BusinessRules.BR
         return dbContext.Gifts.Where(x => x.giA == true && _listGiftsID.Select(s => s.gegi).Contains(x.giID)).ToList();
       }
     }
-    #endregion
+
+    #endregion GetGiftsInputList
+
   }
 }

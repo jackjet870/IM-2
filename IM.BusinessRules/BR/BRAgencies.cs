@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          result= dbContext.USP_OR_GetAgencies(Convert.ToByte(status)).ToList();
+          result = dbContext.USP_OR_GetAgencies(Convert.ToByte(status)).ToList();
         }
       });
 
@@ -46,44 +46,52 @@ namespace IM.BusinessRules.BR
     /// [emoguel] created 08/03/2016
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
     /// [emoguel] modified 02/05/2016--->Se agrega el filtro por Club
+    /// [aalcocer] 25/05/2016  Modified. Se agregó asincronía
     /// </history>
-    public static List<Agency> GetAgencies(Agency agency = null, int nStatus = -1)
+    public static async Task<List<Agency>> GetAgencies(Agency agency = null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var query = from ag in dbContext.Agencies
-                    select ag;
+      var result = new List<Agency>();
 
-        if (nStatus != -1)//Filtro por estatus
-        {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(ag => ag.agA == blnStatus);
-        }
+      await Task.Run(() =>
+       {
+         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+         {
+           var query = from ag in dbContext.Agencies
+                       select ag;
 
-        if (agency != null)//Validacion del objeto
-        {
-          if (!string.IsNullOrWhiteSpace(agency.agID))//Filtro por ID
-          {
-            query = query.Where(ag => ag.agID == agency.agID);
-          }
+           if (nStatus != -1)//Filtro por estatus
+           {
+             bool blnStatus = Convert.ToBoolean(nStatus);
+             query = query.Where(ag => ag.agA == blnStatus);
+           }
 
-          if (!string.IsNullOrWhiteSpace(agency.agN))//Filtro por Nombre(Descripcion)
-          {
-            query = query.Where(ag => ag.agN.Contains(agency.agN));
-          }
+           if (agency != null)//Validacion del objeto
+           {
+             if (!string.IsNullOrWhiteSpace(agency.agID))//Filtro por ID
+             {
+               query = query.Where(ag => ag.agID == agency.agID);
+             }
 
-          if (!string.IsNullOrWhiteSpace(agency.agse))//Filtro segment by agency
-          {
-            query = query.Where(ag => ag.agse == agency.agse);
-          }
+             if (!string.IsNullOrWhiteSpace(agency.agN))//Filtro por Nombre(Descripcion)
+             {
+               query = query.Where(ag => ag.agN.Contains(agency.agN));
+             }
 
-          if (agency.agcl != null && agency.agcl > 0)//Filtro por Club
-          {
-            query = query.Where(ag => ag.agcl == agency.agcl);
-          }
-        }
-        return query.OrderBy(ag => ag.agN).ToList();
-      }
+             if (!string.IsNullOrWhiteSpace(agency.agse))//Filtro segment by agency
+             {
+               query = query.Where(ag => ag.agse == agency.agse);
+             }
+
+             if (agency.agcl != null && agency.agcl > 0)//Filtro por Club
+             {
+               query = query.Where(ag => ag.agcl == agency.agcl);
+             }
+           }
+           result = query.OrderBy(ag => ag.agN).ToList();
+         }
+       });
+
+      return result;
     }
 
     #endregion GetAgencies
@@ -230,13 +238,21 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [aalcocer] 23/03/2016 Created
     /// [aalcocer] 20/04/2016 Modified. devuelve listado de  Agency en ves de AgencyShort
+    /// [aalcocer] 25/05/2016  Modified. Se agregó asincronía
     /// </history>
-    public static List<Agency> GetAgenciesByIds(IEnumerable<string> agIDList)
+    public static async Task<List<Agency>> GetAgenciesByIds(IEnumerable<string> agIDList)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      var result = new List<Agency>();
+
+      await Task.Run(() =>
       {
-        return dbContext.Agencies.Where(x => agIDList.Contains(x.agID)).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.Agencies.Where(x => agIDList.Contains(x.agID)).ToList();
+        }
+      });
+
+      return result;
     }
 
     #endregion GetAgenciesByIds

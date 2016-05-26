@@ -224,14 +224,14 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 08/03/2016
     /// </history>
-    protected void LoadAgencies(Agency agency=null)
+    protected async void LoadAgencies(Agency agency = null)
     {
       int nIndex = 0;
-      List<Agency> lstAgencies = BRAgencies.GetAgencies(_agencyFilter, _nStatus);
+      List<Agency> lstAgencies = await BRAgencies.GetAgencies(_agencyFilter, _nStatus);
       dgrAgencies.ItemsSource = lstAgencies;
-      if (agency!=null && lstAgencies.Count>0)
+      if (agency != null && lstAgencies.Count > 0)
       {
-        agency = lstAgencies.Where(ag => ag.agID == agency.agID).FirstOrDefault();
+        agency = lstAgencies.FirstOrDefault(ag => ag.agID == agency.agID);
         nIndex = lstAgencies.IndexOf(agency);
       }
       GridHelper.SelectRow(dgrAgencies, nIndex);

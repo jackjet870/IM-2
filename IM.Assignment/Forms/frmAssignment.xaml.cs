@@ -61,9 +61,9 @@ namespace IM.Assignment
     /// <history>
     ///   [vku] 08/Mar/2016 Created
     /// </history>
-    private void LoadListMarkets()
+    private async void LoadListMarkets()
     {
-      lstMarkets = BRMarkets.GetMarkets(1);
+      lstMarkets = await BRMarkets.GetMarkets(1);
       grdListMarkets.ItemsSource = lstMarkets;
       grdListMarkets.SelectAll();
     }

@@ -89,7 +89,7 @@ namespace IM.Host.Forms
       _dsPersonnel_Gifts.Source =await BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);
 
       // Obtenemos los Charge To
-      _lstChargeTo = BRChargeTos.GetChargeTos();
+      _lstChargeTo = await BRChargeTos.GetChargeTos();
       _dsChargeTo.Source = _lstChargeTo;
 
       //Obtenemos los Parments Types

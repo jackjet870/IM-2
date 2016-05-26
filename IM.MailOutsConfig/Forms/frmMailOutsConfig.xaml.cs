@@ -10,6 +10,7 @@ using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
 using System;
+using System.Linq;
 
 namespace IM.MailOutsConfig.Forms
 {
@@ -277,38 +278,29 @@ namespace IM.MailOutsConfig.Forms
     /// <history>
     /// [erosado] 20/04/2016 Created
     /// </history>
-    public void DoGetMarkets()
+    public async void DoGetMarkets()
     {
-      Task.Factory.StartNew(() => BRMarkets.GetMarkets(1))
-      .ContinueWith(
-      task1 =>
+      try
       {
-        if (task1.IsFaulted)
+        List<MarketShort> data = await BRMarkets.GetMarkets(1);
+        if (!data.Any())
         {
-          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          return false;
+          data.Insert(0, new MarketShort { mkN = "ANY ONE", mkID = "ANY ONE" });
+          cbxMarket.ItemsSource = data;
+          cbxMarket.SelectedIndex = 0;
         }
-        if (task1.IsCompleted)
+        else
         {
-          task1.Wait(1000);
-          List<MarketShort> data = task1.Result;
-          if (data.Count > 0)
-          {
-            data.Insert(0, new MarketShort { mkN = "ANY ONE", mkID = "ANY ONE" });
-            cbxMarket.ItemsSource = data;
-            cbxMarket.SelectedIndex = 0;
-          }
-          else
-          {
-            cbxMarket.Text = "No data found - Press Ctrl+F5 to load Data";
-          }
+          cbxMarket.Text = "No data found - Press Ctrl+F5 to load Data";
         }
-        StaEnd();
-        return false;
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+       
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
+      StaEnd();
+     
     }
     /// <summary>
     /// Actualiza la información de un MailOut

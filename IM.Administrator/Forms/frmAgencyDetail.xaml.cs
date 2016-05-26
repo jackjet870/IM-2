@@ -200,9 +200,9 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] 11/03/2016
     /// </history>
-    protected void LoadMarkets()
+    protected async void LoadMarkets()
     {
-      List<MarketShort> lstMarkestShort = BRMarkets.GetMarkets(1);
+      List<MarketShort> lstMarkestShort = await BRMarkets.GetMarkets(1);
       cmbMarket.ItemsSource = lstMarkestShort;
     }
     #endregion
@@ -247,9 +247,9 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 11/03/2016
     /// </history>
-    protected void LoadClubs()
+    protected async void LoadClubs()
     {
-      List<Club> lstClubs = BRClubs.GetClubs(new Club());
+      List<Club> lstClubs = await BRClubs.GetClubs(new Club());
       if (lstClubs.Count > 0)
       {
         lstClubs.Insert(0, new Club { clID = -1, clN = "" });

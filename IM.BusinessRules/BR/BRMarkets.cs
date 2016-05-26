@@ -1,8 +1,9 @@
-﻿using System;
+﻿using IM.Model;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using IM.Model;
-using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -14,18 +15,25 @@ namespace IM.BusinessRules.BR
     /// Obtiene el catalogo de mercados
     /// </summary>
     /// <param name="status"> 0- Sin filtro, 1-Activos, 2. Inactivos </param>
-    /// <returns>List<MarketShort></returns>
+    /// <returns><list type="MarketShort"></list></returns>
     /// <hystory>
     /// [erosado] 08/03/2016  created
+    /// [aalcocer] 25/05/2016  Modified. Se agregó asincronía
     /// </hystory>
-    public static List<MarketShort> GetMarkets(int status)
+    public static async Task<List<MarketShort>> GetMarkets(int status)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      var result = new List<MarketShort>();
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetMarkets(Convert.ToByte(status)).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.USP_OR_GetMarkets(Convert.ToByte(status)).ToList();
+        }
+      });
+      return result;
     }
-    #endregion
+
+    #endregion GetMarkets
 
     #region GetMarkets
 
@@ -39,14 +47,14 @@ namespace IM.BusinessRules.BR
     /// [emoguel]created 09/03/2016
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
     /// </history>
-    public static List<Market> GetMarkets(Market market=null,int nStatus=-1)    
+    public static List<Market> GetMarkets(Market market = null, int nStatus = -1)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var query = from mkt in dbContext.Markets
                     select mkt;
 
-        if(nStatus!=-1)//Filtro por status
+        if (nStatus != -1)//Filtro por status
         {
           query = query.Where(mkt => mkt.mkA == market.mkA);
         }
@@ -67,6 +75,6 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion
+    #endregion GetMarkets
   }
 }

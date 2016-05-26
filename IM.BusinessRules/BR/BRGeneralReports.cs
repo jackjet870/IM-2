@@ -30,7 +30,7 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion
+    #endregion GetRptAgencies
 
     #region GetRptPersonnel
 
@@ -49,7 +49,7 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion
+    #endregion GetRptPersonnel
 
     #region GetRptGifts
 
@@ -68,7 +68,7 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion
+    #endregion GetRptGifts
 
     #region GetRptLoginsLog
 
@@ -92,7 +92,7 @@ namespace IM.BusinessRules.BR
       return result;
     }
 
-    #endregion
+    #endregion GetRptLoginsLog
 
     #region GetRptProductionByLeadSourceMarketMonthly
 
@@ -111,7 +111,7 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion
+    #endregion GetRptProductionByLeadSourceMarketMonthly
 
     #region GetRptProductionReferral
 
@@ -129,7 +129,7 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion
+    #endregion GetRptProductionReferral
 
     #region GetRptReps
 
@@ -147,7 +147,7 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion
+    #endregion GetRptReps
 
     #region GetRptSalesByProgramLeadSourceMarket
 
@@ -165,7 +165,7 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion
+    #endregion GetRptSalesByProgramLeadSourceMarket
 
     #region GetRptWarehouseMovements
 
@@ -184,9 +184,9 @@ namespace IM.BusinessRules.BR
       }
     }
 
-    #endregion
+    #endregion GetRptWarehouseMovements
 
-    #endregion
+    #endregion Processor General
 
     #region Inhouse
 
@@ -301,15 +301,22 @@ namespace IM.BusinessRules.BR
     /// <returns><list type="RptProductionByAgencyMonthly"></list></returns>
     /// <history>
     /// [aalcocer] 21/04/2016 Created
+    /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    public static List<RptProductionByAgencyMonthly> GetRptProductionByAgencyMonthly(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> agencies,
+    public static async Task<List<RptProductionByAgencyMonthly>> GetRptProductionByAgencyMonthly(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> agencies,
       EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
     {
+      var result = new List<RptProductionByAgencyMonthly>();
+
+      await Task.Run(() =>
+      {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByAgencyMonthly_Timeout;
-        return dbContext.USP_OR_RptProductionByAgencyMonthly(dtmStart, dtmEnd, string.Join(",", agencies), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival)).ToList();
+          result = dbContext.USP_OR_RptProductionByAgencyMonthly(dtmStart, dtmEnd, string.Join(",", agencies), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival)).ToList();
       }
+      });
+      return result;
     }
 
     #endregion GetRptProductionByAgencyMonthly
@@ -333,20 +340,29 @@ namespace IM.BusinessRules.BR
     /// <returns><list type="RptProductionByMember"></list></returns>
     /// <history>
     /// [aalcocer] 03/05/2016 Created
+    /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    public static List<RptProductionByMember> GetRptProductionByMembers(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
+    public static async Task<List<RptProductionByMember>> GetRptProductionByMembers(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
       IEnumerable<string> pRs = null, EnumProgram program = EnumProgram.All, string aplication = "", int company = 0, Club club = null,
       bool onlyWholesalers = false, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
     {
-      if (pRs == null || !pRs.Any()) pRs = new[] { "ALL" };
+      var result = new List<RptProductionByMember>();
+
+      if (pRs == null || !pRs.Any())
+        pRs = new[] { "ALL" };
+
+      await Task.Run(() =>
+      {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByMember_Timeout;
-        return dbContext.USP_OR_RptProductionByMember(dtmStart, dtmEnd, string.Join(",", leadSources), string.Join(",", pRs),
+          result = dbContext.USP_OR_RptProductionByMember(dtmStart, dtmEnd, string.Join(",", leadSources), string.Join(",", pRs),
           EnumToListHelper.GetEnumDescription(program), string.IsNullOrWhiteSpace(aplication) ? "ALL" : aplication,
           company, club?.clID, onlyWholesalers, Convert.ToBoolean(considerQuinellas),
           Convert.ToBoolean(basedOnArrival)).ToList();
       }
+      });
+      return result;
     }
 
     #endregion GetRptProductionByMembers

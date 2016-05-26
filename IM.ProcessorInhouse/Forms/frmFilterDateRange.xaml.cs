@@ -30,15 +30,9 @@ namespace IM.ProcessorInhouse.Forms
     private List<MarketShort> _lstMarkets = new List<MarketShort>();
 
     public bool _blnOK;
-    public frmProcessorInhouse frmIH = new frmProcessorInhouse();
+    public frmProcessorInhouse _frmIh = new frmProcessorInhouse();
 
     #endregion Atributos
-
-    #region Properties
-
-    public bool CloseAllowed { get; set; }
-
-    #endregion Properties
 
     #region Constructor
 
@@ -51,8 +45,6 @@ namespace IM.ProcessorInhouse.Forms
     public frmFilterDateRange()
     {
       InitializeComponent();
-      cboSaveCourtesyTours.ItemsSource = EnumToListHelper.GetList<EnumSaveCourtesyTours>();
-      cboExternal.ItemsSource = EnumToListHelper.GetList<EnumExternalInvitation>();
       PreviewKeyDown += Close_KeyPreviewESC;
     }
 
@@ -113,7 +105,7 @@ namespace IM.ProcessorInhouse.Forms
     private void chbx_Checked(object sender, RoutedEventArgs e)
     {
       CheckBox _checkBox = (CheckBox)sender;
-      bool _checked = _checkBox.IsChecked.HasValue && _checkBox.IsChecked.Value;
+      bool _checked = Convert.ToBoolean(_checkBox.IsChecked);
       DataGrid _dataGrid = null;
 
       if (_checkBox.Equals(chkAllLeadSources))
@@ -126,8 +118,6 @@ namespace IM.ProcessorInhouse.Forms
         _dataGrid = grdAgencies;
       else if (_checkBox.Equals(chkAllChargeTo))
         _dataGrid = grdChargeTo;
-      else if (_checkBox.Equals(chkAllCountries))
-        _dataGrid = grdCountries;
       else if (_checkBox.Equals(chkAllGifts))
         _dataGrid = grdGifts;
       else if (_checkBox.Equals(chkAllMarkets))
@@ -161,29 +151,16 @@ namespace IM.ProcessorInhouse.Forms
     private void grd_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       DataGrid _dataGrid = (DataGrid)sender;
-      if (_dataGrid.Equals(grdPersonnel))
-        StatusBarNumPR.Content = $"{grdPersonnel.SelectedItems.Count}/{grdPersonnel.Items.Count} Selected SalesRooms";
-      else if (_dataGrid.Equals(grdLeadSources))
-        StatusBarNumLS.Content = $"{grdLeadSources.SelectedItems.Count}/{grdLeadSources.Items.Count} Selected LeadSources";
-      else if (_dataGrid.Equals(grdChargeTo))
-        StatusBarNumCha.Content = $"{grdChargeTo.SelectedItems.Count}/{grdChargeTo.Items.Count} Selected ChargeTo";
-      else if (_dataGrid.Equals(grdGifts))
-        StatusBarNumGifts.Content = $"{grdGifts.SelectedItems.Count}/{grdGifts.Items.Count} Selected Gifts";
-      else if (_dataGrid.Equals(grdGiftsQuantity))
+
+      if (_dataGrid.Equals(grdGiftsQuantity))
         StatusBarNumGiftsQuantity.Content = $"{grdGiftsQuantity.Items.Cast<GiftQuantity>().Count(x => x.include)}/{grdGiftsQuantity.Items.Count} Selected Gifts";
       else if (_dataGrid.Equals(grdMarkets))
       {
-        var selectedMarkets = grdMarkets.SelectedItems.Cast<MarketShort>().Select(m => m.mkID);
+        List<string> selectedMarkets = grdMarkets.SelectedItems.Cast<MarketShort>().Select(m => m.mkID).ToList();
         grdAgencies.ItemsSource = _lstAgencies.Where(c => selectedMarkets.Contains(c.agmk));
-        if (chkAllAgencies.IsChecked.Value) grdAgencies.SelectAll();
-        else StatusBarNumAgen.Content = $"{grdAgencies.SelectedItems.Count}/{grdAgencies.Items.Count} Selected Agencies";
-
-        StatusBarNumMark.Content = $"{grdMarkets.SelectedItems.Count}/{grdMarkets.Items.Count} Selected Markets";
+        if (Convert.ToBoolean(chkAllAgencies.IsChecked))
+          grdAgencies.SelectAll();
       }
-      else if (_dataGrid.Equals(grdAgencies))
-        StatusBarNumAgen.Content = $"{grdAgencies.SelectedItems.Count}/{grdAgencies.Items.Count} Selected Agencies";
-      else if (_dataGrid.Equals(grdCountries))
-        StatusBarNumCoun.Content = $"{grdCountries.SelectedItems.Count}/{grdCountries.Items.Count} Selected Countries";
     }
 
     #endregion grd_SelectionChanged
@@ -198,111 +175,12 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void cboDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+      if (e.AddedItems.Count <= 0) return;
       EnumPredefinedDate selected = (EnumPredefinedDate)((ComboBox)e.OriginalSource).SelectedValue;
-      DateTime today = BRHelpers.GetServerDate();
-      pnlDtmStart.IsEnabled = false;
-      pnlDtmEnd.IsEnabled = false;
-      switch (selected)
-      {
-        case EnumPredefinedDate.Today:
-          dtmStart.Value = dtmEnd.Value = today;
-          break;
-
-        case EnumPredefinedDate.Yesterday:
-          dtmStart.Value = dtmEnd.Value = today.Date.AddDays(-1);
-          break;
-
-        case EnumPredefinedDate.ThisWeek:
-          dtmStart.Value = today.AddDays((DayOfWeek.Monday - today.DayOfWeek));
-          dtmEnd.Value = today.AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
-          break;
-
-        case EnumPredefinedDate.PreviousWeek:
-          dtmStart.Value = today.AddDays(-7).AddDays(DayOfWeek.Monday - today.DayOfWeek);
-          dtmEnd.Value = today.AddDays(-7).AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
-          break;
-
-        case EnumPredefinedDate.TwoWeeksAgo:
-          dtmStart.Value = today.AddDays(-14).AddDays(DayOfWeek.Monday - today.DayOfWeek);
-          dtmEnd.Value = today.AddDays(-14).AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
-          break;
-
-        case EnumPredefinedDate.ThreeWeeksAgo:
-          dtmStart.Value = today.AddDays(-21).AddDays(DayOfWeek.Monday - today.DayOfWeek);
-          dtmEnd.Value = today.AddDays(-21).AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
-          break;
-
-        case EnumPredefinedDate.ThisHalf:
-          if (today.Day <= 15)
-          {
-            dtmStart.Value = new DateTime(today.Year, today.Month, 1);
-            dtmEnd.Value = new DateTime(today.Year, today.Month, 15);
-          }
-          else
-          {
-            dtmStart.Value = new DateTime(today.Year, today.Month, 16);
-            dtmEnd.Value = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
-          }
-          break;
-
-        case EnumPredefinedDate.PreviousHalf:
-
-          if (today.Day <= 15)
-          {
-            if (today.Month > 1)
-            {
-              dtmStart.Value = new DateTime(today.Year, today.Month - 1, 16);
-              dtmEnd.Value = new DateTime(today.Year, today.Month - 1, DateTime.DaysInMonth(today.Year, today.Month - 1));
-            }
-            else
-            {
-              dtmStart.Value = new DateTime(today.Year - 1, 12, 16);
-              dtmEnd.Value = new DateTime(today.Year - 1, 12, 31);
-            }
-          }
-          else
-          {
-            dtmStart.Value = new DateTime(today.Year, today.Month, 1);
-            dtmEnd.Value = new DateTime(today.Year, today.Month, 15);
-          }
-          break;
-
-        case EnumPredefinedDate.ThisMonth:
-          dtmStart.Value = new DateTime(today.Year, today.Month, 1);
-          dtmEnd.Value = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
-          break;
-
-        case EnumPredefinedDate.PreviousMonth:
-          dtmStart.Value = new DateTime(today.Year, today.Month - 1, 1);
-          dtmEnd.Value = new DateTime(today.Year, today.Month - 1, DateTime.DaysInMonth(today.Year, today.Month - 1));
-          break;
-
-        case EnumPredefinedDate.TwoMonthsAgo:
-          dtmStart.Value = new DateTime(today.Year, today.Month - 2, 1);
-          dtmEnd.Value = new DateTime(today.Year, today.Month - 2, DateTime.DaysInMonth(today.Year, today.Month - 2));
-          break;
-
-        case EnumPredefinedDate.ThreeMonthsAgo:
-          dtmStart.Value = new DateTime(today.Year, today.Month - 3, 1);
-          dtmEnd.Value = new DateTime(today.Year, today.Month - 3, DateTime.DaysInMonth(today.Year, today.Month - 3));
-          break;
-
-        case EnumPredefinedDate.ThisYear:
-          dtmStart.Value = new DateTime(today.Year, 1, 1);
-          dtmEnd.Value = new DateTime(today.Year, 12, 31);
-          break;
-
-        case EnumPredefinedDate.PreviousYear:
-          dtmStart.Value = new DateTime(today.Year - 1, 1, 1);
-          dtmEnd.Value = new DateTime(today.Year - 1, 12, 31);
-          break;
-
-        default:
-          pnlDtmStart.IsEnabled = pnlDtmEnd.IsEnabled = true;
-          break;
-      }
-      dtmStart.Value = dtmStart.Value.Value.Date;
-      dtmEnd.Value = dtmEnd.Value.Value.Date;
+      var dateRange = DateHelper.GetDateRange(selected);
+      pnlDtmStart.IsEnabled = pnlDtmEnd.IsEnabled = (selected == EnumPredefinedDate.DatesSpecified);
+      dtmStart.Value = dateRange.Item1;
+      dtmEnd.Value = dateRange.Item2;
     }
 
     #endregion cboDate_SelectionChanged
@@ -356,10 +234,19 @@ namespace IM.ProcessorInhouse.Forms
 
     #endregion TextBoxNumeric_LostFocus
 
+    #region grdGiftsQuantity_OnChecked
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void grdGiftsQuantity_OnChecked(object sender, RoutedEventArgs e)
     {
       StatusBarNumGiftsQuantity.Content = $"{grdGiftsQuantity.Items.Cast<GiftQuantity>().Count(x => x.include)}/{_lstGiftsQuantity.Count} Selected Gifts";
     }
+
+    #endregion grdGiftsQuantity_OnChecked
 
     #endregion Eventos del Formulario
 
@@ -373,11 +260,11 @@ namespace IM.ProcessorInhouse.Forms
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// [edgrodriguez] 21/May/2016 Modified El método GetLeadSourcesByUser se volvió asincrónico.
     /// </history>
-    public async void ConfigurarFomulario(bool blnOneDate, bool blnOnlyOneRegister, bool blnOnePeriod = false,
+    public void ConfigurarFomulario(bool blnOneDate, bool blnOnlyOneRegister,
         bool blnPersonnel = false, bool blnAllPersonnel = false, bool blnLeadSources = false, bool blnAllLeadSources = false,
         bool blnChargeTo = false, bool blnAllChargeTo = false, bool blnGifts = false, bool blnAllGifts = false,
         bool blnMarkets = false, bool blnAllMarkets = false, bool blnAgencies = false, bool blnAllAgencies = false,
-        bool blnCountries = false, bool blnAllCountries = false, bool blnGiftsQuantity = false, bool blnAllGiftsQuantity = false,
+        bool blnGiftsQuantity = false, bool blnAllGiftsQuantity = false,
         EnumPeriod enumPeriod = EnumPeriod.None, EnumProgram program = EnumProgram.All, EnumBasedOnArrival? enumBasedOnArrival = null,
         EnumBasedOnBooking? enumBasedOnBooking = null, EnumQuinellas? enumQuinellas = null, EnumDetailGifts? enumDetailGifts = null,
         EnumSalesByMemberShipType? enumSalesByMemberShipType = null,
@@ -386,53 +273,21 @@ namespace IM.ProcessorInhouse.Forms
         bool blnOnlyWholesalers = false)
     {
       ConfigureDates(blnOneDate, enumPeriod);
-
-      if (blnPersonnel)
-      {
-        var x = (await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program)).Select(y => y.lsID);
-        _lstPersonnel =await BRPersonnel.GetPersonnel(string.Join(",", x), roles: "PR", status: 0);
-      }
-      if (blnLeadSources)
-      {
-        _lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program);
-        if (blnLsHotelNotNull)
-        {
-          var lstLsIDHotelNotNull = BRLeadSources.GetLeadSources(1,EnumProgram.All).
-              Where(x => x.lsHotel != null).
-              Select(x => x.lsID);
-          _lstLeadSources = _lstLeadSources.Where(x => lstLsIDHotelNotNull.Contains(x.lsID)).ToList();
-        }
-      }
-      if (blnGifts) _lstGifts = await BRGifts.GetGifts();
-      if (blnGiftsQuantity)
-      {
-        Dictionary<string, int> _productionByGiftQuantity = GetSettings.ProductionByGiftQuantity();
-        List<GiftShort> _giftShorts = BRGifts.GetGiftsShortById(_productionByGiftQuantity.Keys);
-
-        _lstGiftsQuantity = (from a in _giftShorts
-                             join b in _productionByGiftQuantity on a.giID equals b.Key
-                             select new GiftQuantity
-                             {
-                               giID = a.giID,
-                               gigc = a.gigc,
-                               giN = a.giN,
-                               quantity = b.Value
-                             }).ToList();
-      }
-      if (blnChargeTo) _lstCharteTo = BRChargeTos.GetChargeTos();
-
-      if (blnAgencies) _lstAgencies = !blnAgencyMonthly ? BRAgencies.GetAgencies() : BRAgencies.GetAgenciesByIds(GetSettings.ProductionByAgencyMonthly());
-
-      if (blnMarkets) _lstMarkets = BRMarkets.GetMarkets(1);
-
-      if (blnClub) cboClub.ItemsSource = BRClubs.GetClubs(nStatus: 1);
-
-      //Configuracion de Grids
-      ConfigureGridPanels(blnPersonnel, blnLeadSources, blnChargeTo, blnGifts, blnGiftsQuantity, blnMarkets, blnAgencies, blnCountries);
-      ConfigureSelection(blnOnlyOneRegister);
-      ConfigureCheckboxSelectAll(blnOnlyOneRegister, blnAllPersonnel, blnAllLeadSources, blnAllChargeTo, blnAllGifts, blnAllGiftsQuantity, blnAllMarkets, blnAllAgencies, blnAllCountries);
       ConfigureFilters(enumBasedOnArrival, enumBasedOnBooking, enumQuinellas, enumDetailGifts, enumSalesByMemberShipType, enumSaveCourtesyTours, enumExternalInvitation, blnClub, blnNight, blnOnlyWholesalers);
-      LoadUserFilters();
+
+      LoadCombos(blnClub);
+
+      #region Configuracion de Grids.
+
+      LoadPersonnel(blnOnlyOneRegister, blnPersonnel, blnAllPersonnel, program);
+      LoadLeadSources(blnOnlyOneRegister, blnLeadSources, blnAllLeadSources, program, blnLsHotelNotNull);
+      LoadGifts(blnOnlyOneRegister, blnGifts, blnAllGifts);
+      LoadGiftsQuantity(blnOnlyOneRegister, blnGiftsQuantity, blnAllGiftsQuantity);
+      LoadChargeTo(blnOnlyOneRegister, blnChargeTo, blnAllChargeTo);
+      LoadAgencies(blnOnlyOneRegister, blnAgencies, blnAllAgencies, blnAgencyMonthly);
+      LoadMarkets(blnOnlyOneRegister, blnMarkets, blnAllMarkets);
+
+      #endregion Configuracion de Grids.
     }
 
     #endregion Métodos Publicos
@@ -476,7 +331,6 @@ namespace IM.ProcessorInhouse.Forms
       else
         chkSalesByMembershipType.Visibility = Visibility.Collapsed;
 
-     
       if (enumSaveCourtesyTours != null)
         cboSaveCourtesyTours.SelectedValue = enumSaveCourtesyTours;
       else
@@ -497,70 +351,6 @@ namespace IM.ProcessorInhouse.Forms
     }
 
     #endregion ConfigureFilters
-
-    #region ConfigureGridPanels
-
-    /// <summary>
-    /// Configura los grids.
-    /// </summary>
-    /// <history>
-    /// [aalcocer] 05/Mar/2016 Created
-    /// </history>
-    private void ConfigureGridPanels(bool blnPersonnel, bool blnLeadSources, bool blnChargeTo,
-      bool blnGifts, bool blnGiftsQuantity, bool blnMarkets, bool blnAgencies, bool blnCountries)
-    {
-      pnlPersonnel.Visibility = blnPersonnel ? Visibility.Visible : Visibility.Collapsed;
-      pnlLeadSource.Visibility = blnLeadSources ? Visibility.Visible : Visibility.Collapsed;
-      pnlChargeTo.Visibility = blnChargeTo ? Visibility.Visible : Visibility.Collapsed;
-      pnlGifts.Visibility = blnGifts ? Visibility.Visible : Visibility.Collapsed;
-      pnlGiftsQuantity.Visibility = blnGiftsQuantity ? Visibility.Visible : Visibility.Collapsed;
-      pnlMarkets.Visibility = blnMarkets ? Visibility.Visible : Visibility.Collapsed;
-      pnlAgencies.Visibility = blnAgencies ? Visibility.Visible : Visibility.Collapsed;
-      pnlCountries.Visibility = blnCountries ? Visibility.Visible : Visibility.Collapsed;
-
-      grdPersonnel.ItemsSource = blnPersonnel ? _lstPersonnel : null;
-      grdLeadSources.ItemsSource = blnLeadSources ? _lstLeadSources : null;
-      grdChargeTo.ItemsSource = blnChargeTo ? _lstCharteTo : null;
-      grdGifts.ItemsSource = blnGifts ? _lstGifts : null;
-      grdGiftsQuantity.ItemsSource = blnGiftsQuantity ? _lstGiftsQuantity : null;
-      grdMarkets.ItemsSource = blnMarkets ? _lstMarkets : null;
-      grdAgencies.ItemsSource = blnAgencies ? _lstAgencies : null;
-      //grdCountries.ItemsSource = blnCountries ? _lstCountries : null;
-
-      StatusBarNumPR.Content = blnPersonnel ? $"{0}/{_lstPersonnel.Count} Selected Personnel" : "";
-      StatusBarNumLS.Content = blnLeadSources ? $"{0}/{_lstLeadSources.Count} Selected LeadSources" : "";
-      StatusBarNumCha.Content = (blnChargeTo) ? $"{0}/{_lstCharteTo.Count} Selected ChargeTo" : "";
-      StatusBarNumGifts.Content = blnGifts ? $"{0}/{_lstGifts.Count} Selected Gifts" : "";
-      StatusBarNumGiftsQuantity.Content = blnGiftsQuantity ? $"{0}/{_lstGiftsQuantity.Count} Selected Gifts" : "";
-      StatusBarNumMark.Content = (blnMarkets) ? $"{0}/{_lstMarkets.Count} Selected Markets" : "";
-      StatusBarNumAgen.Content = (blnAgencies) ? $"{0}/{_lstAgencies.Count} Selected Agencies" : "";
-      //StatusBarNumCoun.Content = (blnCountries) ? $"{0}/{_lstCountries.Count} Selected Countries" : "";
-    }
-
-    #endregion ConfigureGridPanels
-
-    #region ConfigureSelection
-
-    /// <summary>
-    /// Configura el modo de seleccion de los grids(Multiseleccion ó Solo un registro).
-    /// Activa o desactiva los controles checkbox dependiendo el modo de seleccion configurado.
-    /// </summary>
-    /// <history>
-    /// [aalcocer] 16/Mar/2016 Created
-    /// </history>
-    private void ConfigureSelection(bool blnOnlyOneRegister)
-    {
-      grdPersonnel.SelectionMode = blnOnlyOneRegister ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
-      grdLeadSources.SelectionMode = blnOnlyOneRegister ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
-      grdChargeTo.SelectionMode = blnOnlyOneRegister ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
-      grdGifts.SelectionMode = blnOnlyOneRegister ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
-      grdGiftsQuantity.SelectionMode = blnOnlyOneRegister ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
-      grdMarkets.SelectionMode = blnOnlyOneRegister ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
-      grdAgencies.SelectionMode = blnOnlyOneRegister ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
-      grdCountries.SelectionMode = blnOnlyOneRegister ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
-    }
-
-    #endregion ConfigureSelection
 
     #region ConfigureDates
 
@@ -614,44 +404,10 @@ namespace IM.ProcessorInhouse.Forms
       }
       cboDate.SelectedIndex = 0;
       //Si es un rango de fechas.
-      cboDate.IsEnabled = !blnOneDate;
-      pnlDtmEnd.IsEnabled = !blnOneDate;
+      cboDate.IsEnabled = pnlDtmEnd.IsEnabled = !blnOneDate;
     }
 
     #endregion ConfigureDates
-
-    #region ConfigureCheckboxSelectAll
-
-    /// <summary>
-    /// Valida los checkbox para seleccionar todos los registros de los grids.
-    /// </summary>
-    /// <history>
-    /// [aalcocer] 16/Mar/2016 Created
-    /// </history>
-    private void ConfigureCheckboxSelectAll(bool blnOnlyOneRegister, bool blnAllPersonnel,
-      bool blnAllLeadSources, bool blnAllChargeTo, bool blnAllGifts, bool blnAllGiftsQuantity, bool blnAllMarkets,
-      bool blnAllAgencies, bool blnAllCountries)
-    {
-      chkAllPersonnel.IsChecked = blnAllPersonnel;
-      chkAllLeadSources.IsChecked = blnAllLeadSources;
-      chkAllChargeTo.IsChecked = blnAllChargeTo;
-      chkAllGifts.IsChecked = blnAllGifts;
-      chkAllGiftsQuantity.IsChecked = blnAllGiftsQuantity;
-      chkAllMarkets.IsChecked = blnAllMarkets;
-      chkAllAgencies.IsChecked = blnAllAgencies;
-      chkAllCountries.IsChecked = blnAllCountries;
-
-      chkAllPersonnel.IsEnabled = !blnOnlyOneRegister;
-      chkAllLeadSources.IsEnabled = !blnOnlyOneRegister;
-      chkAllChargeTo.IsEnabled = !blnOnlyOneRegister;
-      chkAllGifts.IsEnabled = !blnOnlyOneRegister;
-      chkAllGiftsQuantity.IsEnabled = !blnOnlyOneRegister;
-      chkAllMarkets.IsEnabled = !blnOnlyOneRegister;
-      chkAllAgencies.IsEnabled = !blnOnlyOneRegister;
-      chkAllCountries.IsEnabled = !blnOnlyOneRegister;
-    }
-
-    #endregion ConfigureCheckboxSelectAll
 
     #region saveFrmFilterValues
 
@@ -664,36 +420,36 @@ namespace IM.ProcessorInhouse.Forms
     private void SaveFrmFilterValues()
     {
       if (pnlPersonnel.IsVisible)
-        frmIH._lstPersonnel = grdPersonnel.SelectedItems.Cast<PersonnelShort>().Select(x => x.peID).ToList();
+        _frmIh._lstPersonnel = grdPersonnel.SelectedItems.Cast<PersonnelShort>().Select(x => x.peID).ToList();
       if (pnlLeadSource.IsVisible)
-        frmIH._lstLeadSources = grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(x => x.lsID).ToList();
+        _frmIh._lstLeadSources = grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(x => x.lsID).ToList();
       if (pnlMarkets.IsVisible)
-        frmIH._lstMarkets = grdMarkets.SelectedItems.Cast<MarketShort>().Select(c => c.mkID).ToList();
+        _frmIh._lstMarkets = grdMarkets.SelectedItems.Cast<MarketShort>().Select(c => c.mkID).ToList();
       if (pnlAgencies.IsVisible)
-        frmIH._lstAgencies = grdAgencies.SelectedItems.Cast<Agency>().Select(c => c.agID).ToList();
+        _frmIh._lstAgencies = grdAgencies.SelectedItems.Cast<Agency>().Select(c => c.agID).ToList();
       if (pnlChargeTo.IsVisible)
-        frmIH._lstCharteTo = grdChargeTo.SelectedItems.Cast<ChargeTo>().Select(c => c.ctID).ToList();
+        _frmIh._lstCharteTo = grdChargeTo.SelectedItems.Cast<ChargeTo>().Select(c => c.ctID).ToList();
       if (pnlGifts.IsVisible)
-        frmIH._lstGifts = grdGifts.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList();
+        _frmIh._lstGifts = grdGifts.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList();
       if (pnlGiftsQuantity.IsVisible)
-        frmIH._lstGiftsQuantity = grdGiftsQuantity.Items.Cast<GiftQuantity>().Where(x => x.include).ToDictionary(x => x.giID, x => x.quantity);
+        _frmIh._lstGiftsQuantity = grdGiftsQuantity.Items.Cast<GiftQuantity>().Where(x => x.include).ToDictionary(x => x.giID, x => x.quantity);
 
-      frmIH._cboDateSelected = ((KeyValuePair<EnumPredefinedDate, string>)cboDate.SelectedItem).Key;
+      _frmIh._cboDateSelected = ((KeyValuePair<EnumPredefinedDate, string>)cboDate.SelectedItem).Key;
       if (cboDate.IsEnabled)
-        frmIH._dtmStart = dtmStart.Value.Value;
+        _frmIh._dtmStart = dtmStart.Value.Value;
       else
-        frmIH._dtmInit = dtmStart.Value.Value;
-      frmIH._dtmEnd = dtmEnd.Value.Value;
-      frmIH._enumBasedOnArrival = (chkBasedOnArrival.IsChecked.Value) ? EnumBasedOnArrival.boaBasedOnArrival : EnumBasedOnArrival.boaNoBasedOnArrival;
-      frmIH._enumQuinellas = (chkQuinellas.IsChecked.Value) ? EnumQuinellas.quQuinellas : EnumQuinellas.quNoQuinellas;
-      frmIH._enumDetailsGift = (chkDetailGifts.IsChecked.Value) ? EnumDetailGifts.dgDetailGifts : EnumDetailGifts.dgNoDetailGifts;
-      frmIH._enumSalesByMemberShipType = (chkSalesByMembershipType.IsChecked.Value) ? EnumSalesByMemberShipType.sbmDetail : EnumSalesByMemberShipType.sbmNoDetail;
-      frmIH._blnOnlyWholesalers = Convert.ToBoolean(chkOnlyWholesalers.IsChecked);
-      frmIH._strApplication = txtApplication.Text;
-      frmIH._iCompany = Convert.ToInt32(txtCompany.Text);
-      frmIH._club = (Club)cboClub.SelectedItem;
-      frmIH._enumSaveCourtesyTours = ((KeyValuePair<EnumSaveCourtesyTours, string>)cboSaveCourtesyTours.SelectedItem).Key;
-      frmIH._enumExternalInvitation = ((KeyValuePair<EnumExternalInvitation, string>)cboExternal.SelectedItem).Key;
+        _frmIh._dtmInit = dtmStart.Value.Value;
+      _frmIh._dtmEnd = dtmEnd.Value.Value;
+      _frmIh._enumBasedOnArrival = Convert.ToBoolean(chkBasedOnArrival.IsChecked) ? EnumBasedOnArrival.boaBasedOnArrival : EnumBasedOnArrival.boaNoBasedOnArrival;
+      _frmIh._enumQuinellas = Convert.ToBoolean(chkQuinellas.IsChecked) ? EnumQuinellas.quQuinellas : EnumQuinellas.quNoQuinellas;
+      _frmIh._enumDetailsGift = Convert.ToBoolean(chkDetailGifts.IsChecked) ? EnumDetailGifts.dgDetailGifts : EnumDetailGifts.dgNoDetailGifts;
+      _frmIh._enumSalesByMemberShipType = Convert.ToBoolean(chkSalesByMembershipType.IsChecked) ? EnumSalesByMemberShipType.sbmDetail : EnumSalesByMemberShipType.sbmNoDetail;
+      _frmIh._blnOnlyWholesalers = Convert.ToBoolean(chkOnlyWholesalers.IsChecked);
+      _frmIh._strApplication = txtApplication.Text;
+      _frmIh._iCompany = Convert.ToInt32(txtCompany.Text);
+      _frmIh._club = (Club)cboClub.SelectedItem;
+      _frmIh._enumSaveCourtesyTours = ((KeyValuePair<EnumSaveCourtesyTours, string>)cboSaveCourtesyTours.SelectedItem).Key;
+      _frmIh._enumExternalInvitation = ((KeyValuePair<EnumExternalInvitation, string>)cboExternal.SelectedItem).Key;
     }
 
     #endregion saveFrmFilterValues
@@ -709,78 +465,21 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void LoadUserFilters()
     {
-      if (pnlPersonnel.Visibility == Visibility.Visible && frmIH._lstPersonnel.Any())
-      {
-        chkAllPersonnel.IsChecked = false;
-        frmIH._lstPersonnel.ForEach(c => grdPersonnel.SelectedItems.Add(_lstPersonnel.SingleOrDefault(x => x.peID == c)));
-        if (grdPersonnel.SelectedItems.Count == grdPersonnel.Items.Count)
-          chkAllPersonnel.IsChecked = true;
-      }
-      if (pnlLeadSource.Visibility == Visibility.Visible && frmIH._lstLeadSources.Any())
-      {
-        chkAllLeadSources.IsChecked = false;
-        frmIH._lstLeadSources.ForEach(c => grdLeadSources.SelectedItems.Add(_lstLeadSources.SingleOrDefault(x => x.lsID == c)));
-        if (grdLeadSources.SelectedItems.Count == grdLeadSources.Items.Count)
-          chkAllLeadSources.IsChecked = true;
-      }
+      cboDate.SelectedValue = cboDate.Items.Cast<KeyValuePair<EnumPredefinedDate, string>>().Any(c => c.Key == _frmIh._cboDateSelected) ? _frmIh._cboDateSelected : EnumPredefinedDate.DatesSpecified;
 
-      if (pnlMarkets.Visibility == Visibility.Visible && frmIH._lstMarkets.Any())
-      {
-        chkAllMarkets.IsChecked = false;
-        frmIH._lstMarkets.ForEach(c => grdMarkets.SelectedItems.Add(_lstMarkets.SingleOrDefault(x => x.mkID == c)));
-        if (grdMarkets.SelectedItems.Count == grdMarkets.Items.Count)
-          chkAllMarkets.IsChecked = true;
-      }
-      if (pnlAgencies.Visibility == Visibility.Visible && frmIH._lstAgencies.Any())
-      {
-        chkAllAgencies.IsChecked = false;
-        frmIH._lstAgencies.ForEach(c => grdAgencies.SelectedItems.Add(_lstAgencies.SingleOrDefault(x => x.agID == c)));
-        if (grdAgencies.SelectedItems.Count == grdAgencies.Items.Count)
-          chkAllAgencies.IsChecked = true;
-      }
-      if (pnlChargeTo.Visibility == Visibility.Visible && frmIH._lstCharteTo.Any())
-      {
-        chkAllChargeTo.IsChecked = false;
-        frmIH._lstCharteTo.ForEach(c => grdChargeTo.SelectedItems.Add(_lstCharteTo.SingleOrDefault(x => x.ctID == c)));
-        if (grdChargeTo.SelectedItems.Count == grdChargeTo.Items.Count)
-          chkAllChargeTo.IsChecked = true;
-      }
-      if (pnlGifts.Visibility == Visibility.Visible && frmIH._lstGifts.Any())
-      {
-        chkAllGifts.IsChecked = false;
-        frmIH._lstGifts.ForEach(c => grdGifts.SelectedItems.Add(_lstGifts.SingleOrDefault(x => x.giID == c)));
-        if (grdGifts.SelectedItems.Count == grdGifts.Items.Count)
-          chkAllGifts.IsChecked = true;
-      }
-      if (pnlGiftsQuantity.Visibility == Visibility.Visible && frmIH._lstGiftsQuantity.Any())
-      {
-        chkAllGiftsQuantity.IsChecked = false;
-        frmIH._lstGiftsQuantity.ToList().ForEach(x =>
-        {
-          GiftQuantity giftQuantity = grdGiftsQuantity.Items.Cast<GiftQuantity>().SingleOrDefault(q => q.giID == x.Key);
-          if (giftQuantity != null)
-            giftQuantity.include = true;
-        });
-
-        if (grdGiftsQuantity.Items.Cast<GiftQuantity>().Count(c => c.include) == grdGiftsQuantity.Items.Count)
-          chkAllGiftsQuantity.IsChecked = true;
-      }
-
-      cboDate.SelectedValue = cboDate.Items.Cast<KeyValuePair<EnumPredefinedDate, string>>().Any(c => c.Key == frmIH._cboDateSelected) ? frmIH._cboDateSelected : EnumPredefinedDate.DatesSpecified;
-
-      dtmStart.Value = pnlDtmEnd.IsEnabled ? frmIH._dtmStart : frmIH._dtmInit;
-      dtmEnd.Value = frmIH._dtmEnd;
-      chkBasedOnArrival.IsChecked = Convert.ToBoolean(frmIH._enumBasedOnArrival);
-      chkQuinellas.IsChecked = Convert.ToBoolean(frmIH._enumQuinellas);
-      chkDetailGifts.IsChecked = Convert.ToBoolean(frmIH._enumDetailsGift);
-      chkSalesByMembershipType.IsChecked = Convert.ToBoolean(frmIH._enumSalesByMemberShipType);
-      chkOnlyWholesalers.IsChecked = frmIH._blnOnlyWholesalers;
-      txtApplication.Text = frmIH._strApplication;
-      txtCompany.Text = $"{frmIH._iCompany}";
-      if (frmIH._club != null)
-        cboClub.SelectedValue = frmIH._club.clID;
-      cboSaveCourtesyTours.SelectedValue = frmIH._enumSaveCourtesyTours;
-      cboExternal.SelectedValue = frmIH._enumExternalInvitation;
+      dtmStart.Value = pnlDtmEnd.IsEnabled ? _frmIh._dtmStart : _frmIh._dtmInit;
+      dtmEnd.Value = _frmIh._dtmEnd;
+      chkBasedOnArrival.IsChecked = Convert.ToBoolean(_frmIh._enumBasedOnArrival);
+      chkQuinellas.IsChecked = Convert.ToBoolean(_frmIh._enumQuinellas);
+      chkDetailGifts.IsChecked = Convert.ToBoolean(_frmIh._enumDetailsGift);
+      chkSalesByMembershipType.IsChecked = Convert.ToBoolean(_frmIh._enumSalesByMemberShipType);
+      chkOnlyWholesalers.IsChecked = _frmIh._blnOnlyWholesalers;
+      txtApplication.Text = _frmIh._strApplication;
+      txtCompany.Text = $"{_frmIh._iCompany}";
+      if (_frmIh._club != null)
+        cboClub.SelectedValue = _frmIh._club.clID;
+      cboSaveCourtesyTours.SelectedValue = _frmIh._enumSaveCourtesyTours;
+      cboExternal.SelectedValue = _frmIh._enumExternalInvitation;
     }
 
     #endregion LoadUserFilters
@@ -816,6 +515,298 @@ namespace IM.ProcessorInhouse.Forms
     }
 
     #endregion ValidateFields
+
+    #region LoadCombos
+
+    /// <summary>
+    /// Carga los combobox.
+    /// </summary>
+    /// <param name="blnClub"></param>
+    /// <history>
+    /// [aalcocer] 24/May/2016 Created
+    /// </history>
+    private async void LoadCombos(bool blnClub)
+    {
+      cboSaveCourtesyTours.ItemsSource = EnumToListHelper.GetList<EnumSaveCourtesyTours>();
+      cboExternal.ItemsSource = EnumToListHelper.GetList<EnumExternalInvitation>();
+
+      if (blnClub)
+        cboClub.ItemsSource = await BRClubs.GetClubs(nStatus: 1);
+
+      LoadUserFilters();
+    }
+
+    #endregion LoadCombos
+
+    #region LoadPersonnel
+
+    /// <summary>
+    /// Carga y configuracion del grid de Personnel
+    /// </summary>
+    /// <param name="blnOnlyOneRegister"></param>
+    /// <param name="blnPersonnel"></param>
+    /// <param name="blnAllPersonnel"></param>
+    /// <param name="program"></param>
+    private async void LoadPersonnel(bool blnOnlyOneRegister, bool blnPersonnel, bool blnAllPersonnel, EnumProgram program)
+    {
+      if (!blnPersonnel)
+      {
+        pnlPersonnel.Visibility = Visibility.Collapsed;
+        return;
+      }
+      grdPersonnel.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
+      List<LeadSourceByUser> listLeadSourceByUsers = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program);
+      _lstPersonnel = await BRPersonnel.GetPersonnel(string.Join(",", listLeadSourceByUsers.Select(y => y.lsID)), roles: "PR", status: 0);
+      grdPersonnel.ItemsSource = _lstPersonnel;
+      chkAllPersonnel.IsChecked = blnAllPersonnel;
+      chkAllPersonnel.IsEnabled = !blnOnlyOneRegister;
+
+      if (!_frmIh._lstPersonnel.Any()) return;
+
+      chkAllPersonnel.IsChecked = false;
+      _frmIh._lstPersonnel.ForEach(c => grdPersonnel.SelectedItems.Add(_lstPersonnel.SingleOrDefault(x => x.peID == c)));
+      if (grdPersonnel.SelectedItems.Count == grdPersonnel.Items.Count)
+        chkAllPersonnel.IsChecked = true;
+    }
+
+    #endregion LoadPersonnel
+
+    #region LoadLeadSources
+
+    /// <summary>
+    /// Carga y configuracion del grid de LeadSources
+    /// </summary>
+    /// <param name="blnOnlyOneRegister"></param>
+    /// <param name="blnLeadSources"></param>
+    /// <param name="blnAllLeadSources"></param>
+    /// <param name="program"></param>
+    /// <param name="blnLsHotelNotNull"></param>
+    /// <history>
+    /// [aalcocer] 26/May/2016 Created
+    /// </history>
+    private async void LoadLeadSources(bool blnOnlyOneRegister, bool blnLeadSources, bool blnAllLeadSources, EnumProgram program, bool blnLsHotelNotNull)
+    {
+      if (!blnLeadSources)
+      {
+        pnlLeadSource.Visibility = Visibility.Collapsed;
+        return;
+      }
+      grdLeadSources.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
+      _lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program);
+      if (blnLsHotelNotNull)
+      {
+        List<string> lstLsIDHotelNotNull = BRLeadSources.GetLeadSources(1, EnumProgram.All).Where(x => x.lsHotel != null).Select(x => x.lsID).ToList();
+        _lstLeadSources = _lstLeadSources.Where(x => lstLsIDHotelNotNull.Contains(x.lsID)).ToList();
+      }
+      grdLeadSources.ItemsSource = _lstLeadSources;
+      chkAllLeadSources.IsChecked = blnAllLeadSources;
+      chkAllLeadSources.IsEnabled = !blnOnlyOneRegister;
+
+      if (!_frmIh._lstLeadSources.Any()) return;
+
+      chkAllLeadSources.IsChecked = false;
+      _frmIh._lstLeadSources.ForEach(c => grdLeadSources.SelectedItems.Add(_lstLeadSources.SingleOrDefault(x => x.lsID == c)));
+      if (grdLeadSources.SelectedItems.Count == grdLeadSources.Items.Count)
+        chkAllLeadSources.IsChecked = true;
+    }
+
+    #endregion LoadLeadSources
+
+    #region LoadGifts
+
+    /// <summary>
+    /// Carga y configuracion del grid de Gifts
+    /// </summary>
+    /// <param name="blnOnlyOneRegister"></param>
+    /// <param name="blnGifts"></param>
+    /// <param name="blnAllGifts"></param>
+    /// <history>
+    /// [aalcocer] 26/May/2016 Created
+    /// </history>
+    private async void LoadGifts(bool blnOnlyOneRegister, bool blnGifts, bool blnAllGifts)
+    {
+      if (!blnGifts)
+      {
+        pnlGifts.Visibility = Visibility.Collapsed;
+        return;
+      }
+      grdGifts.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
+      _lstGifts = await BRGifts.GetGifts();
+      grdGifts.ItemsSource = _lstGifts;
+      chkAllGifts.IsChecked = blnAllGifts;
+      chkAllGifts.IsEnabled = !blnOnlyOneRegister;
+
+      if (!_frmIh._lstGifts.Any()) return;
+
+      chkAllGifts.IsChecked = false;
+      _frmIh._lstGifts.ForEach(c => grdGifts.SelectedItems.Add(_lstGifts.SingleOrDefault(x => x.giID == c)));
+      if (grdGifts.SelectedItems.Count == grdGifts.Items.Count)
+        chkAllGifts.IsChecked = true;
+    }
+
+    #endregion LoadGifts
+
+    #region LoadGiftsQuantity
+
+    /// <summary>
+    /// Carga y configuracion del grid de Gifts Quantity
+    /// </summary>
+    /// <param name="blnOnlyOneRegister"></param>
+    /// <param name="blnGiftsQuantity"></param>
+    /// <param name="blnAllGiftsQuantity"></param>
+    /// <history>
+    /// [aalcocer] 26/May/2016 Created
+    /// </history>
+    private async void LoadGiftsQuantity(bool blnOnlyOneRegister, bool blnGiftsQuantity, bool blnAllGiftsQuantity)
+    {
+      if (!blnGiftsQuantity)
+      {
+        pnlGiftsQuantity.Visibility = Visibility.Collapsed;
+        return;
+      }
+      grdGiftsQuantity.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
+      Dictionary<string, int> _productionByGiftQuantity = GetSettings.ProductionByGiftQuantity();
+      List<string> listKeys = new List<string>();
+      listKeys.AddRange(_productionByGiftQuantity.Keys);
+      List<GiftShort> _giftShorts = await BRGifts.GetGiftsShortById(listKeys);
+      _lstGiftsQuantity = (from a in _giftShorts
+                           join b in _productionByGiftQuantity on a.giID equals b.Key
+                           select new GiftQuantity
+                           {
+                             giID = a.giID,
+                             gigc = a.gigc,
+                             giN = a.giN,
+                             quantity = b.Value
+                           }).ToList();
+      grdGiftsQuantity.ItemsSource = _lstGiftsQuantity;
+
+      chkAllGiftsQuantity.IsChecked = blnAllGiftsQuantity;
+      chkAllGiftsQuantity.IsEnabled = !blnOnlyOneRegister;
+      StatusBarNumGiftsQuantity.Content = $"{grdGiftsQuantity.Items.Cast<GiftQuantity>().Count(x => x.include)} / {_lstGiftsQuantity.Count} Selected Gifts";
+
+      if (!_frmIh._lstGiftsQuantity.Any()) return;
+
+      chkAllGiftsQuantity.IsChecked = false;
+      _frmIh._lstGiftsQuantity.ToList().ForEach(x =>
+      {
+        GiftQuantity giftQuantity = grdGiftsQuantity.Items.Cast<GiftQuantity>().SingleOrDefault(q => q.giID == x.Key);
+        if (giftQuantity != null)
+          giftQuantity.include = true;
+      });
+
+      if (grdGiftsQuantity.Items.Cast<GiftQuantity>().Count(c => c.include) == grdGiftsQuantity.Items.Count)
+        chkAllGiftsQuantity.IsChecked = true;
+    }
+
+    #endregion LoadGiftsQuantity
+
+    #region LoadChargeTo
+
+    /// <summary>
+    /// Carga y configuracion del grid de Charge To
+    /// </summary>
+    /// <param name="blnOnlyOneRegister"></param>
+    /// <param name="blnChargeTo"></param>
+    /// <param name="blnAllChargeTo"></param>
+    /// <history>
+    /// [aalcocer] 26/May/2016 Created
+    /// </history>
+    private async void LoadChargeTo(bool blnOnlyOneRegister, bool blnChargeTo, bool blnAllChargeTo)
+    {
+      if (!blnChargeTo)
+      {
+        pnlChargeTo.Visibility = Visibility.Collapsed;
+        return;
+      }
+      grdChargeTo.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
+      _lstCharteTo = await BRChargeTos.GetChargeTos();
+      grdChargeTo.ItemsSource = _lstCharteTo;
+      chkAllChargeTo.IsChecked = blnAllChargeTo;
+      chkAllChargeTo.IsEnabled = !blnOnlyOneRegister;
+
+      if (!_frmIh._lstCharteTo.Any()) return;
+
+      chkAllChargeTo.IsChecked = false;
+      _frmIh._lstCharteTo.ForEach(c => grdChargeTo.SelectedItems.Add(_lstCharteTo.SingleOrDefault(x => x.ctID == c)));
+      if (grdChargeTo.SelectedItems.Count == grdChargeTo.Items.Count)
+        chkAllChargeTo.IsChecked = true;
+    }
+
+    #endregion LoadChargeTo
+
+    #region LoadAgencies
+
+    /// <summary>
+    /// Carga y configuracion del grid de Agencies
+    /// </summary>
+    /// <param name="blnOnlyOneRegister"></param>
+    /// <param name="blnAgencies"></param>
+    /// <param name="blnAllAgencies"></param>
+    /// <param name="blnAgencyMonthly"></param>
+    /// <history>
+    /// [aalcocer] 26/May/2016 Created
+    /// </history>
+    private async void LoadAgencies(bool blnOnlyOneRegister, bool blnAgencies, bool blnAllAgencies, bool blnAgencyMonthly)
+    {
+      if (!blnAgencies)
+      {
+        pnlAgencies.Visibility = Visibility.Collapsed;
+        return;
+      }
+
+      grdAgencies.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
+      if (blnAgencyMonthly)
+        _lstAgencies = await BRAgencies.GetAgenciesByIds(GetSettings.ProductionByAgencyMonthly());
+      else
+        _lstAgencies = await BRAgencies.GetAgencies();
+      grdAgencies.ItemsSource = _lstAgencies;
+      chkAllAgencies.IsChecked = blnAllAgencies;
+      chkAllAgencies.IsEnabled = !blnOnlyOneRegister;
+
+      if (!_frmIh._lstAgencies.Any()) return;
+
+      chkAllAgencies.IsChecked = false;
+      _frmIh._lstAgencies.ForEach(c => grdAgencies.SelectedItems.Add(_lstAgencies.SingleOrDefault(x => x.agID == c)));
+      if (grdAgencies.SelectedItems.Count == grdAgencies.Items.Count)
+        chkAllAgencies.IsChecked = true;
+    }
+
+    #endregion LoadAgencies
+
+    #region LoadMarkets
+
+    /// <summary>
+    /// Carga y configuracion del grid de Markets
+    /// </summary>
+    /// <param name="blnOnlyOneRegister"></param>
+    /// <param name="blnMarkets"></param>
+    /// <param name="blnAllMarkets"></param>
+    /// <history>
+    /// [aalcocer] 26/May/2016 Created
+    /// </history>
+    private async void LoadMarkets(bool blnOnlyOneRegister, bool blnMarkets, bool blnAllMarkets)
+    {
+      if (!blnMarkets)
+      {
+        pnlMarkets.Visibility = Visibility.Collapsed;
+        return;
+      }
+
+      grdMarkets.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
+      _lstMarkets = await BRMarkets.GetMarkets(1);
+      grdMarkets.ItemsSource = _lstMarkets;
+      chkAllMarkets.IsChecked = blnAllMarkets;
+      chkAllMarkets.IsEnabled = !blnOnlyOneRegister;
+
+      if (!_frmIh._lstMarkets.Any()) return;
+
+      chkAllMarkets.IsChecked = false;
+      _frmIh._lstMarkets.ForEach(c => grdMarkets.SelectedItems.Add(_lstMarkets.SingleOrDefault(x => x.mkID == c)));
+      if (grdMarkets.SelectedItems.Count == grdMarkets.Items.Count)
+        chkAllMarkets.IsChecked = true;
+    }
+
+    #endregion LoadMarkets
 
     #endregion Métodos Privados
   }

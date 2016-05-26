@@ -17,7 +17,6 @@
             <Setter Property="Height" Value="350" />
             <Setter Property="Margin" Value="10 5 10 25" />
             <Setter Property="AlternatingRowBackground" Value="LightGray" />
-            <EventSetter Event="SelectionChanged" Handler="grd_SelectionChanged" />
             <Style.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{x:Static SystemColors.HighlightColor}" />
             </Style.Resources>
@@ -58,7 +57,18 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StatusBar Style="{StaticResource StatusBarStyle}">
-                <StatusBarItem x:Name="StatusBarNumPR"  Style="{StaticResource StatusBarItemStyle}" />
+                <StatusBarItem Style="{StaticResource StatusBarItemStyle}">
+                    <StatusBarItem.Content>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} / {1} Selected PRs">
+                                    <Binding ElementName="grdPersonnel"  Path="SelectedItems.Count" />
+                                    <Binding ElementName="grdPersonnel" Path="Items.Count" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StatusBarItem.Content>
+                </StatusBarItem>
             </StatusBar>
         </StackPanel>
         <!--#endregion-->
@@ -66,13 +76,24 @@
         <!--#region Grid LeadSource -->
         <StackPanel Name="pnlLeadSource">
             <CheckBox Name="chkAllLeadSources" Content="All Lead Sources" Style="{StaticResource CheckBoxSelectAll}" />
-            <DataGrid Name="grdLeadSources" IsReadOnly="True">
+            <DataGrid Name="grdLeadSources" IsReadOnly="True" ItemsSource="{Binding}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Lead Sources" Width="*" Binding="{Binding lsN}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
                 </DataGrid.Columns>
             </DataGrid>
             <StatusBar Style="{StaticResource StatusBarStyle}">
-                <StatusBarItem x:Name="StatusBarNumLS" Style="{StaticResource StatusBarItemStyle}" />
+                <StatusBarItem Style="{StaticResource StatusBarItemStyle}">
+                    <StatusBarItem.Content>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} / {1} Selected Lead Sources">
+                                    <Binding ElementName="grdLeadSources"  Path="SelectedItems.Count" />
+                                    <Binding ElementName="grdLeadSources" Path="Items.Count" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StatusBarItem.Content>
+                </StatusBarItem>
             </StatusBar>
         </StackPanel>
         <!--#endregion-->
@@ -80,13 +101,24 @@
         <!--#region Grid ChargeTo -->
         <StackPanel Name="pnlChargeTo">
             <CheckBox Name="chkAllChargeTo" Content="All Charge To" Style="{StaticResource CheckBoxSelectAll}" />
-            <DataGrid Name="grdChargeTo" IsReadOnly="True">
+            <DataGrid Name="grdChargeTo" IsReadOnly="True" ItemsSource="{Binding}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ChargeTo" Width="*" Binding="{Binding ctID}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
                 </DataGrid.Columns>
             </DataGrid>
             <StatusBar Style="{StaticResource StatusBarStyle}">
-                <StatusBarItem x:Name="StatusBarNumCha" Style="{StaticResource StatusBarItemStyle}" />
+                <StatusBarItem Style="{StaticResource StatusBarItemStyle}">
+                    <StatusBarItem.Content>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} / {1} Selected Charge To">
+                                    <Binding ElementName="grdChargeTo"  Path="SelectedItems.Count" />
+                                    <Binding ElementName="grdChargeTo" Path="Items.Count" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StatusBarItem.Content>
+                </StatusBarItem>
             </StatusBar>
         </StackPanel>
         <!--#endregion-->
@@ -94,13 +126,24 @@
         <!--#region Grid Gifts -->
         <StackPanel Name="pnlGifts">
             <CheckBox Name="chkAllGifts" Content="All Gifts" Style="{StaticResource CheckBoxSelectAll}" />
-            <DataGrid Name="grdGifts" IsReadOnly="True">
+            <DataGrid Name="grdGifts" IsReadOnly="True" ItemsSource="{Binding}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Gifts" Width="*" Binding="{Binding giN}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
                 </DataGrid.Columns>
             </DataGrid>
             <StatusBar Style="{StaticResource StatusBarStyle}">
-                <StatusBarItem x:Name="StatusBarNumGifts" Style="{StaticResource StatusBarItemStyle}" />
+                <StatusBarItem Style="{StaticResource StatusBarItemStyle}">
+                    <StatusBarItem.Content>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} / {1} Selected Gifts">
+                                    <Binding ElementName="grdGifts"  Path="SelectedItems.Count" />
+                                    <Binding ElementName="grdGifts" Path="Items.Count" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StatusBarItem.Content>
+                </StatusBarItem>
             </StatusBar>
         </StackPanel>
         <!--#endregion-->
@@ -108,7 +151,7 @@
         <!--#region Grid Gifts Quantity -->
         <StackPanel Name="pnlGiftsQuantity">
             <CheckBox Name="chkAllGiftsQuantity" Content="All Gifts" Style="{StaticResource CheckBoxSelectAll}" />
-            <DataGrid Name="grdGiftsQuantity" Width="300" CanUserDeleteRows="False" CanUserAddRows="False">
+            <DataGrid Name="grdGiftsQuantity" Width="300" CanUserDeleteRows="False" CanUserAddRows="False" ItemsSource="{Binding}" SelectionChanged="grd_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn Header="Include" Width="*" Binding="{Binding include ,NotifyOnTargetUpdated=True , UpdateSourceTrigger=PropertyChanged }" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
                         <DataGridCheckBoxColumn.CellStyle>
@@ -135,7 +178,7 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StatusBar Style="{StaticResource StatusBarStyle}">
-                <StatusBarItem x:Name="StatusBarNumGiftsQuantity" Style="{StaticResource StatusBarItemStyle}" />
+                <StatusBarItem x:Name="StatusBarNumGiftsQuantity" Style="{StaticResource StatusBarItemStyle}" Content="0 / 0 Selected Gifts"/>
             </StatusBar>
         </StackPanel>
         <!--#endregion-->
@@ -143,13 +186,24 @@
         <!--#region Grid Markets -->
         <StackPanel Name="pnlMarkets">
             <CheckBox Name="chkAllMarkets" Content="All Markets" Style="{StaticResource CheckBoxSelectAll}" />
-            <DataGrid Name="grdMarkets" IsReadOnly="True">
+            <DataGrid Name="grdMarkets" IsReadOnly="True" ItemsSource="{Binding}" SelectionChanged="grd_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Markets" Width="*" Binding="{Binding mkN}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
                 </DataGrid.Columns>
             </DataGrid>
             <StatusBar Style="{StaticResource StatusBarStyle}">
-                <StatusBarItem x:Name="StatusBarNumMark" Style="{StaticResource StatusBarItemStyle}" />
+                <StatusBarItem Style="{StaticResource StatusBarItemStyle}">
+                    <StatusBarItem.Content>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} / {1} Selected Markets">
+                                    <Binding ElementName="grdMarkets"  Path="SelectedItems.Count" />
+                                    <Binding ElementName="grdMarkets" Path="Items.Count" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StatusBarItem.Content>
+                </StatusBarItem>
             </StatusBar>
         </StackPanel>
         <!--#endregion-->
@@ -157,27 +211,24 @@
         <!--#region Grid Agencies -->
         <StackPanel Name="pnlAgencies">
             <CheckBox Name="chkAllAgencies" Content="All Agencies" Style="{StaticResource CheckBoxSelectAll}" />
-            <DataGrid Name="grdAgencies" IsReadOnly="True">
+            <DataGrid Name="grdAgencies" IsReadOnly="True" ItemsSource="{Binding}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Agencies" Width="*" Binding="{Binding agN}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
                 </DataGrid.Columns>
             </DataGrid>
             <StatusBar Style="{StaticResource StatusBarStyle}">
-                <StatusBarItem x:Name="StatusBarNumAgen" Style="{StaticResource StatusBarItemStyle}" />
-            </StatusBar>
-        </StackPanel>
-        <!--#endregion-->
-
-        <!--#region Grid Countries -->
-        <StackPanel Name="pnlCountries">
-            <CheckBox Name="chkAllCountries" Content="All Countries" Style="{StaticResource CheckBoxSelectAll}" />
-            <DataGrid Name="grdCountries" IsReadOnly="True">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Countries" Width="*" Binding="{Binding pgN}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
-                </DataGrid.Columns>
-            </DataGrid>
-            <StatusBar Style="{StaticResource StatusBarStyle}">
-                <StatusBarItem x:Name="StatusBarNumCoun" Style="{StaticResource StatusBarItemStyle}" />
+                <StatusBarItem Style="{StaticResource StatusBarItemStyle}">
+                    <StatusBarItem.Content>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} / {1} SelectedAgencies">
+                                    <Binding ElementName="grdAgencies"  Path="SelectedItems.Count" />
+                                    <Binding ElementName="grdAgencies" Path="Items.Count" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StatusBarItem.Content>
+                </StatusBarItem>
             </StatusBar>
         </StackPanel>
         <!--#endregion-->
@@ -229,18 +280,18 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Label Name="lblClub" Content="Club" VerticalAlignment="Center" HorizontalContentAlignment="Left" />
+                    <Label Content="Club" VerticalAlignment="Center" HorizontalContentAlignment="Left" />
                     <ComboBox x:Name="cboClub" Margin="10 0 10 0" Grid.Column="1" DisplayMemberPath="clN" SelectedValuePath="clID" />
-                    <Label Name="lblCompany" Content="Company" Grid.Row="1" VerticalAlignment="Center" HorizontalContentAlignment="Left" />
+                    <Label Content="Company" Grid.Row="1" VerticalAlignment="Center" HorizontalContentAlignment="Left" />
                     <TextBox x:Name="txtCompany" Margin="10 0 10 0" Grid.Row="1" Grid.Column="1" Width="50" HorizontalAlignment="Left" Text="{Binding Path=., TargetNullValue=0}" Style="{StaticResource TextBoxNumeric}" />
-                    <Label Name="lblApplication" Content="Application" Grid.Row="2" VerticalAlignment="Center" HorizontalContentAlignment="Left" />
+                    <Label Content="Application" Grid.Row="2" VerticalAlignment="Center" HorizontalContentAlignment="Left" />
                     <TextBox x:Name="txtApplication" Margin="10 0 10 0" Grid.Row="2" Grid.Column="1" />
                 </Grid>
             </Border>
             <!--#endregion -->
 
             <!--#region Checkboxs -->
-            <StackPanel Name="pnlCheckBox" Margin="20 5 20 5">
+            <StackPanel Margin="20 5 20 5">
                 <CheckBox Name="chkBasedOnArrival" Margin="5" Content="Based on arrival date" />
                 <CheckBox Name="chkBasedOnBooking" Margin="5" Content="Based on booking date" />
                 <CheckBox Name="chkQuinellas" Margin="5" Content="Consider Quinellas" />
@@ -250,7 +301,7 @@
             </StackPanel>
             <!--#endregion-->
             <!--#region Combobox Guest-Gifts -->
-            <Grid Name="pnlFiltrosGuestGift" Margin="20 5 20 5">
+            <Grid Margin="20 5 20 5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="80" />
                     <ColumnDefinition Width="*" />
@@ -266,8 +317,8 @@
 
             <!--#region Botones -->
             <StackPanel Margin="20 5 20 5">
-                <Button Name="btnOK" Content="_OK" Width="100" HorizontalAlignment="Left" Margin="10" Click="btnOK_Click" />
-                <Button Name="btnCancel" Content="_Cancel" Width="100" HorizontalAlignment="Left" Margin="10" Click="btnCancel_Click" />
+                <Button Content="_OK" Width="100" HorizontalAlignment="Left" Margin="10" Click="btnOK_Click" />
+                <Button Content="_Cancel" Width="100" HorizontalAlignment="Left" Margin="10" Click="btnCancel_Click" />
             </StackPanel>
             <!--#endregion-->
         </StackPanel>

@@ -1,14 +1,16 @@
-﻿using System;
+﻿using IM.Model;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using IM.Model;
-using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
   public class BRChargeTos
   {
     #region GetChargeTos
+
     /// <summary>
     /// Devuelve la lista de chargeTo
     /// </summary>
@@ -18,42 +20,45 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [Emoguel] created 01/03/2016
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto
+    /// [aalcocer] 25/05/2016  Modified. Se agregó asincronía
     /// </history>
-    public static List<ChargeTo> GetChargeTos(ChargeTo chargeTo=null, int nCxC=-1)
+    public static async Task<List<ChargeTo>> GetChargeTos(ChargeTo chargeTo = null, int nCxC = -1)
     {
-      
       List<ChargeTo> lstCharge = new List<ChargeTo>();
 
-      using (var dbContext=new IMEntities(ConnectionHelper.ConnectionString))
+      await Task.Run(() =>
       {
-        var query = from c in dbContext.ChargeTos
-                    select c;
-
-        if(nCxC!=-1)//Filtra por CxC
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnCxc = Convert.ToBoolean(nCxC);
-          query = query.Where(c=>c.ctIsCxC==blnCxc);
-        }
+          var query = from c in dbContext.ChargeTos
+                      select c;
 
-        if (chargeTo != null)//Si se recibió objeto
-        {
-          if (!string.IsNullOrWhiteSpace(chargeTo.ctID))//Filtra por ID
+          if (nCxC != -1) //Filtra por CxC
           {
-            query = query.Where(c => c.ctID == chargeTo.ctID);
+            bool blnCxc = Convert.ToBoolean(nCxC);
+            query = query.Where(c => c.ctIsCxC == blnCxc);
           }
 
-          if (chargeTo.ctPrice > 0)//Filtra por Price
+          if (chargeTo != null) //Si se recibió objeto
           {
-            query = query.Where(c => c.ctPrice == chargeTo.ctPrice);
+            if (!string.IsNullOrWhiteSpace(chargeTo.ctID)) //Filtra por ID
+            {
+              query = query.Where(c => c.ctID == chargeTo.ctID);
+            }
+
+            if (chargeTo.ctPrice > 0) //Filtra por Price
+            {
+              query = query.Where(c => c.ctPrice == chargeTo.ctPrice);
+            }
           }
+
+          lstCharge = query.OrderBy(c => c.ctID).ToList();
         }
+      });
 
-
-        lstCharge = query.OrderBy(c=>c.ctID).ToList();
-      }
       return lstCharge;
-      
     }
-    #endregion    
+
+    #endregion GetChargeTos
   }
 }

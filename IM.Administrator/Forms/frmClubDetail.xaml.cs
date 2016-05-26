@@ -184,9 +184,9 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 03/05/2016
     /// </history>
-    private void LoadAgencies(int clubId)
+    private async void LoadAgencies(int clubId)
     {
-      List<Agency> lstAllAgencies = BRAgencies.GetAgencies();
+      List<Agency> lstAllAgencies = await BRAgencies.GetAgencies();
       List<Agency> lstAgencies = lstAllAgencies.Where(ag => ag.agcl == clubId).ToList();
       dgrAgencies.ItemsSource = lstAgencies;
       cmbAgencies.ItemsSource = lstAllAgencies;

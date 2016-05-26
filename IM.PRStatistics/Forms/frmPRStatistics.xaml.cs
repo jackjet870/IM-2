@@ -11,6 +11,7 @@ using IM.PRStatistics.Utilities;
 using System.IO;
 using System.Diagnostics;
 using System.Data;
+using System.Linq;
 using IM.Base.Forms;
 using IM.Base.Helpers;
 
@@ -340,36 +341,22 @@ namespace IM.PRStatistics.Forms
     /// <history>
     /// [erosado] 08/Mar/2016 Created
     /// </history>
-    public void DoGetMarkets()
+    public async void DoGetMarkets()
     {
-      Task.Factory.StartNew(() => BRMarkets.GetMarkets(1))
-      .ContinueWith(
-      (task1) =>
+      try
       {
-        if (task1.IsFaulted)
+        List<MarketShort> data = await BRMarkets.GetMarkets(1);
+        if (!data.Any())
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          return false;
+          lsbxMarkets.DataContext = data;
+          chbxMarkets.IsChecked = true;
         }
-        else
-        {
-          if (task1.IsCompleted)
-          {
-            task1.Wait(1000);
-            List<MarketShort> data = task1.Result;
-            if (data.Count > 0)
-            {
-              lsbxMarkets.DataContext = data;
-              chbxMarkets.IsChecked = true;
-            }
-          }
-          StaEnd();
-          return false;
-        }
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
+      StaEnd();
     }
 
     /// <summary>

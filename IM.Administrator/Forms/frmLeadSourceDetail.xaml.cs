@@ -457,9 +457,9 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 16/05/2016
     /// </history>
-    private void LoadAgencies()
+    private async void LoadAgencies()
     {
-      List<Agency> lstAgencies = BRAgencies.GetAgencies();
+      List<Agency> lstAgencies =await BRAgencies.GetAgencies();
       cmbAgencies.ItemsSource = lstAgencies;
     }
     #endregion
