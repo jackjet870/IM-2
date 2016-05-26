@@ -38,7 +38,6 @@ namespace IM.ProcessorOuthouse.Classes
                                  select new
                                  {
                                    paymentByPR.Category,
-                                   paymentByPRDep.bdpc,
                                    paymentByPR.PaymentSchemaFactor,
                                    paymentByPR.PR,
                                    paymentByPR.PRN,
@@ -49,9 +48,7 @@ namespace IM.ProcessorOuthouse.Classes
                                    paymentByPRDep.guls,
                                    paymentByPRDep.gusr,
                                    paymentByPRDep.guHotel,
-                                   RefundIn = paymentByPRDep.bdpc,
                                    paymentByPR.SalesAmount,
-                                   paymentByPRDep.tpshow,
                                    paymentByPR.Books,
                                    paymentByPR.InOuts,
                                    paymentByPR.GrossBooks,
@@ -62,7 +59,7 @@ namespace IM.ProcessorOuthouse.Classes
                                    payType.ptN,
                                    paymentByPRDep.bdAmount,
                                    paymentByPRDep.bdReceived,
-                                   paymentByPRDep.topay,
+                          
                                  }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstDepositsPayments, replaceStringNullOrWhiteSpace: true);

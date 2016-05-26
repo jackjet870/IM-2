@@ -13,7 +13,12 @@ namespace IM.Model
     
     public partial class RptDepositsPaymentByPR_Deposit
     {
+        public string Category { get; set; }
+        public string pcN { get; set; }
+        public string PaymentSchema { get; set; }
+        public Nullable<decimal> PaymentSchemaFactor { get; set; }
         public string PR { get; set; }
+        public string PRN { get; set; }
         public int guID { get; set; }
         public string guName { get; set; }
         public Nullable<byte> guAge1 { get; set; }
@@ -25,10 +30,8 @@ namespace IM.Model
         public string gusr { get; set; }
         public string bdpt { get; set; }
         public string bdcu { get; set; }
-        public string bdpc { get; set; }
-        public string tpshow { get; set; }
-        public Nullable<decimal> bdAmount { get; set; }
-        public Nullable<decimal> bdReceived { get; set; }
-        public Nullable<decimal> topay { get; set; }
+        public decimal bdAmount { get; set; }
+        public decimal bdReceived { get; set; }
+        public Nullable<decimal> ToPay { get; set; }
     }
 }

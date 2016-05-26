@@ -1556,7 +1556,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptFollowUpByPR>("USP_OR_RptFollowUpByPR", dateFromParameter, dateToParameter, leadSourcesParameter, considerQuinellasParameter, basedOnArrivalParameter);
         }
     
-        public virtual ObjectResult<RptDepositsPaymentByPR> USP_OR_RptDepositsPaymentByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string pRs, string program, string paymentTypes, Nullable<byte> filterDeposit)
+        public virtual ObjectResult<CurrencyShort> USP_OR_RptDepositsPaymentByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string pRs, string program, string paymentTypes, Nullable<byte> filterDeposit)
         {
             var dateFromParameter = dateFrom.HasValue ?
                 new ObjectParameter("DateFrom", dateFrom) :
@@ -1586,7 +1586,7 @@ namespace IM.Model
                 new ObjectParameter("FilterDeposit", filterDeposit) :
                 new ObjectParameter("FilterDeposit", typeof(byte));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptDepositsPaymentByPR>("USP_OR_RptDepositsPaymentByPR", dateFromParameter, dateToParameter, leadSourcesParameter, pRsParameter, programParameter, paymentTypesParameter, filterDepositParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CurrencyShort>("USP_OR_RptDepositsPaymentByPR", dateFromParameter, dateToParameter, leadSourcesParameter, pRsParameter, programParameter, paymentTypesParameter, filterDepositParameter);
         }
     
         public virtual ObjectResult<RptGiftsReceivedBySR> USP_OR_RptGiftsReceivedBySR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string chargeTo, string gifts)

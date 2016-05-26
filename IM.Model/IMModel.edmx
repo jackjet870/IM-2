@@ -16498,7 +16498,6 @@
             <ReturnType Type="Collection(IMModel.RptDepositsPaymentByPR_Deposit)" />
             <ReturnType Type="Collection(IMModel.CurrencyShort)" />
             <ReturnType Type="Collection(IMModel.PaymentTypeShort)" />
-            <ReturnType Type="Collection(IMModel.PaymentPlaceShort)" />
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="LeadSources" Mode="In" Type="String" />
@@ -18742,19 +18741,6 @@
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AverageSale" Nullable="true" Precision="19" />
         </ComplexType>
-        <ComplexType Name="RptDepositsPaymentByPR">
-          <Property Type="String" Name="Category" Nullable="false" MaxLength="9" />
-          <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="PRN" Nullable="false" MaxLength="40" />
-          <Property Type="Decimal" Name="Books" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="InOuts" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="GrossBooks" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="ShowsFactor" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="GrossShows" Nullable="true" Precision="19" />
-          <Property Type="String" Name="PaymentSchemaFactor" Nullable="false" MaxLength="17" />
-          <Property Type="Decimal" Name="SalesAmount" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
-        </ComplexType>
         <ComplexType Name="RptGiftsReceivedBySR">
           <Property Type="String" Name="SalesRoom" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="Gift" Nullable="false" MaxLength="10" />
@@ -19023,25 +19009,6 @@
           <Property Type="String" Name="gype" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="UserName" Nullable="true" MaxLength="40" />
           <Property Type="Int32" Name="gyID" Nullable="false" />
-        </ComplexType>
-        <ComplexType Name="RptDepositsPaymentByPR_Deposit">
-          <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
-          <Property Type="Int32" Name="guID" Nullable="false" />
-          <Property Type="String" Name="guName" Nullable="true" MaxLength="200" />
-          <Property Type="Byte" Name="guAge1" Nullable="true" />
-          <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="guShowD" Nullable="true" Precision="23" />
-          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
-          <Property Type="String" Name="guHotel" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="guls" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="gusr" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="bdpt" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="bdcu" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="bdpc" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="tpshow" Nullable="true" MaxLength="13" />
-          <Property Type="Decimal" Name="bdAmount" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="bdReceived" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="topay" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="PaymentTypeShort">
           <Property Type="String" Name="ptID" Nullable="true" MaxLength="10" />
@@ -21603,6 +21570,42 @@
           <Property Type="String" Name="giN" Nullable="true" MaxLength="50" />
           <Property Type="Boolean" Name="giWFolio" Nullable="true" />
           <Property Type="String" Name="gigc" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="RptDepositsPaymentByPR">
+          <Property Type="String" Name="Category" Nullable="false" MaxLength="9" />
+          <Property Type="String" Name="PaymentSchema" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="PaymentSchemaFactor" Nullable="true" Precision="19" />
+          <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PRN" Nullable="false" MaxLength="40" />
+          <Property Type="Decimal" Name="Books" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="InOuts" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="GrossBooks" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ShowsFactor" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="GrossShows" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="SalesAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptDepositsPaymentByPR_Deposit">
+          <Property Type="String" Name="Category" Nullable="false" MaxLength="9" />
+          <Property Type="String" Name="pcN" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="PaymentSchema" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="PaymentSchemaFactor" Nullable="true" Precision="19" />
+          <Property Type="String" Name="PR" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PRN" Nullable="false" MaxLength="40" />
+          <Property Type="Int32" Name="guID" Nullable="false" />
+          <Property Type="String" Name="guName" Nullable="true" MaxLength="200" />
+          <Property Type="Byte" Name="guAge1" Nullable="true" />
+          <Property Type="DateTime" Name="guBookD" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="guShowD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="guHotel" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="guls" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="gusr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="bdpt" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="bdcu" Nullable="false" MaxLength="10" />
+          <Property Type="Decimal" Name="bdAmount" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="bdReceived" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="ToPay" Nullable="true" Precision="19" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -25164,6 +25167,8 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.RptDepositsPaymentByPR">
                 <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="PaymentSchema" ColumnName="PaymentSchema" />
+                <ScalarProperty Name="PaymentSchemaFactor" ColumnName="PaymentSchemaFactor" />
                 <ScalarProperty Name="PR" ColumnName="PR" />
                 <ScalarProperty Name="PRN" ColumnName="PRN" />
                 <ScalarProperty Name="Books" ColumnName="Books" />
@@ -25171,17 +25176,22 @@
                 <ScalarProperty Name="GrossBooks" ColumnName="GrossBooks" />
                 <ScalarProperty Name="ShowsFactor" ColumnName="ShowsFactor" />
                 <ScalarProperty Name="GrossShows" ColumnName="GrossShows" />
-                <ScalarProperty Name="PaymentSchemaFactor" ColumnName="PaymentSchemaFactor" />
                 <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
               </ComplexTypeMapping>
             </ResultMapping>
             <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.RptDepositsPaymentByPR_Deposit">
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="pcN" ColumnName="pcN" />
+                <ScalarProperty Name="PaymentSchema" ColumnName="PaymentSchema" />
+                <ScalarProperty Name="PaymentSchemaFactor" ColumnName="PaymentSchemaFactor" />
                 <ScalarProperty Name="PR" ColumnName="PR" />
+                <ScalarProperty Name="PRN" ColumnName="PRN" />
                 <ScalarProperty Name="guID" ColumnName="guID" />
                 <ScalarProperty Name="guName" ColumnName="guName" />
                 <ScalarProperty Name="guAge1" ColumnName="guAge1" />
+                <ScalarProperty Name="guBookD" ColumnName="guBookD" />
                 <ScalarProperty Name="guShowD" ColumnName="guShowD" />
                 <ScalarProperty Name="guOutInvitNum" ColumnName="guOutInvitNum" />
                 <ScalarProperty Name="guHotel" ColumnName="guHotel" />
@@ -25189,11 +25199,9 @@
                 <ScalarProperty Name="gusr" ColumnName="gusr" />
                 <ScalarProperty Name="bdpt" ColumnName="bdpt" />
                 <ScalarProperty Name="bdcu" ColumnName="bdcu" />
-                <ScalarProperty Name="bdpc" ColumnName="bdpc" />
-                <ScalarProperty Name="tpshow" ColumnName="tpshow" />
                 <ScalarProperty Name="bdAmount" ColumnName="bdAmount" />
                 <ScalarProperty Name="bdReceived" ColumnName="bdReceived" />
-                <ScalarProperty Name="topay" ColumnName="topay" />
+                <ScalarProperty Name="ToPay" ColumnName="ToPay" />
               </ComplexTypeMapping>
             </ResultMapping>
             <ResultMapping>
@@ -25206,12 +25214,6 @@
               <ComplexTypeMapping TypeName="IMModel.PaymentTypeShort">
                 <ScalarProperty Name="ptID" ColumnName="ptID" />
                 <ScalarProperty Name="ptN" ColumnName="ptN" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.PaymentPlaceShort">
-                <ScalarProperty Name="pcID" ColumnName="pcID" />
-                <ScalarProperty Name="pcN" ColumnName="pcN" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

@@ -14,6 +14,8 @@ namespace IM.Model
     public partial class RptDepositsPaymentByPR
     {
         public string Category { get; set; }
+        public string PaymentSchema { get; set; }
+        public Nullable<decimal> PaymentSchemaFactor { get; set; }
         public string PR { get; set; }
         public string PRN { get; set; }
         public Nullable<decimal> Books { get; set; }
@@ -21,7 +23,6 @@ namespace IM.Model
         public Nullable<decimal> GrossBooks { get; set; }
         public Nullable<decimal> ShowsFactor { get; set; }
         public Nullable<decimal> GrossShows { get; set; }
-        public string PaymentSchemaFactor { get; set; }
         public Nullable<decimal> SalesAmount { get; set; }
         public Nullable<decimal> Efficiency { get; set; }
     }

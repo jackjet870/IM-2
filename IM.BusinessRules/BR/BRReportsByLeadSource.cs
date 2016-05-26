@@ -1000,7 +1000,7 @@ namespace IM.BusinessRules.BR
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         var resDepositsPaymentByPR = dbContext.USP_OR_RptDepositsPaymentByPR(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), paymentTypes, Convert.ToByte(filterDeposit));
-        DepositsPaymentByPRData.DepositsPaymentByPR = resDepositsPaymentByPR.ToList();
+        //DepositsPaymentByPRData.DepositsPaymentByPR = resDepositsPaymentByPR.ToList();
 
         var resDepositsPaymentByPRDeposits = resDepositsPaymentByPR.GetNextResult<RptDepositsPaymentByPR_Deposit>();
         DepositsPaymentByPRData.DepositsPaymentByPR_Deposit = resDepositsPaymentByPRDeposits.ToList();
