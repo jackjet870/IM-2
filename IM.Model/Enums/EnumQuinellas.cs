@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace IM.Model.Enums
 {
@@ -11,10 +7,13 @@ namespace IM.Model.Enums
   /// </summary>
   /// <history>
   /// [edgrodriguez] 02/Mar/2016 Created
+  /// [aalcocer]     27/May/2016 Modified. Se cambian los nombres y se agrega Descripcion
   /// </history>
   public enum EnumQuinellas
-  {    
-    quNoQuinellas,
-    quQuinellas
+  {
+    NoQuinellas,
+
+    [Description("Consider Quinellas")]
+    Quinellas
   }
 }

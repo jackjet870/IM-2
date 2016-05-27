@@ -304,7 +304,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<List<RptProductionByAgencyMonthly>> GetRptProductionByAgencyMonthly(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> agencies,
-      EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByAgencyMonthly>();
 
@@ -344,7 +344,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static async Task<List<RptProductionByMember>> GetRptProductionByMembers(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
       IEnumerable<string> pRs = null, EnumProgram program = EnumProgram.All, string aplication = "", int company = 0, Club club = null,
-      bool onlyWholesalers = false, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      bool onlyWholesalers = false, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByMember>();
 

@@ -266,14 +266,14 @@ namespace IM.ProcessorInhouse.Forms
         bool blnMarkets = false, bool blnAllMarkets = false, bool blnAgencies = false, bool blnAllAgencies = false,
         bool blnGiftsQuantity = false, bool blnAllGiftsQuantity = false,
         EnumPeriod enumPeriod = EnumPeriod.None, EnumProgram program = EnumProgram.All, EnumBasedOnArrival? enumBasedOnArrival = null,
-        EnumBasedOnBooking? enumBasedOnBooking = null, EnumQuinellas? enumQuinellas = null, EnumDetailGifts? enumDetailGifts = null,
+        EnumBasedOnPRLocation? enumBasedOnPRLocation = null, EnumQuinellas? enumQuinellas = null, EnumDetailGifts? enumDetailGifts = null,
         EnumSalesByMemberShipType? enumSalesByMemberShipType = null,
         EnumSaveCourtesyTours? enumSaveCourtesyTours = null,
         EnumExternalInvitation? enumExternalInvitation = null, bool blnClub = false, bool blnNight = false, bool blnLsHotelNotNull = false, bool blnAgencyMonthly = false,
         bool blnOnlyWholesalers = false)
     {
       ConfigureDates(blnOneDate, enumPeriod);
-      ConfigureFilters(enumBasedOnArrival, enumBasedOnBooking, enumQuinellas, enumDetailGifts, enumSalesByMemberShipType, enumSaveCourtesyTours, enumExternalInvitation, blnClub, blnNight, blnOnlyWholesalers);
+      ConfigureFilters(enumBasedOnArrival, enumBasedOnPRLocation, enumQuinellas, enumDetailGifts, enumSalesByMemberShipType, enumSaveCourtesyTours, enumExternalInvitation, blnClub, blnNight, blnOnlyWholesalers);
 
       LoadCombos(blnClub);
 
@@ -302,7 +302,7 @@ namespace IM.ProcessorInhouse.Forms
     /// <history>
     /// [aalcocer] 15/03/2016 Created
     /// </history>
-    private void ConfigureFilters(EnumBasedOnArrival? enumBasedOnArrival, EnumBasedOnBooking? enumBasedOnBooking,
+    private void ConfigureFilters(EnumBasedOnArrival? enumBasedOnArrival, EnumBasedOnPRLocation? enumBasedOnPRLocation,
         EnumQuinellas? enumQuinellas, EnumDetailGifts? enumDetailGifts, EnumSalesByMemberShipType? enumSalesByMemberShipType,
        EnumSaveCourtesyTours? enumSaveCourtesyTours, EnumExternalInvitation? enumExternalInvitation, bool blnClub, bool blnNight, bool blnOnlyWholesalers)
     {
@@ -311,11 +311,10 @@ namespace IM.ProcessorInhouse.Forms
       else
         chkBasedOnArrival.Visibility = Visibility.Collapsed;
 
-      if (enumBasedOnBooking != null)
-        chkBasedOnBooking.IsChecked = Convert.ToBoolean(enumBasedOnBooking);
+      if (enumBasedOnPRLocation != null)
+        chkBasedOnPRLocation.IsChecked = Convert.ToBoolean(enumBasedOnPRLocation);
       else
-        chkBasedOnBooking.Visibility = Visibility.Collapsed;
-
+        chkBasedOnPRLocation.Visibility = Visibility.Collapsed;
       if (enumQuinellas != null)
         chkQuinellas.IsChecked = Convert.ToBoolean(enumQuinellas);
       else
@@ -440,10 +439,10 @@ namespace IM.ProcessorInhouse.Forms
       else
         _frmIh._dtmInit = dtmStart.Value.Value;
       _frmIh._dtmEnd = dtmEnd.Value.Value;
-      _frmIh._enumBasedOnArrival = Convert.ToBoolean(chkBasedOnArrival.IsChecked) ? EnumBasedOnArrival.boaBasedOnArrival : EnumBasedOnArrival.boaNoBasedOnArrival;
-      _frmIh._enumQuinellas = Convert.ToBoolean(chkQuinellas.IsChecked) ? EnumQuinellas.quQuinellas : EnumQuinellas.quNoQuinellas;
-      _frmIh._enumDetailsGift = Convert.ToBoolean(chkDetailGifts.IsChecked) ? EnumDetailGifts.dgDetailGifts : EnumDetailGifts.dgNoDetailGifts;
-      _frmIh._enumSalesByMemberShipType = Convert.ToBoolean(chkSalesByMembershipType.IsChecked) ? EnumSalesByMemberShipType.sbmDetail : EnumSalesByMemberShipType.sbmNoDetail;
+      _frmIh._enumBasedOnArrival = Convert.ToBoolean(chkBasedOnArrival.IsChecked) ? EnumBasedOnArrival.BasedOnArrival : EnumBasedOnArrival.NoBasedOnArrival;
+      _frmIh._enumQuinellas = Convert.ToBoolean(chkQuinellas.IsChecked) ? EnumQuinellas.Quinellas : EnumQuinellas.NoQuinellas;
+      _frmIh._enumDetailsGift = Convert.ToBoolean(chkDetailGifts.IsChecked) ? EnumDetailGifts.DetailGifts : EnumDetailGifts.NoDetailGifts;
+      _frmIh._enumSalesByMemberShipType = Convert.ToBoolean(chkSalesByMembershipType.IsChecked) ? EnumSalesByMemberShipType.Detail : EnumSalesByMemberShipType.NoDetail;
       _frmIh._blnOnlyWholesalers = Convert.ToBoolean(chkOnlyWholesalers.IsChecked);
       _frmIh._strApplication = txtApplication.Text;
       _frmIh._iCompany = Convert.ToInt32(txtCompany.Text);

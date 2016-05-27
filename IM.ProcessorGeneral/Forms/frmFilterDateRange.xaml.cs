@@ -413,9 +413,9 @@ namespace IM.ProcessorGeneral.Forms
       bool blnCategories = false, bool blnAllCategories = false, bool blnPrograms = false, bool blnAllPrograms = false,
       bool blnRatetypes = false, bool blnAllRatetypes = false, bool blnLeadSources = false, bool blnAllLeadSources = false,
       bool blnWarehouse = false, bool blnAllWarehouse = false, bool blnOneDate = false, bool blnOnlyOneRegister = false, EnumPeriod enumPeriod = EnumPeriod.None,
-      EnumProgram enumPrograms = EnumProgram.All, bool blnOnePeriod = false, EnumBasedOnArrival enumBasedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival,
-      EnumQuinellas enumQuinellas = EnumQuinellas.quNoQuinellas, EnumDetailGifts enumDetailGifts = EnumDetailGifts.dgNoDetailGifts, EnumSaveCourtesyTours? enumSaveCourtesyTours = null,
-      EnumSalesByMemberShipType enumSalesByMemberShipType = EnumSalesByMemberShipType.sbmNoDetail, EnumBasedOnBooking enumBasedOnBooking = EnumBasedOnBooking.bobNoBasedOnBooking,
+      EnumProgram enumPrograms = EnumProgram.All, bool blnOnePeriod = false, EnumBasedOnArrival enumBasedOnArrival = EnumBasedOnArrival.NoBasedOnArrival,
+      EnumQuinellas enumQuinellas = EnumQuinellas.NoQuinellas, EnumDetailGifts enumDetailGifts = EnumDetailGifts.NoDetailGifts, EnumSaveCourtesyTours? enumSaveCourtesyTours = null,
+      EnumSalesByMemberShipType enumSalesByMemberShipType = EnumSalesByMemberShipType.NoDetail, EnumBasedOnBooking enumBasedOnBooking = EnumBasedOnBooking.NoBasedOnBooking,
       EnumExternalInvitation? enumExternalInvitation = null, bool blncbStatus = false, bool blnGiftReceiptType = false, bool blnGuestId = false, bool blnGiftSale = false)
     {
       ConfigureDates(blnOneDate, enumPeriod);
@@ -455,12 +455,12 @@ namespace IM.ProcessorGeneral.Forms
       EnumSaveCourtesyTours? enumSaveCourtesyTours, EnumSalesByMemberShipType? enumSalesMemberShipType, EnumBasedOnBooking enumBasedOnBooking,
       EnumExternalInvitation? enumExternalInvitation, bool blncbStatus, bool blnGiftReceiptType, bool blnGuestId, bool blnGiftSale)
     {
-      chkDetailGifts.Visibility = (enumDetailGifts == EnumDetailGifts.dgDetailGifts) ? Visibility.Visible : Visibility.Collapsed;
-      chkBasedOnArrival.Visibility = (enumBasedOnArrival == EnumBasedOnArrival.boaBasedOnArrival) ? Visibility.Visible : Visibility.Collapsed;
-      chkQuinellas.Visibility = (enumQuinellas == EnumQuinellas.quQuinellas) ? Visibility.Visible : Visibility.Collapsed;
+      chkDetailGifts.Visibility = (enumDetailGifts == EnumDetailGifts.DetailGifts) ? Visibility.Visible : Visibility.Collapsed;
+      chkBasedOnArrival.Visibility = (enumBasedOnArrival == EnumBasedOnArrival.BasedOnArrival) ? Visibility.Visible : Visibility.Collapsed;
+      chkQuinellas.Visibility = (enumQuinellas == EnumQuinellas.Quinellas) ? Visibility.Visible : Visibility.Collapsed;
       cboSaveCourtesyTours.Visibility = (enumSaveCourtesyTours != null) ? Visibility.Visible : Visibility.Collapsed;
-      chkSalesByMembershipType.Visibility = (enumSalesMemberShipType == EnumSalesByMemberShipType.sbmDetail) ? Visibility.Visible : Visibility.Collapsed;
-      chkBasedOnBooking.Visibility = (enumBasedOnBooking == EnumBasedOnBooking.bobBasedOnBooking) ? Visibility.Visible : Visibility.Collapsed;
+      chkSalesByMembershipType.Visibility = (enumSalesMemberShipType == EnumSalesByMemberShipType.Detail) ? Visibility.Visible : Visibility.Collapsed;
+      chkBasedOnBooking.Visibility = (enumBasedOnBooking == EnumBasedOnBooking.BasedOnBooking) ? Visibility.Visible : Visibility.Collapsed;
       cboExternal.Visibility = (enumExternalInvitation != null) ? Visibility.Visible : Visibility.Collapsed;
 
       cboStatus.Visibility = lblStatus.Visibility = (blncbStatus) ? Visibility.Visible : Visibility.Collapsed;
@@ -555,11 +555,11 @@ namespace IM.ProcessorGeneral.Forms
       FrmProcGen._cboDateSelected = (EnumPredefinedDate)cboDate.SelectedValue;
       FrmProcGen._dtmStart = dtmStart.Value.Value;
       FrmProcGen._dtmEnd = dtmEnd.Value.Value;
-      FrmProcGen._enumBasedOnArrival = (chkBasedOnArrival.IsChecked.Value) ? EnumBasedOnArrival.boaBasedOnArrival : EnumBasedOnArrival.boaNoBasedOnArrival;
-      FrmProcGen._enumBasedOnBooking = (chkBasedOnBooking.IsChecked.Value) ? EnumBasedOnBooking.bobBasedOnBooking : EnumBasedOnBooking.bobNoBasedOnBooking;
-      FrmProcGen._enumQuinellas = (chkQuinellas.IsChecked.Value) ? EnumQuinellas.quQuinellas : EnumQuinellas.quNoQuinellas;
-      FrmProcGen._enumDetailsGift = (chkDetailGifts.IsChecked.Value) ? EnumDetailGifts.dgDetailGifts : EnumDetailGifts.dgNoDetailGifts;
-      FrmProcGen._enumSalesByMemberShipType = (chkSalesByMembershipType.IsChecked.Value) ? EnumSalesByMemberShipType.sbmDetail : EnumSalesByMemberShipType.sbmNoDetail;
+      FrmProcGen._enumBasedOnArrival = (chkBasedOnArrival.IsChecked.Value) ? EnumBasedOnArrival.BasedOnArrival : EnumBasedOnArrival.NoBasedOnArrival;
+      FrmProcGen._enumBasedOnBooking = (chkBasedOnBooking.IsChecked.Value) ? EnumBasedOnBooking.BasedOnBooking : EnumBasedOnBooking.NoBasedOnBooking;
+      FrmProcGen._enumQuinellas = (chkQuinellas.IsChecked.Value) ? EnumQuinellas.Quinellas : EnumQuinellas.NoQuinellas;
+      FrmProcGen._enumDetailsGift = (chkDetailGifts.IsChecked.Value) ? EnumDetailGifts.DetailGifts : EnumDetailGifts.NoDetailGifts;
+      FrmProcGen._enumSalesByMemberShipType = (chkSalesByMembershipType.IsChecked.Value) ? EnumSalesByMemberShipType.Detail : EnumSalesByMemberShipType.NoDetail;
       FrmProcGen._enumStatus = ((KeyValuePair<EnumStatus, string>)cboStatus.SelectedItem).Key;
       FrmProcGen._enumGiftsReceiptType = ((KeyValuePair<EnumGiftsReceiptType, string>)cboGiftsReceiptType.SelectedItem).Key;
       FrmProcGen._GuestID = txtGuestID.Text;
@@ -584,11 +584,11 @@ namespace IM.ProcessorGeneral.Forms
       cboDate.SelectedValue = FrmProcGen._cboDateSelected ?? EnumPredefinedDate.DatesSpecified;
       dtmStart.Value = FrmProcGen._dtmStart;
       dtmEnd.Value = FrmProcGen._dtmEnd;
-      chkBasedOnArrival.IsChecked = (FrmProcGen._enumBasedOnArrival == EnumBasedOnArrival.boaBasedOnArrival);
-      chkBasedOnBooking.IsChecked = (FrmProcGen._enumBasedOnBooking == EnumBasedOnBooking.bobBasedOnBooking);
-      chkQuinellas.IsChecked = (FrmProcGen._enumQuinellas == EnumQuinellas.quQuinellas);
-      chkDetailGifts.IsChecked = (FrmProcGen._enumDetailsGift == EnumDetailGifts.dgDetailGifts);
-      chkSalesByMembershipType.IsChecked = (FrmProcGen._enumSalesByMemberShipType == EnumSalesByMemberShipType.sbmDetail);
+      chkBasedOnArrival.IsChecked = (FrmProcGen._enumBasedOnArrival == EnumBasedOnArrival.BasedOnArrival);
+      chkBasedOnBooking.IsChecked = (FrmProcGen._enumBasedOnBooking == EnumBasedOnBooking.BasedOnBooking);
+      chkQuinellas.IsChecked = (FrmProcGen._enumQuinellas == EnumQuinellas.Quinellas);
+      chkDetailGifts.IsChecked = (FrmProcGen._enumDetailsGift == EnumDetailGifts.DetailGifts);
+      chkSalesByMembershipType.IsChecked = (FrmProcGen._enumSalesByMemberShipType == EnumSalesByMemberShipType.Detail);
       cboStatus.SelectedValue = FrmProcGen._enumStatus;
       cboGiftsReceiptType.SelectedValue = FrmProcGen._enumGiftsReceiptType;
       txtGuestID.Text = FrmProcGen._GuestID;

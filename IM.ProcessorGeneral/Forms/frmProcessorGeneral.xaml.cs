@@ -39,17 +39,17 @@ namespace IM.ProcessorGeneral.Forms
     public EnumPredefinedDate? _cboDateSelected;
     public DateTime _dtmStart = DateTime.Now.Date;
     public DateTime _dtmEnd = DateTime.Now.Date;
-    public EnumBasedOnArrival _enumBasedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival;
-    public EnumBasedOnBooking _enumBasedOnBooking = EnumBasedOnBooking.bobNoBasedOnBooking;
-    public EnumQuinellas _enumQuinellas = EnumQuinellas.quNoQuinellas;
-    public EnumDetailGifts _enumDetailsGift = EnumDetailGifts.dgNoDetailGifts;
-    public EnumSalesByMemberShipType _enumSalesByMemberShipType = EnumSalesByMemberShipType.sbmNoDetail;
+    public EnumBasedOnArrival _enumBasedOnArrival = EnumBasedOnArrival.NoBasedOnArrival;
+    public EnumBasedOnBooking _enumBasedOnBooking = EnumBasedOnBooking.NoBasedOnBooking;
+    public EnumQuinellas _enumQuinellas = EnumQuinellas.NoQuinellas;
+    public EnumDetailGifts _enumDetailsGift = EnumDetailGifts.NoDetailGifts;
+    public EnumSalesByMemberShipType _enumSalesByMemberShipType = EnumSalesByMemberShipType.NoDetail;
     public EnumStatus _enumStatus = EnumStatus.staActives;
     public EnumGiftsReceiptType _enumGiftsReceiptType = EnumGiftsReceiptType.grtAll;
     public string _GuestID = "";
     public EnumGiftSale _enumGiftSale = EnumGiftSale.gsAll;
-    public EnumSaveCourtesyTours _enumSaveCourtesyTours = EnumSaveCourtesyTours.sctExcludeSaveCourtesyTours;
-    public EnumExternalInvitation _enumExternalInvitation = EnumExternalInvitation.extExclude;
+    public EnumSaveCourtesyTours _enumSaveCourtesyTours = EnumSaveCourtesyTours.ExcludeSaveCourtesyTours;
+    public EnumExternalInvitation _enumExternalInvitation = EnumExternalInvitation.Exclude;
 
     #endregion
 
@@ -438,7 +438,7 @@ namespace IM.ProcessorGeneral.Forms
         case "Production by Sales Room, Program, Market & Submarket":
         case "Production by Show Program":
         case "Production by Show Program & Program":
-          _frmFilter.ConfigurarFomulario(blnSalesRoom: true, blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, enumBasedOnArrival: EnumBasedOnArrival.boaBasedOnArrival, enumQuinellas: EnumQuinellas.quQuinellas);
+          _frmFilter.ConfigurarFomulario(blnSalesRoom: true, blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, enumBasedOnArrival: EnumBasedOnArrival.BasedOnArrival, enumQuinellas: EnumQuinellas.Quinellas);
           break;
         case "Meal Tickets":
         case "Meal Tickets by Host":
@@ -1561,8 +1561,8 @@ namespace IM.ProcessorGeneral.Forms
         //break;
         case "Production by Lead Source & Market (Monthly)":
           _frmFilter.ConfigurarFomulario(enumPeriod: EnumPeriod.Monthly,
-            enumBasedOnArrival: EnumBasedOnArrival.boaBasedOnArrival, enumQuinellas: EnumQuinellas.quQuinellas,
-            enumExternalInvitation: EnumExternalInvitation.extInclude);
+            enumBasedOnArrival: EnumBasedOnArrival.BasedOnArrival, enumQuinellas: EnumQuinellas.Quinellas,
+            enumExternalInvitation: EnumExternalInvitation.Include);
           break;
         default:
           _frmFilter = null;
@@ -1673,11 +1673,11 @@ namespace IM.ProcessorGeneral.Forms
           List<RptProductionByLeadSourceMarketMonthly> lstRptProductionByLsMarketMonthly =
             BRGeneralReports.GetRptProductionByLeadSourceMarketMonthly(_dtmStart,
               _dtmEnd,
-              (_frmFilter.chkQuinellas.IsChecked ?? false) ? EnumQuinellas.quQuinellas : EnumQuinellas.quNoQuinellas,
+              (_frmFilter.chkQuinellas.IsChecked ?? false) ? EnumQuinellas.Quinellas : EnumQuinellas.NoQuinellas,
               (EnumExternalInvitation)_frmFilter.cboExternal.SelectedValue,
               (_frmFilter.chkBasedOnArrival.IsChecked ?? false)
-                ? EnumBasedOnArrival.boaBasedOnArrival
-                : EnumBasedOnArrival.boaNoBasedOnArrival);
+                ? EnumBasedOnArrival.BasedOnArrival
+                : EnumBasedOnArrival.NoBasedOnArrival);
           if (lstRptProductionByLsMarketMonthly.Count > 0)
           {
             finfo = clsReports.ExportRptProductionByLeadSourceMarketMonthly(strReport, dateRangeFileNameRep, filters,

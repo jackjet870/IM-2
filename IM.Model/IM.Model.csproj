@@ -170,6 +170,7 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Enums\EnumAction.cs" />
+    <Compile Include="Enums\EnumBasedOnPRLocation.cs" />
     <Compile Include="Enums\EnumClub.cs" />
     <Compile Include="Enums\EnumDataFieldShowDataAs.cs" />
     <Compile Include="Enums\EnumFilterDeposit.cs" />
@@ -205,7 +206,7 @@
     <Compile Include="Enums\EnumPredefinedDateMonthly.cs" />
     <Compile Include="Enums\EnumPrintDevice.cs" />
     <Compile Include="Enums\EnumQuinellas.cs" />
-    <Compile Include="Enums\EnumSalesByMembershipType.cs" />
+    <Compile Include="Enums\EnumSalesByMemberShipType.cs" />
     <Compile Include="Enums\EnumSaveCourtesyTours.cs" />
     <Compile Include="Enums\EnumScreen.cs" />
     <Compile Include="Enums\EnumStatus.cs" />

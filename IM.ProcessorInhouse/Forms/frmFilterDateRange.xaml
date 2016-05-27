@@ -293,7 +293,7 @@
             <!--#region Checkboxs -->
             <StackPanel Margin="20 5 20 5">
                 <CheckBox Name="chkBasedOnArrival" Margin="5" Content="Based on arrival date" />
-                <CheckBox Name="chkBasedOnBooking" Margin="5" Content="Based on booking date" />
+                <CheckBox Name="chkBasedOnPRLocation" Margin="5" Content="Based on PR Location" />
                 <CheckBox Name="chkQuinellas" Margin="5" Content="Consider Quinellas" />
                 <CheckBox Name="chkDetailGifts" Margin="5" Content="Details Gifts" />
                 <CheckBox Name="chkSalesByMembershipType" Margin="5" Content="Detail the Sales by Membership Type" />

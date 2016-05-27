@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace IM.Model.Enums
 {
@@ -12,14 +7,17 @@ namespace IM.Model.Enums
   /// </summary>
   /// <history>
   /// [edgrodriguez] 05/Mar/2016 Created
+  /// [aalcocer]   27/05/2016 Modified. Se cambian los nombres
   /// </history>
   public enum EnumExternalInvitation
-  {    
+  {
     [Description("Include External Invitation")]
-    extInclude,
+    Include,
+
     [Description("Exclude External Invitation")]
-    extExclude,
+    Exclude,
+
     [Description("Only External Invitation")]
-    extOnly
+    Only
   }
 }

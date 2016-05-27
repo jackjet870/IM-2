@@ -53,15 +53,15 @@ namespace IM.ProcessorOuthouse.Forms
     public string _cboFolSeriesSelected;
     public DateTime _dtmStart = DateTime.Now.Date;
     public DateTime _dtmEnd = DateTime.Now.Date;
-    public EnumBasedOnArrival _enumBasedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival;
-    public EnumBasedOnBooking _enumBasedOnBooking = EnumBasedOnBooking.bobNoBasedOnBooking;
-    public EnumQuinellas _enumQuinellas = EnumQuinellas.quNoQuinellas;
-    public EnumDetailGifts _enumDetailsGift = EnumDetailGifts.dgNoDetailGifts;
-    public EnumSalesByMemberShipType _enumSalesByMemberShipType = EnumSalesByMemberShipType.sbmNoDetail;
+    public EnumBasedOnArrival _enumBasedOnArrival = EnumBasedOnArrival.NoBasedOnArrival;
+    public EnumBasedOnBooking _enumBasedOnBooking = EnumBasedOnBooking.NoBasedOnBooking;
+    public EnumQuinellas _enumQuinellas = EnumQuinellas.NoQuinellas;
+    public EnumDetailGifts _enumDetailsGift = EnumDetailGifts.NoDetailGifts;
+    public EnumSalesByMemberShipType _enumSalesByMemberShipType = EnumSalesByMemberShipType.NoDetail;
     public EnumStatus _enumStatus = EnumStatus.staActives;
     public EnumGiftSale _enumGiftSale = EnumGiftSale.gsAll;
-    public EnumSaveCourtesyTours _enumSaveCourtesyTours = EnumSaveCourtesyTours.sctExcludeSaveCourtesyTours;
-    public EnumExternalInvitation _enumExternalInvitation = EnumExternalInvitation.extExclude;
+    public EnumSaveCourtesyTours _enumSaveCourtesyTours = EnumSaveCourtesyTours.ExcludeSaveCourtesyTours;
+    public EnumExternalInvitation _enumExternalInvitation = EnumExternalInvitation.Exclude;
     public string _folFrom;
     public string _folTo;
 
@@ -331,7 +331,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         case "Production by Agency":
         case "Production by Agency & Sales Room":
-          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, enumSalesByMemberShipType: EnumSalesByMemberShipType.sbmDetail);
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, enumSalesByMemberShipType: EnumSalesByMemberShipType.Detail);
           break;
 
         case "Production by Gift (Invitation)":
@@ -341,7 +341,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         case "Production by Nationality":
         case "Production by Nationality & Sales Room":
-          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, enumSaveCourtesyTours: EnumSaveCourtesyTours.sctIncludeSaveCourtesyTours);
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, enumSaveCourtesyTours: EnumSaveCourtesyTours.IncludeSaveCourtesyTours);
           break;
 
         case "Production by PR":
@@ -352,7 +352,7 @@ namespace IM.ProcessorOuthouse.Forms
         case "Production by PR (Deposits & Flyers Show)":
         case "Production by PR (Deposits)":
         case "Production by PR (Flyers)":
-          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, enumBasedOnBooking: EnumBasedOnBooking.bobBasedOnBooking);
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnLeadSource: true, enumBasedOnBooking: EnumBasedOnBooking.BasedOnBooking);
           break;
       }
 
@@ -1009,13 +1009,13 @@ namespace IM.ProcessorOuthouse.Forms
 
         case "Production by Agency":
         case "Production by Agency & Sales Room":
-          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnPRs: true, enumSalesByMemberShipType: EnumSalesByMemberShipType.sbmDetail);
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnPRs: true, enumSalesByMemberShipType: EnumSalesByMemberShipType.Detail);
           break;
 
 
         case "Production by PR & Sales Room (Deposits & Flyers Show)":
         case "Production by PR (Deposits & Flyers Show)":
-          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnPRs: true, enumBasedOnBooking: EnumBasedOnBooking.bobBasedOnBooking);
+          _frmFilter.ConfigureForm(blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister, blnPRs: true, enumBasedOnBooking: EnumBasedOnBooking.BasedOnBooking);
           break;
       }
 

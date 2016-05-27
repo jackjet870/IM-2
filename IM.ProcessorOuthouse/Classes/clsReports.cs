@@ -290,7 +290,7 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///   [vku] 15/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptProductionByAgencyOuhouse(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, ProductionByAgencyOuthouseData lstRptProductionByAgencyOuthouse, EnumSalesByMemberShipType salesByMemberShipType = EnumSalesByMemberShipType.sbmNoDetail)
+    public static FileInfo ExportRptProductionByAgencyOuhouse(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, ProductionByAgencyOuthouseData lstRptProductionByAgencyOuthouse, EnumSalesByMemberShipType salesByMemberShipType = EnumSalesByMemberShipType.NoDetail)
     {
       DataTable dtData = null;
       var lstProductionByAgency = lstRptProductionByAgencyOuthouse.ProductionByAgencyOuthouse;
@@ -361,7 +361,7 @@ namespace IM.ProcessorOuthouse.Classes
 
         dtData = TableHelper.GetDataTableFromList(lstProductionByAgencySalesMembershipTypeAux, replaceStringNullOrWhiteSpace: true);
       }
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, salesByMemberShipType == EnumSalesByMemberShipType.sbmNoDetail ? clsFormatReport.rptProductionByAgencyOuthouse() : clsFormatReport.rptProductionByAgencySalesMembershipTypeOuthouse(), showRowGrandTotal: true, showColumnGrandTotal: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, salesByMemberShipType == EnumSalesByMemberShipType.NoDetail ? clsFormatReport.rptProductionByAgencyOuthouse() : clsFormatReport.rptProductionByAgencySalesMembershipTypeOuthouse(), showRowGrandTotal: true, showColumnGrandTotal: true);
     }
 
     #endregion ExportRptProductionByAgencyOuthouse

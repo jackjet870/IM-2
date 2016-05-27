@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace IM.Model.Enums
 {
   /// <summary>
-  /// Enumerado que indica si un reporte debe incluir los tours de cortesia y  rescate. 
+  /// Enumerado que indica si un reporte debe incluir los tours de cortesia y  rescate.
   /// </summary>
   ///  <history>
   /// [erodriguez] 05/03/2016 Created
+  /// [aalcocer]   27/05/2016 Modified. Se cambian los nombres
   /// </history>
   public enum EnumSaveCourtesyTours
   {
     [Description("Include Save Courtesy Tours")]
-    sctIncludeSaveCourtesyTours,
+    IncludeSaveCourtesyTours,
+
     [Description("Exclude Save Courtesy Tours")]
-    sctExcludeSaveCourtesyTours,
+    ExcludeSaveCourtesyTours,
+
     [Description("Exclude Save Courtesy Tours Without Sales")]
-    sctExcludeSaveCourtesyToursWithoutSales
+    ExcludeSaveCourtesyToursWithoutSales
   }
 }

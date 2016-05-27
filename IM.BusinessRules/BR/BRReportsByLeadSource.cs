@@ -28,7 +28,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 23/03/2016 Created
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    public static async Task<List<RptCostByPR>> GetRptCostByPR(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas)
+    public static async Task<List<RptCostByPR>> GetRptCostByPR(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas)
     {
       var result = new List<RptCostByPR>();
       await Task.Run(() =>
@@ -59,7 +59,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 23/03/2016 Created
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    public static async Task<List<RptCostByPRWithDetailGifts>> GetRptCostByPRWithDetailGifts(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumDetailGifts detailGifts = EnumDetailGifts.dgDetailGifts)
+    public static async Task<List<RptCostByPRWithDetailGifts>> GetRptCostByPRWithDetailGifts(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumDetailGifts detailGifts = EnumDetailGifts.DetailGifts)
     {
       var result = new List<RptCostByPRWithDetailGifts>();
       await Task.Run(() =>
@@ -91,7 +91,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 29/03/2016 Created
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    public static async Task<List<RptFollowUpByAgency>> GetRptFollowUpByAgencies(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+    public static async Task<List<RptFollowUpByAgency>> GetRptFollowUpByAgencies(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptFollowUpByAgency>();
       await Task.Run(() =>
@@ -123,7 +123,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 29/03/2016 Created
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    public static async Task<List<RptFollowUpByPR>> GeRptFollowUpByPRs(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+    public static async Task<List<RptFollowUpByPR>> GeRptFollowUpByPRs(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptFollowUpByPR>();
       await Task.Run(() =>
@@ -216,7 +216,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<List<RptProductionByGiftQuantity>> GetRptProductionByGiftQuantities(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
-      Dictionary<string, int> giftsQuantitys, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      Dictionary<string, int> giftsQuantitys, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByGiftQuantity>();
       await Task.Run(() =>
@@ -331,7 +331,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<Tuple<GraphMaximum, List<GraphProduction_Weeks>, List<GraphProduction_Months>>> GetGraphProduction(DateTime dtmStart, IEnumerable<string> leadSources,
-      EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       Tuple<GraphMaximum, List<GraphProduction_Weeks>, List<GraphProduction_Months>> result = null;
       await Task.Run(() =>
@@ -412,7 +412,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 21/04/2016 Created
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    public static async Task<List<RptShowFactorByBookingDate>> GetRptShowFactorByBookingDates(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas)
+    public static async Task<List<RptShowFactorByBookingDate>> GetRptShowFactorByBookingDates(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas)
     {
       var result = new List<RptShowFactorByBookingDate>();
       await Task.Run(() =>
@@ -443,7 +443,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 13/05/2016 Created
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    public static async Task<ScoreByPRData> GetRptScoreByPrs(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas)
+    public static async Task<ScoreByPRData> GetRptScoreByPrs(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas)
     {
       var scoreByPRData = new ScoreByPRData();
       await Task.Run(() =>
@@ -513,9 +513,9 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<List<RptProductionByMonth>> GetRptProductionByMonths(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
-      EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, IEnumerable<string> markets = null, bool considerNights = false,
+      EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, IEnumerable<string> markets = null, bool considerNights = false,
       int nightsFrom = 0, int nightsTo = 0, IEnumerable<string> agencies = null, bool considerOriginallyAvailable = false,
-      EnumExternalInvitation external = EnumExternalInvitation.extInclude, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      EnumExternalInvitation external = EnumExternalInvitation.Include, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByMonth>();
       if (markets == null || !markets.Any())
@@ -558,7 +558,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<List<RptContactBookShowQuinellas>> GetRptContactBookShowQuinellas(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
-      EnumExternalInvitation external = EnumExternalInvitation.extInclude, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      EnumExternalInvitation external = EnumExternalInvitation.Include, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptContactBookShowQuinellas>();
       await Task.Run(() =>
@@ -589,7 +589,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 04/04/2016 Created
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    public static async Task<List<RptProductionByAgeInhouse>> GetProductionByAgeInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+    public static async Task<List<RptProductionByAgeInhouse>> GetProductionByAgeInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByAgeInhouse>();
       await Task.Run(() =>
@@ -621,7 +621,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 04/04/2016 Created
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    public static async Task<List<RptProductionByAgeMarketOriginallyAvailableInhouse>> GetProductionByAgeMarketOriginallyAvailableInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+    public static async Task<List<RptProductionByAgeMarketOriginallyAvailableInhouse>> GetProductionByAgeMarketOriginallyAvailableInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByAgeMarketOriginallyAvailableInhouse>();
       await Task.Run(() =>
@@ -664,9 +664,9 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 09/05/2016 Modified. Ahora devuelve una entidad compleja y se agregan los demas entidades que devuelve la consulta
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    public static async Task<ProductionByAgencyInhouseData> GetRptProductionByAgencyInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas,
-      bool considerNights = false, int nightsFrom = 0, int nightsTo = 0, EnumSalesByMemberShipType salesByMembershipType = EnumSalesByMemberShipType.sbmNoDetail,
-      bool onlyQuinellas = false, EnumExternalInvitation external = EnumExternalInvitation.extExclude, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+    public static async Task<ProductionByAgencyInhouseData> GetRptProductionByAgencyInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas,
+      bool considerNights = false, int nightsFrom = 0, int nightsTo = 0, EnumSalesByMemberShipType salesByMembershipType = EnumSalesByMemberShipType.NoDetail,
+      bool onlyQuinellas = false, EnumExternalInvitation external = EnumExternalInvitation.Exclude, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var productionByAgencyInhouseData = new ProductionByAgencyInhouseData();
       await Task.Run(() =>
@@ -710,7 +710,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<List<RptProductionByContractAgencyInhouse>> GetRptProductionByContractAgencyInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
-      IEnumerable<string> markets = null, IEnumerable<string> agencies = null, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      IEnumerable<string> markets = null, IEnumerable<string> agencies = null, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByContractAgencyInhouse>();
 
@@ -751,8 +751,8 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<List<RptProductionByContractAgencyMarketOriginallyAvailableInhouse>> GetRptProductionByContractAgencyMarketOriginallyAvailableInhouses(DateTime dtmStart,
-      DateTime dtmEnd, IEnumerable<string> leadSources, IEnumerable<string> markets = null, IEnumerable<string> agencies = null, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas,
-      EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      DateTime dtmEnd, IEnumerable<string> leadSources, IEnumerable<string> markets = null, IEnumerable<string> agencies = null, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas,
+      EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByContractAgencyMarketOriginallyAvailableInhouse>();
 
@@ -798,8 +798,8 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<List<RptProductionByNationalityInhouse>> GetRptProductionByNationalityInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, IEnumerable<string> pRs = null,
-      EnumProgram program = EnumProgram.All, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumSaveCourtesyTours filterSaveCourtesyTours = EnumSaveCourtesyTours.sctIncludeSaveCourtesyTours,
-      EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      EnumProgram program = EnumProgram.All, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumSaveCourtesyTours filterSaveCourtesyTours = EnumSaveCourtesyTours.IncludeSaveCourtesyTours,
+      EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByNationalityInhouse>();
 
@@ -845,8 +845,8 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static async Task<List<RptProductionByNationalityMarketOriginallyAvailableInhouse>> GetRptProductionByNationalityMarketOriginallyAvailableInhouses(DateTime dtmStart, DateTime dtmEnd,
       IEnumerable<string> leadSources, IEnumerable<string> pRs = null,
-      EnumProgram program = EnumProgram.All, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumSaveCourtesyTours filterSaveCourtesyTours = EnumSaveCourtesyTours.sctIncludeSaveCourtesyTours,
-      EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      EnumProgram program = EnumProgram.All, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumSaveCourtesyTours filterSaveCourtesyTours = EnumSaveCourtesyTours.IncludeSaveCourtesyTours,
+      EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByNationalityMarketOriginallyAvailableInhouse>();
 
@@ -887,7 +887,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<List<RptProductionByCoupleTypeInhouse>> GetRptProductionByCoupleTypeInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources, IEnumerable<string> pRs = null,
-      EnumProgram program = EnumProgram.All, EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      EnumProgram program = EnumProgram.All, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByCoupleTypeInhouse>();
 
@@ -925,7 +925,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<List<RptProductionByDeskInhouse>> GetRptProductionByDeskInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
-      EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByDeskInhouse>();
 
@@ -959,7 +959,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<List<RptProductionByGroupInhouse>> GetRptProductionByGroupInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
-      EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByGroupInhouse>();
 
@@ -993,7 +993,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<List<RptProductionByGuestStatusInhouse>> GetRptProductionByGuestStatusInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
-      EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByGuestStatusInhouse>();
 
@@ -1030,7 +1030,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static async Task<List<RptProductionByMemberTypeAgencyInhouse>> GetRptProductionByMemberTypeAgencyInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
       IEnumerable<string> markets = null, IEnumerable<string> agencies = null,
-      EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByMemberTypeAgencyInhouse>();
 
@@ -1072,7 +1072,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static async Task<List<RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse>> GetRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
       IEnumerable<string> markets = null, IEnumerable<string> agencies = null,
-      EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse>();
 
@@ -1112,7 +1112,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<List<RptProductionByPRInhouse>> GetRptProductionByPRInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
-      EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival, bool basedOnPRLocation = false)
+      EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival, bool basedOnPRLocation = false)
     {
       var result = new List<RptProductionByPRInhouse>();
 
@@ -1146,7 +1146,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<List<RptProductionByPRGroupInhouse>> GetRptProductionByPRGroupInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
-      EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByPRGroupInhouse>();
 
@@ -1180,7 +1180,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<List<RptProductionByPRSalesRoomInhouse>> GetRptProductionByPRSalesRoomInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
-      EnumQuinellas considerQuinellas = EnumQuinellas.quNoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.boaNoBasedOnArrival)
+      EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByPRSalesRoomInhouse>();
 
@@ -1327,7 +1327,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [vku] 14/Abr/2016 Created
     /// </history>
-    public static List<RptProductionByPROuthouse> GetRptProductionByPROuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram programa = EnumProgram.All, EnumFilterDeposit filterDeposit = EnumFilterDeposit.fdAll, EnumBasedOnBooking basedOnBooking = EnumBasedOnBooking.bobNoBasedOnBooking)
+    public static List<RptProductionByPROuthouse> GetRptProductionByPROuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram programa = EnumProgram.All, EnumFilterDeposit filterDeposit = EnumFilterDeposit.fdAll, EnumBasedOnBooking basedOnBooking = EnumBasedOnBooking.NoBasedOnBooking)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -1407,7 +1407,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [vku] 15/Abr/2016 Created
     /// </history>
-    public static ProductionByAgencyOuthouseData GetRptProductionByAgencyOuthouseData(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSalesByMemberShipType salesByMemberShipType = EnumSalesByMemberShipType.sbmNoDetail)
+    public static ProductionByAgencyOuthouseData GetRptProductionByAgencyOuthouseData(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSalesByMemberShipType salesByMemberShipType = EnumSalesByMemberShipType.NoDetail)
     {
       ProductionByAgencyOuthouseData ProductionByAgencyOuthouseData = new ProductionByAgencyOuthouseData();
       ProductionByAgencyOuthouseData.ProductionByAgencyOuthouse = new List<RptProductionByAgencyOuthouse>();
@@ -1449,7 +1449,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [vku] 20/Abr/2016 Created
     /// </history>
-    public static List<RptProductionByAgencySalesRoomOuthouse> GetRptProductionByAgencySalesRoomOuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSalesByMemberShipType salesByMemberShipType = EnumSalesByMemberShipType.sbmNoDetail)
+    public static List<RptProductionByAgencySalesRoomOuthouse> GetRptProductionByAgencySalesRoomOuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSalesByMemberShipType salesByMemberShipType = EnumSalesByMemberShipType.NoDetail)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -1639,7 +1639,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [vku] 22/Abr/2016 Created
     /// </history>
-    public static List<RptProductionByNationalityOuthouse> GetRptProductionByNationalityOuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSaveCourtesyTours saveCourtesyTours = EnumSaveCourtesyTours.sctIncludeSaveCourtesyTours)
+    public static List<RptProductionByNationalityOuthouse> GetRptProductionByNationalityOuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSaveCourtesyTours saveCourtesyTours = EnumSaveCourtesyTours.IncludeSaveCourtesyTours)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -1669,7 +1669,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [vku] 22/Abr/2016 Created
     /// </history>
-    public static List<RptProductionByNationalitySalesRoomOuthouse> GetRptProductionByNationalitySalesRoomOuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSaveCourtesyTours saveCourtesyTours = EnumSaveCourtesyTours.sctIncludeSaveCourtesyTours)
+    public static List<RptProductionByNationalitySalesRoomOuthouse> GetRptProductionByNationalitySalesRoomOuthouse(DateTime dtmStart, DateTime dtmEnd, string leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposits = EnumFilterDeposit.fdAll, EnumSaveCourtesyTours saveCourtesyTours = EnumSaveCourtesyTours.IncludeSaveCourtesyTours)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -1697,7 +1697,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [vku] 25/Abr/2016 Created
     /// </history>
-    public static List<RptProductionByPRSalesRoomOuthouse> GetRptProductionByPRSalesRoomOuthouse(DateTime dtmStart, DateTime dtmEnd, String leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposit = EnumFilterDeposit.fdAll, EnumBasedOnBooking basedOnBooking = EnumBasedOnBooking.bobNoBasedOnBooking)
+    public static List<RptProductionByPRSalesRoomOuthouse> GetRptProductionByPRSalesRoomOuthouse(DateTime dtmStart, DateTime dtmEnd, String leadSources, string PRs, EnumProgram program = EnumProgram.All, EnumFilterDeposit filterDeposit = EnumFilterDeposit.fdAll, EnumBasedOnBooking basedOnBooking = EnumBasedOnBooking.NoBasedOnBooking)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {

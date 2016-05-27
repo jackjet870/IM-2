@@ -262,11 +262,11 @@ namespace IM.ProcessorInhouse.Forms
       GetFirstDayValue();
 
       _enumProgram = EnumProgram.Inhouse; //Programa
-      _enumBasedOnArrival = EnumBasedOnArrival.boaBasedOnArrival; //Basado en llegada
-      _enumQuinellas = EnumQuinellas.quNoQuinellas; //No considerar quinielas
-      _enumSaveCourtesyTours = EnumSaveCourtesyTours.sctIncludeSaveCourtesyTours; //Incluir tours de rescate y cortesia
-      _enumSalesByMemberShipType = EnumSalesByMemberShipType.sbmDetail; //Detallar ventas por tipo de membresia
-      _enumExternalInvitation = EnumExternalInvitation.extInclude; //Incluir invitaciones externas
+      _enumBasedOnArrival = EnumBasedOnArrival.BasedOnArrival; //Basado en llegada
+      _enumQuinellas = EnumQuinellas.NoQuinellas; //No considerar quinielas
+      _enumSaveCourtesyTours = EnumSaveCourtesyTours.IncludeSaveCourtesyTours; //Incluir tours de rescate y cortesia
+      _enumSalesByMemberShipType = EnumSalesByMemberShipType.Detail; //Detallar ventas por tipo de membresia
+      _enumExternalInvitation = EnumExternalInvitation.Include; //Incluir invitaciones externas
     }
 
     #endregion SetupParameters

@@ -507,8 +507,8 @@ namespace IM.ProcessorSales.Forms
         frmPrs.goal = Convert.ToDecimal(txtGoal.Text.Trim());
 
       //Region de checks
-      frmPrs.basedOnArrival = (chkBasedOnArrival.IsChecked.Value) ? EnumBasedOnArrival.boaBasedOnArrival : EnumBasedOnArrival.boaNoBasedOnArrival;
-      frmPrs.quinellas = (chkQuinellas.IsChecked.Value) ? EnumQuinellas.quQuinellas : EnumQuinellas.quNoQuinellas;
+      frmPrs.basedOnArrival = (chkBasedOnArrival.IsChecked.Value) ? EnumBasedOnArrival.BasedOnArrival : EnumBasedOnArrival.NoBasedOnArrival;
+      frmPrs.quinellas = (chkQuinellas.IsChecked.Value) ? EnumQuinellas.Quinellas : EnumQuinellas.NoQuinellas;
       frmPrs.groupedByTeams = chkGroupedByTeams.IsChecked.Value;
       frmPrs.includeAllSalesmen = chkIncludeAllSalesmen.IsChecked.Value;
 
