@@ -62,8 +62,9 @@ namespace IM.ProcessorOuthouse.Classes
                           
                                  }).ToList();
 
-      DataTable dtData = TableHelper.GetDataTableFromList(lstDepositsPayments, replaceStringNullOrWhiteSpace: true);
+      DataTable dtData = TableHelper.GetDataTableFromList(lstDepositsPayments, true, false, true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptDepositsPaymentByPR(), showRowGrandTotal: true);
+     
     }
 
     #endregion ExportRptDepositsPaymentByPR
@@ -80,14 +81,13 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///   [vku] 11/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptGiftsReceivedBySR(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<object> lstRptGiftsReceivedBySR)
+    public static FileInfo ExportRptGiftsReceivedBySR(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, GiftsReceivedBySRData lstRptGiftsReceivedBySR)
     {
-      List<RptGiftsReceivedBySR> lstGiftsReceivedBySR = new List<RptGiftsReceivedBySR>();
-      lstGiftsReceivedBySR.AddRange((IEnumerable<RptGiftsReceivedBySR>)lstRptGiftsReceivedBySR[0]);
-      List<Currency> curriencies = lstRptGiftsReceivedBySR[1] as List<Currency>;
+      var lstGiftsReceivedBySR = lstRptGiftsReceivedBySR.GiftsReceivedBySR;
+      var currencies = lstRptGiftsReceivedBySR.Currencies;
 
       var lstGifRecBySRWithCu = (from giftRecBySR in lstGiftsReceivedBySR
-                                 join cu in curriencies on giftRecBySR.Currency equals cu.cuID
+                                 join cu in currencies on giftRecBySR.Currency equals cu.cuID
                                  select new
                                  {
                                    giftRecBySR.SalesRoom,
@@ -121,7 +121,6 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu);
       return EpplusHelper.CreateExcelCustomPivot(dtData, filters, strReport, dateRangeFileName, clsFormatReport.rptGiftsRecivedBySR(), blnShowSubtotal: true, blnRowGrandTotal: true);
     }
-
     #endregion ExportRptGiftsReceivedBySR
 
     #region ExportRptGuestsShowNoPresentedInvitation
@@ -325,6 +324,7 @@ namespace IM.ProcessorOuthouse.Classes
           c.AverageSale
         }).ToList();
         dtData = TableHelper.GetDataTableFromList(lstProductionByAgencyAux, replaceStringNullOrWhiteSpace: true);
+        return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByAgencyOuthouse(), showRowGrandTotal: true, showColumnGrandTotal: true);
       }
       else
       {
@@ -351,7 +351,10 @@ namespace IM.ProcessorOuthouse.Classes
                                                              mt.mtN,
                                                              prodByAgencyMemshipType.Sales,
                                                              prodByAgencyMemshipType.SalesAmount,
-                                                             prodbyAgency.SalesAmount_CANCEL,
+                                                             SalesCancel = prodbyAgency.Sales_CANCEL,
+                                                             SalesAmountCancel = prodbyAgency.SalesAmount_CANCEL,
+                                                             SalesTotal = prodbyAgency.Sales_TOTAL,
+                                                             SalesAmountTotal = prodbyAgency.SalesAmount_TOTAL,
                                                              prodbyAgency.ShowsFactor,
                                                              prodbyAgency.CancelFactor,
                                                              prodbyAgency.Efficiency,
@@ -360,10 +363,9 @@ namespace IM.ProcessorOuthouse.Classes
                                                            }).ToList();
 
         dtData = TableHelper.GetDataTableFromList(lstProductionByAgencySalesMembershipTypeAux, replaceStringNullOrWhiteSpace: true);
+        return EpplusHelper.CreateExcelCustomPivot(dtData, filters, strReport, dateRangeFileName, clsFormatReport.rptProductionByAgencySalesMembershipTypeOuthouse(), blnShowSubtotal: true, blnRowGrandTotal: true, blnColumnGrandTotal: true);
       }
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, salesByMemberShipType == EnumSalesByMemberShipType.NoDetail ? clsFormatReport.rptProductionByAgencyOuthouse() : clsFormatReport.rptProductionByAgencySalesMembershipTypeOuthouse(), showRowGrandTotal: true, showColumnGrandTotal: true);
     }
-
     #endregion ExportRptProductionByAgencyOuthouse
 
     #region ExportRptProductionByAgencySalesRoomOuthouse
@@ -510,7 +512,7 @@ namespace IM.ProcessorOuthouse.Classes
     /// <param name="strReport">Nombre del reporte</param>
     /// <param name="dateRangeFileName">Rango de fechas</param>
     /// <param name="filters">Filtros</param>
-    /// <param name="lstRptProductionByCoupleTypeSalesRoomOuthouse">Lista de production por tipo de pareja yt sala</param>
+    /// <param name="lstRptProductionByCoupleTypeSalesRoomOuthouse">Lista de production por tipo de pareja y sala</param>
     /// <history>
     ///   [vku] 18/Abr/2016 Created
     /// </history>
@@ -542,6 +544,50 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByCoupleTypeSalesRoomOuthouseAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByCoupleTypeSalesRoomOuthouse(), showRowGrandTotal: true);
     }
+
+    #region ExportRptProductionByFlightSalesRoom
+    /// <summary>
+    ///  Obtiene los datos para el reporte productionByFlightSalesRoom
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <param name="dateRangeFileName">Rango de fechas</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="lstRptProductionByFlightSalesRoom">lista de produccion por vuelo y sala</param>
+    /// <history>
+    ///   [VKU] 17/May/2016 Created
+    /// </history>
+    public static FileInfo ExportRptProductionByFlightSalesRoom(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionByFlightSalesRoom> lstRptProductionByFlightSalesRoom)
+    {
+      var lstRptProductionByFlightSalesRoomAux = lstRptProductionByFlightSalesRoom.Select(c => new
+      {
+        c.FlightID,
+        c.SalesRoomID,
+        c.Books,
+        c.InOuts,
+        c.GrossBooks,
+        c.Shows,
+        c.Sales_PROC,
+        c.SalesAmount_PROC,
+        c.Sales_OOP,
+        c.SalesAmount_OOP,
+        c.Sales_PEND,
+        c.SalesAmount_PEND,
+        c.Sales_CANCEL,
+        c.SalesAmount_CANCEL,
+        c.Sales_TOTAL,
+        c.SalesAmount_TOTAL,
+        c.Subtotal,
+        c.ShowsFactor,
+        c.CancelFactor,
+        c.Efficiency,
+        c.ClosingFactor,
+        c.AverageSale
+      }).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByFlightSalesRoomAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByFlightSalesRoom(), showRowGrandTotal: true);
+    }
+    #endregion
 
     #endregion ExportRptProductionByCoupleTypeSalesRoomOuthouse
 
@@ -672,8 +718,183 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByGuestStatusOuthouseAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByGuestStatusOuthouse(), showRowGrandTotal: true);
     }
+  #endregion
 
-    #endregion ExportRptProductionByGuestStatusOuthouse
+    #region ExportRptProductionByHotel
+  /// <summary>
+  ///   Obtiene los datos para el reporte productionbyhotel 
+  /// </summary>
+  /// <param name="strReport">Nombre del reporte</param>
+  /// <param name="dateRangeFileName">Rango de fechas</param>
+  /// <param name="filters">Filtros</param>
+  /// <param name="lstRptProductionByHotel">Lista de produccion por hotel</param>
+  /// <history>
+  ///   [vku] 17/May/2016 Created
+  /// </history>
+  public static FileInfo ExportRptProductionByHotel(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionByHotel> lstRptProductionByHotel)
+    {
+      var lstRptProductionByHotelAux = lstRptProductionByHotel.Select(c => new
+      {
+        c.HotelID,
+        c.Books,
+        c.InOuts,
+        c.GrossBooks,
+        c.Shows,
+        c.Sales_PROC,
+        c.SalesAmount_PROC,
+        c.Sales_OOP,
+        c.SalesAmount_OOP,
+        c.Sales_PEND,
+        c.SalesAmount_PEND,
+        c.Sales_CANCEL,
+        c.SalesAmount_CANCEL,
+        c.Sales_TOTAL,
+        c.SalesAmount_TOTAL,
+        c.Subtotal,
+        c.ShowsFactor,
+        c.CancelFactor,
+        c.Efficiency,
+        c.ClosingFactor,
+        c.AverageSale
+      }).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByHotelAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByHotel(), showRowGrandTotal: true);
+    }
+    #endregion
+
+    #region ExportRptProductionByHotelSalesRoom
+    /// <summary>
+    ///  Obtiene los datos para el reporte de produccion por hotel y sala
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <param name="dateRangeFileName">Rango de fechas</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="lstRptProductionByHotelSalesRoom">Lista de produccion por hotel y sala</param>
+    /// <history>
+    ///   [vku] 19/May/2016 Created
+    /// </history>
+    public static FileInfo ExportRptProductionByHotelSalesRoom(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionByHotelSalesRoom> lstRptProductionByHotelSalesRoom)
+    {
+      var lstRptProductionByHotelSalesRoomAux = lstRptProductionByHotelSalesRoom.Select(c => new
+      {
+        c.HotelID,
+        c.SalesRoomID,
+        c.Books,
+        c.InOuts,
+        c.GrossBooks,
+        c.Shows,
+        c.Sales_PROC,
+        c.SalesAmount_PROC,
+        c.Sales_OOP,
+        c.SalesAmount_OOP,
+        c.Sales_PEND,
+        c.SalesAmount_PEND,
+        c.Sales_CANCEL,
+        c.SalesAmount_CANCEL,
+        c.Sales_TOTAL,
+        c.SalesAmount_TOTAL,
+        c.Subtotal,
+        c.ShowsFactor,
+        c.CancelFactor,
+        c.Efficiency,
+        c.ClosingFactor,
+        c.AverageSale
+      }).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByHotelSalesRoomAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByHotelSalesRoom(), showRowGrandTotal: true);
+    }
+    #endregion
+
+    #region ExportRptProductionByHotelGroup
+    /// <summary>
+    ///   Obtiene los datos para el reporte de produccion por grupo hotelero
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <param name="dateRangeFileName">Rango de fechas</param>
+    /// <param name="filters">Flitros</param>
+    /// <param name="lstRptProductionByHotelGroup">lista de produccion por grupo hotelero</param>
+    /// <history>
+    ///   [vku] 19/May/2016 Created
+    /// </history>
+    public static FileInfo ExportRptProductionByHotelGroup(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionByHotelGroup> lstRptProductionByHotelGroup)
+    {
+      var lstRptProductionByHotelGroupAux = lstRptProductionByHotelGroup.Select(c => new
+      {
+        c.HotelID,
+        c.hoGroup,
+        c.Books,
+        c.InOuts,
+        c.GrossBooks,
+        c.Shows,
+        c.Sales_PROC,
+        c.SalesAmount_PROC,
+        c.Sales_OOP,
+        c.SalesAmount_OOP,
+        c.Sales_PEND,
+        c.SalesAmount_PEND,
+        c.Sales_CANCEL,
+        c.SalesAmount_CANCEL,
+        c.Sales_TOTAL,
+        c.SalesAmount_TOTAL,
+        c.Subtotal,
+        c.ShowsFactor,
+        c.CancelFactor,
+        c.Efficiency,
+        c.ClosingFactor,
+        c.AverageSale
+      }).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByHotelGroupAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByHotelGroup(), showRowGrandTotal: true);
+    }
+    #endregion
+
+    #region ExportRptProductionByHotelGroupSalesRoom
+    /// <summary>
+    ///  Obtiene los datos para el reporte de produccion por grupo hotelero y sala
+    /// </summary>
+    /// <param name="strReport"></param>
+    /// <param name="dateRangeFileName"></param>
+    /// <param name="filters"></param>
+    /// <param name="lstRptProductionByHotelGroupSalesRoom"></param>
+    /// <history>
+    ///   [vku] 19/May/2016 Created
+    /// </history>
+    public static FileInfo ExportRptProductionByHotelGroupSalesRoom(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionByHotelGroupSalesRoom> lstRptProductionByHotelGroupSalesRoom)
+    {
+      var lstRptProductionByHotelGroupSalesRoomAux = lstRptProductionByHotelGroupSalesRoom.Select(c => new
+      {
+        c.hoGroup,
+        c.SalesRoomID,
+        c.HotelID,
+        c.Books,
+        c.InOuts,
+        c.GrossBooks,
+        c.Shows,
+        c.Sales_PROC,
+        c.SalesAmount_PROC,
+        c.Sales_OOP,
+        c.SalesAmount_OOP,
+        c.Sales_PEND,
+        c.SalesAmount_PEND,
+        c.Sales_CANCEL,
+        c.SalesAmount_CANCEL,
+        c.Sales_TOTAL,
+        c.SalesAmount_TOTAL,
+        c.Subtotal,
+        c.ShowsFactor,
+        c.CancelFactor,
+        c.Efficiency,
+        c.ClosingFactor,
+        c.AverageSale
+      }).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByHotelGroupSalesRoomAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByHotelGroupSalesRoom(), showRowGrandTotal: true);
+    }
+    #endregion
 
     #region ExportRptProductionByNationalityOuthouse
 
@@ -857,8 +1078,97 @@ namespace IM.ProcessorOuthouse.Classes
       DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByPRContactOuthouseAux, replaceStringNullOrWhiteSpace: true);
       return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByPRContactOuthouse(), showRowGrandTotal: true);
     }
+  #endregion
 
-    #endregion ExportRptProductionByPRContactOuthouse
+    #region ExportRptProductionByWave
+  /// <summary>
+  ///   Obtiene los datos para el reporte de produccion por horario
+  /// </summary>
+  /// <param name="strReport">Nombre del reporte</param>
+  /// <param name="dateRangeFileName">Rango de folios</param>
+  /// <param name="filters">Filtros</param>
+  /// <param name="lstRptProductionByWave">Lista de produccion por horario</param>
+  /// <history>
+  ///   [vku] 20/May/2016 Created
+  /// </history>
+  public static FileInfo ExportRptProductionByWave(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionByWave> lstRptProductionByWave)
+    {
+
+      var lstRptProductionByWaveAux = lstRptProductionByWave.Select(c => new
+      {
+        BookTime = DateTime.Parse(c.BookTime.ToString()).ToString("hh:mm:ss tt"),
+        c.SalesRoomID,
+        c.Books,
+        c.InOuts,
+        c.GrossBooks,
+        c.Shows,
+        c.Sales_PROC,
+        c.SalesAmount_PROC,
+        c.Sales_OOP,
+        c.SalesAmount_OOP,
+        c.Sales_PEND,
+        c.SalesAmount_PEND,
+        c.Sales_CANCEL,
+        c.SalesAmount_CANCEL,
+        c.Sales_TOTAL,
+        c.SalesAmount_TOTAL,
+        c.Subtotal,
+        c.ShowsFactor,
+        c.CancelFactor,
+        c.Efficiency,
+        c.ClosingFactor,
+        c.AverageSale
+      }).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByWaveAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByWave(), showRowGrandTotal: true);
+    }
+    #endregion
+
+    #region ExportRptProductionByWaveSalesRoom
+    /// <summary>
+    ///   Obtiene los datos para el reporte de produccion por horario y sala
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <param name="dateRangeFileName">Rango de folios</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="lstRptProductionByWave">Lista de produccion por horario</param>
+    /// <history>
+    ///   [vku] 20/May/2016 Created
+    /// </history>
+    public static FileInfo ExportRptProductionByWaveSalesRoom(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionByWaveSalesRoom> lstRptProductionByWaveSalesRoom)
+    {
+
+      var lstRptProductionByWaveAux = lstRptProductionByWaveSalesRoom.Select(c => new
+      {
+        BookTime = DateTime.Parse(c.BookTime.ToString()).ToString("hh:mm:ss tt"),
+        c.SalesRoomID,
+        c.Books,
+        c.InOuts,
+        c.GrossBooks,
+        c.Shows,
+        c.Sales_PROC,
+        c.SalesAmount_PROC,
+        c.Sales_OOP,
+        c.SalesAmount_OOP,
+        c.Sales_PEND,
+        c.SalesAmount_PEND,
+        c.Sales_CANCEL,
+        c.SalesAmount_CANCEL,
+        c.Sales_TOTAL,
+        c.SalesAmount_TOTAL,
+        c.Subtotal,
+        c.ShowsFactor,
+        c.CancelFactor,
+        c.Efficiency,
+        c.ClosingFactor,
+        c.AverageSale
+      }).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptProductionByWaveAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptProductionByWave(), showRowGrandTotal: true);
+    }
+    #endregion
 
     #region ExportRptFoliosInvitationByDateFolio
 
@@ -879,5 +1189,101 @@ namespace IM.ProcessorOuthouse.Classes
     }
 
     #endregion ExportRptFoliosInvitationByDateFolio
+
+    #region ExportRptFoliosInvitationOuthouseByPR
+    /// <summary>
+    ///  Obtiene los datos para el reporte FoliosInvitationOuthouseByPR
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <param name="dateRangeFileName">Rango de fechas</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="lstRptFoliosInvitationOuthouseByPR">Lista de Folios de invitationbyPR</param>
+    /// <history>
+    ///   [vku] 05/May/2016 Created
+    /// </history>
+    public static FileInfo ExportRptFoliosInvitationOuthouseByPR(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptFoliosInvitationsOuthouseByPR> lstRptFoliosInvitationOuthouseByPR)
+    {
+      var lstRptFoliosInvitationOuthouseByPRAux = lstRptFoliosInvitationOuthouseByPR.Select(c => new
+      {
+        c.peN,
+        c.guStatus,
+        c.guSerie,   
+        c.guFrom,
+        c.guTo,
+        c.lsN,
+        c.guLastName1,
+        c.guFirstName1,
+        c.guBookD,
+      }).OrderBy(c=>c.peN).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptFoliosInvitationOuthouseByPRAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptFoliosInvitationOuthouseByPR());
+    }
+    #endregion
+
+    #region ExportRptFoliosCxCByPR
+    /// <summary>
+    ///   Obtiene los datos para el reporte FoliosCxCByPR
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <param name="dateRangeFileName">Rango de fechas</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="lstRptFoliosCxCByPR">Lista de Folios CxC by PR</param>
+    /// <history>
+    ///   [vku] 06/May/2016 Created
+    /// </history>
+    public static FileInfo ExportRptFoliosCxCByPR(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptFoliosCxCByPR> lstRptFoliosCxCByPR)
+    {
+      var lstRptFoliosCxCByPRAux = lstRptFoliosCxCByPR.Select(c => new
+      {
+        c.peN,
+        c.guStatus,
+        c.guFrom,
+        c.guTo,
+        c.lsN,
+        c.guLastName1,
+        c.guFirstName1,
+        c.guBookD,
+      }).OrderBy(c=>c.peN).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptFoliosCxCByPRAux, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptFoliosCxCByPR());  
+    }
+    #endregion
+
+    #region ExportRptFoliosCXC
+    /// <summary>
+    ///   Obtiene los datos para el reporte Folios CXC
+    /// </summary>
+    /// <param name="strReport">Nombre del reporte</param>
+    /// <param name="dateRangeFileName">Rango de fechas</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="lstRptFoliosCxC">Lista de folios CXC</param>
+    /// <history>
+    ///   [vku] 07/May/2016 Created
+    /// </history>
+    public static FileInfo ExportRptFoliosCXC(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptFoliosCXC> lstRptFoliosCXC)
+    {
+      var lstRptFoliosCXCAux = lstRptFoliosCXC.Select(c => new
+      {
+        c.EsShow,
+        c.Tipo,
+        c.bdFolioCXC,
+        c.PR,
+        c.PRN,
+        c.guOutInvitNum,
+        c.lsN,
+        c.guLastName1,
+        c.guFirstName1,
+        c.guBookD,
+        c.bdUserCXC,
+        c.peN,
+        c.bdEntryDCXC
+      }).ToList();
+
+      DataTable dtData = TableHelper.GetDataTableFromList(lstRptFoliosCXCAux);
+      return EpplusHelper.CreateExcelCustom(dtData, filters, strReport, dateRangeFileName, clsFormatReport.rptFoliosCXC());
+    }
+    #endregion
   }
 }

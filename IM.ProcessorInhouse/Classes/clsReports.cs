@@ -890,14 +890,14 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 22/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptGiftsReceivedBySR(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<object> lstRptGiftsReceivedBySR)
+    internal static FileInfo ExportRptGiftsReceivedBySR(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, GiftsReceivedBySRData lstRptGiftsReceivedBySR)
     {
-      List<RptGiftsReceivedBySR> lstGiftsReceivedBySR = new List<RptGiftsReceivedBySR>();
-      lstGiftsReceivedBySR.AddRange((IEnumerable<RptGiftsReceivedBySR>)lstRptGiftsReceivedBySR[0]);
-      List<Currency> curriencies = lstRptGiftsReceivedBySR[1] as List<Currency>;
+      var lstGiftsReceivedBySR = lstRptGiftsReceivedBySR.GiftsReceivedBySR;
+      var currencies = lstRptGiftsReceivedBySR.Currencies;
+
 
       var lstGifRecBySRWithCu = (from giftRecBySR in lstGiftsReceivedBySR
-                                 join cu in curriencies on giftRecBySR.Currency equals cu.cuID
+                                 join cu in currencies on giftRecBySR.Currency equals cu.cuID
                                  select new
                                  {
                                    giftRecBySR.SalesRoom,

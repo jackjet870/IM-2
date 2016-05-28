@@ -108,6 +108,7 @@
     <Compile Include="Classes\DepositsPaymentByPRData.cs" />
     <Compile Include="Classes\ExcelFormatGroupHeaders.cs" />
     <Compile Include="Classes\ExcelFormatTable.cs" />
+    <Compile Include="Classes\GiftsReceivedBySRData.cs" />
     <Compile Include="Classes\Invitation.cs" />
     <Compile Include="Classes\NoteGuest.cs" />
     <Compile Include="Classes\InvitationData.cs" />

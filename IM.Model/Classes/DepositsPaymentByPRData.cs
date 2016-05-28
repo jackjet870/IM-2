@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace IM.Model.Classes
 {
   /// <summary>
-  ///   Entidada que trae la informacion para el reporte de pago de depositos a los PRs (Comisiones de PRs de Outhouse)
+  ///   Entidad que trae la informacion para el reporte de pago de depositos a los PRs (Comisiones de PRs de Outhouse)
   /// </summary>
   /// <history>
   ///   [vku] 26/Abr/2016 Created

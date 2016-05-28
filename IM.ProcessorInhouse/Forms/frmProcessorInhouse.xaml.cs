@@ -720,7 +720,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Gifts Received by Sales Room
 
         case EnumRptLeadSource.GiftsReceivedbySalesRoom:
-          list.AddRange(BRReportsByLeadSource.GetRptGiftsReceivedBySR(_dtmStart, _dtmEnd, string.Join(",", _lstLeadSources),
+          list.Add(BRReportsByLeadSource.GetRptGiftsReceivedBySRData(_dtmStart, _dtmEnd, string.Join(",", _lstLeadSources),
             string.Join(",", _lstCharteTo), string.Join(",", _lstGifts)));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else
@@ -732,7 +732,7 @@ namespace IM.ProcessorInhouse.Forms
             filters.Add(new Tuple<string, string>(_frmFilter.grdGifts.Columns[0].Header.ToString(),
               _frmFilter.grdGifts.Items.Count == _lstGifts.Count ? "ALL" : string.Join(",", _lstGifts)));
 
-            finfo = clsReports.ExportRptGiftsReceivedBySR(reportname, dateRangeFileNameRep, filters, list);
+            finfo = clsReports.ExportRptGiftsReceivedBySR(reportname, dateRangeFileNameRep, filters, list.First());
           }
           break;
 

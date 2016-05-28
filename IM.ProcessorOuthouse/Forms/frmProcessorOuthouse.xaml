@@ -5,85 +5,128 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.ProcessorOuthouse.Forms"
         mc:Ignorable="d"
-        Title="Processor Outhouse" Height="650" Width="800" Icon="/IM.ProcessorOuthouse;component/Images/IM.ico" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Processor Outhouse" Height="650" Width="800" Icon="/IM.ProcessorOuthouse;component/Images/IM.ico" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Closing="Window_Closing">
+    <!--#region window.resources-->
+    <Window.Resources>
+        <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="{x:Type DataGrid}">
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="GridLinesVisibility" Value="None" />
+            <Setter Property="SelectionMode" Value="Single" />
+        </Style>
+        <Style TargetType="{x:Type DataGridRow}">
+            <EventSetter Event="MouseDoubleClick" Handler="grdrpt_MouseDoubleClick" />
+            <EventSetter Event="PreviewKeyDown" Handler="grdrp_PreviewKeyDown" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="LightBlue" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <!--#endregion-->
+    
     <Grid>
-        <DataGrid x:Name="grdRptsByLeadSource" Grid.Row="1" SelectionMode="Single" CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" HorizontalAlignment="Left" Margin="5,53,0,0" VerticalAlignment="Top" Height="464" Width="390" AutoGenerateColumns="False" GridLinesVisibility="None">
-            <DataGrid.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkGray"/>
-                <Style TargetType="DataGridRow">
-                    <EventSetter Event="MouseDoubleClick" Handler="grdrptLeadSources_dblClick"/>
-                </Style>
-            </DataGrid.Resources>
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding rptName}" IsReadOnly="True" Width="*">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}">
-                            <Setter Property="Content" Value="REPORTS BY LEAD SOURCE"/>
-                            <Setter Property="FontWeight" Value="Bold"/>
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        <DataGrid x:Name="grdRptsByPR" Grid.Row="1" SelectionMode="Single" CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" HorizontalAlignment="Left" Margin="401,53,0,0" VerticalAlignment="Top" Height="284" Width="390" AutoGenerateColumns="False" GridLinesVisibility="None">
-            <DataGrid.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkGray"/>
-                <Style TargetType="DataGridRow">
-                    <EventSetter Event="MouseDoubleClick" Handler="grdrptByPR_dblClick"/>
-                </Style>
-            </DataGrid.Resources>
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding rptName}" IsReadOnly="True" Width="*">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}">
-                            <Setter Property="Content" Value="REPORTS BY PR"/>
-                            <Setter Property="FontWeight" Value="Bold"/>
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+       <!--#region Nombre Usuario-->
         <Label x:Name="lblUserName" Content="User Name" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="401,16,0,0" VerticalAlignment="Top" Width="390" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+       <!--#endregion-->
+        
+       <!--#region Grids-->
+       <!--#region grdRptsByLeadSource-->
+            <DataGrid x:Name="grdRptsByLeadSource" Grid.Row="1" SelectionMode="Single" CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" HorizontalAlignment="Left" Margin="5,53,0,0" VerticalAlignment="Top" Height="464" Width="390" AutoGenerateColumns="False" GridLinesVisibility="None">
+                <DataGrid.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkGray"/>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding rptName}" IsReadOnly="True" Width="*">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Content" Value="REPORTS BY LEAD SOURCE"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <!--#endregion-->
+        
+       <!--#region grdRptsByPR-->
+            <DataGrid x:Name="grdRptsByPR" Grid.Row="1" SelectionMode="Single" CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" HorizontalAlignment="Left" Margin="401,53,0,0" VerticalAlignment="Top" Height="284" Width="390" AutoGenerateColumns="False" GridLinesVisibility="None">
+                <DataGrid.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkGray"/>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding rptName}" IsReadOnly="True" Width="*">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Content" Value="REPORTS BY PR"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <!--#endregion-->
+        
+       <!--#region grdOtherRpts-->
+            <DataGrid x:Name="grdOtherRpts" Grid.Row="1" SelectionMode="Single" CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" HorizontalAlignment="Left" Height="115" Margin="401,402,0,0" VerticalAlignment="Top" Width="390" AutoGenerateColumns="False" GridLinesVisibility="None">
+                <DataGrid.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkGray"/>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding rptName}" IsReadOnly="True" Width="*">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Content" Value="OTHER REPORTS"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <!--#endregion-->    
+       <!--#endregion-->
+        
+       <!--#region Buttons-->     
+       <!--#region btnPrintRptByLeadSource-->
         <Button Name="btnPrintRptByLeadSource" VerticalAlignment="Center" Click="btnPrintRptByLeadSource_Click" Margin="5,537,706,66">
             <StackPanel Orientation="Horizontal">
                 <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left"/>
-                <AccessText Text="_Print"></AccessText>
-            </StackPanel>
+                    <AccessText Text="_Print"></AccessText>
+                </StackPanel>
         </Button>
-        <DataGrid x:Name="grdOtherRpts" Grid.Row="1" SelectionMode="Single" CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" HorizontalAlignment="Left" Height="115" Margin="401,402,0,0" VerticalAlignment="Top" Width="390" AutoGenerateColumns="False" GridLinesVisibility="None">
-            <DataGrid.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkGray"/>
-                <Style TargetType="DataGridRow">
-                    <EventSetter Event="MouseDoubleClick" Handler="grdOtherRpt_dblClick"/>
-                </Style>
-            </DataGrid.Resources>
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding rptName}" IsReadOnly="True" Width="*">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}">
-                            <Setter Property="Content" Value="OTHER REPORTS"/>
-                            <Setter Property="FontWeight" Value="Bold"/>
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+       <!--#endregion-->
+        
+       <!--#region btnPrintRptByPR-->
         <Button x:Name="btnPrintRptByPR" HorizontalAlignment="Left" Margin="401,351,0,0" VerticalAlignment="Top" Width="83" Height="20" Click="btnPrintRptByPR_Click">
             <StackPanel Orientation="Horizontal">
                 <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left"></Image>
                 <AccessText>_Print</AccessText>
             </StackPanel>
         </Button>
+       <!--#endregion-->
+        
+       <!--#region btnPrintOtherRpts-->
         <Button x:Name="btnPrintOtherRpts" HorizontalAlignment="Left" Margin="400,539,0,0" VerticalAlignment="Top" Width="83" Height="20" Click="btnPrintOtherRpts_Click">
             <StackPanel Orientation="Horizontal">
                 <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left"></Image>
                 <AccessText>_Print</AccessText>
             </StackPanel>
         </Button>
+       <!--#endregion-->
+        
+       <!--#region btnExit-->
         <Button x:Name="btnExit" Content="Exit" HorizontalAlignment="Left" Margin="716,556,0,0" VerticalAlignment="Top" Width="75" Click="btnExit_Click"/>
+        <!--#endregion-->      
+       <!--#endregion-->
+        
+       <!--#region Barra de estado-->
         <StatusBar x:Name="stbStatusBar" Height="30" VerticalAlignment="Bottom" Grid.Row="3" Grid.ColumnSpan="3">
             <StatusBarItem x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
             <StatusBarItem x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>
@@ -97,5 +140,6 @@
             </StatusBarItem>
             <StatusBarItem x:Name="StatusBarReg" Content="0/0" HorizontalAlignment="Right" HorizontalContentAlignment="Left" />
         </StatusBar>
+        <!--#endregion-->
     </Grid>
 </Window>
