@@ -49,7 +49,7 @@ namespace IM.Transfer.Forms
     #endregion
 
     #region Parametros para trasnferencias de Exchange Rate
-    public static decimal _exchangeRateType;
+    public static decimal _exchangeRateType; 
     private static TimeSpan _tranferExchangeRatesStartTime;//Hora inicial del proceso de actualización de tipos de cambio
     private static TimeSpan _tranferExchangeRatesEndTime;//Hora final del proceso de actualización de tipos de cambio
     private static TimeSpan _tranferExchangeRatesIntervalTime;//Intervalo de tiempo del proceso de actualización de tipos de cambio
@@ -74,16 +74,18 @@ namespace IM.Transfer.Forms
     CancellationTokenSource cancelTokenExchangeRate;
     #endregion
 
-    #region Lista de registros de transacciones para datagrid
+    #region Lista de registros
+    // lista de transacciones de reservaciones
     public static List<LogHelper.Transaction> listTransactionsExchangeReservations = new List<LogHelper.Transaction>();
+    // lista de transacciones de exchange rate
     public static List<LogHelper.Transaction> listTransactionsReservations = new List<LogHelper.Transaction>();
     #endregion
 
     #region Instancias de delegados
     //Instancia de delegado para la actualizacion del grid de Exchange Rate
-    public UpdateDelegateGridExchangeRate updateGridExchangeRate = null;
+    public UpdateDelegateGrid updateGridExchangeRate = null;
     //Instancia de delegado para la actualizacion del grid de las reservaciones.
-    public UpdateDelegateGridReservations updateGridReservations = null;
+    public UpdateDelegateGrid updateGridReservations = null;
     //Instancia de delegado para la actualizcion de label de los botones.
     public UpdateDelegateButton updateContentButton = null;
     // Instancia de delegado para la actualizacion del texto de labels.
@@ -105,8 +107,11 @@ namespace IM.Transfer.Forms
     #endregion
 
     #region Booleans
+    // indica si desea transferir reservaciones para una noche
     public static bool blnOneNight = false;
+    // inidica si desea transferir reservaciones para dos noches
     public static bool blnTwoNight = false;
+    // si desea utilizar bandas.
     public static bool blnuseBand = false;
     //Indica si se desea iniciar el proceso de transferencia de reservaciones
     public static bool blnCallTransfer;
@@ -119,9 +124,10 @@ namespace IM.Transfer.Forms
 
     #region Status Transfers
     // Parametros para validar el estatus de las trasnferencias
-    public bool blnRunTransfer = false;
-    public bool blnRunOrCancelReservations = false; // valida el estatus de la transferencia de reservaciones
-    public bool blnRunOrCancelExchangeRate = false; // valida el estatus de la transferencia de exchange rate
+    // valida el estatus de la transferencia de reservaciones
+    public bool blnRunOrCancelReservations = false;
+    // valida el estatus de la transferencia de exchange rate 
+    public bool blnRunOrCancelExchangeRate = false; 
     #endregion
 
     #endregion
@@ -130,7 +136,6 @@ namespace IM.Transfer.Forms
     public frmTransferLauncher()
     {
       InitializeComponent();
-
       //Inicializa los parametros de la aplicación.
       InitializeValuesParameters();
     }
@@ -155,7 +160,7 @@ namespace IM.Transfer.Forms
       _timeOutWebServiceT = ConfigHelper.GetString("TimeOutWebService");
       _standbyIntervalTimeReservations = TimeSpan.Parse(ConfigHelper.GetString("StandbyIntervalTimeReservations"));
 
-
+      // fecha actual
       _dateToday = DateTime.Now;
 
       //se inicializan los parametros para ejecutar ExchangeRate
@@ -181,7 +186,7 @@ namespace IM.Transfer.Forms
     #endregion
 
     #region InitializeTransfers
-    ///<summary>Metodo que inicializa y ejecuta cuando se cumple la validación para la actualización del Exchange Rate</summary>
+    ///<summary>Metodo que inicializa y ejecuta las actualizaciones</summary>
     ///<history>
     ///[michan] 15/04/2016 Created
     ///</history>
@@ -189,7 +194,7 @@ namespace IM.Transfer.Forms
       //INSTANCIANDO EL TIMER CON LA CLASE DISPATCHERTIMER 
       DispatcherTimer dispathcerT = new DispatcherTimer();
       //EL INTERVALO DEL TIMER ES DE HORAS, MINUTOS Y SEGUNDOS QUE SE PASAN COMO PARAMETRO 
-      dispathcerT.Interval = _standbyIntervalTimeExchangeRate;//new TimeSpan(0, 0, Convert.ToInt32(_standbyIntervalTime));
+      dispathcerT.Interval = _standbyIntervalTimeExchangeRate;
       //EL EVENTO TICK SE SUBSCRIBE A UN CONTROLADOR DE EVENTOS UTILIZANDO LAMBDA 
       dispathcerT.Tick += (s, a) =>
       {
@@ -250,8 +255,10 @@ namespace IM.Transfer.Forms
       UpdateButton(btnReservations, "Cancel updating of Reservations");
       // iniciamos el efecto blink en el label de status 
       OnOffBlinkReservations();
-      try { 
-        await DoWorkerTransferReservations(cancelTokenReservations.Token);
+
+      try
+      {
+        await DoTransfer();
       }
       catch (OperationCanceledException)
       {
@@ -295,7 +302,7 @@ namespace IM.Transfer.Forms
       
       try
       {
-        await WorkerUpdateExchangeRateDoWork(cancelTokenExchangeRate.Token);
+        await TransferExchangeRates();
       }
       catch (OperationCanceledException)
       {
@@ -374,18 +381,18 @@ namespace IM.Transfer.Forms
 
     #endregion
 
-    #region Metodos para transferencia de reservaciones
+    #region Transferencia de reservaciones
 
-    #region DoWorkerTransferReservations
+    #region DoTransfer
     /// <summary>
     /// Inicia la transferencia de reservaciones
     /// </summary>
     /// <history>
     /// [michan] 23/04/2016 Created
     /// </history>
-    public async Task DoWorkerTransferReservations(CancellationToken cancelToken)//object Sender, DoWorkEventArgs e
+    public async Task DoTransfer()//object Sender, DoWorkEventArgs e
     {
-      cancelToken.ThrowIfCancellationRequested();
+      
       // Transferencia iniciada
       UpdateLabelStatusReservations("PROCESSING");
       AddLogGridReservations("Start", "Transfer Started.");
@@ -409,24 +416,20 @@ namespace IM.Transfer.Forms
       List<ZoneTransfer> zoneTransfer = await BRZones.GetZonesTransfer();
       // si hay al menos una zona
       if (zoneTransfer.Count > 0 && zoneTransfer != null)
-      {
+      { 
         // recorremos las zonas
         foreach (ZoneTransfer zone in zoneTransfer)
         {
-        // si se cancelo
-        cancelToken.ThrowIfCancellationRequested();
-        // validamos que hayan hoteles para la zona     
-        if (!(String.IsNullOrEmpty(zone.znID) && !String.IsNullOrWhiteSpace(zone.znID)) && (!String.IsNullOrEmpty(zone.znN) && !String.IsNullOrWhiteSpace(zone.znN)) && (!String.IsNullOrEmpty(zone.znZoneHotel) && !String.IsNullOrWhiteSpace(zone.znZoneHotel)))
+          cancelTokenReservations.Token.ThrowIfCancellationRequested();
+          // validamos que hayan hoteles para la zona     
+          if (!(String.IsNullOrEmpty(zone.znID) && !String.IsNullOrWhiteSpace(zone.znID)) && (!String.IsNullOrEmpty(zone.znN) && !String.IsNullOrWhiteSpace(zone.znN)) && (!String.IsNullOrEmpty(zone.znZoneHotel) && !String.IsNullOrWhiteSpace(zone.znZoneHotel)))
           {
             //exportamos las reservaciones a la tabla de transferencia
-            int itotalReservations = await ExportToTransfer(cancelToken, zone.znID, zone.znN, zone.znZoneHotel);
-
-            // si se cancelo
-            cancelToken.ThrowIfCancellationRequested();
+            int itotalReservations = await ExportToTransfer(zone.znID, zone.znN, zone.znZoneHotel);
 
             // valida si hay registro para transferir si hay 
             // exportamos los registros de la tabla de transferencia a la tabla de huespedes
-            if (itotalReservations>0) await ExportToGuests(cancelToken);
+            if (itotalReservations > 0) await ExportToGuests();
 
             //Total de registros agregados
             AddLogGridReservations("Info", "Transfer Completed.");
@@ -459,51 +462,55 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan]  23/04/2016 Created
     /// </history>
-    public async Task<int> ExportToTransfer(CancellationToken cancelToken, string zoneID, string zoneName, string zoneHotel)
+    public async Task<int> ExportToTransfer(string zoneID, string zoneName, string zoneHotel)
     {
-      // validamos si se cancelo la actualizacion de registros
-      cancelToken.ThrowIfCancellationRequested();
+      #region  obtenemos las reservaciones
       // obtenemos las reservaciones
-      List<ReservationOrigosTransfer> reservationOrigosTransfer = await GetReservations(cancelToken, zoneID, zoneName, zoneHotel);
+      List<ReservationOrigosTransfer> reservationOrigosTransfer = null;
+      reservationOrigosTransfer = await GetReservations(zoneID, zoneName, zoneHotel);
       int iCountReservations = 0;
       string strTransferingReservation = "";
+      #endregion
+
+      #region validamos que hayan registros por actualizar.
       // validamos que hayan registros por actualizar.
       if ((reservationOrigosTransfer != null && reservationOrigosTransfer.Count > 0))
       {
-        // validamos si se cancelo la actualizacion de registros
-        cancelToken.ThrowIfCancellationRequested();
-
         iCountReservations = reservationOrigosTransfer.Count;
-       
+
         // transfiriendo reservaciones a la base de datos.
         AddLogGridReservations("Insert", "Transfering Reservations to Database.");
-        //limpiamos la tabla de transferencia
+        // limpiamos la tabla de transferencia
         await BRTransfer.DeleteTransfer();
         await BRTransfer.GetTransfer();
 
         // transferimos las reservaciones a la base de datos
         int cont = 0;
         double dPorcent = 0;
-          
+
+        #region Guarda las transferencias en osTransfer
         foreach (ReservationOrigosTransfer reservationOrigos in reservationOrigosTransfer)
         {
-          // validamos si se cancelo la actualizacion de registros
-          cancelToken.ThrowIfCancellationRequested();
-
+          // valida si se ha cancelado la operación.
+          if (cancelTokenReservations.Token.IsCancellationRequested)
+          { iCountReservations = 0; break; }
+           
           //exportamos las reservaciones a la tabla de transferencia
           //cont = cont + 1;
           dPorcent = Porcent(cont++, iCountReservations);
+          //progressReservations.Report(dPorcent);
           AddValueProgressBarReservations(porcentBase: dPorcent);
           // desplegamos la reservacion que se esta transfiriendo
           strTransferingReservation = $"Transfering Reservation {reservationOrigos.Hotel} No. {reservationOrigos.Folio} \r\nCheck In Date: {reservationOrigos.Arrival:dd/MMM/yyyy}";
           UpdateLabelTrasnferReservations(strTransferingReservation);
           //agregamos la reservacion transferida
-          await AddTransfer(cancelToken, reservationOrigos);
+          await AddTransfer(reservationOrigos);
         }
-          
+        #endregion
+
         //Total de registros agregados de la zona (X)
         AddLogGridReservations("Info", $"{iCountReservations}  Records Added from {zoneName}.");
-          
+
         //indicamos que la zona ya no esta transfiriendo
         await TransferStopZone(zoneID);
       }
@@ -512,6 +519,7 @@ namespace IM.Transfer.Forms
         // si no existen registros por actualizar no se realiza nada.
         AddLogGridReservations("Warning", "No records were found to process.");
       }
+      #endregion
 
       // retornamos la cnatidad de reservaciones actualizadas
       return iCountReservations;
@@ -526,11 +534,9 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan]  23/04/2016  Created
     /// </history>
-    public async Task AddTransfer(CancellationToken cancelToken, ReservationOrigosTransfer reservationOrigos)
+    public async Task AddTransfer(ReservationOrigosTransfer reservationOrigos)
     {
-      // validamos si se cancelo la actualizacion
-      cancelToken.ThrowIfCancellationRequested();
-
+      
       // localizamos la reservacion
       bool existReservation = await BRTransfer.ExistReservation(reservationOrigos.Hotel, reservationOrigos.Folio.ToString());
       if (!existReservation)
@@ -541,7 +547,7 @@ namespace IM.Transfer.Forms
         await BRTransfer.AddReservation(transfer);
 
         // Agregamos la informacion de Origen a GuestOpera
-        await AddTransferToOperaGuest(cancelToken, reservationOrigos);
+        await AddTransferToOperaGuest(reservationOrigos);
       }
       else
       {
@@ -558,11 +564,8 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan]  23/04/2016  Created
     /// </history>
-    public async Task AddTransferToOperaGuest(CancellationToken cancelToken, ReservationOrigosTransfer reservationOrigos)
+    public async Task AddTransferToOperaGuest(ReservationOrigosTransfer reservationOrigos)
     {
-      // validamos si se cancelo la actualizacion
-      cancelToken.ThrowIfCancellationRequested();
-
       //Si hay GuestID, se asigna, de lo contrario es OutHouse y no se agrega
       Model.Guest guest = await BRGuests.GetGuestValidForTransfer(reservationOrigos.Folio.ToString(), reservationOrigos.Hotel);
       if ((guest != null))
@@ -598,10 +601,8 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan]  23/04/2016  Created
     /// </history>
-    public async Task<List<ReservationOrigosTransfer>> GetReservations(CancellationToken cancelToken, string zoneID, string zoneName, string zoneHotel)
+    public async Task<List<ReservationOrigosTransfer>> GetReservations(string zoneID, string zoneName, string zoneHotel)
     {
-      // validamos si se cancelo la actualizacion de registros
-      cancelToken.ThrowIfCancellationRequested();
 
       List<ReservationOrigosTransfer> reservations = null;
       // obtenemos los hoteles de la zona
@@ -622,23 +623,22 @@ namespace IM.Transfer.Forms
         // asignamos la fecha final
         dateTo = _iniFileHelper.readDate("TransferReservations", "DateTo", dateTo);
       }
-      string leadSourceID = await StringIDHoteles(hotels);
+      string leadSourceID = StringIDHoteles(hotels);
       //si no hay hoteles en la zona
       if ((hotels.Count > 0) && (hotels != null) && dateFrom <= dateTo)
       {
-        // validamos si se cancelo la actualizacion de registros
-        cancelToken.ThrowIfCancellationRequested();
+        
+        //await Task.Run(() => {
         // obtenemos las reservaciones e la zona
         AddLogGridReservations("Info", $"Getting Reservations from {zoneName} (Check In Date: {DateHelper.DateRange(dateFrom, dateTo)} , Hotels: {leadSourceID} ).");
         timeWatchReservations.Start();
-        reservations = await HotelServiceHelper.GetReservationsByArrivalDate(zoneHotel, dateFrom, dateTo, leadSourceID, cancelToken);
+        reservations = await HotelServiceHelper.GetReservationsByArrivalDate(zoneHotel, dateFrom, dateTo, leadSourceID, cancelTokenReservations.Token);
         timeWatchReservations.Stop();
-        
+        //}, cancelTokenReservations.Token).ConfigureAwait(false); ;
+
         // valida si se obtubieron reservaciones
         if (reservations != null && reservations.Count > 0)
         {
-          // validamos si se cancelo la actualizacion de registros
-          cancelToken.ThrowIfCancellationRequested();
           // Calculamos el tiempo de obtencion de las reservaciones
           TimeSpan tSpan = timeWatchReservations.Elapsed;
           // Convertimos el tiempo de obtencion en string para pintar en el grid
@@ -862,27 +862,33 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan]  21/04/2016  Created
     /// </history>
-    public async Task ExportToGuests(CancellationToken cancelToken)
+    public async Task ExportToGuests()
     {
-      // validamos si se cancelo la actualizacion
-      cancelToken.ThrowIfCancellationRequested();
-
+      cancelTokenReservations.Token.ThrowIfCancellationRequested();
       //procesando registros transferidos
       AddLogGridReservations("Info", "Processing Transferred Records.");
       //actualizamos el catalogo de paises
-      await UpdateCountries(cancelToken);
+      await UpdateCountries();
+      cancelTokenReservations.Token.ThrowIfCancellationRequested();
       //actualizamos el catalogo de agencias
-      await UpdateAgencies(cancelToken);
+      await UpdateAgencies();
+      cancelTokenReservations.Token.ThrowIfCancellationRequested();
       //actualizamos el catalogo de tipos de habitacion
-      await UpdateRoomTypes(cancelToken);
+      await UpdateRoomTypes();
+      cancelTokenReservations.Token.ThrowIfCancellationRequested();
       //actualizamos el catalogo de contratos
-      await UpdateContracts(cancelToken);
+      await UpdateContracts();
+      cancelTokenReservations.Token.ThrowIfCancellationRequested();
       //actualizamos el catalogo de grupos
-      await UpdateGroups(cancelToken);
+      await UpdateGroups();
+      cancelTokenReservations.Token.ThrowIfCancellationRequested();
       //actualizamos la tabla de transferencia
-      await UpdateTransfer(cancelToken);
+      await UpdateTransfer();
+      cancelTokenReservations.Token.ThrowIfCancellationRequested();
       //actualizamos los huespedes
-      await UpdateGuests(cancelToken);
+      await UpdateGuests();
+      cancelTokenReservations.Token.ThrowIfCancellationRequested();
+
     }
     #endregion
 
@@ -893,11 +899,8 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan]  21/04/2016  Created
     /// </history>
-    public async Task UpdateCountries(CancellationToken cancelToken)
+    public async Task UpdateCountries()
     {
-      // validamos si se cancelo la actualizacion
-      cancelToken.ThrowIfCancellationRequested();
-
       try
       { 
         // agregando paises de Hotel
@@ -952,11 +955,8 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan]  21/04/2016  Created
     /// </history>
-    public async Task UpdateAgencies(CancellationToken cancelToken)
+    public async Task UpdateAgencies()
     {
-      // validamos si se cancelo la actualizacion
-      cancelToken.ThrowIfCancellationRequested();
-
       try
       { 
         //agregando agencias de Hotel
@@ -1011,11 +1011,8 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan]  21/04/2016  Created
     /// </history>
-    public async Task UpdateRoomTypes(CancellationToken cancelToken)
+    public async Task UpdateRoomTypes()
     {
-      // validamos si se cancelo la actualizacion
-      cancelToken.ThrowIfCancellationRequested();
-
       try
       { 
         //agregando tipos de habitacion
@@ -1049,11 +1046,8 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan]  21/04/2016  Created
     /// </history>
-    public async Task UpdateContracts(CancellationToken cancelToken)
+    public async Task UpdateContracts()
     {
-      // validamos si se cancelo la actualizacion
-      cancelToken.ThrowIfCancellationRequested();
-
       try
       { 
         //agregando contratos
@@ -1085,11 +1079,8 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan]  21/04/2016  Created
     /// </history>
-    public async Task UpdateGroups(CancellationToken cancelToken)
+    public async Task UpdateGroups()
     {
-      // validamos si se cancelo la actualizacion
-      cancelToken.ThrowIfCancellationRequested();
-
       try
       {
         // agregando contratos
@@ -1122,11 +1113,8 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan]  21/04/2016  Created
     /// </history>
-    public async Task UpdateTransfer(CancellationToken cancelToken)
+    public async Task UpdateTransfer()
     {
-      // validamos si se cancelo la actualizacion
-      cancelToken.ThrowIfCancellationRequested();
-
       try
       { 
         //actualizando paises de la tabla de transferencia
@@ -1298,11 +1286,8 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan]  21/04/2016  Created
     /// </history>
-    public async Task UpdateGuests(CancellationToken cancelToken)
+    public async Task UpdateGuests()
     {
-      // validamos si se cancelo la actualizacion
-      cancelToken.ThrowIfCancellationRequested();
-
       try
       {
         //eliminando reservaciones canceladas
@@ -1639,20 +1624,17 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan]  16/04/2016  Created
     /// </history>
-    public async Task<string> StringIDHoteles(List<LeadSourceShort> hotels)
+    public string StringIDHoteles(List<LeadSourceShort> hotels)
     {
       string leadSourceId = string.Empty;
-      await Task.Run(() =>
+      // recorremos la lista
+      foreach (LeadSourceShort hotel in hotels)
       {
-        // recorremos la lista
-        foreach (LeadSourceShort hotel in hotels)
-        {
-          // concatenamos la lista de hoteles
-          leadSourceId += hotel.lsID + ",";
-        }
-        //eliminamos la ultima coma.
-        leadSourceId = leadSourceId.Remove(leadSourceId.Length - 1);
-      });
+        // concatenamos la lista de hoteles
+        leadSourceId += hotel.lsID + ",";
+      }
+      //eliminamos la ultima coma.
+      leadSourceId = leadSourceId.Remove(leadSourceId.Length - 1);
       // retornamos el string.
       return leadSourceId;
     }
@@ -1720,7 +1702,7 @@ namespace IM.Transfer.Forms
     #endregion
 
     #endregion
-
+    
     #region efecto blink
 
     #region OnOffBlinkReservations
@@ -1905,20 +1887,12 @@ namespace IM.Transfer.Forms
 
     #region Actualizacion de Grids
 
-    #region UpdateDelegateGridReservations
+    #region UpdateDelegateGrid
     ///<summary>Metodo para crear delegado utilizado en la actualizacion el grid del log de reservations</summary>
     ///<history>
     ///[michan] 15/04/2016 Created
     ///</history>
-    public delegate void UpdateDelegateGridReservations(DateTime dtmDate, string strLogLevel, string strMessage);
-    #endregion
-
-    #region UpdateDelegateGridExchangeRate
-    ///<summary>Metodo para crear delegado utilizado en la actualizacion el grid del log de Exchange Rate</summary>
-    ///<history>
-    ///[michan] 15/04/2016 Created
-    ///</history>
-    public delegate void UpdateDelegateGridExchangeRate(DateTime dtmDate, string strLogLevel, string strMessage);
+    public delegate void UpdateDelegateGrid(DateTime dtmDate, string strLogLevel, string strMessage);
     #endregion
 
     #region UpdatingGrid
@@ -2021,7 +1995,7 @@ namespace IM.Transfer.Forms
         // validamos que exista la instancia del delegado para actualizar el grid de reservaciones
         if (updateGridReservations == null)
           // si es nullo se crea la instancia
-          updateGridReservations = new UpdateDelegateGridReservations(UpdateDelegateDatagridReservations);
+          updateGridReservations = new UpdateDelegateGrid(UpdateDelegateDatagridReservations);
         // actualizamos el grid de reservaciones.
         grdLogReservations.Dispatcher.BeginInvoke(DispatcherPriority.Normal, updateGridReservations, DateTime.Now, strLogLevel, strLogMessage);
       }  
@@ -2045,7 +2019,7 @@ namespace IM.Transfer.Forms
         // validamos la instancia del delegado para actualizar el grid
         if (updateGridExchangeRate == null)
           // creamos la instancia si no existe.
-          updateGridExchangeRate = new UpdateDelegateGridExchangeRate(UpdateDatagridExchangeRate);
+          updateGridExchangeRate = new UpdateDelegateGrid(UpdateDatagridExchangeRate);
         // actualizamos el grid.
         grdLogExchangeRate.Dispatcher.BeginInvoke(DispatcherPriority.Normal, updateGridExchangeRate, DateTime.Now, strLogLevel, strLogMessage);
       }
@@ -2067,7 +2041,7 @@ namespace IM.Transfer.Forms
       AddLogGridReservations("Info", "Canceling Transfer Reservations");
       UpdateLabelStatusReservations("CANCELING");
       UpdateButton(btnReservations, "Cancel updating of Reservations", false); // cambiamos el testo del boton para cancelar la transferemcia
-      cancelTokenReservations.Cancel();
+      if(cancelTokenReservations != null) cancelTokenReservations.Cancel();
     }
     #endregion
 
@@ -2082,7 +2056,7 @@ namespace IM.Transfer.Forms
       AddLogGridExchangeRate("Info", "Cancelling Exchange Rate");
       UpdateLabelStatusExchangeRate("CANCELING");
       UpdateButton(btnExchangeRate, "Cancel updating of Exchange Rate", false);
-      cancelTokenExchangeRate.Cancel();
+      if(cancelTokenExchangeRate != null) cancelTokenExchangeRate.Cancel();
     }
     #endregion
 
@@ -2100,7 +2074,6 @@ namespace IM.Transfer.Forms
     public void ResetParametersReservations()
     {
       // cambiamos la bandera para indicar que no se esta actualizando
-      blnRunTransfer = false;
       blnRunOrCancelReservations = false;
       // reiniciamos a cero los valores del progresbar
       AddValueProgressBarReservations(porcentBase: 0);
@@ -2241,6 +2214,15 @@ namespace IM.Transfer.Forms
 
     #region Actualiza ProgresBar
 
+    #region UpdateDelegateProgressBar
+    /// <summary>
+    /// Delegado para actualizar los labels del formulario en interacción.
+    /// </summary>
+    /// <param name="lblUpdate">label que se desea actualizar</param>
+    /// <param name="strContent">Cadena que se desea pintar en el label</param>
+    private delegate void UpdateDelegateProgressBar(System.Windows.Controls.ProgressBar progressBar, System.Windows.Controls.Label lblProcent, double? value = null, double? porcentBase = null);
+    #endregion
+
     #region InitializerProgressBar
     ///<summary>Metodo que inicializa y reestablece los valores de la barra de progreso</summary>
     ///<history>
@@ -2298,11 +2280,8 @@ namespace IM.Transfer.Forms
       }
       if ((valueIncrement >=0) && (porcentValue >=0) && (!valueIncrement.Equals(null)) && (!porcentValue.Equals(null)))
       {
-        //((IProgress<double>)progressBar).Report(valueIncrement);
-      
         progressBar.Value = valueIncrement;
-        lblProcent.Content = String.Format("{0:0} %", porcentValue);
-        //progressBar.ReportProgress(valueIncrement, porcentValue);
+        UpdateLabel(lblProcent, String.Format("{0:0} %", porcentValue));
       }
       
 
@@ -2357,19 +2336,16 @@ namespace IM.Transfer.Forms
 
     #endregion
 
-    #region Metodos de transferencia de Exchange Rate
+    #region Transferencia de Exchange Rate
 
-    #region WorkerUpdateExchangeRateDoWork
+    #region TransferExchangeRates
     ///<summary>Metodo que contiene la tarea que realiza todo el proceso de actualizacion de Exchange Rate</summary>
     ///<history>
     ///[michan] 15/04/2016 Created
     ///</history>
-    private async Task WorkerUpdateExchangeRateDoWork(CancellationToken cancelationtoken)
+    public async Task TransferExchangeRates()
     {
-      // valida si el proceso de actualización no ha sido cancelado
-      cancelationtoken.ThrowIfCancellationRequested();
-      
-        
+      UpdateLabelStatusExchangeRate("STARTED");
       //Se obtiene la fecha del servidor
       _dtmServerDate = BRHelpers.GetServerDate();    
       AddLogGridExchangeRate("Start", "Start Updating Exchange Rates");
@@ -2377,32 +2353,38 @@ namespace IM.Transfer.Forms
       Thread.Sleep(100);
 
       //agregamos los tipos de cambio faltantes hasta la fecha actual para que no existan huecos
-      BRExchangeRate.InsertExchangeRate(_dtmServerDate);
+      UpdateLabelStatusExchangeRate("PROCESSING");
+      await BRExchangeRate.InsertExchangeRate(_dtmServerDate);
       AddValueProgressBarExchangeRate(value: 2);
+      // actualizamos los tipos de cambio
+      await UpdateExchangeRatesFromIntranet();
+      // actualizamos el tipo de cambio Canadience
+      await UpdateExchangeRatesFromHotel();
 
-      // valida si el proceso de actualización no ha sido cancelado
-      cancelationtoken.ThrowIfCancellationRequested();
+    }
+    #endregion
 
+    #region UpdateExchangeRatesFromIntranet
+    public async Task UpdateExchangeRatesFromIntranet()
+    {
       //obtenemos el tipo de cambio de la Intranet
+      AddValueProgressBarExchangeRate(value: 2);
       AddLogGridExchangeRate("Info", "Getting Exchange Rate from Intranet Service");
-      TipoCambioTesoreria exchangeRate = await IntranetHelper.TipoCambioTesoreria(_dtmServerDate, "USD");
+      TipoCambioTesoreria exchangeRate = await IntranetHelper.TipoCambioTesoreria(_dtmServerDate, "USD", cancelTokenExchangeRate.Token);
       if (exchangeRate != null)
       {
         timeWatchExchangeRate.Start();
         _exchangeRateType = Convert.ToDecimal(exchangeRate.TipoCambio);
+
+        AddValueProgressBarExchangeRate(value: 3);
         //comparamos si el cambio es positivo y mayor a cero
         if (_exchangeRateType > 0)
         {
-          _currencyId = "MX";
-          AddValueProgressBarExchangeRate(value: 3);
-          //Se realiza la actualizacion y se registra en el log la inicialización
-
-          AddLogGridExchangeRate("Info", $"Updating Exchange Rate { _currencyId } ({_exchangeRateType})");
+          cancelTokenExchangeRate.Token.ThrowIfCancellationRequested();
           AddValueProgressBarExchangeRate(value: 4);
-
-          // valida si el proceso de actualización no ha sido cancelado
-          cancelationtoken.ThrowIfCancellationRequested();
-
+          _currencyId = "MX";
+          //Se realiza la actualizacion y se registra en el log la inicialización
+          AddLogGridExchangeRate("Info", $"Updating Exchange Rate { _currencyId } ({_exchangeRateType})");
           // actualizamos el exchange rate
           await BRExchangeRate.UpdateExchangeRate(_dtmServerDate, _currencyId, _exchangeRateType);
           timeWatchExchangeRate.Stop();
@@ -2411,12 +2393,10 @@ namespace IM.Transfer.Forms
           // Convertimos el tiempo de obtencion en string para pintar en el grid
           string elapsedTime = StringTimeDifference(tSpan);
 
-          AddLogGridExchangeRate("Info", $"Updating Exchange Rate in {elapsedTime }");
-          AddValueProgressBarExchangeRate(value: 6);
-          Thread.Sleep(1000);
+          AddLogGridExchangeRate("Info", $"Updating Exchange Rate in {elapsedTime}");
+         
+
           AddLogGridExchangeRate("Success", "Exchange Rate finished");
-          AddValueProgressBarExchangeRate(value: 10);
-          Thread.Sleep(1000);
         }
         else
         {
@@ -2429,7 +2409,54 @@ namespace IM.Transfer.Forms
         // Registramos en el log que no existen cambios en la fecha especificada y el tipo de moneda
         AddLogGridExchangeRate("Warning", "Exchange rate does not exists for day");
       }
-      
+      AddValueProgressBarExchangeRate(value: 5);
+    }
+    #endregion
+
+    #region UpdateExchangeRatesFromHotel
+    /// <summary>
+    /// Actualizamos el tipo de cambio de divisa canadiense
+    /// </summary>
+    /// <returns></returns>
+    public async Task UpdateExchangeRatesFromHotel()
+    {
+      cancelTokenExchangeRate.Token.ThrowIfCancellationRequested();
+      AddValueProgressBarExchangeRate(value: 6);
+      AddLogGridExchangeRate("Info", "Updating CurrencyChange...");
+      //Se obtiene la fecha del servidor
+      _dtmServerDate = BRHelpers.GetServerDate();
+      //agregamos los tipos de cambio faltantes hasta la fecha actual para que no existan huecos
+      await BRExchangeRate.InsertExchangeRate(_dtmServerDate);
+      AddValueProgressBarExchangeRate(value: 7);
+      // obtenemos el tipo de cambio de la Intranet
+      AddLogGridExchangeRate("Info", "Getting Currency Change from Intranet Service...");
+      Rmmoney currencyChange = await HotelServiceHelper.ObtenerFactoresConversion("CP", cancelTokenExchangeRate.Token);
+
+      // validamos que exista el tipo de cambio para el dia actual
+      if (currencyChange != null)
+      {
+        // validamos que el tipo de cambio sea positivo
+        if (currencyChange.factor > 0)
+        {
+          // actualizamos el tipo de cambio
+          cancelTokenExchangeRate.Token.ThrowIfCancellationRequested();
+          AddValueProgressBarExchangeRate(value: 8);
+          _currencyId = "CAN";
+          AddLogGridExchangeRate("Info", "Updating currencyChange...");
+          decimal factor = (1 / currencyChange.factor);
+          await BRExchangeRate.UpdateExchangeRate(_dtmServerDate, _currencyId, factor);
+          AddLogGridExchangeRate("Info", "Update completed...");
+        }
+        else
+        {
+          AddLogGridExchangeRate("Info", $"Canadian currency must be positive ({currencyChange.factor}).");
+        }
+      }
+      else
+      {
+        AddLogGridExchangeRate("Info", $"Canadian Currency Change does not exists for day { _dtmServerDate:dd/MMM/yyyy}");
+      }
+      AddValueProgressBarExchangeRate(value: 10);
     }
     #endregion
 

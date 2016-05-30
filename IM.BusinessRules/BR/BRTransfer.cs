@@ -1358,10 +1358,13 @@ namespace IM.BusinessRules.BR
     public async static Task<bool> ExistReservation(string leadSource, string tHReservID)
     {
       bool status = true;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        status = await dbContext.Transfers.AnyAsync(transfer => transfer.tls == leadSource && transfer.tHReservID == tHReservID);
-      }
+      await Task.Run(() => { 
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var result = dbContext.Transfers.SingleOrDefault(transfer => transfer.tls == leadSource && transfer.tHReservID == tHReservID);
+          status = (result != null) ?true : false;
+        }
+      });
       return  status;
     }
     #endregion

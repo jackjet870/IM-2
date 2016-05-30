@@ -58,7 +58,7 @@ namespace IM.Services.Helpers
       /// <history>
       /// [michan] 07/04/2016  Created
       /// </history>
-      public async static Task<TipoCambioTesoreria> TipoCambioTesoreria(DateTime date, string currencyId)
+      public async static Task<TipoCambioTesoreria> TipoCambioTesoreria(DateTime date, string currencyId, System.Threading.CancellationToken cToken = new System.Threading.CancellationToken())
       {
         TipoCambioTesoreria exchangeRate = null;
         await Task.Run(() =>
@@ -75,7 +75,7 @@ namespace IM.Services.Helpers
           request.TipoCambioTesoreria.IdMoneda = currencyId;
 
             //invocamos al servicio web  
-            response = Current.ObtenerTipoCambioTesoreria(request); //ObtenerTipoCambioTesoreria
+            response = Current.ObtenerTipoCambioTesoreria(request);
 
             var Data = response.Data;
           if (Data.Length > 0)
@@ -83,7 +83,7 @@ namespace IM.Services.Helpers
             exchangeRate = Data[0];
 
           }
-        });    
+        }, cToken);    
         return exchangeRate;
       }
       #endregion

@@ -798,7 +798,6 @@ namespace IM.BusinessRules.BR
 
     #endregion
 
-
     /// <summary>
     /// Elimina un Guest
     /// </summary>
@@ -814,6 +813,7 @@ namespace IM.BusinessRules.BR
       }
     }
 
+    #region GetGuestValidForTransfer
     /// <summary>
     /// Valida si existe el guesta en los registros. Si existe retorna el registro.
     /// </summary>
@@ -826,16 +826,14 @@ namespace IM.BusinessRules.BR
     public async static Task<Guest> GetGuestValidForTransfer(string guHReservID, string gulsOriginal)
     {
       Guest guest = null;
-      await Task.Run(() =>
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-        {
-          //Revisamos si ya existe en Guest
-          guest = dbContext.Guests.Where(g => g.guHReservID == guHReservID && g.gulsOriginal == gulsOriginal).FirstOrDefault();
-        }
-      });
+        //Revisamos si ya existe en Guest
+        guest = await dbContext.Guests.SingleOrDefaultAsync(g => g.guHReservID == guHReservID && g.gulsOriginal == gulsOriginal);
+      }
       return guest;
     }
+    #endregion
   }
 
 }

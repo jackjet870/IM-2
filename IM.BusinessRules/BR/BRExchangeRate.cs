@@ -42,7 +42,7 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 07/03/2016 Created
     /// </history>
-    public async static void InsertExchangeRate(DateTime serverDate)
+    public async static Task InsertExchangeRate(DateTime serverDate)
     {
       await Task.Run(() =>
       {
