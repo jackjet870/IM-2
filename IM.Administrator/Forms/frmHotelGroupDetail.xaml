@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="Hotel Group Detail" Height="418" Width="338">
+        Title="Hotel Group Detail" Height="418" Width="338" Closing="Window_Closing">
     <DockPanel LastChildFill="True">
         <!--#region Top-->
         <Grid DockPanel.Dock="Top" Margin="10,10,14,2">
@@ -33,7 +33,7 @@
         <!--#endregion-->
 
         <!--#region Grid Hotels-->
-        <DataGrid Name="dgrHotels" Margin="79,0,14,0" CellEditEnding="dgrHotels_CellEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Grid.Column="1" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+        <DataGrid Name="dgrHotels" Margin="79,0,14,0" CellEditEnding="dgrHotels_CellEditEnding" RowEditEnding="dgrHotels_RowEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Grid.Column="1" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                   CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="True" IsReadOnly="True" >
             <DataGrid.Columns>
                 <DataGridComboBoxColumn  Width="100*" x:Name="cmbHotels" DisplayMemberPath="hoID" SelectedValuePath="hoID" SelectedValueBinding="{Binding hoID}" Header="Hotels" >

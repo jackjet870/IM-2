@@ -5,6 +5,7 @@ using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -65,35 +66,43 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 18/04/2016
+    /// [emoguel] modified 30/05/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(reimpresionMotive,oldReimpresionMotive))
+      try
       {
-        Close();
-      }
-      else
-      {
-        string strMsj = ValidateHelper.ValidateForm(this, "Reimpresion Motive");
-        if(reimpresionMotive.rmID==0)
-        {
-          strMsj += (strMsj == "") ? "" : " \n " + "Reimpresion Motive ID can not be 0.";
-        }
-        if(strMsj=="")
-        {
-          int nRes = BREntities.OperationEntity(reimpresionMotive, enumMode);
-          UIHelper.ShowMessageResult("Reimpresion Motive", nRes);
-          if(nRes>0)
-          {
-            DialogResult = true;
-            Close();
-          }
-        }
-        else
+        btnAccept.Focus();
+        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(reimpresionMotive, oldReimpresionMotive))
         {
           Close();
         }
+        else
+        {
+          string strMsj = ValidateHelper.ValidateForm(this, "Reimpresion Motive");
+          if (reimpresionMotive.rmID == 0)
+          {
+            strMsj += (strMsj == "") ? "" : " \n " + "Reimpresion Motive ID can not be 0.";
+          }
+          if (strMsj == "")
+          {
+            int nRes = await BREntities.OperationEntity(reimpresionMotive, enumMode);
+            UIHelper.ShowMessageResult("Reimpresion Motive", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            Close();
+          }
+        }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Reimpresion Motive");
       }
     } 
     #endregion

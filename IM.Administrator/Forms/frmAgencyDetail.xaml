@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"        
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                
-        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" Closing="Window_Closing"
         mc:Ignorable="d" WindowStartupLocation="CenterOwner" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" ResizeMode="NoResize"
         Title="Agency Detail" Height="360" Width="600" DataContext="{Binding agency}" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
     <Grid >
@@ -14,7 +14,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="90*"/>
-            <RowDefinition Height="20*"/>
+            <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
         <!--#endregion-->
         <!--#region Controles de la izquierda-->
@@ -91,8 +91,12 @@
         </Grid>
         <!--#endregion-->
         <!--#region Botones-->
-        <Button Name="btnAccept" Width="60" Height="30"  Grid.Column="1" Grid.Row="1" Margin="0,12,96,13"  HorizontalAlignment="Right" Visibility="Hidden" Click="btnAccept_Click" Content="_Accept"/>
-        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="1" Margin="0,12,21,13"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Name="skpStatus"  Margin="10,6,96,13" Visibility="Visible" HorizontalAlignment="Left">
+            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Base;component/Images/time.ico" Width="16" Height="16"/>
+            <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
+        </StackPanel>
+        <Button Name="btnAccept" Width="60" Height="30"  Grid.Column="1" Grid.Row="1" Margin="0,6,96,13"  HorizontalAlignment="Right" Visibility="Hidden" Click="btnAccept_Click" Content="_Accept"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="1" Margin="0,6,21,13"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
         <!--#endregion-->
     </Grid>
 </Window>

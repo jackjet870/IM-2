@@ -240,19 +240,29 @@ namespace IM.Administrator.Forms
     /// <param name="salesRoom">Objeto a seleccionar</param>
     /// <history>
     /// [emoguel] created 21/04/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void LoadSalesRooms(SalesRoom salesRoom = null)
+    private async void LoadSalesRooms(SalesRoom salesRoom = null)
     {
-      int nIndex = 0;
-      List<SalesRoom> lstSalesRooms = BRSalesRooms.GetSalesRooms(_nStatus, _nAppointment, _salesRoomFilter);
-      dgrSalesRooms.ItemsSource = lstSalesRooms;
-      if (lstSalesRooms.Count > 0 && salesRoom != null)
+      try
       {
-        salesRoom = lstSalesRooms.Where(sr => sr.srID == salesRoom.srID).FirstOrDefault();
-        nIndex = lstSalesRooms.IndexOf(salesRoom);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<SalesRoom> lstSalesRooms =await BRSalesRooms.GetSalesRooms(_nStatus, _nAppointment, _salesRoomFilter);
+        dgrSalesRooms.ItemsSource = lstSalesRooms;
+        if (lstSalesRooms.Count > 0 && salesRoom != null)
+        {
+          salesRoom = lstSalesRooms.Where(sr => sr.srID == salesRoom.srID).FirstOrDefault();
+          nIndex = lstSalesRooms.IndexOf(salesRoom);
+        }
+        GridHelper.SelectRow(dgrSalesRooms, nIndex);
+        StatusBarReg.Content = lstSalesRooms.Count + " Sales Rooms.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrSalesRooms, nIndex);
-      StatusBarReg.Content = lstSalesRooms.Count + " Sales Rooms.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Sales Room");
+      }
     }
     #endregion
 

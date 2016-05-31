@@ -8,6 +8,7 @@ using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -183,19 +184,26 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 17/03/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void LoadGridComputers()
+    private async void LoadGridComputers()
     {
-      Computer computer = new Computer();
-      List<Computer> lstComputers = new List<Computer>();
-      if (enumMode == EnumMode.edit)
+      try
       {
-        computer.cpdk = desk.dkID;
-        lstComputers= BRComputers.GetComputers(computer);
-        _oldLstComputers = lstComputers.ToList();
+        Computer computer = new Computer();
+        List<Computer> lstComputers = new List<Computer>();
+        if (enumMode == EnumMode.edit)
+        {
+          computer.cpdk = desk.dkID;
+          lstComputers = await BRComputers.GetComputers(computer);
+          _oldLstComputers = lstComputers.ToList();
+        }
+        dgrComputers.ItemsSource = lstComputers;
       }
-      
-      dgrComputers.ItemsSource = lstComputers;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Desks");
+      }
     }
     #endregion
 
@@ -204,12 +212,20 @@ namespace IM.Administrator.Forms
     /// Llena el combo de computers del grid
     /// </summary>
     /// <history>
-    //// [emoguel] created 17/03/2016
+    /// [emoguel] created 17/03/2016        
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void LoadCmbComputers()
+    private async void LoadCmbComputers()
     {
-      List<Computer> lstComputers = BRComputers.GetComputers();      
-      cmbComputers.ItemsSource = lstComputers;
+      try
+      {
+        List<Computer> lstComputers = await BRComputers.GetComputers();
+        cmbComputers.ItemsSource = lstComputers;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Deks");
+      }
     }
     #endregion
     

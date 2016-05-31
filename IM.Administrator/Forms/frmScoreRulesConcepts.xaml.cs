@@ -237,19 +237,26 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 23/04/2016
     /// </history>
-    private void LoadScoreRulesConcepts(ScoreRuleConcept scoreRuleConcept = null)
+    private async void LoadScoreRulesConcepts(ScoreRuleConcept scoreRuleConcept = null)
     {
-      int nIndex = 0;
-      List<ScoreRuleConcept> lstScoreRulesConcepts = BRScoreRulesConcepts.GetScoreRulesConcepts(_nStatus, _scoreRuleConceptFilter);
-      dgrScoreRulesConcepts.ItemsSource = lstScoreRulesConcepts;
-      if (lstScoreRulesConcepts.Count > 0 && scoreRuleConcept != null)
+      try
       {
-        scoreRuleConcept = lstScoreRulesConcepts.Where(sp => sp.spID == scoreRuleConcept.spID).FirstOrDefault();
-        nIndex = lstScoreRulesConcepts.IndexOf(scoreRuleConcept);
-      }
+        int nIndex = 0;
+        List<ScoreRuleConcept> lstScoreRulesConcepts = await BRScoreRulesConcepts.GetScoreRulesConcepts(_nStatus, _scoreRuleConceptFilter);
+        dgrScoreRulesConcepts.ItemsSource = lstScoreRulesConcepts;
+        if (lstScoreRulesConcepts.Count > 0 && scoreRuleConcept != null)
+        {
+          scoreRuleConcept = lstScoreRulesConcepts.Where(sp => sp.spID == scoreRuleConcept.spID).FirstOrDefault();
+          nIndex = lstScoreRulesConcepts.IndexOf(scoreRuleConcept);
+        }
 
-      GridHelper.SelectRow(dgrScoreRulesConcepts, nIndex);
-      StatusBarReg.Content = lstScoreRulesConcepts.Count + " Score Rules Concepts.";
+        GridHelper.SelectRow(dgrScoreRulesConcepts, nIndex);
+        StatusBarReg.Content = lstScoreRulesConcepts.Count + " Score Rules Concepts.";
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Score Rule Concept");
+      }
     }
     #endregion
 

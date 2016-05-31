@@ -6,6 +6,7 @@ using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -14,9 +15,12 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmContractsDetail : Window
   {
-    public Contract contract=new Contract();//Objeto que se muestra en la ventana
+    #region Variables
+    public Contract contract = new Contract();//Objeto que se muestra en la ventana
     public Contract oldContract = new Contract();//Objeto con los datos iniciales
     public EnumMode mode;//Modo en el que se abrirá la ventana
+    private bool _isClosing = false; 
+    #endregion
     public frmContractsDetail()
     {
       InitializeComponent();
@@ -25,31 +29,48 @@ namespace IM.Administrator.Forms
 
     #region event controls
     #region Accept
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// Guarda un registro en el catalogo Contracts
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] modified 30/05/2016 se volvió async
+    /// </history>
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if(ObjectHelper.IsEquals(contract,oldContract) && mode!=EnumMode.add)
+      try
       {
-        Close();
-      }
-      else
-      {
-        string sMsj = ValidateHelper.ValidateForm(this, "Contract");
-        int nRes = 0;
-        if (sMsj == "")//Todos los campos estan llenos
+        btnAccept.Focus();
+        if (ObjectHelper.IsEquals(contract, oldContract) && mode != EnumMode.add)
         {
-          nRes = BREntities.OperationEntity<Contract>(contract, mode);
-          UIHelper.ShowMessageResult("Contract", nRes);
-          if(nRes==1)
-          {
-            DialogResult = true;
-            Close();
-          }
+          _isClosing = true;
+          Close();
         }
         else
-        {//Hace falta llenar campos
-          UIHelper.ShowMessage(sMsj);
+        {
+          string sMsj = ValidateHelper.ValidateForm(this, "Contract");
+          int nRes = 0;
+          if (sMsj == "")//Todos los campos estan llenos
+          {
+            nRes = await BREntities.OperationEntity<Contract>(contract, mode);
+            UIHelper.ShowMessageResult("Contract", nRes);
+            if (nRes == 1)
+            {
+              _isClosing = true;
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {//Hace falta llenar campos
+            UIHelper.ShowMessage(sMsj);
+          }
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Contracts");
       }
     }
 
@@ -92,7 +113,6 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null, null);
       }
     }
@@ -109,6 +129,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       if(mode!=EnumMode.preview)
       {
         if (!ObjectHelper.IsEquals(contract, oldContract))
@@ -116,17 +137,48 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!_isClosing) { _isClosing = true; Close(); }
+          }
+          else
+          {
+            _isClosing = false;
           }
         }
         else
         {
-          Close();
+          if (!_isClosing) { _isClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!_isClosing) { _isClosing = true; Close(); }
+      }
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 30/05/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
+      {
+        _isClosing = true;
+        btnCancel_Click(null, null);
+        if (!_isClosing)
+        {
+          e.Cancel = true;
+        }
+        else
+        {
+          _isClosing = false;
+        }
       }
     }
     #endregion
@@ -135,13 +187,26 @@ namespace IM.Administrator.Forms
     #region Metodos    
 
     #region LoadUnavailableMotives
-    protected void LoadUnvMotive()
+    /// <summary>
+    /// Carga la lista de unavailMotives
+    /// </summary>
+    /// <history>
+    /// [emoguel] modified 30/05/2016 se volvió async
+    /// </history>
+    protected async void LoadUnvMotive()
     {
-      List<UnavailableMotive> lstUnaVailMots = BRUnavailableMotives.GetUnavailableMotives();
-      cmbUnvMot.ItemsSource = lstUnaVailMots;
-    } 
-    #endregion
+      try
+      {
+        List<UnavailableMotive> lstUnaVailMots = await BRUnavailableMotives.GetUnavailableMotives();
+        cmbUnvMot.ItemsSource = lstUnaVailMots;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Contratcs");
+      }
+    }
     #endregion
 
+    #endregion
   }
 }

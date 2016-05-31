@@ -7,6 +7,7 @@ using IM.Model.Helpers;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.Infrastructure;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -22,72 +23,78 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 25/04/2016
     /// </history>
-    public static int OperationEntity<T>(T entitySave, EnumMode enumMode) where T : class
+    public async static Task<int> OperationEntity<T>(T entitySave, EnumMode enumMode) where T : class
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      int nRes = 0;
+     nRes= await Task.Run(() => 
       {
-        switch (enumMode)
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          #region Delete
-          case EnumMode.deleted:
-            {
-              dbContext.Entry(entitySave).State = EntityState.Deleted;
-              break;
-            } 
-          #endregion
-          #region Edit
-          case EnumMode.edit:
-            {
-              dbContext.Entry(entitySave).State = EntityState.Modified;
-              break;
-            } 
-          #endregion
-          #region Add
-          case EnumMode.add:
-            {
-              var objContext = ((IObjectContextAdapter)dbContext).ObjectContext;
-              var objSet = objContext.CreateObjectSet<T>();
-              #region Buscar si tiene Llave identity
-              bool blIdentity = false;
-              foreach (EdmProperty edm in objSet.EntitySet.ElementType.KeyMembers)
+          switch (enumMode)
+          {
+            #region Delete
+            case EnumMode.deleted:
               {
-                var a = edm.MetadataProperties.Where(item => item.Name == "http://schemas.microsoft.com/ado/2009/02/edm/annotation:StoreGeneratedPattern").FirstOrDefault();
-                if (a != null)
+                dbContext.Entry(entitySave).State = EntityState.Deleted;
+                break;
+              }
+            #endregion
+            #region Edit
+            case EnumMode.edit:
+              {
+                dbContext.Entry(entitySave).State = EntityState.Modified;
+                break;
+              }
+            #endregion
+            #region Add
+            case EnumMode.add:
+              {
+                var objContext = ((IObjectContextAdapter)dbContext).ObjectContext;
+                var objSet = objContext.CreateObjectSet<T>();
+                #region Buscar si tiene Llave identity
+                bool blIdentity = false;
+                foreach (EdmProperty edm in objSet.EntitySet.ElementType.KeyMembers)
                 {
-                  if (a.Value.ToString() == "Identity")
+                  var a = edm.MetadataProperties.Where(item => item.Name == "http://schemas.microsoft.com/ado/2009/02/edm/annotation:StoreGeneratedPattern").FirstOrDefault();
+                  if (a != null)
                   {
-                    blIdentity = true;
-                    break;
+                    if (a.Value.ToString() == "Identity")
+                    {
+                      blIdentity = true;
+                      break;
+                    }
+
                   }
-
                 }
-              }
-              #endregion
+                #endregion
 
-              if (blIdentity == true)//Si es campo autoincremental
-              {
-                dbContext.Entry(entitySave).State = EntityState.Added;
-              }
-              else
-              {
-                var keyNames = objSet.EntitySet.ElementType.KeyMembers.Select(edmMember => edmMember.Name);
-                var keyValues = keyNames.Select(name => entitySave.GetType().GetProperty(name).GetValue(entitySave, null)).ToArray();
-                var exists = dbContext.Set<T>().Find(keyValues);
-                if (exists != null)//Validamos si existe un registro con el mismo ID
-                {
-                  return -1;
-                }
-                else//Agrega
+                if (blIdentity == true)//Si es campo autoincremental
                 {
                   dbContext.Entry(entitySave).State = EntityState.Added;
                 }
+                else
+                {
+                  var keyNames = objSet.EntitySet.ElementType.KeyMembers.Select(edmMember => edmMember.Name);
+                  var keyValues = keyNames.Select(name => entitySave.GetType().GetProperty(name).GetValue(entitySave, null)).ToArray();
+                  var exists = dbContext.Set<T>().Find(keyValues);
+                  if (exists != null)//Validamos si existe un registro con el mismo ID
+                  {
+                    return -1;
+                  }
+                  else//Agrega
+                  {
+                    dbContext.Entry(entitySave).State = EntityState.Added;
+                  }
+                }
+                break;
               }
-              break;
-            } 
-            #endregion
+              #endregion
+          }
+          return dbContext.SaveChanges();
         }
-        return dbContext.SaveChanges();
-      }
+      });
+
+      return nRes;
     }
     #endregion
 

@@ -236,18 +236,26 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 04/04/2016
     /// </history>
-    private void LoadMemberShipTypes(MembershipType memberShipType=null)
+    private async void LoadMemberShipTypes(MembershipType memberShipType=null)
     {
-      int nIndex = 0;
-      List<MembershipType> lstMemberShipTypes = BRMemberShipTypes.GetMemberShipTypes(_nStatus, _membershipTypeFilter);
-      dgrMemberShipTypes.ItemsSource = lstMemberShipTypes;
-      if(lstMemberShipTypes.Count>0 && memberShipType!=null)
+      try
       {
-        memberShipType = lstMemberShipTypes.Where(mt => mt.mtID == memberShipType.mtID).FirstOrDefault();
-        nIndex = lstMemberShipTypes.IndexOf(memberShipType);
+        int nIndex = 0;
+        List<MembershipType> lstMemberShipTypes = await BRMemberShipTypes.GetMemberShipTypes(_nStatus, _membershipTypeFilter);
+        dgrMemberShipTypes.ItemsSource = lstMemberShipTypes;
+        if (lstMemberShipTypes.Count > 0 && memberShipType != null)
+        {
+          memberShipType = lstMemberShipTypes.Where(mt => mt.mtID == memberShipType.mtID).FirstOrDefault();
+          nIndex = lstMemberShipTypes.IndexOf(memberShipType);
+        }
+        GridHelper.SelectRow(dgrMemberShipTypes, nIndex);
+        StatusBarReg.Content = lstMemberShipTypes.Count + "MemberShip Types.";
+
       }
-      GridHelper.SelectRow(dgrMemberShipTypes, nIndex);
-      StatusBarReg.Content = lstMemberShipTypes.Count + "MemberShip Types.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error, "Membership Type");
+      }
     }
     #endregion
 

@@ -325,11 +325,20 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 10/05/2016
+    /// [emoguel] modified 25/05/2016 se volvio Asyncrono el método 
     /// </history>
-    private void LoadLeadSources()
+    private async void LoadLeadSources()
     {
-      List<LeadSource> lstLeadSources = BRLeadSources.GetLeadSources(1,-1);
-      cmbLoc.ItemsSource = lstLeadSources;
+      try
+      {
+        List<LeadSource> lstLeadSources = await BRLeadSources.GetLeadSources(1, -1);
+        cmbLoc.ItemsSource = lstLeadSources;
+      }
+      catch
+      (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Goals");
+      }
     }
     #endregion
 

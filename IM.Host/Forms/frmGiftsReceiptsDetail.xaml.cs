@@ -108,7 +108,7 @@ namespace IM.Host.Forms
       _dsCurrencyDeposits.Source =await BRCurrencies.GetCurrencies(null, 1);
 
       //Obtenemos los regalos
-      _dsGifts.Source =await BRGifts.GetGifts("ALL", 1);
+      _dsGifts.Source =await BRGifts.GetGiftsShort("ALL", 1);
 
       // Obtenemos los bancos
       _dsBanks.Source = BRBanks.GetBanks(1);

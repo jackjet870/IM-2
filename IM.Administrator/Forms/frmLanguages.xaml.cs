@@ -233,10 +233,10 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 30/03/2016
     /// </history>
-    private void LoadLanguages( Language language = null)
+    private async void LoadLanguages( Language language = null)
     {
       int nIndex = 0;
-      List<Language> lstLanguages = BRLanguages.GetLanguages(_languageFilter, _nStatus);
+      List<Language> lstLanguages = await BRLanguages.GetLanguages(_languageFilter, _nStatus);
       dgrLanguages.ItemsSource = lstLanguages;
       if (language != null && lstLanguages.Count > 0)
       {

@@ -5,6 +5,7 @@ using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -94,31 +95,39 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 06/04/2016
+    /// [emoguel] modified 30/05/2016 se volviió async
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if (ObjectHelper.IsEquals(paymentType, oldPaymentType) && enumMode!=EnumMode.add)
+      try
       {
-        Close();
-      }
-      else
-      {
-        string strMsj = ValidateHelper.ValidateForm(this, "Payment Type");
-        if (strMsj == "")
+        btnAccept.Focus();
+        if (ObjectHelper.IsEquals(paymentType, oldPaymentType) && enumMode != EnumMode.add)
         {
-          int nRes = BREntities.OperationEntity(paymentType, enumMode);
-          UIHelper.ShowMessageResult("Payment Type", nRes);
-          if (nRes > 0)
-          {
-            DialogResult = true;
-            Close();
-          }
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          string strMsj = ValidateHelper.ValidateForm(this, "Payment Type");
+          if (strMsj == "")
+          {
+            int nRes =await BREntities.OperationEntity(paymentType, enumMode);
+            UIHelper.ShowMessageResult("Payment Type", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Payment Type");
       }
     } 
     #endregion

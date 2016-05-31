@@ -21,6 +21,8 @@ namespace IM.Administrator.Forms
     public HotelGroup oldHotelGroup = new HotelGroup();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo de la ventana
     private List<Hotel> _oldHotels = new List<Hotel>();//Hoteles iniciales
+    private bool blnClosing = false;
+    private bool isCellCancel = false;
     #endregion
     public frmHotelGroupDetail()
     {
@@ -67,7 +69,6 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null, null);
       }
     }
@@ -86,24 +87,53 @@ namespace IM.Administrator.Forms
     {
       if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
       {
-        List<Hotel> lstHotels = (List<Hotel>)dgrHotels.ItemsSource;//Los items del grid                   
-        Hotel hotel = (Hotel)dgrHotels.SelectedItem;//Valor que se está editando
+        isCellCancel = false;
+        bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrHotels);
+        e.Cancel = isRepeat;
+      }
+      else
+      {
+        isCellCancel = true;
+      }
+    }
+    #endregion
 
-        var Combobox = (ComboBox)e.EditingElement;
-        Hotel hotelCombo = (Hotel)Combobox.SelectedItem;//Valor seleccionado del combo
-
-        if (hotelCombo != null)//Se valida que no esté seleccionado en otra fila
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!blnClosing)
+      {
+        blnClosing = true;
+        btnCancel_Click(null, null);
+        if (!blnClosing)
         {
-          if (hotelCombo != hotel)//Validar que se esté cambiando el valor
-          {
-            Hotel hotelVal = lstHotels.Where(ho => ho.hoID != hotel.hoID && ho.hoID == hotelCombo.hoID).FirstOrDefault();
-            if (hotelVal != null)
-            {
-              UIHelper.ShowMessage("Hotel must not be repeated");
-              e.Cancel = true;
-            }
-          }
+          e.Cancel = true;
         }
+      }
+    }
+    #endregion
+
+    #region dgrHotels_RowEditEnding
+    /// <summary>
+    /// No permite agregar filas vacias
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void dgrHotels_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      if (isCellCancel)
+      {
+        dgrHotels.RowEditEnding -= dgrHotels_RowEditEnding;
+        dgrHotels.CancelEdit();
+        dgrHotels.RowEditEnding += dgrHotels_RowEditEnding;
       }
     }
     #endregion
@@ -123,6 +153,7 @@ namespace IM.Administrator.Forms
       List<Hotel> lstHotels = (List<Hotel>)dgrHotels.ItemsSource;
       if (enumMode != EnumMode.add && ObjectHelper.IsEquals(hotelGroup, oldHotelGroup) && ObjectHelper.IsListEquals(_oldHotels, lstHotels))
       {
+        blnClosing = true;
         Close();
       }
       else
@@ -136,6 +167,7 @@ namespace IM.Administrator.Forms
           UIHelper.ShowMessageResult("Hotel Group", nRes);
           if (nRes > 0)
           {
+            blnClosing = true;
             DialogResult = true;
             Close();
           }
@@ -159,6 +191,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       if (enumMode != EnumMode.preview)
       {
         List<Hotel> lstHotels = (List<Hotel>)dgrHotels.ItemsSource;
@@ -169,15 +202,19 @@ namespace IM.Administrator.Forms
           {
             Close();
           }
+          else
+          {
+            blnClosing = false;
+          }
         }
         else
         {
-          Close();
+          if (!blnClosing) { blnClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!blnClosing) { blnClosing = true; Close(); }
       }
     }
     #endregion
@@ -199,8 +236,9 @@ namespace IM.Administrator.Forms
       _oldHotels = lstHotels.ToList();
       dgrHotels.ItemsSource = lstHotels;
       cmbHotels.ItemsSource = lstAllHotels;
-    } 
+    }
     #endregion
+
     #endregion
   }
 }

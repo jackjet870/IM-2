@@ -25,7 +25,9 @@ namespace IM.Administrator.Forms
     public int nAnimation = -1;//Is animation para el modo busqueda 
     public EnumMode enumMode;//Modo en que se abrirá la ventana
     private List<Location> _oldLocations = new List<Location>();//Locaciones iniciales de la ventana
-    private List<Agency> _oldAgencies = new List<Agency>();//Agencias iniciales de la ventana     
+    private List<Agency> _oldAgencies = new List<Agency>();//Agencias iniciales de la ventana    
+    bool blnClosing = false;
+    bool isCellCancel = false; 
     #endregion
     public frmLeadSourceDetail()
     {
@@ -129,7 +131,6 @@ namespace IM.Administrator.Forms
     {
       if(e.Key==Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null, null);
       }
     }
@@ -154,6 +155,7 @@ namespace IM.Administrator.Forms
       {
         if (enumMode != EnumMode.add && ObjectHelper.IsEquals(leadSource, oldLeadSource) && ObjectHelper.IsListEquals(_oldAgencies, lstAgencies) && ObjectHelper.IsListEquals(_oldLocations, lstLocations))
         {
+          blnClosing = true;
           Close();
         }
         else
@@ -175,6 +177,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Lead Source", nRes);
             if(nRes>0)
             {
+              blnClosing = true;
               DialogResult = true;
               Close();
             }
@@ -191,6 +194,7 @@ namespace IM.Administrator.Forms
       #region Search
       else
       {
+        blnClosing = true;
         DialogResult = true;
         nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
         nRegen = Convert.ToInt32(cmbRegen.SelectedValue);
@@ -212,6 +216,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       if(enumMode!=EnumMode.preview && enumMode!=EnumMode.search)
       {
         List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
@@ -221,17 +226,21 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!blnClosing) { blnClosing = true; Close(); }
+          }
+          else
+          {
+            blnClosing = false;
           }
         }
         else
         {
-          Close();
+          if (!blnClosing) { blnClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!blnClosing) { blnClosing = true; Close(); }
       }
     }
     #endregion
@@ -249,24 +258,13 @@ namespace IM.Administrator.Forms
     {
       if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
       {
-        List<Location> lstLocations = (List<Location>)dgrLocations.ItemsSource;//Los items del grid                   
-        Location location = (Location)dgrLocations.SelectedItem;//Valor que se está editando
-
-        var Combobox = (ComboBox)e.EditingElement;
-        Location locationCombo = (Location)Combobox.SelectedItem;//Valor seleccionado del combo
-
-        if (locationCombo != null)//Se valida que no esté seleccionado en otra fila
-        {
-          if (locationCombo != location)//Validar que se esté cambiando el valor
-          {
-            Location locationVal = lstLocations.Where(lo => lo.loID != location.loID && lo.loID == locationCombo.loID).FirstOrDefault();
-            if (locationVal != null)
-            {
-              UIHelper.ShowMessage("Location must not be repeated");
-              e.Cancel = true;
-            }
-          }
-        }
+        isCellCancel = false;
+        bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrLocations);
+        e.Cancel = isRepeat;
+      }
+      else
+      {
+        isCellCancel = true;
       }
     }
     #endregion
@@ -285,27 +283,60 @@ namespace IM.Administrator.Forms
 
       if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
       {
-        List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;//Los items del grid                   
-        Agency agency = (Agency)dgrAgencies.SelectedItem;//Valor que se está editando
-
-        var Combobox = (ComboBox)e.EditingElement;
-        Agency agencyCombo = (Agency)Combobox.SelectedItem;//Valor seleccionado del combo
-
-        if (agencyCombo != null)//Se valida que no esté seleccionado en otra fila
-        {
-          if (agencyCombo != agency)//Validar que se esté cambiando el valor
-          {
-            Agency agencyVal = lstAgencies.Where(ag => ag.agID != agency.agID && ag.agID == agencyCombo.agID).FirstOrDefault();
-            if (agencyVal != null)
-            {
-              UIHelper.ShowMessage("Agency must not be repeated");
-              e.Cancel = true;
-            }
-          }
-        }
+        isCellCancel = false;
+        bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrAgencies);
+        e.Cancel = isRepeat;
+      }
+      else
+      {
+        isCellCancel = true;
       }
     }
 
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Verifica cambios al cerrar
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 25/05/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!blnClosing)
+      {
+        blnClosing = true;
+        btnCancel_Click(null, null);
+        if (!blnClosing)
+        {
+          e.Cancel = true;
+        }
+      }
+    }
+    #endregion
+
+    #region dgr_RowEditEnding
+    /// <summary>
+    /// No permite que se agreguen filas vacias
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 25/05/2016
+    /// </history>
+    private void dgr_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      DataGrid dgr = (DataGrid)sender;
+      if (isCellCancel)
+      {
+        dgr.RowEditEnding -= dgr_RowEditEnding;
+        dgr.CancelEdit();
+        dgr.RowEditEnding += dgr_RowEditEnding;
+      }
+    }
     #endregion
     #endregion
 
@@ -371,14 +402,21 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 16/05/2016
     /// </history>
-    private void LoadAreas()
+    private async void LoadAreas()
     {
-      List<Area> lstAreas = BRAreas.GetAreas(nStatus:1);
-      if(enumMode==EnumMode.search)
+      try
       {
-        lstAreas.Insert(0, new Area { arID = "", arN = "" });
+        List<Area> lstAreas = await BRAreas.GetAreas(nStatus: 1);
+        if (enumMode == EnumMode.search)
+        {
+          lstAreas.Insert(0, new Area { arID = "", arN = "" });
+        }
+        cmblsar.ItemsSource = lstAreas;
       }
-      cmblsar.ItemsSource = lstAreas;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Lead Source");
+      }
     }
     #endregion
 
@@ -389,14 +427,21 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 16/05/2016
     /// </history>
-    private void LoadRegions()
+    private async void LoadRegions()
     {
-      List<Region> lstRegions = BRRegions.GetRegions(1);
-      if(enumMode==EnumMode.search)
+      try
       {
-        lstRegions.Insert(0, new Region { rgID = "", rgN = "" });
+        List<Region> lstRegions = await BRRegions.GetRegions(1);
+        if (enumMode == EnumMode.search)
+        {
+          lstRegions.Insert(0, new Region { rgID = "", rgN = "" });
+        }
+        cmblsrg.ItemsSource = lstRegions;
       }
-      cmblsrg.ItemsSource = lstRegions;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Lead Source");
+      }
     }
     #endregion
 

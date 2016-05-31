@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -22,7 +23,7 @@ namespace IM.BusinessRules.BR
     /// [edgrodriguez] 24/Feb/2016 Created
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    public async static Task<List<GiftShort>> GetGifts(string location = "ALL", int Status = 0)
+    public async static Task<List<GiftShort>> GetGiftsShort(string location = "ALL", int Status = 0)
     {
       List<GiftShort> result = new List<GiftShort>();
       await Task.Run(() =>
@@ -208,5 +209,56 @@ namespace IM.BusinessRules.BR
 
     #endregion GetGiftsInputList
 
+
+    #region GetGifts
+    /// <summary>
+    /// Obtiene registros del catalogo Gift
+    /// </summary>
+    /// <param name="nStatus">-1. Todos | 0. Inactivos | 1. Activos</param>
+    /// <param name="gift">Objeto con filtros adicionales</param>
+    /// <returns>Lista tipo Gift</returns>
+    /// <history>
+    /// [emoguel] created 23/05/2016
+    /// </history>
+    public async static Task<List<Gift>> GetGifts(int nStatus = -1, Gift gift = null)
+    {
+      List<Gift> lstGift = new List<Gift>();
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var query = from gi in dbContext.Gifts
+                      select gi;
+
+          if (nStatus != -1)//Filtro por estatus
+          {
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(gi => gi.giA == blnStatus);
+          }
+
+          if (gift != null)
+          {
+            if (!string.IsNullOrWhiteSpace(gift.giID))//Filtro por ID
+            {
+              query = query.Where(gi => gi.giID == gift.giID);
+            }
+
+            if (!string.IsNullOrWhiteSpace(gift.giN))//Filtro por descripción
+            {
+              query = query.Where(gi => gi.giN.Contains(gift.giN));
+            }
+
+            if (!string.IsNullOrWhiteSpace(gift.gipr))//Filtro por product
+            {
+              query = query.Where(gi => gi.gipr == gift.gipr);
+            }
+          }          
+          lstGift= query.OrderBy(gi => gi.giN).ToList();
+        }
+      });
+      return lstGift;
+
+    } 
+    #endregion
   }
 }

@@ -1,0 +1,65 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmScoreRuleByLeadSourceDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing"
+        Title="Score Rule By Lead Source Detail" Height="418" Width="338" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+    <DockPanel LastChildFill="True" >
+        <!--#region Top-->
+        <Grid DockPanel.Dock="Top" Margin="10,10,14,2">
+            <!--#region Formato del grid-->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="24"/>
+            </Grid.RowDefinitions>
+            <!--#endregion-->
+            <!--#region títulos-->
+            <Label Grid.Column="0" Grid.Row="0">Lead Source</Label>
+            <!--#endregion-->
+            <ComboBox Name="cmbsbID" Tag="ID" Grid.Row="0" Height="27" DisplayMemberPath="lsN" SelectedValuePath="lsID" VerticalAlignment="Top" SelectedValue="{Binding sbls}" IsEnabled="False" Margin="69,0,0,0" />            
+            <CheckBox Name="chksuA" Grid.Row="2" VerticalAlignment="Center" Content="Active" Margin="69,0,0,0" IsChecked="{Binding sbA}"/>
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region  Botones-->
+        <Grid DockPanel.Dock="Bottom" Background="Transparent" >
+            <StackPanel Orientation="Horizontal" Name="skpStatus" Visibility="Visible" Margin="0,0,0,4" HorizontalAlignment="Right" Width="326">
+                <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Base;component/Images/time.ico" Width="16" Height="16"/>
+                <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
+            </StackPanel>
+            <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" HorizontalAlignment="Right" Content="_Accept" Margin="0,4,84,4"/>
+            <Button Name="btnCancel" Width="60" Height="30" Click="btnCancel_Click" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region Grid Scores-->
+        <Grid>
+            <DataGrid Name="dgrScores" Margin="79,0,14,15" Grid.Column="1" CellEditEnding="dgrScores_CellEditEnding" RowEditEnding="dgrScores_RowEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                      CanUserAddRows="True" BeginningEdit="dgrScores_BeginningEdit" CanUserResizeColumns="False" CanUserResizeRows="False" >
+                <DataGrid.Columns>
+                    <DataGridComboBoxColumn  Width="40*" x:Name="cmbScoreRuleConcept" DisplayMemberPath="spN" SelectedValuePath="spID" SelectedValueBinding="{Binding sjsp}" Header="Concept" />
+                    <DataGridTemplateColumn Header="Score" Width="60*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding sjScore,StringFormat={}{0:n1}}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <TextBox Name="txtScore" Text="{Binding sjScore,StringFormat={}{0:n1}}" PreviewTextInput="txtScore_PreviewTextInput" MaxLength="3"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
+        </Grid>
+        <!--#endregion-->
+    </DockPanel>
+</Window>

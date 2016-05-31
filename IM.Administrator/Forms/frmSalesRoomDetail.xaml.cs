@@ -185,15 +185,23 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 22/03/2016
+    /// [emoguel] modified 30/05/2016 Se volvió async
     /// </history>
-    private void LoadAreas()
+    private async void LoadAreas()
     {
-      List<Area> lstAreas = BRAreas.GetAreas();
-      if (enumMode == EnumMode.search && lstAreas.Count > 0)
+      try
       {
-        lstAreas.Insert(0, new Area { arID = "", arN = "" });
+        List<Area> lstAreas = await BRAreas.GetAreas();
+        if (enumMode == EnumMode.search && lstAreas.Count > 0)
+        {
+          lstAreas.Insert(0, new Area { arID = "", arN = "" });
+        }
+        cmbsrar.ItemsSource = lstAreas;
       }
-      cmbsrar.ItemsSource = lstAreas;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Sales Room");
+      }
     }
     #endregion
 

@@ -103,52 +103,60 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 13/04/2016
+    /// [emoguel] modified 30/05/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();      
-      if(enumMode==EnumMode.search)
+      try
       {
-        if (dpppDT.SelectedDate != null)
+        btnAccept.Focus();
+        if (enumMode == EnumMode.search)
         {
-          blnDate = true;
-          postLog.ppDT = Convert.ToDateTime(dpppDT.SelectedDate);
-        }
-        else
-        {
-          blnDate = false;
-        }
-        DialogResult = true;
-        Close();
-      }
-      else
-      {
-        if(ObjectHelper.IsEquals(postLog,oldPostLog) && enumMode!=EnumMode.add)
-        {
+          if (dpppDT.SelectedDate != null)
+          {
+            blnDate = true;
+            postLog.ppDT = Convert.ToDateTime(dpppDT.SelectedDate);
+          }
+          else
+          {
+            blnDate = false;
+          }
+          DialogResult = true;
           Close();
         }
         else
         {
-          #region Insertar|Agregar
-          string strMsj = ValidateHelper.ValidateForm(this, "Post Log");
-          if (strMsj == "")
+          if (ObjectHelper.IsEquals(postLog, oldPostLog) && enumMode != EnumMode.add)
           {
-            int nRes = BREntities.OperationEntity(postLog, enumMode);
-            UIHelper.ShowMessageResult("PostLog", nRes);
-            if (nRes>0)
-            {
-              postLog = BRPostsLog.GetPostsLog(postLog).FirstOrDefault();
-              DialogResult = true;
-              Close();
-            } 
-              
+            Close();
           }
           else
           {
-            UIHelper.ShowMessage(strMsj);
+            #region Insertar|Agregar
+            string strMsj = ValidateHelper.ValidateForm(this, "Post Log");
+            if (strMsj == "")
+            {
+              int nRes = await BREntities.OperationEntity(postLog, enumMode);
+              UIHelper.ShowMessageResult("PostLog", nRes);
+              if (nRes > 0)
+              {
+                postLog = BRPostsLog.GetPostsLog(postLog).FirstOrDefault();
+                DialogResult = true;
+                Close();
+              }
+
+            }
+            else
+            {
+              UIHelper.ShowMessage(strMsj);
+            }
+            #endregion
           }
-          #endregion
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Post Log");
       }
     } 
     #endregion

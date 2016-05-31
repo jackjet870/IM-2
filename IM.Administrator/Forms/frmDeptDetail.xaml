@@ -3,25 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"                
-        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown"
-        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"  Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="Dept Detail" Height="408" Width="348">
-    <Window.Resources>
-        <CollectionViewSource x:Key="getPersonnels" IsLiveSortingRequested="True" d:DesignSource="{d:DesignInstance {x:Type Model:Personnel}, CreateList=True}">
-            <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription PropertyName="peN" Direction="Ascending"/>
-            </CollectionViewSource.SortDescriptions>
-        </CollectionViewSource>
-    </Window.Resources>
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"                        
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        Title="Dept Detail" Height="408" Width="348" Closing="Window_Closing">
     <DockPanel LastChildFill="True" >
         <!--#region Top-->
         <Grid DockPanel.Dock="Top" Margin="10,10,14,2">
             <!--#region Formato del grid-->
             <Grid.RowDefinitions>
-                <RowDefinition Height="44"/>
-                <RowDefinition Height="44"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="24"/>
             </Grid.RowDefinitions>
             <!--#endregion-->
@@ -43,18 +34,18 @@
         <!--#endregion-->
 
         <!--#region Grid Sales Room-->
-        <DataGrid Name="dgrPersonnel" Margin="79,0,14,0" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Source={StaticResource getPersonnels},UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" CellEditEnding="dgrPersonnels_CellEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CanUserAddRows="True" 
-                  CanUserResizeColumns="False" CanUserResizeRows="False" >
+        <DataGrid Name="dgrPersonnel" Margin="79,0,14,0" IsSynchronizedWithCurrentItem="True" Grid.Column="1" CellEditEnding="dgrPersonnels_CellEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CanUserAddRows="True" 
+                  CanUserResizeColumns="False" CanUserResizeRows="False" RowEditEnding="dgrPersonnel_RowEditEnding" >
             <DataGrid.Columns>
                 <DataGridComboBoxColumn  Width="78*" x:Name="cmbPersonnel" DisplayMemberPath="peN" SelectedValuePath="peID"
-                                         SelectedValueBinding="{Binding peID}" Header="Personnel" >
+                                         SelectedValueBinding="{Binding peID}"  Header="Personnel" >
                     <DataGridComboBoxColumn.EditingElementStyle>
                         <Style TargetType="ComboBox">
                             <Setter Property="IsEditable" Value="True"/>
                         </Style>
                     </DataGridComboBoxColumn.EditingElementStyle>
                 </DataGridComboBoxColumn>
-                <DataGridCheckBoxColumn Header="Active" x:Name="chkpeA" Width="22*" IsReadOnly="True" Binding="{Binding peA}" />
+                <DataGridCheckBoxColumn Header="Active" x:Name="chkpeA" Width="22*" IsReadOnly="True" Binding="{Binding peA,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
         <!--#endregion-->

@@ -5,6 +5,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -74,31 +75,39 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 28/04/2016
+    /// [emoguel] modified 30/05/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(underPaymentMotive,oldUnderPaymentMOtive))
+      try
       {
-        Close();
-      }
-      else
-      {
-        string strMsj = ValidateHelper.ValidateForm(this, "Under Payment Motive");
-        if(strMsj=="")
+        btnAccept.Focus();
+        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(underPaymentMotive, oldUnderPaymentMOtive))
         {
-          int nRes = BREntities.OperationEntity<UnderPaymentMotive>(underPaymentMotive, enumMode);
-          UIHelper.ShowMessageResult("Under Payment Motives", nRes);
-          if(nRes>0)
-          {
-            DialogResult = true;
-            Close();
-          }
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          string strMsj = ValidateHelper.ValidateForm(this, "Under Payment Motive");
+          if (strMsj == "")
+          {
+            int nRes =await BREntities.OperationEntity(underPaymentMotive, enumMode);
+            UIHelper.ShowMessageResult("Under Payment Motives", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Under Payment Motive");
       }
     }
     #endregion

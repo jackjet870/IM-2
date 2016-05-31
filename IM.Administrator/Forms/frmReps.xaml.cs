@@ -235,18 +235,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 18/04/2016
     /// </history>
-    private void LoadReps(Rep rep = null)
+    private async void LoadReps(Rep rep = null)
     {
-      int nIndex = 0;
-      List<Rep> lstReps = BRReps.GetReps(_repFilter, _nStatus);
-      dgrReps.ItemsSource = lstReps;
-      if (lstReps.Count > 0 && rep != null)
+      try
       {
-        rep = lstReps.Where(rp => rp.rpID == rep.rpID).FirstOrDefault();
-        nIndex = lstReps.IndexOf(rep);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Rep> lstReps = await BRReps.GetReps(_repFilter, _nStatus);
+        dgrReps.ItemsSource = lstReps;
+        if (lstReps.Count > 0 && rep != null)
+        {
+          rep = lstReps.Where(rp => rp.rpID == rep.rpID).FirstOrDefault();
+          nIndex = lstReps.IndexOf(rep);
+        }
+        GridHelper.SelectRow(dgrReps, nIndex);
+        StatusBarReg.Content = lstReps.Count + " Reps.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrReps, nIndex);
-      StatusBarReg.Content = lstReps.Count + " Reps.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Reps");
+      }
     }
     #endregion
     #region ValidateFilter

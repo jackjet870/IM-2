@@ -7,6 +7,8 @@ using IM.Base.Helpers;
 using IM.Model.Enums;
 using System.Linq;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -235,19 +237,29 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 16/03/2016
+    /// [emoguel] modified 30/05/2016
     /// </history>
-    private void LoadComputers(Computer computer=null)
+    private async void LoadComputers(Computer computer=null)
     {
-      int nIndex = 0;
-      List<Computer> lstComputers = BRComputers.GetComputers(_computerFilter);
-      dgrComputers.ItemsSource = lstComputers;      
-      if(computer!=null && lstComputers.Count>0)
+      try
       {
-        computer = lstComputers.Where(co => co.cpID == computer.cpID).FirstOrDefault();
-        nIndex = lstComputers.IndexOf(computer);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Computer> lstComputers =await BRComputers.GetComputers(_computerFilter);
+        dgrComputers.ItemsSource = lstComputers;
+        if (computer != null && lstComputers.Count > 0)
+        {
+          computer = lstComputers.Where(co => co.cpID == computer.cpID).FirstOrDefault();
+          nIndex = lstComputers.IndexOf(computer);
+        }
+        GridHelper.SelectRow(dgrComputers, nIndex);
+        StatusBarReg.Content = lstComputers.Count + " Computers.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrComputers, nIndex);
-      StatusBarReg.Content = lstComputers.Count+" Computers.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Computers");
+      }
     }
     #endregion
 
@@ -273,7 +285,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_computerFilter.cpN))
       {
-        if (!newComputer.cpN.Contains(_computerFilter.cpN))
+        if (!newComputer.cpN.Contains(_computerFilter.cpN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

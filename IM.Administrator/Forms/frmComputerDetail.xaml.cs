@@ -6,6 +6,7 @@ using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -17,7 +18,8 @@ namespace IM.Administrator.Forms
     #region Variables
     public Computer computer = new Computer();//Objeto a guardar
     public Computer oldComputer = new Computer();//Objeto con los datos iniciales
-    public EnumMode mode; 
+    public EnumMode mode;
+    private bool _isClosing = false;
     #endregion
     public frmComputerDetail()
     {
@@ -60,7 +62,6 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null, null);
       }
     }
@@ -74,34 +75,45 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 16/03/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if (ObjectHelper.IsEquals(computer, oldComputer) && mode != EnumMode.add)
+      try
       {
-        Close();
-      }
-      else
-      {
-        int nRes = 0;
-        string sMsj = ValidateHelper.ValidateForm(this, "Computer");
-
-
-        if (sMsj == "")
+        btnAccept.Focus();
+        if (ObjectHelper.IsEquals(computer, oldComputer) && mode != EnumMode.add)
         {
-          nRes = BREntities.OperationEntity(computer, mode);
-          UIHelper.ShowMessageResult("Coomputer", nRes);
-          if (nRes > 0)
-          {
-            DialogResult = true;
-            Close();
-          }
+          _isClosing = true;
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(sMsj);
+          skpStatus.Visibility = Visibility.Visible;
+          txtStatus.Text = "Saving Data...";
+          int nRes = 0;
+          string sMsj = ValidateHelper.ValidateForm(this, "Computer");
+          if (sMsj == "")
+          {
+            nRes = await BREntities.OperationEntity(computer, mode);
+            UIHelper.ShowMessageResult("Coomputer", nRes);
+            if (nRes > 0)
+            {
+              _isClosing = true;
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(sMsj);
+          }
+          skpStatus.Visibility = Visibility.Collapsed;
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Computers");
       }
     }
     #endregion
@@ -117,6 +129,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       if (mode != EnumMode.preview)
       {
         if (!ObjectHelper.IsEquals(computer, oldComputer))
@@ -124,17 +137,20 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!_isClosing) { _isClosing = true; Close(); }
+          }
+          {
+            _isClosing = false;
           }
         }
         else
         {
-          Close();
+          if (!_isClosing) { _isClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!_isClosing) { _isClosing = true; Close(); }
       }
     }
     #endregion
@@ -148,11 +164,20 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 16/03/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void LoadDesks()
+    private async void LoadDesks()
     {
-      List<Desk> lstDesk = BRDesks.GetDesks(new Desk());
-      cmbDesk.ItemsSource = lstDesk;
+      try
+      {
+        List<Desk> lstDesk = BRDesks.GetDesks(new Desk());
+        cmbDesk.ItemsSource = lstDesk;
+        skpStatus.Visibility = Visibility.Collapsed;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Computers");
+      }
     }
     #endregion    
     #endregion

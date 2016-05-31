@@ -1847,7 +1847,7 @@ namespace IM.Base.Forms
       guestStatusTypeViewSource.Source = await IM.BusinessRules.BR.BRGuests.GetGuestStatusType(1);
 
       giftShortViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("giftShortViewSource")));
-      giftShortViewSource.Source = await IM.BusinessRules.BR.BRGifts.GetGifts(_user.Location == null ? "ALL":_user.Location.loID, 1);
+      giftShortViewSource.Source = await IM.BusinessRules.BR.BRGifts.GetGiftsShort(_user.Location == null ? "ALL":_user.Location.loID, 1);
       #endregion
 
     }

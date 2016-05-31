@@ -94,41 +94,56 @@ namespace IM.Administrator.Forms
     #endregion
 
     #region Accept
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// Guarada un Location
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] modified 30/05/2016 Se volvió async
+    /// </history>
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if (enumMode!=EnumMode.search)
+      try
       {
-        if(ObjectHelper.IsEquals(location,oldLocation) && enumMode!=EnumMode.add)
+        btnAccept.Focus();
+        if (enumMode != EnumMode.search)
         {
-          Close();          
-        }
-        else
-        {
-          int nRes = 0;
-          string strMsj = ValidateHelper.ValidateForm(this,"Location");
-          
-          if(strMsj=="")
+          if (ObjectHelper.IsEquals(location, oldLocation) && enumMode != EnumMode.add)
           {
-            nRes = BREntities.OperationEntity(location, enumMode);
-            UIHelper.ShowMessageResult("Location", nRes);
-            if(nRes>0)
-            {
-              DialogResult = true;
-              Close();
-            }
+            Close();
           }
           else
           {
-            UIHelper.ShowMessage(strMsj);
+            int nRes = 0;
+            string strMsj = ValidateHelper.ValidateForm(this, "Location");
+
+            if (strMsj == "")
+            {
+              nRes = await BREntities.OperationEntity(location, enumMode);
+              UIHelper.ShowMessageResult("Location", nRes);
+              if (nRes > 0)
+              {
+                DialogResult = true;
+                Close();
+              }
+            }
+            else
+            {
+              UIHelper.ShowMessage(strMsj);
+            }
           }
         }
+        else
+        {
+          nStatus = Convert.ToInt32(cmbSta.SelectedValue);
+          DialogResult = true;
+          Close();
+        }
       }
-      else
+      catch(Exception ex)
       {
-        nStatus = Convert.ToInt32(cmbSta.SelectedValue);
-        DialogResult = true;
-        Close();
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Location");
       }
     }
     #endregion

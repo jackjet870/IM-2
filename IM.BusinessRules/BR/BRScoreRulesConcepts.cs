@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,32 +18,39 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo ScoreRuleConcept</returns>
     /// <history>
     /// [emoguel] created 22/04/2016
+    /// [emoguel] modified 26/05/2016 se volvió asincrono
     /// </history>
-    public static List<ScoreRuleConcept> GetScoreRulesConcepts(int nStatus=-1,ScoreRuleConcept scoreRuleConcept=null)
+    public async static Task<List<ScoreRuleConcept>> GetScoreRulesConcepts(int nStatus=-1,ScoreRuleConcept scoreRuleConcept=null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<ScoreRuleConcept> lstScoreRuleConcept = new List<ScoreRuleConcept>();
+      await Task.Run(() =>
       {
-        var query = from sp in dbContext.ScoreRulesConcepts
-                    select sp;
-        if(nStatus!=-1)//Filtro por Status
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(sp => sp.spA == blnStatus);
-        }
-        if(scoreRuleConcept!=null)
-        {
-          if(scoreRuleConcept.spID>0)//Filtro por ID
+          var query = from sp in dbContext.ScoreRulesConcepts
+                      select sp;
+          if (nStatus != -1)//Filtro por Status
           {
-            query = query.Where(sp => sp.spID == scoreRuleConcept.spID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(sp => sp.spA == blnStatus);
           }
+          if (scoreRuleConcept != null)
+          {
+            if (scoreRuleConcept.spID > 0)//Filtro por ID
+            {
+              query = query.Where(sp => sp.spID == scoreRuleConcept.spID);
+            }
 
-          if(!string.IsNullOrWhiteSpace(scoreRuleConcept.spN))//Filtro por descripción
-          {
-            query = query.Where(sp => sp.spN.Contains(scoreRuleConcept.spN));
+            if (!string.IsNullOrWhiteSpace(scoreRuleConcept.spN))//Filtro por descripción
+            {
+              query = query.Where(sp => sp.spN.Contains(scoreRuleConcept.spN));
+            }
           }
+          lstScoreRuleConcept = query.OrderBy(sp => sp.spN).ToList();
         }
-        return query.OrderBy(sp => sp.spN).ToList();
-      }
+      });
+
+      return lstScoreRuleConcept;
     }
     #endregion
   }

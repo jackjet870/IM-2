@@ -8,6 +8,7 @@ using IM.Model;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -21,6 +22,8 @@ namespace IM.Administrator.Forms
     public Bank oldBank = new Bank();//Objeto con los datos iniciales
     public EnumMode enumMode;//modo en que se mostrará la ventana  
     private List<SalesRoom> _oldLstSalesRoom = new List<SalesRoom>();//Lista incial de computadoras 
+    private bool isCellCancel = false;
+    private bool blnClosing = false; 
     #endregion
     public frmBankDetail()
     {
@@ -40,7 +43,13 @@ namespace IM.Administrator.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       _oldLstSalesRoom = oldBank.SalesRooms.ToList();
-      dgrSalesRoom.ItemsSource = oldBank.SalesRooms.ToList();
+      List<SalesRoom> lstSalesRoom = new List<SalesRoom>();
+      oldBank.SalesRooms.ToList().ForEach(sr=> {
+        SalesRoom srm = new SalesRoom();
+        ObjectHelper.CopyProperties(srm, sr);
+        lstSalesRoom.Add(srm);
+      });
+      dgrSalesRoom.ItemsSource = lstSalesRoom;
       ObjectHelper.CopyProperties(bank, oldBank);            
       UIHelper.SetUpControls(bank, this);      
       txtbkID.IsEnabled = (enumMode == EnumMode.add);
@@ -62,12 +71,53 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null, null);
       }
     }
     #endregion
 
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 25/05/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!blnClosing)
+      {
+        blnClosing = true;
+        btnCancel_Click(null, null);
+        if (!blnClosing)
+        {
+          e.Cancel = true;
+        }
+      }
+    }
+    #endregion
+
+    #region dgrSalesRoom_RowEditEnding
+    /// <summary>
+    /// No permite agregar registros vacios
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 25/05/2016
+    /// </history>
+    private void dgrSalesRoom_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      if (isCellCancel)
+      {
+        dgrSalesRoom.RowEditEnding -= dgrSalesRoom_RowEditEnding;
+        dgrSalesRoom.CancelEdit();
+        dgrSalesRoom.RowEditEnding += dgrSalesRoom_RowEditEnding;
+      }
+    }
+    #endregion
     #region Cancel
     /// <summary>
     /// Cierra la ventana Verificando cambios pendientes
@@ -78,19 +128,24 @@ namespace IM.Administrator.Forms
     /// [emoguel] created 30/04/2016
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {      
+    {
+      btnCancel.Focus(); 
       List<SalesRoom> lstSalesRoom = (List<SalesRoom>)dgrSalesRoom.ItemsSource;
       if (!ObjectHelper.IsEquals(bank, oldBank) || !ObjectHelper.IsListEquals(lstSalesRoom, _oldLstSalesRoom))
       {
         MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
         if (result == MessageBoxResult.Yes)
         {
-          Close();
+          if (!blnClosing) { blnClosing = true; Close(); }
+        }
+        else
+        {
+          blnClosing = false;
         }
       }
       else
       {
-        Close();
+        if (!blnClosing) { blnClosing = true; Close(); }
       }
     }
     #endregion
@@ -103,34 +158,50 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 30/04/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      List<SalesRoom> lstSalesRoom = (List<SalesRoom>)dgrSalesRoom.ItemsSource;
-      if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(bank,oldBank) && ObjectHelper.IsListEquals(_oldLstSalesRoom,lstSalesRoom))
+      try
       {
-        Close();
-      }
-      else
-      {
-        string strMsj = ValidateHelper.ValidateForm(this, "Bank");
-        if (strMsj == "")
-        {          
-          List<SalesRoom> lstAdd = lstSalesRoom.Where(sr => !_oldLstSalesRoom.Any(srr => srr.srID == sr.srID)).ToList();
-          List<SalesRoom> lstDel = _oldLstSalesRoom.Where(sr => !lstSalesRoom.Any(srr => srr.srID == sr.srID)).ToList();
-          int nRes = BRBanks.SaveBank(ref bank, (enumMode == EnumMode.edit), lstAdd, lstDel);
-          UIHelper.ShowMessageResult("Bank", nRes);
-          if (nRes > 0)
-          {
-            DialogResult = true;
-            Close();
-          }
+        btnAccept.Focus();
+        List<SalesRoom> lstSalesRoom = (List<SalesRoom>)dgrSalesRoom.ItemsSource;
+        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(bank, oldBank) && ObjectHelper.IsListEquals(_oldLstSalesRoom, lstSalesRoom))
+        {
+          blnClosing = true;
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          skpStatus.Visibility = Visibility.Visible;
+          txtStatus.Text = "Saving Data...";
+          string strMsj = ValidateHelper.ValidateForm(this, "Bank");
+          if (strMsj == "")
+          {
+            List<SalesRoom> lstAdd = lstSalesRoom.Where(sr => !_oldLstSalesRoom.Any(srr => srr.srID == sr.srID)).ToList();
+            List<SalesRoom> lstDel = _oldLstSalesRoom.Where(sr => !lstSalesRoom.Any(srr => srr.srID == sr.srID)).ToList();
+            var grid = dgrSalesRoom;
+            int nRes = await BRBanks.SaveBank(bank, (enumMode == EnumMode.edit), lstAdd, lstDel);
+            var banks = await BRBanks.GetBanks(bank: bank);
+            bank = banks.FirstOrDefault();
+            UIHelper.ShowMessageResult("Bank", nRes);
+            if (nRes > 0)
+            {
+              blnClosing = true;
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
+          skpStatus.Visibility = Visibility.Collapsed;
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Banks");
       }
     }
     #endregion
@@ -148,24 +219,13 @@ namespace IM.Administrator.Forms
     {
       if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
       {
-        List<SalesRoom> lstSalesRoom = (List<SalesRoom>)dgrSalesRoom.ItemsSource;//Los items del grid                   
-        SalesRoom salesRoom = (SalesRoom)dgrSalesRoom.SelectedItem;//Valor que se está editando
-
-        var Combobox = (ComboBox)e.EditingElement;
-        SalesRoom salesCombo = (SalesRoom)Combobox.SelectedItem;//Valor seleccionado del combo
-
-        if (salesCombo != null)//Se valida que no esté seleccionado en otra fila
-        {
-          if (salesCombo != salesRoom)//Validar que se esté cambiando el valor
-          {
-            SalesRoom salesRoomVal = lstSalesRoom.Where(sr => sr.srID != salesRoom.srID && sr.srID == salesCombo.srID).FirstOrDefault();
-            if (salesRoomVal != null)
-            {
-              UIHelper.ShowMessage("Sales Room must not be repeated");
-              e.Cancel = true;
-            }
-          }
-        }
+        isCellCancel = false;
+        bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrSalesRoom);
+        e.Cancel = isRepeat;
+      }
+      else
+      {
+        isCellCancel = true;
       }
     }
     #endregion
@@ -179,11 +239,20 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] 02/05/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void LoadSalesRoom()
+    private async void LoadSalesRoom()
     {
-      List<SalesRoom> lstSalesRoom = BRSalesRooms.GetSalesRooms(1, -1);
-      cmbSalesRoom.ItemsSource = lstSalesRoom;
+      try
+      {
+        List<SalesRoom> lstSalesRoom =await BRSalesRooms.GetSalesRooms(1, -1);
+        cmbSalesRoom.ItemsSource = lstSalesRoom.ToList();
+        skpStatus.Visibility = Visibility.Collapsed;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Banks");
+      }
     }
     #endregion
 

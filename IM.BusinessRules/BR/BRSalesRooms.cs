@@ -126,55 +126,63 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 21/04/2016
     /// [emoguel] modified 27/04/2016--->Se agregó el parametro blnTeamLog
+    /// [emoguel] modified 30/05/2016 Se volvió async
     /// </history>
-    public static List<SalesRoom> GetSalesRooms(int nStatus = -1, int nAppointment = -1, SalesRoom salesRoom = null, bool blnTeamLog = false)
+    public async static Task<List<SalesRoom>> GetSalesRooms(int nStatus = -1, int nAppointment = -1, SalesRoom salesRoom = null, bool blnTeamLog = false)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<SalesRoom> lstSalesRooms = new List<SalesRoom>();
+      await Task.Run(() =>
       {
-        var query = from sr in dbContext.SalesRooms
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var query = from sr in dbContext.SalesRooms
+                      select sr;
+
+          if (blnTeamLog)
+          {
+            query = from ts in dbContext.TeamsSalesmen
+                    from sr in dbContext.SalesRooms.Where(sr => sr.srID == ts.tssr).DefaultIfEmpty().Distinct()
                     select sr;
 
-        if (blnTeamLog)
-        {
-          query = from ts in dbContext.TeamsSalesmen
-                  from sr in dbContext.SalesRooms.Where(sr => sr.srID == ts.tssr).DefaultIfEmpty().Distinct()
-                  select sr;
+          }
+
+          if (nStatus != -1)//Filtro por Estatus
+          {
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(sr => sr.srA == blnStatus);
+          }
+          if (nAppointment != -1)//Filtro por ApointMent
+          {
+            bool blnAppointment = Convert.ToBoolean(nAppointment);
+            query = query.Where(sr => sr.srAppointment == blnAppointment);
+          }
+
+          #region FIltros adicionales
+          if (salesRoom != null)
+          {
+            if (!string.IsNullOrWhiteSpace(salesRoom.srID))//Filtro por ID
+            {
+              query = query.Where(sr => sr.srID == salesRoom.srID);
+            }
+            if (!string.IsNullOrWhiteSpace(salesRoom.srN))//Filtro por descripción
+            {
+              query = query.Where(sr => sr.srN.Contains(salesRoom.srN));
+            }
+            if (!string.IsNullOrWhiteSpace(salesRoom.srar))
+            {
+              query = query.Where(sr => sr.srar == salesRoom.srar);
+            }
+            if (!string.IsNullOrWhiteSpace(salesRoom.srcu))
+            {
+              query = query.Where(sr => sr.srcu == salesRoom.srcu);
+            }
+          }
+          #endregion
+          lstSalesRooms = query.OrderBy(sr => sr.srN).ToList();
 
         }
-
-        if (nStatus != -1)//Filtro por Estatus
-        {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(sr => sr.srA == blnStatus);
-        }
-        if (nAppointment != -1)//Filtro por ApointMent
-        {
-          bool blnAppointment = Convert.ToBoolean(nAppointment);
-          query = query.Where(sr => sr.srAppointment == blnAppointment);
-        }
-
-        if (salesRoom != null)
-        {
-          if (!string.IsNullOrWhiteSpace(salesRoom.srID))//Filtro por ID
-          {
-            query = query.Where(sr => sr.srID == salesRoom.srID);
-          }
-          if (!string.IsNullOrWhiteSpace(salesRoom.srN))//Filtro por descripción
-          {
-            query = query.Where(sr => sr.srN.Contains(salesRoom.srN));
-          }
-          if (!string.IsNullOrWhiteSpace(salesRoom.srar))
-          {
-            query = query.Where(sr => sr.srar == salesRoom.srar);
-          }
-          if (!string.IsNullOrWhiteSpace(salesRoom.srcu))
-          {
-            query = query.Where(sr => sr.srcu == salesRoom.srcu);
-          }
-        }
-        return query.OrderBy(sr => sr.srN).ToList();
-
-      }
+      });
+      return lstSalesRooms;
     }
     #endregion
 

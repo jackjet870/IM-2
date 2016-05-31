@@ -83,40 +83,48 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 20/04/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if(enumMode!=EnumMode.search)
+      try
       {
-        if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(saleType,oldSaleType))
+        btnAccept.Focus();
+        if (enumMode != EnumMode.search)
         {
-          Close();
-        }
-        else
-        {
-          string strMsj = ValidateHelper.ValidateForm(this, "Sale Type");
-          if(strMsj=="")
+          if (enumMode != EnumMode.add && ObjectHelper.IsEquals(saleType, oldSaleType))
           {
-            int nRes = BREntities.OperationEntity(saleType, enumMode);
-            UIHelper.ShowMessageResult("Sale Type", nRes);
-            if(nRes>0)
-            {
-              DialogResult = true;
-              Close();
-            }
+            Close();
           }
           else
           {
-            UIHelper.ShowMessage(strMsj);
+            string strMsj = ValidateHelper.ValidateForm(this, "Sale Type");
+            if (strMsj == "")
+            {
+              int nRes =await BREntities.OperationEntity(saleType, enumMode);
+              UIHelper.ShowMessageResult("Sale Type", nRes);
+              if (nRes > 0)
+              {
+                DialogResult = true;
+                Close();
+              }
+            }
+            else
+            {
+              UIHelper.ShowMessage(strMsj);
+            }
           }
         }
+        else
+        {
+          nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
+          DialogResult = true;
+          Close();
+        }
       }
-      else
+      catch(Exception ex)
       {
-        nStatus =Convert.ToInt32(cmbStatus.SelectedValue);
-        DialogResult = true;
-        Close();
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Sale Types");
       }
 
     }

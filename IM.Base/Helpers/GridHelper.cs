@@ -1,6 +1,11 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using IM.Model.Helpers;
 
 namespace IM.Base.Helpers
 {
@@ -8,7 +13,7 @@ namespace IM.Base.Helpers
   /// Clase que contiene las funciones comunes de grids
   /// </summary>
   public static class GridHelper
-  {
+  {    
     #region SelectRow
 
     /// <summary>
@@ -102,8 +107,74 @@ namespace IM.Base.Helpers
         return cell;
       }
       return null;
-    } 
+    }
     #endregion
 
+    #region HasRepeatItem
+    /// <summary>
+    /// Verifica que el registro no extista en el grid
+    /// </summary>
+    /// <param name="blnClone">Define si se va a clonar toda la fila seleccionada</param>
+    /// <param name="control">Control que está siendo verificado</param>
+    /// <param name="dgrItems">Grid que está siendo validado</param>
+    /// <param name="strPropGrid">id para validar si son diferentes entidades</param>
+    /// <returns>True. Si existe | False.no existe</returns>
+    /// <history>
+    /// [emoguel] created 18/05/2016
+    /// </history>
+    public static bool HasRepeatItem(Control control, DataGrid dgrItems,bool blnClone=false,string strPropGrid="")
+    {      
+      switch (control.GetType().Name)
+      {
+        case "ComboBox":
+          {
+            ComboBox combobox = control as ComboBox;
+
+            var listaGrid = dgrItems.ItemsSource.Cast<object>().ToList();//Lista de registros del grid
+            var gridSelec = dgrItems.SelectedItem;//Item seleccionado del grid
+            var selectedItem = combobox.SelectedItem;//Nuevo item seleccionado                                   
+            
+            if (selectedItem != null)
+            {              
+              if (gridSelec != selectedItem)
+              {
+                string strPropControl = combobox.SelectedValuePath;//Valor para hacer el filtro
+                Type typeFromControl = selectedItem.GetType();//En caso de que sea de otro tipo el grid
+
+                strPropGrid = (strPropGrid != "") ? strPropGrid : strPropControl;
+                Type typeFromGrid = gridSelec.GetType();//En caso de que sea de otro tipo el grid
+
+                var gridSelectValue = typeFromGrid.GetProperty(strPropGrid).GetValue(gridSelec, null);
+                var selectItemValue = typeFromControl.GetProperty(strPropControl).GetValue(selectedItem, null);
+                
+                if (selectItemValue != null)
+                {
+                  var itemVal = listaGrid.Where(it => typeFromGrid.GetProperty(strPropGrid).GetValue(it, null) != gridSelectValue
+                    && (typeFromGrid.GetProperty(strPropGrid).GetValue(it, null) == selectItemValue || typeFromGrid.GetProperty(strPropGrid).GetValue(it, null).Equals(selectItemValue))).FirstOrDefault();
+                  if (itemVal != null)
+                  {
+                    UIHelper.ShowMessage(typeFromControl.Name + " must not be repeated");
+                    return true;
+                  }
+                  else if(blnClone)
+                  {
+                    ObjectHelper.CopyProperties(gridSelec, selectedItem);
+                  }
+                }
+              }
+            }
+            else
+            {
+              UIHelper.ShowMessage("Please select a Value");
+              return true;
+            }
+            break;
+          }
+
+      }
+
+      return false;
+    } 
+    #endregion    
   }
 }

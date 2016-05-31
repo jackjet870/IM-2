@@ -27,7 +27,7 @@ namespace IM.Base.Helpers
       {
         TextRange textRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
         textRange.Save(ms, DataFormats.Rtf);
-        return Encoding.Default.GetString(ms.ToArray());
+        return Encoding.UTF8.GetString(ms.ToArray());
       }
     }
     #endregion
@@ -91,7 +91,7 @@ namespace IM.Base.Helpers
     {
       if (!string.IsNullOrEmpty(rtf))
       {
-        using (MemoryStream ms = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(rtf)))
+        using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(rtf)))
         {
           TextRange range = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
           range.Load(ms, DataFormats.Rtf);

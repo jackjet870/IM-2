@@ -222,16 +222,25 @@ namespace IM.Administrator.Forms
     /// </history>
     protected async void LoadChargeTo(ChargeTo chargeTo = null)
     {
-      int nIndex = 0;
-      List<ChargeTo> lstChargeTo = await BRChargeTos.GetChargeTos(_chargeToFilter, _nStatus);
-      dgrChargeTo.ItemsSource = lstChargeTo;
-      if (chargeTo != null && lstChargeTo.Count > 0)
+      try
       {
-        chargeTo = lstChargeTo.FirstOrDefault(ch => ch.ctID == chargeTo.ctID);
-        nIndex = lstChargeTo.IndexOf(chargeTo);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<ChargeTo> lstChargeTo = await BRChargeTos.GetChargeTos(_chargeToFilter, _nStatus);
+        dgrChargeTo.ItemsSource = lstChargeTo;
+        if (chargeTo != null && lstChargeTo.Count > 0)
+        {
+          chargeTo = lstChargeTo.FirstOrDefault(ch => ch.ctID == chargeTo.ctID);
+          nIndex = lstChargeTo.IndexOf(chargeTo);
+        }
+        GridHelper.SelectRow(dgrChargeTo, nIndex);
+        StatusBarReg.Content = lstChargeTo.Count + " Charge To.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrChargeTo, nIndex);
-      StatusBarReg.Content = lstChargeTo.Count + " Charge To.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Charge to");
+      }
     }
     #endregion
 

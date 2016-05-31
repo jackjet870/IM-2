@@ -12,6 +12,7 @@ using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using OfficeOpenXml.Style;
 using IM.Base.Classes;
+using System.Data.Entity;
 
 namespace IM.Base.Forms
 {
@@ -176,7 +177,7 @@ namespace IM.Base.Forms
     /// Carga El grid Con la lista de asistencia con las fechas seleccionadas
     /// </summary>
     /// <history>[ECANUL] 19-03-2016 CREATED</history>
-    void LoadGrid()
+    async void LoadGrid()
     {
       StaStart("Loading Assistance List...");
       _listAssistData = BRAssistance.GetAssistance(enumPalaceType, palaceId, dtpStart.SelectedDate.Value, dtpEnd.SelectedDate.Value);
@@ -184,7 +185,7 @@ namespace IM.Base.Forms
       assistanceStatusViewSource = ((CollectionViewSource)(this.FindResource("assistanceStatusViewSource")));
       assistanceViewSource = ((CollectionViewSource)(this.FindResource("assistanceViewSource")));
       AssistanceStatus ast = new AssistanceStatus();
-      lstAssistStatus = BRAssistancesStatus.GetAssitanceStatus(ast, 1);
+      lstAssistStatus = await BRAssistancesStatus.GetAssitanceStatus(ast, 1);
       assistanceStatusViewSource.Source = lstAssistStatus;
       if (_listAssistData.Count != 0)
       {
@@ -246,10 +247,14 @@ namespace IM.Base.Forms
     {
       StaStart("Saving Data...");
       int nres = 0;
+      List<Assistance> lstAssistances = new List<Assistance>();
+
       _listAssistData.ForEach(c =>
       {
-        nres = BREntities.OperationEntity(AssistanceToAssistance.ConvertAssistanceDataToAssistance(c), _isNew ? EnumMode.add : EnumMode.edit);
+        lstAssistances.Add(AssistanceToAssistance.ConvertAssistanceDataToAssistance(c));        
       });
+
+      nres = BREntities.OperationEntities(lstAssistances, _isNew ? EnumMode.add : EnumMode.edit);
       ChangeUseMode(false);
       MessageBox.Show("Saved Assistence", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
       LoadGrid();

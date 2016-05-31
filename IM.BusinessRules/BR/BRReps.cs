@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -19,28 +20,34 @@ namespace IM.BusinessRules.BR
     /// [Emoguel] created 11/03/2016
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto 
     /// </history>
-    public static List<Rep> GetReps(Rep rep=null,int nStatus=-1)
+    public async static Task<List<Rep>> GetReps(Rep rep=null,int nStatus=-1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var query = from r in dbContext.Reps select r;
-
-        if(nStatus!=-1)//Filtro por Estatus
+      List<Rep> lstReps = new List<Rep>();
+      await Task.Run(() =>
+      {        
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(r=>r.rpA==blnStatus);
-        }
+          var query = from r in dbContext.Reps select r;
 
-        if (rep != null)//Valida si se tiene un objeto
-        {
-          if (!string.IsNullOrWhiteSpace(rep.rpID))//Filtro por ID
+          if (nStatus != -1)//Filtro por Estatus
           {
-            query = query.Where(r => r.rpID == rep.rpID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(r => r.rpA == blnStatus);
           }
-        }
 
-        return query.OrderBy(r=>r.rpID).ToList();
-      }
+          if (rep != null)//Valida si se tiene un objeto
+          {
+            if (!string.IsNullOrWhiteSpace(rep.rpID))//Filtro por ID
+            {
+              query = query.Where(r => r.rpID == rep.rpID);
+            }
+          }
+
+          lstReps = query.OrderBy(r => r.rpID).ToList();
+        }
+      });
+
+      return lstReps;
     }
     #endregion
   }

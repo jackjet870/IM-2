@@ -6,6 +6,7 @@ using IM.BusinessRules.BR;
 using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -15,9 +16,12 @@ namespace IM.Administrator.Forms
   public partial class frmAreaDetalle : Window
   {
 
-    public Area area=new Area();//Variable que se va a guardar o actualizar
+    #region Variables
+    public Area area = new Area();//Variable que se va a guardar o actualizar
     public Area oldArea = new Area();//Variable con los atributos iniciales
-    public EnumMode mode;//Modo en el que se abrirá la ventana        
+    public EnumMode mode;//Modo en el que se abrirá la ventana  
+    private bool _isClosing = false;
+    #endregion
     public frmAreaDetalle()
     {
       InitializeComponent();
@@ -30,11 +34,20 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] 26/Feb/2016 Created
+    /// [emoguel] 30/05/2016 se volvió async
     /// </history>
-    protected void LoadRegions()
+    protected async void LoadRegions()
     {
-      List<Region> lstRegions = BRRegions.GetRegions(1);
-      cmbRegion.ItemsSource = lstRegions;
+      try
+      {
+        List<Region> lstRegions = await BRRegions.GetRegions(1);
+        cmbRegion.ItemsSource = lstRegions;
+        skpStatus.Visibility = Visibility.Collapsed;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Area");
+      }
     }
     #endregion
     #endregion
@@ -51,6 +64,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      skpStatus.Visibility = Visibility.Visible;
       ObjectHelper.CopyProperties(area, oldArea);
       LoadRegions();
       DataContext = area;
@@ -75,34 +89,38 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] 26/Feb/2016 Created
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
       if(ObjectHelper.IsEquals(area,oldArea)&& mode!=EnumMode.add)
       {
+        _isClosing = true;
         Close();
       }
       else
       {
+        skpStatus.Visibility = Visibility.Visible;
+        txtStatus.Text = "Saving Data...";
         string sMsj = ValidateHelper.ValidateForm(this, "Area");
         int nRes = 0;
         
         if (sMsj == "")
         {
-          nRes = BREntities.OperationEntity<Area>(area, mode);
+          nRes = await BREntities.OperationEntity(area, mode);
 
           UIHelper.ShowMessageResult("Area", nRes);
           if(nRes==1)
           {
+            _isClosing = true;
             DialogResult = true;
             Close();
           }
-
         }
         else
         {
           UIHelper.ShowMessage(sMsj);
         }
+        skpStatus.Visibility = Visibility.Collapsed;
       }
     }
     #endregion
@@ -117,7 +135,6 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null, null);
       }
     }
@@ -134,6 +151,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       if(mode!=EnumMode.preview)
       {
         if (!ObjectHelper.IsEquals(area, oldArea))
@@ -141,20 +159,52 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!_isClosing) { _isClosing = true; Close(); }
+          }
+          else
+          {
+            _isClosing = false;
           }
         }
         else
         {
-          Close();
+          if (!_isClosing) { _isClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!_isClosing) { _isClosing = true; Close(); }
       }
     }
     #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana con el boton escape
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 30/05/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
+      {
+        _isClosing = true;
+        btnCancel_Click(null, null);
+        if (!_isClosing)
+        {
+          e.Cancel = true;
+        }
+        else
+        {
+          _isClosing = false;
+        }
+      }
+    }
+    #endregion
+
     #endregion
   }
 }

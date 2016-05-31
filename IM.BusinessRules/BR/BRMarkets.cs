@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -56,7 +57,8 @@ namespace IM.BusinessRules.BR
 
         if (nStatus != -1)//Filtro por status
         {
-          query = query.Where(mkt => mkt.mkA == market.mkA);
+          bool blnStatus = Convert.ToBoolean(nStatus);
+          query = query.Where(mkt => mkt.mkA == blnStatus);
         }
 
         if (market != null)//Valida si se tiene un objeto
@@ -76,5 +78,63 @@ namespace IM.BusinessRules.BR
     }
 
     #endregion GetMarkets
+
+    #region SaveMarket
+    /// <summary>
+    /// Agrega|Actualiza un registro en el catalogo market
+    /// Asigna|Desasigna agencies al market
+    /// </summary>
+    /// <param name="market">Objeto a guardar</param>
+    /// <param name="lstAdd">Agencias a asignar</param>
+    /// <param name="lstDel">Agencias a desasignar</param>
+    /// <param name="blnUpdate">True. Actualiza | False. Inserta</param>
+    /// <returns></returns>
+    public static int SaveMarket(Market market, List<Agency> lstAdd, bool blnUpdate)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        {
+          try
+          {
+            #region UpdateMarket
+            if (blnUpdate)
+            {
+              dbContext.Entry(market).State = EntityState.Modified;
+            }
+            #endregion
+            #region Add market
+            else
+            {
+              if(dbContext.Markets.Where(mk=>mk.mkID==market.mkID).FirstOrDefault()!=null)
+              {
+                return -1;
+              }
+              else
+              {
+                dbContext.Markets.Add(market);
+              }
+            }
+            #endregion
+
+            #region Agencies
+            //Add markets
+            dbContext.Agencies.AsEnumerable().Where(ag => lstAdd.Any(agg => agg.agID == ag.agID)).ToList().ForEach(ag=>{
+              ag.agmk = market.mkID;
+            });
+            #endregion
+            int nRes = dbContext.SaveChanges();
+            transacction.Commit();
+            return nRes;
+          }
+          catch
+          {
+            transacction.Rollback();
+            return 0;
+          }
+        }
+      }
+    } 
+    #endregion
   }
 }

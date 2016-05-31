@@ -69,31 +69,39 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 25/04/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(scoreRuleType,oldScoreRuleType))
+      try
       {
-        Close();
-      }
-      else
-      {
-        string strMsj = ValidateHelper.ValidateForm(this, "Score Rule Type");
-        if(strMsj=="")
-        {          
-          int nRes = BREntities.OperationEntity<ScoreRuleType>(scoreRuleType,enumMode);
-          UIHelper.ShowMessageResult("Score Rule Type", nRes);
-          if(nRes>0)
-          {
-            DialogResult = true;
-            Close();
-          }
+        btnAccept.Focus();
+        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(scoreRuleType, oldScoreRuleType))
+        {
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          string strMsj = ValidateHelper.ValidateForm(this, "Score Rule Type");
+          if (strMsj == "")
+          {
+            int nRes =await BREntities.OperationEntity(scoreRuleType, enumMode);
+            UIHelper.ShowMessageResult("Score Rule Type", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Score Rule Type");
       }
     }
     #endregion

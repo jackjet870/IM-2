@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         mc:Ignorable="d" KeyDown="Window_KeyDown" Loaded="Window_Loaded" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="Folio CXC by PR Detail" Height="418" Width="338">
+        Title="Folio CXC by PR Detail" Height="418" Width="338" Closing="Window_Closing">
     <DockPanel LastChildFill="True" >
         <!--#region Top-->
         <Grid DockPanel.Dock="Top" Margin="10,10,14,2" Height="77">

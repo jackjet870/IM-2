@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -20,35 +21,41 @@ namespace IM.BusinessRules.BR
     /// [emoguel] 27/Feb/2016 Created
     /// [emoguel] 11/03/2016 Se le agregaron los filtros ID y Descripcion
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
+    /// [emoguel] Modified 30/05/2016 Se volvio async
     /// </history>
-    public static List<Region> GetRegions(int nStatus=-1, Region region = null)
-    {      
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+    public async static Task<List<Region>> GetRegions(int nStatus = -1, Region region = null)
+    {
+      List<Region> lstRegions = new List<Region>();
+      await Task.Run(() =>
       {
-        var query = from rg in dbContext.Regions
-                    select rg;
-        if(nStatus!=-1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnEstatus = Convert.ToBoolean(nStatus);
-          query = query.Where(rg=>rg.rgA==blnEstatus);          
-        }
-
-        if (region != null)//Valida si se tiene objeto
-        {
-          if (!string.IsNullOrWhiteSpace(region.rgID))//Filtro por ID
+          var query = from rg in dbContext.Regions
+                      select rg;
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(rg => rg.rgID == region.rgID);
+            bool blnEstatus = Convert.ToBoolean(nStatus);
+            query = query.Where(rg => rg.rgA == blnEstatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(region.rgN))//Filtro por nombre(Descripcion)
+          if (region != null)//Valida si se tiene objeto
           {
-            query = query.Where(rg => rg.rgN.Contains(region.rgN));
-          }
-        }
+            if (!string.IsNullOrWhiteSpace(region.rgID))//Filtro por ID
+            {
+              query = query.Where(rg => rg.rgID == region.rgID);
+            }
 
-        return query.OrderBy(rg=>rg.rgN).ToList();
-      }
-      
+            if (!string.IsNullOrWhiteSpace(region.rgN))//Filtro por nombre(Descripcion)
+            {
+              query = query.Where(rg => rg.rgN.Contains(region.rgN));
+            }
+          }
+
+          lstRegions = query.OrderBy(rg => rg.rgN).ToList();
+        }
+      });
+
+      return lstRegions;
     }
     #endregion
   }

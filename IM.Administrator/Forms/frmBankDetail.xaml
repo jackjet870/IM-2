@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="Bank Detail" Height="418" Width="338">
+        Title="Bank Detail" Height="418" Width="338" Closing="Window_Closing">
     <DockPanel LastChildFill="True" >
         <!--#region Top-->
         <Grid DockPanel.Dock="Top" Margin="10,10,14,2">
@@ -28,13 +28,17 @@
         
         <!--#region  Botones-->
         <Grid DockPanel.Dock="Bottom" Background="Transparent" Height="40">
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Name="skpStatus" Visibility="Visible" Margin="10,0,0,6" HorizontalAlignment="Left">
+                <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Base;component/Images/time.ico" Width="16" Height="16"/>
+                <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
+            </StackPanel>
             <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" HorizontalAlignment="Right" Content="_Accept" Margin="0,4,84,4"/>
             <Button Name="btnCancel" Width="60" Height="30" Click="btnCancel_Click" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
         </Grid>
         <!--#endregion-->
 
         <!--#region Grid Sales Room-->
-            <DataGrid Name="dgrSalesRoom" Margin="79,0,14,0" Grid.Column="1" CellEditEnding="dgrSalesRoom_CellEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+            <DataGrid Name="dgrSalesRoom" Margin="79,0,14,0" RowEditEnding="dgrSalesRoom_RowEditEnding" Grid.Column="1" CellEditEnding="dgrSalesRoom_CellEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                       CanUserAddRows="True" CanUserResizeColumns="False" CanUserResizeRows="False" >
                 <DataGrid.Columns>
                     <DataGridComboBoxColumn  Width="100*" x:Name="cmbSalesRoom" DisplayMemberPath="srN" SelectedValuePath="srID" SelectedValueBinding="{Binding srID}" Header="Sales Room" >

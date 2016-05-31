@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using System;
 using System.Linq;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -224,19 +225,29 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [Emoguel] created 03/03/2016
+    /// [emoguel] modified 30/05/2016 Se volvió async
     /// </history>
-    protected void LoadContracts( Contract contract = null)
+    protected async void LoadContracts( Contract contract = null)
     {
-      int nIndex = 0;
-      List<Contract> lstContracts = BRContracts.getContracts(_contractFilter, _nStatus);
-      dgrContracts.ItemsSource = lstContracts;
-      if(contract!=null && lstContracts.Count>0)
+      try
       {
-        contract = lstContracts.Where(co => co.cnID == contract.cnID).FirstOrDefault();
-        nIndex = lstContracts.IndexOf(contract);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Contract> lstContracts =await BRContracts.getContracts(_contractFilter, _nStatus);
+        dgrContracts.ItemsSource = lstContracts;
+        if (contract != null && lstContracts.Count > 0)
+        {
+          contract = lstContracts.Where(co => co.cnID == contract.cnID).FirstOrDefault();
+          nIndex = lstContracts.IndexOf(contract);
+        }
+        GridHelper.SelectRow(dgrContracts, nIndex);
+        StatusBarReg.Content = lstContracts.Count + " Contracts.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrContracts, nIndex);      
-      StatusBarReg.Content = lstContracts.Count + " Contracts.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Contracts");
+      }
     }
     #endregion
 
@@ -269,7 +280,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_contractFilter.cnN))
       {
-        if (!newContract.cnN.Contains(_contractFilter.cnN))
+        if (!newContract.cnN.Contains(_contractFilter.cnN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

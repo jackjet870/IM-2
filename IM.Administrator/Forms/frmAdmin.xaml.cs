@@ -66,6 +66,7 @@ namespace IM.Administrator.Forms
         lstMenu.Add(new { nombre = "Agencies", img = "pack://application:,,,/IM.Base;component/Images/Airplane.ico", form = "frmAgencies" });
         lstMenu.Add(new { nombre = "Countries", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmCountries" });
         lstMenu.Add(new { nombre = "Reps", img = "pack://application:,,,/IM.Base;component/Images/Rep.png", form = "frmReps" });
+        lstMenu.Add(new { nombre = "Markets", img = "pack://application:,,,/IM.Base;component/Images/Market.png", form = "frmMarkets" });
       }
       #endregion
 
@@ -107,6 +108,7 @@ namespace IM.Administrator.Forms
       if (App.User.HasPermission(EnumPermission.Gifts, EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add(new { nombre = "Gifts Categories", img = "pack://application:,,,/IM.Base;component/Images/GiftCategory.png", form = "frmGiftsCategories" });
+        lstMenu.Add(new { nombre = "Products", img = "pack://application:,,,/IM.Base;component/Images/Product.ico", form = "frmProducts" });
       }
       #endregion
 
@@ -120,6 +122,7 @@ namespace IM.Administrator.Forms
         lstMenu.Add(new { nombre = "Sales Room", img = "pack://application:,,,/IM.Base;component/Images/Sales_Room.png", form = "frmSalesRooms" });
         lstMenu.Add(new { nombre = "Hotel Groups", img = "pack://application:,,,/IM.Base;component/Images/Hotel.png", form = "frmHotelGroups" });
         lstMenu.Add(new { nombre = "Lead Sources", img = "pack://application:,,,/IM.Base;component/Images/Lead_Sources.png", form = "frmLeadSources" });
+        lstMenu.Add(new { nombre = "Programs", img = "pack://application:,,,/IM.Base;component/Images/Lead_Sources.png", form = "frmPrograms" });
       }
       #endregion
 
@@ -161,6 +164,7 @@ namespace IM.Administrator.Forms
         lstMenu.Add(new { nombre = "Desks", img = "pack://application:,,,/IM.Base;component/Images/desk.png", form = "frmDesks" });
         lstMenu.Add(new { nombre = "Meal Ticket Types", img = "pack://application:,,,/IM.Base;component/Images/Cofee.png", form = "frmMealTicketsTypes" });
         lstMenu.Add(new { nombre = "Membership Types", img = "pack://application:,,,/IM.Base;component/Images/member.ico", form = "frmMembershipTypes" });
+        lstMenu.Add(new { nombre = "Membership Groups", img = "pack://application:,,,/IM.Base;component/Images/member.ico", form = "frmMembershipGroups" });
         lstMenu.Add(new { nombre = "Permissions", img = "pack://application:,,,/IM.Base;component/Images/Police.ico", form = "frmPermissions" });
         lstMenu.Add(new { nombre = "Permissions Levels", img = "pack://application:,,,/IM.Base;component/Images/Police.ico", form = "frmPermissionsLevels" });
         lstMenu.Add(new { nombre = "Place Types", img = "pack://application:,,,/IM.Base;component/Images/Lead_Sources.png", form = "frmPlaceTypes" });
@@ -171,6 +175,8 @@ namespace IM.Administrator.Forms
         lstMenu.Add(new { nombre = "Sale Types", img = "pack://application:,,,/IM.Base;component/Images/money.ico", form = "frmSaleTypes" });
         lstMenu.Add(new { nombre = "Score Rules Concepts", img = "pack://application:,,,/IM.Base;component/Images/Score.gif", form = "frmScoreRulesConcepts" });
         lstMenu.Add(new { nombre = "Score Rules Types", img = "pack://application:,,,/IM.Base;component/Images/Score.gif", form = "frmScoreRulesTypes" });
+        lstMenu.Add(new { nombre = "Score Rules", img = "pack://application:,,,/IM.Base;component/Images/Score.gif", form = "frmScoreRules" });
+        lstMenu.Add(new { nombre = "Score Rules By Lead Source", img = "pack://application:,,,/IM.Base;component/Images/Score.gif", form = "frmScoreRulesByLeadSource" });
         lstMenu.Add(new { nombre = "Show Programs", img = "pack://application:,,,/IM.Base;component/Images/Catalog.ico", form = "frmShowPrograms" });
         lstMenu.Add(new { nombre = "Clubs", img = "pack://application:,,,/IM.Base;component/Images/Member.ico", form = "frmClubs" });
         lstMenu.Add(new { nombre = "Depts", img = "pack://application:,,,/IM.Base;component/Images/Posts.png", form = "frmDepts" });
@@ -182,6 +188,7 @@ namespace IM.Administrator.Forms
       {
         lstMenu.Add(new { nombre = "Sales Amount Ranges", img = "pack://application:,,,/IM.Base;component/Images/Money_Bag.png", form = "frmSalesAmountRanges" });
         lstMenu.Add(new { nombre = "Goals", img = "pack://application:,,,/IM.Base;component/Images/Goal.png", form = "frmGoals" });
+        lstMenu.Add(new { nombre = "Locations Categories", img = "pack://application:,,,/IM.Base;component/Images/locations.png", form = "frmLocationsCategories" });
       }
       #endregion
 

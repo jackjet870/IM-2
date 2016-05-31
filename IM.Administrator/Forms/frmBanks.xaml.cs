@@ -8,6 +8,7 @@ using IM.Model;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -239,19 +240,29 @@ namespace IM.Administrator.Forms
     /// <param name="bank">Objeto a seleccionar</param>
     /// <history>
     /// [emoguel] created 30/04/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void LoadBanks(Bank bank = null)
+    private async void LoadBanks(Bank bank = null)
     {
-      int nIndex = 0;
-      List<Bank> lstBanks = BRBanks.GetBanks(_nStatus, _bankFilter,true);
-      dgrBanks.ItemsSource = lstBanks;
-      if (lstBanks.Count > 0 && bank != null)
+      try
       {
-        bank = lstBanks.Where(bk => bk.bkID == bank.bkID).FirstOrDefault();
-        nIndex = lstBanks.IndexOf(bank);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Bank> lstBanks = await BRBanks.GetBanks(_nStatus, _bankFilter, true);
+        dgrBanks.ItemsSource = lstBanks;
+        if (lstBanks.Count > 0 && bank != null)
+        {
+          bank = lstBanks.Where(bk => bk.bkID == bank.bkID).FirstOrDefault();
+          nIndex = lstBanks.IndexOf(bank);
+        }
+        GridHelper.SelectRow(dgrBanks, nIndex);
+        StatusBarReg.Content = lstBanks.Count + " Banks.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrBanks, nIndex);
-      StatusBarReg.Content = lstBanks.Count + " Banks.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Banks");
+      }
     }
     #endregion
 
@@ -284,7 +295,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_bankFilter.bkN))//Filtro por Descripción
       {
-        if(!bank.bkN.Contains(_bankFilter.bkN))
+        if(!bank.bkN.Contains(_bankFilter.bkN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

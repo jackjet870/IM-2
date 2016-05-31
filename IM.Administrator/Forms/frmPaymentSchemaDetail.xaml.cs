@@ -6,6 +6,7 @@ using IM.Model;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -68,36 +69,44 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 06/04/2016
+    /// [emoguel] modified 30/05/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if (ObjectHelper.IsEquals(paymentSchema, oldPaymentSchema) && enumMode!=EnumMode.add)
+      try
       {
-        Close();
-      }
-      else
-      {
-        string strMsj = ValidateHelper.ValidateForm(this, "Payment Schema");
-        if(paymentSchema.pasCoupleTo<paymentSchema.pasCoupleFrom)
+        btnAccept.Focus();
+        if (ObjectHelper.IsEquals(paymentSchema, oldPaymentSchema) && enumMode != EnumMode.add)
         {
-          strMsj +=(strMsj!="")?"\n ":""+ " Couples To must be greatter than couples From.";
-        }
-
-        if(strMsj=="")
-        {
-          int nRes = BREntities.OperationEntity(paymentSchema, enumMode);
-          UIHelper.ShowMessageResult("Payment Schema", nRes);
-          if(nRes>0)
-          {
-            DialogResult = true;
-            Close();
-          }
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          string strMsj = ValidateHelper.ValidateForm(this, "Payment Schema");
+          if (paymentSchema.pasCoupleTo < paymentSchema.pasCoupleFrom)
+          {
+            strMsj += (strMsj != "") ? "\n " : "" + " Couples To must be greatter than couples From.";
+          }
+
+          if (strMsj == "")
+          {
+            int nRes = await BREntities.OperationEntity(paymentSchema, enumMode);
+            UIHelper.ShowMessageResult("Payment Schema", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Payment Schema");
       }
     } 
     #endregion

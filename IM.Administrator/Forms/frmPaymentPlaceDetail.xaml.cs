@@ -5,6 +5,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -31,22 +32,25 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 06/05/2016
+    /// [emoguel] modified 30/05/2016 se vovlió async
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-        if(ObjectHelper.IsEquals(paymentPlace,oldPaymentPlace) && enumMode!=EnumMode.add)
+      try
+      {
+        btnAccept.Focus();
+        if (ObjectHelper.IsEquals(paymentPlace, oldPaymentPlace) && enumMode != EnumMode.add)
         {
           Close();
         }
         else
         {
           string strMsj = ValidateHelper.ValidateForm(this, "Payment Place");
-          if(strMsj=="")
+          if (strMsj == "")
           {
-          int nRes = BREntities.OperationEntity(paymentPlace, enumMode);
-            UIHelper.ShowMessageResult("PaymentPlaces", nRes);
-            if(nRes>0)
+            int nRes = await BREntities.OperationEntity(paymentPlace, enumMode);
+            UIHelper.ShowMessageResult("Payment Place", nRes);
+            if (nRes > 0)
             {
               DialogResult = true;
               Close();
@@ -57,6 +61,11 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessage(strMsj);
           }
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Payment Places"); 
+      }
     } 
     #endregion
 

@@ -5,6 +5,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -97,35 +98,43 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 11/04/2016
+    /// [emoguel] modified 30/05/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if (ObjectHelper.IsEquals(permissionLevel, oldPermissionLevel) && enumMode!=EnumMode.add)
+      try
       {
-        Close();
-      }
-      else
-      {
-        string strMsj = ValidateHelper.ValidateForm(this, "Permission Level");
-        if(permissionLevel.plID>0)
+        btnAccept.Focus();
+        if (ObjectHelper.IsEquals(permissionLevel, oldPermissionLevel) && enumMode != EnumMode.add)
         {
-          strMsj += (strMsj == "") ? "" : " \n " + "Permission Level can not be 0.";
-        }
-        if (strMsj=="")
-        {
-          int nRes = BREntities.OperationEntity(permissionLevel, enumMode);
-          UIHelper.ShowMessageResult("Permission Level", nRes);
-          if(nRes>0)
-          {
-            DialogResult = true;
-            Close();
-          }
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          string strMsj = ValidateHelper.ValidateForm(this, "Permission Level");
+          if (permissionLevel.plID > 0)
+          {
+            strMsj += (strMsj == "") ? "" : " \n " + "Permission Level can not be 0.";
+          }
+          if (strMsj == "")
+          {
+            int nRes = await BREntities.OperationEntity(permissionLevel, enumMode);
+            UIHelper.ShowMessageResult("Permission Level", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Permission Level");
       }
     }
     #endregion

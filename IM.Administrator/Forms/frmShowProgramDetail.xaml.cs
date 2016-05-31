@@ -81,40 +81,48 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 26/04/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      if (enumMode != EnumMode.search)
+      try
       {
-        if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(showProgram,oldShowProgram))
+        btnAccept.Focus();
+        if (enumMode != EnumMode.search)
         {
-          Close();
-        }
-        else
-        {
-          btnAccept.Focus();
-          string strMsj = ValidateHelper.ValidateForm(this, "Show Program");
-          if(strMsj=="")
+          if (enumMode != EnumMode.add && ObjectHelper.IsEquals(showProgram, oldShowProgram))
           {
-            int nRes = BREntities.OperationEntity<ShowProgram>(showProgram, enumMode);
-            UIHelper.ShowMessageResult("Show Program", nRes);
-            if(nRes>0)
-            {
-              DialogResult = true;
-              Close();
-            }
+            Close();
           }
           else
           {
-            UIHelper.ShowMessage(strMsj);
+            string strMsj = ValidateHelper.ValidateForm(this, "Show Program");
+            if (strMsj == "")
+            {
+              int nRes =await BREntities.OperationEntity<ShowProgram>(showProgram, enumMode);
+              UIHelper.ShowMessageResult("Show Program", nRes);
+              if (nRes > 0)
+              {
+                DialogResult = true;
+                Close();
+              }
+            }
+            else
+            {
+              UIHelper.ShowMessage(strMsj);
+            }
           }
         }
+        else
+        {
+          nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
+          DialogResult = true;
+          Close();
+        }
       }
-      else
+      catch(Exception ex)
       {
-        nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
-        DialogResult = true;
-        Close();
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Show Program");
       }
     }
     #endregion

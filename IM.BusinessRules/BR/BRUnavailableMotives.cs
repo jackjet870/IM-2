@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -16,24 +17,27 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de UnavailMots</returns>
     /// <history>
     /// [Emoguel] created 01/03/2016
+    /// [emoguel] modified 30/05/2016 Se volvió async el método
     /// </history>
-    public static List<UnavailableMotive> GetUnavailableMotives(int nStatus=-1)    
+    public async static Task<List<UnavailableMotive>> GetUnavailableMotives(int nStatus=-1)    
     {
       List<UnavailableMotive> lstUnavailMot = new List<UnavailableMotive>();
-
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      await Task.Run(() =>
       {
-        var query = from um in dbContext.UnavailableMotives
-                    select um;
-
-        if(nStatus!=-1)//Se filtra por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(um=>um.umA==blnStatus);
-        }
+          var query = from um in dbContext.UnavailableMotives
+                      select um;
 
-        lstUnavailMot = query.OrderBy(um=>um.umN).ToList();
-      }
+          if (nStatus != -1)//Se filtra por estatus
+          {
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(um => um.umA == blnStatus);
+          }
+
+          lstUnavailMot = query.OrderBy(um => um.umN).ToList();
+        }
+      });
 
       return lstUnavailMot;      
     }

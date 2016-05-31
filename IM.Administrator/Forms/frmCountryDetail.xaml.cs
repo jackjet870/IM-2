@@ -6,6 +6,7 @@ using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -84,33 +85,40 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 14/03/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if(ObjectHelper.IsEquals(country,oldCountry)&& mode!=EnumMode.add)
+      try
       {
-        Close();
-      }
-      else
-      {
-        int nRes = 0;
-        string sMsj = ValidateHelper.ValidateForm(this, "Country");
-
-        if (sMsj == "")
+        btnAccept.Focus();
+        if (ObjectHelper.IsEquals(country, oldCountry) && mode != EnumMode.add)
         {
-          nRes = BREntities.OperationEntity<Country>(country, mode);
-
-          UIHelper.ShowMessageResult("Country", nRes);
-          if(nRes>0)
-          {
-            DialogResult = true;
-            Close();
-          }
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(sMsj);
+          int nRes = 0;
+          string sMsj = ValidateHelper.ValidateForm(this, "Country");
+
+          if (sMsj == "")
+          {
+            nRes = await BREntities.OperationEntity(country, mode);
+
+            UIHelper.ShowMessageResult("Country", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(sMsj);
+          }
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Countries");
       }
     }
     #endregion
@@ -157,10 +165,17 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 15/03/2016
     /// </history>
-    private void loadUnavailableMotives()
+    private async void loadUnavailableMotives()
     {
-      List<UnavailableMotive> lstUnavailableMotives = BRUnavailableMotives.GetUnavailableMotives();
-      cmbUnvMot.ItemsSource = lstUnavailableMotives;
+      try
+      {
+        List<UnavailableMotive> lstUnavailableMotives = await BRUnavailableMotives.GetUnavailableMotives();
+        cmbUnvMot.ItemsSource = lstUnavailableMotives;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Countries");
+      }
     }
     #endregion
 

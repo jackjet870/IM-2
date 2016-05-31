@@ -30,7 +30,8 @@ namespace IM.Model
     public IMEntities(string connectionString)
       : base(connectionString)
         {
-        }
+      Configuration.ProxyCreationEnabled = false;
+    }
     
     #endregion
 

@@ -8,6 +8,7 @@ using IM.Base.Helpers;
 using IM.Model.Enums;
 using System.Linq;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -37,6 +38,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      
       _blnEdit = App.User.HasPermission(EnumPermission.Agencies, EnumPermisionLevel.Standard);
       LoadAgencies();
       btnAdd.IsEnabled = _blnEdit;
@@ -226,16 +228,25 @@ namespace IM.Administrator.Forms
     /// </history>
     protected async void LoadAgencies(Agency agency = null)
     {
-      int nIndex = 0;
-      List<Agency> lstAgencies = await BRAgencies.GetAgencies(_agencyFilter, _nStatus);
-      dgrAgencies.ItemsSource = lstAgencies;
-      if (agency != null && lstAgencies.Count > 0)
+      try
       {
-        agency = lstAgencies.FirstOrDefault(ag => ag.agID == agency.agID);
-        nIndex = lstAgencies.IndexOf(agency);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Agency> lstAgencies = await BRAgencies.GetAgencies(_agencyFilter, _nStatus);
+        dgrAgencies.ItemsSource = lstAgencies;
+        if (agency != null && lstAgencies.Count > 0)
+        {
+          agency = lstAgencies.FirstOrDefault(ag => ag.agID == agency.agID);
+          nIndex = lstAgencies.IndexOf(agency);
+        }
+        GridHelper.SelectRow(dgrAgencies, nIndex);
+        StatusBarReg.Content = lstAgencies.Count + " Agencies.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrAgencies, nIndex);
-      StatusBarReg.Content = lstAgencies.Count + " Agencies.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Agencies");        
+      }
     }
     #endregion
 
@@ -269,7 +280,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_agencyFilter.agN))
       {
-        if (!newAgency.agN.Contains(_agencyFilter.agN))
+        if (!newAgency.agN.Contains(_agencyFilter.agN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

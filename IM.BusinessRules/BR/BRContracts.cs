@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,38 +19,41 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [Emoguel] created 01/03/2016
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
+    /// [emoguel] modified 30/05/2016 Se volviió async
     /// </history>
-    public static List<Contract> getContracts(Contract contract=null, int nStatus=-1)
+    public async static Task<List<Contract>> getContracts(Contract contract=null, int nStatus=-1)
     {
       
       List<Contract> lstContracts = new List<Contract>();
-
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      await Task.Run(() =>
       {
-        var query = from c in dbContext.Contracts
-                    select c;
-
-        if(nStatus!=-1)//Filtra por status
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(c=>c.cnA==blnStatus);
-        }
+          var query = from c in dbContext.Contracts
+                      select c;
 
-        if (contract != null)//valida si se tiene objeto
-        {
-          if (!string.IsNullOrWhiteSpace(contract.cnID))//Filtra por ID
+          if (nStatus != -1)//Filtra por status
           {
-            query=query.Where(c => c.cnID == contract.cnID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(c => c.cnA == blnStatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(contract.cnN))//Filtra por Descripción
+          if (contract != null)//valida si se tiene objeto
           {
-            query = query.Where(c => c.cnN.Contains( contract.cnN));
-          }
-        }
+            if (!string.IsNullOrWhiteSpace(contract.cnID))//Filtra por ID
+            {
+              query = query.Where(c => c.cnID == contract.cnID);
+            }
 
-        lstContracts = query.OrderBy(c=>c.cnN).ToList();
-      }
+            if (!string.IsNullOrWhiteSpace(contract.cnN))//Filtra por Descripción
+            {
+              query = query.Where(c => c.cnN.Contains(contract.cnN));
+            }
+          }
+
+          lstContracts = query.OrderBy(c => c.cnN).ToList();
+        }
+      });
       return lstContracts;
     }
     #endregion

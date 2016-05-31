@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -49,6 +48,70 @@ namespace IM.BusinessRules.BR
         return query.OrderBy(lc => lc.lcN).ToList();
       }
     }
+    #endregion
+
+    #region SaveLocationCategories
+    /// <summary>
+    /// Guarda|Actualiza un registro en el catalogo LocationsCategories
+    /// Asigna|desasigna locations de loa¿cationscategories
+    /// </summary>
+    /// <param name="locationCategory">Objeto a guardar</param>
+    /// <param name="lstAdd">Locations a asignar</param>
+    /// <param name="lstDel">Locations a desasignar</param>
+    /// <param name="blnUpdate">True. Actualiza | False. Agrega</param>
+    /// <returns>-1. Existe un registro con el mismo ID | 0. No se guardó | >0. Se guardó correctamente</returns>
+    /// <history>
+    /// [emoguel] created 18/05/2016
+    /// </history>
+    public static int SaveLocationCategories(LocationCategory locationCategory, List<Location> lstAdd, List<Location> lstDel, bool blnUpdate)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        {
+          try
+          {
+            if (blnUpdate)
+            {
+              dbContext.Entry(locationCategory).State = EntityState.Modified;
+            }
+            else
+            {
+              var locationVal = dbContext.LocationsCategories.Where(lc => lc.lcID == locationCategory.lcID).FirstOrDefault();
+              if (locationVal != null)
+              {
+                return -1;
+              }
+              else
+              {
+                dbContext.LocationsCategories.Add(locationCategory);
+              }
+            }
+
+            #region Locations
+            dbContext.Locations.AsEnumerable().Where(lo=> lstAdd.Any(loo=>loo.loID==lo.loID)).ToList().ForEach(lo =>
+            {//Agresignar locaciones
+              lo.lolc = locationCategory.lcID;
+            });
+
+            dbContext.Locations.AsEnumerable().Where(lo => lstDel.Any(loo => loo.loID == lo.loID)).ToList().ForEach(lo =>
+            {//Agresignar locaciones
+              lo.lolc = null;
+            });
+            #endregion
+
+            int nRes = dbContext.SaveChanges();
+            transacction.Commit();
+            return nRes;
+          }
+          catch
+          {
+            transacction.Rollback();
+            return 0;
+          }
+        }
+      }
+    } 
     #endregion
   }
 }

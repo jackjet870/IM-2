@@ -5,6 +5,7 @@ using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -67,32 +68,40 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 14/04/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(rateType,oldRateType))
+      try
       {
-        Close();
-      }
-      else
-      {
-        string strMsj = "";
-        strMsj = ValidateHelper.ValidateForm(this, "Rate Type");
-        if(strMsj=="")
+        btnAccept.Focus();
+        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(rateType, oldRateType))
         {
-          int nRes = BREntities.OperationEntity(rateType, enumMode);
-          UIHelper.ShowMessageResult("Rate Type", nRes);
-          if(nRes>0)
-          {
-            DialogResult = true;
-            Close();
-          }
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          string strMsj = "";
+          strMsj = ValidateHelper.ValidateForm(this, "Rate Type");
+          if (strMsj == "")
+          {
+            int nRes = await BREntities.OperationEntity(rateType, enumMode);
+            UIHelper.ShowMessageResult("Rate Type", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Rate Type");
       }
     } 
     #endregion

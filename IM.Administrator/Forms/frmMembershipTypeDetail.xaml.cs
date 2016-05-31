@@ -89,50 +89,58 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 04/04/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if (enumMode != EnumMode.search)
+      try
       {
-        if (ObjectHelper.IsEquals(membershipType, oldMembershipType) && !Validation.GetHasError(txtmtLevel) && enumMode!=EnumMode.add)
+        btnAccept.Focus();
+        if (enumMode != EnumMode.search)
         {
-          Close();
-        }
-        else
-        {
-          string strMsj = ValidateHelper.ValidateForm(this, "Membership Type");
-          #region ValidateLevel
-          if(!string.IsNullOrWhiteSpace(txtmtLevel.Text.Trim()))
+          if (ObjectHelper.IsEquals(membershipType, oldMembershipType) && !Validation.GetHasError(txtmtLevel) && enumMode != EnumMode.add)
           {
-            int nRes = Convert.ToInt32(txtmtLevel.Text.Trim());
-            if(nRes>255 || nRes<1)
-            {
-              strMsj +=((strMsj=="")?"":" \n")+ "Level is out of range. Allowed values are 1 to 255.";
-            }
-          }
-          #endregion
-          if (strMsj == "")
-          {
-            int nRes = BREntities.OperationEntity(membershipType, enumMode);
-            UIHelper.ShowMessageResult("Membership Type", nRes);
-            if (nRes >0)
-            {
-              DialogResult = true;
-              Close();
-            }
+            Close();
           }
           else
           {
-            UIHelper.ShowMessage(strMsj);
+            string strMsj = ValidateHelper.ValidateForm(this, "Membership Type");
+            #region ValidateLevel
+            if (!string.IsNullOrWhiteSpace(txtmtLevel.Text.Trim()))
+            {
+              int nRes = Convert.ToInt32(txtmtLevel.Text.Trim());
+              if (nRes > 255 || nRes < 1)
+              {
+                strMsj += ((strMsj == "") ? "" : " \n") + "Level is out of range. Allowed values are 1 to 255.";
+              }
+            }
+            #endregion
+            if (strMsj == "")
+            {
+              int nRes = await BREntities.OperationEntity(membershipType, enumMode);
+              UIHelper.ShowMessageResult("Membership Type", nRes);
+              if (nRes > 0)
+              {
+                DialogResult = true;
+                Close();
+              }
+            }
+            else
+            {
+              UIHelper.ShowMessage(strMsj);
+            }
           }
         }
+        else
+        {
+          nStatus = Convert.ToInt32(cmbSta.SelectedValue);
+          DialogResult = true;
+          Close();
+        }
       }
-      else
+      catch(Exception ex)
       {
-        nStatus = Convert.ToInt32(cmbSta.SelectedValue);
-        DialogResult = true;
-        Close();
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Member Ship Type");
       }
 
     } 
@@ -180,14 +188,21 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 04/04/2016
     /// </history>
-    private void LoadMemberGroups()
+    private async void LoadMemberGroups()
     {
-      List<MembershipGroup> lstMembershipGroup = BRMembershipGroups.GetMembershipGroup();
-      if (enumMode == EnumMode.search)
+      try
       {
-        lstMembershipGroup.Insert(0, new MembershipGroup { mgID = "", mgN = "" });
+        List<MembershipGroup> lstMembershipGroup = await BRMembershipGroups.GetMembershipGroups();
+        if (enumMode == EnumMode.search)
+        {
+          lstMembershipGroup.Insert(0, new MembershipGroup { mgID = "", mgN = "" });
+        }
+        cmbmtGroup.ItemsSource = lstMembershipGroup;
       }
-      cmbmtGroup.ItemsSource = lstMembershipGroup;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error, "Membership Type");
+      }
     }
     #endregion    
     #endregion

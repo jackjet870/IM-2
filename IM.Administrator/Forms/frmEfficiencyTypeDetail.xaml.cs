@@ -5,6 +5,7 @@ using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -72,32 +73,39 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 18/03/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if(ObjectHelper.IsEquals(efficiencyType,oldEffType)&& enumMode!=EnumMode.add)
+      try
       {
-        Close();
-      }
-      else
-      {
-        int nRes = 0;
-        string strMsj = ValidateHelper.ValidateForm(this, "Efficiency Type");
-        if (strMsj == "")
+        btnAccept.Focus();
+        if (ObjectHelper.IsEquals(efficiencyType, oldEffType) && enumMode != EnumMode.add)
         {
-          nRes = BREntities.OperationEntity(efficiencyType, enumMode);
-          UIHelper.ShowMessageResult("Efficiency Type", nRes);
-          if(nRes>0)
-          {
-            DialogResult = true;
-            Close();
-          }
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          int nRes = 0;
+          string strMsj = ValidateHelper.ValidateForm(this, "Efficiency Type");
+          if (strMsj == "")
+          {
+            nRes = await BREntities.OperationEntity(efficiencyType, enumMode);
+            UIHelper.ShowMessageResult("Efficiency Type", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
         }
+      }catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Currencies");
       }
       
     }

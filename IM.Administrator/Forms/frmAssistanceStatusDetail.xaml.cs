@@ -5,6 +5,7 @@ using IM.BusinessRules.BR;
 using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -13,9 +14,12 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmAssistanceStatusDetail : Window
   {
+    #region Variables
     public EnumMode mode;
-    public AssistanceStatus assistance=new AssistanceStatus();//Objeto a guardar|actualizar
-    public AssistanceStatus oldAssistance = new AssistanceStatus();//Objeto con los datos iniciales
+    public AssistanceStatus assistance = new AssistanceStatus();//Objeto a guardar|actualizar
+    public AssistanceStatus oldAssistance = new AssistanceStatus();//Objeto con los datos iniciales 
+    private bool _isClosing = false;
+    #endregion
     public frmAssistanceStatusDetail()
     {
       InitializeComponent();
@@ -56,33 +60,42 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] 27/Feb/2016 Created
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if(ObjectHelper.IsEquals(assistance,oldAssistance) && mode!=EnumMode.add)
+      try
       {
-        Close();
-      }
-      else
-      {
-        string sMsj = ValidateHelper.ValidateForm(this,"Assistance Status");
-        int nRes = 0;        
-
-        if (sMsj == "")//Validar si hay cmapos vacios
+        btnAccept.Focus();
+        if (ObjectHelper.IsEquals(assistance, oldAssistance) && mode != EnumMode.add)
         {
-          nRes = BREntities.OperationEntity(assistance, mode);
-
-          UIHelper.ShowMessageResult("Assistance Status", nRes);
-          if(nRes>0)
-          {
-            DialogResult = true;
-            Close();
-          }
+          _isClosing = true;
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(sMsj);
+          string sMsj = ValidateHelper.ValidateForm(this, "Assistance Status");
+          int nRes = 0;
+
+          if (sMsj == "")//Validar si hay cmapos vacios
+          {
+            nRes = await BREntities.OperationEntity(assistance, mode);
+
+            UIHelper.ShowMessageResult("Assistance Status", nRes);
+            if (nRes > 0)
+            {
+              _isClosing = true;
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(sMsj);
+          }
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Assistance Status");
       }
 
     }
@@ -123,22 +136,51 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!_isClosing) { _isClosing = true; Close(); }
+          }
+          else
+          {
+            _isClosing = false;
           }
         }
         else
         {
-          Close();
+          if (!_isClosing) { _isClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!_isClosing) { _isClosing = true; Close(); }
+      }
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 30/05/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
+      {
+        _isClosing = true;
+        btnCancel_Click(null, null);
+        if (!_isClosing)
+        {
+          e.Cancel = true;
+        }
+        else
+        {
+          _isClosing = false;
+        }
       }
     }
     #endregion
     #endregion
-
-
   }
 }

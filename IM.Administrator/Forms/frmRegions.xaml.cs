@@ -234,18 +234,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 14/04/2016
     /// </history>
-    private void LoadRegions(Region region=null)
+    private async void LoadRegions(Region region=null)
     {
-      int nIndex = 0;
-      List<Region> lstRegions = BRRegions.GetRegions(_nSatus, _regionFilter);
-      dgrRegions.ItemsSource = lstRegions;
-      if (lstRegions.Count > 0 && region != null)
+      try
       {
-        region = lstRegions.Where(rg => rg.rgID == region.rgID).FirstOrDefault();
-        nIndex = lstRegions.IndexOf(region);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Region> lstRegions = await BRRegions.GetRegions(_nSatus, _regionFilter);
+        dgrRegions.ItemsSource = lstRegions;
+        if (lstRegions.Count > 0 && region != null)
+        {
+          region = lstRegions.Where(rg => rg.rgID == region.rgID).FirstOrDefault();
+          nIndex = lstRegions.IndexOf(region);
+        }
+        GridHelper.SelectRow(dgrRegions, nIndex);
+        StatusBarReg.Content = lstRegions.Count + " Regions.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrRegions, nIndex);
-      StatusBarReg.Content = lstRegions.Count + " Regions.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Regions");
+      }
     }
     #endregion
     #region ValidateFilter

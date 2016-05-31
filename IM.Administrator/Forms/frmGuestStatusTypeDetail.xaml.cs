@@ -6,6 +6,7 @@ using IM.Base.Helpers;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -31,60 +32,68 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 28/03/2016
+    /// [emoguel] modified 30/05/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if (ObjectHelper.IsEquals(guestStaTyp, guestStaTypOld) && !Validation.GetHasError(txtgsAgeEnd) && !Validation.GetHasError(txtgsAgeStart) && enumMode!=EnumMode.add)//Verificamos si se realizó algun cambio
+      try
       {
-        Close();
-      }
-      else
-      {
-        string strMsj = "";
-        int nRes = 0;
-        #region validar campos
-        if (string.IsNullOrWhiteSpace(guestStaTyp.gsID))//ID
+        btnAccept.Focus();
+        if (ObjectHelper.IsEquals(guestStaTyp, guestStaTypOld) && !Validation.GetHasError(txtgsAgeEnd) && !Validation.GetHasError(txtgsAgeStart) && enumMode != EnumMode.add)//Verificamos si se realizó algun cambio
         {
-          strMsj += "Specify the Guest status type ID. \n";
-        }
-        if(string.IsNullOrWhiteSpace(guestStaTyp.gsN))
-        {
-          strMsj += "Specify the Guest status type description. \n";
-        }
-        #region validar star Age y end age
-        if(Validation.GetHasError(txtgsAgeStart))//Validamos que no pueda ser mayor a 255        
-        {
-          strMsj += "Start Age can not be greater than 255. \n";          
-        }
-        if(Validation.GetHasError(txtgsAgeEnd))
-        {
-          strMsj += "End Age can not be greater than 255. \n";
-        }
-        if(!Validation.GetHasError(txtgsAgeStart) &&!Validation.GetHasError(txtgsAgeEnd))
-        {
-          if(guestStaTyp.gsAgeStart>guestStaTyp.gsAgeEnd)//Validamos que start Edge no se mayor que end Age
-          {
-            strMsj += "Start age can not be greater than End age. \n";
-          }
-        }
-        #endregion
-        #endregion
-
-        if (strMsj=="")
-        {
-          nRes = BREntities.OperationEntity(guestStaTyp, enumMode);
-          UIHelper.ShowMessageResult("Guest Status Type", nRes);
-          if (nRes >0)
-          {
-            DialogResult = true;
-            Close();
-          }
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          string strMsj = "";
+          int nRes = 0;
+          #region validar campos
+          if (string.IsNullOrWhiteSpace(guestStaTyp.gsID))//ID
+          {
+            strMsj += "Specify the Guest status type ID. \n";
+          }
+          if (string.IsNullOrWhiteSpace(guestStaTyp.gsN))
+          {
+            strMsj += "Specify the Guest status type description. \n";
+          }
+          #region validar star Age y end age
+          if (Validation.GetHasError(txtgsAgeStart))//Validamos que no pueda ser mayor a 255        
+          {
+            strMsj += "Start Age can not be greater than 255. \n";
+          }
+          if (Validation.GetHasError(txtgsAgeEnd))
+          {
+            strMsj += "End Age can not be greater than 255. \n";
+          }
+          if (!Validation.GetHasError(txtgsAgeStart) && !Validation.GetHasError(txtgsAgeEnd))
+          {
+            if (guestStaTyp.gsAgeStart > guestStaTyp.gsAgeEnd)//Validamos que start Edge no se mayor que end Age
+            {
+              strMsj += "Start age can not be greater than End age. \n";
+            }
+          }
+          #endregion
+          #endregion
+
+          if (strMsj == "")
+          {
+            nRes = await BREntities.OperationEntity(guestStaTyp, enumMode);
+            UIHelper.ShowMessageResult("Guest Status Type", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Guest Status Type");
       }
     }
     #endregion

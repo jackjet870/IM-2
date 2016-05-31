@@ -110,51 +110,58 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 27/04/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      if (enumMode == EnumMode.search)
+      try
       {
-        if (dptlDT.SelectedDate != null)
+        if (enumMode == EnumMode.search)
         {
-          blnDate = true;
-          teamLog.tlDT = Convert.ToDateTime(dptlDT.SelectedDate);
-        }
-        else
-        {
-          blnDate = false;
-        }
-        DialogResult = true;
-        Close();
-      }
-      else
-      {
-        btnAccept.Focus();
-        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(teamLog, oldTeamLog))
-        {
+          if (dptlDT.SelectedDate != null)
+          {
+            blnDate = true;
+            teamLog.tlDT = Convert.ToDateTime(dptlDT.SelectedDate);
+          }
+          else
+          {
+            blnDate = false;
+          }
+          DialogResult = true;
           Close();
         }
         else
         {
-          #region Insertar|Agregar
-          string strMsj = ValidateHelper.ValidateForm(this, "Team Log");
-          if (strMsj == "")
+          btnAccept.Focus();
+          if (enumMode != EnumMode.add && ObjectHelper.IsEquals(teamLog, oldTeamLog))
           {
-            int nRes = BREntities.OperationEntity<TeamLog>(teamLog, enumMode);
-            UIHelper.ShowMessageResult("Team Log", nRes);
-            if (nRes == 1)
-            {              
-              DialogResult = true;
-              Close();
-            }
-
+            Close();
           }
           else
           {
-            UIHelper.ShowMessage(strMsj);
+            #region Insertar|Agregar
+            string strMsj = ValidateHelper.ValidateForm(this, "Team Log");
+            if (strMsj == "")
+            {
+              int nRes =await BREntities.OperationEntity(teamLog, enumMode);
+              UIHelper.ShowMessageResult("Team Log", nRes);
+              if (nRes == 1)
+              {
+                DialogResult = true;
+                Close();
+              }
+            }
+            else
+            {
+              UIHelper.ShowMessage(strMsj);
+            }
+            #endregion
           }
-          #endregion
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Team Logs");
       }
     }
     #endregion
@@ -200,40 +207,47 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 27/04/2016
+    /// [emoguel] created 30/05/2016 se volvió async
     /// </history>
-    private void cmbtlTeamType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void cmbtlTeamType_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      switch(teamLog.tlTeamType)
+      try
       {
-        case "":
-          {
-            cmbtlTeam.ItemsSource = null;
-            cmbtlPlaceID.ItemsSource = null;
-            cmbtlPlaceID.Tag = "Location";
-            break;
-          }
-        case "SA":
-          {
-            cmbtlPlaceID.Tag = "Sales Room";
-            lblSr.Content = "Sales Room";
-            cmbtlPlaceID.DisplayMemberPath = "srN";
-            cmbtlPlaceID.SelectedValuePath = "srID";
-            List<SalesRoom> lstSalesRoom = BRSalesRooms.GetSalesRooms(1, blnTeamLog: true);
-            cmbtlPlaceID.ItemsSource = lstSalesRoom;
-            break;
-          }
-        case "GS":
-          {
-            cmbtlPlaceID.Tag = "Location";
-            lblSr.Content = "Location";
-            cmbtlPlaceID.DisplayMemberPath = "loN";
-            cmbtlPlaceID.SelectedValuePath = "loID";
-            List<Location> lstLocations = BRLocations.GetLocations(1, blnTeamsLog: true);
-            cmbtlPlaceID.ItemsSource = lstLocations;
-            break;
-          }
+        switch (teamLog.tlTeamType)
+        {
+          case "":
+            {
+              cmbtlTeam.ItemsSource = null;
+              cmbtlPlaceID.ItemsSource = null;
+              cmbtlPlaceID.Tag = "Location";
+              break;
+            }
+          case "SA":
+            {
+              cmbtlPlaceID.Tag = "Sales Room";
+              lblSr.Content = "Sales Room";
+              cmbtlPlaceID.DisplayMemberPath = "srN";
+              cmbtlPlaceID.SelectedValuePath = "srID";
+              List<SalesRoom> lstSalesRoom = await BRSalesRooms.GetSalesRooms(1, blnTeamLog: true);
+              cmbtlPlaceID.ItemsSource = lstSalesRoom;
+              break;
+            }
+          case "GS":
+            {
+              cmbtlPlaceID.Tag = "Location";
+              lblSr.Content = "Location";
+              cmbtlPlaceID.DisplayMemberPath = "loN";
+              cmbtlPlaceID.SelectedValuePath = "loID";
+              List<Location> lstLocations = BRLocations.GetLocations(1, blnTeamsLog: true);
+              cmbtlPlaceID.ItemsSource = lstLocations;
+              break;
+            }
+        }
       }
-      
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams Log");
+      }      
     }
     #endregion
 

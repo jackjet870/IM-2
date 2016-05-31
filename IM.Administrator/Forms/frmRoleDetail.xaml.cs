@@ -5,6 +5,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -68,31 +69,39 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 19/04/2016
+    /// [emoguel] modified 30/05/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(role,oldRole))
+      try
       {
-        Close();
-      }
-      else
-      {
-        string strMsj = ValidateHelper.ValidateForm(this, "Roles");
-        if (strMsj == "")
+        btnAccept.Focus();
+        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(role, oldRole))
         {
-          int nRes = BREntities.OperationEntity(role, enumMode);
-          UIHelper.ShowMessageResult("Roles", nRes);
-          if(nRes>0)
-          {
-            DialogResult = true;
-            Close();
-          }
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          string strMsj = ValidateHelper.ValidateForm(this, "Roles");
+          if (strMsj == "")
+          {
+            int nRes =await BREntities.OperationEntity(role, enumMode);
+            UIHelper.ShowMessageResult("Roles", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Roles");
       }
     }
     #endregion

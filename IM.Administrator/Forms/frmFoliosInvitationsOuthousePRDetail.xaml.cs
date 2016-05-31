@@ -22,6 +22,7 @@ namespace IM.Administrator.Forms
     private List<FolioInvitationOuthousePR> _lstFolios = new List<FolioInvitationOuthousePR>();//Lista con los folios iniciales
     private List<FolioInvitationOuthousePRCancellation> _lstCancellation=new List<FolioInvitationOuthousePRCancellation>();//Lista de folios cancelados
     public ExecuteCommandHelper KeyEnter { get; set; }
+    private bool blnClosing = false;
     #endregion
 
     public frmFoliosInvitationsOuthousePRDetail()
@@ -88,7 +89,6 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null, null);
       }
     }
@@ -117,6 +117,7 @@ namespace IM.Administrator.Forms
         #endregion
         if (enumMode != EnumMode.add && !blnHasChanged)
         {
+          blnClosing = true;
           Close();
         }
         else
@@ -159,6 +160,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Folios", nRes);
             if (nRes > 0)
             {
+              blnClosing = true;
               DialogResult = true;
               Close();
             }
@@ -223,6 +225,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       if (enumMode != EnumMode.search && enumMode != EnumMode.preview)
       {
         List<FolioInvitationOuthousePR> lstFoliosPR = (List<FolioInvitationOuthousePR>)dgrAssigned.ItemsSource;
@@ -233,17 +236,21 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!blnClosing) { blnClosing = true; Close(); }
+          }
+          else
+          {
+            blnClosing = false;
           }
         }
         else
         {
-          Close();
+          if (!blnClosing) { blnClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!blnClosing) { blnClosing = true; Close(); }
       }
     } 
     #endregion
@@ -324,6 +331,28 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 25/05/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!blnClosing)
+      {
+        blnClosing = true;
+        btnCancel_Click(null, null);
+        if (!blnClosing)
+        {
+          e.Cancel = true;
+        }
+      }
+    }
+    #endregion
     #endregion
 
     #region Methods
@@ -584,7 +613,11 @@ namespace IM.Administrator.Forms
 
       return blnHasChanged;
     }
+
     #endregion
+
     #endregion
+
+    
   }
 }

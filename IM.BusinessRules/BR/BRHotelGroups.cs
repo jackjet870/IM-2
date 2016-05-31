@@ -113,7 +113,7 @@ namespace IM.BusinessRules.BR
             transacction.Commit();
             return nRes;
           }
-          catch(Exception e)
+          catch
           {
             transacction.Rollback();
             return 0;

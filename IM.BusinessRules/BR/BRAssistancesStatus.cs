@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,37 +19,40 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] 27/Feb/2016 Created
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
+    /// [emoguel] modified 30/05/2016--->Se volvió async
     /// </history>
-    public static List<AssistanceStatus> GetAssitanceStatus(AssistanceStatus assistanceStatus=null, int nStatus=-1)
+    public async static Task<List<AssistanceStatus>> GetAssitanceStatus(AssistanceStatus assistanceStatus=null, int nStatus=-1)
     {
       
       List<AssistanceStatus> lstAssitanceStatus = new List<AssistanceStatus>();
-
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      await Task.Run(() =>
       {
-        var query = from ast in dbContext.AssistancesStatus
-                    select ast;
-        if(nStatus!=-1)//Filtra por status
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool bStat = Convert.ToBoolean(nStatus);
-          query = query.Where(ast => ast.atA == bStat);
-        }
-
-        if (assistanceStatus != null)//validacion del objeto
-        {
-          if (!string.IsNullOrWhiteSpace(assistanceStatus.atID))//Filtra por ID
+          var query = from ast in dbContext.AssistancesStatus
+                      select ast;
+          if (nStatus != -1)//Filtra por status
           {
-            query = query.Where(ast => ast.atID == assistanceStatus.atID);
+            bool bStat = Convert.ToBoolean(nStatus);
+            query = query.Where(ast => ast.atA == bStat);
           }
 
-          if (!string.IsNullOrWhiteSpace(assistanceStatus.atN))//Filtra por Descripción
+          if (assistanceStatus != null)//validacion del objeto
           {
-            query = query.Where(ast => ast.atN.Contains(assistanceStatus.atN));
-          }
-        }
+            if (!string.IsNullOrWhiteSpace(assistanceStatus.atID))//Filtra por ID
+            {
+              query = query.Where(ast => ast.atID == assistanceStatus.atID);
+            }
 
-        lstAssitanceStatus = query.OrderBy(a=>a.atN).ToList();
-      }
+            if (!string.IsNullOrWhiteSpace(assistanceStatus.atN))//Filtra por Descripción
+            {
+              query = query.Where(ast => ast.atN.Contains(assistanceStatus.atN));
+            }
+          }
+
+          lstAssitanceStatus = query.OrderBy(a => a.atN).ToList();
+        }
+      });
 
       return lstAssitanceStatus;
       

@@ -24,7 +24,8 @@ namespace IM.Administrator.Forms
     public EnumMode enumMode;//Modo de la ventana
     private List<Personnel> _lstOldPersonnel = new List<Personnel>();//Lista inicial de personnel
     private List<Personnel> _lstPersonel = new List<Personnel>();//Lista de Personnel para el viewSource
-    CollectionViewSource getPersonnelsView;
+    private bool _blnIsCellCancel=false;
+    private bool blnClosing = false;
     #endregion
     public frmDeptDetail()
     {
@@ -62,7 +63,10 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
-
+      if(e.Key==Key.Escape)
+      {
+        btnCancel_Click(null, null);
+      }
     }
     #endregion
 
@@ -81,6 +85,7 @@ namespace IM.Administrator.Forms
       List<Personnel> lstPersonnels = (List<Personnel>)dgrPersonnel.ItemsSource;
       if (enumMode != EnumMode.add && ObjectHelper.IsEquals(dept, oldDept) && ObjectHelper.IsListEquals(lstPersonnels, _lstOldPersonnel))
       {
+        blnClosing = true;
         Close();
       }
       else
@@ -94,6 +99,7 @@ namespace IM.Administrator.Forms
           UIHelper.ShowMessageResult("Dept", nRes);
           if (nRes > 0)
           {
+            blnClosing = true;
             DialogResult = true;
             Close();
           }
@@ -117,18 +123,22 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      List<Personnel> lstPersonnels = (List<Personnel>)getPersonnelsView.Source;//dgrPersonnel.ItemsSource;
+      List<Personnel> lstPersonnels = (List<Personnel>)dgrPersonnel.ItemsSource;
       if (!ObjectHelper.IsEquals(dept, oldDept) || !ObjectHelper.IsListEquals(lstPersonnels, _lstOldPersonnel))
       {
         MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
         if (result == MessageBoxResult.Yes)
         {
-          Close();
+          if (!blnClosing) { blnClosing = true; Close(); }
+        }
+        else
+        {
+          blnClosing = false;
         }
       }
       else
       {
-        Close();
+        if (!blnClosing) { blnClosing = true; Close(); }
       }
     }
     #endregion
@@ -144,31 +154,65 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgrPersonnels_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
-        if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
+      if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
+      {
+        _blnIsCellCancel = false;
+        bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrPersonnel, true);
+        e.Cancel = isRepeat;
+      }
+      else
+      {
+        _blnIsCellCancel = true;
+      }
+    }
+    #endregion
+
+    #region RowEndEdit
+    /// <summary>
+    /// Actualiza la fila seleccionada
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 20/05/2016
+    /// </history>
+    private void dgrPersonnel_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      dgrPersonnel.RowEditEnding -= dgrPersonnel_RowEditEnding;
+      if (_blnIsCellCancel)
+      {
+        dgrPersonnel.CancelEdit();
+      }
+      else
+      {
+        dgrPersonnel.CommitEdit();
+        dgrPersonnel.Items.Refresh();
+        GridHelper.SelectRow(dgrPersonnel, dgrPersonnel.SelectedIndex);
+      }
+      dgrPersonnel.RowEditEnding += dgrPersonnel_RowEditEnding;
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 25/05/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!blnClosing)
+      {
+        blnClosing = true;
+        btnCancel_Click(null, null);
+        if (!blnClosing)
         {
-          Personnel personnel = (Personnel)dgrPersonnel.SelectedItem;//Valor que se está editando
-
-          var Combobox = (ComboBox)e.EditingElement;
-          Personnel PersonnelCombo = (Personnel)Combobox.SelectedItem;//Valor seleccionado del combo
-
-          if (PersonnelCombo != null)//Se valida que no esté seleccionado en otra fila
-          {
-            if (PersonnelCombo != personnel)//Validar que se esté cambiando el valor
-            {
-              Personnel personnelVal = _lstPersonel.Where(pe => pe.peID != personnel.peID && pe.peID == PersonnelCombo.peID).FirstOrDefault();
-              if (personnelVal != null)
-              {
-                UIHelper.ShowMessage("Personnel must not be repeated");
-                e.Cancel = true;
-              }
-              else
-              {
-                personnel = _lstPersonel[e.Row.GetIndex()];
-                ObjectHelper.CopyProperties(personnel, PersonnelCombo);
-              }
-            }
-          }
-        }      
+          e.Cancel = true;
+        }
+      }
     }
     #endregion
     #endregion
@@ -185,12 +229,12 @@ namespace IM.Administrator.Forms
     private void LoadPersonnels(string deptID)
     {
       List<Personnel> lstAllPersonnels = BRPersonnel.GetPersonnels();
-      cmbPersonnel.ItemsSource = lstAllPersonnels;
-      getPersonnelsView = ((CollectionViewSource)(this.FindResource("getPersonnels")));
+      cmbPersonnel.ItemsSource = lstAllPersonnels;      
       _lstPersonel = lstAllPersonnels.Where(pe => pe.pede == deptID).ToList();
-      getPersonnelsView.Source = _lstPersonel;      
+      dgrPersonnel.ItemsSource = _lstPersonel;
       _lstOldPersonnel = lstAllPersonnels.Where(pe => pe.pede == deptID).ToList();//Cargamos la lista con los datos iniciales
     }
+
     #endregion
 
     #endregion

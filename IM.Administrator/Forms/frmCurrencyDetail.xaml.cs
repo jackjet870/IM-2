@@ -5,6 +5,7 @@ using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -67,34 +68,40 @@ namespace IM.Administrator.Forms
     #endregion
     #region Accept
 
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if(ObjectHelper.IsEquals(currency,oldCurrency) && mode!=EnumMode.add)
+      try
       {
-        Close();
-      }
-      else
-      {
-        string sMsj = ValidateHelper.ValidateForm(this, "Currency");
-        int nRes = 0;
-
-        if (sMsj == "")//Validar si hay cmapos vacios
+        btnAccept.Focus();
+        if (ObjectHelper.IsEquals(currency, oldCurrency) && mode != EnumMode.add)
         {
-
-          nRes = BREntities.OperationEntity(currency, mode);
-          UIHelper.ShowMessageResult("Currency", nRes);
-          if (nRes > 0)
-          {
-            DialogResult = true;
-            Close();
-          }
-          
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(sMsj);
+          string sMsj = ValidateHelper.ValidateForm(this, "Currency");
+          int nRes = 0;
+
+          if (sMsj == "")//Validar si hay cmapos vacios
+          {
+
+            nRes = await BREntities.OperationEntity(currency, mode);
+            UIHelper.ShowMessageResult("Currency", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+
+          }
+          else
+          {
+            UIHelper.ShowMessage(sMsj);
+          }
         }
+      } catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Currencies");
       }
     }
 

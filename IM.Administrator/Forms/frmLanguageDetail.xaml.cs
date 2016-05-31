@@ -5,6 +5,7 @@ using IM.Base.Helpers;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -112,32 +113,39 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 31/03/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if (ObjectHelper.IsEquals(language, oldLanguage) && enumMode!=EnumMode.add)
+      try
       {
-        Close();
-      }
-      else
-      {
-        string strMsj = ValidateHelper.ValidateForm(this, "Language");
-        int nRes = 0;
-
-        if (strMsj == "")//Validar si hay cmapos vacios
+        btnAccept.Focus();
+        if (ObjectHelper.IsEquals(language, oldLanguage) && enumMode != EnumMode.add)
         {
-          nRes = BREntities.OperationEntity(language, enumMode);
-          UIHelper.ShowMessageResult("Language", nRes);
-          if(nRes>0)
-          {
-            DialogResult = true;
-            Close();
-          }
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          string strMsj = ValidateHelper.ValidateForm(this, "Language");
+          int nRes = 0;
+
+          if (strMsj == "")//Validar si hay cmapos vacios
+          {
+            nRes = await BREntities.OperationEntity(language, enumMode);
+            UIHelper.ShowMessageResult("Language", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Language");
       }
     } 
     #endregion

@@ -189,78 +189,82 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista tipo LeadSource</returns>
     /// <history>
     /// [emoguel] created 13/05/2016
+    /// [emogue] Modified 25/05/2016 se volvio async el Metodo
     /// </history>
-    public static List<LeadSource> GetLeadSources(int nStatus = -1, int nRegen = -1, int nAnimation = -1, LeadSource leadSource = null,bool blnAgencies=false)
+    public async static Task<List<LeadSource>> GetLeadSources(int nStatus = -1, int nRegen = -1, int nAnimation = -1, LeadSource leadSource = null, bool blnAgencies = false)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var query = (from ls in dbContext.LeadSources
-                    select ls);
+      List<LeadSource> lstLeadSources = new List<LeadSource>();
+      await Task.Run(() => { 
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {        
+          var query = (from ls in dbContext.LeadSources
+                      select ls);
 
-        if(blnAgencies)
-        {
-          query = query.Include("Agencies");
+          if(blnAgencies)
+          {
+            query = query.Include("Agencies");
+          }
+
+          if (nStatus != -1)//Filtro por Estatus
+          {
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(ls => ls.lsA == blnStatus);
+          }        
+
+          if (nRegen != -1)//Filtro por Regen
+          {
+            bool blnRegen = Convert.ToBoolean(nRegen);
+            query = query.Where(ls => ls.lsRegen == blnRegen);
+          }
+
+          if (nAnimation != -1)//Filtro por Animation
+          {
+            bool blnAnimation = Convert.ToBoolean(nAnimation);
+            query = query.Where(ls => ls.lsAnimation == blnAnimation);
+          }
+
+          if (leadSource != null)
+          {
+            if (!string.IsNullOrWhiteSpace(leadSource.lsID))//Filtro por ID
+            {
+              query = query.Where(ls => ls.lsID == leadSource.lsID);
+            }
+
+            if (!string.IsNullOrWhiteSpace(leadSource.lsN))//Filtro por descripción
+            {
+              query = query.Where(ls => ls.lsN.Contains(leadSource.lsN));
+            }
+
+            if (!string.IsNullOrWhiteSpace(leadSource.lspg))//Filtro por Program
+            {
+              query = query.Where(ls => ls.lspg == leadSource.lspg);
+            }
+
+            if (!string.IsNullOrWhiteSpace(leadSource.lssr))//Filtro por Sales Room
+            {
+              query = query.Where(ls => ls.lssr == leadSource.lssr);
+            }
+
+            if (!string.IsNullOrWhiteSpace(leadSource.lsar))//Filtro por Area
+            {
+              query = query.Where(ls => ls.lsar == leadSource.lsar);
+            }
+
+            if (!string.IsNullOrWhiteSpace(leadSource.lsrg))//Filtro por region
+            {
+              query = query.Where(ls => ls.lsrg == leadSource.lsrg);
+            }
+
+            if (!string.IsNullOrWhiteSpace(leadSource.lsso))//Filtro por Segment
+            {
+              query = query.Where(ls => ls.lsso == leadSource.lsso);
+            }
+
+          }
+          lstLeadSources= query.OrderBy(ls => ls.lsN).ToList();
         }
-
-        if (nStatus != -1)//Filtro por Estatus
-        {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(ls => ls.lsA == blnStatus);
-        }        
-
-        if (nRegen != -1)//Filtro por Regen
-        {
-          bool blnRegen = Convert.ToBoolean(nRegen);
-          query = query.Where(ls => ls.lsRegen == blnRegen);
-        }
-
-        if (nAnimation != -1)//Filtro por Animation
-        {
-          bool blnAnimation = Convert.ToBoolean(nAnimation);
-          query = query.Where(ls => ls.lsAnimation == blnAnimation);
-        }
-
-        if (leadSource != null)
-        {
-          if (!string.IsNullOrWhiteSpace(leadSource.lsID))//Filtro por ID
-          {
-            query = query.Where(ls => ls.lsID == leadSource.lsID);
-          }
-
-          if (!string.IsNullOrWhiteSpace(leadSource.lsN))//Filtro por descripción
-          {
-            query = query.Where(ls => ls.lsN.Contains(leadSource.lsN));
-          }
-
-          if (!string.IsNullOrWhiteSpace(leadSource.lspg))//Filtro por Program
-          {
-            query = query.Where(ls => ls.lspg == leadSource.lspg);
-          }
-
-          if (!string.IsNullOrWhiteSpace(leadSource.lssr))//Filtro por Sales Room
-          {
-            query = query.Where(ls => ls.lssr == leadSource.lssr);
-          }
-
-          if (!string.IsNullOrWhiteSpace(leadSource.lsar))//Filtro por Area
-          {
-            query = query.Where(ls => ls.lsar == leadSource.lsar);
-          }
-
-          if (!string.IsNullOrWhiteSpace(leadSource.lsrg))//Filtro por region
-          {
-            query = query.Where(ls => ls.lsrg == leadSource.lsrg);
-          }
-
-          if (!string.IsNullOrWhiteSpace(leadSource.lsso))//Filtro por Segment
-          {
-            query = query.Where(ls => ls.lsso == leadSource.lsso);
-          }
-
-        }
-
-        return query.OrderBy(ls => ls.lsN).ToList();
-      }
+      });
+      return lstLeadSources;
     }
     #endregion
 
@@ -373,7 +377,7 @@ namespace IM.BusinessRules.BR
             ObjectHelper.CopyProperties(leadSource, leadSourceSave,true);
             return nRes;
           }
-          catch(DbEntityValidationException ex)
+          catch
           {
             transaction.Rollback();
             return 0;

@@ -299,7 +299,7 @@ namespace IM.InventoryMovements
       objWhsMovsViewSource.Source = _lstobjWhsMovs;
       getGiftsViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("getGiftsViewSource")));
       // Load data by setting the CollectionViewSource.Source property:
-      getGiftsViewSource.Source =await BRGifts.GetGifts(App.User.Warehouse.whID, 1);
+      getGiftsViewSource.Source =await BRGifts.GetGiftsShort(App.User.Warehouse.whID, 1);
     }
     #endregion
   }

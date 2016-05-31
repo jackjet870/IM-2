@@ -169,14 +169,21 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 28/04/2016
     /// </history>
-    private void LoadAreas()
+    private async void LoadAreas()
     {
-      List<Area> lstArea = BRAreas.GetAreas();
-      if (enumMode == EnumMode.search)
+      try
       {
-        lstArea.Insert(0, new Area { arID = "", arN = "" });
+        List<Area> lstArea = await BRAreas.GetAreas();
+        if (enumMode == EnumMode.search)
+        {
+          lstArea.Insert(0, new Area { arID = "", arN = "" });
+        }
+        cmbwhar.ItemsSource = lstArea;
       }
-      cmbwhar.ItemsSource = lstArea;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Warehouse");
+      }
     } 
     #endregion
     #endregion

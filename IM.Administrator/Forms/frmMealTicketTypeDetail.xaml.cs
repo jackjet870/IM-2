@@ -6,6 +6,7 @@ using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -68,32 +69,39 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 04/04/2016
+    /// [emoguel] modified 30/05/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if (ObjectHelper.IsEquals(mealTicketType, oldMealTicketType) && enumMode != EnumMode.add)
+      try
       {
-        Close();
-      }
-      else
-      {
-        string strMsj = ValidateHelper.ValidateForm(this,"Meal Ticket Detail");
-        if(strMsj=="")
+        btnAccept.Focus();
+        if (ObjectHelper.IsEquals(mealTicketType, oldMealTicketType) && enumMode != EnumMode.add)
         {
-          int nRes = BREntities.OperationEntity(mealTicketType, enumMode);
-          UIHelper.ShowMessageResult("Meal Ticket Detail", nRes);
-          if(nRes>0)
-          {
-            DialogResult = true;
-            Close();
-          }
+          Close();
         }
         else
         {
-          MessageBox.Show(strMsj);
+          string strMsj = ValidateHelper.ValidateForm(this, "Meal Ticket Detail");
+          if (strMsj == "")
+          {
+            int nRes = await BREntities.OperationEntity(mealTicketType, enumMode);
+            UIHelper.ShowMessageResult("Meal Ticket Detail", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            MessageBox.Show(strMsj);
+          }
         }
-
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Meal Ticket");
       }
     }
 

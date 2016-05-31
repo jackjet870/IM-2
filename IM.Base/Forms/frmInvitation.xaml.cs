@@ -78,7 +78,7 @@ namespace IM.Base.Forms
       var _paymenTypes = await BRPaymentTypes.GetPaymentTypes(1);
       var _paymentPlaces = await BRPaymentPlaces.GetPaymentPlaces();
       var _creditCardTypes =await BRCreditCardTypes.GetCreditCardTypes();
-      var _gifts = await BRGifts.GetGifts(_user.Location == null ? "ALL" : _user.Location.loID, 1);
+      var _gifts = await BRGifts.GetGiftsShort(_user.Location == null ? "ALL" : _user.Location.loID, 1);
       var _salesRooms = BRSalesRooms.GetSalesRooms(0);
     }
     #endregion

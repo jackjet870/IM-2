@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
-        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing"
         Title="Lead Source Detail" Height="480" Width="490" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
     <DockPanel LastChildFill="True" >
 
@@ -88,7 +88,7 @@
                         <ColumnDefinition Width="50*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="5,0,0,0">Eficency</TextBlock>
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="5,0,0,0">Efficiency</TextBlock>
                     <TextBlock Grid.Column="1" TextWrapping="WrapWithOverflow" HorizontalAlignment="Left" Margin="8,0,0,0">Book Factor</TextBlock>
 
                     <TextBox Name="txtlsEfficiencyTh" Grid.Column="0" VerticalAlignment="Top" Text="{Binding lsEfficiencyTh}"  Margin="69,0,0,0" />
@@ -139,7 +139,7 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <!--#region Grid Locations-->
-                    <DataGrid Name="dgrLocations" ScrollViewer.VerticalScrollBarVisibility="Auto" CellEditEnding="dgrLocations_CellEditEnding" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                    <DataGrid Name="dgrLocations" ScrollViewer.VerticalScrollBarVisibility="Auto" RowEditEnding="dgr_RowEditEnding" CellEditEnding="dgrLocations_CellEditEnding" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                           CanUserAddRows="True" CanUserResizeColumns="False" CanUserResizeRows="False" Margin="13,15,15,0">
                         <DataGrid.Columns>
                             <DataGridComboBoxColumn Header="Locations" x:Name="cmbLocations" Width="100*" SelectedValuePath="loID" DisplayMemberPath="loN" SelectedValueBinding="{Binding loID}"/>
@@ -150,7 +150,7 @@
 
                 <Grid Grid.Row="1" >
                     <!--#region Grid Agencies-->
-                    <DataGrid Name="dgrAgencies" CellEditEnding="dgrAgencies_CellEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch"
+                    <DataGrid Name="dgrAgencies" CellEditEnding="dgrAgencies_CellEditEnding" RowEditEnding="dgr_RowEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch" CanUserAddRows="True" CanUserResizeColumns="False" CanUserResizeRows="False" Margin="13,13,15,0">
                         <DataGrid.Columns>
                             <DataGridComboBoxColumn Header="Agencies" x:Name="cmbAgencies" Width="100*" SelectedValueBinding="{Binding agID}" DisplayMemberPath="agN" SelectedValuePath="agID" />

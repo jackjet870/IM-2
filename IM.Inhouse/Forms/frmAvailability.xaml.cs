@@ -61,10 +61,10 @@ namespace IM.Inhouse
     #region Metodos
 
     #region LoadControls
-    private void LoadControls()
+    private async void LoadControls()
     {
       _guest = BRGuests.GetGuest(_guestID);
-      cboguum.ItemsSource = BRUnavailableMotives.GetUnavailableMotives(1);
+      cboguum.ItemsSource =await BRUnavailableMotives.GetUnavailableMotives(1);
       if (_guest.guPRAvail != null)
       {
         txtguPRAvail.Text = _guest.guPRAvail;

@@ -6,6 +6,7 @@ using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -14,9 +15,12 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmAgencyDetail : Window
   {
+    #region Variables
     public Agency oldAgency = new Agency();//Objeto con los valores iniciales
     public Agency agency = new Agency();//Objeto para llenar el formulario 
     public EnumMode enumMode;
+    private bool _isClosing = false;
+    #endregion
 
     public frmAgencyDetail()
     {
@@ -34,7 +38,7 @@ namespace IM.Administrator.Forms
     /// [emoguel] created 09/03/2016
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
-    {
+    {      
       ObjectHelper.CopyProperties(agency, oldAgency);      
       LoadUnavailableMotives();
       LoadMarkets();
@@ -63,6 +67,7 @@ namespace IM.Administrator.Forms
       }
       #endregion      
       DataContext = agency;
+      skpStatus.Visibility = Visibility.Collapsed;
     }
     #endregion
 
@@ -75,11 +80,12 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 09/03/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();//Para actualizar el datacontext
       if (ObjectHelper.IsEquals(agency, oldAgency) && enumMode!=EnumMode.add)
       {
+        _isClosing = true;
         Close();
       }
       else
@@ -88,6 +94,8 @@ namespace IM.Administrator.Forms
 
         if (sMsj == "")
         {
+          skpStatus.Visibility = Visibility.Visible;
+          txtStatus.Text = "Saving Data...";
           agency.agcl = ((agency.agcl == -1) ? null : agency.agcl);
           agency.agse = ((agency.agse == "-1") ? null : agency.agse);
           int nRes = 0;
@@ -96,21 +104,23 @@ namespace IM.Administrator.Forms
           {
             case EnumMode.add:
               {
-                nRes = BRAgencies.SaveAgency(agency, false);
+                nRes = await BRAgencies.SaveAgency(agency, false);
                 break;
               }
             case EnumMode.edit:
               {
                 bool blnMarkets = ((agency.agmk.ToString() != oldAgency.agmk.ToString()) ? true : false);
                 bool blnUnMot = ((agency.agum.ToString() != oldAgency.agum.ToString()) ? true : false);
-                nRes = BRAgencies.SaveAgency(agency, true, blnUnMot, blnMarkets);
+                nRes = await BRAgencies.SaveAgency(agency, true, blnUnMot, blnMarkets);
                 break;
               }
           }
           #endregion
-          UIHelper.ShowMessageResult("Agency", nRes);    
+          UIHelper.ShowMessageResult("Agency", nRes);
+          skpStatus.Visibility = Visibility.Collapsed;
           if(nRes>0 )
           {
+            _isClosing = true;
             DialogResult = true;
             Close();
           }      
@@ -137,7 +147,6 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null, null);
       }
     }
@@ -155,6 +164,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       if(enumMode!=EnumMode.preview)
       {
         if (!ObjectHelper.IsEquals(agency, oldAgency))
@@ -162,17 +172,21 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!_isClosing) { _isClosing = true; Close(); }
+          }
+          else
+          {
+            _isClosing = false;
           }
         }
         else
         {
-          Close();
+          if (!_isClosing) { _isClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!_isClosing) { _isClosing = true; Close(); }
       }
     }
     #endregion
@@ -185,11 +199,19 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 11/03/2016
+    /// [emoguel] modified 30/05/2016 sel volvió async
     /// </history>
-    protected void LoadUnavailableMotives()
+    protected async void LoadUnavailableMotives()
     {
-      List<UnavailableMotive> lstUnavailableMotive = BRUnavailableMotives.GetUnavailableMotives();
-      cmbUnavMot.ItemsSource = lstUnavailableMotive;
+      try
+      {
+        List<UnavailableMotive> lstUnavailableMotive = await BRUnavailableMotives.GetUnavailableMotives();
+        cmbUnavMot.ItemsSource = lstUnavailableMotive;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Agencies");
+      }
     }
     #endregion
 
@@ -202,8 +224,15 @@ namespace IM.Administrator.Forms
     /// </history>
     protected async void LoadMarkets()
     {
-      List<MarketShort> lstMarkestShort = await BRMarkets.GetMarkets(1);
-      cmbMarket.ItemsSource = lstMarkestShort;
+      try
+      {
+        List<MarketShort> lstMarkestShort = await BRMarkets.GetMarkets(1);
+        cmbMarket.ItemsSource = lstMarkestShort;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Agencies");
+      }
     }
     #endregion
 
@@ -213,11 +242,19 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 11/03/2016
+    /// [emoguel] modified 30/05/2016 Se volvió async el metodo
     /// </history>
-    protected void LoadReps()
+    protected async void LoadReps()
     {
-      List<Rep> lstReps = BRReps.GetReps(new Rep(), 1);      
-      cmbRep.ItemsSource = lstReps;
+      try
+      {
+        List<Rep> lstReps = await BRReps.GetReps(new Rep(), 1);
+        cmbRep.ItemsSource = lstReps;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Agencies");
+      }
     }
     #endregion
 
@@ -230,12 +267,15 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void LoadSegments()
     {
-      List<SegmentByAgency> lstSegmentsByAgencies = BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());    
-      if(lstSegmentsByAgencies.Count>0)
+      try
       {
-        lstSegmentsByAgencies.Insert(0, new SegmentByAgency { seID = "-1", seN = "" });
+        List<SegmentByAgency> lstSegmentsByAgencies = BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());
+        cmbSegment.ItemsSource = lstSegmentsByAgencies;
       }
-      cmbSegment.ItemsSource = lstSegmentsByAgencies;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Agencies");
+      }
     }
 
     #endregion
@@ -249,12 +289,15 @@ namespace IM.Administrator.Forms
     /// </history>
     protected async void LoadClubs()
     {
-      List<Club> lstClubs = await BRClubs.GetClubs(new Club());
-      if (lstClubs.Count > 0)
+      try
       {
-        lstClubs.Insert(0, new Club { clID = -1, clN = "" });
+        List<Club> lstClubs = await BRClubs.GetClubs(new Club());        
+        cmbClub.ItemsSource = lstClubs;
       }
-      cmbClub.ItemsSource = lstClubs;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Agencies");
+      }
     }
     #endregion
 
@@ -267,13 +310,46 @@ namespace IM.Administrator.Forms
     /// </history>
     protected async void LoadCountries()
     {
-      List<CountryShort> lstCountries =await BRCountries.GetCountries(1);
-      cmbCountri.ItemsSource = lstCountries;
+      try
+      {
+        List<CountryShort> lstCountries = await BRCountries.GetCountries(1);
+        cmbCountri.ItemsSource = lstCountries;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Agencies");
+      }
     }
-    #endregion
 
     #endregion
 
-    
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel[ created 30/05/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
+      {
+        _isClosing = true;
+        btnCancel_Click(null, null);
+        if (!_isClosing)
+        {
+          e.Cancel = true;
+        }
+        else
+        {
+          _isClosing = false;
+        }
+      }
+    } 
+    #endregion
   }
 }

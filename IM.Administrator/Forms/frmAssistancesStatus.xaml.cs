@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using System;
 using System.Linq;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -229,18 +230,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] 27/Feb/2016 Created
     /// </history>    
-    protected void LoadAssitance(AssistanceStatus assistanceStatus=null)
+    protected async void LoadAssitance(AssistanceStatus assistanceStatus=null)
     {
-      int nIndex = 0;
-      List<AssistanceStatus> lstAssistance = BRAssistancesStatus.GetAssitanceStatus(_assistanceFilter, _nStatus);
-      dgrAssitances.ItemsSource = lstAssistance;
-      if(assistanceStatus!=null && lstAssistance.Count>0)
+      try
       {
-        assistanceStatus = lstAssistance.Where(ass => ass.atID == assistanceStatus.atID).FirstOrDefault();
-        nIndex = lstAssistance.IndexOf(assistanceStatus);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<AssistanceStatus> lstAssistance =await BRAssistancesStatus.GetAssitanceStatus(_assistanceFilter, _nStatus);
+        dgrAssitances.ItemsSource = lstAssistance;
+        if (assistanceStatus != null && lstAssistance.Count > 0)
+        {
+          assistanceStatus = lstAssistance.Where(ass => ass.atID == assistanceStatus.atID).FirstOrDefault();
+          nIndex = lstAssistance.IndexOf(assistanceStatus);
+        }
+        GridHelper.SelectRow(dgrAssitances, nIndex);
+        StatusBarReg.Content = lstAssistance.Count + " Assistance Status.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrAssitances, nIndex);
-      StatusBarReg.Content = lstAssistance.Count + " Assistance Status.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Assistance Status");
+      }
     }
     #endregion
 
@@ -273,7 +283,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_assistanceFilter.atN))
       {
-        if (!newAssistance.atN.Contains(_assistanceFilter.atN))
+        if (!newAssistance.atN.Contains(_assistanceFilter.atN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

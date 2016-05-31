@@ -5,6 +5,7 @@ using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -64,31 +65,38 @@ namespace IM.Administrator.Forms
     #endregion
 
     #region Accept
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if(ObjectHelper.IsEquals(creditCardType,oldCreditCard) && mode!=EnumMode.add)
+      try
       {
-        Close();
-      }
-      else
-      {
-        string sMsj = ValidateHelper.ValidateForm(this, "Credit Card Type");
-        int nRes = 0;
-        if (sMsj == "")//Todos los campos estan llenos
+        btnAccept.Focus();
+        if (ObjectHelper.IsEquals(creditCardType, oldCreditCard) && mode != EnumMode.add)
         {
-          nRes = BREntities.OperationEntity<CreditCardType>(creditCardType, mode);
-          UIHelper.ShowMessageResult("Credit Card Type", nRes);
-          if(nRes>0)
-          {
-            DialogResult = true;
-            Close();
-          }
+          Close();
         }
         else
-        {//Hace falta llenar campos
-          UIHelper.ShowMessage(sMsj);
+        {
+          string sMsj = ValidateHelper.ValidateForm(this, "Credit Card Type");
+          int nRes = 0;
+          if (sMsj == "")//Todos los campos estan llenos
+          {
+            nRes = await BREntities.OperationEntity<CreditCardType>(creditCardType, mode);
+            UIHelper.ShowMessageResult("Credit Card Type", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {//Hace falta llenar campos
+            UIHelper.ShowMessage(sMsj);
+          }
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Credit Card Types");
       }
     }
 

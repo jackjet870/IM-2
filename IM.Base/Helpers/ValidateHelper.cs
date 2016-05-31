@@ -180,7 +180,7 @@ namespace IM.Base.Helpers
       List<Control> lstControls = UIHelper.GetChildParentCollection<Control>(container);//buscamos todos los controles de la ventana
       lstControls = lstControls.Where(co => co.Tag != null).ToList();
       foreach (Control control in lstControls)
-      {
+      {        
         #region TextBox
         if (control is TextBox)//Si es Textbox
         {

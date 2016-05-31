@@ -101,41 +101,48 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if (enumMode!=EnumMode.search)
-      {       
-        if (ObjectHelper.IsEquals(hotel, oldHotel)&& enumMode!=EnumMode.add)//si no modifico nada
+      try
+      {
+        btnAccept.Focus();
+        if (enumMode != EnumMode.search)
         {
-          Close();
-        }
-        else//si hubo cambios
-        {
-          int nRes = 0;
-          string strMsj = ValidateHelper.ValidateForm(this, "Hotel");
-
-          if (strMsj == "")//Guardar
+          if (ObjectHelper.IsEquals(hotel, oldHotel) && enumMode != EnumMode.add)//si no modifico nada
           {
-            nRes = BREntities.OperationEntity(hotel, enumMode);
-            UIHelper.ShowMessageResult("Hotel", nRes);
-            if(nRes>0)
+            Close();
+          }
+          else//si hubo cambios
+          {
+            int nRes = 0;
+            string strMsj = ValidateHelper.ValidateForm(this, "Hotel");
+
+            if (strMsj == "")//Guardar
             {
-              var r =await BRHotels.GetHotels(hotel, blnInclude: true);
-              hotel = r.FirstOrDefault();
-              DialogResult = true;
-              Close();
+              nRes = await BREntities.OperationEntity(hotel, enumMode);
+              UIHelper.ShowMessageResult("Hotel", nRes);
+              if (nRes > 0)
+              {
+                var r = await BRHotels.GetHotels(hotel, blnInclude: true);
+                hotel = r.FirstOrDefault();
+                DialogResult = true;
+                Close();
+              }
+            }
+            else
+            {
+              UIHelper.ShowMessage(strMsj);
             }
           }
-          else
-          {
-            UIHelper.ShowMessage(strMsj);
-          }
+        }
+        else
+        {
+          nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
+          DialogResult = true;
+          Close();
         }
       }
-      else
+      catch(Exception ex)
       {
-        nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
-        DialogResult = true;
-        Close();
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Currencies");
       }
     }
     #endregion
@@ -200,16 +207,24 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 30/03/2016
+    /// [emoguel] se volvió async
     /// </history>
-    private void LoadAreas()
+    private async void LoadAreas()
     {
-      List<Area> lstAreas = BRAreas.GetAreas(nStatus: 1);
-      if(enumMode==EnumMode.search)
+      try
       {
-        lstAreas.Insert(0, new Area { arID = "", arN = "" });
-      }
+        List<Area> lstAreas = await BRAreas.GetAreas(nStatus: 1);
+        if (enumMode == EnumMode.search)
+        {
+          lstAreas.Insert(0, new Area { arID = "", arN = "" });
+        }
 
-      cmbHotelAr.ItemsSource = lstAreas;
+        cmbHotelAr.ItemsSource = lstAreas;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Hotel");
+      }
     }
     #endregion
 

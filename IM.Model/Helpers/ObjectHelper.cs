@@ -103,27 +103,29 @@ namespace IM.Model.Helpers
     /// <returns>True. Contienen los mismos registro | False.Tienen registros diferentes</returns>
     /// <history>
     /// [emoguel] created 15/04/2016
+    /// [emoguel] Modified--Ignora registros vacios y verifica si las lista son null
     /// </history>
     public static bool IsListEquals<T>(List<T> lstNew, List<T> lstOld)
     {
-      Type type = typeof(T);
-
-      #region Obtener la llave primaria
-      EntityTypeBase entityTypeBase = EntityHelper.GetEntityTypeBase(type);//Obtenemos las propiedades de la entidad
-      EdmMember edmMember = entityTypeBase.KeyMembers.FirstOrDefault();//Obtenemos la llave primaria
-
-      var lst1 = lstNew.Where(p => !lstOld.Any(p1 => type.GetProperty(edmMember.Name).GetValue(p1) == type.GetProperty(edmMember.Name).GetValue(p))).ToList();
-      var lst2 = lstOld.Where(p => !lstNew.Any(p1 => type.GetProperty(edmMember.Name).GetValue(p1) == type.GetProperty(edmMember.Name).GetValue(p))).ToList();
-      #endregion
-
-      if (lst1.Count() > 0 || lst2.Count() > 0)
+      if (lstNew != null && lstOld != null)
       {
-        return false;
+        Type type = typeof(T);
+
+        #region Obtener la llave primaria
+        EntityTypeBase entityTypeBase = EntityHelper.GetEntityTypeBase(type);//Obtenemos las propiedades de la entidad
+        EdmMember edmMember = entityTypeBase.KeyMembers.FirstOrDefault();//Obtenemos la llave primaria
+
+        var lst1 = lstNew.Where(p => !lstOld.Any(p1 => type.GetProperty(edmMember.Name).GetValue(p1) == type.GetProperty(edmMember.Name).GetValue(p)) && type.GetProperty(edmMember.Name).GetValue(p) != null).ToList();
+        var lst2 = lstOld.Where(p => !lstNew.Any(p1 => type.GetProperty(edmMember.Name).GetValue(p1) == type.GetProperty(edmMember.Name).GetValue(p)) && type.GetProperty(edmMember.Name).GetValue(p) != null).ToList();
+        #endregion
+
+        if (lst1.Count() > 0 || lst2.Count() > 0)
+        {
+          return false;
+        }
       }
       return true;
     }
-
-
     #endregion
     #endregion
 
@@ -145,5 +147,7 @@ namespace IM.Model.Helpers
     }
 
     #endregion
+    
+   
   }
 }

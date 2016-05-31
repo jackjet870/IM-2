@@ -15,9 +15,12 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmChargeToDetail : Window
   {
+    #region Variables
     public EnumMode mode;
-    public ChargeTo chargeTo=new ChargeTo();//Objeto a guardar|Actualizar
+    public ChargeTo chargeTo = new ChargeTo();//Objeto a guardar|Actualizar
     public ChargeTo oldChargeTo = new ChargeTo();//Objeto con los datos iniciales
+    private bool _isClosing = false; 
+    #endregion
     public frmChargeToDetail()
     {
       InitializeComponent();
@@ -45,58 +48,67 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if(ObjectHelper.IsEquals(chargeTo,oldChargeTo) && mode!=EnumMode.add)
+      try
       {
-        Close();
+        btnAccept.Focus();
+        if (ObjectHelper.IsEquals(chargeTo, oldChargeTo) && mode != EnumMode.add)
+        {
+          _isClosing = true;
+          Close();
+        }
+        else
+        {
+          string sMsj = "";
+          int nRes = 0;
+          #region validar campos
+          if (string.IsNullOrWhiteSpace(txtctID.Text))//ID
+          {
+            sMsj += "Specify the Area ID. \n";
+          }
+          #region validar price
+          if (string.IsNullOrWhiteSpace(txtctPrice.Text))//Se valida que se haya llenado el campo
+          {
+            sMsj += "Specify the Charge To Price. \n";
+          }
+          else
+          {
+            int nPrice = Convert.ToInt32(txtctPrice.Text);
+            if (!(nPrice > 0 && nPrice < 256))//Se valida que el número esté en el rango de tipo byte
+            {
+              txtctPrice.Text = ((nPrice == 0) ? "" : nPrice.ToString());
+              sMsj += "The price must be higher than 0 and must be smaller than 255. \n";
+            }
+          }
+          #endregion
+          if (cmbCalTyp.SelectedIndex < 0)
+          {
+            sMsj += "Specify the Calculation Type.";
+          }
+          #endregion
+          if (sMsj == "")
+          {
+
+            nRes = await BREntities.OperationEntity(chargeTo, mode);
+
+            UIHelper.ShowMessageResult("Charge To", nRes);
+            if (nRes == 1)
+            {
+              _isClosing = true;
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(sMsj);
+          }
+        }
       }
-      else
+      catch(Exception ex)
       {
-        string sMsj = "";
-        int nRes = 0;
-        #region validar campos
-        if (string.IsNullOrWhiteSpace(txtctID.Text))//ID
-        {
-          sMsj += "Specify the Area ID. \n";
-        }
-        #region validar price
-        if (string.IsNullOrWhiteSpace(txtctPrice.Text))//Se valida que se haya llenado el campo
-        {
-          sMsj += "Specify the Charge To Price. \n";
-        }
-        else
-        {
-          int nPrice = Convert.ToInt32(txtctPrice.Text);
-          if (!(nPrice > 0 && nPrice < 256))//Se valida que el número esté en el rango de tipo byte
-          {
-            txtctPrice.Text = ((nPrice == 0) ? "" : nPrice.ToString());
-            sMsj += "The price must be higher than 0 and must be smaller than 255. \n";
-          }
-        }
-        #endregion
-        if (cmbCalTyp.SelectedIndex < 0)
-        {
-          sMsj += "Specify the Calculation Type.";
-        }
-        #endregion
-        if (sMsj == "")
-        {
-
-          nRes = BREntities.OperationEntity<ChargeTo>(chargeTo, mode);
-
-          UIHelper.ShowMessageResult("Charge To", nRes);
-          if(nRes==1)
-          {
-            DialogResult = true;
-            Close();
-          }
-        }
-        else
-        {
-          UIHelper.ShowMessage(sMsj);
-        }
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Charge To");
       }
 
     }
@@ -142,7 +154,6 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null,null);
       }
     }
@@ -159,6 +170,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       if(mode!=EnumMode.preview)
       {
         if (!ObjectHelper.IsEquals(chargeTo, oldChargeTo))
@@ -166,17 +178,48 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!_isClosing) { _isClosing = true; Close(); }
+          }
+          else
+          {
+            _isClosing = false;
           }
         }
         else
         {
-          Close();
+          if (!_isClosing) { _isClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!_isClosing) { _isClosing = true; Close(); }
+      }
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 30/05/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
+      {
+        _isClosing = true;
+        btnCancel_Click(null, null);
+        if (!_isClosing)
+        {
+          e.Cancel = true;
+        }
+        else
+        {
+          _isClosing = false;
+        }
       }
     }
     #endregion

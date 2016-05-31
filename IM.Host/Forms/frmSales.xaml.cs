@@ -433,7 +433,7 @@ namespace IM.Host.Forms
     private async void LoadComboBox()
     {
       //Tipo de membresia y Tipo de membresia Global
-       cbosamtGlobal.ItemsSource = cbosamt.ItemsSource = BRMemberShipTypes.GetMemberShipTypes(1);
+       cbosamtGlobal.ItemsSource = cbosamt.ItemsSource =await BRMemberShipTypes.GetMemberShipTypes(1);
       //Tipo de venta
       cbosast.ItemsSource = BRSaleTypes.GetSalesTypes(1);
       //PR´s

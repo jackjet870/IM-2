@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
-using System.Data.Entity.Validation;
 using System.Threading.Tasks;
 using System.Data.Entity;
 
@@ -45,33 +44,38 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 30/03/2016
     /// </history>
-    public static List<Language> GetLanguages(Language language = null, int nStatus = -1)
+    public async static  Task<List<Language>> GetLanguages(Language language = null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<Language> lstLanguages = new List<Language>();
+      await Task.Run(() =>
       {
-        var query = from la in dbContext.Languages
-                    select la;
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnEstatus = Convert.ToBoolean(nStatus);
-          query = query.Where(la => la.laA == blnEstatus);
-        }
-
-        if (language != null)//Se verifica que se tenga un objeto con filtros
-        {
-          if (!string.IsNullOrWhiteSpace(language.laID))//Filtro por ID
+          var query = from la in dbContext.Languages
+                      select la;
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(la => la.laID == language.laID);
+            bool blnEstatus = Convert.ToBoolean(nStatus);
+            query = query.Where(la => la.laA == blnEstatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(language.laN))//Filtro por descripcion
+          if (language != null)//Se verifica que se tenga un objeto con filtros
           {
-            query = query.Where(la => la.laN.Contains(language.laN));
-          }
-        }
+            if (!string.IsNullOrWhiteSpace(language.laID))//Filtro por ID
+            {
+              query = query.Where(la => la.laID == language.laID);
+            }
 
-        return query.OrderBy(la => la.laN).ToList();
-      }
+            if (!string.IsNullOrWhiteSpace(language.laN))//Filtro por descripcion
+            {
+              query = query.Where(la => la.laN.Contains(language.laN));
+            }
+          }
+
+          lstLanguages= query.OrderBy(la => la.laN).ToList();
+        }
+      });
+      return lstLanguages;
     }
     #endregion
     #endregion

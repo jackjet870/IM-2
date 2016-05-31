@@ -229,6 +229,7 @@
     <Compile Include="ExchangeRateShort.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FolioCXC.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

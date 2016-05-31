@@ -1,0 +1,53 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmMembershipGroupDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        Title="Membership Group Detail" Height="418" Width="338" Closing="Window_Closing">
+    <DockPanel LastChildFill="True" >
+        <!--#region Top-->
+        <Grid DockPanel.Dock="Top" Margin="10,10,14,2">
+            <!--#region Formato del grid-->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
+            <!--#endregion-->
+            <!--#region títulos-->
+            <Label Grid.Column="0" Grid.Row="0">ID</Label>
+            <Label Grid.Column="0" Grid.Row="1">Description</Label>
+            <!--#endregion-->
+            <TextBox Name="txtmgID" Tag="ID" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding mgID}" CharacterCasing="Upper" IsEnabled="False" Margin="69,0,0,0" />
+            <TextBox Name="txtmgN" Tag="description" Grid.Row="1" Height="27" VerticalAlignment="Top" Text="{Binding mgN}" Margin="69,0,0,0" />
+            <CheckBox Name="chkmgA" Grid.Row="2" VerticalAlignment="Center" IsChecked="{Binding mgA}"  Margin="69,0,0,0" >Active</CheckBox>
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region  Botones-->
+        <Grid DockPanel.Dock="Bottom" Background="Transparent" Height="40">
+            <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" HorizontalAlignment="Right" Content="_Accept" Margin="0,4,84,4"/>
+            <Button Name="btnCancel" Width="60" Height="30" Click="btnCancel_Click" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region Grid Membership types-->
+        <Grid>
+            <DataGrid Name="dgrmembershipTypes" Margin="79,0,14,15" Grid.Column="1" CellEditEnding="dgrmembershipTypes_CellEditEnding" RowEditEnding="dgrmembershipTypes_RowEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                      CanUserAddRows="True" CanUserResizeColumns="False" CanUserResizeRows="False" >
+                <DataGrid.Columns>
+                    <DataGridComboBoxColumn  Width="100*" x:Name="cmbMembershipTypes" DisplayMemberPath="mtN" SelectedValuePath="mtID" SelectedValueBinding="{Binding mtID}" Header="Membership Type (0)" />
+                </DataGrid.Columns>
+
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
+        </Grid>
+        <!--#endregion-->
+    </DockPanel>
+</Window>

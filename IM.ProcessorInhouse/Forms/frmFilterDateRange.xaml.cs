@@ -630,7 +630,7 @@ namespace IM.ProcessorInhouse.Forms
         return;
       }
       grdGifts.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
-      _lstGifts = await BRGifts.GetGifts();
+      _lstGifts = await BRGifts.GetGiftsShort();
       grdGifts.ItemsSource = _lstGifts;
       chkAllGifts.IsChecked = blnAllGifts;
       chkAllGifts.IsEnabled = !blnOnlyOneRegister;

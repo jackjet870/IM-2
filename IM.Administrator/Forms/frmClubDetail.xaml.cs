@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -21,6 +22,8 @@ namespace IM.Administrator.Forms
     public Club oldClub = new Club();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo en que se abrirá la ventana
     private List<Agency> _oldLstAgencies = new List<Agency>();//Agencies iniciales
+    private bool blnClosing = false;
+    private bool isCellCancel = false;
     #endregion
     public frmClubDetail()
     {
@@ -60,7 +63,6 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null, null);
       }
     }
@@ -74,38 +76,51 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 03/05/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
-      if (enumMode != EnumMode.add && ObjectHelper.IsEquals(club, oldClub) && ObjectHelper.IsListEquals(_oldLstAgencies, lstAgencies))
+      try
       {
-        Close();
-      }
-      else
-      {
-        string strMsj = ValidateHelper.ValidateForm(this, "Club");
-        if(club.clID==0)
+        btnAccept.Focus();
+        List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
+        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(club, oldClub) && ObjectHelper.IsListEquals(_oldLstAgencies, lstAgencies))
         {
-          strMsj += (strMsj == "") ? "" : " \n " + "The Club ID can not be 0.";
-        }
-        if (strMsj == "")
-        {
-          List<Agency> lstAdd = lstAgencies.Where(ag => !_oldLstAgencies.Any(agg => agg.agID == ag.agID)).ToList();
-          List<Agency> lstDel = _oldLstAgencies.Where(ag => !lstAgencies.Any(agg => agg.agID == ag.agID)).ToList();
-          int nRes = BRClubs.SaveClub(club, (enumMode == EnumMode.edit), lstAdd, lstDel);
-          UIHelper.ShowMessageResult("Club", nRes);
-          if (nRes > 0)
-          {
-            DialogResult = true;
-            Close();
-          }
+          blnClosing = true;
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          skpStatus.Visibility = Visibility.Visible;
+          txtStatus.Text = "Saving Data...";
+          string strMsj = ValidateHelper.ValidateForm(this, "Club");
+          if (club.clID == 0)
+          {
+            strMsj += (strMsj == "") ? "" : " \n " + "The Club ID can not be 0.";
+          }
+          if (strMsj == "")
+          {
+            List<Agency> lstAdd = lstAgencies.Where(ag => !_oldLstAgencies.Any(agg => agg.agID == ag.agID)).ToList();
+            List<Agency> lstDel = _oldLstAgencies.Where(ag => !lstAgencies.Any(agg => agg.agID == ag.agID)).ToList();
+            int nRes = await BRClubs.SaveClub(club, (enumMode == EnumMode.edit), lstAdd, lstDel);
+            UIHelper.ShowMessageResult("Club", nRes);
+            if (nRes > 0)
+            {
+              blnClosing = true;
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
+          skpStatus.Visibility = Visibility.Collapsed;
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Clubs");
       }
     }
     #endregion
@@ -121,18 +136,23 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       List<Agency> lstAgencies = (List<Agency>)dgrAgencies.ItemsSource;
       if (!ObjectHelper.IsEquals(club, oldClub) || !ObjectHelper.IsListEquals(lstAgencies, _oldLstAgencies))
       {
         MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
         if (result == MessageBoxResult.Yes)
         {
-          Close();
+          if (!blnClosing) { blnClosing = true; Close(); }
+        }
+        else
+        {
+          blnClosing = false;
         }
       }
       else
       {
-        Close();
+        if (!blnClosing) { blnClosing = true; Close(); }
       }
     }
     #endregion
@@ -150,29 +170,60 @@ namespace IM.Administrator.Forms
     {
       if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
       {
-        List<Agency> lstAcengies = (List<Agency>)dgrAgencies.ItemsSource;//Los items del grid                   
-        Agency agency = (Agency)dgrAgencies.SelectedItem;//Valor que se está editando
-
-        var Combobox = (ComboBox)e.EditingElement;
-        Agency agencyCombo = (Agency)Combobox.SelectedItem;//Valor seleccionado del combo
-
-        if (agencyCombo != null)//Se valida que no esté seleccionado en otra fila
-        {
-          if (agencyCombo != agency)//Validar que se esté cambiando el valor
-          {
-            Agency agencyVal = lstAcengies.Where(ag => ag.agID != agency.agID && ag.agID == agencyCombo.agID).FirstOrDefault();
-            if (agencyVal != null)
-            {
-              UIHelper.ShowMessage("Agency must not be repeated");
-              e.Cancel = true;
-            }
-          }
-        }
+        isCellCancel = false;
+        bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrAgencies);
+        e.Cancel = isRepeat;
+      }
+      else
+      {
+        isCellCancel = true;
       }
 
     }
     #endregion
 
+    #region dgrAgencies_RowEditEnding
+    /// <summary>
+    /// No repite registros vacios
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 25/05/2016
+    /// </history>
+    private void dgrAgencies_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      if (isCellCancel)
+      {
+        dgrAgencies.RowEditEnding -= dgrAgencies_RowEditEnding;
+        dgrAgencies.CancelEdit();
+        dgrAgencies.RowEditEnding += dgrAgencies_RowEditEnding;
+      }
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 25/05/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!blnClosing)
+      {
+        blnClosing = true;
+        btnCancel_Click(null, null);
+        if (!blnClosing)
+        {
+          e.Cancel = true;
+        }
+      }
+    }
+    #endregion
     #endregion
 
     #region Methods
@@ -186,14 +237,21 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadAgencies(int clubId)
     {
-      List<Agency> lstAllAgencies = await BRAgencies.GetAgencies();
-      List<Agency> lstAgencies = lstAllAgencies.Where(ag => ag.agcl == clubId).ToList();
-      dgrAgencies.ItemsSource = lstAgencies;
-      cmbAgencies.ItemsSource = lstAllAgencies;
-      _oldLstAgencies = lstAgencies.ToList();
+      try
+      {
+        List<Agency> lstAllAgencies = await BRAgencies.GetAgencies();
+        List<Agency> lstAgencies = lstAllAgencies.Where(ag => ag.agcl == clubId).ToList();
+        dgrAgencies.ItemsSource = lstAgencies;
+        cmbAgencies.ItemsSource = lstAllAgencies;
+        _oldLstAgencies = lstAgencies.ToList();
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Clubs");
+      }
     }
     #endregion
-    
+
     #endregion
   }
 }

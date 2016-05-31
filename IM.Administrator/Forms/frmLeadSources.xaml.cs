@@ -231,11 +231,12 @@ namespace IM.Administrator.Forms
     /// <param name="leadSources">Objeto a seleccionar</param>
     /// <history>
     /// [emoguel] created 13/05/2016
+    /// [emoguel] modified 25/05/2016 se volvio async el método
     /// </history>
-    private void loadLeadSources(LeadSource leadSources = null)
+    private async void loadLeadSources(LeadSource leadSources = null)
     {
       int nIndex = 0;
-      List<LeadSource> lstLeadSource = BRLeadSources.GetLeadSources(_nStatus, _nRegen, _nAnimation, _leadSourceFilter,true);
+      List<LeadSource> lstLeadSource = await BRLeadSources.GetLeadSources(_nStatus, _nRegen, _nAnimation, _leadSourceFilter,true);
       if(lstLeadSource.Count>0 && leadSources!=null)
       {
         leadSources = lstLeadSource.Where(ls => ls.lsID == leadSources.lsID).FirstOrDefault();

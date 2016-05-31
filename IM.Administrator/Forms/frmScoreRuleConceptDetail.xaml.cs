@@ -5,6 +5,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -66,30 +67,37 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 23/04/2016
+    /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(scoreRuleConcept,oldScoreRuleConcept))
+      try
       {
-        Close();
-      }
-      {
-        string strMsj = ValidateHelper.ValidateForm(this, "Score Rule Concept");
-        if (strMsj == "")
+        btnAccept.Focus();
+        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(scoreRuleConcept, oldScoreRuleConcept))
         {
-          int nRes = BREntities.OperationEntity(scoreRuleConcept, enumMode);
-          UIHelper.ShowMessageResult("Score Rule Concept", nRes);
-          if(nRes>0)
+          Close();
+        }
+        {
+          string strMsj = ValidateHelper.ValidateForm(this, "Score Rule Concept");
+          if (strMsj == "")
           {
-            DialogResult = true;
-            Close();
+            int nRes = await BREntities.OperationEntity(scoreRuleConcept, enumMode);
+            UIHelper.ShowMessageResult("Score Rule Concept", nRes);
+            if (nRes > 0)
+            {
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
           }
         }
-        else
-        {
-          UIHelper.ShowMessage(strMsj);
-        }
+      }catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Score Rule Concept");
       }
     }
     #endregion

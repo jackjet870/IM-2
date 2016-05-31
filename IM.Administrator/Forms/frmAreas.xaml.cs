@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using System;
 using System.Linq;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -234,20 +235,29 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] 26/Feb/2016 Created
+    /// [emoguel] 30/05/2016 Modified
     /// </history>
-    protected void LoadAreas(Area area=null)
+    protected async void LoadAreas(Area area=null)
     {
-      int nIndex = 0;
-      List<Area> lstAreas = BRAreas.GetAreas(_areaFiltro, _nStatus);
-      dgrAreas.ItemsSource = lstAreas;
-      if (area != null && lstAreas.Count>0)
+      try
       {
-        area = lstAreas.Where(ar => ar.arID == area.arID).FirstOrDefault();
-        nIndex = lstAreas.IndexOf(area);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Area> lstAreas =await BRAreas.GetAreas(_areaFiltro, _nStatus);
+        dgrAreas.ItemsSource = lstAreas;
+        if (area != null && lstAreas.Count > 0)
+        {
+          area = lstAreas.Where(ar => ar.arID == area.arID).FirstOrDefault();
+          nIndex = lstAreas.IndexOf(area);
+        }
+        GridHelper.SelectRow(dgrAreas, nIndex);
+        StatusBarReg.Content = lstAreas.Count + " Areas.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrAreas, nIndex);
-      StatusBarReg.Content = lstAreas.Count + " Areas.";
-
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Area");
+      }
     }
     #endregion
 
@@ -280,7 +290,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_areaFiltro.arN))
       {
-        if (!newArea.arN.Contains(_areaFiltro.arN))
+        if (!newArea.arN.Contains(_areaFiltro.arN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

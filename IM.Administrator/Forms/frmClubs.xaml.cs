@@ -8,6 +8,7 @@ using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -240,16 +241,25 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadClubs(Club club = null)
     {
-      int nIndex = 0;
-      List<Club> lstClubs = await BRClubs.GetClubs(_clubFilter, _nStatus);
-      dgrClubs.ItemsSource = lstClubs;
-      if (lstClubs.Count > 0 && club != null)
+      try
       {
-        club = lstClubs.FirstOrDefault(cl => cl.clID == club.clID);
-        nIndex = lstClubs.IndexOf(club);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Club> lstClubs = await BRClubs.GetClubs(_clubFilter, _nStatus);
+        dgrClubs.ItemsSource = lstClubs;
+        if (lstClubs.Count > 0 && club != null)
+        {
+          club = lstClubs.FirstOrDefault(cl => cl.clID == club.clID);
+          nIndex = lstClubs.IndexOf(club);
+        }
+        GridHelper.SelectRow(dgrClubs, nIndex);
+        StatusBarReg.Content = lstClubs.Count + " Clubs.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrClubs, nIndex);
-      StatusBarReg.Content = lstClubs.Count + " Clubs.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Clubs");
+      }
     }
     #endregion
 
@@ -282,7 +292,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_clubFilter.clN))//Filtro por descripción
       {
-        if(!club.clN.Contains(_clubFilter.clN))
+        if(!club.clN.Contains(_clubFilter.clN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

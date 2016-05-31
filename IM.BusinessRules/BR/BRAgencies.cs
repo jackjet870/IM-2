@@ -108,122 +108,127 @@ namespace IM.BusinessRules.BR
     /// <returns>0. No se pudo guardar | 1.Se guardo | -1. Existe un registro con el mismo ID</returns>
     /// <history>
     /// [emoguel] created 11/03/2016
+    /// [emoguel] modified 30/05/2016
     /// </history>
-    public static int SaveAgency(Agency agency, bool blnUpd, bool blnUnavailMots = false, bool blnMarket = false)
+    public static async Task<int> SaveAgency(Agency agency, bool blnUpd, bool blnUnavailMots = false, bool blnMarket = false)
     {
       int nRes = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+     nRes= await Task.Run(() =>
       {
-        if (blnUpd)//Actualizar
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          #region actualizar
-
-          if (blnMarket || blnUnavailMots)//Si es necesario abrir la transaccion
+          if (blnUpd)//Actualizar
           {
-            #region Transacction
+            #region actualizar
 
-            using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+            if (blnMarket || blnUnavailMots)//Si es necesario abrir la transaccion
             {
-              try
+              #region Transacction
+
+              using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
               {
-                dbContext.Entry(agency).State = System.Data.Entity.EntityState.Modified;//Se modifica agency
-
-                #region unavailableMotives
-
-                if (blnUnavailMots)
+                try
                 {
-                  #region Disponibilidad de huespedes
+                  dbContext.Entry(agency).State = System.Data.Entity.EntityState.Modified;//Se modifica agency
 
-                  //actualizamos el motivo de indisponibilidad de los huespedes,
-                  //la disponibilidad y la disponibilidad de origen de los huespedes
-                  var lstGuestUM = (from guest in dbContext.Guests
-                                    join agen in dbContext.Agencies
-                                    on guest.guag equals agen.agID
-                                    where agen.agID == agency.agID
-                                    && guest.guPRAvail == null
-                                    && guest.guInfo == false
-                                    select new { guest, agen }).ToList();//Buscamos los huspedes a cambiar el motivo
-                  //Actualizamos los registros
-                  lstGuestUM.ForEach(guest =>
+                  #region unavailableMotives
+
+                  if (blnUnavailMots)
                   {
-                    guest.guest.guum = agency.agum;
-                    guest.guest.guAvail = (guest.guest.guCheckIn == true && guest.agen.agum == 0);
-                    guest.guest.guOriginAvail = (guest.guest.guCheckIn == true && guest.agen.agum == 0);
-                  });
+                    #region Disponibilidad de huespedes
 
-                  #endregion Disponibilidad de huespedes
+                    //actualizamos el motivo de indisponibilidad de los huespedes,
+                    //la disponibilidad y la disponibilidad de origen de los huespedes
+                    var lstGuestUM = (from guest in dbContext.Guests
+                                      join agen in dbContext.Agencies
+                                      on guest.guag equals agen.agID
+                                      where agen.agID == agency.agID
+                                      && guest.guPRAvail == null
+                                      && guest.guInfo == false
+                                      select new { guest, agen }).ToList();//Buscamos los huspedes a cambiar el motivo
+                                                                           //Actualizamos los registros
+                    lstGuestUM.ForEach(guest =>
+                    {
+                      guest.guest.guum = agency.agum;
+                      guest.guest.guAvail = (guest.guest.guCheckIn == true && guest.agen.agum == 0);
+                      guest.guest.guOriginAvail = (guest.guest.guCheckIn == true && guest.agen.agum == 0);
+                    });
 
-                  #region Disponibilidad por sistema de huespedes
+                    #endregion Disponibilidad de huespedes
 
-                  //Listamos los huespedes a actualizar
-                  var lstGuestBS = (from guest in dbContext.Guests
-                                    join agen in dbContext.Agencies
-                                    on guest.guag equals agen.agID
-                                    where agen.agID == agency.agID
-                                    select new { guest, agen }).ToList();
+                    #region Disponibilidad por sistema de huespedes
 
-                  //Actualizamos la lista de huespedes
-                  lstGuestBS.ForEach(guest => guest.guest.guAvailBySystem = (guest.guest.guCheckIn == true && guest.agen.agum == 0));
+                    //Listamos los huespedes a actualizar
+                    var lstGuestBS = (from guest in dbContext.Guests
+                                      join agen in dbContext.Agencies
+                                      on guest.guag equals agen.agID
+                                      where agen.agID == agency.agID
+                                      select new { guest, agen }).ToList();
 
-                  #endregion Disponibilidad por sistema de huespedes
+                    //Actualizamos la lista de huespedes
+                    lstGuestBS.ForEach(guest => guest.guest.guAvailBySystem = (guest.guest.guCheckIn == true && guest.agen.agum == 0));
+
+                    #endregion Disponibilidad por sistema de huespedes
+                  }
+
+                  #endregion unavailableMotives
+
+                  #region Markets
+
+                  if (blnMarket)
+                  {
+                    var lstGuestMkt = (from guest in dbContext.Guests
+                                       join agen in dbContext.Agencies
+                                       on guest.guag equals agen.agID
+                                       where agen.agID == agency.agID
+                                       && guest.gumk != agen.agmk
+                                       select guest).ToList();//Recuperamos los registros relacionados de guest
+                    lstGuestMkt.ForEach(guest => guest.gumk = agency.agmk);//Actualizamos su valor
+                  }
+
+                  #endregion Markets
+
+                  int n= dbContext.SaveChanges();//Guardar cambios
+                  transaction.Commit();//se hace el commit
+                  return n;
                 }
-
-                #endregion unavailableMotives
-
-                #region Markets
-
-                if (blnMarket)
+                catch
                 {
-                  var lstGuestMkt = (from guest in dbContext.Guests
-                                     join agen in dbContext.Agencies
-                                     on guest.guag equals agen.agID
-                                     where agen.agID == agency.agID
-                                     && guest.gumk != agen.agmk
-                                     select guest).ToList();//Recuperamos los registros relacionados de guest
-                  lstGuestMkt.ForEach(guest => guest.gumk = agency.agmk);//Actualizamos su valor
+                  transaction.Rollback();
+                  return  0;
                 }
-
-                #endregion Markets
-
-                nRes = dbContext.SaveChanges();//Guardar cambios
-                transaction.Commit();//se hace el commit
               }
-              catch
-              {
-                transaction.Rollback();
-                nRes = 0;
-              }
+
+              #endregion Transacction
+            }
+            else
+            {//No es necesario iniciar la transaccion
+              dbContext.Entry(agency).State = System.Data.Entity.EntityState.Modified;
+              return dbContext.SaveChanges();
             }
 
-            #endregion Transacction
+            #endregion actualizar
           }
-          else
-          {//No es necesario iniciar la transaccion
-            dbContext.Entry(agency).State = System.Data.Entity.EntityState.Modified;
-            nRes = dbContext.SaveChanges();
-          }
-
-          #endregion actualizar
-        }
-        else//Insertar
-        {
-          #region Insertar
-
-          Agency agencyVal = dbContext.Agencies.Where(ag => ag.agID == agency.agID).FirstOrDefault();
-          if (agencyVal != null)//Se valida que no exista un registro con el mismo ID
+          else//Insertar
           {
-            nRes = -1;//Existe un registro con el mismo ID
-          }
-          else//No existe registro con el mismo ID
-          {
-            dbContext.Agencies.Add(agency);
-            nRes = dbContext.SaveChanges();
-          }
+            #region Insertar
 
-          #endregion Insertar
+            Agency agencyVal = dbContext.Agencies.Where(ag => ag.agID == agency.agID).FirstOrDefault();
+            if (agencyVal != null)//Se valida que no exista un registro con el mismo ID
+            {
+              return -1;//Existe un registro con el mismo ID
+            }
+            else//No existe registro con el mismo ID
+            {
+              dbContext.Agencies.Add(agency);
+              return dbContext.SaveChanges();
+            }
+
+            #endregion Insertar
+          }
         }
-        return nRes;
-      }
+      });
+      return nRes;
     }
 
     #endregion SaveAgency
