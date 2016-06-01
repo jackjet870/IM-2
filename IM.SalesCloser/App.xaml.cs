@@ -39,11 +39,12 @@ namespace IM.SalesCloser
     /// </summary>
     ///   [erosado]  23/Mar/2016 Created
     /// </history>
-    protected override void OnStartup(StartupEventArgs e)
+    protected async  override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Sales by Closer");
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.SalesRoom, changePassword: true, autoSign: true);
+      await frmLogin.getAllPlaces();
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)

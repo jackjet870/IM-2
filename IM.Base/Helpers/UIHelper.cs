@@ -68,6 +68,46 @@ namespace IM.Base.Helpers
       return MessageBox.Show(message, title, button, image);
     }
 
+    /// <summary>
+    /// Envia mensaje al usuario obtenido de una excepcion Implementa GetMessageError
+    /// </summary>
+    /// <param name="ex">Mensaje de la excepcion</param>
+    /// <param name="image">Imagen que se mostrará en la ventana</param>
+    /// <param name="title">Título de la ventana</param>
+    ///<history>
+    ///[erosado]  28/05/2016  Created.
+    /// </history>
+    public static MessageBoxResult ShowMessage(Exception ex, MessageBoxImage image = MessageBoxImage.Information, string title = "")
+    {
+      string message= GetMessageError(ex);
+      MessageBoxButton button = MessageBoxButton.OK;
+      switch (image)
+      {
+        case MessageBoxImage.Error:
+          if (String.IsNullOrEmpty(title))
+            title = "Error";
+          break;
+
+        case MessageBoxImage.Warning:
+          if (String.IsNullOrEmpty(title))
+            title = "Warning";
+          break;
+
+        case MessageBoxImage.Question:
+          if (String.IsNullOrEmpty(title))
+            title = "Question";
+          button = MessageBoxButton.YesNo;
+          break;
+
+        default:
+          if (String.IsNullOrEmpty(title))
+            title = "Information";
+          break;
+      }
+
+      return MessageBox.Show(message, title, button, image);
+    }
+
     #endregion ShowMessage
 
     #region ForceUIToUpdate

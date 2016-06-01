@@ -481,7 +481,7 @@ namespace IM.ProcessorOuthouse.Forms
 
       grdGifts.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       pnlGifts.Visibility = Visibility.Visible;
-      _lstGifts = await BRGifts.GetGifts();
+      _lstGifts = await BRGifts.GetGiftsShort();
       grdGifts.ItemsSource = _lstGifts;
 
       chkAllGifts.IsChecked = blnAllGifts;

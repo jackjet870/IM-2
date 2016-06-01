@@ -20,12 +20,17 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [wtorres]  07/Mar/2016 Created
     /// </history>
-    public static List<LocationByUser> GetLocationsByUser(string user="All", string programs="All")
+    public async static Task<List<LocationByUser>> GetLocationsByUser(string user = "All", string programs = "All")
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        return dbContext.USP_OR_GetLocationsByUser(user, programs).ToList();
-      }
+      List<LocationByUser> result = null;
+      await Task.Run(() =>
+     {
+       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+       {
+         result = dbContext.USP_OR_GetLocationsByUser(user, programs).ToList();
+       }
+     });
+      return result;
     }
 
     #endregion
@@ -42,7 +47,7 @@ namespace IM.BusinessRules.BR
     /// [emoguel] created 01/04/2016
     /// [emoguel] modified 27/04/2016 Se agregó el parametro blnTeamsLog para cargar el combobos de Locations en teamLog
     /// </history>
-    public static List<Location> GetLocations(int nStatus=-1,Location location=null, bool blnTeamsLog=false)
+    public static List<Location> GetLocations(int nStatus = -1, Location location = null, bool blnTeamsLog = false)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
@@ -54,7 +59,7 @@ namespace IM.BusinessRules.BR
                   from lo in dbContext.Locations.Where(lo => lo.loID == tg.tglo).DefaultIfEmpty().Distinct()
                   select lo;
         }
-        if (nStatus!=-1)//Filtro por estatus
+        if (nStatus != -1)//Filtro por estatus
         {
           bool blnEstatus = Convert.ToBoolean(nStatus);
           query = query.Where(lo => lo.loA == blnEstatus);
@@ -111,7 +116,7 @@ namespace IM.BusinessRules.BR
 
         return await Locs.ToListAsync();
       }
-    } 
+    }
     #endregion
   }
 }

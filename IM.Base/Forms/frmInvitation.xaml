@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Invitation" 
         d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" WindowState="Maximized" WindowStyle="SingleBorderWindow"
-        ShowInTaskbar="False" Loaded="Window_Loaded">
+        ShowInTaskbar="False" Loaded="Window_Loaded" DataContext="{Binding CatalogList}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -23,7 +23,6 @@
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}},Path=LoadCombo}" Key="F5" Modifiers="Ctrl"/>
     </Window.InputBindings>
     <Grid x:Name="layout" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -47,9 +46,9 @@
                 <Viewbox Stretch="Uniform" Height="24" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0">
                     <Image x:Name="image" Source="pack://application:,,,/IM.SalesLiner;component/Images/BUser.png"/>
                 </Viewbox>
-                <TextBlock x:Name="txtbUserName" VerticalAlignment="Center"
+                <TextBlock x:Name="txtUserName" VerticalAlignment="Center"
                            Foreground="White" Grid.Column="1" Grid.Row="0"/>
-                <TextBlock x:Name="txtbLocation" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="White" Grid.Row="1" Grid.ColumnSpan="2"/>
+                <TextBlock x:Name="txtPlaces" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="White" Grid.Row="1" Grid.ColumnSpan="2"/>
             </Grid>
         </Border>
         <!--#endregion-->
@@ -100,7 +99,7 @@
                             <TextBlock Text="Log" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <TextBlock Name="txtMode" Text="Mode Add" VerticalAlignment="Center" FontSize="16" Foreground="#147F79" Visibility="Visible" TextWrapping="Wrap" FontWeight="Bold" Margin="10,0,10,0"/>
+                    <TextBlock Name="txtMode" Text="{Binding ElementName=cmbLanguage, Path=SelectedValue}" VerticalAlignment="Center" FontSize="16" Foreground="#147F79" Visibility="Visible" TextWrapping="Wrap" FontWeight="Bold" Margin="10,0,10,0"/>
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -180,7 +179,10 @@
                                                     </StackPanel>
                                                     <StackPanel  VerticalAlignment="Center" Margin="3,0">
                                                         <TextBlock Text="Language" TextAlignment="Center"/>
-                                                        <ComboBox Name="cmbLanguage" Width="120" ItemsSource="{Binding}" TextSearch.TextPath="{Binding laID}">
+                                                        <ComboBox Name="cmbLanguage" Width="120" 
+                                                                  ItemsSource="{Binding CatalogList.Languages, Mode=TwoWay}"
+                                                                  TextSearch.TextPath="{Binding laID}">
+
                                                             <ComboBox.ItemTemplate>
                                                                 <StaticResource ResourceKey="tLanguagesComboBox"/>
                                                             </ComboBox.ItemTemplate>
@@ -536,7 +538,7 @@
                                         <StackPanel Orientation="Horizontal">
                                             <StackPanel HorizontalAlignment="Left">
                                                 <TextBlock Text="Guest Status" />
-                                                <ComboBox Name="cmbChangeStatus" Width="250" />
+                                                <ComboBox Name="cmbGuestStatus" Width="250" />
                                             </StackPanel>
                                         </StackPanel>
                                     </Viewbox>
@@ -630,7 +632,7 @@
                                             <StackPanel Orientation="Horizontal">
                                                 <StackPanel>
                                                     <TextBlock Text="Burned" TextAlignment="Center"/>
-                                                    <TextBox Width="120"/>
+                                                    <TextBox Name="txtBurned" Width="120"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                     <TextBlock Text="Currency" TextAlignment="Center"/>
@@ -638,11 +640,11 @@
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                     <TextBlock Text="Payment Type" TextAlignment="Center"/>
-                                                    <ComboBox Width="120"/>
+                                                    <ComboBox Name="cmbPaymentType" Width="120"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                     <TextBlock Text="Resort" TextAlignment="Center"/>
-                                                    <ComboBox Width="120"/>
+                                                    <ComboBox Name="cmbResorts" Width="120"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>

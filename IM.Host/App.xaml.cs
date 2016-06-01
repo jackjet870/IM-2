@@ -37,7 +37,10 @@ namespace IM.Host
     /// <summary>
     /// Inicializa el modulo con el Login y el Splash
     /// </summary>
-    protected override void OnStartup(StartupEventArgs e)
+    /// <history>
+    ///   [erosado] 01/06/2016  Modified. Se agrego async
+    /// </history>
+    protected async override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
       
@@ -46,7 +49,7 @@ namespace IM.Host
 
       //Creamos el tipo de login que se necesita!
       var frmLogin = new frmLogin(frmSplash, EnumLoginType.SalesRoom,changePassword: true, autoSign: true, validatePermission:true, permission:EnumPermission.Host, permissionLevel:EnumPermisionLevel.ReadOnly);
-
+      await frmLogin.getAllPlaces();
       //Mostramos el Splash
       frmSplash.Show();
 

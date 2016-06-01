@@ -37,11 +37,12 @@ namespace IM.SalesPR
     /// <summary>
     /// Inicializa el modulo con el Login y el Splash
     /// </summary>
-    protected override void OnStartup(StartupEventArgs e)
+    protected async  override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Sales by PR");
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, changePassword: true, autoSign: true);
+      await frmLogin.getAllPlaces();
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)

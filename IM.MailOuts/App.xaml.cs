@@ -37,11 +37,15 @@ namespace IM.MailOuts
     /// <summary>
     /// Inicializa el modulo con el Login y el Splash
     /// </summary>
-    protected override void OnStartup(StartupEventArgs e)
+    /// <history>
+    /// [erosado] 01/06/2016  Modified. se agrego async
+    /// </history>
+    protected async override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Mail Outs");
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, EnumProgram.Inhouse, changePassword: true, autoSign: true, permission:EnumPermission.Register, permissionLevel:EnumPermisionLevel.Standard);
+      await frmLogin.getAllPlaces();
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)

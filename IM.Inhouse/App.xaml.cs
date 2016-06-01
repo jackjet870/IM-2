@@ -39,8 +39,9 @@ namespace IM.Inhouse
     /// </summary>
     /// <history>
     /// [jorcanche] 11/04/2016  created 
+    ///   [erosado] 01/06/2016  Modified. Se agrego async
     /// </history>
-    protected override void OnStartup(StartupEventArgs e)
+    protected async override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Inhouse");
@@ -48,6 +49,9 @@ namespace IM.Inhouse
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, EnumProgram.Inhouse, true,
         changePassword: true, autoSign: true, permission: EnumPermission.Register,
         permissionLevel: EnumPermisionLevel.ReadOnly);
+
+      await frmLogin.getAllPlaces();
+
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)

@@ -110,6 +110,7 @@
     <Compile Include="Classes\ExcelFormatTable.cs" />
     <Compile Include="Classes\GiftsReceivedBySRData.cs" />
     <Compile Include="Classes\Invitation.cs" />
+    <Compile Include="Classes\Item.cs" />
     <Compile Include="Classes\NoteGuest.cs" />
     <Compile Include="Classes\InvitationData.cs" />
     <Compile Include="Classes\GuestPremanifestOuthouse.cs" />

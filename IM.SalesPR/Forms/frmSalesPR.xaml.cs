@@ -125,9 +125,10 @@ namespace IM.SalesPR.Forms
     /// <history>
     /// [erosado] 22/Mar/2016 Created
     /// </history>
-    private void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private async  void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       var frmlogin = new frmLogin(loginType: EnumLoginType.Location, changePassword: true, autoSign: true);
+      await frmlogin.getAllPlaces();
       if (App.User.AutoSign)
       {
         frmlogin.UserData = App.User;

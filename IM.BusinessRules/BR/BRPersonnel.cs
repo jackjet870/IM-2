@@ -215,44 +215,7 @@ namespace IM.BusinessRules.BR
 
     #endregion
 
-    /// <summary>
-    /// Método para obtener los datos del usuario
-    /// como son datos principales, permisos, roles
-    /// e informacion específica segun el tipo de login.
-    /// </summary>
-    /// <param name="loginType">EnumLoginType</param>
-    /// <param name="user">Usuario</param>
-    /// <param name="psw">Contraseña</param>
-    /// <param name="place">Lugar</param>
-    /// <returns>UserData</returns>
-    /// <history>
-    /// [erosado] 26/04/2016  Created
-    /// </history>
-    public static UserData login2(EnumLoginType loginType, string user, string psw, string place = "")
-    {
-      UserData userData = new UserData();
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var resUser = dbContext.USP_OR_Login(Convert.ToByte(loginType), user, place).MultipleResults()
-          .With<UserLogin>()
-          .With<RoleLogin>()
-          .With<PermissionLogin>()
-          .With<SalesRoomLogin>()
-          .With<LocationLogin>()
-          .With<LeadSourceLogin>()
-          .With<WarehouseLogin>()
-          .GetValues();
-        userData.User = resUser[0].Cast<UserLogin>().FirstOrDefault();
-        userData.Roles = resUser[1].Cast<RoleLogin>().ToList();
-        userData.Permissions = resUser[2].Cast<PermissionLogin>().ToList();
-        userData.SalesRoom = resUser[3].Cast<SalesRoomLogin>().FirstOrDefault();
-        userData.Location = resUser[4].Cast<LocationLogin>().FirstOrDefault();
-        userData.LeadSource = resUser[5].Cast<LeadSourceLogin>().FirstOrDefault();
-        userData.Warehouse = resUser[6].Cast<WarehouseLogin>().FirstOrDefault();
-      }
-      return userData;
-    }
-
+    #region GetPersonnelByRole
     public static List<PersonnelShort> GetPersonnelByRole(string prRol)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
@@ -264,5 +227,6 @@ namespace IM.BusinessRules.BR
         return query.ToList().Select(p => new PersonnelShort { peID = p.peID, peN = p.peN }).ToList();
       }
     }
+    #endregion
   }
 }

@@ -36,11 +36,12 @@ namespace IM.SalesLiner
     /// <summary>
     /// Inicializa el modulo con el Login y el Splash
     /// </summary>
-    protected override void OnStartup(StartupEventArgs e)
+    protected async  override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
       var frmSplash = new frmSplash("Sales by Liner");
       var frmLogin = new frmLogin(frmSplash, EnumLoginType.SalesRoom, changePassword:true, autoSign:true);
+      await frmLogin.getAllPlaces();
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)

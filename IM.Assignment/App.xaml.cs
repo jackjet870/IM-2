@@ -38,12 +38,14 @@ namespace IM.Assignment
     /// </summary>
     /// <history>
     ///   [vku]  10/03/2016 Created
+    ///   [erosado] 01/06/2016  Modified. Se agrego async
     /// </history>
-    protected override void OnStartup(StartupEventArgs e)
+    protected async override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Assignment");
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location,EnumProgram.Inhouse, validatePermission:true ,changePassword: true, autoSign: true, permission:EnumPermission.Assignment, permissionLevel:EnumPermisionLevel.ReadOnly);
+      await frmLogin.getAllPlaces();
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)

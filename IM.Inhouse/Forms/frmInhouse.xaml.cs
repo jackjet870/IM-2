@@ -1585,11 +1585,20 @@ namespace IM.Inhouse.Forms
     #endregion
 
     #region btnLogin_Click
-
-    private void btnLogin_Click(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [erosado] 01/06/2016  Modified. se agrego async
+    /// </history>
+    private async void btnLogin_Click(object sender, RoutedEventArgs e)
     {
       frmLogin log = new frmLogin(null, EnumLoginType.Location, program: EnumProgram.Inhouse, changePassword: false,
         autoSign: true, modeSwitchLoginUser: true);
+
+      await log.getAllPlaces();
       if (App.User.AutoSign)
       {
         log.UserData = App.User;
@@ -1658,22 +1667,10 @@ namespace IM.Inhouse.Forms
     private void btnExtInvit_Click(object sender, RoutedEventArgs e)
     {
       //Edder
+      var frmInvitation = new frmInvitation(EnumInvitationType.External, App.User, 0, EnumInvitationMode.modAdd);
       //var frmInvitation = new frmInvitationBase(EnumInvitationType.External,App.User, 0,EnumInvitationMode.modAdd);
-      var frmInvitation = new frmInvitation(EnumInvitationType.InHouse, App.User,0,EnumInvitationMode.modAdd);
       frmInvitation.Owner = this;
       frmInvitation.ShowDialog();
-
-      //var j = await BRAgencies.GetAgencies2(1);
-
-      //List<AgencyShort> k = j.Result as List<AgencyShort>;
-
-      //MessageBox.Show(j?[0].agN);
-
-
-      //if (frmInvitation.AccessValidate())
-      //{
-      //  var res = frmInvitation.ShowDialog();
-      //}
     }
 
     #endregion
@@ -1802,7 +1799,7 @@ namespace IM.Inhouse.Forms
 
     #region ChkInvit_Click
 
-    private void ChkInvit_Click(object sender, RoutedEventArgs e)
+    private async void ChkInvit_Click(object sender, RoutedEventArgs e)
     {
       //luis
       GuestArrival itema =
@@ -1822,7 +1819,7 @@ namespace IM.Inhouse.Forms
         !isChecked ? EnumInvitationMode.modOnlyRead : EnumInvitationMode.modAdd);
       invit.Owner = this;
       invit.ShowInTaskbar = false;
-      if (invit.AccessValidate())
+      if (await invit.AccessValidate())
       {
         this.Cursor = null;
         var res = invit.ShowDialog();

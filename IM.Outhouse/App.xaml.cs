@@ -40,14 +40,16 @@ namespace IM.Outhouse
     /// </summary>
     /// <history>
     /// [jorcanche] 11/04/2016  created 
+    /// [erosado] 01/06/2016  Modified. se agrego async
     /// </history>
-    protected override void OnStartup(StartupEventArgs e)
+    protected async override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Outhouse");
 
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Location, EnumProgram.Outhouse, true, changePassword: true,
         autoSign: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.ReadOnly);
+      await frmLogin.getAllPlaces();
 
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);

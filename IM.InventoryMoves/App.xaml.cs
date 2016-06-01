@@ -36,11 +36,15 @@ namespace IM.InventoryMovements
     /// <summary>
     /// Inicializa el modulo con el Login y el Splash
     /// </summary>
-    protected override void OnStartup(StartupEventArgs e)
+    /// <history>
+    /// [erosado] 01/06/2016  Modified. se agrego async
+    /// </history>
+    protected async override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Inventory Movements");
       frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Warehouse, validatePermission:true, permission:EnumPermission.GiftsReceipts, permissionLevel:EnumPermisionLevel.Standard, changePassword:true);
+      await frmLogin.getAllPlaces();
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)

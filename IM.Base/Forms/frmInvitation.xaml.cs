@@ -3,6 +3,9 @@ using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Enums;
 using IM.Model.Classes;
+using System.Collections.Generic;
+using IM.Model;
+using System.Collections.ObjectModel;
 
 namespace IM.Base.Forms
 {
@@ -17,6 +20,19 @@ namespace IM.Base.Forms
     private readonly int _guestId;
     private readonly EnumInvitationMode _invitationMode;
     private readonly bool _allowSchedule;
+    List<LanguageShort> _languagesCat;
+    List<MaritalStatus> _maritalStatusCat;
+    List<PersonnelShort> _personnelCat;
+    List<Hotel> _hotelsCat;
+    List<AgencyShort> _agenciesCat;
+    List<CountryShort> _countriesCat;
+    List<GuestStatusType> _guestStatusTypesCat;
+    List<Currency> _currenciesCat;
+    List<PaymentType> _paymenTypesCat;
+    List<PaymentPlace> _paymentPlacesCat;
+    List<CreditCardType> _creditCardTypesCat;
+    List<GiftShort> _giftsCat;
+    List<SalesRoomShort> _salesRoomsCat;
 
     public ExecuteCommandHelper LoadCombo { get; set; }
 
@@ -27,15 +43,16 @@ namespace IM.Base.Forms
       _user = User;
       _guestId = GuestId;
       _invitationMode = InvitationMode;
-
       InitializeComponent();
-      LoadCatalog();
+
       // LoadCombo = new ExecuteCommandHelper(); sirve para cargar la informacion deseada al preciosar combinacion de teclas
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      LoadCommonCatalog();
       ControlsConfiguration(_invitationType);//Cargamos la UI dependiendo del tipo de Invitacion
+
     }
 
     #region Metodos
@@ -65,22 +82,134 @@ namespace IM.Base.Forms
       }
     }
 
-    private async void LoadCatalog()
+    private void LoadCommonCatalog()
+    {
+      try
+      {
+        txtUserName.Text = _user.User.peN;
+        //txtUserName.Text = _user.Location ??  _user.SalesRoom.srN  ;
+        loadLenguages();
+        loadMaritalStatus();
+        loadPersonnel();
+        loadHotels();
+        loadAgencies();
+        loadCountries();
+        loadGuestStatusType();
+        loadPaymentTypes();
+        loadPaymentPlaces();
+        loadCreditCardTypes();
+      }
+      catch (System.Exception ex)
+      {
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Invitation");
+      }
+
+    }
+    #endregion
+
+    #region  LoadCombos
+    #region Languages
+    private async void loadLenguages()
     {
       var _languages = await BRLanguages.GetLanguages(1);
-      var _maritalStatus =await BRMaritalStatus.GetMaritalStatus(1);
-      var _personnel = await BRPersonnel.GetPersonnel(_user.User.peID, roles: "PR");
-      var _hotels = await BRHotels.GetHotels(nStatus: 1);
-      var _agencies = await BRAgencies.GetAgencies(1);
-      var _countries = await BRCountries.GetCountries(1);
-      var _guestStatusTypes= await BRGuests.GetGuestStatusType(1);
-      var _currencies = await BRCurrencies.GetCurrencies(nStatus: 1);
-      var _paymenTypes = await BRPaymentTypes.GetPaymentTypes(1);
-      var _paymentPlaces = await BRPaymentPlaces.GetPaymentPlaces();
-      var _creditCardTypes =await BRCreditCardTypes.GetCreditCardTypes();
-      var _gifts = await BRGifts.GetGiftsShort(_user.Location == null ? "ALL" : _user.Location.loID, 1);
-      var _salesRooms = BRSalesRooms.GetSalesRooms(0);
     }
+    #endregion
+
+    #region MaritalStatus
+    private async void loadMaritalStatus()
+    {
+      _maritalStatusCat = await BRMaritalStatus.GetMaritalStatus(1);
+      cmbMaritalStatusGuest1.ItemsSource =
+        cmbMaritalStatusGuest2.ItemsSource = _maritalStatusCat;
+    }
+    #endregion
+
+    #region Personnel
+    private async void loadPersonnel()
+    {
+      _personnelCat = await BRPersonnel.GetPersonnel(_user.User.peID, roles: "PR");
+      cmbPR.ItemsSource = cmbPRContract.ItemsSource = _personnelCat;
+    }
+    #endregion
+
+    #region Hotels
+    private async void loadHotels()
+    {
+      _hotelsCat = await BRHotels.GetHotels(nStatus: 1);
+      cmbOtherInfoHotel.ItemsSource =
+      cmbResorts.ItemsSource = _hotelsCat;
+    }
+    #endregion
+
+    #region Agencies
+    private async void loadAgencies()
+    {
+      _agenciesCat = await BRAgencies.GetAgencies(1);
+      cmbOtherInfoAgency.ItemsSource = _agenciesCat;
+    }
+    #endregion
+
+    #region Countries
+    private async void loadCountries()
+    {
+      _countriesCat = await BRCountries.GetCountries(1);
+      cmbOtherInfoCountry.ItemsSource = _countriesCat;
+    }
+    #endregion
+
+    #region GuestStatusType
+    private async void loadGuestStatusType()
+    {
+      _guestStatusTypesCat = await BRGuests.GetGuestStatusType(1);
+      cmbGuestStatus.ItemsSource = _guestStatusTypesCat;
+    }
+    #endregion
+
+    #region Currencies
+    private async void loadCurrencies()
+    {
+      _currenciesCat = await BRCurrencies.GetCurrencies(nStatus: 1);
+      cmbCurrency.ItemsSource = _currenciesCat;
+    }
+    #endregion
+
+    #region PaymentTypes
+    private async void loadPaymentTypes()
+    {
+      _paymenTypesCat = await BRPaymentTypes.GetPaymentTypes(1);
+      cmbPaymentType.ItemsSource = _guestStatusTypesCat;
+    }
+    #endregion
+
+    #region PaymentPlaces
+    private async void loadPaymentPlaces()
+    {
+      _paymentPlacesCat = await BRPaymentPlaces.GetPaymentPlaces();
+
+    }
+    #endregion
+
+    #region CreditCardTypes
+    private async void loadCreditCardTypes()
+    {
+      _creditCardTypesCat = await BRCreditCardTypes.GetCreditCardTypes();
+    }
+    #endregion
+
+    #region Gifts
+    private async void loadGifts()
+    {
+      _giftsCat = await BRGifts.GetGiftsShort(_user.Location == null ? "ALL" : _user.Location.loID, 1);
+    }
+    #endregion
+
+    #region SalesRooms
+    private async void loadSalesRooms()
+    {
+      _salesRoomsCat = await BRSalesRooms.GetSalesRooms(0);
+    }
+    #endregion
+
     #endregion
 
     #region ControlsConfig

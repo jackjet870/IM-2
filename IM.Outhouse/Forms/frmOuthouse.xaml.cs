@@ -424,11 +424,13 @@ namespace IM.Outhouse.Forms
     /// </summary>
     /// <history>
     /// [jorcanche] created 05/05/2016
+    /// [erosado] 01/06/2016  Modified. se agrego async
     /// </history>
-    private void btnLogin_Click(object sender, RoutedEventArgs e)
+    private async  void btnLogin_Click(object sender, RoutedEventArgs e)
     {
       // frmLogin log = new frmLogin(null,false, EnumLoginType.Location, true);
       frmLogin log = new frmLogin(null, EnumLoginType.Location, program: EnumProgram.Outhouse, changePassword: false, autoSign: true, modeSwitchLoginUser: true);
+      await log.getAllPlaces();
       if (App.User.AutoSign)
       {
         log.UserData = App.User;

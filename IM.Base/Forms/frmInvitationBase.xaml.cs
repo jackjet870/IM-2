@@ -14,6 +14,7 @@ using IM.BusinessRules.BR;
 using IM.Base.Reports;
 using System.Text;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.Base.Forms
 {
@@ -547,10 +548,10 @@ namespace IM.Base.Forms
     /// <history>
     /// [lchairez] 29/02/2016 Crated.
     /// </history>
-    private void btnEdit_Click(object sender, RoutedEventArgs e)
+    private async void btnEdit_Click(object sender, RoutedEventArgs e)
     {
       _wasPressedEditButton = true;
-      if (ValidateEdit())
+      if (await ValidateEdit())
       {
         //si no tiene show
         if (chkShow.IsChecked.HasValue && !chkShow.IsChecked.Value)
@@ -1039,13 +1040,13 @@ namespace IM.Base.Forms
     #endregion
 
     #region Métodos públicos
-    public bool AccessValidate()
+    public async Task<bool> AccessValidate()
     {
       bool res = true;
       
       if (_invitationMode == EnumInvitationMode.modAdd)//' si el huesped no ha sido invitado
       {
-        res = ValidateEdit();
+        res =await ValidateEdit();
       }
 
       if (res)
@@ -1067,7 +1068,7 @@ namespace IM.Base.Forms
     /// Validamos que se permita editar
     /// </summary>
     /// <returns>Boolean</returns>
-    private bool ValidateEdit()
+    private async Task<bool> ValidateEdit()
     {
       var login = new frmLogin(loginType: EnumLoginType.Normal, program: EnumProgram.Inhouse, validatePermission: false,modeSwitchLoginUser:true);
       if (_user.AutoSign)
@@ -1099,7 +1100,7 @@ namespace IM.Base.Forms
       //validamos si tiene el usuario permiso sobre la locacion que se está trabajando
       if(login.UserData.Location == null)
       {
-        var locationByUser = BRLocations.GetLocationsByUser(login.UserData.User.peID);
+        var locationByUser = await BRLocations.GetLocationsByUser(login.UserData.User.peID);
         if(locationByUser.FirstOrDefault(l=> l.loID == _user.Location.loID) == null)
         {
           Helpers.UIHelper.ShowMessage("You do not have sufficient permissions to modify the invitation");
