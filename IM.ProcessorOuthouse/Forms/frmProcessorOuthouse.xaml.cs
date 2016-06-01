@@ -379,12 +379,13 @@ namespace IM.ProcessorOuthouse.Forms
     /// <param name="strReport">Nombre del reporte</param>
     /// <history>
     ///   [vku] 05/Abr/2016 Created
+    ///   
     /// </history>
-    public void ShowLeadSourceReport(string strReport)
+    public async void ShowLeadSourceReport(string strReport)
     {
       FileInfo finfo = null;
-      string dateRange = (_blnOneDate) ? DateHelper.DateRange(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmStart.Value.Value) : DateHelper.DateRange(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value);
-      string dateRangeFileNameRep = (_blnOneDate) ? DateHelper.DateRangeFileName(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmStart.Value.Value) : DateHelper.DateRangeFileName(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value);
+      string dateRange = (_blnOneDate) ? DateHelper.DateRange(_dtmStart, _dtmEnd) : DateHelper.DateRange(_dtmStart, _dtmEnd);
+      string dateRangeFileNameRep = (_blnOneDate) ? DateHelper.DateRangeFileName(_dtmStart, _dtmStart) : DateHelper.DateRangeFileName(_dtmStart, _dtmEnd);
       DataTable dtData = new DataTable();
       List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
       WaitMessage(true, "Loading report...");
@@ -394,8 +395,8 @@ namespace IM.ProcessorOuthouse.Forms
         #region Deposits Payment By PR
 
         case "Deposits Payment by PR":
-          DepositsPaymentByPRData lstRptDepositsPaymentByPR = BRReportsByLeadSource.GetRptDepositsPaymentByPRData(
-          _frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          DepositsPaymentByPRData lstRptDepositsPaymentByPR = await BRReportsByLeadSource.GetRptDepositsPaymentByPRData(
+          _dtmStart, _dtmEnd,
           string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
           "ALL",
           EnumProgram.Outhouse,
@@ -418,8 +419,8 @@ namespace IM.ProcessorOuthouse.Forms
         #region Gifts Received by Sales Room
 
         case "Gifts Received by Sales Room":
-          GiftsReceivedBySRData lstRptGiftsReceivedBySR = BRReportsByLeadSource.GetRptGiftsReceivedBySRData(
-          _frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          GiftsReceivedBySRData lstRptGiftsReceivedBySR = await BRReportsByLeadSource.GetRptGiftsReceivedBySRData(
+          _dtmStart, _dtmEnd,
           string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
           _frmFilter.chkAllChargeTo.IsChecked.Value ? "ALL" : string.Join(",", _frmFilter.grdChargeTo.SelectedItems.Cast<ChargeTo>().Select(c => c.ctID).ToList()),
           _frmFilter.chkAllGifts.IsChecked.Value ? "ALL" : string.Join(",", _frmFilter.grdGifts.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList()));
@@ -442,7 +443,9 @@ namespace IM.ProcessorOuthouse.Forms
         #region Guests Show No Presented Invitation
 
         case "Guests Show No Presented Invitation":
-          List<GuestShowNoPresentedInvitation> lstRptGuestsShowNoPresentedInvitation = BRReportsByLeadSource.GetRptGuestsShowNoPresentedInvitation(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value, string.Join(",", _frmFilter.grdLeadSources.SelectedItems.OfType<LeadSourceByUser>().Select(c => c.lsID)));
+          List<GuestShowNoPresentedInvitation> lstRptGuestsShowNoPresentedInvitation = await BRReportsByLeadSource.GetRptGuestsShowNoPresentedInvitation(
+            _dtmStart, _dtmEnd, 
+            string.Join(",", _frmFilter.grdLeadSources.SelectedItems.OfType<LeadSourceByUser>().Select(c => c.lsID)));
           if (lstRptGuestsShowNoPresentedInvitation.Count > 0)
           {
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
@@ -460,7 +463,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region PR Payment Commissions
 
         case "PR Payment Commissions":
-          List<RptProductionByPROuthouse> lstRptProductionByPROuthouseComm = BRReportsByLeadSource.GetRptProductionByPROuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByPROuthouse> lstRptProductionByPROuthouseComm = await BRReportsByLeadSource.GetRptProductionByPROuthouse(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSourcesPaymentComm.SelectedItems.Cast<LeadSource>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -484,7 +487,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by Age
 
         case "Production by Age":
-          List<RptProductionByAgeOuthouse> lstRptProductionByAgeOuthouse = BRReportsByLeadSource.GetRptProductionByAge(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByAgeOuthouse> lstRptProductionByAgeOuthouse = await BRReportsByLeadSource.GetRptProductionByAge(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -506,7 +509,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by Age & Sales Room
 
         case "Production by Age & Sales Room":
-          List<RptProductionByAgeSalesRoomOuthouse> lstRptProductionByAgeSalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByAgeSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByAgeSalesRoomOuthouse> lstRptProductionByAgeSalesRoomOuthouse = await BRReportsByLeadSource.GetRptProductionByAgeSalesRoomOuthouse(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -528,7 +531,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by Agency
 
         case "Production by Agency":
-          ProductionByAgencyOuthouseData lstRptProductionByAgencyOuthouse = BRReportsByLeadSource.GetRptProductionByAgencyOuthouseData(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          ProductionByAgencyOuthouseData lstRptProductionByAgencyOuthouse = await BRReportsByLeadSource.GetRptProductionByAgencyOuthouseData(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -551,12 +554,12 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by Agency & Sales Room
 
         case "Production by Agency & Sales Room":
-          List<RptProductionByAgencySalesRoomOuthouse> lstRptProductionByAgencySalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByAgencySalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+            ProductionByAgencySalesRoomOuthouseData lstRptProductionByAgencySalesRoomOuthouse = await BRReportsByLeadSource.GetRptProductionByAgencySalesRoomOuthouseData(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
             EnumFilterDeposit.fdDepositShowsNoDeposit);
-          if (lstRptProductionByAgencySalesRoomOuthouse.Count > 0)
+          if (lstRptProductionByAgencySalesRoomOuthouse != null)
           {
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
             filters.Add(new Tuple<string, string>("Lead Sources", _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID))));
@@ -573,7 +576,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by Agency, Market & Hotel
 
         case "Production by Agency, Market & Hotel":
-          List<RptProductionByAgencyMarketHotelOuthouse> lstRptProductionByAgencyMarketHotelOuthouse = BRReportsByLeadSource.GetRptProductionByAgencyMarketHotelOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByAgencyMarketHotelOuthouse> lstRptProductionByAgencyMarketHotelOuthouse = await BRReportsByLeadSource.GetRptProductionByAgencyMarketHotelOuthouse(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -595,7 +598,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by Couple Type
 
         case "Production by Couple Type":
-          List<RptProductionByCoupleTypeOuthouse> lstRptProductionByCoupleTypeOuthouse = BRReportsByLeadSource.GetRptProductionByCoupleTypeOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByCoupleTypeOuthouse> lstRptProductionByCoupleTypeOuthouse = await BRReportsByLeadSource.GetRptProductionByCoupleTypeOuthouse(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -617,7 +620,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by Couple Type & Sales Room
 
         case "Production by Couple Type & Sales Room":
-          List<RptProductionByCoupleTypeSalesRoomOuthouse> lstRptProductionByCoupleTypeSalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByCoupleTypeSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByCoupleTypeSalesRoomOuthouse> lstRptProductionByCoupleTypeSalesRoomOuthouse = await BRReportsByLeadSource.GetRptProductionByCoupleTypeSalesRoomOuthouse(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -638,7 +641,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Flight & Sales Room
         case "Production by Flight & Sales Room":
-          List<RptProductionByFlightSalesRoom> lstRptProductionByFlightSalesRoom = BRReportsByLeadSource.GetRptProductionByFlightSalesRoom(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByFlightSalesRoom> lstRptProductionByFlightSalesRoom = await BRReportsByLeadSource.GetRptProductionByFlightSalesRoom(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -659,7 +662,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by Gift (Invitation)
 
         case "Production by Gift (Invitation)":
-          List<RptProductionByGiftInvitation> lstRptProductionByGiftInvitation = BRReportsByLeadSource.GetRptProductionByGiftInvitation(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByGiftInvitation> lstRptProductionByGiftInvitation = await BRReportsByLeadSource.GetRptProductionByGiftInvitation(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -683,7 +686,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by Gift (Invitation) & Sales Room
 
         case "Production by Gift (Invitation) & Sales Room":
-          List<RptProductionByGiftInvitationSalesRoom> lstRptProductionByGiftInvitationSalesRoom = BRReportsByLeadSource.GetRptProductionByGiftInvitationSalesRoom(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByGiftInvitationSalesRoom> lstRptProductionByGiftInvitationSalesRoom = await BRReportsByLeadSource.GetRptProductionByGiftInvitationSalesRoom(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -707,7 +710,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by Guest Status
 
         case "Production by Guest Status":
-          List<RptProductionByGuestStatusOuthouse> lstRptProductionByGuestStatusOuthouse = BRReportsByLeadSource.GetRptProductionByGuestStatusOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByGuestStatusOuthouse> lstRptProductionByGuestStatusOuthouse = await BRReportsByLeadSource.GetRptProductionByGuestStatusOuthouse(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -728,7 +731,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Hotel
         case "Production by Hotel":
-          List<RptProductionByHotel> lstRptProductionByHotel = BRReportsByLeadSource.GetRptProductionByHotel(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByHotel> lstRptProductionByHotel = await BRReportsByLeadSource.GetRptProductionByHotel(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -748,7 +751,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Hotel & Sales Room
         case "Production by Hotel & Sales Room":
-          List<RptProductionByHotelSalesRoom> lstRptProductionByHotelSalesRoom = BRReportsByLeadSource.GetRptProductionByHotelSalesRoom(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByHotelSalesRoom> lstRptProductionByHotelSalesRoom = await BRReportsByLeadSource.GetRptProductionByHotelSalesRoom(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -768,7 +771,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Hotel Group
         case "Production by Hotel Group":
-          List<RptProductionByHotelGroup> lstRptProductionByHotelGroup = BRReportsByLeadSource.GetRptProductionByHotelGroup(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByHotelGroup> lstRptProductionByHotelGroup = await BRReportsByLeadSource.GetRptProductionByHotelGroup(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -788,7 +791,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Hotel Group & Sales Room
         case "Production by Hotel Group & Sales Room":
-          List<RptProductionByHotelGroupSalesRoom> lstRptProductionByHotelGroupSalesRoom = BRReportsByLeadSource.GetRptProductionByHotelGroupSalesRoom(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByHotelGroupSalesRoom> lstRptProductionByHotelGroupSalesRoom = await BRReportsByLeadSource.GetRptProductionByHotelGroupSalesRoom(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -809,7 +812,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by Nationality
 
         case "Production by Nationality":
-          List<RptProductionByNationalityOuthouse> lstRptProductionByNationalityOuthouse = BRReportsByLeadSource.GetRptProductionByNationalityOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByNationalityOuthouse> lstRptProductionByNationalityOuthouse = await BRReportsByLeadSource.GetRptProductionByNationalityOuthouse(_dtmStart, _dtmEnd,
               string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -832,7 +835,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by Nationality & Sales Room
 
         case "Production by Nationality & Sales Room":
-          List<RptProductionByNationalitySalesRoomOuthouse> lstRptProductionByNationalitySalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByNationalitySalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByNationalitySalesRoomOuthouse> lstRptProductionByNationalitySalesRoomOuthouse = await BRReportsByLeadSource.GetRptProductionByNationalitySalesRoomOuthouse(_dtmStart, _dtmEnd,
              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
              "ALL",
              EnumProgram.Outhouse,
@@ -855,7 +858,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by PR
 
         case "Production by PR":
-          List<RptProductionByPROuthouse> lstRptProductionByPROuthouse = BRReportsByLeadSource.GetRptProductionByPROuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByPROuthouse> lstRptProductionByPROuthouse = await BRReportsByLeadSource.GetRptProductionByPROuthouse(_dtmStart, _dtmEnd,
              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
              "ALL",
              EnumProgram.Outhouse,
@@ -878,7 +881,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by PR & Sales Room
 
         case "Production by PR & Sales Room":
-          List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomOuthouse = await BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_dtmStart, _dtmEnd,
              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
              "ALL",
              EnumProgram.Outhouse,
@@ -901,7 +904,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by PR & Sales Room (Deposits & Flyers Show)
 
         case "Production by PR & Sales Room (Deposits & Flyers Show)":
-          List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomDepositsFlyersShow = BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomDepositsFlyersShow = await BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_dtmStart, _dtmEnd,
              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
              "ALL",
              EnumProgram.Outhouse,
@@ -924,7 +927,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by PR & Sales Room (Deposits)
 
         case "Production by PR Sales Room (Deposits)":
-          List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomDeposits = BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomDeposits = await BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_dtmStart, _dtmEnd,
              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
              "ALL",
              EnumProgram.Outhouse,
@@ -947,7 +950,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by PR & Sales Room (Flyers)
 
         case "Production by PR & Sales Room (Flyers)":
-          List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomFlyers = BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomFlyers = await BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_dtmStart, _dtmEnd,
              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
              "ALL",
              EnumProgram.Outhouse,
@@ -970,7 +973,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by PR (Deposits & Flyers Show)
 
         case "Production by PR (Deposits & Flyers Show)":
-          List<RptProductionByPROuthouse> lstRptProductionByPRDepositsFlyersShowOuthouse = BRReportsByLeadSource.GetRptProductionByPROuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByPROuthouse> lstRptProductionByPRDepositsFlyersShowOuthouse = await BRReportsByLeadSource.GetRptProductionByPROuthouse(_dtmStart, _dtmEnd,
              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
              "ALL",
              EnumProgram.Outhouse,
@@ -993,7 +996,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by PR (Deposits)
 
         case "Production by PR (Deposits)":
-          List<RptProductionByPROuthouse> lstRptProductionByPRDepositsOuthouse = BRReportsByLeadSource.GetRptProductionByPROuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByPROuthouse> lstRptProductionByPRDepositsOuthouse = await BRReportsByLeadSource.GetRptProductionByPROuthouse(_dtmStart, _dtmEnd,
                string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
                "ALL",
                EnumProgram.Outhouse,
@@ -1016,7 +1019,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by PR (Flyers)
 
         case "Production by PR (Flyers)":
-          List<RptProductionByPROuthouse> lstRptProductionByPRFlyersOuthouse = BRReportsByLeadSource.GetRptProductionByPROuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByPROuthouse> lstRptProductionByPRFlyersOuthouse = await BRReportsByLeadSource.GetRptProductionByPROuthouse(_dtmStart, _dtmEnd,
                string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
                "ALL",
                EnumProgram.Outhouse,
@@ -1039,7 +1042,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by PR Contact
 
         case "Production by PR Contact":
-          List<RptProductionByPRContactOuthouse> lstRptProductionByPRContactOuthouse = BRReportsByLeadSource.GetProductionByPRContactOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByPRContactOuthouse> lstRptProductionByPRContactOuthouse = await BRReportsByLeadSource.GetProductionByPRContactOuthouse(_dtmStart, _dtmEnd,
                string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
                "ALL",
                EnumProgram.Outhouse,
@@ -1060,7 +1063,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Wave
         case "Production by Wave":
-          List<RptProductionByWave> lstRptProductionByWave = BRReportsByLeadSource.GetRptProductionByWave(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByWave> lstRptProductionByWave = await BRReportsByLeadSource.GetRptProductionByWave(_dtmStart, _dtmEnd,
             string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -1080,7 +1083,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Wave & Sales Room
         case "Production by Wave & Sales Room":
-          List<RptProductionByWaveSalesRoom> lstRptProductionByWaveSalesRoom = BRReportsByLeadSource.GetRptProductionByWaveSalesRoom(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByWaveSalesRoom> lstRptProductionByWaveSalesRoom = await BRReportsByLeadSource.GetRptProductionByWaveSalesRoom(_dtmStart, _dtmEnd,
              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
             "ALL",
             EnumProgram.Outhouse,
@@ -1182,12 +1185,13 @@ namespace IM.ProcessorOuthouse.Forms
     /// <param name="strReport">Nombre del reporte</param>
     /// <history>
     ///   [vku] 05/Abr/2016 Created
+    ///   [vku] 30/May/2016 Modified. Ahora el metodo es asincrono
     /// </history>
-    public void ShowByPRReport(string strReport)
+    public async void ShowByPRReport(string strReport)
     {
       FileInfo finfo = null;
-      string dateRange = (_blnOneDate) ? DateHelper.DateRange(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmStart.Value.Value) : DateHelper.DateRange(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value);
-      string dateRangeFileNameRep = (_blnOneDate) ? DateHelper.DateRangeFileName(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmStart.Value.Value) : DateHelper.DateRangeFileName(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value);
+      string dateRange = (_blnOneDate) ? DateHelper.DateRange(_dtmStart, _dtmStart) : DateHelper.DateRange(_dtmStart, _dtmEnd);
+      string dateRangeFileNameRep = (_blnOneDate) ? DateHelper.DateRangeFileName(_dtmStart, _dtmStart) : DateHelper.DateRangeFileName(_dtmStart, _dtmEnd);
       DataTable dtData = new DataTable();
       List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
       WaitMessage(true, "Loading report...");
@@ -1197,7 +1201,7 @@ namespace IM.ProcessorOuthouse.Forms
         #region Production by Age
 
         case "Production by Age":
-          List<RptProductionByAgeOuthouse> lstRptProductionByAgeOuthouse = BRReportsByLeadSource.GetRptProductionByAge(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByAgeOuthouse> lstRptProductionByAgeOuthouse = await BRReportsByLeadSource.GetRptProductionByAge(_dtmStart, _dtmEnd,
             "ALL",
             string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
             EnumProgram.Outhouse,
@@ -1218,7 +1222,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Age & Sales Room
         case "Production by Age & Sales Room":
-          List<RptProductionByAgeSalesRoomOuthouse> lstRptProductionByAgeSalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByAgeSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByAgeSalesRoomOuthouse> lstRptProductionByAgeSalesRoomOuthouse = await BRReportsByLeadSource.GetRptProductionByAgeSalesRoomOuthouse(_dtmStart, _dtmEnd,
             "ALL",
             string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
             EnumProgram.Outhouse,
@@ -1238,7 +1242,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Agency, Market & Hotel
         case "Production by Agency, Market & Hotel":
-          List<RptProductionByAgencyMarketHotelOuthouse> lstRptProductionByAgencyMarketHotelOuthouse = BRReportsByLeadSource.GetRptProductionByAgencyMarketHotelOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByAgencyMarketHotelOuthouse> lstRptProductionByAgencyMarketHotelOuthouse = await BRReportsByLeadSource.GetRptProductionByAgencyMarketHotelOuthouse(_dtmStart, _dtmEnd,
             "ALL",
              string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
              EnumProgram.Outhouse,
@@ -1258,7 +1262,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Couple Type
         case "Production by Couple Type":
-          List<RptProductionByCoupleTypeOuthouse> lstRptProductionByCoupleTypeOuthouse = BRReportsByLeadSource.GetRptProductionByCoupleTypeOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByCoupleTypeOuthouse> lstRptProductionByCoupleTypeOuthouse = await BRReportsByLeadSource.GetRptProductionByCoupleTypeOuthouse(_dtmStart, _dtmEnd,
             "ALL",
             string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
             EnumProgram.Outhouse,
@@ -1278,7 +1282,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Couple Type & Sales Room
         case "Production by Couple Type & Sales Room":
-          List<RptProductionByCoupleTypeSalesRoomOuthouse> lstRptProductionByCoupleTypeSalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByCoupleTypeSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByCoupleTypeSalesRoomOuthouse> lstRptProductionByCoupleTypeSalesRoomOuthouse = await BRReportsByLeadSource.GetRptProductionByCoupleTypeSalesRoomOuthouse(_dtmStart, _dtmEnd,
             "ALL",
             string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
             EnumProgram.Outhouse,
@@ -1298,7 +1302,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Gift (Invitation)
         case "Production by Gift (Invitation)":
-          List<RptProductionByGiftInvitation> lstRptProductionByGiftInvitation = BRReportsByLeadSource.GetRptProductionByGiftInvitation(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByGiftInvitation> lstRptProductionByGiftInvitation = await BRReportsByLeadSource.GetRptProductionByGiftInvitation(_dtmStart, _dtmEnd,
             "ALL",
             string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
             EnumProgram.Outhouse,
@@ -1320,7 +1324,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Gift (Invitation) & Sales Room
         case "Production by Gift (Invitation) & Sales Room":
-          List<RptProductionByGiftInvitationSalesRoom> lstRptProductionByGiftInvitationSalesRoom = BRReportsByLeadSource.GetRptProductionByGiftInvitationSalesRoom(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByGiftInvitationSalesRoom> lstRptProductionByGiftInvitationSalesRoom = await BRReportsByLeadSource.GetRptProductionByGiftInvitationSalesRoom(_dtmStart, _dtmEnd,
             "ALL",
             string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
             EnumProgram.Outhouse,
@@ -1342,7 +1346,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Guest Status
         case "Production by Guest Status":
-          List<RptProductionByGuestStatusOuthouse> lstRptProductionByGuestStatusOuthouse = BRReportsByLeadSource.GetRptProductionByGuestStatusOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByGuestStatusOuthouse> lstRptProductionByGuestStatusOuthouse = await BRReportsByLeadSource.GetRptProductionByGuestStatusOuthouse(_dtmStart, _dtmEnd,
             "ALL",
             string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
             EnumProgram.Outhouse,
@@ -1360,9 +1364,85 @@ namespace IM.ProcessorOuthouse.Forms
           break;
         #endregion
 
+        #region Production by Hotel
+        case "Production by Hotel":
+          List<RptProductionByHotel> lstRptProductionByHotel = await BRReportsByLeadSource.GetRptProductionByHotel(_dtmStart, _dtmEnd,
+            "ALL",
+            string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit);
+          if(lstRptProductionByHotel.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("PR", _frmFilter.grdPR.SelectedItems.Count == _frmFilter.grdPR.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID))));
+            finfo = clsReports.ExportRptProductionByHotel(strReport, dateRangeFileNameRep, filters, lstRptProductionByHotel);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligece Marketing ProcessorOuthouse");
+          }
+          break;
+        #endregion
+
+        #region Production by Hotel & Sales Room
+        case "Production by Hotel & Sales Room":
+          List<RptProductionByHotelSalesRoom> lstRptProductionByHotelSalesRoom = await BRReportsByLeadSource.GetRptProductionByHotelSalesRoom(_dtmStart, _dtmEnd,
+            "ALL",
+            string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit);
+          if (lstRptProductionByHotelSalesRoom.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("PR", _frmFilter.grdPR.SelectedItems.Count == _frmFilter.grdPR.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID))));
+            finfo = clsReports.ExportRptProductionByHotelSalesRoom(strReport, dateRangeFileNameRep, filters, lstRptProductionByHotelSalesRoom);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligece Marketing ProcessorOuthouse");
+          }
+          break;
+        #endregion
+
+        #region Production by Hotel Group
+        case "Production by Hotel Group":
+          List<RptProductionByHotelGroup> lstRptProductionByHotelGroup = await BRReportsByLeadSource.GetRptProductionByHotelGroup(_dtmStart, _dtmEnd,
+            "ALL",
+            string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit);
+          if(lstRptProductionByHotelGroup.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("PR", _frmFilter.grdPR.SelectedItems.Count == _frmFilter.grdPR.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID))));
+            finfo = clsReports.ExportRptProductionByHotelGroup(strReport, dateRangeFileNameRep, filters, lstRptProductionByHotelGroup);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligece Marketing ProcessorOuthouse");
+          }
+          break;
+        #endregion
+
+        #region Production by Hotel Group & Sales Room
+        case "Production by Hotel Group & Sales Room":
+          List<RptProductionByHotelGroupSalesRoom> lstRptProductionByHotelGroupSalesRoom = await BRReportsByLeadSource.GetRptProductionByHotelGroupSalesRoom(_dtmStart, _dtmEnd,
+             "ALL",
+            string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit);
+          if(lstRptProductionByHotelGroupSalesRoom.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("PR", _frmFilter.grdPR.SelectedItems.Count == _frmFilter.grdPR.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID))));
+            finfo = clsReports.ExportRptProductionByHotelGroupSalesRoom(strReport, dateRangeFileNameRep, filters, lstRptProductionByHotelGroupSalesRoom);
+          }
+          break;
+        #endregion
+
         #region Production by Nationality
         case "Production by Nationality":
-          List<RptProductionByNationalityOuthouse> lstRptProductionByNationalityOuthouse = BRReportsByLeadSource.GetRptProductionByNationalityOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByNationalityOuthouse> lstRptProductionByNationalityOuthouse = await BRReportsByLeadSource.GetRptProductionByNationalityOuthouse(_dtmStart, _dtmEnd,
             "ALL",
             string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
             EnumProgram.Outhouse,
@@ -1382,7 +1462,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by Nationality & Sales Room
         case "Production by Nationality & Sales Room":
-          List<RptProductionByNationalitySalesRoomOuthouse> lstRptProductionByNationalitySalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByNationalitySalesRoomOuthouse(_frmFilter.dtmEnd.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByNationalitySalesRoomOuthouse> lstRptProductionByNationalitySalesRoomOuthouse = await BRReportsByLeadSource.GetRptProductionByNationalitySalesRoomOuthouse(_dtmEnd, _dtmEnd,
             "ALL",
             string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
             EnumProgram.Outhouse,
@@ -1402,7 +1482,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by PR & Sales Room (Deposits & Flyers Show)
         case "Production by PR & Sales Room (Deposits & Flyers Show)":
-          List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomOuthouse = BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByPRSalesRoomOuthouse> lstRptProductionByPRSalesRoomOuthouse = await BRReportsByLeadSource.GetRptProductionByPRSalesRoomOuthouse(_dtmStart, _dtmEnd,
             "ALL",
             string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
             EnumProgram.Outhouse,
@@ -1422,7 +1502,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Production by PR (Deposits & Flyers Show)
         case "Production by PR (Deposits & Flyers Show)":
-          List<RptProductionByPROuthouse> lstRptProductionByPROuthouse = BRReportsByLeadSource.GetRptProductionByPROuthouse(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value,
+          List<RptProductionByPROuthouse> lstRptProductionByPROuthouse = await BRReportsByLeadSource.GetRptProductionByPROuthouse(_dtmStart, _dtmEnd,
             "ALL",
             string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
             EnumProgram.Outhouse,
@@ -1432,6 +1512,46 @@ namespace IM.ProcessorOuthouse.Forms
             filters.Add(new Tuple<string, string>("Date Range", dateRange));
             filters.Add(new Tuple<string, string>("PR", _frmFilter.grdPR.SelectedItems.Count == _frmFilter.grdPR.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID))));
             finfo = clsReports.ExportRptProductionByPROuthouse(strReport, dateRangeFileNameRep, filters, lstRptProductionByPROuthouse);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
+          }
+          break;
+        #endregion
+
+        #region Production by Wave
+        case "Production by Wave":
+          List<RptProductionByWave> lstRptProductionByWave = await BRReportsByLeadSource.GetRptProductionByWave(_dtmStart, _dtmEnd,
+            "ALL",
+            string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit);
+          if(lstRptProductionByWave.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("PR", _frmFilter.grdPR.SelectedItems.Count == _frmFilter.grdPR.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID))));
+            finfo = clsReports.ExportRptProductionByWave(strReport, dateRangeFileNameRep, filters, lstRptProductionByWave);
+          }
+          else
+          {
+            UIHelper.ShowMessage("There is no data", MessageBoxImage.Warning, "Intelligence Marketing ProcessorOuthouse");
+          }
+          break;
+        #endregion
+
+        #region Production by Wave & Sales Room
+        case "Production by Wave & Sales Room":
+          List<RptProductionByWaveSalesRoom> lstRptProductionByWaveSalesRoom = await BRReportsByLeadSource.GetRptProductionByWaveSalesRoom(_dtmStart, _dtmEnd,
+            "ALL",
+            string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID).ToList()),
+            EnumProgram.Outhouse,
+            EnumFilterDeposit.fdDepositShowsNoDeposit);
+          if (lstRptProductionByWaveSalesRoom.Count > 0)
+          {
+            filters.Add(new Tuple<string, string>("Date Range", dateRange));
+            filters.Add(new Tuple<string, string>("PR", _frmFilter.grdPR.SelectedItems.Count == _frmFilter.grdPR.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PersonnelShort>().Select(c => c.peID))));
+            finfo = clsReports.ExportRptProductionByWaveSalesRoom(strReport, dateRangeFileNameRep, filters, lstRptProductionByWaveSalesRoom);
           }
           else
           {
@@ -1502,12 +1622,13 @@ namespace IM.ProcessorOuthouse.Forms
     /// <param name="strReport">Nombre del reporte</param>
     /// <history>
     ///   [vku] 05/Abr/2016 Created
+    ///   [vku] 30/May/2016 Modified. Ahora el metodo es asincrono
     /// </history>
-    public void ShowOtherReport(string strReport)
+    public async void ShowOtherReport(string strReport)
     {
       FileInfo finfo = null;
-      string dateRange = (_blnOneDate) ? DateHelper.DateRange(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmStart.Value.Value) : DateHelper.DateRange(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value);
-      string dateRangeFileNameRep = (_blnOneDate) ? DateHelper.DateRangeFileName(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmStart.Value.Value) : DateHelper.DateRangeFileName(_frmFilter.dtmStart.Value.Value, _frmFilter.dtmEnd.Value.Value);
+      string dateRange = (_blnOneDate) ? DateHelper.DateRange(_dtmStart, _dtmStart) : DateHelper.DateRange(_dtmStart, _dtmEnd);
+      string dateRangeFileNameRep = (_blnOneDate) ? DateHelper.DateRangeFileName(_dtmStart, _dtmStart) : DateHelper.DateRangeFileName(_dtmStart, _dtmEnd);
       DataTable dtData = new DataTable();
       List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
       WaitMessage(true, "Loading report...");
@@ -1516,7 +1637,7 @@ namespace IM.ProcessorOuthouse.Forms
       {
         #region Folios Invitations Outhouse
         case "Folios Invitations Outhouse":
-          List<RptFoliosInvitationByDateFolio> lstRptFoliosInvitationByDateFolio = BRReportsByLeadSource.GetRptFoliosInvitationByDateFolio(_frmFilter.chkUseDates.IsChecked.Value ? _frmFilter.dtmStart.Value.Value : (DateTime?)null, _frmFilter.chkUseDates.IsChecked.Value ? _frmFilter.dtmEnd.Value.Value : (DateTime?)null, 
+          List<RptFoliosInvitationByDateFolio> lstRptFoliosInvitationByDateFolio = await BRReportsByLeadSource.GetRptFoliosInvitationByDateFolio(_frmFilter.chkUseDates.IsChecked.Value ? _dtmStart : (DateTime?)null, _frmFilter.chkUseDates.IsChecked.Value ? _dtmEnd : (DateTime?)null, 
             _cboFolSeriesSelected,
             _folFrom,
             _folTo,
@@ -1538,7 +1659,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Folios Invitations Outhouse by PR
         case "Folios Invitations Outhouse by PR":
-          List<RptFoliosInvitationsOuthouseByPR> lstRptFoliosInvitationsOuthouseByPR = BRReportsByLeadSource.GetRptFoliosInvitationsOuthouseByPR(_frmFilter.chkUseDates.IsChecked.Value ? _frmFilter.dtmStart.Value.Value : (DateTime?)null, _frmFilter.chkUseDates.IsChecked.Value ? _frmFilter.dtmEnd.Value.Value : (DateTime?)null,
+          List<RptFoliosInvitationsOuthouseByPR> lstRptFoliosInvitationsOuthouseByPR = await BRReportsByLeadSource.GetRptFoliosInvitationsOuthouseByPR(_frmFilter.chkUseDates.IsChecked.Value ? _dtmStart : (DateTime?)null, _frmFilter.chkUseDates.IsChecked.Value ? _dtmEnd : (DateTime?)null,
             _cboFolSeriesSelected,
             _folFrom,
             _folTo,
@@ -1560,7 +1681,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Folios CxC by PR
         case "Folios CxC by PR":
-          List<RptFoliosCxCByPR> lstRptFoliosCxCByPR = BRReportsByLeadSource.GetRptFoliosCxCByPR(_frmFilter.chkUseDates.IsChecked.Value ? _frmFilter.dtmStart.Value.Value : (DateTime?)null, _frmFilter.chkUseDates.IsChecked.Value ? _frmFilter.dtmEnd.Value.Value : (DateTime?)null,
+          List<RptFoliosCxCByPR> lstRptFoliosCxCByPR = await BRReportsByLeadSource.GetRptFoliosCxCByPR(_frmFilter.chkUseDates.IsChecked.Value ? _dtmStart : (DateTime?)null, _frmFilter.chkUseDates.IsChecked.Value ? _dtmEnd : (DateTime?)null,
             _frmFilter.chkAllFolios.IsChecked.Value,
             _folFrom,
             _folTo,
@@ -1581,7 +1702,7 @@ namespace IM.ProcessorOuthouse.Forms
 
         #region Folios CXC
         case "Folios CXC":
-          List<RptFoliosCXC> lstRptFoliosCXC = BRReportsByLeadSource.GetRptFoliosCXC(_frmFilter.chkUseDates.IsChecked.Value ? _frmFilter.dtmStart.Value.Value : (DateTime?)null, _frmFilter.chkUseDates.IsChecked.Value ? _frmFilter.dtmEnd.Value.Value : (DateTime?)null,
+          List<RptFoliosCXC> lstRptFoliosCXC = await BRReportsByLeadSource.GetRptFoliosCXC(_frmFilter.chkUseDates.IsChecked.Value ? _dtmStart : (DateTime?)null, _frmFilter.chkUseDates.IsChecked.Value ? _dtmEnd : (DateTime?)null,
             _frmFilter.chkAllFolios.IsChecked.Value,
             _folFrom,
             _folTo,

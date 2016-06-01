@@ -7,13 +7,15 @@
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Assignment.frmAssignment"
         mc:Ignorable="d"
         Title="Assignment" Height="549" Width="813.25" Loaded="Window_Loaded" Icon="/IM.Assignment;component/Images/IM.ico">
+    <!--#region  window.Resources-->
     <Window.Resources>
         <CollectionViewSource x:Key="marketShortViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:MarketShort}, CreateList=True}"/>
         <CollectionViewSource x:Key="guestUnassignedViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GuestUnassigned}, CreateList=True}"/>
         <CollectionViewSource x:Key="pRAssignedViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:PRAssigned}, CreateList=True}"/>
         <CollectionViewSource x:Key="guestAssignedViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GuestAssigned}, CreateList=True}"/>
     </Window.Resources>
-    <Grid DataContext="{StaticResource guestUnassignedViewSource}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+    <!--#endregion-->
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         
         <!--#region Filas y Columnas definidas-->
         <Grid.RowDefinitions>
@@ -60,7 +62,7 @@
 
         <!--#region Barra de grids -->
         <!--#region grdGuestUnassigned -->
-        <DataGrid x:Name="grdGuestUnassigned"  SelectionUnit ="FullRow" SelectionMode="Extended"  IsReadOnly="True" CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False" Margin="5,4,5,3" SelectionChanged="grdGuestUnassigned_SelectionChanged"  Grid.Column="0" Grid.Row="1">
+        <DataGrid x:Name="grdGuestUnassigned"  SelectionUnit ="FullRow" SelectionMode="Extended"  IsReadOnly="True" CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" ItemsSource="{Binding Source={StaticResource guestUnassignedViewSource}}" AutoGenerateColumns="False" Margin="5,4,5,3" SelectionChanged="grdGuestUnassigned_SelectionChanged"  Grid.Column="0" Grid.Row="1">
             <DataGrid.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkGray"/>
             </DataGrid.Resources>
@@ -96,7 +98,7 @@
         </DataGrid>
         <!--#endregion-->
 
-        <!--#region grdGuestUnassigned -->
+        <!--#region grdPRAssigned -->
         <DataGrid x:Name="grdPRAssigned" IsReadOnly="True" CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AutoGenerateColumns="False"  ItemsSource="{Binding Source={StaticResource pRAssignedViewSource}}" Margin="6,10,4,4"  SelectionChanged="grdPRAssigned_SelectionChanged" Grid.Column="1">
             <DataGrid.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkGray"/>

@@ -720,7 +720,7 @@ namespace IM.ProcessorInhouse.Forms
         #region Gifts Received by Sales Room
 
         case EnumRptLeadSource.GiftsReceivedbySalesRoom:
-          list.Add(BRReportsByLeadSource.GetRptGiftsReceivedBySRData(_dtmStart, _dtmEnd, string.Join(",", _lstLeadSources),
+          list.Add(await BRReportsByLeadSource.GetRptGiftsReceivedBySRData(_dtmStart, _dtmEnd, string.Join(",", _lstLeadSources),
             string.Join(",", _lstCharteTo), string.Join(",", _lstGifts)));
           if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
           else

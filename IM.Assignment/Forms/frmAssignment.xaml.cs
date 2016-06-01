@@ -21,7 +21,7 @@ namespace IM.Assignment
   /// <history>
   ///   [vku] 08/Mar/2016 Created
   /// </history>
-  public partial class frmAssignment : Window
+  public partial class frmAssignment: Window
   {
 
     #region Atributos
@@ -41,7 +41,7 @@ namespace IM.Assignment
     private List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
     private DataTable dt = new DataTable();
     private string dateRange;
-
+    int weekYear;
     FileInfo finfo;
     #endregion
 
@@ -75,10 +75,11 @@ namespace IM.Assignment
     /// </summary>
     /// <history>
     ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 27/May/2016 Modified. Ahora el metodo es asincrono
     /// </history>
-    private void LoadListGuestsUnassigned()
+    private async void LoadListGuestsUnassigned()
     {
-      _guestUnassignedViewSource.Source = BRAssignment.GetGuestUnassigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, chkShowOnlyAvail.IsChecked.Value);
+      _guestUnassignedViewSource.Source = await BRAssignment.GetGuestUnassigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, chkShowOnlyAvail.IsChecked.Value);
       grdGuestUnassigned.UnselectAll();
     }
     #endregion
@@ -89,10 +90,11 @@ namespace IM.Assignment
     ///</summary>
     /// <history>
     ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 27/May/2016 Modified. Ahora el metodo es asincrono
     /// </history>
-    private void LoadPRs()
+    private async void LoadPRs()
     {
-      _pRAssignedViewSource.Source = BRAssignment.GetPRsAssigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, chkGuestsPRs.IsChecked.Value, chkMemberPRs.IsChecked.Value);
+      _pRAssignedViewSource.Source = await BRAssignment.GetPRsAssigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, chkGuestsPRs.IsChecked.Value, chkMemberPRs.IsChecked.Value);
       LoadListGuestsAssigned();
     }
     #endregion
@@ -103,14 +105,22 @@ namespace IM.Assignment
     /// </summary>
     /// <history>
     ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 27/May/2016 Modified. Ahora el metodo es asincrono
     /// </history>
-    private void LoadListGuestsAssigned()
+    private async void LoadListGuestsAssigned()
     {
       var selectedItems = grdPRAssigned.SelectedItems;
       if (selectedItems.Count > 0)
       {
-        _guestAssignedViewSource.Source = BRAssignment.GetGuestAssigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _strgPRs, _markets);
+        _guestAssignedViewSource.Source = await BRAssignment.GetGuestAssigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _strgPRs, _markets);
       }
+      int sumAssign = 0;
+      foreach (PRAssigned item in grdPRAssigned.ItemsSource)
+      {
+        sumAssign += Convert.ToInt32(item.Assigned);
+      }
+      lblTotalAssign.Content = sumAssign;
+      lblTotalW.Content = sumAssign + grdGuestUnassigned.Items.Count;
     }
 
     #endregion
@@ -127,22 +137,13 @@ namespace IM.Assignment
       ///Refrescamos los filtros
       filters.Clear();
 
-      ///Obtiene numero de la semana a partir de una fecha
-      int weekYear = CultureInfo.CurrentUICulture.Calendar.GetWeekOfYear(mdtmDate, CalendarWeekRule.FirstFullWeek, mdtmDate.DayOfWeek);
+      weekYear = CultureInfo.CurrentUICulture.Calendar.GetWeekOfYear(mdtmDate, CalendarWeekRule.FirstFullWeek, mdtmDate.DayOfWeek);
       lblWeek.Content = "Week " + weekYear;
-
-      ///Rango de fechas
       dateRange = DateHelper.DateRange(mdtmDate, mdtmDate.AddDays(6));
       lblDataRange.Content = dateRange;
+
       LoadListGuestsUnassigned();
       LoadPRs();
-      int sumAssign = 0;
-      foreach (PRAssigned item in grdPRAssigned.ItemsSource)
-      {
-        sumAssign += Convert.ToInt32(item.Assigned);
-      }
-      lblTotalAssign.Content = sumAssign;
-      lblTotalW.Content = sumAssign + grdGuestUnassigned.Items.Count;
     }
     #endregion
 
@@ -254,21 +255,25 @@ namespace IM.Assignment
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       System.Windows.Data.CollectionViewSource marketShortViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("marketShortViewSource")));
-
+      ///Inicializamos los filtros
       _LeadSource = App.User.Location.loID;
       mdtmDate = DateHelper.GetStartWeek(DateTime.Today.Date);
 
-      ///Inicializamos los filtros
-      chkMemberPRs.IsChecked = true;
+      ///Obtiene numero de la semana a partir de una fecha
+      weekYear = CultureInfo.CurrentUICulture.Calendar.GetWeekOfYear(mdtmDate, CalendarWeekRule.FirstFullWeek, mdtmDate.DayOfWeek);
+      lblWeek.Content = "Week " + weekYear;
 
+      ///Rango de fechas
+      dateRange = DateHelper.DateRange(mdtmDate, mdtmDate.AddDays(6));
+      lblDataRange.Content = dateRange;
+
+      chkMemberPRs.IsChecked = true;
 
       _guestUnassignedViewSource = ((CollectionViewSource)(this.FindResource("guestUnassignedViewSource")));
       _pRAssignedViewSource = ((CollectionViewSource)(this.FindResource("pRAssignedViewSource")));
       _guestAssignedViewSource = ((CollectionViewSource)(this.FindResource("guestAssignedViewSource")));
       LoadListMarkets();
-      FilterRecords();
-
-    
+      LoadPRs();
     }
     #endregion
 
@@ -355,19 +360,20 @@ namespace IM.Assignment
     /// </summary>
     /// <history>
     ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 27/May/2016 Modified. Ahora el metodo es asincrono
     /// </history>
-    private void btnAssignmentByPR_Click(object sender, RoutedEventArgs e)
+    private async void btnAssignmentByPR_Click(object sender, RoutedEventArgs e)
     {
       filters.Clear();
+      finfo = null;
       ///validamos el PR
       if (ValidatePR()) {
         filters.Add(Tuple.Create("Date Range", dateRange));
         filters.Add(Tuple.Create("Lead Source", _LeadSource));
         filters.Add(Tuple.Create(_strgPRs, _strgNamePR));
-        List<RptAssignmentByPR> lstAssignmentByPR = BRAssignment.RptAssignmentByPR(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, _strgPRs);
+        List<RptAssignmentByPR> lstAssignmentByPR = await BRAssignment.RptAssignmentByPR(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, _strgPRs);
         if (lstAssignmentByPR.Count > 0)
         {
-          finfo = null;
           dt = TableHelper.GetDataTableFromList(lstAssignmentByPR, true);
           string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
           finfo = EpplusHelper.CreateGeneralRptExcel(filters, dt, "Assignment by PR", dateRangeFileName, clsFormatTable.getExcelFormatTableAssignByPR());
@@ -376,8 +382,8 @@ namespace IM.Assignment
         {
           UIHelper.ShowMessage("There is no data",MessageBoxImage.Warning);
         }
-      }
-      OpenReport(finfo);
+        OpenReport(finfo);
+      }  
     }
     #endregion
 
@@ -387,16 +393,18 @@ namespace IM.Assignment
     /// </summary>
     /// <history>
     ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 27/May/2016 Modified. Ahora el metodo es asincrono
     /// </history>
-    private void btnGeneralAssignment_Click(object sender, RoutedEventArgs e)
+    private async void btnGeneralAssignment_Click(object sender, RoutedEventArgs e)
     {
       filters.Clear();
       filters.Add(Tuple.Create("Date Range", dateRange));
       filters.Add(Tuple.Create("Lead Source", _LeadSource));
-      List<RptAssignment> lstAssignment = BRAssignment.RptAssignment(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets) ;
+      finfo = null;
+      List<RptAssignment> lstAssignment = await BRAssignment.RptAssignment(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets) ;
       if (lstAssignment.Count > 0)
       {
-        finfo = null;
+        
         dt = TableHelper.GetDataTableFromList(lstAssignment, true);
         string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
         finfo = EpplusHelper.CreateGeneralRptExcel(filters, dt, "General Assignment", dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
@@ -415,16 +423,17 @@ namespace IM.Assignment
     /// </summary>
     /// <history>
     ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 27/May/2016 Modified. El metodo ahora es asincrono
     /// </history>
-    private void btnAssignmentArrivals_Click(object sender, RoutedEventArgs e)
+    private async void btnAssignmentArrivals_Click(object sender, RoutedEventArgs e)
     {
       filters.Clear();
       filters.Add(Tuple.Create("Date Range", dateRange));
       filters.Add(Tuple.Create("Lead Source", _LeadSource));
-      List<RptAssignmentArrivals> lstAssignmentArrivals = BRAssignment.RptAssignmetArrivals(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets);
+      finfo = null;
+      List<RptAssignmentArrivals> lstAssignmentArrivals = await BRAssignment.RptAssignmetArrivals(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets);
       if (lstAssignmentArrivals.Count > 0)
       {
-        finfo = null;
         dt = TableHelper.GetDataTableFromList(lstAssignmentArrivals, true);
         string dateRangeFileName = DateHelper.DateRangeFileName(mdtmDate, mdtmDate.AddDays(6));
         finfo = EpplusHelper.CreateGeneralRptExcel(filters, dt, "Arrivals", dateRangeFileName, clsFormatTable.getExcelFormatTableGenAsignyArvls());
@@ -443,13 +452,16 @@ namespace IM.Assignment
     /// </summary>
     /// <history>
     ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 31/May/2016 Modified. Ahora el metodo es asincroino
     /// </history>
-    private void btnAssign_Click(object sender, RoutedEventArgs e)
+    private async void btnAssign_Click(object sender, RoutedEventArgs e)
     {
       if (ValidateAssign())
       {
-        BRAssignment.SaveGuetsPRAssign(_strgGuestUnassigned, _strgPRs);
+        int res = 0;
+        res = await BRAssignment.SaveGuetsPRAssign(_strgGuestUnassigned, _strgPRs);
         FilterRecords();
+        UIHelper.ShowMessageResult("Assignment", res);
       }
     }
     #endregion
@@ -460,13 +472,17 @@ namespace IM.Assignment
     /// </summary>
     /// <history>
     ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 31/May/2016 Modified. Ahora el metodo es asincrono
     /// </history>
-    private void btnRemove_Click(object sender, RoutedEventArgs e)
+    private async void btnRemove_Click(object sender, RoutedEventArgs e)
     {
       if (ValidateUnassign())
       {
-        BRAssignment.SaveGuestUnassign(_strgGuestAssigned, _strgPRs);
+        int res = 0;
+        res = await BRAssignment.SaveGuestUnassign(_strgGuestAssigned, _strgPRs);
         FilterRecords();
+        UIHelper.ShowMessageResult("Remove Assignment", res);
+        
       }
     }
     #endregion
@@ -491,7 +507,7 @@ namespace IM.Assignment
           _markets = _markets + ",";
         }
       }
-      LoadListGuestsUnassigned();
+     LoadListGuestsUnassigned();
     }
     #endregion
 

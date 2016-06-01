@@ -380,9 +380,10 @@ namespace IM.ProcessorOuthouse.Classes
     /// <history>
     ///   [vku] 20/Abr/2016 Created
     /// </history>
-    public static FileInfo ExportRptProductionByAgencySalesRoomOuhouse(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, List<RptProductionByAgencySalesRoomOuthouse> lstRptProductionByAgencySalesRoomOuthouse)
+    public static FileInfo ExportRptProductionByAgencySalesRoomOuhouse(string strReport, string dateRangeFileName, List<Tuple<string, string>> filters, ProductionByAgencySalesRoomOuthouseData lstRptProductionByAgencySalesRoomOuthouse)
     {
-      var lstRptProductionByAgencySalesRoomOuthouseAux = lstRptProductionByAgencySalesRoomOuthouse.Select(c => new
+      var lstRptProductionByAgencySalesRoom = lstRptProductionByAgencySalesRoomOuthouse.ProductionByAgencySalesRoomOuthouse;
+      var lstRptProductionByAgencySalesRoomOuthouseAux = lstRptProductionByAgencySalesRoom.Select(c => new
       {
         c.SalesRoomN,
         c.Agency,

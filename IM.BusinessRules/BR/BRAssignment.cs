@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,12 +18,21 @@ namespace IM.BusinessRules.BR
     /// <param name="leadSource">Clave del LeadSource</param>
     /// <param name="markets">Claves de Mercados</param>
     /// <param name="onlyAvail">Indica si solo se desean los huespedes disponibles</param>
-    public static List<GuestUnassigned> GetGuestUnassigned(DateTime dateFrom, DateTime dateTo, String leadSource, String markets,  Boolean onlyAvail)
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 27/May/2016 Modified. Se agregá asincronía.
+    /// </history>
+    public async static Task<List<GuestUnassigned>> GetGuestUnassigned(DateTime dateFrom, DateTime dateTo, String leadSource, String markets,  Boolean onlyAvail)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<GuestUnassigned> result = null;
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetGuestsUnassigned(dateFrom, dateTo, leadSource, markets, onlyAvail).OrderBy(o => o.guCheckInD).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.USP_OR_GetGuestsUnassigned(dateFrom, dateTo, leadSource, markets, onlyAvail).OrderBy(o => o.guCheckInD).ToList();
+        }
+      });
+      return result; 
     }
     #endregion
 
@@ -35,12 +45,21 @@ namespace IM.BusinessRules.BR
     /// <param name="leadSource">Clave del LeadSource</param>
     /// <param name="markets">Claves de Mercados</param>
     /// <param name="PR">Clave del PR</param>
-    public static List<RptAssignmentByPR> RptAssignmentByPR(DateTime dateFrom, DateTime dateTo, String leadSource, String markets, String PR)
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 27/May/2016 Modified. Se agrago asincronía.
+    /// </history>
+    public async static Task<List<RptAssignmentByPR>> RptAssignmentByPR(DateTime dateFrom, DateTime dateTo, String leadSource, String markets, String PR)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<RptAssignmentByPR> result = null;
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_RptAssignmentByPR(dateFrom, dateTo, leadSource, markets, PR).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.USP_OR_RptAssignmentByPR(dateFrom, dateTo, leadSource, markets, PR).ToList();
+        }
+      });
+      return result;
     }
     #endregion
 
@@ -52,12 +71,21 @@ namespace IM.BusinessRules.BR
     /// <param name="dateTo">Fecha hasta</param>
     /// <param name="leadSource">Clave del LeadSource</param>
     /// <param name="markets">Claves de Mercados</param>
-    public static List<RptAssignment> RptAssignment(DateTime dateFrom, DateTime dateTo, String leadSource, String markets)
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 27/May/2016 Modified. Se agrego asincronía
+    /// </history>
+    public async static Task<List<RptAssignment>> RptAssignment(DateTime dateFrom, DateTime dateTo, String leadSource, String markets)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<RptAssignment> result = null;
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_RptAssignment(dateFrom, dateTo, leadSource, markets).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.USP_OR_RptAssignment(dateFrom, dateTo, leadSource, markets).ToList();
+        }
+      });
+      return result;
     }
     #endregion
 
@@ -69,12 +97,21 @@ namespace IM.BusinessRules.BR
     /// <param name="dateTo">Fecha hasta</param>
     /// <param name="leadSource">Clave del LeadSource</param>
     /// <param name="markets">Claves de Mercados</param>
-    public static List<RptAssignmentArrivals> RptAssignmetArrivals(DateTime dateFrom, DateTime dateTo, String leadSource, String markets)
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 27/May/2016 Modified. Se agrego asincronia.
+    /// </history>
+    public async static Task<List<RptAssignmentArrivals>> RptAssignmetArrivals(DateTime dateFrom, DateTime dateTo, String leadSource, String markets)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<RptAssignmentArrivals> result = null;
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_RptAssignmentArrivals(dateFrom, dateTo, leadSource, markets).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.USP_OR_RptAssignmentArrivals(dateFrom, dateTo, leadSource, markets).ToList();
+        }
+      });
+      return result;
     }
     #endregion
 
@@ -88,14 +125,21 @@ namespace IM.BusinessRules.BR
     /// <param name="markets">Claves de Mercados</param>
     /// <param name="guPRs">Indica si se desean los PRs de huespedes</param>
     /// <param name="mbrPRs">Indica si se desean los PRs de socios</param>
-    public static List<PRAssigned> GetPRsAssigned(DateTime dateFrom, DateTime dateTo, String leadSource, String markets, Boolean guPRs, Boolean mbrPRs)
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 27/May/2016 Modified. Se agrego asincronía
+    /// </history>
+    public async static Task<List<PRAssigned>> GetPRsAssigned(DateTime dateFrom, DateTime dateTo, String leadSource, String markets, Boolean guPRs, Boolean mbrPRs)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<PRAssigned> result = null;
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetPRsAssigned(dateFrom, dateTo, leadSource, markets, guPRs, mbrPRs).OrderByDescending(o => o.Assigned).ToList();
-
-        ;
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.USP_OR_GetPRsAssigned(dateFrom, dateTo, leadSource, markets, guPRs, mbrPRs).OrderByDescending(o => o.Assigned).ToList();
+        }
+      });
+      return result;
     }
 
     #endregion
@@ -109,39 +153,72 @@ namespace IM.BusinessRules.BR
     /// <param name="leadSource">Clave del LeadSource</param>
     /// <param name="PRs">Claves de PRs</param>
     /// <param name="markets">Claves de Mercados</param>
-    public static List<GuestAssigned> GetGuestAssigned(DateTime dateFrom, DateTime dateTo, String leadSource, String PRs, String markets)
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 27/May/2016 Modified. Se agrego asincronía.
+    /// </history>
+    public async static Task<List<GuestAssigned>> GetGuestAssigned(DateTime dateFrom, DateTime dateTo, String leadSource, String PRs, String markets)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<GuestAssigned> result = null;
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetGuestsAssigned(dateFrom, dateTo, leadSource, PRs, markets).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.USP_OR_GetGuestsAssigned(dateFrom, dateTo, leadSource, PRs, markets).ToList();
+        }
+      });
+      return result;
     }
     #endregion
 
     #region SaveGuestsPRAssign
-    public static int SaveGuetsPRAssign(List<int> listguID, String idPR)
+    /// <summary>
+    ///   Asigna huespedes a PR
+    /// </summary>
+    /// <param name="listguID">Claves de huespedes</param>
+    /// <param name="idPR">Clave de PR</param>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 31/May/2016 Modified. Se agregó asincronía
+    /// </history>
+    public async static Task<int> SaveGuetsPRAssign(List<int> listguID, String idPR)
     {
       int res = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      res = await Task.Run(() =>
       {
-        var guests = dbContext.Guests.Where(Guest => listguID.Contains(Guest.guID)).ToList();
-        guests.ForEach(g => g.guPRAssign = idPR);
-        res = dbContext.SaveChanges();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var guests = dbContext.Guests.Where(Guest => listguID.Contains(Guest.guID)).ToList();
+          guests.ForEach(g => g.guPRAssign = idPR);
+          return dbContext.SaveChanges();
+        }
+      });
       return res;
     }
     #endregion
 
     #region SaveGuestsUnassign
-    public static int SaveGuestUnassign(List<int> listguID, String idPR)
+    /// <summary>
+    ///   Remueve asignaciones de huespedes
+    /// </summary>
+    /// <param name="listguID">Claves de huespedes</param>
+    /// <param name="idPR">Clave de PR</param>
+    /// <history>
+    ///   [vku] 08/Mar/2016 Created
+    ///   [vku] 31/May/2016 Modified. Se agregó asincronía
+    /// </history>
+    public async static Task<int> SaveGuestUnassign(List<int> listguID, String idPR)
     {
       int res = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      res = await Task.Run(() =>
       {
-        var guests = dbContext.Guests.Where(Guest => listguID.Contains(Guest.guID)).ToList();
-        guests.ForEach(g => g.guPRAssign = null);
-        res = dbContext.SaveChanges();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var guests = dbContext.Guests.Where(Guest => listguID.Contains(Guest.guID)).ToList();
+          guests.ForEach(g => g.guPRAssign = null);
+          return dbContext.SaveChanges();
+        }
+      });
       return res;
     }
     #endregion

@@ -745,89 +745,12 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     private void cboDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      EnumPredefinedDate selected = (EnumPredefinedDate)((ComboBox)e.OriginalSource).SelectedIndex;
-      DateTime today = BRHelpers.GetServerDate();
-      pnlDtmStart.IsEnabled = false;
-      pnlDtmEnd.IsEnabled = false;
-      switch (selected)
-      {
-        case EnumPredefinedDate.Today:
-          dtmStart.Value = dtmEnd.Value = today;
-          break;
-
-        case EnumPredefinedDate.Yesterday:
-          dtmStart.Value = dtmEnd.Value = today.Date.AddDays(-1);
-          break;
-
-        case EnumPredefinedDate.ThisWeek:
-          dtmStart.Value = today.AddDays((DayOfWeek.Monday - today.DayOfWeek));
-          dtmEnd.Value = today.AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
-          break;
-
-        case EnumPredefinedDate.PreviousWeek:
-          dtmStart.Value = today.AddDays(-7).AddDays(DayOfWeek.Monday - today.DayOfWeek);
-          dtmEnd.Value = today.AddDays(-7).AddDays((DayOfWeek.Sunday - today.DayOfWeek) + 7);
-          break;
-
-        case EnumPredefinedDate.ThisHalf:
-          if (today.Day <= 15)
-          {
-            dtmStart.Value = new DateTime(today.Year, today.Month, 1);
-            dtmEnd.Value = new DateTime(today.Year, today.Month, 15);
-          }
-          else
-          {
-            dtmStart.Value = new DateTime(today.Year, today.Month, 16);
-            dtmEnd.Value = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
-          }
-          break;
-
-        case EnumPredefinedDate.PreviousHalf:
-
-          if (today.Day <= 15)
-          {
-            if (today.Month > 1)
-            {
-              dtmStart.Value = new DateTime(today.Year, today.Month - 1, 16);
-              dtmEnd.Value = new DateTime(today.Year, today.Month - 1, DateTime.DaysInMonth(today.Year, today.Month - 1));
-            }
-            else
-            {
-              dtmStart.Value = new DateTime(today.Year - 1, 12, 16);
-              dtmEnd.Value = new DateTime(today.Year - 1, 12, 31);
-            }
-          }
-          else
-          {
-            dtmStart.Value = new DateTime(today.Year, today.Month, 1);
-            dtmEnd.Value = new DateTime(today.Year, today.Month, 15);
-          }
-          break;
-
-        case EnumPredefinedDate.ThisMonth:
-          dtmStart.Value = new DateTime(today.Year, today.Month, 1);
-          dtmEnd.Value = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
-          break;
-
-        case EnumPredefinedDate.PreviousMonth:
-          dtmStart.Value = new DateTime(today.Year, today.Month - 1, 1);
-          dtmEnd.Value = new DateTime(today.Year, today.Month - 1, DateTime.DaysInMonth(today.Year, today.Month - 1));
-          break;
-
-        case EnumPredefinedDate.ThisYear:
-          dtmStart.Value = new DateTime(today.Year, 1, 1);
-          dtmEnd.Value = new DateTime(today.Year, 12, 31);
-          break;
-
-        case EnumPredefinedDate.PreviousYear:
-          dtmStart.Value = new DateTime(today.Year - 1, 1, 1);
-          dtmEnd.Value = new DateTime(today.Year - 1, 12, 31);
-          break;
-
-        default:
-          pnlDtmStart.IsEnabled = pnlDtmEnd.IsEnabled = true;
-          break;
-      }
+      if (e.AddedItems.Count <= 0) return;
+      EnumPredefinedDate selected = (EnumPredefinedDate)((ComboBox)e.OriginalSource).SelectedValue;
+      var dateRange = DateHelper.GetDateRange(selected);
+      pnlDtmStart.IsEnabled = pnlDtmEnd.IsEnabled = (selected == EnumPredefinedDate.DatesSpecified);
+      dtmStart.Value = dateRange.Item1;
+      dtmEnd.Value = dateRange.Item2;
     }
 
     #endregion cboDate_SelectionChanged
