@@ -17,6 +17,7 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SegmentByAgency()
         {
+            this.seO = 9999;
             this.Agencies = new HashSet<Agency>();
         }
     

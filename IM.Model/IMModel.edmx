@@ -11171,7 +11171,7 @@
           <Property Name="seID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="seN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="seA" Type="Boolean" Nullable="false" />
-          <Property Name="seO" Type="Int32" Nullable="false" />
+          <Property Name="seO" Type="Int32" Nullable="false" DefaultValue="9999" />
           <Property Name="sesc" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Agencies" Relationship="Self.FK_Agencies_SegmentsByAgency" FromRole="SegmentsByAgency" ToRole="Agencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
