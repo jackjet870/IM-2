@@ -31,7 +31,7 @@ namespace IM.Model
       : base(connectionString)
         {
       Configuration.ProxyCreationEnabled = false;
-    }
+        }
     
     #endregion
 
@@ -1557,7 +1557,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptFollowUpByPR>("USP_OR_RptFollowUpByPR", dateFromParameter, dateToParameter, leadSourcesParameter, considerQuinellasParameter, basedOnArrivalParameter);
         }
     
-        public virtual ObjectResult<CurrencyShort> USP_OR_RptDepositsPaymentByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string pRs, string program, string paymentTypes, Nullable<byte> filterDeposit)
+        public virtual ObjectResult<RptDepositsPaymentByPR> USP_OR_RptDepositsPaymentByPR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string pRs, string program, string paymentTypes, Nullable<byte> filterDeposit)
         {
             var dateFromParameter = dateFrom.HasValue ?
                 new ObjectParameter("DateFrom", dateFrom) :
@@ -1587,7 +1587,7 @@ namespace IM.Model
                 new ObjectParameter("FilterDeposit", filterDeposit) :
                 new ObjectParameter("FilterDeposit", typeof(byte));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CurrencyShort>("USP_OR_RptDepositsPaymentByPR", dateFromParameter, dateToParameter, leadSourcesParameter, pRsParameter, programParameter, paymentTypesParameter, filterDepositParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptDepositsPaymentByPR>("USP_OR_RptDepositsPaymentByPR", dateFromParameter, dateToParameter, leadSourcesParameter, pRsParameter, programParameter, paymentTypesParameter, filterDepositParameter);
         }
     
         public virtual ObjectResult<RptGiftsReceivedBySR> USP_OR_RptGiftsReceivedBySR(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSources, string chargeTo, string gifts)
@@ -5497,6 +5497,39 @@ namespace IM.Model
                 new ObjectParameter("SalesRooms", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGiftsManifestCancel>("USP_OR_RptGiftsManifestCancel", dateFromParameter, dateToParameter, salesRoomsParameter);
+        }
+    
+        public virtual ObjectResult<CxCData> USP_OR_GetCxC(Nullable<bool> authorized, string salesRoom, string user, Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string leadSource, string pR)
+        {
+            var authorizedParameter = authorized.HasValue ?
+                new ObjectParameter("Authorized", authorized) :
+                new ObjectParameter("Authorized", typeof(bool));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var userParameter = user != null ?
+                new ObjectParameter("User", user) :
+                new ObjectParameter("User", typeof(string));
+    
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var pRParameter = pR != null ?
+                new ObjectParameter("PR", pR) :
+                new ObjectParameter("PR", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CxCData>("USP_OR_GetCxC", authorizedParameter, salesRoomParameter, userParameter, dateFromParameter, dateToParameter, leadSourceParameter, pRParameter);
         }
     }
 }

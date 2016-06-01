@@ -147,6 +147,9 @@
     <Compile Include="CurrencyShort.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="CxCData.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="CxCPayment.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
