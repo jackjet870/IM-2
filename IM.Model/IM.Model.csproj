@@ -96,9 +96,6 @@
     <Compile Include="BookingDeposit.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="BookingDepositsByGuest.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="CECOCEBEType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -167,6 +164,12 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DepositsRefund.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DepositsRefundShort.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DepositToRefund.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Dept.cs">
@@ -259,9 +262,6 @@
     <Compile Include="FolioInvitationOuthousePRCancellation.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="GetGiftsReceiptLog.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="GetGiftsReceiptsAdditional.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -311,6 +311,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="GiftsReceiptLog.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GiftsReceiptLogData.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="GiftsReceiptPackage.cs">
@@ -850,7 +853,7 @@
     <Compile Include="RptManifestByLSRange.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="RptManifestByLSRange_Bokings.cs">
+    <Compile Include="RptManifestByLSRange_Bookings.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptManifestRange.cs">
@@ -1148,9 +1151,6 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="SaleTypeCategory.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SaveDepositsRefund.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ScoreRule.cs">

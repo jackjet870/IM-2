@@ -11,7 +11,7 @@ namespace IM.Model
 {
     using System;
     
-    public partial class SaveDepositsRefund
+    public partial class DepositsRefundShort
     {
         public Nullable<int> RefunID { get; set; }
         public Nullable<int> Folio { get; set; }

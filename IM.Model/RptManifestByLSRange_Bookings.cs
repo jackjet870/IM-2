@@ -11,7 +11,7 @@ namespace IM.Model
 {
     using System;
     
-    public partial class RptManifestByLSRange_Bokings
+    public partial class RptManifestByLSRange_Bookings
     {
         public string guloInvit { get; set; }
         public string LocationN { get; set; }

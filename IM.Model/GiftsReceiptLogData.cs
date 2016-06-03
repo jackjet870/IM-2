@@ -11,7 +11,7 @@ namespace IM.Model
 {
     using System;
     
-    public partial class GetGiftsReceiptLog
+    public partial class GiftsReceiptLogData
     {
         public string goChangedBy { get; set; }
         public string ChangedByN { get; set; }

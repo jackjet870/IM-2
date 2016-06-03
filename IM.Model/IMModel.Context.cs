@@ -5650,7 +5650,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptManifestRange>("USP_IM_RptManifestRange", dateFromParameter, dateToParameter, salesRoomParameter, programParameter);
         }
     
-        public virtual ObjectResult<BookingDepositsByGuest> USP_OR_GetBookingDepositsByGuest(Nullable<int> guestID, Nullable<int> refundID)
+        public virtual ObjectResult<DepositToRefund> USP_OR_GetBookingDepositsByGuest(Nullable<int> guestID, Nullable<int> refundID)
         {
             var guestIDParameter = guestID.HasValue ?
                 new ObjectParameter("GuestID", guestID) :
@@ -5660,7 +5660,7 @@ namespace IM.Model
                 new ObjectParameter("RefundID", refundID) :
                 new ObjectParameter("RefundID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BookingDepositsByGuest>("USP_OR_GetBookingDepositsByGuest", guestIDParameter, refundIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DepositToRefund>("USP_OR_GetBookingDepositsByGuest", guestIDParameter, refundIDParameter);
         }
     
         public virtual ObjectResult<DepositsRefund> USP_OR_GetDepositsRefund(Nullable<int> guest, Nullable<int> refundID, string folio, string name, string reservation, string outInv, string pR, Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo)
@@ -5704,16 +5704,16 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DepositsRefund>("USP_OR_GetDepositsRefund", guestParameter, refundIDParameter, folioParameter, nameParameter, reservationParameter, outInvParameter, pRParameter, dateFromParameter, dateToParameter);
         }
     
-        public virtual ObjectResult<GetGiftsReceiptLog> USP_OR_GetGiftsReceiptLog(Nullable<int> receipt)
+        public virtual ObjectResult<GiftsReceiptLogData> USP_OR_GetGiftsReceiptLog(Nullable<int> receipt)
         {
             var receiptParameter = receipt.HasValue ?
                 new ObjectParameter("Receipt", receipt) :
                 new ObjectParameter("Receipt", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetGiftsReceiptLog>("USP_OR_GetGiftsReceiptLog", receiptParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftsReceiptLogData>("USP_OR_GetGiftsReceiptLog", receiptParameter);
         }
     
-        public virtual ObjectResult<SaveDepositsRefund> USP_OR_SaveDepositsRefund(Nullable<int> guestID, Nullable<int> folio, string refundType, string deposits)
+        public virtual ObjectResult<DepositsRefundShort> USP_OR_SaveDepositsRefund(Nullable<int> guestID, Nullable<int> folio, string refundType, string deposits)
         {
             var guestIDParameter = guestID.HasValue ?
                 new ObjectParameter("GuestID", guestID) :
@@ -5731,7 +5731,7 @@ namespace IM.Model
                 new ObjectParameter("Deposits", deposits) :
                 new ObjectParameter("Deposits", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaveDepositsRefund>("USP_OR_SaveDepositsRefund", guestIDParameter, folioParameter, refundTypeParameter, depositsParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DepositsRefundShort>("USP_OR_SaveDepositsRefund", guestIDParameter, folioParameter, refundTypeParameter, depositsParameter);
         }
     
         public virtual int USP_OR_UpdateRefundFolio(string refundTypeID, Nullable<int> folio)

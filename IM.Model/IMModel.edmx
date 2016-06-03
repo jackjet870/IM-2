@@ -17796,7 +17796,7 @@
           </FunctionImport>
           <FunctionImport Name="USP_IM_RptManifestByLSRange" >
             <ReturnType Type="Collection(IMModel.RptManifestByLSRange)"/>
-            <ReturnType Type="Collection(IMModel.RptManifestByLSRange_Bokings)"/>
+            <ReturnType Type="Collection(IMModel.RptManifestByLSRange_Bookings)"/>
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
@@ -17807,7 +17807,7 @@
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
             <Parameter Name="Program" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="USP_OR_GetBookingDepositsByGuest" ReturnType="Collection(IMModel.BookingDepositsByGuest)">
+          <FunctionImport Name="USP_OR_GetBookingDepositsByGuest" ReturnType="Collection(IMModel.DepositToRefund)">
             <Parameter Name="GuestID" Mode="In" Type="Int32" />
             <Parameter Name="RefundID" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -17822,10 +17822,10 @@
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
           </FunctionImport>
-          <FunctionImport Name="USP_OR_GetGiftsReceiptLog" ReturnType="Collection(IMModel.GetGiftsReceiptLog)">
+          <FunctionImport Name="USP_OR_GetGiftsReceiptLog" ReturnType="Collection(IMModel.GiftsReceiptLogData)">
             <Parameter Name="Receipt" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="USP_OR_SaveDepositsRefund" ReturnType="Collection(IMModel.SaveDepositsRefund)">
+          <FunctionImport Name="USP_OR_SaveDepositsRefund" ReturnType="Collection(IMModel.DepositsRefundShort)">
             <Parameter Name="GuestID" Mode="In" Type="Int32" />
             <Parameter Name="Folio" Mode="In" Type="Int32" />
             <Parameter Name="RefundType" Mode="In" Type="String" />
@@ -21885,7 +21885,7 @@
           <Property Type="String" Name="CC" Nullable="true" />
           <Property Type="String" Name="Comments" Nullable="true" MaxLength="100" />
         </ComplexType>
-        <ComplexType Name="RptManifestByLSRange_Bokings">
+        <ComplexType Name="RptManifestByLSRange_Bookings">
           <Property Type="String" Name="guloInvit" Nullable="true" MaxLength="11" />
           <Property Type="String" Name="LocationN" Nullable="false" MaxLength="37" />
           <Property Type="String" Name="guBookT" Nullable="true" MaxLength="5" />
@@ -21959,7 +21959,7 @@
           <Property Type="Int32" Name="OutQty" Nullable="true" />
           <Property Type="Int32" Name="InvQty" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="BookingDepositsByGuest">
+        <ComplexType Name="DepositToRefund">
           <Property Type="Int32" Name="drID" Nullable="true" />
           <Property Type="Int32" Name="drFolio" Nullable="true" />
           <Property Type="Boolean" Name="bdRefund" Nullable="true" />
@@ -21980,7 +21980,7 @@
           <Property Type="Int32" Name="drFolio" Nullable="false" />
           <Property Type="Int32" Name="guID" Nullable="false" />
         </ComplexType>
-        <ComplexType Name="GetGiftsReceiptLog">
+        <ComplexType Name="GiftsReceiptLogData">
           <Property Type="String" Name="goChangedBy" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="ChangedByN" Nullable="true" MaxLength="40" />
           <Property Type="DateTime" Name="goID" Nullable="false" Precision="23" />
@@ -22007,7 +22007,7 @@
           <Property Type="String" Name="upN" Nullable="true" MaxLength="50" />
           <Property Type="DateTime" Name="goCancelD" Nullable="true" Precision="23" />
         </ComplexType>
-        <ComplexType Name="SaveDepositsRefund">
+        <ComplexType Name="DepositsRefundShort">
           <Property Type="Int32" Name="RefunID" Nullable="true" />
           <Property Type="Int32" Name="Folio" Nullable="true" />
         </ComplexType>
@@ -29333,7 +29333,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.RptManifestByLSRange_Bokings">
+              <ComplexTypeMapping TypeName="IMModel.RptManifestByLSRange_Bookings">
                 <ScalarProperty Name="guloInvit" ColumnName="guloInvit" />
                 <ScalarProperty Name="LocationN" ColumnName="LocationN" />
                 <ScalarProperty Name="guBookT" ColumnName="guBookT" />
@@ -29407,7 +29407,7 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_GetBookingDepositsByGuest" FunctionName="IMModel.Store.USP_OR_GetBookingDepositsByGuest">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.BookingDepositsByGuest">
+              <ComplexTypeMapping TypeName="IMModel.DepositToRefund">
                 <ScalarProperty Name="drID" ColumnName="drID" />
                 <ScalarProperty Name="drFolio" ColumnName="drFolio" />
                 <ScalarProperty Name="bdRefund" ColumnName="bdRefund" />
@@ -29436,7 +29436,7 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_GetGiftsReceiptLog" FunctionName="IMModel.Store.USP_OR_GetGiftsReceiptLog">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.GetGiftsReceiptLog">
+              <ComplexTypeMapping TypeName="IMModel.GiftsReceiptLogData">
                 <ScalarProperty Name="goChangedBy" ColumnName="goChangedBy" />
                 <ScalarProperty Name="ChangedByN" ColumnName="ChangedByN" />
                 <ScalarProperty Name="goID" ColumnName="goID" />
@@ -29467,7 +29467,7 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_SaveDepositsRefund" FunctionName="IMModel.Store.USP_OR_SaveDepositsRefund">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.SaveDepositsRefund">
+              <ComplexTypeMapping TypeName="IMModel.DepositsRefundShort">
                 <ScalarProperty Name="RefunID" ColumnName="RefunID" />
                 <ScalarProperty Name="Folio" ColumnName="Folio" />
               </ComplexTypeMapping>

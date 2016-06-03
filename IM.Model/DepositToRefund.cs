@@ -11,7 +11,7 @@ namespace IM.Model
 {
     using System;
     
-    public partial class BookingDepositsByGuest
+    public partial class DepositToRefund
     {
         public Nullable<int> drID { get; set; }
         public Nullable<int> drFolio { get; set; }
