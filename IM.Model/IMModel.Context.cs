@@ -5531,5 +5531,305 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CxCData>("USP_OR_GetCxC", authorizedParameter, salesRoomParameter, userParameter, dateFromParameter, dateToParameter, leadSourceParameter, pRParameter);
         }
+    
+        public virtual int USP_OR_RptGiftsKardex(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string warehouse, string gifts)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var warehouseParameter = warehouse != null ?
+                new ObjectParameter("Warehouse", warehouse) :
+                new ObjectParameter("Warehouse", typeof(string));
+    
+            var giftsParameter = gifts != null ?
+                new ObjectParameter("Gifts", gifts) :
+                new ObjectParameter("Gifts", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_RptGiftsKardex", dateFromParameter, dateToParameter, warehouseParameter, giftsParameter);
+        }
+    
+        public virtual int USP_OR_RptManifestByLSRange(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_RptManifestByLSRange", dateFromParameter, dateToParameter, salesRoomParameter);
+        }
+    
+        public virtual int USP_OR_RptManifestRange(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string program)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var programParameter = program != null ?
+                new ObjectParameter("Program", program) :
+                new ObjectParameter("Program", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_RptManifestRange", dateFromParameter, dateToParameter, salesRoomParameter, programParameter);
+        }
+    
+        public virtual ObjectResult<RptGiftsKardex> USP_IM_RptGiftsKardex(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string warehouse, string gifts)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var warehouseParameter = warehouse != null ?
+                new ObjectParameter("Warehouse", warehouse) :
+                new ObjectParameter("Warehouse", typeof(string));
+    
+            var giftsParameter = gifts != null ?
+                new ObjectParameter("Gifts", gifts) :
+                new ObjectParameter("Gifts", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGiftsKardex>("USP_IM_RptGiftsKardex", dateFromParameter, dateToParameter, warehouseParameter, giftsParameter);
+        }
+    
+        public virtual ObjectResult<RptManifestByLSRange> USP_IM_RptManifestByLSRange(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptManifestByLSRange>("USP_IM_RptManifestByLSRange", dateFromParameter, dateToParameter, salesRoomParameter);
+        }
+    
+        public virtual ObjectResult<RptManifestRange> USP_IM_RptManifestRange(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string program)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var programParameter = program != null ?
+                new ObjectParameter("Program", program) :
+                new ObjectParameter("Program", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptManifestRange>("USP_IM_RptManifestRange", dateFromParameter, dateToParameter, salesRoomParameter, programParameter);
+        }
+    
+        public virtual ObjectResult<BookingDepositsByGuest> USP_OR_GetBookingDepositsByGuest(Nullable<int> guestID, Nullable<int> refundID)
+        {
+            var guestIDParameter = guestID.HasValue ?
+                new ObjectParameter("GuestID", guestID) :
+                new ObjectParameter("GuestID", typeof(int));
+    
+            var refundIDParameter = refundID.HasValue ?
+                new ObjectParameter("RefundID", refundID) :
+                new ObjectParameter("RefundID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BookingDepositsByGuest>("USP_OR_GetBookingDepositsByGuest", guestIDParameter, refundIDParameter);
+        }
+    
+        public virtual ObjectResult<DepositsRefund> USP_OR_GetDepositsRefund(Nullable<int> guest, Nullable<int> refundID, string folio, string name, string reservation, string outInv, string pR, Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo)
+        {
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            var refundIDParameter = refundID.HasValue ?
+                new ObjectParameter("RefundID", refundID) :
+                new ObjectParameter("RefundID", typeof(int));
+    
+            var folioParameter = folio != null ?
+                new ObjectParameter("Folio", folio) :
+                new ObjectParameter("Folio", typeof(string));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var reservationParameter = reservation != null ?
+                new ObjectParameter("Reservation", reservation) :
+                new ObjectParameter("Reservation", typeof(string));
+    
+            var outInvParameter = outInv != null ?
+                new ObjectParameter("OutInv", outInv) :
+                new ObjectParameter("OutInv", typeof(string));
+    
+            var pRParameter = pR != null ?
+                new ObjectParameter("PR", pR) :
+                new ObjectParameter("PR", typeof(string));
+    
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DepositsRefund>("USP_OR_GetDepositsRefund", guestParameter, refundIDParameter, folioParameter, nameParameter, reservationParameter, outInvParameter, pRParameter, dateFromParameter, dateToParameter);
+        }
+    
+        public virtual ObjectResult<GetGiftsReceiptLog> USP_OR_GetGiftsReceiptLog(Nullable<int> receipt)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetGiftsReceiptLog>("USP_OR_GetGiftsReceiptLog", receiptParameter);
+        }
+    
+        public virtual ObjectResult<SaveDepositsRefund> USP_OR_SaveDepositsRefund(Nullable<int> guestID, Nullable<int> folio, string refundType, string deposits)
+        {
+            var guestIDParameter = guestID.HasValue ?
+                new ObjectParameter("GuestID", guestID) :
+                new ObjectParameter("GuestID", typeof(int));
+    
+            var folioParameter = folio.HasValue ?
+                new ObjectParameter("Folio", folio) :
+                new ObjectParameter("Folio", typeof(int));
+    
+            var refundTypeParameter = refundType != null ?
+                new ObjectParameter("RefundType", refundType) :
+                new ObjectParameter("RefundType", typeof(string));
+    
+            var depositsParameter = deposits != null ?
+                new ObjectParameter("Deposits", deposits) :
+                new ObjectParameter("Deposits", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaveDepositsRefund>("USP_OR_SaveDepositsRefund", guestIDParameter, folioParameter, refundTypeParameter, depositsParameter);
+        }
+    
+        public virtual int USP_OR_UpdateRefundFolio(string refundTypeID, Nullable<int> folio)
+        {
+            var refundTypeIDParameter = refundTypeID != null ?
+                new ObjectParameter("RefundTypeID", refundTypeID) :
+                new ObjectParameter("RefundTypeID", typeof(string));
+    
+            var folioParameter = folio.HasValue ?
+                new ObjectParameter("Folio", folio) :
+                new ObjectParameter("Folio", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdateRefundFolio", refundTypeIDParameter, folioParameter);
+        }
+    
+        public virtual ObjectResult<ValidationData> USP_OR_ValidateShow(string changedBy, string password, string salesRoom, string agency, string country, string pR1, string pR2, string pR3, string liner1, string liner2, string closer1, string closer2, string closer3, string exit1, string exit2, string podium, string vLO, string entryHost, string giftsHost, string exitHost)
+        {
+            var changedByParameter = changedBy != null ?
+                new ObjectParameter("ChangedBy", changedBy) :
+                new ObjectParameter("ChangedBy", typeof(string));
+    
+            var passwordParameter = password != null ?
+                new ObjectParameter("Password", password) :
+                new ObjectParameter("Password", typeof(string));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var agencyParameter = agency != null ?
+                new ObjectParameter("Agency", agency) :
+                new ObjectParameter("Agency", typeof(string));
+    
+            var countryParameter = country != null ?
+                new ObjectParameter("Country", country) :
+                new ObjectParameter("Country", typeof(string));
+    
+            var pR1Parameter = pR1 != null ?
+                new ObjectParameter("PR1", pR1) :
+                new ObjectParameter("PR1", typeof(string));
+    
+            var pR2Parameter = pR2 != null ?
+                new ObjectParameter("PR2", pR2) :
+                new ObjectParameter("PR2", typeof(string));
+    
+            var pR3Parameter = pR3 != null ?
+                new ObjectParameter("PR3", pR3) :
+                new ObjectParameter("PR3", typeof(string));
+    
+            var liner1Parameter = liner1 != null ?
+                new ObjectParameter("Liner1", liner1) :
+                new ObjectParameter("Liner1", typeof(string));
+    
+            var liner2Parameter = liner2 != null ?
+                new ObjectParameter("Liner2", liner2) :
+                new ObjectParameter("Liner2", typeof(string));
+    
+            var closer1Parameter = closer1 != null ?
+                new ObjectParameter("Closer1", closer1) :
+                new ObjectParameter("Closer1", typeof(string));
+    
+            var closer2Parameter = closer2 != null ?
+                new ObjectParameter("Closer2", closer2) :
+                new ObjectParameter("Closer2", typeof(string));
+    
+            var closer3Parameter = closer3 != null ?
+                new ObjectParameter("Closer3", closer3) :
+                new ObjectParameter("Closer3", typeof(string));
+    
+            var exit1Parameter = exit1 != null ?
+                new ObjectParameter("Exit1", exit1) :
+                new ObjectParameter("Exit1", typeof(string));
+    
+            var exit2Parameter = exit2 != null ?
+                new ObjectParameter("Exit2", exit2) :
+                new ObjectParameter("Exit2", typeof(string));
+    
+            var podiumParameter = podium != null ?
+                new ObjectParameter("Podium", podium) :
+                new ObjectParameter("Podium", typeof(string));
+    
+            var vLOParameter = vLO != null ?
+                new ObjectParameter("VLO", vLO) :
+                new ObjectParameter("VLO", typeof(string));
+    
+            var entryHostParameter = entryHost != null ?
+                new ObjectParameter("EntryHost", entryHost) :
+                new ObjectParameter("EntryHost", typeof(string));
+    
+            var giftsHostParameter = giftsHost != null ?
+                new ObjectParameter("GiftsHost", giftsHost) :
+                new ObjectParameter("GiftsHost", typeof(string));
+    
+            var exitHostParameter = exitHost != null ?
+                new ObjectParameter("ExitHost", exitHost) :
+                new ObjectParameter("ExitHost", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ValidationData>("USP_OR_ValidateShow", changedByParameter, passwordParameter, salesRoomParameter, agencyParameter, countryParameter, pR1Parameter, pR2Parameter, pR3Parameter, liner1Parameter, liner2Parameter, closer1Parameter, closer2Parameter, closer3Parameter, exit1Parameter, exit2Parameter, podiumParameter, vLOParameter, entryHostParameter, giftsHostParameter, exitHostParameter);
+        }
     }
 }

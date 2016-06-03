@@ -5931,6 +5931,12 @@
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_IM_RptGiftsKardex" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="Warehouse" Type="varchar" Mode="In" />
+          <Parameter Name="Gifts" Type="varchar(max)" Mode="In" />
+        </Function>
         <Function Name="USP_IM_RptLinerStatistics" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -5942,6 +5948,17 @@
           <Parameter Name="Location" Type="varchar" Mode="In" />
           <Parameter Name="PCName" Type="varchar" Mode="In" />
           <Parameter Name="Personnel" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_IM_RptManifestByLSRange" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_IM_RptManifestRange" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="Program" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_IM_RptProductionByFlightSalesRoom" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -6070,6 +6087,10 @@
           <Parameter Name="Invited" Type="int" Mode="In" />
           <Parameter Name="OnGroup" Type="int" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetBookingDepositsByGuest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GuestID" Type="int" Mode="In" />
+          <Parameter Name="RefundID" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetCountries" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Status" Type="tinyint" Mode="In" />
         </Function>
@@ -6084,6 +6105,17 @@
         </Function>
         <Function Name="USP_OR_GetCxCPayments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="GiftReceiptID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetDepositsRefund" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Guest" Type="int" Mode="In" />
+          <Parameter Name="RefundID" Type="int" Mode="In" />
+          <Parameter Name="Folio" Type="varchar" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="Reservation" Type="varchar" Mode="In" />
+          <Parameter Name="OutInv" Type="varchar" Mode="In" />
+          <Parameter Name="PR" Type="varchar" Mode="In" />
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetExchangeRateLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Currency" Type="varchar" Mode="In" />
@@ -6119,6 +6151,9 @@
           <Parameter Name="Receipt" Type="int" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetGiftsReceiptDetailRoomChargesOpera" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_GetGiftsReceiptLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Receipt" Type="int" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetGiftsReceiptPackage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -6565,6 +6600,12 @@
           <Parameter Name="Categories" Type="varchar" Mode="In" />
           <Parameter Name="Gifts" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_RptGiftsKardex" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="Warehouse" Type="varchar" Mode="In" />
+          <Parameter Name="Gifts" Type="varchar(max)" Mode="In" />
+        </Function>
         <Function Name="USP_OR_RptGiftsManifest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -6653,6 +6694,17 @@
           <Parameter Name="Programs" Type="varchar" Mode="In" />
           <Parameter Name="BySegmentsCategories" Type="bit" Mode="In" />
           <Parameter Name="ByLocationsCategories" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptManifestByLSRange" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptManifestRange" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="Program" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_RptMealTickets" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -7135,6 +7187,12 @@
           <Parameter Name="Markets" Type="varchar" Mode="In" />
           <Parameter Name="Agencies" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_SaveDepositsRefund" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GuestID" Type="int" Mode="In" />
+          <Parameter Name="Folio" Type="int" Mode="In" />
+          <Parameter Name="RefundType" Type="varchar" Mode="In" />
+          <Parameter Name="Deposits" Type="varchar(max)" Mode="In" />
+        </Function>
         <Function Name="USP_OR_SaveExchangeRateLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Currency" Type="varchar" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
@@ -7305,6 +7363,10 @@
           <Parameter Name="Folio" Type="varchar" Mode="In" />
           <Parameter Name="RateType" Type="int" Mode="In" />
         </Function>
+        <Function Name="USP_OR_UpdateRefundFolio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RefundTypeID" Type="varchar" Mode="In" />
+          <Parameter Name="Folio" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_UpdateRoomChargesConsecutive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Hotel" Type="varchar" Mode="In" />
           <Parameter Name="Folio" Type="varchar" Mode="In" />
@@ -7392,6 +7454,28 @@
           <Parameter Name="Exit2" Type="varchar" Mode="In" />
           <Parameter Name="Podium" Type="varchar" Mode="In" />
           <Parameter Name="VLO" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_ValidateShow" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ChangedBy" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="varchar" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="Agency" Type="varchar" Mode="In" />
+          <Parameter Name="Country" Type="varchar" Mode="In" />
+          <Parameter Name="PR1" Type="varchar" Mode="In" />
+          <Parameter Name="PR2" Type="varchar" Mode="In" />
+          <Parameter Name="PR3" Type="varchar" Mode="In" />
+          <Parameter Name="Liner1" Type="varchar" Mode="In" />
+          <Parameter Name="Liner2" Type="varchar" Mode="In" />
+          <Parameter Name="Closer1" Type="varchar" Mode="In" />
+          <Parameter Name="Closer2" Type="varchar" Mode="In" />
+          <Parameter Name="Closer3" Type="varchar" Mode="In" />
+          <Parameter Name="Exit1" Type="varchar" Mode="In" />
+          <Parameter Name="Exit2" Type="varchar" Mode="In" />
+          <Parameter Name="Podium" Type="varchar" Mode="In" />
+          <Parameter Name="VLO" Type="varchar" Mode="In" />
+          <Parameter Name="EntryHost" Type="varchar" Mode="In" />
+          <Parameter Name="GiftsHost" Type="varchar" Mode="In" />
+          <Parameter Name="ExitHost" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="IMModelStoreContainer">
           <EntitySet Name="Activities" EntityType="Self.Activities" Schema="dbo" store:Type="Tables" />
@@ -17687,6 +17771,92 @@
             <Parameter Name="LeadSource" Mode="In" Type="String" />
             <Parameter Name="PR" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_RptGiftsKardex">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="Warehouse" Mode="In" Type="String" />
+            <Parameter Name="Gifts" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptManifestByLSRange">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_RptManifestRange">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="Program" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_IM_RptGiftsKardex" ReturnType="Collection(IMModel.RptGiftsKardex)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="Warehouse" Mode="In" Type="String" />
+            <Parameter Name="Gifts" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_IM_RptManifestByLSRange" >
+            <ReturnType Type="Collection(IMModel.RptManifestByLSRange)"/>
+            <ReturnType Type="Collection(IMModel.RptManifestByLSRange_Bokings)"/>
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            </FunctionImport>
+          <FunctionImport Name="USP_IM_RptManifestRange" ReturnType="Collection(IMModel.RptManifestRange)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="Program" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetBookingDepositsByGuest" ReturnType="Collection(IMModel.BookingDepositsByGuest)">
+            <Parameter Name="GuestID" Mode="In" Type="Int32" />
+            <Parameter Name="RefundID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetDepositsRefund" ReturnType="Collection(IMModel.DepositsRefund)">
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
+            <Parameter Name="RefundID" Mode="In" Type="Int32" />
+            <Parameter Name="Folio" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Reservation" Mode="In" Type="String" />
+            <Parameter Name="OutInv" Mode="In" Type="String" />
+            <Parameter Name="PR" Mode="In" Type="String" />
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGiftsReceiptLog" ReturnType="Collection(IMModel.GetGiftsReceiptLog)">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_SaveDepositsRefund" ReturnType="Collection(IMModel.SaveDepositsRefund)">
+            <Parameter Name="GuestID" Mode="In" Type="Int32" />
+            <Parameter Name="Folio" Mode="In" Type="Int32" />
+            <Parameter Name="RefundType" Mode="In" Type="String" />
+            <Parameter Name="Deposits" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdateRefundFolio">
+            <Parameter Name="RefundTypeID" Mode="In" Type="String" />
+            <Parameter Name="Folio" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_ValidateShow" ReturnType="Collection(IMModel.ValidationData)">
+            <Parameter Name="ChangedBy" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="Agency" Mode="In" Type="String" />
+            <Parameter Name="Country" Mode="In" Type="String" />
+            <Parameter Name="PR1" Mode="In" Type="String" />
+            <Parameter Name="PR2" Mode="In" Type="String" />
+            <Parameter Name="PR3" Mode="In" Type="String" />
+            <Parameter Name="Liner1" Mode="In" Type="String" />
+            <Parameter Name="Liner2" Mode="In" Type="String" />
+            <Parameter Name="Closer1" Mode="In" Type="String" />
+            <Parameter Name="Closer2" Mode="In" Type="String" />
+            <Parameter Name="Closer3" Mode="In" Type="String" />
+            <Parameter Name="Exit1" Mode="In" Type="String" />
+            <Parameter Name="Exit2" Mode="In" Type="String" />
+            <Parameter Name="Podium" Mode="In" Type="String" />
+            <Parameter Name="VLO" Mode="In" Type="String" />
+            <Parameter Name="EntryHost" Mode="In" Type="String" />
+            <Parameter Name="GiftsHost" Mode="In" Type="String" />
+            <Parameter Name="ExitHost" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -21650,6 +21820,196 @@
           <Property Type="String" Name="grcxcComments" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Log" Nullable="false" MaxLength="1" />
           <Property Type="Int64" Name="Page" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="RptManifestByLSRange">
+          <Property Type="Int32" Name="SaleType" Nullable="true" />
+          <Property Type="String" Name="SaleTypeN" Nullable="true" MaxLength="34" />
+          <Property Type="DateTime" Name="DateManifest" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="guID" Nullable="true" />
+          <Property Type="String" Name="Location" Nullable="true" MaxLength="11" />
+          <Property Type="String" Name="LocationN" Nullable="true" MaxLength="37" />
+          <Property Type="String" Name="ShowProgramN" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SalesRoom" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="LeadSource" Nullable="true" MaxLength="10" />
+          <Property Type="Byte" Name="Sequency" Nullable="true" />
+          <Property Type="String" Name="Hotel" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Room" Nullable="true" MaxLength="15" />
+          <Property Type="Decimal" Name="Pax" Nullable="true" Precision="4" Scale="1" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="8000" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="8000" />
+          <Property Type="String" Name="Agency" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="AgencyN" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="ShowD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="CountryD" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="TimeInT" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="TimeOutT" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Tour" Nullable="true" />
+          <Property Type="Int32" Name="IO" Nullable="true" />
+          <Property Type="Int32" Name="WO" Nullable="true" />
+          <Property Type="Int32" Name="CTour" Nullable="true" />
+          <Property Type="Int32" Name="STour" Nullable="true" />
+          <Property Type="Int32" Name="Direct" Nullable="true" />
+          <Property Type="Int32" Name="Resch" Nullable="false" />
+          <Property Type="String" Name="PR1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="PR2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="PR3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR3N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Liner1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Liner2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Closer1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Closer2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Closer3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer3N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Exit1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Exit2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Hostess" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="ProcSales" Nullable="true" />
+          <Property Type="Decimal" Name="ProcOriginal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ProcNew" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ProcGross" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="PendSales" Nullable="true" />
+          <Property Type="Decimal" Name="PendOriginal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="PendNew" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="PendGross" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="DepositSale" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="DepositSaleNum" Nullable="true" />
+          <Property Type="String" Name="CC" Nullable="true" />
+          <Property Type="String" Name="Comments" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="RptManifestByLSRange_Bokings">
+          <Property Type="String" Name="guloInvit" Nullable="true" MaxLength="11" />
+          <Property Type="String" Name="LocationN" Nullable="false" MaxLength="37" />
+          <Property Type="String" Name="guBookT" Nullable="true" MaxLength="5" />
+          <Property Type="Int32" Name="Bookings" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="RptManifestRange">
+          <Property Type="DateTime" Name="DateManifest" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="SaleType" Nullable="true" />
+          <Property Type="String" Name="SaleTypeN" Nullable="true" MaxLength="34" />
+          <Property Type="Int32" Name="guID" Nullable="true" />
+          <Property Type="String" Name="SalesRoom" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Location" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Hotel" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Room" Nullable="true" MaxLength="15" />
+          <Property Type="Decimal" Name="Pax" Nullable="true" Precision="4" Scale="1" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Agency" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="AgencyN" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="CountryN" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="showD" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="TimeInT" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="TimeOutT" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="CheckIn" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="CheckOut" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Direct" Nullable="true" />
+          <Property Type="Int32" Name="Tour" Nullable="true" />
+          <Property Type="Int32" Name="InOut" Nullable="true" />
+          <Property Type="Int32" Name="WalkOut" Nullable="true" />
+          <Property Type="Int32" Name="CTour" Nullable="true" />
+          <Property Type="Int32" Name="SaveTour" Nullable="true" />
+          <Property Type="String" Name="PR1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="PR2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="PR3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR3N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Liner1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Liner2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Closer1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Closer2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Closer3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer3N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Exit1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Exit2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Hostess" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="ProcSales" Nullable="true" />
+          <Property Type="Decimal" Name="ProcOriginal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ProcNew" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ProcGross" Nullable="true" Precision="19" />
+          <Property Type="Int32" Name="PendSales" Nullable="true" />
+          <Property Type="Decimal" Name="PendOriginal" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="PendNew" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="PendGross" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ClosingCost" Nullable="true" Precision="19" />
+          <Property Type="String" Name="MemberShip" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Comments" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="RptGiftsKardex">
+          <Property Type="DateTime" Name="MovD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="MovGi" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="MovGiN" Nullable="true" MaxLength="400" />
+          <Property Type="Int32" Name="InQty" Nullable="true" />
+          <Property Type="Int32" Name="OutQty" Nullable="true" />
+          <Property Type="Int32" Name="InvQty" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="BookingDepositsByGuest">
+          <Property Type="Int32" Name="drID" Nullable="true" />
+          <Property Type="Int32" Name="drFolio" Nullable="true" />
+          <Property Type="Boolean" Name="bdRefund" Nullable="true" />
+          <Property Type="String" Name="srN" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="drD" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="bdAmount" Nullable="false" Precision="19" />
+          <Property Type="String" Name="lsN" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="guID" Nullable="false" />
+          <Property Type="String" Name="GuestName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="guHReservID" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="peID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="bdID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="DepositsRefund">
+          <Property Type="Int32" Name="drID" Nullable="false" />
+          <Property Type="Int32" Name="drFolio" Nullable="false" />
+          <Property Type="Int32" Name="guID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetGiftsReceiptLog">
+          <Property Type="String" Name="goChangedBy" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="ChangedByN" Nullable="true" MaxLength="40" />
+          <Property Type="DateTime" Name="goID" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="goD" Nullable="false" Precision="23" />
+          <Property Type="String" Name="gope" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="OfferedByN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="goHost" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="HostN" Nullable="true" MaxLength="40" />
+          <Property Type="Decimal" Name="goDeposit" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="goBurned" Nullable="false" Precision="19" />
+          <Property Type="String" Name="gocu" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="ptN" Nullable="true" MaxLength="30" />
+          <Property Type="Decimal" Name="goCXCPRDeposit" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="goTaxiOut" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="goTotalGifts" Nullable="false" Precision="19" />
+          <Property Type="String" Name="goct" Nullable="false" MaxLength="10" />
+          <Property Type="Decimal" Name="goCXCGifts" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="goCXCAdj" Nullable="false" Precision="19" />
+          <Property Type="Byte" Name="goReimpresion" Nullable="false" />
+          <Property Type="String" Name="rmN" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="goAuthorizedBy" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="AuthorizedByN" Nullable="true" MaxLength="40" />
+          <Property Type="Decimal" Name="goAmountPaid" Nullable="true" Precision="19" />
+          <Property Type="String" Name="upN" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="goCancelD" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="SaveDepositsRefund">
+          <Property Type="Int32" Name="RefunID" Nullable="true" />
+          <Property Type="Int32" Name="Folio" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -28886,6 +29246,239 @@
                 <ScalarProperty Name="grcxcComments" ColumnName="grcxcComments" />
                 <ScalarProperty Name="Log" ColumnName="Log" />
                 <ScalarProperty Name="Page" ColumnName="Page" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptGiftsKardex" FunctionName="IMModel.Store.USP_OR_RptGiftsKardex" />
+          <FunctionImportMapping FunctionImportName="USP_OR_RptManifestByLSRange" FunctionName="IMModel.Store.USP_OR_RptManifestByLSRange">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptManifestRange" FunctionName="IMModel.Store.USP_OR_RptManifestRange" />
+          <FunctionImportMapping FunctionImportName="USP_IM_RptGiftsKardex" FunctionName="IMModel.Store.USP_IM_RptGiftsKardex" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptGiftsKardex">
+                <ScalarProperty Name="MovD" ColumnName="MovD" />
+                <ScalarProperty Name="MovGi" ColumnName="MovGi" />
+                <ScalarProperty Name="MovGiN" ColumnName="MovGiN" />
+                <ScalarProperty Name="InQty" ColumnName="InQty" />
+                <ScalarProperty Name="OutQty" ColumnName="OutQty" />
+                <ScalarProperty Name="InvQty" ColumnName="InvQty" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_IM_RptManifestByLSRange" FunctionName="IMModel.Store.USP_IM_RptManifestByLSRange" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptManifestByLSRange">
+                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
+                <ScalarProperty Name="SaleTypeN" ColumnName="SaleTypeN" />
+                <ScalarProperty Name="DateManifest" ColumnName="DateManifest" />
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="LocationN" ColumnName="LocationN" />
+                <ScalarProperty Name="ShowProgramN" ColumnName="ShowProgramN" />
+                <ScalarProperty Name="SalesRoom" ColumnName="SalesRoom" />
+                <ScalarProperty Name="LeadSource" ColumnName="LeadSource" />
+                <ScalarProperty Name="Sequency" ColumnName="Sequency" />
+                <ScalarProperty Name="Hotel" ColumnName="Hotel" />
+                <ScalarProperty Name="Room" ColumnName="Room" />
+                <ScalarProperty Name="Pax" ColumnName="Pax" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Agency" ColumnName="Agency" />
+                <ScalarProperty Name="AgencyN" ColumnName="AgencyN" />
+                <ScalarProperty Name="ShowD" ColumnName="ShowD" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="CountryD" ColumnName="CountryD" />
+                <ScalarProperty Name="TimeInT" ColumnName="TimeInT" />
+                <ScalarProperty Name="TimeOutT" ColumnName="TimeOutT" />
+                <ScalarProperty Name="Tour" ColumnName="Tour" />
+                <ScalarProperty Name="IO" ColumnName="IO" />
+                <ScalarProperty Name="WO" ColumnName="WO" />
+                <ScalarProperty Name="CTour" ColumnName="CTour" />
+                <ScalarProperty Name="STour" ColumnName="STour" />
+                <ScalarProperty Name="Direct" ColumnName="Direct" />
+                <ScalarProperty Name="Resch" ColumnName="Resch" />
+                <ScalarProperty Name="PR1" ColumnName="PR1" />
+                <ScalarProperty Name="PR1N" ColumnName="PR1N" />
+                <ScalarProperty Name="PR2" ColumnName="PR2" />
+                <ScalarProperty Name="PR2N" ColumnName="PR2N" />
+                <ScalarProperty Name="PR3" ColumnName="PR3" />
+                <ScalarProperty Name="PR3N" ColumnName="PR3N" />
+                <ScalarProperty Name="Liner1" ColumnName="Liner1" />
+                <ScalarProperty Name="Liner1N" ColumnName="Liner1N" />
+                <ScalarProperty Name="Liner2" ColumnName="Liner2" />
+                <ScalarProperty Name="Liner2N" ColumnName="Liner2N" />
+                <ScalarProperty Name="Closer1" ColumnName="Closer1" />
+                <ScalarProperty Name="Closer1N" ColumnName="Closer1N" />
+                <ScalarProperty Name="Closer2" ColumnName="Closer2" />
+                <ScalarProperty Name="Closer2N" ColumnName="Closer2N" />
+                <ScalarProperty Name="Closer3" ColumnName="Closer3" />
+                <ScalarProperty Name="Closer3N" ColumnName="Closer3N" />
+                <ScalarProperty Name="Exit1" ColumnName="Exit1" />
+                <ScalarProperty Name="Exit1N" ColumnName="Exit1N" />
+                <ScalarProperty Name="Exit2" ColumnName="Exit2" />
+                <ScalarProperty Name="Exit2N" ColumnName="Exit2N" />
+                <ScalarProperty Name="Hostess" ColumnName="Hostess" />
+                <ScalarProperty Name="ProcSales" ColumnName="ProcSales" />
+                <ScalarProperty Name="ProcOriginal" ColumnName="ProcOriginal" />
+                <ScalarProperty Name="ProcNew" ColumnName="ProcNew" />
+                <ScalarProperty Name="ProcGross" ColumnName="ProcGross" />
+                <ScalarProperty Name="PendSales" ColumnName="PendSales" />
+                <ScalarProperty Name="PendOriginal" ColumnName="PendOriginal" />
+                <ScalarProperty Name="PendNew" ColumnName="PendNew" />
+                <ScalarProperty Name="PendGross" ColumnName="PendGross" />
+                <ScalarProperty Name="DepositSale" ColumnName="DepositSale" />
+                <ScalarProperty Name="DepositSaleNum" ColumnName="DepositSaleNum" />
+                <ScalarProperty Name="CC" ColumnName="CC" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptManifestByLSRange_Bokings">
+                <ScalarProperty Name="guloInvit" ColumnName="guloInvit" />
+                <ScalarProperty Name="LocationN" ColumnName="LocationN" />
+                <ScalarProperty Name="guBookT" ColumnName="guBookT" />
+                <ScalarProperty Name="Bookings" ColumnName="Bookings" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_IM_RptManifestRange" FunctionName="IMModel.Store.USP_IM_RptManifestRange" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptManifestRange">
+                <ScalarProperty Name="DateManifest" ColumnName="DateManifest" />
+                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
+                <ScalarProperty Name="SaleTypeN" ColumnName="SaleTypeN" />
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="SalesRoom" ColumnName="SalesRoom" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="Hotel" ColumnName="Hotel" />
+                <ScalarProperty Name="Room" ColumnName="Room" />
+                <ScalarProperty Name="Pax" ColumnName="Pax" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Agency" ColumnName="Agency" />
+                <ScalarProperty Name="AgencyN" ColumnName="AgencyN" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="CountryN" ColumnName="CountryN" />
+                <ScalarProperty Name="showD" ColumnName="showD" />
+                <ScalarProperty Name="TimeInT" ColumnName="TimeInT" />
+                <ScalarProperty Name="TimeOutT" ColumnName="TimeOutT" />
+                <ScalarProperty Name="CheckIn" ColumnName="CheckIn" />
+                <ScalarProperty Name="CheckOut" ColumnName="CheckOut" />
+                <ScalarProperty Name="Direct" ColumnName="Direct" />
+                <ScalarProperty Name="Tour" ColumnName="Tour" />
+                <ScalarProperty Name="InOut" ColumnName="InOut" />
+                <ScalarProperty Name="WalkOut" ColumnName="WalkOut" />
+                <ScalarProperty Name="CTour" ColumnName="CTour" />
+                <ScalarProperty Name="SaveTour" ColumnName="SaveTour" />
+                <ScalarProperty Name="PR1" ColumnName="PR1" />
+                <ScalarProperty Name="PR1N" ColumnName="PR1N" />
+                <ScalarProperty Name="PR2" ColumnName="PR2" />
+                <ScalarProperty Name="PR2N" ColumnName="PR2N" />
+                <ScalarProperty Name="PR3" ColumnName="PR3" />
+                <ScalarProperty Name="PR3N" ColumnName="PR3N" />
+                <ScalarProperty Name="Liner1" ColumnName="Liner1" />
+                <ScalarProperty Name="Liner1N" ColumnName="Liner1N" />
+                <ScalarProperty Name="Liner2" ColumnName="Liner2" />
+                <ScalarProperty Name="Liner2N" ColumnName="Liner2N" />
+                <ScalarProperty Name="Closer1" ColumnName="Closer1" />
+                <ScalarProperty Name="Closer1N" ColumnName="Closer1N" />
+                <ScalarProperty Name="Closer2" ColumnName="Closer2" />
+                <ScalarProperty Name="Closer2N" ColumnName="Closer2N" />
+                <ScalarProperty Name="Closer3" ColumnName="Closer3" />
+                <ScalarProperty Name="Closer3N" ColumnName="Closer3N" />
+                <ScalarProperty Name="Exit1" ColumnName="Exit1" />
+                <ScalarProperty Name="Exit1N" ColumnName="Exit1N" />
+                <ScalarProperty Name="Exit2" ColumnName="Exit2" />
+                <ScalarProperty Name="Exit2N" ColumnName="Exit2N" />
+                <ScalarProperty Name="Hostess" ColumnName="Hostess" />
+                <ScalarProperty Name="ProcSales" ColumnName="ProcSales" />
+                <ScalarProperty Name="ProcOriginal" ColumnName="ProcOriginal" />
+                <ScalarProperty Name="ProcNew" ColumnName="ProcNew" />
+                <ScalarProperty Name="ProcGross" ColumnName="ProcGross" />
+                <ScalarProperty Name="PendSales" ColumnName="PendSales" />
+                <ScalarProperty Name="PendOriginal" ColumnName="PendOriginal" />
+                <ScalarProperty Name="PendNew" ColumnName="PendNew" />
+                <ScalarProperty Name="PendGross" ColumnName="PendGross" />
+                <ScalarProperty Name="ClosingCost" ColumnName="ClosingCost" />
+                <ScalarProperty Name="MemberShip" ColumnName="MemberShip" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetBookingDepositsByGuest" FunctionName="IMModel.Store.USP_OR_GetBookingDepositsByGuest">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.BookingDepositsByGuest">
+                <ScalarProperty Name="drID" ColumnName="drID" />
+                <ScalarProperty Name="drFolio" ColumnName="drFolio" />
+                <ScalarProperty Name="bdRefund" ColumnName="bdRefund" />
+                <ScalarProperty Name="srN" ColumnName="srN" />
+                <ScalarProperty Name="drD" ColumnName="drD" />
+                <ScalarProperty Name="bdAmount" ColumnName="bdAmount" />
+                <ScalarProperty Name="lsN" ColumnName="lsN" />
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="GuestName" ColumnName="GuestName" />
+                <ScalarProperty Name="guHReservID" ColumnName="guHReservID" />
+                <ScalarProperty Name="guOutInvitNum" ColumnName="guOutInvitNum" />
+                <ScalarProperty Name="peID" ColumnName="peID" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="bdID" ColumnName="bdID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetDepositsRefund" FunctionName="IMModel.Store.USP_OR_GetDepositsRefund">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.DepositsRefund">
+                <ScalarProperty Name="drID" ColumnName="drID" />
+                <ScalarProperty Name="drFolio" ColumnName="drFolio" />
+                <ScalarProperty Name="guID" ColumnName="guID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGiftsReceiptLog" FunctionName="IMModel.Store.USP_OR_GetGiftsReceiptLog">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GetGiftsReceiptLog">
+                <ScalarProperty Name="goChangedBy" ColumnName="goChangedBy" />
+                <ScalarProperty Name="ChangedByN" ColumnName="ChangedByN" />
+                <ScalarProperty Name="goID" ColumnName="goID" />
+                <ScalarProperty Name="goD" ColumnName="goD" />
+                <ScalarProperty Name="gope" ColumnName="gope" />
+                <ScalarProperty Name="OfferedByN" ColumnName="OfferedByN" />
+                <ScalarProperty Name="goHost" ColumnName="goHost" />
+                <ScalarProperty Name="HostN" ColumnName="HostN" />
+                <ScalarProperty Name="goDeposit" ColumnName="goDeposit" />
+                <ScalarProperty Name="goBurned" ColumnName="goBurned" />
+                <ScalarProperty Name="gocu" ColumnName="gocu" />
+                <ScalarProperty Name="ptN" ColumnName="ptN" />
+                <ScalarProperty Name="goCXCPRDeposit" ColumnName="goCXCPRDeposit" />
+                <ScalarProperty Name="goTaxiOut" ColumnName="goTaxiOut" />
+                <ScalarProperty Name="goTotalGifts" ColumnName="goTotalGifts" />
+                <ScalarProperty Name="goct" ColumnName="goct" />
+                <ScalarProperty Name="goCXCGifts" ColumnName="goCXCGifts" />
+                <ScalarProperty Name="goCXCAdj" ColumnName="goCXCAdj" />
+                <ScalarProperty Name="goReimpresion" ColumnName="goReimpresion" />
+                <ScalarProperty Name="rmN" ColumnName="rmN" />
+                <ScalarProperty Name="goAuthorizedBy" ColumnName="goAuthorizedBy" />
+                <ScalarProperty Name="AuthorizedByN" ColumnName="AuthorizedByN" />
+                <ScalarProperty Name="goAmountPaid" ColumnName="goAmountPaid" />
+                <ScalarProperty Name="upN" ColumnName="upN" />
+                <ScalarProperty Name="goCancelD" ColumnName="goCancelD" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_SaveDepositsRefund" FunctionName="IMModel.Store.USP_OR_SaveDepositsRefund">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.SaveDepositsRefund">
+                <ScalarProperty Name="RefunID" ColumnName="RefunID" />
+                <ScalarProperty Name="Folio" ColumnName="Folio" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdateRefundFolio" FunctionName="IMModel.Store.USP_OR_UpdateRefundFolio" />
+          <FunctionImportMapping FunctionImportName="USP_OR_ValidateShow" FunctionName="IMModel.Store.USP_OR_ValidateShow">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.ValidationData">
+                <ScalarProperty Name="Focus" ColumnName="Focus" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
