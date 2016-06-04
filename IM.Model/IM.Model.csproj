@@ -850,6 +850,9 @@
     <Compile Include="RptLoginLog.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptManifest.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptManifestByLSRange.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

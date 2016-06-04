@@ -5831,5 +5831,46 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ValidationData>("USP_OR_ValidateShow", changedByParameter, passwordParameter, salesRoomParameter, agencyParameter, countryParameter, pR1Parameter, pR2Parameter, pR3Parameter, liner1Parameter, liner2Parameter, closer1Parameter, closer2Parameter, closer3Parameter, exit1Parameter, exit2Parameter, podiumParameter, vLOParameter, entryHostParameter, giftsHostParameter, exitHostParameter);
         }
+    
+        public virtual ObjectResult<RptManifest> USP_IM_RptManifest(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string salesmanID, string salesmanRoles, string segments, string programs, Nullable<bool> bySegmentsCategories, Nullable<bool> byLocationsCategories)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var salesmanIDParameter = salesmanID != null ?
+                new ObjectParameter("SalesmanID", salesmanID) :
+                new ObjectParameter("SalesmanID", typeof(string));
+    
+            var salesmanRolesParameter = salesmanRoles != null ?
+                new ObjectParameter("SalesmanRoles", salesmanRoles) :
+                new ObjectParameter("SalesmanRoles", typeof(string));
+    
+            var segmentsParameter = segments != null ?
+                new ObjectParameter("Segments", segments) :
+                new ObjectParameter("Segments", typeof(string));
+    
+            var programsParameter = programs != null ?
+                new ObjectParameter("Programs", programs) :
+                new ObjectParameter("Programs", typeof(string));
+    
+            var bySegmentsCategoriesParameter = bySegmentsCategories.HasValue ?
+                new ObjectParameter("BySegmentsCategories", bySegmentsCategories) :
+                new ObjectParameter("BySegmentsCategories", typeof(bool));
+    
+            var byLocationsCategoriesParameter = byLocationsCategories.HasValue ?
+                new ObjectParameter("ByLocationsCategories", byLocationsCategories) :
+                new ObjectParameter("ByLocationsCategories", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptManifest>("USP_IM_RptManifest", dateFromParameter, dateToParameter, salesRoomParameter, salesmanIDParameter, salesmanRolesParameter, segmentsParameter, programsParameter, bySegmentsCategoriesParameter, byLocationsCategoriesParameter);
+        }
     }
 }

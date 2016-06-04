@@ -5949,6 +5949,17 @@
           <Parameter Name="PCName" Type="varchar" Mode="In" />
           <Parameter Name="Personnel" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_IM_RptManifest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="DateTo" Type="datetime" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="SalesmanID" Type="varchar" Mode="In" />
+          <Parameter Name="SalesmanRoles" Type="varchar" Mode="In" />
+          <Parameter Name="Segments" Type="varchar" Mode="In" />
+          <Parameter Name="Programs" Type="varchar" Mode="In" />
+          <Parameter Name="BySegmentsCategories" Type="bit" Mode="In" />
+          <Parameter Name="ByLocationsCategories" Type="bit" Mode="In" />
+        </Function>
         <Function Name="USP_IM_RptManifestByLSRange" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -17823,7 +17834,7 @@
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGiftsReceiptLog" ReturnType="Collection(IMModel.GiftsReceiptLogData)">
-            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+          <Parameter Name="Receipt" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_SaveDepositsRefund" ReturnType="Collection(IMModel.DepositsRefundShort)">
             <Parameter Name="GuestID" Mode="In" Type="Int32" />
@@ -17856,6 +17867,17 @@
             <Parameter Name="EntryHost" Mode="In" Type="String" />
             <Parameter Name="GiftsHost" Mode="In" Type="String" />
             <Parameter Name="ExitHost" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_IM_RptManifest" ReturnType="Collection(IMModel.RptManifest)">
+            <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="DateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="SalesmanID" Mode="In" Type="String" />
+            <Parameter Name="SalesmanRoles" Mode="In" Type="String" />
+            <Parameter Name="Segments" Mode="In" Type="String" />
+            <Parameter Name="Programs" Mode="In" Type="String" />
+            <Parameter Name="BySegmentsCategories" Mode="In" Type="Boolean" />
+            <Parameter Name="ByLocationsCategories" Mode="In" Type="Boolean" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -22010,6 +22032,59 @@
         <ComplexType Name="DepositsRefundShort">
           <Property Type="Int32" Name="RefunID" Nullable="true" />
           <Property Type="Int32" Name="Folio" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="RptManifest">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="Int32" Name="guID" Nullable="true" />
+          <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
+          <Property Type="String" Name="guFirstName1" Nullable="true" MaxLength="40" />
+          <Property Type="Boolean" Name="guShow" Nullable="true" />
+          <Property Type="Boolean" Name="guTour" Nullable="true" />
+          <Property Type="Boolean" Name="guWalkout" Nullable="true" />
+          <Property Type="Boolean" Name="guCTour" Nullable="true" />
+          <Property Type="Boolean" Name="guSaveProgram" Nullable="true" />
+          <Property Type="Boolean" Name="guSelfGen" Nullable="true" />
+          <Property Type="Boolean" Name="guOverflow" Nullable="true" />
+          <Property Type="DateTime" Name="salesmanDate" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="sold" Nullable="true" />
+          <Property Type="Boolean" Name="sale" Nullable="true" />
+          <Property Type="Int32" Name="SaleType" Nullable="true" />
+          <Property Type="String" Name="SaleTypeN" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="saID" Nullable="true" />
+          <Property Type="String" Name="saMembershipNum" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="samt" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="procSales" Nullable="true" />
+          <Property Type="Decimal" Name="saGrossAmount" Nullable="true" Precision="19" />
+          <Property Type="String" Name="PR1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="PR1P" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="PR2P" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR3N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="PR3P" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Liner1P" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Liner2P" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Closer1P" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Closer2p" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer3N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Closer3p" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Exit1P" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="Exit2P" Nullable="true" MaxLength="10" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -29479,6 +29554,63 @@
               <ComplexTypeMapping TypeName="IMModel.ValidationData">
                 <ScalarProperty Name="Focus" ColumnName="Focus" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_IM_RptManifest" FunctionName="IMModel.Store.USP_IM_RptManifest" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptManifest">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="guID" ColumnName="guID" />
+                <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
+                <ScalarProperty Name="guFirstName1" ColumnName="guFirstName1" />
+                <ScalarProperty Name="guShow" ColumnName="guShow" />
+                <ScalarProperty Name="guTour" ColumnName="guTour" />
+                <ScalarProperty Name="guWalkout" ColumnName="guWalkout" />
+                <ScalarProperty Name="guCTour" ColumnName="guCTour" />
+                <ScalarProperty Name="guSaveProgram" ColumnName="guSaveProgram" />
+                <ScalarProperty Name="guSelfGen" ColumnName="guSelfGen" />
+                <ScalarProperty Name="guOverflow" ColumnName="guOverflow" />
+                <ScalarProperty Name="salesmanDate" ColumnName="salesmanDate" />
+                <ScalarProperty Name="sold" ColumnName="sold" />
+                <ScalarProperty Name="sale" ColumnName="sale" />
+                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
+                <ScalarProperty Name="SaleTypeN" ColumnName="SaleTypeN" />
+                <ScalarProperty Name="saID" ColumnName="saID" />
+                <ScalarProperty Name="saMembershipNum" ColumnName="saMembershipNum" />
+                <ScalarProperty Name="samt" ColumnName="samt" />
+                <ScalarProperty Name="procSales" ColumnName="procSales" />
+                <ScalarProperty Name="saGrossAmount" ColumnName="saGrossAmount" />
+                <ScalarProperty Name="PR1" ColumnName="PR1" />
+                <ScalarProperty Name="PR1N" ColumnName="PR1N" />
+                <ScalarProperty Name="PR1P" ColumnName="PR1P" />
+                <ScalarProperty Name="PR2" ColumnName="PR2" />
+                <ScalarProperty Name="PR2N" ColumnName="PR2N" />
+                <ScalarProperty Name="PR2P" ColumnName="PR2P" />
+                <ScalarProperty Name="PR3" ColumnName="PR3" />
+                <ScalarProperty Name="PR3N" ColumnName="PR3N" />
+                <ScalarProperty Name="PR3P" ColumnName="PR3P" />
+                <ScalarProperty Name="Liner1" ColumnName="Liner1" />
+                <ScalarProperty Name="Liner1N" ColumnName="Liner1N" />
+                <ScalarProperty Name="Liner1P" ColumnName="Liner1P" />
+                <ScalarProperty Name="Liner2" ColumnName="Liner2" />
+                <ScalarProperty Name="Liner2N" ColumnName="Liner2N" />
+                <ScalarProperty Name="Liner2P" ColumnName="Liner2P" />
+                <ScalarProperty Name="Closer1" ColumnName="Closer1" />
+                <ScalarProperty Name="Closer1N" ColumnName="Closer1N" />
+                <ScalarProperty Name="Closer1P" ColumnName="Closer1P" />
+                <ScalarProperty Name="Closer2" ColumnName="Closer2" />
+                <ScalarProperty Name="Closer2N" ColumnName="Closer2N" />
+                <ScalarProperty Name="Closer2p" ColumnName="Closer2p" />
+                <ScalarProperty Name="Closer3" ColumnName="Closer3" />
+                <ScalarProperty Name="Closer3N" ColumnName="Closer3N" />
+                <ScalarProperty Name="Closer3p" ColumnName="Closer3p" />
+                <ScalarProperty Name="Exit1" ColumnName="Exit1" />
+                <ScalarProperty Name="Exit1N" ColumnName="Exit1N" />
+                <ScalarProperty Name="Exit1P" ColumnName="Exit1P" />
+                <ScalarProperty Name="Exit2" ColumnName="Exit2" />
+                <ScalarProperty Name="Exit2N" ColumnName="Exit2N" />
+                <ScalarProperty Name="Exit2P" ColumnName="Exit2P" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
