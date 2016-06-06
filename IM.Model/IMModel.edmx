@@ -22034,7 +22034,6 @@
           <Property Type="Int32" Name="Folio" Nullable="true" />
         </ComplexType>
         <ComplexType Name="RptManifest">
-          <Property Type="Int32" Name="id" Nullable="false" />
           <Property Type="Int32" Name="guID" Nullable="true" />
           <Property Type="String" Name="guLastName1" Nullable="true" MaxLength="65" />
           <Property Type="String" Name="guFirstName1" Nullable="true" MaxLength="40" />
@@ -29560,7 +29559,6 @@
           <FunctionImportMapping FunctionImportName="USP_IM_RptManifest" FunctionName="IMModel.Store.USP_IM_RptManifest" >
             <ResultMapping>
               <ComplexTypeMapping TypeName="IMModel.RptManifest">
-                <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="guID" ColumnName="guID" />
                 <ScalarProperty Name="guLastName1" ColumnName="guLastName1" />
                 <ScalarProperty Name="guFirstName1" ColumnName="guFirstName1" />

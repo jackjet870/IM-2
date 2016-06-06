@@ -13,7 +13,6 @@ namespace IM.Model
     
     public partial class RptManifest
     {
-        public int id { get; set; }
         public Nullable<int> guID { get; set; }
         public string guLastName1 { get; set; }
         public string guFirstName1 { get; set; }
