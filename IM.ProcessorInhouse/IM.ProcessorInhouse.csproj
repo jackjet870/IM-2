@@ -93,6 +93,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ClsFilter.cs" />
     <Compile Include="Classes\clsFormatReport.cs" />
     <Compile Include="Classes\clsReports.cs" />
     <Compile Include="Classes\GetSettings.cs" />

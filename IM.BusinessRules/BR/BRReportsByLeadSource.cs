@@ -1146,7 +1146,7 @@ namespace IM.BusinessRules.BR
     /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
     public static async Task<List<RptProductionByPRInhouse>> GetRptProductionByPRInhouses(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
-      EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival, bool basedOnPRLocation = false)
+      EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival, EnumBasedOnPRLocation basedOnPRLocation= EnumBasedOnPRLocation.NoBasedOnPRLocation)
     {
       var result = new List<RptProductionByPRInhouse>();
 
@@ -1155,7 +1155,7 @@ namespace IM.BusinessRules.BR
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByPRInhouse_Timeout;
-          result = dbContext.USP_OR_RptProductionByPRInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival), basedOnPRLocation).ToList();
+          result = dbContext.USP_OR_RptProductionByPRInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival), Convert.ToBoolean(basedOnPRLocation)).ToList();
         }
       });
 

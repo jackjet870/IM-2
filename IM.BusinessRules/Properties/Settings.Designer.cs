@@ -25,7 +25,7 @@ namespace IM.BusinessRules.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("90")]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
         public int USP_OR_RptFollowUpByAgency_Timeout {
             get {
                 return ((int)(this["USP_OR_RptFollowUpByAgency_Timeout"]));
@@ -37,7 +37,7 @@ namespace IM.BusinessRules.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
         public int USP_OR_RptFollowUpByPR_Timeout {
             get {
                 return ((int)(this["USP_OR_RptFollowUpByPR_Timeout"]));
@@ -133,7 +133,7 @@ namespace IM.BusinessRules.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
         public int USP_OR_RptProductionByCoupleTypeInhouse_Timeout {
             get {
                 return ((int)(this["USP_OR_RptProductionByCoupleTypeInhouse_Timeout"]));
@@ -145,7 +145,7 @@ namespace IM.BusinessRules.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        [global::System.Configuration.DefaultSettingValueAttribute("90")]
         public int USP_OR_RptProductionByNationalityInhouse_Timeout {
             get {
                 return ((int)(this["USP_OR_RptProductionByNationalityInhouse_Timeout"]));
@@ -229,7 +229,7 @@ namespace IM.BusinessRules.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
         public int USP_OR_RptProductionByGiftQuantity_Timeout {
             get {
                 return ((int)(this["USP_OR_RptProductionByGiftQuantity_Timeout"]));

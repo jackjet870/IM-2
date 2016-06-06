@@ -37,8 +37,7 @@ namespace IM.Base.Helpers
       bool showCheckMark = true, bool replaceStringNullOrWhiteSpace = false)
     {
       DataTable table = new DataTable();
-      Type t = lst[0].GetType();
-      List<PropertyDescriptor> properties = TypeDescriptor.GetProperties(t).Cast<PropertyDescriptor>().ToList();
+      List<PropertyDescriptor> properties = TypeDescriptor.GetProperties(lst.Any() ? lst[0].GetType() : typeof(T)).Cast<PropertyDescriptor>().ToList();
 
       properties.ForEach(propInfo =>
       {
@@ -73,6 +72,6 @@ namespace IM.Base.Helpers
       return table;
     }
 
-    #endregion
+    #endregion GetDataTableFromList
   }
 }

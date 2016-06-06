@@ -75,6 +75,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AssistanceToAssistance.cs" />
+    <Compile Include="Classes\objReportQueue.cs" />
+    <Compile Include="Forms\frmReportQueue.xaml.cs">
+      <DependentUpon>frmReportQueue.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\RptInvitationHelper.cs" />
     <Compile Include="Classes\objInvitAdditionalGuest.cs" />
     <Compile Include="Classes\objInvitBookingDeposit.cs" />
@@ -235,6 +239,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmReportQueue.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmSearchGuest.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -324,6 +332,7 @@
     <None Include="Properties\DataSources\IM.Base.Classes.objInvitCreditCard.datasource" />
     <None Include="Properties\DataSources\IM.Base.Classes.objInvitGift.datasource" />
     <None Include="Properties\DataSources\IM.Base.Classes.objInvitGuestStatus.datasource" />
+    <None Include="Properties\DataSources\IM.Base.Classes.objReportQueue.datasource" />
     <None Include="Properties\DataSources\IM.Model.CreditCardType.datasource" />
     <None Include="Properties\DataSources\IM.Model.Currency.datasource" />
     <None Include="Properties\DataSources\IM.Model.GiftShort.datasource" />

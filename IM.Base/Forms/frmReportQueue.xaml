@@ -1,0 +1,116 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Classes="clr-namespace:IM.Base.Classes"
+        x:Class="IM.Base.Forms.frmReportQueue"
+        mc:Ignorable="d"
+        Title="Report Queue" Height="300" Width="800" Closing="Window_Closing" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+    <Window.Resources>
+        <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="{x:Type DataGrid}">
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="GridLinesVisibility" Value="None" />
+            <Setter Property="SelectionMode" Value="Single" />
+        </Style>
+        <Style TargetType="{x:Type DataGridRow}">
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="LightBlue" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <CollectionViewSource x:Key="ObjReportQueueViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:objReportQueue}, CreateList=True}" />
+    </Window.Resources>
+    <ScrollViewer>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Name="btnClearCompleted" Content="Clear Completed" VerticalAlignment="Center" Width="100"  Margin="10,5,10,5" Click="BtnClearCompleted_OnClick"/>
+                <Button Name="btnOpenFolder" Content="Open Containing Folder" VerticalAlignment="Center" Width="130" Margin="50,5,10,5" Click="BtnOpenFolder_OnClick" />
+            </StackPanel>
+            <DataGrid IsReadOnly="True" ItemsSource="{Binding}" DataContext="{StaticResource ObjReportQueueViewSource}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Padding" Value="3" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                    <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn  Binding="{Binding ReportName}" IsReadOnly="True" Header="Report Name" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CanUserResize="False" />
+                    <DataGridTemplateColumn IsReadOnly="True"  Header="File Name" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=FileInfo}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <Image Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Width="12" Height="12" />
+                                        <Label Content="Loading report..." Margin="5,0,0,0" />
+                                    </StackPanel>
+                                    <Label Content="{Binding FileInfo.Name}">
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding FileInfo}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Open File" VerticalAlignment="Center" Width="80" HorizontalAlignment="Right" Click="BtnOpenReport_OnClick">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                            <Setter Property="IsEnabled" Value="True" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding FileInfo}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Exists}" Value="False">
+                                                    <Setter Property="IsEnabled" Value="False" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                           
+                                        </Style>
+                                           
+                                           
+                                     
+                                    </Button.Style>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

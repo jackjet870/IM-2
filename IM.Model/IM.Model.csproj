@@ -195,6 +195,7 @@
     <Compile Include="Enums\EnumMenu.cs" />
     <Compile Include="Enums\EnumMode.cs" />
     <Compile Include="Enums\EnumMessage.cs" />
+    <Compile Include="Enums\EnumOnlyWholesalers.cs" />
     <Compile Include="Enums\EnumPermission.cs" />
     <Compile Include="Enums\EnumPlaceType.cs" />
     <Compile Include="Enums\EnumProgram.cs" />

@@ -270,10 +270,10 @@ namespace IM.ProcessorInhouse.Forms
         EnumSalesByMemberShipType? enumSalesByMemberShipType = null,
         EnumSaveCourtesyTours? enumSaveCourtesyTours = null,
         EnumExternalInvitation? enumExternalInvitation = null, bool blnClub = false, bool blnNight = false, bool blnLsHotelNotNull = false, bool blnAgencyMonthly = false,
-        bool blnOnlyWholesalers = false)
+        EnumOnlyWholesalers?  enumOnlyWholesalers = null)
     {
       ConfigureDates(blnOneDate, enumPeriod);
-      ConfigureFilters(enumBasedOnArrival, enumBasedOnPRLocation, enumQuinellas, enumDetailGifts, enumSalesByMemberShipType, enumSaveCourtesyTours, enumExternalInvitation, blnClub, blnNight, blnOnlyWholesalers);
+      ConfigureFilters(enumBasedOnArrival, enumBasedOnPRLocation, enumQuinellas, enumDetailGifts, enumSalesByMemberShipType, enumSaveCourtesyTours, enumExternalInvitation, blnClub, blnNight, enumOnlyWholesalers);
 
       LoadCombos(blnClub);
 
@@ -304,7 +304,7 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void ConfigureFilters(EnumBasedOnArrival? enumBasedOnArrival, EnumBasedOnPRLocation? enumBasedOnPRLocation,
         EnumQuinellas? enumQuinellas, EnumDetailGifts? enumDetailGifts, EnumSalesByMemberShipType? enumSalesByMemberShipType,
-       EnumSaveCourtesyTours? enumSaveCourtesyTours, EnumExternalInvitation? enumExternalInvitation, bool blnClub, bool blnNight, bool blnOnlyWholesalers)
+       EnumSaveCourtesyTours? enumSaveCourtesyTours, EnumExternalInvitation? enumExternalInvitation, bool blnClub, bool blnNight, EnumOnlyWholesalers? enumOnlyWholesalers)
     {
       if (enumBasedOnArrival != null)
         chkBasedOnArrival.IsChecked = Convert.ToBoolean(enumBasedOnArrival);
@@ -343,7 +343,10 @@ namespace IM.ProcessorInhouse.Forms
       if (!blnClub)
         brdClub.Visibility = Visibility.Collapsed;
 
-      if (!blnOnlyWholesalers)
+
+      if (enumOnlyWholesalers != null)
+        chkOnlyWholesalers.IsChecked = Convert.ToBoolean(enumOnlyWholesalers);
+      else
         chkOnlyWholesalers.Visibility = Visibility.Collapsed;
 
       txtStartN.Visibility = txtEndN.Visibility = lblNights.Visibility = lblNigths2.Visibility = blnNight ? Visibility.Visible : Visibility.Collapsed;
@@ -419,36 +422,60 @@ namespace IM.ProcessorInhouse.Forms
     private void SaveFrmFilterValues()
     {
       if (pnlPersonnel.IsVisible)
-        _frmIh._lstPersonnel = grdPersonnel.SelectedItems.Cast<PersonnelShort>().Select(x => x.peID).ToList();
+      {
+        _frmIh._clsFilter.LstPersonnel = grdPersonnel.SelectedItems.Cast<PersonnelShort>().Select(x => x.peID).ToList();
+        _frmIh._clsFilter.BlnAllPersonnel = grdPersonnel.Items.Count == grdPersonnel.SelectedItems.Count;
+      }
       if (pnlLeadSource.IsVisible)
-        _frmIh._lstLeadSources = grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(x => x.lsID).ToList();
+      {
+        _frmIh._clsFilter.LstLeadSources = grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(x => x.lsID).ToList();
+        _frmIh._clsFilter.BlnAllLeadSources = grdLeadSources.Items.Count == grdLeadSources.SelectedItems.Count;
+      }
       if (pnlMarkets.IsVisible)
-        _frmIh._lstMarkets = grdMarkets.SelectedItems.Cast<MarketShort>().Select(c => c.mkID).ToList();
+      {
+        _frmIh._clsFilter.LstMarkets = grdMarkets.SelectedItems.Cast<MarketShort>().Select(c => c.mkID).ToList();
+        _frmIh._clsFilter.BlnAllMarkets = grdMarkets.Items.Count == grdMarkets.SelectedItems.Count;
+      }
       if (pnlAgencies.IsVisible)
-        _frmIh._lstAgencies = grdAgencies.SelectedItems.Cast<Agency>().Select(c => c.agID).ToList();
+      {
+        _frmIh._clsFilter.LstAgencies = grdAgencies.SelectedItems.Cast<Agency>().Select(c => c.agID).ToList();
+        _frmIh._clsFilter.BlnAllAgencies = grdAgencies.Items.Count == grdAgencies.SelectedItems.Count;
+      }
       if (pnlChargeTo.IsVisible)
-        _frmIh._lstCharteTo = grdChargeTo.SelectedItems.Cast<ChargeTo>().Select(c => c.ctID).ToList();
+      {
+        _frmIh._clsFilter.LstChargeTo = grdChargeTo.SelectedItems.Cast<ChargeTo>().Select(c => c.ctID).ToList();
+        _frmIh._clsFilter.BlnAllChargeTo = grdChargeTo.Items.Count == grdChargeTo.SelectedItems.Count;
+      }
       if (pnlGifts.IsVisible)
-        _frmIh._lstGifts = grdGifts.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList();
+      {
+        _frmIh._clsFilter.LstGifts = grdGifts.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList();
+        _frmIh._clsFilter.BlnAllGifts = grdGifts.Items.Count == grdGifts.SelectedItems.Count;
+      }
       if (pnlGiftsQuantity.IsVisible)
-        _frmIh._lstGiftsQuantity = grdGiftsQuantity.Items.Cast<GiftQuantity>().Where(x => x.include).ToDictionary(x => x.giID, x => x.quantity);
+      {
+        _frmIh._clsFilter.LstGiftsQuantity = grdGiftsQuantity.Items.Cast<GiftQuantity>().Where(x => x.include).ToDictionary(x => x.giID, x => x.quantity);        
+      }
 
-      _frmIh._cboDateSelected = ((KeyValuePair<EnumPredefinedDate, string>)cboDate.SelectedItem).Key;
       if (cboDate.IsEnabled)
-        _frmIh._dtmStart = dtmStart.Value.Value;
+      {
+        _frmIh._clsFilter.DtmStart = Convert.ToDateTime(dtmStart.Value);
+        _frmIh._clsFilter.CboDateSelected = ((KeyValuePair<EnumPredefinedDate, string>)cboDate.SelectedItem).Key;
+      }
       else
-        _frmIh._dtmInit = dtmStart.Value.Value;
-      _frmIh._dtmEnd = dtmEnd.Value.Value;
-      _frmIh._enumBasedOnArrival = Convert.ToBoolean(chkBasedOnArrival.IsChecked) ? EnumBasedOnArrival.BasedOnArrival : EnumBasedOnArrival.NoBasedOnArrival;
-      _frmIh._enumQuinellas = Convert.ToBoolean(chkQuinellas.IsChecked) ? EnumQuinellas.Quinellas : EnumQuinellas.NoQuinellas;
-      _frmIh._enumDetailsGift = Convert.ToBoolean(chkDetailGifts.IsChecked) ? EnumDetailGifts.DetailGifts : EnumDetailGifts.NoDetailGifts;
-      _frmIh._enumSalesByMemberShipType = Convert.ToBoolean(chkSalesByMembershipType.IsChecked) ? EnumSalesByMemberShipType.Detail : EnumSalesByMemberShipType.NoDetail;
-      _frmIh._blnOnlyWholesalers = Convert.ToBoolean(chkOnlyWholesalers.IsChecked);
-      _frmIh._strApplication = txtApplication.Text;
-      _frmIh._iCompany = Convert.ToInt32(txtCompany.Text);
-      _frmIh._club = (Club)cboClub.SelectedItem;
-      _frmIh._enumSaveCourtesyTours = ((KeyValuePair<EnumSaveCourtesyTours, string>)cboSaveCourtesyTours.SelectedItem).Key;
-      _frmIh._enumExternalInvitation = ((KeyValuePair<EnumExternalInvitation, string>)cboExternal.SelectedItem).Key;
+        _frmIh._clsFilter.DtmInit = Convert.ToDateTime(dtmStart.Value);
+      _frmIh._clsFilter.DtmEnd = Convert.ToDateTime(dtmEnd.Value);
+      _frmIh._clsFilter.EnumBasedOnArrival = Convert.ToBoolean(chkBasedOnArrival.IsChecked) ? EnumBasedOnArrival.BasedOnArrival : EnumBasedOnArrival.NoBasedOnArrival;
+      _frmIh._clsFilter.EnumQuinellas = Convert.ToBoolean(chkQuinellas.IsChecked) ? EnumQuinellas.Quinellas : EnumQuinellas.NoQuinellas;
+      _frmIh._clsFilter.EnumDetailGifts = Convert.ToBoolean(chkDetailGifts.IsChecked) ? EnumDetailGifts.DetailGifts : EnumDetailGifts.NoDetailGifts;
+      _frmIh._clsFilter.EnumSalesByMemberShipType = Convert.ToBoolean(chkSalesByMembershipType.IsChecked) ? EnumSalesByMemberShipType.Detail : EnumSalesByMemberShipType.NoDetail;
+      _frmIh._clsFilter.EnumOnlyWholesalers = Convert.ToBoolean(chkOnlyWholesalers.IsChecked) ? EnumOnlyWholesalers.OnlyWholesalers : EnumOnlyWholesalers.NoOnlyWholesalers;
+      _frmIh._clsFilter.StrApplication = txtApplication.Text;
+      _frmIh._clsFilter.IntCompany = Convert.ToInt32(txtCompany.Text);
+      _frmIh._clsFilter.Club = (Club)cboClub.SelectedItem;
+      if(cboSaveCourtesyTours.SelectedItem!=null)
+        _frmIh._clsFilter.EnumSaveCourtesyTours = ((KeyValuePair<EnumSaveCourtesyTours, string>)cboSaveCourtesyTours.SelectedItem).Key;
+      if (cboExternal.SelectedItem != null)
+        _frmIh._clsFilter.EnumExternalInvitation = ((KeyValuePair<EnumExternalInvitation, string>)cboExternal.SelectedItem).Key;
     }
 
     #endregion saveFrmFilterValues
@@ -464,21 +491,22 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void LoadUserFilters()
     {
-      cboDate.SelectedValue = cboDate.Items.Cast<KeyValuePair<EnumPredefinedDate, string>>().Any(c => c.Key == _frmIh._cboDateSelected) ? _frmIh._cboDateSelected : EnumPredefinedDate.DatesSpecified;
+      if(cboDate.IsEnabled)
+        cboDate.SelectedValue = cboDate.Items.Cast<KeyValuePair<EnumPredefinedDate, string>>().Any(c => c.Key == _frmIh._clsFilter.CboDateSelected) ? _frmIh._clsFilter.CboDateSelected : EnumPredefinedDate.DatesSpecified;
 
-      dtmStart.Value = pnlDtmEnd.IsEnabled ? _frmIh._dtmStart : _frmIh._dtmInit;
-      dtmEnd.Value = _frmIh._dtmEnd;
-      chkBasedOnArrival.IsChecked = Convert.ToBoolean(_frmIh._enumBasedOnArrival);
-      chkQuinellas.IsChecked = Convert.ToBoolean(_frmIh._enumQuinellas);
-      chkDetailGifts.IsChecked = Convert.ToBoolean(_frmIh._enumDetailsGift);
-      chkSalesByMembershipType.IsChecked = Convert.ToBoolean(_frmIh._enumSalesByMemberShipType);
-      chkOnlyWholesalers.IsChecked = _frmIh._blnOnlyWholesalers;
-      txtApplication.Text = _frmIh._strApplication;
-      txtCompany.Text = $"{_frmIh._iCompany}";
-      if (_frmIh._club != null)
-        cboClub.SelectedValue = _frmIh._club.clID;
-      cboSaveCourtesyTours.SelectedValue = _frmIh._enumSaveCourtesyTours;
-      cboExternal.SelectedValue = _frmIh._enumExternalInvitation;
+      dtmStart.Value = cboDate.IsEnabled ? _frmIh._clsFilter.DtmStart : _frmIh._clsFilter.DtmInit;
+      dtmEnd.Value = _frmIh._clsFilter.DtmEnd;
+      chkBasedOnArrival.IsChecked = Convert.ToBoolean(_frmIh._clsFilter.EnumBasedOnArrival);
+      chkQuinellas.IsChecked = Convert.ToBoolean(_frmIh._clsFilter.EnumQuinellas);
+      chkDetailGifts.IsChecked = Convert.ToBoolean(_frmIh._clsFilter.EnumDetailGifts);
+      chkSalesByMembershipType.IsChecked = Convert.ToBoolean(_frmIh._clsFilter.EnumSalesByMemberShipType);
+      chkOnlyWholesalers.IsChecked = Convert.ToBoolean(_frmIh._clsFilter.EnumOnlyWholesalers); 
+      txtApplication.Text = _frmIh._clsFilter.StrApplication;
+      txtCompany.Text = $"{_frmIh._clsFilter.IntCompany}";
+      if (_frmIh._clsFilter.Club != null)
+        cboClub.SelectedValue = _frmIh._clsFilter.Club.clID;
+      cboSaveCourtesyTours.SelectedValue = _frmIh._clsFilter.EnumSaveCourtesyTours;
+      cboExternal.SelectedValue = _frmIh._clsFilter.EnumExternalInvitation;
     }
 
     #endregion LoadUserFilters
@@ -506,9 +534,9 @@ namespace IM.ProcessorInhouse.Forms
         return "No Charge To is selected.";
       if (pnlGifts.Visibility == Visibility.Visible && grdGifts.SelectedItems.Count == 0)
         return "No Gift is selected.";
-      if (pnlGiftsQuantity.Visibility == Visibility.Visible && grdGiftsQuantity.Items.Cast<GiftQuantity>().Any(x => x.include))
+      if (pnlGiftsQuantity.Visibility == Visibility.Visible && !grdGiftsQuantity.Items.Cast<GiftQuantity>().Any(x => x.include))
         return "No Gift is selected.";
-      if (pnlDtmEnd.IsEnabled && dtmEnd.Value.Value < dtmStart.Value.Value)
+      if (pnlDtmEnd.IsEnabled && Convert.ToDateTime(dtmEnd.Value) < Convert.ToDateTime(dtmStart.Value))
         return "End date must be greater than start date.";
       return string.Empty;
     }
@@ -560,10 +588,10 @@ namespace IM.ProcessorInhouse.Forms
       chkAllPersonnel.IsChecked = blnAllPersonnel;
       chkAllPersonnel.IsEnabled = !blnOnlyOneRegister;
 
-      if (!_frmIh._lstPersonnel.Any()) return;
+      if (!_frmIh._clsFilter.LstPersonnel.Any()) return;
 
       chkAllPersonnel.IsChecked = false;
-      _frmIh._lstPersonnel.ForEach(c => grdPersonnel.SelectedItems.Add(_lstPersonnel.SingleOrDefault(x => x.peID == c)));
+      _frmIh._clsFilter.LstPersonnel.ForEach(c => grdPersonnel.SelectedItems.Add(_lstPersonnel.SingleOrDefault(x => x.peID == c)));
       if (grdPersonnel.SelectedItems.Count == grdPersonnel.Items.Count)
         chkAllPersonnel.IsChecked = true;
     }
@@ -601,10 +629,10 @@ namespace IM.ProcessorInhouse.Forms
       chkAllLeadSources.IsChecked = blnAllLeadSources;
       chkAllLeadSources.IsEnabled = !blnOnlyOneRegister;
 
-      if (!_frmIh._lstLeadSources.Any()) return;
+      if (!_frmIh._clsFilter.LstLeadSources.Any()) return;
 
       chkAllLeadSources.IsChecked = false;
-      _frmIh._lstLeadSources.ForEach(c => grdLeadSources.SelectedItems.Add(_lstLeadSources.SingleOrDefault(x => x.lsID == c)));
+      _frmIh._clsFilter.LstLeadSources.ForEach(c => grdLeadSources.SelectedItems.Add(_lstLeadSources.SingleOrDefault(x => x.lsID == c)));
       if (grdLeadSources.SelectedItems.Count == grdLeadSources.Items.Count)
         chkAllLeadSources.IsChecked = true;
     }
@@ -635,10 +663,10 @@ namespace IM.ProcessorInhouse.Forms
       chkAllGifts.IsChecked = blnAllGifts;
       chkAllGifts.IsEnabled = !blnOnlyOneRegister;
 
-      if (!_frmIh._lstGifts.Any()) return;
+      if (!_frmIh._clsFilter.LstGifts.Any()) return;
 
       chkAllGifts.IsChecked = false;
-      _frmIh._lstGifts.ForEach(c => grdGifts.SelectedItems.Add(_lstGifts.SingleOrDefault(x => x.giID == c)));
+      _frmIh._clsFilter.LstGifts.ForEach(c => grdGifts.SelectedItems.Add(_lstGifts.SingleOrDefault(x => x.giID == c)));
       if (grdGifts.SelectedItems.Count == grdGifts.Items.Count)
         chkAllGifts.IsChecked = true;
     }
@@ -664,7 +692,7 @@ namespace IM.ProcessorInhouse.Forms
         return;
       }
       grdGiftsQuantity.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
-      Dictionary<string, int> _productionByGiftQuantity = GetSettings.ProductionByGiftQuantity();
+      Dictionary<string, int> _productionByGiftQuantity = GetSettings.ProductionByGiftQuantity;
       List<string> listKeys = new List<string>();
       listKeys.AddRange(_productionByGiftQuantity.Keys);
       List<GiftShort> _giftShorts = await BRGifts.GetGiftsShortById(listKeys);
@@ -683,10 +711,10 @@ namespace IM.ProcessorInhouse.Forms
       chkAllGiftsQuantity.IsEnabled = !blnOnlyOneRegister;
       StatusBarNumGiftsQuantity.Content = $"{grdGiftsQuantity.Items.Cast<GiftQuantity>().Count(x => x.include)} / {_lstGiftsQuantity.Count} Selected Gifts";
 
-      if (!_frmIh._lstGiftsQuantity.Any()) return;
+      if (!_frmIh._clsFilter.LstGiftsQuantity.Any()) return;
 
       chkAllGiftsQuantity.IsChecked = false;
-      _frmIh._lstGiftsQuantity.ToList().ForEach(x =>
+      _frmIh._clsFilter.LstGiftsQuantity.ToList().ForEach(x =>
       {
         GiftQuantity giftQuantity = grdGiftsQuantity.Items.Cast<GiftQuantity>().SingleOrDefault(q => q.giID == x.Key);
         if (giftQuantity != null)
@@ -723,10 +751,10 @@ namespace IM.ProcessorInhouse.Forms
       chkAllChargeTo.IsChecked = blnAllChargeTo;
       chkAllChargeTo.IsEnabled = !blnOnlyOneRegister;
 
-      if (!_frmIh._lstCharteTo.Any()) return;
+      if (!_frmIh._clsFilter.LstChargeTo.Any()) return;
 
       chkAllChargeTo.IsChecked = false;
-      _frmIh._lstCharteTo.ForEach(c => grdChargeTo.SelectedItems.Add(_lstCharteTo.SingleOrDefault(x => x.ctID == c)));
+      _frmIh._clsFilter.LstChargeTo.ForEach(c => grdChargeTo.SelectedItems.Add(_lstCharteTo.SingleOrDefault(x => x.ctID == c)));
       if (grdChargeTo.SelectedItems.Count == grdChargeTo.Items.Count)
         chkAllChargeTo.IsChecked = true;
     }
@@ -755,17 +783,17 @@ namespace IM.ProcessorInhouse.Forms
 
       grdAgencies.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       if (blnAgencyMonthly)
-        _lstAgencies = await BRAgencies.GetAgenciesByIds(GetSettings.ProductionByAgencyMonthly());
+        _lstAgencies = await BRAgencies.GetAgenciesByIds(GetSettings.ProductionByAgencyMonthly);
       else
         _lstAgencies = await BRAgencies.GetAgencies();
       grdAgencies.ItemsSource = _lstAgencies;
       chkAllAgencies.IsChecked = blnAllAgencies;
       chkAllAgencies.IsEnabled = !blnOnlyOneRegister;
 
-      if (!_frmIh._lstAgencies.Any()) return;
+      if (!_frmIh._clsFilter.LstAgencies.Any()) return;
 
       chkAllAgencies.IsChecked = false;
-      _frmIh._lstAgencies.ForEach(c => grdAgencies.SelectedItems.Add(_lstAgencies.SingleOrDefault(x => x.agID == c)));
+      _frmIh._clsFilter.LstAgencies.ForEach(c => grdAgencies.SelectedItems.Add(_lstAgencies.SingleOrDefault(x => x.agID == c)));
       if (grdAgencies.SelectedItems.Count == grdAgencies.Items.Count)
         chkAllAgencies.IsChecked = true;
     }
@@ -797,10 +825,10 @@ namespace IM.ProcessorInhouse.Forms
       chkAllMarkets.IsChecked = blnAllMarkets;
       chkAllMarkets.IsEnabled = !blnOnlyOneRegister;
 
-      if (!_frmIh._lstMarkets.Any()) return;
+      if (!_frmIh._clsFilter.LstMarkets.Any()) return;
 
       chkAllMarkets.IsChecked = false;
-      _frmIh._lstMarkets.ForEach(c => grdMarkets.SelectedItems.Add(_lstMarkets.SingleOrDefault(x => x.mkID == c)));
+      _frmIh._clsFilter.LstMarkets.ForEach(c => grdMarkets.SelectedItems.Add(_lstMarkets.SingleOrDefault(x => x.mkID == c)));
       if (grdMarkets.SelectedItems.Count == grdMarkets.Items.Count)
         chkAllMarkets.IsChecked = true;
     }

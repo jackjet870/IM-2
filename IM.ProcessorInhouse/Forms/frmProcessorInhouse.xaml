@@ -138,6 +138,7 @@
                 </Grid>
                 <!--#endregion-->
             </Grid>
+            <Button Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Content="_Report Queue" Width="100" HorizontalAlignment="Left" Margin="10 0 10 0" Click="btnReportQueue_Click" />
             <Button Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Content="_Exit" Width="100" HorizontalAlignment="Right" Margin="10 0 10 0" Click="btnExit_Click" />
         </Grid>
         <!--#region PIE DE LA FORMA-->

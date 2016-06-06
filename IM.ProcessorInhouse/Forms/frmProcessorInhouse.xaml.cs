@@ -1,4 +1,5 @@
-﻿using IM.Base.Helpers;
+﻿using IM.Base.Forms;
+using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Classes;
@@ -8,7 +9,6 @@ using IM.ProcessorInhouse.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -33,36 +33,13 @@ namespace IM.ProcessorInhouse.Forms
 
     #region Atributos
 
+    public ClsFilter _clsFilter;
+
     private frmFilterDateRange _frmFilter;
+    private frmReportQueue _frmReportQueue;
+
     private bool _blnOneDate;
     private bool _blnOnlyOneRegister;
-
-    public List<string> _lstPersonnel = new List<string>();
-    public List<string> _lstLeadSources = new List<string>();
-    public List<string> _lstMarkets = new List<string>();
-    public List<string> _lstAgencies = new List<string>();
-    public List<string> _lstGifts = new List<string>();
-    public List<string> _lstCharteTo = new List<string>();
-    public Dictionary<string, int> _lstGiftsQuantity = new Dictionary<string, int>();
-
-    public EnumPredefinedDate _cboDateSelected;
-    public DateTime _dtmInit;
-    public DateTime _dtmStart;
-    public DateTime _dtmEnd;
-    public EnumBasedOnArrival _enumBasedOnArrival;
-    public EnumQuinellas _enumQuinellas;
-
-    public EnumDetailGifts _enumDetailsGift;
-    public EnumSalesByMemberShipType _enumSalesByMemberShipType;
-
-    public string _strApplication;
-    public int _iCompany;
-    public Club _club;
-    public bool _blnOnlyWholesalers;
-
-    public EnumSaveCourtesyTours _enumSaveCourtesyTours;
-
-    public EnumExternalInvitation _enumExternalInvitation;
 
     private EnumProgram _enumProgram;
     private EnumRptLeadSource _rptLeadSource;
@@ -86,6 +63,7 @@ namespace IM.ProcessorInhouse.Forms
       ConfigurarGrids();
       SetupParameters();
       lblUserName.Content = App.User.User.peN;
+      _frmReportQueue = new frmReportQueue();
     }
 
     #endregion Window_ContentRendered
@@ -221,6 +199,24 @@ namespace IM.ProcessorInhouse.Forms
 
     #endregion btnPrint_Click
 
+    #region btnReportQueue_Click
+
+    /// <summary>
+    ///   Método para abrir la ventana de cola de Reportes
+    /// </summary>
+    /// <history>
+    ///   [aalcocer] 03/06/2016 Created
+    /// </history>
+    private void btnReportQueue_Click(object sender, RoutedEventArgs e)
+    {
+      _frmReportQueue.Show();
+      if (_frmReportQueue.WindowState == WindowState.Minimized)
+        _frmReportQueue.WindowState = WindowState.Normal;
+      _frmReportQueue.Activate();
+    }
+
+    #endregion btnReportQueue_Click
+
     #endregion Eventos Formulario
 
     #region Métodos Privados
@@ -258,15 +254,16 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void SetupParameters()
     {
+      _clsFilter = new ClsFilter();
       // obtenemos las fechas iniciales de los reportes
       GetFirstDayValue();
 
       _enumProgram = EnumProgram.Inhouse; //Programa
-      _enumBasedOnArrival = EnumBasedOnArrival.BasedOnArrival; //Basado en llegada
-      _enumQuinellas = EnumQuinellas.NoQuinellas; //No considerar quinielas
-      _enumSaveCourtesyTours = EnumSaveCourtesyTours.IncludeSaveCourtesyTours; //Incluir tours de rescate y cortesia
-      _enumSalesByMemberShipType = EnumSalesByMemberShipType.Detail; //Detallar ventas por tipo de membresia
-      _enumExternalInvitation = EnumExternalInvitation.Include; //Incluir invitaciones externas
+      _clsFilter.EnumBasedOnArrival = EnumBasedOnArrival.BasedOnArrival; //Basado en llegada
+      _clsFilter.EnumQuinellas = EnumQuinellas.NoQuinellas; //No considerar quinielas
+      _clsFilter.EnumSaveCourtesyTours = EnumSaveCourtesyTours.IncludeSaveCourtesyTours; //Incluir tours de rescate y cortesia
+      _clsFilter.EnumSalesByMemberShipType = EnumSalesByMemberShipType.Detail; //Detallar ventas por tipo de membresia
+      _clsFilter.EnumExternalInvitation = EnumExternalInvitation.Include; //Incluir invitaciones externas
     }
 
     #endregion SetupParameters
@@ -283,20 +280,20 @@ namespace IM.ProcessorInhouse.Forms
     {
       DateTime _serverDate = BRHelpers.GetServerDate();
       // Fecha inicial
-      _dtmStart = new DateTime(_serverDate.Year, _serverDate.Month, 1);
+      _clsFilter.DtmStart = new DateTime(_serverDate.Year, _serverDate.Month, 1);
 
       // obtenemos la fecha de inicio de la semana
-      _dtmInit = DateHelper.GetStartWeek(_serverDate.AddDays(-7)).Date;
+      _clsFilter.DtmInit = DateHelper.GetStartWeek(_serverDate.AddDays(-7)).Date;
 
       //Fecha final
-      _dtmEnd = _serverDate.Date;
+      _clsFilter.DtmEnd = _serverDate.Date;
       string strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
       if (!File.Exists(strArchivo)) return;
       var _iniFileHelper = new IniFileHelper(strArchivo);
-      _dtmStart = _iniFileHelper.readDate("FilterDate", "DateStart", _dtmStart);
-      _dtmEnd = _iniFileHelper.readDate("FilterDate", "DateEnd", _dtmEnd);
+      _clsFilter.DtmStart = _iniFileHelper.readDate("FilterDate", "DateStart", _clsFilter.DtmStart);
+      _clsFilter.DtmEnd = _iniFileHelper.readDate("FilterDate", "DateEnd", _clsFilter.DtmEnd);
       string strLeadSource = _iniFileHelper.readText("FilterDate", "LeadSource", string.Empty);
-      if (!string.IsNullOrEmpty(strLeadSource)) _lstLeadSources.Add(strLeadSource);
+      if (!string.IsNullOrEmpty(strLeadSource)) _clsFilter.LstLeadSources.Add(strLeadSource);
     }
 
     #endregion GetFirstDayValue
@@ -440,51 +437,46 @@ namespace IM.ProcessorInhouse.Forms
         case EnumRptLeadSource.ProductionbyGiftQuantity:
           _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, program: _enumProgram,
             blnLeadSources: true, blnGiftsQuantity: true, blnAllGiftsQuantity: true,
-            enumBasedOnArrival: _enumBasedOnArrival,
-            enumQuinellas: _enumQuinellas);
+            enumBasedOnArrival: _clsFilter.EnumBasedOnArrival,
+            enumQuinellas: _clsFilter.EnumQuinellas);
           break;
 
         case EnumRptLeadSource.OccupationContactBookShow:
           _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, program: _enumProgram,
-            blnLeadSources: true, enumBasedOnArrival: _enumBasedOnArrival, enumQuinellas: _enumQuinellas,
-            enumExternalInvitation: _enumExternalInvitation, blnLsHotelNotNull: true);
+            blnLeadSources: true, enumBasedOnArrival: _clsFilter.EnumBasedOnArrival, enumQuinellas: _clsFilter.EnumQuinellas,
+            enumExternalInvitation: _clsFilter.EnumExternalInvitation, blnLsHotelNotNull: true);
 
           break;
 
         case EnumRptLeadSource.ProductionbyAgencyNights:
           _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, program: _enumProgram,
-            blnLeadSources: true, enumBasedOnArrival: _enumBasedOnArrival, enumQuinellas: _enumQuinellas,
-            enumSalesByMemberShipType: _enumSalesByMemberShipType, enumExternalInvitation: _enumExternalInvitation,
+            blnLeadSources: true, enumBasedOnArrival: _clsFilter.EnumBasedOnArrival, enumQuinellas: _clsFilter.EnumQuinellas,
+            enumSalesByMemberShipType: _clsFilter.EnumSalesByMemberShipType, enumExternalInvitation: _clsFilter.EnumExternalInvitation,
             blnNight: true);
           break;
 
         case EnumRptLeadSource.ProductionbyNationality:
         case EnumRptLeadSource.ProductionbyNationalityMarketOriginallyAvailable:
-          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, program: _enumProgram,
-            blnLeadSources: true, enumBasedOnArrival: _enumBasedOnArrival, enumQuinellas: _enumQuinellas,
-            enumDetailGifts: _enumDetailsGift);
+          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, program: _enumProgram, blnLeadSources: true,
+            enumBasedOnArrival: _clsFilter.EnumBasedOnArrival, enumQuinellas: _clsFilter.EnumQuinellas);
           break;
 
         case EnumRptLeadSource.ProductionbyAgency:
         case EnumRptLeadSource.ProductionbyAgencyOnlyQuinellas:
-          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister,
-            program: _enumProgram,
-            blnLeadSources: true, enumBasedOnArrival: _enumBasedOnArrival, enumQuinellas: _enumQuinellas,
-            enumSalesByMemberShipType: _enumSalesByMemberShipType,
-            enumExternalInvitation: _enumExternalInvitation);
+          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, program: _enumProgram, blnLeadSources: true,
+            enumBasedOnArrival: _clsFilter.EnumBasedOnArrival, enumQuinellas: _clsFilter.EnumQuinellas,
+            enumSalesByMemberShipType: _clsFilter.EnumSalesByMemberShipType, enumExternalInvitation: _clsFilter.EnumExternalInvitation);
           break;
 
         case EnumRptLeadSource.CostbyPR:
-          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister,
-            program: _enumProgram,
-            blnLeadSources: true, enumQuinellas: _enumQuinellas, enumDetailGifts: _enumDetailsGift);
+          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, program: _enumProgram, blnLeadSources: true,
+            enumQuinellas: _clsFilter.EnumQuinellas, enumDetailGifts: _clsFilter.EnumDetailGifts);
           break;
 
         case EnumRptLeadSource.ScorebyPR:
         case EnumRptLeadSource.ShowFactorbyBookingDate:
-          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister,
-            program: _enumProgram,
-            blnLeadSources: true, enumQuinellas: _enumQuinellas);
+          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, program: _enumProgram, blnLeadSources: true,
+            enumQuinellas: _clsFilter.EnumQuinellas);
           break;
 
         case EnumRptLeadSource.FollowUpbyAgency:
@@ -496,27 +488,29 @@ namespace IM.ProcessorInhouse.Forms
         case EnumRptLeadSource.ProductionbyCoupleType:
         case EnumRptLeadSource.ProductionbyGroup:
         case EnumRptLeadSource.ProductionbyGuestStatus:
-        case EnumRptLeadSource.ProductionbyPR:
         case EnumRptLeadSource.ProductionbyPRSalesRoom:
         case EnumRptLeadSource.ProductionbyPRGroup:
-          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister,
-            program: _enumProgram, blnLeadSources: true,
-            enumBasedOnArrival: _enumBasedOnArrival, enumQuinellas: _enumQuinellas);
+          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, program: _enumProgram, blnLeadSources: true,
+            enumBasedOnArrival: _clsFilter.EnumBasedOnArrival, enumQuinellas: _clsFilter.EnumQuinellas);
+          break;
+
+        case EnumRptLeadSource.ProductionbyPR:
+          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, program: _enumProgram, blnLeadSources: true,
+            enumBasedOnArrival: _clsFilter.EnumBasedOnArrival, enumQuinellas: _clsFilter.EnumQuinellas,
+            enumBasedOnPRLocation: _clsFilter.EnumBasedOnPRLocation);
           break;
 
         case EnumRptLeadSource.ProductionbyMemberTypeAgency:
         case EnumRptLeadSource.ProductionbyMemberTypeAgencyMarketOriginallyAvailable:
         case EnumRptLeadSource.ProductionbyContractAgency:
         case EnumRptLeadSource.ProductionbyContractAgencyMarketOriginallyAvailable:
-          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister,
-            program: _enumProgram, blnLeadSources: true,
+          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, program: _enumProgram, blnLeadSources: true,
             blnMarkets: true, blnAllMarkets: true, blnAgencies: true, blnAllAgencies: true,
-            enumQuinellas: _enumQuinellas);
+            enumQuinellas: _clsFilter.EnumQuinellas);
           break;
 
         case EnumRptLeadSource.UnavailableMotivesByAgency:
-          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister,
-            program: _enumProgram, blnLeadSources: true,
+          _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, program: _enumProgram, blnLeadSources: true,
             blnMarkets: true, blnAllMarkets: true, blnAgencies: true, blnAllAgencies: true);
           break;
 
@@ -529,7 +523,7 @@ namespace IM.ProcessorInhouse.Forms
       _frmFilter.ShowDialog();
       if (_frmFilter._blnOK)
       {
-        ShowLeadSourceReport();
+        ShowLeadSourceReport(_rptLeadSource, _clsFilter);
         _frmFilter.Close();
       }
       else
@@ -558,13 +552,13 @@ namespace IM.ProcessorInhouse.Forms
       #region Abriendo FrmFilter segun reporte seleccionado.
 
       _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, program: _enumProgram,
-        blnPersonnel: true, enumBasedOnArrival: _enumBasedOnArrival, enumQuinellas: _enumQuinellas);
+        blnPersonnel: true, enumBasedOnArrival: _clsFilter.EnumBasedOnArrival, enumQuinellas: _clsFilter.EnumQuinellas);
 
       WaitMessage(false);
       _frmFilter.ShowDialog();
       if (_frmFilter._blnOK)
       {
-        ShowPRReport();
+        ShowPRReport(_rptPR, _clsFilter);
         _frmFilter.Close();
       }
       else
@@ -597,13 +591,13 @@ namespace IM.ProcessorInhouse.Forms
         case EnumRptGeneral.ProductionbyAgencyMonthly:
           _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, program: _enumProgram,
             enumPeriod: EnumPeriod.Monthly, blnAgencies: true, blnAllAgencies: true,
-            enumBasedOnArrival: _enumBasedOnArrival,
-            enumQuinellas: _enumQuinellas, blnAgencyMonthly: true);
+            enumBasedOnArrival: _clsFilter.EnumBasedOnArrival,
+            enumQuinellas: _clsFilter.EnumQuinellas, blnAgencyMonthly: true);
           break;
 
         case EnumRptGeneral.ProductionbyMember:
           _frmFilter.ConfigurarFomulario(_blnOneDate, _blnOnlyOneRegister, program: _enumProgram,
-             enumBasedOnArrival: _enumBasedOnArrival, enumQuinellas: _enumQuinellas, blnOnlyWholesalers: true, blnClub: true);
+            enumBasedOnArrival: _clsFilter.EnumBasedOnArrival, enumQuinellas: _clsFilter.EnumQuinellas, enumOnlyWholesalers: _clsFilter.EnumOnlyWholesalers, blnClub: true);
           break;
       }
 
@@ -611,7 +605,7 @@ namespace IM.ProcessorInhouse.Forms
       _frmFilter.ShowDialog();
       if (_frmFilter._blnOK)
       {
-        ShowGeneralReport();
+        ShowGeneralReport(_rptGeneral, _clsFilter);
         _frmFilter.Close();
       }
       else
@@ -630,52 +624,46 @@ namespace IM.ProcessorInhouse.Forms
     /// <summary>
     ///   Muestra el reporte seleccionado
     /// </summary>
+    /// <param name="rptLeadSource"></param>
+    /// <param name="clsFilter"></param>
     /// <history>
-    /// [aalcocer] 23/Mar/2016 Created
-    /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
+    ///   [aalcocer] 23/Mar/2016 Created
+    ///   [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    private async void ShowLeadSourceReport()
+    private async void ShowLeadSourceReport(EnumRptLeadSource rptLeadSource, ClsFilter clsFilter)
     {
       FileInfo finfo = null;
-      string dateRange = _blnOneDate ? DateHelper.DateRange(_dtmInit, _dtmInit.AddDays(6)) : DateHelper.DateRange(_dtmStart, _dtmEnd);
-      string dateRangeFileNameRep = _blnOneDate ? DateHelper.DateRangeFileName(_dtmInit, _dtmInit) : DateHelper.DateRangeFileName(_dtmStart, _dtmEnd);
+      string dateRange = _blnOneDate ? DateHelper.DateRange(clsFilter.DtmInit, clsFilter.DtmInit.AddDays(6)) : DateHelper.DateRange(clsFilter.DtmStart, clsFilter.DtmEnd);
+      string dateRangeFileNameRep = _blnOneDate ? DateHelper.DateRangeFileName(clsFilter.DtmInit, clsFilter.DtmInit) : DateHelper.DateRangeFileName(clsFilter.DtmStart, clsFilter.DtmEnd);
 
-      string reportname = EnumToListHelper.GetEnumDescription(_rptLeadSource);
-      List<Tuple<string, string>> filters = new List<Tuple<string, string>> { new Tuple<string, string>("Date Range", dateRange) };
-      List<dynamic> list = new List<dynamic>();
-      WaitMessage(true, "Loading report...");
+      string reportname = EnumToListHelper.GetEnumDescription(rptLeadSource);
+      if (rptLeadSource == EnumRptLeadSource.CostbyPR && Convert.ToBoolean(clsFilter.EnumDetailGifts))
+        reportname += " With Details Gifts";
+      var filters = new List<Tuple<string, string>> { new Tuple<string, string>("Date Range", dateRange) };
+      var list = new List<dynamic>();
+      string fileFullPath = EpplusHelper.CreateEmptyExcel(reportname, dateRangeFileNameRep);
+      _frmReportQueue.AddReport(fileFullPath, reportname);
 
-      switch (_rptLeadSource)
+      switch (rptLeadSource)
       {
         #region Cost by PR
 
         case EnumRptLeadSource.CostbyPR:
-          if (!Convert.ToBoolean(_enumDetailsGift))
-          {
-            list.AddRange(await BRReportsByLeadSource.GetRptCostByPR(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas));
-            if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-            else
-            {
-              filters.Add(new Tuple<string, string>("Lead Sources",
-                _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-              if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
 
-              finfo = clsReports.ExportRptCostByPR(reportname, dateRangeFileNameRep, filters, list.Cast<RptCostByPR>().ToList());
-            }
+          if (!Convert.ToBoolean(clsFilter.EnumDetailGifts))
+          {
+            list.AddRange(await BRReportsByLeadSource.GetRptCostByPR(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources, clsFilter.EnumQuinellas));
+            if (list.Any())
+              finfo = clsReports.ExportRptCostByPR(reportname, fileFullPath, filters, list.Cast<RptCostByPR>().ToList());
           }
           else
           {
-            list.AddRange(await BRReportsByLeadSource.GetRptCostByPRWithDetailGifts(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas));
-            if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-            else
-            {
-              reportname += " With Details Gifts";
-              filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-                _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-              if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-
-              finfo = clsReports.ExportRptCostByPRWithDetailGifts(reportname, dateRangeFileNameRep, filters, list.Cast<RptCostByPRWithDetailGifts>().ToList());
-            }
+            list.AddRange(await BRReportsByLeadSource.GetRptCostByPRWithDetailGifts(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
+              clsFilter.EnumQuinellas));
+            if (list.Any())
+              finfo = clsReports.ExportRptCostByPRWithDetailGifts(reportname, fileFullPath, filters, list.Cast<RptCostByPRWithDetailGifts>().ToList());
           }
           break;
 
@@ -684,17 +672,14 @@ namespace IM.ProcessorInhouse.Forms
         #region Follow Up by Agency
 
         case EnumRptLeadSource.FollowUpbyAgency:
-          list.AddRange(await BRReportsByLeadSource.GetRptFollowUpByAgencies(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptFollowUpByAgencies(reportname, dateRangeFileNameRep, filters, list.Cast<RptFollowUpByAgency>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptFollowUpByAgencies(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
+            clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptFollowUpByAgencies(reportname, fileFullPath, filters, list.Cast<RptFollowUpByAgency>().ToList());
           break;
 
         #endregion Follow Up by Agency
@@ -702,17 +687,14 @@ namespace IM.ProcessorInhouse.Forms
         #region Follow Up by PR
 
         case EnumRptLeadSource.FollowUpbyPR:
-          list.AddRange(await BRReportsByLeadSource.GeRptFollowUpByPRs(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptFollowUpByPRs(reportname, dateRangeFileNameRep, filters, list.Cast<RptFollowUpByPR>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GeRptFollowUpByPRs(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
+            clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptFollowUpByPRs(reportname, fileFullPath, filters, list.Cast<RptFollowUpByPR>().ToList());
           break;
 
         #endregion Follow Up by PR
@@ -720,20 +702,14 @@ namespace IM.ProcessorInhouse.Forms
         #region Gifts Received by Sales Room
 
         case EnumRptLeadSource.GiftsReceivedbySalesRoom:
-          list.Add(await BRReportsByLeadSource.GetRptGiftsReceivedBySRData(_dtmStart, _dtmEnd, string.Join(",", _lstLeadSources),
-            string.Join(",", _lstCharteTo), string.Join(",", _lstGifts)));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            filters.Add(new Tuple<string, string>(_frmFilter.grdChargeTo.Columns[0].Header.ToString(),
-              _frmFilter.grdChargeTo.Items.Count == _lstCharteTo.Count ? "ALL" : string.Join(",", _lstCharteTo)));
-            filters.Add(new Tuple<string, string>(_frmFilter.grdGifts.Columns[0].Header.ToString(),
-              _frmFilter.grdGifts.Items.Count == _lstGifts.Count ? "ALL" : string.Join(",", _lstGifts)));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          filters.Add(Tuple.Create(GetSettings.StrChargeTo, clsFilter.BlnAllChargeTo ? GetSettings.StrAll : string.Join(",", clsFilter.LstChargeTo)));
+          filters.Add(Tuple.Create(GetSettings.StrGifts, clsFilter.BlnAllGifts ? GetSettings.StrAll : string.Join(",", clsFilter.LstGifts)));
 
-            finfo = clsReports.ExportRptGiftsReceivedBySR(reportname, dateRangeFileNameRep, filters, list.First());
-          }
+          list.Add(await BRReportsByLeadSource.GetRptGiftsReceivedBySRData(clsFilter.DtmStart, clsFilter.DtmEnd, string.Join(",", clsFilter.LstLeadSources),
+            string.Join(",", clsFilter.LstChargeTo), string.Join(",", clsFilter.LstGifts)));
+          if (list.Cast<GiftsReceivedBySRData>().First().GiftsReceivedBySR.Any())
+            finfo = clsReports.ExportRptGiftsReceivedBySR(reportname, fileFullPath, filters, list.First());
           break;
 
         #endregion Gifts Received by Sales Room
@@ -741,15 +717,11 @@ namespace IM.ProcessorInhouse.Forms
         #region Not Booking Arrivals (Graphic)
 
         case EnumRptLeadSource.NotBookingArrivalsGraphic:
-          list.Add(await BRReportsByLeadSource.GetGraphNotBookingArrival(_dtmInit, _lstLeadSources));
-          if (list.First() == null) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
 
-            finfo = clsReports.ExportGraphNotBookingArrival(reportname, dateRangeFileNameRep, filters, _dtmInit, list.First());
-          }
+          list.Add(await BRReportsByLeadSource.GetGraphNotBookingArrival(clsFilter.DtmInit, clsFilter.LstLeadSources));
+          if (list.First() != null)
+            finfo = clsReports.ExportGraphNotBookingArrival(reportname, fileFullPath, filters, clsFilter.DtmInit, list.First());
           break;
 
         #endregion Not Booking Arrivals (Graphic)
@@ -757,34 +729,25 @@ namespace IM.ProcessorInhouse.Forms
         #region Occupation, Contact, Book & Show
 
         case EnumRptLeadSource.OccupationContactBookShow:
-          if (!Convert.ToBoolean(_enumQuinellas))
-          {
-            list.AddRange(await BRReportsByLeadSource.GetRptProductionByMonths(_dtmStart, _dtmEnd, _lstLeadSources, external: _enumExternalInvitation, basedOnArrival: _enumBasedOnArrival));
-            if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-            else
-            {
-              filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-                _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-              if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
-              if (Convert.ToBoolean(_enumExternalInvitation)) filters.Add(new Tuple<string, string>(EnumToListHelper.GetEnumDescription(_enumExternalInvitation), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumExternalInvitation)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumExternalInvitation), string.Empty));
 
-              finfo = clsReports.ExportRptProductionByMonths(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByMonth>().ToList());
-            }
+          if (!Convert.ToBoolean(clsFilter.EnumQuinellas))
+          {
+            list.AddRange(await BRReportsByLeadSource.GetRptProductionByMonths(clsFilter.DtmStart, clsFilter.DtmEnd,
+              clsFilter.LstLeadSources, external: clsFilter.EnumExternalInvitation, basedOnArrival: clsFilter.EnumBasedOnArrival));
+            if (list.Any())
+              finfo = clsReports.ExportRptProductionByMonths(reportname, fileFullPath, filters, list.Cast<RptProductionByMonth>().ToList());
           }
           else
           {
-            list.AddRange(await BRReportsByLeadSource.GetRptContactBookShowQuinellas(_dtmStart, _dtmEnd, _lstLeadSources, _enumExternalInvitation, _enumBasedOnArrival));
-            if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-            else
-            {
-              filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-                _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-              if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-              if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
-              if (Convert.ToBoolean(_enumExternalInvitation)) filters.Add(new Tuple<string, string>(EnumToListHelper.GetEnumDescription(_enumExternalInvitation), string.Empty));
-
-              finfo = clsReports.ExportRptContactBookShowQuinellas(reportname, dateRangeFileNameRep, filters, list.Cast<RptContactBookShowQuinellas>().ToList());
-            }
+            list.AddRange(
+              await BRReportsByLeadSource.GetRptContactBookShowQuinellas(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
+              clsFilter.EnumExternalInvitation, clsFilter.EnumBasedOnArrival));
+            if (list.Any())
+              finfo = clsReports.ExportRptContactBookShowQuinellas(reportname, fileFullPath, filters, list.Cast<RptContactBookShowQuinellas>().ToList());
           }
           break;
 
@@ -793,17 +756,14 @@ namespace IM.ProcessorInhouse.Forms
         #region Production (Graphic)
 
         case EnumRptLeadSource.ProductionGraphic:
-          list.Add(await BRReportsByLeadSource.GetGraphProduction(_dtmInit, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
-          if (list.First() == null) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportGraphProduction(reportname, dateRangeFileNameRep, filters, _dtmInit, list.First());
-          }
+          list.Add(await BRReportsByLeadSource.GetGraphProduction(clsFilter.DtmInit, clsFilter.LstLeadSources, clsFilter.EnumQuinellas,
+            clsFilter.EnumBasedOnArrival));
+          if (list.First() != null)
+            finfo = clsReports.ExportGraphProduction(reportname, fileFullPath, filters, clsFilter.DtmInit, list.First());
           break;
 
         #endregion Production (Graphic)
@@ -811,17 +771,14 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Age
 
         case EnumRptLeadSource.ProductionbyAge:
-          list.AddRange(await BRReportsByLeadSource.GetProductionByAgeInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportProductionByAgeInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByAgeInhouse>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetProductionByAgeInhouses(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
+            clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportProductionByAgeInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByAgeInhouse>().ToList());
           break;
 
         #endregion Production by Age
@@ -829,17 +786,14 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Age, Market & Originally Available
 
         case EnumRptLeadSource.ProductionbyAgeMarketOriginallyAvailable:
-          list.AddRange(await BRReportsByLeadSource.GetProductionByAgeMarketOriginallyAvailableInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportProductionByAgeMarketOriginallyAvailableInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByAgeMarketOriginallyAvailableInhouse>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetProductionByAgeMarketOriginallyAvailableInhouses(clsFilter.DtmStart,
+            clsFilter.DtmEnd, clsFilter.LstLeadSources, clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportProductionByAgeMarketOriginallyAvailableInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByAgeMarketOriginallyAvailableInhouse>().ToList());
           break;
 
         #endregion Production by Age, Market & Originally Available
@@ -847,21 +801,17 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Agency
 
         case EnumRptLeadSource.ProductionbyAgency:
-          list.Add(await BRReportsByLeadSource.GetRptProductionByAgencyInhouses(_dtmStart, _dtmEnd, _lstLeadSources,
-            _enumQuinellas, salesByMembershipType: _enumSalesByMemberShipType, basedOnArrival: _enumBasedOnArrival,
-            external: _enumExternalInvitation));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumSalesByMemberShipType)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumSalesByMemberShipType), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumExternalInvitation)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumExternalInvitation), string.Empty));
 
-          if (!list.Cast<ProductionByAgencyInhouseData>().First().ProductionByAgencyInhouses.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-               _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumSalesByMemberShipType)) filters.Add(new Tuple<string, string>(_frmFilter.chkSalesByMembershipType.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumExternalInvitation)) filters.Add(new Tuple<string, string>(EnumToListHelper.GetEnumDescription(_enumExternalInvitation), string.Empty));
-            finfo = clsReports.ExportProductionByAgencyInhouses(reportname, dateRangeFileNameRep, filters, list.First());
-          }
+          list.Add(await BRReportsByLeadSource.GetRptProductionByAgencyInhouses(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
+            clsFilter.EnumQuinellas, salesByMembershipType: clsFilter.EnumSalesByMemberShipType, basedOnArrival: clsFilter.EnumBasedOnArrival,
+            external: clsFilter.EnumExternalInvitation));
+          if (list.Cast<ProductionByAgencyInhouseData>().First().ProductionByAgencyInhouses.Any())
+            finfo = clsReports.ExportProductionByAgencyInhouses(reportname, fileFullPath, filters, list.First());
           break;
 
         #endregion Production by Agency
@@ -869,20 +819,18 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Agency (Nights)
 
         case EnumRptLeadSource.ProductionbyAgencyNights:
-          list.Add(await BRReportsByLeadSource.GetRptProductionByAgencyInhouses(_dtmStart, _dtmEnd, _lstLeadSources,
-            _enumQuinellas, true, Convert.ToInt32(_frmFilter.txtStartN.Text), Convert.ToInt32(_frmFilter.txtEndN.Text), _enumSalesByMemberShipType,
-            basedOnArrival: _enumBasedOnArrival, external: _enumExternalInvitation));
-          if (!list.Cast<ProductionByAgencyInhouseData>().First().ProductionByAgencyInhouses.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(), _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumSalesByMemberShipType)) filters.Add(new Tuple<string, string>(_frmFilter.chkSalesByMembershipType.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumExternalInvitation)) filters.Add(new Tuple<string, string>(EnumToListHelper.GetEnumDescription(_enumExternalInvitation), string.Empty));
-            filters.Add(Tuple.Create($"{Convert.ToInt32(_frmFilter.txtStartN.Text)}-{Convert.ToInt32(_frmFilter.txtEndN.Text)} nights", string.Empty));
-            finfo = clsReports.ExportProductionByAgencyInhouses(reportname, dateRangeFileNameRep, filters, list.First());
-          }
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumSalesByMemberShipType)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumSalesByMemberShipType), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumExternalInvitation)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumExternalInvitation), string.Empty));
+          filters.Add(Tuple.Create($"{clsFilter.IntStartN}-{clsFilter.IntEndN} nights", string.Empty));
+
+          list.Add(await BRReportsByLeadSource.GetRptProductionByAgencyInhouses(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
+            clsFilter.EnumQuinellas, true, clsFilter.IntStartN, clsFilter.IntEndN, clsFilter.EnumSalesByMemberShipType,
+            basedOnArrival: clsFilter.EnumBasedOnArrival, external: clsFilter.EnumExternalInvitation));
+          if (list.Cast<ProductionByAgencyInhouseData>().First().ProductionByAgencyInhouses.Any())
+            finfo = clsReports.ExportProductionByAgencyInhouses(reportname, fileFullPath, filters, list.First());
           break;
 
         #endregion Production by Agency (Nights)
@@ -890,20 +838,18 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Agency (Only Quinellas)
 
         case EnumRptLeadSource.ProductionbyAgencyOnlyQuinellas:
-          list.Add(await BRReportsByLeadSource.GetRptProductionByAgencyInhouses(_dtmStart, _dtmEnd, _lstLeadSources,
-           _enumQuinellas, salesByMembershipType: _enumSalesByMemberShipType, basedOnArrival: _enumBasedOnArrival,
-           external: _enumExternalInvitation, onlyQuinellas: true));
-          if (!list.Cast<ProductionByAgencyInhouseData>().First().ProductionByAgencyInhouses.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(), _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumSalesByMemberShipType)) filters.Add(new Tuple<string, string>(_frmFilter.chkSalesByMembershipType.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumExternalInvitation)) filters.Add(new Tuple<string, string>(EnumToListHelper.GetEnumDescription(_enumExternalInvitation), string.Empty));
-            filters.Add(Tuple.Create("Only Quinellas", string.Empty));
-            finfo = clsReports.ExportProductionByAgencyInhouses(reportname, dateRangeFileNameRep, filters, list.First());
-          }
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumSalesByMemberShipType)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumSalesByMemberShipType), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumExternalInvitation)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumExternalInvitation), string.Empty));
+          filters.Add(Tuple.Create("Only Quinellas", string.Empty));
+
+          list.Add(await BRReportsByLeadSource.GetRptProductionByAgencyInhouses(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
+            clsFilter.EnumQuinellas, salesByMembershipType: clsFilter.EnumSalesByMemberShipType, basedOnArrival: clsFilter.EnumBasedOnArrival,
+            external: clsFilter.EnumExternalInvitation, onlyQuinellas: true));
+          if (list.Cast<ProductionByAgencyInhouseData>().First().ProductionByAgencyInhouses.Any())
+            finfo = clsReports.ExportProductionByAgencyInhouses(reportname, fileFullPath, filters, list.First());
           break;
 
         #endregion Production by Agency (Only Quinellas)
@@ -911,18 +857,15 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Contract & Agency
 
         case EnumRptLeadSource.ProductionbyContractAgency:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByContractAgencyInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _lstMarkets, _lstAgencies, _enumQuinellas));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            filters.Add(new Tuple<string, string>(_frmFilter.grdMarkets.Columns[0].Header.ToString(), _frmFilter.grdMarkets.Items.Count == _lstMarkets.Count ? "ALL" : string.Join(",", _lstMarkets)));
-            filters.Add(new Tuple<string, string>(_frmFilter.grdAgencies.Columns[0].Header.ToString(), _frmFilter.grdAgencies.Items.Count == _lstAgencies.Count ? "ALL" : string.Join(",", _lstAgencies)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          filters.Add(Tuple.Create(GetSettings.StrMarkets, clsFilter.BlnAllMarkets ? GetSettings.StrAll : string.Join(",", clsFilter.LstMarkets)));
+          filters.Add(Tuple.Create(GetSettings.StrAgencies, clsFilter.BlnAllAgencies ? GetSettings.StrAll : string.Join(",", clsFilter.LstAgencies)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByContractAgencyInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByContractAgencyInhouse>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByContractAgencyInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
+            clsFilter.LstLeadSources, clsFilter.LstMarkets, clsFilter.LstAgencies, clsFilter.EnumQuinellas));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByContractAgencyInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByContractAgencyInhouse>().ToList());
           break;
 
         #endregion Production by Contract & Agency
@@ -930,19 +873,16 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Contract, Agency, Market & Originally Available
 
         case EnumRptLeadSource.ProductionbyContractAgencyMarketOriginallyAvailable:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByContractAgencyMarketOriginallyAvailableInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _lstMarkets, _lstAgencies, _enumQuinellas));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            filters.Add(new Tuple<string, string>(_frmFilter.grdMarkets.Columns[0].Header.ToString(), _frmFilter.grdMarkets.Items.Count == _lstMarkets.Count ? "ALL" : string.Join(",", _lstMarkets)));
-            filters.Add(new Tuple<string, string>(_frmFilter.grdAgencies.Columns[0].Header.ToString(), _frmFilter.grdAgencies.Items.Count == _lstAgencies.Count ? "ALL" : string.Join(",", _lstAgencies)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          filters.Add(Tuple.Create(GetSettings.StrMarkets, clsFilter.BlnAllMarkets ? GetSettings.StrAll : string.Join(",", clsFilter.LstMarkets)));
+          filters.Add(Tuple.Create(GetSettings.StrAgencies, clsFilter.BlnAllAgencies ? GetSettings.StrAll : string.Join(",", clsFilter.LstAgencies)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByContractAgencyMarketOriginallyAvailableInhouses(reportname, dateRangeFileNameRep, filters,
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByContractAgencyMarketOriginallyAvailableInhouses(clsFilter.DtmStart,
+            clsFilter.DtmEnd, clsFilter.LstLeadSources, clsFilter.LstMarkets, clsFilter.LstAgencies, clsFilter.EnumQuinellas));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByContractAgencyMarketOriginallyAvailableInhouses(reportname, fileFullPath, filters,
               list.Cast<RptProductionByContractAgencyMarketOriginallyAvailableInhouse>().ToList());
-          }
           break;
 
         #endregion Production by Contract, Agency, Market & Originally Available
@@ -950,17 +890,14 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Couple Type
 
         case EnumRptLeadSource.ProductionbyCoupleType:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByCoupleTypeInhouses(_dtmStart, _dtmEnd, _lstLeadSources, considerQuinellas: _enumQuinellas, basedOnArrival: _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByCoupleTypeInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByCoupleTypeInhouse>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByCoupleTypeInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
+            clsFilter.LstLeadSources, considerQuinellas: clsFilter.EnumQuinellas, basedOnArrival: clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByCoupleTypeInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByCoupleTypeInhouse>().ToList());
           break;
 
         #endregion Production by Couple Type
@@ -968,17 +905,14 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Desk
 
         case EnumRptLeadSource.ProductionbyDesk:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByDeskInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByDeskInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByDeskInhouse>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByDeskInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
+            clsFilter.LstLeadSources, clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByDeskInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByDeskInhouse>().ToList());
           break;
 
         #endregion Production by Desk
@@ -986,19 +920,15 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Gift & Quantity
 
         case EnumRptLeadSource.ProductionbyGiftQuantity:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByGiftQuantities(_dtmStart, _dtmEnd, _lstLeadSources, _lstGiftsQuantity, _enumQuinellas,
-            _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            filters.Add(new Tuple<string, string>(_frmFilter.grdGiftsQuantity.Columns[1].Header.ToString(), string.Join(",", _lstGiftsQuantity.Select(c => c.Value + "-" + c.Key))));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          filters.Add(Tuple.Create(GetSettings.StrGifts, string.Join(",", clsFilter.LstGiftsQuantity.Select(c => c.Value + "-" + c.Key))));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByGiftQuantities(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByGiftQuantity>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByGiftQuantities(clsFilter.DtmStart, clsFilter.DtmEnd,
+            clsFilter.LstLeadSources, clsFilter.LstGiftsQuantity, clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByGiftQuantities(reportname, fileFullPath, filters, list.Cast<RptProductionByGiftQuantity>().ToList());
           break;
 
         #endregion Production by Gift & Quantity
@@ -1006,17 +936,14 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Group
 
         case EnumRptLeadSource.ProductionbyGroup:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByGroupInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByGroupInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByGroupInhouse>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByGroupInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
+            clsFilter.LstLeadSources, clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByGroupInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByGroupInhouse>().ToList());
           break;
 
         #endregion Production by Group
@@ -1024,17 +951,14 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Guest Status
 
         case EnumRptLeadSource.ProductionbyGuestStatus:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByGuestStatusInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByGuestStatusInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByGuestStatusInhouse>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByGuestStatusInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
+            clsFilter.LstLeadSources, clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByGuestStatusInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByGuestStatusInhouse>().ToList());
           break;
 
         #endregion Production by Guest Status
@@ -1042,19 +966,16 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Member Type & Agency
 
         case EnumRptLeadSource.ProductionbyMemberTypeAgency:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByMemberTypeAgencyInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _lstMarkets, _lstAgencies, _enumQuinellas, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            filters.Add(new Tuple<string, string>(_frmFilter.grdMarkets.Columns[0].Header.ToString(), _frmFilter.grdMarkets.Items.Count == _lstMarkets.Count ? "ALL" : string.Join(",", _lstMarkets)));
-            filters.Add(new Tuple<string, string>(_frmFilter.grdAgencies.Columns[0].Header.ToString(), _frmFilter.grdAgencies.Items.Count == _lstAgencies.Count ? "ALL" : string.Join(",", _lstAgencies)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          filters.Add(Tuple.Create(GetSettings.StrMarkets, clsFilter.BlnAllMarkets ? GetSettings.StrAll : string.Join(",", clsFilter.LstMarkets)));
+          filters.Add(Tuple.Create(GetSettings.StrAgencies, clsFilter.BlnAllAgencies ? GetSettings.StrAll : string.Join(",", clsFilter.LstAgencies)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByMemberTypeAgencyInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByMemberTypeAgencyInhouse>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByMemberTypeAgencyInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
+            clsFilter.LstLeadSources, clsFilter.LstMarkets, clsFilter.LstAgencies, clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByMemberTypeAgencyInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByMemberTypeAgencyInhouse>().ToList());
           break;
 
         #endregion Production by Member Type & Agency
@@ -1062,19 +983,19 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Member Type, Agency, Market & Originally Available
 
         case EnumRptLeadSource.ProductionbyMemberTypeAgencyMarketOriginallyAvailable:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _lstMarkets, _lstAgencies, _enumQuinellas, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            filters.Add(new Tuple<string, string>(_frmFilter.grdMarkets.Columns[0].Header.ToString(), _frmFilter.grdMarkets.Items.Count == _lstMarkets.Count ? "ALL" : string.Join(",", _lstMarkets)));
-            filters.Add(new Tuple<string, string>(_frmFilter.grdAgencies.Columns[0].Header.ToString(), _frmFilter.grdAgencies.Items.Count == _lstAgencies.Count ? "ALL" : string.Join(",", _lstAgencies)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          filters.Add(Tuple.Create(GetSettings.StrMarkets, clsFilter.BlnAllMarkets ? GetSettings.StrAll : string.Join(",", clsFilter.LstMarkets)));
+          filters.Add(Tuple.Create(GetSettings.StrAgencies, clsFilter.BlnAllAgencies ? GetSettings.StrAll : string.Join(",", clsFilter.LstAgencies)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse>().ToList());
-          }
+          list.AddRange(
+            await
+              BRReportsByLeadSource.GetRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
+              clsFilter.LstLeadSources, clsFilter.LstMarkets, clsFilter.LstAgencies, clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses(reportname, fileFullPath, filters,
+              list.Cast<RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse>().ToList());
           break;
 
         #endregion Production by Member Type, Agency, Market & Originally Available
@@ -1082,17 +1003,14 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Nationality
 
         case EnumRptLeadSource.ProductionbyNationality:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityInhouses(_dtmStart, _dtmEnd, _lstLeadSources, considerQuinellas: _enumQuinellas, basedOnArrival: _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByNationalityInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByNationalityInhouse>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
+            clsFilter.LstLeadSources, considerQuinellas: clsFilter.EnumQuinellas, basedOnArrival: clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByNationalityInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByNationalityInhouse>().ToList());
           break;
 
         #endregion Production by Nationality
@@ -1100,18 +1018,17 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Nationality, Market & Originally Available
 
         case EnumRptLeadSource.ProductionbyNationalityMarketOriginallyAvailable:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityMarketOriginallyAvailableInhouses(_dtmStart, _dtmEnd, _lstLeadSources, considerQuinellas: _enumQuinellas, filterSaveCourtesyTours: _enumSaveCourtesyTours, basedOnArrival: _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
-            filters.Add(new Tuple<string, string>("Including Save Courtesy Tours", string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
+          filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumSaveCourtesyTours), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByNationalityMarketOriginallyAvailableInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByNationalityMarketOriginallyAvailableInhouse>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityMarketOriginallyAvailableInhouses(clsFilter.DtmStart,
+            clsFilter.DtmEnd, clsFilter.LstLeadSources, considerQuinellas: clsFilter.EnumQuinellas,
+            filterSaveCourtesyTours: clsFilter.EnumSaveCourtesyTours, basedOnArrival: clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByNationalityMarketOriginallyAvailableInhouses(reportname, fileFullPath, filters,
+              list.Cast<RptProductionByNationalityMarketOriginallyAvailableInhouse>().ToList());
           break;
 
         #endregion Production by Nationality, Market & Originally Available
@@ -1119,17 +1036,15 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by PR
 
         case EnumRptLeadSource.ProductionbyPR:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByPRInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnPRLocation)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnPRLocation), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByPRInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByPRInhouse>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByPRInhouses(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
+            clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival, clsFilter.EnumBasedOnPRLocation));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByPRInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByPRInhouse>().ToList());
           break;
 
         #endregion Production by PR
@@ -1137,17 +1052,15 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by PR & Group
 
         case EnumRptLeadSource.ProductionbyPRGroup:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByPRGroupInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByPRGroupInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByPRGroupInhouse>().ToList());
-          }
+          list.AddRange(
+            await BRReportsByLeadSource.GetRptProductionByPRGroupInhouses(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
+            clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByPRGroupInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByPRGroupInhouse>().ToList());
           break;
 
         #endregion Production by PR & Group
@@ -1155,17 +1068,14 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by PR & Sales Room
 
         case EnumRptLeadSource.ProductionbyPRSalesRoom:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByPRSalesRoomInhouses(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByPRSalesRoomInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByPRSalesRoomInhouse>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByPRSalesRoomInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
+            clsFilter.LstLeadSources, clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByPRSalesRoomInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByPRSalesRoomInhouse>().ToList());
           break;
 
         #endregion Production by PR & Sales Room
@@ -1173,15 +1083,11 @@ namespace IM.ProcessorInhouse.Forms
         #region Reps Payment
 
         case EnumRptLeadSource.RepsPayment:
-          list.AddRange(await BRReportsByLeadSource.GetRptRepsPayments(_dtmStart, _dtmEnd, _lstLeadSources));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
 
-            finfo = clsReports.ExportRptRepsPayments(reportname, dateRangeFileNameRep, filters, list.Cast<RptRepsPayment>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptRepsPayments(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources));
+          if (list.Any())
+            finfo = clsReports.ExportRptRepsPayments(reportname, fileFullPath, filters, list.Cast<RptRepsPayment>().ToList());
           break;
 
         #endregion Reps Payment
@@ -1189,15 +1095,11 @@ namespace IM.ProcessorInhouse.Forms
         #region Reps Payment Summary
 
         case EnumRptLeadSource.RepsPaymentSummary:
-          list.AddRange(await BRReportsByLeadSource.GetRptRepsPaymentSummaries(_dtmStart, _dtmEnd, _lstLeadSources));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
 
-            finfo = clsReports.ExportRptRepsPaymentSummaries(reportname, dateRangeFileNameRep, filters, list.Cast<RptRepsPaymentSummary>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptRepsPaymentSummaries(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources));
+          if (list.Any())
+            finfo = clsReports.ExportRptRepsPaymentSummaries(reportname, fileFullPath, filters, list.Cast<RptRepsPaymentSummary>().ToList());
           break;
 
         #endregion Reps Payment Summary
@@ -1205,16 +1107,12 @@ namespace IM.ProcessorInhouse.Forms
         #region Score by PR
 
         case EnumRptLeadSource.ScorebyPR:
-          list.Add(await BRReportsByLeadSource.GetRptScoreByPrs(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas));
-          if (!list.Cast<ScoreByPRData>().First().ScoreByPR.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
 
-            finfo = clsReports.ExportRptScoreByPrs(reportname, dateRangeFileNameRep, filters, list.First());
-          }
+          list.Add(await BRReportsByLeadSource.GetRptScoreByPrs(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources, clsFilter.EnumQuinellas));
+          if (list.Cast<ScoreByPRData>().First().ScoreByPR.Any())
+            finfo = clsReports.ExportRptScoreByPrs(reportname, fileFullPath, filters, list.First());
           break;
 
         #endregion Score by PR
@@ -1222,16 +1120,13 @@ namespace IM.ProcessorInhouse.Forms
         #region Show Factor by Booking Date
 
         case EnumRptLeadSource.ShowFactorbyBookingDate:
-          list.AddRange(await BRReportsByLeadSource.GetRptShowFactorByBookingDates(_dtmStart, _dtmEnd, _lstLeadSources, _enumQuinellas));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
 
-            finfo = clsReports.ExportRptShowFactorByBookingDates(reportname, dateRangeFileNameRep, filters, list.Cast<RptShowFactorByBookingDate>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptShowFactorByBookingDates(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
+            clsFilter.EnumQuinellas));
+          if (list.Any())
+            finfo = clsReports.ExportRptShowFactorByBookingDates(reportname, fileFullPath, filters, list.Cast<RptShowFactorByBookingDate>().ToList());
           break;
 
         #endregion Show Factor by Booking Date
@@ -1239,14 +1134,11 @@ namespace IM.ProcessorInhouse.Forms
         #region Unavailable Arrivals (Graphic)
 
         case EnumRptLeadSource.UnavailableArrivalsGraphic:
-          list.Add(await BRReportsByLeadSource.GetGraphUnavailableArrivals(_dtmInit, _lstLeadSources));
-          if (list.First() == null) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            finfo = clsReports.ExportGraphUnavailableArrivals(reportname, dateRangeFileNameRep, filters, _dtmInit, list.First());
-          }
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+
+          list.Add(await BRReportsByLeadSource.GetGraphUnavailableArrivals(clsFilter.DtmInit, clsFilter.LstLeadSources));
+          if (list.First() != null)
+            finfo = clsReports.ExportGraphUnavailableArrivals(reportname, fileFullPath, filters, clsFilter.DtmInit, list.First());
           break;
 
         #endregion Unavailable Arrivals (Graphic)
@@ -1254,30 +1146,24 @@ namespace IM.ProcessorInhouse.Forms
         #region Unavailable Motives By Agency
 
         case EnumRptLeadSource.UnavailableMotivesByAgency:
-          list.AddRange(await BRReportsByLeadSource.GetRptUnavailableMotivesByAgencies(_dtmStart, _dtmEnd, _lstLeadSources, _lstMarkets, _lstAgencies));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdLeadSources.Columns[0].Header.ToString(),
-              _frmFilter.grdLeadSources.Items.Count == _lstLeadSources.Count ? "ALL" : string.Join(",", _lstLeadSources)));
-            filters.Add(new Tuple<string, string>(_frmFilter.grdMarkets.Columns[0].Header.ToString(),
-              _frmFilter.grdMarkets.Items.Count == _lstMarkets.Count ? "ALL" : string.Join(",", _lstMarkets)));
-            filters.Add(new Tuple<string, string>(_frmFilter.grdAgencies.Columns[0].Header.ToString(),
-              _frmFilter.grdAgencies.Items.Count == _lstAgencies.Count ? "ALL" : string.Join(",", _lstAgencies)));
+          filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
+          filters.Add(Tuple.Create(GetSettings.StrMarkets, clsFilter.BlnAllMarkets ? GetSettings.StrAll : string.Join(",", clsFilter.LstMarkets)));
+          filters.Add(Tuple.Create(GetSettings.StrAgencies, clsFilter.BlnAllAgencies ? GetSettings.StrAll : string.Join(",", clsFilter.LstAgencies)));
 
-            finfo = clsReports.ExportRptUnavailableMotivesByAgencies(reportname, dateRangeFileNameRep, filters, list.Cast<RptUnavailableMotivesByAgency>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptUnavailableMotivesByAgencies(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
+            clsFilter.LstMarkets, clsFilter.LstAgencies));
+          if (list.Any())
+            finfo = clsReports.ExportRptUnavailableMotivesByAgencies(reportname, fileFullPath, filters, list.Cast<RptUnavailableMotivesByAgency>().ToList());
           break;
 
           #endregion Unavailable Motives By Agency
       }
 
-      if (finfo != null)
+      if (finfo == null)
       {
-        Process.Start(finfo.FullName);
+        finfo = EpplusHelper.CreateNoInfoRptExcel(filters, reportname, fileFullPath);
       }
-
-      WaitMessage(false);
+      _frmReportQueue.SetFileInfo(fileFullPath, finfo);
     }
 
     #endregion ShowLeadSourceReport
@@ -1287,36 +1173,39 @@ namespace IM.ProcessorInhouse.Forms
     /// <summary>
     ///   Muestra el reporte seleccionado por PR
     /// </summary>
+    /// <param name="clsFilter"></param>
+    /// <param name="rptPR"></param>
     /// <history>
-    /// [aalcocer] 23/Mar/2016 Created
-    /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
+    ///   [aalcocer] 23/Mar/2016 Created
+    ///   [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    private async void ShowPRReport()
+    private async void ShowPRReport(EnumRptPR rptPR, ClsFilter clsFilter)
     {
       FileInfo finfo = null;
-      string dateRange = _blnOneDate ? DateHelper.DateRange(_dtmStart, _dtmStart) : DateHelper.DateRange(_dtmStart, _dtmEnd);
-      string dateRangeFileNameRep = _blnOneDate ? DateHelper.DateRangeFileName(_dtmStart, _dtmStart) : DateHelper.DateRangeFileName(_dtmStart, _dtmEnd);
+      string dateRange = _blnOneDate ? DateHelper.DateRange(clsFilter.DtmInit, clsFilter.DtmInit.AddDays(6)) : DateHelper.DateRange(clsFilter.DtmStart, clsFilter.DtmEnd);
+      string dateRangeFileNameRep = _blnOneDate ? DateHelper.DateRangeFileName(clsFilter.DtmInit, clsFilter.DtmInit) : DateHelper.DateRangeFileName(clsFilter.DtmStart, clsFilter.DtmEnd);
 
-      string reportname = EnumToListHelper.GetEnumDescription(_rptPR);
-      List<Tuple<string, string>> filters = new List<Tuple<string, string>> { new Tuple<string, string>("Date Range", dateRange) };
-      List<dynamic> list = new List<dynamic>();
-      WaitMessage(true, "Loading report...");
+      string reportname = EnumToListHelper.GetEnumDescription(rptPR);
+      var filters = new List<Tuple<string, string>> { new Tuple<string, string>("Date Range", dateRange) };
+      var list = new List<dynamic>();
+      string fileFullPath = EpplusHelper.CreateEmptyExcel(reportname, dateRangeFileNameRep);
+      _frmReportQueue.AddReport(fileFullPath, reportname);
 
-      switch (_rptPR)
+      switch (rptPR)
       {
         #region Production by Couple Type
 
         case EnumRptPR.ProductionbyCoupleType:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByCoupleTypeInhouses(_dtmStart, _dtmEnd, new[] { "ALL" }, _lstPersonnel, _enumProgram, _enumQuinellas, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>("PR", _frmFilter.grdPersonnel.Items.Count == _lstPersonnel.Count ? "ALL" : string.Join(",", _lstPersonnel)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrPR, clsFilter.BlnAllPersonnel ? GetSettings.StrAll : string.Join(",", clsFilter.LstPersonnel)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByCoupleTypeInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByCoupleTypeInhouse>().ToList());
-          }
+          list.AddRange(
+            await
+              BRReportsByLeadSource.GetRptProductionByCoupleTypeInhouses(clsFilter.DtmStart, clsFilter.DtmEnd, new[] { GetSettings.StrAll },
+              clsFilter.LstPersonnel, _enumProgram, clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByCoupleTypeInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByCoupleTypeInhouse>().ToList());
           break;
 
         #endregion Production by Couple Type
@@ -1324,17 +1213,14 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Nationality
 
         case EnumRptPR.ProductionbyNationality:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityInhouses(_dtmStart, _dtmEnd, new[] { "ALL" }, _lstPersonnel,
-            _enumProgram, _enumQuinellas, _enumSaveCourtesyTours, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>("PR", _frmFilter.grdPersonnel.Items.Count == _lstPersonnel.Count ? "ALL" : string.Join(",", _lstPersonnel)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrPR, clsFilter.BlnAllPersonnel ? GetSettings.StrAll : string.Join(",", clsFilter.LstPersonnel)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByNationalityInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByNationalityInhouse>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityInhouses(clsFilter.DtmStart, clsFilter.DtmEnd, new[] { GetSettings.StrAll },
+            clsFilter.LstPersonnel, _enumProgram, clsFilter.EnumQuinellas, clsFilter.EnumSaveCourtesyTours, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByNationalityInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByNationalityInhouse>().ToList());
           break;
 
         #endregion Production by Nationality
@@ -1342,27 +1228,24 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Nationality, Market & Originally Available
 
         case EnumRptPR.ProductionbyNationalityMarketOriginallyAvailable:
-          list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityMarketOriginallyAvailableInhouses(_dtmStart, _dtmEnd, new[] { "ALL" }, _lstPersonnel,
-           _enumProgram, _enumQuinellas, _enumSaveCourtesyTours, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>("PR", _frmFilter.grdPersonnel.Items.Count == _lstPersonnel.Count ? "ALL" : string.Join(",", _lstPersonnel)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrPR, clsFilter.BlnAllPersonnel ? GetSettings.StrAll : string.Join(",", clsFilter.LstPersonnel)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByNationalityMarketOriginallyAvailableInhouses(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByNationalityMarketOriginallyAvailableInhouse>().ToList());
-          }
+          list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityMarketOriginallyAvailableInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
+            new[] { GetSettings.StrAll }, clsFilter.LstPersonnel, _enumProgram, clsFilter.EnumQuinellas, clsFilter.EnumSaveCourtesyTours, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByNationalityMarketOriginallyAvailableInhouses(reportname, fileFullPath, filters,
+              list.Cast<RptProductionByNationalityMarketOriginallyAvailableInhouse>().ToList());
           break;
 
           #endregion Production by Nationality, Market & Originally Available
       }
-      if (finfo != null)
+      if (finfo == null)
       {
-        Process.Start(finfo.FullName);
+        finfo = EpplusHelper.CreateNoInfoRptExcel(filters, reportname, fileFullPath);
       }
-
-      WaitMessage(false);
+      _frmReportQueue.SetFileInfo(fileFullPath, finfo);
     }
 
     #endregion ShowPRReport
@@ -1372,36 +1255,38 @@ namespace IM.ProcessorInhouse.Forms
     /// <summary>
     ///   Muestra el reporte seleccionado
     /// </summary>
+    /// <param name="rptGeneral"></param>
+    /// <param name="clsFilter"></param>
     /// <history>
-    /// [aalcocer] 22/04/2016 Created
-    /// [aalcocer] 24/05/2016 Modified. Se agregó asincronía
+    ///   [aalcocer] 22/04/2016 Created
+    ///   [aalcocer] 24/05/2016 Modified. Se agregó asincronía
     /// </history>
-    private async void ShowGeneralReport()
+    private async void ShowGeneralReport(EnumRptGeneral rptGeneral, ClsFilter clsFilter)
     {
       FileInfo finfo = null;
-      string dateRange = _blnOneDate ? DateHelper.DateRange(_dtmStart, _dtmStart) : DateHelper.DateRange(_dtmStart, _dtmEnd);
-      string dateRangeFileNameRep = _blnOneDate ? DateHelper.DateRangeFileName(_dtmStart, _dtmStart) : DateHelper.DateRangeFileName(_dtmStart, _dtmEnd);
+      string dateRange = _blnOneDate ? DateHelper.DateRange(clsFilter.DtmInit, clsFilter.DtmInit.AddDays(6)) : DateHelper.DateRange(clsFilter.DtmStart, clsFilter.DtmEnd);
+      string dateRangeFileNameRep = _blnOneDate ? DateHelper.DateRangeFileName(clsFilter.DtmInit, clsFilter.DtmInit) : DateHelper.DateRangeFileName(clsFilter.DtmStart, clsFilter.DtmEnd);
 
-      string reportname = EnumToListHelper.GetEnumDescription(_rptGeneral);
-      List<Tuple<string, string>> filters = new List<Tuple<string, string>> { new Tuple<string, string>("Date Range", dateRange) };
-      List<dynamic> list = new List<dynamic>();
-      WaitMessage(true, "Loading report...");
+      string reportname = EnumToListHelper.GetEnumDescription(rptGeneral);
+      var filters = new List<Tuple<string, string>> { new Tuple<string, string>("Date Range", dateRange) };
+      var list = new List<dynamic>();
+      string fileFullPath = EpplusHelper.CreateEmptyExcel(reportname, dateRangeFileNameRep);
+      _frmReportQueue.AddReport(fileFullPath, reportname);
 
-      switch (_rptGeneral)
+      switch (rptGeneral)
       {
         #region Production by Agency (Monthly)
 
         case EnumRptGeneral.ProductionbyAgencyMonthly:
-          list.AddRange(await BRGeneralReports.GetRptProductionByAgencyMonthly(_dtmStart, _dtmEnd, _lstAgencies, _enumQuinellas, _enumBasedOnArrival));
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>(_frmFilter.grdAgencies.Columns[0].Header.ToString(), _frmFilter.grdAgencies.Items.Count == _lstAgencies.Count ? "ALL" : string.Join(",", _lstAgencies)));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
+          filters.Add(Tuple.Create(GetSettings.StrAgencies, clsFilter.BlnAllAgencies ? GetSettings.StrAll : string.Join(",", clsFilter.LstAgencies)));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
-            finfo = clsReports.ExportRptProductionByAgencyMonthly(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByAgencyMonthly>().ToList());
-          }
+          list.AddRange(await BRGeneralReports.GetRptProductionByAgencyMonthly(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstAgencies,
+            clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByAgencyMonthly(reportname, fileFullPath, filters, list.Cast<RptProductionByAgencyMonthly>().ToList());
+
           break;
 
         #endregion Production by Agency (Monthly)
@@ -1409,28 +1294,26 @@ namespace IM.ProcessorInhouse.Forms
         #region Production by Member
 
         case EnumRptGeneral.ProductionbyMember:
-          list.AddRange(await BRGeneralReports.GetRptProductionByMembers(_dtmStart, _dtmEnd, new[] { "ALL" }, program: _enumProgram, company: _iCompany,
-            club: _club, aplication: _strApplication, onlyWholesalers: _blnOnlyWholesalers, considerQuinellas: _enumQuinellas, basedOnArrival: _enumBasedOnArrival));
+          filters.Add(Tuple.Create("Membership", GetSettings.StrAll));
+          if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
+          if (Convert.ToBoolean(clsFilter.EnumOnlyWholesalers)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumOnlyWholesalers), string.Empty));
 
-          if (!list.Any()) UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          else
-          {
-            filters.Add(new Tuple<string, string>("Membership", "ALL"));
-            if (Convert.ToBoolean(_enumQuinellas)) filters.Add(new Tuple<string, string>(_frmFilter.chkQuinellas.Content.ToString(), string.Empty));
-            if (Convert.ToBoolean(_enumBasedOnArrival)) filters.Add(new Tuple<string, string>(_frmFilter.chkBasedOnArrival.Content.ToString(), string.Empty));
-            if (_blnOnlyWholesalers) filters.Add(new Tuple<string, string>(_frmFilter.chkOnlyWholesalers.Content.ToString(), string.Empty));
-            finfo = clsReports.ExportRptProductionByMembers(reportname, dateRangeFileNameRep, filters, list.Cast<RptProductionByMember>().ToList());
-          }
+          list.AddRange(await BRGeneralReports.GetRptProductionByMembers(clsFilter.DtmStart, clsFilter.DtmEnd, new[] { GetSettings.StrAll },
+            program: _enumProgram, company: clsFilter.IntCompany, club: clsFilter.Club, aplication: clsFilter.StrApplication,
+            onlyWholesalers: clsFilter.EnumOnlyWholesalers, considerQuinellas: clsFilter.EnumQuinellas, basedOnArrival: clsFilter.EnumBasedOnArrival));
+
+          if (list.Any())
+            finfo = clsReports.ExportRptProductionByMembers(reportname, fileFullPath, filters, list.Cast<RptProductionByMember>().ToList());
           break;
 
           #endregion Production by Member
       }
-      if (finfo != null)
+      if (finfo == null)
       {
-        Process.Start(finfo.FullName);
+        finfo = EpplusHelper.CreateNoInfoRptExcel(filters, reportname, fileFullPath);
       }
-
-      WaitMessage(false);
+      _frmReportQueue.SetFileInfo(fileFullPath, finfo);
     }
 
     #endregion ShowGeneralReport

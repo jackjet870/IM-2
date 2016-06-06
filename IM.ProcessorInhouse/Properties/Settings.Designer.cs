@@ -72,5 +72,68 @@ namespace IM.ProcessorInhouse.Properties {
                 this["ProductionByGiftQuantity"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ALL")]
+        public string strALL {
+            get {
+                return ((string)(this["strALL"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Lead Sources")]
+        public string strLeadSources {
+            get {
+                return ((string)(this["strLeadSources"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Charge To")]
+        public string strChargeTo {
+            get {
+                return ((string)(this["strChargeTo"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Gifts")]
+        public string strGifts {
+            get {
+                return ((string)(this["strGifts"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Markets")]
+        public string strMarkets {
+            get {
+                return ((string)(this["strMarkets"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Agencies")]
+        public string strAgencies {
+            get {
+                return ((string)(this["strAgencies"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PR")]
+        public string strPR {
+            get {
+                return ((string)(this["strPR"]));
+            }
+        }
     }
 }

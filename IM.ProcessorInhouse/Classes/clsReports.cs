@@ -18,18 +18,18 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptCostByPR
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptCostByPrs">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 11/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptCostByPR(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptCostByPR> listRptCostByPrs)
+    internal static FileInfo ExportRptCostByPR(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptCostByPR> listRptCostByPrs)
     {
       var listRptCostByPrsAux = listRptCostByPrs.Select(c => new { c.PR, c.PRN, c.Shows, c.TotalCost }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptCostByPrsAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptCostByPRFormat(), true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptCostByPRFormat(), true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptCostByPR
@@ -40,14 +40,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptCostByPRWithDetailGifts
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptCostByPRWithDetailGifts">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 11/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptCostByPRWithDetailGifts(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters,
+    internal static FileInfo ExportRptCostByPRWithDetailGifts(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptCostByPRWithDetailGifts> listRptCostByPRWithDetailGifts)
     {
       var listRptCostByPRWithDetailGiftsAux = listRptCostByPRWithDetailGifts.Select(c => new
@@ -60,7 +60,7 @@ namespace IM.ProcessorInhouse.Classes
         c.TotalCost
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptCostByPRWithDetailGiftsAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptCostByPRWithDetailGiftsFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptCostByPRWithDetailGiftsFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptCostByPRWithDetailGifts
@@ -71,14 +71,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptFollowUpByAgency
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptFollowUpByAgencies">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 11/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptFollowUpByAgencies(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptFollowUpByAgency> listRptFollowUpByAgencies)
+    internal static FileInfo ExportRptFollowUpByAgencies(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptFollowUpByAgency> listRptFollowUpByAgencies)
     {
       var listRptFollowUpByAgenciesAux = listRptFollowUpByAgencies.Select(c => new
       {
@@ -95,7 +95,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptFollowUpByAgenciesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptFollowUpByAgencyFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptFollowUpByAgencyFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptFollowUpByAgencies
@@ -106,14 +106,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptFollowUpByPR
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptFollowUpByPR">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 11/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptFollowUpByPRs(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptFollowUpByPR> listRptFollowUpByPR)
+    internal static FileInfo ExportRptFollowUpByPRs(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptFollowUpByPR> listRptFollowUpByPR)
     {
       var listRptFollowUpByPRAux = listRptFollowUpByPR.Select(c => new
       {
@@ -130,7 +130,7 @@ namespace IM.ProcessorInhouse.Classes
       }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(listRptFollowUpByPRAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptFollowUpByPRFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptFollowUpByPRFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptFollowUpByPRs
@@ -141,14 +141,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByAgeInhouse
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByAgeInhouses">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 11/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportProductionByAgeInhouses(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters,
+    internal static FileInfo ExportProductionByAgeInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByAgeInhouse> listRptProductionByAgeInhouses)
     {
       var listRptProductionByAgeInhousesAux = listRptProductionByAgeInhouses.Select(c => new
@@ -170,7 +170,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByAgeInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByAgeInhouseFormat(), true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByAgeInhouseFormat(), true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportProductionByAgeInhouses
@@ -181,14 +181,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByAgeMarketOriginallyAvailableInhouse
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listProductionByAgeMarketOriginallyAvailableInhouses">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 11/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportProductionByAgeMarketOriginallyAvailableInhouses(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters,
+    internal static FileInfo ExportProductionByAgeMarketOriginallyAvailableInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByAgeMarketOriginallyAvailableInhouse> listProductionByAgeMarketOriginallyAvailableInhouses)
     {
       var listProductionByAgeMarketOriginallyAvailableInhousesAux = listProductionByAgeMarketOriginallyAvailableInhouses.Select(c => new
@@ -212,7 +212,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listProductionByAgeMarketOriginallyAvailableInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetProductionByAgeMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetProductionByAgeMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportProductionByAgeMarketOriginallyAvailableInhouses
@@ -223,14 +223,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByContractAgencyInhouse
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByContractAgencyInhouses">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 11/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByContractAgencyInhouses(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptProductionByContractAgencyInhouse> listRptProductionByContractAgencyInhouses)
+    internal static FileInfo ExportRptProductionByContractAgencyInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByContractAgencyInhouse> listRptProductionByContractAgencyInhouses)
     {
       var listRptProductionByContractAgencyInhousesAux = listRptProductionByContractAgencyInhouses.Select(c => new
       {
@@ -253,7 +253,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).OrderBy(c => c.Agency).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByContractAgencyInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByContractAgencyInhouseFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByContractAgencyInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByContractAgencyInhouses
@@ -264,14 +264,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByContractAgencyMarketOriginallyAvailableInhouse
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByContractAgencyMarketOriginallyAvailableInhouses">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 11/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByContractAgencyMarketOriginallyAvailableInhouses(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptProductionByContractAgencyMarketOriginallyAvailableInhouse> listRptProductionByContractAgencyMarketOriginallyAvailableInhouses)
+    internal static FileInfo ExportRptProductionByContractAgencyMarketOriginallyAvailableInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByContractAgencyMarketOriginallyAvailableInhouse> listRptProductionByContractAgencyMarketOriginallyAvailableInhouses)
     {
       var listRptProductionByContractAgencyInhousesAux = listRptProductionByContractAgencyMarketOriginallyAvailableInhouses.Select(c => new
       {
@@ -296,7 +296,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByContractAgencyInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByContractAgencyMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByContractAgencyMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByContractAgencyMarketOriginallyAvailableInhouses
@@ -307,14 +307,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByCoupleTypeInhouse
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByCoupleTypeInhouses">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByCoupleTypeInhouses(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptProductionByCoupleTypeInhouse> listRptProductionByCoupleTypeInhouses)
+    internal static FileInfo ExportRptProductionByCoupleTypeInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByCoupleTypeInhouse> listRptProductionByCoupleTypeInhouses)
     {
       var listRptProductionByCoupleTypeInhousesAux = listRptProductionByCoupleTypeInhouses.Select(c => new
       {
@@ -335,7 +335,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByCoupleTypeInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByCoupleTypeInhouseFormat(), true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByCoupleTypeInhouseFormat(), true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByCoupleTypeInhouses
@@ -346,14 +346,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByNationalityInhouse
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByNationalityInhouses">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByNationalityInhouses(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters,
+    internal static FileInfo ExportRptProductionByNationalityInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByNationalityInhouse> listRptProductionByNationalityInhouses)
     {
       var listRptProductionByNationalityInhousesAux = listRptProductionByNationalityInhouses.Select(c => new
@@ -375,7 +375,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByNationalityInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByNationalityInhouseFormat(), true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByNationalityInhouseFormat(), true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByNationalityInhouses
@@ -386,14 +386,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByNationalityMarketOriginallyAvailableInhouse
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByNationalityMarketOriginallyAvailableInhouses">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByNationalityMarketOriginallyAvailableInhouses(string reportname, string dateRangeFileNameRep,
+    internal static FileInfo ExportRptProductionByNationalityMarketOriginallyAvailableInhouses(string reportname, string fileFullPath,
       List<Tuple<string, string>> filters, List<RptProductionByNationalityMarketOriginallyAvailableInhouse> listRptProductionByNationalityMarketOriginallyAvailableInhouses)
     {
       var listRptProductionByNationalityMarketOriginallyAvailableInhousesAux = listRptProductionByNationalityMarketOriginallyAvailableInhouses.Select(c => new
@@ -417,7 +417,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByNationalityMarketOriginallyAvailableInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetProductionByNationalityMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetProductionByNationalityMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByNationalityMarketOriginallyAvailableInhouses
@@ -428,14 +428,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByDeskInhouse
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByDeskInhouses">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByDeskInhouses(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters,
+    internal static FileInfo ExportRptProductionByDeskInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByDeskInhouse> listRptProductionByDeskInhouses)
     {
       var listRptProductionByDeskInhousesAux = listRptProductionByDeskInhouses.Select(c => new
@@ -456,7 +456,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByDeskInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByDeskInhouseFormat(), true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByDeskInhouseFormat(), true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByDeskInhouses
@@ -467,11 +467,11 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByGiftQuantity
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByGiftQuantities">Lista de datos para el reporte.</param>
     /// <returns></returns>
-    internal static FileInfo ExportRptProductionByGiftQuantities(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptProductionByGiftQuantity> listRptProductionByGiftQuantities)
+    internal static FileInfo ExportRptProductionByGiftQuantities(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByGiftQuantity> listRptProductionByGiftQuantities)
     {
       var listRptProductionByDeskInhousesAux = listRptProductionByGiftQuantities.Select(c => new
       {
@@ -496,7 +496,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByDeskInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByGiftQuantityFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByGiftQuantityFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByGiftQuantities
@@ -507,14 +507,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByGroupInhouse
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByGroupInhouses">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByGroupInhouses(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters,
+    internal static FileInfo ExportRptProductionByGroupInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByGroupInhouse> listRptProductionByGroupInhouses)
     {
       var listRptProductionByGroupInhousesAux = listRptProductionByGroupInhouses.Select(c => new
@@ -538,7 +538,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByGroupInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByGroupInhouseFormat(), true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByGroupInhouseFormat(), true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByGroupInhouses
@@ -549,14 +549,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByPRGroupInhouse
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByPRGroupInhouses">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByPRGroupInhouses(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters,
+    internal static FileInfo ExportRptProductionByPRGroupInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByPRGroupInhouse> listRptProductionByPRGroupInhouses)
     {
       var listRptProductionByPRGroupInhousesAux = listRptProductionByPRGroupInhouses.Where(c => c.Type != "TOTAL").Select(c => new
@@ -582,7 +582,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByPRGroupInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByPRGroupInhouseFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByPRGroupInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByPRGroupInhouses
@@ -593,14 +593,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByGuestStatusInhouse
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByGuestStatusInhouses">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByGuestStatusInhouses(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters,
+    internal static FileInfo ExportRptProductionByGuestStatusInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByGuestStatusInhouse> listRptProductionByGuestStatusInhouses)
     {
       var listRptProductionByGuestStatusInhousesAux = listRptProductionByGuestStatusInhouses.Select(c => new
@@ -623,7 +623,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByGuestStatusInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByGuestStatusInhouseFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByGuestStatusInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByGuestStatusInhouses
@@ -634,14 +634,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByMemberTypeAgencyInhouse
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByMemberTypeAgencyInhouses">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByMemberTypeAgencyInhouses(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters,
+    internal static FileInfo ExportRptProductionByMemberTypeAgencyInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByMemberTypeAgencyInhouse> listRptProductionByMemberTypeAgencyInhouses)
     {
       var listRptProductionByMemberTypeAgencyInhousesAux = listRptProductionByMemberTypeAgencyInhouses.Select(c => new
@@ -664,7 +664,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByMemberTypeAgencyInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByMemberTypeAgencyInhouseFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByMemberTypeAgencyInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByMemberTypeAgencyInhouses
@@ -675,14 +675,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses(string reportname, string dateRangeFileNameRep,
+    internal static FileInfo ExportRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses(string reportname, string fileFullPath,
       List<Tuple<string, string>> filters, List<RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse> listRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses)
     {
       var listRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhousesAux = listRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses.Select(c => new
@@ -707,7 +707,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses
@@ -718,14 +718,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByPRInhouse
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByPRInhouses">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByPRInhouses(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters,
+    internal static FileInfo ExportRptProductionByPRInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByPRInhouse> listRptProductionByPRInhouses)
     {
       var listRptProductionByPRInhousesAux = listRptProductionByPRInhouses.Select(c => new
@@ -756,7 +756,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_OOP
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByPRInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByPRInhouseFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByPRInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByPRInhouses
@@ -767,14 +767,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByPRSalesRoomInhouse
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByPRSalesRoomInhouses">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByPRSalesRoomInhouses(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters,
+    internal static FileInfo ExportRptProductionByPRSalesRoomInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptProductionByPRSalesRoomInhouse> listRptProductionByPRSalesRoomInhouses)
     {
       var listRptProductionByPRSalesRoomInhousesAux = listRptProductionByPRSalesRoomInhouses.Select(c => new
@@ -806,7 +806,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_OOP
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByPRSalesRoomInhousesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByPRSalesRoomInhouseFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByPRSalesRoomInhouseFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByPRSalesRoomInhouses
@@ -817,14 +817,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptRepsPayment
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptRepsPayments">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptRepsPayments(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters,
+    internal static FileInfo ExportRptRepsPayments(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptRepsPayment> listRptRepsPayments)
     {
       var listRptRepsPaymentsAux = listRptRepsPayments.Select(c => new
@@ -839,7 +839,7 @@ namespace IM.ProcessorInhouse.Classes
         c.agTotalPay,
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptRepsPaymentsAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptRepsPaymentFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptRepsPaymentFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptRepsPayments
@@ -850,14 +850,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptRepsPaymentSummary
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptRepsPaymentSummaries">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 18/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptRepsPaymentSummaries(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters,
+    internal static FileInfo ExportRptRepsPaymentSummaries(string reportname, string fileFullPath, List<Tuple<string, string>> filters,
       List<RptRepsPaymentSummary> listRptRepsPaymentSummaries)
     {
       var listRptRepsPaymentSummariesAux = listRptRepsPaymentSummaries.Select(c => new
@@ -872,7 +872,7 @@ namespace IM.ProcessorInhouse.Classes
         c.TotalPay
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptRepsPaymentSummariesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreateGeneralRptExcel(filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptRepsPaymentSummaryFormat());
+      return EpplusHelper.CreateGeneralRptExcel(filters, dtData, reportname, string.Empty, clsFormatReport.GetRptRepsPaymentSummaryFormat(), fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptRepsPaymentSummaries
@@ -883,18 +883,17 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptGiftsReceivedBySR
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="lstRptGiftsReceivedBySR">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 22/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptGiftsReceivedBySR(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, GiftsReceivedBySRData lstRptGiftsReceivedBySR)
+    internal static FileInfo ExportRptGiftsReceivedBySR(string reportname, string fileFullPath, List<Tuple<string, string>> filters, GiftsReceivedBySRData lstRptGiftsReceivedBySR)
     {
       var lstGiftsReceivedBySR = lstRptGiftsReceivedBySR.GiftsReceivedBySR;
       var currencies = lstRptGiftsReceivedBySR.Currencies;
-
 
       var lstGifRecBySRWithCu = (from giftRecBySR in lstGiftsReceivedBySR
                                  join cu in currencies on giftRecBySR.Currency equals cu.cuID
@@ -929,7 +928,7 @@ namespace IM.ProcessorInhouse.Classes
       lstGifRecBySRWithCu.AddRange(lstGifRecBySRWithCuTotal);
 
       DataTable dtData = TableHelper.GetDataTableFromList(lstGifRecBySRWithCu);
-      return EpplusHelper.CreateExcelCustomPivot(dtData, filters, reportname, dateRangeFileNameRep, clsFormatReport.GetRptGiftsReceivedBySRFormat(), blnShowSubtotal: true, blnRowGrandTotal: true);
+      return EpplusHelper.CreateExcelCustomPivot(dtData, filters, reportname, string.Empty, clsFormatReport.GetRptGiftsReceivedBySRFormat(), blnShowSubtotal: true, blnRowGrandTotal: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptGiftsReceivedBySR
@@ -940,14 +939,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptUnavailableMotivesByAgency
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptUnavailableMotivesByAgencies">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 22/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptUnavailableMotivesByAgencies(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptUnavailableMotivesByAgency> listRptUnavailableMotivesByAgencies)
+    internal static FileInfo ExportRptUnavailableMotivesByAgencies(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptUnavailableMotivesByAgency> listRptUnavailableMotivesByAgencies)
     {
       var listRptUnavailableMotivesByAgenciesAux = listRptUnavailableMotivesByAgencies.Select(c => new
       {
@@ -960,7 +959,7 @@ namespace IM.ProcessorInhouse.Classes
         c.ByUser
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptUnavailableMotivesByAgenciesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptUnavailableMotivesByAgencyFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptUnavailableMotivesByAgencyFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptUnavailableMotivesByAgencies
@@ -971,14 +970,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptShowFactorByBookingDate
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptShowFactorByBookingDates">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 22/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptShowFactorByBookingDates(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptShowFactorByBookingDate> listRptShowFactorByBookingDates)
+    internal static FileInfo ExportRptShowFactorByBookingDates(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptShowFactorByBookingDate> listRptShowFactorByBookingDates)
     {
       var listRptShowFactorByBookingDatesAux = listRptShowFactorByBookingDates.Select(c => new
       {
@@ -992,7 +991,7 @@ namespace IM.ProcessorInhouse.Classes
         c.WalkOuts
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptShowFactorByBookingDatesAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptShowFactorByBookingDateFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptShowFactorByBookingDateFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptShowFactorByBookingDates
@@ -1003,14 +1002,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByAgencyMonthly
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByAgencyMonthly">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 25/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByAgencyMonthly(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptProductionByAgencyMonthly> listRptProductionByAgencyMonthly)
+    internal static FileInfo ExportRptProductionByAgencyMonthly(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByAgencyMonthly> listRptProductionByAgencyMonthly)
     {
       //Se pone el valor AgencyN a los que no tienen valor y que sean del mismo AgencyID
       listRptProductionByAgencyMonthly.
@@ -1038,7 +1037,7 @@ namespace IM.ProcessorInhouse.Classes
           c.SalesAmount
         }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByAgencyMonthlyAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByAgencyMonthlyFormat(), showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByAgencyMonthlyFormat(), showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByAgencyMonthly
@@ -1049,7 +1048,7 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de GraphNotBookingArrivals
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="dtmDate">Fecha de inicio de la semana</param>
     /// <param name="listGraphNotBookingArrivals">Lista de datos para el reporte.</param>
@@ -1057,7 +1056,7 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 27/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportGraphNotBookingArrival(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, DateTime dtmDate, Tuple<GraphTotals, List<GraphNotBookingArrivals>, List<GraphNotBookingArrivals>> listGraphNotBookingArrivals)
+    internal static FileInfo ExportGraphNotBookingArrival(string reportname, string fileFullPath, List<Tuple<string, string>> filters, DateTime dtmDate, Tuple<GraphTotals, List<GraphNotBookingArrivals>, List<GraphNotBookingArrivals>> listGraphNotBookingArrivals)
     {
       var list1 = listGraphNotBookingArrivals.Item2.Select(c => new { c.NotBookingMotiveN, c.Percentage, c.Arrivals }).ToList();
       var list2 = listGraphNotBookingArrivals.Item3.Select(c => new { c.NotBookingMotiveN, c.Percentage, c.Arrivals }).ToList();
@@ -1074,7 +1073,7 @@ namespace IM.ProcessorInhouse.Classes
       string strWeek = DateHelper.DateRange(dtmFromWeek, dtmToWeek);
       string strMonth = DateHelper.DateRange(dtmFromMonth, dtmToMonth);
 
-      return EpplusHelper.CreateGraphExcel(filters, listGraphNotBookingArrivals.Item1, reportname, dateRangeFileNameRep, Tuple.Create(strWeek, dtData1, clsFormatReport.GetGraphNotBookingArrivalsFormat()), Tuple.Create(strMonth, dtData2, clsFormatReport.GetGraphNotBookingArrivalsFormat()));
+      return EpplusHelper.CreateGraphExcel(filters, listGraphNotBookingArrivals.Item1, reportname, string.Empty, Tuple.Create(strWeek, dtData1, clsFormatReport.GetGraphNotBookingArrivalsFormat()), Tuple.Create(strMonth, dtData2, clsFormatReport.GetGraphNotBookingArrivalsFormat()), fileFullPath: fileFullPath);
     }
 
     #endregion ExportGraphNotBookingArrival
@@ -1085,7 +1084,7 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de GraphProduction
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="dtmDate">Fecha de inicio de la semana</param>
     /// <param name="listGraphProduction">Lista de datos para el reporte.</param>
@@ -1093,7 +1092,7 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 03/05/2016 Created
     /// </history>
-    internal static FileInfo ExportGraphProduction(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, DateTime dtmDate, Tuple<GraphMaximum, List<GraphProduction_Weeks>, List<GraphProduction_Months>> listGraphProduction)
+    internal static FileInfo ExportGraphProduction(string reportname, string fileFullPath, List<Tuple<string, string>> filters, DateTime dtmDate, Tuple<GraphMaximum, List<GraphProduction_Weeks>, List<GraphProduction_Months>> listGraphProduction)
     {
       Assembly assembly = Assembly.GetExecutingAssembly();
       Stream template = assembly.GetManifestResourceStream(assembly.GetName().Name + ".ExcelTemplate.GraphProductionTemplate.xlsx");
@@ -1152,7 +1151,7 @@ namespace IM.ProcessorInhouse.Classes
       template = EpplusHelper.UpdateTableExcel(template, dtDataWeeks);
       template = EpplusHelper.UpdateTableExcel(template, dtDataMonths);
 
-      return EpplusHelper.CreateExcelFromTemplate(filters, template, reportname, dateRangeFileNameRep);
+      return EpplusHelper.CreateExcelFromTemplate(filters, template, reportname, string.Empty, fileFullPath: fileFullPath);
     }
 
     #endregion ExportGraphProduction
@@ -1163,7 +1162,7 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de GraphUnavailableArrivals
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="dtmDate">Fecha de inicio de la semana</param>
     /// <param name="listGraphUnavailableArrivals">Lista de datos para el reporte.</param>
@@ -1171,7 +1170,7 @@ namespace IM.ProcessorInhouse.Classes
     /// <history>
     /// [aalcocer] 27/Abr/2016 Created
     /// </history>
-    internal static FileInfo ExportGraphUnavailableArrivals(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, DateTime dtmDate, Tuple<GraphTotals, List<GraphUnavailableArrivals>, List<GraphUnavailableArrivals>> listGraphUnavailableArrivals)
+    internal static FileInfo ExportGraphUnavailableArrivals(string reportname, string fileFullPath, List<Tuple<string, string>> filters, DateTime dtmDate, Tuple<GraphTotals, List<GraphUnavailableArrivals>, List<GraphUnavailableArrivals>> listGraphUnavailableArrivals)
     {
       var list1 = listGraphUnavailableArrivals.Item2.Select(c => new { c.UnavailableMotiveN, c.Percentage, c.ByUser, c.Arrivals }).ToList();
       var list2 = listGraphUnavailableArrivals.Item3.Select(c => new { c.UnavailableMotiveN, c.Percentage, c.ByUser, c.Arrivals }).ToList();
@@ -1188,7 +1187,7 @@ namespace IM.ProcessorInhouse.Classes
       string strWeek = DateHelper.DateRange(dtmFromWeek, dtmToWeek);
       string strMonth = DateHelper.DateRange(dtmFromMonth, dtmToMonth);
 
-      return EpplusHelper.CreateGraphExcel(filters, listGraphUnavailableArrivals.Item1, reportname, dateRangeFileNameRep, Tuple.Create(strWeek, dtData1, clsFormatReport.GetGraphUnavailableArrivalsFormat()), Tuple.Create(strMonth, dtData2, clsFormatReport.GetGraphUnavailableArrivalsFormat()));
+      return EpplusHelper.CreateGraphExcel(filters, listGraphUnavailableArrivals.Item1, reportname, string.Empty, Tuple.Create(strWeek, dtData1, clsFormatReport.GetGraphUnavailableArrivalsFormat()), Tuple.Create(strMonth, dtData2, clsFormatReport.GetGraphUnavailableArrivalsFormat()), fileFullPath: fileFullPath);
     }
 
     #endregion ExportGraphUnavailableArrivals
@@ -1199,14 +1198,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByMember
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByMembers">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 04/05/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByMembers(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptProductionByMember> listRptProductionByMembers)
+    internal static FileInfo ExportRptProductionByMembers(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByMember> listRptProductionByMembers)
     {
       var listRptProductionByMembersAux = listRptProductionByMembers.Select(c => new
       {
@@ -1234,7 +1233,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount_SELFGEN
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByMembersAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByMemberFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByMemberFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByMembers
@@ -1245,14 +1244,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByAgencyInhouses
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="productionByAgencyInhouseData">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 1305/2016 Created
     /// </history>
-    internal static FileInfo ExportProductionByAgencyInhouses(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, ProductionByAgencyInhouseData productionByAgencyInhouseData)
+    internal static FileInfo ExportProductionByAgencyInhouses(string reportname, string fileFullPath, List<Tuple<string, string>> filters, ProductionByAgencyInhouseData productionByAgencyInhouseData)
     {
       var productionByAgencyInhousesTotal = productionByAgencyInhouseData.ProductionByAgencyInhouses.Select(x =>
       new
@@ -1311,7 +1310,7 @@ namespace IM.ProcessorInhouse.Classes
         }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(productionByAgencyInhouses);
-      return EpplusHelper.CreateExcelCustomPivot(dtData, filters, reportname, dateRangeFileNameRep, clsFormatReport.RptProductionByAgencyInhouse(), true, true, true);
+      return EpplusHelper.CreateExcelCustomPivot(dtData, filters, reportname, string.Empty, clsFormatReport.RptProductionByAgencyInhouse(), true, true, true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportProductionByAgencyInhouses
@@ -1322,14 +1321,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptProductionByMonth
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="listRptProductionByMonths">Lista de datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 05/05/2016 Created
     /// </history>
-    internal static FileInfo ExportRptProductionByMonths(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptProductionByMonth> listRptProductionByMonths)
+    internal static FileInfo ExportRptProductionByMonths(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptProductionByMonth> listRptProductionByMonths)
     {
       var listRptProductionByMembersAux = listRptProductionByMonths.Select(c => new
       {
@@ -1345,7 +1344,7 @@ namespace IM.ProcessorInhouse.Classes
         c.SalesAmount
       }).ToList();
       DataTable dtData = TableHelper.GetDataTableFromList(listRptProductionByMembersAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(true, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptProductionByMonthFormat(), true, showRowHeaders: true);
+      return EpplusHelper.CreatePivotRptExcel(true, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptProductionByMonthFormat(), true, showRowHeaders: true, fileFullPath: fileFullPath);
     }
 
     #endregion ExportRptProductionByMonths
@@ -1356,14 +1355,14 @@ namespace IM.ProcessorInhouse.Classes
     /// Obtiene los datos para exportar a Excel el reporte de RptScoreByPR
     /// </summary>
     /// <param name="reportname">Nombre del reporte</param>
-    /// <param name="dateRangeFileNameRep">Rango de fechas</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
     /// <param name="filters">Filtros</param>
     /// <param name="scoreByPRData">Datos para el reporte.</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer] 16/05/2016 Created
     /// </history>
-    internal static FileInfo ExportRptScoreByPrs(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, ScoreByPRData scoreByPRData)
+    internal static FileInfo ExportRptScoreByPrs(string reportname, string fileFullPath, List<Tuple<string, string>> filters, ScoreByPRData scoreByPRData)
     {
       var scoreByPRAux = (from sbpr in scoreByPRData.ScoreByPR
                           join srd in scoreByPRData.ScoreRuleDetail on sbpr.ScoreRule equals srd.sisu.ToString()
@@ -1384,12 +1383,25 @@ namespace IM.ProcessorInhouse.Classes
                           }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(scoreByPRAux);
-      return EpplusHelper.CreateExcelCustomPivot(dtData, filters, reportname, dateRangeFileNameRep, clsFormatReport.RptScoreByPR(), blnRowGrandTotal: true);
+      return EpplusHelper.CreateExcelCustomPivot(dtData, filters, reportname, string.Empty, clsFormatReport.RptScoreByPR(), blnRowGrandTotal: true, fileFullPath:fileFullPath);
     }
 
     #endregion ExportRptScoreByPrs
 
-    internal static FileInfo ExportRptContactBookShowQuinellas(string reportname, string dateRangeFileNameRep, List<Tuple<string, string>> filters, List<RptContactBookShowQuinellas> listRptContactBookShowQuinellas)
+    #region ExportRptContactBookShowQuinellas
+
+    /// <summary>
+    /// Obtiene los datos para exportar a Excel el reporte de RptContactBookShowQuinellas
+    /// </summary>
+    /// <param name="reportname">Nombre del reporte</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
+    /// <param name="filters">Filtros</param>
+    /// <param name="listRptContactBookShowQuinellas">Datos para el reporte.</param>
+    /// <returns>FileInfo</returns>
+    /// <history>
+    /// [aalcocer] 16/05/2016 Created
+    /// </history>
+    internal static FileInfo ExportRptContactBookShowQuinellas(string reportname, string fileFullPath, List<Tuple<string, string>> filters, List<RptContactBookShowQuinellas> listRptContactBookShowQuinellas)
     {
       var total = listRptContactBookShowQuinellas.Where(c => c.Subgroup.ToUpper() == "TOTAL").ToList();
       var partial = listRptContactBookShowQuinellas.Where(c => !total.Contains(c)).ToList();
@@ -1449,7 +1461,9 @@ namespace IM.ProcessorInhouse.Classes
       }).ToList();
 
       DataTable dtData = TableHelper.GetDataTableFromList(listRptContactBookShowQuinellasAux, replaceStringNullOrWhiteSpace: true);
-      return EpplusHelper.CreatePivotRptExcel(true, filters, dtData, reportname, dateRangeFileNameRep, clsFormatReport.GetRptContactBookShowQuinellasFormat(), true);
+      return EpplusHelper.CreatePivotRptExcel(true, filters, dtData, reportname, string.Empty, clsFormatReport.GetRptContactBookShowQuinellasFormat(), true, fileFullPath: fileFullPath);
     }
+
+    #endregion ExportRptContactBookShowQuinellas
   }
 }

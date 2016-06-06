@@ -2,11 +2,11 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="IM.BusinessRules.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="USP_OR_RptFollowUpByAgency_Timeout" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">90</Value>
+  <Setting Name="USP_OR_RptFollowUpByAgency_Timeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
     </Setting>
     <Setting Name="USP_OR_RptFollowUpByPR_Timeout" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">60</Value>
+      <Value Profile="(Default)">120</Value>
     </Setting>
     <Setting Name="USP_OR_RptProductionByAgeInhouse_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">120</Value>
@@ -30,10 +30,10 @@
       <Value Profile="(Default)">90</Value>
     </Setting>
     <Setting Name="USP_OR_RptProductionByCoupleTypeInhouse_Timeout" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">60</Value>
+      <Value Profile="(Default)">120</Value>
     </Setting>
     <Setting Name="USP_OR_RptProductionByNationalityInhouse_Timeout" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">60</Value>
+      <Value Profile="(Default)">90</Value>
     </Setting>
     <Setting Name="USP_OR_RptProductionByDeskInhouse_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
@@ -54,7 +54,7 @@
       <Value Profile="(Default)">60</Value>
     </Setting>
     <Setting Name="USP_OR_RptProductionByGiftQuantity_Timeout" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">60</Value>
+      <Value Profile="(Default)">120</Value>
     </Setting>
     <Setting Name="USP_OR_RptProductionByPRInhouse_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
@@ -170,5 +170,6 @@
     <Setting Name="USP_OR_GetSales_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">120</Value>
     </Setting>
+    
   </Settings>
 </SettingsFile>

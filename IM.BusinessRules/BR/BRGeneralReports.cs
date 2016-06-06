@@ -344,7 +344,8 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static async Task<List<RptProductionByMember>> GetRptProductionByMembers(DateTime dtmStart, DateTime dtmEnd, IEnumerable<string> leadSources,
       IEnumerable<string> pRs = null, EnumProgram program = EnumProgram.All, string aplication = "", int company = 0, Club club = null,
-      bool onlyWholesalers = false, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
+      EnumOnlyWholesalers onlyWholesalers = EnumOnlyWholesalers.NoOnlyWholesalers, EnumQuinellas considerQuinellas = EnumQuinellas.NoQuinellas, 
+      EnumBasedOnArrival basedOnArrival = EnumBasedOnArrival.NoBasedOnArrival)
     {
       var result = new List<RptProductionByMember>();
 
@@ -358,7 +359,7 @@ namespace IM.BusinessRules.BR
         dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByMember_Timeout;
           result = dbContext.USP_OR_RptProductionByMember(dtmStart, dtmEnd, string.Join(",", leadSources), string.Join(",", pRs),
           EnumToListHelper.GetEnumDescription(program), string.IsNullOrWhiteSpace(aplication) ? "ALL" : aplication,
-          company, club?.clID, onlyWholesalers, Convert.ToBoolean(considerQuinellas),
+          company, club?.clID, Convert.ToBoolean(onlyWholesalers), Convert.ToBoolean(considerQuinellas),
           Convert.ToBoolean(basedOnArrival)).ToList();
       }
       });

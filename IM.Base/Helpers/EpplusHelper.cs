@@ -44,6 +44,7 @@ namespace IM.Base.Helpers
     /// <param name="formatColumns">Lista de ExcelFormatTable donde definimos ("Titulo de la columna",IM.Model.Enums.EnumFormatTypeExcel, OfficeOpenXml.Style.Enum.ExcelHorizontalAlignment) </param>
     /// <param name="extraFieldHeader"></param>
     /// <param name="numRows"></param>
+    /// <param name="fileFullPath">Opcional. Ruta completa del archivo</param>
     /// <returns>FileInfo con el path para abrir el excel</returns>
     /// <history>
     ///   [erosado] 12/Mar/2016 Created.
@@ -56,9 +57,10 @@ namespace IM.Base.Helpers
     /// [erosado] 02/Mar/2016 Modified  Se cambio el formato del encabezado y los filtros.
     /// [aalcocer] 16/04/2016 Modified. Se cambia el contenido del reporte en a una tabla con encabezados integrado.
     ///                                 Se agrega la  opcion de mostrar totales de la tabla
+    /// [aalcocer] 06/06/2016 Modified. Se agrega la opcion de generar el reporte en de ruta completa del archivo
     /// </history>
     public static FileInfo CreateGeneralRptExcel(List<Tuple<string, string>> filter, DataTable dt, string reportName, string dateRangeFileName, List<ExcelFormatTable> formatColumns,
-      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0)
+      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0, string fileFullPath = null)
     {
       #region Variables Atributos, Propiedades
 
@@ -137,13 +139,18 @@ namespace IM.Base.Helpers
         ws.Cells[2, 1, filasTotalesFiltros + 1, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
       }
 
-      string suggestedFilaName = string.Concat(reportName, " ", dateRangeFileName);
-
       #endregion Formato de columnas Centrar y AutoAjustar
 
       #region Generamos y Retornamos la ruta del archivo EXCEL
 
-      var pathFinalFile = SaveExcel(pk, suggestedFilaName);
+      FileInfo pathFinalFile;
+      if (fileFullPath == null)
+      {
+        string suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
+        pathFinalFile = SaveExcel(pk, suggestedFilaName);
+      }
+      else
+        pathFinalFile = SaveExcelFilePath(pk, fileFullPath);
 
       return pathFinalFile;
 
@@ -167,6 +174,7 @@ namespace IM.Base.Helpers
     /// <param name="showRowHeaders">Muestra el encabezado especial para la primera columna de la tabla</param>
     /// <param name="extraFieldHeader"></param>
     /// <param name="numRows"></param>
+    /// <param name="fileFullPath">Opcional. Ruta completa del archivo</param>
     /// <returns> FileInfo </returns>
     /// <history>
     ///   [erosado]      14/03/2016 Created.
@@ -178,11 +186,12 @@ namespace IM.Base.Helpers
     ///   [aalcocer]     11/04/2016 Modified. Se agrega la opción de insertar Superheaders y borders a columnas.
     ///   [aalcocer]     16/04/2016 Modified. Se agrego la opcion de mostrar encabezado especial para la primera columna de la tabla
     ///   [aalcocer]     23/05/2016 Modified. Se agrega la opcion de mostrar distintos cálculos en los campos de valores de tabla dinámica
+    ///   [aalcocer]     06/06/2016 Modified. Se agrega la opcion de generar el reporte en de ruta completa del archivo
     /// </history>
     public static FileInfo CreatePivotRptExcel(bool isPivot, List<Tuple<string, string>> filters, DataTable dtData,
       string reportName, string dateRangeFileName,
       List<ExcelFormatTable> formatColumns, bool showRowGrandTotal = false, bool showColumnGrandTotal = false, bool showRowHeaders = false,
-      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0)
+      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0, string fileFullPath = null)
     {
       ExcelPackage pk = new ExcelPackage();
       //Preparamos la hoja donde escribiremos
@@ -205,7 +214,7 @@ namespace IM.Base.Helpers
       //El contenido lo convertimos a una tabla
       ExcelTable table = wsData.Tables.Add(rangeTable, null);
       table.TableStyle = TableStyles
-        
+
         .None;
       //Formateamos la tabla
       SetFormatTable(formatColumns.Where(c => !(c.Axis == ePivotFieldAxis.Values && !string.IsNullOrEmpty(c.Formula))).ToList(), ref table);
@@ -231,7 +240,7 @@ namespace IM.Base.Helpers
           if (pivotTable.PivotTableXml.DocumentElement?.LastChild.Attributes != null)
             pivotTable.PivotTableXml.DocumentElement.LastChild.Attributes["showRowHeaders"].Value = "0";
 
-        pivotTable.Compact = false; 
+        pivotTable.Compact = false;
         pivotTable.CompactData = true;
         pivotTable.Outline = false;
         pivotTable.OutlineData = false;
@@ -413,18 +422,21 @@ namespace IM.Base.Helpers
               range.Style.Fill.BackgroundColor.SetColor(Color.Cyan);
               range.Style.Border.BorderAround(ExcelBorderStyle.Medium);
             }
-            pivotTable.AddPivotBorderRange(columnasAgrupadas);
+
             fromCol = 0;
             columnasAgrupadas.Clear();
           }
         });
       }
 
-      string suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
-
-      if (pk.Workbook.VbaProject != null) suggestedFilaName += ".xlsm";
-
-      var pathFinalFile = SaveExcel(pk, suggestedFilaName);
+      FileInfo pathFinalFile;
+      if (fileFullPath == null)
+      {
+        string suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
+        pathFinalFile = SaveExcel(pk, suggestedFilaName);
+      }
+      else
+        pathFinalFile = SaveExcelFilePath(pk, fileFullPath);
 
       return pathFinalFile;
     }
@@ -446,14 +458,16 @@ namespace IM.Base.Helpers
     /// <param name="blnShowSubtotal"></param>
     /// <param name="extraFieldHeader"></param>
     /// <param name="numRows"></param>
+    /// <param name="fileFullPath">Opcional. Ruta completa del archivo</param>
     /// <returns> FileInfo </returns>
     /// <history>
     ///   [edgrodriguez] 28/03/2016  Created.
+    ///   [aalcocer]     06/06/2016 Modified. Se agrega la opcion de generar el reporte en de ruta completa del archivo
     /// </history>
     public static FileInfo CreateExcelCustom(DataTable dtTable, List<Tuple<string, string>> filters, string reportName,
       string dateRangeFileName, List<ExcelFormatTable> formatTable, bool blnColumnGrandTotal = false,
       bool blnRowGrandTotal = false, bool blnShowSubtotal = false,
-      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0)
+      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0, string fileFullPath = null)
     {
       ExcelPackage pk = new ExcelPackage();
       var wsData = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
@@ -464,7 +478,7 @@ namespace IM.Base.Helpers
 
       int rowNumber = totalFilterRows + 1;
       int columnNumber = 1;
-      
+
       //Obtenemos las columnas y las ordenamos.
       var formatTableColumns = formatTable.Where(c => !c.IsGroup && c.Order > 0)
         .OrderBy(row => row.Order).ToList();
@@ -480,9 +494,9 @@ namespace IM.Base.Helpers
           wsData.Cells[rowNumber, columnNumber].Style.Font.Bold = true;
           wsData.Cells[rowNumber, columnNumber].Style.Font.Size = 12;
           columnNumber++;
-        }); 
+        });
 
-      #endregion
+      #endregion Creando Headers
 
       //Si existe algun grupo
       if (formatTable.Any(c => c.IsGroup))
@@ -490,7 +504,7 @@ namespace IM.Base.Helpers
         #region Simple con Agrupado
 
         #region Formato para encabezados de grupo
-        
+
         //Formato para los encabezados de grupo.
         List<ExcelFormatGroupHeaders> backgroundColorGroups = new List<ExcelFormatGroupHeaders> {
             new ExcelFormatGroupHeaders { BackGroundColor="#004E48", FontBold = true, TextAligment = ExcelHorizontalAlignment.Center },
@@ -499,9 +513,11 @@ namespace IM.Base.Helpers
             new ExcelFormatGroupHeaders { BackGroundColor="#4CA09A", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
             //Formato para la fila de Gran Total.
             new ExcelFormatGroupHeaders { BackGroundColor="#000000", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left }};
-        #endregion
+
+        #endregion Formato para encabezados de grupo
 
         #region Obtenemos los encabezados de grupo y sus valores
+
         //Creamos la sentencia Linq para obtener los campos que se agruparán.
         var qfields = string.Join(", ", formatTable
     .Where(c => c.IsGroup)
@@ -514,11 +530,11 @@ namespace IM.Base.Helpers
           .GroupBy("new(" + qfields + ")", "it")
           .Select("new(Key as qgroup, it as Values)");
 
-        #endregion
+        #endregion Obtenemos los encabezados de grupo y sus valores
 
         //Lista de formulas para cada grupo. Teniendo como items las columnas que tienen la propiedad SubtotalFunction.
         var subtotalFormulas = new Dictionary<string, string>[formatTable.Count(c => c.IsGroup)];
-        //Lista de grupos.       
+        //Lista de grupos.
         List<dynamic> dynamicListData = qTable.OfType<dynamic>().ToList();
         //Total de columnas que no son grupo.
         int totalColumns = formatTable.Count(c => !c.IsGroup);
@@ -555,7 +571,6 @@ namespace IM.Base.Helpers
           }
           else if (i > 0)
           {
-
             //Recorremos los encabezados(Niveles).
             for (int j = 0; j < groupsAct.Length; j++)
             {
@@ -645,9 +660,11 @@ namespace IM.Base.Helpers
                       case EnumFormatTypeExcel.Number:
                         subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
                         break;
+
                       case EnumFormatTypeExcel.DecimalNumber:
                         subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
                         break;
+
                       case EnumFormatTypeExcel.Percent:
                         subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
                         break;
@@ -656,7 +673,6 @@ namespace IM.Base.Helpers
 
                   //Le aplicacamos el formato a la celda.
                   wsData.Cells[rowNumber, format.Order].Style.Numberformat.Format = GetFormat(subtotalFormat);
-
 
                   //Si no es calculada aplicamos la funcion configurada.
                   if (!format.IsCalculated)
@@ -689,9 +705,11 @@ namespace IM.Base.Helpers
                       case eSubTotalFunctions.Sum:
                         wsData.Cells[rowNumber, format.Order].Formula = "=SUM(" + formula + ")";
                         break;
+
                       case eSubTotalFunctions.Avg:
                         wsData.Cells[rowNumber, format.Order].Formula = "=AVERAGE(" + formula + ")";
                         break;
+
                       case eSubTotalFunctions.Count:
                         if (format.Format == EnumFormatTypeExcel.General)
                           wsData.Cells[rowNumber, format.Order].Formula = (j == groupsAct.Length - 1) ? "= COUNTA(" + formula + ")" : "= SUM(" + formula + ")";
@@ -725,7 +743,8 @@ namespace IM.Base.Helpers
 
         if (blnRowGrandTotal)
         {
-          formatTableColumns.ForEach(format => {
+          formatTableColumns.ForEach(format =>
+          {
             if (!format.IsCalculated)
             {
               switch (format.SubTotalFunctions)
@@ -733,9 +752,11 @@ namespace IM.Base.Helpers
                 case eSubTotalFunctions.Sum:
                   wsData.Cells[rowNumber - 1, format.Order].Formula = "=SUM(" + subtotalFormulas[0][format.PropertyName] + ")";
                   break;
+
                 case eSubTotalFunctions.Avg:
                   wsData.Cells[rowNumber - 1, format.Order].Formula = "=AVERAGE(" + subtotalFormulas[0][format.PropertyName] + ")";
                   break;
+
                 case eSubTotalFunctions.Count:
                   if (format.Format == EnumFormatTypeExcel.General)
                     wsData.Cells[rowNumber - 1, format.Order].Formula = "= SUM(" + subtotalFormulas[0][format.PropertyName] + ")";
@@ -751,7 +772,6 @@ namespace IM.Base.Helpers
           wsData.Cells[rowNumber - 1, 1, rowNumber - 1, totalColumns].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 1].BackGroundColor));
           wsData.Cells[rowNumber - 1, 1, rowNumber - 1, totalColumns].Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 1].FontColor));
           wsData.Cells[rowNumber - 1, 1, rowNumber - 1, totalColumns].Style.Font.Bold = backgroundColorGroups[backgroundColorGroups.Count - 1].FontBold;
-
         }
         //Ajustamos todas las columnas a su contenido.
         wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
@@ -770,7 +790,7 @@ namespace IM.Base.Helpers
           //Recorremos las columnas.
           formatTableColumns.ForEach(row =>
             {
-              //Asignamos el valor y formato a la celda. 
+              //Asignamos el valor y formato a la celda.
               wsData.Cells[rowNumber, drColumn].Value = dr[row.PropertyName];
               wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(row.Format);
               drColumn++;
@@ -837,9 +857,14 @@ namespace IM.Base.Helpers
       //Ajustamos las celdas a su contenido.
       wsData.Cells[totalFilterRows + 5, 1, rowNumber, dtTable.Columns.Count].AutoFitColumns();
 
-      var suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
-
-      var pathFinalFile = SaveExcel(pk, suggestedFilaName);
+      FileInfo pathFinalFile;
+      if (fileFullPath == null)
+      {
+        string suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
+        pathFinalFile = SaveExcel(pk, suggestedFilaName);
+      }
+      else
+        pathFinalFile = SaveExcelFilePath(pk, fileFullPath);
 
       return pathFinalFile;
     }
@@ -862,15 +887,17 @@ namespace IM.Base.Helpers
     /// <param name="pivotedTable"></param>
     /// <param name="extraFieldHeader"></param>
     /// <param name="numRows"></param>
+    /// <param name="fileFullPath">Opcional. Ruta completa del archivo</param>
     /// <returns> FileInfo </returns>
     /// <history>
     ///   [edgrodriguez] 11/04/2016  Created.
     ///   [aalcocer]    18/05/2016 Modified. Se agregan columnas calculadas
+    ///   [aalcocer]     06/06/2016 Modified. Se agrega la opcion de generar el reporte en de ruta completa del archivo
     /// </history>
     public static FileInfo CreateExcelCustomPivot(DataTable dtTable, List<Tuple<string, string>> filters,
       string reportName, string dateRangeFileName, List<ExcelFormatTable> formatTable, bool blnColumnGrandTotal = false,
-      bool blnRowGrandTotal = false, bool blnShowSubtotal = false, DataTable pivotedTable=null,
-      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0)
+      bool blnRowGrandTotal = false, bool blnShowSubtotal = false, DataTable pivotedTable = null,
+      List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0, string fileFullPath = null)
     {
       ExcelPackage pk = new ExcelPackage();
       var wsData = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
@@ -917,7 +944,7 @@ namespace IM.Base.Helpers
         {
           //Obtenemos la fila inicial para dibujar el encabezado.
           int rowHeader = rowNumber - (item.Length - 1);
-          //Obtenemos el siguiente arreglo de encabezados.        
+          //Obtenemos el siguiente arreglo de encabezados.
           string[] itemNext = (lstHeaders.IndexOf(item) + 1 < lstHeaders.Count) ? lstHeaders[lstHeaders.IndexOf(item) + 1] : null;
 
           //Si el arreglo posterior contiene valore.
@@ -925,7 +952,7 @@ namespace IM.Base.Helpers
           {
             //Recorremos la lista.
             for (int i = 0; i < item.Length; i++)
-            {              
+            {
               if (i < item.Length - 1)
               {
                 //Si el encabezado de la lista actual es igual al encabezado de la lista posterior y Si pertenecen al mismo encabezado superior
@@ -1092,7 +1119,7 @@ namespace IM.Base.Helpers
                 formatTable.First(
                   ft =>
                     ft.PropertyName ==
-                    ((col.Length == 1) ? col[0] : col[col.Length -1]));
+                    ((col.Length == 1) ? col[0] : col[col.Length - 1]));
               if (!formatCol.IsGroup)
               {
                 if (!formatCol.IsCalculated)
@@ -1115,7 +1142,7 @@ namespace IM.Base.Helpers
             int drColumn = 1;
             lstHeaders.ForEach(col =>
             {
-              var format = formatTable.First(ft => ft.PropertyName == ((col.Length == 1) ? col[0] : col[col.Length -1]));
+              var format = formatTable.First(ft => ft.PropertyName == ((col.Length == 1) ? col[0] : col[col.Length - 1]));
               if (!format.IsGroup)
               {
                 EnumFormatTypeExcel subtotalFormat = format.Format;
@@ -1203,7 +1230,6 @@ namespace IM.Base.Helpers
             }
           }
           columnIndex++;
-
         });
 
         //El contenido lo convertimos a una tabla
@@ -1229,9 +1255,11 @@ namespace IM.Base.Helpers
                   case EnumFormatTypeExcel.Number:
                     subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
                     break;
+
                   case EnumFormatTypeExcel.DecimalNumber:
                     subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
                     break;
+
                   case EnumFormatTypeExcel.Percent:
                     subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
                     break;
@@ -1254,9 +1282,14 @@ namespace IM.Base.Helpers
 
         #endregion Agregando Datos
       }
-      string suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
-
-      var pathFinalFile = SaveExcel(pk, suggestedFilaName);
+      FileInfo pathFinalFile;
+      if (fileFullPath == null)
+      {
+        string suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
+        pathFinalFile = SaveExcel(pk, suggestedFilaName);
+      }
+      else
+        pathFinalFile = SaveExcelFilePath(pk, fileFullPath);
 
       return pathFinalFile;
     }
@@ -1313,15 +1346,16 @@ namespace IM.Base.Helpers
     /// <param name="template">Stream del archivo excel</param>
     /// <param name="reportName">Nombre del Reporte.</param>
     /// <param name="dateRangeFileName">Nombre del archivo del reporte</param>
+    /// <param name="fileFullPath">Opcional. Ruta completa del archivo</param>
     /// <returns>FileInfo</returns>
     /// <history>
     /// [aalcocer]  03/05/2016 Created.
+    /// [aalcocer]  06/06/2016 Modified. Se agrega la opcion de generar el reporte en de ruta completa del archivo
     /// </history>
-    public static FileInfo CreateExcelFromTemplate(List<Tuple<string, string>> filter, Stream template, string reportName, string dateRangeFileName)
+    public static FileInfo CreateExcelFromTemplate(List<Tuple<string, string>> filter, Stream template, string reportName, string dateRangeFileName, string fileFullPath = null)
     {
       #region Variables Atributos, Propiedades
 
-      FileInfo pathFinalFile = null;
       ExcelPackage pk = new ExcelPackage(template);
       //Preparamos la hoja donde escribiremos
       ExcelWorksheet ws = pk.Workbook.Worksheets.First(w => w.Hidden == eWorkSheetHidden.Visible);
@@ -1355,13 +1389,18 @@ namespace IM.Base.Helpers
         ws.Cells[2, 1, FilasTotalesFiltros + 1, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
       }
 
-      string suggestedFilaName = string.Concat(reportName, " ", dateRangeFileName);
-
       #endregion Formato de columnas Centrar y AutoAjustar
 
       #region Generamos y Retornamos la ruta del archivo EXCEL
 
-      pathFinalFile = SaveExcel(pk, suggestedFilaName);
+      FileInfo pathFinalFile;
+      if (fileFullPath == null)
+      {
+        string suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
+        pathFinalFile = SaveExcel(pk, suggestedFilaName);
+      }
+      else
+        pathFinalFile = SaveExcelFilePath(pk, fileFullPath);
 
       return pathFinalFile;
 
@@ -1382,15 +1421,16 @@ namespace IM.Base.Helpers
     /// <param name="dateRangeFileName">Nombre del reporte con fecha</param>
     /// <param name="tupleGraph1">tuple la semana: item1:Rango de fecha de la semana - item2:DataTable con la informacion de la semana - item3:Lista de ExcelFormatTable donde definimos la estructura</param>
     /// <param name="tupleGraph2">tuple la semana: item1:Rango de fecha del mes- item2:DataTable con la informacion del mes - item3:Lista de ExcelFormatTable donde definimos la estructura</param>
+    /// <param name="fileFullPath">Opcional. Ruta completa del archivo</param>
     /// <returns>FileInfo con el path para abrir el excel</returns>
     /// <history>
     ///   [aalcocer] 27/04/2016 Created.
+    ///   [aalcocer]     06/06/2016 Modified. Se agrega la opcion de generar el reporte en de ruta completa del archivo
     /// </history>
-    public static FileInfo CreateGraphExcel(List<Tuple<string, string>> filter, GraphTotals graphTotals, string reportName, string dateRangeFileName, Tuple<string, DataTable, List<ExcelFormatTable>> tupleGraph1, Tuple<string, DataTable, List<ExcelFormatTable>> tupleGraph2)
+    public static FileInfo CreateGraphExcel(List<Tuple<string, string>> filter, GraphTotals graphTotals, string reportName, string dateRangeFileName, Tuple<string, DataTable, List<ExcelFormatTable>> tupleGraph1, Tuple<string, DataTable, List<ExcelFormatTable>> tupleGraph2, string fileFullPath = null)
     {
       #region Variables Atributos, Propiedades
 
-      FileInfo pathFinalFile = null;
       ExcelPackage pk = new ExcelPackage();
       //Preparamos la hoja donde escribiremos
       ExcelWorksheet ws = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
@@ -1526,8 +1566,14 @@ namespace IM.Base.Helpers
 
       #region Generamos y Retornamos la ruta del archivo EXCEL
 
-      string suggestedFilaName = string.Concat(reportName, " ", dateRangeFileName);
-      pathFinalFile = SaveExcel(pk, suggestedFilaName);
+      FileInfo pathFinalFile;
+      if (fileFullPath == null)
+      {
+        string suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
+        pathFinalFile = SaveExcel(pk, suggestedFilaName);
+      }
+      else
+        pathFinalFile = SaveExcelFilePath(pk, fileFullPath);
 
       return pathFinalFile;
 
@@ -1535,6 +1581,95 @@ namespace IM.Base.Helpers
     }
 
     #endregion CreateGraphExcel
+
+    #region CreateEmptyExcel
+
+    /// <summary>
+    /// Crea un Excel vacio para porterior reemplazar por un reporte
+    /// </summary>
+    /// <param name="reportName">Nombre del reporte</param>
+    /// <param name="dateRangeFileName">Fecha del reporte</param>
+    /// <returns>Ruta completa del archivo</returns>
+    /// <history>
+    ///   [aalcocer] 03/06/2016 Created.
+    /// </history>
+    public static string CreateEmptyExcel(string reportName, string dateRangeFileName)
+    {
+      string suggestedName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
+      //TODO: remplazar con la ruta por default que se obtiene en la configuracion
+      DirectoryInfo outputDir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+      int count = 1;
+
+      string fullPath = $@"{outputDir.FullName}\{suggestedName}.xlsx";
+
+      string fileNameOnly = Path.GetFileNameWithoutExtension(fullPath);
+      string extension = Path.GetExtension(fullPath);
+      string path = Path.GetDirectoryName(fullPath);
+      string newFullPath = fullPath;
+
+      while (File.Exists(newFullPath))
+      {
+        string tempFileName = $"{fileNameOnly}({count++})";
+        newFullPath = Path.Combine(path, tempFileName + extension);
+      }
+
+      var file = File.Create(newFullPath);
+      file.Close();
+      return file.Name;
+    }
+
+    #endregion CreateEmptyExcel
+
+    #region CreateNoInfoRptExcel
+
+    /// <summary>
+    ///   Crea un reporte en excel que el contenido informa que no existen informacion  para el reporte, tiene Filtros y Nombre del reporte.
+    /// </summary>
+    /// <param name="filter">Tupla de filtros </param>
+    /// <param name="reportName">Nombre del reporte</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
+    /// <returns>FileInfo con el path para abrir el excel</returns>
+    /// <history>
+    /// [aalcocer] 06/06/2016 Created.
+    /// </history>
+    public static FileInfo CreateNoInfoRptExcel(List<Tuple<string, string>> filter, string reportName, string fileFullPath)
+    {
+      #region Variables Atributos, Propiedades
+
+      ExcelPackage pk = new ExcelPackage();
+      //Preparamos la hoja donde escribiremos
+      ExcelWorksheet ws = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
+      //Filas Para los filtros
+      int filasTotalesFiltros = 0;
+
+      #endregion Variables Atributos, Propiedades
+
+      #region Report SuperHeader
+
+      //Creamos la cabecera del reporte (Titulos, Filtros, Fecha y Hora de Impresion)
+      CreateReportHeader(filter, reportName, ref ws, ref filasTotalesFiltros, null, 0);
+
+      #endregion Report SuperHeader
+
+      using (ExcelRange range = ws.Cells[filasTotalesFiltros + 1, 2, filasTotalesFiltros + 4, 12])
+      {
+        range.Value = "There is no info to make a report";
+        range.Style.Font.Bold = true;
+        range.Style.Font.Size = 36;
+        range.Merge = true;
+        range.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+        range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+        range.Style.Fill.BackgroundColor.SetColor(Color.Cyan);
+        range.Style.Border.BorderAround(ExcelBorderStyle.Medium);
+      }
+
+      var pathFinalFile = SaveExcelFilePath(pk, fileFullPath);
+
+      return pathFinalFile;
+    }
+
+    #endregion CreateNoInfoRptExcel
 
     #endregion Public Methods
 
@@ -1677,14 +1812,14 @@ namespace IM.Base.Helpers
     /// <param name="extraFieldHeader">"Titulo","Valor",Formato de Celda</param>
     /// <param name="numRows">Numero de Rows por Columna</param>
     /// <history>
-    /// 
+    ///
     /// [ecanul] 16/05/2016 Modified Agregados parametros extraFieldHeader y numRows para agregar detalles al Header de los reportes
     /// </history>
-    private static void CreateReportHeader(List<Tuple<string, string>> filterList, string reportName, 
+    private static void CreateReportHeader(List<Tuple<string, string>> filterList, string reportName,
       ref ExcelWorksheet ws, ref int totalFilterRows, List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader, int numRows)
     {
       double filterNumber = filterList.Count;
-     
+
       #region Titulo del reporte
 
       //Agregamos el Nombre de la Aplicacion en las columnas combinadas A:C en la fila 1
@@ -1763,12 +1898,12 @@ namespace IM.Base.Helpers
 
       #region ExtraHeaderFile
 
-      //Si el parametro extraFieldHeader tiene algo 
+      //Si el parametro extraFieldHeader tiene algo
       if (extraFieldHeader != null && extraFieldHeader.Count > 0)
       {
         //Saltamos 2 lineas Para iniciar SubHeader
         totalFilterRows += 2;
-        /** La idea es que quede de la siguiente manera 
+        /** La idea es que quede de la siguiente manera
          * /-/-/ /-/-/
          * /-/-/ /-/-/
          * /-/-/ /-/-/
@@ -1791,9 +1926,9 @@ namespace IM.Base.Helpers
           ws.Cells[staRow, col].Style.Border.Top.Style = style;
           ws.Cells[staRow, col].Style.Border.Left.Style = style;
           ws.Cells[staRow, col].Style.Border.Bottom.Style = style;
-          ws.Cells[staRow, col].Style.Border.Right.Style = style;          
-          
-          #endregion
+          ws.Cells[staRow, col].Style.Border.Right.Style = style;
+
+          #endregion HeaderName
 
           #region HeaderValue
 
@@ -1804,8 +1939,8 @@ namespace IM.Base.Helpers
           ws.Cells[staRow, col + 1].Style.Border.Bottom.Style = style;
           ws.Cells[staRow, col + 1].Style.Border.Right.Style = style;
           ws.Cells[staRow, col + 1].Style.Numberformat.Format = GetFormat(item.Item3);
-          
-          #endregion
+
+          #endregion HeaderValue
 
           count++; //Incrementa el contador
           if (count < numRows)
@@ -1820,7 +1955,7 @@ namespace IM.Base.Helpers
         totalFilterRows += numRows - 1;
       }
 
-      #endregion
+      #endregion ExtraHeaderFile
 
       //Se saltan 2 lineas desde donde quedo (Fila 3 si es sin subheader o 3 + numRows)
       totalFilterRows += 2;
@@ -1866,9 +2001,43 @@ namespace IM.Base.Helpers
         pk.Dispose();
         return null;
       }
-    }    
+    }
 
     #endregion SaveExcel
+
+    #region SaveExcelFilePath
+
+    /// <summary>
+    /// Guarda un ExcelPackage en una ruta especificada
+    /// </summary>
+    /// <param name="pk">ExcelPackage</param>
+    /// <param name="fileFullPath">Ruta completa del archivo</param>
+    /// <returns>Ruta de archivo nuevo (FileInfo)</returns>
+    /// <history>
+    /// [aalcocer] 03/06/2016  Created
+    /// </history>
+    private static FileInfo SaveExcelFilePath(ExcelPackage pk, string fileFullPath)
+    {
+      var newFile = new FileInfo(fileFullPath);
+      try
+      {
+        if (newFile.Exists)
+        {
+          newFile.Delete();
+        }
+        pk.SaveAs(newFile);
+      }
+      catch (Exception e)
+      {
+        string message = UIHelper.GetMessageError(e);
+        UIHelper.ShowMessage(message, System.Windows.MessageBoxImage.Error);
+        return null;
+      }
+      pk.Dispose();
+      return newFile;
+    }
+
+    #endregion SaveExcelFilePath
 
     #region AddCalculatedField
 
@@ -2121,7 +2290,7 @@ namespace IM.Base.Helpers
         {
           row[field.PropertyName] = rowName[field.PropertyName];
           if (rowName[field.PropertyName] != DBNull.Value)
-            strFilter += " and [" + field.PropertyName + "] = '" + rowName[field.PropertyName].ToString().Replace("'","''") + "'";
+            strFilter += " and [" + field.PropertyName + "] = '" + rowName[field.PropertyName].ToString().Replace("'", "''") + "'";
         });
 
         strFilter = strFilter.Substring(5);
@@ -2305,7 +2474,7 @@ namespace IM.Base.Helpers
       return qTable.ToTable();
     }
 
-    #endregion 
+    #endregion SortDatatable
 
     #region SetDataFieldShowDataAsAttribute
 
