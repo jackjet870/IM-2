@@ -11,7 +11,7 @@ namespace IM.Model
 {
     using System;
     
-    public partial class Wholesalers
+    public partial class WholesalerData
     {
         public int wscl { get; set; }
         public string clN { get; set; }

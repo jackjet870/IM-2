@@ -17880,7 +17880,7 @@
             <Parameter Name="BySegmentsCategories" Mode="In" Type="Boolean" />
             <Parameter Name="ByLocationsCategories" Mode="In" Type="Boolean" />
           </FunctionImport>
-          <FunctionImport Name="USP_OR_GetWholesalers" ReturnType="Collection(IMModel.Wholesalers)" />
+          <FunctionImport Name="USP_OR_GetWholesalers" ReturnType="Collection(IMModel.WholesalerData)" />
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -22087,7 +22087,7 @@
           <Property Type="String" Name="Exit2N" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="Exit2P" Nullable="true" MaxLength="10" />
         </ComplexType>
-        <ComplexType Name="Wholesalers">
+        <ComplexType Name="WholesalerData">
           <Property Type="Int32" Name="wscl" Nullable="false" />
           <Property Type="String" Name="clN" Nullable="true" MaxLength="50" />
           <Property Type="Decimal" Name="wsCompany" Nullable="false" Precision="2" Scale="0" />
@@ -29627,7 +29627,7 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_GetWholesalers" FunctionName="IMModel.Store.USP_OR_GetWholesalers">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.Wholesalers">
+              <ComplexTypeMapping TypeName="IMModel.WholesalerData">
                 <ScalarProperty Name="wscl" ColumnName="wscl" />
                 <ScalarProperty Name="clN" ColumnName="clN" />
                 <ScalarProperty Name="wsCompany" ColumnName="wsCompany" />

@@ -5873,9 +5873,9 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptManifest>("USP_IM_RptManifest", dateFromParameter, dateToParameter, salesRoomParameter, salesmanIDParameter, salesmanRolesParameter, segmentsParameter, programsParameter, bySegmentsCategoriesParameter, byLocationsCategoriesParameter);
         }
     
-        public virtual ObjectResult<Wholesalers> USP_OR_GetWholesalers()
+        public virtual ObjectResult<WholesalerData> USP_OR_GetWholesalers()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Wholesalers>("USP_OR_GetWholesalers");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WholesalerData>("USP_OR_GetWholesalers");
         }
     }
 }
