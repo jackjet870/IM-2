@@ -323,6 +323,7 @@ namespace IM.Launcher.Forms
     /// </history>
     private void btnOkPath_Click(object sender, RoutedEventArgs e)
     {
+      
       var strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
       if (!File.Exists(strArchivo)) return;
       _iniFileHelper = new IniFileHelper(strArchivo);
