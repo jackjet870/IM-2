@@ -1277,6 +1277,9 @@
     <Compile Include="Wholesaler.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Wholesalers.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Zone.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

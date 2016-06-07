@@ -6359,6 +6359,7 @@
           <Parameter Name="User" Type="varchar" Mode="In" />
           <Parameter Name="Regions" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetWholesalers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="USP_OR_GetWhsMovs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="wmwh" Type="varchar" Mode="In" />
           <Parameter Name="wmD" Type="datetime" Mode="In" />
@@ -17879,6 +17880,7 @@
             <Parameter Name="BySegmentsCategories" Mode="In" Type="Boolean" />
             <Parameter Name="ByLocationsCategories" Mode="In" Type="Boolean" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_GetWholesalers" ReturnType="Collection(IMModel.Wholesalers)" />
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -22084,6 +22086,17 @@
           <Property Type="String" Name="Exit2" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="Exit2N" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="Exit2P" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="Wholesalers">
+          <Property Type="Int32" Name="wscl" Nullable="false" />
+          <Property Type="String" Name="clN" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="wsCompany" Nullable="false" Precision="2" Scale="0" />
+          <Property Type="String" Name="wsApplication" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="Name" Nullable="true" />
+          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="Total" Nullable="true" Precision="12" Scale="2" />
+          <Property Type="String" Name="SaleType" Nullable="true" />
+          <Property Type="String" Name="Program" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -29609,6 +29622,21 @@
                 <ScalarProperty Name="Exit2" ColumnName="Exit2" />
                 <ScalarProperty Name="Exit2N" ColumnName="Exit2N" />
                 <ScalarProperty Name="Exit2P" ColumnName="Exit2P" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetWholesalers" FunctionName="IMModel.Store.USP_OR_GetWholesalers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.Wholesalers">
+                <ScalarProperty Name="wscl" ColumnName="wscl" />
+                <ScalarProperty Name="clN" ColumnName="clN" />
+                <ScalarProperty Name="wsCompany" ColumnName="wsCompany" />
+                <ScalarProperty Name="wsApplication" ColumnName="wsApplication" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="SaleType" ColumnName="SaleType" />
+                <ScalarProperty Name="Program" ColumnName="Program" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
