@@ -46,6 +46,7 @@ namespace IM.Launcher.Classes
     /// </summary>
     /// <history>
     /// [wtorres]  11/Abr/2016 Modified. Ahora genera la lista en base al enumerado EnumMenu
+    /// [vku] 06/06/2016 Modified. Se cambia el boton PrinteroConfig a SystemConfig
     /// </history>
     public IDictionary<int, string> ListOfButtons()
     {
@@ -71,7 +72,7 @@ namespace IM.Launcher.Classes
       lstMenus.Add((int)EnumMenu.Administrator, EnumToListHelper.GetEnumDescription(EnumMenu.Administrator));
       lstMenus.Add((int)EnumMenu.MailOutsConfig, EnumToListHelper.GetEnumDescription(EnumMenu.MailOutsConfig));
       lstMenus.Add((int)EnumMenu.InvitationsConfig, EnumToListHelper.GetEnumDescription(EnumMenu.InvitationsConfig));
-      lstMenus.Add((int)EnumMenu.PrinterConfig, EnumToListHelper.GetEnumDescription(EnumMenu.PrinterConfig));
+      lstMenus.Add((int)EnumMenu.SystemConfig, EnumToListHelper.GetEnumDescription(EnumMenu.SystemConfig));
 
       return lstMenus;
     }

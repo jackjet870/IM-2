@@ -32,6 +32,7 @@ namespace IM.ProcessorOuthouse.Forms
     {
       InitializeComponent();
       ConfigGrds();
+      GetFirstDayValue();
       lblUserName.Content = App.User.User.peN;
     }
 
@@ -43,7 +44,7 @@ namespace IM.ProcessorOuthouse.Forms
     private bool _blnOneDate;
     private bool _blnOnlyOneRegister;
 
-    public List<int> _lstLeadSources = new List<int>();
+    public List<string> _lstLeadSources = new List<string>();
     public List<int> _lstLeadSourcesPaymentComm = new List<int>();
     public List<int> _lstPaymentTypes = new List<int>();
     public List<int> _lstPRs = new List<int>();
@@ -52,6 +53,7 @@ namespace IM.ProcessorOuthouse.Forms
     public List<int> _lstGiftsProdGift = new List<int>();
     public EnumPredefinedDate? _cboDateSelected;
     public string _cboFolSeriesSelected;
+    public DateTime _dtmInit;
     public DateTime _dtmStart = DateTime.Now.Date;
     public DateTime _dtmEnd = DateTime.Now.Date;
     public EnumBasedOnArrival _enumBasedOnArrival = EnumBasedOnArrival.NoBasedOnArrival;
@@ -165,6 +167,34 @@ namespace IM.ProcessorOuthouse.Forms
     }
 
     #endregion ConfigGrds
+
+    #region GetFirtsDayValue
+    /// <summary>
+    ///   Obtiene las fechas iniciales y finales de los reportes
+    /// </summary>
+    /// <history>
+    ///   [vku] 03/Jun/2016 Created
+    /// </history>
+    private void GetFirstDayValue()
+    {
+      DateTime _serverDate = BRHelpers.GetServerDate();
+      // Fecha inicial
+      _dtmStart = new DateTime(_serverDate.Year, _serverDate.Month, 1);
+
+      // obtenemos la fecha de inicio de la semana
+      _dtmInit = DateHelper.GetStartWeek(_serverDate.AddDays(-7)).Date;
+
+      //Fecha final
+      _dtmEnd = _serverDate.Date;
+      string strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
+      if (!File.Exists(strArchivo)) return;
+      var _iniFileHelper = new IniFileHelper(strArchivo);
+      _dtmStart = _iniFileHelper.readDate("FilterDate", "DateStart", _dtmStart);
+      _dtmEnd = _iniFileHelper.readDate("FilterDate", "DateEnd", _dtmEnd);
+      string strLeadSource = _iniFileHelper.readText("FilterDate", "LeadSource", string.Empty);
+      if (!string.IsNullOrEmpty(strLeadSource)) _lstLeadSources.Add(strLeadSource);
+    }
+    #endregion
 
     #region PrepareReportByLeadSource
 
@@ -400,7 +430,7 @@ namespace IM.ProcessorOuthouse.Forms
           string.Join(",", _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList()),
           "ALL",
           EnumProgram.Outhouse,
-          string.Join(",", _frmFilter.grdPR.SelectedItems.Cast<PaymentType>().Select(c => c.ptID).ToList()),
+          string.Join(",", _frmFilter.grdPaymentTypes.SelectedItems.Cast<PaymentType>().Select(c => c.ptID).ToList()),
           EnumFilterDeposit.fdDepositShowsNoDeposit);
           if (lstRptDepositsPaymentByPR != null)
           {

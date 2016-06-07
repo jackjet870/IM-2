@@ -2,26 +2,42 @@
 using System;
 using System.Printing;
 using System.Windows;
+using System.IO;
+using IM.Base.Helpers;
 
 namespace IM.Launcher.Forms
 {
   /// <summary>
-  /// Módulo para configurar las impresoras
+  /// Módulo para configurar opciones de sistema
   /// </summary>
   /// <history>
   /// [lchairez] 05/Feb/2016 Created
+  /// [vku] 06/Jun/2016 Modified. Renombre el formulario a SystemCfg
   /// </history>
 
-  public partial class PrinterCfg : Window
+  public partial class SystemCfg : Window
   {
-    public PrinterCfg()
+
+    #region Atributos
+    IniFileHelper _iniFileHelper;
+    public string FileName
+    {
+      get { return txtPath.Text; }
+      set { txtPath.Text = value; }
+    }
+    #endregion
+
+    #region Constructor
+    public SystemCfg()
     {
       WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
       InitializeComponent();
     }
+    #endregion
 
     #region Métodos de la forma
 
+    #region Window_Loaded
     /// <summary>
     /// Configura el formulario
     /// </summary>
@@ -32,8 +48,11 @@ namespace IM.Launcher.Forms
     {
       FillPrinters();
       SelectedPrinterLoaded();
+      LoadReportsPath();
     }
+    #endregion
 
+    #region btnOk_Click
     /// <summary>
     /// Guarda en los registros de windows las impresoras seleccionadas
     /// </summary>
@@ -55,7 +74,9 @@ namespace IM.Launcher.Forms
 
       SaveRegistrySettings();
     }
+    #endregion
 
+    #region btnCancel_Click
     /// <summary>
     /// Cierra la ventana
     /// </summary>
@@ -66,11 +87,13 @@ namespace IM.Launcher.Forms
     {
       SystemCommands.CloseWindow(this);
     }
+    #endregion
 
     #endregion
 
     #region Métodos privados
 
+    #region FillPrinters
     /// <summary>
     /// Llena los combos con las impresoras instaladas en la computadora
     /// </summary>
@@ -88,7 +111,9 @@ namespace IM.Launcher.Forms
       }
 
     }
+    #endregion
 
+    #region SaveRegistrySettings
     /// <summary>
     /// Guarda en el registro de windows el nombre de la impresora para invitaciones y tickets de comida
     /// </summary>
@@ -116,7 +141,9 @@ namespace IM.Launcher.Forms
         return;
       }
     }
+    #endregion
 
+    #region GetUrlPrinterRegistry
     /// <summary>
     /// Regresa la ruta donde se guardan los valores de las impresoras
     /// </summary>
@@ -158,7 +185,9 @@ namespace IM.Launcher.Forms
         return null;
       }
     }
+    #endregion
 
+    #region  CreateUrlConfiguration
     /// <summary>
     /// Crea la ruta donde se guardaran los valores de las impresoras
     /// </summary>
@@ -199,7 +228,9 @@ namespace IM.Launcher.Forms
         return null;
       }
     }
+    #endregion
 
+    #region SelectedPrinterLoaded
     /// <summary>
     /// Selecciona el valor almacenado en el registro de windows de cada impresora
     /// </summary>
@@ -219,6 +250,100 @@ namespace IM.Launcher.Forms
       cmbPrinterInvitation.SelectedValue = printInvit;
       cmbPrinterMeal.SelectedValue = printMealTicket;
     }
+    #endregion
+
+    #region LoadReportsPath
+    /// <summary>
+    ///  Carga la ruta de guardado para los reportes desde el archivo de configuración
+    /// </summary>
+    /// <history>
+    ///   [vku] 06/Jun/2016 Created
+    /// </history>
+    private void LoadReportsPath()
+    {
+      var strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
+      if (!File.Exists(strArchivo)) return;
+      _iniFileHelper = new IniFileHelper(strArchivo);
+      FileName = _iniFileHelper.readText("SavePath", "ReportsPath", "");
+    }
+    #endregion
+
+    #endregion
+
+    #region Eventos
+
+    #region btnBrowser_Click
+    /// <summary>
+    ///   Abre el browser Folder
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    ///   [vku] 06/Jun/2016 Created
+    /// </history>
+    private void btnBrowser_Click(object sender, RoutedEventArgs e)
+    {
+      System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
+      dialog.SelectedPath = "M:\\";
+      System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+      if (result == System.Windows.Forms.DialogResult.OK)
+        FileName = dialog.SelectedPath;
+    }
+    #endregion
+
+    public event EventHandler FileNameChanged;
+
+    #region txtPath_TextChanged
+    /// <summary>
+    ///   Ruta para los reportes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    ///   [vku] 06/Jun/2016 Created
+    /// </history>
+    private void txtPath_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+    {
+      e.Handled = true;
+      if (FileNameChanged != null)
+      {
+        FileNameChanged(this, EventArgs.Empty);
+      }
+    }
+    #endregion
+
+    #region btnOkPath_Click
+    /// <summary>
+    ///  Guarda la ruta para los reportes en el archivo de configuración
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    ///   [vku] 06/Jun/2016 Created
+    /// </history>
+    private void btnOkPath_Click(object sender, RoutedEventArgs e)
+    {
+      var strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
+      if (!File.Exists(strArchivo)) return;
+      _iniFileHelper = new IniFileHelper(strArchivo);
+      _iniFileHelper.writeText("SavePath", "ReportsPath", FileName); 
+    }
+    #endregion
+
+    #region btnCancelPath_Click
+    /// <summary>
+    ///   Cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    ///   [vku] 06/Jun/2016 Created
+    /// </history>
+    private void btnCancelPath_Click(object sender, RoutedEventArgs e)
+    {
+      SystemCommands.CloseWindow(this);
+    }
+    #endregion
 
     #endregion
   }

@@ -38,9 +38,17 @@ namespace IM.ProcessorOuthouse.Classes
                                  select new
                                  {
                                    paymentByPR.Category,
-                                   paymentByPR.PaymentSchemaFactor,
+                                   paymentByPRDep.pcN,
+                                   paymentByPRDep.PaymentSchema,
                                    paymentByPR.PR,
                                    paymentByPR.PRN,
+
+                                   paymentByPR.Books,
+                                   paymentByPR.InOuts,
+                                   paymentByPR.GrossBooks,
+                                   paymentByPR.GrossShows,
+                                   paymentByPR.SalesAmount,
+
                                    paymentByPRDep.guID,
                                    paymentByPRDep.guName,
                                    paymentByPRDep.guBookD,
@@ -48,22 +56,19 @@ namespace IM.ProcessorOuthouse.Classes
                                    paymentByPRDep.guls,
                                    paymentByPRDep.gusr,
                                    paymentByPRDep.guHotel,
-                                   paymentByPR.SalesAmount,
-                                   paymentByPR.Books,
-                                   paymentByPR.InOuts,
-                                   paymentByPR.GrossBooks,
-                                   paymentByPR.GrossShows,
+
                                    paymentByPR.ShowsFactor,
                                    paymentByPR.Efficiency,
+
                                    cu.cuN,
                                    payType.ptN,
                                    paymentByPRDep.bdAmount,
                                    paymentByPRDep.bdReceived,
-                          
+                                   paymentByPRDep.ToPay
                                  }).ToList();
 
-      DataTable dtData = TableHelper.GetDataTableFromList(lstDepositsPayments, true, false, true);
-      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptDepositsPaymentByPR(), showRowGrandTotal: true);
+      DataTable dtData = TableHelper.GetDataTableFromList(lstDepositsPayments, replaceStringNullOrWhiteSpace: true);
+      return EpplusHelper.CreatePivotRptExcel(false, filters, dtData, strReport, dateRangeFileName, clsFormatReport.rptDepositsPaymentByPR(), showRowGrandTotal: true, showColumnGrandTotal: true);
      
     }
 

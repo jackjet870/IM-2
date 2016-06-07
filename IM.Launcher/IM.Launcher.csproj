@@ -72,6 +72,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Printing" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -93,7 +94,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Forms\PrinterCfg.xaml">
+    <Page Include="Forms\SystemCfg.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -106,8 +107,8 @@
     <Compile Include="Forms\frmLauncher.xaml.cs">
       <DependentUpon>frmLauncher.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\PrinterCfg.xaml.cs">
-      <DependentUpon>PrinterCfg.xaml</DependentUpon>
+    <Compile Include="Forms\SystemCfg.xaml.cs">
+      <DependentUpon>SystemCfg.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +129,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -176,7 +178,7 @@
     <Content Include="Images\Outhouse.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\PrinterConfig.png">
+    <Content Include="Images\SystemConfig.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\ProcessorGRAL.png">
@@ -230,6 +232,10 @@
     <ProjectReference Include="..\IM.Model\IM.Model.csproj">
       <Project>{4d0c8faf-7eeb-4a36-9826-e190a0d9fe72}</Project>
       <Name>IM.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IM.Styles\IM.Styles.csproj">
+      <Project>{bad29979-3e8d-4913-8dd0-edebc8af85a7}</Project>
+      <Name>IM.Styles</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

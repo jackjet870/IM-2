@@ -53,8 +53,8 @@
                     </StatusBarItem.Content>
                 </StatusBarItem>
             </StatusBar>
-            
-            
+
+
         </StackPanel>
         <!--#endregion-->
         <!--#region pnlLeadSourcesPaymentComm-->
@@ -280,7 +280,7 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <!--#endregion-->
-            
+
             <!--#region rango de fechas-->
             <Grid Margin="20 20 20 5">
                 <!--#region columns & rows-->
@@ -303,13 +303,13 @@
                 <Grid Name="pnlDtmStart" Grid.Row="1" Grid.Column="1">
                     <!--<DatePicker Name="dtmStart" HorizontalAlignment="Left" VerticalAlignment="Center" Width="180" DisplayDate="" SelectedDate="{x:Static sys:DateTime.Today}" Height="26" SelectedDateFormat="Long" />-->
                     <!--<ScrollBar Name="updStart" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,5,10,5" Scroll="upd_Scroll" Maximum="99999" Minimum="-99999"/>-->
-                    <xctk:DateTimePicker Name="dtmStart" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" Value="{x:Static sys:DateTime.Today}" Format="LongDate"/>
+                    <xctk:DateTimePicker Name="dtmStart" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" Value="{x:Static sys:DateTime.Today}" Format="Custom" FormatString="ddd d MMM yyyy" Width="130"/>
                 </Grid>
                 <!--#endregion-->
                 <Label Grid.Row="2" VerticalAlignment="Center" Content="To" HorizontalContentAlignment="Right"></Label>
                 <!--#region pnlDtmEnd-->
                 <Grid Name="pnlDtmEnd"  Grid.Row="2" Grid.Column="1">
-                    <xctk:DateTimePicker Name="dtmEnd" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" Value="{x:Static sys:DateTime.Today}" Format="LongDate"/>
+                    <xctk:DateTimePicker Name="dtmEnd" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 5 10 5" Value="{x:Static sys:DateTime.Today}" Format="Custom" FormatString="ddd d MMM yyyy" Width="130"/>
                     <!--<DatePicker Name="dtmEnd" HorizontalAlignment="Left" VerticalAlignment="Center" Width="180" DisplayDate="" SelectedDate="{x:Static sys:DateTime.Today}" Height="26" SelectedDateFormat="Long" />-->
                     <!--<ScrollBar Name="updEnd" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,5,10,5" Scroll="upd_Scroll" Maximum="99999" Minimum="-99999"/>-->
                 </Grid>
@@ -331,8 +331,8 @@
             <Grid Name="pnlfolios" Grid.Row="2" Margin="20 5 20 5">
                 <!--#region columns & rows-->
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -342,18 +342,18 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <!--#endregion-->
-                
-                <CheckBox Grid.Row="0" x:Name="chkUseDates" Content="Use dates"  Margin="5" Grid.ColumnSpan="2" Checked="chkUseDates_Checked" Unchecked="chkUseDates_Checked"/>
-                
-                <Label x:Name="lblFolSeries" Grid.Row="1" VerticalAlignment="Center" Content="Serie" HorizontalContentAlignment="Right" HorizontalAlignment="Right" Width="73" Margin="0,0,22,0"/>
-                <ComboBox Name="cboFolSeries" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,10,0" Height="21" VerticalAlignment="Top" HorizontalAlignment="Right" Width="130"/>
 
-                <Label x:Name="lblFolFrom" Grid.Row="2" VerticalAlignment="Center" Content="Folios From" HorizontalContentAlignment="Right" HorizontalAlignment="Right" Width="73" Margin="0,0,22,0"/>
-                <TextBox Grid.Row ="2" x:Name="txtFolFrom" Height="22" TextWrapping="Wrap" Margin="0,1,10,0" Grid.ColumnSpan="2" HorizontalAlignment="Right" Width="130" VerticalAlignment="Top"/>
-                
-                <Label x:Name="lblFolTo" Grid.Row="3" VerticalAlignment="Center" Content="Folios To" HorizontalContentAlignment="Right" HorizontalAlignment="Right" Width="73" Margin="0,0,22,0"/>
-                <TextBox Grid.Row ="3" x:Name="txtFolTo" Height="22" TextWrapping="Wrap" Text="" Margin="0,1,10,0" Grid.ColumnSpan="2" HorizontalAlignment="Right" Width="130"/>
-                
+                <CheckBox Grid.Row="0" x:Name="chkUseDates" Content="Use dates"  Margin="5" Grid.ColumnSpan="2" Checked="chkUseDates_Checked" Unchecked="chkUseDates_Checked"/>
+
+                <Label x:Name="lblFolSeries" Grid.Row="1" VerticalAlignment="Center" Content="Serie" HorizontalContentAlignment="Right" HorizontalAlignment="Center" Width="68" Height="23"/>
+                <ComboBox Name="cboFolSeries" Grid.Row="1" Margin="15,0,15,2" Height="21" VerticalAlignment="Center" HorizontalAlignment="Center" Width="125" Grid.Column="1"/>
+
+                <Label x:Name="lblFolFrom" Grid.Row="2" VerticalAlignment="Center" Content="Folios From" HorizontalContentAlignment="Right" HorizontalAlignment="Center" Width="68" Height="23"/>
+                <TextBox Grid.Row ="2" x:Name="txtFolFrom" Height="22" TextWrapping="Wrap" Margin="15,1,10,0" HorizontalAlignment="Center" Width="130" VerticalAlignment="Center" Grid.Column="1"/>
+
+                <Label x:Name="lblFolTo" Grid.Row="3" VerticalAlignment="Center" Content="Folios To" HorizontalContentAlignment="Right" HorizontalAlignment="Center" Width="68" Height="23"/>
+                <TextBox Grid.Row ="3" x:Name="txtFolTo" TextWrapping="Wrap" Text="" Margin="0,1,10,0" HorizontalAlignment="Right" Width="130" Grid.Column="1"/>
+
                 <CheckBox Grid.Row="4" x:Name="chkAllFolios" Content="All"  Margin="5" Grid.ColumnSpan="2"/>
             </Grid>
             <!--#endregion-->

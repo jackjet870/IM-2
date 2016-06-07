@@ -136,7 +136,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          result = dbContext.USP_OR_GetPRsAssigned(dateFrom, dateTo, leadSource, markets, guPRs, mbrPRs).OrderByDescending(o => o.Assigned).ToList();
+          result = dbContext.USP_OR_GetPRsAssigned(dateFrom, dateTo, leadSource, markets, guPRs, mbrPRs).OrderByDescending(c => c.peN).OrderByDescending(c => c.Assigned).ToList();
         }
       });
       return result;

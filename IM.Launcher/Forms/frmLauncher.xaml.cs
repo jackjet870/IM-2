@@ -169,6 +169,7 @@ namespace IM.Launcher.Forms
     /// <param name="button">Botón oprimido</param>
     /// <history>
     /// [lchairez] 09/Mar/2016 Created
+    /// [vku] 06/06/20161 Modified. Se añade SystemConfig (antes PrinterConfig)
     /// </history>
     private void CallingExe(EnumMenu option)
     {
@@ -232,10 +233,10 @@ namespace IM.Launcher.Forms
         case EnumMenu.InvitationsConfig:
           Process.Start(String.Format("{0}\\IM.InvitConfig.exe", path));
           break;
-        case EnumMenu.PrinterConfig:
-          var printer = new PrinterCfg();
-          printer.Owner = this;
-          printer.ShowDialog();
+        case EnumMenu.SystemConfig:
+          var system = new SystemCfg();
+          system.Owner = this;
+          system.ShowDialog();
           break;
       }
     }

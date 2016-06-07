@@ -7,6 +7,7 @@ namespace IM.Model.Enums
   /// </summary>
   /// <history>
   /// [wtorres]  11/04/2016 Modified. Movido desde IM.Launcher
+  /// [vku] 06/06/2016 Modified. Se renombro PrinterConfig a SystemConfig
   /// </history>
   public enum EnumMenu
   {
@@ -67,7 +68,7 @@ namespace IM.Model.Enums
     [Description("Invitations Config")]
     InvitationsConfig,
 
-    [Description("Printer Config")]
-    PrinterConfig
+    [Description("System Config")]
+    SystemConfig
   }
 }

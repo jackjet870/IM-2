@@ -143,8 +143,7 @@ namespace IM.ProcessorOuthouse.Forms
       }
       cboDate.SelectedIndex = 0;
       //Si es un rango de fechas.
-      cboDate.IsEnabled = !blnOneDate;
-      pnlDtmEnd.IsEnabled = !blnOneDate;
+      cboDate.IsEnabled = pnlDtmEnd.IsEnabled = !blnOneDate;
     }
 
     #endregion ConfigureDates
@@ -194,7 +193,7 @@ namespace IM.ProcessorOuthouse.Forms
     public void SaveFrmFilterValues()
     {
       if (!chkAllLeadSources.IsChecked.Value)
-        frmPO._lstLeadSources = grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => grdLeadSources.Items.IndexOf(c)).ToList();
+        frmPO._lstLeadSources = grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList();
       if (!chkAllLeadSourcesPaymentComm.IsChecked.Value)
         frmPO._lstLeadSourcesPaymentComm = grdLeadSourcesPaymentComm.SelectedItems.Cast<LeadSource>().Select(c => grdLeadSourcesPaymentComm.Items.IndexOf(c)).ToList();
       if (!chkAllPaymentTypes.IsChecked.Value)
@@ -329,7 +328,7 @@ namespace IM.ProcessorOuthouse.Forms
       {
         frmPO._lstLeadSources.ForEach(c =>
         {
-          grdLeadSources.SelectedItems.Add(grdLeadSources.Items.GetItemAt(c));
+          grdLeadSources.SelectedItems.Add(_lstLeadSources.SingleOrDefault(x => x.lsID == c));
         });
       }
     }
