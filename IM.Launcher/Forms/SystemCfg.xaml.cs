@@ -2,7 +2,6 @@
 using System;
 using System.Printing;
 using System.Windows;
-using System.IO;
 using IM.Base.Helpers;
 
 namespace IM.Launcher.Forms
@@ -143,15 +142,16 @@ namespace IM.Launcher.Forms
     }
     #endregion
 
-    #region GetUrlPrinterRegistry
+    #region GetUrlConfigRegistry
     /// <summary>
-    /// Regresa la ruta donde se guardan los valores de las impresoras
+    ///   Regresa la ruta donde se guardan los valores de configuración
     /// </summary>
-    /// <returns>Objeto que contiene los valores de las impresoras</returns>
+    /// <returns>Objeto que contiene los valores de configuración</returns>
     /// <history>
     /// [lchairez] 05/Feb/2016 Created
+    /// [vku] 07/Jun/2016 Modified. Renombre el metodo a GetUrlConfigRegistry (antes GetUrlPrinterRegistry)
     /// </history>
-    private RegistryKey GetUrlPrinterRegistry()
+    private RegistryKey GetUrlConfigRegistry()
     {
       RegistryKey softwareKey = Registry.CurrentUser.OpenSubKey("Software", true); //obtenemos la ruta de la carpeta Software en el registro de windows
       RegistryKey imKey;
@@ -189,9 +189,9 @@ namespace IM.Launcher.Forms
 
     #region  CreateUrlConfiguration
     /// <summary>
-    /// Crea la ruta donde se guardaran los valores de las impresoras
+    ///   Crea la ruta donde se guardaran los valores de configuración del sistema
     /// </summary>
-    /// <returns>Objeto que contiene los valores de las impresoras</returns>
+    /// <returns>Objeto que contiene los valores de configuración</returns>
     /// <history>
     /// [lchairez] 05/Feb/2016 Created
     /// </history>
@@ -239,9 +239,11 @@ namespace IM.Launcher.Forms
     /// </history>
     private void SelectedPrinterLoaded()
     {
-      RegistryKey configuration = GetUrlPrinterRegistry();
+      RegistryKey configuration = GetUrlConfigRegistry();
 
       if (configuration == null)
+        return;
+      if (configuration.GetValue("PrintInvit") == null && configuration.GetValue("PrintMealTicket") == null)
         return;
 
       string printInvit = configuration.GetValue("PrintInvit").ToString();
@@ -254,17 +256,43 @@ namespace IM.Launcher.Forms
 
     #region LoadReportsPath
     /// <summary>
-    ///  Carga la ruta de guardado para los reportes desde el archivo de configuración
+    ///  Carga la ruta para los reportes desde el registro de windows
     /// </summary>
     /// <history>
     ///   [vku] 06/Jun/2016 Created
     /// </history>
     private void LoadReportsPath()
     {
-      var strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
-      if (!File.Exists(strArchivo)) return;
-      _iniFileHelper = new IniFileHelper(strArchivo);
-      FileName = _iniFileHelper.readText("SavePath", "ReportsPath", "");
+      RegistryKey configuration = GetUrlConfigRegistry();
+      if (configuration != null)
+      {
+        FileName = (string) configuration.GetValue("ReportsPath");  
+      }
+    }
+    #endregion
+
+    #region SavePath
+    /// <summary>
+    ///   Guarda la ruta para los reportes en el registro de windows
+    /// </summary>
+    /// <history>
+    ///   [vku] 07/Jun/2016 Created
+    /// </history>
+    private void SavePath()
+    {
+      try
+      {
+        RegistryKey configurationKey = CreateUrlConfiguration();
+        if (configurationKey != null)
+        {
+          configurationKey.SetValue("ReportsPath", FileName);
+          UIHelper.ShowMessage("path successfully saved", MessageBoxImage.Information, "System Configuration");
+        }
+      }
+      catch (System.Security.SecurityException)
+      {
+        UIHelper.ShowMessage("The user doesn't have the required permissions", MessageBoxImage.Error, "System Configuration");
+      }
     }
     #endregion
 
@@ -314,7 +342,7 @@ namespace IM.Launcher.Forms
 
     #region btnOkPath_Click
     /// <summary>
-    ///  Guarda la ruta para los reportes en el archivo de configuración
+    ///  Guarda la ruta seleccionada en el registro de windows
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -323,11 +351,14 @@ namespace IM.Launcher.Forms
     /// </history>
     private void btnOkPath_Click(object sender, RoutedEventArgs e)
     {
-      
-      var strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
-      if (!File.Exists(strArchivo)) return;
-      _iniFileHelper = new IniFileHelper(strArchivo);
-      _iniFileHelper.writeText("SavePath", "ReportsPath", FileName); 
+      if (txtPath.Text!=string.Empty)
+      {
+        SavePath();
+      }
+      else
+      {
+        UIHelper.ShowMessage("Select Path", MessageBoxImage.Exclamation, "System Configuration");
+      }
     }
     #endregion
 
