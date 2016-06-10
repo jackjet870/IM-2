@@ -74,8 +74,8 @@ namespace IM.ProcessorInhouse.Classes
     {
       return new List<ExcelFormatTable>
       {
-        new ExcelFormatTable{Title = "OriginallyAvailable", Axis =ePivotFieldAxis.Row, Order = 0,Compact = true,Outline = true,SubTotalFunctions = eSubTotalFunctions.Default},
-        new ExcelFormatTable{Title = "Market", Axis  = ePivotFieldAxis.Row, Order = 1, Compact = true,Outline = true,SubTotalFunctions = eSubTotalFunctions.Default},
+        new ExcelFormatTable{Title = "OriginallyAvailable", Axis =ePivotFieldAxis.Row, Order = 0,Compact = true,Outline = true, InsertBlankRow = true, SubTotalFunctions = eSubTotalFunctions.Default},
+        new ExcelFormatTable{Title = "Market", Axis  = ePivotFieldAxis.Row, Order = 1, Compact = true, Outline = true, InsertBlankRow = true, SubTotalFunctions = eSubTotalFunctions.Default},
         new ExcelFormatTable {Title = "Agency ID", Axis  = ePivotFieldAxis.Row, Order = 2},
         new ExcelFormatTable {Title = "Agency Name", Axis  = ePivotFieldAxis.Row, Order = 3},
 
@@ -110,7 +110,7 @@ namespace IM.ProcessorInhouse.Classes
     {
       return new List<ExcelFormatTable>
       {
-         new ExcelFormatTable { Title = "Status", Order = 0, Axis = ePivotFieldAxis.Row, Compact = true, Outline = true, SubTotalFunctions = eSubTotalFunctions.Default },
+         new ExcelFormatTable { Title = "Status", Order = 0, Axis = ePivotFieldAxis.Row, Compact = true, Outline = true, InsertBlankRow = true, SubTotalFunctions = eSubTotalFunctions.Default },
         new ExcelFormatTable { Title = "PR ID", Order = 1, Axis = ePivotFieldAxis.Row },
         new ExcelFormatTable {Title = "PR Name", Order = 2,  Axis = ePivotFieldAxis.Row},
 
@@ -187,8 +187,8 @@ namespace IM.ProcessorInhouse.Classes
     {
       return new List<ExcelFormatTable>
       {
-        new ExcelFormatTable{Title = "OriginallyAvailable",Order = 0, Axis = ePivotFieldAxis.Row, Compact = true,Outline = true,SubTotalFunctions = eSubTotalFunctions.Default},
-        new ExcelFormatTable{Title = "Market",Order = 1, Axis = ePivotFieldAxis.Row,Compact = true, Outline = true,SubTotalFunctions = eSubTotalFunctions.Default},
+        new ExcelFormatTable{Title = "OriginallyAvailable",Order = 0, Axis = ePivotFieldAxis.Row, Compact = true, Outline = true, InsertBlankRow = true, SubTotalFunctions = eSubTotalFunctions.Default},
+        new ExcelFormatTable{Title = "Market",Order = 1, Axis = ePivotFieldAxis.Row,Compact = true, Outline = true, InsertBlankRow = true, SubTotalFunctions = eSubTotalFunctions.Default},
         new ExcelFormatTable {Title = "Age Range", Order = 2 , Axis = ePivotFieldAxis.Row},
         new ExcelFormatTable {Title = "Arrivs", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ExcelFormatTable {Title = "Conts", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
@@ -233,7 +233,7 @@ namespace IM.ProcessorInhouse.Classes
       {
         new ExcelFormatTable{Title = "Contract ID",Order = 1, Axis = ePivotFieldAxis.Row},
         new ExcelFormatTable{Title = "Contract Name",Order = 2, Axis = ePivotFieldAxis.Row},
-         new ExcelFormatTable {Title = "Agency", Order = 0 , Axis = ePivotFieldAxis.Row, SubTotalFunctions = eSubTotalFunctions.Default, Compact = true, Outline = true},
+         new ExcelFormatTable {Title = "Agency", Order = 0 , Axis = ePivotFieldAxis.Row, SubTotalFunctions = eSubTotalFunctions.Default, Compact = true, Outline = true, InsertBlankRow = true},
         new ExcelFormatTable {Title = "Arrivs", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ExcelFormatTable {Title = "Conts", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ExcelFormatTable {Title = "Avails",Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
@@ -275,11 +275,11 @@ namespace IM.ProcessorInhouse.Classes
     {
       return new List<ExcelFormatTable>
       {
-        new ExcelFormatTable{Title = "Originally Available",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true},
-        new ExcelFormatTable{Title = "Market",Order = 1, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true},
+        new ExcelFormatTable{Title = "Originally Available",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true, InsertBlankRow=true},
+        new ExcelFormatTable{Title = "Market",Order = 1, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true, InsertBlankRow=true},
         new ExcelFormatTable{Title = "Contract ID",Order = 3, Axis = ePivotFieldAxis.Row},
         new ExcelFormatTable{Title = "Contract Name",Order = 4, Axis = ePivotFieldAxis.Row},
-        new ExcelFormatTable {Title = "Agency", Order = 2 , Axis = ePivotFieldAxis.Row, SubTotalFunctions = eSubTotalFunctions.Default, Outline = true},
+        new ExcelFormatTable {Title = "Agency", Order = 2 , Axis = ePivotFieldAxis.Row, SubTotalFunctions = eSubTotalFunctions.Default, Outline = true, InsertBlankRow=true},
         new ExcelFormatTable {Title = "Arrivs", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ExcelFormatTable {Title = "Conts", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ExcelFormatTable {Title = "Avails",Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
@@ -449,7 +449,7 @@ namespace IM.ProcessorInhouse.Classes
       return new List<ExcelFormatTable>
       {
         new ExcelFormatTable{Title = "Guest Status",Order = 1, Axis = ePivotFieldAxis.Row},
-        new ExcelFormatTable{Title = "Lead Source",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Compact = true,Outline = true},
+        new ExcelFormatTable{Title = "Lead Source",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Compact = true,Outline = true, InsertBlankRow = true},
         new ExcelFormatTable {Title = "Arrivs", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ExcelFormatTable {Title = "Conts", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ExcelFormatTable {Title = "Avails",Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
@@ -491,7 +491,7 @@ namespace IM.ProcessorInhouse.Classes
     {
       return new List<ExcelFormatTable>
       {
-        new ExcelFormatTable{Title = "Agency",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Compact = true,Outline = true},
+        new ExcelFormatTable{Title = "Agency",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Compact = true,Outline = true, InsertBlankRow = true},
         new ExcelFormatTable{Title = "Member Type",Order = 1, Axis = ePivotFieldAxis.Row},
         new ExcelFormatTable {Title = "Arrivs", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ExcelFormatTable {Title = "Conts", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
@@ -534,9 +534,9 @@ namespace IM.ProcessorInhouse.Classes
     {
       return new List<ExcelFormatTable>
       {
-        new ExcelFormatTable{Title = "Originally Available",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true},
-        new ExcelFormatTable{Title = "Market",Order = 1, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true, Compact = true},
-        new ExcelFormatTable{Title = "Agency",Order = 2, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default, Outline = true},
+        new ExcelFormatTable{Title = "Originally Available",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true, InsertBlankRow = true},
+        new ExcelFormatTable{Title = "Market",Order = 1, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true, Compact = true, InsertBlankRow = true},
+        new ExcelFormatTable{Title = "Agency",Order = 2, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default, Outline = true, InsertBlankRow = true},
         new ExcelFormatTable{Title = "Member Type",Order = 3, Axis = ePivotFieldAxis.Row},
         new ExcelFormatTable {Title = "Arrivs", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ExcelFormatTable {Title = "Conts", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
@@ -579,7 +579,7 @@ namespace IM.ProcessorInhouse.Classes
     {
       return new List<ExcelFormatTable>
       {
-        new ExcelFormatTable{Title = "Status",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true},
+        new ExcelFormatTable{Title = "Status",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default, Outline = true, Compact = true, InsertBlankRow = true},
         new ExcelFormatTable{Title = "PR ID",Order = 1, Axis = ePivotFieldAxis.Row},
         new ExcelFormatTable{Title = "PR Name",Order = 2, Axis = ePivotFieldAxis.Row},
 
@@ -630,8 +630,8 @@ namespace IM.ProcessorInhouse.Classes
     {
       return new List<ExcelFormatTable>
       {
-        new ExcelFormatTable{Title = "PR",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Compact = true,Outline = true},
-        new ExcelFormatTable{Title = "Type",Order = 2, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable{Title = "PR",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default, Compact = true, Outline = true, InsertBlankRow = true},
+        new ExcelFormatTable{Title = "Type",Order = 2, Axis = ePivotFieldAxis.Row, Outline = true},
         new ExcelFormatTable{Title = "Groups",Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ExcelFormatTable{Title = "Rooms",Order = 3, Axis = ePivotFieldAxis.Row,Format = EnumFormatTypeExcel.Number},
         new ExcelFormatTable{Title = "T Rooms",Order = 1, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
@@ -823,8 +823,8 @@ namespace IM.ProcessorInhouse.Classes
     {
       return new List<ExcelFormatTable>
       {
-        new ExcelFormatTable{Title = "Originally Available",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true},
-        new ExcelFormatTable{Title = "Market",Order = 1, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true, Compact = true},
+        new ExcelFormatTable{Title = "Originally Available",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true, InsertBlankRow = true},
+        new ExcelFormatTable{Title = "Market",Order = 1, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true, Compact = true, InsertBlankRow = true},
         new ExcelFormatTable{Title = "Nationality",Order = 2, Axis = ePivotFieldAxis.Row},
         new ExcelFormatTable {Title = "Arrivs", Order = 0, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
         new ExcelFormatTable {Title = "Conts", Order = 1,  Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Number},
@@ -938,8 +938,8 @@ namespace IM.ProcessorInhouse.Classes
     {
       return new List<ExcelFormatTable>
       {
-        new ExcelFormatTable{Title = "Unavail Motive",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true},
-        new ExcelFormatTable{Title = "Market",Order = 1, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true, Compact = true},
+        new ExcelFormatTable{Title = "Unavail Motive",Order = 0, Axis = ePivotFieldAxis.Row, SubTotalFunctions = eSubTotalFunctions.Default, Outline = true, Compact = true, InsertBlankRow = true},
+        new ExcelFormatTable{Title = "Market",Order = 1, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default, Outline = true, Compact = true, InsertBlankRow = true},
         new ExcelFormatTable{Title = "AgencyID",Order = 2, Axis = ePivotFieldAxis.Row},
         new ExcelFormatTable {Title = "Agency", Order = 3, Axis = ePivotFieldAxis.Row},
 
@@ -964,7 +964,7 @@ namespace IM.ProcessorInhouse.Classes
     {
       return new List<ExcelFormatTable>
       {
-        new ExcelFormatTable{Title = "Category",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default,Outline = true,Compact = true},
+        new ExcelFormatTable{Title = "Category",Order = 0, Axis = ePivotFieldAxis.Row,SubTotalFunctions = eSubTotalFunctions.Default ,Outline = true ,Compact = true, InsertBlankRow = true},
         new ExcelFormatTable{Title = "Agency ID",Order = 1, Axis = ePivotFieldAxis.Row},
         new ExcelFormatTable{Title = "Agency Name",Order = 2, Axis = ePivotFieldAxis.Row},
 

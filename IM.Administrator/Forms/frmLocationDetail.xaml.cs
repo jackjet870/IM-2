@@ -228,9 +228,9 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 01/04/2016
     /// </history>
-    private void LoadLeadSource()
+    private async void LoadLeadSource()
     {
-      List<LeadSource> lstLeadSource = BRLeadSources.GetLeadSources(1,EnumProgram.All);
+      List<LeadSource> lstLeadSource = await BRLeadSources.GetLeadSources(1,EnumProgram.All);
       cmblols.ItemsSource = lstLeadSource;
     }
     #endregion

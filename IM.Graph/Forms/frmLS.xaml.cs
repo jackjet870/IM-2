@@ -4,6 +4,7 @@ using IM.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -18,12 +19,13 @@ namespace IM.Graph.Forms
 
     protected Window _frmBase;
     private IniFileHelper _iniFileHelper;
+    private List<LeadSource> _leadsources;
 
     #endregion Atributos
 
     #region Propiedades
 
-    public LeadSource leadSource { get; set; }
+    public LeadSource LeadSource { get; set; }
     public bool IsValidated { get; set; }
 
     #endregion Propiedades
@@ -66,7 +68,7 @@ namespace IM.Graph.Forms
         res = false;
       }
       else
-        leadSource = (LeadSource)cmbPlace.SelectedItem;
+        LeadSource = (LeadSource)cmbPlace.SelectedItem;
 
       return res;
     }
@@ -114,25 +116,7 @@ namespace IM.Graph.Forms
     }
 
     #endregion Window_Loaded
-
-    #region Window_ContentRendered
-
-    /// <summary>
-    /// Carga el formulario
-    /// </summary>
-    /// <history>
-    /// [aalcocer] 10/03/2016 Created
-    /// </history>
-    private void Window_ContentRendered(object sender, EventArgs e)
-    {
-      this.Cursor = Cursors.Wait;
-      List<LeadSource> leadsources = BRLeadSources.GetLeadSources(1,Model.Enums.EnumProgram.All);
-      cmbPlace.ItemsSource = leadsources;
-      this.Cursor = null;
-    }
-
-    #endregion Window_ContentRendered
-
+    
     #region btnAceptar_Click
 
     /// <summary>
@@ -148,8 +132,7 @@ namespace IM.Graph.Forms
       IsValidated = true;
       Close();
 
-      if (_frmBase != null)
-        _frmBase.Hide();
+      _frmBase?.Hide();
     }
 
     #endregion btnAceptar_Click
@@ -164,13 +147,25 @@ namespace IM.Graph.Forms
     /// </history>
     private void btnCancelar_Click(object sender, RoutedEventArgs e)
     {
-      if (_frmBase != null)
-        _frmBase.Close();
+      _frmBase?.Close();
       Close();
     }
 
     #endregion btnCancelar_Click
 
     #endregion Eventos del formulario
+
+    #region Async Methods
+
+    public async Task<int> GetLeadSources()
+    {
+      Cursor = Cursors.Wait;
+      _leadsources = await BRLeadSources.GetLeadSources(1, Model.Enums.EnumProgram.All);
+      cmbPlace.ItemsSource = _leadsources;
+      Cursor = null;
+      return 1;
+
+    }
+    #endregion
   }
 }
