@@ -1,12 +1,13 @@
-﻿using System;
+﻿using IM.Model;
+using IM.Model.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using IM.Model;
-using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
-  public class BRGraph
+  public static class BRGraph
   {
     #region GetGraphProductionByPR
 
@@ -16,16 +17,23 @@ namespace IM.BusinessRules.BR
     /// <param name="dateFrom">Fecha desde</param>
     /// <param name="dateTo">Fecha hasta</param>
     /// <param name="leadSource">Clave de Lead Source</param>
-    /// <returns>List<GraphProductionByPRData></returns>
+    /// <returns><list type="GraphProductionByPRData"></list></returns>
     /// <history>
     /// [aalcocer] 07/03/2016 Created
+    /// [aalcocer] 07/06/2016 Modified. Se agregó asincronía
     /// </history>
-    public static List<GraphProductionByPR> GetGraphProductionByPR(DateTime dateFrom, DateTime dateTo, string leadSource)
+    public static async Task<List<GraphProductionByPR>> GetGraphProductionByPR(DateTime dateFrom, DateTime dateTo, string leadSource)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      var listGraphProductionByPr = new List<GraphProductionByPR>();
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GraphProductionByPR(dateFrom, dateTo, leadSource).OrderBy(gp => gp.PR).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GraphProductionByPR_Timeout;
+          listGraphProductionByPr = dbContext.USP_OR_GraphProductionByPR(dateFrom, dateTo, leadSource).OrderBy(gp => gp.PR).ToList();
+        }
+      });
+      return listGraphProductionByPr;
     }
 
     #endregion GetGraphProductionByPR

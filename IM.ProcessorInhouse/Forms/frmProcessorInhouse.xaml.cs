@@ -707,7 +707,7 @@ namespace IM.ProcessorInhouse.Forms
           filters.Add(Tuple.Create(GetSettings.StrGifts, clsFilter.BlnAllGifts ? GetSettings.StrAll : string.Join(",", clsFilter.LstGifts)));
 
           list.Add(await BRReportsByLeadSource.GetRptGiftsReceivedBySRData(clsFilter.DtmStart, clsFilter.DtmEnd, string.Join(",", clsFilter.LstLeadSources),
-            string.Join(",", clsFilter.LstChargeTo), string.Join(",", clsFilter.LstGifts)));
+            string.Join(",", clsFilter.LstChargeTo), clsFilter.BlnAllGifts ? GetSettings.StrAll : string.Join(",", clsFilter.LstGifts)));
           if (list.Cast<GiftsReceivedBySRData>().First().GiftsReceivedBySR.Any())
             finfo = clsReports.ExportRptGiftsReceivedBySR(reportname, fileFullPath, filters, list.First());
           break;
@@ -861,9 +861,12 @@ namespace IM.ProcessorInhouse.Forms
           filters.Add(Tuple.Create(GetSettings.StrMarkets, clsFilter.BlnAllMarkets ? GetSettings.StrAll : string.Join(",", clsFilter.LstMarkets)));
           filters.Add(Tuple.Create(GetSettings.StrAgencies, clsFilter.BlnAllAgencies ? GetSettings.StrAll : string.Join(",", clsFilter.LstAgencies)));
           if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          //if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
           list.AddRange(await BRReportsByLeadSource.GetRptProductionByContractAgencyInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
-            clsFilter.LstLeadSources, clsFilter.LstMarkets, clsFilter.LstAgencies, clsFilter.EnumQuinellas));
+            clsFilter.LstLeadSources, clsFilter.BlnAllMarkets ? null : clsFilter.LstMarkets,
+            clsFilter.BlnAllAgencies? null: clsFilter.LstAgencies, clsFilter.EnumQuinellas));
+          //, clsFilter.EnumBasedOnArrival));
           if (list.Any())
             finfo = clsReports.ExportRptProductionByContractAgencyInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByContractAgencyInhouse>().ToList());
           break;
@@ -877,9 +880,12 @@ namespace IM.ProcessorInhouse.Forms
           filters.Add(Tuple.Create(GetSettings.StrMarkets, clsFilter.BlnAllMarkets ? GetSettings.StrAll : string.Join(",", clsFilter.LstMarkets)));
           filters.Add(Tuple.Create(GetSettings.StrAgencies, clsFilter.BlnAllAgencies ? GetSettings.StrAll : string.Join(",", clsFilter.LstAgencies)));
           if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
+          //if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
           list.AddRange(await BRReportsByLeadSource.GetRptProductionByContractAgencyMarketOriginallyAvailableInhouses(clsFilter.DtmStart,
-            clsFilter.DtmEnd, clsFilter.LstLeadSources, clsFilter.LstMarkets, clsFilter.LstAgencies, clsFilter.EnumQuinellas));
+            clsFilter.DtmEnd, clsFilter.LstLeadSources, clsFilter.BlnAllMarkets ? null : clsFilter.LstMarkets,
+            clsFilter.BlnAllAgencies ? null : clsFilter.LstAgencies, clsFilter.EnumQuinellas));
+          //, clsFilter.EnumBasedOnArrival));
           if (list.Any())
             finfo = clsReports.ExportRptProductionByContractAgencyMarketOriginallyAvailableInhouses(reportname, fileFullPath, filters,
               list.Cast<RptProductionByContractAgencyMarketOriginallyAvailableInhouse>().ToList());
@@ -970,10 +976,12 @@ namespace IM.ProcessorInhouse.Forms
           filters.Add(Tuple.Create(GetSettings.StrMarkets, clsFilter.BlnAllMarkets ? GetSettings.StrAll : string.Join(",", clsFilter.LstMarkets)));
           filters.Add(Tuple.Create(GetSettings.StrAgencies, clsFilter.BlnAllAgencies ? GetSettings.StrAll : string.Join(",", clsFilter.LstAgencies)));
           if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
-          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
+          //if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
           list.AddRange(await BRReportsByLeadSource.GetRptProductionByMemberTypeAgencyInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
-            clsFilter.LstLeadSources, clsFilter.LstMarkets, clsFilter.LstAgencies, clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+            clsFilter.LstLeadSources, clsFilter.BlnAllMarkets ? null : clsFilter.LstMarkets,
+            clsFilter.BlnAllAgencies ? null : clsFilter.LstAgencies, clsFilter.EnumQuinellas));
+            //, clsFilter.EnumBasedOnArrival));
           if (list.Any())
             finfo = clsReports.ExportRptProductionByMemberTypeAgencyInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByMemberTypeAgencyInhouse>().ToList());
           break;
@@ -987,12 +995,14 @@ namespace IM.ProcessorInhouse.Forms
           filters.Add(Tuple.Create(GetSettings.StrMarkets, clsFilter.BlnAllMarkets ? GetSettings.StrAll : string.Join(",", clsFilter.LstMarkets)));
           filters.Add(Tuple.Create(GetSettings.StrAgencies, clsFilter.BlnAllAgencies ? GetSettings.StrAll : string.Join(",", clsFilter.LstAgencies)));
           if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
-          if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
+          //if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
 
           list.AddRange(
             await
               BRReportsByLeadSource.GetRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
-              clsFilter.LstLeadSources, clsFilter.LstMarkets, clsFilter.LstAgencies, clsFilter.EnumQuinellas, clsFilter.EnumBasedOnArrival));
+              clsFilter.LstLeadSources, clsFilter.BlnAllMarkets ? null : clsFilter.LstMarkets,
+            clsFilter.BlnAllAgencies ? null : clsFilter.LstAgencies, clsFilter.EnumQuinellas));
+            //, clsFilter.EnumBasedOnArrival));
           if (list.Any())
             finfo = clsReports.ExportRptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouses(reportname, fileFullPath, filters,
               list.Cast<RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse>().ToList());
@@ -1006,9 +1016,11 @@ namespace IM.ProcessorInhouse.Forms
           filters.Add(Tuple.Create(GetSettings.StrLeadSources, clsFilter.BlnAllLeadSources ? GetSettings.StrAll : string.Join(",", clsFilter.LstLeadSources)));
           if (Convert.ToBoolean(clsFilter.EnumQuinellas)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumQuinellas), string.Empty));
           if (Convert.ToBoolean(clsFilter.EnumBasedOnArrival)) filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumBasedOnArrival), string.Empty));
+          filters.Add(Tuple.Create(EnumToListHelper.GetEnumDescription(clsFilter.EnumSaveCourtesyTours), string.Empty));
 
           list.AddRange(await BRReportsByLeadSource.GetRptProductionByNationalityInhouses(clsFilter.DtmStart, clsFilter.DtmEnd,
-            clsFilter.LstLeadSources, considerQuinellas: clsFilter.EnumQuinellas, basedOnArrival: clsFilter.EnumBasedOnArrival));
+            clsFilter.LstLeadSources, considerQuinellas: clsFilter.EnumQuinellas,
+            filterSaveCourtesyTours: clsFilter.EnumSaveCourtesyTours, basedOnArrival: clsFilter.EnumBasedOnArrival));
           if (list.Any())
             finfo = clsReports.ExportRptProductionByNationalityInhouses(reportname, fileFullPath, filters, list.Cast<RptProductionByNationalityInhouse>().ToList());
           break;
@@ -1150,8 +1162,9 @@ namespace IM.ProcessorInhouse.Forms
           filters.Add(Tuple.Create(GetSettings.StrMarkets, clsFilter.BlnAllMarkets ? GetSettings.StrAll : string.Join(",", clsFilter.LstMarkets)));
           filters.Add(Tuple.Create(GetSettings.StrAgencies, clsFilter.BlnAllAgencies ? GetSettings.StrAll : string.Join(",", clsFilter.LstAgencies)));
 
-          list.AddRange(await BRReportsByLeadSource.GetRptUnavailableMotivesByAgencies(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstLeadSources,
-            clsFilter.LstMarkets, clsFilter.LstAgencies));
+          list.AddRange(await BRReportsByLeadSource.GetRptUnavailableMotivesByAgencies(clsFilter.DtmStart, clsFilter.DtmEnd, 
+            clsFilter.LstLeadSources, clsFilter.BlnAllMarkets ? null : clsFilter.LstMarkets, 
+            clsFilter.BlnAllAgencies ? null : clsFilter.LstAgencies));
           if (list.Any())
             finfo = clsReports.ExportRptUnavailableMotivesByAgencies(reportname, fileFullPath, filters, list.Cast<RptUnavailableMotivesByAgency>().ToList());
           break;

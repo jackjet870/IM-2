@@ -622,7 +622,7 @@ namespace IM.ProcessorInhouse.Forms
       _lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID, program);
       if (blnLsHotelNotNull)
       {
-        List<string> lstLsIDHotelNotNull = BRLeadSources.GetLeadSources(1, EnumProgram.All).Where(x => x.lsHotel != null).Select(x => x.lsID).ToList();
+        List<string> lstLsIDHotelNotNull = (await BRLeadSources.GetLeadSources(1, EnumProgram.All)).Where(x => x.lsHotel != null).Select(x => x.lsID).ToList();
         _lstLeadSources = _lstLeadSources.Where(x => lstLsIDHotelNotNull.Contains(x.lsID)).ToList();
       }
       grdLeadSources.ItemsSource = _lstLeadSources;

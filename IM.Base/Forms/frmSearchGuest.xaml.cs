@@ -130,7 +130,7 @@ namespace IM.Base.Forms
     /// </history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      cmbLeadSourse.ItemsSource = BRLeadSources.GetLeadSources(1, _program);
+      cmbLeadSourse.ItemsSource = await BRLeadSources.GetLeadSources(1, _program);
       dtpTo.SelectedDate = BRHelpers.GetServerDate().Date;
       dtpFrom.SelectedDate = BRHelpers.GetServerDate().AddDays(-7).Date;
       cmbLeadSourse.SelectedValue = user.LeadSource.lsID;

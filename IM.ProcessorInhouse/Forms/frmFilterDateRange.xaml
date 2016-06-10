@@ -221,7 +221,7 @@
                     <StatusBarItem.Content>
                         <TextBlock>
                             <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0} / {1} SelectedAgencies">
+                                <MultiBinding StringFormat="{}{0} / {1} Selected Agencies">
                                     <Binding ElementName="grdAgencies"  Path="SelectedItems.Count" />
                                     <Binding ElementName="grdAgencies" Path="Items.Count" />
                                 </MultiBinding>

@@ -1,8 +1,6 @@
 ﻿using IM.Base.Forms;
 using IM.Graph.Forms;
 using IM.Model;
-using IM.Model.Classes;
-using IM.Model.Enums;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -35,17 +33,18 @@ namespace IM.Graph
     /// <history>
     ///   [aalcocer]  10/03/2016 Created
     /// </history>
-    protected override void OnStartup(StartupEventArgs e)
+    protected override async void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
 
       frmSplash frmSplash = new frmSplash("Graph");
       Window frmLS = new frmLS(frmSplash);
+      await ((frmLS)frmLS).GetLeadSources();
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLS);
       if (((frmLS)frmLS).IsValidated)
       {
-        LeadSource leadsource = ((frmLS)frmLS).leadSource;
+        LeadSource leadsource = ((frmLS)frmLS).LeadSource;
         frmGraph frmMain = new frmGraph(leadsource);
         frmMain.ShowDialog();
         frmSplash.Close();

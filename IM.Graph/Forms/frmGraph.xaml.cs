@@ -2,7 +2,7 @@
 using IM.BusinessRules.BR;
 using IM.Model;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -15,7 +15,9 @@ namespace IM.Graph.Forms
   {
     #region Atributos
 
-    private LeadSource _leadsource;
+    private readonly LeadSource _leadsource;
+    private readonly ObservableCollection<GraphProductionByPR> _lstGraphProductionByPRData = new ObservableCollection<GraphProductionByPR>();
+    private readonly ObservableCollection<GraphProductionByPR> _lstGeneralGraphProductionByPRData = new ObservableCollection<GraphProductionByPR>();
 
     #endregion Atributos
 
@@ -32,6 +34,8 @@ namespace IM.Graph.Forms
     {
       InitializeComponent();
       _leadsource = leadSource;
+      chartProduccion.Series.OfType<ColumnSeries>().ToList().ForEach(serie => serie.ItemsSource = _lstGraphProductionByPRData);
+      chartGeneralProduccion.Series.OfType<ColumnSeries>().ToList().ForEach(serie => serie.ItemsSource = _lstGeneralGraphProductionByPRData);
     }
 
     #endregion Constructores y destructores
@@ -48,7 +52,7 @@ namespace IM.Graph.Forms
     /// </history>
     private void btnOK_Click(object sender, RoutedEventArgs e)
     {
-      DoGraph();
+      DoGraph(Convert.ToDateTime(dtpStartDate.Value), Convert.ToDateTime(dtpEndDate.Value), cmbLS.SelectedValue.ToString());
     }
 
     #endregion btnOK_Click
@@ -78,23 +82,23 @@ namespace IM.Graph.Forms
     /// <history>
     /// [aalcocer] 05/03/2016 Created
     /// </history>
-    private void Window_ContentRendered(object sender, EventArgs e)
+    private async void Window_ContentRendered(object sender, EventArgs e)
     {
       DateTime _serverDate = BRHelpers.GetServerDate();
 
       // Fecha inicial
-      dtpStartDate.SelectedDate = new DateTime(_serverDate.Year, _serverDate.Month, 1);
+      dtpStartDate.Value = new DateTime(_serverDate.Year, _serverDate.Month, 1);
 
       //Fecha final
-      dtpEndDate.SelectedDate = _serverDate;
+      dtpEndDate.Value = _serverDate.Date;
 
       LoadFromFile();
 
       // Lead Source
-      cmbLS.ItemsSource = BRLeadSources.GetLeadSources(1,Model.Enums.EnumProgram.All);
+      cmbLS.ItemsSource = await BRLeadSources.GetLeadSources(1, Model.Enums.EnumProgram.All);
       cmbLS.SelectedValue = _leadsource.lsID;
       // Realiza la gráfica
-      DoGraph();
+      DoGraph(Convert.ToDateTime(dtpStartDate.Value), Convert.ToDateTime(dtpEndDate.Value), cmbLS.SelectedValue.ToString());
     }
 
     #endregion Window_ContentRendered
@@ -143,8 +147,8 @@ namespace IM.Graph.Forms
       if (File.Exists(strArchivo))
       {
         IniFileHelper _iniFileHelper = new IniFileHelper(strArchivo);
-        dtpStartDate.SelectedDate = _iniFileHelper.readDate("FilterDate", "DateStart", dtpStartDate.SelectedDate.Value);
-        dtpEndDate.SelectedDate = _iniFileHelper.readDate("FilterDate", "DateEnd", dtpEndDate.SelectedDate.Value);
+        dtpStartDate.Value = _iniFileHelper.readDate("FilterDate", "DateStart", Convert.ToDateTime(dtpStartDate.Value));
+        dtpEndDate.Value = _iniFileHelper.readDate("FilterDate", "DateEnd", Convert.ToDateTime(dtpEndDate.Value));
       }
     }
 
@@ -157,28 +161,32 @@ namespace IM.Graph.Forms
     /// </summary>
     /// <history>
     /// [aalcocer] 05/03/2016 Created
+    /// [aalcocer] 07/06/2016 Modified. Se agregó asíncronia
     /// </history>
-    private void DoGraph()
+    private async void DoGraph(DateTime dateFrom, DateTime dateTo, string leadSource)
     {
       StaStart();
+      btnOK.IsEnabled = false;
       lblTitleGraph.Content = cmbLS.Text;
 
-      List<GraphProductionByPR> _lstGraphProductionByPRData = BRGraph.GetGraphProductionByPR(dtpStartDate.SelectedDate.Value, dtpEndDate.SelectedDate.Value, cmbLS.SelectedValue.ToString());
-      List<GraphProductionByPR> _lstgeneralGraphProductionByPRAux = new List<GraphProductionByPR>();
-      _lstgeneralGraphProductionByPRAux.Add(new GraphProductionByPR
+      _lstGraphProductionByPRData.Clear();
+      _lstGeneralGraphProductionByPRData.Clear();
+
+      (await BRGraph.GetGraphProductionByPR(dateFrom, dateTo, leadSource)).ForEach(pr => _lstGraphProductionByPRData.Add(pr));
+
+      _lstGeneralGraphProductionByPRData.Add(new GraphProductionByPR
       {
         PR = "General Production",
         Books = _lstGraphProductionByPRData.Sum(lst => lst.Books),
         Shows = _lstGraphProductionByPRData.Sum(lst => lst.Shows),
         Sales = _lstGraphProductionByPRData.Sum(lst => lst.Sales)
       });
+
       DynamicGraphSize(_lstGraphProductionByPRData.Count);
 
-      chartProduccion.Series.OfType<ColumnSeries>().ToList().ForEach(serie => serie.ItemsSource = _lstGraphProductionByPRData);
-      chartGeneralProduccion.Series.OfType<ColumnSeries>().ToList().ForEach(serie => serie.ItemsSource = _lstgeneralGraphProductionByPRAux);
-
-      if (_lstGraphProductionByPRData.Count == 0)
+      if (!_lstGraphProductionByPRData.Any())
         lblTitleGraph.Content += " There is no data.";
+      btnOK.IsEnabled = true;
       StaEnd();
     }
 
@@ -198,7 +206,7 @@ namespace IM.Graph.Forms
       if (count > 8)
         chartProduccion.Width = 100 * count;
       else
-        chartProduccion.Width = Double.NaN;
+        chartProduccion.Width = double.NaN;
     }
 
     #endregion DynamicGraphSize
@@ -213,10 +221,9 @@ namespace IM.Graph.Forms
     /// </history>
     private void StaEnd()
     {
-      lblStatusBarMessage.Content = String.Empty;
+      lblStatusBarMessage.Content = string.Empty;
       imgStatusBarMessage.Visibility = Visibility.Hidden;
-      this.Cursor = null;
-      UIHelper.ForceUIToUpdate();
+      Cursor = null;
     }
 
     #endregion StaEnd
@@ -230,12 +237,11 @@ namespace IM.Graph.Forms
     /// <history>
     /// [aalcocer] 05/03/2016 Created
     /// </history>
-    private void StaStart(String message = "Loading Report...")
+    private void StaStart(string message = "Loading Report...")
     {
       lblStatusBarMessage.Content = message;
       imgStatusBarMessage.Visibility = Visibility.Visible;
-      this.Cursor = Cursors.Wait;
-      UIHelper.ForceUIToUpdate();
+      Cursor = Cursors.Wait;
     }
 
     #endregion StaStart

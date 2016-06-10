@@ -694,5 +694,17 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_GetSales_Timeout"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_OR_GraphProductionByPR_Timeout {
+            get {
+                return ((int)(this["USP_OR_GraphProductionByPR_Timeout"]));
+            }
+            set {
+                this["USP_OR_GraphProductionByPR_Timeout"] = value;
+            }
+        }
     }
 }

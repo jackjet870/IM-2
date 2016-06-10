@@ -4,7 +4,6 @@ using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Validation;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -54,20 +53,23 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [aalcocer] 09/03/2016 Created
     /// [jorcanche] 02/05/2016 Agrego el parametro EnumProgram para que se puede saleccionar
+    /// [aalcocer] 09/06/2016 Modified.  Se agregó asincronía.
     /// </history>
-    public static List<LeadSource> GetLeadSources(int status = 0, EnumProgram program = EnumProgram.All)
+    public static async Task<List<LeadSource>> GetLeadSources(int status = 0, EnumProgram program = EnumProgram.All)
     {
+      var leadSources = new List<LeadSource>();
       var pro = EnumToListHelper.GetEnumDescription(program);
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      await Task.Run(() =>
       {
-        var query = dbContext.LeadSources.Where(ls => status.Equals(1) ? ls.lsA : status.Equals(2) ? !ls.lsA : true);
-
-        if (program != EnumProgram.All)
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          query = query.Where(ls => ls.lspg == ((program == EnumProgram.All) ? ls.lspg : pro));
+          leadSources = dbContext.LeadSources
+            .Where(ls => status.Equals(1) ? ls.lsA : status.Equals(2) ? !ls.lsA : true)
+            .Where(ls => program != EnumProgram.All ? ls.lspg == pro: true)
+            .OrderBy(ls => ls.lsN).ToList();
         }
-        return query.OrderBy(ls => ls.lsN).ToList();
-      }
+      });
+      return leadSources;
     }
 
     #endregion GetLeadSources

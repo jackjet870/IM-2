@@ -3,11 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.Graph.Forms"
-         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" xmlns:System="clr-namespace:System;assembly=mscorlib"
+        
         mc:Ignorable="d"
         Height="203" Width="290" ResizeMode="NoResize"
-        Background="White" BorderThickness="5" BorderBrush="AliceBlue" WindowStartupLocation="Manual" Loaded="Window_Loaded" ContentRendered="Window_ContentRendered">
+        Background="White" BorderThickness="5" BorderBrush="AliceBlue" WindowStartupLocation="Manual" Loaded="Window_Loaded">
     <Grid Background="SkyBlue">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80" />
