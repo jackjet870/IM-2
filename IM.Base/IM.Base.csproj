@@ -58,6 +58,7 @@
       <HintPath>..\packages\System.Linq.Dynamic.1.0.6\lib\net40\System.Linq.Dynamic.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Printing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -79,6 +80,10 @@
     <Compile Include="Forms\frmReportQueue.xaml.cs">
       <DependentUpon>frmReportQueue.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SystemCfg.xaml.cs">
+      <DependentUpon>SystemCfg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\ConfigRegistry.cs" />
     <Compile Include="Helpers\RptInvitationHelper.cs" />
     <Compile Include="Classes\objInvitAdditionalGuest.cs" />
     <Compile Include="Classes\objInvitBookingDeposit.cs" />
@@ -280,6 +285,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Forms\frmViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\SystemCfg.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

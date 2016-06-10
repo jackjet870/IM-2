@@ -40,6 +40,7 @@ namespace IM.ProcessorOuthouse.Forms
     #region Atributos
 
     private frmFilterDateRange _frmFilter;
+    private SystemCfg _SystemConfig;
     private frmReportQueue _frmReportQueue;
     private bool _blnOneDate;
     private bool _blnOnlyOneRegister;
@@ -56,6 +57,7 @@ namespace IM.ProcessorOuthouse.Forms
     public DateTime _dtmInit;
     public DateTime _dtmStart = DateTime.Now.Date;
     public DateTime _dtmEnd = DateTime.Now.Date;
+    public EnumConfiguration _enumConfiguration = EnumConfiguration.ReportsPath;
     public EnumBasedOnArrival _enumBasedOnArrival = EnumBasedOnArrival.NoBasedOnArrival;
     public EnumBasedOnBooking _enumBasedOnBooking = EnumBasedOnBooking.NoBasedOnBooking;
     public EnumQuinellas _enumQuinellas = EnumQuinellas.NoQuinellas;
@@ -1581,10 +1583,23 @@ namespace IM.ProcessorOuthouse.Forms
     /// </summary>
     /// <history>
     ///   [vku] 22/Mar/2016 Created
+    ///   [vku] 10/Jun/2016 Modified. Ahora verifica que este configurado la ruta para guardar el reporte
     /// </history>
     private void btnPrintRptByLeadSource_Click(object sender, RoutedEventArgs e)
     {
-      PrepareReportByLeadSource();
+      if (ConfigRegistry.ExistReportsPath())
+      {
+        PrepareReportByLeadSource();
+      }
+      else
+      {
+        MessageBoxResult result = UIHelper.ShowMessage("It is not configured path yet. Do you want to configure path now?", MessageBoxImage.Question, "Proccesor Outhouse");
+        if (result == MessageBoxResult.Yes)
+        {
+          _SystemConfig = new SystemCfg(EnumConfiguration.ReportsPath);
+          _SystemConfig.Show();
+        }
+      }   
     }
 
     #endregion btnPrintRptByLeadSource_Click
@@ -1599,7 +1614,19 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     private void btnPrintRptByPR_Click(object sender, RoutedEventArgs e)
     {
-      PrepareReportByPR();
+      if (ConfigRegistry.ExistReportsPath())
+      {
+        PrepareReportByPR();
+      }
+      else
+      {
+        MessageBoxResult result = UIHelper.ShowMessage("It is not configured path yet. Do you want to configure path now?", MessageBoxImage.Question, "Proccesor Outhouse");
+        if (result == MessageBoxResult.Yes)
+        {
+          _SystemConfig = new SystemCfg(EnumConfiguration.ReportsPath);
+          _SystemConfig.Show();
+        }
+      }
     }
 
     #endregion btnPrintRptByPR_Click
@@ -1614,7 +1641,19 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     private void btnPrintOtherRpts_Click(object sender, RoutedEventArgs e)
     {
-      PrepareOtherReports();
+      if (ConfigRegistry.ExistReportsPath())
+      {
+        PrepareOtherReports();
+      }
+      else
+      {
+        MessageBoxResult result = UIHelper.ShowMessage("It is not configured path yet. Do you want to configure path now?", MessageBoxImage.Question, "Proccesor Outhouse");
+        if (result == MessageBoxResult.Yes)
+        {
+          _SystemConfig = new SystemCfg(EnumConfiguration.ReportsPath);
+          _SystemConfig.Show();
+        }
+      }
     }
 
     #endregion btnPrintOtherRpts_Click
@@ -1658,13 +1697,26 @@ namespace IM.ProcessorOuthouse.Forms
     /// </summary>
     /// <history>
     ///   [vku] 10/May/2016 Created
+    ///   [vku] 10/Jun/2016 Modified. Ahora verifica que este configurado la ruta para guardar el reporte
     /// </history>
     private void grdrpt_MouseDoubleClick(object sender, RoutedEventArgs e)
     {
       var _dataGridRow = (DataGridRow)sender;
-      if (_dataGridRow.Item.Equals(grdRptsByLeadSource.CurrentItem)) PrepareReportByLeadSource();
-      else if (_dataGridRow.Item.Equals(grdRptsByPR.CurrentItem)) PrepareReportByPR();
-      else if (_dataGridRow.Item.Equals(grdOtherRpts.CurrentItem)) PrepareOtherReports();
+      if (ConfigRegistry.ExistReportsPath())
+      {
+        if (_dataGridRow.Item.Equals(grdRptsByLeadSource.CurrentItem)) PrepareReportByLeadSource();
+        else if (_dataGridRow.Item.Equals(grdRptsByPR.CurrentItem)) PrepareReportByPR();
+        else if (_dataGridRow.Item.Equals(grdOtherRpts.CurrentItem)) PrepareOtherReports();
+      }
+      else
+      {
+        MessageBoxResult result = UIHelper.ShowMessage("It is not configured path yet. Do you want to configure path now?", MessageBoxImage.Question, "Proccesor Outhouse");
+        if (result == MessageBoxResult.Yes)
+        {
+          _SystemConfig = new SystemCfg(EnumConfiguration.ReportsPath);
+          _SystemConfig.Show();
+        }
+      }
     }
     #endregion
 

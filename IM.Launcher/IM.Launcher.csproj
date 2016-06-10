@@ -94,10 +94,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Forms\SystemCfg.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -106,9 +102,6 @@
     <Compile Include="Classes\ListItemLauncher.cs" />
     <Compile Include="Forms\frmLauncher.xaml.cs">
       <DependentUpon>frmLauncher.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\SystemCfg.xaml.cs">
-      <DependentUpon>SystemCfg.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
