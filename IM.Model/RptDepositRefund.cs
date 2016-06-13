@@ -29,6 +29,6 @@ namespace IM.Model
         public string ccN { get; set; }
         public string bdCardNum { get; set; }
         public string bdExpD { get; set; }
-        public Nullable<int> bdAuth { get; set; }
+        public string bdAuth { get; set; }
     }
 }

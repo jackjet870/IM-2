@@ -20469,7 +20469,7 @@
           <Property Type="String" Name="ccN" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="bdCardNum" Nullable="true" MaxLength="4" />
           <Property Type="String" Name="bdExpD" Nullable="true" MaxLength="5" />
-          <Property Type="Int32" Name="bdAuth" Nullable="true" />
+          <Property Type="String" Name="bdAuth" Nullable="true" MaxLength="7" />
         </ComplexType>
         <ComplexType Name="RptGiftsUsedBySistur">
           <Property Type="String" Name="srN" Nullable="true" MaxLength="30" />
