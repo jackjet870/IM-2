@@ -241,7 +241,7 @@ namespace IM.BusinessRules.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
         public int USP_OR_RptProductionByPRInhouse_Timeout {
             get {
                 return ((int)(this["USP_OR_RptProductionByPRInhouse_Timeout"]));

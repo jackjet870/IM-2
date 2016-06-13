@@ -57,7 +57,7 @@
       <Value Profile="(Default)">120</Value>
     </Setting>
     <Setting Name="USP_OR_RptProductionByPRInhouse_Timeout" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">60</Value>
+      <Value Profile="(Default)">120</Value>
     </Setting>
     <Setting Name="USP_OR_RptProductionByPRGroupInhouse_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>

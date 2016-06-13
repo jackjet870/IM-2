@@ -1,6 +1,5 @@
 ﻿using IM.Base.Classes;
 using IM.Base.Helpers;
-using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -115,12 +114,20 @@ namespace IM.Base.Forms
     /// </summary>
     /// <history>
     /// [aalcocer] 06/06/2016 Created
+    /// [aalcocer] 13/06/2016 Modified. La ruta por default se obtiene en la configuracion
     /// </history>
     private void BtnOpenFolder_OnClick(object sender, RoutedEventArgs e)
     {
-      //TODO: remplazar con la ruta por default que se obtiene en la configuracion
-      DirectoryInfo outputDir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-      Process.Start(outputDir.FullName);
+      if (ConfigRegistry.ExistReportsPath())
+      {
+        string outputDir = ConfigRegistry.GetReportsPath();
+        Process.Start(outputDir);
+      }
+      else
+      {
+        UIHelper.ShowMessage("It is not configured path.", MessageBoxImage.Warning, Title);
+        Hide();
+      }
     }
 
     #endregion BtnOpenFolder_OnClick
@@ -130,6 +137,7 @@ namespace IM.Base.Forms
     #region Métodos Públicos
 
     #region AddReport
+
     /// <summary>
     /// Agrega un reporte a la cola
     /// </summary>
@@ -150,16 +158,18 @@ namespace IM.Base.Forms
       }
       else
       {
-        ObjReportQueues.Add(new objReportQueue()
+        ObjReportQueues.Insert(0, new objReportQueue()
         {
           Id = id,
           ReportName = reportname
         });
       }
-    } 
-    #endregion
+    }
+
+    #endregion AddReport
 
     #region SetFileInfo
+
     /// <summary>
     /// Le agrega un archivo al reporte
     /// </summary>
@@ -176,8 +186,30 @@ namespace IM.Base.Forms
         x.FileInfo = fileInfo;
         x.Exists = fileInfo.Exists;
       });
-    } 
-    #endregion
+    }
+
+    #endregion SetFileInfo
+
+    #region SetFileInfoError
+
+    /// <summary>
+    ///Le actualiza el archivo del reporte cuando ocurre un error
+    /// </summary>
+    /// <param name="id">id del reporte</param>
+    /// <history>
+    /// [aalcocer] 13/06/2016 Created
+    /// </history>
+    public void SetFileInfoError(string id)
+    {
+      ObjReportQueues.Where(x => x.Id == id).ToList().ForEach(x =>
+      {
+        x.FileInfo = new FileInfo(id);
+        x.FileInfo.Delete();
+        x.Exists = false;
+      });
+    }
+
+    #endregion SetFileInfoError
 
     #endregion Métodos Públicos
   }

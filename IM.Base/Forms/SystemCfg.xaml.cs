@@ -243,12 +243,8 @@ namespace IM.Base.Forms
     /// </history>
     private void LoadReportsPath()
     {
-      RegistryKey configuration = ConfigRegistry.GetUrlConfigRegistry();
-      if (configuration != null)
-      {
-        FileName = (string) configuration.GetValue("ReportsPath");  
-      }
-    }
+      FileName = ConfigRegistry.GetReportsPath();
+     }
     #endregion
 
     #region SavePath

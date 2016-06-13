@@ -1,11 +1,13 @@
 ﻿using System;
+using System.IO;
 using Microsoft.Win32;
 using System.Windows;
 
 namespace IM.Base.Helpers
 {
-  public class ConfigRegistry
+  public static class ConfigRegistry
   {
+    private const string ReportsPath = "ReportsPath";
 
     #region GetUrlConfigRegistry
     /// <summary>
@@ -56,26 +58,37 @@ namespace IM.Base.Helpers
     ///  Verifica si esta configurado la ruta de reportes
     /// </summary>
     /// <history>
-    ///   [vku] 10/Jun/2016 Created
+    ///   [vku]       10/Jun/2016 Created
+    ///   [aalcocer]  16/06/2016 Modified. Se valida si la el directorio de la ruta de reportes existe 
     /// </history>
     public static bool ExistReportsPath()
     {
-      if (ConfigRegistry.GetUrlConfigRegistry() == null)
-      {
-        return false;
-      }
-      else
-      {
-        if (ConfigRegistry.GetUrlConfigRegistry().GetValue("ReportsPath") == null)
-        {
-          return false;
-        }
-        else
-        {
-          return true;
-        }
-      }
+      bool exist = false;
+      RegistryKey configuration = GetUrlConfigRegistry();
+      string reportsPath = (string) configuration?.GetValue(ReportsPath);
+      if (reportsPath != null)
+        exist = Directory.Exists(reportsPath);
+      return exist;
     }
+
     #endregion
+
+
+    /// <summary>
+    /// Obtiene la ruta de reportes
+    /// </summary>
+    /// <returns>string || NULL si la ruta no existe</returns>
+    /// <history>
+    ///   [aalcocer] 11/Jun/2016 Created
+    /// </history>
+    public static string GetReportsPath()
+    {
+      string _reportsPath = null;
+      if (ExistReportsPath())
+      {
+        _reportsPath = (string) GetUrlConfigRegistry().GetValue(ReportsPath);
+      }
+      return _reportsPath;
+    }
   }
 }

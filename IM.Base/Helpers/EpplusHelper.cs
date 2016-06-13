@@ -1592,15 +1592,16 @@ namespace IM.Base.Helpers
     /// <returns>Ruta completa del archivo</returns>
     /// <history>
     ///   [aalcocer] 03/06/2016 Created.
+    ///   [aalcocer] 13/06/2016 Modified. La ruta por default se obtiene en la configuracion
     /// </history>
     public static string CreateEmptyExcel(string reportName, string dateRangeFileName)
     {
       string suggestedName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
-      //TODO: remplazar con la ruta por default que se obtiene en la configuracion
-      DirectoryInfo outputDir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+     
+      string outputDir = ConfigRegistry.GetReportsPath();
       int count = 1;
 
-      string fullPath = $@"{outputDir.FullName}\{suggestedName}.xlsx";
+      string fullPath = $@"{outputDir}\{suggestedName}.xlsx";
 
       string fileNameOnly = Path.GetFileNameWithoutExtension(fullPath);
       string extension = Path.GetExtension(fullPath);

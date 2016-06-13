@@ -26,13 +26,12 @@
         </Style>
         <CollectionViewSource x:Key="ObjReportQueueViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:objReportQueue}, CreateList=True}" />
     </Window.Resources>
-    <ScrollViewer>
-        <StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Button Name="btnClearCompleted" Content="Clear Completed" VerticalAlignment="Center" Width="100"  Margin="10,5,10,5" Click="BtnClearCompleted_OnClick"/>
-                <Button Name="btnOpenFolder" Content="Open Containing Folder" VerticalAlignment="Center" Width="130" Margin="50,5,10,5" Click="BtnOpenFolder_OnClick" />
-            </StackPanel>
-            <DataGrid IsReadOnly="True" ItemsSource="{Binding}" DataContext="{StaticResource ObjReportQueueViewSource}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <Button Name="btnClearCompleted" Content="Clear Completed" VerticalAlignment="Center" Width="100"  Margin="10,5,10,5" Click="BtnClearCompleted_OnClick"/>
+            <Button Name="btnOpenFolder" Content="Open Containing Folder" VerticalAlignment="Center" Width="130" Margin="50,5,10,5" Click="BtnOpenFolder_OnClick" />
+        </StackPanel>
+        <DataGrid IsReadOnly="True" ItemsSource="{Binding}" DataContext="{StaticResource ObjReportQueueViewSource}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="Padding" Value="3" />
@@ -99,11 +98,11 @@
                                                     <Setter Property="IsEnabled" Value="False" />
                                                 </DataTrigger>
                                             </Style.Triggers>
-                                           
+
                                         </Style>
-                                           
-                                           
-                                     
+
+
+
                                     </Button.Style>
                                 </Button>
                             </DataTemplate>
@@ -111,6 +110,6 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-        </StackPanel>
-    </ScrollViewer>
+    </DockPanel>
+
 </Window>
