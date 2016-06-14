@@ -7,6 +7,7 @@
 **
 ** [ecanul] 03/Jun/2016 Created
 ** [ecanul] 06/Jun/2016 Modified, ya no se selecciona el ID de la tabla temporal
+** [ecanul] 14/06/2016 Modified, se corrigio el llamado de la funcion UFN_IM_GetPerssonelPostsIDByDate por UFN_IM_GetPersonnelPostIDByDate
 **
 */
 
@@ -130,44 +131,44 @@ select
 	-- PR 1
 	G.guPRInvit1 as guPR1,
 	GP1.peN as guPR1N,
-	CASE WHEN G.guPRInvit1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guPRInvit1) ELSE NULL END [PR1P],
+	CASE WHEN G.guPRInvit1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guPRInvit1) ELSE NULL END [PR1P],
 	-- PR2
 	G.guPRInvit2 as guPR2,
 	GP2.peN as guPR2N,
-	CASE WHEN G.guPRInvit2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guPRInvit2) ELSE NULL END [PR2P],
+	CASE WHEN G.guPRInvit2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guPRInvit2) ELSE NULL END [PR2P],
 	-- PR3
 	G.guPRInvit3 as guPR3,
 	GP3.peN as guPR3N,
-	CASE WHEN G.guPRInvit3 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guPRInvit3) ELSE NULL END [PR3P],
+	CASE WHEN G.guPRInvit3 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guPRInvit3) ELSE NULL END [PR3P],
 	-- Vendedores
 	-- Liner 1
 	G.guLiner1 as guLiner1,
 	GL1.peN as guLiner1N,
-	CASE WHEN G.guLiner1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guLiner1) ELSE NULL END [Liner1P],
+	CASE WHEN G.guLiner1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guLiner1) ELSE NULL END [Liner1P],
 	-- Liner 2
 	G.guLiner2 as guLiner2,
 	GL2.peN as guLiner2N,
-	CASE WHEN G.guLiner2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guLiner2) ELSE NULL END [Liner2P],
+	CASE WHEN G.guLiner2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guLiner2) ELSE NULL END [Liner2P],
 	-- Closer 1
 	G.guCloser1 as guCloser1,
 	GC1.peN as guCloser1N,
-	CASE WHEN G.guCloser1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guCloser1) ELSE NULL END [Closer1P],
+	CASE WHEN G.guCloser1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guCloser1) ELSE NULL END [Closer1P],
 	-- Closer 2
 	G.guCloser2 as guCloser2,
 	GC2.peN as guCloser2N,
-	CASE WHEN G.guCloser2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guCloser2) ELSE NULL END [Closer2P],
+	CASE WHEN G.guCloser2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guCloser2) ELSE NULL END [Closer2P],
 	-- Closer 3
 	G.guCloser3 as guCloser3,
 	GC3.peN as guCloser3N,
-	CASE WHEN G.guCloser3 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guCloser3) ELSE NULL END [Closer3P],
+	CASE WHEN G.guCloser3 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guCloser3) ELSE NULL END [Closer3P],
 	-- Exit 1
 	G.guExit1 as guExit1,
 	GE1.peN as guExit1N,
-	CASE WHEN G.guExit1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guExit1) ELSE NULL END [Exit1P],
+	CASE WHEN G.guExit1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guExit1) ELSE NULL END [Exit1P],
 	-- Exit 2
 	G.guExit2 as guExit2,
 	GE2.peN as guExit2N,
-	CASE WHEN G.guExit2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guExit2) ELSE NULL END [Exit2P]
+	CASE WHEN G.guExit2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guExit2) ELSE NULL END [Exit2P]
 	--#endregion
 from Guests G	
 	--#region PERSONAL DEL SHOW
@@ -250,43 +251,43 @@ BEGIN
 		--Datos de los vendedores
 			S.saPR1 as saPR1,
 			SP1.peN as saPR1N,
-			CASE WHEN S.saPR1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saPR1) ELSE NULL END [PR1P],
+			CASE WHEN S.saPR1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saPR1) ELSE NULL END [PR1P],
 			-- PR 2
 			S.saPR2 as saPR2,
 			SP2.peN as saPR2N,
-			CASE WHEN S.saPR2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saPR2) ELSE NULL END [PR2P],
+			CASE WHEN S.saPR2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saPR2) ELSE NULL END [PR2P],
 			-- PR 3
 			S.saPR3 as saPR3,
 			SP3.peN as saPR3N,
-			CASE WHEN S.saPR3 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saPR3) ELSE NULL END [PR3P],
+			CASE WHEN S.saPR3 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saPR3) ELSE NULL END [PR3P],
 			-- Liner 1
 			S.saLiner1 as saLiner1,
 			SL1.peN as saLiner1N,
-			CASE WHEN S.saLiner1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saLiner1) ELSE NULL END [Liner1P],
+			CASE WHEN S.saLiner1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saLiner1) ELSE NULL END [Liner1P],
 			-- Liner 2
 			S.saLiner2 as saLiner2,
 			SL2.peN as saLiner2N,
-			CASE WHEN S.saLiner2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saLiner2) ELSE NULL END [Liner2P],
+			CASE WHEN S.saLiner2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saLiner2) ELSE NULL END [Liner2P],
 			-- Closer 1
 			S.saCloser1 as saCloser1,
 			SC1.peN as saCloser1N,
-			CASE WHEN S.saCloser1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saCloser1) ELSE NULL END [Closer1P],
+			CASE WHEN S.saCloser1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saCloser1) ELSE NULL END [Closer1P],
 			-- Closer 2
 			S.saCloser2 as saCloser2,
 			SC2.peN as saCloser2N,
-			CASE WHEN S.saCloser2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saCloser2) ELSE NULL END [Closer2P],
+			CASE WHEN S.saCloser2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saCloser2) ELSE NULL END [Closer2P],
 			-- Closer 3
 			S.saCloser3 as saCloser3,
 			SC3.peN as saCloser3N,
-			CASE WHEN S.saCloser3 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saCloser3) ELSE NULL END [Closer3P],
+			CASE WHEN S.saCloser3 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saCloser3) ELSE NULL END [Closer3P],
 			-- Exit 1
 			S.saExit1 as saExit1,
 			SE1.peN as saExit1N,
-			CASE WHEN S.saExit1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saExit1) ELSE NULL END [Exit1P],
+			CASE WHEN S.saExit1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saExit1) ELSE NULL END [Exit1P],
 			-- Exit 2
 			S.saExit2 as saExit2,
 			SE2.peN as saExit2N,
-			CASE WHEN S.saExit2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saExit2) ELSE NULL END [Exit2P],
+			CASE WHEN S.saExit2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saExit2) ELSE NULL END [Exit2P],
 			1 Sold,
 			1 procSales
 		INTO #tbTemp
@@ -364,44 +365,44 @@ select
 	-- PR 1
 	G.guPRInvit1 as guPR1,
 	GP1.peN as guPR1N,
-	CASE WHEN G.guPRInvit1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guPRInvit1) ELSE NULL END [PR1P],
+	CASE WHEN G.guPRInvit1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guPRInvit1) ELSE NULL END [PR1P],
 	-- PR2
 	G.guPRInvit2 as guPR2,
 	GP2.peN as guPR2N,
-	CASE WHEN G.guPRInvit2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guPRInvit2) ELSE NULL END [PR2P],
+	CASE WHEN G.guPRInvit2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guPRInvit2) ELSE NULL END [PR2P],
 	-- PR3
 	G.guPRInvit3 as guPR3,
 	GP3.peN as guPR3N,
-	CASE WHEN G.guPRInvit3 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guPRInvit3) ELSE NULL END [PR3P],
+	CASE WHEN G.guPRInvit3 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guPRInvit3) ELSE NULL END [PR3P],
 	-- Vendedores
 	-- Liner 1
 	G.guLiner1 as guLiner1,
 	GL1.peN as guLiner1N,
-	CASE WHEN G.guLiner1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guLiner1) ELSE NULL END [Liner1P],
+	CASE WHEN G.guLiner1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guLiner1) ELSE NULL END [Liner1P],
 	-- Liner 2
 	G.guLiner2 as guLiner2,
 	GL2.peN as guLiner2N,
-	CASE WHEN G.guLiner2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guLiner2) ELSE NULL END [Liner2P],
+	CASE WHEN G.guLiner2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guLiner2) ELSE NULL END [Liner2P],
 	-- Closer 1
 	G.guCloser1 as guCloser1,
 	GC1.peN as guCloser1N,
-	CASE WHEN G.guCloser1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guCloser1) ELSE NULL END [Closer1P],
+	CASE WHEN G.guCloser1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guCloser1) ELSE NULL END [Closer1P],
 	-- Closer 2
 	G.guCloser2 as guCloser2,
 	GC2.peN as guCloser2N,
-	CASE WHEN G.guCloser2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guCloser2) ELSE NULL END [Closer2P],
+	CASE WHEN G.guCloser2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guCloser2) ELSE NULL END [Closer2P],
 	-- Closer 3
 	G.guCloser3 as guCloser3,
 	GC3.peN as guCloser3N,
-	CASE WHEN G.guCloser3 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guCloser3) ELSE NULL END [Closer3P],
+	CASE WHEN G.guCloser3 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guCloser3) ELSE NULL END [Closer3P],
 	-- Exit 1
 	G.guExit1 as guExit1,
 	GE1.peN as guExit1N,
-	CASE WHEN G.guExit1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guExit1) ELSE NULL END [Exit1P],
+	CASE WHEN G.guExit1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guExit1) ELSE NULL END [Exit1P],
 	-- Exit 2
 	G.guExit2 as guExit2,
 	GE2.peN as guExit2N,
-	CASE WHEN G.guExit2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,G.guExit2) ELSE NULL END [Exit2P]
+	CASE WHEN G.guExit2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,G.guExit2) ELSE NULL END [Exit2P]
 	--#endregion
 from Guests G	
 --#region PERSONAL DEL SHOW
@@ -489,43 +490,43 @@ SELECT
 --Datos de los vendedores
 	S.saPR1 as saPR1,
 	SP1.peN as saPR1N,
-	CASE WHEN S.saPR1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saPR1) ELSE NULL END [PR1P],
+	CASE WHEN S.saPR1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saPR1) ELSE NULL END [PR1P],
 	-- PR 2
 	S.saPR2 as saPR2,
 	SP2.peN as saPR2N,
-	CASE WHEN S.saPR2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saPR2) ELSE NULL END [PR2P],
+	CASE WHEN S.saPR2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saPR2) ELSE NULL END [PR2P],
 	-- PR 3
 	S.saPR3 as saPR3,
 	SP3.peN as saPR3N,
-	CASE WHEN S.saPR3 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saPR3) ELSE NULL END [PR3P],
+	CASE WHEN S.saPR3 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saPR3) ELSE NULL END [PR3P],
 	-- Liner 1
 	S.saLiner1 as saLiner1,
 	SL1.peN as saLiner1N,
-	CASE WHEN S.saLiner1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saLiner1) ELSE NULL END [Liner1P],
+	CASE WHEN S.saLiner1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saLiner1) ELSE NULL END [Liner1P],
 	-- Liner 2
 	S.saLiner2 as saLiner2,
 	SL2.peN as saLiner2N,
-	CASE WHEN S.saLiner2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saLiner2) ELSE NULL END [Liner2P],
+	CASE WHEN S.saLiner2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saLiner2) ELSE NULL END [Liner2P],
 	-- Closer 1
 	S.saCloser1 as saCloser1,
 	SC1.peN as saCloser1N,
-	CASE WHEN S.saCloser1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saCloser1) ELSE NULL END [Closer1P],
+	CASE WHEN S.saCloser1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saCloser1) ELSE NULL END [Closer1P],
 	-- Closer 2
 	S.saCloser2 as saCloser2,
 	SC2.peN as saCloser2N,
-	CASE WHEN S.saCloser2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saCloser2) ELSE NULL END [Closer2P],
+	CASE WHEN S.saCloser2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saCloser2) ELSE NULL END [Closer2P],
 	-- Closer 3
 	S.saCloser3 as saCloser3,
 	SC3.peN as saCloser3N,
-	CASE WHEN S.saCloser3 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saCloser3) ELSE NULL END [Closer3P],
+	CASE WHEN S.saCloser3 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saCloser3) ELSE NULL END [Closer3P],
 	-- Exit 1
 	S.saExit1 as saExit1,
 	SE1.peN as saExit1N,
-	CASE WHEN S.saExit1 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saExit1) ELSE NULL END [Exit1P],
+	CASE WHEN S.saExit1 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saExit1) ELSE NULL END [Exit1P],
 	-- Exit 2
 	S.saExit2 as saExit2,
 	SE2.peN as saExit2N,
-	CASE WHEN S.saExit2 IS NOT NULL THEN dbo.UFN_IM_GetPerssonelPostsIDByDate(G.guShowD,S.saExit2) ELSE NULL END [Exit2P]
+	CASE WHEN S.saExit2 IS NOT NULL THEN dbo.UFN_IM_GetPersonnelPostIDByDate(G.guShowD,S.saExit2) ELSE NULL END [Exit2P]
 FROM Guests G --para obtener la fecha del show
 	LEFT JOIN Sales S on S.sagu = G.guID
 	LEFT JOIN SaleTypes ST on ST.stID = S.sast
