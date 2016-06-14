@@ -133,7 +133,7 @@ namespace IM.Base.Helpers
         return false;
       }
       //Validamos la contraseña de quin hizo el cambio
-      if (!ValidateRequired(ptxtPwd, "Specify your password."))
+      else if (!ValidateRequired(ptxtPwd, "Specify your password."))
       {
         ptxtPwd.Focus();
         return false;    

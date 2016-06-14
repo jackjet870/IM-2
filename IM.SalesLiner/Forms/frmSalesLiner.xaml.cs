@@ -360,12 +360,13 @@ namespace IM.SalesLiner.Forms
     /// Carga personal en el combobox
     /// </summary>
     /// <history>
-    /// [erosado] 18/04/2016  Created
+    /// [erosado] 18/04/2016  Created  
+    /// [vipacheco] 02/Mayo/2016 Modified --> Se cambio el parametro de string a un tipo EnumRole
     /// </history>
     public void LoadPersonnel()
     {
       StaStart("Loading Personnel...");
-      DoGetPersonnel(App.User.SalesRoom.srID, Model.Helpers.EnumToListHelper.GetEnumDescription(EnumRole.Liner));
+      DoGetPersonnel(App.User.SalesRoom.srID, "LINER");
     }
 
     /// <summary>

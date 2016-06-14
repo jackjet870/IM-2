@@ -1,0 +1,174 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Base.Forms"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="IM.Base.Forms.frmSearchSelfGen"
+        mc:Ignorable="d"
+        KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
+        WindowStartupLocation="CenterScreen"
+        Title="Self Gen Search" Height="360" Width="832.475">
+  <Grid>
+    <!--#region Filas-->
+    <Grid.RowDefinitions>
+      <RowDefinition Height="100"/>
+      <RowDefinition/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+
+    <!--#region Menú-->
+    <GroupBox x:Name="grbCriteria" Header="Search Criteria" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,5" FontWeight="Bold">
+      <Grid>
+        <!--#region Definicio de filas-->
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3">
+          <StackPanel Orientation="Vertical" Margin="5,0,5,0">
+            <TextBlock Text="Date From"/>
+            <xctk:DateTimePicker x:Name="dtpStart" Width="150" Format="LongDate" TextAlignment="Left"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Margin="5,0,5,0">
+            <TextBlock Text="Date To"/>
+            <xctk:DateTimePicker x:Name="dtpEnd" Width="150" Format="LongDate" TextAlignment="Left"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Margin="5,0,5,0">
+            <TextBlock Text="Guest Name"/>
+            <TextBox x:Name="txtGuestName" AcceptsReturn="False" Width="150"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Margin="5,0,5,0">
+            <TextBlock Text="Room"/>
+            <TextBox x:Name="txtRoomNum" AcceptsReturn="False" Width="50"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Margin="5,0,5,0">
+            <TextBlock Text="Liner"/>
+            <TextBox x:Name="txtLiner" AcceptsReturn="False" Width="50"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Margin="5,0,5,0">
+            <TextBlock Text="GUID"/>
+            <TextBox x:Name="txtguID" AcceptsReturn="False" Width="50"/>
+          </StackPanel>
+          <Button x:Name="btnSearch" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,0" Width="Auto" Background="Aquamarine" Height="32" Click="btnSearch_Click" >
+            <StackPanel Orientation="Horizontal">
+              <Viewbox Stretch="Uniform" Width="20">
+                <Image Source="pack://application:,,,/IM.Base;component/Images/CloseSalesRoom.png"/>
+              </Viewbox>
+              <TextBlock Text="Self Gen Search" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
+            </StackPanel>
+          </Button>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="3">
+          <RadioButton x:Name="optAll" Content="All Cases" Margin="10,0,10,0"/>
+          <RadioButton x:Name="optClassified" Content="Cases classified" Margin="10,0,10,0"/>
+          <RadioButton x:Name="optPending" Content="Pending cases by classifying" Margin="10,0,10,0" Initialized="optPending_Initialized"/>
+        </StackPanel >
+      </Grid>
+    </GroupBox>
+    <!--#region DataGrid-->
+    <DataGrid x:Name="grdGuest" AutoGenerateColumns="False" HorizontalAlignment="Stretch" Margin="5,0,5,0" Grid.Row="1" VerticalAlignment="Stretch" Height="209" IsReadOnly="True" SelectionChanged="grdGuest_SelectionChanged" >
+      <DataGrid.Resources>
+        <Style TargetType="{x:Type DataGridRow}">
+          <EventSetter Event="MouseDoubleClick" Handler="grdGuest_DoubleClick"/>
+          <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+        </Style>
+      </DataGrid.Resources>
+      <DataGrid.Columns>
+        <DataGridTextColumn x:Name="guIDColumn" Binding="{Binding guID}" Header="ID" Width="Auto" >
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Guest ID"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="guLastName1Column" Binding="{Binding guLastName1}" Header="Last Name" Width="Auto" >
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Last Name"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="guFirstName1Column" Binding="{Binding guFirstName1}" Header="First Name" Width="Auto" >
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="First Name"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="guHotelColumn" Binding="{Binding guHotel}" Header="Hotel" Width="Auto" >
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Hotel"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="guRoomNumColumn" Binding="{Binding guRoomNum}" Header="Room" Width="Auto" >
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Room"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="guLiner1Column" Binding="{Binding guLiner1}" Header="Hotel" Width="Auto" >
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Liner"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="peNColumn" Binding="{Binding peN}" Header="Liner Name" Width="Auto" >
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Liner Name"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="guShowDColumn" Binding="{Binding guShowD, StringFormat=d}" Header="Show Date" Width="Auto" >
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Show Date"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridCheckBoxColumn x:Name="guShowColumn" Binding="{Binding guShow, Mode=OneWay}" Header="Sh" Width="SizeToHeader">
+          <DataGridCheckBoxColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Show"/>
+            </Style>
+          </DataGridCheckBoxColumn.HeaderStyle>
+        </DataGridCheckBoxColumn>
+        <DataGridCheckBoxColumn x:Name="guSelfGenColumn" Binding="{Binding guSelfGen, Mode=OneWay}" Header="SG" Width="SizeToHeader">
+          <DataGridCheckBoxColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Self Gen"/>
+            </Style>
+          </DataGridCheckBoxColumn.HeaderStyle>
+        </DataGridCheckBoxColumn>
+        <DataGridTextColumn x:Name="gutsColumn" Binding="{Binding guts}" Header="Team" Width="*" >
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Team"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+    <!--#endregion-->
+
+
+    <!--#region  Estatus Bar-->
+    <StatusBar x:Name="stbStatusBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Row="2" Margin="5,5,5,0" >
+      <StatusBarItem x:Name="StatusBarCap" Content="CAP"  HorizontalContentAlignment="Stretch" />
+      <StatusBarItem x:Name="StatusBarNum" Content="NUM"  HorizontalContentAlignment="Stretch" />
+      <StatusBarItem x:Name="StatusBarIns" Content="INS"  HorizontalContentAlignment="Stretch" />
+      <Separator />
+      <StatusBarItem x:Name="StatusBarReg" Content="0 Guests" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
+    </StatusBar>
+    <!--#endregion-->
+  </Grid>
+</Window>

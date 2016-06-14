@@ -1,0 +1,26 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Host.Forms"
+        xmlns:UserControls="clr-namespace:IM.Styles.UserControls;assembly=IM.Styles" xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmGiftsReceiptsAdditional"
+        mc:Ignorable="d"
+        Title="Gifts Receipts Additional" Height="303.909" Width="452.443" WindowStartupLocation="CenterOwner" Loaded="Window_Loaded">
+  <Window.Resources>
+    <CollectionViewSource x:Key="dsGiftsReceiptsAdditional" d:DesignSource="{d:DesignInstance {x:Type Model:GetGiftsReceiptsAdditional}, CreateList=True}"/>
+  </Window.Resources>
+  <Grid DataContext="{StaticResource dsGiftsReceiptsAdditional}">
+    <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="115,242,0,0" VerticalAlignment="Top" Width="75" Click="btnSave_Click"/>
+    <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="253,242,0,0" VerticalAlignment="Top" Width="75" Click="btnCancel_Click"/>
+    <DataGrid x:Name="dgGuestsAdditional" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="10,10,10,44" RowDetailsVisibilityMode="VisibleWhenSelected">
+      <DataGrid.Columns>
+        <DataGridCheckBoxColumn x:Name="generateColumn" Binding="{Binding Generate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Generate" Width="SizeToHeader" IsReadOnly="false"/>
+        <DataGridTextColumn x:Name="gaAdditionalColumn" Binding="{Binding gaAdditional}" Header="GUID" Width="SizeToHeader" IsReadOnly="True"/>
+        <DataGridTextColumn x:Name="guLastName1Column" Binding="{Binding guLastName1}" Header="Last Name" Width="Auto" IsReadOnly="True"/>
+        <DataGridTextColumn x:Name="guFirstName1Column" Binding="{Binding guFirstName1}" Header="First Name" Width="Auto" IsReadOnly="True"/>
+        <DataGridTextColumn x:Name="grIDColumn" Binding="{Binding grID}" Header="Receipt ID" Width="*" IsReadOnly="True"/>
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
+</Window>

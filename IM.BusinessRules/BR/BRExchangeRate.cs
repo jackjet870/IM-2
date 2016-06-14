@@ -48,19 +48,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          #region Transaction
-          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
-          {
-            try
-            {
-              dbContext.USP_OR_InsertExchangeRate(serverDate);
-            }
-            catch
-            {
-              transaction.Rollback();
-            }
-          }
-          #endregion
+          dbContext.USP_OR_InsertExchangeRate(serverDate);
         }
       });
     }
@@ -91,7 +79,7 @@ namespace IM.BusinessRules.BR
         }
       }
     }
-        #endregion
+    #endregion
 
     #region GetExchangeRateByID
     /// <summary>
@@ -108,7 +96,7 @@ namespace IM.BusinessRules.BR
       {
         return dbContext.ExchangeRates.Where(x => x.excu == exchangeID).OrderBy(o => o.exD).FirstOrDefault();
       }
-    } 
+    }
     #endregion
 
     #region GetExchangeRatesByDate
@@ -141,7 +129,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task UpdateExchangeRate(DateTime? date, string currency, decimal? exchangeRate)
     {
-      
+
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))

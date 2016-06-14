@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:PromocionesControllerwsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/" name="PromocionesController" targetNamespace="urn:PromocionesControllerwsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="urn:PromocionesControllerwsdl">
+      <xsd:complexType name="BeneficiosxFolioRequest">
+        <xsd:all>
+          <xsd:element name="hotel" type="xsd:string" />
+          <xsd:element name="folio" type="xsd:int" />
+          <xsd:element name="room" type="xsd:int" />
+          <xsd:element name="last_name" type="xsd:string" />
+          <xsd:element name="first_name" type="xsd:string" />
+          <xsd:element name="nights" type="xsd:int" />
+          <xsd:element name="agency_cd" type="xsd:string" />
+          <xsd:element name="contract" type="xsd:string" />
+          <xsd:element name="guest_cd" type="xsd:string" />
+          <xsd:element name="group_cd" type="xsd:string" />
+          <xsd:element name="ded_comm" type="xsd:string" />
+          <xsd:element name="mkt_seg" type="xsd:string" />
+          <xsd:element name="geo_seg" type="xsd:string" />
+          <xsd:element name="arv_date" type="xsd:dateTime" />
+          <xsd:element name="depart_dt" type="xsd:dateTime" />
+          <xsd:element name="ent_date" type="xsd:dateTime" />
+          <xsd:element name="rm_type" type="xsd:string" />
+          <xsd:element name="adult" type="xsd:int" />
+          <xsd:element name="child" type="xsd:int" />
+          <xsd:element name="country" type="xsd:string" />
+          <xsd:element name="kid" type="xsd:int" />
+          <xsd:element name="chg_amt2" type="xsd:string" />
+          <xsd:element name="grat_bell_bill" type="xsd:string" />
+          <xsd:element name="club_stat" type="xsd:string" />
+          <xsd:element name="xtra_adu" type="xsd:int" />
+          <xsd:element name="xtra_chd" type="xsd:int" />
+          <xsd:element name="xtra_kid" type="xsd:int" />
+          <xsd:element name="cvv_agency" type="xsd:string" />
+          <xsd:element name="rm_desc" type="xsd:string" />
+          <xsd:element name="idpromo" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="OstpromosResponseArray">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soap-enc:Array">
+            <xsd:attribute wsdl:arrayType="tns:OstpromosResponse[]" ref="soap-enc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="OstpromosResponse">
+        <xsd:all>
+          <xsd:element name="rmhotel" type="xsd:string" />
+          <xsd:element name="rmfolio" type="xsd:integer" />
+          <xsd:element name="creddisp" type="xsd:float" />
+          <xsd:element name="credusado" type="xsd:float" />
+          <xsd:element name="idpromo" type="xsd:string" />
+          <xsd:element name="esResortCredit" type="xsd:int" />
+          <xsd:element name="status" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="OstdtpromosRequest">
+        <xsd:all>
+          <xsd:element name="hotel" type="xsd:string" />
+          <xsd:element name="folio" type="xsd:integer" />
+          <xsd:element name="folvta" type="xsd:integer" />
+          <xsd:element name="establec" type="xsd:string" />
+          <xsd:element name="operacion" type="xsd:string" />
+          <xsd:element name="servicio" type="xsd:string" />
+          <xsd:element name="monto" type="xsd:float" />
+          <xsd:element name="idpromo" type="xsd:string" />
+          <xsd:element name="sistema" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="OstdtpromosResponseArray">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soap-enc:Array">
+            <xsd:attribute wsdl:arrayType="tns:OstdtpromosResponse[]" ref="soap-enc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="OstdtpromosResponse">
+        <xsd:all>
+          <xsd:element name="rmhotel" type="xsd:string" />
+          <xsd:element name="rmfolio" type="xsd:integer" />
+          <xsd:element name="folvta" type="xsd:integer" />
+          <xsd:element name="establec" type="xsd:string" />
+          <xsd:element name="operacion" type="xsd:string" />
+          <xsd:element name="servicio" type="xsd:string" />
+          <xsd:element name="status" type="xsd:string" />
+          <xsd:element name="monto" type="xsd:float" />
+          <xsd:element name="idpromo" type="xsd:string" />
+          <xsd:element name="sistema" type="xsd:string" />
+          <xsd:element name="fechamov" type="xsd:date" />
+          <xsd:element name="horamov" type="xsd:time" />
+          <xsd:element name="codbeneficio" type="xsd:string" />
+          <xsd:element name="abonoforzado" type="xsd:boolean" />
+          <xsd:element name="idareaabonoforzado" type="xsd:integer" />
+          <xsd:element name="usrabonoforzado" type="xsd:string" />
+          <xsd:element name="observaciones" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="PromocionesTipoRequest">
+        <xsd:all>
+          <xsd:element name="tipoPromo" type="xsd:string" />
+          <xsd:element name="estatus" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="PromocionesTipoResponseArray">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soap-enc:Array">
+            <xsd:attribute wsdl:arrayType="tns:PromocionesTipoResponse[]" ref="soap-enc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="PromocionesTipoResponse">
+        <xsd:all>
+          <xsd:element name="recnum" type="xsd:integer" />
+          <xsd:element name="clave" type="xsd:string" />
+          <xsd:element name="nombre" type="xsd:string" />
+          <xsd:element name="descripcion" type="xsd:string" />
+          <xsd:element name="estatus" type="xsd:string" />
+          <xsd:element name="tipo_promo" type="xsd:string" />
+          <xsd:element name="book_ini" type="xsd:date" />
+          <xsd:element name="book_fin" type="xsd:date" />
+          <xsd:element name="stay_ini" type="xsd:date" />
+          <xsd:element name="stay_fin" type="xsd:date" />
+          <xsd:element name="incl_over" type="xsd:boolean" />
+          <xsd:element name="stay_min" type="xsd:integer" />
+          <xsd:element name="stay_max" type="xsd:integer" />
+          <xsd:element name="hoteles_si" type="xsd:string" />
+          <xsd:element name="nota" type="xsd:string" />
+          <xsd:element name="ent_date" type="xsd:date" />
+          <xsd:element name="ent_time" type="xsd:string" />
+          <xsd:element name="ent_oper" type="xsd:string" />
+          <xsd:element name="ent_term" type="xsd:string" />
+          <xsd:element name="chg_date" type="xsd:date" />
+          <xsd:element name="chg_time" type="xsd:string" />
+          <xsd:element name="chg_oper" type="xsd:string" />
+          <xsd:element name="chg_term" type="xsd:string" />
+          <xsd:element name="cargo_usd" type="xsd:float" />
+          <xsd:element name="bill_to" type="xsd:string" />
+          <xsd:element name="in_folio" type="xsd:boolean" />
+          <xsd:element name="cargo_code" type="xsd:string" />
+          <xsd:element name="promo" type="xsd:integer" />
+          <xsd:element name="arv_based" type="xsd:boolean" />
+          <xsd:element name="emitida_por" type="xsd:string" />
+          <xsd:element name="aplica_text" type="xsd:string" />
+          <xsd:element name="noaplica_text" type="xsd:string" />
+          <xsd:element name="grupos" type="xsd:integer" />
+          <xsd:element name="club" type="xsd:integer" />
+          <xsd:element name="bill_freq" type="xsd:string" />
+          <xsd:element name="cargo_usd2" type="xsd:float" />
+          <xsd:element name="bill_to2" type="xsd:string" />
+          <xsd:element name="cargo_code2" type="xsd:string" />
+          <xsd:element name="front_apply" type="xsd:boolean" />
+          <xsd:element name="pame" type="xsd:integer" />
+          <xsd:element name="pplus" type="xsd:integer" />
+          <xsd:element name="web" type="xsd:integer" />
+          <xsd:element name="con_limites" type="xsd:boolean" />
+          <xsd:element name="producto" type="xsd:string" />
+          <xsd:element name="desc_cliente" type="xsd:string" />
+          <xsd:element name="costo_adulto" type="xsd:float" />
+          <xsd:element name="costo_menor" type="xsd:float" />
+          <xsd:element name="mostrar_carta" type="xsd:string" />
+          <xsd:element name="hasErrors" type="xsd:boolean" />
+          <xsd:element name="errorInfo" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="PromoForzadaFolioTipoRequest">
+        <xsd:all>
+          <xsd:element name="hotel" type="xsd:string" />
+          <xsd:element name="folio" type="xsd:integer" />
+          <xsd:element name="tipoPromo" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="PromoForzadaFolioTipoResponseArray">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soap-enc:Array">
+            <xsd:attribute wsdl:arrayType="tns:PromoForzadaFolioTipoResponse[]" ref="soap-enc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="PromoForzadaFolioTipoResponse">
+        <xsd:all>
+          <xsd:element name="hotel" type="xsd:string" />
+          <xsd:element name="folio" type="xsd:integer" />
+          <xsd:element name="tipo_promo" type="xsd:string" />
+          <xsd:element name="adicional" type="xsd:integer" />
+          <xsd:element name="usralta" type="xsd:string" />
+          <xsd:element name="fechaalta" type="xsd:date" />
+          <xsd:element name="idtipoasignacion" type="xsd:string" />
+          <xsd:element name="status" type="xsd:string" />
+          <xsd:element name="usrmodif" type="xsd:string" />
+          <xsd:element name="fechamodif" type="xsd:date" />
+          <xsd:element name="tipomov" type="xsd:string" />
+          <xsd:element name="monto" type="xsd:float" />
+          <xsd:element name="hotelnew" type="xsd:string" />
+          <xsd:element name="folionew" type="xsd:integer" />
+          <xsd:element name="usrtransf" type="xsd:string" />
+          <xsd:element name="fechatransf" type="xsd:date" />
+          <xsd:element name="hasErrors" type="xsd:boolean" />
+          <xsd:element name="errorInfo" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ActualizaEstatusPromoForzadaRequest">
+        <xsd:all>
+          <xsd:element name="hotel" type="xsd:string" />
+          <xsd:element name="folio" type="xsd:integer" />
+          <xsd:element name="promo" type="xsd:string" />
+          <xsd:element name="estatus" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ActualizaEstatusPromoForzadaResponse">
+        <xsd:all>
+          <xsd:element name="message" type="xsd:string" />
+          <xsd:element name="hasErrors" type="xsd:boolean" />
+          <xsd:element name="errorInfo" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="GuardaPromocionForzadaRequest">
+        <xsd:all>
+          <xsd:element name="hotel" type="xsd:string" />
+          <xsd:element name="folio" type="xsd:integer" />
+          <xsd:element name="adicional" type="xsd:integer" />
+          <xsd:element name="idpromo" type="xsd:string" />
+          <xsd:element name="usralta" type="xsd:string" />
+          <xsd:element name="fechaalta" type="xsd:date" />
+          <xsd:element name="GiftID" type="xsd:string" />
+          <xsd:element name="GiftsReceiptID" type="xsd:string" />
+          <xsd:element name="idtipoasignacion" type="xsd:string" />
+          <xsd:element name="status" type="xsd:string" />
+          <xsd:element name="usrmodif" type="xsd:string" />
+          <xsd:element name="fechamodif" type="xsd:date" />
+          <xsd:element name="tipomov" type="xsd:string" />
+          <xsd:element name="monto" type="xsd:float" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="GuardaPromocionForzadaResponse">
+        <xsd:all>
+          <xsd:element name="message" type="xsd:string" />
+          <xsd:element name="hasErrors" type="xsd:boolean" />
+          <xsd:element name="errorInfo" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="BeneficiosxFolioResponseArray">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soap-enc:Array">
+            <xsd:attribute wsdl:arrayType="tns:BeneficiosxFolioResponse[]" ref="soap-enc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="BeneficiosxFolioResponse">
+        <xsd:all>
+          <xsd:element name="id" type="xsd:string" />
+          <xsd:element name="idPromo_Promocion" type="xsd:string" />
+          <xsd:element name="Descripcion" type="xsd:string" />
+          <xsd:element name="UnidadConversion" type="xsd:string" />
+          <xsd:element name="Maximo" type="xsd:string" />
+          <xsd:element name="Saldo" type="xsd:string" />
+          <xsd:element name="Cantidad1" type="xsd:string" />
+          <xsd:element name="CodigoInt" type="xsd:string" />
+          <xsd:element name="ListaHoteles" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ConsumosPromocionesRequest">
+        <xsd:all>
+          <xsd:element name="FechaInicial" type="xsd:date" />
+          <xsd:element name="FechaFinal" type="xsd:date" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ConsumosPromocionesResponse">
+        <xsd:all>
+          <xsd:element name="listaPromociones" type="tns:ConsumosPromocionesListResponseArray" />
+          <xsd:element name="HasErrors" type="xsd:boolean" />
+          <xsd:element name="ErrorInfo" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ConsumosPromocionesListResponseArray">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soap-enc:Array">
+            <xsd:attribute wsdl:arrayType="tns:ConsumosPromocionesListResponse[]" ref="soap-enc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ConsumosPromocionesListResponse">
+        <xsd:all>
+          <xsd:element name="Hotel" type="xsd:string" />
+          <xsd:element name="Folio" type="xsd:integer" />
+          <xsd:element name="idOp_CuponVenta" type="xsd:integer" />
+          <xsd:element name="FechaPago" type="xsd:date" />
+          <xsd:element name="idPromo_Promocion" type="xsd:string" />
+          <xsd:element name="NumerodePromocionesUsadas" type="xsd:integer" />
+          <xsd:element name="Pax" type="xsd:integer" />
+          <xsd:element name="MontoFactura" type="xsd:float" />
+          <xsd:element name="HasErrors" type="xsd:boolean" />
+          <xsd:element name="ErrorInfo" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ObtenerCabeceraEstadoCuentaRequest">
+    <wsdl:part name="request" type="tns:BeneficiosxFolioRequest" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerCabeceraEstadoCuentaResponse">
+    <wsdl:part name="return" type="tns:OstpromosResponseArray" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerDetalleEstadoCuentaRequest">
+    <wsdl:part name="OstdtpromosRequest" type="tns:OstdtpromosRequest" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerDetalleEstadoCuentaResponse">
+    <wsdl:part name="return" type="tns:OstdtpromosResponseArray" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerPromocionesTipoRequest">
+    <wsdl:part name="request" type="tns:PromocionesTipoRequest" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerPromocionesTipoResponse">
+    <wsdl:part name="return" type="tns:PromocionesTipoResponseArray" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerPromocionesForzadasFolioTipoRequest">
+    <wsdl:part name="request" type="tns:PromoForzadaFolioTipoRequest" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerPromocionesForzadasFolioTipoResponse">
+    <wsdl:part name="return" type="tns:PromoForzadaFolioTipoResponseArray" />
+  </wsdl:message>
+  <wsdl:message name="ActualizaEstatusPromoForzadaFolioRequest">
+    <wsdl:part name="request" type="tns:ActualizaEstatusPromoForzadaRequest" />
+  </wsdl:message>
+  <wsdl:message name="ActualizaEstatusPromoForzadaFolioResponse">
+    <wsdl:part name="return" type="tns:ActualizaEstatusPromoForzadaResponse" />
+  </wsdl:message>
+  <wsdl:message name="GuardarPromocionForzadaRequest">
+    <wsdl:part name="request" type="tns:GuardaPromocionForzadaRequest" />
+  </wsdl:message>
+  <wsdl:message name="GuardarPromocionForzadaResponse">
+    <wsdl:part name="return" type="tns:GuardaPromocionForzadaResponse" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerBeneficiosByFolioRequest">
+    <wsdl:part name="request" type="tns:BeneficiosxFolioRequest" />
+  </wsdl:message>
+  <wsdl:message name="ObtenerBeneficiosByFolioResponse">
+    <wsdl:part name="return" type="tns:BeneficiosxFolioResponseArray" />
+  </wsdl:message>
+  <wsdl:message name="ConsultarPromocionesConsumidasRequest">
+    <wsdl:part name="ConsumosPromocionesRequest" type="tns:ConsumosPromocionesRequest" />
+  </wsdl:message>
+  <wsdl:message name="ConsultarPromocionesConsumidasResponse">
+    <wsdl:part name="return" type="tns:ConsumosPromocionesResponse" />
+  </wsdl:message>
+  <wsdl:portType name="PromocionesControllerPortType">
+    <wsdl:operation name="ObtenerCabeceraEstadoCuenta">
+      <wsdl:documentation />
+      <wsdl:input message="tns:ObtenerCabeceraEstadoCuentaRequest" />
+      <wsdl:output message="tns:ObtenerCabeceraEstadoCuentaResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerDetalleEstadoCuenta">
+      <wsdl:documentation />
+      <wsdl:input message="tns:ObtenerDetalleEstadoCuentaRequest" />
+      <wsdl:output message="tns:ObtenerDetalleEstadoCuentaResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerPromocionesTipo">
+      <wsdl:documentation>method: Obtener las promociones por tipo
+Returns arreglo de promociones.</wsdl:documentation>
+      <wsdl:input message="tns:ObtenerPromocionesTipoRequest" />
+      <wsdl:output message="tns:ObtenerPromocionesTipoResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerPromocionesForzadasFolioTipo">
+      <wsdl:documentation>method: Obtener las promociones forzadas por folio y tipo
+Returns arreglo de promociones forzadas.</wsdl:documentation>
+      <wsdl:input message="tns:ObtenerPromocionesForzadasFolioTipoRequest" />
+      <wsdl:output message="tns:ObtenerPromocionesForzadasFolioTipoResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="ActualizaEstatusPromoForzadaFolio">
+      <wsdl:documentation>method: Actualiza las promociones forzadas por folio y tipo
+Returns resultado positivo o no de la actualizacion.</wsdl:documentation>
+      <wsdl:input message="tns:ActualizaEstatusPromoForzadaFolioRequest" />
+      <wsdl:output message="tns:ActualizaEstatusPromoForzadaFolioResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="GuardarPromocionForzada">
+      <wsdl:documentation>method: guardar las promociones forzadas
+Returns resultado positivo o no de la inserción.</wsdl:documentation>
+      <wsdl:input message="tns:GuardarPromocionForzadaRequest" />
+      <wsdl:output message="tns:GuardarPromocionForzadaResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerBeneficiosByFolio">
+      <wsdl:documentation>method: Obtiene los beneficios de una promoción.
+Returns Lista de los beneficios.</wsdl:documentation>
+      <wsdl:input message="tns:ObtenerBeneficiosByFolioRequest" />
+      <wsdl:output message="tns:ObtenerBeneficiosByFolioResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultarPromocionesConsumidas">
+      <wsdl:documentation />
+      <wsdl:input message="tns:ConsultarPromocionesConsumidasRequest" />
+      <wsdl:output message="tns:ConsultarPromocionesConsumidasResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PromocionesControllerBinding" type="tns:PromocionesControllerPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="ObtenerCabeceraEstadoCuenta">
+      <soap:operation soapAction="urn:PromocionesControllerwsdl#ObtenerCabeceraEstadoCuenta" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerDetalleEstadoCuenta">
+      <soap:operation soapAction="urn:PromocionesControllerwsdl#ObtenerDetalleEstadoCuenta" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerPromocionesTipo">
+      <soap:operation soapAction="urn:PromocionesControllerwsdl#ObtenerPromocionesTipo" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerPromocionesForzadasFolioTipo">
+      <soap:operation soapAction="urn:PromocionesControllerwsdl#ObtenerPromocionesForzadasFolioTipo" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ActualizaEstatusPromoForzadaFolio">
+      <soap:operation soapAction="urn:PromocionesControllerwsdl#ActualizaEstatusPromoForzadaFolio" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GuardarPromocionForzada">
+      <soap:operation soapAction="urn:PromocionesControllerwsdl#GuardarPromocionForzada" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ObtenerBeneficiosByFolio">
+      <soap:operation soapAction="urn:PromocionesControllerwsdl#ObtenerBeneficiosByFolio" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultarPromocionesConsumidas">
+      <soap:operation soapAction="urn:PromocionesControllerwsdl#ConsultarPromocionesConsumidas" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:PromocionesControllerwsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PromocionesControllerService">
+    <wsdl:port name="PromocionesControllerPort" binding="tns:PromocionesControllerBinding">
+      <soap:address location="http://sistur-test.palace-resorts.local/index.php/promociones/promociones/ServiceInterface/ws/1" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

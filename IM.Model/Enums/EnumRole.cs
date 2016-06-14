@@ -7,6 +7,7 @@ namespace IM.Model.Enums
   /// </summary>
   /// <history>
   /// [jorcanche]  12/Mar/2016 Created
+  /// [vipacheco] 02/Mayo/2016 Modified --> Se agrego opcion ALL al enumerado
   /// </history>
   public enum EnumRole
   {
@@ -47,6 +48,8 @@ namespace IM.Model.Enums
     [Description("SECRETARY")]
     Secretary,
     [Description("BOSS")]
-    Boss
+    Boss,
+    [Description("ALL")]
+    All
   }
 }

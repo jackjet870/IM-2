@@ -697,11 +697,24 @@ namespace IM.BusinessRules.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("180")]
+        public int USP_OR_GetGiftsReceipts {
+            get {
+                return ((int)(this["USP_OR_GetGiftsReceipts"]));
+            }
+            set {
+                this["USP_OR_GetGiftsReceipts"] = value;
+            }
+        }
+
+      	[global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("120")]
         public int USP_OR_GraphProductionByPR_Timeout {
             get {
                 return ((int)(this["USP_OR_GraphProductionByPR_Timeout"]));
             }
+
             set {
                 this["USP_OR_GraphProductionByPR_Timeout"] = value;
             }

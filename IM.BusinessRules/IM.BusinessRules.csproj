@@ -66,6 +66,7 @@
     <Compile Include="BR\BRCountries.cs" />
     <Compile Include="BR\BRCreditCardTypes.cs" />
     <Compile Include="BR\BRCurrencies.cs" />
+    <Compile Include="BR\BRDepositsRefund.cs" />
     <Compile Include="BR\BRDepts.cs" />
     <Compile Include="BR\BRDesks.cs" />
     <Compile Include="BR\BREfficiency.cs" />
@@ -82,6 +83,8 @@
     <Compile Include="BR\BRFoliosCXC.cs" />
     <Compile Include="BR\BRGifts.cs" />
     <Compile Include="BR\BRGiftsCategories.cs" />
+    <Compile Include="BR\BRGiftsReceiptDetail.cs" />
+    <Compile Include="BR\BRGiftsReceiptLog.cs" />
     <Compile Include="BR\BRGiftsReceipts.cs" />
     <Compile Include="BR\BRGiftsReceiptsPacks.cs" />
     <Compile Include="BR\BRGiftsReceiptsPayments.cs" />
@@ -93,6 +96,7 @@
     <Compile Include="BR\BRGuestsGroups.cs" />
     <Compile Include="BR\BRGuestsGroupsIntegrants.cs" />
     <Compile Include="BR\BRGuestsLogs.cs" />
+    <Compile Include="BR\BRGuestsPromotions.cs" />
     <Compile Include="BR\BRGuestStatus.cs" />
     <Compile Include="BR\BRGuestStatusType.cs" />
     <Compile Include="BR\BRGuestStatusTypes.cs" />
@@ -132,6 +136,7 @@
     <Compile Include="BR\BRReimpresionMotives.cs" />
     <Compile Include="BR\BRReportsByLeadSource.cs" />
     <Compile Include="BR\BRRoles.cs" />
+    <Compile Include="BR\BRRoomCharges.cs" />
     <Compile Include="BR\BRRoomTypes.cs" />
     <Compile Include="BR\BRSaleAmountRanges.cs" />
     <Compile Include="BR\BRSaleTypes.cs" />
@@ -172,6 +177,7 @@
     <Compile Include="BR\BRMarkets.cs" />
     <Compile Include="BR\BRSalesRooms.cs" />
     <Compile Include="BR\BRZones.cs" />
+    <Compile Include="BR\BRInvitsGifts.cs" />
     <Compile Include="BR\BRFoliosInvitationsOuthousePR.cs" />
     <Compile Include="BR\BRScoreRulesDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

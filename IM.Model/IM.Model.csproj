@@ -186,8 +186,11 @@
     </Compile>
     <Compile Include="Enums\EnumAction.cs" />
     <Compile Include="Enums\EnumBasedOnPRLocation.cs" />
+    <Compile Include="Enums\EnumCaseSelfGen.cs" />
+    <Compile Include="Enums\EnumCheckedStatus.cs" />
     <Compile Include="Enums\EnumClub.cs" />
     <Compile Include="Enums\EnumConfiguration.cs" />
+    <Compile Include="Enums\EnumExternalProduct.cs" />
     <Compile Include="Enums\EnumDataFieldShowDataAs.cs" />
     <Compile Include="Enums\EnumFilterDeposit.cs" />
     <Compile Include="Enums\EnumFormatTypeExcel.cs" />
@@ -200,6 +203,7 @@
     <Compile Include="Enums\EnumPermission.cs" />
     <Compile Include="Enums\EnumPlaceType.cs" />
     <Compile Include="Enums\EnumProgram.cs" />
+    <Compile Include="Enums\EnumPromotionsSystem.cs" />
     <Compile Include="Enums\EnumRole.cs" />
     <Compile Include="Enums\EnumBasedOnArrival.cs" />
     <Compile Include="Enums\EnumBasedOnBooking.cs" />

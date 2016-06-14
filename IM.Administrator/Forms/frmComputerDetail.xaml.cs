@@ -166,7 +166,7 @@ namespace IM.Administrator.Forms
     /// [emoguel] created 16/03/2016
     /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private async void LoadDesks()
+    private void LoadDesks()
     {
       try
       {

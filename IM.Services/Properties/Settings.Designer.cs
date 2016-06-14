@@ -73,5 +73,16 @@ namespace IM.Services.Properties {
                 return ((string)(this["IM_Services_IntranetService_ServiceInterface"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://sistur-test.palace-resorts.local/index.php/promociones/promociones/Service" +
+            "Interface/ws/1")]
+        public string IM_Services_SisturService_PromocionesControllerService {
+            get {
+                return ((string)(this["IM_Services_SisturService_PromocionesControllerService"]));
+            }
+        }
     }
 }

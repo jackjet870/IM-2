@@ -265,11 +265,11 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 11/03/2016
     /// </history>
-    protected void LoadSegments()
+    protected async void LoadSegments()
     {
       try
       {
-        List<SegmentByAgency> lstSegmentsByAgencies = BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());
+        List<SegmentByAgency> lstSegmentsByAgencies = await BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());
         cmbSegment.ItemsSource = lstSegmentsByAgencies;
       }
       catch(Exception ex)

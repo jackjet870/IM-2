@@ -1,5 +1,6 @@
 ﻿using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -19,12 +20,15 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 07/03/2016 Created
     /// </history>
-    public static void UpdateSeasonDates(int yearServer)
+    public async static Task UpdateSeasonDates(int yearServer)
     {
-      using (var model = new IMEntities(ConnectionHelper.ConnectionString))
+      await Task.Run(() =>
       {
-        model.USP_OR_ActualizarFechasTemporadas(yearServer);
-      }
+        using (var model = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          model.USP_OR_ActualizarFechasTemporadas(yearServer);
+        }
+      });
     } 
     #endregion
   }

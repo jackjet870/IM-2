@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -47,5 +48,48 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
+
+
+    #region UpdateReimpresionMotive
+    /// <summary>
+    /// Actualiza el motivo de reimpresion del recibo de regalos
+    /// </summary>
+    /// <param name="ReimpresionMotive"></param>
+    /// <history>
+    /// [vipacheco] 09/Junio/2016 Created
+    /// </history>
+    public static async Task UpdateReimpresionMotive(int ReceiptID, byte ReimpresionMotive)
+    {
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          dbContext.USP_OR_UpdateGiftReceiptsReimpresionMotive(ReceiptID, ReimpresionMotive);
+        }
+      });
+    }
+    #endregion
+
+    #region UpdateReimpresionNumber
+    /// <summary>
+    ///  Actualiza el contador de reimpresion del recibo de regalos
+    /// </summary>
+    /// <param name="ReceiptID"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 09/Junio/2016 Created
+    /// </history>
+    public static async Task UpdateReimpresionNumber(int ReceiptID)
+    {
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          dbContext.USP_OR_UpdateGiftReceiptsReimpresionNumber(ReceiptID);
+        }
+      });
+    } 
+    #endregion
+
   }
 }

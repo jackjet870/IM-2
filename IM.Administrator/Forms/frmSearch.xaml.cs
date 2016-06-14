@@ -420,9 +420,9 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 14/03/2016
     /// </history>
-    protected void loadSegments()
+    protected async void loadSegments()
     {
-      List<SegmentByAgency> lstSegmentsByAgency = BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());
+      List<SegmentByAgency> lstSegmentsByAgency = await BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());
       lstSegmentsByAgency.Insert(0,new SegmentByAgency { seID = "", seN = "" });
       cmbSegment.ItemsSource = lstSegmentsByAgency;
     }

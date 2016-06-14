@@ -199,13 +199,13 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 20/Abril/2016 Created
     /// </history>
-    public static List<Gift> GetGiftsInputList(List<GiftsReceiptDetailShort> _listGiftsID)
+    /*public static List<Gift> GetGiftsInputList(List<GiftsReceiptDetailShort> _listGiftsID)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.Gifts.Where(x => x.giA == true && _listGiftsID.Select(s => s.gegi).Contains(x.giID)).ToList();
+        return dbContext.Gifts.Where(x => x.giA == true).Intersect(_listGiftsID.Select(s => s.gegi)) // && _listGiftsID.Select(s => s.gegi).Contains(x.giID)).ToList();
       }
-    }
+    } */
 
     #endregion GetGiftsInputList
 

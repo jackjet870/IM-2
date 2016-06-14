@@ -1,7 +1,10 @@
 ﻿using IM.Model;
+using IM.Model.Enums;
 using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,35 +45,16 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene la información de un Gifts Receipt especifico.
     /// </summary>
-    /// <param name="grSelected"></param>
+    /// <param name="GiftReceiptID"></param>
     /// <returns> Gifts Receipt </returns>
     /// <history>
     /// [vipacheco] 06/04/2016 Created
     /// </history>
-    public static List<GiftsReceipt> GetGiftReceipt(int grSelected)
+    public static GiftsReceipt GetGiftReceipt(int GiftReceiptID)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.GiftsReceipts.Where(x => x.grID == grSelected).ToList();
-      }
-    }
-    #endregion
-
-    #region GetGiftsReceiptsDetail
-    /// <summary>
-    /// Consulta los regalos de un recibo
-    /// </summary>
-    /// <param name="receipt"> Clave del recibo de regalos </param>
-    /// <param name="package"> Indica si se desean los paquetes de regalos </param>
-    /// <returns></returns>
-    /// <history>
-    /// [vipacheco] 06/04/2016
-    /// </history>
-    public static List<GiftsReceiptDetailShort> GetGiftsReceiptsDetail(int receipt, bool package = false)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        return dbContext.USP_OR_GetGiftsReceiptDetail(receipt, package).ToList();
+        return  dbContext.GiftsReceipts.Where(x => x.grID == GiftReceiptID).SingleOrDefault();
       }
     }
     #endregion
@@ -96,7 +80,105 @@ namespace IM.BusinessRules.BR
       {
         return dbContext.USP_OR_ValidateGiftsReceipt(changedBy, password, guest, location, salesroom, giftshost, personnel).SingleOrDefault();
       }
-    } 
+    }
+    #endregion
+
+    #region SaveGiftReceipt
+    /// <summary>
+    /// Guarda un nuevo Gift Receipt y retorna el ID asignado
+    /// </summary>
+    /// <param name="giftReceipt"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 2/Mayo/2016 Created
+    /// </history>
+    public static int SaveGiftReceipt(GiftsReceipt giftReceipt)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        // Guardamos el Gift Receipt Nuevo
+        dbContext.Entry(giftReceipt).State = System.Data.Entity.EntityState.Added;
+        dbContext.SaveChanges();
+
+        return giftReceipt.grID; // Obtenemos el ID del nuevo Gift Receipt
+      }
+
+    }
+    #endregion
+
+    #region GetGiftsReceiptsAdditional
+    /// <summary>
+    /// Obtiene los Gifts Receipts Adicionales de acuerdo al ID del Guest
+    /// </summary>
+    /// <param name="GuestID"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 12/Mayo/2016 Created
+    /// </history>
+    public static List<GetGiftsReceiptsAdditional> GetGiftsReceiptsAdditional(int GuestID)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_IM_GetGiftsReceiptsAdditional(guestID: GuestID).ToList();
+      }
+    }
+    #endregion
+
+    #region CancelGiftsReceipt
+    /// <summary>
+    /// Cancela un recibo de regalos
+    /// </summary>
+    /// <param name="ReceiptID"></param>
+    /// <param name="DateServer"></param>
+    /// <history>
+    /// [vipacheco] 14/Mayo/2016 Created
+    /// </history>
+    public static void CancelGiftsReceipt(int ReceiptID, DateTime DateServer)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        dbContext.USP_OR_CancelGiftsReceipt(ReceiptID, DateServer);
+      }
+    }
+    #endregion
+
+    #region CalculateTotalsGiftsInvitation
+    /// <summary>
+    /// Calcula el total de los regalos de la invitacion
+    /// </summary>
+    /// <param name="GuestID"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 16/Mayo/2016 Created
+    /// </history>
+    public static decimal? CalculateTotalsGiftsInvitation(int GuestID)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_CalculateTotalsGiftsInvitation(GuestID).SingleOrDefault();
+      }
+    }
+    #endregion
+
+    #region CancelGiftPromotionSistur
+    /// <summary>
+    /// Indica que a un regalo se le cancelo su promocion en Sistur
+    /// </summary>
+    /// <param name="ReceiptID"></param>
+    /// <param name="Gift"></param>
+    /// <history>
+    /// [vipacheco] 27/Mayo/2016 Created
+    /// </history>
+    public async static void CancelGiftPromotionSistur(int ReceiptID, string Gift)
+    {
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          dbContext.USP_OR_UpdateGiftsReceiptDetailPromotionPVPCancel(ReceiptID, Gift);
+        }
+      });
+    }
     #endregion
 
   }

@@ -167,11 +167,11 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<GuestStatusType>> GetGuestStatusType(int status)
     {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-        {
-          bool statusGuestStatus = Convert.ToBoolean(status);
-          return await dbContext.GuestsStatusTypes.Where(gs => gs.gsA == statusGuestStatus).ToListAsync();
-        }
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        bool statusGuestStatus = Convert.ToBoolean(status);
+        return await dbContext.GuestsStatusTypes.Where(gs => gs.gsA == statusGuestStatus).ToListAsync();
+      }
     }
     #endregion
 
@@ -493,6 +493,7 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    #region GetSearchGuestByLS
     /// <summary>
     /// Trae los huespedes segun los parametros
     /// </summary>
@@ -575,6 +576,7 @@ namespace IM.BusinessRules.BR
         return query.OrderBy(gu => gu.gusr).ThenBy(gu => gu.guBookD).ThenBy(gu => gu.guLastName1).ToList();
       }
     }
+    #endregion
 
     #region SaveChangedOfGuest
     /// <summary>
@@ -798,6 +800,7 @@ namespace IM.BusinessRules.BR
 
     #endregion
 
+    #region DeleteGuest
     /// <summary>
     /// Elimina un Guest
     /// </summary>
@@ -812,6 +815,7 @@ namespace IM.BusinessRules.BR
         dbContext.USP_OR_DeleteGuest(guID);
       }
     }
+    #endregion
 
     #region GetGuestValidForTransfer
     /// <summary>
@@ -834,6 +838,175 @@ namespace IM.BusinessRules.BR
       return guest;
     }
     #endregion
+
+    #region GetSelfGen
+    /// <summary>
+    /// Devuelve los datos para la busqueda de casos Self Gen
+    /// </summary>
+    /// <param name="GuestName"></param>
+    /// <param name="SalesRoom"></param>
+    /// <param name="dateFrom"></param>
+    /// <param name="dateTo"></param>
+    /// <param name="GuestID"></param>
+    /// <param name="SelfGen"></param>
+    /// <param name="RoomNum"></param>
+    /// <param name="Liner"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 04/Junio/2016 Created
+    /// </history>
+    public async static Task<IEnumerable<object>> GetSelfGen(string GuestName, string SalesRoom, DateTime dateFrom, DateTime dateTo, string GuestID = "", EnumCaseSelfGen SelfGen = EnumCaseSelfGen.PendingByClassifying, string RoomNum = "", string Liner = "")
+    {
+      IEnumerable<object> lstResult = null;
+
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var query = from _Guest in dbContext.Guests
+                      join _Personnel in dbContext.Personnels on _Guest.guLiner1 equals _Personnel.peID into Joined
+                      from _Personnel in Joined.DefaultIfEmpty()
+                      select new
+                      {
+                        guLastName1 = _Guest.guLastName1,
+                        guFirstName1 = _Guest.guFirstName1,
+                        guHotel = _Guest.guHotel,
+                        guRoomNum = _Guest.guRoomNum,
+                        guLiner1 = _Guest.guLiner1,
+                        peN = _Personnel.peN,
+                        guShowD = _Guest.guShowD,
+                        guShow = _Guest.guShow,
+                        guSelfGen = _Guest.guSelfGen,
+                        guts = _Guest.guts,
+
+                        // Campos para validaciones
+                        peLinerID = _Personnel.peLinerID,
+                        guID = _Guest.guID,
+                        gusr = _Guest.gusr,
+                        guInvit = _Guest.guInvit
+                      };
+
+          //Busqueda por sala  //Busqueda de solo invitados //Busqueda por fechas
+          query = query.Where(x => x.gusr == SalesRoom && (x.guShowD >= dateFrom && x.guShowD <= dateTo) && x.guInvit == true);
+
+          // Obtenemos el personal
+          var Personnel = (dbContext.Personnels.Where(w => !string.IsNullOrEmpty(w.peLinerID)).Select(s => s.peLinerID)).ToList();
+
+          // Busqueda de Self Gen
+          switch (SelfGen)
+          {
+            case EnumCaseSelfGen.All:
+              query = query.Where(x => (Personnel.Contains(x.guLiner1)) || x.guSelfGen == true);
+              break;
+            case EnumCaseSelfGen.Classified:
+              query = query.Where(x => (Personnel.Contains(x.guLiner1)) && x.guSelfGen == true && x.guts != "");
+              break;
+            case EnumCaseSelfGen.PendingByClassifying:
+              query = query.Where(x => (Personnel.Contains(x.guLiner1)) && (x.guSelfGen == false || x.guts == null) || (!(Personnel.Contains(x.guLiner1)) && x.guSelfGen == true));
+              break;
+          }
+
+          // Busqueda por clave de invitado
+          if (GuestID != "")
+          {
+            int Guest = Convert.ToInt32(GuestID);
+            query = query.Where(x => x.guID == Guest);
+          }
+
+          // Busqueda por nombre o apellido
+          if (GuestName != "")
+          {
+            query = query.Where(x => x.guLastName1.Contains(GuestName) || x.guFirstName1.Contains(GuestName));
+          }
+
+          // Busqueda por numero de habitacion
+          if (RoomNum != "")
+          {
+            query = query.Where(x => x.guRoomNum.Contains(RoomNum));
+          }
+
+          // Busqueda por liner
+          if (Liner != "")
+          {
+            query = query.Where(x => x.guLiner1 == Liner);
+          }
+
+          lstResult = query.ToList();
+        }
+      });
+
+      return lstResult;
+    }
+    #endregion
+
+    #region GetSearchGuest_General
+    /// <summary>
+    /// Busca los huespedes que cumplan los criterios de busqueda
+    /// </summary>
+    /// <param name="dtpStart"></param>
+    /// <param name="dtpEnd"></param>
+    /// <param name="GuestID"></param>
+    /// <param name="GuestName"></param>
+    /// <param name="LeadSource"></param>
+    /// <param name="salesRoom"></param>
+    /// <param name="RoomNum"></param>
+    /// <param name="Reservation"></param>
+    /// <param name="PR"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 06/Junio/2016 Created
+    /// </history>
+    public async static Task<List<Guest>> GetSearchGuest_General(DateTime dtpStart, DateTime dtpEnd, int GuestID = 0, string GuestName = "", string LeadSource = "", string salesRoom = "", string RoomNum = "", string Reservation = "", string PR = "")
+    {
+      List<Guest> lstGuests = new List<Guest>();
+
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var query = from _Guests in dbContext.Guests
+                      where _Guests.guInvit == true && (_Guests.guBookD >= dtpStart && _Guests.guBookD <= dtpEnd)
+                      select _Guests;
+
+          // Busqueda por Guest ID
+          if (GuestID > 0)
+            query = query.Where(x => x.guID == GuestID);
+          else
+          {
+            // Busqueda por nombre o apellido
+            if (GuestName != "")
+              query = query.Where(x => x.guLastName1.Contains(GuestName) || x.guFirstName1.Contains(GuestName) || x.guLastname2.Contains(GuestName) || x.guFirstName2.Contains(GuestName));
+
+            // Busqueda por Lead Source
+            if (LeadSource != "")
+              query = query.Where(x => x.guls == LeadSource);
+
+            // Busqueda por sala
+            if (salesRoom != "")
+              query = query.Where(x => x.gusr == salesRoom);
+
+            // Busqueda por numero de habitacion
+            if (RoomNum != "")
+              query = query.Where(x => x.guRoomNum == RoomNum);
+
+            // Busqueda por folio de reservacion
+            if (Reservation != "")
+              query = query.Where(x => x.guHReservID == Reservation);
+
+            //Busqueda por PR
+            if (PR != "")
+              query = query.Where(x => x.guPRInvit1 == PR);
+
+          }
+          lstGuests = query.ToList();
+        }
+      });
+
+      return lstGuests;
+    } 
+    #endregion
+
+
   }
 
 }

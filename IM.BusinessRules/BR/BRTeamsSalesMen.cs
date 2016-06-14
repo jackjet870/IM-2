@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -20,41 +21,40 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<TeamSalesmen> GetTeamsSalesMen(int nStatus = -1, TeamSalesmen teamSalesMen = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var query = from ts in dbContext.TeamsSalesmen
-                    select ts;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(ts => ts.tsA == blnStatus);
+          var query = from ts in dbContext.TeamsSalesmen
+                      select ts;
+
+          if (nStatus != -1)//Filtro por estatus
+          {
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(ts => ts.tsA == blnStatus);
+          }
+
+          if (teamSalesMen != null)
+          {
+            if (!string.IsNullOrWhiteSpace(teamSalesMen.tssr))//Filtro por Sales Room
+            {
+              query = query.Where(ts => ts.tssr == teamSalesMen.tssr);
+            }
+            if (!string.IsNullOrWhiteSpace(teamSalesMen.tsID))//Filtro por ID
+            {
+              query = query.Where(ts => ts.tsID == teamSalesMen.tsID);
+            }
+
+            if (!string.IsNullOrWhiteSpace(teamSalesMen.tsN))//Filtro por descripción
+            {
+              query = query.Where(ts => ts.tsN.Contains(teamSalesMen.tsN));
+            }
+
+            if (!string.IsNullOrWhiteSpace(teamSalesMen.tsLeader))//Filtro por Lide
+            {
+              query = query.Where(ts => ts.tsLeader == teamSalesMen.tsLeader);
+            }
+          }
+          return query.OrderBy(ts => ts.tsN).ToList();
         }
-
-        if (teamSalesMen != null)
-        {
-          if (!string.IsNullOrWhiteSpace(teamSalesMen.tssr))//Filtro por Sales Room
-          {
-            query = query.Where(ts => ts.tssr == teamSalesMen.tssr);
-          }
-          if (!string.IsNullOrWhiteSpace(teamSalesMen.tsID))//Filtro por ID
-          {
-            query = query.Where(ts => ts.tsID == teamSalesMen.tsID);
-          }
-
-          if (!string.IsNullOrWhiteSpace(teamSalesMen.tsN))//Filtro por descripción
-          {
-            query = query.Where(ts => ts.tsN.Contains(teamSalesMen.tsN));
-          }
-
-          if (!string.IsNullOrWhiteSpace(teamSalesMen.tsLeader))//Filtro por Lide
-          {
-            query = query.Where(ts => ts.tsLeader == teamSalesMen.tsLeader);
-          }
-        }
-
-        return query.OrderBy(ts => ts.tsN).ToList();
-      }
     } 
     #endregion
   }

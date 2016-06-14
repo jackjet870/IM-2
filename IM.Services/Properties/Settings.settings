@@ -17,5 +17,8 @@
     <Setting Name="IM_Services_IntranetService_ServiceInterface" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://svr-2000-web2:8087/IntranetServiceInterface/ServiceInterface.asmx</Value>
     </Setting>
+    <Setting Name="IM_Services_SisturService_PromocionesControllerService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://sistur-test.palace-resorts.local/index.php/promociones/promociones/ServiceInterface/ws/1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -1,0 +1,157 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Host.Forms"
+        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmGiftsReceiptsLog"
+        mc:Ignorable="d"
+        KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
+        WindowStartupLocation="CenterScreen"
+        Title="Gifts Receipts Log" Height="340" Width="786" Loaded="Window_Loaded">
+  <Window.Resources>
+    <CollectionViewSource x:Key="dsGifsReceiptLog" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceiptLogData}, CreateList=True}"/>
+    <CollectionViewSource x:Key="dsPersonnel" d:DesignSource="{d:DesignInstance {x:Type Model:Personnel}, CreateList=True}"/>
+
+  </Window.Resources>
+  <Grid DataContext="{StaticResource dsGifsReceiptLog}">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition />
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    
+    <!--#region Botones-->
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+      <Button x:Name="btnClose" Content="Close" Width="100" Margin="10" Click="btnClose_Click"/>
+    </StackPanel>
+    <!--#endregion-->
+
+    <!--#region Grid-->
+    <DataGrid x:Name="grdLog" Grid.Row="1" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="5,5,5,5" RowDetailsVisibilityMode="VisibleWhenSelected" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="grdLog_SelectionChanged" IsReadOnly="True">
+      <DataGrid.Columns>
+        <DataGridTextColumn x:Name="goChangedByColumn" Binding="{Binding goChangedBy}" Header="By" Width="Auto" >
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Personnel who made the change"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="changedByNColumn" Binding="{Binding ChangedByN}" Header="Name" Width="Auto">
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Name of personnel that made the change"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="goIDColumn" Binding="{Binding goID, StringFormat=g}" Header="Update Date/Time" Width="Auto" />
+        <DataGridTextColumn x:Name="goDColumn" Binding="{Binding goD, StringFormat=d}" Header="Receipt D" Width="Auto">
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Receipt Date"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="gopeColumn" Binding="{Binding gope}" Header="Offered By" Width="Auto"/>
+        <DataGridTextColumn x:Name="offeredByNColumn" Binding="{Binding OfferedByN}" Header="Offered By Name" Width="Auto"/>
+        <DataGridTextColumn x:Name="goHostColumn" Binding="{Binding goHost}" Header="Host" Width="SizeToHeader">
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Host(ess)"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="hostNColumn" Binding="{Binding HostN}" Header="Host Name" Width="Auto">
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Host(ess) Name"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="goDepositColumn" Binding="{Binding goDeposit, StringFormat={}{0:0.00}}" Header="Deposit" Width="Auto"/>
+        <DataGridTextColumn x:Name="goBurnedColumn" Binding="{Binding goBurned, StringFormat={}{0:0.00}}" Header="go Burned" Width="Auto">
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Burned Deposit"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="gocuColumn" Binding="{Binding gocu}" Header="Currency" Width="Auto"/>
+        <DataGridTextColumn x:Name="ptNColumn" Binding="{Binding ptN}" Header="Payment Type" Width="Auto"/>
+        <DataGridTextColumn x:Name="goCXCPRDepositColumn" Binding="{Binding goCXCPRDeposit, StringFormat={}{0:0.00}}" Header="CXC PR D." Width="Auto">
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="CXC PR Deposit"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="goTaxiOutColumn" Binding="{Binding goTaxiOut, StringFormat={}{0:0.00}}" Header="Taxi Out" Width="Auto"/>
+        <DataGridTextColumn x:Name="goTotalGiftsColumn" Binding="{Binding goTotalGifts, StringFormat={}{0:0.00}}" Header="Total Gifts" Width="Auto"/>
+        <DataGridTextColumn x:Name="goctColumn" Binding="{Binding goct}" Header="Charge To" Width="Auto"/>
+        <DataGridTextColumn x:Name="goCXCGiftsColumn" Binding="{Binding goCXCGifts, StringFormat={}{0:0.00}}" Header="CXC Gifts" Width="Auto"/>
+        <DataGridTextColumn x:Name="goCXCAdjColumn" Binding="{Binding goCXCAdj, StringFormat={}{0:0.00}}" Header="CXC Adj." Width="Auto">
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="CXC Adjustment"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="goReimpresionColumn" Binding="{Binding goReimpresion}" Header="Re-Printed" Width="Auto"/>
+        <DataGridTextColumn x:Name="rmNColumn" Binding="{Binding rmN}" Header="Re-Print Motive" Width="SizeToHeader">
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Reimpresion Motive"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="goAuthorizedByColumn" Binding="{Binding goAuthorizedBy}" Header="Author. By" Width="Auto">
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Personnel who made the authorization"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="authorizedByNColumn" Binding="{Binding AuthorizedByN}" Header="Author. Name" Width="Auto">
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Personnel who made the authorization"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="goAmountPaidColumn" Binding="{Binding goAmountPaid}" Header="Paid" Width="Auto">
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Amount Paid"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="upNColumn" Binding="{Binding upN}" Header="Under Pay. Motive" Width="Auto">
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Under Payment Motive"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Name="goCancelDColumn" Binding="{Binding goCancelD, StringFormat=d}" Header="Under Pay. Motive" Width="Auto">
+          <DataGridTextColumn.HeaderStyle>
+            <Style TargetType="DataGridColumnHeader">
+              <Setter Property="ToolTip" Value="Cancelled Date"/>
+            </Style>
+          </DataGridTextColumn.HeaderStyle>
+        </DataGridTextColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <!--#endregion-->
+
+    <!--#region  Estatus Bar-->
+    <StatusBar x:Name="stbStatusBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Row="2" Margin="5,5,5,0" >
+      <StatusBarItem x:Name="StatusBarCap" Content="CAP"  HorizontalContentAlignment="Stretch" />
+      <StatusBarItem x:Name="StatusBarNum" Content="NUM"  HorizontalContentAlignment="Stretch" />
+      <StatusBarItem x:Name="StatusBarIns" Content="INS"  HorizontalContentAlignment="Stretch" />
+      <Separator />
+      <StatusBarItem x:Name="StatusBarReg" Content="0 / 0" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
+    </StatusBar>
+    <!--#endregion-->
+  </Grid>
+</Window>

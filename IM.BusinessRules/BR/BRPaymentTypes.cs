@@ -24,29 +24,36 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<PaymentType>> GetPaymentTypes(int status = -1, PaymentType paymentType = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var query = from pt in dbContext.PaymentTypes
-                    select pt;
-        if (status != -1)//Filtro por estatus
-        {
-          bool blnStatus = Convert.ToBoolean(status);
-          query = query.Where(pt => pt.ptA == blnStatus);
-        }
-        if (paymentType != null)
-        {
-          if (!string.IsNullOrWhiteSpace(paymentType.ptID))//filtro por ID
-          {
-            query = query.Where(pt => pt.ptID == paymentType.ptID);
-          }
+      List<PaymentType> Result = null;
 
-          if (!string.IsNullOrWhiteSpace(paymentType.ptN))//Filtro por descripcion
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var query = from pt in dbContext.PaymentTypes
+                      select pt;
+          if (status != -1)//Filtro por estatus
           {
-            query = query.Where(pt => pt.ptN.Contains(paymentType.ptN));
+            bool blnStatus = Convert.ToBoolean(status);
+            query = query.Where(pt => pt.ptA == blnStatus);
           }
+          if (paymentType != null)
+          {
+            if (!string.IsNullOrWhiteSpace(paymentType.ptID))//filtro por ID
+            {
+              query = query.Where(pt => pt.ptID == paymentType.ptID);
+            }
+
+            if (!string.IsNullOrWhiteSpace(paymentType.ptN))//Filtro por descripcion
+            {
+              query = query.Where(pt => pt.ptN.Contains(paymentType.ptN));
+            }
+          }
+          Result = query.OrderBy(pt => pt.ptN).ToList();
         }
-        return await query.OrderBy(pt => pt.ptN).ToListAsync();
-      }
+      });
+
+      return Result;
     }
     #endregion
 

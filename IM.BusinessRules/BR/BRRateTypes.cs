@@ -23,49 +23,57 @@ namespace IM.BusinessRules.BR
     /// [edgrodriguez] 08/03/2016 Created
     /// [vipacheco] 18/03/2016 Modified --> Se agregó parametro raIDMayorA para la busqueda mayor a ese ID especificado
     /// [emoguel] 13/04/2016 Modified--->Se modificaron los tipos de variable y nombe de los parametros ID ((RateType)rateType) y raA ((int)nStatus)
+    /// [vipacheco] 12/Mayo/2016 Modified --> Se corrigio un error de validacion por filtro
     /// [edgrodriguez] 21/05/2016 Modified. El método se volvió asincrónico.
+    /// [vipacheco] 06/Junio/2016 Modified --> Se modifico el metodo por Task.Run
     /// </history>
     public async static Task<List<RateType>> GetRateTypes(RateType rateType=null, int nStatus = -1, bool raIDMayorA = false, bool orderByraN = false)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<RateType> lsRateTypes = new List<RateType>();
+      await Task.Run(() =>
       {
-        var query = from ra in dbContext.RateTypes
-                    select ra;
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var query = from ra in dbContext.RateTypes
+                      select ra;
 
-        if(nStatus!=-1)//Filtro por estatus
-        {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(ra => ra.raA == blnStatus);
-        }
-        if(rateType!=null)//Validamos si tenemos un objeto
-        {
-          #region Filtro por ID
-          if (rateType.raID > 0)
+          if (nStatus != -1)//Filtro por estatus
           {
-            if (raIDMayorA)
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(ra => ra.raA == blnStatus);
+          }
+          if (rateType != null)//Validamos si tenemos un objeto
+          {
+            #region Filtro por ID
+            if (rateType.raID > 0)
             {
-              query = query.Where(ra => ra.raID > rateType.raID);//id mayor a
+              if (raIDMayorA)
+              {
+                query = query.Where(ra => ra.raID > rateType.raID);//id mayor a
+              }
+              else
+              {
+                query = query.Where(ra => ra.raID == rateType.raID);//id igual a
+              }
             }
-            else
+            #endregion
+
+            if (!string.IsNullOrWhiteSpace(rateType.raN))//Filtro por descripción
             {
-              query = query.Where(ra => ra.raID == rateType.raID);//id igual a
+              query = query.Where(ra => ra.raN.Contains(rateType.raN));
             }
           }
-          #endregion
 
-          if(!string.IsNullOrWhiteSpace(rateType.raN))//Filtro por descripción
+          if (orderByraN)//ordenar
           {
-            query = query.Where(ra => ra.raN.Contains(rateType.raN));
+            query = query.OrderBy(ra => ra.raN);
           }
+
+          lsRateTypes = query.ToList();
         }
+      });
 
-        if(orderByraN)//ordenar
-        {
-          query = query.OrderBy(ra => ra.raN);
-        }        
-
-        return await query.ToListAsync();
-      }
+      return lsRateTypes;
     }
     #endregion
   }
