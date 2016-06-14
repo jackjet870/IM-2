@@ -5553,44 +5553,6 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_RptGiftsKardex", dateFromParameter, dateToParameter, warehouseParameter, giftsParameter);
         }
     
-        public virtual int USP_OR_RptManifestByLSRange(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var salesRoomParameter = salesRoom != null ?
-                new ObjectParameter("SalesRoom", salesRoom) :
-                new ObjectParameter("SalesRoom", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_RptManifestByLSRange", dateFromParameter, dateToParameter, salesRoomParameter);
-        }
-    
-        public virtual int USP_OR_RptManifestRange(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string program)
-        {
-            var dateFromParameter = dateFrom.HasValue ?
-                new ObjectParameter("DateFrom", dateFrom) :
-                new ObjectParameter("DateFrom", typeof(System.DateTime));
-    
-            var dateToParameter = dateTo.HasValue ?
-                new ObjectParameter("DateTo", dateTo) :
-                new ObjectParameter("DateTo", typeof(System.DateTime));
-    
-            var salesRoomParameter = salesRoom != null ?
-                new ObjectParameter("SalesRoom", salesRoom) :
-                new ObjectParameter("SalesRoom", typeof(string));
-    
-            var programParameter = program != null ?
-                new ObjectParameter("Program", program) :
-                new ObjectParameter("Program", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_RptManifestRange", dateFromParameter, dateToParameter, salesRoomParameter, programParameter);
-        }
-    
         public virtual ObjectResult<RptGiftsKardex> USP_IM_RptGiftsKardex(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string warehouse, string gifts)
         {
             var dateFromParameter = dateFrom.HasValue ?
