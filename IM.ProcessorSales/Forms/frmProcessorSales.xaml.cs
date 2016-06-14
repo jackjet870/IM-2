@@ -63,7 +63,7 @@ namespace IM.ProcessorSales.Forms
     public bool groupedByTeams, includeAllSalesmen, pr, liner, closer, exit;
 
     #endregion Publicos
-    
+
     #endregion Atributos
 
     #region Metodos
@@ -125,7 +125,7 @@ namespace IM.ProcessorSales.Forms
     #endregion
 
     #region SetUpIniField
-    
+
     /// <summary>
     /// Carga los valores de un archivo de configuracion
     /// </summary>
@@ -143,7 +143,7 @@ namespace IM.ProcessorSales.Forms
       _salesman = _iniFieldHelper.readText(FilterDate, "Salesman", string.Empty);
       //Se limpia el archivo de confiuguracion
       _iniFieldHelper = null;
-    } 
+    }
 
     #endregion
 
@@ -166,11 +166,10 @@ namespace IM.ProcessorSales.Forms
 
       _allSalesRoom = false;
 
-
       // Obtenemos los valores de un archivo de configuracion
       SetUpIniField();
       //roles de vendedores
-      pr = liner = closer= exit = true;
+      pr = liner = closer = exit = true;
       //segmentos y programas
       _allSegments = _allPrograms = true;
     }
@@ -183,7 +182,7 @@ namespace IM.ProcessorSales.Forms
     /// <history>
     /// [ecanul] 05/05/2016 Created
     /// </history>
-    private void ShowReportBySalesRoom()
+    private async void ShowReportBySalesRoom()
     {
       FileInfo file = null;
       //Deberia validarse con 
@@ -220,13 +219,15 @@ namespace IM.ProcessorSales.Forms
       {
         #region Manifest
         case EnumRptRoomSales.Manifest:
-
+          list.AddRange(await BRReportsBySalesRoom.GetRptManiest(dtmStart, dtmEnd, lstSalesRoom));
+          if (list.Count > 0)
+            file = Reports.RptManifest(reporteName, dateRangeFileName, filters, list.Cast<RptManifest>().ToList(), dtmStart, dtmEnd);
           break;
         #endregion
 
         #region StatsByLocation
         case EnumRptRoomSales.StatsByLocation:
-          list.AddRange(BRReportsBySalesRoom.GetRptStatisticsByLocation(dtmStart, dtmEnd, lstSalesRoom));
+          list.AddRange(await BRReportsBySalesRoom.GetRptStatisticsByLocation(dtmStart, dtmEnd, lstSalesRoom));
           if (list.Count > 0)
             file = Reports.RptStatisticsByLocation(reporteName, dateRangeFileName, filters, list.Cast<RptStatisticsByLocation>().ToList());
           break;
@@ -234,7 +235,7 @@ namespace IM.ProcessorSales.Forms
 
         #region StatsByLocationMonthly
         case EnumRptRoomSales.StatsByLocationMonthly:
-          list.AddRange(BRReportsBySalesRoom.GetRptStaticsByLocationMonthly(dtmStart, dtmEnd, lstSalesRoom));
+          list.AddRange(await BRReportsBySalesRoom.GetRptStaticsByLocationMonthly(dtmStart, dtmEnd, lstSalesRoom));
           if (list.Count > 0)
             file = Reports.RptStaticsByLocationMonthly(reporteName, dateRangeFileName, filters, list.Cast<RptStatisticsByLocationMonthly>().ToList());
           break;
@@ -242,7 +243,7 @@ namespace IM.ProcessorSales.Forms
 
         #region SalesByLocationMonthly
         case EnumRptRoomSales.SalesByLocationMonthly:
-          list.AddRange(BRReportsBySalesRoom.GetRptSalesByLocationMonthly(dtmStart, dtmEnd, lstSalesRoom));
+          list.AddRange(await BRReportsBySalesRoom.GetRptSalesByLocationMonthly(dtmStart, dtmEnd, lstSalesRoom));
           if (list.Count > 0)
             file = Reports.RptSalesByLocationMonthly(reporteName, dateRangeFileName, filters, list.Cast<RptSalesByLocationMonthly>().ToList());
           break;
@@ -250,7 +251,7 @@ namespace IM.ProcessorSales.Forms
 
         #region StatsByLocationAndSalesRoom
         case EnumRptRoomSales.StatsByLocationAndSalesRoom:
-          list.AddRange(BRReportsBySalesRoom.GetRptStatisticsBySalesRoomLocation(dtmStart, dtmEnd, lstSalesRoom));
+          list.AddRange(await BRReportsBySalesRoom.GetRptStatisticsBySalesRoomLocation(dtmStart, dtmEnd, lstSalesRoom));
           if (list.Count > 0)
             file = Reports.RptStatisticsBySalesRoomLocation(reporteName, dateRangeFileName, filters, list.Cast<RptStatisticsBySalesRoomLocation>().ToList());
           break;
@@ -263,7 +264,7 @@ namespace IM.ProcessorSales.Forms
           filters.Add(new Tuple<string, string>("Sales Room", string.Join("/", lstGoals.Select(c => c.salesRoom.srID).ToList())));
           #endregion
 
-          list.AddRange(BRReportsBySalesRoom.GetRptConcentrateDailySales(dtmStart, dtmEnd, lstGoals.Select(c => c.salesRoom.srID).ToList()));
+          list.AddRange(await BRReportsBySalesRoom.GetRptConcentrateDailySales(dtmStart, dtmEnd, lstGoals.Select(c => c.salesRoom.srID).ToList()));
 
           if (list.Count > 0)
             file = Reports.RptConcentrateDailySales(reporteName, dateRangeFileName, dtmEnd, filters,
@@ -273,8 +274,8 @@ namespace IM.ProcessorSales.Forms
 
         #region DailySales
         case EnumRptRoomSales.DailySales:
-          list.AddRange(BRReportsBySalesRoom.GetRptDailySalesDetail(dtmStart, dtmEnd, lstSalesRoom));
-          List<RptDailySalesHeader> lstHeader = BRReportsBySalesRoom.GetRptDailySalesHeader(dtmStart, dtmEnd, lstSalesRoom);
+          list.AddRange(await BRReportsBySalesRoom.GetRptDailySalesDetail(dtmStart, dtmEnd, lstSalesRoom));
+          List<RptDailySalesHeader> lstHeader = await BRReportsBySalesRoom.GetRptDailySalesHeader(dtmStart, dtmEnd, lstSalesRoom);
           if (list.Count > 0 && lstHeader.Count > 0)
             file = Reports.RptDailySales(reporteName, dateRange, filters, list.Cast<RptDailySalesDetail>().ToList(), 
               lstHeader, dtmStart,dtmEnd,goal);

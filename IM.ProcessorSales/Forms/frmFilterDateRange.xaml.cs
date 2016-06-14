@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using IM.ProcessorSales.Classes;
 using Xceed.Wpf.Toolkit;
+using System.Windows.Input;
 
 namespace IM.ProcessorSales.Forms
 {
@@ -19,7 +20,6 @@ namespace IM.ProcessorSales.Forms
   public partial class frmFilterDateRange
   {
     #region Atributos
-
     //BANDERA PARA EVITAR CONFLICTO ENTRE LOS EVENTOS txtSalesman_TextChanged Y cmbSalesman_SelectionChanged 
     private bool _changecmb = true;
     private DateTime _dtStart;
@@ -38,8 +38,6 @@ namespace IM.ProcessorSales.Forms
 
     public frmProcessorSales frmPrs = new frmProcessorSales();
     public bool ok;
-
-
     #endregion
 
     #region Metodos
@@ -167,9 +165,9 @@ namespace IM.ProcessorSales.Forms
     /// <history>
     /// [ecanul] 02/05/2016 Created
     /// </history>
-    private void LoadEfficiencyWeek()
+    private async void LoadEfficiencyWeek()
     {
-      _lstWeeks = BREfficiency.GetEffificencyBySr(_salesRoom, _dtStart, _dtEnd);
+      _lstWeeks = await BREfficiency.GetEffificencyBySr(_salesRoom, _dtStart, _dtEnd);
       _lstWeeksHelpp = new List<WeeksHelpper>();
       foreach (var week in _lstWeeks)
       {
@@ -201,10 +199,10 @@ namespace IM.ProcessorSales.Forms
     /// [ecanul] 26/04/2016 Created
     /// [edgrodriguez] 21/05/2016 Modified. El metodo GetPrograms se volvió asincrónico.
     /// </history>
-    private async void ConfigureGrids(bool sr, bool programs, bool segments, bool multidate, bool concentrate, bool weeks)
+    private async void ConfigureGrids(bool sr, bool programs, bool segments, bool multidate, bool concentrate, bool weeks,
+      bool onlyOneRegister, bool allPrograms = false, bool allSegments = false)
     {
       #region Visibilidad de los grids
-
       //Visibilidad de los grids
       pnlSalesRoom.Visibility = (sr) ? Visibility.Visible : Visibility.Collapsed;
       pnlProggrams.Visibility = (programs) ? Visibility.Visible : Visibility.Collapsed;
@@ -235,7 +233,7 @@ namespace IM.ProcessorSales.Forms
       //Si tiene Segments
       if (segments)
       {
-        _lstSegmentByAgencies = BRSegmentsByAgency.GetSegMentsByAgency();
+        _lstSegmentByAgencies = await BRSegmentsByAgency.GetSegMentsByAgency();
         dtgSegments.ItemsSource = _lstSegmentByAgencies;
       }
       #endregion
@@ -244,7 +242,6 @@ namespace IM.ProcessorSales.Forms
       //Si es concentrate
       if (concentrate)
       {
-//        frmPrs.lstSalesRoom = dtgSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(x => x.srID).ToList();
         _lstGoals = new List<GoalsHelpper>();
         foreach (var item in _lstSalesRoomByUsers)
         {
@@ -290,7 +287,10 @@ namespace IM.ProcessorSales.Forms
       statusBarNumSalesRoom.Content = (sr) ? $"{0}/{_lstSalesRoomByUsers.Count} Sales Rooms selected" : string.Empty;
       statusBarNumPg.Content = (programs) ? $"{0}/{_lstPrograms.Count} Programs selected" : string.Empty;
       statusBarNumSegments.Content = (segments) ? $"{0}/{_lstSegmentByAgencies.Count} Segments selected" : string.Empty;
-
+      //Toma la configuracion del padre
+      LoadUserFilters();
+      //configura el check all de los grids
+      ConfigureSelection(onlyOneRegister, allPrograms, allSegments);
     }
 
     #endregion
@@ -320,6 +320,13 @@ namespace IM.ProcessorSales.Forms
 
     #endregion
 
+    private async void LoadSalesman()
+    {
+      _lstPersonnels = await BRPersonnel.GetPersonnel("All", "All", "PR,LINER,CLOSER,EXIT", 1, "All", "=",
+         EnumPermisionLevel.None, "All");
+      cmbSalesman.ItemsSource = _lstPersonnels;
+    }
+
     #region ConfigureFilters
 
     /// <summary>
@@ -343,7 +350,7 @@ namespace IM.ProcessorSales.Forms
     /// [ecanul] 27/04/2016 Created
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private async void ConfigureFilters(EnumBasedOnArrival? basedOnArrival, EnumQuinellas? quinellas, bool shGroup, bool group, bool shAllSalesmen, bool allSalesmen, bool isGoal, decimal? goal,
+    private void ConfigureFilters(EnumBasedOnArrival? basedOnArrival, EnumQuinellas? quinellas, bool shGroup, bool group, bool shAllSalesmen, bool allSalesmen, bool isGoal, decimal? goal,
       //seccion salesman
       bool isSalesman, bool shRoles, bool pr, bool liner, bool closer, bool exit)
     {
@@ -376,9 +383,7 @@ namespace IM.ProcessorSales.Forms
       if (isSalesman)
       {
         //cmb
-        _lstPersonnels =await BRPersonnel.GetPersonnel("All", "All", "PR,LINER,CLOSER,EXIT", 1, "All", "=",
-          EnumPermisionLevel.None, "All");
-        cmbSalesman.ItemsSource = _lstPersonnels;
+        LoadSalesman();
         //roles
         if (shRoles)
         {
@@ -409,11 +414,8 @@ namespace IM.ProcessorSales.Forms
     {
       if (pnlSalesRoom.Visibility == Visibility.Visible && !string.IsNullOrEmpty(_salesRoom))
       {
-        /*var sel = (from sr in _lstSalesRoomByUsers where sr.srID == _salesRoom select sr).FirstOrDefault();
-        dtgSalesRoom.SelectedItem = sel;*/
         dtgSalesRoom.SelectedItem = (from sr in _lstSalesRoomByUsers where sr.srID == _salesRoom select sr).FirstOrDefault();
       }
-      //  frmPrs.lstSalesRoom.ForEach(c => dtgSalesRoom.SelectedItems.Add(_lstSalesRoomByUsers.SingleOrDefault(x => x.srID == c)));
 
       if (grdGoal.Visibility == Visibility.Visible && frmPrs.goal != 0)
         txtGoal.Text = frmPrs.goal.ToString();
@@ -554,15 +556,12 @@ namespace IM.ProcessorSales.Forms
       _onePeriod = onePeriod;
       //Configura Fechas
       ConfigureDates(oneDate, period);
-      //configura la visibilidad de los grids
-      ConfigureGrids(shSr, shPrograms, shSegments, shMultiDateRanges, shConcentrate, shWeeks);
-      //configura el check all de los grids
-      ConfigureSelection(onlyOneRegister,allProgams,allSegments);
       //configura la visibilidad de los filtros 
       ConfigureFilters(basedOnArrival, quinellas, shGroupsByTeams, groupByTeams, shAllSalesmen, allSalesmen, isGoal,
         goal, isBySalesman, shRoles, pr, liner, closer, exit);
-      //Toma la configuracion del padre
-      LoadUserFilters();
+      //configura Los grids y los carga
+      ConfigureGrids(shSr, shPrograms, shSegments, shMultiDateRanges, shConcentrate, shWeeks, onlyOneRegister, allProgams, allSegments);
+      
     }
 
     #endregion ConfigForm
@@ -576,13 +575,39 @@ namespace IM.ProcessorSales.Forms
     public frmFilterDateRange()
     {
       InitializeComponent();
-      
+      PreviewKeyDown += Close_KeyPreviewESC;
     }
-
     #endregion
 
     #region Eventos del Formulario
 
+    #region Botones
+    #region btnCancel_Click
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+      ok = false;
+      Close();
+    }
+    #endregion
+
+    #region btnOk_Click
+    private void btnOk_Click(object sender, RoutedEventArgs e)
+    {
+      string message = ValidateFields();
+      if (message == "" || message == string.Empty)
+      {
+        ok = true;
+        SaveFilterValues();
+        Close();
+      }
+      else
+        UIHelper.ShowMessage(message);
+    }
+    #endregion
+
+    #endregion
+
+    #region Cheks
     #region chbx_Checked
 
     /// <summary>
@@ -620,6 +645,18 @@ namespace IM.ProcessorSales.Forms
 
     #endregion
 
+    #region chkSalesRoom_Checked
+    private void chkSalesRoom_Checked(object sender, RoutedEventArgs e)
+    {
+      int count = _lstGoals.Count(item => item.isCheck);
+      statusBarNumSalesRoomConcentrate.Content = $"{count}/{dtgSalesRoomConcentrate.Items.Count} Sales Rooms selected";
+    }
+    #endregion
+
+    #endregion
+
+    #region Grids
+
     #region dtgSalesRoom_SelectionChanged
     private void dtgSalesRoom_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -641,43 +678,25 @@ namespace IM.ProcessorSales.Forms
     }
     #endregion
 
-    #region chkSalesRoom_Checked
-    private void chkSalesRoom_Checked(object sender, RoutedEventArgs e)
-    {
-      int count = _lstGoals.Count(item => item.isCheck);
-      statusBarNumSalesRoomConcentrate.Content = $"{count}/{dtgSalesRoomConcentrate.Items.Count} Sales Rooms selected";
-    }
     #endregion
 
-    #region btnCancel_Click
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    #region TextBox
+    #region txtSalesman_TextChanged
+    private void txtSalesman_TextChanged(object sender, TextChangedEventArgs e)
     {
-      ok = false;
-      Close();
-    }
-    #endregion
-
-    #region btnOk_Click
-    private void btnOk_Click(object sender, RoutedEventArgs e)
-    {
-      string message = ValidateFields();
-      if (message == "" || message == string.Empty)
-      {
-        ok = true;
-        SaveFilterValues();
-        Close();
-      }
-      else
-        UIHelper.ShowMessage(message);
+      cmbSalesman.SelectedValue = txtSalesman.Text;
+      _changecmb = false;
     }
     #endregion
 
     #region txtGoal_PreviewTextInput
-    private void txtGoal_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+    private void txtGoal_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
       if (!char.IsDigit(e.Text, e.Text.Length - 1))
         e.Handled = true;
     }
+    #endregion 
+
     #endregion
 
     #region cmbSalesman_SelectionChanged
@@ -689,15 +708,7 @@ namespace IM.ProcessorSales.Forms
         _changecmb = true;
     }
     #endregion
-
-    #region txtSalesman_TextChanged
-    private void txtSalesman_TextChanged(object sender, TextChangedEventArgs e)
-    {
-      cmbSalesman.SelectedValue = txtSalesman.Text;
-      _changecmb = false;
-    } 
-    #endregion
-
+    
     #region cmbSalesman_PreviewMouseDown
 
     /// <summary>
@@ -831,11 +842,17 @@ namespace IM.ProcessorSales.Forms
       if (picker == null) return;
       DateTime date = (DateTime)picker.Value;
       ChangeDates(date);
-    } 
+    }
+    #endregion
+
+    #region Close_KeyPreviewESC
+    private void Close_KeyPreviewESC(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Escape)
+        Close();
+    }
     #endregion
 
     #endregion
-
-
   }
 }

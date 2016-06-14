@@ -6,7 +6,6 @@ using Microsoft.Win32;
 using OfficeOpenXml;
 using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Style;
-using OfficeOpenXml.Style.XmlAccess;
 using OfficeOpenXml.Table;
 using OfficeOpenXml.Table.PivotTable;
 using OfficeOpenXml.VBA;
@@ -64,11 +63,11 @@ namespace IM.Base.Helpers
     {
       #region Variables Atributos, Propiedades
 
-      ExcelPackage pk = new ExcelPackage();
+      var pk = new ExcelPackage();
       //Preparamos la hoja donde escribiremos
-      ExcelWorksheet ws = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
+      var ws = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
       //Filas Para los filtros
-      int filasTotalesFiltros = 0;
+      var filasTotalesFiltros = 0;
 
       //Renombramos las columnas.
       dt.Columns.Cast<DataColumn>().ToList().ForEach(c =>
@@ -91,9 +90,9 @@ namespace IM.Base.Helpers
       ws.InsertRow(filasTotalesFiltros + 3, dt.Rows.Count);
 
       //Agregamos el contenido empezando en la fila
-      ExcelRangeBase range = ws.Cells[filasTotalesFiltros + 1, 1].LoadFromDataTable(dt, true);
+      var range = ws.Cells[filasTotalesFiltros + 1, 1].LoadFromDataTable(dt, true);
       //El contenido lo convertimos a una tabla
-      ExcelTable table = ws.Tables.Add(range, null);
+      var table = ws.Tables.Add(range, null);
       table.TableStyle = TableStyles.Medium2;
 
       //Formateamos la tabla
@@ -104,10 +103,10 @@ namespace IM.Base.Helpers
       {
         table.ShowTotal = true;
         table.Columns[0].TotalsRowLabel = "TOTAL";
-        for (int i = 1; i < formatColumns.Count; i++)
+        for (var i = 1; i < formatColumns.Count; i++)
         {
-          ExcelTableColumn c = table.Columns[i];
-          ExcelFormatTable format = formatColumns[i];
+          var c = table.Columns[i];
+          var format = formatColumns[i];
           if (format.TotalsRowFunction != RowFunctions.None)
           {
             c.TotalsRowFunction = format.TotalsRowFunction;
@@ -146,7 +145,7 @@ namespace IM.Base.Helpers
       FileInfo pathFinalFile;
       if (fileFullPath == null)
       {
-        string suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
+        var suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
         pathFinalFile = SaveExcel(pk, suggestedFilaName);
       }
       else
@@ -193,14 +192,14 @@ namespace IM.Base.Helpers
       List<ExcelFormatTable> formatColumns, bool showRowGrandTotal = false, bool showColumnGrandTotal = false, bool showRowHeaders = false,
       List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0, string fileFullPath = null)
     {
-      ExcelPackage pk = new ExcelPackage();
+      var pk = new ExcelPackage();
       //Preparamos la hoja donde escribiremos
       //la tabla dinamica.
-      ExcelWorksheet wsPivot = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", ""));
-      ExcelWorksheet wsData = pk.Workbook.Worksheets.Add("Hoja0");
+      var wsPivot = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", ""));
+      var wsData = pk.Workbook.Worksheets.Add("Hoja0");
       wsData.Hidden = eWorkSheetHidden.Hidden;
 
-      int totalFilterRows = 0;
+      var totalFilterRows = 0;
       CreateReportHeader(filters, reportName, ref wsPivot, ref totalFilterRows, extraFieldHeader, numRows);
 
       //Renombramos las columnas.
@@ -210,9 +209,9 @@ namespace IM.Base.Helpers
       });
 
       //Cargamos los datos en la hoja0.
-      ExcelRangeBase rangeTable = wsData.Cells["A1"].LoadFromDataTable(dtData, true);
+      var rangeTable = wsData.Cells["A1"].LoadFromDataTable(dtData, true);
       //El contenido lo convertimos a una tabla
-      ExcelTable table = wsData.Tables.Add(rangeTable, null);
+      var table = wsData.Tables.Add(rangeTable, null);
       table.TableStyle = TableStyles
 
         .None;
@@ -220,7 +219,7 @@ namespace IM.Base.Helpers
       SetFormatTable(formatColumns.Where(c => !(c.Axis == ePivotFieldAxis.Values && !string.IsNullOrEmpty(c.Formula))).ToList(), ref table);
 
       //Cargamos la tabla dinamica.
-      ExcelPivotTable pivotTable = wsPivot.PivotTables.Add(wsPivot.Cells[totalFilterRows + 1, 1],
+      var pivotTable = wsPivot.PivotTables.Add(wsPivot.Cells[totalFilterRows + 1, 1],
         wsData.Cells[1, 1, wsData.Dimension.End.Row, wsData.Dimension.End.Column], Regex.Replace(reportName, "[^a-zA-Z0-9_]+", ""));
 
       if (isPivot)
@@ -250,7 +249,7 @@ namespace IM.Base.Helpers
 
         pivotTable.MultipleFieldFilters = true;
 
-        ExcelFormatTable fistsRow = formatColumns.Where(c => c.Axis == ePivotFieldAxis.Row && !c.Compact)
+        var fistsRow = formatColumns.Where(c => c.Axis == ePivotFieldAxis.Row && !c.Compact)
           .OrderBy(c => c.Order).FirstOrDefault();
         pivotTable.RowHeaderCaption = fistsRow != null ? fistsRow.Title : string.Empty;
 
@@ -275,7 +274,7 @@ namespace IM.Base.Helpers
         .OrderBy(c => c.Order)
         .ToList().ForEach(col =>
         {
-          ExcelPivotTableField ptfField = pivotTable.ColumnFields.Add(pivotTable.Fields[col.PropertyName ?? col.Title]);
+          var ptfField = pivotTable.ColumnFields.Add(pivotTable.Fields[col.PropertyName ?? col.Title]);
 
           if (!isPivot) //Si se va manejar el formato tabular.
             ptfField.ShowAll = false;
@@ -288,15 +287,15 @@ namespace IM.Base.Helpers
           if (col.Format != EnumFormatTypeExcel.General)
           {
             //Formato
-            PropertyInfo highlightedItemProperty = ptfField.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "TopNode");
-            XmlElement ptfFieldXml = (XmlElement)highlightedItemProperty.GetValue(ptfField, null);
+            var highlightedItemProperty = ptfField.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "TopNode");
+            var ptfFieldXml = (XmlElement)highlightedItemProperty.GetValue(ptfField, null);
             var styles = pivotTable.WorkSheet.Workbook.Styles;
-            ExcelNumberFormatXml nFormatXml = styles.NumberFormats.ToList().Find(x => x.Format == GetFormat(col.Format));
+            var nFormatXml = styles.NumberFormats.ToList().Find(x => x.Format == GetFormat(col.Format));
 
             //Si existe el Formato
             if (nFormatXml != null)
             {
-              XmlAttribute numFmtIdAttrib = pivotTable.PivotTableXml.CreateAttribute("numFmtId");
+              var numFmtIdAttrib = pivotTable.PivotTableXml.CreateAttribute("numFmtId");
               numFmtIdAttrib.Value = nFormatXml.NumFmtId.ToString();
               ptfFieldXml.Attributes.Append(numFmtIdAttrib);
             }
@@ -311,7 +310,7 @@ namespace IM.Base.Helpers
         .ToList().ForEach(rowFormat =>
         {
           //Lo Agregamos a la lista de Filas.
-          ExcelPivotTableField ptfField = pivotTable.RowFields.Add(pivotTable.Fields[rowFormat.PropertyName ?? rowFormat.Title]);
+          var ptfField = pivotTable.RowFields.Add(pivotTable.Fields[rowFormat.PropertyName ?? rowFormat.Title]);
 
           if (!isPivot) //Si se va manejar el formato tabular.
           {
@@ -329,15 +328,15 @@ namespace IM.Base.Helpers
           if (rowFormat.Format != EnumFormatTypeExcel.General)
           {
             //Formato
-            PropertyInfo highlightedItemProperty = ptfField.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "TopNode");
-            XmlElement ptfFieldXml = (XmlElement)highlightedItemProperty.GetValue(ptfField, null);
+            var highlightedItemProperty = ptfField.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "TopNode");
+            var ptfFieldXml = (XmlElement)highlightedItemProperty.GetValue(ptfField, null);
             var styles = pivotTable.WorkSheet.Workbook.Styles;
-            ExcelNumberFormatXml nFormatXml = styles.NumberFormats.ToList().Find(x => x.Format == GetFormat(rowFormat.Format));
+            var nFormatXml = styles.NumberFormats.ToList().Find(x => x.Format == GetFormat(rowFormat.Format));
 
             //Si existe el Formato
             if (nFormatXml != null)
             {
-              XmlAttribute numFmtIdAttrib = pivotTable.PivotTableXml.CreateAttribute("numFmtId");
+              var numFmtIdAttrib = pivotTable.PivotTableXml.CreateAttribute("numFmtId");
               numFmtIdAttrib.Value = nFormatXml.NumFmtId.ToString();
               ptfFieldXml.Attributes.Append(numFmtIdAttrib);
             }
@@ -350,9 +349,9 @@ namespace IM.Base.Helpers
           if (rowFormat.InsertBlankRow)
           {
             //Insertar salto de linea
-            PropertyInfo highlightedItemProperty = ptfField.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "TopNode");
-            XmlElement ptfFieldXml = (XmlElement)highlightedItemProperty.GetValue(ptfField, null);
-            XmlAttribute insertBlankRowIdAttrib = pivotTable.PivotTableXml.CreateAttribute("insertBlankRow");
+            var highlightedItemProperty = ptfField.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).Single(pi => pi.Name == "TopNode");
+            var ptfFieldXml = (XmlElement)highlightedItemProperty.GetValue(ptfField, null);
+            var insertBlankRowIdAttrib = pivotTable.PivotTableXml.CreateAttribute("insertBlankRow");
             insertBlankRowIdAttrib.Value = "1";
             ptfFieldXml.Attributes.Append(insertBlankRowIdAttrib);
           }
@@ -365,7 +364,7 @@ namespace IM.Base.Helpers
         .OrderBy(c => c.Order)
         .ToList().ForEach(valueFormat =>
         {
-          ExcelPivotTableDataField valueField = pivotTable.DataFields.Add(pivotTable.Fields[valueFormat.PropertyName ?? valueFormat.Title]);
+          var valueField = pivotTable.DataFields.Add(pivotTable.Fields[valueFormat.PropertyName ?? valueFormat.Title]);
 
           if (!isPivot)
           {
@@ -390,29 +389,29 @@ namespace IM.Base.Helpers
       {
         var formatHeaders = formatColumns.Where(c => c.SuperHeader != null).ToList();
 
-        int startColumn = pivotTable.Address.Start.Column;
-        int startRow = pivotTable.Address.Start.Row - 1;
+        var startColumn = pivotTable.Address.Start.Column;
+        var startRow = pivotTable.Address.Start.Row - 1;
 
-        int rowCount = pivotTable.RowFields.Count(c => !(c.Compact && c.Outline));
+        var rowCount = pivotTable.RowFields.Count(c => !(c.Compact && c.Outline));
 
         var formatHeadersValue = formatHeaders.Where(c => c.Axis == ePivotFieldAxis.Values).OrderBy(c => c.Order).GroupBy(c => c.SuperHeader).ToList();
+        var columnasAgrupadas = new List<ExcelFormatTable>();
         formatHeadersValue.ForEach(v =>
         {
-          List<ExcelFormatTable> columnasAgrupadas = new List<ExcelFormatTable>();
-          int fromCol = 0;
-          for (int i = 0; i < v.Count(); i++)
+          var fromCol = 0;
+          for (var i = 0; i < v.Count(); i++)
           {
-            ExcelFormatTable value = v.ElementAt(i);
+            var value = v.ElementAt(i);
             columnasAgrupadas.Add(value);
             if (fromCol == 0)
               fromCol = value.Order + rowCount + startColumn;
 
-            ExcelFormatTable valueNext = v.ElementAtOrDefault(i + 1);
+            var valueNext = v.ElementAtOrDefault(i + 1);
             if (valueNext != null && valueNext.Order == value.Order + 1) continue;
 
-            int toCol = value.Order + rowCount + startColumn;
+            var toCol = value.Order + rowCount + startColumn;
 
-            using (ExcelRange range = wsPivot.Cells[startRow, fromCol, startRow, toCol])
+            using (var range = wsPivot.Cells[startRow, fromCol, startRow, toCol])
             {
               range.Value = value.SuperHeader;
               range.Style.Font.Bold = true;
@@ -432,7 +431,7 @@ namespace IM.Base.Helpers
       FileInfo pathFinalFile;
       if (fileFullPath == null)
       {
-        string suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
+        var suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
         pathFinalFile = SaveExcel(pk, suggestedFilaName);
       }
       else
@@ -462,42 +461,60 @@ namespace IM.Base.Helpers
     /// <returns> FileInfo </returns>
     /// <history>
     ///   [edgrodriguez] 28/03/2016  Created.
+    ///   [edgrodriguez] 24/05/2016 Modified. Se agrega agrupaciones. Calculo de Subtotales por grupo. Y estilos.
     ///   [aalcocer]     06/06/2016 Modified. Se agrega la opcion de generar el reporte en de ruta completa del archivo
+    ///   [ecanul] 13/06/2016 Modified. Se agrego la impresion de Superheaders
     /// </history>
     public static FileInfo CreateExcelCustom(DataTable dtTable, List<Tuple<string, string>> filters, string reportName,
       string dateRangeFileName, List<ExcelFormatTable> formatTable, bool blnColumnGrandTotal = false,
       bool blnRowGrandTotal = false, bool blnShowSubtotal = false,
       List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0, string fileFullPath = null)
     {
-      ExcelPackage pk = new ExcelPackage();
+      var pk = new ExcelPackage();
       var wsData = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
-      int totalFilterRows = 0;
+      var totalFilterRows = 0;
 
       //Creamos el encabezado
       CreateReportHeader(filters, reportName, ref wsData, ref totalFilterRows, extraFieldHeader, numRows);
 
-      int rowNumber = totalFilterRows + 1;
-      int columnNumber = 1;
+      var rowNumber = totalFilterRows + 1;
 
       //Obtenemos las columnas y las ordenamos.
-      var formatTableColumns = formatTable.Where(c => !c.IsGroup && c.Order > 0)
+      var formatTableColumns = formatTable.Where(c => !c.IsGroup && c.Order > 0 && c.IsVisible)
         .OrderBy(row => row.Order).ToList();
 
       #region Creando Headers
-
       //Agregando los headers de acuerdo al orden configurado.
       //descartando los campos configurados como grupos.
-      formatTableColumns
-        .ForEach(c =>
+      dtTable.Columns.OfType<DataColumn>().ToList().ForEach(c =>
+      {
+        var format = formatTable.FirstOrDefault(f => f.PropertyName == c.ColumnName);
+
+        if (format != null && format.Order > 0 && format.IsVisible && !format.IsGroup)
         {
-          wsData.Cells[rowNumber, columnNumber].Value = c.Title;
-          wsData.Cells[rowNumber, columnNumber].Style.Font.Bold = true;
-          wsData.Cells[rowNumber, columnNumber].Style.Font.Size = 12;
-          columnNumber++;
-        });
+          dtTable.Columns[c.ColumnName].SetOrdinal(format.Order - 1);
+          using (var range = wsData.Cells[rowNumber, format.Order])
+          {
+            range.Value = format.Title;
+            range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            range.Style.Font.Bold = true;
+            range.Style.Font.Size = 12;
+            range.Style.Fill.BackgroundColor.SetColor(Color.Black);
+            range.Style.Font.Color.SetColor(Color.White);
+            range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.White);
+          }
+        }
+        else if (format != null && !format.IsVisible)
+        {
+          dtTable.Columns.Remove(c);
+        }
+        else
+          dtTable.Columns[c.ColumnName].SetOrdinal(dtTable.Columns.Count - 1);
+      });
+      rowNumber++;
+      #endregion
 
-      #endregion Creando Headers
-
+      #region CreteExcel
       //Si existe algun grupo
       if (formatTable.Any(c => c.IsGroup))
       {
@@ -506,18 +523,17 @@ namespace IM.Base.Helpers
         #region Formato para encabezados de grupo
 
         //Formato para los encabezados de grupo.
-        List<ExcelFormatGroupHeaders> backgroundColorGroups = new List<ExcelFormatGroupHeaders> {
-            new ExcelFormatGroupHeaders { BackGroundColor="#004E48", FontBold = true, TextAligment = ExcelHorizontalAlignment.Center },
+        var backgroundColorGroups = new List<ExcelFormatGroupHeaders> {
+            new ExcelFormatGroupHeaders { BackGroundColor="#004E48", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
             new ExcelFormatGroupHeaders { BackGroundColor="#147F79", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
             new ExcelFormatGroupHeaders { BackGroundColor="#2D8B85", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
             new ExcelFormatGroupHeaders { BackGroundColor="#4CA09A", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
             //Formato para la fila de Gran Total.
-            new ExcelFormatGroupHeaders { BackGroundColor="#000000", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left }};
-
-        #endregion Formato para encabezados de grupo
+            new ExcelFormatGroupHeaders { BackGroundColor="#000000", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left }
+        };
+        #endregion
 
         #region Obtenemos los encabezados de grupo y sus valores
-
         //Creamos la sentencia Linq para obtener los campos que se agruparán.
         var qfields = string.Join(", ", formatTable
     .Where(c => c.IsGroup)
@@ -530,40 +546,40 @@ namespace IM.Base.Helpers
           .GroupBy("new(" + qfields + ")", "it")
           .Select("new(Key as qgroup, it as Values)");
 
-        #endregion Obtenemos los encabezados de grupo y sus valores
+        #endregion
 
         //Lista de formulas para cada grupo. Teniendo como items las columnas que tienen la propiedad SubtotalFunction.
         var subtotalFormulas = new Dictionary<string, string>[formatTable.Count(c => c.IsGroup)];
-        //Lista de grupos.
-        List<dynamic> dynamicListData = qTable.OfType<dynamic>().ToList();
+        //Lista de grupos.       
+        var dynamicListData = qTable.OfType<dynamic>().ToList();
         //Total de columnas que no son grupo.
-        int totalColumns = formatTable.Count(c => !c.IsGroup);
-        string[] previousGroup = new string[subtotalFormulas.Length];
+        var totalColumns = formatTable.Count(c => !c.IsGroup);
+        var previousGroup = new string[subtotalFormulas.Length];
         //Recorremos la lista de grupos.
-        for (int i = 0; i < dynamicListData.Count; i++)
+        for (var i = 0; i < dynamicListData.Count; i++)
         {
-          string[] nextGroup = new string[subtotalFormulas.Length];
+          var nextGroup = new string[subtotalFormulas.Length];
           //Obtenemos la informacion del item actual.
           object itemActual = dynamicListData[i].qgroup;
           //Obtenemos los headers de cada grupo.
-          string[] groupsAct = itemActual.GetType().GetProperties().Select(c => c.GetValue(itemActual).ToString()).ToArray();
+          var groupsAct = itemActual.GetType().GetProperties().Select(c => c.GetValue(itemActual).ToString()).ToArray();
           //Si es el primer item de la lista o es el indice es mayor a cero y el primer grupo del item actual
           //es diferente al primer grupo del item anterior.
           if (i == 0 || (i > 0 && groupsAct[0] != previousGroup[0]))
           {
             //Dibujamos todos los headers de grupo.
-            for (int j = 0; j < groupsAct.Length; j++)
+            for (var j = 0; j < groupsAct.Length; j++)
             {
               wsData.Cells[rowNumber, 1].Value = groupsAct[j];
-              wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Merge = true;
-              wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Fill.PatternType = ExcelFillStyle.Solid;
-              wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Fill.BackgroundColor.SetColor(
-                ColorTranslator.FromHtml(backgroundColorGroups[j].BackGroundColor));
-              wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Font.Color.SetColor(
-                ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
-              wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Font.Bold = backgroundColorGroups[j].FontBold;
-              wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.HorizontalAlignment =
-                backgroundColorGroups[j].TextAligment;
+              using (var range = wsData.Cells[rowNumber, 1, rowNumber, totalColumns])
+              {
+                range.Merge = true;
+                range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].BackGroundColor));
+                range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
+                range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
+                range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
+              }
               rowNumber++;
             }
             //asignamos el valor actual a la variable aux
@@ -572,7 +588,7 @@ namespace IM.Base.Helpers
           else if (i > 0)
           {
             //Recorremos los encabezados(Niveles).
-            for (int j = 0; j < groupsAct.Length; j++)
+            for (var j = 0; j < groupsAct.Length; j++)
             {
               if (groupsAct[j] == previousGroup[j]) continue;
               //Si el nivel actual es diferente al valor anterior.
@@ -580,12 +596,15 @@ namespace IM.Base.Helpers
               {
                 //Dibujamos el encabezado.
                 wsData.Cells[rowNumber, 1].Value = groupsAct[j];
-                wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Merge = true;
-                wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].BackGroundColor));
-                wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
-                wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Font.Bold = backgroundColorGroups[j].FontBold;
-                wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
+                using (var range = wsData.Cells[rowNumber, 1, rowNumber, totalColumns])
+                {
+                  range.Merge = true;
+                  range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                  range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].BackGroundColor));
+                  range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
+                  range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
+                  range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
+                }
                 rowNumber++;
               }
             }
@@ -593,43 +612,43 @@ namespace IM.Base.Helpers
           }
           //Obtenemos los datos.
           var dataValues = ((IEnumerable<DataRow>)dynamicListData[i].Values).CopyToDataTable();
-          List<string> camposGrupo = formatTable.Where(col => col.IsGroup).Select(col => col.PropertyName).ToList();
-          //Eliminamos las columnas que fueron configuradas como grupo.
+          var camposGrupo = formatTable.Where(col => col.IsGroup).Select(col => col.PropertyName).ToList();
+          //Eliminamos las columnas que fueron configuradas como grupo. Y obtenemos el formato de las columnas que se visualizaran en el reporte.
           dataValues.Columns.OfType<DataColumn>().ToList().ForEach(c =>
           {
-            if (camposGrupo.Contains(c.ColumnName)) { dataValues.Columns.Remove(c); }
+            if (camposGrupo.Contains(c.ColumnName))
+              dataValues.Columns.Remove(c);
+            else
+            {
+              var format = formatTable.FirstOrDefault(f => f.PropertyName == c.ColumnName);
+              if (format != null && format.Order > 0)
+              {
+                using (var range = wsData.Cells[rowNumber, format.Order, rowNumber + dataValues.Rows.Count, format.Order])
+                {
+                  range.Style.Numberformat.Format = GetFormat(format.Format);
+                }
+              }
+            }
           });
 
-          dataValues.AsEnumerable().ToList().ForEach(dr =>
+          //Agregamos los datos al excel.
+          using (var range = wsData.Cells[rowNumber, 1].LoadFromDataTable(dataValues, false))
           {
-            int drColumn = 1;
-            //Recorremos las columnas
-            formatTableColumns.ForEach(row =>
-            {
-              //Si la columna no es calculada.
-              if (!row.IsCalculated)
-              {
-                //Agregamos el valor.
-                wsData.Cells[rowNumber, drColumn].Value = dr[row.PropertyName];
-              }
-              else
-              {
-                //Obtenemos la formula de la columna calculada.
-                wsData.Cells[rowNumber, drColumn].Formula = GetFormula(formatTable, row.Formula, rowNumber);
-              }
-              //Aplicamos el formato a la celda.
-              wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(row.Format);
-              wsData.Cells[rowNumber, drColumn].Style.Border.BorderAround(ExcelBorderStyle.Thin, ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
-              drColumn++;
-            });
-            rowNumber++;
-          });
+            //Aplicamos estilo a las celdas.
+            range.Style.Border.Top.Style = range.Style.Border.Right.Style = range.Style.Border.Left.Style = range.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            range.Style.Border.Top.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+            range.Style.Border.Right.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+            range.Style.Border.Left.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+            range.Style.Border.Bottom.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+          }
+
+          rowNumber += dataValues.Rows.Count;
 
           //Si se mostrará el subtotal de cada grupo.
           if (blnShowSubtotal)
           {
             //Obtenemos la fila inicial.
-            int dataIniRow = rowNumber - dataValues.Rows.Count;
+            var dataIniRow = rowNumber - dataValues.Rows.Count;
             //Si el indice siguiente es menor que la cantidad total de items.
             if (i + 1 < dynamicListData.Count)
             {
@@ -642,98 +661,100 @@ namespace IM.Base.Helpers
                 nextGroup = new string[groupsAct.Length];//Limpiamos la lista
             }
             //Recorremos los niveles del arreglo actual.
-            for (int j = groupsAct.Length - 1; j >= 0; j--)
+            for (var j = groupsAct.Length - 1; j >= 0; j--)
             {
               //Si los valores del index actual de cada lista son diferentes o el valor del index de la siguiente lista esta vacia o nula.
-              if (groupsAct[j] != nextGroup[j] || string.IsNullOrEmpty(nextGroup[j]))
+              if (groupsAct[j] != nextGroup[j] || string.IsNullOrEmpty(nextGroup[j]) || j == groupsAct.Length - 1)
               {
                 //Recorremos las columnas.
                 foreach (var format in formatTableColumns)
                 {
-                  if (format.SubTotalFunctions == eSubTotalFunctions.None && format.Formula == null) continue;
-
-                  EnumFormatTypeExcel subtotalFormat = format.Format;
-                  if (format.SubtotalWithCero)
+                  using (var range = wsData.Cells[rowNumber, format.Order])
                   {
-                    switch (format.Format)
+                    if (format.SubTotalFunctions == eSubTotalFunctions.None && format.Formula == null) continue;
+
+                    var subtotalFormat = format.Format;
+                    if (format.SubtotalWithCero)
                     {
-                      case EnumFormatTypeExcel.Number:
-                        subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
-                        break;
-
-                      case EnumFormatTypeExcel.DecimalNumber:
-                        subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
-                        break;
-
-                      case EnumFormatTypeExcel.Percent:
-                        subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
-                        break;
-                    }
-                  }
-
-                  //Le aplicacamos el formato a la celda.
-                  wsData.Cells[rowNumber, format.Order].Style.Numberformat.Format = GetFormat(subtotalFormat);
-
-                  //Si no es calculada aplicamos la funcion configurada.
-                  if (!format.IsCalculated)
-                  {
-                    var formula = "";
-                    //Si es el ultimo nivel
-                    if (j == groupsAct.Length - 1)
-                      formula = wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address;//Aplicamos la seleccion segun la cantidad de registros que tenga el grupo.
-                    else
-                    {
-                      //Si son antes del ultimo nivel.
-                      int index = j + 1;//Se obtiene el indice actual mas 1
-                      while (formula == "")
+                      switch (format.Format)
                       {
-                        //Si el indice devuelve un valor nulo, se incrementa.
-                        if (subtotalFormulas[index] == null) { index++; continue; }
-                        //Obtenemos las posiciones de cada subtotal.
-                        formula = subtotalFormulas[index][format.PropertyName];
-
-                        //Si no es el ultimo nivel y el nivel actual de cada arreglo son diferentes o el nivel actual del arreglo siguiente  es nulo.
-                        if (j < groupsAct.Length - 1 && (groupsAct[j] != nextGroup[j] || string.IsNullOrEmpty(nextGroup[j])))
-                        {
-                          //Limpiamos la formula.
-                          subtotalFormulas[index][format.PropertyName] = string.Empty;
-                        }
+                        case EnumFormatTypeExcel.Number:
+                          subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
+                          break;
+                        case EnumFormatTypeExcel.DecimalNumber:
+                          subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
+                          break;
+                        case EnumFormatTypeExcel.Percent:
+                          subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
+                          break;
                       }
                     }
-                    switch (format.SubTotalFunctions)
-                    {
-                      case eSubTotalFunctions.Sum:
-                        wsData.Cells[rowNumber, format.Order].Formula = "=SUM(" + formula + ")";
-                        break;
 
-                      case eSubTotalFunctions.Avg:
-                        wsData.Cells[rowNumber, format.Order].Formula = "=AVERAGE(" + formula + ")";
-                        break;
+                    //Le aplicacamos el formato a la celda.
+                    range.Style.Numberformat.Format = GetFormat(subtotalFormat);
 
-                      case eSubTotalFunctions.Count:
-                        if (format.Format == EnumFormatTypeExcel.General)
-                          wsData.Cells[rowNumber, format.Order].Formula = (j == groupsAct.Length - 1) ? "= COUNTA(" + formula + ")" : "= SUM(" + formula + ")";
-                        break;
-                    }
-                    if (subtotalFormulas[j] != null && subtotalFormulas[j].ContainsKey(format.PropertyName))
+                    //Si no es calculada aplicamos la funcion configurada.
+                    if (!format.IsCalculated)
                     {
-                      subtotalFormulas[j][format.PropertyName] += (subtotalFormulas[j][format.PropertyName] == string.Empty) ? wsData.Cells[rowNumber, format.Order].Address : "," + wsData.Cells[rowNumber, format.Order].Address;
+                      var formula = "";
+                      //Si es el ultimo nivel
+                      if (j == groupsAct.Length - 1)
+                        formula = wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address;//Aplicamos la seleccion segun la cantidad de registros que tenga el grupo.
+                      else
+                      {
+                        //Si son antes del ultimo nivel.
+                        var index = j + 1;//Se obtiene el indice actual mas 1
+                        while (formula == "")
+                        {
+                          //Si el indice devuelve un valor nulo, se incrementa.
+                          if (subtotalFormulas[index] == null) { index++; continue; }
+                          //Obtenemos las posiciones de cada subtotal.
+                          formula = subtotalFormulas[index][format.PropertyName];
+
+                          //Si no es el ultimo nivel y el nivel actual de cada arreglo son diferentes o el nivel actual del arreglo siguiente  es nulo.
+                          if (j < groupsAct.Length - 1 && (groupsAct[j] != nextGroup[j] || string.IsNullOrEmpty(nextGroup[j])))
+                          {
+                            //Limpiamos la formula.
+                            subtotalFormulas[index][format.PropertyName] = string.Empty;
+                          }
+                        }
+                      }
+                      switch (format.SubTotalFunctions)
+                      {
+                        case eSubTotalFunctions.Sum:
+                          range.Formula = "=SUM(" + formula + ")";
+                          break;
+                        case eSubTotalFunctions.Avg:
+                          range.Formula = "=AVERAGE(" + formula + ")";
+                          break;
+                        case eSubTotalFunctions.Count:
+                          if (format.Format == EnumFormatTypeExcel.General)
+                            range.Formula = (j == groupsAct.Length - 1) ? "= COUNTA(" + formula + ")" : "= SUM(" + formula + ")";
+                          break;
+                      }
+                      if (subtotalFormulas[j] != null && subtotalFormulas[j].ContainsKey(format.PropertyName))
+                      {
+                        subtotalFormulas[j][format.PropertyName] += (subtotalFormulas[j][format.PropertyName] == string.Empty) ? range.Address : "," + range.Address;
+                      }
+                      else
+                      {
+                        if (subtotalFormulas[j] == null) subtotalFormulas[j] = new Dictionary<string, string>();
+                        subtotalFormulas[j].Add(format.PropertyName, range.Address);
+                      }
                     }
                     else
-                    {
-                      if (subtotalFormulas[j] == null) subtotalFormulas[j] = new Dictionary<string, string>();
-                      subtotalFormulas[j].Add(format.PropertyName, wsData.Cells[rowNumber, format.Order].Address);
-                    }
+                      //Obtenemos la formula.
+                      range.Formula = GetFormula(formatTable, format.Formula, rowNumber);
                   }
-                  else
-                    //Obtenemos la formula.
-                    wsData.Cells[rowNumber, format.Order].Formula = GetFormula(formatTable, format.Formula, rowNumber);
                 }
                 var firstSubtotalColumn = formatTable.First(c => c.SubTotalFunctions != eSubTotalFunctions.None || c.Formula != null).Order;
-                wsData.Cells[rowNumber, firstSubtotalColumn, rowNumber, totalColumns].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                wsData.Cells[rowNumber, firstSubtotalColumn, rowNumber, totalColumns].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].BackGroundColor));
-                wsData.Cells[rowNumber, firstSubtotalColumn, rowNumber, totalColumns].Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
-                wsData.Cells[rowNumber, firstSubtotalColumn, rowNumber, totalColumns].Style.Font.Bold = backgroundColorGroups[j].FontBold;
+                using (var range = wsData.Cells[rowNumber, firstSubtotalColumn, rowNumber, totalColumns])
+                {
+                  range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                  range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].BackGroundColor));
+                  range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
+                  range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
+                }
                 rowNumber += 2;
               }
             }
@@ -745,33 +766,39 @@ namespace IM.Base.Helpers
         {
           formatTableColumns.ForEach(format =>
           {
-            if (!format.IsCalculated)
+            using (var range = wsData.Cells[rowNumber - 1, format.Order])
             {
-              switch (format.SubTotalFunctions)
+              if (format.SubTotalFunctions == eSubTotalFunctions.None && format.Formula == null) return;
+
+              if (!format.IsCalculated)
               {
-                case eSubTotalFunctions.Sum:
-                  wsData.Cells[rowNumber - 1, format.Order].Formula = "=SUM(" + subtotalFormulas[0][format.PropertyName] + ")";
-                  break;
-
-                case eSubTotalFunctions.Avg:
-                  wsData.Cells[rowNumber - 1, format.Order].Formula = "=AVERAGE(" + subtotalFormulas[0][format.PropertyName] + ")";
-                  break;
-
-                case eSubTotalFunctions.Count:
-                  if (format.Format == EnumFormatTypeExcel.General)
-                    wsData.Cells[rowNumber - 1, format.Order].Formula = "= SUM(" + subtotalFormulas[0][format.PropertyName] + ")";
-                  break;
+                switch (format.SubTotalFunctions)
+                {
+                  case eSubTotalFunctions.Sum:
+                    range.Formula = "=SUM(" + subtotalFormulas[0][format.PropertyName] + ")";
+                    break;
+                  case eSubTotalFunctions.Avg:
+                    range.Formula = "=AVERAGE(" + subtotalFormulas[0][format.PropertyName] + ")";
+                    break;
+                  case eSubTotalFunctions.Count:
+                    if (format.Format == EnumFormatTypeExcel.General)
+                      range.Formula = "= SUM(" + subtotalFormulas[0][format.PropertyName] + ")";
+                    break;
+                }
               }
-            }
-            else
-              wsData.Cells[rowNumber - 1, format.Order].Formula = GetFormula(formatTableColumns, format.Formula, rowNumber - 1);
+              else
+                range.Formula = GetFormula(formatTableColumns, format.Formula, rowNumber - 1);
 
-            wsData.Cells[rowNumber - 1, format.Order].Style.Numberformat.Format = GetFormat(format.Format);
+              range.Style.Numberformat.Format = GetFormat(format.Format);
+            }
           });
-          wsData.Cells[rowNumber - 1, 1, rowNumber - 1, totalColumns].Style.Fill.PatternType = ExcelFillStyle.Solid;
-          wsData.Cells[rowNumber - 1, 1, rowNumber - 1, totalColumns].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 1].BackGroundColor));
-          wsData.Cells[rowNumber - 1, 1, rowNumber - 1, totalColumns].Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 1].FontColor));
-          wsData.Cells[rowNumber - 1, 1, rowNumber - 1, totalColumns].Style.Font.Bold = backgroundColorGroups[backgroundColorGroups.Count - 1].FontBold;
+          using (var range = wsData.Cells[rowNumber - 1, 1, rowNumber - 1, totalColumns])
+          {
+            range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 1].BackGroundColor));
+            range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 1].FontColor));
+            range.Style.Font.Bold = backgroundColorGroups[backgroundColorGroups.Count - 1].FontBold;
+          }
         }
         //Ajustamos todas las columnas a su contenido.
         wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
@@ -786,85 +813,136 @@ namespace IM.Base.Helpers
         //Recorremos los datarows del datatable.
         dtTable.AsEnumerable().ToList().ForEach(dr =>
         {
-          int drColumn = 1;
+          var drColumn = 1;
           //Recorremos las columnas.
           formatTableColumns.ForEach(row =>
-            {
-              //Asignamos el valor y formato a la celda.
-              wsData.Cells[rowNumber, drColumn].Value = dr[row.PropertyName];
-              wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(row.Format);
-              drColumn++;
-            });
+          {
+            //Asignamos el valor y formato a la celda. 
+            wsData.Cells[rowNumber, drColumn].Value = dr[row.PropertyName];
+            wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(row.Format);
+            drColumn++;
+          });
           rowNumber++;
         });
 
         if (blnRowGrandTotal)
         {
           //Obtenemos la fila inicial.
-          int dataIniRow = rowNumber - dtTable.Rows.Count;
+          var dataIniRow = rowNumber - dtTable.Rows.Count;
           //Recorremos las columnas.
           formatTableColumns.ForEach(format =>
+          {
+            var subtotalFormat = format.Format;
+            if (format.SubtotalWithCero)
             {
-              EnumFormatTypeExcel subtotalFormat = format.Format;
-              if (format.SubtotalWithCero)
+              switch (format.Format)
               {
-                switch (format.Format)
-                {
-                  case EnumFormatTypeExcel.Number:
-                    subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
-                    break;
+                case EnumFormatTypeExcel.Number:
+                  subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
+                  break;
 
-                  case EnumFormatTypeExcel.DecimalNumber:
-                    subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
-                    break;
+                case EnumFormatTypeExcel.DecimalNumber:
+                  subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
+                  break;
 
-                  case EnumFormatTypeExcel.Percent:
-                    subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
-                    break;
-                }
+                case EnumFormatTypeExcel.Percent:
+                  subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
+                  break;
               }
+            }
 
-              //Le aplicacamos el formato a la celda.
-              wsData.Cells[rowNumber, format.Order].Style.Numberformat.Format = GetFormat(subtotalFormat);
-              //S no es una columna calculada.
-              if (!format.IsCalculated)
+            //Le aplicacamos el formato a la celda.
+            wsData.Cells[rowNumber, format.Order].Style.Numberformat.Format = GetFormat(subtotalFormat);
+            //S no es una columna calculada.
+            if (!format.IsCalculated)
+            {
+              //Aplicamos la funcion configurada.
+              switch (format.Function)
               {
-                //Aplicamos la funcion configurada.
-                switch (format.Function)
-                {
-                  case DataFieldFunctions.Sum:
-                    wsData.Cells[rowNumber, format.Order].Formula = "=SUM(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
-                    break;
+                case DataFieldFunctions.Sum:
+                  wsData.Cells[rowNumber, format.Order].Formula = "=SUM(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
+                  break;
 
-                  case DataFieldFunctions.Average:
-                    wsData.Cells[rowNumber, format.Order].Formula = "=AVERAGE(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
-                    break;
+                case DataFieldFunctions.Average:
+                  wsData.Cells[rowNumber, format.Order].Formula = "=AVERAGE(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
+                  break;
 
-                  case DataFieldFunctions.Count:
-                    if (format.Format == EnumFormatTypeExcel.General)
-                      wsData.Cells[rowNumber, format.Order].Formula = "=COUNTA(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
-                    break;
-                }
+                case DataFieldFunctions.Count:
+                  if (format.Format == EnumFormatTypeExcel.General)
+                    wsData.Cells[rowNumber, format.Order].Formula = "=COUNTA(" + wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address + ")";
+                  break;
               }
-              else
-                //Aplicamos la formula configurada.
-                wsData.Cells[rowNumber, format.Order].Formula = GetFormula(formatTable, format.Formula, rowNumber);
-            });
+            }
+            else
+              //Aplicamos la formula configurada.
+              wsData.Cells[rowNumber, format.Order].Formula = GetFormula(formatTable, format.Formula, rowNumber);
+          });
         }
 
         #endregion Simple
-      }
+      } 
+      #endregion
+
       //Ajustamos las celdas a su contenido.
       wsData.Cells[totalFilterRows + 5, 1, rowNumber, dtTable.Columns.Count].AutoFitColumns();
+            
+      #region CreateSuperHeader
+      // Se Agregan los superheaders
+      if (formatTableColumns.Any(c => c.SuperHeader != null))
+      {//Selecciona las columnas que tengan SuperHeader
+        var formatHeaders = formatTableColumns.Where(c => c.SuperHeader != null).ToList();
+        //Se obtienen los datos iniciales para empezar a pintar la tabla
+        //El start column se usa como una variable por si se llega a insertar algun column antes de iniciar la tabla
+        var startColumn = 0;
+        var startRow = totalFilterRows;
+        var rowCount = formatTableColumns.Count(c => !(c.IsGroup));
+        //Selecciona las columnas que sean Values o Row y las agrupa por Order y SuperHeader
+        var formatHeadersValue = formatHeaders.Where(c => c.Axis == ePivotFieldAxis.Values || c.Axis == ePivotFieldAxis.Row).OrderBy(c => c.Order).GroupBy(c => c.SuperHeader).ToList();
+        //Recorre las folas obtenidas para pintarlas en el Excel
+        formatHeadersValue.ForEach(v =>
+        {
+          var fromCol = 0;
+          for (var i = 0; i < v.Count(); i++)
+          {
+            //Obtiene el valor del Superheader
+            var value = v.ElementAt(i);
+            //Si fromCol = 0 se le asigna el valor a iniciar
+            if (fromCol == 0)
+              fromCol = value.Order + startColumn;
+            //Se obtiene el valor del siguiente elemento 
+            var valueNext = v.ElementAtOrDefault(i + 1);
+            //si el siguente elemento tiene el mismo superHeader y es el consecutivo del actual se pasa a este inmediatamente
+            if (valueNext != null && valueNext.Order == value.Order + 1) continue;
+            //Si no se cumple la condicion anterior se pinta el superheader
+            //Se obtiene la Columna final del superheader
+            var toCol = value.Order + startColumn;
 
+            using (var range = wsData.Cells[startRow, fromCol, startRow, toCol])
+            {
+              range.Value = value.SuperHeader;
+              range.Style.Font.Bold = true;
+              range.Merge = true;
+              range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+              range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+              range.Style.Fill.BackgroundColor.SetColor(Color.Cyan);
+              range.Style.Border.BorderAround(ExcelBorderStyle.Medium);
+            }
+            fromCol = 0;
+          }
+        });
+      } 
+      #endregion
+
+      #region SaveFile
       FileInfo pathFinalFile;
       if (fileFullPath == null)
       {
-        string suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
+        var suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
         pathFinalFile = SaveExcel(pk, suggestedFilaName);
       }
       else
-        pathFinalFile = SaveExcelFilePath(pk, fileFullPath);
+        pathFinalFile = SaveExcelFilePath(pk, fileFullPath); 
+      #endregion
 
       return pathFinalFile;
     }
@@ -892,6 +970,7 @@ namespace IM.Base.Helpers
     /// <history>
     ///   [edgrodriguez] 11/04/2016  Created.
     ///   [aalcocer]    18/05/2016 Modified. Se agregan columnas calculadas
+    ///   [edgrodriguez] 06/06/2016 Modified. Se agrega agrupaciones. Calculo de Subtotales por grupo. Y estilos.
     ///   [aalcocer]     06/06/2016 Modified. Se agrega la opcion de generar el reporte en de ruta completa del archivo
     /// </history>
     public static FileInfo CreateExcelCustomPivot(DataTable dtTable, List<Tuple<string, string>> filters,
@@ -899,59 +978,90 @@ namespace IM.Base.Helpers
       bool blnRowGrandTotal = false, bool blnShowSubtotal = false, DataTable pivotedTable = null,
       List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0, string fileFullPath = null)
     {
-      ExcelPackage pk = new ExcelPackage();
+      var pk = new ExcelPackage();
       var wsData = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
-      int totalFilterRows = 0;
+      var totalFilterRows = 0;
 
       //Creamos el encabezado del reporte. Filtros, Titulo.
       CreateReportHeader(filters, reportName, ref wsData, ref totalFilterRows, extraFieldHeader, numRows);
 
       //Obtenemos la fila inicial. Para dibujar la tabla.
-      int rowNumber = totalFilterRows + 1 + formatTable.Count(c => c.Axis == ePivotFieldAxis.Column);
+      var rowNumber = totalFilterRows + 1 + formatTable.Count(c => c.Axis == ePivotFieldAxis.Column);
 
       //Obtenemos la tabla ya con las columnas pivote.
       if (pivotedTable == null)
         pivotedTable = GetPivotTable(formatTable, dtTable);
 
+      var formatTableColumns = new List<ExcelFormatTable>();
+
+      pivotedTable.Columns.Cast<DataColumn>().ToList().ForEach(col =>
+      {
+        var header = col.ColumnName.Split(separator);
+        var format = formatTable.FirstOrDefault(ft => ft.PropertyName == ((header.Length == 1) ? header[0] : header[header.Length - 1]));
+        if (format != null)
+        {
+          formatTableColumns.Add(new ExcelFormatTable
+          {
+            AggregateFunction = format.AggregateFunction,
+            Alignment = format.Alignment,
+            Axis = format.Axis,
+            Format = format.Format,
+            Formula = format.Formula,
+            Function = format.Function,
+            IsCalculated = format.IsCalculated,
+            IsGroup = format.IsGroup,
+            IsVisible = format.IsVisible,
+            Sort = format.Sort,
+            SubTotalFunctions = format.SubTotalFunctions,
+            SubtotalWithCero = format.SubtotalWithCero,
+            Title = format.Title,
+            PropertyName = col.ColumnName,
+            Order = col.Ordinal + 1,
+          });
+        }
+      });
+
       #region Creando Headers
 
       //Obtenemos los encabezados de la tabla pivote.
-      List<string[]> lstHeaders = pivotedTable.Columns.OfType<DataColumn>().Select(c => c.ColumnName.Split(separator)).ToList();
+      var lstHeaders = pivotedTable.Columns.OfType<DataColumn>().Select(c => c.ColumnName.Split(separator)).ToList();
       //Obtenemos la cantidad maxima de superheaders.
-      int[] iniValue = new int[pivotedTable.Columns.OfType<DataColumn>().Max(c => c.ColumnName.Split(separator).Length - 1)];
-      int columnNumber = 1;
+      var iniValue = new int[pivotedTable.Columns.OfType<DataColumn>().Max(c => c.ColumnName.Split(separator).Length - 1)];
+      var columnNumber = 1;
       //Recorremos los encabezados.
-      foreach (string[] item in lstHeaders)
+      foreach (var item in lstHeaders)
       {
         //Si solo hay un encabezado.
         if (item.Length == 1)
         {
           //Si no es un grupo.
-          if (!formatTable.First(c => c.PropertyName == item.First()).IsGroup)
+          if (formatTable.First(c => c.PropertyName == item.First()).IsGroup || !formatTable.First(c => c.PropertyName == item.First()).IsVisible) continue;
+          //Dibujamos el encabezado y aplicamos formato.
+          using (var range = wsData.Cells[rowNumber, columnNumber])
           {
-            //Dibujamos el encabezado y aplicamos formato.
-            using (ExcelRange range = wsData.Cells[rowNumber, columnNumber])
-            {
-              range.Value = formatTable.First(c => c.PropertyName == item.First()).Title;
-              range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-              range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
-            }
-            columnNumber++;
+            range.Value = formatTable.First(c => c.PropertyName == item.First()).Title;
+            range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            range.Style.Fill.BackgroundColor.SetColor(Color.Black);
+            range.Style.Font.Bold = true;
+            range.Style.Font.Color.SetColor(Color.White);
+            range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.White);
           }
+          columnNumber++;
         }
         //Si son mas de 1 encabezado.
         else if (item.Length > 1)
         {
           //Obtenemos la fila inicial para dibujar el encabezado.
-          int rowHeader = rowNumber - (item.Length - 1);
-          //Obtenemos el siguiente arreglo de encabezados.
-          string[] itemNext = (lstHeaders.IndexOf(item) + 1 < lstHeaders.Count) ? lstHeaders[lstHeaders.IndexOf(item) + 1] : null;
+          var rowHeader = rowNumber - (item.Length - 1);
+          //Obtenemos el siguiente arreglo de encabezados.        
+          var itemNext = (lstHeaders.IndexOf(item) + 1 < lstHeaders.Count) ? lstHeaders[lstHeaders.IndexOf(item) + 1] : null;
 
           //Si el arreglo posterior contiene valore.
           if (itemNext != null && itemNext.Length == item.Length)
           {
             //Recorremos la lista.
-            for (int i = 0; i < item.Length; i++)
+            for (var i = 0; i < item.Length; i++)
             {
               if (i < item.Length - 1)
               {
@@ -964,25 +1074,33 @@ namespace IM.Base.Helpers
                 //Si el encabezado de la lista actual es diferente al encabezado de la lista posterior.
                 else
                 {
-                  using (ExcelRange range = wsData.Cells[rowHeader, columnNumber - iniValue[i], rowHeader, columnNumber])
+                  using (var range = wsData.Cells[rowHeader, columnNumber - iniValue[i], rowHeader, columnNumber])
                   {
                     //Dibujamos el encabezado.
                     range.Value = item[i];
                     //Combinamos las celdas.
                     range.Merge = true;
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
                     range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+                    range.Style.Fill.BackgroundColor.SetColor(Color.Black);
+                    range.Style.Font.Bold = true;
+                    range.Style.Font.Color.SetColor(Color.White);
+                    range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.White);
                   }
                   iniValue[i] = 0;//Reiniciamos el contador de celdas a combinar.
                 }
               }
               else if (i == item.Length - 1)
               {
-                using (ExcelRange range = wsData.Cells[rowHeader, columnNumber])
+                using (var range = wsData.Cells[rowHeader, columnNumber])
                 {
                   range.Value = formatTable.First(c => c.PropertyName == item[i]).Title;
+                  range.Style.Fill.PatternType = ExcelFillStyle.Solid;
                   range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                  range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+                  range.Style.Fill.BackgroundColor.SetColor(Color.Black);
+                  range.Style.Font.Bold = true;
+                  range.Style.Font.Color.SetColor(Color.White);
+                  range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.White);
                 }
               }
               rowHeader++;
@@ -992,28 +1110,36 @@ namespace IM.Base.Helpers
           else
           {
             //Recorremos la lista de encabezados.
-            for (int i = 0; i < item.Length; i++)
+            for (var i = 0; i < item.Length; i++)
             {
               if (i < item.Length - 1)
               {
-                using (ExcelRange range = wsData.Cells[rowHeader, columnNumber - iniValue[i], rowHeader, columnNumber])
+                using (var range = wsData.Cells[rowHeader, columnNumber - iniValue[i], rowHeader, columnNumber])
                 {
                   //Dibujamos el encabezado.
                   range.Value = item[i];
                   //Combinamos las celdas.
                   range.Merge = true;
+                  range.Style.Fill.PatternType = ExcelFillStyle.Solid;
                   range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                  range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+                  range.Style.Fill.BackgroundColor.SetColor(Color.Black);
+                  range.Style.Font.Bold = true;
+                  range.Style.Font.Color.SetColor(Color.White);
+                  range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.White);
                 }
                 iniValue[i] = 0;//Reiniciamos el contador de celdas a combinar.
               }
               else if (i == item.Length - 1)
               {
-                using (ExcelRange range = wsData.Cells[rowHeader, columnNumber])
+                using (var range = wsData.Cells[rowHeader, columnNumber])
                 {
                   range.Value = formatTable.First(c => c.PropertyName == item[i]).Title;
+                  range.Style.Fill.PatternType = ExcelFillStyle.Solid;
                   range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                  range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+                  range.Style.Fill.BackgroundColor.SetColor(Color.Black);
+                  range.Style.Font.Bold = true;
+                  range.Style.Font.Color.SetColor(Color.White);
+                  range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.White);
                 }
               }
               rowHeader++;
@@ -1027,7 +1153,7 @@ namespace IM.Base.Helpers
 
       if (formatTable.Any(c => c.IsGroup))
       {
-        List<ExcelFormatGroupHeaders> backgroundColorGroups = new List<ExcelFormatGroupHeaders> {
+        var backgroundColorGroups = new List<ExcelFormatGroupHeaders> {
             new ExcelFormatGroupHeaders { BackGroundColor="#004E48", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
             new ExcelFormatGroupHeaders { BackGroundColor="#147F79", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
             new ExcelFormatGroupHeaders { BackGroundColor="#2D8B85", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
@@ -1036,163 +1162,275 @@ namespace IM.Base.Helpers
         #region Agrupado
 
         rowNumber++;
-        //Creamos la sentencia Linq para obtener los campos de pivot y valores de pivot.
+        #region Obtenemos los encabezados de grupo y sus valores
+        //Creamos la sentencia Linq para obtener los campos que se agruparán.
         var qfields = string.Join(", ", formatTable
           .Where(c => c.IsGroup)
           .OrderBy(c => c.Order).Select(x => "it[\"" + x.PropertyName + "\"] as " + x.PropertyName));
 
-        //Creamos la sentencia linq para ordenar los registros.
-        var qOrder = string.Join(", ", formatTable
-          .Where(c => c.IsGroup)
-          .OrderBy(c => c.Order).Select(x => "Key." + x.PropertyName + ((x.Sort == eSortType.Descending) ? " desc" : " asc")));
-
         //Obtenemos las agrupaciones y los registros de cada agrupacion.
-        var qTableaux = pivotedTable
+        var qTable = pivotedTable
           .AsEnumerable()
           .AsQueryable()
-          .GroupBy("new(" + qfields + ")", "it");
-        if (qOrder != "")
-        {
-          qTableaux = qTableaux.OrderBy(qOrder);
-        }
+          .GroupBy("new(" + qfields + ")", "it")
+          .Select("new(Key as qgroup, it as Values)");
 
-        var qTable = qTableaux.Select("new(Key as qgroup, it as Values)");
-        //Lista con los headers de cada agrupacion.
-        var headers = new List<string>();
-        var values = new Dictionary<string, List<DataRow>>();
-        foreach (dynamic item in qTable)
+        #endregion
+
+        //Lista de formulas para cada grupo. Teniendo como items las columnas que tienen la propiedad SubtotalFunction.
+        var subtotalFormulas = new Dictionary<string, string>[formatTable.Count(c => c.IsGroup)];
+        //Lista de grupos.       
+        var dynamicListData = qTable.OfType<dynamic>().ToList();
+        //Total de columnas que no son grupo.
+        var totalColumns = pivotedTable.Columns.Count - formatTable.Count(c => c.IsGroup);
+        var previousGroup = new string[subtotalFormulas.Length];
+        //Recorremos la lista de grupos.
+        for (var i = 0; i < dynamicListData.Count; i++)
         {
-          //obtenemos los grupos.
-          object gKey = item.qgroup;
-          //Concatenamos los grupos
-          var groups = string.Join(separator.ToString(), gKey.GetType().GetProperties().Select(c => c.GetValue(gKey).ToString()).ToList());
-          if (!headers.Contains(groups))
+          var nextGroup = new string[subtotalFormulas.Length];
+          //Obtenemos la informacion del item actual.
+          object itemActual = dynamicListData[i].qgroup;
+          //Obtenemos los headers de cada grupo.
+          var groupsAct = itemActual.GetType().GetProperties().Select(c => c.GetValue(itemActual).ToString()).ToArray();
+          //Si es el primer item de la lista o es el indice es mayor a cero y el primer grupo del item actual
+          //es diferente al primer grupo del item anterior.
+          if (i == 0 || (i > 0 && groupsAct[0] != previousGroup[0]))
           {
-            headers.Add(groups);
-            values.Add(groups, ((IEnumerable<DataRow>)item.Values).ToList());
-          }
-        }
-        //Obtenemos la cantidad de columnas.
-        int totalColumns = pivotedTable.Columns.Count - (formatTable.Count(c => c.IsGroup) - 1);
-        for (int i = 0; i < headers.Count; i++)
-        {
-          string[] posAct = headers[i].Split(separator);
-          if (i == 0)
-          {
-            for (int j = 0; j < posAct.Length; j++)
+            //Dibujamos todos los headers de grupo.
+            for (var j = 0; j < groupsAct.Length; j++)
             {
-              wsData.Cells[rowNumber, 1].Value = posAct[j];
-              wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Merge = true;
-              wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Fill.PatternType = ExcelFillStyle.Solid;
-              wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].BackGroundColor));
-              wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
-              wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Font.Bold = backgroundColorGroups[j].FontBold;
-              wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
+
+              wsData.Cells[rowNumber, 1].Value = groupsAct[j];
+              using (var range = wsData.Cells[rowNumber, 1, rowNumber, totalColumns])
+              {
+                range.Merge = true;
+                range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].BackGroundColor));
+                range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
+                range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
+                range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
+              }
               rowNumber++;
             }
+            //asignamos el valor actual a la variable aux
+            previousGroup = groupsAct;
           }
           else if (i > 0)
           {
-            string[] posAnt = headers[i - 1].Split(separator);
-            for (int j = 0; j < posAct.Length; j++)
+
+            //Recorremos los encabezados(Niveles).
+            for (var j = 0; j < groupsAct.Length; j++)
             {
-              if (posAct[j] != posAnt[j])
+              if (groupsAct[j] == previousGroup[j]) continue;
+              //Si el nivel actual es diferente al valor anterior.
+              if (groupsAct[j] != previousGroup[j])
               {
-                wsData.Cells[rowNumber, 1].Value = posAct[j];
-                wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Merge = true;
-                wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].BackGroundColor));
-                wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
-                wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.Font.Bold = backgroundColorGroups[j].FontBold;
-                wsData.Cells[rowNumber, 1, rowNumber, totalColumns].Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
+                //Dibujamos el encabezado.
+                wsData.Cells[rowNumber, 1].Value = groupsAct[j];
+                using (var range = wsData.Cells[rowNumber, 1, rowNumber, totalColumns])
+                {
+                  range.Merge = true;
+                  range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                  range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].BackGroundColor));
+                  range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
+                  range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
+                  range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
+                }
                 rowNumber++;
               }
             }
+            previousGroup = groupsAct;
           }
+          //Obtenemos los datos.
+          var dataValues = ((IEnumerable<DataRow>)dynamicListData[i].Values).CopyToDataTable();
+          var camposGrupo = formatTable.Where(col => col.IsGroup).Select(col => col.PropertyName).ToList();
 
-          values[headers[i]].ToList().ForEach(dr =>
+          //Eliminamos las columnas que fueron configuradas como grupo. Y obtenemos el formato de las columnas que se visualizaran en el reporte.
+          dataValues.Columns.OfType<DataColumn>().ToList().ForEach(c =>
           {
-            int drColumn = 1;
-            lstHeaders.ForEach(col =>
+            if (camposGrupo.Contains(c.ColumnName))
+              dataValues.Columns.Remove(c);
+            else
             {
-              var formatCol =
-                formatTable.First(
-                  ft =>
-                    ft.PropertyName ==
-                    ((col.Length == 1) ? col[0] : col[col.Length - 1]));
-              if (!formatCol.IsGroup)
+              var format = formatTableColumns.FirstOrDefault(f => f.PropertyName == c.ColumnName);
+              if (format != null && format.Order > 0)
               {
-                if (!formatCol.IsCalculated)
-                  wsData.Cells[rowNumber, drColumn].Value = dr[lstHeaders.IndexOf(col)];
-                else
+                using (var range = wsData.Cells[rowNumber, format.Order, rowNumber + dataValues.Rows.Count, format.Order])
                 {
-                  //Obtenemos la formula de la columna calculada.
-                  wsData.Cells[rowNumber, drColumn].Formula = GetFormula(pivotedTable, formatCol.Formula, rowNumber);
+                  range.Style.Numberformat.Format = GetFormat(format.Format);
                 }
-                wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(formatCol.Format);
-                drColumn++;
               }
-            });
-            rowNumber++;
+            }
           });
 
+          //Agregamos los datos al excel.
+          using (var range = wsData.Cells[rowNumber, 1].LoadFromDataTable(dataValues, false))
+          {
+            //Aplicamos estilo a las celdas.
+            range.Style.Border.Top.Style = range.Style.Border.Right.Style = range.Style.Border.Left.Style = range.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            range.Style.Border.Top.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+            range.Style.Border.Right.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+            range.Style.Border.Left.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+            range.Style.Border.Bottom.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+          }
+
+          rowNumber += dataValues.Rows.Count;
+
+          //Si se mostrará el subtotal de cada grupo.
           if (blnShowSubtotal)
           {
-            int dataIniRow = rowNumber - values[headers[i]].Count;
-            int drColumn = 1;
-            lstHeaders.ForEach(col =>
+            //Obtenemos la fila inicial.
+            var dataIniRow = rowNumber - dataValues.Rows.Count;
+            //Si el indice siguiente es menor que la cantidad total de items.
+            if (i + 1 < dynamicListData.Count)
             {
-              var format = formatTable.First(ft => ft.PropertyName == ((col.Length == 1) ? col[0] : col[col.Length - 1]));
-              if (!format.IsGroup)
+              //Obtenemos objeto con los encabezados de grupo.
+              object nextItem = dynamicListData[i + 1].qgroup;
+              //Obtenemos el arreglo de encabezados de grupo. Los niveles estan de acuerdo al indice del arreglo.
+              nextGroup = nextItem.GetType().GetProperties().Select(c => c.GetValue(nextItem).ToString()).ToArray();
+              //Si el primer nivel de cada arreglo son diferentes.
+              if (groupsAct[0] != nextGroup[0])
+                nextGroup = new string[groupsAct.Length];//Limpiamos la lista
+            }
+            //Recorremos los niveles del arreglo actual.
+            for (var j = groupsAct.Length - 1; j >= 0; j--)
+            {
+              //Si los valores del index actual de cada lista son diferentes o el valor del index de la siguiente lista esta vacia o nula.
+              if (groupsAct[j] != nextGroup[j] || string.IsNullOrEmpty(nextGroup[j]))
               {
-                EnumFormatTypeExcel subtotalFormat = format.Format;
-                if (format.SubtotalWithCero)
+                //Recorremos las columnas.
+                foreach (var format in formatTableColumns)
                 {
-                  switch (format.Format)
+                  using (var range = wsData.Cells[rowNumber, format.Order])
                   {
-                    case EnumFormatTypeExcel.Number:
-                      subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
-                      break;
+                    if (format.SubTotalFunctions == eSubTotalFunctions.None && format.Formula == null) continue;
 
-                    case EnumFormatTypeExcel.DecimalNumber:
-                      subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
-                      break;
+                    var subtotalFormat = format.Format;
+                    if (format.SubtotalWithCero)
+                    {
+                      switch (format.Format)
+                      {
+                        case EnumFormatTypeExcel.Number:
+                          subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
+                          break;
+                        case EnumFormatTypeExcel.DecimalNumber:
+                          subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
+                          break;
+                        case EnumFormatTypeExcel.Percent:
+                          subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
+                          break;
+                      }
+                    }
 
-                    case EnumFormatTypeExcel.Percent:
-                      subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
-                      break;
+                    //Le aplicacamos el formato a la celda.
+                    range.Style.Numberformat.Format = GetFormat(subtotalFormat);
+
+
+                    //Si no es calculada aplicamos la funcion configurada.
+                    if (!format.IsCalculated)
+                    {
+                      var formula = "";
+                      //Si es el ultimo nivel
+                      if (j == groupsAct.Length - 1)
+                        formula = wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address;//Aplicamos la seleccion segun la cantidad de registros que tenga el grupo.
+                      else
+                      {
+                        //Si son antes del ultimo nivel.
+                        var index = j + 1;//Se obtiene el indice actual mas 1
+                        while (formula == "")
+                        {
+                          //Si el indice devuelve un valor nulo, se incrementa.
+                          if (subtotalFormulas[index] == null) { index++; continue; }
+                          //Obtenemos las posiciones de cada subtotal.
+                          formula = subtotalFormulas[index][format.PropertyName];
+
+                          //Si no es el ultimo nivel y el nivel actual de cada arreglo son diferentes o el nivel actual del arreglo siguiente  es nulo.
+                          if (j < groupsAct.Length - 1 && (groupsAct[j] != nextGroup[j] || string.IsNullOrEmpty(nextGroup[j])))
+                          {
+                            //Limpiamos la formula.
+                            subtotalFormulas[index][format.PropertyName] = string.Empty;
+                          }
+                        }
+                      }
+                      switch (format.SubTotalFunctions)
+                      {
+                        case eSubTotalFunctions.Sum:
+                          range.Formula = "=SUM(" + formula + ")";
+                          break;
+                        case eSubTotalFunctions.Avg:
+                          range.Formula = "=AVERAGE(" + formula + ")";
+                          break;
+                        case eSubTotalFunctions.Count:
+                          if (format.Format == EnumFormatTypeExcel.General)
+                            range.Formula = (j == groupsAct.Length - 1) ? "= COUNTA(" + formula + ")" : "= SUM(" + formula + ")";
+                          break;
+                      }
+                      if (subtotalFormulas[j] != null && subtotalFormulas[j].ContainsKey(format.PropertyName))
+                      {
+                        subtotalFormulas[j][format.PropertyName] += (subtotalFormulas[j][format.PropertyName] == string.Empty) ? range.Address : "," + range.Address;
+                      }
+                      else
+                      {
+                        if (subtotalFormulas[j] == null) subtotalFormulas[j] = new Dictionary<string, string>();
+                        subtotalFormulas[j].Add(format.PropertyName, range.Address);
+                      }
+                    }
+                    else
+                      //Obtenemos la formula.
+                      range.Formula = GetFormula(formatTable, format.Formula, rowNumber);
                   }
                 }
-                wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(subtotalFormat);
-                //Si no es calculada aplicamos la funcion configurada.
-                if (!format.IsCalculated)
+                var firstSubtotalColumn = formatTable.First(c => c.SubTotalFunctions != eSubTotalFunctions.None || c.Formula != null).Order;
+                using (var range = wsData.Cells[rowNumber, firstSubtotalColumn, rowNumber, totalColumns])
                 {
-                  switch (format.SubTotalFunctions)
-                  {
-                    case eSubTotalFunctions.Sum:
-                      wsData.Cells[rowNumber, drColumn].Formula = "=SUM(" + wsData.Cells[dataIniRow, drColumn, rowNumber - 1, drColumn].Address + ")";
-                      break;
-
-                    case eSubTotalFunctions.Avg:
-                      wsData.Cells[rowNumber, drColumn].Formula = "=AVERAGE(" + wsData.Cells[dataIniRow, drColumn, rowNumber - 1, drColumn].Address + ")";
-                      break;
-
-                    case eSubTotalFunctions.Count:
-                      if (format.Format == EnumFormatTypeExcel.General)
-                        wsData.Cells[rowNumber, drColumn].Formula = "=COUNTA(" + wsData.Cells[dataIniRow, drColumn, rowNumber - 1, drColumn].Address + ")";
-                      break;
-                  }
+                  range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                  range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].BackGroundColor));
+                  range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
+                  range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
                 }
-                else
-                  //Obtenemos la formula.
-                  wsData.Cells[rowNumber, drColumn].Formula = GetFormula(pivotedTable, format.Formula, rowNumber);
-                drColumn++;
+                rowNumber += 2;
               }
-            });
-            rowNumber++;
+            }
           }
           rowNumber++;
         }
+
+        if (blnRowGrandTotal)
+        {
+          formatTableColumns.ForEach(format =>
+          {
+            using (var range = wsData.Cells[rowNumber - 1, format.Order])
+            {
+              if (!format.IsCalculated)
+              {
+                switch (format.SubTotalFunctions)
+                {
+                  case eSubTotalFunctions.Sum:
+                    range.Formula = "=SUM(" + subtotalFormulas[0][format.PropertyName] + ")";
+                    break;
+                  case eSubTotalFunctions.Avg:
+                    range.Formula = "=AVERAGE(" + subtotalFormulas[0][format.PropertyName] + ")";
+                    break;
+                  case eSubTotalFunctions.Count:
+                    if (format.Format == EnumFormatTypeExcel.General)
+                      range.Formula = "= SUM(" + subtotalFormulas[0][format.PropertyName] + ")";
+                    break;
+                }
+              }
+              else
+                range.Formula = GetFormula(formatTableColumns, format.Formula, rowNumber - 1);
+              range.Style.Numberformat.Format = GetFormat(format.Format);
+            }
+          });
+          using (var range = wsData.Cells[rowNumber - 1, 1, rowNumber - 1, totalColumns])
+          {
+            range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 1].BackGroundColor));
+            range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 1].FontColor));
+            range.Style.Font.Bold = backgroundColorGroups[backgroundColorGroups.Count - 1].FontBold;
+          }
+        }
+        //Ajustamos todas las columnas a su contenido.
         wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
 
         #endregion Agrupado
@@ -1201,18 +1439,28 @@ namespace IM.Base.Helpers
       {
         #region Agregando Datos
 
+        //Eliminamos las columnas que fueron configuradas como No Visibles. Y obtenemos el formato de las columnas que se visualizaran en el reporte.
+        pivotedTable.Columns.OfType<DataColumn>().ToList().ForEach(c =>
+        {
+          var format = formatTableColumns.FirstOrDefault(f => f.PropertyName == c.ColumnName);
+          if (format != null && !format.IsVisible)
+          {
+            pivotedTable.Columns.Remove(c);
+          }
+        });
+
         rowNumber++;
-        int columnIndex = 1;
-        int rowEnd = rowNumber + pivotedTable.Rows.Count;
+        var columnIndex = 1;
+        var rowEnd = rowNumber + pivotedTable.Rows.Count;
         pivotedTable.Columns.Cast<DataColumn>().ToList().ForEach(col =>
         {
-          var ColumnN = col.ColumnName.Split(separator);
-          if (ColumnN.Length == 1)
+          var columnN = col.ColumnName.Split(separator);
+          if (columnN.Length == 1)
           {
-            var format = GetFormat(formatTable.First(c => c.PropertyName == ColumnN[0]).Format);
+            var format = GetFormat(formatTable.First(c => c.PropertyName == columnN[0]).Format);
             if (format != "")
             {
-              using (ExcelRange range = wsData.Cells[rowNumber, columnIndex, rowEnd, columnIndex])
+              using (var range = wsData.Cells[rowNumber, columnIndex, rowEnd, columnIndex])
               {
                 range.Style.Numberformat.Format = format;
               }
@@ -1220,10 +1468,10 @@ namespace IM.Base.Helpers
           }
           else
           {
-            var format = GetFormat(formatTable.First(c => c.PropertyName == ColumnN[ColumnN.Length - 1]).Format);
+            var format = GetFormat(formatTable.First(c => c.PropertyName == columnN[columnN.Length - 1]).Format);
             if (format != "")
             {
-              using (ExcelRange range = wsData.Cells[rowNumber, columnIndex, rowEnd, columnIndex])
+              using (var range = wsData.Cells[rowNumber, columnIndex, rowEnd, columnIndex])
               {
                 range.Style.Numberformat.Format = format;
               }
@@ -1241,13 +1489,13 @@ namespace IM.Base.Helpers
           columnIndex = 1;
           pivotedTable.Columns.Cast<DataColumn>().ToList().ForEach(col =>
           {
-            var ColumnN = col.ColumnName.Split(separator);
-            string ColN = (ColumnN.Length == 1) ? ColumnN[0] : ColumnN[ColumnN.Length - 1];
+            var columnN = col.ColumnName.Split(separator);
+            var colN = (columnN.Length == 1) ? columnN[0] : columnN[columnN.Length - 1];
 
-            var formatCol = formatTable.First(ft => ft.PropertyName == ColN);
+            var formatCol = formatTable.First(ft => ft.PropertyName == colN);
             if (!formatCol.IsGroup)
             {
-              EnumFormatTypeExcel subtotalFormat = formatCol.Format;
+              var subtotalFormat = formatCol.Format;
               if (formatCol.SubtotalWithCero)
               {
                 switch (formatCol.Format)
@@ -1255,37 +1503,544 @@ namespace IM.Base.Helpers
                   case EnumFormatTypeExcel.Number:
                     subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
                     break;
-
                   case EnumFormatTypeExcel.DecimalNumber:
                     subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
                     break;
-
                   case EnumFormatTypeExcel.Percent:
                     subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
                     break;
                 }
               }
-              wsData.Cells[rowNumber, columnIndex].Style.Numberformat.Format = GetFormat(subtotalFormat);
-              switch (formatCol.Function)
+              using (var range = wsData.Cells[rowNumber, columnIndex])
               {
-                case DataFieldFunctions.Sum:
-                  wsData.Cells[rowNumber, columnIndex].Formula = "=SUM(" + wsData.Cells[rowNumber - pivotedTable.Rows.Count, columnIndex, rowNumber - 1, columnIndex].Address + ")";
-                  break;
+                range.Style.Numberformat.Format = GetFormat(subtotalFormat);
+                switch (formatCol.Function)
+                {
+                  case DataFieldFunctions.Sum:
+                    range.Formula = "=SUM(" + wsData.Cells[rowNumber - pivotedTable.Rows.Count, columnIndex, rowNumber - 1, columnIndex].Address + ")";
+                    break;
+                }
               }
               columnIndex++;
             }
           });
+          using (var range = wsData.Cells[rowNumber, 1, rowNumber, pivotedTable.Columns.Count])
+          {
+            range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            range.Style.Fill.BackgroundColor.SetColor(Color.Black);
+            range.Style.Font.Bold = true;
+            range.Style.Font.Color.SetColor(Color.White);
+          }
           rowNumber++;
         }
-
-        wsData.Cells[totalFilterRows + 5, 1, rowNumber, pivotedTable.Columns.Count].AutoFitColumns();
+        wsData.Cells[totalFilterRows, 1, rowNumber, pivotedTable.Columns.Count].AutoFitColumns();
 
         #endregion Agregando Datos
       }
       FileInfo pathFinalFile;
       if (fileFullPath == null)
       {
-        string suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
+        var suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
+        pathFinalFile = SaveExcel(pk, suggestedFilaName);
+      }
+      else
+        pathFinalFile = SaveExcelFilePath(pk, fileFullPath);
+
+      return pathFinalFile;
+    }
+
+    #endregion CreateExcelCustomPivot
+
+    #region ExportRptWeeklyMonthlyHostess
+
+    /// <summary>
+    /// Exporta un excel realizando un pivot a las columnas configuradas.
+    /// </summary>
+    /// <param name="dtTable"></param>
+    /// <param name="filters"></param>
+    /// <param name="reportName"></param>
+    /// <param name="dateRangeFileName"></param>
+    /// <param name="formatTable"></param>
+    /// <param name="blnColumnGrandTotal"></param>
+    /// <param name="blnRowGrandTotal"></param>
+    /// <param name="blnShowSubtotal"></param>
+    /// <param name="pivotedTable"></param>
+    /// <param name="extraFieldHeader"></param>
+    /// <param name="numRows"></param>
+    /// <param name="fileFullPath">Opcional. Ruta completa del archivo</param>
+    /// <returns> FileInfo </returns>
+    /// <history>
+    ///   [edgrodriguez] 09/06/2016  Created.
+    /// </history>
+    public static FileInfo ExportRptWeeklyMonthlyHostess(List<Tuple<DataTable,List<ExcelFormatTable>,string>> Data, List<Tuple<string, string>> filters,
+      string reportName, string dateRangeFileName, bool blnColumnGrandTotal = false,
+      bool blnRowGrandTotal = false, bool blnShowSubtotal = false, string fileFullPath = null)
+    {
+      var pk = new ExcelPackage();
+      foreach (var pair in Data)
+      {
+        var wsData = pk.Workbook.Worksheets.Add(Regex.Replace(pair.Item3, "[^a-zA-Z0-9_]+", " "));
+        var totalFilterRows = 0;
+
+        //Creamos el encabezado del reporte. Filtros, Titulo.
+        CreateReportHeader(filters, reportName, ref wsData, ref totalFilterRows);
+
+        var columnNumber = 1;
+
+        //Obtenemos la fila inicial. Para dibujar la tabla.
+        var rowNumber = totalFilterRows + 1 + pair.Item2.Count(c => c.Axis == ePivotFieldAxis.Column);
+
+        //Obtenemos la tabla ya con las columnas pivote.
+        var pivotedTable = GetPivotTable(pair.Item2, pair.Item1);
+
+        var formatTableColumns = new List<ExcelFormatTable>();
+
+        pivotedTable.Columns.Cast<DataColumn>().ToList().ForEach(col =>
+        {
+          var header = col.ColumnName.Split(separator);
+          var format = pair.Item2.FirstOrDefault(ft => ft.PropertyName == ((header.Length == 1) ? header[0] : header[header.Length - 1]));
+          if (format != null)
+          {
+            formatTableColumns.Add(new ExcelFormatTable
+            {
+              AggregateFunction = format.AggregateFunction,
+              Alignment = format.Alignment,
+              Axis = format.Axis,
+              Format = format.Format,
+              Formula = format.Formula,
+              Function = format.Function,
+              IsCalculated = format.IsCalculated,
+              IsGroup = format.IsGroup,
+              IsVisible = format.IsVisible,
+              Sort = format.Sort,
+              SubTotalFunctions = format.SubTotalFunctions,
+              SubtotalWithCero = format.SubtotalWithCero,
+              Title = format.Title,
+              PropertyName = col.ColumnName,
+              Order = col.Ordinal + 1,
+            });
+          }
+        });
+
+        #region Creando Headers
+
+        //Obtenemos los encabezados de la tabla pivote.
+        var lstHeaders = pivotedTable.Columns.OfType<DataColumn>().Select(c => c.ColumnName.Split(separator)).ToList();
+        //Obtenemos la cantidad maxima de superheaders.
+        var iniValue = new int[pivotedTable.Columns.OfType<DataColumn>().Max(c => c.ColumnName.Split(separator).Length - 1)];
+
+        //Recorremos los encabezados.
+        foreach (var item in lstHeaders)
+        {
+          //Si solo hay un encabezado.
+          if (item.Length == 1)
+          {
+            //Si no es un grupo.
+            if (pair.Item2.First(c => c.PropertyName == item.First()).IsGroup || !pair.Item2.First(c => c.PropertyName == item.First()).IsVisible) continue;
+            //Dibujamos el encabezado y aplicamos formato.
+            using (var range = wsData.Cells[rowNumber, columnNumber])
+            {
+              range.Value = pair.Item2.First(c => c.PropertyName == item.First()).Title;
+              range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+              range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+              range.Style.Fill.BackgroundColor.SetColor(Color.Black);
+              range.Style.Font.Bold = true;
+              range.Style.Font.Color.SetColor(Color.White);
+              range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.White);
+            }
+            columnNumber++;
+          }
+          //Si son mas de 1 encabezado.
+          else if (item.Length > 1)
+          {
+            //Obtenemos la fila inicial para dibujar el encabezado.
+            var rowHeader = rowNumber - (item.Length - 1);
+            //Obtenemos el siguiente arreglo de encabezados.        
+            var itemNext = (lstHeaders.IndexOf(item) + 1 < lstHeaders.Count) ? lstHeaders[lstHeaders.IndexOf(item) + 1] : null;
+
+            //Si el arreglo posterior contiene valore.
+            if (itemNext != null && itemNext.Length == item.Length)
+            {
+              //Recorremos la lista.
+              for (var i = 0; i < item.Length; i++)
+              {
+                if (i < item.Length - 1)
+                {
+                  //Si el encabezado de la lista actual es igual al encabezado de la lista posterior y Si pertenecen al mismo encabezado superior
+                  if (item[i] == itemNext[i] && (i == 0 || item[i - 1] == itemNext[i - 1]))
+                  {
+                    //Aumentamos la cantidad de celdas a combinar. (MERGE)
+                    iniValue[i] = iniValue[i] + 1;
+                  }
+                  //Si el encabezado de la lista actual es diferente al encabezado de la lista posterior.
+                  else
+                  {
+                    using (var range = wsData.Cells[rowHeader, columnNumber - iniValue[i], rowHeader, columnNumber])
+                    {
+                      //Dibujamos el encabezado.
+                      range.Value = item[i];
+                      //Combinamos las celdas.
+                      range.Merge = true;
+                      range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                      range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                      range.Style.Fill.BackgroundColor.SetColor(Color.Black);
+                      range.Style.Font.Bold = true;
+                      range.Style.Font.Color.SetColor(Color.White);
+                      range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.White);
+                    }
+                    iniValue[i] = 0;//Reiniciamos el contador de celdas a combinar.
+                  }
+                }
+                else if (i == item.Length - 1)
+                {
+                  using (var range = wsData.Cells[rowHeader, columnNumber])
+                  {
+                    range.Value = pair.Item2.First(c => c.PropertyName == item[i]).Title;
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    range.Style.Fill.BackgroundColor.SetColor(Color.Black);
+                    range.Style.Font.Bold = true;
+                    range.Style.Font.Color.SetColor(Color.White);
+                    range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.White);
+                  }
+                }
+                rowHeader++;
+              }
+            }
+            //Si el arreglo posterior esta vacio
+            else
+            {
+              //Recorremos la lista de encabezados.
+              for (var i = 0; i < item.Length; i++)
+              {
+                if (i < item.Length - 1)
+                {
+                  using (var range = wsData.Cells[rowHeader, columnNumber - iniValue[i], rowHeader, columnNumber])
+                  {
+                    //Dibujamos el encabezado.
+                    range.Value = item[i];
+                    //Combinamos las celdas.
+                    range.Merge = true;
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    range.Style.Fill.BackgroundColor.SetColor(Color.Black);
+                    range.Style.Font.Bold = true;
+                    range.Style.Font.Color.SetColor(Color.White);
+                    range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.White);
+                  }
+                  iniValue[i] = 0;//Reiniciamos el contador de celdas a combinar.
+                }
+                else if (i == item.Length - 1)
+                {
+                  using (var range = wsData.Cells[rowHeader, columnNumber])
+                  {
+                    range.Value = pair.Item2.First(c => c.PropertyName == item[i]).Title;
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    range.Style.Fill.BackgroundColor.SetColor(Color.Black);
+                    range.Style.Font.Bold = true;
+                    range.Style.Font.Color.SetColor(Color.White);
+                    range.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.White);
+                  }
+                }
+                rowHeader++;
+              }
+            }
+            columnNumber++;
+          }
+        }
+
+        #endregion Creando Headers
+
+        if (pair.Item2.Any(c => c.IsGroup))
+        {
+          var backgroundColorGroups = new List<ExcelFormatGroupHeaders> {
+            new ExcelFormatGroupHeaders { BackGroundColor="#004E48", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
+            new ExcelFormatGroupHeaders { BackGroundColor="#147F79", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
+            new ExcelFormatGroupHeaders { BackGroundColor="#2D8B85", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left },
+            new ExcelFormatGroupHeaders { BackGroundColor="#4CA09A", FontBold = true, TextAligment = ExcelHorizontalAlignment.Left } };
+
+          #region Agrupado
+
+          rowNumber++;
+          #region Obtenemos los encabezados de grupo y sus valores
+          //Creamos la sentencia Linq para obtener los campos que se agruparán.
+          var qfields = string.Join(", ", pair.Item2
+            .Where(c => c.IsGroup)
+            .OrderBy(c => c.Order).Select(x => "it[\"" + x.PropertyName + "\"] as " + x.PropertyName));
+
+          //Obtenemos las agrupaciones y los registros de cada agrupacion.
+          var qTable = pivotedTable
+            .AsEnumerable()
+            .AsQueryable()
+            .GroupBy("new(" + qfields + ")", "it")
+            .Select("new(Key as qgroup, it as Values)");
+
+          #endregion
+
+          //Lista de formulas para cada grupo. Teniendo como items las columnas que tienen la propiedad SubtotalFunction.
+          var subtotalFormulas = new Dictionary<string, string>[pair.Item2.Count(c => c.IsGroup)];
+          //Lista de grupos.       
+          var dynamicListData = qTable.OfType<dynamic>().ToList();
+          //Total de columnas que no son grupo.
+          var totalColumns = pivotedTable.Columns.Count - pair.Item2.Count(c => c.IsGroup);
+          var previousGroup = new string[subtotalFormulas.Length];
+          //Recorremos la lista de grupos.
+          for (var i = 0; i < dynamicListData.Count; i++)
+          {
+            var nextGroup = new string[subtotalFormulas.Length];
+            //Obtenemos la informacion del item actual.
+            object itemActual = dynamicListData[i].qgroup;
+            //Obtenemos los headers de cada grupo.
+            var groupsAct = itemActual.GetType().GetProperties().Select(c => c.GetValue(itemActual).ToString()).ToArray();
+            //Si es el primer item de la lista o es el indice es mayor a cero y el primer grupo del item actual
+            //es diferente al primer grupo del item anterior.
+            if (i == 0 || (i > 0 && groupsAct[0] != previousGroup[0]))
+            {
+              //Dibujamos todos los headers de grupo.
+              for (var j = 0; j < groupsAct.Length; j++)
+              {
+
+                wsData.Cells[rowNumber, 1].Value = groupsAct[j];
+                using (var range = wsData.Cells[rowNumber, 1, rowNumber, totalColumns])
+                {
+                  range.Merge = true;
+                  range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                  range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].BackGroundColor));
+                  range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
+                  range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
+                  range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
+                }
+                rowNumber++;
+              }
+              //asignamos el valor actual a la variable aux
+              previousGroup = groupsAct;
+            }
+            else if (i > 0)
+            {
+
+              //Recorremos los encabezados(Niveles).
+              for (var j = 0; j < groupsAct.Length; j++)
+              {
+                if (groupsAct[j] == previousGroup[j]) continue;
+                //Si el nivel actual es diferente al valor anterior.
+                if (groupsAct[j] != previousGroup[j])
+                {
+                  //Dibujamos el encabezado.
+                  wsData.Cells[rowNumber, 1].Value = groupsAct[j];
+                  using (var range = wsData.Cells[rowNumber, 1, rowNumber, totalColumns])
+                  {
+                    range.Merge = true;
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].BackGroundColor));
+                    range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
+                    range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
+                    range.Style.HorizontalAlignment = backgroundColorGroups[j].TextAligment;
+                  }
+                  rowNumber++;
+                }
+              }
+              previousGroup = groupsAct;
+            }
+            //Obtenemos los datos.
+            var dataValues = ((IEnumerable<DataRow>)dynamicListData[i].Values).CopyToDataTable();
+            var camposGrupo = pair.Item2.Where(col => col.IsGroup).Select(col => col.PropertyName).ToList();
+
+            //Eliminamos las columnas que fueron configuradas como grupo. Y obtenemos el formato de las columnas que se visualizaran en el reporte.
+            dataValues.Columns.OfType<DataColumn>().ToList().ForEach(c =>
+            {
+              var format = formatTableColumns.FirstOrDefault(f => f.PropertyName == c.ColumnName);
+              if (camposGrupo.Contains(c.ColumnName) || (format != null && !format.IsVisible))
+                dataValues.Columns.Remove(c);
+              else
+              {
+                if (format != null && format.Order > 0)
+                {
+                  using (var range = wsData.Cells[rowNumber, format.Order, rowNumber + dataValues.Rows.Count, format.Order])
+                  {
+                    range.Style.Numberformat.Format = GetFormat(format.Format);
+                  }
+                }
+              }
+            });
+
+            //Agregamos los datos al excel.
+            using (var range = wsData.Cells[rowNumber, 1].LoadFromDataTable(dataValues, false))
+            {
+              //Aplicamos estilo a las celdas.
+              range.Style.Border.Top.Style = range.Style.Border.Right.Style = range.Style.Border.Left.Style = range.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+              range.Style.Border.Top.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+              range.Style.Border.Right.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+              range.Style.Border.Left.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+              range.Style.Border.Bottom.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+            }
+
+            rowNumber += dataValues.Rows.Count;
+
+            //Si se mostrará el subtotal de cada grupo.
+            if (blnShowSubtotal)
+            {
+              //Obtenemos la fila inicial.
+              var dataIniRow = rowNumber - dataValues.Rows.Count;
+              //Si el indice siguiente es menor que la cantidad total de items.
+              if (i + 1 < dynamicListData.Count)
+              {
+                //Obtenemos objeto con los encabezados de grupo.
+                object nextItem = dynamicListData[i + 1].qgroup;
+                //Obtenemos el arreglo de encabezados de grupo. Los niveles estan de acuerdo al indice del arreglo.
+                nextGroup = nextItem.GetType().GetProperties().Select(c => c.GetValue(nextItem).ToString()).ToArray();
+                //Si el primer nivel de cada arreglo son diferentes.
+                if (groupsAct[0] != nextGroup[0])
+                  nextGroup = new string[groupsAct.Length];//Limpiamos la lista
+              }
+              //Recorremos los niveles del arreglo actual.
+              for (var j = groupsAct.Length - 1; j >= 0; j--)
+              {
+                //Si los valores del index actual de cada lista son diferentes o el valor del index de la siguiente lista esta vacia o nula.
+                if (groupsAct[j] != nextGroup[j] || string.IsNullOrEmpty(nextGroup[j]))
+                {
+                  //Recorremos las columnas.
+                  foreach (var format in formatTableColumns)
+                  {
+                    using (var range = wsData.Cells[rowNumber, format.Order])
+                    {
+                      if (format.SubTotalFunctions == eSubTotalFunctions.None && format.Formula == null) continue;
+
+                      var subtotalFormat = format.Format;
+                      if (format.SubtotalWithCero)
+                      {
+                        switch (format.Format)
+                        {
+                          case EnumFormatTypeExcel.Number:
+                            subtotalFormat = EnumFormatTypeExcel.NumberWithCero;
+                            break;
+                          case EnumFormatTypeExcel.DecimalNumber:
+                            subtotalFormat = EnumFormatTypeExcel.DecimalNumberWithCero;
+                            break;
+                          case EnumFormatTypeExcel.Percent:
+                            subtotalFormat = EnumFormatTypeExcel.PercentWithCero;
+                            break;
+                        }
+                      }
+
+                      //Le aplicacamos el formato a la celda.
+                      range.Style.Numberformat.Format = GetFormat(subtotalFormat);
+
+
+                      //Si no es calculada aplicamos la funcion configurada.
+                      if (!format.IsCalculated)
+                      {
+                        var formula = "";
+                        //Si es el ultimo nivel
+                        if (j == groupsAct.Length - 1)
+                          formula = wsData.Cells[dataIniRow, format.Order, rowNumber - 1, format.Order].Address;//Aplicamos la seleccion segun la cantidad de registros que tenga el grupo.
+                        else
+                        {
+                          //Si son antes del ultimo nivel.
+                          var index = j + 1;//Se obtiene el indice actual mas 1
+                          while (formula == "")
+                          {
+                            //Si el indice devuelve un valor nulo, se incrementa.
+                            if (subtotalFormulas[index] == null) { index++; continue; }
+                            //Obtenemos las posiciones de cada subtotal.
+                            formula = subtotalFormulas[index][format.PropertyName];
+
+                            //Si no es el ultimo nivel y el nivel actual de cada arreglo son diferentes o el nivel actual del arreglo siguiente  es nulo.
+                            if (j < groupsAct.Length - 1 && (groupsAct[j] != nextGroup[j] || string.IsNullOrEmpty(nextGroup[j])))
+                            {
+                              //Limpiamos la formula.
+                              subtotalFormulas[index][format.PropertyName] = string.Empty;
+                            }
+                          }
+                        }
+                        switch (format.SubTotalFunctions)
+                        {
+                          case eSubTotalFunctions.Sum:
+                            range.Formula = "=SUM(" + formula + ")";
+                            break;
+                          case eSubTotalFunctions.Avg:
+                            range.Formula = "=AVERAGE(" + formula + ")";
+                            break;
+                          case eSubTotalFunctions.Count:
+                            if (format.Format == EnumFormatTypeExcel.General)
+                              range.Formula = (j == groupsAct.Length - 1) ? "= COUNTA(" + formula + ")" : "= SUM(" + formula + ")";
+                            break;
+                        }
+                        if (subtotalFormulas[j] != null && subtotalFormulas[j].ContainsKey(format.PropertyName))
+                        {
+                          subtotalFormulas[j][format.PropertyName] += (subtotalFormulas[j][format.PropertyName] == string.Empty) ? range.Address : "," + range.Address;
+                        }
+                        else
+                        {
+                          if (subtotalFormulas[j] == null) subtotalFormulas[j] = new Dictionary<string, string>();
+                          subtotalFormulas[j].Add(format.PropertyName, range.Address);
+                        }
+                      }
+                      else
+                        //Obtenemos la formula.
+                        range.Formula = GetFormula(pair.Item2, format.Formula, rowNumber);
+                    }
+                  }
+                  var firstSubtotalColumn = pair.Item2.First(c => c.SubTotalFunctions != eSubTotalFunctions.None || c.Formula != null).Order;
+                  using (var range = wsData.Cells[rowNumber, firstSubtotalColumn, rowNumber, totalColumns])
+                  {
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].BackGroundColor));
+                    range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[j].FontColor));
+                    range.Style.Font.Bold = backgroundColorGroups[j].FontBold;
+                  }
+                  rowNumber += 2;
+                }
+              }
+            }
+            rowNumber++;
+          }
+
+          if (blnRowGrandTotal)
+          {
+            formatTableColumns.ForEach(format =>
+            {
+              using (var range = wsData.Cells[rowNumber - 1, format.Order])
+              {
+                if (!format.IsCalculated)
+                {
+                  switch (format.SubTotalFunctions)
+                  {
+                    case eSubTotalFunctions.Sum:
+                      range.Formula = "=SUM(" + subtotalFormulas[0][format.PropertyName] + ")";
+                      break;
+                    case eSubTotalFunctions.Avg:
+                      range.Formula = "=AVERAGE(" + subtotalFormulas[0][format.PropertyName] + ")";
+                      break;
+                    case eSubTotalFunctions.Count:
+                      if (format.Format == EnumFormatTypeExcel.General)
+                        range.Formula = "= SUM(" + subtotalFormulas[0][format.PropertyName] + ")";
+                      break;
+                  }
+                }
+                else
+                  range.Formula = GetFormula(formatTableColumns, format.Formula, rowNumber - 1);
+                range.Style.Numberformat.Format = GetFormat(format.Format);
+              }
+            });
+            using (var range = wsData.Cells[rowNumber - 1, 1, rowNumber - 1, totalColumns])
+            {
+              range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+              range.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 1].BackGroundColor));
+              range.Style.Font.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 1].FontColor));
+              range.Style.Font.Bold = backgroundColorGroups[backgroundColorGroups.Count - 1].FontBold;
+            }
+          }
+          //Ajustamos todas las columnas a su contenido.
+          wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
+
+          #endregion Agrupado
+        }
+      }
+      FileInfo pathFinalFile;
+      if (fileFullPath == null)
+      {
+        var suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
         pathFinalFile = SaveExcel(pk, suggestedFilaName);
       }
       else
@@ -1312,20 +2067,20 @@ namespace IM.Base.Helpers
       using (var pk = new ExcelPackage(template))
       {
         //Preparamos la hoja donde escribiremos la tabla
-        ExcelWorksheet ws = pk.Workbook.Worksheets.ToList().First(w => w.Tables.Any(t => t.Name == dt.TableName));
+        var ws = pk.Workbook.Worksheets.ToList().First(w => w.Tables.Any(t => t.Name == dt.TableName));
 
-        ExcelTable table = ws.Tables[dt.TableName];
-        ExcelCellAddress start = table.Address.Start;
-        ExcelRange body = ws.Cells[start.Row + 1, start.Column];
-        ExcelRangeBase outRange = body.LoadFromDataTable(dt, false);
+        var table = ws.Tables[dt.TableName];
+        var start = table.Address.Start;
+        var body = ws.Cells[start.Row + 1, start.Column];
+        var outRange = body.LoadFromDataTable(dt, false);
 
         string newRange = $"{start.Address}:{outRange.End.Address}";
 
-        XmlElement tableElement = table.TableXml.DocumentElement;
+        var tableElement = table.TableXml.DocumentElement;
         if (tableElement != null)
         {
           tableElement.Attributes["ref"].Value = newRange;
-          XmlElement xmlElement = tableElement["autoFilter"];
+          var xmlElement = tableElement["autoFilter"];
           if (xmlElement != null) xmlElement.Attributes["ref"].Value = newRange;
         }
         pk.Save();
@@ -1356,20 +2111,20 @@ namespace IM.Base.Helpers
     {
       #region Variables Atributos, Propiedades
 
-      ExcelPackage pk = new ExcelPackage(template);
+      var pk = new ExcelPackage(template);
       //Preparamos la hoja donde escribiremos
-      ExcelWorksheet ws = pk.Workbook.Worksheets.First(w => w.Hidden == eWorkSheetHidden.Visible);
+      var ws = pk.Workbook.Worksheets.First(w => w.Hidden == eWorkSheetHidden.Visible);
       ws.Name = Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " ");
 
       //Filas Para los filtros
-      int FilasTotalesFiltros = 0;
+      var filasTotalesFiltros = 0;
 
       #endregion Variables Atributos, Propiedades
 
       #region Report SuperHeader
 
       //Creamos la cabecera del reporte (Titulos, Filtros, Fecha y Hora de Impresion)
-      CreateReportHeader(filter, reportName, ref ws, ref FilasTotalesFiltros, null, 0);
+      CreateReportHeader(filter, reportName, ref ws, ref filasTotalesFiltros, null, 0);
 
       #endregion Report SuperHeader
 
@@ -1385,8 +2140,8 @@ namespace IM.Base.Helpers
       //Centramos La etiqueta Filters
       if (filter.Count > 0)
       {
-        ws.Cells[2, 1, FilasTotalesFiltros + 1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-        ws.Cells[2, 1, FilasTotalesFiltros + 1, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+        ws.Cells[2, 1, filasTotalesFiltros + 1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        ws.Cells[2, 1, filasTotalesFiltros + 1, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
       }
 
       #endregion Formato de columnas Centrar y AutoAjustar
@@ -1396,7 +2151,7 @@ namespace IM.Base.Helpers
       FileInfo pathFinalFile;
       if (fileFullPath == null)
       {
-        string suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
+        var suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
         pathFinalFile = SaveExcel(pk, suggestedFilaName);
       }
       else
@@ -1431,13 +2186,13 @@ namespace IM.Base.Helpers
     {
       #region Variables Atributos, Propiedades
 
-      ExcelPackage pk = new ExcelPackage();
+      var pk = new ExcelPackage();
       //Preparamos la hoja donde escribiremos
-      ExcelWorksheet ws = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
+      var ws = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
 
       //Filas Para los filtros
-      int filasTotalesFiltros = 0;
-      int filasTotales = 0;
+      var filasTotalesFiltros = 0;
+      var filasTotales = 0;
 
       //Renombramos las columnas.
       tupleGraph1.Item2.Columns.Cast<DataColumn>().ToList().ForEach(c =>
@@ -1466,9 +2221,9 @@ namespace IM.Base.Helpers
       #region tabla 1
 
       //Agregamos el contenido empezando en la fila
-      ExcelRangeBase range = ws.Cells[filasTotales, 1].LoadFromDataTable(tupleGraph1.Item2, true);
+      var range = ws.Cells[filasTotales, 1].LoadFromDataTable(tupleGraph1.Item2, true);
       //El contenido lo convertimos a una tabla
-      ExcelTable table = ws.Tables.Add(range, null);
+      var table = ws.Tables.Add(range, null);
       table.TableStyle = TableStyles.Medium2;
 
       //Formateamos la tabla
@@ -1569,7 +2324,7 @@ namespace IM.Base.Helpers
       FileInfo pathFinalFile;
       if (fileFullPath == null)
       {
-        string suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
+        var suggestedFilaName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
         pathFinalFile = SaveExcel(pk, suggestedFilaName);
       }
       else
@@ -1596,17 +2351,17 @@ namespace IM.Base.Helpers
     /// </history>
     public static string CreateEmptyExcel(string reportName, string dateRangeFileName)
     {
-      string suggestedName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
+      var suggestedName = string.Concat(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "), " ", dateRangeFileName);
      
       string outputDir = ConfigRegistry.GetReportsPath();
       int count = 1;
 
       string fullPath = $@"{outputDir}\{suggestedName}.xlsx";
 
-      string fileNameOnly = Path.GetFileNameWithoutExtension(fullPath);
-      string extension = Path.GetExtension(fullPath);
-      string path = Path.GetDirectoryName(fullPath);
-      string newFullPath = fullPath;
+      var fileNameOnly = Path.GetFileNameWithoutExtension(fullPath);
+      var extension = Path.GetExtension(fullPath);
+      var path = Path.GetDirectoryName(fullPath);
+      var newFullPath = fullPath;
 
       while (File.Exists(newFullPath))
       {
@@ -1637,11 +2392,11 @@ namespace IM.Base.Helpers
     {
       #region Variables Atributos, Propiedades
 
-      ExcelPackage pk = new ExcelPackage();
+      var pk = new ExcelPackage();
       //Preparamos la hoja donde escribiremos
-      ExcelWorksheet ws = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
+      var ws = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
       //Filas Para los filtros
-      int filasTotalesFiltros = 0;
+      var filasTotalesFiltros = 0;
 
       #endregion Variables Atributos, Propiedades
 
@@ -1652,7 +2407,7 @@ namespace IM.Base.Helpers
 
       #endregion Report SuperHeader
 
-      using (ExcelRange range = ws.Cells[filasTotalesFiltros + 1, 2, filasTotalesFiltros + 4, 12])
+      using (var range = ws.Cells[filasTotalesFiltros + 1, 2, filasTotalesFiltros + 4, 12])
       {
         range.Value = "There is no info to make a report";
         range.Style.Font.Bold = true;
@@ -1690,17 +2445,17 @@ namespace IM.Base.Helpers
     /// </history>
     private static void SetFormatTable(List<ExcelFormatTable> formatColumns, ref ExcelTable tableData)
     {
-      ExcelWorkbook excelWorkbook = tableData.WorkSheet.Workbook;
+      var excelWorkbook = tableData.WorkSheet.Workbook;
       //Agregamos estilo a los Headers de la Tabla
-      ExcelNamedStyleXml namedStyle = excelWorkbook.Styles.CreateNamedStyle(tableData.Name + "HeaderRowCellStyle");
+      var namedStyle = excelWorkbook.Styles.CreateNamedStyle(tableData.Name + "HeaderRowCellStyle");
       namedStyle.Style.Font.Bold = true;
       namedStyle.Style.Font.Size = 14;
       tableData.HeaderRowCellStyle = namedStyle.Name;
 
-      int contColumn = 0;
-      foreach (ExcelFormatTable item in formatColumns)
+      var contColumn = 0;
+      foreach (var item in formatColumns)
       {
-        ExcelNamedStyleXml tableStyle = excelWorkbook.Styles.CreateNamedStyle(tableData.Name + "TableColumnStyle" + contColumn);
+        var tableStyle = excelWorkbook.Styles.CreateNamedStyle(tableData.Name + "TableColumnStyle" + contColumn);
         tableStyle.Style.HorizontalAlignment = item.Alignment;
         switch (item.Format)
         {
@@ -1745,7 +2500,7 @@ namespace IM.Base.Helpers
     /// </history>
     private static string GetFormat(EnumFormatTypeExcel item)
     {
-      string format = "";
+      var format = "";
       switch (item)
       {
         case EnumFormatTypeExcel.General:
@@ -1813,11 +2568,11 @@ namespace IM.Base.Helpers
     /// <param name="extraFieldHeader">"Titulo","Valor",Formato de Celda</param>
     /// <param name="numRows">Numero de Rows por Columna</param>
     /// <history>
-    ///
     /// [ecanul] 16/05/2016 Modified Agregados parametros extraFieldHeader y numRows para agregar detalles al Header de los reportes
+    /// [edgrodriguez] 09/06/2016 Modified Parametros extraFieldHeader y numRows se cambiaron a opcionales.
     /// </history>
     private static void CreateReportHeader(List<Tuple<string, string>> filterList, string reportName,
-      ref ExcelWorksheet ws, ref int totalFilterRows, List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader, int numRows)
+      ref ExcelWorksheet ws, ref int totalFilterRows, List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows=0)
     {
       double filterNumber = filterList.Count;
 
@@ -1844,8 +2599,8 @@ namespace IM.Base.Helpers
       if (filterList.Count > 0)
       {
         //Calculamos el numero de filas para ingresar nuestros filtros
-        double filterDivision = filterNumber / 4;
-        double filasTotales = Math.Ceiling(filterDivision); //Obtenemos el numero de filas totales.
+        var filterDivision = filterNumber / 4;
+        var filasTotales = Math.Ceiling(filterDivision); //Obtenemos el numero de filas totales.
         totalFilterRows = Convert.ToInt16(filasTotales);
         //Insertamos las filas que necesitamos para los filtros apartir de la fila 2
         ws.InsertRow(2, totalFilterRows);
@@ -1858,13 +2613,13 @@ namespace IM.Base.Helpers
 
         //Separamos los filtros en listas de a 4 en 4
         double cIteraccionReal = 0; //Contador de vueltas en el foreach
-        int cIteraccionColumn = 2;//Contador de columnas de escritura
-        foreach (Tuple<string, string> item in filterList)
+        var cIteraccionColumn = 2;//Contador de columnas de escritura
+        foreach (var item in filterList)
         {
           cIteraccionReal++;
 
-          double rowDivision = cIteraccionReal / 4; //Obtenemos el numero de filtro a escribir
-          double filaEscritura = Math.Ceiling(rowDivision); //Redondeamos Para saber en que fila se encuenta
+          var rowDivision = cIteraccionReal / 4; //Obtenemos el numero de filtro a escribir
+          var filaEscritura = Math.Ceiling(rowDivision); //Redondeamos Para saber en que fila se encuenta
 
           ws.Cells[Convert.ToInt16(filaEscritura) + 1, cIteraccionColumn].Value = item.Item1; //NameFilter
           ws.Cells[Convert.ToInt16(filaEscritura) + 1, cIteraccionColumn].Style.Font.Bold = true;//NameFilter
@@ -1899,24 +2654,24 @@ namespace IM.Base.Helpers
 
       #region ExtraHeaderFile
 
-      //Si el parametro extraFieldHeader tiene algo
+      //Si el parametro extraFieldHeader tiene algo 
       if (extraFieldHeader != null && extraFieldHeader.Count > 0)
       {
         //Saltamos 2 lineas Para iniciar SubHeader
         totalFilterRows += 2;
-        /** La idea es que quede de la siguiente manera
+        /** La idea es que quede de la siguiente manera 
          * /-/-/ /-/-/
          * /-/-/ /-/-/
          * /-/-/ /-/-/
          **/
         //Inserta desde el ultimo numero utilizado,cantidad de rows solicitada por el usuario
         ws.InsertRow(totalFilterRows, numRows);
-        int staRow = totalFilterRows; //Deberia de ser 5
-        int col = 1; //Siempre empieza en 1
+        var staRow = totalFilterRows; //Deberia de ser 5
+        var col = 1; //Siempre empieza en 1
         double count = 0; //Contador de vueltas del foreach
         foreach (var item in extraFieldHeader)
         {
-          ExcelBorderStyle style = ExcelBorderStyle.Thin;
+          var style = ExcelBorderStyle.Thin;
           //wsData.Cells[rowNumber, drColumn].Style.Numberformat.Format = GetFormat(subtotalFormat);
 
           #region HeaderName
@@ -1929,7 +2684,7 @@ namespace IM.Base.Helpers
           ws.Cells[staRow, col].Style.Border.Bottom.Style = style;
           ws.Cells[staRow, col].Style.Border.Right.Style = style;
 
-          #endregion HeaderName
+          #endregion
 
           #region HeaderValue
 
@@ -1941,7 +2696,7 @@ namespace IM.Base.Helpers
           ws.Cells[staRow, col + 1].Style.Border.Right.Style = style;
           ws.Cells[staRow, col + 1].Style.Numberformat.Format = GetFormat(item.Item3);
 
-          #endregion HeaderValue
+          #endregion
 
           count++; //Incrementa el contador
           if (count < numRows)
@@ -1956,7 +2711,7 @@ namespace IM.Base.Helpers
         totalFilterRows += numRows - 1;
       }
 
-      #endregion ExtraHeaderFile
+      #endregion
 
       //Se saltan 2 lineas desde donde quedo (Fila 3 si es sin subheader o 3 + numRows)
       totalFilterRows += 2;
@@ -1978,19 +2733,19 @@ namespace IM.Base.Helpers
     /// </history>
     private static FileInfo SaveExcel(ExcelPackage pk, string suggestedName)
     {
-      SaveFileDialog saveFileDialog = new SaveFileDialog();
+      var saveFileDialog = new SaveFileDialog();
       saveFileDialog.Filter = "Excel files(*.xlsx or *.xls) | *.xlsx; *.xls;";
       saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
       saveFileDialog.DefaultExt = ".xlsx";
       saveFileDialog.FileName = suggestedName;
       if (saveFileDialog.ShowDialog() == true)
       {
-        FileInfo name = new FileInfo(saveFileDialog.FileName);
+        var name = new FileInfo(saveFileDialog.FileName);
         try
         { pk.SaveAs(name); }
         catch (Exception e)
         {
-          string message = UIHelper.GetMessageError(e);
+          var message = UIHelper.GetMessageError(e);
           UIHelper.ShowMessage(message, System.Windows.MessageBoxImage.Error);
           return null;
         }
@@ -2030,7 +2785,7 @@ namespace IM.Base.Helpers
       }
       catch (Exception e)
       {
-        string message = UIHelper.GetMessageError(e);
+        var message = UIHelper.GetMessageError(e);
         UIHelper.ShowMessage(message, System.Windows.MessageBoxImage.Error);
         return null;
       }
@@ -2054,30 +2809,30 @@ namespace IM.Base.Helpers
     private static void AddCalculatedField(this ExcelPivotTable pivotTable, ExcelFormatTable formatTable, string caption = null)
     {
       //En primer lugar, se agrega el elemento cacheFields campo calculado como un hijo del elemento Campos de caché en el PivotCache Definition1.xml
-      XmlElement cacheFieldsElement = pivotTable.CacheDefinition.CacheDefinitionXml.GetElementsByTagName("cacheFields")[0] as XmlElement;
+      var cacheFieldsElement = pivotTable.CacheDefinition.CacheDefinitionXml.GetElementsByTagName("cacheFields")[0] as XmlElement;
 
       // Añadir el elemento cacheField y tomar nota de que el índice
-      XmlAttribute cacheFieldsCountAttribute = cacheFieldsElement.Attributes["count"];
-      int count = Convert.ToInt32(cacheFieldsCountAttribute.Value);
+      var cacheFieldsCountAttribute = cacheFieldsElement.Attributes["count"];
+      var count = Convert.ToInt32(cacheFieldsCountAttribute.Value);
       cacheFieldsElement.InnerXml += $"<cacheField name=\"{formatTable.Title}\" numFmtId=\"0\" formula=\"{formatTable.Formula}\" databaseField=\"0\"/>\n";
-      int cacheFieldIndex = ++count;
+      var cacheFieldIndex = ++count;
       // Campos de actualización de memoria caché cuentan atributo
       cacheFieldsCountAttribute.Value = count.ToString();
 
       // A continuación, actualizar e insertar pivotTable1.xml elemento PivotField como un hijo del elemento PivotFields
-      XmlElement pivotFieldsElement = pivotTable.PivotTableXml.GetElementsByTagName("pivotFields")[0] as XmlElement;
-      XmlAttribute pivotFieldsCountAttribute = pivotFieldsElement.Attributes["count"];
+      var pivotFieldsElement = pivotTable.PivotTableXml.GetElementsByTagName("pivotFields")[0] as XmlElement;
+      var pivotFieldsCountAttribute = pivotFieldsElement.Attributes["count"];
       pivotFieldsElement.InnerXml += "<pivotField dataField=\"1\" compact=\"0\" outline=\"0\" subtotalTop=\"0\" dragToRow=\"0\" dragToCol=\"0\" dragToPage=\"0\" showAll=\"0\" includeNewItemsInFilter=\"1\" defaultSubtotal=\"0\"/> \n";
       //actualizar el atributo cantidad de  pivotFields
       pivotFieldsCountAttribute.Value = (int.Parse(pivotFieldsCountAttribute.Value) + 1).ToString();
 
       // También en pivotTable1.xml, inserte el <dataField> en la posición correcta, el FLD aquí apunta al caché de índice de Campo
-      XmlElement dataFields = pivotTable.PivotTableXml.GetElementsByTagName("dataFields")[0] as XmlElement;
+      var dataFields = pivotTable.PivotTableXml.GetElementsByTagName("dataFields")[0] as XmlElement;
 
       // Crear el elemento dataField con los atributos
-      XmlElement dataField = pivotTable.PivotTableXml.CreateElement("dataField", pivotTable.PivotTableXml.DocumentElement.NamespaceURI);
+      var dataField = pivotTable.PivotTableXml.CreateElement("dataField", pivotTable.PivotTableXml.DocumentElement.NamespaceURI);
       dataField.RemoveAllAttributes();
-      XmlAttribute nameAttrib = pivotTable.PivotTableXml.CreateAttribute("name");
+      var nameAttrib = pivotTable.PivotTableXml.CreateAttribute("name");
 
       // Caché campo no puede tener el mismo nombre que el atributo dataField
       if (caption == null || caption == formatTable.Title)
@@ -2086,31 +2841,31 @@ namespace IM.Base.Helpers
         nameAttrib.Value = caption;
       dataField.Attributes.Append(nameAttrib);
 
-      XmlAttribute fldAttrib = pivotTable.PivotTableXml.CreateAttribute("fld");
+      var fldAttrib = pivotTable.PivotTableXml.CreateAttribute("fld");
 
       fldAttrib.Value = (cacheFieldIndex - 1).ToString();
       dataField.Attributes.Append(fldAttrib);
-      XmlAttribute baseFieldAttrib = pivotTable.PivotTableXml.CreateAttribute("baseField");
+      var baseFieldAttrib = pivotTable.PivotTableXml.CreateAttribute("baseField");
       baseFieldAttrib.Value = "0";
       dataField.Attributes.Append(baseFieldAttrib);
-      XmlAttribute baseItemAttrib = pivotTable.PivotTableXml.CreateAttribute("baseItem");
+      var baseItemAttrib = pivotTable.PivotTableXml.CreateAttribute("baseItem");
       baseItemAttrib.Value = "0";
       dataField.Attributes.Append(baseItemAttrib);
 
       var styles = pivotTable.WorkSheet.Workbook.Styles;
-      ExcelNumberFormatXml nFormatXml = styles.NumberFormats.ToList().Find(x => x.Format == GetFormat(formatTable.Format));
+      var nFormatXml = styles.NumberFormats.ToList().Find(x => x.Format == GetFormat(formatTable.Format));
 
       //Si no existe el Formato se crea uno
       if (nFormatXml == null)
       {
-        ExcelPivotTableDataField dataFieldAux = pivotTable.DataFields.First();
-        string formatAux = dataFieldAux.Format;
+        var dataFieldAux = pivotTable.DataFields.First();
+        var formatAux = dataFieldAux.Format;
         dataFieldAux.Format = GetFormat(formatTable.Format);
         dataFieldAux.Format = formatAux;
         nFormatXml = styles.NumberFormats.ToList().Find(x => x.Format == GetFormat(formatTable.Format));
       }
 
-      XmlAttribute numFmtIdAttrib = pivotTable.PivotTableXml.CreateAttribute("numFmtId");
+      var numFmtIdAttrib = pivotTable.PivotTableXml.CreateAttribute("numFmtId");
       numFmtIdAttrib.Value = nFormatXml.NumFmtId.ToString();
       dataField.Attributes.Append(numFmtIdAttrib);
 
@@ -2125,7 +2880,7 @@ namespace IM.Base.Helpers
       }
       else
       {
-        XmlNode insertBeforeThis = dataFields.ChildNodes.Item(formatTable.Order);
+        var insertBeforeThis = dataFields.ChildNodes.Item(formatTable.Order);
         if (insertBeforeThis != null)
           dataFields.InsertBefore(dataField, insertBeforeThis);
         else
@@ -2155,10 +2910,10 @@ namespace IM.Base.Helpers
         pivotTable.WorkSheet.Workbook.VbaProject.Modules.AddModule("EPPlusGeneratedCode");
       }
 
-      ExcelVBAModule module = pivotTable.WorkSheet.Workbook.VbaProject.Modules.Single(m => m.Type == eModuleType.Module);
-      List<string> lines = pivotTable.WorkSheet.Workbook.CodeModule.Code.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+      var module = pivotTable.WorkSheet.Workbook.VbaProject.Modules.Single(m => m.Type == eModuleType.Module);
+      var lines = pivotTable.WorkSheet.Workbook.CodeModule.Code.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
 
-      string nombreSub = "BorderPivotTable" + (lines.Count - 1);
+      var nombreSub = "BorderPivotTable" + (lines.Count - 1);
       lines.Insert(lines.Count - 1, nombreSub);
       pivotTable.WorkSheet.Workbook.CodeModule.Code = string.Join(Environment.NewLine, lines);
 
@@ -2172,7 +2927,7 @@ namespace IM.Base.Helpers
       sb.AppendLine("PvtTbl.PivotCache.Refresh");
 
       sb.Append("Set t_Range = Union(");
-      List<string> pivotFieldList = new List<string>();
+      var pivotFieldList = new List<string>();
       columnasAgrupadas.ForEach(c => pivotFieldList.Add("PvtTbl.PivotFields(\"" + c.Title + "\").DataRange, PvtTbl.PivotFields(\"" + c.Title + "\").LabelRange"));
       sb.Append(string.Join(",", pivotFieldList));
       sb.AppendLine(")");
@@ -2225,7 +2980,7 @@ namespace IM.Base.Helpers
     {
       var dt = new DataTable();
 
-      var rowFields = formatTable.Where(c => c.Axis != ePivotFieldAxis.Column && c.Axis != ePivotFieldAxis.Values).ToList();
+      var rowFields = formatTable.Where(c => c.Axis != ePivotFieldAxis.Column && c.Axis != ePivotFieldAxis.Values && c.IsVisible).ToList();
       var columnFields = formatTable.Where(c => c.Axis == ePivotFieldAxis.Column).OrderBy(c => c.Order).ToList();
       var dataFields = formatTable.Where(c => c.Axis == ePivotFieldAxis.Values).OrderBy(c => c.Order).ToList();
 
@@ -2270,7 +3025,7 @@ namespace IM.Base.Helpers
         {
           dataFields.ForEach(dataF =>
           {
-            DataColumn sourcecol = sourceTable.Columns.OfType<DataColumn>().First(c => c.ColumnName == dataF.PropertyName);
+            var sourcecol = sourceTable.Columns.OfType<DataColumn>().First(c => c.ColumnName == dataF.PropertyName);
             dt.Columns.Add(col.Name.ToString() + separator + dataF.PropertyName, sourcecol.DataType);
           });// Cretes the result columns.//
         });
@@ -2278,14 +3033,14 @@ namespace IM.Base.Helpers
       //Columnas despues del pivote
       rowFields.Where(c => !rowFieldsBefore.Contains(c)).OrderBy(c => c.IsGroup).ThenBy(c => c.Order).ToList().ForEach(s =>
       {
-        DataColumn sourcecol = sourceTable.Columns.OfType<DataColumn>().First(c => c.ColumnName == s.PropertyName);
+        var sourcecol = sourceTable.Columns.OfType<DataColumn>().First(c => c.ColumnName == s.PropertyName);
         dt.Columns.Add(s.PropertyName, sourcecol.DataType);
       });
 
       rowList.ForEach(rowName =>
       {
-        DataRow row = dt.NewRow();
-        string strFilter = string.Empty;
+        var row = dt.NewRow();
+        var strFilter = string.Empty;
 
         rowFields.ForEach(field =>
         {
@@ -2298,8 +3053,8 @@ namespace IM.Base.Helpers
 
         colList.ForEach(col =>
         {
-          string filter = strFilter;
-          string[] strColValues = col.Name.ToString().Split(separator);
+          var filter = strFilter;
+          var strColValues = col.Name.ToString().Split(separator);
 
           columnFields.Where(n => n.IsVisible).Select((value, index) => new { Value = value, Index = index }).ToList().ForEach(item =>
           {
@@ -2308,7 +3063,7 @@ namespace IM.Base.Helpers
 
           dataFields.ForEach(dataF =>
           {
-            string colN = col.Name.ToString() + separator + dataF.PropertyName;
+            var colN = col.Name.ToString() + separator + dataF.PropertyName;
             var data = GetData(filter, dataF, sourceTable);
             row[colN] = data ?? DBNull.Value;
           });
@@ -2339,8 +3094,8 @@ namespace IM.Base.Helpers
     {
       try
       {
-        DataRow[] filteredRows = sourceTable.Select(filter);
-        object[] objList = filteredRows.Select(x => x.Field<object>(format.PropertyName)).ToArray();
+        var filteredRows = sourceTable.Select(filter);
+        var objList = filteredRows.Select(x => x.Field<object>(format.PropertyName)).ToArray();
 
         switch (format.AggregateFunction)
         {
@@ -2383,8 +3138,8 @@ namespace IM.Base.Helpers
     /// </history>
     private static string GetExcelColumnName(int columnNumber)
     {
-      int dividend = columnNumber;
-      string columnName = string.Empty;
+      var dividend = columnNumber;
+      var columnName = string.Empty;
       int modulo;
 
       while (dividend > 0)
@@ -2423,28 +3178,6 @@ namespace IM.Base.Helpers
       return formula;
     }
 
-    /// <summary>
-    /// Obtiene la formula para asignar a una celda.
-    /// </summary>
-    /// <param name="dataTable">Datatable con las columnas ordenadas</param>
-    /// <param name="formula">formula</param>
-    /// <param name="rowNumber">posicion de row de la celda</param>
-    /// <returns> string </returns>
-    /// <history>
-    ///   [aalcocer] 18/05/2016  Created.
-    /// </history>
-    private static string GetFormula(DataTable dataTable, string formula, int rowNumber)
-    {
-      var columns = Regex.Matches(formula, @"(\[.*?\])+");
-      foreach (var match in columns)
-      {
-        var dataColumn = dataTable.Columns.Cast<DataColumn>().First(c => c.ColumnName == match.ToString().Replace("[", "").Replace("]", ""));
-        formula = formula.Replace(match.ToString(), GetExcelColumnName(dataColumn.Ordinal + 1) + rowNumber);
-      }
-
-      return formula;
-    }
-
     #endregion GetFormula
 
     #region SortDatatable
@@ -2475,7 +3208,7 @@ namespace IM.Base.Helpers
       return qTable.ToTable();
     }
 
-    #endregion SortDatatable
+    #endregion 
 
     #region SetDataFieldShowDataAsAttribute
 
@@ -2493,16 +3226,16 @@ namespace IM.Base.Helpers
     {
       if (pivot != null & pivot.DataFields != null && pivot.DataFields.Contains(dataField))
       {
-        string showDataAsAttributeValue = EnumToListHelper.GetEnumDescription(showDataAs);
+        var showDataAsAttributeValue = EnumToListHelper.GetEnumDescription(showDataAs);
         var xml = pivot.PivotTableXml;
-        XmlNodeList elements = xml.GetElementsByTagName("dataField");
+        var elements = xml.GetElementsByTagName("dataField");
 
         foreach (XmlNode elem in elements)
         {
-          XmlAttribute fldAttribute = elem.Attributes["fld"];
+          var fldAttribute = elem.Attributes["fld"];
           if (fldAttribute != null && fldAttribute.Value == dataField.Index.ToString())
           {
-            XmlAttribute showDataAsAttribute = elem.Attributes["showDataAs"];
+            var showDataAsAttribute = elem.Attributes["showDataAs"];
             if (showDataAsAttribute == null)
             {
               showDataAsAttribute = xml.CreateAttribute("showDataAs");

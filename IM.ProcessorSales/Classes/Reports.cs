@@ -290,6 +290,27 @@ namespace IM.ProcessorSales.Classes
     }
     #endregion
 
+    #region RptManifest
+    /// <summary>
+    /// Obtiene los datos para exportar a excel el reporte RptManifest
+    /// </summary>
+    /// <param name="report">Nombre del reporte</param>
+    /// <param name="dateFileName">Rango de fechas</param>
+    /// <param name="filters">Listado de filtros</param>
+    /// <param name="lstReport">Contenido del reporte</param>
+    /// <param name="dtStart">Fecha inicial del reporte</param>
+    /// <param name="dtEnd">Fecha final del reporte</param>
+    /// <history>
+    ///  [ecanul] 07/06/2016 Created
+    /// </history>
+    public static FileInfo RptManifest(string report, string dateFileName, List<Tuple<string, string>> filters,
+      List<RptManifest> lstReport, DateTime dtStartm, DateTime dtEnd)
+    {
+      var dtData = TableHelper.GetDataTableFromList(lstReport, true, true);
+      return EpplusHelper.CreateExcelCustom(dtData, filters, report, dateFileName, FormatReport.RptManifest(), blnShowSubtotal: true, blnRowGrandTotal: true, blnColumnGrandTotal: false);
+    } 
+    #endregion
+
     #endregion
   }
 }

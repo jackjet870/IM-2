@@ -32,6 +32,7 @@ namespace IM.Base.Helpers
     ///                                      Se hizo modificaciones en el proceso de creacion del datatable.
     /// [aalcocer] 11/Abr/2016 Modified. Opcion para reemplazar campos vacios.
     /// [wtorres]  15/Abr/2016 Modified. Movido desde el GridHelper y renombrado. Antes se llamaba GetDatatableFromGrid
+    /// [ecanul] 10/06/2016 Modified. Ahora el valor showCheckMark, cambia la ü por ✓ de manera directa 
     /// </history>
     public static DataTable GetDataTableFromList<T>(List<T> lst, bool changeDataTypeBoolToString = false,
       bool showCheckMark = true, bool replaceStringNullOrWhiteSpace = false)
@@ -61,7 +62,7 @@ namespace IM.Base.Helpers
           object value = properties[i].GetValue(c) ?? DBNull.Value;
           Type type = Nullable.GetUnderlyingType(properties[i].PropertyType) ?? properties[i].PropertyType;
           if (changeDataTypeBoolToString && (type == typeof(bool) || type == typeof(bool?)))
-            value = showCheckMark ? (value.ToString().ToLower() == "true" ? "ü" : "") : (value.ToString().ToLower() == "true" ? (object)"Yes" : DBNull.Value);
+            value = showCheckMark ? (value.ToString().ToLower() == "true" ? "✓" : "") : (value.ToString().ToLower() == "true" ? (object)"Yes" : DBNull.Value);
           if (replaceStringNullOrWhiteSpace && type == typeof(string) && string.IsNullOrWhiteSpace(value.ToString()))
             value = "-";
           values[i] = value;
