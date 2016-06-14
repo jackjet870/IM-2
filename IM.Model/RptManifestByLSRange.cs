@@ -75,6 +75,6 @@ namespace IM.Model
         public Nullable<int> DepositSaleNum { get; set; }
         public string CC { get; set; }
         public string Comments { get; set; }
-		public string saMembershipNum { get; set; }
+        public string saMembershipNum { get; set; }
     }
 }

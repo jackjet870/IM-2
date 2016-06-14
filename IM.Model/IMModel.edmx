@@ -6043,6 +6043,14 @@
         <Function Name="USP_OR_AddAccessAdministrator" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PlaceType" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_AddGiftReceiptPayment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="GiftReceiptID" Type="int" Mode="In" />
+          <Parameter Name="ReceivedBy" Type="varchar" Mode="In" />
+          <Parameter Name="ReceivedDate" Type="datetime" Mode="In" />
+          <Parameter Name="USDAmount" Type="money" Mode="In" />
+          <Parameter Name="RateAmount" Type="money" Mode="In" />
+          <Parameter Name="MXNAmount" Type="money" Mode="In" />
+        </Function>
         <Function Name="USP_OR_CalculateTotalsGiftsInvitation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="GuestID" Type="int" Mode="In" />
         </Function>
@@ -6068,6 +6076,9 @@
         </Function>
         <Function Name="USP_OR_DeleteGuest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Guest" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_DeletePersonnel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="User" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_DeleteSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Sale" Type="int" Mode="In" />
@@ -6276,6 +6287,7 @@
           <Parameter Name="RelationalOperator" Type="varchar" Mode="In" />
           <Parameter Name="PermissionLevel" Type="int" Mode="In" />
           <Parameter Name="Dept" Type="varchar" Mode="In" />
+          <Parameter Name="IdPersonnel" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_GetPersonnelAssistance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PlaceType" Type="varchar" Mode="In" />
@@ -6651,7 +6663,7 @@
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="LeadSources" Type="varchar" Mode="In" />
           <Parameter Name="ChargeTo" Type="varchar" Mode="In" />
-          <Parameter Name="Gifts" Type="varchar" Mode="In" />
+          <Parameter Name="Gifts" Type="varchar(max)" Mode="In" />
         </Function>
         <Function Name="USP_OR_RptGiftsSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -6790,7 +6802,7 @@
         <Function Name="USP_OR_RptProductionByAgencyMonthly" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
-          <Parameter Name="Agencies" Type="varchar" Mode="In" />
+          <Parameter Name="Agencies" Type="varchar(max)" Mode="In" />
           <Parameter Name="ConsiderQuinellas" Type="bit" Mode="In" />
           <Parameter Name="BasedOnArrival" Type="bit" Mode="In" />
         </Function>
@@ -6833,7 +6845,7 @@
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="LeadSources" Type="varchar" Mode="In" />
           <Parameter Name="Markets" Type="varchar" Mode="In" />
-          <Parameter Name="Agencies" Type="varchar" Mode="In" />
+          <Parameter Name="Agencies" Type="varchar(max)" Mode="In" />
           <Parameter Name="ConsiderQuinellas" Type="bit" Mode="In" />
           <Parameter Name="BasedOnArrival" Type="bit" Mode="In" />
         </Function>
@@ -6842,7 +6854,7 @@
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="LeadSources" Type="varchar" Mode="In" />
           <Parameter Name="Markets" Type="varchar" Mode="In" />
-          <Parameter Name="Agencies" Type="varchar" Mode="In" />
+          <Parameter Name="Agencies" Type="varchar(max)" Mode="In" />
           <Parameter Name="ConsiderQuinellas" Type="bit" Mode="In" />
           <Parameter Name="BasedOnArrival" Type="bit" Mode="In" />
         </Function>
@@ -6953,7 +6965,7 @@
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="LeadSources" Type="varchar" Mode="In" />
           <Parameter Name="Markets" Type="varchar" Mode="In" />
-          <Parameter Name="Agencies" Type="varchar" Mode="In" />
+          <Parameter Name="Agencies" Type="varchar(max)" Mode="In" />
           <Parameter Name="ConsiderQuinellas" Type="bit" Mode="In" />
           <Parameter Name="BasedOnArrival" Type="bit" Mode="In" />
         </Function>
@@ -6962,7 +6974,7 @@
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="LeadSources" Type="varchar" Mode="In" />
           <Parameter Name="Markets" Type="varchar" Mode="In" />
-          <Parameter Name="Agencies" Type="varchar" Mode="In" />
+          <Parameter Name="Agencies" Type="varchar(max)" Mode="In" />
           <Parameter Name="ConsiderQuinellas" Type="bit" Mode="In" />
           <Parameter Name="BasedOnArrival" Type="bit" Mode="In" />
         </Function>
@@ -7175,7 +7187,7 @@
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="LeadSources" Type="varchar" Mode="In" />
           <Parameter Name="Markets" Type="varchar" Mode="In" />
-          <Parameter Name="Agencies" Type="varchar" Mode="In" />
+          <Parameter Name="Agencies" Type="varchar(max)" Mode="In" />
         </Function>
         <Function Name="USP_OR_SaveDepositsRefund" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="GuestID" Type="int" Mode="In" />
@@ -16328,6 +16340,7 @@
             <Parameter Name="RelationalOperator" Mode="In" Type="String" />
             <Parameter Name="PermissionLevel" Mode="In" Type="Int32" />
             <Parameter Name="Dept" Mode="In" Type="String" />
+            <Parameter Name="IdPersonnel" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetSalesRoomLog" ReturnType="Collection(IMModel.SalesRoomLogData)">
           <Parameter Name="SalesRoom" Mode="In" Type="String" />
@@ -17848,6 +17861,17 @@
             <Parameter Name="ByLocationsCategories" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetWholesalers" ReturnType="Collection(IMModel.WholesalerData)" />
+          <FunctionImport Name="USP_OR_AddGiftReceiptPayment" ReturnType="Collection(IMModel.AddGiftReceiptPayment)">
+            <Parameter Name="GiftReceiptID" Mode="In" Type="Int32" />
+            <Parameter Name="ReceivedBy" Mode="In" Type="String" />
+            <Parameter Name="ReceivedDate" Mode="In" Type="DateTime" />
+            <Parameter Name="USDAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="RateAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="MXNAmount" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_DeletePersonnel">
+          <Parameter Name="User" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -22065,6 +22089,10 @@
           <Property Type="Decimal" Name="Total" Nullable="true" Precision="12" Scale="2" />
           <Property Type="String" Name="SaleType" Nullable="true" />
           <Property Type="String" Name="Program" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="AddGiftReceiptPayment">
+          <Property Type="Int32" Name="iRes" Nullable="false" />
+          <Property Type="String" Name="sRes" Nullable="false" MaxLength="55" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -29606,6 +29634,15 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_AddGiftReceiptPayment" FunctionName="IMModel.Store.USP_OR_AddGiftReceiptPayment">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.AddGiftReceiptPayment">
+                <ScalarProperty Name="iRes" ColumnName="iRes" />
+                <ScalarProperty Name="sRes" ColumnName="sRes" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_DeletePersonnel" FunctionName="IMModel.Store.USP_OR_DeletePersonnel" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

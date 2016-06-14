@@ -654,7 +654,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_SaveSalesRoomLog", salesRoomParameter, hoursDifParameter, changedByParameter);
         }
     
-        public virtual ObjectResult<PersonnelShort> USP_OR_GetPersonnel(string leadSources, string salesRooms, string roles, Nullable<byte> status, string permission, string relationalOperator, Nullable<int> permissionLevel, string dept)
+        public virtual ObjectResult<PersonnelShort> USP_OR_GetPersonnel(string leadSources, string salesRooms, string roles, Nullable<byte> status, string permission, string relationalOperator, Nullable<int> permissionLevel, string dept, string idPersonnel)
         {
             var leadSourcesParameter = leadSources != null ?
                 new ObjectParameter("LeadSources", leadSources) :
@@ -688,7 +688,11 @@ namespace IM.Model
                 new ObjectParameter("Dept", dept) :
                 new ObjectParameter("Dept", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PersonnelShort>("USP_OR_GetPersonnel", leadSourcesParameter, salesRoomsParameter, rolesParameter, statusParameter, permissionParameter, relationalOperatorParameter, permissionLevelParameter, deptParameter);
+            var idPersonnelParameter = idPersonnel != null ?
+                new ObjectParameter("IdPersonnel", idPersonnel) :
+                new ObjectParameter("IdPersonnel", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PersonnelShort>("USP_OR_GetPersonnel", leadSourcesParameter, salesRoomsParameter, rolesParameter, statusParameter, permissionParameter, relationalOperatorParameter, permissionLevelParameter, deptParameter, idPersonnelParameter);
         }
     
         public virtual ObjectResult<SalesRoomLogData> USP_OR_GetSalesRoomLog(string salesRoom)
@@ -5838,6 +5842,44 @@ namespace IM.Model
         public virtual ObjectResult<WholesalerData> USP_OR_GetWholesalers()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<WholesalerData>("USP_OR_GetWholesalers");
+        }
+    
+        public virtual ObjectResult<AddGiftReceiptPayment> USP_OR_AddGiftReceiptPayment(Nullable<int> giftReceiptID, string receivedBy, Nullable<System.DateTime> receivedDate, Nullable<decimal> uSDAmount, Nullable<decimal> rateAmount, Nullable<decimal> mXNAmount)
+        {
+            var giftReceiptIDParameter = giftReceiptID.HasValue ?
+                new ObjectParameter("GiftReceiptID", giftReceiptID) :
+                new ObjectParameter("GiftReceiptID", typeof(int));
+    
+            var receivedByParameter = receivedBy != null ?
+                new ObjectParameter("ReceivedBy", receivedBy) :
+                new ObjectParameter("ReceivedBy", typeof(string));
+    
+            var receivedDateParameter = receivedDate.HasValue ?
+                new ObjectParameter("ReceivedDate", receivedDate) :
+                new ObjectParameter("ReceivedDate", typeof(System.DateTime));
+    
+            var uSDAmountParameter = uSDAmount.HasValue ?
+                new ObjectParameter("USDAmount", uSDAmount) :
+                new ObjectParameter("USDAmount", typeof(decimal));
+    
+            var rateAmountParameter = rateAmount.HasValue ?
+                new ObjectParameter("RateAmount", rateAmount) :
+                new ObjectParameter("RateAmount", typeof(decimal));
+    
+            var mXNAmountParameter = mXNAmount.HasValue ?
+                new ObjectParameter("MXNAmount", mXNAmount) :
+                new ObjectParameter("MXNAmount", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AddGiftReceiptPayment>("USP_OR_AddGiftReceiptPayment", giftReceiptIDParameter, receivedByParameter, receivedDateParameter, uSDAmountParameter, rateAmountParameter, mXNAmountParameter);
+        }
+    
+        public virtual int USP_OR_DeletePersonnel(string user)
+        {
+            var userParameter = user != null ?
+                new ObjectParameter("User", user) :
+                new ObjectParameter("User", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_DeletePersonnel", userParameter);
         }
     }
 }

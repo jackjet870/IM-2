@@ -69,6 +69,9 @@
     <Compile Include="Activity.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="AddGiftReceiptPayment.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Agency.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

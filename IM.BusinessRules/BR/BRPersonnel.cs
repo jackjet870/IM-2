@@ -110,7 +110,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<PersonnelShort>> GetPersonnel(string leadSources = "ALL", string salesRooms = "ALL",
       string roles = "ALL", int status = 1, string permission = "ALL",
-      string relationalOperator = "=", EnumPermisionLevel level = EnumPermisionLevel.None, string dept = "ALL")
+      string relationalOperator = "=", EnumPermisionLevel level = EnumPermisionLevel.None, string dept = "ALL" , string idPersonnel = "ALL")
     {
       List<PersonnelShort> result = null;
       await Task.Run(() =>
@@ -118,7 +118,7 @@ namespace IM.BusinessRules.BR
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
           result = dbContext.USP_OR_GetPersonnel(leadSources, salesRooms, roles, ((byte)status), permission, relationalOperator,
-              ((int)level), dept).ToList();
+              ((int)level), dept, idPersonnel).ToList();
         }
       });
       return result;
