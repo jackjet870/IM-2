@@ -1126,6 +1126,9 @@
     <Compile Include="SaleLog.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="SaleLogData.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="SalesAmountRange.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

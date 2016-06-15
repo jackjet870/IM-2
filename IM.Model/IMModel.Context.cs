@@ -5881,5 +5881,14 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_DeletePersonnel", userParameter);
         }
+    
+        public virtual ObjectResult<SaleLogData> USP_OR_GetSaleLog(Nullable<int> sale)
+        {
+            var saleParameter = sale.HasValue ?
+                new ObjectParameter("Sale", sale) :
+                new ObjectParameter("Sale", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleLogData>("USP_OR_GetSaleLog", saleParameter);
+        }
     }
 }

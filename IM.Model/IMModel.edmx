@@ -6317,6 +6317,9 @@
           <Parameter Name="PRGuests" Type="bit" Mode="In" />
           <Parameter Name="PRMembers" Type="bit" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetSaleLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Sale" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetSales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Guest" Type="int" Mode="In" />
           <Parameter Name="Sale" Type="int" Mode="In" />
@@ -17872,6 +17875,9 @@
           <FunctionImport Name="USP_OR_DeletePersonnel">
           <Parameter Name="User" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_GetSaleLog" ReturnType="Collection(IMModel.SaleLogData)">
+            <Parameter Name="Sale" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -22093,6 +22099,67 @@
         <ComplexType Name="AddGiftReceiptPayment">
           <Property Type="Int32" Name="iRes" Nullable="false" />
           <Property Type="String" Name="sRes" Nullable="false" MaxLength="55" />
+        </ComplexType>
+        <ComplexType Name="SaleLogData">
+          <Property Type="String" Name="slChangedBy" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ChangedByN" Nullable="true" MaxLength="40" />
+          <Property Type="DateTime" Name="slID" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="slgu" Nullable="true" />
+          <Property Type="String" Name="GuestName" Nullable="true" MaxLength="200" />
+          <Property Type="DateTime" Name="slD" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="slProcD" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="slCancelD" Nullable="true" Precision="23" />
+          <Property Type="String" Name="slMembershipNum" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="stN" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="slReference" Nullable="true" />
+          <Property Type="String" Name="mtN" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="slOriginalAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="slNewAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="slGrossAmount" Nullable="true" Precision="19" />
+          <Property Type="String" Name="sllo" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="slls" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="slsr" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="slSelfGen" Nullable="true" />
+          <Property Type="String" Name="slPR1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slPR2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slPR3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR3N" Nullable="true" MaxLength="40" />
+          <Property Type="Byte" Name="slLiner1Type" Nullable="true" />
+          <Property Type="String" Name="slLiner1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slLiner2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Liner2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slCloser1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slCloser2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slCloser3" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Closer3N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slExit1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit1N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slExit2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Exit2N" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slPodium" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PodiumN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slVLO" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="VLON" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slPRCaptain1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR1CaptainN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slPRCaptain2" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="PR2CaptainN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slLinerCaptain1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="LinerCaptainN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="slCloserCaptain1" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="CloserCaptainN" Nullable="true" MaxLength="40" />
+          <Property Type="Byte" Name="slCloser1P" Nullable="true" />
+          <Property Type="Byte" Name="slCloser2P" Nullable="true" />
+          <Property Type="Byte" Name="slCloser3P" Nullable="true" />
+          <Property Type="Byte" Name="slExit1P" Nullable="true" />
+          <Property Type="Byte" Name="slExit2P" Nullable="true" />
+          <Property Type="Decimal" Name="slClosingCost" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="slOverPack" Nullable="true" Precision="19" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -29643,6 +29710,71 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_DeletePersonnel" FunctionName="IMModel.Store.USP_OR_DeletePersonnel" />
+          <FunctionImportMapping FunctionImportName="USP_OR_GetSaleLog" FunctionName="IMModel.Store.USP_OR_GetSaleLog">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.SaleLogData">
+                <ScalarProperty Name="slChangedBy" ColumnName="slChangedBy" />
+                <ScalarProperty Name="ChangedByN" ColumnName="ChangedByN" />
+                <ScalarProperty Name="slID" ColumnName="slID" />
+                <ScalarProperty Name="slgu" ColumnName="slgu" />
+                <ScalarProperty Name="GuestName" ColumnName="GuestName" />
+                <ScalarProperty Name="slD" ColumnName="slD" />
+                <ScalarProperty Name="slProcD" ColumnName="slProcD" />
+                <ScalarProperty Name="slCancelD" ColumnName="slCancelD" />
+                <ScalarProperty Name="slMembershipNum" ColumnName="slMembershipNum" />
+                <ScalarProperty Name="stN" ColumnName="stN" />
+                <ScalarProperty Name="slReference" ColumnName="slReference" />
+                <ScalarProperty Name="mtN" ColumnName="mtN" />
+                <ScalarProperty Name="slOriginalAmount" ColumnName="slOriginalAmount" />
+                <ScalarProperty Name="slNewAmount" ColumnName="slNewAmount" />
+                <ScalarProperty Name="slGrossAmount" ColumnName="slGrossAmount" />
+                <ScalarProperty Name="sllo" ColumnName="sllo" />
+                <ScalarProperty Name="slls" ColumnName="slls" />
+                <ScalarProperty Name="slsr" ColumnName="slsr" />
+                <ScalarProperty Name="slSelfGen" ColumnName="slSelfGen" />
+                <ScalarProperty Name="slPR1" ColumnName="slPR1" />
+                <ScalarProperty Name="PR1N" ColumnName="PR1N" />
+                <ScalarProperty Name="slPR2" ColumnName="slPR2" />
+                <ScalarProperty Name="PR2N" ColumnName="PR2N" />
+                <ScalarProperty Name="slPR3" ColumnName="slPR3" />
+                <ScalarProperty Name="PR3N" ColumnName="PR3N" />
+                <ScalarProperty Name="slLiner1Type" ColumnName="slLiner1Type" />
+                <ScalarProperty Name="slLiner1" ColumnName="slLiner1" />
+                <ScalarProperty Name="Liner1N" ColumnName="Liner1N" />
+                <ScalarProperty Name="slLiner2" ColumnName="slLiner2" />
+                <ScalarProperty Name="Liner2N" ColumnName="Liner2N" />
+                <ScalarProperty Name="slCloser1" ColumnName="slCloser1" />
+                <ScalarProperty Name="Closer1N" ColumnName="Closer1N" />
+                <ScalarProperty Name="slCloser2" ColumnName="slCloser2" />
+                <ScalarProperty Name="Closer2N" ColumnName="Closer2N" />
+                <ScalarProperty Name="slCloser3" ColumnName="slCloser3" />
+                <ScalarProperty Name="Closer3N" ColumnName="Closer3N" />
+                <ScalarProperty Name="slExit1" ColumnName="slExit1" />
+                <ScalarProperty Name="Exit1N" ColumnName="Exit1N" />
+                <ScalarProperty Name="slExit2" ColumnName="slExit2" />
+                <ScalarProperty Name="Exit2N" ColumnName="Exit2N" />
+                <ScalarProperty Name="slPodium" ColumnName="slPodium" />
+                <ScalarProperty Name="PodiumN" ColumnName="PodiumN" />
+                <ScalarProperty Name="slVLO" ColumnName="slVLO" />
+                <ScalarProperty Name="VLON" ColumnName="VLON" />
+                <ScalarProperty Name="slPRCaptain1" ColumnName="slPRCaptain1" />
+                <ScalarProperty Name="PR1CaptainN" ColumnName="PR1CaptainN" />
+                <ScalarProperty Name="slPRCaptain2" ColumnName="slPRCaptain2" />
+                <ScalarProperty Name="PR2CaptainN" ColumnName="PR2CaptainN" />
+                <ScalarProperty Name="slLinerCaptain1" ColumnName="slLinerCaptain1" />
+                <ScalarProperty Name="LinerCaptainN" ColumnName="LinerCaptainN" />
+                <ScalarProperty Name="slCloserCaptain1" ColumnName="slCloserCaptain1" />
+                <ScalarProperty Name="CloserCaptainN" ColumnName="CloserCaptainN" />
+                <ScalarProperty Name="slCloser1P" ColumnName="slCloser1P" />
+                <ScalarProperty Name="slCloser2P" ColumnName="slCloser2P" />
+                <ScalarProperty Name="slCloser3P" ColumnName="slCloser3P" />
+                <ScalarProperty Name="slExit1P" ColumnName="slExit1P" />
+                <ScalarProperty Name="slExit2P" ColumnName="slExit2P" />
+                <ScalarProperty Name="slClosingCost" ColumnName="slClosingCost" />
+                <ScalarProperty Name="slOverPack" ColumnName="slOverPack" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
