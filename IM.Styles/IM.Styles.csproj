@@ -65,11 +65,19 @@
     <Compile Include="UserControls\ToolBarRtfFontStyle.xaml.cs">
       <DependentUpon>ToolBarRtfFontStyle.xaml</DependentUpon>
     </Compile>
+    <Page Include="Styles\sComboBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\sRichTextFormatMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\sTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\sTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -140,6 +148,15 @@
     <Resource Include="Images\BCopy.png" />
     <Resource Include="Images\BCut.png" />
     <Resource Include="Images\BPaste.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BHotel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BAgency.png" />
+    <Resource Include="Images\BCountry.png" />
+    <Resource Include="Images\BLocation.png" />
+    <Resource Include="Images\BSalesRooms.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

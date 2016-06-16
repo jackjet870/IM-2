@@ -3,16 +3,18 @@
                     xmlns:local="clr-namespace:IM.Styles.Styles">
 
     <!--#region Personnel-->
-    <DataTemplate x:Key="tPersonnelComboBox">
-        <Border Height="35" Margin="0,2,0,0">
-            <Grid>
+    
+    <!--#region Personnel Img-->
+    <DataTemplate x:Key="tPersonnelComboBox-img">
+        <Border Height="30">
+            <Grid ToolTip="{Binding peN}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="70"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="15"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="15"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
                     <Viewbox Width="16" Stretch="Uniform" >
@@ -27,10 +29,36 @@
             </Grid>
         </Border>
     </DataTemplate>
+
     <!--#endregion-->
     
+    <!--#region Personnel Concat-->
+    <DataTemplate x:Key="tPersonnelComboBox-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="peID"/>
+                            <Binding Path="peN"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
     <!--#region Languages -->
-    <DataTemplate x:Key="tLanguagesComboBox">
+    <DataTemplate x:Key="tLanguagesComboBox-Concat">
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -52,9 +80,9 @@
     </DataTemplate>
 
     <!--#endregion-->
-    
+
     <!--#region Marital-->
-    <DataTemplate x:Key="tMaritalComboBox">
+    <DataTemplate x:Key="tMaritalComboBox-Concat">
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -76,9 +104,11 @@
     </DataTemplate>
 
     <!--#endregion-->
-    
-    <!--#region SalesRooms-->
-    <DataTemplate x:Key="tSalesRoomsComboBox">
+
+    <!--#region SaleRoom-->
+
+    <!--#region SalesRoom Concat-->
+    <DataTemplate x:Key="tSaleRoomComboBox-Concat">
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -100,8 +130,38 @@
     </DataTemplate>
     <!--#endregion-->
 
+    <!--#region SaleRoom Img-->
+    <DataTemplate x:Key="tSaleRoomComboBox-img">
+        <Border Height="30" >
+            <Grid ToolTip="{Binding srN}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
+                    <Viewbox Width="24" Stretch="Uniform" >
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BSalesRooms.png"/>
+                    </Viewbox>
+                </StackPanel>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="0" Text="{Binding srN}"/>
+                <TextBlock  Text="{Binding srID}" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="1"/>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
     <!--#region Location-->
-    <DataTemplate x:Key="tLocationComboBox">
+
+    <!--#region Location Concat-->
+    <DataTemplate x:Key="tLocationComboBox-Concat">
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -113,8 +173,8 @@
                 <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} - {1}">
-                            <Binding Path="srID"/>
-                            <Binding Path="srN"/>
+                            <Binding Path="loID"/>
+                            <Binding Path="loN"/>
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -122,4 +182,230 @@
         </Border>
     </DataTemplate>
     <!--#endregion-->
+
+    <!--#region Location Img-->
+    <DataTemplate x:Key="tLocationComboBox-img">
+        <Border Height="30">
+            <Grid ToolTip="{Binding loN}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
+                    <Viewbox Width="24" Stretch="Uniform" >
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BLocation.png"/>
+                    </Viewbox>
+                </StackPanel>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="0" Text="{Binding loN}"/>
+                <TextBlock  Text="{Binding loID}" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="1"/>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region Hotel-->
+
+    <!--#region Hotel Img-->
+    <DataTemplate x:Key="tHotelComboBox-img">
+        <Border Height="30">
+            <Grid ToolTip="{Binding hoID}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
+                    <Viewbox Width="24" Stretch="Uniform" >
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BHotel.png"/>
+                    </Viewbox>
+                </StackPanel>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="0" Text="{Binding hoID}"/>
+                <TextBlock  Text="{Binding hoGroup}" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="1"/>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region Agency-->
+
+    <!--#region Agency Img-->
+    <DataTemplate x:Key="tAgencyComboBox-img">
+        <Border Height="30">
+            <Grid ToolTip="{Binding agN}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
+                    <Viewbox Width="24" Stretch="Uniform" >
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BAgency.png"/>
+                    </Viewbox>
+                </StackPanel>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="0" Text="{Binding agN}"/>
+                <TextBlock  Text="{Binding agID}" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="1"/>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region Country-->
+
+    <!--#region Country Img-->
+    <DataTemplate x:Key="tCountryComboBox-img">
+        <Border Height="30">
+            <Grid ToolTip="{Binding coN}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
+                    <Viewbox Width="24" Stretch="Uniform" >
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BCountry.png"/>
+                    </Viewbox>
+                </StackPanel>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="0" Text="{Binding coN}"/>
+                <TextBlock  Text="{Binding coID}" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="1"/>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region Guest Status Type-->
+
+    <!--#region Guest Status Type Concat-->
+    <DataTemplate x:Key="tGuestStatusTypeComboBox-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="gsID"/>
+                            <Binding Path="gsN"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region Currency-->
+
+    <!--#region Currency Concat-->
+    <DataTemplate x:Key="tCurrencyComboBox-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="cuID"/>
+                            <Binding Path="cuN"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region Payment Type-->
+
+    <!--#region Payment Type Concat-->
+    <DataTemplate x:Key="tPaymentTypeComboBox-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="ptID"/>
+                            <Binding Path="ptN"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region Salesmen -->
+
+    <!--#region Salesmen Concat-->
+    <DataTemplate x:Key="tSalesmenComboBox-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="CODE"/>
+                            <Binding Path="NAME"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+    <!--#endregion-->
+    
 </ResourceDictionary>
