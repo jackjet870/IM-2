@@ -1141,6 +1141,9 @@
     <Compile Include="SalesmanChange.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="SalesmenChanges.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="SalesRoom.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

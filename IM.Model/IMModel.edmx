@@ -6369,6 +6369,9 @@
           <Parameter Name="PR" Type="varchar" Mode="In" />
           <Parameter Name="SearchBySalePR" Type="bit" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetSalesmenChanges" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Sale" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetSalesRoom" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
         </Function>
@@ -17909,6 +17912,9 @@
             <End Role="DisputeStatu" EntitySet="DisputeStatusList" />
             <End Role="BookingDeposit" EntitySet="BookingDeposits" />
           </AssociationSet>
+          <FunctionImport Name="USP_OR_GetSalesmenChanges" ReturnType="Collection(IMModel.SalesmenChanges)">
+            <Parameter Name="Sale" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -22214,6 +22220,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="SalesmenChanges">
+          <Property Type="DateTime" Name="schDT" Nullable="false" Precision="23" />
+          <Property Type="String" Name="schAuthorizedBy" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="AuthorizedByN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="schMadeBy" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="MadeByN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="roN" Nullable="true" MaxLength="50" />
+          <Property Type="Byte" Name="schPosition" Nullable="false" />
+          <Property Type="String" Name="schOldSalesman" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="OldSalesmanN" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="schNewSalesman" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="NewSalesmanN" Nullable="true" MaxLength="40" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -29838,6 +29857,23 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetSalesmenChanges" FunctionName="IMModel.Store.USP_OR_GetSalesmenChanges">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.SalesmenChanges">
+                <ScalarProperty Name="schDT" ColumnName="schDT" />
+                <ScalarProperty Name="schAuthorizedBy" ColumnName="schAuthorizedBy" />
+                <ScalarProperty Name="AuthorizedByN" ColumnName="AuthorizedByN" />
+                <ScalarProperty Name="schMadeBy" ColumnName="schMadeBy" />
+                <ScalarProperty Name="MadeByN" ColumnName="MadeByN" />
+                <ScalarProperty Name="roN" ColumnName="roN" />
+                <ScalarProperty Name="schPosition" ColumnName="schPosition" />
+                <ScalarProperty Name="schOldSalesman" ColumnName="schOldSalesman" />
+                <ScalarProperty Name="OldSalesmanN" ColumnName="OldSalesmanN" />
+                <ScalarProperty Name="schNewSalesman" ColumnName="schNewSalesman" />
+                <ScalarProperty Name="NewSalesmanN" ColumnName="NewSalesmanN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
