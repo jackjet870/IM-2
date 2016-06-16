@@ -49,7 +49,7 @@ namespace IM.Base.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       FillPrinters();
-      SelectItemTap();
+      SelectItemTab();
       SelectedPrinterLoaded();
       LoadReportsPath();
     }
@@ -96,14 +96,14 @@ namespace IM.Base.Forms
 
     #region Métodos privados
 
-    #region SelectItemTap
+    #region SelectItemTab
     /// <summary>
-    ///   Selecciona el tap requerido
+    ///   Selecciona el tab requerido
     /// </summary>
     /// <history>
     ///   [vku] 10/Jun/2016 Created
     /// </history>
-    private void SelectItemTap()
+    private void SelectItemTab()
     {
       switch (_enumConfiguration)
       {

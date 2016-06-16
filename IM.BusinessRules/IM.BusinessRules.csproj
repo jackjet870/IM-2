@@ -176,6 +176,7 @@
     <Compile Include="BR\BRLeadSources.cs" />
     <Compile Include="BR\BRMarkets.cs" />
     <Compile Include="BR\BRSalesRooms.cs" />
+    <Compile Include="BR\BRWeekDays.cs" />
     <Compile Include="BR\BRZones.cs" />
     <Compile Include="BR\BRInvitsGifts.cs" />
     <Compile Include="BR\BRFoliosInvitationsOuthousePR.cs" />

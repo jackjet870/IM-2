@@ -72,6 +72,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmCloseInvitation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmClubDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -87,6 +91,14 @@
     <Page Include="Forms\frmComputers.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\frmConfiguration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmConfigurationDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\frmCountries.xaml">
       <SubType>Designer</SubType>
@@ -549,6 +561,9 @@
     <Compile Include="Forms\frmBanks.xaml.cs">
       <DependentUpon>frmBanks.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmCloseInvitation.xaml.cs">
+      <DependentUpon>frmCloseInvitation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmClubDetail.xaml.cs">
       <DependentUpon>frmClubDetail.xaml</DependentUpon>
     </Compile>
@@ -560,6 +575,12 @@
     </Compile>
     <Compile Include="Forms\frmComputers.xaml.cs">
       <DependentUpon>frmComputers.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmConfiguration.xaml.cs">
+      <DependentUpon>frmConfiguration.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmConfigurationDetail.xaml.cs">
+      <DependentUpon>frmConfigurationDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmCountries.xaml.cs">
       <DependentUpon>frmCountries.xaml</DependentUpon>

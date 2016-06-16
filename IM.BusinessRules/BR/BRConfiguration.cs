@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using IM.Model;
 using IM.Model.Helpers;
@@ -27,6 +26,52 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-        
+
+    #region GetConfigurations
+    /// <summary>
+    ///  Obtiene el unico registro de configuracion
+    /// </summary>
+    /// <history>
+    ///   [vku] 13/Jun/2016 Created 
+    /// </history>
+    public async static Task<List<Configuration>> GetConfigurations()
+    {
+      List<Configuration> lstConfigurations = new List<Configuration>();
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var query = from configs in dbContext.Configurations
+                      select configs;
+          lstConfigurations = query.ToList();
+        }
+      });
+      return lstConfigurations;
+    }
+    #endregion
+
+    #region SaveCloseDate
+    /// <summary>
+    ///   Guarda la fecha de cierre de invitaciones
+    /// </summary>
+    /// <param name="dtmCloseDate">Fecha de cierre de invitaciones</param>
+    /// <history>
+    ///   [vku] 16/Jun/2016 Created
+    /// </history>
+    public async static Task<int> SaveCloseDate(DateTime dtmCloseDate)
+    {
+      int res = 0;
+      res = await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var invitationClose = dbContext.Configurations;
+          invitationClose.Single().ocInvitationsCloseD = dtmCloseDate;
+          return dbContext.SaveChanges();
+        }
+      });
+      return res;
+    }
+    #endregion
   }
 }
