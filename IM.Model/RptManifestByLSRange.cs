@@ -35,13 +35,13 @@ namespace IM.Model
         public string CountryD { get; set; }
         public Nullable<System.DateTime> TimeInT { get; set; }
         public Nullable<System.DateTime> TimeOutT { get; set; }
-        public Nullable<int> Tour { get; set; }
-        public Nullable<int> IO { get; set; }
-        public Nullable<int> WO { get; set; }
-        public Nullable<int> CTour { get; set; }
-        public Nullable<int> STour { get; set; }
-        public Nullable<int> Direct { get; set; }
-        public int Resch { get; set; }
+        public bool Tour { get; set; }
+        public bool IO { get; set; }
+        public bool WO { get; set; }
+        public bool CTour { get; set; }
+        public bool STour { get; set; }
+        public bool Direct { get; set; }
+        public bool Resch { get; set; }
         public string PR1 { get; set; }
         public string PR1N { get; set; }
         public string PR2 { get; set; }
@@ -76,5 +76,6 @@ namespace IM.Model
         public string CC { get; set; }
         public string Comments { get; set; }
         public string saMembershipNum { get; set; }
+        public bool Show { get; set; }
     }
 }
