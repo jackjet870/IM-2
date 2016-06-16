@@ -38,5 +38,6 @@ namespace IM.Model
         public virtual PaymentType PaymentType { internal get; set; }
         public virtual DepositRefund DepositsRefund { internal get; set; }
         public virtual Personnel Personnel { internal get; set; }
+        public virtual DisputeStatus DisputeStatus { get; set; }
     }
 }

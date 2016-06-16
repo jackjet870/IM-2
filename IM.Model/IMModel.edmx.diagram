@@ -447,6 +447,8 @@
         <AssociationConnector Association="IMModel.FK_Sales_Personnel_FrontToBack1" />
         <AssociationConnector Association="IMModel.FK_Sales_Personnel_FrontToBack2" />
         <AssociationConnector Association="IMModel.FK_Sales_Personnel_FrontToBack3" />
+        <EntityTypeShape EntityType="IMModel.DisputeStatus" Width="1.5" PointX="5.375" PointY="13.875" />
+        <AssociationConnector Association="IMModel.FK_BookingDeposits_bdds" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

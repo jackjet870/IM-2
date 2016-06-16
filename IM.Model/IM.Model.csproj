@@ -181,6 +181,9 @@
     <Compile Include="Desk.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DisputeStatus.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Efficiency.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

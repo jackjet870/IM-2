@@ -189,6 +189,7 @@ namespace IM.Model
         public virtual DbSet<IncomeCECOCEBEType> IncomesCECOCEBETypes { get; set; }
         public virtual DbSet<MarketSegmentCECOCEBEType> MarketsSegmentsCECOCEBETypes { get; set; }
         public virtual DbSet<Transfer> Transfers { get; set; }
+        public virtual DbSet<DisputeStatus> DisputeStatusList { get; set; }
     
         public virtual ObjectResult<CountryShort> USP_OR_GetCountries(Nullable<byte> status)
         {
