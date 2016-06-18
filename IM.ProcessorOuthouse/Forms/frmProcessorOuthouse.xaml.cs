@@ -44,6 +44,7 @@ namespace IM.ProcessorOuthouse.Forms
     private frmReportQueue _frmReportQueue;
     private bool _blnOneDate;
     private bool _blnOnlyOneRegister;
+    private bool _isConfigured;
 
     public List<string> _lstLeadSources = new List<string>();
     public List<int> _lstLeadSourcesPaymentComm = new List<int>();
@@ -1538,13 +1539,21 @@ namespace IM.ProcessorOuthouse.Forms
     /// </summary>
     /// <history>
     ///   [vku] 16/Jun/2016 Created
+    ///   [vku] 17/Jun/2016 Modified. Ahora verfica si se configuro la ruta. Devuelve true or false
     /// </history>
-    private void ShowSystemCfg()
+    private bool ShowSystemCfg()
     {
+      _isConfigured = false;
       MessageBoxResult result = UIHelper.ShowMessage("It is not configured path yet. Do you want to configure path now?", MessageBoxImage.Question, Title);
-      if (result != MessageBoxResult.Yes) return;
-      _systemConfig = new SystemCfg(EnumConfiguration.ReportsPath);
-      _systemConfig.Show();
+      if (result != MessageBoxResult.Yes) _isConfigured = false;
+      else {
+        _systemConfig = new SystemCfg(EnumConfiguration.ReportsPath);
+        if (_systemConfig.ShowDialog() == true)
+        {
+          _isConfigured = true;
+        }
+      }
+      return _isConfigured;
     }
     #endregion
 
@@ -1616,16 +1625,17 @@ namespace IM.ProcessorOuthouse.Forms
     /// <param name="e"></param>
     /// <history>
     ///   [vku] 16/Jun/2016 Created
+    ///   [vku] 17/Jun/2016 Modified. Ahora abre la ventana de filtros si se configura la ruta
     /// </history>
     private void btnPrint_Click(object sender, RoutedEventArgs e)
     {
-      if (ConfigRegistry.ExistReportsPath())
+      if (!ConfigRegistry.ExistReportsPath())
       {
-        if (sender.Equals(btnPrintRptByLeadSource)) PrepareReportByLeadSource();
-        else if (sender.Equals(btnPrintRptByPR)) PrepareReportByPR();
-        else if (sender.Equals(btnPrintOtherRpts)) PrepareOtherReports();
+        if (!ShowSystemCfg()) return;
       }
-      else ShowSystemCfg();
+      if (sender.Equals(btnPrintRptByLeadSource)) PrepareReportByLeadSource();
+      else if (sender.Equals(btnPrintRptByPR)) PrepareReportByPR();
+      else if (sender.Equals(btnPrintOtherRpts)) PrepareOtherReports();
     }
     #endregion
 
@@ -1669,17 +1679,18 @@ namespace IM.ProcessorOuthouse.Forms
     /// <history>
     ///   [vku] 10/May/2016 Created
     ///   [vku] 10/Jun/2016 Modified. Ahora verifica que este configurado la ruta para guardar el reporte
+    ///   [vku] 17/Jun/2016 Modified. Ahora abre la ventana de filtros si se configura la ruta
     /// </history>
     private void grdrpt_MouseDoubleClick(object sender, RoutedEventArgs e)
     {
-      if (ConfigRegistry.ExistReportsPath())
+      if (!ConfigRegistry.ExistReportsPath())
       {
-        var _dataGridRow = (DataGridRow)sender;
-        if (_dataGridRow.Item.Equals(grdRptsByLeadSource.CurrentItem)) PrepareReportByLeadSource();
-        else if (_dataGridRow.Item.Equals(grdRptsByPR.CurrentItem)) PrepareReportByPR();
-        else if (_dataGridRow.Item.Equals(grdOtherRpts.CurrentItem)) PrepareOtherReports();
+        if (!ShowSystemCfg()) return;
       }
-      else ShowSystemCfg();
+      var _dataGridRow = (DataGridRow)sender;
+      if (_dataGridRow.Item.Equals(grdRptsByLeadSource.CurrentItem)) PrepareReportByLeadSource();
+      else if (_dataGridRow.Item.Equals(grdRptsByPR.CurrentItem)) PrepareReportByPR();
+      else if (_dataGridRow.Item.Equals(grdOtherRpts.CurrentItem)) PrepareOtherReports();
     }
     #endregion
 

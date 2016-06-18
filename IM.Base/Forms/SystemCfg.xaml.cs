@@ -4,6 +4,8 @@ using System.Printing;
 using System.Windows;
 using IM.Base.Helpers;
 using IM.Model.Enums;
+using System.IO;
+using System.Windows.Controls;
 
 namespace IM.Base.Forms
 {
@@ -19,6 +21,7 @@ namespace IM.Base.Forms
 
     #region Atributo
     readonly EnumConfiguration _enumConfiguration;
+    string defaultSelectedPath = "P:\\";
     public string FileName
     {
       get { return txtPath.Text; }
@@ -109,9 +112,17 @@ namespace IM.Base.Forms
       {
         case EnumConfiguration.Printer:
           tabControl.SelectedIndex = 0;
+          Printer.Visibility = Visibility.Visible;
           break;
         case EnumConfiguration.ReportsPath:
           tabControl.SelectedIndex = 1;
+          Reports.Visibility = Visibility.Visible;
+          break;
+        default:
+         foreach (TabItem item in tabControl.Items)
+          {
+            item.Visibility = Visibility.Visible;
+          }
           break;
       }
     }
@@ -263,6 +274,8 @@ namespace IM.Base.Forms
         {
           configurationKey.SetValue("ReportsPath", FileName);
           UIHelper.ShowMessage("path successfully saved", MessageBoxImage.Information, "System Configuration");
+          DialogResult = true;
+          Close();
         }
       }
       catch (System.Security.SecurityException)
@@ -284,11 +297,13 @@ namespace IM.Base.Forms
     /// <param name="e"></param>
     /// <history>
     ///   [vku] 06/Jun/2016 Created
+    ///   [vku] 17/Jun/2016 Modified. Ahora verifica que exista el directorio por default (P:\\)
     /// </history>
     private void btnBrowser_Click(object sender, RoutedEventArgs e)
     {
       System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
-      dialog.SelectedPath = "M:\\";
+      if (!Directory.Exists(defaultSelectedPath)){ defaultSelectedPath = "M:\\"; } 
+      dialog.SelectedPath = defaultSelectedPath;
       System.Windows.Forms.DialogResult result = dialog.ShowDialog();
       if (result == System.Windows.Forms.DialogResult.OK)
         FileName = dialog.SelectedPath;
@@ -316,7 +331,7 @@ namespace IM.Base.Forms
     }
     #endregion
 
-    #region btnOkPath_Click
+    #region btnSaveChanges_Click
     /// <summary>
     ///  Guarda la ruta seleccionada en el registro de windows
     /// </summary>
@@ -325,9 +340,9 @@ namespace IM.Base.Forms
     /// <history>
     ///   [vku] 06/Jun/2016 Created
     /// </history>
-    private void btnOkPath_Click(object sender, RoutedEventArgs e)
+    private void btnSaveChanges_Click(object sender, RoutedEventArgs e)
     {
-      if (txtPath.Text!=string.Empty)
+      if (txtPath.Text != string.Empty)
       {
         SavePath();
       }

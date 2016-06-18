@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using IM.Model.Enums;
+using IM.Base.Helpers;
 
 namespace IM.Administrator.Forms
 {
@@ -34,7 +35,7 @@ namespace IM.Administrator.Forms
     /// </history>
     protected void CreateMenu()
     {
-
+      status.Visibility = Visibility.Visible;
       lblUser.Content = App.User.User.peN;
       var lstMenu = new List<object>();
       #region Sales permision
@@ -224,6 +225,8 @@ namespace IM.Administrator.Forms
 
       lstMenuAdm.SelectedIndex = 0;
       lstMenuAdm.Focus();
+      status.Visibility = Visibility.Collapsed;
+      StatusBarReg.Content = lstMenuAdm.Items.Count + " Items.";
     }
 
     #endregion
@@ -310,8 +313,56 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
+
+    #region Window_IsKeyboarFocusedChanged
+    /// <summary>
+    ///   Verfica que teclas estan presionadas
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    ///   [vku] 17/Jun/2016 Created
+    /// </history>
+    private void Window_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+    }
     #endregion
 
+    #region Window_KeyDown
+    /// <summary>
+    ///   Valida las teclas INS|MAYSU|LOCKNUM
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    ///   [vku] 17/Jun/2016 Created
+    /// </history>
+    private void Window_KeyDown(object sender, KeyEventArgs e)
+    {
+      switch (e.Key)
+      {
+        case Key.Capital:
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+            break;
+          }
+        case Key.Insert:
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+            break;
+          }
+        case Key.NumLock:
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+            break;
+          }
+      }
+    }
+    #endregion
 
+    #endregion
   }
 }

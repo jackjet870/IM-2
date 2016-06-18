@@ -10,7 +10,7 @@
         <!--#region TabControl-->
         <TabControl x:Name="tabControl" Style="{StaticResource TabControlStyle}" HorizontalAlignment="Left" Height="345" VerticalAlignment="Top" Width="344" Margin="5">
             <!--#region Printer-->
-            <TabItem Header="Printer" Style="{StaticResource ResourceKey=TabItemStyle}">
+            <TabItem Name="Printer" Header="Printer" Style="{StaticResource ResourceKey=TabItemStyle}" Visibility="Collapsed">
                 <Grid Background="White">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="100"/>
@@ -37,7 +37,7 @@
             </TabItem>
             <!--#endregion-->
             <!--#region Reports-->
-            <TabItem Header="Reports" Style="{StaticResource ResourceKey=TabItemStyle}">
+            <TabItem Name="Reports" Header="Reports" Style="{StaticResource ResourceKey=TabItemStyle}" Visibility="Collapsed">
                 <Grid Background="White">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="120"/>
@@ -52,7 +52,7 @@
                         </StackPanel>
                     </GroupBox>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Button Content="Ok" x:Name="btnOkPath" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5,0" Click="btnOkPath_Click"/>
+                        <Button Content="Save Changes" x:Name="btnSaveChanges" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5,0" Click="btnSaveChanges_Click"/>
                         <Button Content="Cancel" x:Name="btnCancelPath" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="btnCancelPath_Click"/>
                     </StackPanel>
                 </Grid>

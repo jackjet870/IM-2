@@ -7,6 +7,7 @@ using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using System;
 using IM.Model.Helpers;
+using System.Windows.Controls;
 
 namespace IM.Administrator.Forms
 {
@@ -145,7 +146,7 @@ namespace IM.Administrator.Forms
       try
       {
         btnAccept.Focus();
-        if (ObjectHelper.IsEquals(configurations, oldConfigurations))
+        if (ObjectHelper.IsEquals(configurations, oldConfigurations) && !Validation.GetHasError(txtocWelcomeCopies))
         {
           _isClosing = true;
           Close();
@@ -154,11 +155,18 @@ namespace IM.Administrator.Forms
         {
           skpStatus.Visibility = Visibility.Visible;
           txtStatus.Text = "Saving Data...";
-          int nRes = 0;
           string sMsj = ValidateHelper.ValidateForm(this, "Configuration");
+          if (!string.IsNullOrWhiteSpace(txtocWelcomeCopies.Text.Trim()))
+          {
+            int nRes = Convert.ToInt32(txtocWelcomeCopies.Text.Trim());
+            if (nRes > 255 || nRes < 1)
+            {
+              sMsj += ((sMsj == "") ? "" : " \n") + "Welcome Copies is out of range. Allowed values are 1 to 255.";
+            }
+          }
           if (sMsj == "")
           {
-            nRes = await BREntities.OperationEntity(configurations, mode);
+           int nRes = await BREntities.OperationEntity(configurations, mode);
             UIHelper.ShowMessageResult("Configurations", nRes);
             if (nRes > 0)
             {

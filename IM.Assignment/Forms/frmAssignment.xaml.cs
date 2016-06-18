@@ -11,6 +11,7 @@ using System.Data;
 using System.IO;
 using IM.Assignment.Classes;
 using System.Diagnostics;
+using System.Windows.Input;
 
 namespace IM.Assignment
 {
@@ -63,9 +64,11 @@ namespace IM.Assignment
     /// </history>
     private async void LoadListMarkets()
     {
+      status.Visibility = Visibility.Visible;
       lstMarkets = await BRMarkets.GetMarkets(1);
       grdListMarkets.ItemsSource = lstMarkets;
       grdListMarkets.SelectAll();
+      status.Visibility = Visibility.Collapsed;
     }
     #endregion
 
@@ -79,8 +82,10 @@ namespace IM.Assignment
     /// </history>
     private async void LoadListGuestsUnassigned()
     {
+      status.Visibility = Visibility.Visible;
       _guestUnassignedViewSource.Source = await BRAssignment.GetGuestUnassigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, chkShowOnlyAvail.IsChecked.Value);
       grdGuestUnassigned.UnselectAll();
+      status.Visibility = Visibility.Collapsed;
     }
     #endregion
 
@@ -94,8 +99,10 @@ namespace IM.Assignment
     /// </history>
     private async void LoadPRs()
     {
+      status.Visibility = Visibility.Visible;
       _pRAssignedViewSource.Source = await BRAssignment.GetPRsAssigned(mdtmDate, mdtmDate.AddDays(6), _LeadSource, _markets, chkGuestsPRs.IsChecked.Value, chkMemberPRs.IsChecked.Value);
       LoadListGuestsAssigned();
+      status.Visibility = Visibility.Collapsed;
     }
     #endregion
 
@@ -109,6 +116,7 @@ namespace IM.Assignment
     /// </history>
     private async void LoadListGuestsAssigned()
     {
+      status.Visibility = Visibility.Visible;
       var selectedItems = grdPRAssigned.SelectedItems;
       if (selectedItems.Count > 0)
       {
@@ -121,6 +129,7 @@ namespace IM.Assignment
       }
       lblTotalAssign.Content = sumAssign;
       lblTotalW.Content = sumAssign + grdGuestUnassigned.Items.Count;
+      status.Visibility = Visibility.Collapsed;
     }
 
     #endregion
@@ -141,7 +150,6 @@ namespace IM.Assignment
       lblWeek.Content = "Week " + weekYear;
       dateRange = DateHelper.DateRange(mdtmDate, mdtmDate.AddDays(6));
       lblDataRange.Content = dateRange;
-
       LoadListGuestsUnassigned();
       LoadPRs();
     }
@@ -272,6 +280,7 @@ namespace IM.Assignment
       _guestUnassignedViewSource = ((CollectionViewSource)(this.FindResource("guestUnassignedViewSource")));
       _pRAssignedViewSource = ((CollectionViewSource)(this.FindResource("pRAssignedViewSource")));
       _guestAssignedViewSource = ((CollectionViewSource)(this.FindResource("guestAssignedViewSource")));
+      status.Visibility = Visibility.Visible;
       LoadListMarkets();
       LoadPRs();
     }
@@ -508,6 +517,55 @@ namespace IM.Assignment
         }
       }
      LoadListGuestsUnassigned();
+    }
+    #endregion
+
+    #region Window_IsKeyboardFocusedChanged
+    /// <summary>
+    ///   Verifica que teclas estan presionadas
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    ///   [vku] 18/Jun/2016 Created
+    /// </history>
+    private void Window_IsKeyboardFocusedChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+      KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+      KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+      KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+    }
+    #endregion
+
+    #region Window_KeyDown
+    /// <summary>
+    ///   Valida las teclas INS|MAYSU|LOCKNUM
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    ///   [vku] 18/Jun/2016 Created
+    /// </history>
+    private void Window_KeyDown(object sender, KeyEventArgs e)
+    {
+      switch (e.Key)
+      {
+        case Key.Capital:
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+            break;
+          }
+        case Key.Insert:
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+            break;
+          }
+        case Key.NumLock:
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+            break;
+          }
+      }
     }
     #endregion
 
