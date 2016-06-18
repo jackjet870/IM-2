@@ -400,6 +400,9 @@
     <Compile Include="GuestMovement.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="GuestMovements.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="GuestMovementType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

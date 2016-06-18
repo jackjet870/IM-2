@@ -6221,6 +6221,9 @@
         <Function Name="USP_OR_GetGuestLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Guest" Type="int" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetGuestMovements" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Guest" Type="int" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetGuests" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
@@ -17913,7 +17916,10 @@
             <End Role="BookingDeposit" EntitySet="BookingDeposits" />
           </AssociationSet>
           <FunctionImport Name="USP_OR_GetSalesmenChanges" ReturnType="Collection(IMModel.SalesmenChanges)">
-            <Parameter Name="Sale" Mode="In" Type="Int32" />
+          <Parameter Name="Sale" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetGuestMovements" ReturnType="Collection(IMModel.GuestMovements)">
+            <Parameter Name="Guest" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -22232,6 +22238,15 @@
           <Property Type="String" Name="OldSalesmanN" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="schNewSalesman" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="NewSalesmanN" Nullable="true" MaxLength="40" />
+        </ComplexType>
+        <ComplexType Name="GuestMovements">
+          <Property Type="String" Name="gmpe" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="peN" Nullable="true" MaxLength="40" />
+          <Property Type="DateTime" Name="gmDT" Nullable="false" Precision="23" />
+          <Property Type="String" Name="gnN" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="gmcp" Nullable="false" MaxLength="63" />
+          <Property Type="String" Name="cpN" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="gmIpAddress" Nullable="false" MaxLength="15" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -29871,6 +29886,19 @@
                 <ScalarProperty Name="OldSalesmanN" ColumnName="OldSalesmanN" />
                 <ScalarProperty Name="schNewSalesman" ColumnName="schNewSalesman" />
                 <ScalarProperty Name="NewSalesmanN" ColumnName="NewSalesmanN" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetGuestMovements" FunctionName="IMModel.Store.USP_OR_GetGuestMovements">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.GuestMovements">
+                <ScalarProperty Name="gmpe" ColumnName="gmpe" />
+                <ScalarProperty Name="peN" ColumnName="peN" />
+                <ScalarProperty Name="gmDT" ColumnName="gmDT" />
+                <ScalarProperty Name="gnN" ColumnName="gnN" />
+                <ScalarProperty Name="gmcp" ColumnName="gmcp" />
+                <ScalarProperty Name="cpN" ColumnName="cpN" />
+                <ScalarProperty Name="gmIpAddress" ColumnName="gmIpAddress" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

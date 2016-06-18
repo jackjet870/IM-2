@@ -5900,5 +5900,14 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SalesmenChanges>("USP_OR_GetSalesmenChanges", saleParameter);
         }
+    
+        public virtual ObjectResult<GuestMovements> USP_OR_GetGuestMovements(Nullable<int> guest)
+        {
+            var guestParameter = guest.HasValue ?
+                new ObjectParameter("Guest", guest) :
+                new ObjectParameter("Guest", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestMovements>("USP_OR_GetGuestMovements", guestParameter);
+        }
     }
 }
