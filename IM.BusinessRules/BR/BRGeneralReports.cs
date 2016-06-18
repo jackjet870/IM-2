@@ -18,16 +18,19 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene los datos para el reporte Agencies.
     /// </summary>
-    /// <returns> List<RptAgencies> </returns>
+    /// <returns> List of RptAgencies </returns>
     /// <history>
     /// [edgrodriguez] 20/Abr/2016 Created
     /// </history>
-    public static List<RptAgencies> GetRptAgencies()
+    public static async Task<List<RptAgencies>> GetRptAgencies()
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        return dbContext.USP_OR_RptAgencies().ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          return dbContext.USP_OR_RptAgencies().ToList();
+        }
+      });
     }
 
     #endregion GetRptAgencies
@@ -37,16 +40,19 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene el reporte de personal.
     /// </summary>
-    /// <returns> List<RptPersonnel> </returns>
+    /// <returns> List of RptPersonnel </returns>
     /// <history>
     /// [edgrodriguez] 16/Mar/2016 Created
     /// </history>
-    public static List<RptPersonnel> GetRptPersonnel()
+    public static async Task<List<RptPersonnel>> GetRptPersonnel()
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        return dbContext.USP_OR_RptPersonnel().ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          return dbContext.USP_OR_RptPersonnel().ToList();
+        }
+      });
     }
 
     #endregion GetRptPersonnel
@@ -56,30 +62,55 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene el reporte de regalos.
     /// </summary>
-    /// <returns> List<RptGifts> </returns>
+    /// <returns> List of RptGifts </returns>
     /// <history>
     /// [edgrodriguez] 16/Mar/2016 Created
     /// </history>
-    public static List<RptGifts> GetRptGifts()
+    public static async Task<List<RptGifts>> GetRptGifts()
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        return dbContext.USP_OR_RptGifts().ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          return dbContext.USP_OR_RptGifts().ToList();
+        }
+      });
     }
 
     #endregion GetRptGifts
+
+    #region GetRptGiftsKardex
+
+    /// <summary>
+    /// Obtiene el reporte de regalos.
+    /// </summary>
+    /// <returns> List of RptGiftsKardex </returns>
+    /// <history>
+    /// [edgrodriguez] 07/Jun/2016 Created
+    /// </history>
+    public static async Task<List<RptGiftsKardex>> GetRptGiftsKardex(DateTime? dtmStart, DateTime? dtmEnd, string salesRoom, string gifts = "ALL")
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          return dbContext.USP_IM_RptGiftsKardex(dtmStart, dtmEnd, salesRoom, gifts).ToList();
+        }
+      });
+    }
+
+    #endregion GetRptGiftsKardex
 
     #region GetRptLoginsLog
 
     /// <summary>
     /// Obtiene el reporte Logins Log
     /// </summary>
-    /// <returns> List<RptGifts> </returns>
+    /// <returns> List of RptGifts </returns>
     /// <history>
     /// [edgrodriguez] 27/Abr/2016 Created
     /// </history>
-    public async static Task<List<RptLoginLog>> GetRptLoginsLog(DateTime dtmStart, DateTime dtmEnd, string location = "ALL", string pcname = "ALL", string personnel = "ALL")
+    public static async Task<List<RptLoginLog>> GetRptLoginsLog(DateTime dtmStart, DateTime dtmEnd, string location = "ALL", string pcname = "ALL", string personnel = "ALL")
     {
       List<RptLoginLog> result = new List<RptLoginLog>();
       await Task.Run(() =>
@@ -99,16 +130,19 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene el reporte Production By Lead Source & Market(Monthly).
     /// </summary>
-    /// <returns>List<RptProductionByLeadSourceMarketMonthly></returns>
+    /// <returns>List of RptProductionByLeadSourceMarketMonthly</returns>
     /// <history>
     /// [edgrodriguez] 21/Abr/2016 Created
     /// </history>
-    public static List<RptProductionByLeadSourceMarketMonthly> GetRptProductionByLeadSourceMarketMonthly(DateTime? dtmStart, DateTime? dtmEnd, EnumQuinellas quinellas, EnumExternalInvitation external, EnumBasedOnArrival basedOnArrival, string leadSources = "ALL", string Program = "ALL")
+    public static async Task<List<RptProductionByLeadSourceMarketMonthly>> GetRptProductionByLeadSourceMarketMonthly(DateTime? dtmStart, DateTime? dtmEnd, EnumQuinellas quinellas, EnumExternalInvitation external, EnumBasedOnArrival basedOnArrival, string leadSources = "ALL", EnumProgram program = EnumProgram.All)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        return dbContext.USP_OR_RptProductionByLeadSourceMarketMonthly(dtmStart, dtmEnd, leadSources, Program, Convert.ToBoolean(quinellas), Convert.ToInt32(external), Convert.ToBoolean(basedOnArrival)).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          return dbContext.USP_OR_RptProductionByLeadSourceMarketMonthly(dtmStart, dtmEnd, leadSources, EnumToListHelper.GetEnumDescription(program), Convert.ToBoolean(quinellas), Convert.ToInt32(external), Convert.ToBoolean(basedOnArrival)).ToList();
+        }
+      });
     }
 
     #endregion GetRptProductionByLeadSourceMarketMonthly
@@ -121,12 +155,15 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 22/Abr/2016 Created
     /// </history>
-    public static List<RptProductionReferral> GetRptProductionReferral(DateTime? dtmStart, DateTime? dtmEnd)
+    public static async Task<List<RptProductionReferral>> GetRptProductionReferral(DateTime? dtmStart, DateTime? dtmEnd)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        return dbContext.USP_OR_RptProductionReferral(dtmStart, dtmEnd).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          return dbContext.USP_OR_RptProductionReferral(dtmStart, dtmEnd).ToList();
+        }
+      });
     }
 
     #endregion GetRptProductionReferral
@@ -139,12 +176,15 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 23/Abr/2016 Created
     /// </history>
-    public static List<Rep> GetRptReps()
+    public static async Task<List<Rep>> GetRptReps()
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        return dbContext.Reps.ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          return dbContext.Reps.ToList();
+        }
+      });
     }
 
     #endregion GetRptReps
@@ -157,12 +197,15 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 23/Abr/2016 Created
     /// </history>
-    public static List<RptSalesByProgramLeadSourceMarket> GetRptSalesByProgramLeadSourceMarket(DateTime? dtmStart, DateTime? dtmEnd)
+    public static async Task<List<RptSalesByProgramLeadSourceMarket>> GetRptSalesByProgramLeadSourceMarket(DateTime? dtmStart, DateTime? dtmEnd)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        return dbContext.USP_OR_RptSalesByProgramLeadSourceMarket(dtmStart, dtmEnd).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          return dbContext.USP_OR_RptSalesByProgramLeadSourceMarket(dtmStart, dtmEnd).ToList();
+        }
+      });
     }
 
     #endregion GetRptSalesByProgramLeadSourceMarket
@@ -172,16 +215,19 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene el reporte de Warehouse Movements.
     /// </summary>
-    /// <returns> List<RptWarehouseMovements> </returns>
+    /// <returns> List of RptWarehouseMovements</returns>
     /// <history>
     /// [edgrodriguez] 26/Abr/2016 Created
     /// </history>
-    public static List<RptWarehouseMovements> GetRptWarehouseMovements(DateTime? dtmStart, DateTime? dtmEnd, string whs)
+    public static async Task<List<RptWarehouseMovements>> GetRptWarehouseMovements(DateTime? dtmStart, DateTime? dtmEnd, string whs)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        return dbContext.sprptWhsMovs(dtmStart, dtmEnd, whs).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          return dbContext.sprptWhsMovs(dtmStart, dtmEnd, whs).ToList();
+        }
+      });
     }
 
     #endregion GetRptWarehouseMovements
@@ -194,21 +240,21 @@ namespace IM.BusinessRules.BR
 
     /// <summary>
     /// Obtiene el reporte RptArrivals
-    /// </summary>/// <param name="Date">Fecha </param>
-    /// <param name="LeadSource">LeadSource </param>
-    /// <param name="Markets">Mercado </param>
-    /// <param name="Available">Available </param>
-    /// <param name="Contacted">Contacted</param>
-    /// <param name="Invited">Invited</param>
-    /// <param name="OnGroup">OnGroup</param>
+    /// </summary>/// <param name="date">Fecha </param>
+    /// <param name="leadSource">LeadSource </param>
+    /// <param name="markets">Mercado </param>
+    /// <param name="available">Available </param>
+    /// <param name="contacted">Contacted</param>
+    /// <param name="invited">Invited</param>
+    /// <param name="onGroup">OnGroup</param>
     /// <history>
     /// [ecanul] 18/04/2016 Created
     /// </history>
-    public static List<RptArrivals> GetRptArrivals(DateTime Date, string LeadSource, string Markets, int Available, int Contacted, int Invited, int OnGroup)
+    public static List<RptArrivals> GetRptArrivals(DateTime date, string leadSource, string markets, int available, int contacted, int invited, int onGroup)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.USP_OR_RptArrivals(Date, LeadSource, Markets, Available, Contacted, Invited, OnGroup).ToList();
+        return dbContext.USP_OR_RptArrivals(date, leadSource, markets, available, contacted, invited, onGroup).ToList();
       }
     }
 
@@ -219,20 +265,20 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene el reporte RptAviables
     /// </summary>
-    /// <param name="Date">Fecha </param>
-    /// <param name="LeadSource">LeadSource </param>
-    /// <param name="Markets">Mercado </param>
-    /// <param name="Contacted">Contacted</param>
-    /// <param name="Invited">Invited</param>
-    /// <param name="OnGroup">OnGroup</param>
+    /// <param name="date">Fecha </param>
+    /// <param name="leadSource">LeadSource </param>
+    /// <param name="markets">Mercado </param>
+    /// <param name="contacted">Contacted</param>
+    /// <param name="invited">Invited</param>
+    /// <param name="onGroup">OnGroup</param>
     /// <history>
     /// [ecanul] 18/04/2016 Created
     /// </history>
-    public static List<RptAvailables> GetRptAviables(DateTime Date, string LeadSource, string Markets, int Contacted, int Invited, int OnGroup)
+    public static List<RptAvailables> GetRptAviables(DateTime date, string leadSource, string markets, int contacted, int invited, int onGroup)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.USP_OR_RptAvailables(Date, LeadSource, Markets, Contacted, Invited, OnGroup).ToList();
+        return dbContext.USP_OR_RptAvailables(date, leadSource, markets, contacted, invited, onGroup).ToList();
       }
     }
 
@@ -243,19 +289,19 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene Un reporte RptPremanifest
     /// </summary>
-    /// <param name="Date">Fecha</param>
-    /// <param name="PalaceID">ID de Palace</param>
-    /// <param name="Markets">Mercado</param>
-    /// <param name="OnGroup">OnGroup</param>
-    /// <param name="SalesRoom">ID de SalesRoom</param>
+    /// <param name="date">Fecha</param>
+    /// <param name="palaceId">ID de Palace</param>
+    /// <param name="markets">Mercado</param>
+    /// <param name="onGroup">OnGroup</param>
+    /// <param name="salesRoom">ID de SalesRoom</param>
     /// <history>
     /// [ecanul] 18/04/2016 Created
     /// </history>
-    public static List<RptPremanifest> GetRptPremanifest(DateTime Date, string PalaceID, string Markets, int OnGroup, string SalesRoom = "ALL")
+    public static List<RptPremanifest> GetRptPremanifest(DateTime date, string palaceId, string markets, int onGroup, string salesRoom = "ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.USP_OR_RptPremanifest(Date, PalaceID, SalesRoom, Markets, OnGroup, false, false, BRHelpers.GetServerDate()).ToList();
+        return dbContext.USP_OR_RptPremanifest(date, palaceId, salesRoom, markets, onGroup, false, false, BRHelpers.GetServerDate()).ToList();
       }
     }
 
@@ -266,19 +312,19 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene un reporte RptPremanifestWithGifts
     /// </summary>
-    /// <param name="Date">Fecha</param>
-    /// <param name="PalaceID">ID de Palace</param>
-    /// <param name="Markets">Mercado</param>
-    /// <param name="OnGroup">OnGroup</param>
-    /// <param name="SalesRoom">ID de SalesRoom</param>
+    /// <param name="date">Fecha</param>
+    /// <param name="palaceId">ID de Palace</param>
+    /// <param name="markets">Mercado</param>
+    /// <param name="onGroup">OnGroup</param>
+    /// <param name="salesRoom">ID de SalesRoom</param>
     /// <history>
     /// [ecanul] 18/04/2016 Created
     /// </history>
-    public static List<RptPremanifestWithGifts> GetRptPremanifestWithGifts(DateTime Date, string PalaceID, string Markets, int OnGroup, string SalesRoom = "ALL")
+    public static List<RptPremanifestWithGifts> GetRptPremanifestWithGifts(DateTime date, string palaceId, string markets, int onGroup, string salesRoom = "ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.USP_OR_RptPremanifestWithGifts(Date, PalaceID, SalesRoom, false, false, BRHelpers.GetServerDate()).ToList();
+        return dbContext.USP_OR_RptPremanifestWithGifts(date, palaceId, salesRoom, false, false, BRHelpers.GetServerDate()).ToList();
       }
     }
 
@@ -374,16 +420,16 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Regresa un lista de tipo RptPremanifestOuthouse
     /// </summary>
-    /// <param name="Date"></param>
-    /// <param name="LeadSource"></param>
+    /// <param name="date"></param>
+    /// <param name="leadSource"></param>
     ///<history>
     ///[jorcanche] created 27/04/2016
     ///</history>
-    public static List<RptPremanifestOuthouse> GetRptPremanifestOutSide(DateTime Date, string LeadSource)
+    public static List<RptPremanifestOuthouse> GetRptPremanifestOutSide(DateTime date, string leadSource)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.USP_OR_RptPremanifestOutside(Date, LeadSource).ToList();
+        return dbContext.USP_OR_RptPremanifestOutside(date, leadSource).ToList();
       }
     } 
     #endregion

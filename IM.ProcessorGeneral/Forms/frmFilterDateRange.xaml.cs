@@ -310,22 +310,20 @@ namespace IM.ProcessorGeneral.Forms
     private void cboDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       if (e.AddedItems.Count <= 0) return;
-      var selected = ((EnumPredefinedDate)((ComboBox)e.OriginalSource).SelectedValue);
+      var selected = e.AddedItems.Cast<KeyValuePair<EnumPredefinedDate, string>>().FirstOrDefault().Key;
       var dateRange = DateHelper.GetDateRange(selected);
 
       dtmStart.Value = dateRange.Item1;
       dtmEnd.Value = dateRange.Item2;
       if (selected == EnumPredefinedDate.DatesSpecified)
       {
-        pnlDtmStart.IsEnabled = true;
-        pnlDtmEnd.IsEnabled = true;
+        pnlDtmStart.IsEnabled = pnlDtmEnd.IsEnabled = true;
         dtmStart.LostFocus += date_LostFocus;
         dtmEnd.LostFocus += date_LostFocus;
       }
       else
       {
-        pnlDtmStart.IsEnabled = false;
-        pnlDtmEnd.IsEnabled = false;
+        pnlDtmStart.IsEnabled = pnlDtmEnd.IsEnabled = false;
         dtmStart.LostFocus -= date_LostFocus;
         dtmEnd.LostFocus -= date_LostFocus;
       }
@@ -435,7 +433,7 @@ namespace IM.ProcessorGeneral.Forms
       LoadWarehouses(blnOnlyOneRegister, blnWarehouse, blnAllWarehouse);
       #endregion Configuracion de Grids.
 
-      LoadUserFilters();
+      LoadUserFilters(blnOneDate, blnOnlyOneRegister);
     } 
     #endregion
 
@@ -524,8 +522,7 @@ namespace IM.ProcessorGeneral.Forms
       }
       cboDate.SelectedIndex = 0;
       //Si es un rango de fechas.
-      cboDate.IsEnabled = !blnOneDate;
-      pnlDtmEnd.IsEnabled = !blnOneDate;
+      cboDate.IsEnabled = pnlDtmEnd.IsEnabled = !blnOneDate;
     }
 
     #endregion ConfigureDates
@@ -540,32 +537,44 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void SaveFrmFilterValues()
     {
-      if (chkAllSalesRoom.IsChecked != null && !chkAllSalesRoom.IsChecked.Value)
-        FrmProcGen._lstSalesRoom = grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => grdSalesRoom.Items.IndexOf(c)).ToList();
-      if (chkAllCategories.IsChecked != null && !chkAllCategories.IsChecked.Value)
-        FrmProcGen._lstGiftsCate = grdCategories.SelectedItems.Cast<GiftCategory>().Select(c => grdCategories.Items.IndexOf(c)).ToList();
-      if (chkAllGifts.IsChecked != null && !chkAllGifts.IsChecked.Value)
-        FrmProcGen._lstGifts = grdGifts.SelectedItems.Cast<GiftShort>().Select(c => grdGifts.Items.IndexOf(c)).ToList();
-      if (chkAllRatetypes.IsChecked != null && !chkAllRatetypes.IsChecked.Value)
-        FrmProcGen._lstRateTypes = grdRatetypes.SelectedItems.Cast<RateType>().Select(c => grdRatetypes.Items.IndexOf(c)).ToList();
-      if (chkAllPrograms.IsChecked != null && !chkAllPrograms.IsChecked.Value)
-        FrmProcGen._lstPrograms = grdPrograms.SelectedItems.Cast<Program>().Select(c => grdPrograms.Items.IndexOf(c)).ToList();
-      if (chkAllLeadSources.IsChecked != null && !chkAllLeadSources.IsChecked.Value)
-        FrmProcGen._lstLeadSources = grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => grdLeadSources.Items.IndexOf(c)).ToList();
-      FrmProcGen._cboDateSelected = (EnumPredefinedDate)cboDate.SelectedValue;
-      FrmProcGen._dtmStart = dtmStart.Value.Value;
-      FrmProcGen._dtmEnd = dtmEnd.Value.Value;
-      FrmProcGen._enumBasedOnArrival = (chkBasedOnArrival.IsChecked.Value) ? EnumBasedOnArrival.BasedOnArrival : EnumBasedOnArrival.NoBasedOnArrival;
-      FrmProcGen._enumBasedOnBooking = (chkBasedOnBooking.IsChecked.Value) ? EnumBasedOnBooking.BasedOnBooking : EnumBasedOnBooking.NoBasedOnBooking;
-      FrmProcGen._enumQuinellas = (chkQuinellas.IsChecked.Value) ? EnumQuinellas.Quinellas : EnumQuinellas.NoQuinellas;
-      FrmProcGen._enumDetailsGift = (chkDetailGifts.IsChecked.Value) ? EnumDetailGifts.DetailGifts : EnumDetailGifts.NoDetailGifts;
-      FrmProcGen._enumSalesByMemberShipType = (chkSalesByMembershipType.IsChecked.Value) ? EnumSalesByMemberShipType.Detail : EnumSalesByMemberShipType.NoDetail;
-      FrmProcGen._enumStatus = ((KeyValuePair<EnumStatus, string>)cboStatus.SelectedItem).Key;
-      FrmProcGen._enumGiftsReceiptType = ((KeyValuePair<EnumGiftsReceiptType, string>)cboGiftsReceiptType.SelectedItem).Key;
-      FrmProcGen._GuestID = txtGuestID.Text;
-      FrmProcGen._enumGiftSale = ((KeyValuePair<EnumGiftSale, string>)cboGiftSale.SelectedItem).Key;
-      FrmProcGen._enumSaveCourtesyTours = ((KeyValuePair<EnumSaveCourtesyTours, string>)cboSaveCourtesyTours.SelectedItem).Key;
-      FrmProcGen._enumExternalInvitation = ((KeyValuePair<EnumExternalInvitation, string>)cboExternal.SelectedItem).Key;
+      //if (chkAllSalesRoom.IsChecked != null && !chkAllSalesRoom.IsChecked.Value)
+        FrmProcGen.ClsFilter.LstSalesRooms = grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList();
+      //if (chkAllCategories.IsChecked != null && !chkAllCategories.IsChecked.Value)
+        FrmProcGen.ClsFilter.LstGiftsCate = grdCategories.SelectedItems.Cast<GiftCategory>().Select(c =>c.gcID).ToList();
+      //if (chkAllGifts.IsChecked != null && !chkAllGifts.IsChecked.Value)
+        FrmProcGen.ClsFilter.LstGifts = grdGifts.SelectedItems.Cast<GiftShort>().Select(c => c.giID).ToList();
+      //if (chkAllRatetypes.IsChecked != null && !chkAllRatetypes.IsChecked.Value)
+        FrmProcGen.ClsFilter.LstRateTypes = grdRatetypes.SelectedItems.Cast<RateType>().Select(c => c.raID).ToList();
+      //if (chkAllPrograms.IsChecked != null && !chkAllPrograms.IsChecked.Value)
+        FrmProcGen.ClsFilter.LstPrograms = grdPrograms.SelectedItems.Cast<Program>().Select(c => c.pgID).ToList();
+      //if (chkAllLeadSources.IsChecked != null && !chkAllLeadSources.IsChecked.Value)
+        FrmProcGen.ClsFilter.LstLeadSources = grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList();
+      //if (chkAllWarehouse.IsChecked != null && !chkAllWarehouse.IsChecked.Value)
+        FrmProcGen.ClsFilter.LstWarehouses = grdWarehouse.SelectedItems.Cast<WarehouseByUser>().Select(c => c.whID).ToList();
+
+      FrmProcGen.ClsFilter.SelectedDate = (EnumPredefinedDate)cboDate.SelectedValue;
+      FrmProcGen.ClsFilter.StartDate = dtmStart.Value.Value;
+      FrmProcGen.ClsFilter.EndDate = dtmEnd.Value.Value;
+      FrmProcGen.ClsFilter.BasedOnArrival = (chkBasedOnArrival.IsChecked.Value) ? EnumBasedOnArrival.BasedOnArrival : EnumBasedOnArrival.NoBasedOnArrival;
+      FrmProcGen.ClsFilter.BasedOnBooking = (chkBasedOnBooking.IsChecked.Value) ? EnumBasedOnBooking.BasedOnBooking : EnumBasedOnBooking.NoBasedOnBooking;
+      FrmProcGen.ClsFilter.Quinellas = (chkQuinellas.IsChecked.Value) ? EnumQuinellas.Quinellas : EnumQuinellas.NoQuinellas;
+      FrmProcGen.ClsFilter.DetailGift = (chkDetailGifts.IsChecked.Value) ? EnumDetailGifts.DetailGifts : EnumDetailGifts.NoDetailGifts;
+      FrmProcGen.ClsFilter.SalesByMemberShipType = (chkSalesByMembershipType.IsChecked.Value) ? EnumSalesByMemberShipType.Detail : EnumSalesByMemberShipType.NoDetail;
+      FrmProcGen.ClsFilter.Status = ((KeyValuePair<EnumStatus, string>)cboStatus.SelectedItem).Key;
+      FrmProcGen.ClsFilter.GiftsReceiptType = ((KeyValuePair<EnumGiftsReceiptType, string>)cboGiftsReceiptType.SelectedItem).Key;
+      FrmProcGen.ClsFilter.GuestId = txtGuestID.Text;
+      FrmProcGen.ClsFilter.GiftSale = ((KeyValuePair<EnumGiftSale, string>)cboGiftSale.SelectedItem).Key;
+      FrmProcGen.ClsFilter.SaveCourtesyTours = ((KeyValuePair<EnumSaveCourtesyTours, string>)cboSaveCourtesyTours.SelectedItem).Key;
+      FrmProcGen.ClsFilter.ExternalInvitation = ((KeyValuePair<EnumExternalInvitation, string>)cboExternal.SelectedItem).Key;
+
+      FrmProcGen.ClsFilter.AllGifts = chkAllGifts.IsChecked.Value;
+      FrmProcGen.ClsFilter.AllGiftsCate = chkAllCategories.IsChecked.Value;
+      FrmProcGen.ClsFilter.AllLeadSources = chkAllLeadSources.IsChecked.Value;
+      FrmProcGen.ClsFilter.AllPrograms = chkAllPrograms.IsChecked.Value;
+      FrmProcGen.ClsFilter.AllRateTypes = chkAllRatetypes.IsChecked.Value;
+      FrmProcGen.ClsFilter.AllSalesRooms = chkAllSalesRoom.IsChecked.Value;
+      FrmProcGen.ClsFilter.AllWarehouses = chkAllWarehouse.IsChecked.Value;
+
     }
 
     #endregion SaveFrmFilterValues
@@ -579,22 +588,23 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 03/Mar/2016 Created
     /// </history>
-    private void LoadUserFilters()
-    {        
-      cboDate.SelectedValue = FrmProcGen._cboDateSelected ?? EnumPredefinedDate.DatesSpecified;
-      dtmStart.Value = FrmProcGen._dtmStart;
-      dtmEnd.Value = FrmProcGen._dtmEnd;
-      chkBasedOnArrival.IsChecked = (FrmProcGen._enumBasedOnArrival == EnumBasedOnArrival.BasedOnArrival);
-      chkBasedOnBooking.IsChecked = (FrmProcGen._enumBasedOnBooking == EnumBasedOnBooking.BasedOnBooking);
-      chkQuinellas.IsChecked = (FrmProcGen._enumQuinellas == EnumQuinellas.Quinellas);
-      chkDetailGifts.IsChecked = (FrmProcGen._enumDetailsGift == EnumDetailGifts.DetailGifts);
-      chkSalesByMembershipType.IsChecked = (FrmProcGen._enumSalesByMemberShipType == EnumSalesByMemberShipType.Detail);
-      cboStatus.SelectedValue = FrmProcGen._enumStatus;
-      cboGiftsReceiptType.SelectedValue = FrmProcGen._enumGiftsReceiptType;
-      txtGuestID.Text = FrmProcGen._GuestID;
-      cboGiftSale.SelectedValue = FrmProcGen._enumGiftSale;
-      cboSaveCourtesyTours.SelectedValue = FrmProcGen._enumSaveCourtesyTours;
-      cboExternal.SelectedValue = FrmProcGen._enumExternalInvitation;
+    private void LoadUserFilters(bool onlyOneDate,bool onlyOneRegister)
+    {
+
+      cboDate.SelectedValue = (!onlyOneDate && cboDate.Items.Cast<KeyValuePair<EnumPredefinedDate, string>>().Any(c => c.Key == FrmProcGen.ClsFilter.SelectedDate)) ? FrmProcGen.ClsFilter.SelectedDate : EnumPredefinedDate.DatesSpecified;
+      dtmStart.Value = FrmProcGen.ClsFilter.StartDate;
+      dtmEnd.Value = FrmProcGen.ClsFilter.EndDate;
+      chkBasedOnArrival.IsChecked = (FrmProcGen.ClsFilter.BasedOnArrival == EnumBasedOnArrival.BasedOnArrival);
+      chkBasedOnBooking.IsChecked = (FrmProcGen.ClsFilter.BasedOnBooking == EnumBasedOnBooking.BasedOnBooking);
+      chkQuinellas.IsChecked = (FrmProcGen.ClsFilter.Quinellas == EnumQuinellas.Quinellas);
+      chkDetailGifts.IsChecked = (FrmProcGen.ClsFilter.DetailGift == EnumDetailGifts.DetailGifts);
+      chkSalesByMembershipType.IsChecked = (FrmProcGen.ClsFilter.SalesByMemberShipType == EnumSalesByMemberShipType.Detail);
+      cboStatus.SelectedValue = FrmProcGen.ClsFilter.Status;
+      cboGiftsReceiptType.SelectedValue = FrmProcGen.ClsFilter.GiftsReceiptType;
+      txtGuestID.Text = FrmProcGen.ClsFilter.GuestId;
+      cboGiftSale.SelectedValue = FrmProcGen.ClsFilter.GiftSale;
+      cboSaveCourtesyTours.SelectedValue = FrmProcGen.ClsFilter.SaveCourtesyTours;
+      cboExternal.SelectedValue = FrmProcGen.ClsFilter.ExternalInvitation;
     }
 
     #endregion LoadUserFilters
@@ -645,8 +655,6 @@ namespace IM.ProcessorGeneral.Forms
       cboExternal.ItemsSource = EnumToListHelper.GetList<EnumExternalInvitation>();
       cboGiftsReceiptType.ItemsSource = EnumToListHelper.GetList<EnumGiftsReceiptType>();
       cboGiftSale.ItemsSource = EnumToListHelper.GetList<EnumGiftSale>();
-
-      LoadUserFilters();
     }
     #endregion
 
@@ -672,14 +680,18 @@ namespace IM.ProcessorGeneral.Forms
       chkAllSalesRoom.IsChecked = blnAllSalesRoom;
       chkAllSalesRoom.IsEnabled = !blnOnlyOneRegister;
 
-      if (grdSalesRoom.ItemsSource != null && chkAllSalesRoom.IsChecked != null && (!chkAllSalesRoom.IsChecked.Value && chkAllSalesRoom.IsEnabled))
+      if (!FrmProcGen.ClsFilter.LstSalesRooms.Any()) return;
+
+      chkAllSalesRoom.IsChecked = (grdSalesRoom.SelectionMode == DataGridSelectionMode.Extended) ? FrmProcGen.ClsFilter.AllSalesRooms : false;
+      if (grdSalesRoom.ItemsSource != null && !FrmProcGen.ClsFilter.AllSalesRooms && !blnOnlyOneRegister)
       {
-        FrmProcGen._lstSalesRoom.ForEach(c =>
+        FrmProcGen.ClsFilter.LstSalesRooms.ForEach(c =>
         {
-          grdSalesRoom.SelectedItems.Add(grdSalesRoom.Items.GetItemAt(c));
+          grdSalesRoom.SelectedItems.Add(_lstSalesRoom.FirstOrDefault(s => s.srID == c));
         });
       }
-
+      else
+        grdSalesRoom.SelectedItem = _lstSalesRoom.FirstOrDefault(c => c.srID == FrmProcGen.ClsFilter.LstSalesRooms[0]);
     }
     #endregion
 
@@ -688,23 +700,35 @@ namespace IM.ProcessorGeneral.Forms
     /// Carga y configuracion del grid de LeadSources 
     /// </summary>
     /// <param name="blnOnlyOneRegister"></param>
-    /// <param name="blnSalesRoom"></param>
+    /// <param name="blnLeadSources"></param>
     /// <param name="blnAllLeadSources"></param>
     /// <history>
     /// [edgrodriguez] 21/May/2016 Created
     /// </history>
-    private async void LoadLeadSources(bool blnOnlyOneRegister, bool blnSalesRoom, bool blnAllLeadSources)
+    private async void LoadLeadSources(bool blnOnlyOneRegister, bool blnLeadSources, bool blnAllLeadSources)
     {
-      if (!blnSalesRoom) return;
+      if (!blnLeadSources) return;
 
       grdLeadSources.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       pnlLeadSource.Visibility = Visibility.Visible;
       _lstLeadSources = await BRLeadSources.GetLeadSourcesByUser(App.User.User.peID);
       grdLeadSources.ItemsSource = _lstLeadSources;
 
-      chkAllLeadSources.IsEnabled = !blnOnlyOneRegister;
       chkAllLeadSources.IsChecked = blnAllLeadSources;
+      chkAllLeadSources.IsEnabled = !blnOnlyOneRegister;
 
+      if (!FrmProcGen.ClsFilter.LstLeadSources.Any()) return;
+
+      chkAllLeadSources.IsChecked = (grdLeadSources.SelectionMode == DataGridSelectionMode.Extended) ? FrmProcGen.ClsFilter.AllLeadSources : false;
+      if (grdLeadSources.ItemsSource != null && !FrmProcGen.ClsFilter.AllLeadSources && !blnOnlyOneRegister)
+      {
+        FrmProcGen.ClsFilter.LstLeadSources.ForEach(c =>
+        {
+          grdLeadSources.SelectedItems.Add(_lstLeadSources.FirstOrDefault(l => l.lsID == c));
+        });
+      }
+      else
+        grdLeadSources.SelectedItem = _lstLeadSources.FirstOrDefault(c => c.lsID == FrmProcGen.ClsFilter.LstLeadSources[0]);
     }
     #endregion
 
@@ -730,13 +754,18 @@ namespace IM.ProcessorGeneral.Forms
       chkAllCategories.IsChecked = blnAllCategories;
       chkAllCategories.IsEnabled = !blnOnlyOneRegister;
 
-      if (grdCategories.ItemsSource != null && chkAllCategories.IsChecked != null && (!chkAllCategories.IsChecked.Value && chkAllCategories.IsEnabled))
+      if (!FrmProcGen.ClsFilter.LstGiftsCate.Any()) return;
+
+      chkAllCategories.IsChecked = (grdCategories.SelectionMode == DataGridSelectionMode.Extended) ? FrmProcGen.ClsFilter.AllGiftsCate : false;
+      if (grdCategories.ItemsSource != null && !FrmProcGen.ClsFilter.AllGiftsCate && !blnOnlyOneRegister)
       {
-        FrmProcGen._lstGiftsCate.ForEach(c =>
+        FrmProcGen.ClsFilter.LstGiftsCate.ForEach(c =>
         {
-          grdCategories.SelectedItems.Add(grdCategories.Items.GetItemAt(c));
+          grdCategories.SelectedItems.Add(_lstGiftsCate.FirstOrDefault(g => g.gcID == c));
         });
       }
+      else
+        grdCategories.SelectedItem = _lstGiftsCate.FirstOrDefault(c => c.gcID == FrmProcGen.ClsFilter.LstGiftsCate[0]);
     }
     #endregion
 
@@ -762,13 +791,18 @@ namespace IM.ProcessorGeneral.Forms
       chkAllGifts.IsChecked = blnAllGifts;
       chkAllGifts.IsEnabled = !blnOnlyOneRegister;
 
-      if (grdGifts.ItemsSource != null && chkAllGifts.IsChecked != null && (!chkAllGifts.IsChecked.Value && chkAllGifts.IsEnabled))
+      if (!FrmProcGen.ClsFilter.LstGifts.Any()) return;
+
+      chkAllGifts.IsChecked = (grdGifts.SelectionMode == DataGridSelectionMode.Extended) ? FrmProcGen.ClsFilter.AllGifts : false;
+      if (grdGifts.ItemsSource != null && !FrmProcGen.ClsFilter.AllGifts && !blnOnlyOneRegister)
       {
-        FrmProcGen._lstGifts.ForEach(c =>
+        FrmProcGen.ClsFilter.LstGifts.ForEach(c =>
         {
-          grdGifts.SelectedItems.Add(grdGifts.Items.GetItemAt(c));
+          grdGifts.SelectedItems.Add(_lstGifts.FirstOrDefault(g => g.giID == c));
         });
       }
+      else
+        grdGifts.SelectedItem = _lstGifts.FirstOrDefault(c=>c.giID == FrmProcGen.ClsFilter.LstGifts[0]);
     }
     #endregion
 
@@ -794,13 +828,18 @@ namespace IM.ProcessorGeneral.Forms
       chkAllRatetypes.IsChecked = blnAllRateTypes;
       chkAllRatetypes.IsEnabled = !blnOnlyOneRegister;
 
-      if (grdRatetypes.ItemsSource != null && chkAllRatetypes.IsChecked != null && (!chkAllRatetypes.IsChecked.Value && chkAllRatetypes.IsEnabled))
+      if (!FrmProcGen.ClsFilter.LstRateTypes.Any()) return;
+
+      chkAllRatetypes.IsChecked = (grdRatetypes.SelectionMode == DataGridSelectionMode.Extended) ? FrmProcGen.ClsFilter.AllRateTypes : false;
+      if (grdRatetypes.ItemsSource != null && !FrmProcGen.ClsFilter.AllRateTypes && !blnOnlyOneRegister)
       {
-        FrmProcGen._lstRateTypes.ForEach(c =>
+        FrmProcGen.ClsFilter.LstRateTypes.ForEach(c =>
         {
-          grdRatetypes.SelectedItems.Add(grdRatetypes.Items.GetItemAt(c));
+          grdRatetypes.SelectedItems.Add(_lstRateTypes.FirstOrDefault(r => r.raID == c));
         });
       }
+      else
+        grdRatetypes.SelectedItem = _lstRateTypes.FirstOrDefault(c => c.raID == FrmProcGen.ClsFilter.LstRateTypes[0]);
     }
     #endregion
 
@@ -826,13 +865,18 @@ namespace IM.ProcessorGeneral.Forms
       chkAllPrograms.IsChecked = blnAllPrograms;
       chkAllPrograms.IsEnabled = !blnOnlyOneRegister;
 
-      if (grdPrograms.ItemsSource != null && chkAllPrograms.IsChecked != null && (!chkAllPrograms.IsChecked.Value && chkAllPrograms.IsEnabled))
+      if (!FrmProcGen.ClsFilter.LstPrograms.Any()) return;
+
+      chkAllPrograms.IsChecked = (grdPrograms.SelectionMode == DataGridSelectionMode.Extended) ? FrmProcGen.ClsFilter.AllPrograms : false;
+      if (grdPrograms.ItemsSource != null && !FrmProcGen.ClsFilter.AllPrograms && !blnOnlyOneRegister)
       {
-        FrmProcGen._lstPrograms.ForEach(c =>
+        FrmProcGen.ClsFilter.LstPrograms.ForEach(c =>
         {
-          grdPrograms.SelectedItems.Add(grdPrograms.Items.GetItemAt(c));
+          grdPrograms.SelectedItems.Add(_lstPrograms.FirstOrDefault(p => p.pgID == c));
         });
       }
+      else
+        grdPrograms.SelectedItem = _lstPrograms.FirstOrDefault(c => c.pgID == FrmProcGen.ClsFilter.LstPrograms[0]);
     }
     #endregion
 
@@ -858,13 +902,18 @@ namespace IM.ProcessorGeneral.Forms
       chkAllWarehouse.IsChecked = blnAllWarehouses;
       chkAllWarehouse.IsEnabled = !blnOnlyOneRegister;
 
-      if (grdLeadSources.ItemsSource != null && chkAllLeadSources.IsChecked != null && (!chkAllLeadSources.IsChecked.Value && chkAllLeadSources.IsEnabled))
+      if (!FrmProcGen.ClsFilter.LstWarehouses.Any()) return;
+
+      chkAllWarehouse.IsChecked = (grdWarehouse.SelectionMode == DataGridSelectionMode.Extended) ? FrmProcGen.ClsFilter.AllWarehouses : false;
+      if (grdWarehouse.ItemsSource != null && !FrmProcGen.ClsFilter.AllWarehouses && !blnOnlyOneRegister)
       {
-        FrmProcGen._lstLeadSources.ForEach(c =>
+        FrmProcGen.ClsFilter.LstWarehouses.ForEach(c =>
         {
-          grdLeadSources.SelectedItems.Add(grdLeadSources.Items.GetItemAt(c));
+          grdWarehouse.SelectedItems.Add(_lstWarehouseByUsers.FirstOrDefault(w => w.whID == c));
         });
       }
+      else
+        grdWarehouse.SelectedItem = _lstWarehouseByUsers.FirstOrDefault(c=>c.whID == FrmProcGen.ClsFilter.LstWarehouses[0]);
     } 
     #endregion
 

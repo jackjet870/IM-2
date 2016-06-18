@@ -23,6 +23,7 @@
     Date,
     Time,
     Month,
-    Id
+    Id,
+    Day
   }
 }

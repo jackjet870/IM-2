@@ -719,5 +719,17 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_GraphProductionByPR_Timeout"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_IM_RptManifestRange_TimeOut {
+            get {
+                return ((int)(this["USP_IM_RptManifestRange_TimeOut"]));
+            }
+            set {
+                this["USP_IM_RptManifestRange_TimeOut"] = value;
+            }
+        }
     }
 }

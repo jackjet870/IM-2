@@ -17,6 +17,7 @@ using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.ProcessorGeneral.Classes;
+using IM.Base.Forms;
 
 namespace IM.ProcessorGeneral.Forms
 {
@@ -29,6 +30,7 @@ namespace IM.ProcessorGeneral.Forms
     private List<Personnel> _personnels;
     private List<string> _pcNames;
     CollectionViewSource lstLoginsLog;
+    public frmReportQueue frmReportQ;
     public frmLoginLog()
     {
       InitializeComponent();
@@ -119,9 +121,26 @@ namespace IM.ProcessorGeneral.Forms
           DateHelper.DateRange(dtmStart.SelectedDate.Value, dtmEnd.SelectedDate.Value))
       };
 
-      Process.Start(EpplusHelper.CreateGeneralRptExcel(filters, dtRptLoginsLog, "Logins Log",
-        DateHelper.DateRangeFileName(dtmStart.SelectedDate.Value, dtmEnd.SelectedDate.Value),
-        clsFormatReport.RptLoginsLog()).FullName);
+      string strReportName = "Logins Log";
+      string dateFileName = DateHelper.DateRangeFileName(dtmStart.SelectedDate.Value, dtmEnd.SelectedDate.Value);
+
+      string fileFullPath = EpplusHelper.CreateEmptyExcel(strReportName, dateFileName);
+      frmReportQ.AddReport(fileFullPath, strReportName);
+      try
+      {
+        var finfo = EpplusHelper.CreateGeneralRptExcel(filters, dtRptLoginsLog, strReportName, "", clsFormatReport.RptLoginsLog(), fileFullPath: fileFullPath);
+
+        if (finfo == null)
+        {
+          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);
+        }
+        frmReportQ.SetFileInfo(fileFullPath, finfo);
+      }
+      catch (Exception ex)
+      {
+        frmReportQ.SetFileInfoError(fileFullPath);
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+      }
     }
 
     /// <summary>

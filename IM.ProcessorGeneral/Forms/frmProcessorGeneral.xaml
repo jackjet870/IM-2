@@ -188,7 +188,8 @@
             </Grid>
             <!--#endregion-->
         </Grid>
-        <Button Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Content="_Exit" Width="100" HorizontalAlignment="Right" Margin="10 0 10 0" Click="btnExit_Click"></Button>
+        <Button Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Content="Report Queue" Width="100" HorizontalAlignment="Center" Margin="10 0 10 0" Click="btnReportQueue_Click" />
+        <Button Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Content="_Exit" Width="100" HorizontalAlignment="Right" Margin="10 0 10 0" Click="btnExit_Click" />
         <StatusBar x:Name="stbStatusBar" Height="30" VerticalAlignment="Bottom" Grid.Row="3" Grid.ColumnSpan="3">
             <StatusBarItem x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
             <StatusBarItem x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>

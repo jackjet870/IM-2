@@ -2177,21 +2177,24 @@ namespace IM.BusinessRules.BR
     /// <history>
     ///   [edgrodriguez] 19/04/2016 Created
     /// </history>
-    public static List<object> GetRptDepositsBurnedGuests(DateTime dtmStart, DateTime dtmEnd, string leadSources)
+    public async static Task<List<object>> GetRptDepositsBurnedGuests(DateTime dtmStart, DateTime dtmEnd, string leadSources)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var lstguests = dbContext.USP_OR_RptDepositsBurnedGuests(dtmStart, dtmEnd, leadSources).ToList();
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var lstguests = dbContext.USP_OR_RptDepositsBurnedGuests(dtmStart, dtmEnd, leadSources).ToList();
 
-        var currencies = (from gift in lstguests.Select(c => c.gucu).Distinct()
-                          join curr in dbContext.Currencies on gift equals curr.cuID
-                          select curr).ToList();
-        var payType = (from gift in lstguests.Select(c => c.gupt).Distinct()
-                       join payT in dbContext.PaymentTypes on gift equals payT.ptID
-                       select payT).ToList();
+          var currencies = (from gift in lstguests.Select(c => c.gucu).Distinct()
+                            join curr in dbContext.Currencies on gift equals curr.cuID
+                            select curr).ToList();
+          var payType = (from gift in lstguests.Select(c => c.gupt).Distinct()
+                         join payT in dbContext.PaymentTypes on gift equals payT.ptID
+                         select payT).ToList();
 
-        return (lstguests.Count > 0) ? new List<object> { lstguests, currencies, payType } : new List<object>();
-      }
+          return (lstguests.Count > 0) ? new List<object> { lstguests, currencies, payType } : new List<object>();
+        }
+      });
     }
 
     #endregion GetRptDepositsBurnedGuests
@@ -2208,13 +2211,16 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 19/04/2016 Created
     /// </history>
-    public static List<RptDepositRefund> GetRptDepositRefunds(DateTime dtmStart, DateTime dtmEnd, string leadSources = "ALL")
+    public async static Task<List<RptDepositRefund>> GetRptDepositRefunds(DateTime dtmStart, DateTime dtmEnd, string leadSources = "ALL")
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var lstDepRef = dbContext.USP_OR_RptDepositRefund(dtmStart, dtmEnd, leadSources).ToList();
-        return lstDepRef;
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var lstDepRef = dbContext.USP_OR_RptDepositRefund(dtmStart, dtmEnd, leadSources).ToList();
+          return lstDepRef;
+        }
+      });
     }
 
     #endregion GetRptDepositRefunds
@@ -2231,22 +2237,25 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 19/04/2016 Created
     /// </history>
-    public static List<object> GetRptDepositByPR(DateTime dtmStart, DateTime dtmEnd, string leadSources)
+    public async static Task<List<object>> GetRptDepositByPR(DateTime dtmStart, DateTime dtmEnd, string leadSources)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var lstDepPR = dbContext.USP_OR_RptDepositsByPR(dtmStart, dtmEnd, leadSources).ToList();
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var lstDepPR = dbContext.USP_OR_RptDepositsByPR(dtmStart, dtmEnd, leadSources).ToList();
 
-        var currencies = (from gift in lstDepPR.Select(c => c.gucu).Distinct()
-                          join curr in dbContext.Currencies on gift equals curr.cuID
-                          select curr).ToList();
+          var currencies = (from gift in lstDepPR.Select(c => c.gucu).Distinct()
+                            join curr in dbContext.Currencies on gift equals curr.cuID
+                            select curr).ToList();
 
-        var payType = (from gift in lstDepPR.Select(c => c.gupt).Distinct()
-                       join payT in dbContext.PaymentTypes on gift equals payT.ptID
-                       select payT).ToList();
+          var payType = (from gift in lstDepPR.Select(c => c.gupt).Distinct()
+                         join payT in dbContext.PaymentTypes on gift equals payT.ptID
+                         select payT).ToList();
 
-        return (lstDepPR.Count > 0) ? new List<object> { lstDepPR, currencies, payType } : new List<object>();
-      }
+          return (lstDepPR.Count > 0) ? new List<object> { lstDepPR, currencies, payType } : new List<object>();
+        }
+      });
     }
 
     #endregion GetRptDepositByPR
@@ -2263,22 +2272,25 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 19/04/2016 Created
     /// </history>
-    public static List<object> GetRptDepositsNoShow(DateTime dtmStart, DateTime dtmEnd, string leadSources)
+    public async static Task<List<object>> GetRptDepositsNoShow(DateTime dtmStart, DateTime dtmEnd, string leadSources)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var lstDepNoShow = dbContext.USP_OR_RptDepositsNoShow(dtmStart, dtmEnd, leadSources).ToList();
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var lstDepNoShow = dbContext.USP_OR_RptDepositsNoShow(dtmStart, dtmEnd, leadSources).ToList();
 
-        var currencies = (from gift in lstDepNoShow.Select(c => c.gucu).Distinct()
-                          join curr in dbContext.Currencies on gift equals curr.cuID
-                          select curr).ToList();
+          var currencies = (from gift in lstDepNoShow.Select(c => c.gucu).Distinct()
+                            join curr in dbContext.Currencies on gift equals curr.cuID
+                            select curr).ToList();
 
-        var payType = (from gift in lstDepNoShow.Select(c => c.gupt).Distinct()
-                       join payT in dbContext.PaymentTypes on gift equals payT.ptID
-                       select payT).ToList();
+          var payType = (from gift in lstDepNoShow.Select(c => c.gupt).Distinct()
+                         join payT in dbContext.PaymentTypes on gift equals payT.ptID
+                         select payT).ToList();
 
-        return (lstDepNoShow.Count > 0) ? new List<object> { lstDepNoShow, currencies, payType } : new List<object>();
-      }
+          return (lstDepNoShow.Count > 0) ? new List<object> { lstDepNoShow, currencies, payType } : new List<object>();
+        }
+      });
     }
 
     #endregion GetRptDepositsNoShow
@@ -2295,13 +2307,16 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 19/04/2016 Created
     /// </history>
-    public static List<RptInOutByPR> GetRptInOutByPR(DateTime dtmStart, DateTime dtmEnd, string leadSources)
+    public async static Task<List<RptInOutByPR>> GetRptInOutByPR(DateTime dtmStart, DateTime dtmEnd, string leadSources)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var lstInOutPR = dbContext.USP_OR_RptInOutByPR(dtmStart, dtmEnd, leadSources).ToList();
-        return lstInOutPR;
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var lstInOutPR = dbContext.USP_OR_RptInOutByPR(dtmStart, dtmEnd, leadSources).ToList();
+          return lstInOutPR;
+        }
+      });
     }
 
     #endregion GetRptInOutByPR
@@ -2318,13 +2333,16 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 19/04/2016 Created
     /// </history>
-    public static List<RptPersonnelAccess> GetRptPersonnelAccess(string leadSources)
+    public async static Task<List<RptPersonnelAccess>> GetRptPersonnelAccess(string leadSources)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var lstPersonnelAccess = dbContext.USP_OR_RptPersonnelAccess(leadSources).ToList();
-        return lstPersonnelAccess;
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var lstPersonnelAccess = dbContext.USP_OR_RptPersonnelAccess(leadSources).ToList();
+          return lstPersonnelAccess;
+        }
+      });
     }
 
     #endregion GetRptPersonnelAccess
@@ -2341,43 +2359,46 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [edgrodriguez] 25/04/2016 Created
     /// </history>
-    public static Tuple<List<RptSelfGen>, List<Sale>, List<Personnel>> GetRptSelfGen(DateTime dtmStart, DateTime dtmEnd, string leadSources)
+    public async static Task<Tuple<List<RptSelfGen>, List<Sale>, List<Personnel>>> GetRptSelfGen(DateTime dtmStart, DateTime dtmEnd, string leadSources)
     {
-      List<string> lstLeadSources = leadSources.Split(',').ToList();
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var lstRptSelfGen = dbContext.sprptSelfGen(dtmStart, dtmEnd, leadSources).ToList();
-
-        var lstSales = (from s in dbContext.Sales
-                        where (s.saD >= dtmStart && s.saD <= dtmEnd ||
-                               s.saProcD >= dtmStart && s.saProcD <= dtmEnd ||
-                               s.saCancelD >= dtmStart && s.saCancelD <= dtmEnd) &&
-                              lstLeadSources.Contains(s.sals) && s.saSelfGen
-                        select s
-          ).ToList();
-
-        var lstSaleType = (from s in lstSales.Select(c => c.sast).Distinct()
-                           join st in dbContext.SaleTypes on s equals st.stID
-                           select st
-          ).ToList();
-
-        lstSales.ForEach(c =>
+        List<string> lstLeadSources = leadSources.Split(',').ToList();
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          c.sast = lstSaleType.First(st => st.stID == c.sast).ststc;
-        });
+          var lstRptSelfGen = dbContext.sprptSelfGen(dtmStart, dtmEnd, leadSources).ToList();
 
-        var lstPersonnel = (from pe in dbContext.Personnels
-                            join sg in lstRptSelfGen.Select(c => c.guPRInvit1).Distinct() on pe.peID equals sg
-                            select pe
-          ).Distinct().ToList();
+          var lstSales = (from s in dbContext.Sales
+                          where (s.saD >= dtmStart && s.saD <= dtmEnd ||
+                                 s.saProcD >= dtmStart && s.saProcD <= dtmEnd ||
+                                 s.saCancelD >= dtmStart && s.saCancelD <= dtmEnd) &&
+                                lstLeadSources.Contains(s.sals) && s.saSelfGen
+                          select s
+            ).ToList();
 
-        lstPersonnel.AddRange((from pe in dbContext.Personnels
-                               join s in lstSales.Select(c => c.saPR1).Distinct() on pe.peID equals s
-                               select pe
-          ).Distinct().ToList());
+          var lstSaleType = (from s in lstSales.Select(c => c.sast).Distinct()
+                             join st in dbContext.SaleTypes on s equals st.stID
+                             select st
+            ).ToList();
 
-        return Tuple.Create(lstRptSelfGen, lstSales, lstPersonnel.Distinct().ToList());
-      }
+          lstSales.ForEach(c =>
+          {
+            c.sast = lstSaleType.First(st => st.stID == c.sast).ststc;
+          });
+
+          var lstPersonnel = (from pe in dbContext.Personnels
+                              join sg in lstRptSelfGen.Select(c => c.guPRInvit1).Distinct() on pe.peID equals sg
+                              select pe
+            ).Distinct().ToList();
+
+          lstPersonnel.AddRange((from pe in dbContext.Personnels
+                                 join s in lstSales.Select(c => c.saPR1).Distinct() on pe.peID equals s
+                                 select pe
+            ).Distinct().ToList());
+
+          return Tuple.Create(lstRptSelfGen, lstSales, lstPersonnel.Distinct().ToList());
+        }
+      });
     }
 
     #endregion GetRptSelfGen

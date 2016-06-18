@@ -8,12 +8,11 @@ using System.Windows.Input;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Model;
-using System.Data;
 using IM.Base.Helpers;
 using System.IO;
 using IM.ProcessorGeneral.Classes;
 using System.Diagnostics;
-using System.Collections;
+using IM.Base.Forms;
 
 namespace IM.ProcessorGeneral.Forms
 {
@@ -27,29 +26,33 @@ namespace IM.ProcessorGeneral.Forms
     private bool _skipSelectionChanged;//Bandera para evitar que el evento SelectionChanged se dispare al asignar el datasource.
 
     private frmFilterDateRange _frmFilter;
+    private SystemCfg _systemConfig;
+    private frmReportQueue _frmReportQueue;
     private bool _blnOneDate;
     private bool _blnOnlyOneRegister;
+    private bool _isConfigured;
+    public clsFilter ClsFilter;
 
-    public List<int> _lstGifts = new List<int>();
-    public List<int> _lstGiftsCate = new List<int>();
-    public List<int> _lstSalesRoom = new List<int>();
-    public List<int> _lstLeadSources = new List<int>();
-    public List<int> _lstPrograms = new List<int>();
-    public List<int> _lstRateTypes = new List<int>();
-    public EnumPredefinedDate? _cboDateSelected;
-    public DateTime _dtmStart = DateTime.Now.Date;
-    public DateTime _dtmEnd = DateTime.Now.Date;
-    public EnumBasedOnArrival _enumBasedOnArrival = EnumBasedOnArrival.NoBasedOnArrival;
-    public EnumBasedOnBooking _enumBasedOnBooking = EnumBasedOnBooking.NoBasedOnBooking;
-    public EnumQuinellas _enumQuinellas = EnumQuinellas.NoQuinellas;
-    public EnumDetailGifts _enumDetailsGift = EnumDetailGifts.NoDetailGifts;
-    public EnumSalesByMemberShipType _enumSalesByMemberShipType = EnumSalesByMemberShipType.NoDetail;
-    public EnumStatus _enumStatus = EnumStatus.staActives;
-    public EnumGiftsReceiptType _enumGiftsReceiptType = EnumGiftsReceiptType.grtAll;
-    public string _GuestID = "";
-    public EnumGiftSale _enumGiftSale = EnumGiftSale.gsAll;
-    public EnumSaveCourtesyTours _enumSaveCourtesyTours = EnumSaveCourtesyTours.ExcludeSaveCourtesyTours;
-    public EnumExternalInvitation _enumExternalInvitation = EnumExternalInvitation.Exclude;
+    //public List<int> _lstGifts = new List<int>();
+    //public List<int> _lstGiftsCate = new List<int>();
+    //public List<int> _lstSalesRoom = new List<int>();
+    //public List<int> _lstLeadSources = new List<int>();
+    //public List<int> _lstPrograms = new List<int>();
+    //public List<int> _lstRateTypes = new List<int>();
+    //public EnumPredefinedDate? _cboDateSelected;
+    //public DateTime _dtmStart = DateTime.Now.Date;
+    //public DateTime _dtmEnd = DateTime.Now.Date;
+    //public EnumBasedOnArrival _enumBasedOnArrival = EnumBasedOnArrival.NoBasedOnArrival;
+    //public EnumBasedOnBooking _enumBasedOnBooking = EnumBasedOnBooking.NoBasedOnBooking;
+    //public EnumQuinellas _enumQuinellas = EnumQuinellas.NoQuinellas;
+    //public EnumDetailGifts _enumDetailsGift = EnumDetailGifts.NoDetailGifts;
+    //public EnumSalesByMemberShipType _enumSalesByMemberShipType = EnumSalesByMemberShipType.NoDetail;
+    //public EnumStatus _enumStatus = EnumStatus.staActives;
+    //public EnumGiftsReceiptType _enumGiftsReceiptType = EnumGiftsReceiptType.grtAll;
+    //public string _GuestID = "";
+    //public EnumGiftSale _enumGiftSale = EnumGiftSale.gsAll;
+    //public EnumSaveCourtesyTours _enumSaveCourtesyTours = EnumSaveCourtesyTours.ExcludeSaveCourtesyTours;
+    //public EnumExternalInvitation _enumExternalInvitation = EnumExternalInvitation.Exclude;
 
     #endregion
 
@@ -73,7 +76,9 @@ namespace IM.ProcessorGeneral.Forms
     private void Window_Loaded(object sender, EventArgs e)
     {
       ConfigurarGrids();
+      SetupParameters();
       lblUserName.Content = App.User.User.peN;
+      _frmReportQueue = new frmReportQueue();
     }
     #endregion
 
@@ -90,6 +95,10 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void grdrptSalesRooms_dblClick(object sender, RoutedEventArgs e)
     {
+      if (!ConfigRegistry.ExistReportsPath())
+      {
+        if (!ShowSystemCfg()) return;
+      }
       PrepareReportBySalesRoom();
     }
     #endregion
@@ -105,10 +114,11 @@ namespace IM.ProcessorGeneral.Forms
     {
       if (e.Key != Key.Enter) return;
 
-      if (grdrptSalesRooms.SelectedIndex >= 0)
+      if (!ConfigRegistry.ExistReportsPath())
       {
-        PrepareReportBySalesRoom();
+        if (!ShowSystemCfg()) return;
       }
+      PrepareReportBySalesRoom();
     }
 
     #endregion
@@ -129,6 +139,10 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void grdrptLeadSource_dblClick(object sender, RoutedEventArgs e)
     {
+      if (!ConfigRegistry.ExistReportsPath())
+      {
+        if (!ShowSystemCfg()) return;
+      }
       PrepareReportByLeadSource();
     }
 
@@ -144,14 +158,18 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void grdrptLeadSources_PreviewKeyDown(object sender, KeyEventArgs e)
     {
-      if (e.Key == Key.Enter)
+      if (e.Key != Key.Enter) return;
+
+      if (!ConfigRegistry.ExistReportsPath())
       {
-        if (grdrptLeadSources.SelectedIndex >= 0)
-        {
-          PrepareReportByLeadSource();
-        }
+        if (!ShowSystemCfg()) return;
+      }
+      if (grdrptLeadSources.SelectedIndex >= 0)
+      {
+        PrepareReportByLeadSource();
       }
     }
+
     #endregion
 
     #endregion
@@ -169,6 +187,10 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void grdrptGeneral_dblClick(object sender, RoutedEventArgs e)
     {
+      if (!ConfigRegistry.ExistReportsPath())
+      {
+        if (!ShowSystemCfg()) return;
+      }
       PrepareGeneralReport();
     }
 
@@ -183,14 +205,18 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void grdrptGeneral_PreviewKeyDown(object sender, KeyEventArgs e)
     {
-      if (e.Key == Key.Enter)
+      if (e.Key != Key.Enter) return;
+
+      if (!ConfigRegistry.ExistReportsPath())
       {
-        if (grdrptGeneral.SelectedIndex >= 0)
-        {
-          PrepareGeneralReport();
-        }
+        if (!ShowSystemCfg()) return;
+      }
+      if (grdrptGeneral.SelectedIndex >= 0)
+      {
+        PrepareGeneralReport();
       }
     }
+
     #endregion
 
     #endregion
@@ -218,19 +244,20 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
-      if (e.Key == Key.Capital)
+      switch (e.Key)
       {
-        KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
-      }
-      else if (e.Key == Key.Insert)
-      {
-        KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
-      }
-      else if (e.Key == Key.NumLock)
-      {
-        KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+        case Key.Capital:
+          KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+          break;
+        case Key.Insert:
+          KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+          break;
+        case Key.NumLock:
+          KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+          break;
       }
     }
+
     #endregion
 
     #region Window_IsKeyboardFocusedChanged
@@ -258,6 +285,10 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void btnPrintSR_Click(object sender, RoutedEventArgs e)
     {
+      if (!ConfigRegistry.ExistReportsPath())
+      {
+        if (!ShowSystemCfg()) return;
+      }
       PrepareReportBySalesRoom();
     }
     #endregion
@@ -273,6 +304,10 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void btnPrintLS_Click(object sender, RoutedEventArgs e)
     {
+      if (!ConfigRegistry.ExistReportsPath())
+      {
+        if (!ShowSystemCfg()) return;
+      }
       PrepareReportByLeadSource();
     }
 
@@ -289,6 +324,10 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void btnPrintGral_Click(object sender, RoutedEventArgs e)
     {
+      if (!ConfigRegistry.ExistReportsPath())
+      {
+        if (!ShowSystemCfg()) return;
+      }
       PrepareGeneralReport();
     }
 
@@ -352,7 +391,7 @@ namespace IM.ProcessorGeneral.Forms
       {
         //Reportes que permiten seleccionar solo un registro.
         case "CxC":
-        case "CxC (Excel)":
+        case "CxC By Type":
         case "CxC Not Authorized":
         case "CxC Payments":
           _blnOnlyOneRegister = true;
@@ -376,7 +415,7 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void AbrirFilterDateRangeSalesRoom(string strReport)
     {
-      _frmFilter = new frmFilterDateRange { FrmProcGen = this };
+      _frmFilter = new frmFilterDateRange { FrmProcGen = this, Owner = this };
       #region Abriendo FrmFilter segun reporte seleccionado.
       switch (strReport)
       {
@@ -427,7 +466,7 @@ namespace IM.ProcessorGeneral.Forms
             blnGiftSale: true);
           break;
         case "Manifest":
-        case "Manifest (Excel)":
+        case "Manifest by LS":
           _frmFilter.ConfigurarFomulario(blnSalesRoom: true, blnPrograms: true, blnAllPrograms: true, blnOneDate: _blnOneDate, blnOnlyOneRegister: _blnOnlyOneRegister);
           break;
         case "Gifts Used by Sistur":
@@ -454,7 +493,7 @@ namespace IM.ProcessorGeneral.Forms
       _frmFilter.ShowDialog();
       if (_frmFilter.BlnOk)
       {
-        ShowSalesRoomReport(strReport);
+        ShowSalesRoomReport(strReport, ClsFilter);
         _frmFilter.Close();
       }
       else
@@ -473,746 +512,609 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 09/Mar/2016 Created
     /// </history>
-    private void ShowSalesRoomReport(string strReport)
+    private async void ShowSalesRoomReport(string strReportName, clsFilter Filter)
     {
       FileInfo finfo = null;
-      string dateRange = (_blnOneDate) ? DateHelper.DateRange(_dtmStart, _dtmStart) : DateHelper.DateRange(_dtmStart, _dtmEnd);
-      string dateRangeFileNameRep = (_blnOneDate) ? DateHelper.DateRangeFileName(_dtmStart, _dtmStart) : DateHelper.DateRangeFileName(_dtmStart, _dtmEnd);
-      List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
-      WaitMessage(true, "Loading report...");
+      var dateRange = (_blnOneDate) ? DateHelper.DateRange(Filter.StartDate, Filter.StartDate) : DateHelper.DateRange(Filter.StartDate, Filter.EndDate);
+      var dateRangeFileNameRep = (_blnOneDate) ? DateHelper.DateRangeFileName(Filter.StartDate, Filter.StartDate) : DateHelper.DateRangeFileName(Filter.StartDate, Filter.EndDate);
+
+      var filters = new List<Tuple<string, string>>();
       filters.Add(new Tuple<string, string>("Date Range", dateRange));
-      filters.Add(new Tuple<string, string>("Sales Room", _frmFilter.grdSalesRoom.SelectedItems.Count == _frmFilter.grdSalesRoom.Items.Count ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList())));
+      filters.Add(new Tuple<string, string>("Sales Room", Filter.AllSalesRooms ? "ALL" : string.Join(",", Filter.LstSalesRooms)));
 
-      switch (strReport)
+      string fileFullPath = EpplusHelper.CreateEmptyExcel(strReportName, dateRangeFileNameRep);
+      _frmReportQueue.AddReport(fileFullPath, strReportName);
+      try
       {
+        switch (strReportName)
+        {
 
-        #region Reportes Bookings
+          #region Reportes Bookings
 
-        #region Bookings By Sales Room, Program & Time
-        case "Bookings By Sales Room, Program & Time":
-          List<RptBookingsBySalesRoomProgramTime> lstRptBbSalesRoom = BRReportsBySalesRoom.GetRptBookingsBySalesRoomProgramTime(_dtmStart, (_frmFilter.chkAllSalesRoom.IsChecked ?? false) ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstRptBbSalesRoom.Count > 0)
-          {
-            finfo = clsReports.ExportRptBookingsBySalesRoomProgramTime(strReport, dateRangeFileNameRep, filters, lstRptBbSalesRoom);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-        #endregion
-        #region Bookings By Sales Room, Program, Lead Source & Time
-        case "Bookings By Sales Room, Program, Lead Source & Time":
-          List<RptBookingsBySalesRoomProgramLeadSourceTime> lstRptBbSalesRoomPlst = BRReportsBySalesRoom.GetRptBookingsBySalesRoomProgramLeadSourceTime(_dtmStart, (_frmFilter.chkAllSalesRoom.IsChecked ?? false) ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstRptBbSalesRoomPlst.Count > 0)
-          {
-            finfo = clsReports.ExportRptBookingsBySalesRoomProgramLeadSourceTime(strReport, dateRangeFileNameRep, filters, lstRptBbSalesRoomPlst);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-        #endregion
+          #region Bookings By Sales Room, Program & Time
+          case "Bookings By Sales Room, Program & Time":
+            var lstRptBbSalesRoom = await BRReportsBySalesRoom.GetRptBookingsBySalesRoomProgramTime(Filter.StartDate, (Filter.AllSalesRooms) ? "ALL" : string.Join(",", Filter.LstSalesRooms));
+            if (lstRptBbSalesRoom.Any())
+              finfo = clsReports.ExportRptBookingsBySalesRoomProgramTime(strReportName, fileFullPath, filters, lstRptBbSalesRoom);
+            break;
+          #endregion
+          #region Bookings By Sales Room, Program, Lead Source & Time
+          case "Bookings By Sales Room, Program, Lead Source & Time":
+            var lstRptBbSalesRoomPlst = await BRReportsBySalesRoom.GetRptBookingsBySalesRoomProgramLeadSourceTime(Filter.StartDate, (Filter.AllSalesRooms) ? "ALL" : string.Join(",", Filter.LstSalesRooms));
+            if (lstRptBbSalesRoomPlst.Any())
+              finfo = clsReports.ExportRptBookingsBySalesRoomProgramLeadSourceTime(strReportName, fileFullPath, filters, lstRptBbSalesRoomPlst);
+            break;
+          #endregion
 
-        #endregion
+          #endregion
 
-        #region Reportes CxC
+          #region Reportes CxC
 
-        #region CxC
-        case "CxC":
-          List<RptCxCExcel> lstRptCxCExcel = BRReportsBySalesRoom.GetRptCxC(_dtmStart, _dtmEnd, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
-          if (lstRptCxCExcel.Count > 0)
-          {
-            finfo = clsReports.ExportRptCxC(strReport, dateRangeFileNameRep, filters, lstRptCxCExcel);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-        #endregion
-        #region CxC By Type
-        case "CxC By Type":
-          List<RptCxC> lstRptCxC = BRReportsBySalesRoom.GetRptCxCByType(_dtmStart, _dtmEnd, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
-          if (lstRptCxC.Count > 0)
-          {
-            finfo = clsReports.ExportRptCxCByType(strReport, dateRangeFileNameRep, filters, lstRptCxC);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-        #endregion
-        #region CxC Deposits
-        case "CxC Deposits":
-          List<object> lstRptCxCDeposits = BRReportsBySalesRoom.GetRptCxCDeposits(_dtmStart, _dtmEnd, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
-          if (lstRptCxCDeposits.Any())
-          {
-            finfo = clsReports.ExportRptCxCDeposits(strReport, dateRangeFileNameRep, filters, lstRptCxCDeposits);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-        #endregion
-        #region CxC Gifts
-        case "CxC Gifts":
-          List<object> lstRptCxCGifts = BRReportsBySalesRoom.GetRptCxCGifts(_dtmStart, _dtmEnd, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstRptCxCGifts.Any())
-          {
-            finfo = clsReports.ExportRptCxCGift(strReport, dateRangeFileNameRep, filters, lstRptCxCGifts);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-        #endregion
-        #region CxC Not Authorized
-        case "CxC Not Authorized":
-          List<RptCxCNotAuthorized> lstRptCxCNotAut = BRReportsBySalesRoom.GetRptCxCNotAuthorized(_dtmStart, _dtmEnd, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
-          if (lstRptCxCNotAut.Count > 0)
-          {
-            finfo = clsReports.ExportRptCxCNotAuthorized(strReport, dateRangeFileNameRep, filters, lstRptCxCNotAut);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-        #endregion
-        #region CxC Payments
-        case "CxC Payments":
-          List<RptCxCPayments> lstRptCxCPayments = BRReportsBySalesRoom.GetRptCxCPayments(_dtmStart, _dtmEnd, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
-          if (lstRptCxCPayments.Count > 0)
-          {
-            finfo = clsReports.ExportRptCxCPayments(strReport, dateRangeFileNameRep, filters, lstRptCxCPayments);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-        #endregion
+          #region CxC
+          case "CxC":
+            var lstRptCxCExcel = await BRReportsBySalesRoom.GetRptCxC(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            if (lstRptCxCExcel.Any())
+              finfo = clsReports.ExportRptCxC(strReportName, fileFullPath, filters, lstRptCxCExcel);
+            break;
+          #endregion
+          #region CxC By Type
+          case "CxC By Type":
+            var lstRptCxC = await BRReportsBySalesRoom.GetRptCxCByType(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            if (lstRptCxC.Any())
+              finfo = clsReports.ExportRptCxCByType(strReportName, fileFullPath, filters, lstRptCxC);
+            break;
+          #endregion
+          #region CxC Deposits
+          case "CxC Deposits":
+            var lstRptCxCDeposits = await BRReportsBySalesRoom.GetRptCxCDeposits(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            if (lstRptCxCDeposits.Any())
+              finfo = clsReports.ExportRptCxCDeposits(strReportName, fileFullPath, filters, lstRptCxCDeposits);
+            break;
+          #endregion
+          #region CxC Gifts
+          case "CxC Gifts":
+            var lstRptCxCGifts = await BRReportsBySalesRoom.GetRptCxCGifts(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            if (lstRptCxCGifts.Any())
+              finfo = clsReports.ExportRptCxCGift(strReportName, fileFullPath, filters, lstRptCxCGifts);
+            break;
+          #endregion
+          #region CxC Not Authorized
+          case "CxC Not Authorized":
+            var lstRptCxCNotAut = await BRReportsBySalesRoom.GetRptCxCNotAuthorized(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            if (lstRptCxCNotAut.Any())
+              finfo = clsReports.ExportRptCxCNotAuthorized(strReportName, fileFullPath, filters, lstRptCxCNotAut);
+            break;
+          #endregion
+          #region CxC Payments
+          case "CxC Payments":
+            var lstRptCxCPayments = await BRReportsBySalesRoom.GetRptCxCPayments(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            if (lstRptCxCPayments.Any())
+              finfo = clsReports.ExportRptCxCPayments(strReportName, fileFullPath, filters, lstRptCxCPayments);
+            break;
+          #endregion
 
-        #endregion
+          #endregion
 
-        #region Reportes Deposits
+          #region Reportes Deposits
 
-        #region Deposits
-        case "Deposits":
-          List<object> lstRptDeposits = BRReportsBySalesRoom.GetRptDeposits(_dtmStart, _dtmEnd, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
-          if (lstRptDeposits.Count > 0)
-          {
-            finfo = clsReports.ExportRptDeposits(strReport, dateRangeFileNameRep, filters, lstRptDeposits);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-        #endregion
-        #region Burned Deposits
-        case "Burned Deposits":
-          List<object> lstRptBurnedDeposits = BRReportsBySalesRoom.GetRptDepositsBurned(_dtmStart, _dtmEnd, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
-          if (lstRptBurnedDeposits.Count > 0)
-          {
-            finfo = clsReports.ExportRptBurnedDeposits(strReport, dateRangeFileNameRep, filters, lstRptBurnedDeposits, _dtmStart.Date, _dtmEnd.Date);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-        #endregion
-        #region Burned Deposits by Resorts
-        case "Burned Deposits by Resort":
-          List<object> lstRptBurnedDepositsResort = BRReportsBySalesRoom.GetRptDepositsBurnedByResort(_dtmStart, _dtmEnd, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(c => c.srID).ToList()));
-          if (lstRptBurnedDepositsResort.Count > 0)
-          {
-            finfo = clsReports.ExportRptBurnedDepositsByResorts(strReport, dateRangeFileNameRep, filters, lstRptBurnedDepositsResort, _dtmStart.Date, _dtmEnd.Date);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-        #endregion
-        #region Paid Deposits
-        case "Paid Deposits":
-          List<object> lstRptPaidDeposits = BRReportsBySalesRoom.GetRptPaidDeposits(_dtmStart, _dtmEnd, (_frmFilter.chkAllSalesRoom.IsChecked ?? false) ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstRptPaidDeposits.Count > 0)
-          {
-            finfo = clsReports.ExportRptPaidDeposits(strReport, dateRangeFileNameRep, filters, lstRptPaidDeposits);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-        #endregion
+          #region Deposits
+          case "Deposits":
+            var lstRptDeposits = await BRReportsBySalesRoom.GetRptDeposits(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            if (lstRptDeposits.Any())
+              finfo = clsReports.ExportRptDeposits(strReportName, fileFullPath, filters, lstRptDeposits);
+            break;
+          #endregion
+          #region Burned Deposits
+          case "Burned Deposits":
+            var lstRptBurnedDeposits = await BRReportsBySalesRoom.GetRptDepositsBurned(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            if (lstRptBurnedDeposits.Any())
+              finfo = clsReports.ExportRptBurnedDeposits(strReportName, fileFullPath, filters, lstRptBurnedDeposits, Filter.StartDate.Date, Filter.EndDate.Date);
+            break;
+          #endregion
+          #region Burned Deposits by Resorts
+          case "Burned Deposits by Resort":
+            var lstRptBurnedDepositsResort = await BRReportsBySalesRoom.GetRptDepositsBurnedByResort(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            if (lstRptBurnedDepositsResort.Any())
+              finfo = clsReports.ExportRptBurnedDepositsByResorts(strReportName, fileFullPath, filters, lstRptBurnedDepositsResort, Filter.StartDate.Date, Filter.EndDate.Date);
+            break;
+          #endregion
+          #region Paid Deposits
+          case "Paid Deposits":
+            var lstRptPaidDeposits = await BRReportsBySalesRoom.GetRptPaidDeposits(Filter.StartDate, Filter.EndDate, (Filter.AllSalesRooms) ? "ALL" : string.Join(",", Filter.LstSalesRooms));
+            if (lstRptPaidDeposits.Any())
+              finfo = clsReports.ExportRptPaidDeposits(strReportName, fileFullPath, filters, lstRptPaidDeposits);
+            break;
+          #endregion
 
-        #endregion
+          #endregion
 
-        #region Reportes Gifts
+          #region Reportes Gifts
 
-        #region Daily Gifts (Simple)
-        case "Daily Gifts (Simple)":
-          List<RptDailyGiftSimple> lstRptDailyG =
-            BRReportsBySalesRoom.GetRptDailyGiftSimple(_dtmStart,
-              (_frmFilter.chkAllSalesRoom.IsChecked ?? false)
+          #region Cancelled Gifts Manifest
+          case "Cancelled Gifts Manifest":
+            var lstRptCancelledGift = await BRReportsBySalesRoom.GetRptGiftsCancelledManifest(Filter.StartDate, Filter.EndDate, (Filter.AllSalesRooms)
+                  ? "ALL"
+                  : string.Join(",", Filter.LstSalesRooms));
+            if (lstRptCancelledGift.Any())
+              finfo = clsReports.ExportRptCancelledGiftsManifest(strReportName, fileFullPath, filters, lstRptCancelledGift);
+            break;
+          #endregion
+          #region Daily Gifts (Simple)
+          case "Daily Gifts (Simple)":
+            var lstRptDailyG = await BRReportsBySalesRoom.GetRptDailyGiftSimple(Filter.StartDate,
+                (Filter.AllSalesRooms)
+                  ? "ALL"
+                  : string.Join(",", Filter.LstSalesRooms));
+            if (lstRptDailyG.Any())
+              finfo = clsReports.ExportRptDailyGiftSimple(strReportName, fileFullPath, filters, lstRptDailyG);
+            break;
+
+          #endregion
+          #region Gifts By Category
+
+          case "Gifts By Category":
+            var lstRptGiftByCat = await BRReportsBySalesRoom.GetRptGiftsByCategory(Filter.StartDate, string.Join(",", Filter.LstSalesRooms));
+            if (lstRptGiftByCat.Any())
+              finfo = clsReports.ExportRptGiftsByCategory(strReportName, fileFullPath, filters, lstRptGiftByCat);
+            break;
+
+          #endregion
+          #region Gifts By Category & Program
+
+          case "Gifts By Category & Program":
+            var lstRptGiftByCatP = await BRReportsBySalesRoom.GetRptGiftsByCategoryProgram(Filter.StartDate, string.Join(",", Filter.LstSalesRooms));
+            if (lstRptGiftByCatP.Any())
+              finfo = clsReports.ExportRptGiftsByCategoryProgram(strReportName, fileFullPath, filters, lstRptGiftByCatP);
+            break;
+
+          #endregion
+          #region Gifts Certificates
+          case "Gifts Certificates":
+            var lstRptGifsCerts = await BRReportsBySalesRoom.GetRptGiftsCertificates(Filter.StartDate,
+              Filter.EndDate,
+              string.Join(",", Filter.LstSalesRooms),
+              (Filter.AllGiftsCate)
                 ? "ALL"
-                : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstRptDailyG.Count > 0)
-          {
-            finfo = clsReports.ExportRptDailyGiftSimple(strReport, dateRangeFileNameRep, filters, lstRptDailyG);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Gifts By Category
-
-        case "Gifts By Category":
-          List<RptGiftsByCategory> lstRptGiftByCat = BRReportsBySalesRoom.GetRptGiftsByCategory(_dtmStart, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstRptGiftByCat.Count > 0)
-          {
-            finfo = clsReports.ExportRptGiftsByCategory(strReport, dateRangeFileNameRep, filters, lstRptGiftByCat);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Gifts By Category & Program
-
-        case "Gifts By Category & Program":
-          List<RptGiftsByCategoryProgram> lstRptGiftByCatP = BRReportsBySalesRoom.GetRptGiftsByCategoryProgram(_dtmStart, string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstRptGiftByCatP.Count > 0)
-          {
-            finfo = clsReports.ExportRptGiftsByCategoryProgram(strReport, dateRangeFileNameRep, filters, lstRptGiftByCatP);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Gifts Certificates
-        case "Gifts Certificates":
-          List<object> lstRptGifsCerts = BRReportsBySalesRoom.GetRptGiftsCertificates(_dtmStart,
-            _dtmEnd,
-            string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)),
-            (_frmFilter.chkAllCategories.IsChecked ?? false)
-              ? "ALL"
-              : string.Join(",", _frmFilter.grdCategories.SelectedItems.OfType<GiftCategory>().Select(c => c.gcID)),
-            (_frmFilter.chkAllGifts.IsChecked ?? false)
-              ? "ALL"
-              : string.Join(",", _frmFilter.grdGifts.SelectedItems.OfType<GiftShort>().Select(c => c.giID)));
-
-          if (lstRptGifsCerts.Count > 0)
-          {
-            finfo = clsReports.ExportRptGiftsCertificates(strReport, dateRangeFileNameRep, filters, lstRptGifsCerts);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Gifts Manifest
-        case "Gifts Manifest":
-          List<IEnumerable> lstRptGiftsManifest = BRReportsBySalesRoom.GetRptGiftsManifest(_dtmStart,
-            _dtmEnd,
-            string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)),
-            (_frmFilter.chkAllCategories.IsChecked ?? false) ? "ALL" : string.Join(",", _frmFilter.grdCategories.SelectedItems.OfType<GiftCategory>().Select(c => c.gcID)),
-            (_frmFilter.chkAllGifts.IsChecked ?? false) ? "ALL" : string.Join(",", _frmFilter.grdGifts.SelectedItems.OfType<GiftShort>().Select(c => c.giID)),
-            (EnumStatus)_frmFilter.cboStatus.SelectedValue);
-
-          if (lstRptGiftsManifest.Count > 0)
-          {
-            finfo = clsReports.ExportRptGiftsManifest(strReport, dateRangeFileNameRep, filters, lstRptGiftsManifest);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Gifts Receipts
-        case "Gifts Receipts":
-          List<IEnumerable> lstRptGiftsReceipts = BRReportsBySalesRoom.GetRptGiftsMReceipts(_dtmStart,
-            _dtmEnd,
-            string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)),
-            (_frmFilter.chkAllCategories.IsChecked ?? false) ? "ALL" : string.Join(",", _frmFilter.grdCategories.SelectedItems.OfType<GiftCategory>().Select(c => c.gcID)),
-            (_frmFilter.chkAllGifts.IsChecked ?? false) ? "ALL" : string.Join(",", _frmFilter.grdGifts.SelectedItems.OfType<GiftShort>().Select(c => c.giID)),
-            (EnumStatus)_frmFilter.cboStatus.SelectedValue, (EnumGiftsReceiptType)_frmFilter.cboGiftsReceiptType.SelectedValue,
-            (_frmFilter.txtGuestID.Text == string.Empty) ? 0 : Convert.ToInt32(_frmFilter.txtGuestID.Text));
-
-          if (lstRptGiftsReceipts.Count > 0)
-          {
-            finfo = clsReports.ExportRptGiftsReceipts(strReport, dateRangeFileNameRep, filters, lstRptGiftsReceipts);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Gifts Receipts Payments
-        case "Gifts Receipts Payments":
-          List<object> lstRptGifsReceiptsPay =
-            BRReportsBySalesRoom.GetRptGiftsReceiptsPayments(_dtmStart,
-              _dtmEnd,
-              string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-
-          if (lstRptGifsReceiptsPay.Count > 0)
-          {
-            finfo = clsReports.ExportRptGiftsReceiptsPayments(strReport, dateRangeFileNameRep, filters,
-              lstRptGifsReceiptsPay);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Gifts Sale
-
-        case "Gifts Sale":
-          List<IEnumerable> lstRptGiftsSale = BRReportsBySalesRoom.GetRptGiftsSale(_dtmStart,
-            _dtmEnd,
-            (_frmFilter.chkAllSalesRoom.IsChecked ?? false) ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)),
-            (_frmFilter.chkAllGifts.IsChecked ?? false) ? "ALL" : string.Join(",", _frmFilter.grdGifts.SelectedItems.OfType<GiftShort>().Select(c => c.giID)),
-            (_frmFilter.chkAllCategories.IsChecked ?? false) ? "ALL" : string.Join(",", _frmFilter.grdCategories.SelectedItems.OfType<GiftCategory>().Select(c => c.gcID)),
-            (EnumGiftSale)_frmFilter.cboGiftSale.SelectedValue);
-
-          if (lstRptGiftsSale.Count > 0)
-          {
-            finfo = clsReports.ExportRptGiftsSale(strReport, dateRangeFileNameRep, filters, lstRptGiftsSale);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Gifts Used by Sistur
-
-        case "Gifts Used by Sistur":
-          List<RptGiftsUsedBySistur> lstRptGiftsSistur =
-            BRReportsBySalesRoom.GetRptGiftsUsedBySistur(_dtmStart, _dtmEnd,
-              (_frmFilter.chkAllSalesRoom.IsChecked ?? false)
+                : string.Join(",", Filter.LstGiftsCate),
+              (Filter.AllGifts)
                 ? "ALL"
-                : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)),
-              (_frmFilter.chkAllPrograms.IsChecked ?? false)
-                ? "ALL"
-                : string.Join(",", _frmFilter.grdPrograms.SelectedItems.OfType<Program>().Select(c => c.pgID)),
-              (_frmFilter.chkAllLeadSources.IsChecked ?? false)
-                ? "ALL"
-                : string.Join(",",
-                  _frmFilter.grdLeadSources.SelectedItems.OfType<LeadSourceByUser>().Select(c => c.lsID)));
-          if (lstRptGiftsSistur.Count > 0)
-          {
-            finfo = clsReports.ExportRptGiftsUsedBySistur(strReport, dateRangeFileNameRep, filters, lstRptGiftsSistur);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Weekly Gifts (ITEMS) (Simple)
-
-        case "Weekly Gifts (ITEMS) (Simple)":
-          List<RptWeeklyGiftsItemsSimple> lstWeeklyGiftsSimple =
-            BRReportsBySalesRoom.GetRptWeeklyGiftsItemsSimple(_dtmStart,
-              (_frmFilter.chkAllSalesRoom.IsChecked ?? false)
-                ? "ALL"
-                : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstWeeklyGiftsSimple.Count > 0)
-          {
-            finfo = clsReports.ExportRptWeeklyGiftSimple(strReport, dateRangeFileNameRep, filters, lstWeeklyGiftsSimple);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #endregion
-
-        #region Reportes Guest
-
-        #region Guest CECO
-
-        case "Guest CECO":
-          List<RptGuestCeco> lstRptGuestCeco = BRReportsBySalesRoom.GetRptGuestCeco(_dtmStart,
-            _dtmEnd,
-            string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstRptGuestCeco.Count > 0)
-          {
-            finfo = clsReports.ExportRptGuestCeco(strReport, dateRangeFileNameRep, filters, lstRptGuestCeco);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Guests No Buyers
-
-        case "Guests No Buyers":
-          List<RptGuestsNoBuyers> lstRptGuestNoBuyers =
-            BRReportsBySalesRoom.GetRptGuestNoBuyers(_dtmStart, _dtmEnd,
-              string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstRptGuestNoBuyers.Count > 0)
-          {
-            finfo = clsReports.ExportRptGuestNoBuyers(strReport, dateRangeFileNameRep, filters, lstRptGuestNoBuyers);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region In & Out
-
-        case "In & Out":
-          List<RptInOut> lstRptInOut = BRReportsBySalesRoom.GetRptInOut(_dtmStart,
-            _dtmEnd,
-            string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstRptInOut.Count > 0)
-          {
-            finfo = clsReports.ExportRptInOut(strReport, dateRangeFileNameRep, filters, lstRptInOut);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region No Shows
-
-        case "No Shows":
-          List<RptGuestsNoShows> lstGuestNoShows =
-            BRReportsBySalesRoom.GetRptGuestNoShows(_dtmStart, _dtmEnd,
-              string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstGuestNoShows.Count > 0)
-          {
-            finfo = clsReports.ExportRptGuestNoShows(strReport, dateRangeFileNameRep, filters, lstGuestNoShows);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #endregion
-
-        #region Reportes Meal Tickets
-
-        #region Meal Tickets Simple, ByHost & Cancelled)
-
-        case "Meal Tickets":
-        case "Meal Tickets by Host":
-        case "Meal Tickets Cancelled":
-          List<RptMealTickets> lstMealTickets = BRReportsBySalesRoom.GetRptMealTickets(_dtmStart,
-            _dtmEnd,
-            string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)),
-            (strReport == "Meal Tickets Cancelled"),
-            (_frmFilter.chkAllRatetypes.IsChecked ?? false)
-              ? "ALL"
-              : string.Join(",", _frmFilter.grdRatetypes.SelectedItems.OfType<RateType>().Select(c => c.raID)));
-          if (lstMealTickets.Count > 0)
-          {
-            finfo = clsReports.ExportRptMealTickets(strReport, dateRangeFileNameRep, filters, lstMealTickets,
-              (strReport == "Meal Tickets by Host"));
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Meal Tickets Cost
-
-        case "Meal Tickets with Cost":
-          List<RptMealTicketsCost> lstMealTicketsCost =
-            BRReportsBySalesRoom.GetRptMealTicketsCost(_dtmStart, _dtmEnd,
-              string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)),
-              (_frmFilter.chkAllRatetypes.IsChecked ?? false)
-                ? "ALL"
-                : string.Join(",", _frmFilter.grdRatetypes.SelectedItems.OfType<RateType>().Select(c => c.raID)));
-          if (lstMealTicketsCost.Count > 0)
-          {
-            finfo = clsReports.ExportRptMealTicketsCost(strReport, dateRangeFileNameRep, filters, lstMealTicketsCost);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #endregion
-
-        #region Reportes Membership
-
-        #region Memberships
-
-        case "Memberships":
-          List<RptMemberships> lstMemberships = BRReportsBySalesRoom.GetRptMemberships(_dtmStart,
-            _dtmEnd,
-            (_frmFilter.chkAllSalesRoom.IsChecked ?? false)
-              ? "ALL"
-              : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstMemberships.Count > 0)
-          {
-            finfo = clsReports.ExportRptMemberships(strReport, dateRangeFileNameRep, filters, lstMemberships);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Memberships by Agency & Market
-
-        case "Memberships by Agency & Market":
-          List<RptMembershipsByAgencyMarket> lstMembershipsAgencyM =
-            BRReportsBySalesRoom.GetRptMembershipsByAgencyMarket(_dtmStart,
-              _dtmEnd,
-              (_frmFilter.chkAllSalesRoom.IsChecked ?? false)
-                ? "ALL"
-                : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstMembershipsAgencyM.Count > 0)
-          {
-            finfo = clsReports.ExportRptMembershipsByAgencyMarket(strReport, dateRangeFileNameRep, filters,
-              lstMembershipsAgencyM);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Memberships by Host
-
-        case "Memberships by Host":
-          List<RptMembershipsByHost> lstMembershipsHost =
-            BRReportsBySalesRoom.GetRptMembershipsByHost(_dtmStart, _dtmEnd,
-              (_frmFilter.chkAllSalesRoom.IsChecked ?? false)
-                ? "ALL"
-                : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstMembershipsHost.Count > 0)
-          {
-            finfo = clsReports.ExportRptMembershipsByHost(strReport, dateRangeFileNameRep, filters, lstMembershipsHost);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #endregion
-
-        #region Reportes Production
-
-        #region Production by Sales Room
-
-        case "Production by Sales Room":
-          List<RptProductionBySalesRoom> lstProductionBySr =
-            BRReportsBySalesRoom.GetRptProductionBySalesRoom(_dtmStart,
-              _dtmEnd,
-              (_frmFilter.chkAllSalesRoom.IsChecked ?? false)
-                ? "ALL"
-                : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)),
-              _frmFilter.chkQuinellas.IsChecked ?? false, _frmFilter.chkBasedOnArrival.IsChecked ?? false);
-          if (lstProductionBySr.Count > 0)
-          {
-            if (_frmFilter.chkBasedOnArrival.IsChecked ?? false)
-              filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
-            if (_frmFilter.chkQuinellas.IsChecked ?? false)
-              filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
-
-            finfo = clsReports.ExportRptProductionBySalesRoom(strReport, dateRangeFileNameRep, filters,
-              lstProductionBySr);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Production by Sales Room & Market
-
-        case "Production by Sales Room & Market":
-          List<RptProductionBySalesRoomMarket> lstProductionBySrm =
-            BRReportsBySalesRoom.GetRptProductionBySalesRoomMarket(_dtmStart,
-              _dtmEnd,
-              (_frmFilter.chkAllSalesRoom.IsChecked ?? false)
-                ? "ALL"
-                : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)),
-              _frmFilter.chkQuinellas.IsChecked ?? false, _frmFilter.chkBasedOnArrival.IsChecked ?? false);
-          if (lstProductionBySrm.Count > 0)
-          {
-            if (_frmFilter.chkBasedOnArrival.IsChecked ?? false)
-              filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
-            if (_frmFilter.chkQuinellas.IsChecked ?? false)
-              filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
-
-            finfo = clsReports.ExportRptProductionBySalesRoomMarket(strReport, dateRangeFileNameRep, filters,
-              lstProductionBySrm);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Production by Sales Room, Program, Market & Submarket
-
-        case "Production by Sales Room, Program, Market & Submarket":
-          List<RptProductionBySalesRoomProgramMarketSubmarket> lstProductionBySrmSm =
-            BRReportsBySalesRoom.GetRptProductionBySalesRoomMarketSubMarket(_dtmStart,
-              _dtmEnd,
-              (_frmFilter.chkAllSalesRoom.IsChecked ?? false)
-                ? "ALL"
-                : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)),
-              _frmFilter.chkQuinellas.IsChecked ?? false, _frmFilter.chkBasedOnArrival.IsChecked ?? false);
-          if (lstProductionBySrmSm.Count > 0)
-          {
-            if (_frmFilter.chkBasedOnArrival.IsChecked ?? false)
-              filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
-            if (_frmFilter.chkQuinellas.IsChecked ?? false)
-              filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
-
-            finfo = clsReports.ExportRptProductionBySalesRoomMarketSubMarket(strReport, dateRangeFileNameRep, filters,
-              lstProductionBySrmSm);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Production by Show Program
-
-        case "Production by Show Program":
-          List<RptProductionByShowProgram> lstProductionByShowProgram =
-            BRReportsBySalesRoom.GetRptProductionByShowProgram(_dtmStart,
-              _dtmEnd,
-              (_frmFilter.chkAllSalesRoom.IsChecked ?? false)
-                ? "ALL"
-                : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)),
-              _frmFilter.chkQuinellas.IsChecked ?? false, _frmFilter.chkBasedOnArrival.IsChecked ?? false);
-          if (lstProductionByShowProgram.Count > 0)
-          {
-            if (_frmFilter.chkBasedOnArrival.IsChecked ?? false)
-              filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
-            if (_frmFilter.chkQuinellas.IsChecked ?? false)
-              filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
-
-            finfo = clsReports.ExportRptProductionByShowProgram(strReport, dateRangeFileNameRep, filters,
-              lstProductionByShowProgram);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Production by Show, Program & Program
-
-        case "Production by Show Program & Program":
-          List<RptProductionByShowProgramProgram> lstProductionByShowProgramPro =
-            BRReportsBySalesRoom.GetRptProductionByShowProgramProgram(_dtmStart,
-              _dtmEnd,
-              (_frmFilter.chkAllSalesRoom.IsChecked ?? false)
-                ? "ALL"
-                : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)),
-              _frmFilter.chkQuinellas.IsChecked ?? false, _frmFilter.chkBasedOnArrival.IsChecked ?? false);
-          if (lstProductionByShowProgramPro.Count > 0)
-          {
-            if (_frmFilter.chkBasedOnArrival.IsChecked ?? false)
-              filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
-            if (_frmFilter.chkQuinellas.IsChecked ?? false)
-              filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
-
-            finfo = clsReports.ExportRptProductionByShowProgramProgram(strReport, dateRangeFileNameRep, filters,
-              lstProductionByShowProgramPro);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #endregion
-
-        #region Reportes Salesmen
-
-        #region Closer Statistics
-
-        case "Closer Statistics":
-          List<RptCloserStatistics> lstCloserStatistics = BRReportsBySalesRoom.GetRptCloserStatistics(_dtmStart,
-              _dtmEnd, (_frmFilter.chkAllSalesRoom.IsChecked ?? false) ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstCloserStatistics.Count > 0)
-          {            
-            finfo = clsReports.ExportRptCloserStatistics(strReport, dateRangeFileNameRep, filters, lstCloserStatistics);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Liner Statistics
-
-        case "Liner Statistics":
-          List<RptLinerStatistics> lstLinerStatistics = BRReportsBySalesRoom.GetRptLinerStatistics(_dtmStart,
-              _dtmEnd, (_frmFilter.chkAllSalesRoom.IsChecked ?? false) ? "ALL" : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstLinerStatistics.Count > 0)
-          {
-            finfo = clsReports.ExportRptLinerStatistics(strReport, dateRangeFileNameRep, filters, lstLinerStatistics);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #endregion
-
-        #region Reportes Taxis
-
-        #region Taxis In
-
-        case "Taxis In":
-          List<RptTaxisIn> lstTaxisIn = BRReportsBySalesRoom.GetRptTaxisIn(_dtmStart,
-            _dtmEnd,
-            (_frmFilter.chkAllSalesRoom.IsChecked ?? false)
-              ? "ALL"
-              : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstTaxisIn.Count > 0)
-          {
-            finfo = clsReports.ExportRptTaxiIn(strReport, dateRangeFileNameRep, filters, lstTaxisIn);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Taxis Out
-
-        case "Taxis Out":
-          List<RptTaxisOut> lstTaxisOut = BRReportsBySalesRoom.GetRptTaxisOut(_dtmStart,
-            _dtmEnd,
-            (_frmFilter.chkAllSalesRoom.IsChecked ?? false)
-              ? "ALL"
-              : string.Join(",", _frmFilter.grdSalesRoom.SelectedItems.OfType<SalesRoomByUser>().Select(c => c.srID)));
-          if (lstTaxisOut.Count > 0)
-          {
-            finfo = clsReports.ExportRptTaxiOut(strReport, dateRangeFileNameRep, filters, lstTaxisOut);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
+                : string.Join(",", Filter.LstGifts));
+
+            if (lstRptGifsCerts.Any())
+              finfo = clsReports.ExportRptGiftsCertificates(strReportName, fileFullPath, filters, lstRptGifsCerts);
+            break;
+
+          #endregion
+          #region Gifts Manifest
+          case "Gifts Manifest":
+            var lstRptGiftsManifest = await BRReportsBySalesRoom.GetRptGiftsManifest(Filter.StartDate,
+              Filter.EndDate,
+              string.Join(",", Filter.LstSalesRooms),
+              (Filter.AllGiftsCate) ? "ALL" : string.Join(",", Filter.LstGiftsCate),
+              (Filter.AllGifts) ? "ALL" : string.Join(",", Filter.LstGifts),
+              (EnumStatus)_frmFilter.cboStatus.SelectedValue);
+
+            if (lstRptGiftsManifest.Any())
+              finfo = clsReports.ExportRptGiftsManifest(strReportName, fileFullPath, filters, lstRptGiftsManifest);
+            break;
+
+          #endregion
+          #region Gifts Receipts
+          case "Gifts Receipts":
+            var lstRptGiftsReceipts = await BRReportsBySalesRoom.GetRptGiftsMReceipts(Filter.StartDate,
+              Filter.EndDate,
+              string.Join(",", Filter.LstSalesRooms),
+              (Filter.AllGiftsCate) ? "ALL" : string.Join(",", Filter.LstGiftsCate),
+              (Filter.AllGifts) ? "ALL" : string.Join(",", Filter.LstGifts),
+              (EnumStatus)_frmFilter.cboStatus.SelectedValue, (EnumGiftsReceiptType)_frmFilter.cboGiftsReceiptType.SelectedValue,
+              (_frmFilter.txtGuestID.Text == string.Empty) ? 0 : Convert.ToInt32(_frmFilter.txtGuestID.Text));
+
+            if (lstRptGiftsReceipts.Any())
+              finfo = clsReports.ExportRptGiftsReceipts(strReportName, fileFullPath, filters, lstRptGiftsReceipts);
+            break;
+
+          #endregion
+          #region Gifts Receipts Payments
+          case "Gifts Receipts Payments":
+            var lstRptGifsReceiptsPay = await BRReportsBySalesRoom.GetRptGiftsReceiptsPayments(Filter.StartDate,
+                Filter.EndDate,
+                string.Join(",", Filter.LstSalesRooms));
+
+            if (lstRptGifsReceiptsPay.Any())
+              finfo = clsReports.ExportRptGiftsReceiptsPayments(strReportName, fileFullPath, filters,
+                lstRptGifsReceiptsPay);
+            break;
+
+          #endregion
+          #region Gifts Sale
+
+          case "Gifts Sale":
+            var lstRptGiftsSale = await BRReportsBySalesRoom.GetRptGiftsSale(Filter.StartDate,
+              Filter.EndDate,
+              (Filter.AllSalesRooms) ? "ALL" : string.Join(",", Filter.LstSalesRooms),
+              (Filter.AllGifts) ? "ALL" : string.Join(",", Filter.LstGifts),
+              (Filter.AllGiftsCate) ? "ALL" : string.Join(",", Filter.LstGiftsCate),
+              (EnumGiftSale)_frmFilter.cboGiftSale.SelectedValue);
+
+            if (lstRptGiftsSale.Any())
+              finfo = clsReports.ExportRptGiftsSale(strReportName, fileFullPath, filters, lstRptGiftsSale);
+            break;
+
+          #endregion
+          #region Gifts Used by Sistur
+
+          case "Gifts Used by Sistur":
+            var lstRptGiftsSistur = await BRReportsBySalesRoom.GetRptGiftsUsedBySistur(Filter.StartDate, Filter.EndDate,
+                (Filter.AllSalesRooms)
+                  ? "ALL"
+                  : string.Join(",", Filter.LstSalesRooms),
+                (Filter.AllPrograms)
+                  ? "ALL"
+                  : string.Join(",", Filter.LstPrograms),
+                (Filter.AllLeadSources)
+                  ? "ALL"
+                  : string.Join(",",
+                    Filter.LstLeadSources));
+            if (lstRptGiftsSistur.Any())
+              finfo = clsReports.ExportRptGiftsUsedBySistur(strReportName, fileFullPath, filters, lstRptGiftsSistur);
+            break;
+
+          #endregion
+          #region Weekly Gifts (ITEMS) (Simple)
+
+          case "Weekly Gifts (ITEMS) (Simple)":
+            var lstWeeklyGiftsSimple = await BRReportsBySalesRoom.GetRptWeeklyGiftsItemsSimple(Filter.StartDate,
+                (Filter.AllSalesRooms)
+                  ? "ALL"
+                  : string.Join(",", Filter.LstSalesRooms));
+            if (lstWeeklyGiftsSimple.Any())
+              finfo = clsReports.ExportRptWeeklyGiftSimple(strReportName, fileFullPath, filters, lstWeeklyGiftsSimple);
+            break;
 
           #endregion
 
           #endregion
-      }
 
-      if (finfo != null)
+          #region Reportes Guest
+
+          #region Guest CECO
+
+          case "Guest CECO":
+            var lstRptGuestCeco = await BRReportsBySalesRoom.GetRptGuestCeco(Filter.StartDate,
+              Filter.EndDate,
+              string.Join(",", Filter.LstSalesRooms));
+            if (lstRptGuestCeco.Any())
+              finfo = clsReports.ExportRptGuestCeco(strReportName, fileFullPath, filters, lstRptGuestCeco);
+            break;
+
+          #endregion
+          #region Guests No Buyers
+
+          case "Guests No Buyers":
+            var lstRptGuestNoBuyers = await BRReportsBySalesRoom.GetRptGuestNoBuyers(Filter.StartDate, Filter.EndDate,
+                string.Join(",", Filter.LstSalesRooms));
+            if (lstRptGuestNoBuyers.Any())
+              finfo = clsReports.ExportRptGuestNoBuyers(strReportName, fileFullPath, filters, lstRptGuestNoBuyers);
+            break;
+
+          #endregion
+          #region In & Out
+
+          case "In & Out":
+            var lstRptInOut = await BRReportsBySalesRoom.GetRptInOut(Filter.StartDate,
+              Filter.EndDate,
+              string.Join(",", Filter.LstSalesRooms));
+            if (lstRptInOut.Any())
+              finfo = clsReports.ExportRptInOut(strReportName, fileFullPath, filters, lstRptInOut);
+            break;
+
+          #endregion
+          #region Manifest
+
+          case "Manifest":
+            var lstRptManifestRange = await BRReportsBySalesRoom.GetRptManifestRange(Filter.StartDate,
+              Filter.EndDate,
+              string.Join(",", Filter.LstSalesRooms));
+            if (lstRptManifestRange.Any())
+              finfo = clsReports.ExportRptManifestRange(strReportName, fileFullPath, filters, lstRptManifestRange);
+            break;
+
+          #endregion
+          #region Manifest
+
+          case "Manifest by LS":
+            var lstRptManifestRangeByLs = await BRReportsBySalesRoom.GetRptManifestRangeByLs(Filter.StartDate,
+              Filter.EndDate,
+              string.Join(",", Filter.LstSalesRooms));
+            if (lstRptManifestRangeByLs.Any())
+              finfo = clsReports.ExportRptManifestRangeByLs(strReportName, fileFullPath, filters, lstRptManifestRangeByLs);
+            break;
+
+          #endregion
+          #region No Shows
+
+          case "No Shows":
+            var lstGuestNoShows = await BRReportsBySalesRoom.GetRptGuestNoShows(Filter.StartDate, Filter.EndDate,
+                string.Join(",", Filter.LstSalesRooms));
+            if (lstGuestNoShows.Any())
+              finfo = clsReports.ExportRptGuestNoShows(strReportName, fileFullPath, filters, lstGuestNoShows);
+            break;
+
+          #endregion
+
+          #endregion
+
+          #region Reportes Meal Tickets
+
+          #region Meal Tickets Simple, ByHost & Cancelled)
+
+          case "Meal Tickets":
+          case "Meal Tickets by Host":
+          case "Meal Tickets Cancelled":
+            var lstMealTickets = await BRReportsBySalesRoom.GetRptMealTickets(Filter.StartDate,
+              Filter.EndDate,
+              string.Join(",", Filter.LstSalesRooms),
+              (strReportName == "Meal Tickets Cancelled"),
+              (Filter.AllRateTypes)
+                ? "ALL"
+                : string.Join(",", Filter.LstRateTypes));
+            if (lstMealTickets.Any())
+              finfo = clsReports.ExportRptMealTickets(strReportName, fileFullPath, filters, lstMealTickets,
+                (strReportName == "Meal Tickets by Host"));
+            break;
+
+          #endregion
+          #region Meal Tickets Cost
+
+          case "Meal Tickets with Cost":
+            var lstMealTicketsCost = await BRReportsBySalesRoom.GetRptMealTicketsCost(Filter.StartDate, Filter.EndDate,
+                string.Join(",", Filter.LstSalesRooms),
+                (Filter.AllRateTypes)
+                  ? "ALL"
+                  : string.Join(",", Filter.LstRateTypes));
+            if (lstMealTicketsCost.Any())
+              finfo = clsReports.ExportRptMealTicketsCost(strReportName, fileFullPath, filters, lstMealTicketsCost);
+            break;
+
+          #endregion
+
+          #endregion
+
+          #region Reportes Membership
+
+          #region Memberships
+
+          case "Memberships":
+            var lstMemberships = await BRReportsBySalesRoom.GetRptMemberships(Filter.StartDate,
+              Filter.EndDate,
+              (Filter.AllSalesRooms)
+                ? "ALL"
+                : string.Join(",", Filter.LstSalesRooms));
+            if (lstMemberships.Any())
+              finfo = clsReports.ExportRptMemberships(strReportName, fileFullPath, filters, lstMemberships);
+            break;
+
+          #endregion
+          #region Memberships by Agency & Market
+
+          case "Memberships by Agency & Market":
+            var lstMembershipsAgencyM = await BRReportsBySalesRoom.GetRptMembershipsByAgencyMarket(Filter.StartDate,
+                Filter.EndDate,
+                (Filter.AllSalesRooms)
+                  ? "ALL"
+                  : string.Join(",", Filter.LstSalesRooms));
+            if (lstMembershipsAgencyM.Any())
+              finfo = clsReports.ExportRptMembershipsByAgencyMarket(strReportName, fileFullPath, filters,
+                lstMembershipsAgencyM);
+            break;
+
+          #endregion
+          #region Memberships by Host
+
+          case "Memberships by Host":
+            var lstMembershipsHost = await BRReportsBySalesRoom.GetRptMembershipsByHost(Filter.StartDate, Filter.EndDate,
+                (Filter.AllSalesRooms)
+                  ? "ALL"
+                  : string.Join(",", Filter.LstSalesRooms));
+            if (lstMembershipsHost.Any())
+              finfo = clsReports.ExportRptMembershipsByHost(strReportName, fileFullPath, filters, lstMembershipsHost);
+            break;
+
+          #endregion
+
+          #endregion
+
+          #region Reportes Production
+
+          #region Production by Sales Room
+
+          case "Production by Sales Room":
+            var lstProductionBySr = await BRReportsBySalesRoom.GetRptProductionBySalesRoom(Filter.StartDate,
+                Filter.EndDate,
+                (Filter.AllSalesRooms)
+                  ? "ALL"
+                  : string.Join(",", Filter.LstSalesRooms),
+                Convert.ToBoolean(Filter.Quinellas), Convert.ToBoolean(Filter.BasedOnArrival));
+            if (lstProductionBySr.Any())
+            {
+              if (Convert.ToBoolean(Filter.BasedOnArrival))
+                filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
+              if (Convert.ToBoolean(Filter.Quinellas))
+                filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
+
+              finfo = clsReports.ExportRptProductionBySalesRoom(strReportName, fileFullPath, filters,
+                lstProductionBySr);
+            }
+            break;
+
+          #endregion
+          #region Production by Sales Room & Market
+
+          case "Production by Sales Room & Market":
+            var lstProductionBySrm = await BRReportsBySalesRoom.GetRptProductionBySalesRoomMarket(Filter.StartDate,
+                Filter.EndDate,
+                (Filter.AllSalesRooms)
+                  ? "ALL"
+                  : string.Join(",", Filter.LstSalesRooms),
+                Convert.ToBoolean(Filter.Quinellas), Convert.ToBoolean(Filter.BasedOnArrival));
+            if (lstProductionBySrm.Any())
+            {
+              if (Convert.ToBoolean(Filter.BasedOnArrival))
+                filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
+              if (Convert.ToBoolean(Filter.Quinellas))
+                filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
+
+              finfo = clsReports.ExportRptProductionBySalesRoomMarket(strReportName, fileFullPath, filters,
+                lstProductionBySrm);
+            }
+            break;
+
+          #endregion
+          #region Production by Sales Room, Program, Market & Submarket
+
+          case "Production by Sales Room, Program, Market & Submarket":
+            var lstProductionBySrmSm = await BRReportsBySalesRoom.GetRptProductionBySalesRoomMarketSubMarket(Filter.StartDate,
+                Filter.EndDate,
+                (Filter.AllSalesRooms)
+                  ? "ALL"
+                  : string.Join(",", Filter.LstSalesRooms),
+                Convert.ToBoolean(Filter.Quinellas), Convert.ToBoolean(Filter.BasedOnArrival));
+            if (lstProductionBySrmSm.Any())
+            {
+              if (Convert.ToBoolean(Filter.BasedOnArrival))
+                filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
+              if (Convert.ToBoolean(Filter.Quinellas))
+                filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
+
+              finfo = clsReports.ExportRptProductionBySalesRoomMarketSubMarket(strReportName, fileFullPath, filters,
+                lstProductionBySrmSm);
+            }
+            break;
+
+          #endregion
+          #region Production by Show Program
+
+          case "Production by Show Program":
+            var lstProductionByShowProgram = await BRReportsBySalesRoom.GetRptProductionByShowProgram(Filter.StartDate,
+                Filter.EndDate,
+                (Filter.AllSalesRooms)
+                  ? "ALL"
+                  : string.Join(",", Filter.LstSalesRooms),
+                Convert.ToBoolean(Filter.Quinellas), Convert.ToBoolean(Filter.BasedOnArrival));
+            if (lstProductionByShowProgram.Any())
+            {
+              if (Convert.ToBoolean(Filter.BasedOnArrival))
+                filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
+              if (Convert.ToBoolean(Filter.Quinellas))
+                filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
+
+              finfo = clsReports.ExportRptProductionByShowProgram(strReportName, fileFullPath, filters,
+                lstProductionByShowProgram);
+            }
+            break;
+
+          #endregion
+          #region Production by Show, Program & Program
+
+          case "Production by Show Program & Program":
+            var lstProductionByShowProgramPro = await BRReportsBySalesRoom.GetRptProductionByShowProgramProgram(Filter.StartDate,
+                Filter.EndDate,
+                (Filter.AllSalesRooms)
+                  ? "ALL"
+                  : string.Join(",", Filter.LstSalesRooms),
+                Convert.ToBoolean(Filter.Quinellas), Convert.ToBoolean(Filter.BasedOnArrival));
+            if (lstProductionByShowProgramPro.Any())
+            {
+              if (Convert.ToBoolean(Filter.BasedOnArrival))
+                filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
+              if (Convert.ToBoolean(Filter.Quinellas))
+                filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
+
+              finfo = clsReports.ExportRptProductionByShowProgramProgram(strReportName, fileFullPath, filters,
+                lstProductionByShowProgramPro);
+            }
+            break;
+
+          #endregion
+
+          #endregion
+
+          #region Reportes Salesmen
+
+          #region Closer Statistics
+
+          case "Closer Statistics":
+            var lstCloserStatistics = await BRReportsBySalesRoom.GetRptCloserStatistics(Filter.StartDate,
+                Filter.EndDate, (Filter.AllSalesRooms) ? "ALL" : string.Join(",", Filter.LstSalesRooms));
+            if (lstCloserStatistics.Any())
+              finfo = clsReports.ExportRptCloserStatistics(strReportName, fileFullPath, filters, lstCloserStatistics);
+            break;
+
+          #endregion
+          #region Liner Statistics
+
+          case "Liner Statistics":
+            var lstLinerStatistics = await BRReportsBySalesRoom.GetRptLinerStatistics(Filter.StartDate,
+                Filter.EndDate, (Filter.AllSalesRooms) ? "ALL" : string.Join(",", Filter.LstSalesRooms));
+            if (lstLinerStatistics.Any())
+              finfo = clsReports.ExportRptLinerStatistics(strReportName, fileFullPath, filters, lstLinerStatistics);
+            break;
+
+          #endregion
+          #region Weekly and Monthly Hostess
+
+          case "Weekly and Monthly Hostess":
+            var lstWeeklyMontly = await BRReportsBySalesRoom.GetRptWeeklyMonthlyHostess(Filter.StartDate, (Filter.AllSalesRooms) ? "ALL" : string.Join(",", Filter.LstSalesRooms));
+            if (lstWeeklyMontly.Any())
+              finfo = clsReports.ExportRptWeeklyMonthlyHostess(strReportName, fileFullPath, filters, lstWeeklyMontly);
+            break;
+
+          #endregion
+          #endregion
+
+          #region Reportes Taxis
+
+          #region Taxis In
+
+          case "Taxis In":
+            var lstTaxisIn = await BRReportsBySalesRoom.GetRptTaxisIn(Filter.StartDate,
+              Filter.EndDate,
+              (Filter.AllSalesRooms)
+                ? "ALL"
+                : string.Join(",", Filter.LstSalesRooms));
+            if (lstTaxisIn.Any())
+              finfo = clsReports.ExportRptTaxiIn(strReportName, fileFullPath, filters, lstTaxisIn);
+            break;
+
+          #endregion
+          #region Taxis Out
+
+          case "Taxis Out":
+            var lstTaxisOut = await BRReportsBySalesRoom.GetRptTaxisOut(Filter.StartDate,
+              Filter.EndDate,
+              (Filter.AllSalesRooms)
+                ? "ALL"
+                : string.Join(",", Filter.LstSalesRooms));
+            if (lstTaxisOut.Any())
+              finfo = clsReports.ExportRptTaxiOut(strReportName, fileFullPath, filters, lstTaxisOut);
+            break;
+
+            #endregion
+
+            #endregion
+        }
+
+        if (finfo == null)
+        {
+          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);
+        }
+        _frmReportQueue.SetFileInfo(fileFullPath, finfo);
+      }
+      catch (Exception ex)
       {
-        Process.Start(finfo.FullName);
+        _frmReportQueue.SetFileInfoError(fileFullPath);
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
       }
-
-      WaitMessage(false);
     }
 
     #endregion
@@ -1258,7 +1160,7 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void AbrirFilterDateRangeLeadsSource(string strReport)
     {
-      _frmFilter = new frmFilterDateRange { FrmProcGen = this };
+      _frmFilter = new frmFilterDateRange { FrmProcGen = this, Owner = this };
 
       #region Abriendo FrmFilter segun reporte seleccionado.
 
@@ -1269,7 +1171,7 @@ namespace IM.ProcessorGeneral.Forms
       _frmFilter.ShowDialog();
       if (_frmFilter.BlnOk)
       {
-        ShowLeadSourceReport(strReport);
+        ShowLeadSourceReport(strReport, ClsFilter);
         _frmFilter.Close();
       }
       else
@@ -1291,197 +1193,143 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    private void ShowLeadSourceReport(string strReport)
+    private async void ShowLeadSourceReport(string strReportName, clsFilter Filter)
     {
-      string dateRange = (_blnOneDate)
-        ? DateHelper.DateRange(_dtmStart, _dtmStart)
-        : DateHelper.DateRange(_dtmStart, _dtmEnd);
-      string dateRangeFileNameRep = (_blnOneDate)
-        ? DateHelper.DateRangeFileName(_dtmStart, _dtmStart)
-        : DateHelper.DateRangeFileName(_dtmStart, _dtmEnd);
+      var dateRange = _blnOneDate ? DateHelper.DateRange(Filter.StartDate, Filter.StartDate) : DateHelper.DateRange(Filter.StartDate, Filter.EndDate);
+      var dateRangeFileNameRep = _blnOneDate ? DateHelper.DateRangeFileName(Filter.StartDate, Filter.StartDate) : DateHelper.DateRangeFileName(Filter.StartDate, Filter.EndDate);
       FileInfo finfo = null;
-      List<Tuple<string, string>> filters = new List<Tuple<string, string>>();
-      string leadSources = (_frmFilter.chkAllLeadSources.IsChecked ?? false)
-        ? "ALL"
-        : string.Join(",", _frmFilter.grdLeadSources.SelectedItems.OfType<LeadSourceByUser>().Select(c => c.lsID));
+      var filters = new List<Tuple<string, string>>();
+      var leadSources = (Filter.AllLeadSources) ? "ALL" : string.Join(",", Filter.LstLeadSources);
       filters.Add(new Tuple<string, string>("Date Range", dateRange));
       filters.Add(new Tuple<string, string>("Lead Sources",
-        _frmFilter.grdLeadSources.SelectedItems.Count == _frmFilter.grdLeadSources.Items.Count
-          ? "ALL"
-          : string.Join(",",
-            _frmFilter.grdLeadSources.SelectedItems.Cast<LeadSourceByUser>().Select(c => c.lsID).ToList())));
-      WaitMessage(true, "Loading report...");
+        Filter.AllLeadSources ? "ALL" : string.Join(",", Filter.LstLeadSources)));
 
-      switch (strReport)
+      string fileFullPath = EpplusHelper.CreateEmptyExcel(strReportName, dateRangeFileNameRep);
+      _frmReportQueue.AddReport(fileFullPath, strReportName);
+      try
       {
-        #region Burned Deposits Guests
+        switch (strReportName)
+        {
+          #region Burned Deposits Guests
 
-        case "Burned Deposits Guests":
-          List<object> lstRptBurnedDepsGuest =
-            BRReportsByLeadSource.GetRptDepositsBurnedGuests(_dtmStart,
-              _dtmEnd,
-              string.Join(",", _frmFilter.grdLeadSources.SelectedItems.OfType<LeadSourceByUser>().Select(c => c.lsID)));
-          if (lstRptBurnedDepsGuest.Count > 0)
-          {
-            finfo = clsReports.ExportRptBurnedDepositsGuests(strReport, dateRangeFileNameRep, filters,
-              lstRptBurnedDepsGuest);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Deposit Refund
-
-        case "Deposit Refund":
-          List<RptDepositRefund> lstRptDepRef =
-            BRReportsByLeadSource.GetRptDepositRefunds(_dtmStart, _dtmEnd,
-              leadSources);
-          if (lstRptDepRef.Count > 0)
-          {
-            finfo = clsReports.ExportRptDepositRefunds(strReport, dateRangeFileNameRep, filters, lstRptDepRef);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Deposits by PR
-
-        case "Deposits by PR":
-          List<object> lstRptDepPr = BRReportsByLeadSource.GetRptDepositByPR(_dtmStart,
-            _dtmEnd,
-            string.Join(",", _frmFilter.grdLeadSources.SelectedItems.OfType<LeadSourceByUser>().Select(c => c.lsID)));
-          if (lstRptDepPr.Count > 0)
-          {
-            finfo = clsReports.ExportRptDepositByPr(strReport, dateRangeFileNameRep, filters, lstRptDepPr);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Deposits No Show
-
-        case "Deposits No Show":
-          List<object> lstRptDepNoShow = BRReportsByLeadSource.GetRptDepositsNoShow(_dtmStart,
-            _dtmEnd,
-            string.Join(",", _frmFilter.grdLeadSources.SelectedItems.OfType<LeadSourceByUser>().Select(c => c.lsID)));
-          if (lstRptDepNoShow.Count > 0)
-          {
-            finfo = clsReports.ExportRptDepositsNoShow(strReport, dateRangeFileNameRep, filters, lstRptDepNoShow);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region In & Out by PR
-
-        case "In & Out by PR":
-          List<RptInOutByPR> lstRptInOutPr = BRReportsByLeadSource.GetRptInOutByPR(_dtmStart,
-            _dtmEnd,
-            string.Join(",", _frmFilter.grdLeadSources.SelectedItems.OfType<LeadSourceByUser>().Select(c => c.lsID)));
-          if (lstRptInOutPr.Count > 0)
-          {
-            finfo = clsReports.ExportRptInOutByPr(strReport, dateRangeFileNameRep, filters, lstRptInOutPr);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Memberships
-
-        case "Memberships":
-          List<RptMemberships> lstMemberships = BRReportsBySalesRoom.GetRptMemberships(_dtmStart,
-            _dtmEnd, leadSources: leadSources);
-          if (lstMemberships.Count > 0)
-          {
-            finfo = clsReports.ExportRptMemberships(strReport, dateRangeFileNameRep, filters, lstMemberships);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Memberships by Host
-
-        case "Memberships by Host":
-          List<RptMembershipsByHost> lstMembershipsHost =
-            BRReportsBySalesRoom.GetRptMembershipsByHost(_dtmStart, _dtmEnd,
-              leadSources: leadSources);
-          if (lstMembershipsHost.Count > 0)
-          {
-            finfo = clsReports.ExportRptMembershipsByHost(strReport, dateRangeFileNameRep, filters, lstMembershipsHost);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Paid Deposits
-
-        case "Paid Deposits by PR":
-          List<object> lstRptPaidDeposits = BRReportsBySalesRoom.GetRptPaidDeposits(_dtmStart,
-            _dtmEnd, leadSources: leadSources);
-          if (lstRptPaidDeposits.Count > 0)
-          {
-            finfo = clsReports.ExportRptPaidDeposits(strReport, dateRangeFileNameRep, filters, lstRptPaidDeposits, true);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Personnel Access
-
-        case "Personnel Access":
-          List<RptPersonnelAccess> lstPersonnelAccess =
-            BRReportsByLeadSource.GetRptPersonnelAccess(string.Join(",",
-              _frmFilter.grdLeadSources.SelectedItems.OfType<LeadSourceByUser>().Select(c => c.lsID)));
-          if (lstPersonnelAccess.Count > 0)
-          {
-            finfo = clsReports.ExportRptPersonnelAccess(strReport, dateRangeFileNameRep, filters, lstPersonnelAccess);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Self Gen
-
-        case "Self Gen":
-          var lstRptSelfGen = BRReportsByLeadSource.GetRptSelfGen(_dtmStart,
-            _dtmEnd,
-            string.Join(",", _frmFilter.grdLeadSources.SelectedItems.OfType<LeadSourceByUser>().Select(c => c.lsID)));
-          if (lstRptSelfGen.Item1.Count > 0)
-          {
-            finfo = clsReports.ExportRptSelfGen(strReport, dateRangeFileNameRep, filters, lstRptSelfGen,
-              _dtmStart, _dtmEnd);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
+          case "Burned Deposits Guests":
+            var lstRptBurnedDepsGuest = await BRReportsByLeadSource.GetRptDepositsBurnedGuests(Filter.StartDate,
+                Filter.EndDate,
+                string.Join(",", Filter.LstLeadSources));
+            if (lstRptBurnedDepsGuest.Any())
+              finfo = clsReports.ExportRptBurnedDepositsGuests(strReportName, fileFullPath, filters,
+                lstRptBurnedDepsGuest);
+            break;
 
           #endregion
-      }
+          #region Deposit Refund
 
-      if (finfo != null)
+          case "Deposit Refund":
+            var lstRptDepRef = await BRReportsByLeadSource.GetRptDepositRefunds(Filter.StartDate, Filter.EndDate,
+                leadSources);
+            if (lstRptDepRef.Any())
+              finfo = clsReports.ExportRptDepositRefunds(strReportName, fileFullPath, filters, lstRptDepRef);
+            break;
+
+          #endregion
+          #region Deposits by PR
+
+          case "Deposits by PR":
+            var lstRptDepPr = await BRReportsByLeadSource.GetRptDepositByPR(Filter.StartDate,
+              Filter.EndDate,
+              string.Join(",", Filter.LstLeadSources));
+            if (lstRptDepPr.Any())
+              finfo = clsReports.ExportRptDepositByPr(strReportName, fileFullPath, filters, lstRptDepPr);
+            break;
+
+          #endregion
+          #region Deposits No Show
+
+          case "Deposits No Show":
+            var lstRptDepNoShow = await BRReportsByLeadSource.GetRptDepositsNoShow(Filter.StartDate,
+              Filter.EndDate,
+              string.Join(",", Filter.LstLeadSources));
+            if (lstRptDepNoShow.Any())
+              finfo = clsReports.ExportRptDepositsNoShow(strReportName, fileFullPath, filters, lstRptDepNoShow);
+            break;
+
+          #endregion
+          #region In & Out by PR
+
+          case "In & Out by PR":
+            var lstRptInOutPr = await BRReportsByLeadSource.GetRptInOutByPR(Filter.StartDate,
+              Filter.EndDate,
+              string.Join(",", Filter.LstLeadSources));
+            if (lstRptInOutPr.Any())
+              finfo = clsReports.ExportRptInOutByPr(strReportName, fileFullPath, filters, lstRptInOutPr);
+            break;
+
+          #endregion
+          #region Memberships
+
+          case "Memberships":
+            var lstMemberships = await BRReportsBySalesRoom.GetRptMemberships(Filter.StartDate,
+              Filter.EndDate, leadSources: leadSources);
+            if (lstMemberships.Any())
+              finfo = clsReports.ExportRptMemberships(strReportName, fileFullPath, filters, lstMemberships);
+            break;
+
+          #endregion
+          #region Memberships by Host
+
+          case "Memberships by Host":
+            var lstMembershipsHost = await BRReportsBySalesRoom.GetRptMembershipsByHost(Filter.StartDate, Filter.EndDate,
+                leadSources: leadSources);
+            if (lstMembershipsHost.Any())
+              finfo = clsReports.ExportRptMembershipsByHost(strReportName, fileFullPath, filters, lstMembershipsHost);
+            break;
+
+          #endregion
+          #region Paid Deposits
+
+          case "Paid Deposits by PR":
+            var lstRptPaidDeposits = await BRReportsBySalesRoom.GetRptPaidDeposits(Filter.StartDate,
+              Filter.EndDate, leadSources: leadSources);
+            if (lstRptPaidDeposits.Any())
+              finfo = clsReports.ExportRptPaidDeposits(strReportName, fileFullPath, filters, lstRptPaidDeposits, true);
+            break;
+
+          #endregion
+          #region Personnel Access
+
+          case "Personnel Access":
+            var lstPersonnelAccess = await BRReportsByLeadSource.GetRptPersonnelAccess(string.Join(",",
+                Filter.LstLeadSources));
+            if (lstPersonnelAccess.Any())
+              finfo = clsReports.ExportRptPersonnelAccess(strReportName, fileFullPath, filters, lstPersonnelAccess);
+            break;
+
+          #endregion
+          #region Self Gen
+
+          case "Self Gen":
+            var lstRptSelfGen = await BRReportsByLeadSource.GetRptSelfGen(Filter.StartDate,
+              Filter.EndDate,
+              string.Join(",", Filter.LstLeadSources));
+            if (lstRptSelfGen.Item1.Any())
+              finfo = clsReports.ExportRptSelfGen(strReportName, fileFullPath, filters, lstRptSelfGen,
+                Filter.StartDate, Filter.EndDate);
+            break;
+
+            #endregion
+        }
+
+        if (finfo == null)
+        {
+          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);
+        }
+        _frmReportQueue.SetFileInfo(fileFullPath, finfo);
+      }
+      catch (Exception ex)
       {
-        Process.Start(finfo.FullName);
+        _frmReportQueue.SetFileInfoError(fileFullPath);
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
       }
-
-      WaitMessage(false);
     }
 
     #endregion
@@ -1539,8 +1387,7 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void AbrirFilterDateRangeGeneral(string strReport)
     {
-      _frmFilter = new frmFilterDateRange { FrmProcGen = this };
-
+      _frmFilter = new frmFilterDateRange { FrmProcGen = this, Owner = this };
       #region Abriendo FrmFilter segun reporte seleccionado.
 
       //desplegamos el filtro de fechas
@@ -1567,7 +1414,7 @@ namespace IM.ProcessorGeneral.Forms
         default:
           _frmFilter = null;
           WaitMessage(true, (strReport != "Logins Log") ? "Loading Report..." : "Loading Date Range Window...");
-          ShowGeneralReport(strReport);
+          ShowGeneralReport(strReport, ClsFilter);
           WaitMessage(false);
           break;
       }
@@ -1577,7 +1424,7 @@ namespace IM.ProcessorGeneral.Forms
       _frmFilter.ShowDialog();
       if (_frmFilter.BlnOk)
       {
-        ShowGeneralReport(strReport, true);
+        ShowGeneralReport(strReport, ClsFilter, true);
         _frmFilter.Close();
       }
       else
@@ -1599,167 +1446,134 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 16/Mar/2016 Created
     /// </history>
-    private void ShowGeneralReport(string strReport, bool blndateRange = false)
+    private async void ShowGeneralReport(string strReportName, clsFilter Filter, bool blndateRange = false)
     {
-      var dateRange = (blndateRange)
-        ? ((_blnOneDate)
-          ? DateHelper.DateRange(_dtmStart, _dtmStart)
-          : DateHelper.DateRange(_dtmStart, _dtmEnd))
-        : "";
-      var dateRangeFileNameRep = (blndateRange)
-        ? ((_blnOneDate)
-          ? DateHelper.DateRangeFileName(_dtmStart, _dtmStart)
-          : DateHelper.DateRangeFileName(_dtmStart, _dtmEnd))
-        : "";
+      //var dateRange = (blndateRange)
+      //  ? ((_blnOneDate)
+      //    ? DateHelper.DateRange(_clsFilter.StartDate, _clsFilter.StartDate)
+      //    : DateHelper.DateRange(_clsFilter.StartDate, _clsFilter.EndDate))
+      //  : "";
+      var dateRangeFileNameRep = (blndateRange) ? (_blnOneDate ? DateHelper.DateRangeFileName(Filter.StartDate, Filter.StartDate) : DateHelper.DateRangeFileName(Filter.StartDate, Filter.EndDate)) : "";
       FileInfo finfo = null;
       var filters = new List<Tuple<string, string>>();
-      WaitMessage(true, "Loading report...");
-      switch (strReport)
+      string fileFullPath = (strReportName != "Logins Log") ? EpplusHelper.CreateEmptyExcel(strReportName, dateRangeFileNameRep) : "";
+      if (strReportName != "Logins Log") { _frmReportQueue.AddReport(fileFullPath, strReportName); }
+      try
       {
-        #region Agencies
+        switch (strReportName)
+        {
+          #region Agencies
 
-        case "Agencies":
-          List<RptAgencies> lstRptAgencies = BRGeneralReports.GetRptAgencies();
-          if (lstRptAgencies.Count > 0)
-          {
-            finfo = clsReports.ExportRptAgencies(strReport, "", filters, lstRptAgencies);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Gifts
-
-        case "Gifts":
-          List<RptGifts> lstRptGift = BRGeneralReports.GetRptGifts();
-          if (lstRptGift.Count > 0)
-          {
-            finfo = clsReports.ExportRptGifts(strReport, "", filters, lstRptGift);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Logins Log
-
-        case "Logins Log":
-          frmLoginLog loginLog = new frmLoginLog();
-          loginLog.ShowDialog();
-          break;
-
-        #endregion
-
-        #region Personnel
-
-        case "Personnel":
-          List<RptPersonnel> lstRptPersonnel = BRGeneralReports.GetRptPersonnel();
-          if (lstRptPersonnel.Count > 0)
-          {
-            finfo = clsReports.ExportRptPersonnel(strReport, "", filters, lstRptPersonnel);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Production by Lead Source & Market (Monthly)
-
-        case "Production by Lead Source & Market (Monthly)":
-          List<RptProductionByLeadSourceMarketMonthly> lstRptProductionByLsMarketMonthly =
-            BRGeneralReports.GetRptProductionByLeadSourceMarketMonthly(_dtmStart,
-              _dtmEnd,
-              (_frmFilter.chkQuinellas.IsChecked ?? false) ? EnumQuinellas.Quinellas : EnumQuinellas.NoQuinellas,
-              (EnumExternalInvitation)_frmFilter.cboExternal.SelectedValue,
-              (_frmFilter.chkBasedOnArrival.IsChecked ?? false)
-                ? EnumBasedOnArrival.BasedOnArrival
-                : EnumBasedOnArrival.NoBasedOnArrival);
-          if (lstRptProductionByLsMarketMonthly.Count > 0)
-          {
-            finfo = clsReports.ExportRptProductionByLeadSourceMarketMonthly(strReport, dateRangeFileNameRep, filters,
-              lstRptProductionByLsMarketMonthly);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Production Referral
-
-        case "Production Referral":
-          List<RptProductionReferral> lstRptProductionReferral =
-            BRGeneralReports.GetRptProductionReferral(_dtmStart, _dtmEnd);
-          if (lstRptProductionReferral.Count > 0)
-          {
-            finfo = clsReports.ExportRptProductionReferral(strReport, dateRangeFileNameRep, filters,
-              lstRptProductionReferral);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Reps
-
-        case "Reps":
-          List<Rep> lstRptReps = BRGeneralReports.GetRptReps();
-          if (lstRptReps.Count > 0)
-          {
-            finfo = clsReports.ExportRptReps(strReport, dateRangeFileNameRep, filters, lstRptReps);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Sales By Program, Lead Source & Market
-
-        case "Sales By Program, Lead Source & Market":
-          List<RptSalesByProgramLeadSourceMarket> lstRptSalesByProgramLeadSourceMarkets =
-            BRGeneralReports.GetRptSalesByProgramLeadSourceMarket(_dtmStart,
-              _dtmEnd);
-          if (lstRptSalesByProgramLeadSourceMarkets.Count > 0)
-          {
-            finfo = clsReports.ExportRptSalesByProgramLeadSourceMarket(strReport, dateRangeFileNameRep, filters,
-              lstRptSalesByProgramLeadSourceMarkets);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
-
-        #endregion
-
-        #region Warehouse Movements
-
-        case "Warehouse Movements":
-          List<RptWarehouseMovements> lstRptWarehouseMovements =
-            BRGeneralReports.GetRptWarehouseMovements(_dtmStart, _dtmEnd,
-              ((WarehouseByUser)_frmFilter.grdWarehouse.SelectedItem).whID);
-          if (lstRptWarehouseMovements.Count > 0)
-          {
-            finfo = clsReports.ExportRptWarehouseMovements(strReport, dateRangeFileNameRep, filters,
-              lstRptWarehouseMovements);
-          }
-          else
-            UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Warning);
-          break;
+          case "Agencies":
+            var lstRptAgencies = await BRGeneralReports.GetRptAgencies();
+            if (lstRptAgencies.Any())
+              finfo = clsReports.ExportRptAgencies(strReportName, fileFullPath, filters, lstRptAgencies);
+            break;
 
           #endregion
-      }
+          #region Gifts
 
-      if (finfo != null)
+          case "Gifts":
+            var lstRptGift = await BRGeneralReports.GetRptGifts();
+            if (lstRptGift.Any())
+              finfo = clsReports.ExportRptGifts(strReportName, fileFullPath, filters, lstRptGift);
+            break;
+
+          #endregion
+          #region Gifts Kardex
+
+          case "Gifts Kardex":
+            var lstRptGiftKardex = await BRGeneralReports.GetRptGiftsKardex(Filter.StartDate, Filter.EndDate, Filter.LstWarehouses.FirstOrDefault());
+            if (lstRptGiftKardex.Any())
+              finfo = clsReports.ExportRptGiftsKardex(strReportName, fileFullPath, filters, lstRptGiftKardex);
+            break;
+
+          #endregion
+          #region Logins Log
+
+          case "Logins Log":
+            var loginLog = new frmLoginLog() { Owner = this, frmReportQ = _frmReportQueue };
+            loginLog.ShowDialog();
+            return;
+
+          #endregion
+          #region Personnel
+
+          case "Personnel":
+            var lstRptPersonnel = await BRGeneralReports.GetRptPersonnel();
+            if (lstRptPersonnel.Any())
+              finfo = clsReports.ExportRptPersonnel(strReportName, fileFullPath, filters, lstRptPersonnel);
+            break;
+
+          #endregion
+          #region Production by Lead Source & Market (Monthly)
+
+          case "Production by Lead Source & Market (Monthly)":
+            var lstRptProductionByLsMarketMonthly = await BRGeneralReports.GetRptProductionByLeadSourceMarketMonthly(Filter.StartDate,
+                Filter.EndDate,
+                (Convert.ToBoolean(Filter.Quinellas)) ? EnumQuinellas.Quinellas : EnumQuinellas.NoQuinellas,
+                (EnumExternalInvitation)_frmFilter.cboExternal.SelectedValue,
+                (Convert.ToBoolean(Filter.BasedOnArrival))
+                  ? EnumBasedOnArrival.BasedOnArrival
+                  : EnumBasedOnArrival.NoBasedOnArrival);
+            if (lstRptProductionByLsMarketMonthly.Any())
+              finfo = clsReports.ExportRptProductionByLeadSourceMarketMonthly(strReportName, fileFullPath, filters,
+                lstRptProductionByLsMarketMonthly);
+            break;
+
+          #endregion
+          #region Production Referral
+
+          case "Production Referral":
+            var lstRptProductionReferral = await BRGeneralReports.GetRptProductionReferral(Filter.StartDate, Filter.EndDate);
+            if (lstRptProductionReferral.Any())
+              finfo = clsReports.ExportRptProductionReferral(strReportName, fileFullPath, filters,
+                lstRptProductionReferral);
+            break;
+
+          #endregion
+          #region Reps
+
+          case "Reps":
+            var lstRptReps = await BRGeneralReports.GetRptReps();
+            if (lstRptReps.Any())
+              finfo = clsReports.ExportRptReps(strReportName, fileFullPath, filters, lstRptReps);
+            break;
+
+          #endregion
+          #region Sales By Program, Lead Source & Market
+
+          case "Sales By Program, Lead Source & Market":
+            var lstRptSalesByProgramLeadSourceMarkets = await BRGeneralReports.GetRptSalesByProgramLeadSourceMarket(Filter.StartDate,
+                Filter.EndDate);
+            if (lstRptSalesByProgramLeadSourceMarkets.Any())
+              finfo = clsReports.ExportRptSalesByProgramLeadSourceMarket(strReportName, fileFullPath, filters, lstRptSalesByProgramLeadSourceMarkets);
+            break;
+
+          #endregion
+          #region Warehouse Movements
+
+          case "Warehouse Movements":
+            var lstRptWarehouseMovements = await BRGeneralReports.GetRptWarehouseMovements(Filter.StartDate, Filter.EndDate, Filter.LstWarehouses.FirstOrDefault());
+            if (lstRptWarehouseMovements.Any())
+              finfo = clsReports.ExportRptWarehouseMovements(strReportName, fileFullPath, filters,
+                lstRptWarehouseMovements);
+            break;
+
+            #endregion
+        }
+
+        if (finfo == null)
+        {
+          finfo = EpplusHelper.CreateNoInfoRptExcel(filters, strReportName, fileFullPath);
+        }
+        _frmReportQueue.SetFileInfo(fileFullPath, finfo);
+      }
+      catch (Exception ex)
       {
-        Process.Start(finfo.FullName);
+        _frmReportQueue.SetFileInfoError(fileFullPath);
+        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
       }
-
-      WaitMessage(false);
     }
 
     #endregion
@@ -1783,7 +1597,7 @@ namespace IM.ProcessorGeneral.Forms
 
         #region Grid SalesRooms
 
-        ListCollectionView lstrptSalesRooms = new ListCollectionView(new List<dynamic>
+        var lstrptSalesRooms = new ListCollectionView(new List<dynamic>
         {
           new {rptNombre = "Bookings By Sales Room, Program & Time", rptGroup = "Bookings"},
           new {rptNombre = "Bookings By Sales Room, Program, Lead Source & Time", rptGroup = "Bookings"},
@@ -1814,7 +1628,7 @@ namespace IM.ProcessorGeneral.Forms
           new {rptNombre = "Gifts Used by Sistur", rptGroup = "Gifts"},
 
           new {rptNombre = "Manifest", rptGroup = "Guests"},
-          new {rptNombre = "Manifest (Excel)", rptGroup = "Guests"},
+          new {rptNombre = "Manifest by LS", rptGroup = "Guests"},
           new {rptNombre = "No Shows", rptGroup = "Guests"},
           new {rptNombre = "Guests No Buyers", rptGroup = "Guests"},
           new {rptNombre = "In & Out", rptGroup = "Guests"},
@@ -1838,7 +1652,7 @@ namespace IM.ProcessorGeneral.Forms
           new {rptNombre = "Liner Statistics", rptGroup = "Salesmen"},
           new {rptNombre = "Closer Statistics", rptGroup = "Salesmen"},
           new {rptNombre = "Weekly and Monthly Hostess", rptGroup = "Salesmen"},
-          new {rptNombre = "Weekly and Monthly Hostess (Golf & Sunrise)", rptGroup = "Salesmen"},
+          //new {rptNombre = "Weekly and Monthly Hostess (Golf & Sunrise)", rptGroup = "Salesmen"},
 
           new {rptNombre = "Taxis In", rptGroup = "Taxis"},
           new {rptNombre = "Taxis Out", rptGroup = "Taxis"}
@@ -1851,7 +1665,7 @@ namespace IM.ProcessorGeneral.Forms
 
         #region Grid LeadSources
 
-        List<dynamic> lstrptLeadSources = new List<dynamic>
+        var lstrptLeadSources = new List<dynamic>
         {
           new {rptNombre = "Deposits by PR"},
           new {rptNombre = "Deposits No Show"},
@@ -1888,7 +1702,7 @@ namespace IM.ProcessorGeneral.Forms
 
         #endregion
 
-        StatusBarReg.Content = $"{lstrptGeneral.Count() + lstrptLeadSources.Count + lstrptSalesRooms.Count} Reports";
+        StatusBarReg.Content = $"{lstrptGeneral.Count + lstrptLeadSources.Count + lstrptSalesRooms.Count} Reports";
       }
       finally
       {
@@ -1916,6 +1730,101 @@ namespace IM.ProcessorGeneral.Forms
 
     #endregion
 
+    #region GetFirstDayValue
+
+    /// <summary>
+    ///   Obtiene las fechas iniciales y finales de los reportes
+    /// </summary>
+    /// <history>
+    ///   [edgrodriguez] 09/Jun/2016 Created
+    /// </history>
+    private void GetFirstDayValue()
+    {
+      DateTime _serverDate = BRHelpers.GetServerDate();
+      // Fecha inicial
+      ClsFilter.StartDate = new DateTime(_serverDate.Year, _serverDate.Month, 1);
+
+      // obtenemos la fecha de inicio de la semana
+      //_clsFilter.DtmInit = DateHelper.GetStartWeek(_serverDate.AddDays(-7)).Date;
+
+      //Fecha final
+      ClsFilter.EndDate = _serverDate.Date;
+      string strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
+      if (!File.Exists(strArchivo)) return;
+      var _iniFileHelper = new IniFileHelper(strArchivo);
+      ClsFilter.StartDate = _iniFileHelper.readDate("FilterDate", "DateStart", ClsFilter.StartDate);
+      ClsFilter.EndDate = _iniFileHelper.readDate("FilterDate", "DateEnd", ClsFilter.EndDate);
+      //string strSalesRoom = _iniFileHelper.readText("FilterDate", "SalesRoom", string.Empty);
+      //if (!string.IsNullOrEmpty(strSalesRoom)) _clsFilter.LstLeadSources.Add(strSalesRoom);
+    }
+
+    #endregion GetFirstDayValue
+
+    #region SetupParameters
+
+    /// <summary>
+    ///   Configura los parametros de los reportes
+    /// </summary>
+    /// <history>
+    ///   [edgrodriguez] 09/Jun/2016 Created
+    /// </history>
+    private void SetupParameters()
+    {
+      ClsFilter = new clsFilter();
+      // obtenemos las fechas iniciales de los reportes
+      GetFirstDayValue();
+
+      ClsFilter.BasedOnArrival = EnumBasedOnArrival.NoBasedOnArrival; //Basado en llegada
+      ClsFilter.Quinellas = EnumQuinellas.NoQuinellas; //No considerar quinielas
+      ClsFilter.SaveCourtesyTours = EnumSaveCourtesyTours.IncludeSaveCourtesyTours; //Incluir tours de rescate y cortesia
+      ClsFilter.SalesByMemberShipType = EnumSalesByMemberShipType.Detail; //Detallar ventas por tipo de membresia
+      ClsFilter.ExternalInvitation = EnumExternalInvitation.Include; //Incluir invitaciones externas
+    }
+
+    #endregion SetupParameters
+
     #endregion
+
+    /// <summary>
+    /// Configura la ruta para guardar los reportes.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    ///   [edgrodriguez] 17/Jun/2016 Created
+    /// </history>
+    private void btnReportQueue_Click(object sender, RoutedEventArgs e)
+    {
+      if (!ConfigRegistry.ExistReportsPath())
+      {
+        if (!ShowSystemCfg()) return;
+      }
+      _frmReportQueue.Show();
+      if (_frmReportQueue.WindowState == WindowState.Minimized)
+        _frmReportQueue.WindowState = WindowState.Normal;
+      _frmReportQueue.Activate();
+    }
+
+    /// <summary>
+    /// Muestra la ventana de configuracion
+    /// </summary>
+    /// <history>
+    ///   [edgrodriguez] 17/Jun/2016 Created
+    /// </history>
+    private bool ShowSystemCfg()
+    {
+      _isConfigured = false;
+      MessageBoxResult result = UIHelper.ShowMessage("It is not configured path yet. Do you want to configure path now?", MessageBoxImage.Question, Title);
+      if (result != MessageBoxResult.Yes) _isConfigured = false;
+      else
+      {
+        _systemConfig = new SystemCfg(EnumConfiguration.ReportsPath);
+        if (_systemConfig.ShowDialog() == true)
+        {
+          _isConfigured = true;
+        }
+      }
+      return _isConfigured;
+    }
   }
 }

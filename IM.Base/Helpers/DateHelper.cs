@@ -26,6 +26,7 @@ namespace IM.Base.Helpers
     public static string DateRange(DateTime dateFrom, DateTime dateTo)
     {
       string dateRange = string.Empty;
+      System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
       //Comparar si es la misma fecha
       if (dateFrom.Date == dateTo.Date)
       {
