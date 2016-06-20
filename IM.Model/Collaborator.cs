@@ -11,12 +11,12 @@ namespace IM.Model
 {
     using System;
     
-    public partial class SalesRoomByUser
+    public partial class Collaborator
     {
-        public string srID { get; set; }
-        public string srN { get; set; }
-        public string srwh { get; set; }
-        public string plpe { get; set; }
-        public string arrg { get; set; }
+        public string EmpID { get; set; }
+        public string NombreCompleto { get; set; }
+        public string Puesto { get; set; }
+        public string Locacion { get; set; }
+        public string Hotel { get; set; }
     }
 }

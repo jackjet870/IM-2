@@ -18168,6 +18168,7 @@
           <Property Type="String" Name="lsID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="lsN" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="lspg" Nullable="false" MaxLength="10" />
+		  <Property Type="String" Name="lsrg" Nullable="true" MaxLength="10" />
         </ComplexType>
         <ComplexType Name="MailOutTextByLeadSource">
           <Property Type="String" Name="mtmoCode" Nullable="false" MaxLength="10" />
@@ -18225,6 +18226,7 @@
           <Property Type="String" Name="srN" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="srwh" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="plpe" Nullable="false" MaxLength="10" />
+		  <Property Type="String" Name="arrg" Nullable="true" MaxLength="10" />
         </ComplexType>
         <ComplexType Name="SalesRoomCloseDates">
           <Property Type="String" Name="srID" Nullable="false" MaxLength="10" />
@@ -18258,6 +18260,7 @@
           <Property Type="String" Name="whID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="whN" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="plpe" Nullable="false" MaxLength="10" />
+		  <Property Type="String" Name="arrg" Nullable="true" MaxLength="10" />
         </ComplexType>
         <ComplexType Name="GiftShort">
           <Property Type="String" Name="giID" Nullable="false" MaxLength="10" />
@@ -21950,6 +21953,10 @@
           <Property Type="String" Name="Comments" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="saMembershipNum" Nullable="true" MaxLength="10" />
           <Property Type="Boolean" Name="Show" Nullable="false" />
+		  <Property Type="Decimal" Name="saDownPaymentPercentage" Nullable="true" Precision="8" />
+		  <Property Type="Decimal" Name="saDownPayment" Nullable="true" Precision="8" />
+		  <Property Type="Decimal" Name="saDownPaymentPaid" Nullable="true" Precision="8" />
+		  <Property Type="Decimal" Name="saDownPaymentPaidPercentage" Nullable="true" Precision="8" />
         </ComplexType>
         <ComplexType Name="RptManifestByLSRange_Bookings">
           <Property Type="String" Name="guloInvit" Nullable="true" MaxLength="11" />
@@ -24797,6 +24804,7 @@
                 <ScalarProperty Name="lsID" ColumnName="lsID" />
                 <ScalarProperty Name="lsN" ColumnName="lsN" />
                 <ScalarProperty Name="lspg" ColumnName="lspg" />
+				<ScalarProperty Name="lsrg" ColumnName="lsrg" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -24883,6 +24891,7 @@
                 <ScalarProperty Name="srN" ColumnName="srN" />
                 <ScalarProperty Name="srwh" ColumnName="srwh" />
                 <ScalarProperty Name="plpe" ColumnName="plpe" />
+				<ScalarProperty Name="arrg" ColumnName="arrg" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -24936,6 +24945,7 @@
                 <ScalarProperty Name="whID" ColumnName="whID" />
                 <ScalarProperty Name="whN" ColumnName="whN" />
                 <ScalarProperty Name="plpe" ColumnName="plpe" />
+				<ScalarProperty Name="arrg" ColumnName="arrg" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -29566,6 +29576,10 @@
                 <ScalarProperty Name="Comments" ColumnName="Comments" />
                 <ScalarProperty Name="saMembershipNum" ColumnName="saMembershipNum" />
                 <ScalarProperty Name="Show" ColumnName="Show" />
+				<ScalarProperty Name="saDownPaymentPercentage" ColumnName="saDownPaymentPercentage" />
+				<ScalarProperty Name="saDownPayment" ColumnName="saDownPayment" />
+				<ScalarProperty Name="saDownPaymentPaidPercentage" ColumnName="saDownPaymentPaidPercentage" />
+				<ScalarProperty Name="saDownPaymentPaid" ColumnName="saDownPaymentPaid" />
               </ComplexTypeMapping>
             </ResultMapping>
             <ResultMapping>

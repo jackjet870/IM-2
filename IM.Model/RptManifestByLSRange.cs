@@ -77,5 +77,9 @@ namespace IM.Model
         public string Comments { get; set; }
         public string saMembershipNum { get; set; }
         public bool Show { get; set; }
+        public Nullable<decimal> saDownPaymentPercentage { get; set; }
+        public Nullable<decimal> saDownPayment { get; set; }
+        public Nullable<decimal> saDownPaymentPaid { get; set; }
+        public Nullable<decimal> saDownPaymentPaidPercentage { get; set; }
     }
 }

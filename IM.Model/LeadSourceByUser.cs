@@ -16,5 +16,6 @@ namespace IM.Model
         public string lsID { get; set; }
         public string lsN { get; set; }
         public string lspg { get; set; }
+        public string lsrg { get; set; }
     }
 }

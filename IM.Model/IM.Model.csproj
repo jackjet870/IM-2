@@ -84,6 +84,21 @@
     <Compile Include="Area.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="AsistenciaModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AsistenciaModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AsistenciaModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AsistenciaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AsistenciaModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AsistenciaModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Assistance.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -126,6 +141,9 @@
     <Compile Include="Classes\UserNormalLogin.cs" />
     <Compile Include="Club.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Collaborator.cs">
+      <DependentUpon>AsistenciaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Computer.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
@@ -1315,6 +1333,13 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>IMModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <EntityDeploy Include="AsistenciaModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>AsistenciaModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="AsistenciaModel.edmx.diagram">
+      <DependentUpon>AsistenciaModel.edmx</DependentUpon>
+    </None>
     <None Include="IMModel.edmx.diagram">
       <DependentUpon>IMModel.edmx</DependentUpon>
     </None>
@@ -1324,6 +1349,16 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AsistenciaModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AsistenciaModel.edmx</DependentUpon>
+      <LastGenOutput>AsistenciaModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="AsistenciaModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AsistenciaModel.edmx</DependentUpon>
+      <LastGenOutput>AsistenciaModel.cs</LastGenOutput>
+    </Content>
     <Content Include="IMModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>IMModel.edmx</DependentUpon>

@@ -16,5 +16,6 @@ namespace IM.Model
         public string whID { get; set; }
         public string whN { get; set; }
         public string plpe { get; set; }
+        public string arrg { get; set; }
     }
 }
