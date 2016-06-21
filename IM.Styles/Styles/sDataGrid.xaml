@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:IM.Styles.Styles">
+    
+    <!-- Estilo de DataGrid General -->
+    <Style TargetType="DataGrid" x:Key="dataGrid-general">
+        <Setter Property="TextSearch.TextPath" Value="{DynamicResource ResourceKey=strSearching}"/>
+        <Setter Property="IsTextSearchCaseSensitive" Value="False"/>
+        <Setter Property="IsTextSearchEnabled" Value="True"/>
+    </Style>
+</ResourceDictionary>
