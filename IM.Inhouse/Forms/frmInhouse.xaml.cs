@@ -970,6 +970,7 @@ namespace IM.Inhouse.Forms
       if (show) //Si no se cancelo en nungun momento se muestra el formulario
       {
         frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.Value.Value, action);
+        frmGgGu.Owner = this;
         frmGgGu.ShowDialog();
         Guest gu = BRGuests.GetGuest(guID);
         group = gu.guGroup;
@@ -1165,6 +1166,7 @@ namespace IM.Inhouse.Forms
       if (show) //Si no se cancelo en nungun momento se muestra el formulario
       {
         frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.Value.Value.Date, action);
+        frmGgGu.Owner = this;
         frmGgGu.ShowDialog();
         Guest gu = BRGuests.GetGuest(guID);
         group = gu.guGroup;
@@ -1331,6 +1333,7 @@ namespace IM.Inhouse.Forms
       if (show) //Si no se cancelo en nungun momento se muestra el formulario
       {
         frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.Value.Value, action);
+        frmGgGu.Owner = this;
         frmGgGu.ShowDialog();
         Guest gu = BRGuests.GetGuest(guID);
         group = gu.guGroup;
@@ -1510,6 +1513,7 @@ namespace IM.Inhouse.Forms
       if (show) //Si no se cancelo en nungun momento se muestra el formulario
       {
         frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.Value.Value, action);
+        frmGgGu.Owner = this;
         frmGgGu.ShowDialog();
         Guest gu = BRGuests.GetGuest(guID);
         group = gu.guGroup;
@@ -1733,6 +1737,7 @@ namespace IM.Inhouse.Forms
     private void btnGrouos_Click(object sender, RoutedEventArgs e)
     {
       frmGuestsGroups frmGroups = new frmGuestsGroups(0, 0, 0, dtpDate.Value.Value, EnumAction.Search);
+      frmGroups.Owner = this;
       frmGroups.ShowDialog();
     }
 
