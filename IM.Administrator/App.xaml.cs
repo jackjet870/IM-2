@@ -50,6 +50,7 @@ namespace IM.Administrator
         if (User.HasRole(EnumRole.Manager))
         {
           EventManager.RegisterClassHandler(typeof(AccessText), AccessKeyManager.AccessKeyPressedEvent, new RoutedEventHandler(keyManager_keyPressed));
+          EventManager.RegisterClassHandler(typeof(DataGrid), DataGridCell.MouseLeftButtonUpEvent,new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
           frmAdmin frmMain = new frmAdmin();
           frmMain.ShowDialog();
           frmSplash.Close();
@@ -94,9 +95,15 @@ namespace IM.Administrator
       {
         e.Handled = true;
       }
-    } 
+    }
     #endregion
-	
+
+    private void dataGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+      DataGrid dgr = sender as DataGrid;
+      dgr.Resources["SearchField"] = dgr.CurrentColumn.SortMemberPath;
+    }
+
     #endregion
   }
 }
