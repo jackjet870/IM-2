@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -19,15 +18,17 @@ namespace IM.Inhouse.Forms
   public partial class frmGuestsGroups : Window
   {
     #region Atributos
-    int groupID, guestID, guestIDToAdd;
-    DateTime date;
-    EnumAction enumAction;
-    GuestsGroup guestsGroup;
-    Guest guest;
-    List<GuestsGroup> lstGuestsGroups;
-    List<Guest> lstGuest;
-    List<Guest> lstGuestTemp;
-    bool mode; //false nuevo | true modifica
+    int _groupID, _guestID, _guestIDToAdd;
+    DateTime _date;
+    EnumAction _enumAction;
+    GuestsGroup _guestsGroup;
+    GuestsGroup _oldGuestsGroup = new GuestsGroup();
+    Guest _guest;
+    List<GuestsGroup> _lstGuestsGroups;
+    List<Guest> _lstGuest;
+    List<Guest> _lstGuestTemp;
+    List<Guest> _oldListGuests = new List<Guest>();
+    bool _mode; //false nuevo | true modifica
 
     #endregion
 
@@ -61,30 +62,30 @@ namespace IM.Inhouse.Forms
     /// <history>[ECNUL] 28-03-2016 Created</history>
     void CreateWhere(string where = "")
     {
-      guest = new Guest();
-      guestsGroup = new GuestsGroup();
+      _guest = new Guest();
+      _guestsGroup = new GuestsGroup();
       if (where == "")//Si no se envia una clausula Where
       {
         if (txtSearchGroupID.Text != "") //Si tiene un id el campo de GroupID
-          guestsGroup.gxID = Convert.ToInt32(txtSearchGroupID.Text.Trim());
+          _guestsGroup.gxID = Convert.ToInt32(txtSearchGroupID.Text.Trim());
         else //Si esta vacio  GroupID
         {
           //Busca por nombre del grupo
           if (txtSearchGroupDescription.Text != "")
-            guestsGroup.gxN = txtSearchGroupDescription.Text;
+            _guestsGroup.gxN = txtSearchGroupDescription.Text;
           //Busca por la clave del Huesped
           else if (txtSearchGuestID.Text != "")
-            guest.guID = Convert.ToInt32(txtSearchGuestID.Text.Trim());
+            _guest.guID = Convert.ToInt32(txtSearchGuestID.Text.Trim());
           else if (txtSearchGuestName.Text != "")
           {// Busca por nombre o apellido del cliente
-            guest.guLastName1 = txtSearchGuestName.Text;
-            guest.guFirstName1 = txtSearchGuestName.Text;
-            guest.guLastname2 = txtSearchGuestName.Text;
-            guest.guFirstName2 = txtSearchGuestName.Text;
+            _guest.guLastName1 = txtSearchGuestName.Text;
+            _guest.guFirstName1 = txtSearchGuestName.Text;
+            _guest.guLastname2 = txtSearchGuestName.Text;
+            _guest.guFirstName2 = txtSearchGuestName.Text;
           }
-          guest.guCheckInD = dtpGuestStart.SelectedDate.Value;
+          _guest.guCheckInD = dtpGuestStart.SelectedDate.Value;
           //En realidad tambien debe ser en guCheckInD pero es para ser usada en un between que se usa el siguiente campo tipo fecha
-          guest.guCheckOutD = dtpGuestEnd.SelectedDate.Value;
+          _guest.guCheckOutD = dtpGuestEnd.SelectedDate.Value;
         }
         //El join es estatico... se hace desde el BR
       }
@@ -93,7 +94,7 @@ namespace IM.Inhouse.Forms
         switch (where)
         {
           case "0": //Solo para tener la esrtructura de la tabla
-            guest.guID = 0;
+            _guest.guID = 0;
             break;
         }
       }
@@ -106,14 +107,17 @@ namespace IM.Inhouse.Forms
     /// <summary>
     /// Carga el DataGrid GuestsGroups
     /// </summary>
-    /// <history>[ECANUL] 28-03-2016 Created</history>
-    void LoadGrdGuestsGroups()
+    /// <history>
+    /// [ECANUL] 28-03-2016 Created
+    /// [ecaul]17/06/2016 Modified. Implementado Asincronia
+    /// </history>
+    private async void LoadGrdGuestsGroups()
     {
       StaStart("Loading Groups...");
       CreateWhere();
-      lstGuestsGroups = BRGuestsGroups.GetGuestsGroups(guest, guestsGroup);
-      if (lstGuestsGroups.Count != 0)
-        dtgGuestsGroup.ItemsSource = lstGuestsGroups;
+      _lstGuestsGroups = await BRGuestsGroups.GetGuestsGroups(_guest, _guestsGroup);
+      if (_lstGuestsGroups.Count != 0)
+        dtgGuestsGroup.ItemsSource = _lstGuestsGroups;
 
       if (dtgGuestsGroup.Items.Count == 1)
         StatusBarReg.Content = dtgGuestsGroup.Items.Count + " Group";
@@ -152,15 +156,16 @@ namespace IM.Inhouse.Forms
     void LoadGridGuestsGroupsIntegrants(GuestsGroup gx)
     {
       StaStart("Loading Integrants...");
-      lstGuest = BRGuests.GetGuestsGroupsIntegrants(gx);
-      if (lstGuest.Count != 0)
+      _lstGuest = BRGuests.GetGuestsGroupsIntegrants(gx);
+      if (_lstGuest.Count != 0)
       {
-        if (enumAction == EnumAction.AddTo)
-          AddGuestToGridGuestsGroupsIntegrants(guestID);
+        if (_enumAction == EnumAction.AddTo)
+          AddGuestToGridGuestsGroupsIntegrants(_guestID);
         else
-          dtgGuestGroupIntegrants.ItemsSource = lstGuest;
+          dtgGuestGroupIntegrants.ItemsSource = _lstGuest;
         lblIntegrants.Content = "Integrants: " + dtgGuestGroupIntegrants.Items.Count;
       }
+      _oldListGuests = (List<Guest>)dtgGuestGroupIntegrants.ItemsSource;
       dtgGuestGroupIntegrants.IsEnabled = true;
       StaEnd();
     }
@@ -203,18 +208,18 @@ namespace IM.Inhouse.Forms
       Guest gu;
       if (id != 0)
       {
-        if (lstGuest == null)
-          lstGuestTemp = new List<Guest>();
+        if (_lstGuest == null)
+          _lstGuestTemp = new List<Guest>();
         else
-          lstGuestTemp = lstGuest;
-        lstGuestTemp.Add(BRGuests.GetGuest(id));
+          _lstGuestTemp = _lstGuest;
+        _lstGuestTemp.Add(BRGuests.GetGuest(id));
       }
       else
       {
         gu = guest;
-        lstGuestTemp.Add(gu);
+        _lstGuestTemp.Add(gu);
       }
-      dtgGuestGroupIntegrants.ItemsSource = lstGuestTemp;
+      dtgGuestGroupIntegrants.ItemsSource = _lstGuestTemp;
       lblIntegrants.Content = "Integrants: " + dtgGuestGroupIntegrants.Items.Count;
     }
 
@@ -228,7 +233,7 @@ namespace IM.Inhouse.Forms
     /// <HISTORY>[ECANUL] 38-03-2016 CREATED</HISTORY>
     void CaseLoad()
     {
-      switch (enumAction)
+      switch (_enumAction)
       {
         case EnumAction.None:
           LoadGrdGuestsGroups();
@@ -240,13 +245,13 @@ namespace IM.Inhouse.Forms
           EnableControls(0);
           break;
         case EnumAction.Add:
-          AddGuestToGridGuestsGroupsIntegrants(guestID);
+          AddGuestToGridGuestsGroupsIntegrants(_guestID);
           break;
         case EnumAction.AddTo:
           //txtID.Text = groupID.ToString();
-          if (groupID != 0)
+          if (_groupID != 0)
           {
-            txtSearchGroupID.Text = groupID.ToString();
+            txtSearchGroupID.Text = _groupID.ToString();
             LoadGrdGuestsGroups();
             LoadGuestsGroupsInfo();
             dtgGuestGroupIntegrants.IsEnabled = true;
@@ -297,8 +302,8 @@ namespace IM.Inhouse.Forms
           dtgGuestGroupIntegrants.CanUserAddRows = true;
           dtgGuestGroupIntegrants.IsReadOnly = false;
           dtgGuestGroupIntegrants.Focus();
-          lstGuestsGroups = new List<GuestsGroup>();
-          dtgGuestGroupIntegrants.ItemsSource = lstGuestsGroups;
+          _lstGuestsGroups = new List<GuestsGroup>();
+          dtgGuestGroupIntegrants.ItemsSource = _lstGuestsGroups;
           grdListGuest.IsEnabled = true;
           btnSave.IsEnabled = true;
           btnCancel.IsEnabled = true;
@@ -355,11 +360,11 @@ namespace IM.Inhouse.Forms
       //frmSGuest._lstGuests = new List<Guest>();
       frmSGuest.lstGuestAdd = new List<Guest>();
 
-      if (lstGuest == null) //Solo se abre desde el boton y se da new group
-        lstGuest = new List<Guest>();
+      if (_lstGuest == null) //Solo se abre desde el boton y se da new group
+        _lstGuest = new List<Guest>();
 
-      if (lstGuestTemp == null) //Solo si es primer Guest en nuevo grupo pasa
-        lstGuestTemp = new List<Guest>();
+      if (_lstGuestTemp == null) //Solo si es primer Guest en nuevo grupo pasa
+        _lstGuestTemp = new List<Guest>();
       //Valida que se haya cerrado
       if (!frmSGuest.ShowDialog().Value)
       {
@@ -368,14 +373,14 @@ namespace IM.Inhouse.Forms
         if (!frmSGuest.cancel)
         {
           List<Guest> tempList = new List<Guest>();
-          if (lstGuest.Count != 0)
-            lstGuestTemp = lstGuest;
+          if (_lstGuest.Count != 0)
+            _lstGuestTemp = _lstGuest;
           tempList.AddRange(frmSGuest.lstGuestAdd);
           //Recorre cada Nuevo Guest a agregar
           foreach (Guest newGuest in tempList)
           {//Recorre los Guests Existentes
             bool exist = false;
-            foreach (Guest gu in lstGuestTemp)
+            foreach (Guest gu in _lstGuestTemp)
             {
               if (newGuest.guID == gu.guID)
               {
@@ -386,13 +391,13 @@ namespace IM.Inhouse.Forms
             if (exist)
               MessageBox.Show("The Guest " + newGuest.guID + " already exists in the group", "Can´t Add Guest", MessageBoxButton.OK, MessageBoxImage.Error);
             else
-              lstGuestTemp.Add(newGuest);
+              _lstGuestTemp.Add(newGuest);
           }
         }
         dtgGuestGroupIntegrants.ItemsSource = null;
-        dtgGuestGroupIntegrants.ItemsSource = lstGuestTemp;
+        dtgGuestGroupIntegrants.ItemsSource = _lstGuestTemp;
 
-        lblIntegrants.Content = "Integrants: " + lstGuestTemp.Count;
+        lblIntegrants.Content = "Integrants: " + _lstGuestTemp.Count;
 
       }
     }
@@ -436,11 +441,11 @@ namespace IM.Inhouse.Forms
     public frmGuestsGroups(int GroupID, int GuestID, int GuestIDToAdd, DateTime Date, EnumAction EnumAct)
     {
       InitializeComponent();
-      groupID = GroupID;
-      guestID = GuestID;
-      guestIDToAdd = GuestIDToAdd;
-      date = Date;
-      enumAction = EnumAct;
+      _groupID = GroupID;
+      _guestID = GuestID;
+      _guestIDToAdd = GuestIDToAdd;
+      _date = Date;
+      _enumAction = EnumAct;
     }
 
     /// <summary>
@@ -477,21 +482,21 @@ namespace IM.Inhouse.Forms
     {
       ClearControls();
       EnableControls(1);
-      mode = false;
+      _mode = false;
     }
 
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       //Limpiar Controles 
       EnableControls(0);
-      if (lstGuestTemp != null && lstGuestTemp.Count != 0)
+      if (_lstGuestTemp != null && _lstGuestTemp.Count != 0)
       {
-        dtgGuestGroupIntegrants.ItemsSource = lstGuest;
-        lstGuestTemp = null;
+        dtgGuestGroupIntegrants.ItemsSource = _lstGuest;
+        _lstGuestTemp = null;
         txtDescription.Text = "";
       }
 
-      if (enumAction == EnumAction.Add)
+      if (_enumAction == EnumAction.Add)
         Close();
     }
 
@@ -501,7 +506,7 @@ namespace IM.Inhouse.Forms
       {
         LoadGuestsGroupsInfo();
         EnableControls(2);
-        lstGuestTemp = lstGuest;
+        _lstGuestTemp = _lstGuest;
       }
       else if (ValidateGroupSelected())
       {
@@ -511,7 +516,7 @@ namespace IM.Inhouse.Forms
       else
         MessageBox.Show("Select a Guests Group", "Can''t Edit", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 
-      mode = true;
+      _mode = true;
     }
 
     private void btnAddGuest_Click(object sender, RoutedEventArgs e)
@@ -525,32 +530,50 @@ namespace IM.Inhouse.Forms
         LoadGuestsGroupsInfo();
     }
 
-    private void btnSave_Click(object sender, RoutedEventArgs e)
+    private async void btnSave_Click(object sender, RoutedEventArgs e)
     {
-      guestsGroup = new GuestsGroup();
-      if (txtDescription.Text != "" && txtDescription.Text != null)
+      try
       {
-        if (lstGuestTemp != null && lstGuestTemp.Count >= 2) //Si tiene 2 o mas items
+        List<Guest> lstGuests = (List<Guest>)dtgGuestGroupIntegrants.ItemsSource;
+        _guestsGroup = new GuestsGroup();
+        //Si no ha especificado un nombre de grupo
+        if (string.IsNullOrEmpty(txtDescription.Text))
         {
-          if (txtID.Text != "" && txtID.Text != null)
-            guestsGroup.gxID = Convert.ToInt32(txtID.Text.Trim());
-          guestsGroup.gxN = txtDescription.Text.Trim();
-          lstGuest = lstGuestTemp;
-          //Guardar Cambios
-
-          BRGuestsGroups.SageGuestGroup(guestsGroup, mode, lstGuest);
-          dtgGuestGroupIntegrants.ItemsSource = null;
-          dtgGuestGroupIntegrants.ItemsSource = lstGuest;
-          lblIntegrants.Content = "Integrants: " + lstGuest.Count;
-
-          EnableControls(0);
+          UIHelper.ShowMessage("Specify the Guest Group Name", MessageBoxImage.Error);
+          return;
         }
-        else
-
-          MessageBox.Show("Specify at least 2 integrants", "Inhouse", MessageBoxButton.OK, MessageBoxImage.Error);
+        //Si tiene menos de 2 integrantes
+        if (_lstGuestTemp == null || _lstGuestTemp.Count <= 1)
+        {
+          UIHelper.ShowMessage("Specify at least 2 integrants", MessageBoxImage.Error);
+          return;
         }
-      else
-        MessageBox.Show("Specify the Guest Group Name", "Can't Add", MessageBoxButton.OK, MessageBoxImage.Error);
+        //Si se tiene un grupo
+        if (!string.IsNullOrEmpty(txtID.Text))
+        {//Obtiene el registro existente en base de datos
+          _guestsGroup.gxID = Convert.ToInt32(txtID.Text.Trim());
+          _guestsGroup = await BRGuestsGroups.GetGuestsGroup(_guestsGroup.gxID);
+          _oldListGuests = _guestsGroup.Guests.ToList();       
+        }
+        _guestsGroup.gxN = txtDescription.Text.Trim();
+        //Guests a agregar
+        List<Guest> lstAdd = lstGuests.Where(gu => !_oldListGuests.Any(gui => gui.guID == gu.guID)).ToList();
+        //Guests a eliminar
+        List<Guest> lstDel = _oldListGuests.Where(gu => !lstGuests.Any(gui => gui.guID == gu.guID)).ToList();
+        //Guarda los datos
+        int res = await BRGuestsGroups.SaveGuestGroup(_guestsGroup, _mode, lstAdd, lstDel);
+        
+        dtgGuestGroupIntegrants.ItemsSource = null;
+        dtgGuestGroupIntegrants.ItemsSource = lstGuests;
+        lblIntegrants.Content = "Integrants: " + lstGuests.Count;
+        
+        EnableControls(0);
+        CaseLoad();
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(UIHelper.GetMessageError(ex), MessageBoxImage.Error, "Inhouse");
+      }
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -559,15 +582,15 @@ namespace IM.Inhouse.Forms
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
       KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
 
-      if (enumAction == EnumAction.None)
+      if (_enumAction == EnumAction.None)
       {
-        txtSearchGroupID.Text = groupID.ToString();
+        txtSearchGroupID.Text = _groupID.ToString();
       }
-      switch (enumAction)
+      switch (_enumAction)
       {
         case EnumAction.Add: //Crea un nuevo grupo
           EnableControls(1);
-          mode = false;
+          _mode = false;
           break;
         case EnumAction.None: //Midifica un grupo existente
           EnableControls(3);
@@ -578,18 +601,18 @@ namespace IM.Inhouse.Forms
       }
 
       //Muestra u oculta los botones Add y Edit
-      if (enumAction == EnumAction.Search)
+      if (_enumAction == EnumAction.Search)
         btnAdd.Visibility = Visibility.Visible;
       else
         btnAdd.Visibility = Visibility.Hidden;
-      if (enumAction != EnumAction.Add)
+      if (_enumAction != EnumAction.Add)
         btnEdit.Visibility = Visibility.Visible;
       else
         btnEdit.Visibility = Visibility.Hidden;
       //Fecha Inicial
-      dtpGuestStart.SelectedDate = date.AddDays(-7);
+      dtpGuestStart.SelectedDate = _date.AddDays(-7);
       //Fecha Final
-      dtpGuestEnd.SelectedDate = date;
+      dtpGuestEnd.SelectedDate = _date;
       //se impide modificar datos si esta en modo solo lectura
       if (App.Current.Properties.IsReadOnly)
       {

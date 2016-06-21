@@ -6,11 +6,35 @@ using System.Threading.Tasks;
 using System.Data.Entity;
 using IM.Model;
 using IM.Model.Helpers;
+using IM.Base;
 
 namespace IM.BusinessRules.BR
 {
   public class BRGuestsGroups
   {
+     #region GetGuestsGroup
+    /// <summary>
+    /// Obtiene un GuestsGroup segun el Id Mandado, Incluye Los guests integrantes del grupo
+    /// </summary>
+    /// <param name="id">id del grupo a buscar</param>
+    /// <history>
+    /// [ecanul] 20/06/2016 Created
+    /// </history>
+    public async static Task<GuestsGroup> GetGuestsGroup(int id)
+    {
+      GuestsGroup gGroup = new GuestsGroup();
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          gGroup = (from gg in dbContext.GuestsGroups
+                    where gg.gxID == id
+                    select gg).Include("Guests").ToList().FirstOrDefault();
+        }
+      });
+      return gGroup;
+    } 
+    #endregion
 
     #region GetGuestsGroups
     /// <summary>
@@ -18,65 +42,70 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="guest">Model.Guest con datos para la busqueda</param>
     /// <param name="guestsGroup">Model.GuestsGroup con datos para la busqueda</param>
-    /// <returns>Lista de GuestsGroup</returns>
-    public static List<GuestsGroup> GetGuestsGroups(Guest guest, GuestsGroup guestsGroup)
+    /// <history>
+    /// [ecanul]  28-03-2016 Created
+    /// [ecanul] 17/06/2016 Modified. Implementado Asincronia
+    /// </history>
+    public async static Task<List<GuestsGroup>> GetGuestsGroups(Guest guest, GuestsGroup guestsGroup)
     {
-      List<GuestsGroup> lstGuestsGroups;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<GuestsGroup> lstGuestsGroups = new List<GuestsGroup>();
+      await Task.Run(() =>
       {
-        lstGuestsGroups = new List<GuestsGroup>();
-        if (guestsGroup.gxID != 0) //Si mandan el ID del Grupo
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          lstGuestsGroups = (from gg in dbContext.GuestsGroups
-                             where gg.gxID == guestsGroup.gxID
-                             select gg).Distinct().ToList();
-        }
-        else
-        {
-          if (guestsGroup.gxN != "" && guestsGroup.gxN != null)//Si envian el nombre del grupo
-          {
-            lstGuestsGroups = (from gu in dbContext.Guests
-                               from ggi in gu.GuestsGroups
-                               join gg in dbContext.GuestsGroups
-                               on ggi.gxID equals gg.gxID
-                               where gg.gxN.Contains(guestsGroup.gxN)
-                               && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
-                               select gg).Distinct().ToList();
+            //lstGuestsGroups = new List<GuestsGroup>();
+            if (guestsGroup.gxID != 0) //Si mandan el ID del Grupo
+            {
+              lstGuestsGroups = (from gg in dbContext.GuestsGroups
+                                 where gg.gxID == guestsGroup.gxID
+                                 select gg).Distinct().ToList();
+            }
+            else
+            {
+              if (guestsGroup.gxN != "" && guestsGroup.gxN != null)//Si envian el nombre del grupo
+              {
+                lstGuestsGroups = (from gu in dbContext.Guests
+                                   from ggi in gu.GuestsGroups
+                                   join gg in dbContext.GuestsGroups
+                                   on ggi.gxID equals gg.gxID
+                                   where gg.gxN.Contains(guestsGroup.gxN)
+                                   && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
+                                   select gg).Distinct().ToList();
+              }
+              else if (guest.guID != 0) //Si se manda el ID de Guest
+              {
+                lstGuestsGroups = (from gu in dbContext.Guests
+                                   from ggi in gu.GuestsGroups
+                                   join gg in dbContext.GuestsGroups
+                                   on ggi.gxID equals gg.gxID
+                                   where gu.guID == guest.guID
+                                   && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
+                                   select gg).Distinct().ToList();
+              }
+              else if (guest.guLastName1 != "" && guest.guLastName1 != null) //Si se manda Last o First name 1 o 2 (Solo se valida 1 porque en caso de tener 1, se tiene los 4
+              {
+                lstGuestsGroups = (from gu in dbContext.Guests
+                                   from ggi in gu.GuestsGroups
+                                   join gg in dbContext.GuestsGroups
+                                   on ggi.gxID equals gg.gxID
+                                   where gu.guLastName1.Contains(guest.guLastName1) || gu.guFirstName1.Contains(guest.guFirstName1)
+                                   || gu.guLastname2.Contains(guest.guLastname2) || gu.guFirstName2.Contains(guest.guFirstName2)
+                                   && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
+                                   select gg).Distinct().ToList();
+              }
+              else//Si no puso nada en los texbox se hace una busqueda unicamente entre el rango de fechas
+              {
+                lstGuestsGroups = (from gu in dbContext.Guests
+                                   from ggi in gu.GuestsGroups
+                                   join gg in dbContext.GuestsGroups
+                                   on ggi.gxID equals gg.gxID
+                                   //Se usa guCheckOutD que trae la "guest" pero en realidad deberia ser otro rango de fechas para guCheckInD
+                                   where gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD
+                                   select gg).Distinct().ToList();
+              }
+            }
           }
-          else if (guest.guID != 0) //Si se manda el ID de Guest
-          {
-            lstGuestsGroups = (from gu in dbContext.Guests
-                               from ggi in gu.GuestsGroups
-                               join gg in dbContext.GuestsGroups
-                               on ggi.gxID equals gg.gxID
-                               where gu.guID == guest.guID
-                               && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
-                               select gg).Distinct().ToList();
-          }
-          else if (guest.guLastName1 != "" && guest.guLastName1 != null) //Si se manda Last o First name 1 o 2 (Solo se valida 1 porque en caso de tener 1, se tiene los 4
-          {
-            lstGuestsGroups = (from gu in dbContext.Guests
-                               from ggi in gu.GuestsGroups
-                               join gg in dbContext.GuestsGroups
-                               on ggi.gxID equals gg.gxID
-                               where gu.guLastName1.Contains(guest.guLastName1) || gu.guFirstName1.Contains(guest.guFirstName1)
-                               || gu.guLastname2.Contains(guest.guLastname2) || gu.guFirstName2.Contains(guest.guFirstName2)
-                               && (gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD)
-                               select gg).Distinct().ToList();
-          }
-          else//Si no puso nada en los texbox se hace una busqueda unicamente entre el rango de fechas
-          {
-            lstGuestsGroups = (from gu in dbContext.Guests
-                               from ggi in gu.GuestsGroups
-                               join gg in dbContext.GuestsGroups
-                               on ggi.gxID equals gg.gxID
-                               //Se usa guCheckOutD que trae la "guest" pero en realidad deberia ser otro rango de fechas para guCheckInD
-                               where gu.guCheckInD >= guest.guCheckInD && gu.guCheckInD <= guest.guCheckOutD
-                               select gg).Distinct().ToList();
-          }
-        }
-      }
-
+      });
       return lstGuestsGroups;
     }
 
@@ -89,52 +118,89 @@ namespace IM.BusinessRules.BR
     /// <param name="guestGroup">Datos del GuestsGroup a guardar</param>
     /// <param name="action">true Modifica | false Agrega</param>
     /// <returns>Int con valor guardado o no</returns>
-    /// <history>[ECANUL] 28-03-2016 Created</history>
-    public static int SageGuestGroup(GuestsGroup guestGroup, bool action, List<Guest> lstGuests)
+    /// <history>
+    /// [ECANUL] 28-03-2016 Created
+    /// [ecaul] 21/06/2016 Modified, Corregido error de guardado. Implementado Asincronia
+    /// </history>
+    public async static Task<int> SaveGuestGroup(GuestsGroup guestGroup, bool action, List<Guest> lstGuestsAdd, List<Guest> lstGuestsDelete)
     {
       int res = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {       
-        if (action)
-        {//Actualiza
-          //Actualiza los datos directos del gurpo
-          dbContext.Entry(guestGroup).State = EntityState.Modified;
-          res = dbContext.SaveChanges();
-          ///////////////////////// Integrantes del grupo
-          List<Guest> lgu = new List<Guest>();
-          //Obtiene el Grupo con sus respectivos integrantes
-          GuestsGroup gg = dbContext.GuestsGroups.Include(gu => gu.Guests).ToList().Find(ggt => ggt.gxID == guestGroup.gxID);
-          //GuestsGroup gg = dbContext.GuestsGroups.Include(gu => gu.Guests.Where(gut => gut.Groups == guestGroup).ToList(); // .Where(ggt => ggt.Guests == guestGroup).Single();
-          lgu = gg.Guests.ToList();
-          //Borrar los integrantes anteriores 
-          lgu.ForEach(gu =>
+      res = await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          using (var transact = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            dbContext.Entry(gu).State = EntityState.Detached;
-          });
-          //Se borran todas las relaciones entre los grupos y los integrantes
-          gg.Guests.Clear();
-          //Se guarda los cambios (Grupos sin integrantes)
-          dbContext.Entry(gg).State = EntityState.Modified;
-          dbContext.SaveChanges();
+            try
+            {
+              GuestsGroup gGroup = null;
+              var ggID = guestGroup.gxID;
+              //Agrega o modifica El Grupo (SOLO LA INFORMACION DEL GRUPO)
+              #region GuestsGroups
+              #region Update
+              if (action)
+              {
+                gGroup = dbContext.GuestsGroups.Where(gg => gg.gxID == ggID).Include("Guests").FirstOrDefault();
+                gGroup.gxID = guestGroup.gxID;
+                gGroup.gxN = guestGroup.gxN;
+              }
 
-          //Agrega los autores enviados en la lista
-          lstGuests.ForEach(gu =>
-          {
-            gg.Guests.Add(gu);
-          });
-          res = dbContext.SaveChanges();
+              #endregion
+              #region Add
+              else
+              {
+                gGroup = dbContext.GuestsGroups.Where(gg => gg.gxID == ggID).Include("Guests").FirstOrDefault();
+                if (gGroup != null)
+                  return -1;
+                else
+                {
+                  gGroup = guestGroup;
+                  dbContext.GuestsGroups.Add(gGroup);
+                }
+              }
+              #endregion
+              #endregion
+              //Agrega o elimina la relacion Guest <=> GuestsGroup
+              #region GuestsGroupsIntegrants
+              if (gGroup != null)
+              {
+                //Agrega los Guest Nuevos al Grupo
+                lstGuestsAdd.ForEach(gu => {
+                  gu.guGroup = true;
+                  dbContext.Entry(gu).State = EntityState.Modified;
+                  gGroup.Guests.Add(gu);                  
+                  }
+                //dbContext.Guests
+                );
+
+                //Elimina los Guests Eliminados del Grupo
+                #region Delete
+                lstGuestsDelete.ForEach(gu =>
+                {
+                  gGroup.Guests.Remove(gGroup.Guests.Where(gd=>gd.guID==gu.guID).FirstOrDefault());
+                });
+
+                lstGuestsDelete.ForEach(async gu =>
+                {
+                  gu.guGroup = false;
+                  await BREntities.OperationEntity(gu, Model.Enums.EnumMode.edit);
+                });
+
+                #endregion
+              }
+              #endregion
+              int i = dbContext.SaveChanges();
+              transact.Commit();
+              return i;
+            }
+            catch
+            {
+              transact.Rollback();
+              return 0;
+            }
+          }
         }
-        else
-        {//Llena los Guests que integtran el Guests Group
-          lstGuests.ForEach(gu =>
-          {
-            guestGroup.Guests.Add(gu);
-          });
-          //Guarda Todo el la bd
-          dbContext.GuestsGroups.Add(guestGroup);
-          res = dbContext.SaveChanges();
-        }
-      }
+      });
       return res;
     } 
     #endregion
