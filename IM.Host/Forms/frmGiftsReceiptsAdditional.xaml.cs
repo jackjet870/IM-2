@@ -106,7 +106,7 @@ namespace IM.Host.Forms
           UpdateInvitsGifts(lngReceiptID, lngGuestID);
 
           // Guardamos el historico del recibo
-          BRGiftsReceiptLog.SaveGiftsReceiptsLog(lngReceiptID, _frmGiftsReceipt.txtChangedBy.Text);
+          await BRGiftsReceiptLog.SaveGiftsReceiptsLog(lngReceiptID, _frmGiftsReceipt.txtChangedBy.Text);
         }
       }
     }

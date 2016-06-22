@@ -17,6 +17,7 @@ namespace IM.Model.Enums
     Shows = 0,
     MealTickets,
     Sales,
-    GiftsReceipts
+    GiftsReceipts,
+    CxC
   }
 }

@@ -81,7 +81,6 @@ namespace IM.Services.Helpers
           if (Data.Length > 0)
           {
             exchangeRate = Data[0];
-
           }
         }, cToken);    
         return exchangeRate;

@@ -827,6 +827,7 @@ namespace IM.Host
     /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
+    /// [michan] 14/Junio/2016 Modified --> Se agrego el formulario correspondiente.
     /// </history>
     private void btnCxCAuthorization_Click(object sender, RoutedEventArgs e)
     {
@@ -838,7 +839,10 @@ namespace IM.Host
       }
 
       // Desplegamos el formulario de autorizacion de CxC
-
+      frmCxCAuthorization _frmCxCAuthorization = new frmCxCAuthorization();
+      _frmCxCAuthorization.ShowInTaskbar = false;
+      _frmCxCAuthorization.Owner = this;
+      _frmCxCAuthorization.ShowDialog();
 
     }
 

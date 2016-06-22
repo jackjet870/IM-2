@@ -247,7 +247,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 27/Mayo/2016 Created
     /// </history>
-    private void SaveReceiptExchange()
+    private async void SaveReceiptExchange()
     {
       // obtenemos los datos del recibo
       GiftsReceipt _GRResult = BRGiftsReceipts.GetGiftReceipt(_ReceiptID);
@@ -295,7 +295,7 @@ namespace IM.Host.Forms
       ReceiptExchangeID = BRGiftsReceipts.SaveGiftReceipt(_GiftsReceipt);
 
       // Guardamos el historico del recibo
-      BRGiftsReceiptLog.SaveGiftsReceiptsLog(ReceiptExchangeID, App.User.User.peID);
+      await BRGiftsReceiptLog.SaveGiftsReceiptsLog(ReceiptExchangeID, App.User.User.peID);
     }
     #endregion
 

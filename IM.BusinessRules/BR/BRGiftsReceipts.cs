@@ -13,7 +13,6 @@ namespace IM.BusinessRules.BR
 {
   public class BRGiftsReceipts
   {
-
     #region GetGiftsReceipts
     /// <summary>
     /// Obtienen los Gifts Receipts Short
@@ -181,5 +180,17 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    public async Task<int> SaveGiftReceiptAuthorized(GiftsReceipt giftsReceipt)
+    {
+      int nRes = await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          dbContext.Entry(giftsReceipt).State = System.Data.Entity.EntityState.Modified;
+          return dbContext.SaveChanges();
+        }
+      });
+      return nRes;
+    }
   }
 }

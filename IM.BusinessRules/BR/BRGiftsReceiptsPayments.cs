@@ -63,8 +63,31 @@ namespace IM.BusinessRules.BR
       {
         return dbContext.GiftsReceiptsPayments.Where(x => x.gygr == Receipt && x.gyID == GiftPaymentID).SingleOrDefault();
       }
-    } 
+    }
     #endregion
 
+    #region AddGiftReceiptPayment
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="GiftReceiptID"></param>
+    /// <param name="ReceivedBy"></param>
+    /// <param name="ReceivedDate"></param>
+    /// <param name="USDAmount"></param>
+    /// <param name="RateAmount"></param>
+    /// <param name="MXNAmount"></param>
+    /// <returns></returns>
+    public async static Task<List<AddGiftReceiptPayment>> AddGiftReceiptPayment(int GiftReceiptID, string ReceivedBy, DateTime ReceivedDate, decimal USDAmount, decimal RateAmount, decimal MXNAmount)
+    {
+      List<AddGiftReceiptPayment> _AddGiftReceiptPayment = new List<AddGiftReceiptPayment>();
+      await Task.Run(() => { 
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          _AddGiftReceiptPayment = dbContext.USP_OR_AddGiftReceiptPayment(GiftReceiptID, ReceivedBy, ReceivedDate, USDAmount, RateAmount, MXNAmount).ToList();
+        }
+      });
+      return _AddGiftReceiptPayment;
+    }
+    #endregion
   }
 }

@@ -3,4 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:IM.Host">
 
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/IM.GuestsPR;component/Styles/General.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/IM.GuestsPR;component/Styles/ComboBoxTemplate.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/tComboBox.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/IM.PRStatistics;component/Styles/Lists.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/IM.PRStatistics;component/Styles/General.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
 </Application>

@@ -93,7 +93,13 @@ namespace IM.Model
         public virtual DbSet<GuestPromotion> GuestsPromotions { get; set; }
         public virtual DbSet<GuestSisturPromotion> GuestsSisturPromotions { get; set; }
         public virtual DbSet<GuestStatus> GuestsStatus { get; set; }
-        public virtual DbSet<GuestStatusType> GuestsStatusTypes { get; set; }
+
+    public object USP_OR_GetCxC(bool authorized, string salesRoom, object user, string leadSource, string pR)
+    {
+      throw new NotImplementedException();
+    }
+
+    public virtual DbSet<GuestStatusType> GuestsStatusTypes { get; set; }
         public virtual DbSet<HotelGroup> HotelsGroups { get; set; }
         public virtual DbSet<Hotel> Hotels { get; set; }
         public virtual DbSet<Income> Incomes { get; set; }

@@ -10,7 +10,7 @@ namespace IM.BusinessRules.BR
   {
     #region getUnderPaymentMotives
     /// <summary>
-    /// Obtiene registros del catalogo UnderPaymentMotives
+    /// Obtiene registros del catalogo UnderPaymentMotives -1-Todos | 0-Inactivos | 1-Activos
     /// </summary>
     /// <param name="nStatus">-1. Todos | 0. Inactivos | 1. Activos</param>
     /// <param name="underPaymentMotive">Objeto con filtros actuales</param>

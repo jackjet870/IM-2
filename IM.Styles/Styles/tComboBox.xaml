@@ -18,7 +18,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
                     <Viewbox Width="16" Stretch="Uniform" >
-                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BUser.png"/>
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BHotel.png"/>
                     </Viewbox>
                     <TextBlock Text="{Binding peID}" FontWeight="Bold" TextAlignment="Center" FontSize="10"/>
                 </StackPanel>
@@ -58,6 +58,32 @@
     <!--#endregion-->
 
     <!--#region Languages -->
+
+  <!--#region Lead Source-->
+  <DataTemplate x:Key="tLeadSourceComboBox">
+    <Border Height="35" Margin="0,2,0,0">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="70"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="15"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
+          <Viewbox Width="16" Stretch="Uniform" >
+            <Image Source="pack://application:,,,/IM.Styles;component/Images/BHotel.png"/>
+          </Viewbox>
+          <TextBlock Text="{Binding peID}" FontWeight="Bold" TextAlignment="Center" FontSize="10"/>
+        </StackPanel>
+        
+      </Grid>
+    </Border>
+  </DataTemplate>
+  <!--#endregion-->
+
+  <!--#region Languages -->
     <DataTemplate x:Key="tLanguagesComboBox-Concat">
         <Border Height="Auto" Margin="0,2,0,0">
             <Grid>

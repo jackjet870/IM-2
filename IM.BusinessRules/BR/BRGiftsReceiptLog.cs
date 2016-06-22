@@ -19,12 +19,14 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 09/Mayo/2016 Created
     /// </history>
-    public static void SaveGiftsReceiptsLog(int ReceiptID, string ChangeBy, int HoursDiff = 0)
+    public async static Task SaveGiftsReceiptsLog(int ReceiptID, string ChangeBy, int HoursDiff = 0)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        dbContext.USP_OR_SaveGiftsReceiptLog(ReceiptID, Convert.ToInt16(HoursDiff), ChangeBy);
-      }
+      await Task.Run(() => { 
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          dbContext.USP_OR_SaveGiftsReceiptLog(ReceiptID, Convert.ToInt16(HoursDiff), ChangeBy);
+        }
+      });
     }
     #endregion
 

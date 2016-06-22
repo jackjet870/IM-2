@@ -67,6 +67,7 @@
     <Compile Include="BR\BRCreditCardTypes.cs" />
     <Compile Include="BR\BRCurrencies.cs" />
     <Compile Include="BR\BRDepositsRefund.cs" />
+    <Compile Include="BR\BRCxC.cs" />
     <Compile Include="BR\BRDepts.cs" />
     <Compile Include="BR\BRDesks.cs" />
     <Compile Include="BR\BREfficiency.cs" />

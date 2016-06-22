@@ -1806,14 +1806,14 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 14/Mayo/2016 Created
     /// </history>
-    private void Cancel()
+    private async void Cancel()
     {
       int ReceiptID = Convert.ToInt32(txtgrID.Text);
       // Cancelamos el recibo
       BRGiftsReceipts.CancelGiftsReceipt(ReceiptID, frmHost._dtpServerDate);
 
       // Guardamos el historico del recibos de regalos
-      BRGiftsReceiptLog.SaveGiftsReceiptsLog(ReceiptID, App.User.User.peID);
+      await BRGiftsReceiptLog.SaveGiftsReceiptsLog(ReceiptID, App.User.User.peID);
 
       // Actualizamos los datos en pantalla
       chkgrCancel.IsChecked = true;
@@ -2217,7 +2217,7 @@ namespace IM.Host.Forms
       _lstPaymentsDelete.Clear();
 
       // Guardamos el historico de recibo de regalos
-      BRGiftsReceiptLog.SaveGiftsReceiptsLog(Convert.ToInt32(txtgrID.Text), txtChangedBy.Text);
+      await BRGiftsReceiptLog.SaveGiftsReceiptsLog(Convert.ToInt32(txtgrID.Text), txtChangedBy.Text);
 
       Controls_Reading_Mode();
       /*GiftsReceipt _giftReceipt;
@@ -3492,7 +3492,7 @@ namespace IM.Host.Forms
       }
 
       // guardamos el historico del recibos de regalos
-      BRGiftsReceiptLog.SaveGiftsReceiptsLog(Convert.ToInt32(txtgrID.Text), App.User.User.peID);
+      await BRGiftsReceiptLog.SaveGiftsReceiptsLog(Convert.ToInt32(txtgrID.Text), App.User.User.peID);
     }
     #endregion
 

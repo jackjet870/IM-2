@@ -2370,7 +2370,7 @@ namespace IM.Transfer.Forms
       //obtenemos el tipo de cambio de la Intranet
       AddValueProgressBarExchangeRate(value: 2);
       AddLogGridExchangeRate("Info", "Getting Exchange Rate from Intranet Service");
-      TipoCambioTesoreria exchangeRate = await IntranetHelper.TipoCambioTesoreria(_dtmServerDate, "USD", cancelTokenExchangeRate.Token);
+      TipoCambioTesoreria exchangeRate = await IntranetHelper.TipoCambioTesoreria(Convert.ToDateTime("27/05/2016"), "USD", cancelTokenExchangeRate.Token);
       if (exchangeRate != null)
       {
         timeWatchExchangeRate.Start();
@@ -2426,7 +2426,7 @@ namespace IM.Transfer.Forms
       //Se obtiene la fecha del servidor
       _dtmServerDate = BRHelpers.GetServerDate();
       //agregamos los tipos de cambio faltantes hasta la fecha actual para que no existan huecos
-      await BRExchangeRate.InsertExchangeRate(_dtmServerDate);
+      await BRExchangeRate.InsertExchangeRate(Convert.ToDateTime("27/05/2016"));
       AddValueProgressBarExchangeRate(value: 7);
       // obtenemos el tipo de cambio de la Intranet
       AddLogGridExchangeRate("Info", "Getting Currency Change from Intranet Service...");

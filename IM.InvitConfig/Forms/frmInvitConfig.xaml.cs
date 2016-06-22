@@ -223,7 +223,7 @@ namespace IM.InvitConfig.Forms
     ///<history>
     ///[jorcanche] created 12/05/2016
     ///</history>
-    private void btnSave_Click(object sender, RoutedEventArgs e)
+    private async void btnSave_Click(object sender, RoutedEventArgs e)
     {
       StaStart("Save Invit...");
       EnableControls(true, false, true, false, Visibility.Collapsed);
@@ -237,7 +237,7 @@ namespace IM.InvitConfig.Forms
       if (_rtfInvitation.itRTFFooter == footer || _rtfInvitation.itRTFHeader == header) return;
       _rtfInvitation.itRTFFooter = footer;
       _rtfInvitation.itRTFHeader = header;
-      BREntities.OperationEntity(_rtfInvitation, EnumMode.edit);
+      await BREntities.OperationEntity(_rtfInvitation, EnumMode.edit);
       StaEnd();
       #endregion
     } 

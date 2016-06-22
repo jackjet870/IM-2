@@ -293,6 +293,7 @@ namespace IM.BusinessRules.BR
     /// <returns> DateTime </returns>
     /// <history>
     /// [vipacheco] 19/Abril/2016 Created
+    /// [michan]  07/Junio/2016 Modified Se agregó la fecha de cierre de CxC
     /// </history>
     public static DateTime? GetCloseSalesRoom(EnumSalesRoomType salesRoomType, string salesRoom)
     {
@@ -313,6 +314,9 @@ namespace IM.BusinessRules.BR
           case EnumSalesRoomType.GiftsReceipts:
             _salesRoom = dbContext.SalesRooms.Where(x => x.srID == salesRoom).SingleOrDefault();
             return _salesRoom.srGiftsRcptCloseD;
+          case EnumSalesRoomType.CxC:
+            _salesRoom = dbContext.SalesRooms.Where(x => x.srID == salesRoom).SingleOrDefault();
+            return _salesRoom.srCxCCloseD;
           default:
             return null;
         }
