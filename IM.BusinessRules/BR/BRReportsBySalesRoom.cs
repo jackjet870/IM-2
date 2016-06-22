@@ -7,6 +7,7 @@ using IM.Model.Helpers;
 using IM.Model.Enums;
 using System.Collections;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace IM.BusinessRules.BR
 {
@@ -872,21 +873,61 @@ namespace IM.BusinessRules.BR
     /// <returns> List of RptInOut</returns>
     /// <history>
     /// [edgrodriguez] 13/Jun/2016 Created
+    /// [edgrodriguez] 22/Jun/2016 Modified. El método realiza el procesamiento.
     /// </history>
     public static async Task<List<IEnumerable>> GetRptManifestRangeByLs(DateTime? dtmStart, DateTime? dtmEnd, string salesRooms = "ALL", EnumProgram program = EnumProgram.All)
     {
       return await Task.Run(() =>
       {
+        var lstManifestRange = new List<IEnumerable>();
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptManifestRange_TimeOut;
-          var lstManifestRange = dbContext.USP_IM_RptManifestByLSRange(dtmStart, dtmEnd, salesRooms)
+           lstManifestRange = dbContext.USP_IM_RptManifestByLSRange(dtmStart, dtmEnd, salesRooms)
           .MultipleResults()
           .With<RptManifestByLSRange>()
           .With<RptManifestByLSRange_Bookings>()
           .GetValues();
-          return (lstManifestRange[0] as List<RptManifestByLSRange>).Any() ? lstManifestRange : new List<IEnumerable>();
         }
+
+        var lstRptManifest = lstManifestRange[0] as List<RptManifestByLSRange>;
+        var lstBookings = lstManifestRange[1] as List<RptManifestByLSRange_Bookings>;
+        if (lstBookings.Any())
+        {
+          var guloInvitList = lstBookings.Select(c => c.guloInvit).Distinct().ToList();
+          guloInvitList.ForEach(c =>
+          {
+            lstBookings.Add(new RptManifestByLSRange_Bookings
+            {
+              guloInvit = c,
+              LocationN = lstBookings.FirstOrDefault(b => b.guloInvit == c).LocationN,
+              guBookT = "Total",
+              Bookings = lstBookings.Where(b => b.guloInvit == c).Sum(b => b.Bookings)
+            });
+          });
+          var NotExitsInManifest = lstBookings.Select(c => c.LocationN).Except(lstRptManifest.Where(c => c.SaleType == 0 || c.SaleType == 1 || c.SaleType == 2).Select(c => c.LocationN)).ToList();
+          NotExitsInManifest.ForEach(c =>
+          {
+            lstRptManifest.Add(new RptManifestByLSRange
+            {
+              Location = lstRptManifest.FirstOrDefault(b => b.LocationN == c)?.Location ?? lstBookings.FirstOrDefault(b => b.LocationN == c).guloInvit,
+              LocationN = c,
+              SaleType = lstRptManifest.FirstOrDefault(b => b.LocationN == c)?.SaleType ?? 0,
+              SaleTypeN = lstRptManifest.FirstOrDefault(b => b.LocationN == c)?.SaleTypeN ?? "MANIFEST"
+            });
+          });
+
+          lstRptManifest = lstRptManifest
+           .OrderBy(c => c.SaleType)
+           .ThenBy(c => c.Location)
+           .ThenBy(c => c.ShowProgramN)
+           .ThenBy(c => c.Sequency)
+           .ThenBy(c => c.TimeInT)
+           .ThenBy(c => c.LastName)
+           .ToList();
+        }
+        return (lstRptManifest.Any()) ? new List<IEnumerable>() { lstRptManifest, lstBookings } : new List<IEnumerable>();
+
       });
     }
     #endregion

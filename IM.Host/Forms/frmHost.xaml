@@ -70,24 +70,24 @@
               <TextBlock Text="Global Sales" HorizontalAlignment="Center" />
             </StackPanel>
           </Button>
-          <Button x:Name="btnExcel" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnExcel_Click" >
+          <!--<Button x:Name="btnExcel" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnExcel_Click" >
             <StackPanel>
               <Image Source="pack://application:,,,/IM.Base;component/Images/ExchangeRate.png" Width="24" Height="24" HorizontalAlignment="Center"/>
               <TextBlock Text="Excel" HorizontalAlignment="Center" />
             </StackPanel>
-          </Button>
-          <Button x:Name="btnPrint" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="65" Background="White" Click="btnPrint_Click">
-            <StackPanel>
-              <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="24" Height="24" HorizontalAlignment="Center"/>
-              <TextBlock Text="Print" HorizontalAlignment="Center"/>
-            </StackPanel>
-          </Button>
-          <Button x:Name="btnPreview" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="65" Background="White" Click="btnPreview_Click">
+          </Button>-->
+                    <Button x:Name="btnPrint" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="65" Background="White" Click="btnExcel_Click">
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Print" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <!--<Button x:Name="btnPreview" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="65" Background="White" Click="btnPreview_Click">
             <StackPanel>
               <Image Source="pack://application:,,,/IM.Base;component/Images/Preview.png" Width="24" Height="24" HorizontalAlignment="Center"/>
               <TextBlock Text="Preview" HorizontalAlignment="Center"/>
             </StackPanel>
-          </Button>
+          </Button>-->
           <Button x:Name="btnMealTickets" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnMealTickets_Click">
             <StackPanel>
               <Image Source="pack://application:,,,/IM.Base;component/Images/CloseSalesRoom.png" Width="24" Height="24" HorizontalAlignment="Center"/>

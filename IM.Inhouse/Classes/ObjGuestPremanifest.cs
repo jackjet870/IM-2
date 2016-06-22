@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using IM.Model;
-using IM.BusinessRules.BR;
+using System;
 
 namespace IM.Inhouse.Classes
 {
@@ -9,14 +9,14 @@ namespace IM.Inhouse.Classes
     public GuestPremanifest Parent { get; set; }
 
     int Status;
-    public ObjGuestPremanifest(GuestPremanifest parent)
+    public ObjGuestPremanifest(GuestPremanifest parent, DateTime serverDate)
     {
       Parent = parent;
 
       foreach (PropertyInfo prop in parent.GetType().GetProperties())
       { GetType().GetProperty(prop.Name).SetValue(this, prop.GetValue(parent, null), null); }
 
-      Status = HelperToObjGuest.Status(guCheckIn, guCheckOutD, guAvail, guInvit, guBookCanc, guBookD, guShow, guInfo);
+      Status = HelperToObjGuest.Status(guCheckIn, guCheckOutD, guAvail, guInvit, guBookCanc, guBookD, guShow, guInfo,serverDate);
     }
 
     public int StatusColumn

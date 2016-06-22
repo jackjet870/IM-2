@@ -2515,7 +2515,7 @@ namespace IM.Base.Helpers
                   rowNumber++;
 
                   var TotalShow = "COUNTA(" + wsData.Cells[dataIniRow, formatTable.FirstOrDefault(f => f.PropertyName == "Show").Order, rowNumber - 2, formatTable.FirstOrDefault(f => f.PropertyName == "Show").Order].Address + ")";
-                  var Totaltour = $"SUM({wsData.Cells[rowNumber - 1, formatTable.FirstOrDefault(f => f.PropertyName == "Tour").Order].Address},{wsData.Cells[rowNumber - 1, formatTable.FirstOrDefault(f => f.PropertyName == "IO").Order].Address},{wsData.Cells[rowNumber - 1, formatTable.FirstOrDefault(f => f.PropertyName == "WO").Order].Address},{wsData.Cells[rowNumber - 1, formatTable.FirstOrDefault(f => f.PropertyName == "CTour").Order].Address})";
+                  var Totaltour = $"SUM({wsData.Cells[rowNumber - 1, formatTable.FirstOrDefault(f => f.PropertyName == "Tour").Order].Address},{wsData.Cells[rowNumber - 1, formatTable.FirstOrDefault(f => f.PropertyName == "IO").Order].Address},{wsData.Cells[rowNumber - 1, formatTable.FirstOrDefault(f => f.PropertyName == "WO").Order].Address},{wsData.Cells[rowNumber - 1, formatTable.FirstOrDefault(f => f.PropertyName == "CTour").Order].Address},{wsData.Cells[rowNumber - 1, formatTable.FirstOrDefault(f => f.PropertyName == "STour").Order].Address})";
                   var TotalBookings = wsData.Cells[dataIniRow - 1, dtTableBookings.Columns.Count].Address;
                   var resch = wsData.Cells[rowNumber - 1, formatTable.FirstOrDefault(f => f.PropertyName == "Resch").Order].Address;
                   var direct = wsData.Cells[rowNumber - 1, formatTable.FirstOrDefault(f => f.PropertyName == "Direct").Order].Address;

@@ -66,13 +66,16 @@ namespace IM.BusinessRules.BR
     /// <param name="LeadSource">LeadSource </param>
     /// <param name="Markets">Mercado </param>
     /// <param name="OnGroup">OnGroup</param>
-    public static List<GuestPremanifest> GetGuestsPremanifest(DateTime Date, string LeadSource, string Markets, int OnGroup)
+    public static async Task<List<GuestPremanifest>> GetGuestsPremanifest(DateTime Date, string LeadSource, string Markets, int OnGroup)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetPremanifest_Timeout;
-        return dbContext.USP_OR_GetPremanifest(Date, LeadSource, Markets, OnGroup).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetPremanifest_Timeout;
+          return dbContext.USP_OR_GetPremanifest(Date, LeadSource, Markets, OnGroup).ToList();
+        }
+      });
     }
 
     #endregion

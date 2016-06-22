@@ -12,14 +12,14 @@ namespace IM.Inhouse.Classes
     public GuestArrival Parent { get; set; }
 
     int Status;
-    public ObjGuestArrival(GuestArrival parent)
+    public ObjGuestArrival(GuestArrival parent, DateTime serverDate)
     {
       Parent = parent;
 
       foreach (PropertyInfo prop in parent.GetType().GetProperties())
       { GetType().GetProperty(prop.Name).SetValue(this, prop.GetValue(parent, null), null); }
 
-      Status  = HelperToObjGuest.Status(guCheckIn, guCheckOutD, guAvail,guInvit, guBookCanc, guBookD, guShow, guInfo);
+      Status  = HelperToObjGuest.Status(guCheckIn, guCheckOutD, guAvail,guInvit, guBookCanc, guBookD, guShow, guInfo, serverDate);
     }
     //Atributo que se utiliza cuando se cargan el DataGrid, me  agrega el estatus
     public int StatusColumn

@@ -6,6 +6,7 @@ using System.IO;
 using IM.Base.Helpers;
 using System.Data;
 using System.Collections;
+using IM.Base.Reports;
 
 namespace IM.ProcessorGeneral.Classes
 {
@@ -1386,41 +1387,7 @@ namespace IM.ProcessorGeneral.Classes
     public static FileInfo ExportRptManifestRangeByLs(string strReport, string fileFullPath, List<Tuple<string, string>> filters, List<IEnumerable> lstRptManifestRange)
     {
       var lstRptManifest = lstRptManifestRange[0] as List<RptManifestByLSRange>;
-      var lstBookings = lstRptManifestRange[1] as List<RptManifestByLSRange_Bookings>;
-
-      if (lstBookings.Any())
-      {
-        var guloInvitList = lstBookings.Select(c => c.guloInvit).Distinct().ToList();
-        guloInvitList.ForEach(c => {
-          lstBookings.Add(new RptManifestByLSRange_Bookings
-          {
-            guloInvit = c,
-            LocationN = lstBookings.FirstOrDefault(b => b.guloInvit == c).LocationN,
-            guBookT = "Total",
-            Bookings = lstBookings.Where(b => b.guloInvit == c).Sum(b => b.Bookings)
-          });
-        });
-        var NotExitsInManifest = lstBookings.Select(c => c.LocationN).Except(lstRptManifest.Where(c => c.SaleType == 0 || c.SaleType == 1 || c.SaleType == 2).Select(c => c.LocationN)).ToList();
-        NotExitsInManifest.ForEach(c =>
-        {
-          lstRptManifest.Add(new RptManifestByLSRange
-          {
-            Location = lstRptManifest.FirstOrDefault(b => b.LocationN == c)?.Location ?? lstBookings.FirstOrDefault(b => b.LocationN == c).guloInvit,
-            LocationN = c,
-            SaleType = lstRptManifest.FirstOrDefault(b => b.LocationN == c)?.SaleType ?? 0,
-            SaleTypeN = lstRptManifest.FirstOrDefault(b => b.LocationN == c)?.SaleTypeN ?? "MANIFEST"
-          });
-        });
-
-        lstRptManifest = lstRptManifest
-         .OrderBy(c => c.SaleType)
-         .ThenBy(c => c.Location)
-         .ThenBy(c => c.ShowProgramN)
-         .ThenBy(c => c.Sequency)
-         .ThenBy(c => c.TimeInT)
-         .ThenBy(c => c.LastName)
-         .ToList();
-      }
+      var lstBookings = lstRptManifestRange[1] as List<RptManifestByLSRange_Bookings>;     
            
       var dtRptManifest = TableHelper.GetDataTableFromList(lstRptManifest, true);
 
@@ -1433,8 +1400,8 @@ namespace IM.ProcessorGeneral.Classes
       }).ToList(), true, false);
 
       return EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, List<Model.Classes.ExcelFormatTable>>> {
-        Tuple.Create(dtRptManifest, clsFormatReport.RptManifestRangeByLs()),
-        Tuple.Create(dtBookings, clsFormatReport.RptManifestRangeByLs_Bookings())
+        Tuple.Create(dtRptManifest, clsFormatReports.RptManifestRangeByLs()),
+        Tuple.Create(dtBookings, clsFormatReports.RptManifestRangeByLs_Bookings())
       }, filters, strReport, string.Empty, blnRowGrandTotal: true, blnShowSubtotal: true, fileFullPath: fileFullPath);
     }
     #endregion

@@ -530,6 +530,8 @@ namespace IM.Inhouse.Forms
         colGifts.Width = new GridLength(0);
     }
 
+    async
+
     #endregion
 
     #region CreateExcelReport
@@ -570,15 +572,15 @@ namespace IM.Inhouse.Forms
           {
             if (!WithGifts) //Si no se mando nada o mando falso
             {
-              List<RptPremanifest> premanifest = BRGeneralReports.GetRptPremanifest(dtpDate.Value.Value,
+              List<RptPremanifest> premanifest = await BRGeneralReports.GetRptPremanifest(dtpDate.Value.Value,
                 App.User.LeadSource.lsID, _markets, _onGroup);
               ReportsToExcel.PremanifestToExcel(premanifest);
               hasData = true;
             }
             else
             {
-              List<RptPremanifestWithGifts> withGifts = BRGeneralReports.GetRptPremanifestWithGifts(
-                dtpDate.Value.Value, App.User.LeadSource.lsID, _markets, _onGroup);
+              List<RptPremanifestWithGifts> withGifts = await BRGeneralReports.GetRptPremanifestWithGifts(
+                dtpDate.Value.Value, App.User.LeadSource.lsID);
               ReportsToExcel.PremanifestWithGiftsToExcel(withGifts);
               hasData = true;
             }
@@ -1858,8 +1860,9 @@ namespace IM.Inhouse.Forms
 
     private void DoGetScreenArrivals()
     {
+      var serverDate = BRHelpers.GetServerDate();
       Task.Factory.StartNew(() =>
-         BRGuests.GetGuestsArrivals(_serverDate, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup).Select(parent => new ObjGuestArrival(parent)).ToList()).
+         BRGuests.GetGuestsArrivals(_serverDate, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup).Select(parent => new ObjGuestArrival(parent, serverDate)).ToList()).
          ContinueWith((LoadGuestsInhouse) =>
          {
            if (LoadGuestsInhouse.IsFaulted)
@@ -1881,38 +1884,19 @@ namespace IM.Inhouse.Forms
          }, TaskScheduler.FromCurrentSynchronizationContext());
     }
 
-    private void DoGetScreenPremanifest()
+    private async void DoGetScreenPremanifest()
     {
-      Task.Factory.StartNew(() =>
-               BRGuests.GetGuestsPremanifest(_serverDate, App.User.LeadSource.lsID, _markets, _onGroup)
-            .Select(parent => new ObjGuestPremanifest(parent)).ToList()).ContinueWith(
-         (LoadGuestsInhouse) =>
-         {
-           if (LoadGuestsInhouse.IsFaulted)
-           {
-             UIHelper.ShowMessage(LoadGuestsInhouse.Exception.InnerException.Message, MessageBoxImage.Error);
-             StaEnd();
-             return false;
-           }
-           else
-           {
-             if (LoadGuestsInhouse.IsCompleted)
-             {
-               LoadGuestsInhouse.Wait(1000);
-               _guestPremanifestViewSource.Source = LoadGuestsInhouse.Result;
-             }
-             StaEnd();
-             return false;
-           }
-         },
-         TaskScheduler.FromCurrentSynchronizationContext()
-          );
+      var serverDate = BRHelpers.GetServerDate();
+      var lstGuestsPremanifest = await BRGuests.GetGuestsPremanifest(_serverDate, App.User.LeadSource.lsID, _markets, _onGroup);
+      _guestPremanifestViewSource.Source = lstGuestsPremanifest.Select(parent => new ObjGuestPremanifest(parent, serverDate)).ToList();
+      StaEnd();      
     }
 
     private void DoGetScreenAvailables()
     {
+      var serverDate = BRHelpers.GetServerDate();
       Task.Factory.StartNew(() =>
-           BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup).Select(parent => new ObjGuestAvailable(parent)).ToList()).
+           BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup).Select(parent => new ObjGuestAvailable(parent,serverDate)).ToList()).
            ContinueWith((LoadGuestsInhouse) =>
          {
            if (LoadGuestsInhouse.IsFaulted)
@@ -1936,8 +1920,9 @@ namespace IM.Inhouse.Forms
 
     private void DoGetScreenSearched()
     {
+      var serverDate = BRHelpers.GetServerDate();
       Task.Factory.StartNew(() =>
-         BRGuests.GetGuests(_guestdateFrom, _guestDateTo, App.User.LeadSource.lsID, _guestName, _guestRoom, _guestReservation, _guestGuid).Select(parent => new ObjGuestSearched(parent)).ToList()).ContinueWith(
+         BRGuests.GetGuests(_guestdateFrom, _guestDateTo, App.User.LeadSource.lsID, _guestName, _guestRoom, _guestReservation, _guestGuid).Select(parent => new ObjGuestSearched(parent,serverDate)).ToList()).ContinueWith(
          (LoadGuestsInhouse) =>
          {
            if (LoadGuestsInhouse.IsFaulted)

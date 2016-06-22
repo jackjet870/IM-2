@@ -14,6 +14,9 @@ using IM.Model.Enums;
 using IM.Host.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Data;
+using IM.Base.Reports;
 
 namespace IM.Host
 {
@@ -255,6 +258,8 @@ namespace IM.Host
 
     public void ShowReportDesigner()
     {
+      frmHostReports frm = new frmHostReports(dtpDate.Value.Value) { Owner=this};
+      frm.ShowDialog();
     }
 
     #endregion
@@ -703,10 +708,39 @@ namespace IM.Host
     /// <param name="e"></param>
     /// <history>
     /// [vipacheco] 06/Junio/2016 Created
+    /// [edgrodriguez] 22/Junio/2016 Modified. Se agregó el proceso de creación del reporte Manifest By LS
     /// </history>
-    private void btnExcel_Click(object sender, RoutedEventArgs e)
+    private async void btnExcel_Click(object sender, RoutedEventArgs e)
     {
+      
+      var dateRange = DateHelper.DateRange(dtpDate.Value.Value, dtpDate.Value.Value);
+      var dateRangeFileName = DateHelper.DateRangeFileName(dtpDate.Value.Value, dtpDate.Value.Value);
+      var filters = new List<Tuple<string, string>>();
 
+      var lstManifestRange = await BRReportsBySalesRoom.GetRptManifestRangeByLs(dtpDate.Value, dtpDate.Value, App.User.SalesRoom.srID);
+      if (lstManifestRange.Any())
+      {
+        var lstRptManifest = lstManifestRange[0] as List<RptManifestByLSRange>;
+        var lstBookings = lstManifestRange[1] as List<RptManifestByLSRange_Bookings>; 
+               
+        var dtRptManifest = TableHelper.GetDataTableFromList(lstRptManifest, true);
+
+        var dtBookings = TableHelper.GetDataTableFromList(lstBookings.Select(c => new
+        {
+          c.guloInvit,
+          c.LocationN,
+          guBookTime = c.guBookT,
+          c.guBookT,
+          c.Bookings
+        }).ToList(), true, false);
+
+        filters.Add(new Tuple<string, string>("Date Range", dateRange));
+        filters.Add(new Tuple<string, string>("Sales Room", App.User.SalesRoom.srID));
+        EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, List<Model.Classes.ExcelFormatTable>>> {
+        Tuple.Create(dtRptManifest, clsFormatReports.RptManifestRangeByLs()),
+        Tuple.Create(dtBookings, clsFormatReports.RptManifestRangeByLs_Bookings())
+      }, filters, "Manifest By LS", dateRangeFileName, blnRowGrandTotal: true, blnShowSubtotal: true);
+      }
     }
     #endregion
 

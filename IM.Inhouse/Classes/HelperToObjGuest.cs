@@ -24,13 +24,13 @@ namespace IM.Inhouse.Classes
     /// <param name="guShow"></param>
     /// <param name="guInfo"></param>
     /// <history>[jorcanche] 29/03/2016</history>
-    public static int Status(bool guCheckIn, DateTime guCheckOutD, bool guAvail, bool guInvit, bool guBookCanc, DateTime? guBookD, bool guShow, bool guInfo)
+    public static int Status(bool guCheckIn, DateTime guCheckOutD, bool guAvail, bool guInvit, bool guBookCanc, DateTime? guBookD, bool guShow, bool guInfo, DateTime serverDate)
     {
       //Sin Check-In
       if (!guCheckIn)
         return 8;
       //Check Out
-      if (guCheckOutD < BRHelpers.GetServerDate().Date)
+      if (guCheckOutD < serverDate.Date)
         return 7;
       //Invitacion
       if (!guAvail)
@@ -39,7 +39,7 @@ namespace IM.Inhouse.Classes
       if (guInvit && guBookCanc)
         return 5;
       //Inv. No Show
-      if (guInvit && guBookD < BRHelpers.GetServerDate().Date && !guShow)
+      if (guInvit && guBookD < serverDate.Date && !guShow)
         return 4;
       //Inv. Show
       if (guInvit && guShow)

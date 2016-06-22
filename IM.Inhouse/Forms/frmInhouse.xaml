@@ -8,6 +8,7 @@
         mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
         Title="Inhouse" x:Name="House" Width="1100"  Height="700"  WindowState="Maximized" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <CollectionViewSource x:Key="GuestArrivalViewSource" d:DesignSource="{d:DesignInstance {x:Type classes:ObjGuestArrival}, CreateList=True}"/>
         <CollectionViewSource x:Key="GuestAvailableViewSource" d:DesignSource="{d:DesignInstance {x:Type classes:ObjGuestAvailable }, CreateList=True}"/>
         <CollectionViewSource x:Key="GuestPremanifestViewSource" d:DesignSource="{d:DesignInstance {x:Type classes:ObjGuestPremanifest}, CreateList=True}"/>
@@ -77,8 +78,8 @@
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="0" x:Name="colGifts"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto" x:Name="colGifts"/>
                     </Grid.ColumnDefinitions>
                     <Button x:Name="btnLogin" Grid.Column="0" Style="{StaticResource ResourceKey=BtnOptions}" Click="btnLogin_Click"  >
                         <StackPanel >
@@ -127,6 +128,24 @@
                             <Image Source="pack://application:,,,/IM.Base;component/Images/Reports.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
                             <TextBlock Text="Ext Inv" Style="{StaticResource ResourceKey=txtOptions}"/>
                         </StackPanel>
+                    </Button>
+                    <Button x:Name="btnWithGifts" Grid.Column="9"   Click="btnWithGifts_Click" HorizontalAlignment="Left" Margin="0,2" >
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/IM.Base;component/Images/Reports.ico" Style="{StaticResource ResourceKey=ImageOptions}"/>
+                            <TextBlock Text="Gift/Reprt" Style="{StaticResource ResourceKey=txtOptions}"/>
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=ccPremanifest,Path=Visibility}" Value="Visible">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ElementName=ccPremanifest,Path=Visibility}" Value="Hidden">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                     </Button>
                 </Grid>
             </GroupBox>
@@ -248,8 +267,8 @@
                 <Button Grid.Column="1" Name="btnAvailables" Click="btnAvailables_Clicked" FontSize="15" Background="#FFB8EAB5">Availables</Button>
                 <Button Grid.Column="2" Name="btnPremanifiest" Click="btnPremanifiest_Click" FontSize="15" Background="#FFCDF9CB" >Premanifest</Button>
             </Grid>
-            <ContentControl x:Name="ccArrivals"  Grid.Row="1" Visibility="Visible" DataContext="{StaticResource GuestArrivalViewSource}">
-                <DataGrid x:Name="dgGuestArrival" CanUserDeleteRows="False"  SelectionUnit ="FullRow"  SelectionMode="Single"  CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False"  SelectionChanged="dg_SelectionChanged">
+            <DockPanel x:Name="ccArrivals"  Grid.Row="1" Visibility="Visible" DataContext="{StaticResource GuestArrivalViewSource}">
+                <DataGrid x:Name="dgGuestArrival" CanUserDeleteRows="False"  SelectionUnit ="FullRow"  SelectionMode="Single"  CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False"  SelectionChanged="dg_SelectionChanged" EnableRowVirtualization="True" EnableColumnVirtualization="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn"  Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -408,10 +427,10 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-            </ContentControl>
+            </DockPanel>
 
-            <ContentControl x:Name="ccAvailables"   Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource GuestAvailableViewSource}}">
-                <DataGrid x:Name="dgGuestAvailable"  CanUserDeleteRows="False"  CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  CanUserSortColumns="True" AutoGenerateColumns="False" Grid.ColumnSpan="2" Grid.Column="1" EnableRowVirtualization="True"  RowDetailsVisibilityMode="VisibleWhenSelected" SelectionChanged="dg_SelectionChanged" >
+            <DockPanel x:Name="ccAvailables"   Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource GuestAvailableViewSource}}">
+                <DataGrid x:Name="dgGuestAvailable"  CanUserDeleteRows="False"  CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  CanUserSortColumns="True" AutoGenerateColumns="False" Grid.ColumnSpan="2" Grid.Column="1"  RowDetailsVisibilityMode="VisibleWhenSelected" SelectionChanged="dg_SelectionChanged" EnableRowVirtualization="True" EnableColumnVirtualization="True" >
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn1" Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -547,10 +566,10 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-            </ContentControl>
+            </DockPanel>
 
-            <ContentControl x:Name="ccPremanifest" Background="SkyBlue" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource GuestPremanifestViewSource}}">
-                <DataGrid x:Name="dgGuestPremanifest" CanUserDeleteRows="False"   CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"  EnableRowVirtualization="True"   RowDetailsVisibilityMode="Collapsed" SelectionChanged="dg_SelectionChanged">
+            <DockPanel x:Name="ccPremanifest" Background="SkyBlue" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource GuestPremanifestViewSource}}">
+                <DataGrid x:Name="dgGuestPremanifest" CanUserDeleteRows="False"   CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"    RowDetailsVisibilityMode="Collapsed" SelectionChanged="dg_SelectionChanged" EnableRowVirtualization="True" EnableColumnVirtualization="True" >
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn2" Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -690,10 +709,10 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-            </ContentControl>
+            </DockPanel>
 
-            <ContentControl x:Name="ccGetGuest" Background="SkyBlue" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource GuestSearchedViewSource}}">
-                <DataGrid x:Name="guestSearchedDataGrid" CanUserDeleteRows="False"  CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"  EnableRowVirtualization="True"   RowDetailsVisibilityMode="VisibleWhenSelected" SelectionChanged="dg_SelectionChanged">
+            <DockPanel x:Name="ccGetGuest" Background="SkyBlue" Grid.Row="1" Visibility="Hidden" DataContext="{Binding Source={StaticResource GuestSearchedViewSource}}">
+                <DataGrid x:Name="guestSearchedDataGrid" CanUserDeleteRows="False"  CanUserAddRows="False" AlternatingRowBackground="Gainsboro" AlternationCount="2" ItemsSource="{Binding}"  AutoGenerateColumns="False"    RowDetailsVisibilityMode="VisibleWhenSelected" SelectionChanged="dg_SelectionChanged" EnableRowVirtualization="True" EnableColumnVirtualization="True" >
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn3" Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -832,7 +851,7 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-            </ContentControl>
+            </DockPanel>
         </Grid>
         <!--#endregion-->
 

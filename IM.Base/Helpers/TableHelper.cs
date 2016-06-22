@@ -65,6 +65,9 @@ namespace IM.Base.Helpers
             value = showCheckMark ? (value.ToString().ToLower() == "true" ? "✓" : "") : (value.ToString().ToLower() == "true" ? (object)"Yes" : DBNull.Value);
           if (replaceStringNullOrWhiteSpace && type == typeof(string) && string.IsNullOrWhiteSpace(value.ToString()))
             value = "-";
+
+          value = (type == typeof(string) && value.ToString().ToLower() == "ü" ? "✓" : value);
+
           values[i] = value;
         }
         table.Rows.Add(values);

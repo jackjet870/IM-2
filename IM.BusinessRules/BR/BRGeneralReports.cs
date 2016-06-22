@@ -290,19 +290,26 @@ namespace IM.BusinessRules.BR
     /// Obtiene Un reporte RptPremanifest
     /// </summary>
     /// <param name="date">Fecha</param>
-    /// <param name="palaceId">ID de Palace</param>
+    /// <param name="placeId">ID de Palace</param>
     /// <param name="markets">Mercado</param>
-    /// <param name="onGroup">OnGroup</param>
+    /// <param name="onGroup">OnGroup
+    /// 0. No en Grupo
+    /// 1. En Grupo
+    /// 2. Sin Filtro</param>
     /// <param name="salesRoom">ID de SalesRoom</param>
     /// <history>
     /// [ecanul] 18/04/2016 Created
+    /// [edgrodriguez] 21/06/2016 Modified. Se aplico asincronia. Y se cambiaron algunas variales a opcionales.
     /// </history>
-    public static List<RptPremanifest> GetRptPremanifest(DateTime date, string palaceId, string markets, int onGroup, string salesRoom = "ALL")
+    public static async Task<List<RptPremanifest>> GetRptPremanifest(DateTime date, string placeId = "ALL", string markets = "ALL", int onGroup = 2, string salesRoom = "ALL")
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        return dbContext.USP_OR_RptPremanifest(date, palaceId, salesRoom, markets, onGroup, false, false, BRHelpers.GetServerDate()).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          return dbContext.USP_OR_RptPremanifest(date, placeId, salesRoom, markets, onGroup, false, false, BRHelpers.GetServerDate()).ToList();
+        }
+      });
     }
 
     #endregion GetRptPremanifest
@@ -313,19 +320,23 @@ namespace IM.BusinessRules.BR
     /// Obtiene un reporte RptPremanifestWithGifts
     /// </summary>
     /// <param name="date">Fecha</param>
-    /// <param name="palaceId">ID de Palace</param>
+    /// <param name="placeId">ID de Palace</param>
     /// <param name="markets">Mercado</param>
     /// <param name="onGroup">OnGroup</param>
     /// <param name="salesRoom">ID de SalesRoom</param>
     /// <history>
     /// [ecanul] 18/04/2016 Created
+    /// [edgrodriguez] 21/06/2016 Modified. Se aplico asincronia. Y se cambiaron algunas variales a opcionales.
     /// </history>
-    public static List<RptPremanifestWithGifts> GetRptPremanifestWithGifts(DateTime date, string palaceId, string markets, int onGroup, string salesRoom = "ALL")
+    public static async Task<List<RptPremanifestWithGifts>> GetRptPremanifestWithGifts(DateTime date, string placeId= "ALL",string salesRoom = "ALL", bool multiLeadSource = false, bool regen=false,DateTime? currentDateTime=null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        return dbContext.USP_OR_RptPremanifestWithGifts(date, palaceId, salesRoom, false, false, BRHelpers.GetServerDate()).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          return dbContext.USP_OR_RptPremanifestWithGifts(date, placeId, salesRoom, multiLeadSource, regen, currentDateTime).ToList();
+        }
+      });
     }
 
     #endregion GetRptPremanifestWithGifts 
