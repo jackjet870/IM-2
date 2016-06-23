@@ -633,6 +633,9 @@
     <Compile Include="PersonnelShort.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PersonnelStatistics.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="PersonnelStatus.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

@@ -93,13 +93,7 @@ namespace IM.Model
         public virtual DbSet<GuestPromotion> GuestsPromotions { get; set; }
         public virtual DbSet<GuestSisturPromotion> GuestsSisturPromotions { get; set; }
         public virtual DbSet<GuestStatus> GuestsStatus { get; set; }
-
-    public object USP_OR_GetCxC(bool authorized, string salesRoom, object user, string leadSource, string pR)
-    {
-      throw new NotImplementedException();
-    }
-
-    public virtual DbSet<GuestStatusType> GuestsStatusTypes { get; set; }
+        public virtual DbSet<GuestStatusType> GuestsStatusTypes { get; set; }
         public virtual DbSet<HotelGroup> HotelsGroups { get; set; }
         public virtual DbSet<Hotel> Hotels { get; set; }
         public virtual DbSet<Income> Incomes { get; set; }
@@ -5914,6 +5908,28 @@ namespace IM.Model
                 new ObjectParameter("Guest", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GuestMovements>("USP_OR_GetGuestMovements", guestParameter);
+        }
+    
+        public virtual ObjectResult<PersonnelStatistics> USP_OR_GetPersonnelStatistics(string user)
+        {
+            var userParameter = user != null ?
+                new ObjectParameter("User", user) :
+                new ObjectParameter("User", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PersonnelStatistics>("USP_OR_GetPersonnelStatistics", userParameter);
+        }
+    
+        public virtual int USP_OR_UpdatePersonnelId(string old, string @new)
+        {
+            var oldParameter = old != null ?
+                new ObjectParameter("Old", old) :
+                new ObjectParameter("Old", typeof(string));
+    
+            var newParameter = @new != null ?
+                new ObjectParameter("New", @new) :
+                new ObjectParameter("New", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_UpdatePersonnelId", oldParameter, newParameter);
         }
     }
 }

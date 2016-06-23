@@ -6322,6 +6322,9 @@
           <Parameter Name="TeamType" Type="varchar" Mode="In" />
           <Parameter Name="PlaceID" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetPersonnelStatistics" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="User" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetPremanifest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="LeadSource" Type="varchar" Mode="In" />
@@ -7393,6 +7396,10 @@
           <Parameter Name="MealTicketType" Type="varchar" Mode="In" />
           <Parameter Name="Folio" Type="varchar" Mode="In" />
           <Parameter Name="RateType" Type="int" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_UpdatePersonnelId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Old" Type="varchar" Mode="In" />
+          <Parameter Name="New" Type="varchar" Mode="In" />
         </Function>
         <Function Name="USP_OR_UpdateRefundFolio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="RefundTypeID" Type="varchar" Mode="In" />
@@ -17919,7 +17926,14 @@
           <Parameter Name="Sale" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGuestMovements" ReturnType="Collection(IMModel.GuestMovements)">
-            <Parameter Name="Guest" Mode="In" Type="Int32" />
+          <Parameter Name="Guest" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_GetPersonnelStatistics" ReturnType="Collection(IMModel.PersonnelStatistics)">
+            <Parameter Name="User" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_UpdatePersonnelId">
+            <Parameter Name="Old" Mode="In" Type="String" />
+            <Parameter Name="New" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -22254,6 +22268,56 @@
           <Property Type="String" Name="gmcp" Nullable="false" MaxLength="63" />
           <Property Type="String" Name="cpN" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="gmIpAddress" Nullable="false" MaxLength="15" />
+        </ComplexType>
+        <ComplexType Name="PersonnelStatistics">
+          <Property Type="String" Name="Id" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="40" />
+          <Property Type="Int32" Name="Guests_PR" Nullable="true" />
+          <Property Type="Int32" Name="Guests_Liner" Nullable="true" />
+          <Property Type="Int32" Name="Guests_Closer" Nullable="true" />
+          <Property Type="Int32" Name="Guests_Exit" Nullable="true" />
+          <Property Type="Int32" Name="Guests_Podium" Nullable="true" />
+          <Property Type="Int32" Name="Guests_VLO" Nullable="true" />
+          <Property Type="Int32" Name="Guests_Host" Nullable="true" />
+          <Property Type="Int32" Name="Guests_Captain" Nullable="true" />
+          <Property Type="Int32" Name="Shows_Salesmen" Nullable="true" />
+          <Property Type="Int32" Name="Guests_Log" Nullable="true" />
+          <Property Type="Int32" Name="Guests_Movements" Nullable="true" />
+          <Property Type="Int32" Name="Sales_PR" Nullable="true" />
+          <Property Type="Int32" Name="Sales_Liner" Nullable="true" />
+          <Property Type="Int32" Name="Sales_Closer" Nullable="true" />
+          <Property Type="Int32" Name="Sales_Exit" Nullable="true" />
+          <Property Type="Int32" Name="Sales_Podium" Nullable="true" />
+          <Property Type="Int32" Name="Sales_VLO" Nullable="true" />
+          <Property Type="Int32" Name="Sales_Captain" Nullable="true" />
+          <Property Type="Int32" Name="Sales_Salesmen" Nullable="true" />
+          <Property Type="Int32" Name="Sales_Log" Nullable="true" />
+          <Property Type="Int32" Name="Gifts_Receipts_Authorized" Nullable="true" />
+          <Property Type="Int32" Name="Gifts_Receipts_Host" Nullable="true" />
+          <Property Type="Int32" Name="Gifts_Receipts_PR" Nullable="true" />
+          <Property Type="Int32" Name="Gifts_Receipts_Payments" Nullable="true" />
+          <Property Type="Int32" Name="Gifts_Receipts_Log" Nullable="true" />
+          <Property Type="Int32" Name="Meal_Tickets" Nullable="true" />
+          <Property Type="Int32" Name="Exchange_Rate_Log" Nullable="true" />
+          <Property Type="Int32" Name="Warehouse_Movements" Nullable="true" />
+          <Property Type="Int32" Name="PR_Notes" Nullable="true" />
+          <Property Type="Int32" Name="Logins_Log" Nullable="true" />
+          <Property Type="Int32" Name="Assistance" Nullable="true" />
+          <Property Type="Int32" Name="Days_Off" Nullable="true" />
+          <Property Type="Int32" Name="Efficiency_Salesmen" Nullable="true" />
+          <Property Type="Int32" Name="Places_Access" Nullable="true" />
+          <Property Type="Int32" Name="Roles" Nullable="true" />
+          <Property Type="Int32" Name="Permissions" Nullable="true" />
+          <Property Type="Int32" Name="Personnel_Liner" Nullable="true" />
+          <Property Type="Int32" Name="Posts_Log" Nullable="true" />
+          <Property Type="Int32" Name="Teams_Log" Nullable="true" />
+          <Property Type="Int32" Name="Teams_Guest_Services" Nullable="true" />
+          <Property Type="Int32" Name="Teams_Salesmen" Nullable="true" />
+          <Property Type="Int32" Name="Gifts_Log" Nullable="true" />
+          <Property Type="Int32" Name="Lead_Sources" Nullable="true" />
+          <Property Type="Int32" Name="Sales_Rooms" Nullable="true" />
+          <Property Type="Int32" Name="Sales_Rooms_Log" Nullable="true" />
+          <Property Type="Int32" Name="Configurations" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -29916,6 +29980,61 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetPersonnelStatistics" FunctionName="IMModel.Store.USP_OR_GetPersonnelStatistics">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.PersonnelStatistics">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Guests_PR" ColumnName="Guests PR" />
+                <ScalarProperty Name="Guests_Liner" ColumnName="Guests Liner" />
+                <ScalarProperty Name="Guests_Closer" ColumnName="Guests Closer" />
+                <ScalarProperty Name="Guests_Exit" ColumnName="Guests Exit" />
+                <ScalarProperty Name="Guests_Podium" ColumnName="Guests Podium" />
+                <ScalarProperty Name="Guests_VLO" ColumnName="Guests VLO" />
+                <ScalarProperty Name="Guests_Host" ColumnName="Guests Host" />
+                <ScalarProperty Name="Guests_Captain" ColumnName="Guests Captain" />
+                <ScalarProperty Name="Shows_Salesmen" ColumnName="Shows Salesmen" />
+                <ScalarProperty Name="Guests_Log" ColumnName="Guests Log" />
+                <ScalarProperty Name="Guests_Movements" ColumnName="Guests Movements" />
+                <ScalarProperty Name="Sales_PR" ColumnName="Sales PR" />
+                <ScalarProperty Name="Sales_Liner" ColumnName="Sales Liner" />
+                <ScalarProperty Name="Sales_Closer" ColumnName="Sales Closer" />
+                <ScalarProperty Name="Sales_Exit" ColumnName="Sales Exit" />
+                <ScalarProperty Name="Sales_Podium" ColumnName="Sales Podium" />
+                <ScalarProperty Name="Sales_VLO" ColumnName="Sales VLO" />
+                <ScalarProperty Name="Sales_Captain" ColumnName="Sales Captain" />
+                <ScalarProperty Name="Sales_Salesmen" ColumnName="Sales Salesmen" />
+                <ScalarProperty Name="Sales_Log" ColumnName="Sales Log" />
+                <ScalarProperty Name="Gifts_Receipts_Authorized" ColumnName="Gifts Receipts Authorized" />
+                <ScalarProperty Name="Gifts_Receipts_Host" ColumnName="Gifts Receipts Host" />
+                <ScalarProperty Name="Gifts_Receipts_PR" ColumnName="Gifts Receipts PR" />
+                <ScalarProperty Name="Gifts_Receipts_Payments" ColumnName="Gifts Receipts Payments" />
+                <ScalarProperty Name="Gifts_Receipts_Log" ColumnName="Gifts Receipts Log" />
+                <ScalarProperty Name="Meal_Tickets" ColumnName="Meal Tickets" />
+                <ScalarProperty Name="Exchange_Rate_Log" ColumnName="Exchange Rate Log" />
+                <ScalarProperty Name="Warehouse_Movements" ColumnName="Warehouse Movements" />
+                <ScalarProperty Name="PR_Notes" ColumnName="PR Notes" />
+                <ScalarProperty Name="Logins_Log" ColumnName="Logins Log" />
+                <ScalarProperty Name="Assistance" ColumnName="Assistance" />
+                <ScalarProperty Name="Days_Off" ColumnName="Days Off" />
+                <ScalarProperty Name="Efficiency_Salesmen" ColumnName="Efficiency Salesmen" />
+                <ScalarProperty Name="Places_Access" ColumnName="Places Access" />
+                <ScalarProperty Name="Roles" ColumnName="Roles" />
+                <ScalarProperty Name="Permissions" ColumnName="Permissions" />
+                <ScalarProperty Name="Personnel_Liner" ColumnName="Personnel Liner" />
+                <ScalarProperty Name="Posts_Log" ColumnName="Posts Log" />
+                <ScalarProperty Name="Teams_Log" ColumnName="Teams Log" />
+                <ScalarProperty Name="Teams_Guest_Services" ColumnName="Teams Guest Services" />
+                <ScalarProperty Name="Teams_Salesmen" ColumnName="Teams Salesmen" />
+                <ScalarProperty Name="Gifts_Log" ColumnName="Gifts Log" />
+                <ScalarProperty Name="Lead_Sources" ColumnName="Lead Sources" />
+                <ScalarProperty Name="Sales_Rooms" ColumnName="Sales Rooms" />
+                <ScalarProperty Name="Sales_Rooms_Log" ColumnName="Sales Rooms Log" />
+                <ScalarProperty Name="Configurations" ColumnName="Configurations" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_UpdatePersonnelId" FunctionName="IMModel.Store.USP_OR_UpdatePersonnelId" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
