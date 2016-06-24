@@ -6431,6 +6431,10 @@
         <Function Name="USP_OR_InsertExchangeRate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CurrentDate" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="USP_OR_IsUsedGuestPromotion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+          <Parameter Name="Gift" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_Login" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LoginType" Type="tinyint" Mode="In" />
           <Parameter Name="User" Type="varchar" Mode="In" />
@@ -17929,11 +17933,15 @@
           <Parameter Name="Guest" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetPersonnelStatistics" ReturnType="Collection(IMModel.PersonnelStatistics)">
-            <Parameter Name="User" Mode="In" Type="String" />
+          <Parameter Name="User" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_UpdatePersonnelId">
             <Parameter Name="Old" Mode="In" Type="String" />
             <Parameter Name="New" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_IsUsedGuestPromotion" ReturnType="Collection(Int32)">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Gift" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -30035,6 +30043,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="USP_OR_UpdatePersonnelId" FunctionName="IMModel.Store.USP_OR_UpdatePersonnelId" />
+          <FunctionImportMapping FunctionImportName="USP_OR_IsUsedGuestPromotion" FunctionName="IMModel.Store.USP_OR_IsUsedGuestPromotion" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
