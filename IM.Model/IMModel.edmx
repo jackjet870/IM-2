@@ -932,9 +932,13 @@
           <Property Name="guPresentedInvitation" Type="bit" />
           <Property Name="guLastNameOriginal" Type="varchar" MaxLength="65" />
           <Property Name="guFirstNameOriginal" Type="varchar" MaxLength="40" />
+          <Property Name="guLiner3" Type="varchar" MaxLength="10" />
+          <Property Name="guFTM1" Type="varchar" MaxLength="10" />
+          <Property Name="guFTM2" Type="varchar" MaxLength="10" />
           <Property Name="guFTB1" Type="varchar" MaxLength="10" />
           <Property Name="guFTB2" Type="varchar" MaxLength="10" />
-          <Property Name="guFTB3" Type="varchar" MaxLength="10" />
+          <Property Name="guCloser4" Type="varchar" MaxLength="10" />
+          <Property Name="guExit3" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="GuestsAdditional">
           <Key>
@@ -1821,9 +1825,13 @@
           <Property Name="saNewAmountWithVAT" Type="money" Nullable="false" />
           <Property Name="saGrossAmountWithVAT" Type="money" Nullable="false" />
           <Property Name="saVATRate" Type="money" />
+          <Property Name="saLiner3" Type="varchar" MaxLength="10" />
+          <Property Name="saFTM1" Type="varchar" MaxLength="10" />
+          <Property Name="saFTM2" Type="varchar" MaxLength="10" />
           <Property Name="saFTB1" Type="varchar" MaxLength="10" />
           <Property Name="saFTB2" Type="varchar" MaxLength="10" />
-          <Property Name="saFTB3" Type="varchar" MaxLength="10" />
+          <Property Name="saCloser4" Type="varchar" MaxLength="10" />
+          <Property Name="saExit3" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="SalesAmountRanges">
           <Key>
@@ -3641,6 +3649,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Guests_Personnel_Closer4">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guCloser4" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Guests_Personnel_CloserCaptain1">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
           <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
@@ -3689,6 +3709,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Guests_Personnel_Exit3">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guExit3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Guests_Personnel_ExitHost">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
           <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
@@ -3725,7 +3757,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Guests_Personnel_FrontToBack3">
+        <Association Name="FK_Guests_Personnel_FrontToMiddle1">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
           <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3733,7 +3765,19 @@
               <PropertyRef Name="peID" />
             </Principal>
             <Dependent Role="Guests">
-              <PropertyRef Name="guFTB3" />
+              <PropertyRef Name="guFTM1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_FrontToMiddle2">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guFTM2" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3770,6 +3814,18 @@
             </Principal>
             <Dependent Role="Guests">
               <PropertyRef Name="guLiner2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Liner3">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="guLiner3" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4913,6 +4969,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Sales_Personnel_Closer4">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="saCloser4" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Sales_Personnel_CloserCaptain">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
           <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
@@ -4949,6 +5017,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Sales_Personnel_Exit3">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="saExit3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Sales_Personnel_FrontToBack1">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
           <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
@@ -4973,7 +5053,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Sales_Personnel_FrontToBack3">
+        <Association Name="FK_Sales_Personnel_FrontToMiddle1">
           <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
           <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
           <ReferentialConstraint>
@@ -4981,7 +5061,19 @@
               <PropertyRef Name="peID" />
             </Principal>
             <Dependent Role="Sales">
-              <PropertyRef Name="saFTB3" />
+              <PropertyRef Name="saFTM1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sales_Personnel_FrontToMiddle2">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="saFTM2" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5006,6 +5098,18 @@
             </Principal>
             <Dependent Role="Sales">
               <PropertyRef Name="saLiner2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sales_Personnel_Liner3">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="saLiner3" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8139,6 +8243,10 @@
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Guests" EntitySet="Guests" />
           </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Closer4" Association="Self.FK_Guests_Personnel_Closer4">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
           <AssociationSet Name="FK_Guests_Personnel_CloserCaptain1" Association="Self.FK_Guests_Personnel_CloserCaptain1">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Guests" EntitySet="Guests" />
@@ -8155,6 +8263,10 @@
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Guests" EntitySet="Guests" />
           </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Exit3" Association="Self.FK_Guests_Personnel_Exit3">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
           <AssociationSet Name="FK_Guests_Personnel_ExitHost" Association="Self.FK_Guests_Personnel_ExitHost">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Guests" EntitySet="Guests" />
@@ -8167,7 +8279,11 @@
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Guests" EntitySet="Guests" />
           </AssociationSet>
-          <AssociationSet Name="FK_Guests_Personnel_FrontToBack3" Association="Self.FK_Guests_Personnel_FrontToBack3">
+          <AssociationSet Name="FK_Guests_Personnel_FrontToMiddle1" Association="Self.FK_Guests_Personnel_FrontToMiddle1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_FrontToMiddle2" Association="Self.FK_Guests_Personnel_FrontToMiddle2">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Guests" EntitySet="Guests" />
           </AssociationSet>
@@ -8180,6 +8296,10 @@
             <End Role="Guests" EntitySet="Guests" />
           </AssociationSet>
           <AssociationSet Name="FK_Guests_Personnel_Liner2" Association="Self.FK_Guests_Personnel_Liner2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Liner3" Association="Self.FK_Guests_Personnel_Liner3">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Guests" EntitySet="Guests" />
           </AssociationSet>
@@ -8563,6 +8683,10 @@
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Sales" EntitySet="Sales" />
           </AssociationSet>
+          <AssociationSet Name="FK_Sales_Personnel_Closer4" Association="Self.FK_Sales_Personnel_Closer4">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
           <AssociationSet Name="FK_Sales_Personnel_CloserCaptain" Association="Self.FK_Sales_Personnel_CloserCaptain">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Sales" EntitySet="Sales" />
@@ -8575,6 +8699,10 @@
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Sales" EntitySet="Sales" />
           </AssociationSet>
+          <AssociationSet Name="FK_Sales_Personnel_Exit3" Association="Self.FK_Sales_Personnel_Exit3">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
           <AssociationSet Name="FK_Sales_Personnel_FrontToBack1" Association="Self.FK_Sales_Personnel_FrontToBack1">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Sales" EntitySet="Sales" />
@@ -8583,7 +8711,11 @@
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Sales" EntitySet="Sales" />
           </AssociationSet>
-          <AssociationSet Name="FK_Sales_Personnel_FrontToBack3" Association="Self.FK_Sales_Personnel_FrontToBack3">
+          <AssociationSet Name="FK_Sales_Personnel_FrontToMiddle1" Association="Self.FK_Sales_Personnel_FrontToMiddle1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Personnel_FrontToMiddle2" Association="Self.FK_Sales_Personnel_FrontToMiddle2">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Sales" EntitySet="Sales" />
           </AssociationSet>
@@ -8592,6 +8724,10 @@
             <End Role="Sales" EntitySet="Sales" />
           </AssociationSet>
           <AssociationSet Name="FK_Sales_Personnel_Liner2" Association="Self.FK_Sales_Personnel_Liner2">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Personnel_Liner3" Association="Self.FK_Sales_Personnel_Liner3">
             <End Role="Personnel" EntitySet="Personnel" />
             <End Role="Sales" EntitySet="Sales" />
           </AssociationSet>
@@ -9970,10 +10106,18 @@
           <NavigationProperty Name="GuestsGroups" Relationship="Self.GuestsGroupsIntegrants" FromRole="Guests" ToRole="GuestsGroups" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="guFTB1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="guFTB2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="guFTB3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Personnel_FTB1" Relationship="IMModel.FK_Guests_Personnel_FrontToBack1" FromRole="Guest" ToRole="Personnel" />
           <NavigationProperty Name="Personnel_FTB2" Relationship="IMModel.FK_Guests_Personnel_FrontToBack2" FromRole="Guest" ToRole="Personnel" />
-          <NavigationProperty Name="Personnel_FTB3" Relationship="IMModel.FK_Guests_Personnel_FrontToBack3" FromRole="Guest" ToRole="Personnel" />
+          <Property Name="guLiner3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guFTM1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guFTM2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guCloser4" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guExit3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Personnel_Closer4" Relationship="IMModel.FK_Guests_Personnel_Closer4" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_Exit3" Relationship="IMModel.FK_Guests_Personnel_Exit3" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FTM1" Relationship="IMModel.FK_Guests_Personnel_FrontToMiddle1" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FTM2" Relationship="IMModel.FK_Guests_Personnel_FrontToMiddle2" FromRole="Guest" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_Liner3" Relationship="IMModel.FK_Guests_Personnel_Liner3" FromRole="Guest" ToRole="Personnel" />
         </EntityType>
         <EntityType Name="GuestCreditCard">
           <Key>
@@ -10717,10 +10861,18 @@
           <NavigationProperty Name="BookingDeposits" Relationship="IMModel.FK_BookingDeposits_Personnel_CxC" FromRole="Personnel" ToRole="BookingDeposit" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="Guests_FTB1" Relationship="IMModel.FK_Guests_Personnel_FrontToBack1" FromRole="Personnel" ToRole="Guest" />
           <NavigationProperty Name="Guests_FTB2" Relationship="IMModel.FK_Guests_Personnel_FrontToBack2" FromRole="Personnel" ToRole="Guest" />
-          <NavigationProperty Name="Guests_FTB3" Relationship="IMModel.FK_Guests_Personnel_FrontToBack3" FromRole="Personnel" ToRole="Guest" />
           <NavigationProperty Name="Sales_FTB1" Relationship="IMModel.FK_Sales_Personnel_FrontToBack1" FromRole="Personnel" ToRole="Sale" />
           <NavigationProperty Name="Sales_FTB2" Relationship="IMModel.FK_Sales_Personnel_FrontToBack2" FromRole="Personnel" ToRole="Sale" />
-          <NavigationProperty Name="Sales_FTB3" Relationship="IMModel.FK_Sales_Personnel_FrontToBack3" FromRole="Personnel" ToRole="Sale" />
+          <NavigationProperty Name="Guests_Closer4" Relationship="IMModel.FK_Guests_Personnel_Closer4" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests_Exit3" Relationship="IMModel.FK_Guests_Personnel_Exit3" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests_FTM1" Relationship="IMModel.FK_Guests_Personnel_FrontToMiddle1" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests_FTM2" Relationship="IMModel.FK_Guests_Personnel_FrontToMiddle2" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Guests_Liner3" Relationship="IMModel.FK_Guests_Personnel_Liner3" FromRole="Personnel" ToRole="Guest" />
+          <NavigationProperty Name="Sales_Closer4" Relationship="IMModel.FK_Sales_Personnel_Closer4" FromRole="Personnel" ToRole="Sale" />
+          <NavigationProperty Name="Sales_Exit3" Relationship="IMModel.FK_Sales_Personnel_Exit3" FromRole="Personnel" ToRole="Sale" />
+          <NavigationProperty Name="Sales_FTM1" Relationship="IMModel.FK_Sales_Personnel_FrontToMiddle1" FromRole="Personnel" ToRole="Sale" />
+          <NavigationProperty Name="Sales_FTM2" Relationship="IMModel.FK_Sales_Personnel_FrontToMiddle2" FromRole="Personnel" ToRole="Sale" />
+          <NavigationProperty Name="Sales_Liner3" Relationship="IMModel.FK_Sales_Personnel_Liner3" FromRole="Personnel" ToRole="Sale" />
         </EntityType>
         <EntityType Name="PersonnelPermission">
           <Key>
@@ -11019,10 +11171,18 @@
           <NavigationProperty Name="SalesSalesmen" Relationship="Self.FK_SalesSalesmen_Sales" FromRole="Sales" ToRole="SalesSalesmen" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <Property Name="saFTB1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="saFTB2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="saFTB3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Personnel_FTB1" Relationship="IMModel.FK_Sales_Personnel_FrontToBack1" FromRole="Sale" ToRole="Personnel" />
           <NavigationProperty Name="Personnel_FTB2" Relationship="IMModel.FK_Sales_Personnel_FrontToBack2" FromRole="Sale" ToRole="Personnel" />
-          <NavigationProperty Name="Personnel_FTB3" Relationship="IMModel.FK_Sales_Personnel_FrontToBack3" FromRole="Sale" ToRole="Personnel" />
+          <Property Name="saLiner3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="saFTM1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="saFTM2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="saCloser4" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="saExit3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Personnel_Closer4" Relationship="IMModel.FK_Sales_Personnel_Closer4" FromRole="Sale" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_Exit3" Relationship="IMModel.FK_Sales_Personnel_Exit3" FromRole="Sale" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FTM1" Relationship="IMModel.FK_Sales_Personnel_FrontToMiddle1" FromRole="Sale" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_FTM2" Relationship="IMModel.FK_Sales_Personnel_FrontToMiddle2" FromRole="Sale" ToRole="Personnel" />
+          <NavigationProperty Name="Personnel_Liner3" Relationship="IMModel.FK_Sales_Personnel_Liner3" FromRole="Sale" ToRole="Personnel" />
         </EntityType>
         <EntityType Name="SalesAmountRange">
           <Key>
@@ -17595,19 +17755,11 @@
             <End Role="Personnel" EntitySet="Personnels" />
             <End Role="Guest" EntitySet="Guests" />
           </AssociationSet>
-          <AssociationSet Name="FK_Guests_Personnel_FrontToBack3" Association="IMModel.FK_Guests_Personnel_FrontToBack3">
-            <End Role="Personnel" EntitySet="Personnels" />
-            <End Role="Guest" EntitySet="Guests" />
-          </AssociationSet>
           <AssociationSet Name="FK_Sales_Personnel_FrontToBack1" Association="IMModel.FK_Sales_Personnel_FrontToBack1">
             <End Role="Personnel" EntitySet="Personnels" />
             <End Role="Sale" EntitySet="Sales" />
           </AssociationSet>
           <AssociationSet Name="FK_Sales_Personnel_FrontToBack2" Association="IMModel.FK_Sales_Personnel_FrontToBack2">
-            <End Role="Personnel" EntitySet="Personnels" />
-            <End Role="Sale" EntitySet="Sales" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Sales_Personnel_FrontToBack3" Association="IMModel.FK_Sales_Personnel_FrontToBack3">
             <End Role="Personnel" EntitySet="Personnels" />
             <End Role="Sale" EntitySet="Sales" />
           </AssociationSet>
@@ -17943,6 +18095,46 @@
             <Parameter Name="Receipt" Mode="In" Type="Int32" />
             <Parameter Name="Gift" Mode="In" Type="String" />
           </FunctionImport>
+          <AssociationSet Name="FK_Guests_Personnel_Closer4" Association="IMModel.FK_Guests_Personnel_Closer4">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Exit3" Association="IMModel.FK_Guests_Personnel_Exit3">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_FrontToMiddle1" Association="IMModel.FK_Guests_Personnel_FrontToMiddle1">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_FrontToMiddle2" Association="IMModel.FK_Guests_Personnel_FrontToMiddle2">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Personnel_Liner3" Association="IMModel.FK_Guests_Personnel_Liner3">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Guest" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Personnel_Closer4" Association="IMModel.FK_Sales_Personnel_Closer4">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Sale" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Personnel_Exit3" Association="IMModel.FK_Sales_Personnel_Exit3">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Sale" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Personnel_FrontToMiddle1" Association="IMModel.FK_Sales_Personnel_FrontToMiddle1">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Sale" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Personnel_FrontToMiddle2" Association="IMModel.FK_Sales_Personnel_FrontToMiddle2">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Sale" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sales_Personnel_Liner3" Association="IMModel.FK_Sales_Personnel_Liner3">
+            <End Role="Personnel" EntitySet="Personnels" />
+            <End Role="Sale" EntitySet="Sales" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -21415,18 +21607,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Guests_Personnel_FrontToBack3">
-          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
-          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Personnel">
-              <PropertyRef Name="peID" />
-            </Principal>
-            <Dependent Role="Guest">
-              <PropertyRef Name="guFTB3" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Sales_Personnel_FrontToBack1">
           <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
           <End Type="IMModel.Sale" Role="Sale" Multiplicity="*" />
@@ -21448,18 +21628,6 @@
             </Principal>
             <Dependent Role="Sale">
               <PropertyRef Name="saFTB2" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Sales_Personnel_FrontToBack3">
-          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
-          <End Type="IMModel.Sale" Role="Sale" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Personnel">
-              <PropertyRef Name="peID" />
-            </Principal>
-            <Dependent Role="Sale">
-              <PropertyRef Name="saFTB3" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -22327,6 +22495,126 @@
           <Property Type="Int32" Name="Sales_Rooms_Log" Nullable="true" />
           <Property Type="Int32" Name="Configurations" Nullable="true" />
         </ComplexType>
+        <Association Name="FK_Guests_Personnel_Closer4">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guCloser4" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Exit3">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guExit3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_FrontToMiddle1">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guFTM1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_FrontToMiddle2">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guFTM2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Personnel_Liner3">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Guest" Role="Guest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Guest">
+              <PropertyRef Name="guLiner3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sales_Personnel_Closer4">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Sale" Role="Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="saCloser4" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sales_Personnel_Exit3">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Sale" Role="Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="saExit3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sales_Personnel_FrontToMiddle1">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Sale" Role="Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="saFTM1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sales_Personnel_FrontToMiddle2">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Sale" Role="Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="saFTM2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sales_Personnel_Liner3">
+          <End Type="IMModel.Personnel" Role="Personnel" Multiplicity="0..1" />
+          <End Type="IMModel.Sale" Role="Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="peID" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="saLiner3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23027,7 +23315,11 @@
           <EntitySetMapping Name="Guests">
             <EntityTypeMapping TypeName="IMModel.Guest">
               <MappingFragment StoreEntitySet="Guests">
-                <ScalarProperty Name="guFTB3" ColumnName="guFTB3" />
+                <ScalarProperty Name="guExit3" ColumnName="guExit3" />
+                <ScalarProperty Name="guCloser4" ColumnName="guCloser4" />
+                <ScalarProperty Name="guFTM2" ColumnName="guFTM2" />
+                <ScalarProperty Name="guFTM1" ColumnName="guFTM1" />
+                <ScalarProperty Name="guLiner3" ColumnName="guLiner3" />
                 <ScalarProperty Name="guFTB2" ColumnName="guFTB2" />
                 <ScalarProperty Name="guFTB1" ColumnName="guFTB1" />
                 <ScalarProperty Name="guID" ColumnName="guID" />
@@ -23966,7 +24258,11 @@
           <EntitySetMapping Name="Sales">
             <EntityTypeMapping TypeName="IMModel.Sale">
               <MappingFragment StoreEntitySet="Sales">
-                <ScalarProperty Name="saFTB3" ColumnName="saFTB3" />
+                <ScalarProperty Name="saExit3" ColumnName="saExit3" />
+                <ScalarProperty Name="saCloser4" ColumnName="saCloser4" />
+                <ScalarProperty Name="saFTM2" ColumnName="saFTM2" />
+                <ScalarProperty Name="saFTM1" ColumnName="saFTM1" />
+                <ScalarProperty Name="saLiner3" ColumnName="saLiner3" />
                 <ScalarProperty Name="saFTB2" ColumnName="saFTB2" />
                 <ScalarProperty Name="saFTB1" ColumnName="saFTB1" />
                 <ScalarProperty Name="saID" ColumnName="saID" />

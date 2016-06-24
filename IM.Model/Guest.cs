@@ -238,7 +238,11 @@ namespace IM.Model
         public string guFirstNameOriginal { get; set; }
         public string guFTB1 { get; set; }
         public string guFTB2 { get; set; }
-        public string guFTB3 { get; set; }
+        public string guLiner3 { get; set; }
+        public string guFTM1 { get; set; }
+        public string guFTM2 { get; set; }
+        public string guCloser4 { get; set; }
+        public string guExit3 { get; set; }
     
         public virtual Agency Agency { internal get; set; }
         public virtual Club Club { internal get; set; }
@@ -303,6 +307,10 @@ namespace IM.Model
         public virtual ICollection<GuestsGroup> GuestsGroups { get; set; }
         public virtual Personnel Personnel_FTB1 { get; set; }
         public virtual Personnel Personnel_FTB2 { get; set; }
-        public virtual Personnel Personnel_FTB3 { get; set; }
+        public virtual Personnel Personnel_Closer4 { get; set; }
+        public virtual Personnel Personnel_Exit3 { get; set; }
+        public virtual Personnel Personnel_FTM1 { get; set; }
+        public virtual Personnel Personnel_FTM2 { get; set; }
+        public virtual Personnel Personnel_Liner3 { get; set; }
     }
 }

@@ -90,7 +90,11 @@ namespace IM.Model
         public Nullable<decimal> saVATRate { get; set; }
         public string saFTB1 { get; set; }
         public string saFTB2 { get; set; }
-        public string saFTB3 { get; set; }
+        public string saLiner3 { get; set; }
+        public string saFTM1 { get; set; }
+        public string saFTM2 { get; set; }
+        public string saCloser4 { get; set; }
+        public string saExit3 { get; set; }
     
         public virtual Guest Guest { internal get; set; }
         public virtual LeadSource LeadSource { internal get; set; }
@@ -129,6 +133,10 @@ namespace IM.Model
         public virtual ICollection<SalesSalesman> SalesSalesmen { internal get; set; }
         public virtual Personnel Personnel_FTB1 { get; set; }
         public virtual Personnel Personnel_FTB2 { get; set; }
-        public virtual Personnel Personnel_FTB3 { get; set; }
+        public virtual Personnel Personnel_Closer4 { get; set; }
+        public virtual Personnel Personnel_Exit3 { get; set; }
+        public virtual Personnel Personnel_FTM1 { get; set; }
+        public virtual Personnel Personnel_FTM2 { get; set; }
+        public virtual Personnel Personnel_Liner3 { get; set; }
     }
 }

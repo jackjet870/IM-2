@@ -449,6 +449,16 @@
         <AssociationConnector Association="IMModel.FK_Sales_Personnel_FrontToBack3" />
         <EntityTypeShape EntityType="IMModel.DisputeStatus" Width="1.5" PointX="5.375" PointY="13.875" />
         <AssociationConnector Association="IMModel.FK_BookingDeposits_bdds" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Closer4" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Exit3" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_FrontToMiddle1" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_FrontToMiddle2" />
+        <AssociationConnector Association="IMModel.FK_Guests_Personnel_Liner3" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_Closer4" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_Exit3" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_FrontToMiddle1" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_FrontToMiddle2" />
+        <AssociationConnector Association="IMModel.FK_Sales_Personnel_Liner3" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

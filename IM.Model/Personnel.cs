@@ -137,10 +137,18 @@ namespace IM.Model
             this.BookingDeposits = new HashSet<BookingDeposit>();
             this.Guests_FTB1 = new HashSet<Guest>();
             this.Guests_FTB2 = new HashSet<Guest>();
-            this.Guests_FTB3 = new HashSet<Guest>();
             this.Sales_FTB1 = new HashSet<Sale>();
             this.Sales_FTB2 = new HashSet<Sale>();
-            this.Sales_FTB3 = new HashSet<Sale>();
+            this.Guests_Closer4 = new HashSet<Guest>();
+            this.Guests_Exit3 = new HashSet<Guest>();
+            this.Guests_FTM1 = new HashSet<Guest>();
+            this.Guests_FTM2 = new HashSet<Guest>();
+            this.Guests_Liner3 = new HashSet<Guest>();
+            this.Sales_Closer4 = new HashSet<Sale>();
+            this.Sales_Exit3 = new HashSet<Sale>();
+            this.Sales_FTM1 = new HashSet<Sale>();
+            this.Sales_FTM2 = new HashSet<Sale>();
+            this.Sales_Liner3 = new HashSet<Sale>();
         }
     
         public string peID { get; set; }
@@ -404,12 +412,28 @@ namespace IM.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Guest> Guests_FTB2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Guest> Guests_FTB3 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sale> Sales_FTB1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sale> Sales_FTB2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sale> Sales_FTB3 { get; set; }
+        public virtual ICollection<Guest> Guests_Closer4 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Guest> Guests_Exit3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Guest> Guests_FTM1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Guest> Guests_FTM2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Guest> Guests_Liner3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sale> Sales_Closer4 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sale> Sales_Exit3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sale> Sales_FTM1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sale> Sales_FTM2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sale> Sales_Liner3 { get; set; }
     }
 }
