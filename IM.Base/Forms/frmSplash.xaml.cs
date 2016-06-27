@@ -1,5 +1,8 @@
 ﻿using IM.Model.Helpers;
+using System.Threading.Tasks;
 using System.Windows;
+using IM.BusinessRules.BR;
+
 
 namespace IM.Base.Forms
 {
@@ -27,18 +30,29 @@ namespace IM.Base.Forms
     public frmSplash(string title)
     {
       InitializeComponent();
-
-      this.Title = title;
+      Title = title;
       lblTitle.Content = string.Format("Intelligence Marketing - {0}", title);
-
-      // desplegamos el nombre del servidor y de la base de datos
-      lblServerName.Content = ConnectionHelper.ServerName;
-      lblDatabaseName.Content = ConnectionHelper.DatabaseName;
     }
 
     #endregion Constructores y destructores
 
     #region Metodos
+
+    #region Load Window
+    /// <summary>
+    /// Se agrego para implementar metodos async a la hora de consultar los datos del servidor
+    /// </summary>
+    /// <history>
+    /// [erosado] 06/06/2016  Created,
+    /// </history>
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+      // desplegamos el nombre del servidor y de la base de datos
+      var serverInformation = await BRHelpers.GetServerInformation();
+      lblServerName.Content = serverInformation[0];
+      lblDatabaseName.Content = serverInformation[1];
+    }
+    #endregion
 
     #region ShowLogin
 
@@ -93,5 +107,6 @@ namespace IM.Base.Forms
     #endregion ShowWindow
 
     #endregion Metodos
+
   }
 }

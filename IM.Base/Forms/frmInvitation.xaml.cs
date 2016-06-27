@@ -3,9 +3,11 @@ using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Enums;
 using IM.Model.Classes;
-using System.Collections.Generic;
 using IM.Model;
+using IM.Base.Classes;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Controls;
 
 namespace IM.Base.Forms
 {
@@ -15,47 +17,42 @@ namespace IM.Base.Forms
   public partial class frmInvitation : Window
   {
     #region Propiedades, Atributos
-    public readonly UserData _user;
+    public UserData _user;
     private readonly EnumInvitationType _invitationType;
     private readonly int _guestId;
     private readonly EnumInvitationMode _invitationMode;
-    private readonly bool _allowSchedule;
-    List<LanguageShort> _languagesCat;
-    List<MaritalStatus> _maritalStatusCat;
-    List<PersonnelShort> _personnelCat;
-    List<Hotel> _hotelsCat;
-    List<AgencyShort> _agenciesCat;
-    List<CountryShort> _countriesCat;
-    List<GuestStatusType> _guestStatusTypesCat;
-    List<Currency> _currenciesCat;
-    List<PaymentType> _paymenTypesCat;
-    List<PaymentPlace> _paymentPlacesCat;
-    List<CreditCardType> _creditCardTypesCat;
-    List<GiftShort> _giftsCat;
-    List<SalesRoomShort> _salesRoomsCat;
-
-    public ExecuteCommandHelper LoadCombo { get; set; }
-
     #endregion
     public frmInvitation(EnumInvitationType InvitationType, UserData User, int GuestId, EnumInvitationMode InvitationMode, bool AllowReschedule = true)
     {
-      _invitationType = InvitationType;
-      _user = User;
-      _guestId = GuestId;
-      _invitationMode = InvitationMode;
-      InitializeComponent();
-
-      // LoadCombo = new ExecuteCommandHelper(); sirve para cargar la informacion deseada al preciosar combinacion de teclas
+      try
+      {
+        var catObj = new CommonCatObject(User, GuestId, InvitationMode);
+        _invitationType = InvitationType;
+        _guestId = GuestId;
+        _user = User;
+        _invitationMode = InvitationMode;
+        DataContext = catObj;
+        InitializeComponent();
+        
+      }
+      catch (System.Exception ex)
+      {
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Invitation");
+      }
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      LoadCommonCatalog();
-      ControlsConfiguration(_invitationType);//Cargamos la UI dependiendo del tipo de Invitacion
-
+      //Cargamos la UI dependiendo del tipo de Invitacion
+      ControlsConfiguration(_invitationType);
     }
 
-    #region Metodos
+    private void imgButtonSave_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+      var j = DataContext as CommonCatObject;
+      UIHelper.ShowMessage(j.InvitationGiftList.Count.ToString());
+    }
+    #region Metodos Privados
     /// <summary>
     /// Prepara los controles para cada invitacion
     /// </summary>
@@ -63,6 +60,9 @@ namespace IM.Base.Forms
     /// [erosado] 16/05/2016  Created
     private void ControlsConfiguration(EnumInvitationType _invitationType)
     {
+      txtUserName.Text = _user.User.peN;
+      txtPlaces.Text = _invitationType == EnumInvitationType.Host ? _user.SalesRoom.srN : _user.Location.loN;
+
       switch (_invitationType)
       {
         case EnumInvitationType.InHouse:
@@ -76,140 +76,12 @@ namespace IM.Base.Forms
           break;
         case EnumInvitationType.External:
           ExternalControlsConfig();
+          EnableControlsExternal();
           break;
         default:
           break;
       }
     }
-
-    private void LoadCommonCatalog()
-    {
-      try
-      {
-        txtUserName.Text = _user.User.peN;
-        //txtUserName.Text = _user.Location ??  _user.SalesRoom.srN  ;
-        loadLenguages();
-        loadMaritalStatus();
-        loadPersonnel();
-        loadHotels();
-        loadAgencies();
-        loadCountries();
-        loadGuestStatusType();
-        loadPaymentTypes();
-        loadPaymentPlaces();
-        loadCreditCardTypes();
-      }
-      catch (System.Exception ex)
-      {
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Invitation");
-      }
-
-    }
-    #endregion
-
-    #region  LoadCombos
-    #region Languages
-    private async void loadLenguages()
-    {
-      var _languages = await BRLanguages.GetLanguages(1);
-    }
-    #endregion
-
-    #region MaritalStatus
-    private async void loadMaritalStatus()
-    {
-      _maritalStatusCat = await BRMaritalStatus.GetMaritalStatus(1);
-      cmbMaritalStatusGuest1.ItemsSource =
-        cmbMaritalStatusGuest2.ItemsSource = _maritalStatusCat;
-    }
-    #endregion
-
-    #region Personnel
-    private async void loadPersonnel()
-    {
-      _personnelCat = await BRPersonnel.GetPersonnel(_user.User.peID, roles: "PR");
-      cmbPR.ItemsSource = cmbPRContract.ItemsSource = _personnelCat;
-    }
-    #endregion
-
-    #region Hotels
-    private async void loadHotels()
-    {
-      _hotelsCat = await BRHotels.GetHotels(nStatus: 1);
-      cmbOtherInfoHotel.ItemsSource =
-      cmbResorts.ItemsSource = _hotelsCat;
-    }
-    #endregion
-
-    #region Agencies
-    private async void loadAgencies()
-    {
-      _agenciesCat = await BRAgencies.GetAgencies(1);
-      cmbOtherInfoAgency.ItemsSource = _agenciesCat;
-    }
-    #endregion
-
-    #region Countries
-    private async void loadCountries()
-    {
-      _countriesCat = await BRCountries.GetCountries(1);
-      cmbOtherInfoCountry.ItemsSource = _countriesCat;
-    }
-    #endregion
-
-    #region GuestStatusType
-    private async void loadGuestStatusType()
-    {
-      _guestStatusTypesCat = await BRGuests.GetGuestStatusType(1);
-      cmbGuestStatus.ItemsSource = _guestStatusTypesCat;
-    }
-    #endregion
-
-    #region Currencies
-    private async void loadCurrencies()
-    {
-      _currenciesCat = await BRCurrencies.GetCurrencies(nStatus: 1);
-      cmbCurrency.ItemsSource = _currenciesCat;
-    }
-    #endregion
-
-    #region PaymentTypes
-    private async void loadPaymentTypes()
-    {
-      _paymenTypesCat = await BRPaymentTypes.GetPaymentTypes(1);
-      cmbPaymentType.ItemsSource = _guestStatusTypesCat;
-    }
-    #endregion
-
-    #region PaymentPlaces
-    private async void loadPaymentPlaces()
-    {
-      _paymentPlacesCat = await BRPaymentPlaces.GetPaymentPlaces();
-
-    }
-    #endregion
-
-    #region CreditCardTypes
-    private async void loadCreditCardTypes()
-    {
-      _creditCardTypesCat = await BRCreditCardTypes.GetCreditCardTypes();
-    }
-    #endregion
-
-    #region Gifts
-    private async void loadGifts()
-    {
-      _giftsCat = await BRGifts.GetGiftsShort(_user.Location == null ? "ALL" : _user.Location.loID, 1);
-    }
-    #endregion
-
-    #region SalesRooms
-    private async void loadSalesRooms()
-    {
-      _salesRoomsCat = await BRSalesRooms.GetSalesRooms(0);
-    }
-    #endregion
-
     #endregion
 
     #region ControlsConfig
@@ -240,7 +112,6 @@ namespace IM.Base.Forms
       btnReschedule.Visibility = Visibility.Collapsed;
       btnRebook.Visibility = Visibility.Collapsed;
       stkRescheduleDate.Visibility = Visibility.Collapsed;
-      stkRescheduleTime.Visibility = Visibility.Collapsed;
       chkReschedule.Visibility = Visibility.Collapsed;
       stkFlightNumber.Visibility = Visibility.Visible;
       brdRoomsQtyAndElectronicPurse.Visibility = Visibility.Collapsed;
@@ -272,6 +143,113 @@ namespace IM.Base.Forms
     }
 
     #endregion
-         
+
+    private void EnableControlsExternal()
+    {
+      #region Guest Information
+      txtGuid.IsEnabled =
+      txtReservationNumber.IsEnabled = false;
+      btnSearch.IsEnabled = true;
+      txtRebookRef.IsEnabled =
+      txtDate.IsEnabled =
+      txtTime.IsEnabled = false;
+      #endregion
+
+      #region Invitation Type & Languages
+      chkQuiniella.IsEnabled = true;
+      chkShow.IsEnabled =
+      chkInterval.IsEnabled = false;
+      cmbLanguage.IsEnabled = true;
+      #endregion
+
+      #region Profile Opera
+      txtIDOpera.IsEnabled =
+      txtLastNameOpera.IsEnabled =
+      txtFirstNameOpera.IsEnabled = false;
+      #endregion
+
+      #region Guest1 & Guest 2
+      txtLastNameGuest1.IsEnabled =
+      txtFirstNameGuest1.IsEnabled =
+      txtAgeGuest1.IsEnabled =
+      cmbMaritalStatusGuest1.IsEnabled =
+      txtOcuppationGuest1.IsEnabled =
+      txtEmailGuest1.IsEnabled = true;
+
+      txtLastNameGuest2.IsEnabled =
+      txtFirstNameGuest2.IsEnabled =
+      txtAgeGuest2.IsEnabled =
+      cmbMaritalStatusGuest2.IsEnabled =
+      txtOcuppationGuest2.IsEnabled =
+      txtEmailGuest2.IsEnabled = true;
+      #endregion
+
+      #region PR, SalesRoom, etc..
+      btnChange.IsEnabled =
+      btnReschedule.IsEnabled =
+      btnRebook.IsEnabled = false;
+      cmbPRContact.IsEnabled =
+      cmbPR.IsEnabled =
+      cmbSalesRooms.IsEnabled = true;
+      cmbLocation.IsEnabled = false;
+      chkBeforeIO.IsEnabled =
+      dtpBookDate.IsEnabled =
+      cbxBookTime.IsEnabled = true;
+      chkDirect.IsEnabled = false;
+      dtpRescheduleDate.IsEnabled =
+      cbxReschudeleTime.IsEnabled =
+      chkReschedule.IsEnabled = false;
+      #endregion
+
+      #region OtherInfo
+      txtOtherInfoComments.IsEnabled =
+      txtOtherInfoRoomNum.IsEnabled =
+      cmbOtherInfoHotel.IsEnabled =
+      cmbOtherInfoAgency.IsEnabled =
+      cmbOtherInfoCountry.IsEnabled =
+      txtOtherInfoPax.IsEnabled =
+      dtpOtherInfoArrivalD.IsEnabled =
+      dtpOtherInfoDepartureD.IsEnabled = true;
+      #endregion
+
+      #region GuestStatus
+      cmbGuestStatus.IsEnabled = true;
+      #endregion
+
+      #region Gifts
+      dtgGifts.IsEnabled = true;
+      txtGiftMaxAuth.IsReadOnly =
+      txtGiftTotalCost.IsReadOnly =
+      txtGiftTotalPrice.IsReadOnly = false;
+      #endregion
+
+      #region Deposits
+      dtgDeposits.IsEnabled =
+      txtBurned.IsEnabled =
+      cmbCurrency.IsEnabled =
+      cmbPaymentType.IsEnabled =
+      cmbResorts.IsEnabled = true;
+      #endregion
+
+      #region Credit Cards
+      txtCcCompany.IsEnabled = false;
+      dtgCCCompany.IsEnabled = true;
+      #endregion
+
+      #region Rooms Qty And ElectronicPurse
+      txtepAcount.IsEnabled = false;
+      #endregion
+
+    }
+
+    private void dtgGifts_CellEditEnding(object sender, System.Windows.Controls.DataGridCellEditEndingEventArgs e)
+    {
+      if (((TextBox)e.EditingElement).Text == "0")
+      {
+        UIHelper.ShowMessage("NO puede ser cero");
+      }
+
+      
+    }
   }
 }

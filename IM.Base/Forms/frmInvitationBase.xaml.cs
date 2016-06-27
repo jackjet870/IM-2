@@ -1070,7 +1070,7 @@ namespace IM.Base.Forms
     /// <returns>Boolean</returns>
     private async Task<bool> ValidateEdit()
     {
-      var login = new frmLogin(loginType: EnumLoginType.Normal, program: EnumProgram.Inhouse, validatePermission: false,modeSwitchLoginUser:true);
+      var login = new frmLogin(loginType: EnumLoginType.Normal, program: EnumProgram.Inhouse, validatePermission: false,switchLoginUserMode:true);
       if (_user.AutoSign)
       {
         login.UserData = _user;
@@ -1964,8 +1964,7 @@ namespace IM.Base.Forms
 
         chkResch.IsChecked = guest.guResch;
       }
-
-
+      
       if (_invitationType != EnumInvitationType.Animation && _invitationType != EnumInvitationType.Regen)
         chkBeforeInOut.IsChecked = guest.guAntesIO;
 
@@ -2258,7 +2257,6 @@ namespace IM.Base.Forms
       objInvitCreditCardViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("objInvitCreditCardViewSource")));
       objInvitCreditCardViewSource.Source = _lstObjInvitCreditCard;
     }
-
     /// Carga la información del Grid de los invitados extra
     /// </summary>
     private void LoadAdditionalInformartionGrid()

@@ -26,6 +26,8 @@ namespace IM.Base.Forms
     readonly bool _modeSwitchLoginUser;
     readonly bool _validatePermission;
     readonly bool _validateRole;
+    readonly bool _invitationMode;
+    string _invitationPlaceName;
     readonly EnumPermission _permission;
     readonly EnumPermisionLevel _permissionLevel;
     readonly EnumProgram _program;
@@ -57,7 +59,9 @@ namespace IM.Base.Forms
       EnumPermission permission = EnumPermission.None,
       EnumPermisionLevel permissionLevel = EnumPermisionLevel.None,
       EnumRole role = EnumRole.None,
-      bool modeSwitchLoginUser = false
+      bool switchLoginUserMode = false,
+      bool invitationMode = false,
+      string invitationPlaceName = ""
       )
     {
 
@@ -72,7 +76,9 @@ namespace IM.Base.Forms
       _permission = permission;
       _permissionLevel = permissionLevel;
       _role = role;
-      _modeSwitchLoginUser = modeSwitchLoginUser;
+      _modeSwitchLoginUser = switchLoginUserMode;
+      _invitationMode = invitationMode;
+      _invitationPlaceName = invitationPlaceName;
       CloseWindow = new ExecuteCommandHelper(x => btnCancelar_Click(this, null));
     }
 
@@ -298,8 +304,33 @@ namespace IM.Base.Forms
           }
           else { cmbPlace.SelectedIndex = 0; }
         }
+
+        if (_invitationMode)
+        {
+          cmbPlace.IsEnabled = false;
+          var lstPS = cmbPlace.ItemsSource as List<Item>;
+          int index = lstPS.FindIndex(x => x.Name.Equals(_invitationPlaceName));
+          if (index == -1)
+          {
+            UIHelper.ShowMessage("You do not have permissions on this location", MessageBoxImage.Exclamation, "Intelligence Marketing");
+          }
+          else
+          {
+            cmbPlace.SelectedIndex = index;
+          }
+        }
       }
-      else { cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found"; }
+      else
+      {
+        if (_invitationMode)
+        {
+          cmbPlace.IsEnabled = false; UIHelper.ShowMessage("You do not have permissions on this location", MessageBoxImage.Exclamation, "Intelligence Marketing"); ;
+        }
+        else
+        {
+          cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found";
+        }
+      }
     }
     #endregion
 
@@ -342,10 +373,33 @@ namespace IM.Base.Forms
             cmbPlace.SelectedIndex = 0;
           }
         }
+        if (_invitationMode)
+        {
+          cmbPlace.IsEnabled = false;
+          var lstPS = cmbPlace.ItemsSource as List<Item>;
+          int index = lstPS.FindIndex(x => x.Name.Equals(_invitationPlaceName));
+          if (index == -1)
+          {
+            UIHelper.ShowMessage("You do not have permissions on this location", MessageBoxImage.Exclamation, "Intelligence Marketing");
+          }
+          else
+          {
+            cmbPlace.SelectedIndex = index;
+          }
+        }
+
       }
       else
       {
-        cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found";
+        if (_invitationMode)
+        {
+          cmbPlace.IsEnabled = false; cmbPlace.Text = "You do not have permissions on this salesroom";
+        }
+        else
+        {
+          cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found";
+        }
+
       }
     }
     #endregion
@@ -519,15 +573,23 @@ namespace IM.Base.Forms
     /// [erosado] 30/04/2016 Created
     /// </history>
     private void ValidationLoginMode()
-    {
+      {
       if (_modeSwitchLoginUser) // SwitchUser
       {
-        if (UserData != null && UserData.AutoSign)
+        if (UserData != null && UserData.AutoSign) // AutoSign Activo
         {
-          // Se llenan los textBox de user y Password con informacion de UserData
-          txtUser.Text = UserData.User.peID;
-          txtPassword.Password = UserData.User.pePwd;
-          loadLoginControls(UserData.User.peID, true, false);
+          if (UserData.User.peID == txtUser.Text.Trim())
+          {
+            // Se llenan los textBox de user y Password con informacion de UserData
+            txtUser.Text = UserData.User.peID;
+            txtPassword.Password = UserData.User.pePwd;
+            loadLoginControls(UserData.User.peID, true, false);
+          }
+          else
+          {
+            loadLoginControls(txtUser.Text, false, false);
+          }
+        
         }
         else if (_iniFileHelper != null && string.Equals(txtUser.Text, _iniFileHelper.readText("Login", "UserName", "")))
         {// llena datos con config.

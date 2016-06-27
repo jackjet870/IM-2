@@ -1602,7 +1602,7 @@ namespace IM.Inhouse.Forms
     private async void btnLogin_Click(object sender, RoutedEventArgs e)
     {
       frmLogin log = new frmLogin(null, EnumLoginType.Location, program: EnumProgram.Inhouse, changePassword: false,
-        autoSign: true, modeSwitchLoginUser: true);
+        autoSign: true, switchLoginUserMode: true);
 
       await log.getAllPlaces();
       if (App.User.AutoSign)
@@ -1670,13 +1670,23 @@ namespace IM.Inhouse.Forms
       }
     }
 
-    private void btnExtInvit_Click(object sender, RoutedEventArgs e)
+    private async void btnExtInvit_Click(object sender, RoutedEventArgs e)
     {
-      //Edder
-      var frmInvitation = new frmInvitation(EnumInvitationType.External, App.User, 0, EnumInvitationMode.modAdd);
-      //var frmInvitation = new frmInvitationBase(EnumInvitationType.External,App.User, 0,EnumInvitationMode.modAdd);
-      frmInvitation.Owner = this;
-      frmInvitation.ShowDialog();
+      var login = new frmLogin(loginType: EnumLoginType.Location, program: EnumProgram.Inhouse, validatePermission: true, permission: EnumPermission.PRInvitations, permissionLevel: EnumPermisionLevel.Standard, switchLoginUserMode: true, invitationMode: true, invitationPlaceName: App.User.Location.loN);
+
+      if (App.User.AutoSign)
+      {
+        login.UserData = App.User;
+      }
+      await login.getAllPlaces();
+      login.ShowDialog();
+
+      if (login.IsAuthenticated)
+      {
+        var invitacion = new frmInvitation(EnumInvitationType.External, login.UserData , 0, EnumInvitationMode.modAdd);
+        invitacion.Owner = this;
+        invitacion.ShowDialog();
+      }
     }
 
     #endregion

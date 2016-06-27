@@ -3,7 +3,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -29,6 +29,32 @@ namespace IM.BusinessRules.BR
 
     #endregion
 
+    #region GetServerInformation
+    /// <summary>
+    /// Obtiene la informacion del servidor 
+    /// </summary>
+    /// <returns>List<string>| string[0]= Nombre del servidor| string[1]= Nombre de la Base de datos</returns>
+    /// <history>
+    /// [erosado] 06/06/2016  Created
+    /// </history>
+    public async static Task<List<string>> GetServerInformation()
+    {
+      List<string> result = new List<string>();
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          string ServerName = dbContext.Database.Connection.DataSource;
+          string dbName = dbContext.Database.Connection.Database;
+          result.Add(ServerName);
+          result.Add(dbName);
+        }
+      });
+      return result;
+    }
+
+    #endregion
+
     #region ValidateChangedByExist
 
     /// <summary>
@@ -45,14 +71,13 @@ namespace IM.BusinessRules.BR
     /// [jorcanche]  29/Mar/2016 Created
     /// </history>
 
-    public static List<ValidationData>  ValidateChangedByExist(string ptxtChangedBy, string ptxtPwd, string pstrLeadSource, string pstrUserType = "Changed By", string ptxtPR = "")
+    public static List<ValidationData> ValidateChangedByExist(string ptxtChangedBy, string ptxtPwd, string pstrLeadSource, string pstrUserType = "Changed By", string ptxtPR = "")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return dbContext.USP_OR_ValidateChangedBy(ptxtChangedBy, ptxtPwd, "LS", pstrLeadSource, pstrUserType, ptxtPR).ToList();              
+        return dbContext.USP_OR_ValidateChangedBy(ptxtChangedBy, ptxtPwd, "LS", pstrLeadSource, pstrUserType, ptxtPR).ToList();
       }
     }
     #endregion
-
   }
 }

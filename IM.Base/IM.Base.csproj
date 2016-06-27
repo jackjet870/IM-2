@@ -80,6 +80,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AssistanceToAssistance.cs" />
+    <Compile Include="Classes\CommonCatObject.cs" />
+    <Compile Include="Classes\InvitationGiftCustom.cs" />
     <Compile Include="Classes\objReportQueue.cs" />
     <Compile Include="Forms\frmReportQueue.xaml.cs">
       <DependentUpon>frmReportQueue.xaml</DependentUpon>

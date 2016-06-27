@@ -70,6 +70,7 @@
     <Compile Include="BR\BRCxC.cs" />
     <Compile Include="BR\BRDepts.cs" />
     <Compile Include="BR\BRDesks.cs" />
+    <Compile Include="BR\BRDisputeStatus.cs" />
     <Compile Include="BR\BREfficiency.cs" />
     <Compile Include="BR\BREfficiencyTypes.cs" />
     <Compile Include="BR\BREntities.cs" />

@@ -20,7 +20,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<AgencyShort>> GetAgencies(int status)
     {
-      List<AgencyShort> result = null;
+      List<AgencyShort> result = new List<AgencyShort>();
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))

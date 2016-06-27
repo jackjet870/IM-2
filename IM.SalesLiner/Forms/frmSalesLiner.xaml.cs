@@ -121,7 +121,7 @@ namespace IM.SalesLiner.Forms
     /// </history>
     private async void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      var frmlogin = new frmLogin(loginType: EnumLoginType.SalesRoom, changePassword: true, autoSign: true, modeSwitchLoginUser: true);
+      var frmlogin = new frmLogin(loginType: EnumLoginType.SalesRoom, changePassword: true, autoSign: true, switchLoginUserMode: true);
       await frmlogin.getAllPlaces();
       if (App.User.AutoSign)
       {

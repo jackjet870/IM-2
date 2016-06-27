@@ -429,7 +429,7 @@ namespace IM.Outhouse.Forms
     private async  void btnLogin_Click(object sender, RoutedEventArgs e)
     {
       // frmLogin log = new frmLogin(null,false, EnumLoginType.Location, true);
-      frmLogin log = new frmLogin(null, EnumLoginType.Location, program: EnumProgram.Outhouse, changePassword: false, autoSign: true, modeSwitchLoginUser: true);
+      frmLogin log = new frmLogin(null, EnumLoginType.Location, program: EnumProgram.Outhouse, changePassword: false, autoSign: true, switchLoginUserMode: true);
       await log.getAllPlaces();
       if (App.User.AutoSign)
       {

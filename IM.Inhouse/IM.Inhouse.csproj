@@ -461,6 +461,10 @@
       <Project>{96edcb7e-349a-4988-a8ae-ebe1f5fe3060}</Project>
       <Name>IM.Services</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IM.Styles\IM.Styles.csproj">
+      <Project>{bad29979-3e8d-4913-8dd0-edebc8af85a7}</Project>
+      <Name>IM.Styles</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\IM.ico" />

@@ -1064,7 +1064,7 @@ namespace IM.Host
     /// </history>
     private async void btnLogin_Click(object sender, RoutedEventArgs e)
     {
-      frmLogin Login = new frmLogin(null, EnumLoginType.SalesRoom, changePassword: false, autoSign: true, validatePermission: true, permission: EnumPermission.Host, permissionLevel: EnumPermisionLevel.ReadOnly, modeSwitchLoginUser: false);
+      frmLogin Login = new frmLogin(null, EnumLoginType.SalesRoom, changePassword: false, autoSign: true, validatePermission: true, permission: EnumPermission.Host, permissionLevel: EnumPermisionLevel.ReadOnly, switchLoginUserMode: false);
 
       await Login.getAllPlaces();
       if (App.User.AutoSign)

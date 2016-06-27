@@ -63,11 +63,11 @@
 
                     <Grid x:Name="Root">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="1" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="6" />
                             <RowDefinition Height="2" />
                         </Grid.RowDefinitions>
@@ -76,11 +76,9 @@
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Center"
                                           ContentSource="Header"
-                                          Margin="30,10,30,4"
+                                          Margin="5,2"
                                           RecognizesAccessKey="True"/>
                         </Border>
-                        <!--<Border Grid.Column="1" Margin="0,10,0,4" Background="blue" />-->
-
                         <Border Grid.Row="1" Grid.ColumnSpan="2" Background="#ededed"/>
                         <Border Grid.Row="1" Grid.ColumnSpan="2" Name="Border1Highlited" Background="Transparent"/>
 

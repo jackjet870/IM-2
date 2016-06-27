@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Base.Forms"
         mc:Ignorable="d"
         ResizeMode="NoResize" WindowStyle="None"  
-        WindowStartupLocation="CenterScreen" Background="White" BorderThickness="5" BorderBrush="AliceBlue" Width="609.509" Height="444.434" Icon="/IM.Base;component/Images/IM.ico" >
+        WindowStartupLocation="CenterScreen" Background="White" BorderThickness="5" BorderBrush="AliceBlue" Width="609.509" Height="444.434" Icon="/IM.Base;component/Images/IM.ico"  Loaded="Window_Loaded">
 
   <Canvas x:Name="ContentMain">
     <Label x:Name="lblTitle" Content="lblTitle" Canvas.Left="10" FontSize="20" Canvas.Top="10" Width="580" HorizontalContentAlignment="Center"/>
