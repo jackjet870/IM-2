@@ -9,31 +9,46 @@ using IM.Model.Classes;
 
 namespace IM.BusinessRules.BR
 {
- public  class BRPayments
+ public class BRPayments
   {
+    #region GetPaymentsbySale
     /// <summary>
-    /// Obtiene la fecha de cierre de las ventas
+    /// Obtiene los pagos por venta
     /// </summary>
     /// <param name="srId">ID Sale</param>
     /// <returns>Lista de Payment por Sale</returns>
     /// <hitory>
-    /// [jorcanche] 20/05/2016
+    /// [jorcanche] 20/05/2016 created
     /// </hitory>
-    public static List<PaymentbySale> GetPaymentsbySale(int saID)
+    public static List<Payment> GetPaymentsbySale(int saID)
     {
-      using (var dbCOntext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return (from gu in dbCOntext.Payments
-                join pt in dbCOntext.PaymentTypes on gu.papt equals pt.ptID
-                join cct in dbCOntext.CreditCardTypes on gu.pacc equals cct.ccID
-                where gu.pasa == saID orderby gu.papt 
-                select new PaymentbySale
-                {
-                  pasa = gu.pasa,
-                  pacc = cct.ccN,
-                  papt = pt.ptN
-                }).ToList();
+        return (from gu in dbContext.Payments
+                where gu.pasa == saID
+                orderby gu.papt
+                select gu).ToList();
       }
     }
+    #endregion
+
+    #region DeletePaymentsbySale
+    /// <summary>
+    /// Elimina uno o mas registros que contengan el Id Sale en la tabla Payments
+    /// </summary>
+    /// <param name="saleID">Idetificador de Sale</param>
+    /// <history>
+    /// [jorcanche]  created 24062016
+    /// </history>
+    public static int DeletePaymentsbySale(int saleID)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var lstPayments = dbContext.Payments.Where(p => p.pasa == saleID);
+        dbContext.Payments.RemoveRange(lstPayments);
+        return dbContext.SaveChanges();
+      }
+    } 
+    #endregion
   }
 }

@@ -83,6 +83,10 @@
     <Compile Include="Classes\CommonCatObject.cs" />
     <Compile Include="Classes\InvitationGiftCustom.cs" />
     <Compile Include="Classes\objReportQueue.cs" />
+    <Compile Include="Classes\ObjReports.cs" />
+    <Compile Include="Forms\frmGuestsMovements.xaml.cs">
+      <DependentUpon>frmGuestsMovements.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmReportQueue.xaml.cs">
       <DependentUpon>frmReportQueue.xaml</DependentUpon>
     </Compile>
@@ -247,6 +251,10 @@
     <Page Include="Forms\frmGuestLog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\frmGuestsMovements.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\frmInvitation.xaml">
       <SubType>Designer</SubType>

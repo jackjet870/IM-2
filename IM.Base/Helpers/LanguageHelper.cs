@@ -14,9 +14,20 @@ using System.Collections.Generic;
 
 namespace IM.Base.Helpers
 {
+  /// <summary>
+  /// Clase para el control de los lenguajes 
+  /// </summary>
+  /// <history>
+  /// [jorcanche] created 17/06/2016
+  /// </history>
   public class LanguageHelper
   {
-    
+    /// <summary>
+    /// Propiedad que devuelve y recive el CurrentUICulture actual
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 17/06/2016
+    /// </history>
     public static string IDLanguage
     {
       get
@@ -40,11 +51,24 @@ namespace IM.Base.Helpers
       }
     }
 
+    /// <summary>
+    /// Devuelve el mensaje en el que se encuentra actualmente el CurrentUICulture segun el enumerado que esta recibiendo
+    /// </summary>
+    /// <param name="msg">Enumerado que desea que devuelva</param>
+    /// <history>
+    /// [jorcanche]  created  17/06/2016
+    /// </history>
     public static string GetMessage(EnumMessage msg)
     {      
       return ResLanguage.ResourceManager.GetString(msg.ToString());
     }
 
+    /// <summary>
+    /// Devuelve un listado de todas las CurrentUICulture que soporta el lenguaje 
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 17/06/2016
+    /// </history>
     public static List<string> cultures()
     {
       // Obtiene los nombres de la culturas

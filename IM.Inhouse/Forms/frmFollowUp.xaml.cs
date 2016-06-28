@@ -7,6 +7,7 @@ using IM.Base.Forms;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using System;
+using System.Globalization;
 
 namespace IM.Inhouse
 {
@@ -78,20 +79,26 @@ namespace IM.Inhouse
 
     #region Window_Loaded
     /// <summary>
-    /// 
+    /// Carga e inicializa las variables del formulario
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     /// <history>
+    /// [jorcanche] 01/02/2016 Created
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      cboguPRFollow.ItemsSource =await BRPersonnel.GetPersonnel(App.User.Location.loID, "ALL", "PR");
+      LoadFollwUp();
+    }
+
+    private async void LoadFollwUp()
+    {
+      cboguPRFollow.ItemsSource = await BRPersonnel.GetPersonnel(App.User.Location.loID, "ALL", "PR");
       Guest _guest = BRGuests.GetGuest(_guestID);
       if (_guest.guFollowD.HasValue)
       {//txtguFollowD
-        txtguFollowD.Text = _guest.guFollowD.Value.Date.ToString();
+        txtguFollowD.Text = _guest.guFollowD.Value.Date.ToString("dd-MM-yyyy");
       }
       if (_guest.guPRFollow != string.Empty)
       {
@@ -99,6 +106,9 @@ namespace IM.Inhouse
         txtguPRFollow.Text = _guest.guPRFollow;
       }
       chkguFollow.IsChecked = _guest.guFollow;
+
+      btnEdit.IsEnabled = true; btnSave.IsEnabled = btnCancel.IsEnabled = false;      
+      cboguPRFollow.IsEnabled = txtguPRFollow.IsEnabled = false;
     }
     #endregion
 
@@ -138,7 +148,8 @@ namespace IM.Inhouse
         }
         else
         {
-          cboguPRFollow.SelectedValue = txtguPRFollow.Text;
+          cboguPRFollow.SelectedValue = PR.peID;
+          txtguPRFollow.Text = PR.peID;
         }
       }
       else
@@ -166,10 +177,10 @@ namespace IM.Inhouse
           if (_guest.guFollow == false || (log.UserData.HasRole(EnumRole.PRCaptain) || log.UserData.HasRole(EnumRole.PRSupervisor)))
           {
             _user = log.UserData;
-            txtguFollowD.Text = BRHelpers.GetServerDate().Date.ToString();
-            btnSave.IsEnabled = cboguPRFollow.IsEnabled = true;
-            txtguPRFollow.IsReadOnly = false;
-            lblUserName.Content = log.UserData.User.peN;
+            txtguFollowD.Text = BRHelpers.GetServerDate().Date.ToString("dd-MM-yyyy");
+            btnCancel.IsEnabled = btnSave.IsEnabled = txtguPRFollow.IsEnabled = cboguPRFollow.IsEnabled = true;
+            btnEdit.IsEnabled  = false;           
+            lblUserName.Content = log.UserData.User.peN;            
           }
           else
           {
@@ -187,7 +198,8 @@ namespace IM.Inhouse
     #region btnLog_Click
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
-      frmGuestLog frmGuestLog = new frmGuestLog(_guestID);
+      frmGuestLog frmGuestLog = new frmGuestLog(_guestID,App.User.LeadSource.lsN);
+      frmGuestLog.Owner = this;
       frmGuestLog.ShowDialog();
     }
 
@@ -196,7 +208,7 @@ namespace IM.Inhouse
     #region btnCancel_Click
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      this.Close();
+      LoadFollwUp();
     }
     #endregion
 

@@ -25,8 +25,8 @@
 
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label x:Name="lblguPRFollow" Margin="15,12,0,0" Content="PR:" FontSize="17" />
-            <TextBox x:Name="txtguPRFollow" Margin="31,13,0,1" FontSize="16" Height="30" Width="110" IsReadOnly="True" LostFocus="txtguPRFollow_LostFocus"/>
-            <ComboBox x:Name="cboguPRFollow" Margin="12,12,0,0" FontSize="16" FontWeight="Medium" VerticalAlignment="Top" Width="205" Height="29" SelectionChanged="cboguPRFollow_SelectionChanged"  IsEnabled="False" SelectedValuePath="peID" DisplayMemberPath="peN" />
+            <TextBox x:Name="txtguPRFollow" Margin="31,13,0,1" FontSize="16" Height="30" Width="110" LostFocus="txtguPRFollow_LostFocus"/>
+            <ComboBox x:Name="cboguPRFollow" Margin="12,12,0,0" FontSize="16" FontWeight="Medium" VerticalAlignment="Top" Width="205" Height="29" SelectionChanged="cboguPRFollow_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN" />
         </StackPanel>
 
         <StackPanel Grid.Row="3" >

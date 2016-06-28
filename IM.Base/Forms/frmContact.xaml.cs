@@ -18,7 +18,7 @@ namespace IM.Base.Forms
 
     private int _guestID;
     private Guest _guest;
-    private UserData _userLoguedo,_userPrimero;
+    private UserData _userLoguedo, _userPrimero;
     private bool _searchPRByTxt;
     public bool _wasSave;
 
@@ -35,10 +35,7 @@ namespace IM.Base.Forms
       {
         return Convert.ToDateTime(txtguInfoD.Text).Date;
       }
-    }
-
-   
-
+    } 
 
     #endregion
 
@@ -72,6 +69,7 @@ namespace IM.Base.Forms
         return false;
       }
       return true;
+
     }
 
     #endregion
@@ -103,9 +101,9 @@ namespace IM.Base.Forms
           if (_guest.guInfo == false || (log.UserData.HasRole(EnumRole.PRCaptain) || log.UserData.HasRole(EnumRole.PRSupervisor)))
           {
             _userLoguedo = log.UserData;
-            txtguInfoD.Text = BRHelpers.GetServerDate().Date.ToString();
-            btnSave.IsEnabled = cboguPRInfo.IsEnabled = true;
-            txtguPRInfo.IsReadOnly = false;
+            txtguInfoD.Text = BRHelpers.GetServerDate().Date.ToString("dd-MM-yyyy");
+            btnCancel.IsEnabled =  btnSave.IsEnabled = txtguPRInfo.IsEnabled = cboguPRInfo.IsEnabled = true;
+            btnEdit.IsEnabled =  false;            
             lblUserName.Content = log.UserData.User.peN;
           }
           else
@@ -165,7 +163,8 @@ namespace IM.Base.Forms
         }
         else
         {
-          cboguPRInfo.SelectedValue = txtguPRInfo.Text;
+           cboguPRInfo.SelectedValue = PR.peID;
+          txtguPRInfo.Text = PR.peID;
         }
       }
       else
@@ -179,14 +178,15 @@ namespace IM.Base.Forms
     #region btnCancel_Click
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      this.Close();
+      LoadContact();
     }
     #endregion
 
     #region btnLog_Click
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
-      frmGuestLog frmGuestLog = new frmGuestLog(_guestID);
+      frmGuestLog frmGuestLog = new frmGuestLog(_guestID,_userPrimero.LeadSource.lsN);
+      frmGuestLog.Owner = this;
       frmGuestLog.ShowDialog();
     }
     #endregion
@@ -200,28 +200,35 @@ namespace IM.Base.Forms
     /// <history>
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      cboguPRInfo.ItemsSource =await BRPersonnel.GetPersonnel(_userPrimero.Location.loID, "ALL", "PR");
+      LoadContact();
+    }
+
+    private async void LoadContact()
+    {
+      cboguPRInfo.ItemsSource = await BRPersonnel.GetPersonnel(_userPrimero.Location.loID, "ALL", "PR");
       Guest _guest = BRGuests.GetGuest(_guestID);
       if (_guest.guInfoD.HasValue)
       {
         txtguInfoD.Text = _guest.guInfoD.Value.Date.ToString("dd-MM-yyyy");
       }
-   
+
       if (_guest.guPRInfo != string.Empty)
       {
         cboguPRInfo.SelectedValue = _guest.guPRInfo;
         txtguPRInfo.Text = _guest.guPRInfo;
       }
       chkguInfo.IsChecked = _guest.guInfo;
-      //cboguPRInfo.IsEnabled = txtguPRInfo.IsEnabled = false;
+
+      btnEdit.IsEnabled = true; btnSave.IsEnabled = btnCancel.IsEnabled = false;      
+      cboguPRInfo.IsEnabled = txtguPRInfo.IsEnabled = false;
     }
     #endregion
 
     #region btnSave_Click
     private void btnSave_Click(object sender, RoutedEventArgs e)
-    {
+    {      
       if (Validate())
       {
         //guardamos la informacion de contacto
@@ -246,7 +253,7 @@ namespace IM.Base.Forms
           UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
             MessageBoxImage.Error, "Information can not keep");
         }
-        this.Close();
+        Close();
       }
       //BRGuests.SaveGuest(_guest);        
       //BRGuestsLogs.SaveGuestLog(_guestID, App.User.LeadSource.lsHoursDif, _user.User.peID);

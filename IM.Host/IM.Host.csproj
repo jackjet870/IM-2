@@ -105,9 +105,13 @@
     <Compile Include="Classes\GiftsCancel.cs" />
     <Compile Include="Classes\GiftsExchange.cs" />
     <Compile Include="Classes\ReceiptGifts.cs" />
+    <Compile Include="Classes\SaleMan.cs" />
     <Compile Include="Enums\enumMode.cs" />
     <Compile Include="Enums\EnumOpenBy.cs" />
     <Compile Include="Enums\EnumSale.cs" />
+    <Compile Include="Forms\frmEntryFieldsData.xaml.cs">
+      <DependentUpon>frmEntryFieldsData.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmCancelExternalProducts.xaml.cs">
       <DependentUpon>frmCancelExternalProducts.xaml</DependentUpon>
     </Compile>
@@ -135,6 +139,9 @@
     <Compile Include="Forms\frmReimpresionMotives.xaml.cs">
       <DependentUpon>frmReimpresionMotives.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmSalesmenChanges.xaml.cs">
+      <DependentUpon>frmSalesmenChanges.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmSearchDepositRefund.xaml.cs">
       <DependentUpon>frmSearchDepositRefund.xaml</DependentUpon>
     </Compile>
@@ -147,6 +154,12 @@
     <Compile Include="Forms\InputBox.xaml.cs">
       <DependentUpon>InputBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmSalesLog.xaml.cs">
+      <DependentUpon>frmSalesLog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSalesSalesmen.xaml.cs">
+      <DependentUpon>frmSalesSalesmen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Reports\rptGiftsReceipt.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -154,6 +167,10 @@
       <SubType>Component</SubType>
     </Compile>
     <Page Include="Forms\frmAddExchangeRate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmEntryFieldsData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -221,6 +238,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmSalesLog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\frmSalesmenChanges.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmSalesRoomsLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -284,6 +309,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Forms\frmSalesSalesmen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmShow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -319,9 +348,11 @@
       <LastGenOutput>rptGiftsReceipt.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\IM.Host.Classes.SaleMan.datasource" />
     <None Include="Properties\DataSources\IM.Model.Agency.datasource" />
     <None Include="Properties\DataSources\IM.Model.BookingDeposit.datasource" />
     <None Include="Properties\DataSources\IM.Model.ChargeTo.datasource" />
+    <None Include="Properties\DataSources\IM.Model.Classes.PaymentbySale.datasource" />
     <None Include="Properties\DataSources\IM.Model.Currency.datasource" />
     <None Include="Properties\DataSources\IM.Model.DepositsRefund.datasource" />
     <None Include="Properties\DataSources\IM.Model.DepositToRefund.datasource" />
@@ -348,9 +379,13 @@
     <None Include="Properties\DataSources\IM.Model.Personnel2.datasource" />
     <None Include="Properties\DataSources\IM.Model.RateType.datasource" />
     <None Include="Properties\DataSources\IM.Model.RefundType.datasource" />
+    <None Include="Properties\DataSources\IM.Model.SaleLog.datasource" />
+    <None Include="Properties\DataSources\IM.Model.SaleLogData.datasource" />
     <None Include="Properties\DataSources\IM.Model.SaleShort.datasource" />
+    <None Include="Properties\DataSources\IM.Model.SalesmenChanges.datasource" />
     <None Include="Properties\DataSources\IM.Model.SalesRoomLog.datasource" />
     <None Include="Properties\DataSources\IM.Model.SalesRoomShort.datasource" />
+    <None Include="Properties\DataSources\IM.Model.SalesSalesman.datasource" />
     <None Include="Properties\DataSources\IM.Model.SourcePayment.datasource" />
     <None Include="Properties\DataSources\IM.Model.UnderPaymentMotive.datasource" />
     <None Include="Properties\Settings.settings">

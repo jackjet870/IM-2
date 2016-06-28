@@ -242,8 +242,9 @@ namespace IM.Base.Forms
     /// <history>
     /// [ecanul] 22/03/2016 Created
     /// [ecanul] 04/05/2016 Modificated Ahora indica si es Nuevo o Modificacion antes de guardar, Usa el BR BREntities
+    /// [jorcanche] 26062016 se agrego asincronia
     /// </history>
-    void SaveAssistances()
+    async void SaveAssistances()
     {
       StaStart("Saving Data...");
       int nres = 0;
@@ -254,7 +255,7 @@ namespace IM.Base.Forms
         lstAssistances.Add(AssistanceToAssistance.ConvertAssistanceDataToAssistance(c));        
       });
 
-      nres = BREntities.OperationEntities(lstAssistances, _isNew ? EnumMode.add : EnumMode.edit);
+      nres = await BREntities.OperationEntities(lstAssistances, _isNew ? EnumMode.add : EnumMode.edit);
       ChangeUseMode(false);
       MessageBox.Show("Saved Assistence", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
       LoadGrid();

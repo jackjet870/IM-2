@@ -238,8 +238,9 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 27/04/2016
+    /// [jorcanche]  se agrego asincronia 28062016
     /// </history>
-    private void btnDel_Click(object sender, RoutedEventArgs e)
+    private async void btnDel_Click(object sender, RoutedEventArgs e)
     {
       if (dgrTeamsLog.SelectedItems.Count > 0)
       {
@@ -259,7 +260,7 @@ namespace IM.Administrator.Forms
 
         if (msgResult == MessageBoxResult.Yes)
         {
-          int nRes = BREntities.OperationEntities<TeamLog>(lstTeamL,EnumMode.deleted);
+          int nRes = await BREntities.OperationEntities<TeamLog>(lstTeamL,EnumMode.deleted);
 
           if (nRes > 0)
           {

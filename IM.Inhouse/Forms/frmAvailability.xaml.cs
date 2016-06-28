@@ -83,18 +83,12 @@ namespace IM.Inhouse
       chkguOriginAvail.IsChecked = _guest.guOriginAvail;
       chkguAvail.IsChecked = _guest.guAvail;
       chkguAvailBySystem.IsChecked = _guest.guAvailBySystem;
-      EnableControls();
+
+      btnCancel.IsEnabled = btnSave.IsEnabled = chkguOriginAvail.IsEnabled = chkguAvail.IsEnabled = txtguum.IsEnabled = cboguum.IsEnabled =false;      
+      btnEdit.IsEnabled = true;
     }
 
-    #endregion
-
-    #region EnableControls
-    private void EnableControls()
-    {
-      txtguPRAvail.IsReadOnly = true;
-      cboguum.IsEnabled = false;
-    }
-    #endregion
+    #endregion  
 
     #region Validate
     /// <summary>
@@ -224,7 +218,7 @@ namespace IM.Inhouse
         else
         {
           // validamos que el motivo de indisponibilidad exista en los activos
-          UnavailableMotive motive = BRUnavailableMotives.GetUnavailableMotive(Convert.ToInt16(txtguum.Text), true);
+          UnavailableMotive motive = BRUnavailableMotives.GetUnavailableMotive(Convert.ToInt32(txtguum.Text), true);
           if (motive == null)
           {
             UIHelper.ShowMessage("The unavailable motive does not exist");
@@ -248,8 +242,7 @@ namespace IM.Inhouse
     #region chkguAvail_Checked
     private void chkguAvail_Checked(object sender, RoutedEventArgs e)
     {
-      cboguum.IsEnabled = false;
-      txtguum.IsReadOnly = true;
+      txtguum.IsEnabled = cboguum.IsEnabled = false;   
       if (_guest != null)
       {
         cboguum.SelectedValue = _guest.guum;
@@ -261,15 +254,14 @@ namespace IM.Inhouse
     #region chkguAvail_Unchecked
     private void chkguAvail_Unchecked(object sender, RoutedEventArgs e)
     {
-      cboguum.IsEnabled = true;
-      txtguum.IsReadOnly = false;
+      txtguum.IsEnabled = cboguum.IsEnabled = true;
     }
     #endregion
 
     #region btnCancel_Click
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      this.Close();
+      LoadControls();
     }
     #endregion  
 
@@ -298,7 +290,7 @@ namespace IM.Inhouse
           UIHelper.ShowMessage("There was an error saving the information, consult your system administrator",
             MessageBoxImage.Error, "Information can not keep");
         }    
-        this.Close();        
+        Close();        
       }
     }
     #endregion
@@ -306,7 +298,8 @@ namespace IM.Inhouse
     #region btnLog_Click
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
-      frmGuestLog frmGuestLog = new frmGuestLog(_guestID);
+      frmGuestLog frmGuestLog = new frmGuestLog(_guestID, App.User.LeadSource.lsN);
+      frmGuestLog.Owner = this;
       frmGuestLog.ShowDialog();
     }
     #endregion
@@ -329,15 +322,20 @@ namespace IM.Inhouse
           _user = log.UserData;
           txtguPRAvail.Text = _user.User.peID;
           txtguPRAvailName.Text = _user.User.peN;
-          btnSave.IsEnabled = true;
-          cboguum.IsReadOnly = _guest.guAvail;
-          cboguum.IsEnabled = !_guest.guAvail;
-          txtguum.IsReadOnly = _guest.guAvail;
-          chkguAvail.IsEnabled = true;
+
+          btnCancel.IsEnabled = btnSave.IsEnabled  = chkguAvail.IsEnabled  = true;
+          btnEdit.IsEnabled = false;
+
+          //No se permite modificar el motivo de indisponibilidad si esta disponible          
+            txtguum.IsEnabled = !_guest.guAvail;
+            cboguum.IsEnabled = !_guest.guAvail;         
+
+          //No se permite modificar el campo de Originalmente disponible si el usuario no es un gerente 
           if (_user.HasRole(EnumRole.PRCaptain))
           {
             chkguOriginAvail.IsEnabled = true;
           }
+
           lblUserName.Content = log.UserData.User.peN;
         }
         else
@@ -350,5 +348,11 @@ namespace IM.Inhouse
     #endregion
 
     #endregion
+
+    private void txtguum_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+    {
+      var txt = sender as TextBox;                         
+      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);      
+    }
   }
 }

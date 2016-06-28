@@ -235,6 +235,23 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    #region GetGuestMovement
+    /// <summary>
+    /// Devuelve los movimientos del Guest
+    /// </summary>
+    /// <param name="guestId">Id del Guest</param>
+    /// <history>
+    /// [jorcanche] created 20/06/2016
+    /// </history>
+    public static List<GuestMovements> GetGuestMovement(int guestId)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_GetGuestMovements(guestId).ToList();
+      }
+    } 
+    #endregion
+
     #region SaveGuest
     /// <summary>
     /// Guarda los datos del Guest

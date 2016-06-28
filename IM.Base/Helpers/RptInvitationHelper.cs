@@ -29,9 +29,18 @@ namespace IM.Base.Helpers
       //Le damos memoria al reporte de Invitacion
       var rptInvi = new rptInvitation();
 
+      /************************************************************************************************************
+                                  Información Adiocional sobre el DataSource del Crystal                          
+      *************************************************************************************************************
+       Para que el DataSource acepte una entidad primero se debe de converir a lista                              
+       1.- ObjectHelper.ObjectToList(invitationData.Invitation)                                                    
+       Pero sí al convertirlo hay propiedades nulas, el DataSource no lo aceptara y marcara error; para evirar esto
+       se debera convertir a DateTable para que no tenga nulos.
+       2.- TableHelper.GetDataTableFromList(ObjectHelper.ObjectToList(invitationData.Invitation))
+      *************************************************************************************************************/
+
       //Le agregamos la informacion 
       rptInvi.SetDataSource(TableHelper.GetDataTableFromList(ObjectHelper.ObjectToList(invitationData.Invitation)));
-
       //Cargamos los subreportes
       rptInvi.Subreports["rptInvitationGuests.rpt"].SetDataSource(TableHelper.GetDataTableFromList(invitationData.InvitationGuest));
       rptInvi.Subreports["rptInvitationDeposits.rpt"].SetDataSource(invitationData.InvitationDeposit);

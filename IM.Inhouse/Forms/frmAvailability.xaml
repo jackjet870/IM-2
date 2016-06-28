@@ -26,7 +26,7 @@
         <!--TextWrapping="Wrap"-->
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label x:Name="lblguum"  Margin="15,12,0,0" Content="Motive:" FontSize="17"/>
-            <TextBox x:Name="txtguum"  Margin="07,12,0,0" FontSize="16" Height="30"  Width="120"  IsReadOnly="True" LostFocus="txtguum_LostFocus" />
+            <TextBox x:Name="txtguum" MaxLength="3" PreviewTextInput="txtguum_PreviewTextInput" Margin="07,12,0,0" FontSize="16" Height="30"  Width="120"   LostFocus="txtguum_LostFocus" />
             <ComboBox x:Name="cboguum"  Margin="12,12,0,0" FontSize="16" FontWeight="Medium"  Width="198" Height="30"  SelectionChanged="cboguum_SelectionChanged"  SelectedValuePath="umID" DisplayMemberPath="umN" />
         </StackPanel>
         <StackPanel Grid.Row="3" >
@@ -36,8 +36,8 @@
         </StackPanel>
         <Border Grid.Row="4" BorderBrush="Black" BorderThickness="2" Background="Bisque"  Margin="27,0,27,35">
             <StackPanel   Orientation="Horizontal" Height="50" HorizontalAlignment="Center" >
-                <Button x:Name="btnEdit" Content="Edit" FontSize="17" Width="80" Margin="9" Click="btnEdit_Click" />
-                <Button x:Name="btnSave" Content="Save" FontSize="17" Width="80" Margin="9" IsEnabled="False" Click="btnSave_Click"/>
+                <Button x:Name="btnEdit"  Content="Edit" FontSize="17" Width="80" Margin="9" Click="btnEdit_Click" />
+                <Button x:Name="btnSave" Content="Save" FontSize="17" Width="80" Margin="9"  Click="btnSave_Click"/>
                 <Button x:Name="btnCancel" Content="Cancel" FontSize="17" Width="80" Margin="9" Click="btnCancel_Click" />
                 <Button x:Name="btnLog" Content="Log" FontSize="17" Width="80" Margin="9" Click="btnLog_Click"/>
             </StackPanel>

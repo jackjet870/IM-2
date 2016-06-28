@@ -102,6 +102,7 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Agrega|Actualiza|Elimina registros de la BD
     /// dependiendo del tipo de lista que se le TengaEnviado
+    /// El enum agregar unicamente sirve para entidades con id autoincrementales
     /// </summary>
     /// <typeparam name="T">Tipo de lista</typeparam>
     /// <param name="lstEntities">Lista</param>
@@ -109,33 +110,37 @@ namespace IM.BusinessRules.BR
     /// <returns>0. No se hizo nada | >0. Numero de registros afectados</returns>
     /// <history>
     /// [emoguel] created 27/04/2016
+    /// [jorcanche] se agrego asincronia
     /// </history>
-    public static int OperationEntities<T>(List<T> lstEntities, EnumMode enumMode) where T : class
+    public async static Task<int> OperationEntities<T>(List<T> lstEntities, EnumMode enumMode) where T : class
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      int nRes = 0;
+      await Task.Run(() =>
       {
-        int nRes = 0;
-        using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          #region Transacción
-          try
+          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            lstEntities.ForEach(item =>
+            #region Transacción
+            try
             {
-              dbContext.Entry(item).State = (enumMode==EnumMode.add)?EntityState.Added:(enumMode==EnumMode.edit)?EntityState.Modified:EntityState.Deleted;
-            });
-            nRes = dbContext.SaveChanges();
-            transaction.Commit();
-          }
-          catch
-          {
-            nRes = 0;
-            transaction.Rollback();
-          } 
-          #endregion
-        }
-        return nRes;
-      }
+              lstEntities.ForEach(item =>
+              {
+                dbContext.Entry(item).State = (enumMode == EnumMode.add) ? EntityState.Added : (enumMode == EnumMode.edit) ? EntityState.Modified : EntityState.Deleted;
+              });
+              nRes = dbContext.SaveChanges();
+              transaction.Commit();
+            }
+            catch
+            {
+              nRes = 0;
+              transaction.Rollback();
+            }
+            #endregion
+          }          
+        }      
+      });
+      return nRes;
     } 
     #endregion
 

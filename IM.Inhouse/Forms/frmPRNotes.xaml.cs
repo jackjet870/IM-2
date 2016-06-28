@@ -250,11 +250,14 @@ namespace IM.Inhouse.Forms
     }
     #endregion
 
-
+    #region Pass
     public void Pass()
     {
       txtPwd.Password = (App.User.AutoSign ? (App.User.User.peID != txtpnPR.Text ? string.Empty : App.User.User.pePwd) : string.Empty);
     }
+
+    #endregion   
+
     #region txtpnPR_LostFocus
     private void txtpnPR_LostFocus(object sender, RoutedEventArgs e)
     {

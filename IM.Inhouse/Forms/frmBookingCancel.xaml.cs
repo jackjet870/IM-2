@@ -39,7 +39,8 @@ namespace IM.Inhouse.Forms
 
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
-      frmGuestLog frmGuestLog = new frmGuestLog(_guestID);
+      frmGuestLog frmGuestLog = new frmGuestLog(_guestID, App.User.LeadSource.lsN);
+      frmGuestLog.Owner = this;
       frmGuestLog.ShowDialog();
     }
 

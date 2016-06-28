@@ -13,17 +13,16 @@
     </Window.Resources>
     <Border Margin="5">
         <Grid DataContext="{StaticResource GuestLogViewSource}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="aUTO"/>
+            </Grid.RowDefinitions>
+            
             <DataGrid x:Name="dgGuestLog" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="True"  EnableRowVirtualization="True" ItemsSource="{Binding}"  RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" Background="Bisque">
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="glChangedByColumn" Binding="{Binding glChangedBy}" Header="By" Width="auto"/>
                     <DataGridTextColumn x:Name="changedByNColumn" Binding="{Binding ChangedByN}" Header="Name" Width="auto"  />
-                    <DataGridTextColumn x:Name="glIDColumn" Header="Update Date/Time" Width="auto"/>
-                    <!-- <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <DatePicker SelectedDate="{Binding glID, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn> -->
+                    <DataGridTextColumn x:Name="glIDColumn" Binding="{Binding glID}" Header="Update Date/Time" Width="auto"/>
                     <DataGridTextColumn x:Name="glsrColumn" Binding="{Binding glsr}" Header="S R" Width="auto"/>
                     <DataGridTextColumn x:Name="glLastName1Column" Binding="{Binding glLastName1}" Header="Last Name" Width="auto"/>
                     <DataGridTextColumn x:Name="glFirstName1Column" Binding="{Binding glFirstName1}" Header="First Name" Width="auto"/>
@@ -36,16 +35,16 @@
                     <DataGridTextColumn x:Name="umNColumn" Binding="{Binding umN}" Header="Unavailable Motive" Width="auto"/>
                     <DataGridTextColumn x:Name="glPRAvailColumn" Binding="{Binding glPRAvail}" Header="PR Avail" Width="auto"/>
                     <DataGridTextColumn x:Name="pRAvailNColumn" Binding="{Binding PRAvailN}" Header="PR Avail Name" Width="auto"/>
-                    <DataGridTextColumn x:Name="glInfoD" Binding="{Binding glInfoD}" Header="Cont D" Width="auto" />
+                    <DataGridTextColumn x:Name="glInfoD" Binding="{Binding glInfoD, StringFormat={}{0:dd/MM/yyyy}}" Header="Cont D" Width="auto" />
                     <DataGridTextColumn x:Name="glPRInfoColumn" Binding="{Binding glPRInfo}" Header="PR Cont" Width="auto"/>
                     <DataGridTextColumn x:Name="pRInfoNColumn" Binding="{Binding PRInfoN}" Header="PR Cont Name" Width="auto"/>
-                    <DataGridTextColumn x:Name="glFollowD" Binding="{Binding glFollowD}" Header="Follow D" Width="auto" />
+                    <DataGridTextColumn x:Name="glFollowD" Binding="{Binding glFollowD, StringFormat={}{0:dd/MM/yyyy}}" Header="Follow D" Width="auto" />
                     <DataGridTextColumn x:Name="glPRFollowColumn" Binding="{Binding glPRFollow}" Header="PR Follow" Width="auto"/>
                     <DataGridTextColumn x:Name="pRFollowNColumn" Binding="{Binding PRFollowN}" Header="PR Follow Name" Width="auto"/>
-                    <DataGridTextColumn x:Name="glBookD" Binding="{Binding glBookD}" Header="Book D" Width="auto"/>
-                    <DataGridTextColumn x:Name="glBookT" Binding="{Binding glBookD}" Header="Book T" Width="auto"/>
-                    <DataGridTextColumn x:Name="glReschD" Binding="{Binding glReschD}" Header="Resch D" Width="auto"/>
-                    <DataGridTextColumn x:Name="glReschT" Binding="{Binding glReschT}" Header="Resch T" Width="auto"/>
+                    <DataGridTextColumn x:Name="glBookD" Binding="{Binding glBookD, StringFormat={}{0:dd/MM/yyyy}}" Header="Book D" Width="auto"/>
+                    <DataGridTextColumn x:Name="glBookT" Binding="{Binding glBookT,  StringFormat=t}" Header="Book T" Width="auto"/>
+                    <DataGridTextColumn x:Name="glReschD" Binding="{Binding glReschD, StringFormat={}{0:dd/MM/yyyy}}" Header="Resch D" Width="auto"/>
+                    <DataGridTextColumn x:Name="glReschT" Binding="{Binding glReschT, StringFormat=t}" Header="Resch T" Width="auto"/>
                     <DataGridTextColumn x:Name="glPRInvit1Column" Binding="{Binding glPRInvit1}" Header="PR N" Width="auto"/>
                     <DataGridTextColumn x:Name="pRInvit1NColumn" Binding="{Binding PRInvit1N}" Header="PR Booking Name" Width="auto"/>
                     <DataGridTextColumn x:Name="glPRInvit2Column" Binding="{Binding glPRInvit2}" Header="PR B 2" Width="auto"/>
@@ -69,16 +68,17 @@
                     <DataGridTextColumn x:Name="podiumNColumn" Binding="{Binding PodiumN}" Header="Podium Name" Width="auto"/>
                     <DataGridTextColumn x:Name="glVLOColumn" Binding="{Binding glVLO}" Header="VLO" Width="auto"/>
                     <DataGridTextColumn x:Name="vLONColumn" Binding="{Binding VLON}" Header="VLO Name" Width="auto"/>
-                    <DataGridCheckBoxColumn x:Name="glShowColumn" Binding="{Binding glShow}" Header="gl Show" Width="auto"/>
-                    <DataGridCheckBoxColumn x:Name="glShowD" Binding="{Binding glShowD}" Header="Sh" Width="auto"/>
+                    <DataGridCheckBoxColumn x:Name="glShowColumn" Binding="{Binding glShow}" Header="Sh" Width="auto"/>
+                    <DataGridTextColumn x:Name="glShowD" Binding="{Binding glShowD, StringFormat={}{0:dd/MM/yyyy}}" Header="Show D" Width="auto"/>
                     <DataGridCheckBoxColumn x:Name="glQColumn" Binding="{Binding glQ}" Header="Q" Width="auto"/>
                     <DataGridCheckBoxColumn x:Name="glInOutColumn" Binding="{Binding glInOut}" Header="IO" Width="SizeToHeader"/>
                     <DataGridCheckBoxColumn x:Name="glWalkOutColumn" Binding="{Binding glWalkOut}" Header="WO" Width="auto"/>
                     <DataGridCheckBoxColumn x:Name="glCTourColumn" Binding="{Binding glCTour}" Header="CT" Width="auto"/>
-                    <DataGridCheckBoxColumn x:Name="glReimpresion" Binding="{Binding glReimpresion}" Header="Re-Printed" Width="auto"/>
+                    <DataGridTextColumn x:Name="glReimpresion" Binding="{Binding glReimpresion}" Header="Re-Printed" Width="auto"/>
                     <DataGridTextColumn x:Name="rmNColumn" Binding="{Binding rmN}" Header="Re-Print Motive" Width="auto"/>
                 </DataGrid.Columns>
             </DataGrid>
+            <Button Grid.Row="1" Name="btnGuestMovents" Content="Movements" Width="85" Margin="0,10,0,0" Click="btnGuestMovents_Click"/>
         </Grid>
     </Border>
 </Window>

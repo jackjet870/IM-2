@@ -84,7 +84,7 @@ namespace IM.BusinessRules.BR
 
     #region GetSalesShort
     /// <summary>
-    /// 
+    ///  Trae una lista de Guest para una vista 
     /// </summary>
     /// <param name="guest"></param>
     /// <param name="sale"></param>
@@ -94,7 +94,9 @@ namespace IM.BusinessRules.BR
     /// <param name="salesRoom"></param>
     /// <param name="dateFrom"></param>
     /// <param name="dateTo"></param>
-    /// <returns></returns>
+    /// <history>
+    /// [jorcanche]  creted 28062016
+    /// </history>
     public static List<SaleShort> GetSalesShort(int guest = 0, int sale = 0, string membership = "ALL", string name = "ALL", string leadSource = "ALL", string salesRoom = "ALL", DateTime? dateFrom = null, DateTime? dateTo = null)
     {      
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
@@ -121,7 +123,7 @@ namespace IM.BusinessRules.BR
 
     #region ValidateSale
     /// <summary>
-    /// 
+    /// Valida si todos los parametros no esten vacios y que existan en la Base de Datos
     /// </summary>
     /// <param name="changedBy"></param>
     /// <param name="password"></param>
@@ -148,7 +150,9 @@ namespace IM.BusinessRules.BR
     /// <param name="exit2"></param>
     /// <param name="podium"></param>
     /// <param name="vLO"></param>
-    /// <returns></returns>
+    /// <history>
+    /// [jorcanche]  creted 28062016
+    /// </history>
     public static List<ValidationData> ValidateSale(string changedBy, string password, Nullable<int> sale, string membershipNumber, Nullable<int> guest, string saleType, string salesRoom, string location, string pR1, string pR2, string pR3, string pRCaptain1, string pRCaptain2, string pRCaptain3, string liner1, string liner2, string linerCaptain, string closer1, string closer2, string closer3, string closerCaptain, string exit1, string exit2, string podium, string vLO)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
@@ -160,7 +164,7 @@ namespace IM.BusinessRules.BR
 
     #region UpdateGuestSalesmen
     /// <summary>
-    /// 
+    /// Actualiza un GuestSalesMen 
     /// </summary>
     /// <param name="guId"></param>
     /// <param name="saleID"></param>
@@ -175,10 +179,13 @@ namespace IM.BusinessRules.BR
 
     #region UpdateSaleUpdated
     /// <summary>
-    /// 
+    ///  Marca o desmarca una venta como actualizada
     /// </summary>
     /// <param name="saleId"></param>
     /// <param name="updated"></param>
+    /// <history>
+    /// [jorcanche]  creted 28062016
+    /// </history>
     public static void UpdateSaleUpdated(int saleId, bool updated)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
@@ -186,6 +193,47 @@ namespace IM.BusinessRules.BR
         dbContext.USP_OR_UpdateSaleUpdated(saleId, updated);
       }
     }
+    #endregion
+
+    #region SaveChangedSale
+    /// <summary>
+    /// Guarda los cambios de un Sale
+    /// </summary>
+    /// <param name="sale"></param>
+    /// <history>
+    /// [jorcanche]  creted 28062016
+    /// </history>
+    public static int SaveChangedSale(Sale sale)
+    {
+      int nRes;
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var personel = dbContext.Personnels.First();
+        sale.Personnel_LinerCaptain1 = personel;
+        dbContext.Entry(sale).State = System.Data.Entity.EntityState.Modified;
+        return nRes = dbContext.SaveChanges();
+
+      }
+
+    } 
+    #endregion
+
+    #region LogSale
+    /// <summary>
+    /// Retorna el log por sale 
+    /// </summary>
+    /// <param name="sale">Indentificador del sale</param>
+    /// <history>
+    /// [jorcanche] 16062016 created 
+    /// </history>
+    public static List<SaleLogData> GetSaleLog(int sale)
+    {
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        return dbContext.USP_OR_GetSaleLog(sale).ToList();
+      }
+    }
+
     #endregion
 
     #region UpdateGuestSale
@@ -205,7 +253,7 @@ namespace IM.BusinessRules.BR
 
     #region SaveSalesmenChanges
     /// <summary>
-    /// 
+    /// Salva los cambios de un Salesmen
     /// </summary>
     /// <param name="guestId"></param>
     /// <param name="sale"></param>
@@ -220,7 +268,7 @@ namespace IM.BusinessRules.BR
 
     #region SaveSaleLog
     /// <summary>
-    /// 
+    ///Guarda el Log del Sale 
     /// </summary>
     /// <param name="sale"></param>
     /// <param name="hoursDif"></param>
@@ -261,13 +309,17 @@ namespace IM.BusinessRules.BR
     /// <hitory>
     /// [jorcanche] 20/05/2016
     /// </hitory>
-    public static Sale GetSalesbyID(int saId)
+    public static Sale GetSalesbyID(int saId = 0, string memebershipNum = "")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return (from gu in dbContext.Sales where gu.saID == saId select gu).FirstOrDefault();
+        var query = from gu in dbContext.Sales select gu;
+        if (!string.IsNullOrEmpty(memebershipNum))
+          return (query.Where(x => x.saMembershipNum == memebershipNum)).FirstOrDefault();
+
+        return (query.Where(x => x.saID == saId)).FirstOrDefault();
       }
-    }
+    }    
     #endregion
 
     #region GetSalesTypes

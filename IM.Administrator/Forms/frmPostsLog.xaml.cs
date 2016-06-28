@@ -235,8 +235,9 @@ namespace IM.Administrator.Forms
     /// <param name="e"></param>
     /// <history>
     /// [emoguel] created 12/04/2016
+    /// [jorcanche]  se agrego asincronia 28062016
     /// </history>
-    private void btnDel_Click(object sender, RoutedEventArgs e)
+    private async void btnDel_Click(object sender, RoutedEventArgs e)
     {
       if(dgrPostsLog.SelectedItems.Count>0)
       {       
@@ -255,7 +256,7 @@ namespace IM.Administrator.Forms
 
         if (msgResult == MessageBoxResult.Yes)
         {
-          int nRes = BREntities.OperationEntities(lstPostsLogDel, EnumMode.deleted);
+          int nRes = await BREntities.OperationEntities(lstPostsLogDel, EnumMode.deleted);
 
           if (nRes > 0)
           {

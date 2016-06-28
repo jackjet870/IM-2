@@ -140,28 +140,7 @@ namespace IM.Base.Helpers
       }
       return true;
     }
-    #endregion
-
-    /// <summary>
-    /// Valida que los datos de quien hizo el cambio y su contraseña existan
-    /// </summary>
-    /// <param name="ptxtChangedBy"></param>
-    /// <param name="ptxtPwd"></param>
-    /// <param name="pstrLeadSource"></param>
-    /// <param name="pstrUserType"></param>
-    /// <param name="ptxtPR"></param>
-    /// <returns></returns>   
-    public bool ValidateChangedByExist(TextBox ptxtChangedBy, PasswordBox ptxtPwd, string pstrLeadSource,
-                                        string pstrUserType = "Changed By", TextBox ptxtPR = null)
-    {
-      //si se desea validar el PR
-      if (ptxtPR != null)
-      {
-
-
-      }
-      return true;
-    }
+    #endregion  
 
     #region ValidateForm
     /// <summary>

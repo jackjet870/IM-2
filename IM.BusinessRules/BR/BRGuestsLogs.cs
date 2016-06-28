@@ -2,6 +2,7 @@
 using IM.Model.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -24,12 +25,17 @@ namespace IM.BusinessRules.BR
     /// </summary>
     /// <param name="IdGuest">Id del Guest</param>
     /// <history>[jorcanche] 09/03/2016</history>
-    public static List<GuestLogData> GetGuestLog(int IdGuest)
+    public async static Task<List<GuestLogData>> GetGuestLog(int IdGuest)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<GuestLogData> result = null;
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetGuestLog(IdGuest).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          result = dbContext.USP_OR_GetGuestLog(IdGuest).ToList();
+        }
+      });
+      return result;
     }
     #endregion
 
