@@ -22,8 +22,6 @@ namespace IM.Model
             this.srA = true;
             this.srcu = "US";
             this.srUseSistur = true;
-            this.srCECOID = "";
-            this.srCEBEID = "";
             this.Efficiencies = new HashSet<Efficiency>();
             this.GiftsReceipts = new HashSet<GiftsReceipt>();
             this.MealTicketsFolios = new HashSet<MealTicketFolio>();
@@ -54,8 +52,6 @@ namespace IM.Model
         public System.DateTime srSalesCloseD { get; set; }
         public string srPropertyOpera { get; set; }
         public bool srUseSistur { get; set; }
-        public string srCECOID { get; set; }
-        public string srCEBEID { get; set; }
     
         public virtual Area Area { internal get; set; }
         public virtual Currency Currency { internal get; set; }

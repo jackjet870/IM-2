@@ -40,7 +40,6 @@ namespace IM.Model
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Activity> Activities { get; set; }
         public virtual DbSet<Agency> Agencies { get; set; }
         public virtual DbSet<Area> Areas { get; set; }
         public virtual DbSet<Assistance> Assistances { get; set; }
@@ -96,7 +95,6 @@ namespace IM.Model
         public virtual DbSet<GuestStatusType> GuestsStatusTypes { get; set; }
         public virtual DbSet<HotelGroup> HotelsGroups { get; set; }
         public virtual DbSet<Hotel> Hotels { get; set; }
-        public virtual DbSet<Income> Incomes { get; set; }
         public virtual DbSet<InvitationGift> InvitationsGifts { get; set; }
         public virtual DbSet<InvitationText> InvitationsTexts { get; set; }
         public virtual DbSet<Language> Languages { get; set; }
@@ -168,7 +166,6 @@ namespace IM.Model
         public virtual DbSet<ShowProgram> ShowPrograms { get; set; }
         public virtual DbSet<ShowProgramCategory> ShowProgramsCategories { get; set; }
         public virtual DbSet<ShowSalesman> ShowsSalesmen { get; set; }
-        public virtual DbSet<Society> Societies { get; set; }
         public virtual DbSet<SourcePayment> SourcePayments { get; set; }
         public virtual DbSet<TeamGuestServices> TeamsGuestServices { get; set; }
         public virtual DbSet<TeamLog> TeamsLogs { get; set; }
@@ -186,7 +183,6 @@ namespace IM.Model
         public virtual DbSet<WarehouseMovement> WarehouseMovements { get; set; }
         public virtual DbSet<Zone> Zones { get; set; }
         public virtual DbSet<GuestOpera> GuestsOpera { get; set; }
-        public virtual DbSet<IncomeCECOCEBEType> IncomesCECOCEBETypes { get; set; }
         public virtual DbSet<MarketSegmentCECOCEBEType> MarketsSegmentsCECOCEBETypes { get; set; }
         public virtual DbSet<Transfer> Transfers { get; set; }
         public virtual DbSet<DisputeStatus> DisputeStatusList { get; set; }

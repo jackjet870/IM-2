@@ -285,10 +285,11 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_leadSourceFilter.lsID))//Filtro por ID
       {
-        if(_leadSourceFilter.lsCECOID!=leadSource.lsID)
-        {
-          return false;
-        }
+        //YA NO EXISTE lsCECOID
+        //if(_leadSourceFilter.lsCECOID!=leadSource.lsID)
+        //{
+        //  return false;
+        //}
       }
 
       if (!string.IsNullOrWhiteSpace(_leadSourceFilter.lsN))//Filtro por descripción
