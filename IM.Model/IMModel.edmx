@@ -1226,15 +1226,6 @@
           <Property Name="mkN" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="mkA" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="MarketSegments">
-          <Key>
-            <PropertyRef Name="mksID" />
-          </Key>
-          <Property Name="mksID" Type="varchar" MaxLength="5" Nullable="false" />
-          <Property Name="mksN" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="mksCode" Type="varchar" MaxLength="4" />
-          <Property Name="mkspg" Type="varchar" MaxLength="10" Nullable="false" />
-        </EntityType>
         <EntityType Name="MealTicketFolios">
           <Key>
             <PropertyRef Name="mfsr" />
@@ -4316,18 +4307,6 @@
             </Principal>
             <Dependent Role="MailOutTexts">
               <PropertyRef Name="mtls" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_marketsgment_program">
-          <End Role="Programs" Type="Self.Programs" Multiplicity="1" />
-          <End Role="MarketSegments" Type="Self.MarketSegments" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Programs">
-              <PropertyRef Name="pgID" />
-            </Principal>
-            <Dependent Role="MarketSegments">
-              <PropertyRef Name="mkspg" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7567,7 +7546,6 @@
           <EntitySet Name="MailOuts" EntityType="Self.MailOuts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MailOutTexts" EntityType="Self.MailOutTexts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Markets" EntityType="Self.Markets" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="MarketSegments" EntityType="Self.MarketSegments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MealTicketFolios" EntityType="Self.MealTicketFolios" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MealTickets" EntityType="Self.MealTickets" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MealTicketTypes" EntityType="Self.MealTicketTypes" Schema="dbo" store:Type="Tables" />
@@ -8354,10 +8332,6 @@
           <AssociationSet Name="FK_MailOutTexts_LeadSources" Association="Self.FK_MailOutTexts_LeadSources">
             <End Role="LeadSources" EntitySet="LeadSources" />
             <End Role="MailOutTexts" EntitySet="MailOutTexts" />
-          </AssociationSet>
-          <AssociationSet Name="fk_marketsgment_program" Association="Self.fk_marketsgment_program">
-            <End Role="Programs" EntitySet="Programs" />
-            <End Role="MarketSegments" EntitySet="MarketSegments" />
           </AssociationSet>
           <AssociationSet Name="FK_MealTicketFolios_RateTypes" Association="Self.FK_MealTicketFolios_RateTypes">
             <End Role="RateTypes" EntitySet="RateTypes" />
@@ -10294,16 +10268,6 @@
           <Property Name="mkA" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Agencies" Relationship="Self.FK_Agencies_Markets" FromRole="Markets" ToRole="Agencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
-        <EntityType Name="MarketSegment">
-          <Key>
-            <PropertyRef Name="mksID" />
-          </Key>
-          <Property Name="mksID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="mksN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="mksCode" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
-          <Property Name="mkspg" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Program" Relationship="Self.fk_marketsgment_program" FromRole="MarketSegments" ToRole="Programs" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-        </EntityType>
         <EntityType Name="MealTicketFolio" Abstract="false">
           <Key>
             <PropertyRef Name="mfsr" />
@@ -10778,7 +10742,6 @@
           <Property Name="pgID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="pgN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="LeadSources" Relationship="Self.FK_LeadSources_Programs" FromRole="Programs" ToRole="LeadSources" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="MarketSegments" Relationship="Self.fk_marketsgment_program" FromRole="Programs" ToRole="MarketSegments" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="RateType">
           <Key>
@@ -13643,18 +13606,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_marketsgment_program">
-          <End Role="Programs" Type="Self.Program" Multiplicity="1" />
-          <End Role="MarketSegments" Type="Self.MarketSegment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Programs">
-              <PropertyRef Name="pgID" />
-            </Principal>
-            <Dependent Role="MarketSegments">
-              <PropertyRef Name="mkspg" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_MealTicketFolios_RateTypes">
           <End Role="RateTypes" Type="Self.RateType" Multiplicity="1" />
           <End Role="MealTicketFolios" Type="Self.MealTicketFolio" Multiplicity="*" />
@@ -14872,7 +14823,6 @@
           <EntitySet Name="MailOuts" EntityType="Self.MailOut" />
           <EntitySet Name="MailOutTexts" EntityType="Self.MailOutText" />
           <EntitySet Name="Markets" EntityType="Self.Market" />
-          <EntitySet Name="MarketsSegments" EntityType="Self.MarketSegment" />
           <EntitySet Name="MealTicketsFolios" EntityType="Self.MealTicketFolio" />
           <EntitySet Name="MealTickets" EntityType="Self.MealTicket" />
           <EntitySet Name="MealTicketTypes" EntityType="Self.MealTicketType" />
@@ -15656,10 +15606,6 @@
           <AssociationSet Name="FK_LoginsLog_Personnel" Association="Self.FK_LoginsLog_Personnel">
             <End Role="Personnel" EntitySet="Personnels" />
             <End Role="LoginsLog" EntitySet="LoginsLogs" />
-          </AssociationSet>
-          <AssociationSet Name="fk_marketsgment_program" Association="Self.fk_marketsgment_program">
-            <End Role="Programs" EntitySet="Programs" />
-            <End Role="MarketSegments" EntitySet="MarketsSegments" />
           </AssociationSet>
           <AssociationSet Name="FK_MealTicketFolios_RateTypes" Association="Self.FK_MealTicketFolios_RateTypes">
             <End Role="RateTypes" EntitySet="RateTypes" />
@@ -23505,16 +23451,6 @@
                 <ScalarProperty Name="mkID" ColumnName="mkID" />
                 <ScalarProperty Name="mkN" ColumnName="mkN" />
                 <ScalarProperty Name="mkA" ColumnName="mkA" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MarketsSegments">
-            <EntityTypeMapping TypeName="IMModel.MarketSegment">
-              <MappingFragment StoreEntitySet="MarketSegments">
-                <ScalarProperty Name="mksID" ColumnName="mksID" />
-                <ScalarProperty Name="mksN" ColumnName="mksN" />
-                <ScalarProperty Name="mksCode" ColumnName="mksCode" />
-                <ScalarProperty Name="mkspg" ColumnName="mkspg" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

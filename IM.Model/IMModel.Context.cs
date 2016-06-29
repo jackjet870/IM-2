@@ -181,7 +181,6 @@ namespace IM.Model
         public virtual DbSet<Wholesaler> Wholesalers { get; set; }
         public virtual DbSet<WarehouseMovement> WarehouseMovements { get; set; }
         public virtual DbSet<Zone> Zones { get; set; }
-        public virtual DbSet<MarketSegmentCECOCEBEType> MarketsSegmentsCECOCEBETypes { get; set; }
         public virtual DbSet<Transfer> Transfers { get; set; }
         public virtual DbSet<DisputeStatus> DisputeStatusList { get; set; }
     
