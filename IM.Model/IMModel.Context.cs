@@ -104,7 +104,6 @@ namespace IM.Model
         public virtual DbSet<MailOut> MailOuts { get; set; }
         public virtual DbSet<MailOutText> MailOutTexts { get; set; }
         public virtual DbSet<Market> Markets { get; set; }
-        public virtual DbSet<MarketSegment> MarketsSegments { get; set; }
         public virtual DbSet<MealTicketFolio> MealTicketsFolios { get; set; }
         public virtual DbSet<MealTicket> MealTickets { get; set; }
         public virtual DbSet<MealTicketType> MealTicketTypes { get; set; }

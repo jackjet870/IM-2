@@ -18,7 +18,6 @@ namespace IM.Model
         public Program()
         {
             this.LeadSources = new HashSet<LeadSource>();
-            this.MarketSegments = new HashSet<MarketSegment>();
         }
     
         public string pgID { get; set; }
@@ -26,7 +25,5 @@ namespace IM.Model
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LeadSource> LeadSources { internal get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MarketSegment> MarketSegments { internal get; set; }
     }
 }

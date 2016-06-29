@@ -534,9 +534,6 @@
     <Compile Include="Market.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="MarketSegment.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="MarketShort.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>

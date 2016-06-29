@@ -23,5 +23,6 @@ namespace IM.Model
         public string Time { get; set; }
         public Nullable<decimal> AmountYtd { get; set; }
         public Nullable<decimal> AmountM { get; set; }
+        public string TimeN { get; set; }
     }
 }
