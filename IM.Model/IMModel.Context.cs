@@ -46,7 +46,6 @@ namespace IM.Model
         public virtual DbSet<AssistanceStatus> AssistancesStatus { get; set; }
         public virtual DbSet<Bank> Banks { get; set; }
         public virtual DbSet<BookingDeposit> BookingDeposits { get; set; }
-        public virtual DbSet<CECOCEBEType> CECOCEBETypes { get; set; }
         public virtual DbSet<ChargeCalculationType> ChargeCalculationTypes { get; set; }
         public virtual DbSet<ChargeTo> ChargeTos { get; set; }
         public virtual DbSet<Club> Clubs { get; set; }
@@ -182,7 +181,6 @@ namespace IM.Model
         public virtual DbSet<Wholesaler> Wholesalers { get; set; }
         public virtual DbSet<WarehouseMovement> WarehouseMovements { get; set; }
         public virtual DbSet<Zone> Zones { get; set; }
-        public virtual DbSet<GuestOpera> GuestsOpera { get; set; }
         public virtual DbSet<MarketSegmentCECOCEBEType> MarketsSegmentsCECOCEBETypes { get; set; }
         public virtual DbSet<Transfer> Transfers { get; set; }
         public virtual DbSet<DisputeStatus> DisputeStatusList { get; set; }
@@ -5939,6 +5937,23 @@ namespace IM.Model
                 new ObjectParameter("Gift", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("USP_OR_IsUsedGuestPromotion", receiptParameter, giftParameter);
+        }
+    
+        public virtual ObjectResult<RptUpList> USP_IM_RptUpList(Nullable<System.DateTime> dateFrom, string salesRooms, Nullable<int> upListType)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            var upListTypeParameter = upListType.HasValue ?
+                new ObjectParameter("UpListType", upListType) :
+                new ObjectParameter("UpListType", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptUpList>("USP_IM_RptUpList", dateFromParameter, salesRoomsParameter, upListTypeParameter);
         }
     }
 }

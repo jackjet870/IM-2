@@ -253,7 +253,6 @@ namespace IM.Model
         public virtual ICollection<GiftsReceipt> GiftsReceipts { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Group> Groups { internal get; set; }
-        public virtual GuestOpera GuestOpera { internal get; set; }
         public virtual NotBookingMotive NotBookingMotive { internal get; set; }
         public virtual PaymentType PaymentType { internal get; set; }
         public virtual Personnel Personnel_Closer1 { internal get; set; }

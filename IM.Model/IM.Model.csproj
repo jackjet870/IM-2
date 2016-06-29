@@ -66,9 +66,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Activity.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="AddGiftReceiptPayment.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -112,9 +109,6 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="BookingDeposit.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CECOCEBEType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ChargeCalculationType.cs">
@@ -423,9 +417,6 @@
     <Compile Include="GuestMovementType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="GuestOpera.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="GuestPremanifest.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -487,12 +478,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>IMModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Income.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IncomeCECOCEBEType.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="InvitationGift.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
@@ -1125,6 +1110,9 @@
     <Compile Include="RptUnavailableMotivesByAgency.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptUpList.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptWarehouseMovements.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -1237,9 +1225,6 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ShowSalesman.cs">
-      <DependentUpon>IMModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Society.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="SourcePayment.cs">

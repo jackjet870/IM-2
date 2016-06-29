@@ -22,7 +22,6 @@ namespace IM.Model
             this.lsBookFactorTh = 55m;
             this.lsShowsTh = 10;
             this.lsProcesar = true;
-
             this.GiftsReceipts = new HashSet<GiftsReceipt>();
             this.InvitationsTexts = new HashSet<InvitationText>();
             this.MailOuts = new HashSet<MailOut>();
@@ -77,7 +76,6 @@ namespace IM.Model
         public string lsho { get; set; }
         public bool lsUseSistur { get; set; }
         public string lsPropertyOpera { get; set; }
-
     
         public virtual Area Area { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

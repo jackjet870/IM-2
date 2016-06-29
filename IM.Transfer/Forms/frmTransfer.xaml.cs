@@ -566,27 +566,27 @@ namespace IM.Transfer.Forms
     /// </history>
     public async Task AddTransferToOperaGuest(ReservationOrigosTransfer reservationOrigos)
     {
-      //Si hay GuestID, se asigna, de lo contrario es OutHouse y no se agrega
-      Model.Guest guest = await BRGuests.GetGuestValidForTransfer(reservationOrigos.Folio.ToString(), reservationOrigos.Hotel);
-      if ((guest != null))
-      {
-        // Revisamos si ya existe en Guest
-        GuestOpera guestOpera = await BRGuestOpera.GetGuestOpera(guest.guID);
-        GuestOpera guOpera = null;
-        // Si hay GuestID, se asigna, de lo contrario es OutHouse y no se agrega
-        if (guestOpera != null)
-        {
-          // Si ya existe, se actualiza el valor
-          guOpera = await UpdateGuestOpera(reservationOrigosTransfer: reservationOrigos, gOpera: guestOpera);
-          await BRGuestOpera.SaveGuestOpera(guestOpera, false);
-        }
-        else
-        {
-          // Si no existe, se agrega
-          guOpera = await UpdateGuestOpera(reservationOrigosTransfer: reservationOrigos, gogu: guest.guID);
-          await BRGuestOpera.SaveGuestOpera(guOpera, true);
-        }
-      }
+      ////Si hay GuestID, se asigna, de lo contrario es OutHouse y no se agrega
+      //Model.Guest guest = await BRGuests.GetGuestValidForTransfer(reservationOrigos.Folio.ToString(), reservationOrigos.Hotel);
+      //if ((guest != null))
+      //{
+      //  // Revisamos si ya existe en Guest
+      //  GuestOpera guestOpera = await BRGuestOpera.GetGuestOpera(guest.guID);
+      //  GuestOpera guOpera = null;
+      //  // Si hay GuestID, se asigna, de lo contrario es OutHouse y no se agrega
+      //  if (guestOpera != null)
+      //  {
+      //    // Si ya existe, se actualiza el valor
+      //    guOpera = await UpdateGuestOpera(reservationOrigosTransfer: reservationOrigos, gOpera: guestOpera);
+      //    await BRGuestOpera.SaveGuestOpera(guestOpera, false);
+      //  }
+      //  else
+      //  {
+      //    // Si no existe, se agrega
+      //    guOpera = await UpdateGuestOpera(reservationOrigosTransfer: reservationOrigos, gogu: guest.guID);
+      //    await BRGuestOpera.SaveGuestOpera(guOpera, true);
+      //  }
+      //}
     }
     #endregion
 
@@ -822,37 +822,37 @@ namespace IM.Transfer.Forms
     /// <history>
     /// [michan]  25/04/2016  Created
     /// </history>
-    public async Task<GuestOpera> UpdateGuestOpera(ReservationOrigosTransfer reservationOrigosTransfer, int? gogu = null,GuestOpera gOpera = null)
-    {
-      // Creamos un objecto GuestOpera
-      GuestOpera guestOpera = null;
-      await Task.Run(() =>
-      {
-        // si recibimos un objecto GuestOpera 
-        if (gOpera != null)
-        {
-          // asignamos el objeto gOpera al objeto guestOpera creado
-          guestOpera = gOpera;
-        }
-        else
-        {
-          // instnaceamos un objecto de tipo de tipo GuestOpera
-          guestOpera = new GuestOpera();
-          guestOpera.gogu = gogu.Value;
-        }
-        guestOpera.goSourceID = ConvertHelper.StringToInt(reservationOrigosTransfer.Source_id);
-        guestOpera.goTravelAgentID = ConvertHelper.StringToInt(reservationOrigosTransfer.Travel_Agent_Id);
-        guestOpera.goGroupID = ConvertHelper.StringToInt(reservationOrigosTransfer.Group_id);
-        guestOpera.goBlockCode = reservationOrigosTransfer.Block_code;
-        guestOpera.goMarketCode = reservationOrigosTransfer.Market_code;
-        guestOpera.goMarketGroup = reservationOrigosTransfer.Market_group;
-        guestOpera.goSourceGroup = reservationOrigosTransfer.Source_group;
-        guestOpera.goRegion = reservationOrigosTransfer.Source_Region;
-        guestOpera.goCountry = reservationOrigosTransfer.Source_Country;
-        guestOpera.goTerritory = reservationOrigosTransfer.Source_Territory;
-      });
-      return guestOpera;
-    }
+    //public async Task<GuestOpera> UpdateGuestOpera(ReservationOrigosTransfer reservationOrigosTransfer, int? gogu = null,GuestOpera gOpera = null)
+    //{
+    //  // Creamos un objecto GuestOpera
+    //  //GuestOpera guestOpera = null;
+    //  await Task.Run(() =>
+    //  {
+    //    // si recibimos un objecto GuestOpera 
+    //    if (gOpera != null)
+    //    {
+    //      // asignamos el objeto gOpera al objeto guestOpera creado
+    //      guestOpera = gOpera;
+    //    }
+    //    else
+    //    {
+    //      // instnaceamos un objecto de tipo de tipo GuestOpera
+    //      guestOpera = new GuestOpera();
+    //      guestOpera.gogu = gogu.Value;
+    //    }
+    //    guestOpera.goSourceID = ConvertHelper.StringToInt(reservationOrigosTransfer.Source_id);
+    //    guestOpera.goTravelAgentID = ConvertHelper.StringToInt(reservationOrigosTransfer.Travel_Agent_Id);
+    //    guestOpera.goGroupID = ConvertHelper.StringToInt(reservationOrigosTransfer.Group_id);
+    //    guestOpera.goBlockCode = reservationOrigosTransfer.Block_code;
+    //    guestOpera.goMarketCode = reservationOrigosTransfer.Market_code;
+    //    guestOpera.goMarketGroup = reservationOrigosTransfer.Market_group;
+    //    guestOpera.goSourceGroup = reservationOrigosTransfer.Source_group;
+    //    guestOpera.goRegion = reservationOrigosTransfer.Source_Region;
+    //    guestOpera.goCountry = reservationOrigosTransfer.Source_Country;
+    //    guestOpera.goTerritory = reservationOrigosTransfer.Source_Territory;
+    //  });
+    //  return guestOpera;
+    //}
     #endregion
 
     #region ExportToGuests
