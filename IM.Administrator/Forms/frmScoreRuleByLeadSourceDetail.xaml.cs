@@ -289,7 +289,7 @@ namespace IM.Administrator.Forms
         var item = dgrScores.SelectedItem;
         if (item.GetType().Name == "ScoreRuleByLeadSourceDetail")
         {
-          cmbScoreRuleConcept.Header = "Concept (" + (dgrScores.Items.Count - 1) + ")";
+          cmbScoreRuleConcept.Header = "Concept (" + (dgrScores.Items.Count - 2) + ")";
         }
       }
     }

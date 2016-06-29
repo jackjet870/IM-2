@@ -6,6 +6,7 @@ using IM.Model;
 using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -217,19 +218,29 @@ namespace IM.Administrator.Forms
     /// <param name="personnelShort">Objeto a seleccionar</param>
     /// <history>
     /// [emoguel] created 05/05/2016
+    /// [emoguel] modified se volvió async
     /// </history>
-    private void LoadPR(PersonnelShort personnelShort = null)
+    private async void LoadPR(PersonnelShort personnelShort = null)
     {
-      int nIndex = 0;
-      List<PersonnelShort> lstPrs = BRFoliosCXCPR.GetPRByFoliosCXC(_prFilter);
-      dgrPRs.ItemsSource = lstPrs;
-      if (lstPrs.Count > 0 && personnelShort != null)
+      try
       {
-        personnelShort = lstPrs.Where(pe => pe.peID == personnelShort.peID).FirstOrDefault();
-        nIndex = lstPrs.IndexOf(personnelShort);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<PersonnelShort> lstPrs =await BRFoliosCXCPR.GetPRByFoliosCXC(_prFilter);
+        dgrPRs.ItemsSource = lstPrs;
+        if (lstPrs.Count > 0 && personnelShort != null)
+        {
+          personnelShort = lstPrs.Where(pe => pe.peID == personnelShort.peID).FirstOrDefault();
+          nIndex = lstPrs.IndexOf(personnelShort);
+        }
+        GridHelper.SelectRow(dgrPRs, nIndex);
+        StatusBarReg.Content = lstPrs.Count + " PRs.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrPRs, nIndex);
-      StatusBarReg.Content = lstPrs.Count + " PRs.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folios CxC By PR");
+      }
     }
     #endregion
 

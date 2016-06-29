@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -22,6 +21,7 @@ namespace IM.Administrator.Forms
     public MembershipType oldMembershipType = new MembershipType();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo en que se abrirá la ventana
     public int nStatus = -1;//Estatus para el modo Search
+    private bool _isClosing = false;
     #endregion
     public frmMembershipTypeDetail()
     {
@@ -76,7 +76,7 @@ namespace IM.Administrator.Forms
       if (e.Key == Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     }
     #endregion
@@ -100,10 +100,13 @@ namespace IM.Administrator.Forms
         {
           if (ObjectHelper.IsEquals(membershipType, oldMembershipType) && !Validation.GetHasError(txtmtLevel) && enumMode != EnumMode.add)
           {
+            _isClosing = true;
             Close();
           }
           else
           {
+            txtStatus.Text = "Saving Data...";
+            skpStatus.Visibility = Visibility.Visible;
             string strMsj = ValidateHelper.ValidateForm(this, "Membership Type");
             #region ValidateLevel
             if (!string.IsNullOrWhiteSpace(txtmtLevel.Text.Trim()))
@@ -121,6 +124,7 @@ namespace IM.Administrator.Forms
               UIHelper.ShowMessageResult("Membership Type", nRes);
               if (nRes > 0)
               {
+                _isClosing = true;
                 DialogResult = true;
                 Close();
               }
@@ -129,10 +133,12 @@ namespace IM.Administrator.Forms
             {
               UIHelper.ShowMessage(strMsj);
             }
+            skpStatus.Visibility = Visibility.Collapsed;
           }
         }
         else
         {
+          _isClosing = true;
           nStatus = Convert.ToInt32(cmbSta.SelectedValue);
           DialogResult = true;
           Close();
@@ -157,27 +163,38 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if (enumMode != EnumMode.preview)
+      btnCancel.Focus();
+      Close();
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Verifica cambios antes de cerrar
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if(!_isClosing)
       {
-        if (!ObjectHelper.IsEquals(membershipType, oldMembershipType) && enumMode!=EnumMode.search)
+        if (enumMode != EnumMode.preview)
         {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
+          if (!ObjectHelper.IsEquals(membershipType, oldMembershipType) && enumMode != EnumMode.search)
           {
-            Close();
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result != MessageBoxResult.Yes)
+            {
+              e.Cancel = true;
+            }
           }
         }
-        else
-        {
-          Close();
-        }
       }
-      else
-      {
-        Close();
-      }
-    } 
-    #endregion    
+    }
+    #endregion
     #endregion
 
     #region Methods
@@ -198,13 +215,15 @@ namespace IM.Administrator.Forms
           lstMembershipGroup.Insert(0, new MembershipGroup { mgID = "", mgN = "" });
         }
         cmbmtGroup.ItemsSource = lstMembershipGroup;
+        skpStatus.Visibility = Visibility.Collapsed;
       }
       catch(Exception ex)
       {
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error, "Membership Type");
       }
     }
-    #endregion    
+    #endregion
+
     #endregion
   }
 }

@@ -34,7 +34,7 @@ namespace IM.Administrator.Forms
     /// [Emoguel] created
     /// </history>
     protected void CreateMenu()
-    {
+    {      
       status.Visibility = Visibility.Visible;
       lblUser.Content = App.User.User.peN;
       var lstMenu = new List<object>();
@@ -68,6 +68,9 @@ namespace IM.Administrator.Forms
         lstMenu.Add(new { nombre = "Countries", img = "pack://application:,,,/IM.Base;component/Images/World.ico", form = "frmCountries" });
         lstMenu.Add(new { nombre = "Reps", img = "pack://application:,,,/IM.Base;component/Images/Rep.png", form = "frmReps" });
         lstMenu.Add(new { nombre = "Markets", img = "pack://application:,,,/IM.Base;component/Images/Market.png", form = "frmMarkets" });
+        lstMenu.Add(new { nombre = "Segments By Agency", img = "pack://application:,,,/IM.Base;component/Images/Segments.png", form = "frmSegmentsByAgency" });
+        lstMenu.Add(new { nombre = "Segments By Lead Source", img = "pack://application:,,,/IM.Base;component/Images/Segments.png", form = "frmSegmentsByLeadSource" });
+        lstMenu.Add(new { nombre = "Segments Categories", img = "pack://application:,,,/IM.Base;component/Images/Segments.png", form = "frmSegmentsCategories" });
       }
       #endregion
 
@@ -124,6 +127,7 @@ namespace IM.Administrator.Forms
         lstMenu.Add(new { nombre = "Hotel Groups", img = "pack://application:,,,/IM.Base;component/Images/Hotel.png", form = "frmHotelGroups" });
         lstMenu.Add(new { nombre = "Lead Sources", img = "pack://application:,,,/IM.Base;component/Images/Lead_Sources.png", form = "frmLeadSources" });
         lstMenu.Add(new { nombre = "Programs", img = "pack://application:,,,/IM.Base;component/Images/Lead_Sources.png", form = "frmPrograms" });
+        lstMenu.Add(new { nombre = "Zones", img = "pack://application:,,,/IM.Base;component/Images/Lead_Sources.png", form = "frmZones" });
       }
       #endregion
 
@@ -146,6 +150,7 @@ namespace IM.Administrator.Forms
       {
         lstMenu.Add(new { nombre = "Not Booking Motives", img = "pack://application:,,,/IM.Base;component/Images/DateTime_Forbidden.png", form = "frmNotBookingMotives" });
         lstMenu.Add(new { nombre = "Under Payment  Motives", img = "pack://application:,,,/IM.Base;component/Images/Forbidden.png", form = "frmUnderPaymentMotives" });
+        lstMenu.Add(new { nombre = "Unavailable  Motives", img = "pack://application:,,,/IM.Base;component/Images/Forbidden.png", form = "frmUnavailableMotives" });
       }
       #endregion
 
@@ -183,6 +188,7 @@ namespace IM.Administrator.Forms
         lstMenu.Add(new { nombre = "Show Programs", img = "pack://application:,,,/IM.Base;component/Images/Catalog.ico", form = "frmShowPrograms" });
         lstMenu.Add(new { nombre = "Clubs", img = "pack://application:,,,/IM.Base;component/Images/Member.ico", form = "frmClubs" });
         lstMenu.Add(new { nombre = "Depts", img = "pack://application:,,,/IM.Base;component/Images/Posts.png", form = "frmDepts" });
+        lstMenu.Add(new { nombre = "Shows Programs Categories", img = "pack://application:,,,/IM.Base;component/Images/Catalog.ico", form = "frmShowProgramsCategories" });
       }
       #endregion
 
@@ -216,14 +222,34 @@ namespace IM.Administrator.Forms
       }
       #endregion
 
-      lstMenuAdm.ItemsSource = lstMenu;
-      
-      #region sort list
-      CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lstMenuAdm.ItemsSource);
-      view.SortDescriptions.Add(new System.ComponentModel.SortDescription("nombre", System.ComponentModel.ListSortDirection.Ascending));
+      #region Wholesalers
+      if(App.User.HasPermission(EnumPermission.WholeSalers,EnumPermisionLevel.ReadOnly))
+      {
+        lstMenu.Add(new { nombre = "Wholesalers", img = "pack://application:,,,/IM.Base;component/Images/shopping_cart.png", form = "frmWholesalers" });
+      }
       #endregion
 
-      lstMenuAdm.SelectedIndex = 0;
+      #region Personnel
+      if (App.User.HasPermission(EnumPermission.Personnel, EnumPermisionLevel.ReadOnly))
+      {
+        //lstMenu.Add(new { nombre = "Personnel", img = "pack://application:,,,/IM.Base;component/Images/Personnel.png", form = "frmPersonnel" });
+      }
+
+      #endregion
+      #region sort list
+      //CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lstMenuAdm.ItemsSource);
+      //view.SortDescriptions.Add(new System.ComponentModel.SortDescription("nombre", System.ComponentModel.ListSortDirection.Ascending));
+      lstMenu.Sort((x, y) => string.Compare(x.GetType().GetProperty("nombre").GetValue(x, null).ToString(), y.GetType().GetProperty("nombre").GetValue(y, null).ToString()));
+
+      #endregion
+      lstMenuAdm.ItemsSource = lstMenu;
+      int nIndex = 0;
+      var personnelCatalog=lstMenu.Where(item => item.GetType().GetProperty("form").GetValue(item,null).ToString().Trim() == "frmPersonnel").FirstOrDefault();      
+      if(personnelCatalog!=null)
+      {        
+        nIndex = lstMenu.IndexOf(personnelCatalog);
+      }
+      lstMenuAdm.SelectedIndex = nIndex;
       lstMenuAdm.Focus();
       status.Visibility = Visibility.Collapsed;
       StatusBarReg.Content = lstMenuAdm.Items.Count + " Items.";

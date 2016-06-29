@@ -44,40 +44,44 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo WareHouse</returns>
     /// <history>
     /// [emoguel] created 22/04/2016
+    /// [emoguel] modified 27/06/2016------> se volvió async
     /// </history>
-    public static List<Warehouse> GetWareHouses(int nStatus = -1, Warehouse wareHouse = null)
+    public async static Task<List<Warehouse>> GetWareHouses(int nStatus = -1, Warehouse wareHouse = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from wh in dbContext.Warehouses
-                    select wh;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(wh => wh.whA == blnStatus);
+          var query = from wh in dbContext.Warehouses
+                      select wh;
+
+          if (nStatus != -1)//Filtro por estatus
+          {
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(wh => wh.whA == blnStatus);
+          }
+
+          if (wareHouse != null)//Validamos que se tenga el objeto
+          {
+            if (!string.IsNullOrWhiteSpace(wareHouse.whID))//filtro por ID
+            {
+              query = query.Where(wh => wh.whID == wareHouse.whID);
+            }
+
+            if (!string.IsNullOrWhiteSpace(wareHouse.whN))//Filtro por descripción
+            {
+              query = query.Where(wh => wh.whN.Contains(wareHouse.whN));
+            }
+
+            if (!string.IsNullOrWhiteSpace(wareHouse.whar))//Filtro por Area
+            {
+              query = query.Where(wh => wh.whar == wareHouse.whar);
+            }
+          }
+
+          return query.OrderBy(wh => wh.whN).ToList();
         }
-
-        if (wareHouse != null)//Validamos que se tenga el objeto
-        {
-          if (!string.IsNullOrWhiteSpace(wareHouse.whID))//filtro por ID
-          {
-            query = query.Where(wh => wh.whID == wareHouse.whID);
-          }
-
-          if (!string.IsNullOrWhiteSpace(wareHouse.whN))//Filtro por descripción
-          {
-            query = query.Where(wh => wh.whN.Contains(wareHouse.whN));
-          }
-
-          if (!string.IsNullOrWhiteSpace(wareHouse.whar))//Filtro por Area
-          {
-            query = query.Where(wh => wh.whar == wareHouse.whar);
-          }
-        }
-
-        return query.OrderBy(wh => wh.whN).ToList();
-      }
+      });
     }
     #endregion
 
@@ -145,6 +149,29 @@ namespace IM.BusinessRules.BR
         return nRes;
 
       }
+    }
+    #endregion
+
+    #region GetWarehousesByIDs
+    /// <summary>
+    /// Obtiene Warehouses a travez de una lista de IDs
+    /// </summary>
+    /// <param name="lstWarehousesID"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [emoguel] created 16/06/2016
+    /// </history>
+    public static async Task<List<WarehouseByUser>> GetWarehousesByIDs(List<string> lstWarehousesID)
+    {
+      List<WarehouseByUser> lstWarehouses = await Task.Run(() =>
+        {
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          {
+            return dbContext.Warehouses.AsEnumerable().Where(wh => lstWarehousesID.Contains(wh.whID)).Select(wh => new WarehouseByUser { whID = wh.whID, whN = wh.whN }).ToList();
+          }
+        });
+
+      return lstWarehouses;
     }
     #endregion
   }

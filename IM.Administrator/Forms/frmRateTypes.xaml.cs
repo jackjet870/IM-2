@@ -8,6 +8,7 @@ using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -239,16 +240,25 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadRateTypes(RateType rateType = null)
     {
-      int nIndex = 0;
-      List<RateType> lstRateTypes = await BRRateTypes.GetRateTypes(_rateTypeFilter, _nStatus, orderByraN: true);
-      dgrRateTypes.ItemsSource = lstRateTypes;
-      if (lstRateTypes.Count > 0 && rateType != null)
+      try
       {
-        rateType = lstRateTypes.Where(ra => ra.raID == rateType.raID).FirstOrDefault();
-        nIndex = lstRateTypes.IndexOf(rateType);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<RateType> lstRateTypes = await BRRateTypes.GetRateTypes(_rateTypeFilter, _nStatus, orderByraN: true);
+        dgrRateTypes.ItemsSource = lstRateTypes;
+        if (lstRateTypes.Count > 0 && rateType != null)
+        {
+          rateType = lstRateTypes.Where(ra => ra.raID == rateType.raID).FirstOrDefault();
+          nIndex = lstRateTypes.IndexOf(rateType);
+        }
+        GridHelper.SelectRow(dgrRateTypes, nIndex);
+        StatusBarReg.Content = lstRateTypes.Count + " Rate Types.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrRateTypes, nIndex);
-      StatusBarReg.Content = lstRateTypes.Count + " Rate Types.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Rate Types");
+      }
     }
     #endregion
 
@@ -281,7 +291,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_rateTypeFilter.raN))//Filtro por estatus
       {
-        if(!rateType.raN.Contains(_rateTypeFilter.raN))
+        if(!rateType.raN.Contains(_rateTypeFilter.raN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

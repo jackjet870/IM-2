@@ -124,7 +124,7 @@ namespace IM.BusinessRules.BR
                 #region Delete
                 lstSrDel.ForEach(sr =>
                                   bankSave.SalesRooms.Remove(bankSave.SalesRooms.Where(srr => srr.srID == sr.srID).FirstOrDefault())
-                                  );
+                                  );                
                 #endregion
               }
               #endregion

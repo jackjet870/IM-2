@@ -18,13 +18,18 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo FolioCxCCancellation</returns>
     /// <history>
     /// [emoguel] created 05/05/2016
+    /// [emoguel] modified 09/06/2016-->Se volvió async
     /// </history>
-    public static List<FolioCxCCancellation> GetFoliossCxCCancellation(string prId)
+    public async static Task<List<FolioCxCCancellation>> GetFoliossCxCCancellation(string prId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        return dbContext.FoliosCxCCancellation.Where(fc => fc.fccpe == prId).ToList();
-      }
+      List<FolioCxCCancellation> lstFolios = await Task.Run(() =>
+         {
+           using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+           {
+             return dbContext.FoliosCxCCancellation.Where(fc => fc.fccpe == prId).ToList();
+           }
+         });
+      return lstFolios;
     } 
     #endregion
   }

@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -236,18 +237,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 25/04/2016
     /// </history>
-    private void LoadScoreRulesTypes(ScoreRuleType scoreRuleType = null)
+    private async void LoadScoreRulesTypes(ScoreRuleType scoreRuleType = null)
     {
-      int nIndex = 0;
-      List<ScoreRuleType> lstScoreRulesTypes = BRScoreRulesTypes.GetScoreRulesTypes(_nStatus, _scoreRuleTypeFilter);
-      dgrScoreRulesTypes.ItemsSource = lstScoreRulesTypes;
-      if (lstScoreRulesTypes.Count > 0 && scoreRuleType != null)
+      try
       {
-        scoreRuleType = lstScoreRulesTypes.Where(sy => sy.syID == scoreRuleType.syID).FirstOrDefault();
-        nIndex = lstScoreRulesTypes.IndexOf(scoreRuleType);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<ScoreRuleType> lstScoreRulesTypes =await BRScoreRulesTypes.GetScoreRulesTypes(_nStatus, _scoreRuleTypeFilter);
+        dgrScoreRulesTypes.ItemsSource = lstScoreRulesTypes;
+        if (lstScoreRulesTypes.Count > 0 && scoreRuleType != null)
+        {
+          scoreRuleType = lstScoreRulesTypes.Where(sy => sy.syID == scoreRuleType.syID).FirstOrDefault();
+          nIndex = lstScoreRulesTypes.IndexOf(scoreRuleType);
+        }
+        GridHelper.SelectRow(dgrScoreRulesTypes, nIndex);
+        StatusBarReg.Content = lstScoreRulesTypes.Count + "Score Rules Types.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrScoreRulesTypes, nIndex);
-      StatusBarReg.Content = lstScoreRulesTypes.Count + "Score Rules Types.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Score Rules Types");
+      }
     }
     #endregion
 
@@ -280,7 +290,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_scoreRuleTypeFilter.syN))//Filtro por descripcion
       {
-        if(!scoreRuleType.syN.Contains(_scoreRuleTypeFilter.syN))
+        if(!scoreRuleType.syN.Contains(_scoreRuleTypeFilter.syN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

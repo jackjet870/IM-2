@@ -201,6 +201,7 @@
     <Compile Include="EfficiencyType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Enums\EnumDatabase.cs" />
     <Compile Include="Enums\EnumAction.cs" />
     <Compile Include="Enums\EnumBasedOnPRLocation.cs" />
     <Compile Include="Enums\EnumCaseSelfGen.cs" />

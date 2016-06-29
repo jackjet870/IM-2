@@ -18,6 +18,7 @@ namespace IM.Administrator.Forms
     public NotBookingMotive notBookingMotive = new NotBookingMotive();//Objeto a guardar
     public NotBookingMotive oldNotBookingMotive = new NotBookingMotive();//objeto con los datos iniciales
     public EnumMode enumMode;//Modo de la ventada
+    private bool _isClosing = false;
     #endregion
 
     public frmNotBookingMotiveDetail()
@@ -62,7 +63,7 @@ namespace IM.Administrator.Forms
       if (e.Key == Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     }
     #endregion
@@ -84,6 +85,7 @@ namespace IM.Administrator.Forms
         btnAccept.Focus();
         if (ObjectHelper.IsEquals(notBookingMotive, oldNotBookingMotive) && enumMode != EnumMode.add)
         {
+          _isClosing = true;
           Close();
         }
         else
@@ -95,6 +97,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Not Booking Motive", nRes);
             if (nRes > 0)
             {
+              _isClosing = true;
               DialogResult = true;
               Close();
             }
@@ -123,24 +126,35 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if (enumMode != EnumMode.preview)
+      btnCancel.Focus();   
+      Close();
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Verifica cambios en la ventana antes de cerrar
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
       {
-        if (!ObjectHelper.IsEquals(notBookingMotive, oldNotBookingMotive))
+        if (enumMode != EnumMode.preview)
         {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
+          if (!ObjectHelper.IsEquals(notBookingMotive, oldNotBookingMotive))
           {
-            Close();
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result != MessageBoxResult.Yes)
+            {
+              e.Cancel = true;
+            }
           }
         }
-        else
-        {
-          Close();
-        }
-      }
-      else
-      {
-        Close();
       }
     }
     #endregion

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,30 +18,35 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo FolioCXC</returns>
     /// <history>
     /// [emoguel] created 22/03/2016
+    /// [emoguel] modified se volvió async
     /// </history>
-    public static List<FolioCXC> GetFoliosCXC(FolioCXC folioCXC=null,int nStatus=-1)
+    public async static Task<List<FolioCXC>> GetFoliosCXC(FolioCXC folioCXC=null,int nStatus=-1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var query = from fi in dbContext.FoliosCXC
-                    select fi;
-
-        if (nStatus != -1)//Filtro por estatus
+      List<FolioCXC> lstFolios = await Task.Run(() =>
         {
-          bool blnEstatus = Convert.ToBoolean(nStatus);
-          query = query.Where(fi => fi.fiA == blnEstatus);
-        }
-
-        if(folioCXC!=null)//Validamos si se tiene un objeto
-        {
-          if (folioCXC.fiFrom > 0 && folioCXC.fiTo > 0)//Validamos que se tenga un rango mayor a 0
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
           {
-            query = query.Where(fi => folioCXC.fiFrom >= fi.fiFrom && folioCXC.fiTo <= fi.fiTo);//Filtramos por folio
-          }
-        }
+            var query = from fi in dbContext.FoliosCXC
+                        select fi;
 
-        return query.OrderBy(fi=>fi.fiID).ToList();//Ordenamos por ID
-      }
+            if (nStatus != -1)//Filtro por estatus
+          {
+              bool blnEstatus = Convert.ToBoolean(nStatus);
+              query = query.Where(fi => fi.fiA == blnEstatus);
+            }
+
+            if (folioCXC != null)//Validamos si se tiene un objeto
+          {
+              if (folioCXC.fiFrom > 0 && folioCXC.fiTo > 0)//Validamos que se tenga un rango mayor a 0
+            {
+                query = query.Where(fi => folioCXC.fiFrom >= fi.fiFrom && folioCXC.fiTo <= fi.fiTo);//Filtramos por folio
+            }
+            }
+
+            return query.OrderBy(fi => fi.fiID).ToList();//Ordenamos por ID
+        }
+        });
+      return lstFolios;
     }
     #endregion
 

@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -238,18 +239,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 28/04/2016
     /// </history>
-    private void LoadSchemas(TourTimesSchema tourTimeSchema = null)
+    private async void LoadSchemas(TourTimesSchema tourTimeSchema = null)
     {
-      List<TourTimesSchema> lstTourTimesSchemas = BRTourTimesSchemas.GetTourTimesSchemas(_nStatus, _tourTimeSchemaFilter);
-      dgrTourTimesSchemas.ItemsSource = lstTourTimesSchemas;
-      int nIndex = 0;
-      if(lstTourTimesSchemas.Count>0 && tourTimeSchema!=null)
+      try
       {
-        tourTimeSchema = lstTourTimesSchemas.Where(tc => tc.tcID == tourTimeSchema.tcID).FirstOrDefault();
-        nIndex = lstTourTimesSchemas.IndexOf(tourTimeSchema);        
+        status.Visibility = Visibility.Visible;
+        List<TourTimesSchema> lstTourTimesSchemas = await BRTourTimesSchemas.GetTourTimesSchemas(_nStatus, _tourTimeSchemaFilter);
+        dgrTourTimesSchemas.ItemsSource = lstTourTimesSchemas;
+        int nIndex = 0;
+        if (lstTourTimesSchemas.Count > 0 && tourTimeSchema != null)
+        {
+          tourTimeSchema = lstTourTimesSchemas.Where(tc => tc.tcID == tourTimeSchema.tcID).FirstOrDefault();
+          nIndex = lstTourTimesSchemas.IndexOf(tourTimeSchema);
+        }
+        GridHelper.SelectRow(dgrTourTimesSchemas, nIndex);
+        StatusBarReg.Content = lstTourTimesSchemas.Count + " Schemas.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrTourTimesSchemas, nIndex);
-      StatusBarReg.Content = lstTourTimesSchemas.Count + " Schemas.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Schemas");
+      }
     }
     #endregion
 
@@ -282,7 +292,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_tourTimeSchemaFilter.tcN))//Filtro por descripción
       {
-        if(!tourTimeSchema.tcN.Contains(_tourTimeSchemaFilter.tcN))
+        if(!tourTimeSchema.tcN.Contains(_tourTimeSchemaFilter.tcN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

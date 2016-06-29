@@ -4,7 +4,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System.Data.Entity;
-
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -19,35 +19,41 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo Dept</returns>
     /// <history>
     /// [emoguel] created 03/05/2016
+    /// [emoguel] modified 09/06/2016 --> Se volvió async
     /// </history>
-    public static List<Dept> GetDepts(int nStatus = -1, Dept dept = null)
+    public async static Task<List<Dept>> GetDepts(int nStatus = -1, Dept dept = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<Dept> lstDepts = await Task.Run(() =>
       {
-        var query = from de in dbContext.Depts
-                    select de;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(de => de.deA == blnStatus);
-        }
+          var query = from de in dbContext.Depts
+                      select de;
 
-        if (dept != null)
-        {
-          if (!string.IsNullOrWhiteSpace(dept.deID))//filtro por ID
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(de => de.deID == dept.deID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(de => de.deA == blnStatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(dept.deN))//Filtro por descripción
+          if (dept != null)
           {
-            query = query.Where(de => de.deN.Contains(dept.deN));
-          }
-        }
+            if (!string.IsNullOrWhiteSpace(dept.deID))//filtro por ID
+            {
+              query = query.Where(de => de.deID == dept.deID);
+            }
 
-        return query.OrderBy(de => de.deN).ToList();
-      }
+            if (!string.IsNullOrWhiteSpace(dept.deN))//Filtro por descripción
+            {
+              query = query.Where(de => de.deN.Contains(dept.deN));
+            }
+          }
+
+          return query.OrderBy(de => de.deN).ToList();
+        }
+      });
+
+      return lstDepts;
     }
     #endregion
 

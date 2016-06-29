@@ -7,6 +7,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -20,6 +21,7 @@ namespace IM.Administrator.Forms
     public Warehouse oldWarehouse = new Warehouse();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo en que se abrirá la ventana
     public int nStatus = -1;//sirve para el modo busqueda
+    private bool _isClosing = false;
     #endregion
     public frmWarehouseDetail()
     {
@@ -76,7 +78,7 @@ namespace IM.Administrator.Forms
       if (e.Key == Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     }
     #endregion
@@ -97,6 +99,7 @@ namespace IM.Administrator.Forms
       {
         if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(warehouse,oldWarehouse))
         {
+          _isClosing = true;
           Close();
         }
         else
@@ -108,6 +111,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Warehouse", nRes);
             if(nRes>0)
             {
+              _isClosing = true;
               DialogResult = true;
               Close();
             }
@@ -120,6 +124,7 @@ namespace IM.Administrator.Forms
       }
       else
       {
+        _isClosing = true;
         nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
         DialogResult = true;
         Close();
@@ -138,24 +143,35 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if(enumMode!=EnumMode.search && enumMode!=EnumMode.preview)
+      btnCancel.Focus();
+      Close();      
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana verificando cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] crated 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
       {
-        if (!ObjectHelper.IsEquals(warehouse, oldWarehouse))
+        if (enumMode != EnumMode.search && enumMode != EnumMode.preview)
         {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
+          if (!ObjectHelper.IsEquals(warehouse, oldWarehouse))
           {
-            Close();
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result != MessageBoxResult.Yes)
+            {
+              e.Cancel = true;
+            }
           }
         }
-        else
-        {
-          Close();
-        }
-      }
-      else
-      {
-        Close();
       }
     }
     #endregion
@@ -184,8 +200,10 @@ namespace IM.Administrator.Forms
       {
         UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Warehouse");
       }
-    } 
+    }
     #endregion
+
     #endregion
+    
   }
 }

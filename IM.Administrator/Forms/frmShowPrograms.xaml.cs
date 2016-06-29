@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -234,18 +235,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 25/04/2016
     /// </history>
-    private void LoadShowPrograms(ShowProgram showProgram = null)
+    private async void LoadShowPrograms(ShowProgram showProgram = null)
     {
-      int nIndex = 0;
-      List<ShowProgram> lstShowPrograms = BRShowPrograms.GetShowPrograms(_nStatus, _showProgramFilter);
-      dgrShowPrograms.ItemsSource = lstShowPrograms;
-      if (lstShowPrograms.Count > 0 && showProgram != null)
+      try
       {
-        showProgram = lstShowPrograms.Where(sk => sk.skID == showProgram.skID).FirstOrDefault();
-        nIndex = lstShowPrograms.IndexOf(showProgram);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<ShowProgram> lstShowPrograms = await BRShowPrograms.GetShowPrograms(_nStatus, _showProgramFilter);
+        dgrShowPrograms.ItemsSource = lstShowPrograms;
+        if (lstShowPrograms.Count > 0 && showProgram != null)
+        {
+          showProgram = lstShowPrograms.Where(sk => sk.skID == showProgram.skID).FirstOrDefault();
+          nIndex = lstShowPrograms.IndexOf(showProgram);
+        }
+        GridHelper.SelectRow(dgrShowPrograms, nIndex);
+        StatusBarReg.Content = lstShowPrograms.Count + " Show Programs.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrShowPrograms, nIndex);
-      StatusBarReg.Content = lstShowPrograms.Count + " Show Programs.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Show Programs");
+      }
     }
     #endregion
 
@@ -278,7 +288,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_showProgramFilter.skN))//Filtro por descripción
       {
-        if (!showProgram.skN.Contains(_showProgramFilter.skN))
+        if (!showProgram.skN.Contains(_showProgramFilter.skN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

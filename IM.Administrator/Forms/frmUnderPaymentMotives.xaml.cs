@@ -8,6 +8,7 @@ using IM.Base.Helpers;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -233,18 +234,34 @@ namespace IM.Administrator.Forms
 
     #region Methods
     #region LoadUnderPaymentMotives
-    private void LoadUnderPaymentMotives(UnderPaymentMotive underPaymentMotive = null)
+    /// <summary>
+    /// Llena el grid de paymentMotives
+    /// </summary>
+    /// <param name="underPaymentMotive">objeto a seleccionar</param>
+    /// <history>
+    /// [emoguel] created 28/06/2016
+    /// </history>
+    private async void LoadUnderPaymentMotives(UnderPaymentMotive underPaymentMotive = null)
     {
-      int nIndex = 0;
-      List<UnderPaymentMotive> lstUnderPaymentMotive = BRUnderPaymentMotives.getUnderPaymentMotives(_nStatus, _underPaymentMotiveFilter);
-      dgrUnderPayMentMotive.ItemsSource = lstUnderPaymentMotive;
-      if (lstUnderPaymentMotive.Count > 0 && underPaymentMotive != null)
+      try
       {
-        underPaymentMotive = lstUnderPaymentMotive.Where(up => up.upID == underPaymentMotive.upID).FirstOrDefault();
-        nIndex = lstUnderPaymentMotive.IndexOf(underPaymentMotive);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<UnderPaymentMotive> lstUnderPaymentMotive = await BRUnderPaymentMotives.getUnderPaymentMotives(_nStatus, _underPaymentMotiveFilter);
+        dgrUnderPayMentMotive.ItemsSource = lstUnderPaymentMotive;
+        if (lstUnderPaymentMotive.Count > 0 && underPaymentMotive != null)
+        {
+          underPaymentMotive = lstUnderPaymentMotive.Where(up => up.upID == underPaymentMotive.upID).FirstOrDefault();
+          nIndex = lstUnderPaymentMotive.IndexOf(underPaymentMotive);
+        }
+        GridHelper.SelectRow(dgrUnderPayMentMotive, nIndex);
+        StatusBarReg.Content = lstUnderPaymentMotive.Count + " Under Payment Motives.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrUnderPayMentMotive, nIndex);
-      StatusBarReg.Content = lstUnderPaymentMotive.Count + " Under Payment Motives.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Under Payment Motives");
+      }
     }
     #endregion
 
@@ -277,7 +294,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_underPaymentMotiveFilter.upN))
       {
-        if (!underPaymentMotive.upN.Contains(_underPaymentMotiveFilter.upN))
+        if (!underPaymentMotive.upN.Contains(_underPaymentMotiveFilter.upN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

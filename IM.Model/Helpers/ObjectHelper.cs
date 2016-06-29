@@ -23,7 +23,7 @@ namespace IM.Model.Helpers
     {
       if (objNew != null && ObjOld != null)
       {
-        var type = typeof(T);
+        var type = objNew.GetType();
         var property = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
         if (!blnIsVirtual)
         {
@@ -105,18 +105,22 @@ namespace IM.Model.Helpers
     /// [emoguel] created 15/04/2016
     /// [emoguel] Modified--Ignora registros vacios y verifica si las lista son null
     /// </history>
-    public static bool IsListEquals<T>(List<T> lstNew, List<T> lstOld)
+    public static bool IsListEquals<T>(List<T> lstNew, List<T> lstOld,string id="")
     {
       if (lstNew != null && lstOld != null)
       {
         Type type = typeof(T);
 
         #region Obtener la llave primaria
-        EntityTypeBase entityTypeBase = EntityHelper.GetEntityTypeBase(type);//Obtenemos las propiedades de la entidad
-        EdmMember edmMember = entityTypeBase.KeyMembers.FirstOrDefault();//Obtenemos la llave primaria
+        if (id == "")
+        {
+          EntityTypeBase entityTypeBase = EntityHelper.GetEntityTypeBase(type);//Obtenemos las propiedades de la entidad
+          EdmMember edmMember = entityTypeBase.KeyMembers.FirstOrDefault();//Obtenemos la llave primaria
+          id = edmMember.Name;
+        }
 
-        var lst1 = lstNew.Where(p => !lstOld.Any(p1 => type.GetProperty(edmMember.Name).GetValue(p1) == type.GetProperty(edmMember.Name).GetValue(p)) && type.GetProperty(edmMember.Name).GetValue(p) != null).ToList();
-        var lst2 = lstOld.Where(p => !lstNew.Any(p1 => type.GetProperty(edmMember.Name).GetValue(p1) == type.GetProperty(edmMember.Name).GetValue(p)) && type.GetProperty(edmMember.Name).GetValue(p) != null).ToList();
+        var lst1 = lstNew.Where(p => !lstOld.Any(p1 => type.GetProperty(id).GetValue(p1) == type.GetProperty(id).GetValue(p)) && type.GetProperty(id).GetValue(p) != null).ToList();
+        var lst2 = lstOld.Where(p => !lstNew.Any(p1 => type.GetProperty(id).GetValue(p1) == type.GetProperty(id).GetValue(p)) && type.GetProperty(id).GetValue(p) != null).ToList();
         #endregion
 
         if (lst1.Count() > 0 || lst2.Count() > 0)

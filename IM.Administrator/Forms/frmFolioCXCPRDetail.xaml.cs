@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -40,7 +41,7 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 05/05/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
       if (enumMode != EnumMode.search)
@@ -55,6 +56,8 @@ namespace IM.Administrator.Forms
         }
         else
         {
+          txtStatus.Text = "Saving Data...";
+          skpStatus.Visibility = Visibility.Visible;
           PersonnelShort personnelSave = (PersonnelShort)cmbPersonnel.SelectedItem;
           if (personnelSave != null)
           {
@@ -62,7 +65,9 @@ namespace IM.Administrator.Forms
 
             if(enumMode==EnumMode.add)
             {
-              if(BRFoliosCXCPR.GetPRByFoliosCXC(personnelSave).FirstOrDefault()!=null)
+              var lstFolioCXC =await BRFoliosCXCPR.GetPRByFoliosCXC(personnelSave);
+              var folioCxC = lstFolioCXC.FirstOrDefault();
+              if (folioCxC != null)
               {
                 UIHelper.ShowMessage("The current PR already has folios, edit the correspoding PR.");
                 return;
@@ -87,7 +92,7 @@ namespace IM.Administrator.Forms
               return;
             }
 
-            int nRes = BRFoliosCXCPR.SaveFoliosCxCByPR(personnelSave, lstFoliosPR, lstFoliosCan);
+            int nRes =await BRFoliosCXCPR.SaveFoliosCxCByPR(personnelSave, lstFoliosPR, lstFoliosCan);
             UIHelper.ShowMessageResult("Folios", nRes);
             if (nRes > 0)
             {
@@ -102,6 +107,7 @@ namespace IM.Administrator.Forms
           {
             UIHelper.ShowMessage("Select a PR.");
           }
+          skpStatus.Visibility = Visibility.Collapsed;
         }
       }
       else
@@ -109,6 +115,7 @@ namespace IM.Administrator.Forms
         #region Search
         if (cmbPersonnel.SelectedItem != null)
         {
+          blnClosing = true;
           personnel = (PersonnelShort)cmbPersonnel.SelectedItem;
           DialogResult = true;
           Close();
@@ -120,6 +127,7 @@ namespace IM.Administrator.Forms
         }
         else
         {
+          blnClosing = true;
           Close();
         } 
         #endregion
@@ -216,8 +224,7 @@ namespace IM.Administrator.Forms
           }
           dgrAssigned.IsReadOnly = false;
           dgrCancelled.IsReadOnly = false;
-        }
-        btnAccept.Visibility = Visibility.Visible;        
+        }              
       }
       LoadPrs();
       UIHelper.SetUpControls(new Personnel(), this);
@@ -357,10 +364,17 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 05/05/2016
     /// </history>
-    private void LoadPrs()
+    private async void LoadPrs()
     {
-      List<PersonnelShort> lstPrs = BRPersonnel.GetPersonnelByRole("PR");//BRPersonnel.GetPersonnel( status:2,roles: "PR");
-      cmbPersonnel.ItemsSource = lstPrs;
+      try
+      {
+        List<PersonnelShort> lstPrs =await BRPersonnel.GetPersonnelByRole("PR");
+        cmbPersonnel.ItemsSource = lstPrs;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folios Cxc By PR");
+      }
     }
     #endregion
 
@@ -371,10 +385,17 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 05/05/2016
     /// </history>
-    private void loadReasons()
+    private async void loadReasons()
     {
-      List<ReasonCancellationFolio> lstReasons = BRReasonCancellationFolios.GetReasonCancellationFolios(1);
-      cmbReason.ItemsSource = lstReasons;
+      try
+      {
+        List<ReasonCancellationFolio> lstReasons = await BRReasonCancellationFolios.GetReasonCancellationFolios(1);
+        cmbReason.ItemsSource = lstReasons;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folios Cxc By PR");
+      }
     }
     #endregion
 
@@ -386,11 +407,18 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 05/05/2016
     /// </history>
-    private void LoadFoliosAssigned(string prID)
+    private async void LoadFoliosAssigned(string prID)
     {
-      List<FolioCxCPR> lstFoliosCXCPR = BRFoliosCXCPR.GetFoliosCXCPR(prID);
-      _lstFolios = BRFoliosCXCPR.GetFoliosCXCPR(prID);      
-      dgrAssigned.ItemsSource = lstFoliosCXCPR;
+      try
+      {
+        List<FolioCxCPR> lstFoliosCXCPR =await BRFoliosCXCPR.GetFoliosCXCPR(prID);
+        _lstFolios = await BRFoliosCXCPR.GetFoliosCXCPR(prID);
+        dgrAssigned.ItemsSource = lstFoliosCXCPR;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folios Cxc By PR");
+      }
     }
     #endregion
 
@@ -401,12 +429,25 @@ namespace IM.Administrator.Forms
     /// <param name="prID">Pr Asignado</param>
     /// <history>
     /// [emoguel] created 05/05/2016
+    /// [emoguel] modified 09/06/2016-->Se volvió async
     /// </history>
-    private void LoadCancelled(string prID)
+    private async void LoadCancelled(string prID)
     {
-      List<FolioCxCCancellation> lstCancelled = BRFoliosCxCCancellation.GetFoliossCxCCancellation(prID);
-      _lstCancellation = BRFoliosCxCCancellation.GetFoliossCxCCancellation(prID);
-      dgrCancelled.ItemsSource = lstCancelled;
+      try
+      {
+        List<FolioCxCCancellation> lstCancelled =await BRFoliosCxCCancellation.GetFoliossCxCCancellation(prID);
+        _lstCancellation =await BRFoliosCxCCancellation.GetFoliossCxCCancellation(prID);
+        dgrCancelled.ItemsSource = lstCancelled;
+        skpStatus.Visibility = Visibility.Collapsed;
+        if(enumMode!=EnumMode.preview)
+        {
+          btnAccept.Visibility = Visibility.Visible;
+        }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folios Cxc By PR");
+      }
     }
     #endregion
 
@@ -433,7 +474,7 @@ namespace IM.Administrator.Forms
           strMsj = "Values must be greatter than 0.";
           break;
         }
-        else if (folio.fcpTo <= folio.fcpFrom)
+        else if (folio.fcpTo < folio.fcpFrom)
         {
           GridHelper.SelectRow(dgrAssigned, nIndex,1, true);
           strMsj = "From value must be greatter or equal than To value.";

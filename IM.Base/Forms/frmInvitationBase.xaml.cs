@@ -3373,7 +3373,10 @@ namespace IM.Base.Forms
     /// <summary>
     /// Calcula el monto maximo de regalos
     /// </summary>
-    private void CalculateMaxAuthGifts()
+    /// <history>
+    /// [emoguel]  modified 27/06/2016
+    /// </history>
+    private async void CalculateMaxAuthGifts()
     {
       decimal maxAuthGifts = 0;
 
@@ -3381,8 +3384,9 @@ namespace IM.Base.Forms
       {
         if (row.gtgs != null && row.gtQuantity > 0)
         {
-          var guestStatusType = IM.BusinessRules.BR.BRGuestStatusTypes.GetGuestStatusTypes(new Model.GuestStatusType { gsID = row.gtgs }).FirstOrDefault();
-          maxAuthGifts += row.gtQuantity * guestStatusType.gsMaxAuthGifts;
+          var guestStatusType = await BRGuestStatusTypes.GetGuestStatusTypes(new Model.GuestStatusType { gsID = row.gtgs });
+          var guestStaType=guestStatusType.FirstOrDefault();
+          maxAuthGifts += row.gtQuantity * guestStaType.gsMaxAuthGifts;
         }
       }
 

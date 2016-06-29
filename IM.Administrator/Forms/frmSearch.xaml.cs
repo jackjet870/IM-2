@@ -422,9 +422,16 @@ namespace IM.Administrator.Forms
     /// </history>
     protected async void loadSegments()
     {
-      List<SegmentByAgency> lstSegmentsByAgency = await BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());
-      lstSegmentsByAgency.Insert(0,new SegmentByAgency { seID = "", seN = "" });
-      cmbSegment.ItemsSource = lstSegmentsByAgency;
+      try
+      {
+        List<SegmentByAgency> lstSegmentsByAgency = await BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());
+        lstSegmentsByAgency.Insert(0, new SegmentByAgency { seID = "", seN = "" });
+        cmbSegment.ItemsSource = lstSegmentsByAgency;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Agencies");
+      }
     }
     #endregion
     #endregion

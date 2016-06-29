@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="Rate Type Detail" DataContext="{Binding rateType}" Height="200" Width="338">
+        Title="Rate Type Detail" Closing="Window_Closing" Height="200" Width="338">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
         <Grid.ColumnDefinitions>

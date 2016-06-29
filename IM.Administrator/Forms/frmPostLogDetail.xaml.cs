@@ -21,6 +21,7 @@ namespace IM.Administrator.Forms
     public PostLog oldPostLog = new PostLog();//objeto con los datos iniciales
     public EnumMode enumMode;//Modo en que se abrirá la ventana
     public bool blnDate = false;
+    private bool _isClosing = false;
     #endregion
     public frmPostLogDetail()
     {
@@ -90,7 +91,7 @@ namespace IM.Administrator.Forms
       if (e.Key == Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     }
     #endregion
@@ -121,6 +122,7 @@ namespace IM.Administrator.Forms
           {
             blnDate = false;
           }
+          _isClosing = true;
           DialogResult = true;
           Close();
         }
@@ -128,6 +130,7 @@ namespace IM.Administrator.Forms
         {
           if (ObjectHelper.IsEquals(postLog, oldPostLog) && enumMode != EnumMode.add)
           {
+            _isClosing = true;
             Close();
           }
           else
@@ -140,7 +143,9 @@ namespace IM.Administrator.Forms
               UIHelper.ShowMessageResult("PostLog", nRes);
               if (nRes > 0)
               {
-                postLog = BRPostsLog.GetPostsLog(postLog).FirstOrDefault();
+                _isClosing = true;
+                var postsLog= await BRPostsLog.GetPostsLog(postLog);
+                postLog = postsLog.FirstOrDefault();
                 DialogResult = true;
                 Close();
               }
@@ -172,24 +177,35 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if(enumMode!=EnumMode.preview && enumMode!=EnumMode.search)
+      btnCancel.Focus();
+      Close();
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Verifica cambios antes de cerrar la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created  28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if(!_isClosing)
       {
-        if (!ObjectHelper.IsEquals(postLog, oldPostLog))
+        if (enumMode != EnumMode.preview && enumMode != EnumMode.search)
         {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
+          if (!ObjectHelper.IsEquals(postLog, oldPostLog))
           {
-            Close();
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result != MessageBoxResult.Yes)
+            {
+              e.Cancel = true;
+            }
           }
         }
-        else
-        {
-          Close();
-        }
-      }
-      else
-      {
-        Close();
       }
     }
     #endregion
@@ -206,15 +222,23 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadPersonnel()
     {
-      List<PersonnelShort> lstPersonnel =await BRPersonnel.GetPersonnel();
-      if(enumMode==EnumMode.search)
+      try
       {
-        lstPersonnel.Insert(0,new PersonnelShort { peID = "", peN = "" });
+        List<PersonnelShort> lstPersonnel = await BRPersonnel.GetPersonnel();
+        if (enumMode == EnumMode.search)
+        {
+          lstPersonnel.Insert(0, new PersonnelShort { peID = "", peN = "" });
+        }
+        cmbppChangedBy.ItemsSource = lstPersonnel;
+        cmbpppe.ItemsSource = lstPersonnel;
       }
-      cmbppChangedBy.ItemsSource = lstPersonnel;
-      cmbpppe.ItemsSource = lstPersonnel;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Post Log");
+      }
     }
     #endregion
+
     #region LoadPosts
     /// <summary>
     /// Carga el comoboBox de Posts
@@ -222,15 +246,22 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 12/04/2016
     /// </history>
-    private void LoadPosts()
+    private async void LoadPosts()
     {
-      List<Post> lstPosts = BRPosts.GetPosts();
-      cmbpppo.ItemsSource = lstPosts;
+      try
+      {
+        List<Post> lstPosts = await BRPosts.GetPosts();
+        cmbpppo.ItemsSource = lstPosts;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Post Log");
+      }
     }
+
     #endregion
 
     #endregion
-    
     
   }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="Role Detail" DataContext="{Binding Role}" Height="298" Width="338">
+        Title="Role Detail" Closing="Window_Closing" Height="298" Width="338">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
         <Grid.ColumnDefinitions>
@@ -23,6 +23,7 @@
         <!--#region títulos-->
         <Label Grid.Column="0" Grid.Row="0">ID</Label>
         <Label Grid.Column="0" Grid.Row="1">Description</Label>
+        <Label Grid.Column="0" Grid.Row="2">Tool Tip</Label>
         <!--#endregion-->
         <!--#region Datos-->
         <TextBox Name="txtroID" Grid.Column="1" Tag="ID" Grid.Row="0" Height="27" VerticalAlignment="Top" Text="{Binding roID}" CharacterCasing="Upper" IsEnabled="False" />

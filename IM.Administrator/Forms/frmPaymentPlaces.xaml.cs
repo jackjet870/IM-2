@@ -8,6 +8,7 @@ using IM.Base.Helpers;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -244,16 +245,25 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadPaymentPlaces(PaymentPlace paymentPlace = null)
     {
-      int nIndex = 0;
-      List<PaymentPlace> lstPaymentPlace =await BRPaymentPlaces.GetPaymentPlaces(_nStatus, _paymentPlaceFilter);
-      dgrPaymentPlace.ItemsSource = lstPaymentPlace;
-      if (lstPaymentPlace.Count > 0 && paymentPlace != null)
+      try
       {
-        paymentPlace = lstPaymentPlace.Where(pc => pc.pcID == paymentPlace.pcID).FirstOrDefault();
-        nIndex = lstPaymentPlace.IndexOf(paymentPlace);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<PaymentPlace> lstPaymentPlace = await BRPaymentPlaces.GetPaymentPlaces(_nStatus, _paymentPlaceFilter);
+        dgrPaymentPlace.ItemsSource = lstPaymentPlace;
+        if (lstPaymentPlace.Count > 0 && paymentPlace != null)
+        {
+          paymentPlace = lstPaymentPlace.Where(pc => pc.pcID == paymentPlace.pcID).FirstOrDefault();
+          nIndex = lstPaymentPlace.IndexOf(paymentPlace);
+        }
+        GridHelper.SelectRow(dgrPaymentPlace, nIndex);
+        StatusBarReg.Content = lstPaymentPlace.Count + " Payment Places.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrPaymentPlace, nIndex);
-      StatusBarReg.Content = lstPaymentPlace.Count + " Payment Places.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Payment Places");
+      }
     }
     #endregion
 
@@ -286,7 +296,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_paymentPlaceFilter.pcN))//Filtro por descripción
       {
-        if(!paymentPlace.pcN.Contains(_paymentPlaceFilter.pcN))
+        if(!paymentPlace.pcN.Contains(_paymentPlaceFilter.pcN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

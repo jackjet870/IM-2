@@ -18,6 +18,7 @@ namespace IM.Administrator.Forms
     public UnderPaymentMotive underPaymentMotive = new UnderPaymentMotive();//Objeto a guardar
     public UnderPaymentMotive oldUnderPaymentMOtive = new UnderPaymentMotive();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo en que se abrió la ventana
+    private bool _isClosing = false;
     #endregion
     public frmUnderPaymentMotiveDetail()
     {
@@ -62,7 +63,7 @@ namespace IM.Administrator.Forms
       if (e.Key == Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     }
     #endregion
@@ -84,6 +85,7 @@ namespace IM.Administrator.Forms
         btnAccept.Focus();
         if (enumMode != EnumMode.add && ObjectHelper.IsEquals(underPaymentMotive, oldUnderPaymentMOtive))
         {
+          _isClosing = true;
           Close();
         }
         else
@@ -95,6 +97,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Under Payment Motives", nRes);
             if (nRes > 0)
             {
+              _isClosing = true;
               DialogResult = true;
               Close();
             }
@@ -123,24 +126,35 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if(enumMode!=EnumMode.preview)
+      btnCancel.Focus();
+      Close();      
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana verificando cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if(!_isClosing)
       {
-        if (!ObjectHelper.IsEquals(underPaymentMotive, oldUnderPaymentMOtive))
+        if (enumMode != EnumMode.preview)
         {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
+          if (!ObjectHelper.IsEquals(underPaymentMotive, oldUnderPaymentMOtive))
           {
-            Close();
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result != MessageBoxResult.Yes)
+            {
+              e.Cancel = true;
+            }
           }
         }
-        else
-        {
-          Close();
-        }
-      }
-      else
-      {
-        Close();
       }
     } 
     #endregion

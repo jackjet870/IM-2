@@ -20,48 +20,52 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo FolioInvitationOuthouse </returns>
     /// <history>
     /// [emoguel] created 23/03/2016
+    /// [emoguel] modified 10/06/2016
     /// </history>
-    public static List<FolioInvitationOuthouse> GetFoliosInvittionsOutside(FolioInvitationOuthouse folioInvitationOutside = null, int nStatus = -1)
+    public async static Task<List<FolioInvitationOuthouse>> GetFoliosInvittionsOutside(FolioInvitationOuthouse folioInvitationOutside = null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<FolioInvitationOuthouse> lstFolioInvitationsOutside = await Task.Run(() =>
       {
-        var query = from fi in dbContext.FoliosInvitationsOuthouse
-                    select fi;
-
-        if (nStatus != -1)//FIltro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnEstatus = Convert.ToBoolean(nStatus);
-          query = query.Where(fi => fi.fiA == blnEstatus);
-        }
+          var query = from fi in dbContext.FoliosInvitationsOuthouse
+                      select fi;
 
-        if (folioInvitationOutside != null)//Validamos si tiene objeto
-        {
-          if (folioInvitationOutside.fiID > 0)//Filtro por ID
+          if (nStatus != -1)//FIltro por estatus
           {
-            query = query.Where(fi => fi.fiID == folioInvitationOutside.fiID);
+            bool blnEstatus = Convert.ToBoolean(nStatus);
+            query = query.Where(fi => fi.fiA == blnEstatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(folioInvitationOutside.fiSerie))//Filtro por serie
+          if (folioInvitationOutside != null)//Validamos si tiene objeto
           {
-            query = query.Where(fi => fi.fiSerie == folioInvitationOutside.fiSerie);
-          }
-
-          if (folioInvitationOutside.fiFrom > 0 && folioInvitationOutside.fiTo > 0)//Filtro por rango
-          {
-            if (folioInvitationOutside.fiFrom == folioInvitationOutside.fiTo)
+            if (folioInvitationOutside.fiID > 0)//Filtro por ID
             {
-              query = query.Where(fi => folioInvitationOutside.fiFrom>=fi.fiFrom && folioInvitationOutside.fiTo<= fi.fiTo );              
+              query = query.Where(fi => fi.fiID == folioInvitationOutside.fiID);
             }
-            else
+
+            if (!string.IsNullOrWhiteSpace(folioInvitationOutside.fiSerie))//Filtro por serie
             {
-              query = query.Where(fi => fi.fiFrom >= folioInvitationOutside.fiFrom  && fi.fiTo<= folioInvitationOutside.fiTo);
-            }             
+              query = query.Where(fi => fi.fiSerie == folioInvitationOutside.fiSerie);
+            }
+
+            if (folioInvitationOutside.fiFrom > 0 && folioInvitationOutside.fiTo > 0)//Filtro por rango
+            {
+              if (folioInvitationOutside.fiFrom == folioInvitationOutside.fiTo)
+              {
+                query = query.Where(fi => folioInvitationOutside.fiFrom >= fi.fiFrom && folioInvitationOutside.fiTo <= fi.fiTo);
+              }
+              else
+              {
+                query = query.Where(fi => fi.fiFrom >= folioInvitationOutside.fiFrom && fi.fiTo <= folioInvitationOutside.fiTo);
+              }
+            }
+
           }
-
+          return query.OrderBy(fi => fi.fiSerie).ThenBy(fi => fi.fiID).ToList();
         }
-
-        return query.OrderBy(fi => fi.fiSerie).ThenBy(fi=>fi.fiID).ToList();
-      }
+      });
+      return lstFolioInvitationsOutside;
     }
     #endregion
 

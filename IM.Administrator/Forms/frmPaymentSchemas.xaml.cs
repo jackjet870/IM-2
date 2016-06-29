@@ -8,6 +8,7 @@ using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -240,18 +241,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 06/04/2016
     /// </history>
-    private void LoadPaymentSchemas(PaymentSchema paymentSchemas=null)
+    private async void LoadPaymentSchemas(PaymentSchema paymentSchemas=null)
     {
-      int nIndex = 0;
-      List<PaymentSchema> lstPaymentSchemas = BRPaymentSchemas.GetPaymentSchemas(_nStatus, _paymentSchemaFilter);
-      dgrPaymentSchemas.ItemsSource = lstPaymentSchemas;
-      if (lstPaymentSchemas.Count > 0 && paymentSchemas != null)
+      try
       {
-        paymentSchemas = lstPaymentSchemas.Where(pas => pas.pasID == paymentSchemas.pasID).FirstOrDefault();
-        nIndex = lstPaymentSchemas.IndexOf(paymentSchemas);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<PaymentSchema> lstPaymentSchemas = await BRPaymentSchemas.GetPaymentSchemas(_nStatus, _paymentSchemaFilter);
+        dgrPaymentSchemas.ItemsSource = lstPaymentSchemas;
+        if (lstPaymentSchemas.Count > 0 && paymentSchemas != null)
+        {
+          paymentSchemas = lstPaymentSchemas.Where(pas => pas.pasID == paymentSchemas.pasID).FirstOrDefault();
+          nIndex = lstPaymentSchemas.IndexOf(paymentSchemas);
+        }
+        GridHelper.SelectRow(dgrPaymentSchemas, nIndex);
+        StatusBarReg.Content = lstPaymentSchemas.Count + " Payment Schemas.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrPaymentSchemas, nIndex);
-      StatusBarReg.Content = lstPaymentSchemas.Count + " Payment Schemas.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Payment Schemas");
+      }
     }
     #endregion
 
@@ -284,7 +294,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_paymentSchemaFilter.pasN))//Filtro por estatus
       {
-        if(!paymentSchema.pasN.Contains(_paymentSchemaFilter.pasN))
+        if(!paymentSchema.pasN.Contains(_paymentSchemaFilter.pasN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

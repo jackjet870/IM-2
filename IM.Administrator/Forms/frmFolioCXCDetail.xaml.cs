@@ -17,7 +17,7 @@ namespace IM.Administrator.Forms
     public FolioCXC folioCXC = new FolioCXC();//objeto a guardar o actualizar
     public FolioCXC oldFolioCxc = new FolioCXC();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo en el que se mostrará la ventana
-
+    private bool _isClosing = false;
     public frmFolioCXCDetail()
     {
       InitializeComponent();
@@ -37,7 +37,6 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null, null);
       }
     }
@@ -73,6 +72,7 @@ namespace IM.Administrator.Forms
       btnAccept.Focus();
      if(ObjectHelper.IsEquals(folioCXC,oldFolioCxc) && enumMode!=EnumMode.add)
       {
+        _isClosing = true;
         Close();
       }
      else
@@ -104,6 +104,7 @@ namespace IM.Administrator.Forms
           UIHelper.ShowMessageResult("Folio CxC", nRes);
           if(nRes==1)
           {
+            _isClosing = true;
             DialogResult = true;
             Close();
           }          
@@ -145,6 +146,7 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
+
     #region Cancel
     /// <summary>
     /// Cierra la ventana pero antes verifica que no se tengan cambios pendientes
@@ -156,6 +158,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       if(enumMode!=EnumMode.preview)
       {
         if (!ObjectHelper.IsEquals(folioCXC, oldFolioCxc))
@@ -163,21 +166,53 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!_isClosing) { _isClosing = true; Close(); }
+          }
+          else
+          {
+            _isClosing = false;
           }
         }
         else
         {
-          Close();
+          if (!_isClosing) { _isClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!_isClosing) { _isClosing = true; Close(); }
+      }
+    }
+    #endregion
+
+    #region Closing
+    /// <summary>
+    /// Cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 09/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
+      {
+        _isClosing = true;
+        btnCancel_Click(null, null);
+        if (!_isClosing)
+        {
+          e.Cancel = true;
+        }
+        else
+        {
+          _isClosing = false;
+        }
       }
     }
     #endregion
     #endregion
+
     #region Métodos
     #region OpenMode
     /// <summary>
@@ -197,10 +232,9 @@ namespace IM.Administrator.Forms
         chkA.IsEnabled = true;
       }
     }
-    #endregion
 
     #endregion
 
-    
+    #endregion
   }
 }

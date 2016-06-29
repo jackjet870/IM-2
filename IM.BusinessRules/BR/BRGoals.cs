@@ -4,6 +4,7 @@ using IM.Model;
 using IM.Model.Helpers;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,26 +18,29 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 12/05/2016
     /// </history>
-    public static List<Goal> GetGoals(Goal goal)
+    public async static Task<List<Goal>> GetGoals(Goal goal)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from g in dbContext.Goals
-                    select g;
-
-        if (!string.IsNullOrWhiteSpace(goal.gopy))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          query = query.Where(g => g.gopy == goal.gopy);
-        }
-        if (!string.IsNullOrWhiteSpace(goal.gopd))
-        {
-          query = query.Where(g => g.gopd == goal.gopd);
-        }
+          var query = from g in dbContext.Goals
+                      select g;
 
-        List<Goal> lstGoals = query.ToList().Where(g => g.goDateFrom.ToString("yyyyMMdd") == goal.goDateFrom.ToString("yyyyMMdd") && g.goDateTo.ToString("yyyyMMdd") == goal.goDateTo.ToString("yyyyMMdd")).ToList();
+          if (!string.IsNullOrWhiteSpace(goal.gopy))
+          {
+            query = query.Where(g => g.gopy == goal.gopy);
+          }
+          if (!string.IsNullOrWhiteSpace(goal.gopd))
+          {
+            query = query.Where(g => g.gopd == goal.gopd);
+          }
 
-        return lstGoals;
-      }
+          List<Goal> lstGoals = query.ToList().Where(g => g.goDateFrom.ToString("yyyyMMdd") == goal.goDateFrom.ToString("yyyyMMdd") && g.goDateTo.ToString("yyyyMMdd") == goal.goDateTo.ToString("yyyyMMdd")).ToList();
+
+          return lstGoals;
+        }
+      });
     }
     #endregion
 
@@ -93,7 +97,7 @@ namespace IM.BusinessRules.BR
             transacction.Commit();
             return nRes;
           }
-          catch(DbEntityValidationException e)
+          catch
           {
             transacction.Rollback();
             return 0;

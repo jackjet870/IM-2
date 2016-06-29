@@ -43,11 +43,11 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 09/Junio/2016 Created
     /// </history>
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       // Cargamos los motivos de reimpresion
       CollectionViewSource _dsReimpresionMotives = ((CollectionViewSource)(this.FindResource("dsReimpresionMotives")));
-      _dsReimpresionMotives.Source = BRReimpresionMotives.GetReimpresionMotives(1);
+      _dsReimpresionMotives.Source = await BRReimpresionMotives.GetReimpresionMotives(1);
     }
     #endregion
 

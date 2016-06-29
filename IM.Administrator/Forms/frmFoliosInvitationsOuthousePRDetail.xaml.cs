@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -103,95 +104,106 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 07/05/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      #region Save
-      if (enumMode != EnumMode.search)
+      try
       {
-        #region ValidateChanges
-        List<FolioInvitationOuthousePR> lstFoliosPR = (List<FolioInvitationOuthousePR>)dgrAssigned.ItemsSource;
-        List<FolioInvitationOuthousePRCancellation> lstFoliosCan = (List<FolioInvitationOuthousePRCancellation>)dgrCancelled.ItemsSource;
-        bool blnHasChanged = ValidateChanges(lstFoliosPR,lstFoliosCan);        
-        
-        #endregion
-        if (enumMode != EnumMode.add && !blnHasChanged)
+        btnAccept.Focus();
+        #region Save
+        if (enumMode != EnumMode.search)
         {
-          blnClosing = true;
-          Close();
-        }
-        else
-        {
-          PersonnelShort personnelSave = (PersonnelShort)cmbPersonnel.SelectedItem;
-          if (personnelSave != null)
+          #region ValidateChanges
+          List<FolioInvitationOuthousePR> lstFoliosPR = (List<FolioInvitationOuthousePR>)dgrAssigned.ItemsSource;
+          List<FolioInvitationOuthousePRCancellation> lstFoliosCan = (List<FolioInvitationOuthousePRCancellation>)dgrCancelled.ItemsSource;
+          bool blnHasChanged = ValidateChanges(lstFoliosPR, lstFoliosCan);
+
+          #endregion
+          if (enumMode != EnumMode.add && !blnHasChanged)
           {
-            string strMsj = "";
-
-            #region ListFolios
-            if (enumMode == EnumMode.add)
+            blnClosing = true;
+            Close();
+          }
+          else
+          {
+            txtStatus.Text = "Saving Data";
+            skpStatus.Visibility = Visibility.Visible;
+            PersonnelShort personnelSave = (PersonnelShort)cmbPersonnel.SelectedItem;
+            if (personnelSave != null)
             {
-              if (BRFoliosInvitationsOuthousePR.GetPRbyFolioOuthouse(personnelSave).FirstOrDefault()!= null)
+              string strMsj = "";
+
+              #region ListFolios
+              if (enumMode == EnumMode.add)
               {
-                UIHelper.ShowMessage("The current PR already has folios, edit the correspoding PR.");
+                var folio = await BRFoliosInvitationsOuthousePR.GetPRbyFolioOuthouse(personnelSave);
+                if (folio.FirstOrDefault() != null)
+                {
+                  UIHelper.ShowMessage("The current PR already has folios, edit the correspoding PR.");
+                  return;
+                }
+                if (lstFoliosPR.Count == 0)
+                {
+                  UIHelper.ShowMessage("Cannot save an empty record, please add folios..");
+                  return;
+                }
+              }
+              #endregion
+              #region FoliosPR
+              strMsj = ValidateFolioOuthouse(lstFoliosPR);
+              if (strMsj != "")
+              {
+                UIHelper.ShowMessage(strMsj);
                 return;
               }
-              if (lstFoliosPR.Count == 0)
+              strMsj = ValidateCancelled(lstFoliosCan, lstFoliosPR);
+              if (strMsj != "")
               {
-                UIHelper.ShowMessage("Cannot save an empty record, please add folios..");
+                UIHelper.ShowMessage(strMsj);
                 return;
               }
-            }
-            #endregion
-            #region FoliosPR
-            strMsj = ValidateFolioOuthouse(lstFoliosPR);
-            if (strMsj != "")
-            {
-              UIHelper.ShowMessage(strMsj);
-              return;
-            }
-            strMsj = ValidateCancelled(lstFoliosCan, lstFoliosPR);
-            if(strMsj != "")
-            {
-              UIHelper.ShowMessage(strMsj);
-              return;
-            }
 
-            int nRes = BRFoliosInvitationsOuthousePR.SaveFoliosOuthousePR(personnelSave.peID, lstFoliosPR, lstFoliosCan);
-            UIHelper.ShowMessageResult("Folios", nRes);
-            if (nRes > 0)
-            {
-              blnClosing = true;
-              DialogResult = true;
-              Close();
-            }
+              int nRes =await BRFoliosInvitationsOuthousePR.SaveFoliosOuthousePR(personnelSave.peID, lstFoliosPR, lstFoliosCan);
+              UIHelper.ShowMessageResult("Folios", nRes);
+              if (nRes > 0)
+              {
+                blnClosing = true;
+                DialogResult = true;
+                Close();
+              }
 
-            #endregion
+              #endregion
+            }
+            skpStatus.Visibility = Visibility.Collapsed;
           }
         }
-      }
-      #endregion
-      #region Search
-      else
-      {
+        #endregion
         #region Search
-        if (cmbPersonnel.SelectedItem != null)
-        {
-          personnel = (PersonnelShort)cmbPersonnel.SelectedItem;
-          DialogResult = true;
-          Close();
-        }
-        else if (!string.IsNullOrWhiteSpace(personnel.peID))
-        {
-          cmbPersonnel.Focus();
-          UIHelper.ShowMessage("Please select a PR.");
-        }
         else
         {
-          Close();
+          #region Search
+          if (cmbPersonnel.SelectedItem != null)
+          {
+            personnel = (PersonnelShort)cmbPersonnel.SelectedItem;
+            DialogResult = true;
+            Close();
+          }
+          else if (!string.IsNullOrWhiteSpace(personnel.peID))
+          {
+            cmbPersonnel.Focus();
+            UIHelper.ShowMessage("Please select a PR.");
+          }
+          else
+          {
+            Close();
+          }
+          #endregion
         }
         #endregion
       }
-      #endregion
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folio Invitation Outhouse PR");
+      }
     }
     #endregion
 
@@ -363,10 +375,17 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 07/05/2016
     /// </history>
-    private void LoadPrs()
+    private async void LoadPrs()
     {
-      List<PersonnelShort> lstPrs = BRPersonnel.GetPersonnelByRole("PR");
-      cmbPersonnel.ItemsSource = lstPrs;
+      try
+      {
+        List<PersonnelShort> lstPrs = await BRPersonnel.GetPersonnelByRole("PR");
+        cmbPersonnel.ItemsSource = lstPrs;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folios Invitation Houthouse By PR");
+      }
     }
     #endregion
 
@@ -376,11 +395,19 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 07/05/2016
+    /// [emoguel] se volvió async
     /// </history>
-    private void loadReasons()
+    private async void loadReasons()
     {
-      List<ReasonCancellationFolio> lstReasons = BRReasonCancellationFolios.GetReasonCancellationFolios(1);
-      cmbReason.ItemsSource = lstReasons;
+      try
+      {
+        List<ReasonCancellationFolio> lstReasons =await BRReasonCancellationFolios.GetReasonCancellationFolios(1);
+        cmbReason.ItemsSource = lstReasons;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folio Invitations Outhouse");
+      }
     }
     #endregion
 
@@ -391,11 +418,18 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 09/05/2016
     /// </history>
-    private void loadSeries()
+    private async void loadSeries()
     {
-      List<string> lstSeries = BRFoliosInvitationsOuthousePR.GetSeriesFolioOuthouse();
-      cmbSerieA.ItemsSource = lstSeries;
-      cmbSerieB.ItemsSource = lstSeries;
+      try
+      {
+        List<string> lstSeries =await BRFoliosInvitationsOuthousePR.GetSeriesFolioOuthouse();
+        cmbSerieA.ItemsSource = lstSeries;
+        cmbSerieB.ItemsSource = lstSeries;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folio Invitations Outhouse");
+      }
     }
     #endregion
 
@@ -406,11 +440,18 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 09/05/2016
     /// </history>
-    private void LoadFoliosByPr()
+    private async void LoadFoliosByPr()
     {
-      List<FolioInvitationOuthousePR> lstFolios = BRFoliosInvitationsOuthousePR.GetFoliosByPr(personnel.peID);
-      _lstFolios = BRFoliosInvitationsOuthousePR.GetFoliosByPr(personnel.peID);
-      dgrAssigned.ItemsSource = lstFolios;
+      try
+      {
+        List<FolioInvitationOuthousePR> lstFolios =await BRFoliosInvitationsOuthousePR.GetFoliosByPr(personnel.peID);
+        _lstFolios =await BRFoliosInvitationsOuthousePR.GetFoliosByPr(personnel.peID);
+        dgrAssigned.ItemsSource = lstFolios;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folio Invitations Outhouse");
+      }
     }
     #endregion
 
@@ -421,11 +462,19 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 09/05/2016
     /// </history>
-    private void LoadFoliosPrCancellation()
+    private async void LoadFoliosPrCancellation()
     {
-      List<FolioInvitationOuthousePRCancellation> lstCancellations = BRFolioInvitationsOuthousePRCancellation.GetFoliosCancellation(personnel.peID);
-      _lstCancellation = BRFolioInvitationsOuthousePRCancellation.GetFoliosCancellation(personnel.peID);
-      dgrCancelled.ItemsSource = lstCancellations;
+      try
+      {
+        List<FolioInvitationOuthousePRCancellation> lstCancellations = await BRFolioInvitationsOuthousePRCancellation.GetFoliosCancellation(personnel.peID);
+        _lstCancellation =await BRFolioInvitationsOuthousePRCancellation.GetFoliosCancellation(personnel.peID);
+        dgrCancelled.ItemsSource = lstCancellations;
+        skpStatus.Visibility = Visibility.Collapsed;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folio Invitations Outhouse");
+      }
     }
     #endregion
 

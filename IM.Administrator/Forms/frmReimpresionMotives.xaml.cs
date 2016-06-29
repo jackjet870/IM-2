@@ -8,6 +8,7 @@ using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -237,19 +238,28 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 16/04/2016
     /// </history>
-    private void LoadReimpresionMotives(ReimpresionMotive reimpresionMotive = null)
+    private async void LoadReimpresionMotives(ReimpresionMotive reimpresionMotive = null)
     {
-      int nIndex = 0;
-      List<ReimpresionMotive> lstReimpresionMotive = BRReimpresionMotives.GetReimpresionMotives(_nStatus, _reimpresionMotiveFilter);
-      dgrReimpresionMotives.ItemsSource = lstReimpresionMotive;
-
-      if (lstReimpresionMotive.Count > 0 && reimpresionMotive != null)
+      try
       {
-        reimpresionMotive = lstReimpresionMotive.Where(rm => rm.rmID == reimpresionMotive.rmID).FirstOrDefault();
-        nIndex = lstReimpresionMotive.IndexOf(reimpresionMotive);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<ReimpresionMotive> lstReimpresionMotive =await BRReimpresionMotives.GetReimpresionMotives(_nStatus, _reimpresionMotiveFilter);
+        dgrReimpresionMotives.ItemsSource = lstReimpresionMotive;
+
+        if (lstReimpresionMotive.Count > 0 && reimpresionMotive != null)
+        {
+          reimpresionMotive = lstReimpresionMotive.Where(rm => rm.rmID == reimpresionMotive.rmID).FirstOrDefault();
+          nIndex = lstReimpresionMotive.IndexOf(reimpresionMotive);
+        }
+        GridHelper.SelectRow(dgrReimpresionMotives, nIndex);
+        StatusBarReg.Content = lstReimpresionMotive.Count + " Reimpresion Motives.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrReimpresionMotives, nIndex);
-      StatusBarReg.Content = lstReimpresionMotive.Count + " Reimpresion Motives.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Reimpresion Motives");
+      }
     }
     #endregion
 
@@ -281,7 +291,7 @@ namespace IM.Administrator.Forms
       }
       if (!string.IsNullOrWhiteSpace(_reimpresionMotiveFilter.rmN))//Filtro por descripción
       {
-        if (!reimpresionMotive.rmN.Contains(_reimpresionMotiveFilter.rmN))
+        if (!reimpresionMotive.rmN.Contains(_reimpresionMotiveFilter.rmN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

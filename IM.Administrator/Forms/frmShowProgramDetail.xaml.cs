@@ -20,6 +20,7 @@ namespace IM.Administrator.Forms
     public ShowProgram oldShowProgram = new ShowProgram();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo en que se abrirá la ventana
     public int nStatus = -1;//Estatus para el modo search
+    private bool _isClosing = false;
     #endregion
     public frmShowProgramDetail()
     {
@@ -68,7 +69,7 @@ namespace IM.Administrator.Forms
       if(e.Key==Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     }
     #endregion
@@ -92,6 +93,7 @@ namespace IM.Administrator.Forms
         {
           if (enumMode != EnumMode.add && ObjectHelper.IsEquals(showProgram, oldShowProgram))
           {
+            _isClosing = true;
             Close();
           }
           else
@@ -103,6 +105,7 @@ namespace IM.Administrator.Forms
               UIHelper.ShowMessageResult("Show Program", nRes);
               if (nRes > 0)
               {
+                _isClosing = true;
                 DialogResult = true;
                 Close();
               }
@@ -115,6 +118,7 @@ namespace IM.Administrator.Forms
         }
         else
         {
+          _isClosing = true;
           nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
           DialogResult = true;
           Close();
@@ -138,26 +142,37 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if(enumMode!=EnumMode.search)
+      btnCancel.Focus();
+      Close();      
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana verificando cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
       {
-        if(!ObjectHelper.IsEquals(showProgram,oldShowProgram))
+        if (enumMode != EnumMode.search)
         {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
+          if (!ObjectHelper.IsEquals(showProgram, oldShowProgram))
           {
-            Close();
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result != MessageBoxResult.Yes)
+            {
+              e.Cancel = true;
+            }
           }
         }
-        else
-        {
-          Close();
-        }
       }
-      else
-      {
-        Close();
-      }
-    } 
+    }
     #endregion
     #endregion
 
@@ -169,16 +184,25 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 25/04/2016
     /// </history>
-    private void LoadCategories()
+    private async void LoadCategories()
     {
-      List<ShowProgramCategory> lstShowProCategories = BRShowProgramsCategories.GetShowProgramsCategories();
-      if (enumMode == EnumMode.search)
+      try
       {
-        lstShowProCategories.Insert(0, new ShowProgramCategory { sgID = "", sgN = "" });
+        List<ShowProgramCategory> lstShowProCategories = await BRShowProgramsCategories.GetShowProgramsCategories();
+        if (enumMode == EnumMode.search)
+        {
+          lstShowProCategories.Insert(0, new ShowProgramCategory { sgID = "", sgN = "" });
+        }
+        cmbsksg.ItemsSource = lstShowProCategories;
       }
-      cmbsksg.ItemsSource = lstShowProCategories;
-    } 
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Show Programs");
+      }
+    }
     #endregion
+
     #endregion
+    
   }
 }

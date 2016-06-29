@@ -8,6 +8,7 @@ using IM.Base.Helpers;
 using System.Linq;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -242,18 +243,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 24/03/2016
     /// </history>
-    private void LoadGuestStatusTypes(GuestStatusType guestStaTyp=null)
+    private async void LoadGuestStatusTypes(GuestStatusType guestStaTyp=null)
     {
-      int nIndex = 0;
-      List<GuestStatusType> lstGuestStaTyp = BRGuestStatusTypes.GetGuestStatusTypes(_guestStaTypFilter, _nStatus);
-      dgrGuestStaTyp.ItemsSource = lstGuestStaTyp;
-      if(guestStaTyp!=null && lstGuestStaTyp.Count>0)
+      try
       {
-        guestStaTyp = lstGuestStaTyp.Where(gs => gs.gsID == guestStaTyp.gsID).FirstOrDefault();
-        nIndex = lstGuestStaTyp.IndexOf(guestStaTyp);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<GuestStatusType> lstGuestStaTyp =await BRGuestStatusTypes.GetGuestStatusTypes(_guestStaTypFilter, _nStatus);
+        dgrGuestStaTyp.ItemsSource = lstGuestStaTyp;
+        if (guestStaTyp != null && lstGuestStaTyp.Count > 0)
+        {
+          guestStaTyp = lstGuestStaTyp.Where(gs => gs.gsID == guestStaTyp.gsID).FirstOrDefault();
+          nIndex = lstGuestStaTyp.IndexOf(guestStaTyp);
+        }
+        GridHelper.SelectRow(dgrGuestStaTyp, nIndex);
+        StatusBarReg.Content = lstGuestStaTyp.Count + " Guest Status Types.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrGuestStaTyp, nIndex);
-      StatusBarReg.Content = lstGuestStaTyp.Count + " Guest Status Types.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Guest Status types");
+      }
     }
     #endregion
 
@@ -286,7 +296,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_guestStaTypFilter.gsN))//Filtro por descripcion
       {
-        if(!newGuestStaTyp.gsN.Contains(_guestStaTypFilter.gsN))
+        if(!newGuestStaTyp.gsN.Contains(_guestStaTypFilter.gsN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

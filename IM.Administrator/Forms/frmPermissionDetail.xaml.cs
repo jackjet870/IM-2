@@ -18,6 +18,7 @@ namespace IM.Administrator.Forms
     public Permission permission = new Permission();//objeto a guardar
     public Permission oldPermission = new Permission();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo en que se abrirá la ventana  
+    private bool _isClosing = false;
     #endregion
     public frmPermissionDetail()
     {
@@ -53,7 +54,7 @@ namespace IM.Administrator.Forms
       if (e.Key == Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     }
     #endregion
@@ -75,6 +76,7 @@ namespace IM.Administrator.Forms
         btnAccept.Focus();
         if (ObjectHelper.IsEquals(permission, oldPermission) && enumMode != EnumMode.add)
         {
+          _isClosing = true;
           Close();
         }
         else
@@ -86,6 +88,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Permission", nRes);
             if (nRes > 0)
             {
+              _isClosing = true;
               DialogResult = true;
               Close();
             }
@@ -104,27 +107,41 @@ namespace IM.Administrator.Forms
 
     #region Cancel
     /// <summary>
-    /// Cierra la ventana verificando cambios pendientes
+    /// Cierra la ventana 
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if (!ObjectHelper.IsEquals(permission, oldPermission))
-      {
-        MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-        if (result == MessageBoxResult.Yes)
-        {
-          Close();
-        }
-      }
-      else
-      {
-        Close();
-      }
+      btnCancel.Focus();
+      Close();
     }
+
     #endregion
 
-    
+    #region Window_Closing
+    /// <summary>
+    /// Verifica cambios antes de cerrar la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if(!_isClosing)
+      {
+        if (!ObjectHelper.IsEquals(permission, oldPermission))
+        {
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result != MessageBoxResult.Yes)
+          {
+            e.Cancel = true;
+          }
+        }
+      }
+    } 
+    #endregion
   }
 }

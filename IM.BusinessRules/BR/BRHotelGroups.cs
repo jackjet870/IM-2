@@ -4,6 +4,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -19,35 +20,39 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo HotelGroup</returns>
     /// <history>
     /// [emoguel] created 29/03/2016
+    /// [emoguel] modified 27/06/2016 se volvió async
     /// </history>
-    public static List<HotelGroup> GetHotelGroups(HotelGroup hotelGroup = null, int nStatus = -1)
+    public async static Task<List<HotelGroup>> GetHotelGroups(HotelGroup hotelGroup = null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from hg in dbContext.HotelsGroups
-                    select hg;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnEstatus = Convert.ToBoolean(nStatus);
-          query = query.Where(hg => hg.hgA == blnEstatus);
-        }
+          var query = from hg in dbContext.HotelsGroups
+                      select hg;
 
-        if (hotelGroup != null)//Verificamos si tenemos un objeto
-        {
-          if (!string.IsNullOrWhiteSpace(hotelGroup.hgID))//Filtro por ID
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(hg => hg.hgID == hotelGroup.hgID);
+            bool blnEstatus = Convert.ToBoolean(nStatus);
+            query = query.Where(hg => hg.hgA == blnEstatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(hotelGroup.hgN))//Filtro por descripcion
+          if (hotelGroup != null)//Verificamos si tenemos un objeto
           {
-            query = query.Where(hg => hg.hgN.Contains(hotelGroup.hgN));
-          }
-        }
+            if (!string.IsNullOrWhiteSpace(hotelGroup.hgID))//Filtro por ID
+            {
+              query = query.Where(hg => hg.hgID == hotelGroup.hgID);
+            }
 
-        return query.OrderBy(hg => hg.hgN).ToList();
-      }
+            if (!string.IsNullOrWhiteSpace(hotelGroup.hgN))//Filtro por descripcion
+            {
+              query = query.Where(hg => hg.hgN.Contains(hotelGroup.hgN));
+            }
+          }
+
+          return query.OrderBy(hg => hg.hgN).ToList();
+        }
+      });
     }
     #endregion
 
@@ -63,63 +68,67 @@ namespace IM.BusinessRules.BR
     /// <returns>-1. Existe un registro con el mismo ID | 0. No se pudo guardar | 1. Se guardó correctamente</returns>
     /// <history>
     /// [emoguel] created 13/05/2016
+    /// [emoguel] modified 27/06/2016
     /// </history>
-    public static int SaveHotelGroup(HotelGroup hotelGrooup, bool blnUpdate, List<Hotel> lstAdd, List<Hotel> lstDel)
+    public async static Task<int> SaveHotelGroup(HotelGroup hotelGrooup, bool blnUpdate, List<Hotel> lstAdd, List<Hotel> lstDel)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          try
+          using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            #region Update
-            if (blnUpdate)
+            try
             {
-              dbContext.Entry(hotelGrooup).State = EntityState.Modified;
-            }
-            #endregion
-
-            #region Add
-            else
-            {
-              if (dbContext.HotelsGroups.Where(hoo => hoo.hgID == hotelGrooup.hgID).FirstOrDefault() != null)
+              #region Update
+              if (blnUpdate)
               {
-                return -1;
+                dbContext.Entry(hotelGrooup).State = EntityState.Modified;
               }
+              #endregion
+
+              #region Add
               else
               {
-                dbContext.HotelsGroups.Add(hotelGrooup);
+                if (dbContext.HotelsGroups.Where(hoo => hoo.hgID == hotelGrooup.hgID).FirstOrDefault() != null)
+                {
+                  return -1;
+                }
+                else
+                {
+                  dbContext.HotelsGroups.Add(hotelGrooup);
+                }
               }
+              #endregion
+
+              #region List Add
+              dbContext.Hotels.AsEnumerable().Where(ho => lstAdd.Any(hoo => hoo.hoID == ho.hoID)).ToList().ForEach(ho =>
+                    {
+                      ho.hoGroup = hotelGrooup.hgID;
+                      dbContext.Entry(ho).State = EntityState.Modified;
+                    });
+              #endregion
+
+              #region ListDel
+              dbContext.Hotels.AsEnumerable().Where(ho => lstDel.Any(hoo => hoo.hoID == ho.hoID)).ToList().ForEach(ho =>
+              {
+                ho.hoGroup = null;
+                dbContext.Entry(ho).State = EntityState.Modified;
+              });
+              #endregion
+
+              int nRes = dbContext.SaveChanges();
+              transacction.Commit();
+              return nRes;
             }
-            #endregion
-
-            #region List Add
-            dbContext.Hotels.AsEnumerable().Where(ho=>lstAdd.Any(hoo=>hoo.hoID==ho.hoID)).ToList().ForEach(ho =>
+            catch
             {
-              ho.hoGroup = hotelGrooup.hgID;
-              dbContext.Entry(ho).State = EntityState.Modified;
-            });
-            #endregion
-
-            #region ListDel
-            dbContext.Hotels.AsEnumerable().Where(ho => lstDel.Any(hoo => hoo.hoID == ho.hoID)).ToList().ForEach(ho =>
-            {
-              ho.hoGroup = null;
-              dbContext.Entry(ho).State = EntityState.Modified;
-            });
-            #endregion
-
-            int nRes = dbContext.SaveChanges();
-            transacction.Commit();
-            return nRes;
-          }
-          catch
-          {
-            transacction.Rollback();
-            return 0;
+              transacction.Rollback();
+              return 0;
+            }
           }
         }
-      }
+      });
     }
     #endregion
   }

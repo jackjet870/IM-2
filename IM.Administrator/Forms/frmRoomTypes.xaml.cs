@@ -8,6 +8,7 @@ using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -235,18 +236,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 19/04/2016
     /// </history>
-    private void LoadRoomTypes(RoomType roomType = null)
+    private async void LoadRoomTypes(RoomType roomType = null)
     {
-      int nIndex = 0;
-      List<RoomType> lstRoomTypes = BRRoomTypes.GetRoomTypes(_nStatus, _roomTypeFilter);
-      dgrRoomTypes.ItemsSource = lstRoomTypes;
-      if (lstRoomTypes.Count > 0 && roomType != null)
+      try
       {
-        roomType = lstRoomTypes.Where(rt => rt.rtID == roomType.rtID).FirstOrDefault();
-        nIndex = lstRoomTypes.IndexOf(roomType);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<RoomType> lstRoomTypes = await BRRoomTypes.GetRoomTypes(_nStatus, _roomTypeFilter);
+        dgrRoomTypes.ItemsSource = lstRoomTypes;
+        if (lstRoomTypes.Count > 0 && roomType != null)
+        {
+          roomType = lstRoomTypes.Where(rt => rt.rtID == roomType.rtID).FirstOrDefault();
+          nIndex = lstRoomTypes.IndexOf(roomType);
+        }
+        GridHelper.SelectRow(dgrRoomTypes, nIndex);
+        StatusBarReg.Content = lstRoomTypes.Count + " Room Types.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrRoomTypes, nIndex);
-      StatusBarReg.Content = lstRoomTypes.Count + " Room Types.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Room Types");
+      }
     }
     #endregion
 
@@ -280,7 +290,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_roomTypeFilter.rtN))//Filtro por Descripción
       {
-        if(!roomType.rtN.Contains(_roomTypeFilter.rtN))
+        if(!roomType.rtN.Contains(_roomTypeFilter.rtN,StringComparison.OrdinalIgnoreCase))
         {
           return true;
         }

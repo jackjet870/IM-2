@@ -8,6 +8,7 @@ using IM.Base.Helpers;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -238,16 +239,25 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadPaymentTypes(PaymentType paymentType = null)
     {
-      int nIndex = 0;
-      List<PaymentType> lstPaymentTypes = await BRPaymentTypes.GetPaymentTypes(_nStatus, _paymentTypeFilter);
-      dgrPaymentTypes.ItemsSource = lstPaymentTypes;
-      if (lstPaymentTypes.Count > 0 && paymentType != null)
+      try
       {
-        paymentType = lstPaymentTypes.Where(pt => pt.ptID == paymentType.ptID).FirstOrDefault();
-        nIndex = lstPaymentTypes.IndexOf(paymentType);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<PaymentType> lstPaymentTypes = await BRPaymentTypes.GetPaymentTypes(_nStatus, _paymentTypeFilter);
+        dgrPaymentTypes.ItemsSource = lstPaymentTypes;
+        if (lstPaymentTypes.Count > 0 && paymentType != null)
+        {
+          paymentType = lstPaymentTypes.Where(pt => pt.ptID == paymentType.ptID).FirstOrDefault();
+          nIndex = lstPaymentTypes.IndexOf(paymentType);
+        }
+        GridHelper.SelectRow(dgrPaymentTypes, nIndex);
+        StatusBarReg.Content = lstPaymentTypes.Count + " Payment Types.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrPaymentTypes, nIndex);
-      StatusBarReg.Content = lstPaymentTypes.Count + " Payment Types.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Payment Types");
+      }
     }
     #endregion
 
@@ -280,7 +290,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_paymentTypeFilter.ptN))//Filtro por descripción
       {
-        if(!paymentType.ptN.Contains(_paymentTypeFilter.ptN))
+        if(!paymentType.ptN.Contains(_paymentTypeFilter.ptN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

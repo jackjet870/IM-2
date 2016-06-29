@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,35 +18,37 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista tipo TeamType</returns>
     /// <history>
     /// [emoguel] created 27/04/2016
+    /// [emoguel] modified 28/06/2016---> Se volvió async
     /// </history>
-    public static List<TeamType> GetTeamTypes(int nStatus = -1, TeamType teamType = null)
+    public async static Task<List<TeamType>> GetTeamTypes(int nStatus = -1, TeamType teamType = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from tt in dbContext.TeamsTypes
-                    select tt;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(tt => tt.ttA == blnStatus);
-        }
+          var query = from tt in dbContext.TeamsTypes
+                      select tt;
 
-        if (teamType != null)
-        {
-          if (!string.IsNullOrWhiteSpace(teamType.ttID))
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(tt => tt.ttID == teamType.ttID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(tt => tt.ttA == blnStatus);
           }
-          if (!string.IsNullOrWhiteSpace(teamType.ttN))
+
+          if (teamType != null)
           {
-            query = query.Where(tt => tt.ttN.Contains(teamType.ttN));
+            if (!string.IsNullOrWhiteSpace(teamType.ttID))
+            {
+              query = query.Where(tt => tt.ttID == teamType.ttID);
+            }
+            if (!string.IsNullOrWhiteSpace(teamType.ttN))
+            {
+              query = query.Where(tt => tt.ttN.Contains(teamType.ttN));
+            }
           }
+          return query.OrderBy(tt => tt.ttN).ToList();
         }
-
-        return query.OrderBy(tt => tt.ttN).ToList();
-
-      }
+      });
     } 
     #endregion
   }

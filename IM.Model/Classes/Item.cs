@@ -12,5 +12,6 @@ namespace IM.Model.Classes
     public string Name { get; set; }
     public string UserId { get; set; }
     public string By { get; set; }
+    public string Category { get; set; }
   }
 }

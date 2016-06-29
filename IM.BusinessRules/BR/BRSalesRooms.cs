@@ -323,5 +323,50 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
+
+    #region GetSalesRoomsByIDs
+    /// <summary>
+    /// Obtiene salesRoom a traves de su ID
+    /// </summary>
+    /// <param name="lstSalesRoomID"></param>
+    /// <returns>Devuelve lista de SalesRoomShort</returns>
+    /// <history>
+    /// [emoguel] created 16/06/2016
+    /// </history>
+    public static async Task<List<SalesRoomShort>> GetSalesRoomsByIDs(List<string>lstSalesRoomID)
+    {
+      List<SalesRoomShort> lstSalesRoom = await Task.Run(() => {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          return dbContext.SalesRooms.AsEnumerable().Where(sr => lstSalesRoomID.Contains(sr.srID)).Select(sr=>new SalesRoomShort { srID=sr.srID,srN=sr.srN}).ToList();
+        }
+      });
+      return lstSalesRoom;
+    }
+    #endregion
+
+    #region getLocationByTeamGuestSevice
+    /// <summary>
+    /// Obtiene los SalesRoom relacionados a TeamsSalesMen
+    /// </summary>
+    /// <returns>Lista tipo Object</returns>
+    /// <history>
+    /// [emoguel] created 18/06/2016
+    /// </history>
+    public static async Task<List<object>> GetSalesRoombyTeamSalesMen()
+    {
+      List<object> lstObject = await Task.Run(() => {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var query = (from sr in dbContext.SalesRooms
+                       from ts in dbContext.TeamsSalesmen.Distinct()
+                       where sr.srID == ts.tssr
+                       select new { srID = sr.srID, srN = sr.srN }).Distinct();
+          return query.ToList<object>();
+        }
+      });
+      return lstObject;
+    }
+    #endregion
   }
 }

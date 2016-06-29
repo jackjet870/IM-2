@@ -238,17 +238,25 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadHotels(Hotel hotel=null)
     {
-      List<Hotel> lstHotels = await BRHotels.GetHotels(_hotelFilter, _nStatus,true);
-      dgrHotels.ItemsSource = lstHotels;
-      int nIndex =0;
-      if(hotel!=null && lstHotels.Count>0)
+      try
       {
-        hotel = lstHotels.Where(ho => ho.hoID == hotel.hoID).FirstOrDefault();
-        nIndex = lstHotels.IndexOf(hotel);
+        status.Visibility = Visibility.Visible;
+        List<Hotel> lstHotels = await BRHotels.GetHotels(_hotelFilter, _nStatus, true);
+        dgrHotels.ItemsSource = lstHotels;
+        int nIndex = 0;
+        if (hotel != null && lstHotels.Count > 0)
+        {
+          hotel = lstHotels.Where(ho => ho.hoID == hotel.hoID).FirstOrDefault();
+          nIndex = lstHotels.IndexOf(hotel);
+        }
+        GridHelper.SelectRow(dgrHotels, nIndex);
+        StatusBarReg.Content = lstHotels.Count + " Hotels.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrHotels, nIndex);
-
-      StatusBarReg.Content = lstHotels.Count + " Hotels.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Hotels");
+      }
     }
     #endregion
 

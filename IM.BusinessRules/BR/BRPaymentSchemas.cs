@@ -4,6 +4,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,36 +19,40 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo PaymentSchemas</returns>
     /// <history>
     /// [emoguel] created 06/04/2016
+    /// [emoguel] modified 28/06/2016 ---> Se volvió async
     /// </history>
-    public static List<PaymentSchema> GetPaymentSchemas(int nStatus = -1, PaymentSchema paymentSchemas = null)
+    public async static Task<List<PaymentSchema>> GetPaymentSchemas(int nStatus = -1, PaymentSchema paymentSchemas = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from pas in dbContext.PaymentSchemas
-                    select pas;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(pas => pas.pasA == blnStatus);
-        }
+          var query = from pas in dbContext.PaymentSchemas
+                      select pas;
 
-        #region Filtros adicionales
-        if (paymentSchemas != null)//Verificamos si tenemos el objeto
-        {
-          if (paymentSchemas.pasID > 0)//Filtro por ID
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(pas => pas.pasID == paymentSchemas.pasID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(pas => pas.pasA == blnStatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(paymentSchemas.pasN))//Filtro por descripcion
+          #region Filtros adicionales
+          if (paymentSchemas != null)//Verificamos si tenemos el objeto
           {
-            query = query.Where(pas => pas.pasN.Contains(paymentSchemas.pasN));
+            if (paymentSchemas.pasID > 0)//Filtro por ID
+            {
+              query = query.Where(pas => pas.pasID == paymentSchemas.pasID);
+            }
+
+            if (!string.IsNullOrWhiteSpace(paymentSchemas.pasN))//Filtro por descripcion
+            {
+              query = query.Where(pas => pas.pasN.Contains(paymentSchemas.pasN));
+            }
           }
+          #endregion
+          return query.OrderBy(pas => pas.pasN).ToList();
         }
-        #endregion
-        return query.OrderBy(pas => pas.pasN).ToList();
-      }
+      });
     }
     #endregion    
   }

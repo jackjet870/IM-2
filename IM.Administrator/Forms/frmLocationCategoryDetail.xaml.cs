@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Model.Helpers;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -62,7 +63,8 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel_Click(null, null);
+        btnCancel.Focus();
+        Close();
       }
     }
     #endregion
@@ -109,6 +111,10 @@ namespace IM.Administrator.Forms
         dgrLocation.CancelEdit();
         dgrLocation.RowEditEnding += dgrLocation_RowEditEnding;
       }
+      else
+      {
+        cmbLocations.Header = "Location (" + (dgrLocation.Items.Count - 1) + ")";
+      }
     }
     #endregion
 
@@ -124,23 +130,7 @@ namespace IM.Administrator.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.Focus();
-      List<Location> lstLocations = (List<Location>)dgrLocation.ItemsSource;
-      if (!ObjectHelper.IsEquals(locationCategory, oldLocationCategory) || !ObjectHelper.IsListEquals(lstLocations, _oldLocations))
-      {
-        MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-        if (result == MessageBoxResult.Yes)
-        {
-          if (!blnClosing) { blnClosing = true; Close(); }
-        }
-        else
-        {
-          blnClosing = false;
-        }
-      }
-      else
-      {
-        if (!blnClosing) { blnClosing = true; Close(); }
-      }
+      Close();
     }
     #endregion
 
@@ -199,14 +189,39 @@ namespace IM.Administrator.Forms
     {
       if (!blnClosing)
       {
-        blnClosing = true;        
-        btnCancel_Click(null, null);
-        if (!blnClosing)
+        List<Location> lstLocations = (List<Location>)dgrLocation.ItemsSource;
+        if (!ObjectHelper.IsEquals(locationCategory, oldLocationCategory) || !ObjectHelper.IsListEquals(lstLocations, _oldLocations))
         {
-          e.Cancel = true;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result != MessageBoxResult.Yes)
+          {
+            e.Cancel = true;
+          }
         }
       }
     }
+    #endregion
+
+    #region KeyDown
+		// <summary>
+    /// Cambia el contador de los registros
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 04/06/2016
+    /// </history>
+    private void Row_KeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Delete)
+      {
+        var item = dgrLocation.SelectedItem;
+        if (item.GetType().Name == "Location")
+        {
+          cmbLocations.Header = "Location (" + (dgrLocation.Items.Count - 2) + ")";
+        }
+      }
+    } 
     #endregion
     #endregion
 
@@ -218,13 +233,23 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 17/05/2016
     /// </history>
-    private void loadLocations()
+    private async void loadLocations()
     {
-      List<Location> lstAllLocations = BRLocations.GetLocations();
-      List<Location> lstLocations = (!string.IsNullOrWhiteSpace(locationCategory.lcID)) ? lstAllLocations.Where(lo => lo.lolc == locationCategory.lcID).ToList() : new List<Location>();
-      dgrLocation.ItemsSource = lstLocations;
-      cmbLocations.ItemsSource = lstAllLocations;
-      _oldLocations = lstLocations.ToList();
+      try
+      {
+        List<Location> lstAllLocations = await BRLocations.GetLocations();
+        List<Location> lstLocations = (!string.IsNullOrWhiteSpace(locationCategory.lcID)) ? lstAllLocations.Where(lo => lo.lolc == locationCategory.lcID).ToList() : new List<Location>();
+        dgrLocation.ItemsSource = lstLocations;
+        cmbLocations.ItemsSource = lstAllLocations;
+        _oldLocations = lstLocations.ToList();
+        skpStatus.Visibility = Visibility.Collapsed;
+        btnAccept.Visibility = Visibility.Visible;
+        cmbLocations.Header = "Location (" + lstLocations.Count + ")";
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Location Categories");
+      }
     }
     #endregion
 

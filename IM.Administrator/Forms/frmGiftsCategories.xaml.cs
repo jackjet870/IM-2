@@ -8,6 +8,7 @@ using IM.BusinessRules.BR;
 using System.Linq;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -242,18 +243,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 23/03/2016
     /// </history>
-    private void LoadGiftsCategories(GiftCategory giftCategory=null)
+    private async void LoadGiftsCategories(GiftCategory giftCategory=null)
     {
-      int nIndex = 0;
-      List<GiftCategory> lstGiftsCategories = BRGiftsCategories.GetGiftsCategories(_giftCategoryFilter, _nStatus);
-      dgrGiftsCateg.ItemsSource = lstGiftsCategories;
-      if(giftCategory!=null && lstGiftsCategories.Count>0)
+      try
       {
-        giftCategory = lstGiftsCategories.Where(gc => gc.gcID == giftCategory.gcID).FirstOrDefault();
-        nIndex = lstGiftsCategories.IndexOf(giftCategory);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<GiftCategory> lstGiftsCategories = await BRGiftsCategories.GetGiftsCategories(_giftCategoryFilter, _nStatus);
+        dgrGiftsCateg.ItemsSource = lstGiftsCategories;
+        if (giftCategory != null && lstGiftsCategories.Count > 0)
+        {
+          giftCategory = lstGiftsCategories.Where(gc => gc.gcID == giftCategory.gcID).FirstOrDefault();
+          nIndex = lstGiftsCategories.IndexOf(giftCategory);
+        }
+        GridHelper.SelectRow(dgrGiftsCateg, nIndex);
+        StatusBarReg.Content = lstGiftsCategories.Count + " Gift Categories.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrGiftsCateg, nIndex);
-      StatusBarReg.Content = lstGiftsCategories.Count + " Gift Categories.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Gift Categories");
+      }
     }
     #endregion
 
@@ -286,7 +296,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_giftCategoryFilter.gcN))//Filtro por descripcion
       {
-        if (!newGiftCategory.gcN.Contains(_giftCategoryFilter.gcN))
+        if (!newGiftCategory.gcN.Contains(_giftCategoryFilter.gcN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

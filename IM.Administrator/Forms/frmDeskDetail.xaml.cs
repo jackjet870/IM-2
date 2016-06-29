@@ -21,7 +21,9 @@ namespace IM.Administrator.Forms
     public Desk desk = new Desk();//Objeto a edita o agregar
     public Desk oldDesk = new Desk();//Objeto con los datos iniciales
     public EnumMode enumMode;//modo en que se mostrará la ventana  
-    private List<Computer> _oldLstComputers = new List<Computer>();//Lista incial de computadoras 
+    private List<Computer> _oldLstComputers = new List<Computer>();//Lista incial de computadoras
+    private bool _isCellCancel = false;
+    private bool _isClosing = false; 
     #endregion
     public frmDeskDetail()
     {
@@ -59,7 +61,6 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null, null);
       }
     }
@@ -74,34 +75,46 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 17/03/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
-      if (enumMode != EnumMode.add && ObjectHelper.IsEquals(desk, oldDesk) && ObjectHelper.IsEquals(lstComputers, _oldLstComputers))
+      try
       {
-        Close();
-      }
-      else
-      {
-        string strMsj = ValidateHelper.ValidateForm(this, "Desk");
-        int nRes = 0;
-
-        if (strMsj == "")
-        { 
-          List<string> lstIdsComputers = lstComputers.Select(cmp => cmp.cpID).ToList();
-          nRes = BRDesks.SaveDesk(desk, (enumMode == EnumMode.edit), lstIdsComputers);
-          UIHelper.ShowMessageResult("Desk", nRes);
-          if(nRes>0)
-          {
-            DialogResult = true;
-            Close();
-          }
+        btnAccept.Focus();
+        List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;
+        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(desk, oldDesk) && ObjectHelper.IsEquals(lstComputers, _oldLstComputers))
+        {
+          _isClosing = true;
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          skpStatus.Visibility = Visibility.Visible;
+          txtStatus.Text = "Saving Data...";
+          string strMsj = ValidateHelper.ValidateForm(this, "Desk");
+          int nRes = 0;
+
+          if (strMsj == "")
+          {
+            List<string> lstIdsComputers = lstComputers.Select(cmp => cmp.cpID).ToList();
+            nRes =await BRDesks.SaveDesk(desk, (enumMode == EnumMode.edit), lstIdsComputers);
+            UIHelper.ShowMessageResult("Desk", nRes);
+            if (nRes > 0)
+            {
+              _isClosing = true;
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
+          skpStatus.Visibility = Visibility.Collapsed;
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Desks");
       }
     }
     #endregion
@@ -119,24 +132,13 @@ namespace IM.Administrator.Forms
     {
       if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
       {
-        List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;//Los items del grid                   
-        Computer computer = (Computer)dgrComputers.SelectedItem;//Valor que se está editando
-
-        var Combobox = (ComboBox)e.EditingElement;
-        Computer computerCombo = (Computer)Combobox.SelectedItem;//Valor seleccionado del combo
-
-        if (computerCombo != null)//Se valida que no esté seleccionado en otra fila
-        {
-          if (computerCombo != computer)//Validar que se esté cambiando el valor
-          {
-            Computer ComputerVal = lstComputers.Where(c => c.cpID != computer.cpID && c.cpID == computerCombo.cpID).FirstOrDefault();
-            if (ComputerVal != null)
-            {
-              UIHelper.ShowMessage("Computer must not be repeated");
-              e.Cancel = true;
-            }
-          }
-        }
+        _isCellCancel = false;
+        bool blnIsRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrComputers);
+        e.Cancel = blnIsRepeat;
+      }
+      else
+      {
+        _isCellCancel = true;
       }
 
     }
@@ -153,6 +155,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       if(enumMode!=EnumMode.preview)
       {
         List<Computer> lstComputers = (List<Computer>)dgrComputers.ItemsSource;        
@@ -161,17 +164,95 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!_isClosing) { _isClosing = true; Close(); }
+          }
+          else
+          {
+            _isClosing = false;
           }
         }
         else
         {
-          Close();
+          if (!_isClosing) { _isClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!_isClosing) { _isClosing = true; Close(); }
+      }
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 09/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
+      {
+        _isClosing = true;
+        btnCancel_Click(null, null);
+        if (!_isClosing)
+        {
+          e.Cancel = true;
+        }
+        else
+        {
+          _isClosing = false;
+        }
+      }
+
+    }
+    #endregion v
+
+    #region RowEditEnding
+    /// <summary>
+    /// Verifica que no se agreguen registros vacios
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 09/06/2016
+    /// </history>
+    private void dgrComputers_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      if (_isCellCancel)
+      {
+        dgrComputers.RowEditEnding -= dgrComputers_RowEditEnding;
+        dgrComputers.CancelEdit();
+        dgrComputers.RowEditEnding += dgrComputers_RowEditEnding;
+      }
+      else
+      {
+        cmbComputers.Header = "Computer (" + (dgrComputers.Items.Count - 1) + ")";
+      }
+    }
+    #endregion
+
+    #region KeyDown
+    /// <summary>
+    /// Cambia el contador cuando se eliminan registros
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 09/06/2016
+    /// </history>
+    private void Row_KeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Delete)
+      {
+        var item = dgrComputers.SelectedItem;
+        if (item.GetType().Name == "Computer")
+        {
+          cmbComputers.Header = "Computer (" + (dgrComputers.Items.Count - 2) + ")";
+        }
       }
     }
     #endregion
@@ -199,6 +280,8 @@ namespace IM.Administrator.Forms
           _oldLstComputers = lstComputers.ToList();
         }
         dgrComputers.ItemsSource = lstComputers;
+        cmbComputers.Header = "Computer (" + lstComputers.Count + ")";
+        skpStatus.Visibility = Visibility.Collapsed;
       }
       catch(Exception ex)
       {
@@ -228,7 +311,9 @@ namespace IM.Administrator.Forms
       }
     }
     #endregion
-    
+
     #endregion
+
+    
   }
 }

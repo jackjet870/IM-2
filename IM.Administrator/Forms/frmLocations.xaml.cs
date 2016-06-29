@@ -237,18 +237,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 01/04/2016
     /// </history>
-    private void LoadLocations(Location location=null)
+    private async void LoadLocations(Location location=null)
     {
-      int nIndex = 0;
-      List<Location> lstLocations = BRLocations.GetLocations(_nStatus, _locationFilter);
-      dgrLanguages.ItemsSource = lstLocations;
-      if(location!=null && lstLocations.Count>0)
+      try
       {
-        location = lstLocations.Where(lo => lo.loID == location.loID).FirstOrDefault();
-        nIndex = lstLocations.IndexOf(location);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Location> lstLocations =await BRLocations.GetLocations(_nStatus, _locationFilter);
+        dgrLanguages.ItemsSource = lstLocations;
+        if (location != null && lstLocations.Count > 0)
+        {
+          location = lstLocations.Where(lo => lo.loID == location.loID).FirstOrDefault();
+          nIndex = lstLocations.IndexOf(location);
+        }
+        GridHelper.SelectRow(dgrLanguages, nIndex);
+        StatusBarReg.Content = lstLocations.Count + " Locations.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrLanguages, nIndex);
-      StatusBarReg.Content = lstLocations.Count+" Locations.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Locations");
+      }
     }
     #endregion
 

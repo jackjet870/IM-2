@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,35 +18,38 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo TourTimesSchema</returns>
     /// <history>
     /// [emoguel] created 28/04/2016
+    /// [emoguel] modified 28/06/2016---> Se volvió async
     /// </history>
-    public static List<TourTimesSchema> GetTourTimesSchemas(int nStatus = -1, TourTimesSchema tourTimeSchema = null)
+    public async static Task<List<TourTimesSchema>> GetTourTimesSchemas(int nStatus = -1, TourTimesSchema tourTimeSchema = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from tc in dbContext.TourTimesSchemas
-                    select tc;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(tc => tc.tcA == blnStatus);
-        }
+          var query = from tc in dbContext.TourTimesSchemas
+                      select tc;
 
-        if (tourTimeSchema != null)
-        {
-          if (tourTimeSchema.tcID > 0)//filtro por ID
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(tc => tc.tcID == tourTimeSchema.tcID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(tc => tc.tcA == blnStatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(tourTimeSchema.tcN))//Filtro por Descripción
+          if (tourTimeSchema != null)
           {
-            query = query.Where(tc => tc.tcN.Contains(tourTimeSchema.tcN));
-          }
-        }
+            if (tourTimeSchema.tcID > 0)//filtro por ID
+            {
+              query = query.Where(tc => tc.tcID == tourTimeSchema.tcID);
+            }
 
-        return query.OrderBy(tc => tc.tcN).ToList();
-      }
+            if (!string.IsNullOrWhiteSpace(tourTimeSchema.tcN))//Filtro por Descripción
+            {
+              query = query.Where(tc => tc.tcN.Contains(tourTimeSchema.tcN));
+            }
+          }
+          return query.OrderBy(tc => tc.tcN).ToList();
+        }
+      });
     } 
     #endregion
   }

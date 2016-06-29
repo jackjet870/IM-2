@@ -3,6 +3,7 @@ using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,37 +19,41 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 22/03/2016 Created
     /// [emoguel] 04/04/2016 Modified se agregaron filtros de busqueda
+    /// [emoguel] modified28/06/2016 ---> Se volvió async
     /// </history>
-    public static List<MealTicketType> GetMealTicketType(MealTicketType mealTicketType=null,int nWPax=-1)
+    public async static Task<List<MealTicketType>> GetMealTicketType(MealTicketType mealTicketType=null,int nWPax=-1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from my in dbContext.MealTicketTypes
-                    select my;
-
-        if(nWPax!=-1)//filtro por WPAX
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnWPax = Convert.ToBoolean(nWPax);
-          query = query.Where(my => my.myWPax==blnWPax);
+          var query = from my in dbContext.MealTicketTypes
+                      select my;
+
+          if (nWPax != -1)//filtro por WPAX
+          {
+            bool blnWPax = Convert.ToBoolean(nWPax);
+            query = query.Where(my => my.myWPax == blnWPax);
+          }
+
+          #region Filtros adicionales
+          if (mealTicketType != null)//Validamos si tenemos objeto
+          {
+            if (!string.IsNullOrWhiteSpace(mealTicketType.myID))//Filtro por ID
+            {
+              query = query.Where(my => my.myID == mealTicketType.myID);
+            }
+
+            if (!string.IsNullOrWhiteSpace(mealTicketType.myN))//Filtro por descripcion
+            {
+              query = query.Where(my => my.myN.Contains(mealTicketType.myN));
+            }
+          }
+          #endregion
+
+          return query.OrderBy(x => x.myN).ToList();
         }
-
-        #region Filtros adicionales
-        if (mealTicketType != null)//Validamos si tenemos objeto
-        {
-          if (!string.IsNullOrWhiteSpace(mealTicketType.myID))//Filtro por ID
-          {
-            query = query.Where(my => my.myID == mealTicketType.myID);
-          }
-
-          if (!string.IsNullOrWhiteSpace(mealTicketType.myN))//Filtro por descripcion
-          {
-            query = query.Where(my => my.myN.Contains(mealTicketType.myN));
-          }
-        } 
-        #endregion
-
-        return query.OrderBy(x => x.myN).ToList();
-      }
+      });
     }
     #endregion
   }

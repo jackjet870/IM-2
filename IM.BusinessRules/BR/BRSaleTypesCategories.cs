@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,37 +18,38 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo SaleTypeCategory</returns>
     /// <history>
     /// [emoguel] created 19/04/2016
+    /// [emoguel] modified 28/06/2016 -----> Se volvió async
     /// </history>
-    public static List<SaleTypeCategory> GetSaleCategories(int nStatus = -1, SaleTypeCategory saleTypeCategory = null)
+    public async static Task<List<SaleTypeCategory>> GetSaleCategories(int nStatus = -1, SaleTypeCategory saleTypeCategory = null)
     {
-
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from stc in dbContext.SaleTypesCategories
-                    select stc;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(stc => stc.stcA == blnStatus);
-        }
+          var query = from stc in dbContext.SaleTypesCategories
+                      select stc;
 
-        if (saleTypeCategory != null)//Verificamos que se tenga un objeto
-        {
-          if (!string.IsNullOrWhiteSpace(saleTypeCategory.stcID))
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(stc => stc.stcID == saleTypeCategory.stcID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(stc => stc.stcA == blnStatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(saleTypeCategory.stcN))//Filtro por descripción
+          if (saleTypeCategory != null)//Verificamos que se tenga un objeto
           {
-            query = query.Where(stc => stc.stcN.Contains(saleTypeCategory.stcN));
+            if (!string.IsNullOrWhiteSpace(saleTypeCategory.stcID))
+            {
+              query = query.Where(stc => stc.stcID == saleTypeCategory.stcID);
+            }
+
+            if (!string.IsNullOrWhiteSpace(saleTypeCategory.stcN))//Filtro por descripción
+            {
+              query = query.Where(stc => stc.stcN.Contains(saleTypeCategory.stcN));
+            }
           }
+          return query.OrderBy(stc => stc.stcN).ToList();
         }
-
-        return query.OrderBy(stc => stc.stcN).ToList();
-
-      }
+      });
     } 
     #endregion
   }

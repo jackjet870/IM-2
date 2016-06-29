@@ -221,11 +221,11 @@ namespace IM.Administrator.Forms
     /// <history>
     ///   [vku] 13/Jun/2016 Created
     /// </history>
-    protected void LoadPersonelAdmin()
+    protected async void LoadPersonelAdmin()
     {
       try
       {
-        List<PersonnelShort> lstPersonelAdmin = BRPersonnel.GetPersonnelByRole("ADMIN");
+        List<PersonnelShort> lstPersonelAdmin = await BRPersonnel.GetPersonnelByRole("ADMIN");
         cboocAdminUser.ItemsSource = lstPersonelAdmin;
       }
       catch(Exception ex)
@@ -242,11 +242,11 @@ namespace IM.Administrator.Forms
     /// <history>
     ///   [vku] 13/Jun/2016 Created
     /// </history>
-    protected void LoadTourTimesSchema()
+    protected async void LoadTourTimesSchema()
     {
       try
       {
-        List<TourTimesSchema> lstTourTimesSchemas = BRTourTimesSchemas.GetTourTimesSchemas(nStatus: 1);
+        List<TourTimesSchema> lstTourTimesSchemas =await BRTourTimesSchemas.GetTourTimesSchemas(nStatus: 1);
         cboocTourTimesSchema.ItemsSource = lstTourTimesSchemas;
       }
       catch(Exception ex)
@@ -263,11 +263,11 @@ namespace IM.Administrator.Forms
     /// <history>
     ///   [vku] 13/Jun/2016 Created
     /// </history>
-    protected void LoadPersonelBoss()
+    protected async void LoadPersonelBoss()
     {
       try
       {
-        List<PersonnelShort> lstPersonelBoss = BRPersonnel.GetPersonnelByRole("BOSS");
+        List<PersonnelShort> lstPersonelBoss = await BRPersonnel.GetPersonnelByRole("BOSS");
         cboocBoss.ItemsSource = lstPersonelBoss;
       }
       catch(Exception ex)

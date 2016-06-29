@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,35 +18,40 @@ namespace IM.BusinessRules.BR
     /// <returns>Devuelve una lista de tipo EfficiencyType</returns>
     /// <history>
     /// [emoguel] created 18/03/2016
+    /// [emoguel] modified 09/06/2016-->Se volvió async
     /// </history>
-    public static List<EfficiencyType> GetEfficiencyTypes(EfficiencyType efficiencyType = null, int nStatus = -1)
+    public async static Task<List<EfficiencyType>> GetEfficiencyTypes(EfficiencyType efficiencyType = null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var query = from eft in dbContext.EfficiencyTypes
-                    select eft;
-
-        if (nStatus != -1)//Filtro por estatus
+      List<EfficiencyType> lstEfficency = await Task.Run(() =>
         {
-          bool blnEstatus = Convert.ToBoolean(nStatus);
-          query = query.Where(eft => eft.etA == blnEstatus);
-        }
-
-        if (efficiencyType != null)//Si se tiene un objeto
-        {
-          if (!string.IsNullOrWhiteSpace(efficiencyType.etID))//Filtro por ID
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
           {
-            query = query.Where(eft => eft.etID == efficiencyType.etID);
-          }
+            var query = from eft in dbContext.EfficiencyTypes
+                        select eft;
 
-          if (!string.IsNullOrWhiteSpace(efficiencyType.etN))//Filtro por descripcion
+            if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(eft => eft.etN.Contains(efficiencyType.etN));
-          }
-        }
+              bool blnEstatus = Convert.ToBoolean(nStatus);
+              query = query.Where(eft => eft.etA == blnEstatus);
+            }
 
-        return query.OrderBy(eft => eft.etN).ToList();
-      }
+            if (efficiencyType != null)//Si se tiene un objeto
+          {
+              if (!string.IsNullOrWhiteSpace(efficiencyType.etID))//Filtro por ID
+            {
+                query = query.Where(eft => eft.etID == efficiencyType.etID);
+              }
+
+              if (!string.IsNullOrWhiteSpace(efficiencyType.etN))//Filtro por descripcion
+            {
+                query = query.Where(eft => eft.etN.Contains(efficiencyType.etN));
+              }
+            }
+
+            return query.OrderBy(eft => eft.etN).ToList();
+          }
+        });
+      return lstEfficency;
     }
     #endregion    
   }

@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -241,6 +242,7 @@ namespace IM.Administrator.Forms
     {
       try
       {
+        status.Visibility = Visibility.Visible;
         int nIndex = 0;
         List<MembershipGroup> lstMembershipGroups = await BRMembershipGroups.GetMembershipGroups(_nStatus, _memberShipGroupFilter);
         dgrMembershipGroup.ItemsSource = lstMembershipGroups;
@@ -251,6 +253,7 @@ namespace IM.Administrator.Forms
         }
         GridHelper.SelectRow(dgrMembershipGroup, nIndex);
         StatusBarReg.Content = lstMembershipGroups.Count + " Membership Groups.";
+        status.Visibility = Visibility.Collapsed;
       }
       catch(Exception ex)
       {
@@ -288,7 +291,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_memberShipGroupFilter.mgN))//Filtro por estatus
       {
-        if(!membershipGroup.mgN.Contains(_memberShipGroupFilter.mgN))
+        if(!membershipGroup.mgN.Contains(_memberShipGroupFilter.mgN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

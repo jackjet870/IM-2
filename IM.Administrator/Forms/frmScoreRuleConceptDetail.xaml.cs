@@ -18,6 +18,7 @@ namespace IM.Administrator.Forms
     public ScoreRuleConcept scoreRuleConcept = new ScoreRuleConcept();//Objeto a guardar
     public ScoreRuleConcept oldScoreRuleConcept = new ScoreRuleConcept();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo de la ventana
+    private bool _isClosing = false;
     #endregion
     public frmScoreRuleConceptDetail()
     {
@@ -55,7 +56,7 @@ namespace IM.Administrator.Forms
       if(e.Key==Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     }
     #endregion
@@ -76,6 +77,7 @@ namespace IM.Administrator.Forms
         btnAccept.Focus();
         if (enumMode != EnumMode.add && ObjectHelper.IsEquals(scoreRuleConcept, oldScoreRuleConcept))
         {
+          _isClosing = true;
           Close();
         }
         {
@@ -86,6 +88,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Score Rule Concept", nRes);
             if (nRes > 0)
             {
+              _isClosing = true;
               DialogResult = true;
               Close();
             }
@@ -113,17 +116,32 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if (!ObjectHelper.IsEquals(scoreRuleConcept, oldScoreRuleConcept))
+      btnCancel.Focus();
+      Close();
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana verificando cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if(!_isClosing)
       {
-        MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-        if (result == MessageBoxResult.Yes)
+        if (!ObjectHelper.IsEquals(scoreRuleConcept, oldScoreRuleConcept))
         {
-          Close();
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result != MessageBoxResult.Yes)
+          {
+            e.Cancel = true;
+          }
         }
-      }
-      else
-      {
-        Close();
       }
     } 
     #endregion

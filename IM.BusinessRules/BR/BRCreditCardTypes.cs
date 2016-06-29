@@ -24,35 +24,35 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<CreditCardType>> GetCreditCardTypes(CreditCardType creditCardType = null, int nStatus = -1)
     {
-      List<CreditCardType> result = null;
-      await Task.Run(() =>
-      {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<CreditCardType> lstCreditsCard = await Task.Run(() =>
         {
-          var query = from cct in dbContext.CreditCardTypes select cct;
-
-          if (nStatus != -1)//Validación por estatus
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
           {
-            bool blnEstatus = Convert.ToBoolean(nStatus);
-            query = query.Where(cct => cct.ccA == blnEstatus);
-          }
+            var query = from cct in dbContext.CreditCardTypes select cct;
 
-          if (creditCardType != null)//Valida si se tiene un obejto
+            if (nStatus != -1)//Validación por estatus
           {
-            if (!string.IsNullOrWhiteSpace(creditCardType.ccID))//Validación por ID
-            {
-              query = query.Where(cct => cct.ccID == creditCardType.ccID);
+              bool blnEstatus = Convert.ToBoolean(nStatus);
+              query = query.Where(cct => cct.ccA == blnEstatus);
             }
 
-            if (!string.IsNullOrWhiteSpace(creditCardType.ccN))//Validación por nombre/Descripción
+            if (creditCardType != null)//Valida si se tiene un obejto
+          {
+              if (!string.IsNullOrWhiteSpace(creditCardType.ccID))//Validación por ID
             {
-              query = query.Where(cct => cct.ccN.Contains(creditCardType.ccN));
+                query = query.Where(cct => cct.ccID == creditCardType.ccID);
+              }
+
+              if (!string.IsNullOrWhiteSpace(creditCardType.ccN))//Validación por nombre/Descripción
+            {
+                query = query.Where(cct => cct.ccN.Contains(creditCardType.ccN));
+              }
             }
+            return query.OrderBy(cct => cct.ccN).ToList();
           }
-          result = query.OrderBy(cct => cct.ccN).ToList();
-        }        
-      });
-      return result;
+        });
+      return lstCreditsCard;
+
     }
     #endregion    
 

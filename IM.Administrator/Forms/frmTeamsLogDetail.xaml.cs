@@ -21,6 +21,7 @@ namespace IM.Administrator.Forms
     public TeamLog oldTeamLog = new TeamLog();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo de la ventana
     public bool blnDate = false;//Para el modo busqueda
+    private bool _isClosing = false;
     #endregion
     public frmTeamLogDetail()
     {
@@ -97,7 +98,7 @@ namespace IM.Administrator.Forms
       if (e.Key == Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     }
     #endregion
@@ -127,6 +128,7 @@ namespace IM.Administrator.Forms
           {
             blnDate = false;
           }
+          _isClosing = true;
           DialogResult = true;
           Close();
         }
@@ -135,6 +137,7 @@ namespace IM.Administrator.Forms
           btnAccept.Focus();
           if (enumMode != EnumMode.add && ObjectHelper.IsEquals(teamLog, oldTeamLog))
           {
+            _isClosing = true;
             Close();
           }
           else
@@ -147,6 +150,7 @@ namespace IM.Administrator.Forms
               UIHelper.ShowMessageResult("Team Log", nRes);
               if (nRes == 1)
               {
+                _isClosing = true;
                 DialogResult = true;
                 Close();
               }
@@ -177,25 +181,8 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if (enumMode != EnumMode.preview && enumMode != EnumMode.search)
-      {
-        if (!ObjectHelper.IsEquals(teamLog, oldTeamLog))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {
-            Close();
-          }
-        }
-        else
-        {
-          Close();
-        }
-      }
-      else
-      {
-        Close();
-      }
+      btnCancel.Focus();
+      Close();
     }
     #endregion
 
@@ -238,7 +225,7 @@ namespace IM.Administrator.Forms
               lblSr.Content = "Location";
               cmbtlPlaceID.DisplayMemberPath = "loN";
               cmbtlPlaceID.SelectedValuePath = "loID";
-              List<Location> lstLocations = BRLocations.GetLocations(1, blnTeamsLog: true);
+              List<Location> lstLocations =await BRLocations.GetLocations(1, blnTeamsLog: true);
               cmbtlPlaceID.ItemsSource = lstLocations;
               break;
             }
@@ -290,6 +277,33 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana verificando cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
+      {
+        if (enumMode != EnumMode.preview && enumMode != EnumMode.search)
+        {
+          if (!ObjectHelper.IsEquals(teamLog, oldTeamLog))
+          {
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result != MessageBoxResult.Yes)
+            {
+              e.Cancel = true;
+            }
+          }
+        }
+      }
+    }
+    #endregion
     #endregion
 
     #region Methods
@@ -303,13 +317,20 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadPersonnels()
     {
-      List<PersonnelShort> lstPersonnel =await BRPersonnel.GetPersonnel();
-      if(enumMode==EnumMode.search)
+      try
       {
-        lstPersonnel.Insert(0, new PersonnelShort { peID = "", peN = "" });
+        List<PersonnelShort> lstPersonnel = await BRPersonnel.GetPersonnel();
+        if (enumMode == EnumMode.search)
+        {
+          lstPersonnel.Insert(0, new PersonnelShort { peID = "", peN = "" });
+        }
+        cmbtlChangedBy.ItemsSource = lstPersonnel;
+        cmbtlpe.ItemsSource = lstPersonnel;
       }
-      cmbtlChangedBy.ItemsSource = lstPersonnel;
-      cmbtlpe.ItemsSource = lstPersonnel;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams Log");
+      }
     }
     #endregion
 
@@ -320,14 +341,20 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 27/04/2016
     /// </history>
-    private void LoadTeamTypes()
+    private async void LoadTeamTypes()
     {
-      List<TeamType> lstTeamTypes = BRTeamTypes.GetTeamTypes(1);
-      cmbtlTeamType.ItemsSource = lstTeamTypes;
+      try
+      {
+        List<TeamType> lstTeamTypes =await BRTeamTypes.GetTeamTypes(1);
+        cmbtlTeamType.ItemsSource = lstTeamTypes;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Team Log");
+      }
     }
     #endregion
 
     #endregion
-   
   }
 }

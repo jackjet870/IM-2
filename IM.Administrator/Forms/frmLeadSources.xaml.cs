@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -235,16 +236,25 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void loadLeadSources(LeadSource leadSources = null)
     {
-      int nIndex = 0;
-      List<LeadSource> lstLeadSource = await BRLeadSources.GetLeadSources(_nStatus, _nRegen, _nAnimation, _leadSourceFilter,true);
-      if(lstLeadSource.Count>0 && leadSources!=null)
+      try
       {
-        leadSources = lstLeadSource.Where(ls => ls.lsID == leadSources.lsID).FirstOrDefault();
-        nIndex = lstLeadSource.IndexOf(leadSources);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<LeadSource> lstLeadSource = await BRLeadSources.GetLeadSources(_nStatus, _nRegen, _nAnimation, _leadSourceFilter, true);
+        if (lstLeadSource.Count > 0 && leadSources != null)
+        {
+          leadSources = lstLeadSource.Where(ls => ls.lsID == leadSources.lsID).FirstOrDefault();
+          nIndex = lstLeadSource.IndexOf(leadSources);
+        }
+        dgrLeadSources.ItemsSource = lstLeadSource;
+        GridHelper.SelectRow(dgrLeadSources, nIndex);
+        StatusBarReg.Content = lstLeadSource.Count + " Lead Sources.";
+        status.Visibility = Visibility.Collapsed;
       }
-      dgrLeadSources.ItemsSource = lstLeadSource;
-      GridHelper.SelectRow(dgrLeadSources, nIndex);
-      StatusBarReg.Content = lstLeadSource.Count + " Lead Sources.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Lead Source");
+      }
     }
     #endregion
 
@@ -284,17 +294,16 @@ namespace IM.Administrator.Forms
       }
 
       if (!string.IsNullOrWhiteSpace(_leadSourceFilter.lsID))//Filtro por ID
-      {
-        //YA NO EXISTE lsCECOID
-        //if(_leadSourceFilter.lsCECOID!=leadSource.lsID)
-        //{
-        //  return false;
-        //}
+      {        
+        if (_leadSourceFilter.lsID != leadSource.lsID)
+        {
+          return false;
+        }
       }
 
       if (!string.IsNullOrWhiteSpace(_leadSourceFilter.lsN))//Filtro por descripción
       {
-        if(!leadSource.lsN.Contains(_leadSourceFilter.lsN))
+        if(!leadSource.lsN.Contains(_leadSourceFilter.lsN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

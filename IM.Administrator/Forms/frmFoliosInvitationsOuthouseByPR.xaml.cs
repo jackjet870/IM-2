@@ -6,6 +6,7 @@ using IM.Model;
 using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -218,18 +219,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 07/05/2016
     /// </history>
-    private void LoadPrs(PersonnelShort personnel=null)
+    private async void LoadPrs(PersonnelShort personnel=null)
     {
-      int nIndex = 0;
-      List<PersonnelShort> lstPersonnel = BRFoliosInvitationsOuthousePR.GetPRbyFolioOuthouse(_prFilter);
-      dgrPRs.ItemsSource = lstPersonnel;
-      if(lstPersonnel.Count>0 && personnel!=null)
+      try
       {
-        personnel = lstPersonnel.Where(pe => pe.peID == personnel.peID).FirstOrDefault();
-        nIndex = lstPersonnel.IndexOf(personnel);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<PersonnelShort> lstPersonnel =await BRFoliosInvitationsOuthousePR.GetPRbyFolioOuthouse(_prFilter);
+        dgrPRs.ItemsSource = lstPersonnel;
+        if (lstPersonnel.Count > 0 && personnel != null)
+        {
+          personnel = lstPersonnel.Where(pe => pe.peID == personnel.peID).FirstOrDefault();
+          nIndex = lstPersonnel.IndexOf(personnel);
+        }
+        GridHelper.SelectRow(dgrPRs, nIndex);
+        StatusBarReg.Content = lstPersonnel.Count + " PRs.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrPRs, nIndex);
-      StatusBarReg.Content = lstPersonnel.Count + " PRs.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folios Invitations Outhouse By PR");
+      }
     }
     #endregion
 

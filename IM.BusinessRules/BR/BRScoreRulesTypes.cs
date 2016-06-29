@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,35 +19,38 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo ScoreRuleType</returns>
     /// <history>
     /// [emoguel] created 23/04/2016
+    /// [emoguel] modified 28/06/2016 ---> Se volvió async
     /// </history>
-    public static List<ScoreRuleType> GetScoreRulesTypes(int nStatus = -1, ScoreRuleType scoreRuleType = null)
+    public async static Task<List<ScoreRuleType>> GetScoreRulesTypes(int nStatus = -1, ScoreRuleType scoreRuleType = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from sy in dbContext.ScoreRulesTypes
-                    select sy;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(sy => sy.syA == blnStatus);
-        }
+          var query = from sy in dbContext.ScoreRulesTypes
+                      select sy;
 
-        if (scoreRuleType != null)
-        {
-          if (!string.IsNullOrWhiteSpace(scoreRuleType.syID))//Filtro por ID
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(sy => sy.syID == scoreRuleType.syID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(sy => sy.syA == blnStatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(scoreRuleType.syN))//Filtro por descripción
+          if (scoreRuleType != null)
           {
-            query = query.Where(sy => sy.syN.Contains(scoreRuleType.syN));
-          }
-        }
+            if (!string.IsNullOrWhiteSpace(scoreRuleType.syID))//Filtro por ID
+            {
+              query = query.Where(sy => sy.syID == scoreRuleType.syID);
+            }
 
-        return query.OrderBy(sy => sy.syN).ToList();
-      }
+            if (!string.IsNullOrWhiteSpace(scoreRuleType.syN))//Filtro por descripción
+            {
+              query = query.Where(sy => sy.syN.Contains(scoreRuleType.syN));
+            }
+          }
+          return query.OrderBy(sy => sy.syN).ToList();
+        }
+      });
     }
     #endregion
   }

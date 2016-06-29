@@ -205,6 +205,7 @@ namespace IM.Administrator.Forms
     {
       try
       {
+        status.Visibility = Visibility.Visible;
         int nIndex = 0;
         List<Program> lstPrograms = await BRPrograms.GetPrograms();
         dgrPrograms.ItemsSource = lstPrograms;

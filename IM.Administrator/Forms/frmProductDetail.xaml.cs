@@ -501,9 +501,9 @@ namespace IM.Administrator.Forms
           ProductLegend prodLeg = await BRProductsLegends.GetProductLegend(_productLegend);
           if (prodLeg != null)
           {
-            UIRichTextBoxHelper.LoadRTF(ref richTextBox, prodLeg.pxText);
-            _productLegend.pxText = UIRichTextBoxHelper.getRTFFromRichTextBox(ref richTextBox);
+            UIRichTextBoxHelper.LoadRTF(ref richTextBox, prodLeg.pxText);           
           }
+          _productLegend.pxText = UIRichTextBoxHelper.getRTFFromRichTextBox(ref richTextBox);
         }
       }
       catch(Exception ex)

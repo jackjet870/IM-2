@@ -18,6 +18,7 @@ namespace IM.Administrator.Forms
     public GuestStatusType guestStaTypOld = new GuestStatusType();//Objeto con los antigüos valores
     public GuestStatusType guestStaTyp = new GuestStatusType();//Objeto a guardar en la BD
     public EnumMode enumMode;//Modo en el que se abrirá la ventana
+    private bool _isClosing = false;
     public frmGuestStatusTypeDetail()
     {
       InitializeComponent();
@@ -41,10 +42,12 @@ namespace IM.Administrator.Forms
         btnAccept.Focus();
         if (ObjectHelper.IsEquals(guestStaTyp, guestStaTypOld) && !Validation.GetHasError(txtgsAgeEnd) && !Validation.GetHasError(txtgsAgeStart) && enumMode != EnumMode.add)//Verificamos si se realizó algun cambio
         {
+          _isClosing = true;
           Close();
         }
         else
         {
+          skpStatus.Visibility = Visibility.Visible;
           string strMsj = "";
           int nRes = 0;
           #region validar campos
@@ -81,6 +84,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Guest Status Type", nRes);
             if (nRes > 0)
             {
+              _isClosing = true;
               DialogResult = true;
               Close();
             }
@@ -89,6 +93,7 @@ namespace IM.Administrator.Forms
           {
             UIHelper.ShowMessage(strMsj);
           }
+          skpStatus.Visibility = Visibility.Visible;
         }
       }
       catch(Exception ex)
@@ -140,7 +145,6 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null, null);
       }
     }
@@ -157,6 +161,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       if(enumMode!=EnumMode.preview)
       {
         if (!ObjectHelper.IsEquals(guestStaTyp, guestStaTypOld))//Verificar que no haya cambios pendientes
@@ -164,21 +169,51 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("If you close the window, the changes will be lost.", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!_isClosing) { _isClosing = true; Close(); }
+          }
+          else
+          {
+            _isClosing = true;
           }
         }
         else
         {
-          Close();
+          if (!_isClosing) { _isClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!_isClosing) { _isClosing = true; Close(); }
+      }
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Verifica si se desea cerrar la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 27/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
+      {
+        _isClosing = true;
+        btnCancel_Click(null, null);
+        if (!_isClosing)
+        {
+          e.Cancel = true;
+        }
+        else
+        {
+          _isClosing = false;
+        }
       }
     }
     #endregion
     #endregion
-
   }
 }

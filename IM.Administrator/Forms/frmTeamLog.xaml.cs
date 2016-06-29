@@ -17,7 +17,7 @@ namespace IM.Administrator.Forms
   public partial class frmTeamsLog : Window
   {
     #region Variables
-    private TeamLog _teamLogFilter = new TeamLog();//Contiene los filtros del grid
+    public TeamLog _teamLogFilter = new TeamLog();//Contiene los filtros del grid
     private bool _blnEdit = false;//Boleano para saber si se tiene permiso para editar
     private bool _blnDel = false;//Permiso para saber si se tiene permiso para eliminar
     private bool _blnDate = false;//Boleano para saber si va a filtrar por ppDT  
@@ -182,7 +182,7 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 27/04/2016
     /// </history>
-    private void btnAdd_Click(object sender, RoutedEventArgs e)
+    private async void btnAdd_Click(object sender, RoutedEventArgs e)
     {
       frmTeamLogDetail frmTeamLogDetail = new frmTeamLogDetail();
       frmTeamLogDetail.Owner = this;
@@ -192,7 +192,8 @@ namespace IM.Administrator.Forms
         TeamLog teamLog = frmTeamLogDetail.teamLog;
         if (ValidateFilter(teamLog))//Validamos que cumpla con los filtros actuales
         {
-          object dTeamLog = BRTeamsLog.GetTeamsLog(teamLog).FirstOrDefault();//Obtenemos el registro nuevo
+          var team = await BRTeamsLog.GetTeamsLog(teamLog);
+          object dTeamLog = team.FirstOrDefault();//Obtenemos el registro nuevo
           List<object> lstTeamsLog = (List<object>)dgrTeamsLog.ItemsSource;
           lstTeamsLog.Add(dTeamLog);//Agregamos el registro
           lstTeamsLog.Sort((x, y) => DateTime.Compare(Convert.ToDateTime(y.GetType().GetProperty("tlDT").GetValue(y, null)), Convert.ToDateTime(x.GetType().GetProperty("tlDT").GetValue(x, null))));//Reordenamos la lista
@@ -280,7 +281,7 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        UIHelper.ShowMessage("Please select a Post Log.");
+        UIHelper.ShowMessage("Please select a Team Log.");
       }
     } 
     #endregion
@@ -295,26 +296,36 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 26/04/2016
     /// </history>
-    private void LoadTeamsLog(TeamLog teamLog = null)
+    private async void LoadTeamsLog(TeamLog teamLog = null)
     {
-      int nIndex = 0;
-      List<object> lstTeamsLog = BRTeamsLog.GetTeamsLog(_teamLogFilter,_blnDate).ToList();
-      dgrTeamsLog.ItemsSource = lstTeamsLog;
-      if (lstTeamsLog.Count() > 0 )
+      try
       {
-        if (teamLog != null)
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        var teams = await BRTeamsLog.GetTeamsLog(_teamLogFilter, _blnDate);
+        List<object> lstTeamsLog = teams.ToList();
+        dgrTeamsLog.ItemsSource = lstTeamsLog;
+        if (lstTeamsLog.Count() > 0)
         {
-          dynamic dTeamLog = lstTeamsLog.Where(item => Convert.ToUInt32(item.GetType().GetProperty("tlID").GetValue(item, null)) == teamLog.tlID).FirstOrDefault();
-          nIndex = lstTeamsLog.IndexOf(dTeamLog);
+          if (teamLog != null)
+          {
+            dynamic dTeamLog = lstTeamsLog.Where(item => Convert.ToUInt32(item.GetType().GetProperty("tlID").GetValue(item, null)) == teamLog.tlID).FirstOrDefault();
+            nIndex = lstTeamsLog.IndexOf(dTeamLog);
+          }
+          GridHelper.SelectRow(dgrTeamsLog, nIndex);
+          btnDel.IsEnabled = _blnDel;
         }
-        GridHelper.SelectRow(dgrTeamsLog, nIndex);
-        btnDel.IsEnabled = _blnDel;
+        else
+        {
+          btnDel.IsEnabled = false;
+        }
+        StatusBarReg.Content = lstTeamsLog.Count() + " Teams Log.";
+        status.Visibility = Visibility.Collapsed;
       }
-      else
+      catch(Exception ex)
       {
-        btnDel.IsEnabled = false;
-      }      
-      StatusBarReg.Content = lstTeamsLog.Count() + " Teams Log.";
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Teams Log");
+      }
     }
     #endregion
 

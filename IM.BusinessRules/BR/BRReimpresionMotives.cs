@@ -17,35 +17,39 @@ namespace IM.BusinessRules.BR
     /// <param name="reimpresionMotive">Objeto con filtros adicionales</param>
     /// <returns>Lista de tipo ReimpresionMotive</returns>
     /// <history>
-    /// [emogeul] created 16/04/2016
+    /// [emoguel] created 16/04/2016
+    /// [emoguel] modified 28/06/2016 ---> Se volvió async
     /// </history>
-    public static List<ReimpresionMotive> GetReimpresionMotives(int nStatus = -1, ReimpresionMotive reimpresionMotive = null)
+    public async static Task<List<ReimpresionMotive>> GetReimpresionMotives(int nStatus = -1, ReimpresionMotive reimpresionMotive = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from rm in dbContext.ReimpresionMotives
-                    select rm;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(rm => rm.rmA == blnStatus);
-        }
+          var query = from rm in dbContext.ReimpresionMotives
+                      select rm;
 
-        if (reimpresionMotive != null)//Verificamos si se tiene un objeto
-        {
-          if (reimpresionMotive.rmID > 0)//Filtro por ID
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(rm => rm.rmID == reimpresionMotive.rmID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(rm => rm.rmA == blnStatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(reimpresionMotive.rmN))//Filtro por Descripcion
+          if (reimpresionMotive != null)//Verificamos si se tiene un objeto
           {
-            query = query.Where(rm => rm.rmN.Contains(reimpresionMotive.rmN));
+            if (reimpresionMotive.rmID > 0)//Filtro por ID
+            {
+              query = query.Where(rm => rm.rmID == reimpresionMotive.rmID);
+            }
+
+            if (!string.IsNullOrWhiteSpace(reimpresionMotive.rmN))//Filtro por Descripcion
+            {
+              query = query.Where(rm => rm.rmN.Contains(reimpresionMotive.rmN));
+            }
           }
+          return query.OrderBy(rm => rm.rmN).ToList();
         }
-        return query.OrderBy(rm => rm.rmN).ToList();
-      }
+      });
     }
     #endregion
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,34 +18,38 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo UnderPaymentMotive</returns>
     /// <history>
     /// [emoguel] created 28/04/2016
+    /// [emoguel] modified 28/06/2016 ---> Se volvió async
     /// </history>
-    public static List<UnderPaymentMotive> getUnderPaymentMotives(int nStatus = -1, UnderPaymentMotive underPaymentMotive = null)
+    public async static Task<List<UnderPaymentMotive>> getUnderPaymentMotives(int nStatus = -1, UnderPaymentMotive underPaymentMotive = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from up in dbContext.UnderPaymentMotives
-                    select up;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(up => up.upA == blnStatus);
-        }
+          var query = from up in dbContext.UnderPaymentMotives
+                      select up;
 
-        if (underPaymentMotive != null)
-        {
-          if (underPaymentMotive.upID > 0)//Filtro por ID
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(up => up.upID == underPaymentMotive.upID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(up => up.upA == blnStatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(underPaymentMotive.upN))//Filtro por descripción
+          if (underPaymentMotive != null)
           {
-            query = query.Where(up => up.upN.Contains(underPaymentMotive.upN));
+            if (underPaymentMotive.upID > 0)//Filtro por ID
+            {
+              query = query.Where(up => up.upID == underPaymentMotive.upID);
+            }
+
+            if (!string.IsNullOrWhiteSpace(underPaymentMotive.upN))//Filtro por descripción
+            {
+              query = query.Where(up => up.upN.Contains(underPaymentMotive.upN));
+            }
           }
+          return query.OrderBy(up => up.upN).ToList();
         }
-        return query.OrderBy(up => up.upN).ToList();
-      }
+      });
     } 
     #endregion
   }

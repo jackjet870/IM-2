@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -241,6 +242,7 @@ namespace IM.Administrator.Forms
     {
       try
       {
+        status.Visibility = Visibility.Visible;
         int nIndex = 0;
         List<ScoreRuleConcept> lstScoreRulesConcepts = await BRScoreRulesConcepts.GetScoreRulesConcepts(_nStatus, _scoreRuleConceptFilter);
         dgrScoreRulesConcepts.ItemsSource = lstScoreRulesConcepts;
@@ -252,6 +254,7 @@ namespace IM.Administrator.Forms
 
         GridHelper.SelectRow(dgrScoreRulesConcepts, nIndex);
         StatusBarReg.Content = lstScoreRulesConcepts.Count + " Score Rules Concepts.";
+        status.Visibility = Visibility.Collapsed;
       }
       catch(Exception ex)
       {
@@ -287,7 +290,7 @@ namespace IM.Administrator.Forms
       }
       if(!string.IsNullOrWhiteSpace(_scoreRuleConceptFilter.spN))//Filtro por descripción
       {
-        if(!scoreRuleConcept.spN.Contains(_scoreRuleConceptFilter.spN))
+        if(!scoreRuleConcept.spN.Contains(_scoreRuleConceptFilter.spN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

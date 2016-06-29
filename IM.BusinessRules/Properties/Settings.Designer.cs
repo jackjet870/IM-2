@@ -697,6 +697,18 @@ namespace IM.BusinessRules.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int USP_OR_GraphProductionByPR_Timeout {
+            get {
+                return ((int)(this["USP_OR_GraphProductionByPR_Timeout"]));
+            }
+            set {
+                this["USP_OR_GraphProductionByPR_Timeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("180")]
         public int USP_OR_GetGiftsReceipts {
             get {
@@ -704,19 +716,6 @@ namespace IM.BusinessRules.Properties {
             }
             set {
                 this["USP_OR_GetGiftsReceipts"] = value;
-            }
-        }
-
-      	[global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("120")]
-        public int USP_OR_GraphProductionByPR_Timeout {
-            get {
-                return ((int)(this["USP_OR_GraphProductionByPR_Timeout"]));
-            }
-
-            set {
-                this["USP_OR_GraphProductionByPR_Timeout"] = value;
             }
         }
         
@@ -729,6 +728,30 @@ namespace IM.BusinessRules.Properties {
             }
             set {
                 this["USP_IM_RptManifestRange_TimeOut"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("180")]
+        public int USP_OR_GetPersonnelStatistics {
+            get {
+                return ((int)(this["USP_OR_GetPersonnelStatistics"]));
+            }
+            set {
+                this["USP_OR_GetPersonnelStatistics"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("180")]
+        public int USP_OR_UpdatePersonnelId {
+            get {
+                return ((int)(this["USP_OR_UpdatePersonnelId"]));
+            }
+            set {
+                this["USP_OR_UpdatePersonnelId"] = value;
             }
         }
     }

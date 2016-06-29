@@ -18,6 +18,7 @@ namespace IM.Administrator.Forms
     public RefundType refundType = new RefundType();//Objeto a guardar
     public RefundType oldRefundType = new RefundType();//objeto con los datos iniciales
     public EnumMode enumMode;//Modo de la ventana
+    private bool _isClosing = false;
     #endregion
     public frmRefundTypeDetail()
     {
@@ -56,7 +57,7 @@ namespace IM.Administrator.Forms
       if (e.Key == Key.Down)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     }
     #endregion
@@ -78,6 +79,7 @@ namespace IM.Administrator.Forms
         btnAccept.Focus();
         if (enumMode != EnumMode.add && ObjectHelper.IsEquals(refundType, oldRefundType))
         {
+          _isClosing = true;
           Close();
         }
         else
@@ -89,6 +91,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Refund Type", nRes);
             if (nRes > 0)
             {
+              _isClosing = true;
               DialogResult = true;
               Close();
             }
@@ -108,7 +111,7 @@ namespace IM.Administrator.Forms
 
     #region Cancel
     /// <summary>
-    /// Cierra la ventana verificando cambios pendientes
+    /// Cierra la ventana 
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -117,17 +120,32 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if (!ObjectHelper.IsEquals(refundType, oldRefundType))
+      btnCancel.Focus();
+      Close();
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Verifica cambios pendientes antes de cerrar la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
       {
-        MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-        if (result == MessageBoxResult.Yes)
+        if (!ObjectHelper.IsEquals(refundType, oldRefundType))
         {
-          Close();
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result != MessageBoxResult.Yes)
+          {
+            e.Cancel = true;
+          }
         }
-      }
-      else
-      {
-        Close();
       }
     } 
     #endregion

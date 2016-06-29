@@ -291,11 +291,11 @@ namespace IM.Host.Forms
     #endregion
 
     #region Window_Loaded
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       LoadPersonnel();
       GetLeadSources();
-      underPaymentMotiveViewSource.Source = BRUnderPaymentMotives.getUnderPaymentMotives(1);
+      underPaymentMotiveViewSource.Source =await BRUnderPaymentMotives.getUnderPaymentMotives(1);
 
     }
     #endregion

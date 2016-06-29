@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
@@ -268,7 +261,7 @@ namespace IM.Administrator.Forms
         }
         else
         {
-          cmbLeadSources.Header ="Lead Source ("+( dgrLeadSources.Items.Count - 1 )+ ")";
+          cmbLeadSources.Header ="Lead Source ("+( dgrLeadSources.Items.Count - 2 )+ ")";
         }
       }
     }

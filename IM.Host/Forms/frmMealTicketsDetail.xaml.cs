@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Model;
 using IM.Host.Enums;
 using IM.BusinessRules.BR;
@@ -109,7 +101,7 @@ namespace IM.Host.Forms
       // Obtenemos las agencias
       _dsAgency.Source =await BRAgencies.GetAgencies(1);
       // Obtenemos los tipos de cupones de comida.
-      _dsMealTicketType.Source = BRMealTicketTypes.GetMealTicketType();
+      _dsMealTicketType.Source = await BRMealTicketTypes.GetMealTicketType();
     }
     #endregion
 

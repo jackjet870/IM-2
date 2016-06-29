@@ -245,19 +245,29 @@ namespace IM.Administrator.Forms
     /// </summary>
     /// <history>
     /// [emoguel] created 23/03/2016
+    /// [emoguel] modified 10/06/2016 se volvió async
     /// </history>
-    private void LoadFoliosInvitationOuthouse(FolioInvitationOuthouse folioInvOut=null)
+    private async void LoadFoliosInvitationOuthouse(FolioInvitationOuthouse folioInvOut=null)
     {
-      int nIndex = 0;
-      List<FolioInvitationOuthouse> lstFoliosInvOut = BRFoliosInvitationsOuthouse.GetFoliosInvittionsOutside(_folioInvOutFilter, _nStatus);
-      dgrFoliosInvOut.ItemsSource = lstFoliosInvOut;
-      if(folioInvOut!=null && lstFoliosInvOut.Count>0)        
+      try
       {
-        folioInvOut = lstFoliosInvOut.Where(fi => fi.fiID == folioInvOut.fiID).FirstOrDefault();
-        nIndex = lstFoliosInvOut.IndexOf(folioInvOut);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<FolioInvitationOuthouse> lstFoliosInvOut = await BRFoliosInvitationsOuthouse.GetFoliosInvittionsOutside(_folioInvOutFilter, _nStatus);
+        dgrFoliosInvOut.ItemsSource = lstFoliosInvOut;
+        if (folioInvOut != null && lstFoliosInvOut.Count > 0)
+        {
+          folioInvOut = lstFoliosInvOut.Where(fi => fi.fiID == folioInvOut.fiID).FirstOrDefault();
+          nIndex = lstFoliosInvOut.IndexOf(folioInvOut);
+        }
+        GridHelper.SelectRow(dgrFoliosInvOut, nIndex);
+        StatusBarReg.Content = lstFoliosInvOut.Count + " Folio Invitations.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrFoliosInvOut, nIndex);
-      StatusBarReg.Content = lstFoliosInvOut.Count + " Folio Invitations.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folios Invitation Outhouse");
+      }
     }
     #endregion
 

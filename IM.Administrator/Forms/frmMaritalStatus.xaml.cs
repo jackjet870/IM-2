@@ -8,6 +8,7 @@ using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -244,16 +245,25 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadMaritalStatus(MaritalStatus maritalStatus = null)
     {
-      int nIndex = 0;
-      List<MaritalStatus> lstMaritalStatus =await BRMaritalStatus.GetMaritalStatus(_nStatus, _MaritaStaFilter);
-      dgrMaritalStatus.ItemsSource = lstMaritalStatus;
-      if (lstMaritalStatus.Count > 0 && maritalStatus != null)
+      try
       {
-        maritalStatus = lstMaritalStatus.Where(ms => ms.msID == maritalStatus.msID).FirstOrDefault();
-        nIndex = lstMaritalStatus.IndexOf(maritalStatus);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<MaritalStatus> lstMaritalStatus = await BRMaritalStatus.GetMaritalStatus(_nStatus, _MaritaStaFilter);
+        dgrMaritalStatus.ItemsSource = lstMaritalStatus;
+        if (lstMaritalStatus.Count > 0 && maritalStatus != null)
+        {
+          maritalStatus = lstMaritalStatus.Where(ms => ms.msID == maritalStatus.msID).FirstOrDefault();
+          nIndex = lstMaritalStatus.IndexOf(maritalStatus);
+        }
+        GridHelper.SelectRow(dgrMaritalStatus, nIndex);
+        StatusBarReg.Content = lstMaritalStatus.Count + " Marital Status.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrMaritalStatus, nIndex);
-      StatusBarReg.Content = lstMaritalStatus.Count + " Marital Status.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Marital Status");
+      }
     }
     #endregion
 
@@ -286,7 +296,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_MaritaStaFilter.msN))//Filtro por descripcion
       {
-        if(!_MaritaStaFilter.msN.Contains(maritalStatus.msN))
+        if(!_MaritaStaFilter.msN.Contains(maritalStatus.msN,StringComparison.OrdinalIgnoreCase))
         {
           return true;
         }

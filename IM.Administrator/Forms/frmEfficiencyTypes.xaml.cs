@@ -8,6 +8,7 @@ using IM.Base.Helpers;
 using IM.Model;
 using System.Linq;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -241,19 +242,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 18/03/2016
     /// </history>
-    private void LoadEfficiencyTypes(EfficiencyType effType=null)
+    private async void LoadEfficiencyTypes(EfficiencyType effType=null)
     {
-      int nIndex = 0;
-      List<EfficiencyType> lstEfcyTypes = BREfficiencyTypes.GetEfficiencyTypes(_efficiencyTypeFilter, _nStatus);
-      dgrEfcyTypes.ItemsSource = lstEfcyTypes;
-      if(effType!=null& lstEfcyTypes.Count>0)
+      try
       {
-        effType = lstEfcyTypes.Where(ef => ef.etID == effType.etID).FirstOrDefault();
-        nIndex = lstEfcyTypes.IndexOf(effType);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<EfficiencyType> lstEfcyTypes = await BREfficiencyTypes.GetEfficiencyTypes(_efficiencyTypeFilter, _nStatus);
+        dgrEfcyTypes.ItemsSource = lstEfcyTypes;
+        if (effType != null & lstEfcyTypes.Count > 0)
+        {
+          effType = lstEfcyTypes.Where(ef => ef.etID == effType.etID).FirstOrDefault();
+          nIndex = lstEfcyTypes.IndexOf(effType);
+        }
+        GridHelper.SelectRow(dgrEfcyTypes, nIndex);
+        StatusBarReg.Content = lstEfcyTypes.Count + " Efficiency Types.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrEfcyTypes, nIndex);
-      StatusBarReg.Content = lstEfcyTypes.Count + " Efficiency Types.";
-
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Efficiency Types");
+      }
     }
     #endregion
 
@@ -286,7 +295,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_efficiencyTypeFilter.etN))//Validamos la descripcion
       {
-        if(!efficiencyType.etN.Contains(_efficiencyTypeFilter.etN))
+        if(!efficiencyType.etN.Contains(_efficiencyTypeFilter.etN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
-
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,35 +18,38 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo Source Payments</returns>
     /// <history>
     /// [emoguel] created 26/04/2016
+    /// [emoguel] modified 28/06/2016 --> Se volvió async
     /// </history>
-    public static List<SourcePayment> GetSourcePayments(int nStatus = -1, SourcePayment sourcePayment = null)
+    public async static Task<List<SourcePayment>> GetSourcePayments(int nStatus = -1, SourcePayment sourcePayment = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from sb in dbContext.SourcePayments
-                    select sb;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(sb => sb.sbA == blnStatus);
-        }
+          var query = from sb in dbContext.SourcePayments
+                      select sb;
 
-        if (sourcePayment != null)
-        {
-          if (!string.IsNullOrWhiteSpace(sourcePayment.sbID))//Filtro por ID
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(sb => sb.sbID == sourcePayment.sbID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(sb => sb.sbA == blnStatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(sourcePayment.sbN))//Filtro por descripción
+          if (sourcePayment != null)
           {
-            query = query.Where(sb => sb.sbN.Contains(sourcePayment.sbN));
-          }
-        }
+            if (!string.IsNullOrWhiteSpace(sourcePayment.sbID))//Filtro por ID
+            {
+              query = query.Where(sb => sb.sbID == sourcePayment.sbID);
+            }
 
-        return query.OrderBy(sb => sb.sbN).ToList();
-      }
+            if (!string.IsNullOrWhiteSpace(sourcePayment.sbN))//Filtro por descripción
+            {
+              query = query.Where(sb => sb.sbN.Contains(sourcePayment.sbN));
+            }
+          }
+          return query.OrderBy(sb => sb.sbN).ToList();
+        }
+      });
     }
 
     #endregion

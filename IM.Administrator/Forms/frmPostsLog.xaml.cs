@@ -7,6 +7,7 @@ using IM.Base.Helpers;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -16,7 +17,7 @@ namespace IM.Administrator.Forms
   public partial class frmPostsLog : Window
   {
     #region Variables
-    private PostLog _postLogFilter = new PostLog();//Objeto con los filtros de la ven
+    public PostLog _postLogFilter = new PostLog();//Objeto con los filtros de la ven
     private bool _blnEdit = false;//Boleano para saber si se tiene permiso para editar
     private bool _blnDel = false;//Permiso para saber si se tiene permiso para eliminar
     private bool _blnDate = false;//Boleano para saber si va a filtrar por ppDT    
@@ -291,28 +292,37 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 11/04/2016
     /// </history>
-    private void LoadPostLogs(PostLog postLog = null)
+    private async void LoadPostLogs(PostLog postLog = null)
     {
-      int nIndex = 0;
-      List<PostLog> lstPostsLog = BRPostsLog.GetPostsLog(_postLogFilter,_blnDate);
-      dgrPostsLog.ItemsSource = lstPostsLog;
-      if (lstPostsLog.Count > 0 )
+      try
       {
-        if (postLog != null)
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<PostLog> lstPostsLog =await BRPostsLog.GetPostsLog(_postLogFilter, _blnDate);
+        dgrPostsLog.ItemsSource = lstPostsLog;
+        if (lstPostsLog.Count > 0)
         {
-          postLog = lstPostsLog.Where(pp => pp.ppID == postLog.ppID).FirstOrDefault();
-          nIndex = lstPostsLog.IndexOf(postLog);
+          if (postLog != null)
+          {
+            postLog = lstPostsLog.Where(pp => pp.ppID == postLog.ppID).FirstOrDefault();
+            nIndex = lstPostsLog.IndexOf(postLog);
+          }
+
+          GridHelper.SelectRow(dgrPostsLog, nIndex);
+          btnDel.IsEnabled = _blnDel;
         }
-        
-        GridHelper.SelectRow(dgrPostsLog, nIndex);
-        btnDel.IsEnabled = _blnDel;
-      } 
-      else
+        else
+        {
+          btnDel.IsEnabled = false;
+        }
+
+        StatusBarReg.Content = lstPostsLog.Count + " Posts Log.";
+        status.Visibility = Visibility.Collapsed;
+      }
+      catch(Exception ex)
       {
-        btnDel.IsEnabled = false;
-      }    
-      
-      StatusBarReg.Content = lstPostsLog.Count + " Posts Log.";
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Post Log");
+      }
     }
     #endregion
 

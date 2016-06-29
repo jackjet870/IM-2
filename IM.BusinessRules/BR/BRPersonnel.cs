@@ -7,6 +7,8 @@ using IM.Model.Enums;
 using IM.Model.Helpers;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
+using IM.BusinessRules.Properties;
 
 namespace IM.BusinessRules.BR
 {
@@ -96,9 +98,9 @@ namespace IM.BusinessRules.BR
     /// <param name="salesRooms">Salas de ventas</param>
     /// <param name="roles">Roles</param>
     /// <param name="status">Estatus.
-    /// 0 Inactivos
+    /// 0 Todos
     /// 1 Activos
-    /// 2 Todos
+    /// 2 Inactivos 
     /// </param>
     /// <param name="permission">Permiso</param>
     /// <param name="relationalOperator">Operador logico</param>
@@ -156,34 +158,38 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 03/05/2016
     /// </history>
-    public static List<Personnel> GetPersonnels(int nStatus = -1, Personnel personnel = null)
+    public async static Task<List<Personnel>> GetPersonnels(int nStatus = -1, Personnel personnel = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var query = from pe in dbContext.Personnels
-                    select pe;
-
-        if (nStatus != -1)//Filtro por estatus
+      List<Personnel> lstPersonnel = await Task.Run(() =>
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(pe => pe.peA == blnStatus);
-        }
-
-        if (personnel != null)
-        {
-          if (!string.IsNullOrWhiteSpace(personnel.peID))//Filtro por ID
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
           {
-            query = query.Where(pe => pe.peID == personnel.peID);
-          }
+            var query = from pe in dbContext.Personnels
+                        select pe;
 
-          if (!string.IsNullOrWhiteSpace(personnel.pede))//Filtro por dept
+            if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(pe => pe.pede == personnel.pede);
-          }
-        }
+              bool blnStatus = Convert.ToBoolean(nStatus);
+              query = query.Where(pe => pe.peA == blnStatus);
+            }
 
-        return query.OrderBy(pe => pe.peN).ToList();
-      }
+            if (personnel != null)
+            {
+              if (!string.IsNullOrWhiteSpace(personnel.peID))//Filtro por ID
+            {
+                query = query.Where(pe => pe.peID == personnel.peID);
+              }
+
+              if (!string.IsNullOrWhiteSpace(personnel.pede))//Filtro por dept
+            {
+                query = query.Where(pe => pe.pede == personnel.pede);
+              }
+            }
+
+            return query.OrderBy(pe => pe.peN).ToList();
+          }
+        });
+      return lstPersonnel;
     } 
     #endregion
 
@@ -217,17 +223,306 @@ namespace IM.BusinessRules.BR
     #endregion
 
     #region GetPersonnelByRole
-    public static List<PersonnelShort> GetPersonnelByRole(string prRol)
+    /// <summary>
+    /// Devuelve registros del catalogo PR
+    /// </summary>
+    /// <param name="prRol">Rol</param>
+    /// <returns>Lista tipo PersonnelSHort</returns>
+    /// <history>
+    /// [emoguel] modified 09/06/2016--> se volvió async
+    /// </history>
+    public async static Task<List<PersonnelShort>> GetPersonnelByRole(string prRol)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var query = from p in dbContext.Personnels
-                    where p.Roles.Where(r => r.roID == prRol).Count() > 0
-                    select p;
+      List<PersonnelShort> lstPersonnel = await Task.Run(() =>
+        {
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          {
+            var query = from p in dbContext.Personnels
+                        where p.Roles.Where(r => r.roID == prRol).Count() > 0
+                        select p;
 
-        return query.ToList().Select(p => new PersonnelShort { peID = p.peID, peN = p.peN }).ToList();
-      }
+            return query.ToList().Select(p => new PersonnelShort { peID = p.peID, peN = p.peN }).ToList();
+          }
+        });
+      return lstPersonnel;
     }
+    #endregion
+
+    #region DeletePersonnels
+    /// <summary>
+    /// Elimina Personnels de la BD
+    /// </summary>
+    /// <param name="lstPersonnels"></param>
+    /// <returns>0. No se pudo eliminar | >0. Se eliminarion correctamente</returns>
+    /// <history>
+    /// [emoguel] created 14/06/2016
+    /// </history>
+    public static async Task<int> DeletePersonnels(List<PersonnelShort> lstPersonnels)
+    {
+      int nRes = await Task.Run(() =>
+        {
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          {
+            using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+            {
+              try
+              {
+                lstPersonnels.ForEach(pe =>
+                {
+                  dbContext.USP_OR_DeletePersonnel(pe.peID);
+                });
+
+                int nSave = dbContext.SaveChanges();
+                transacction.Commit();
+                return nSave;
+              }
+              catch
+              {
+                transacction.Rollback();
+                return 0;
+              }
+            }
+          }
+        });
+
+      return nRes;
+    }
+    #endregion
+
+    #region SavePersonnel
+    /// <summary>
+    /// Guarda un personnel y todos sus permisos
+    /// </summary>
+    /// <param name="idUser">id del usuario que está editando el personnel</param>
+    /// <param name="personnel">personnel a guardar</param>
+    /// <param name="blnUpdate">True. Actualiza | False. inserta</param>
+    /// <param name="lstPermissionAdd">Permisos a agregar</param>
+    /// <param name="lstPermissionDel">Permisos a eliminar</param>
+    /// <param name="lstPermissionUpd">Permisos a actualizar</param>
+    /// <param name="lstLeadSourceDel">Leadsource a eliminar</param>
+    /// <param name="lstLeadSourceAdd">LeadSource a agregar</param>
+    /// <param name="lstWarehouseDel">Warehouses a eliminar</param>
+    /// <param name="lstWarehousesAdd">Warehouses a agregar</param>
+    /// <param name="lstSalesRoomDel">Salesroom a eliminar</param>
+    /// <param name="lstSalesRoomAdd">SalesRoom a agregar</param>
+    /// <param name="lstRolesDel">Roles a eliminar</param>
+    /// <param name="lstRoleAdd">Roles a agregar</param>
+    /// <param name="blnPostLog">Si se modifico el puesto</param>
+    /// <param name="blnTeamsLog">Si se cambio de tem</param>
+    /// <returns>-1. Existe un registro con el mismo ID | 0. No se guardó | >0. Se guardó correctamente</returns>
+    /// <history>
+    /// [emoguel] created 22/06/2016
+    /// </history>
+    public static async Task<int> SavePersonnel(string idUser,Personnel personnel, bool blnUpdate,List<PersonnelPermission> lstPermissionAdd,List<PersonnelPermission> lstPermissionDel, List<PersonnelPermission>lstPermissionUpd,
+      List<PersonnelAccess> lstLeadSourceDel,List<PersonnelAccess> lstLeadSourceAdd, List<PersonnelAccess> lstWarehouseDel, List<PersonnelAccess> lstWarehousesAdd, List<PersonnelAccess> lstSalesRoomDel, 
+      List<PersonnelAccess> lstSalesRoomAdd,List<Role>lstRoleDel,List<Role>lstRoleAdd,bool blnPostLog,bool blnTeamsLog)
+    {
+      int nRes = await Task.Run(() =>
+        {
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          {
+            using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+            {
+              try
+              {
+                Personnel personnelSave = new Personnel();
+                #region Personnel
+                if (blnUpdate)//Actualizar
+                {
+                   personnelSave= dbContext.Personnels.Where(pe => pe.peID == personnel.peID).Include(pe => pe.Roles).FirstOrDefault();
+                  //dbContext.Entry(personnel).State = EntityState.Modified;
+                  ObjectHelper.CopyProperties(personnelSave, personnel);
+                }
+                else//Agregar
+                {
+                  if(dbContext.Personnels.Where(pe=>pe.peID==personnel.peID).FirstOrDefault()!=null)
+                  {
+                    return -1;
+                  }
+                  else
+                  {
+                    dbContext.Personnels.Add(personnel);
+                    personnelSave = personnel;
+                  }
+                }
+                #endregion                
+                
+                #region PersonnelPermission
+                //Eliminar
+                lstPermissionDel.ForEach(pp =>
+                {
+                  dbContext.Entry(pp).State = EntityState.Deleted;
+                });
+
+                //Add
+                lstPermissionAdd.ForEach(pp =>
+                {
+                  pp.pppe = personnelSave.peID;
+                  dbContext.Entry(pp).State = EntityState.Added;
+                });
+
+                //update
+                lstPermissionUpd.ForEach(pp =>
+                {
+                  pp.pppe = personnelSave.peID;
+                  dbContext.Entry(pp).State = EntityState.Modified;
+                });
+                #endregion
+
+                #region Roles
+                //Del
+                personnelSave.Roles.Where(ro => lstRoleDel.Any(roo => ro.roID == roo.roID)).ToList().ForEach(ro => {
+                  personnelSave.Roles.Remove(ro);
+                });
+                
+                //Add
+                lstRoleAdd = dbContext.Roles.AsEnumerable().Where(ro => lstRoleAdd.Any(roo => ro.roID == roo.roID)).ToList();
+                lstRoleAdd.ForEach(ro => {
+                  personnelSave.Roles.Add(ro);
+                });                
+                #endregion
+                
+                #region leadSource
+                //Eliminar
+                lstLeadSourceDel.ForEach(pl =>
+                {
+                  pl.plpe = personnelSave.peID;
+                  pl.plLSSR = "LS";
+                  dbContext.Entry(pl).State = EntityState.Deleted;
+                });
+
+                //Del
+                lstLeadSourceAdd.ForEach(pl =>
+                {
+                  pl.plpe = personnelSave.peID;
+                  pl.plLSSR = "LS";
+                  dbContext.PersonnelAccessList.Add(pl);
+                });
+                #endregion
+
+                #region SalesRoom
+                //Del
+                lstSalesRoomDel.ForEach(pl =>
+                {
+                  pl.plpe = personnelSave.peID;
+                  pl.plLSSR = "SR";
+                  dbContext.Entry(pl).State = EntityState.Deleted;
+                });
+
+                //Add
+                lstSalesRoomAdd.ForEach(pl => {
+                  pl.plpe = personnelSave.peID;
+                  pl.plLSSR = "SR";
+                  dbContext.PersonnelAccessList.Add(pl);
+                });
+                #endregion
+
+                #region Warehouses
+                //Del
+                lstWarehouseDel.ForEach(pl =>
+                {
+                  pl.plpe = personnelSave.peID;
+                  pl.plLSSR = "WH";
+                  dbContext.Entry(pl).State = EntityState.Deleted;
+                });
+
+                //Add
+                lstWarehousesAdd.ForEach(pl => {
+                  pl.plpe = personnelSave.peID;
+                  pl.plLSSR = "WH";
+                  dbContext.PersonnelAccessList.Add(pl);
+                });
+                #endregion
+
+                DateTime dtmServerDate= BR.BRHelpers.GetServerDate();
+
+                #region postLog
+                if (blnPostLog)
+                {
+                  PostLog postLog = new PostLog();
+                  postLog.ppChangedBy = idUser;
+                  postLog.ppDT = dtmServerDate;
+                  postLog.pppe = personnel.peID;
+                  postLog.pppo = personnel.pepo;
+                  dbContext.PostsLogs.Add(postLog);
+                }
+                #endregion
+
+                #region TeamsLog
+                if(blnTeamsLog)
+                {
+                  TeamLog teamLog = new TeamLog();
+                  teamLog.tlDT = dtmServerDate;
+                  teamLog.tlChangedBy = idUser;
+                  teamLog.tlpe = personnel.peID;
+                  teamLog.tlTeamType = personnel.peTeamType;
+                  teamLog.tlPlaceID = personnel.pePlaceID;
+                  teamLog.tlTeam = personnel.peTeam;
+                  dbContext.TeamsLogs.Add(teamLog);
+                }
+                #endregion
+
+               int nSave= dbContext.SaveChanges();
+                transacction.Commit();
+                return nSave;
+              }
+              catch
+              {
+                transacction.Rollback();
+                return 0;
+              }
+            }
+          }
+        });
+      return nRes;
+    }
+
+    #endregion
+
+    #region PersonnelChageID
+    /// <summary>
+    /// Cambia el ID de un personnel
+    /// </summary>
+    /// <returns>0 No se realizó nada | 1. se realizó correctamente</returns>
+    /// <history>
+    /// [emoguel] created 24/06/2016
+    /// </history>
+    public static async Task<int> UpdatePersonnelId(string idOld, string idNew)
+    {
+      int nRes = await Task.Run(() =>
+        {
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          {
+            dbContext.Database.CommandTimeout = Settings.Default.USP_OR_UpdatePersonnelId;
+            return dbContext.USP_OR_UpdatePersonnelId(idOld, idNew);
+          }
+        });
+
+      return nRes;
+    } 
+    #endregion
+
+    #region GetPersonnelStatistics
+    /// <summary>
+    /// Devuelve los statistics de un personnel
+    /// </summary>
+    /// <param name="idPersonnel">id del personnel a buscar sus statistics</param>
+    /// <returns>PersonnelStatistics</returns>
+    /// <history>
+    /// [emoguel] created 24/06/2016
+    /// </history>
+    public static async Task<PersonnelStatistics> GetPersonnelStatistics(string idPersonnel)
+    {
+      PersonnelStatistics personnelStatistics = await Task.Run(() =>
+        {
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          {
+            dbContext.Database.CommandTimeout = Settings.Default.USP_OR_GetPersonnelStatistics;
+            return dbContext.USP_OR_GetPersonnelStatistics(idPersonnel).FirstOrDefault();
+          }
+        });
+      return personnelStatistics;
+    } 
     #endregion
   }
 }

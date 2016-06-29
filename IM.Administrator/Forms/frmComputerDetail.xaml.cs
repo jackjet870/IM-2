@@ -166,11 +166,11 @@ namespace IM.Administrator.Forms
     /// [emoguel] created 16/03/2016
     /// [emoguel] modified 30/05/2016 se volvió async
     /// </history>
-    private void LoadDesks()
+    private async void LoadDesks()
     {
       try
       {
-        List<Desk> lstDesk = BRDesks.GetDesks(new Desk());
+        List<Desk> lstDesk =await BRDesks.GetDesks(new Desk());
         cmbDesk.ItemsSource = lstDesk;
         skpStatus.Visibility = Visibility.Collapsed;
       }

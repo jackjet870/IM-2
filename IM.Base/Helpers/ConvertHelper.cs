@@ -32,8 +32,11 @@ namespace IM.Base.Helpers
     /// </history>
     public static string IntCurrencyToStandar(string textCurrency)
     {
-      textCurrency = textCurrency.Remove(textCurrency.Length - 3);
-      textCurrency = new string(textCurrency.Where(s => char.IsDigit(s)).ToArray());
+      if (textCurrency.Length > 3)
+      {
+        textCurrency = textCurrency.Remove(textCurrency.Length - 3);
+        textCurrency = new string(textCurrency.Where(s => char.IsDigit(s)).ToArray());
+      }
       return textCurrency;
     }
     #endregion

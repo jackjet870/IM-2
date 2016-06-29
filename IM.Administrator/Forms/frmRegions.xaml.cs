@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -286,7 +287,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_regionFilter.rgN))//filtro por descripción
       {
-        if(!region.rgN.Contains(_regionFilter.rgN))
+        if(!region.rgN.Contains(_regionFilter.rgN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Model.Helpers;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -238,18 +239,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 17/05/2016
     /// </history>
-    private void LoadLocationCategories(LocationCategory locationCategory = null)
+    private async void LoadLocationCategories(LocationCategory locationCategory = null)
     {
-      List<LocationCategory> lstLocationCategories = BRLocationsCategories.GetLocationsCategories(_nStatus, _locationCatFilter);
-      dgrLocationCategories.ItemsSource = lstLocationCategories;
-      int nIndex = 0;
-      if (lstLocationCategories.Count > 0 && locationCategory != null)
+      try
       {
-        locationCategory = lstLocationCategories.Where(lc => lc.lcID == locationCategory.lcID).FirstOrDefault();
-        nIndex = lstLocationCategories.IndexOf(locationCategory);
+        status.Visibility = Visibility.Visible;
+        List<LocationCategory> lstLocationCategories = await BRLocationsCategories.GetLocationsCategories(_nStatus, _locationCatFilter);
+        dgrLocationCategories.ItemsSource = lstLocationCategories;
+        int nIndex = 0;
+        if (lstLocationCategories.Count > 0 && locationCategory != null)
+        {
+          locationCategory = lstLocationCategories.Where(lc => lc.lcID == locationCategory.lcID).FirstOrDefault();
+          nIndex = lstLocationCategories.IndexOf(locationCategory);
+        }
+        GridHelper.SelectRow(dgrLocationCategories, nIndex);
+        StatusBarReg.Content = lstLocationCategories.Count + " Location Categories.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrLocationCategories, nIndex);
-      StatusBarReg.Content = lstLocationCategories.Count + " Location Categories.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Location Categories");
+      }
     }
     #endregion
 
@@ -282,7 +292,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_locationCatFilter.lcN))//Filtro por descripción
       {
-        if (!locationCategory.lcN.Contains(_locationCatFilter.lcN))
+        if (!locationCategory.lcN.Contains(_locationCatFilter.lcN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

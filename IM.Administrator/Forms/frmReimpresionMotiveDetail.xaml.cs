@@ -18,6 +18,7 @@ namespace IM.Administrator.Forms
     public ReimpresionMotive reimpresionMotive = new ReimpresionMotive();//Objeto a guardar
     public ReimpresionMotive oldReimpresionMotive = new ReimpresionMotive();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo de la ventana
+    private bool _isClosing = false;
     #endregion
     public frmReimpresionMotiveDetail()
     {
@@ -35,7 +36,7 @@ namespace IM.Administrator.Forms
       if (e.Key == Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     }
     #endregion
@@ -75,6 +76,7 @@ namespace IM.Administrator.Forms
         btnAccept.Focus();
         if (enumMode != EnumMode.add && ObjectHelper.IsEquals(reimpresionMotive, oldReimpresionMotive))
         {
+          _isClosing = true;
           Close();
         }
         else
@@ -90,13 +92,14 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Reimpresion Motive", nRes);
             if (nRes > 0)
             {
+              _isClosing = true;
               DialogResult = true;
               Close();
             }
           }
           else
           {
-            Close();
+            UIHelper.ShowMessage(strMsj);
           }
         }
       }
@@ -109,7 +112,7 @@ namespace IM.Administrator.Forms
 
     #region Cancel
     /// <summary>
-    /// Cierra verficando cambios pendientes
+    /// Cierra verficando
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -118,17 +121,32 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if (!ObjectHelper.IsEquals(reimpresionMotive, oldReimpresionMotive))
+      btnCancel.Focus();
+      Close();
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana verificando cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if(!_isClosing)
       {
-        MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-        if (result == MessageBoxResult.Yes)
+        if (!ObjectHelper.IsEquals(reimpresionMotive, oldReimpresionMotive))
         {
-          Close();
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result != MessageBoxResult.Yes)
+          {
+            e.Cancel = true;
+          }
         }
-      }
-      else
-      {
-        Close();
       }
     } 
     #endregion

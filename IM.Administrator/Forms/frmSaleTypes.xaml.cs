@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -234,19 +235,28 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 19/04/2016
     /// </history>
-    private void LoadSalesTypes(SaleType saleType = null)
+    private async void LoadSalesTypes(SaleType saleType = null)
     {
-      int nIndex = 0;
-      List<SaleType> lstSalestypes = BRSaleTypes.GetSalesTypes(_nStatus, _saletTypeFilter);
-      dgrSaleTypes.ItemsSource = lstSalestypes;
-      if (lstSalestypes.Count > 0 && saleType != null)
+      try
       {
-        saleType = lstSalestypes.Where(st => st.stID == saleType.stID).FirstOrDefault();
-        nIndex = lstSalestypes.IndexOf(saleType);
-      }
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<SaleType> lstSalestypes = await BRSaleTypes.GetSalesTypes(_nStatus, _saletTypeFilter);
+        dgrSaleTypes.ItemsSource = lstSalestypes;
+        if (lstSalestypes.Count > 0 && saleType != null)
+        {
+          saleType = lstSalestypes.Where(st => st.stID == saleType.stID).FirstOrDefault();
+          nIndex = lstSalestypes.IndexOf(saleType);
+        }
 
-      GridHelper.SelectRow(dgrSaleTypes, nIndex);
-      StatusBarReg.Content = lstSalestypes.Count + " Sale Types.";
+        GridHelper.SelectRow(dgrSaleTypes, nIndex);
+        StatusBarReg.Content = lstSalestypes.Count + " Sale Types.";
+        status.Visibility = Visibility.Collapsed;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Sale Types");
+      }
     }
     #endregion
 
@@ -279,7 +289,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_saletTypeFilter.stN))//Filtro por Descripción
       {
-        if(!saleType.stN.Contains(_saletTypeFilter.stN))
+        if(!saleType.stN.Contains(_saletTypeFilter.stN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

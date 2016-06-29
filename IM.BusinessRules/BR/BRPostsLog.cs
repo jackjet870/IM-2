@@ -4,6 +4,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,36 +19,40 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo PostLog</returns>
     /// <history>
     /// [emoguel] created 11/04/2016
+    /// [emoguel] modified 28/06/2016--->Se volvió async
     /// </history>
-    public static List<PostLog> GetPostsLog(PostLog postLog = null,bool blnDate=false)
+    public async static Task<List<PostLog>> GetPostsLog(PostLog postLog = null,bool blnDate=false)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from pp in dbContext.PostsLogs.Include("Personnel").Include("Personnel_ChangedBy").Include("Post")
-                    select pp;
-
-        #region Filtros
-        if (postLog != null)//verficamos que se tenga un objeto
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          if (blnDate)//Filtro por fecha
-          {
-            query = query.Where(pp => DbFunctions.TruncateTime(pp.ppDT).Value == DbFunctions.TruncateTime(postLog.ppDT).Value);
-          }
+          var query = from pp in dbContext.PostsLogs.Include("Personnel").Include("Personnel_ChangedBy").Include("Post")
+                      select pp;
 
-          if (!string.IsNullOrWhiteSpace(postLog.ppChangedBy))//Filtro por changedBy
+          #region Filtros
+          if (postLog != null)//verficamos que se tenga un objeto
           {
-            query = query.Where(pp => pp.ppChangedBy == postLog.ppChangedBy);
-          }
+            if (blnDate)//Filtro por fecha
+            {
+              query = query.Where(pp => DbFunctions.TruncateTime(pp.ppDT).Value == DbFunctions.TruncateTime(postLog.ppDT).Value);
+            }
 
-          if (!string.IsNullOrWhiteSpace(postLog.pppe))//Filtro por Perssonel
-          {
-            query = query.Where(pp => pp.pppe == postLog.pppe);
+            if (!string.IsNullOrWhiteSpace(postLog.ppChangedBy))//Filtro por changedBy
+            {
+              query = query.Where(pp => pp.ppChangedBy == postLog.ppChangedBy);
+            }
+
+            if (!string.IsNullOrWhiteSpace(postLog.pppe))//Filtro por Perssonel
+            {
+              query = query.Where(pp => pp.pppe == postLog.pppe);
+            }
           }
+          #endregion
+
+          return query.OrderByDescending(pp => pp.ppDT).ToList();
         }
-        #endregion
-        
-        return query.OrderByDescending(pp => pp.ppDT).ToList();
-      }
+      });
     }
     #endregion
   }

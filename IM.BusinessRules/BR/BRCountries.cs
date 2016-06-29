@@ -44,34 +44,39 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 14/03/2016
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
+    /// [emoguel] modified 06/06/2016--->Se volvió async
     /// </history>
-    public static List<Country> GetCountries(Country country = null, int nStatus = -1)
+    public async static Task<List<Country>> GetCountries(Country country = null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var query = from ct in dbContext.Countries
-                    select ct;
-
-        if (nStatus != -1)//Filtro por status
+      List<Country> lstCountries = await Task.Run(() =>
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(ct => ct.coA == blnStatus);
-        }
-
-        if (country != null)//Valida si se tiene un objeto
-        {
-          if (!string.IsNullOrWhiteSpace(country.coID))//Filtro por ID
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
           {
-            query = query.Where(ct => ct.coID == country.coID);
-          }
+            var query = from ct in dbContext.Countries
+                        select ct;
 
-          if (!string.IsNullOrWhiteSpace(country.coN))//Filtro por descripcion(Nombre)
+            if (nStatus != -1)//Filtro por status
           {
-            query = query.Where(ct => ct.coN.Contains(country.coN));
+              bool blnStatus = Convert.ToBoolean(nStatus);
+              query = query.Where(ct => ct.coA == blnStatus);
+            }
+
+            if (country != null)//Valida si se tiene un objeto
+          {
+              if (!string.IsNullOrWhiteSpace(country.coID))//Filtro por ID
+            {
+                query = query.Where(ct => ct.coID == country.coID);
+              }
+
+              if (!string.IsNullOrWhiteSpace(country.coN))//Filtro por descripcion(Nombre)
+            {
+                query = query.Where(ct => ct.coN.Contains(country.coN));
+              }
+            }
+            return query.OrderBy(ct => ct.coN).ToList();
           }
-        }
-        return query.OrderBy(ct => ct.coN).ToList();
-      }
+        });
+      return lstCountries;
     }
     #endregion
 

@@ -269,7 +269,7 @@ namespace IM.Administrator.Forms
     {
       try
       {
-        List<SegmentByAgency> lstSegmentsByAgencies = await BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());
+        List<SegmentByAgency> lstSegmentsByAgencies =await BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());
         cmbSegment.ItemsSource = lstSegmentsByAgencies;
       }
       catch(Exception ex)

@@ -8,6 +8,7 @@ using IM.BusinessRules.BR;
 using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -147,35 +148,45 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 12/05/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-      btnAccept.Focus();
-      List<Hotel> lstHotels = (List<Hotel>)dgrHotels.ItemsSource;
-      if (enumMode != EnumMode.add && ObjectHelper.IsEquals(hotelGroup, oldHotelGroup) && ObjectHelper.IsListEquals(_oldHotels, lstHotels))
+      try
       {
-        blnClosing = true;
-        Close();
-      }
-      else
-      {
-        string strMsj = ValidateHelper.ValidateForm(this, "Hotel");        
-        if (strMsj == "")
+        btnAccept.Focus();
+        List<Hotel> lstHotels = (List<Hotel>)dgrHotels.ItemsSource;
+        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(hotelGroup, oldHotelGroup) && ObjectHelper.IsListEquals(_oldHotels, lstHotels))
         {
-          List<Hotel> lstAdd = lstHotels.Where(ho => !_oldHotels.Any(hoo => hoo.hoID == ho.hoID)).ToList();
-          List<Hotel> lstDel = _oldHotels.Where(ho => !lstHotels.Any(hoo => hoo.hoID == ho.hoID)).ToList();
-          int nRes = BRHotelGroups.SaveHotelGroup(hotelGroup,(enumMode==EnumMode.edit),lstAdd,lstDel);
-          UIHelper.ShowMessageResult("Hotel Group", nRes);
-          if (nRes > 0)
-          {
-            blnClosing = true;
-            DialogResult = true;
-            Close();
-          }
+          blnClosing = true;
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          txtStatus.Text = "Saving Data...";
+          skpStatus.Visibility = Visibility.Visible;
+          string strMsj = ValidateHelper.ValidateForm(this, "Hotel");
+          if (strMsj == "")
+          {
+            List<Hotel> lstAdd = lstHotels.Where(ho => !_oldHotels.Any(hoo => hoo.hoID == ho.hoID)).ToList();
+            List<Hotel> lstDel = _oldHotels.Where(ho => !lstHotels.Any(hoo => hoo.hoID == ho.hoID)).ToList();
+            int nRes = await BRHotelGroups.SaveHotelGroup(hotelGroup, (enumMode == EnumMode.edit), lstAdd, lstDel);
+            UIHelper.ShowMessageResult("Hotel Group", nRes);
+            if (nRes > 0)
+            {
+              blnClosing = true;
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
+          skpStatus.Visibility = Visibility.Collapsed;
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Hotel Group");
       }      
     }
     #endregion
@@ -200,7 +211,7 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!blnClosing) { blnClosing = true; Close(); }
           }
           else
           {
@@ -231,11 +242,19 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadHotels()
     {
-      List<Hotel> lstAllHotels =await BRHotels.GetHotels(nStatus: 1);      
-      List<Hotel> lstHotels =(hotelGroup.hgID!=null)? lstAllHotels.Where(ho => ho.hoGroup == hotelGroup.hgID).ToList():new List<Hotel>();
-      _oldHotels = lstHotels.ToList();
-      dgrHotels.ItemsSource = lstHotels;
-      cmbHotels.ItemsSource = lstAllHotels;
+      try
+      {
+        List<Hotel> lstAllHotels = await BRHotels.GetHotels(nStatus: 1);
+        List<Hotel> lstHotels = (hotelGroup.hgID != null) ? lstAllHotels.Where(ho => ho.hoGroup == hotelGroup.hgID).ToList() : new List<Hotel>();
+        _oldHotels = lstHotels.ToList();
+        dgrHotels.ItemsSource = lstHotels;
+        cmbHotels.ItemsSource = lstAllHotels;
+        skpStatus.Visibility = Visibility.Collapsed;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Hotel Group");
+      }
     }
     #endregion
 

@@ -290,14 +290,22 @@ namespace IM.ProcessorOuthouse.Forms
     /// </summary>
     /// <history>
     ///   [vku] 25/May/2016 Created
+    ///   [emoguel] se volvió async
     /// </history>
-    private void LoadCombos()
+    private async void LoadCombos()
     {
-      _lstFoliosInvitationOuthouse = BRFoliosInvitationsOuthouse.GetFoliosInvittionsOutside(nStatus: 1).ToList();
-      _lstFoliosInvitationOuthouse.Insert(0, new FolioInvitationOuthouse { fiID = 0, fiSerie = "ALL", fiFrom = 0, fiTo = 0, fiA = Convert.ToBoolean(1) });
-      cboFolSeries.ItemsSource = _lstFoliosInvitationOuthouse.Select(c => c.fiSerie).Distinct();
-      cboSaveCourtesyTours.ItemsSource = EnumToListHelper.GetList<EnumSaveCourtesyTours>();
-      cboExternal.ItemsSource = EnumToListHelper.GetList<EnumExternalInvitation>();
+      try
+      {
+        _lstFoliosInvitationOuthouse = await BRFoliosInvitationsOuthouse.GetFoliosInvittionsOutside(nStatus: 1);
+        _lstFoliosInvitationOuthouse.Insert(0, new FolioInvitationOuthouse { fiID = 0, fiSerie = "ALL", fiFrom = 0, fiTo = 0, fiA = Convert.ToBoolean(1) });
+        cboFolSeries.ItemsSource = _lstFoliosInvitationOuthouse.Select(c => c.fiSerie).Distinct();
+        cboSaveCourtesyTours.ItemsSource = EnumToListHelper.GetList<EnumSaveCourtesyTours>();
+        cboExternal.ItemsSource = EnumToListHelper.GetList<EnumExternalInvitation>();
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error);
+      }
     }
     #endregion
 

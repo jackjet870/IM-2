@@ -3,6 +3,9 @@ using IM.Services.ClubesService;
 using IM.Model.Enums;
 using IM.Base.Helpers;
 using System.Windows;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace IM.Services.Helpers
 {
@@ -103,6 +106,33 @@ namespace IM.Services.Helpers
 
     #endregion
 
+    #region GetSalesMen
+    /// <summary>
+    /// Obtiene el catalogo de vendedores
+    /// </summary>
+    /// <history>
+    /// [emoguel] created 15/06/2016
+    /// </history>
+    public async static Task<Vendedor[]> GetSalesMen()
+    {
+      Vendedor [] Vendedores = await Task.Run(() =>
+        {
+          VendedorRequest request = new VendedorRequest();
+          VendedorResponse response = null;
+          Vendedor[] vendedor = null;
+
+          response = Current().ObtenerCatalogoVendedores(request);
+        //si ocurrio un error
+        if (response.HasErrors)
+            UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetSalesMen");
+          else
+            vendedor = response.Data;
+
+          return vendedor;
+        });
+      return Vendedores;
+    }
+    #endregion
     #endregion
   }
 }

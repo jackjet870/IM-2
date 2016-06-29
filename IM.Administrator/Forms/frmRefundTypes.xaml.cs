@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -236,18 +237,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel[] created 14/04/2016
     /// </history>
-    private void LoadRefundTypes(RefundType refundType = null)
+    private async void LoadRefundTypes(RefundType refundType = null)
     {
-      int nIndex = 0;
-      List<RefundType> lstRefundTypes = BRRefundTypes.GetRefundTypes(_nStatus, _refundTypeFilter);
-      dgrRefundTypes.ItemsSource = lstRefundTypes;
-      if (lstRefundTypes.Count > 0 && refundType != null)
+      try
       {
-        refundType = lstRefundTypes.Where(rf => rf.rfID == refundType.rfID).FirstOrDefault();
-        nIndex = lstRefundTypes.IndexOf(refundType);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<RefundType> lstRefundTypes =await BRRefundTypes.GetRefundTypes(_nStatus, _refundTypeFilter);
+        dgrRefundTypes.ItemsSource = lstRefundTypes;
+        if (lstRefundTypes.Count > 0 && refundType != null)
+        {
+          refundType = lstRefundTypes.Where(rf => rf.rfID == refundType.rfID).FirstOrDefault();
+          nIndex = lstRefundTypes.IndexOf(refundType);
+        }
+        GridHelper.SelectRow(dgrRefundTypes, nIndex);
+        StatusBarReg.Content = lstRefundTypes.Count + " Refund Types.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrRefundTypes, nIndex);
-      StatusBarReg.Content = lstRefundTypes.Count + " Refund Types.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Refund Types");
+      }
     }
     #endregion
 
@@ -280,7 +290,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_refundTypeFilter.rfN))//Filtro por descripción
       {
-        if(!refundType.rfN.Contains(_refundTypeFilter.rfN))
+        if(!refundType.rfN.Contains(_refundTypeFilter.rfN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

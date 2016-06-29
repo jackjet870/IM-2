@@ -1,0 +1,44 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmWholesalerDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing" ResizeMode="NoResize" 
+        Title="Wholesaler Detail" SizeToContent="WidthAndHeight" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+    <Grid Margin="10,10,14,2" >
+        <!--#region Formato del grid-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="15*"/>
+            <ColumnDefinition Width="75*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <!--#endregion-->
+        <!--#region títulos-->
+        <Label Grid.Column="0" Grid.Row="0">Club</Label>
+        <Label Grid.Column="0" Grid.Row="1">Company</Label>
+        <Label Grid.Column="0" Grid.Row="2">Application</Label>
+        <Label Name="lblName" Grid.Column="0" Grid.Row="3" Visibility="Collapsed">Name</Label>
+        <!--#endregion-->
+        <!--#region Datos-->        
+        <ComboBox Name="cmbClub" Grid.Column="1" Grid.Row="0" Tag="Club"  Margin="0,0,0,15" Height="27" VerticalAlignment="Top" DisplayMemberPath="clN" SelectedValuePath="clID" SelectedValue="{Binding wscl}" IsEnabled="False" Width="235"/>
+        <TextBox Name="txtwsCompany" Grid.Column="1" Grid.Row="1" Tag="Company" Height="27"  Margin="0,0,0,15" VerticalAlignment="Top" Text="{Binding wsCompany}" IsEnabled="False" Width="235"/>
+        <TextBox Name="txtwsApplication" Grid.Column="1" Grid.Row="2" Tag="Application" Height="27"  Margin="0,0,0,15" VerticalAlignment="Top" Text="{Binding wsApplication}" CharacterCasing="Upper" IsEnabled="False" Width="235"/>
+        <TextBox Name="txtName" Grid.Column="1" Grid.Row="3" Height="27"  Margin="0,0,0,15" VerticalAlignment="Top" Text="{Binding wsName}" IsEnabled="True" Visibility="Collapsed" Width="235"/>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" Name="skpStatus" Visibility="Visible" Margin="0,6,0,7" HorizontalAlignment="Left">
+            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Base;component/Images/time.ico" Width="16" Height="16"/>
+            <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
+        </StackPanel>
+        <Button Name="btnAccept" Width="60" Height="30" Grid.Column="1" Grid.Row="5" Visibility="Hidden" Margin="0,7,75,7"  HorizontalAlignment="Right" Click="btnAccept_Click" Content="_Accept"/>
+        <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="5" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
+        <!--#endregion-->
+    </Grid>
+</Window>

@@ -4,6 +4,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -19,32 +20,36 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 07/05/2016
     /// </history>
-    public static List<PersonnelShort> GetPRbyFolioOuthouse(PersonnelShort personnelShort = null)
+    public async static Task<List<PersonnelShort>> GetPRbyFolioOuthouse(PersonnelShort personnelShort = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var query = from pe in dbContext.Personnels
-                    join pr in dbContext.FoliosInvitationsOuthousePR
-                    on pe.peID equals pr.fippe
-                    group pe by new { pe.peID, pe.peN } into p
-                    select p;
-
-        if (personnelShort != null)
+      List<PersonnelShort> lstPersonnelShort = await Task.Run(() =>
         {
-          if (!string.IsNullOrWhiteSpace(personnelShort.peID))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
           {
-            query = query.Where(pe => pe.Key.peID == personnelShort.peID);
-          }
+            var query = from pe in dbContext.Personnels
+                        join pr in dbContext.FoliosInvitationsOuthousePR
+                        on pe.peID equals pr.fippe
+                        group pe by new { pe.peID, pe.peN } into p
+                        select p;
 
-          if (!string.IsNullOrWhiteSpace(personnelShort.peN))
-          {
-            query = query.Where(pe => pe.Key.peN == personnelShort.peN);
-          }
-        }
+            if (personnelShort != null)
+            {
+              if (!string.IsNullOrWhiteSpace(personnelShort.peID))
+              {
+                query = query.Where(pe => pe.Key.peID == personnelShort.peID);
+              }
 
-        List<PersonnelShort> lstPersonnelShorts = query.ToList().Select(pe => new PersonnelShort { peID = pe.Key.peID, peN = pe.Key.peN }).ToList();
-        return lstPersonnelShorts.OrderBy(pe => pe.peN).ToList();
-      }
+              if (!string.IsNullOrWhiteSpace(personnelShort.peN))
+              {
+                query = query.Where(pe => pe.Key.peN == personnelShort.peN);
+              }
+            }
+
+            List<PersonnelShort> lstPersonnelShorts = query.ToList().Select(pe => new PersonnelShort { peID = pe.Key.peID, peN = pe.Key.peN }).ToList();
+            return lstPersonnelShorts.OrderBy(pe => pe.peN).ToList();
+          }
+        });
+      return lstPersonnelShort;
     }
     #endregion
 
@@ -55,17 +60,21 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo string</returns>
     /// <history>
     /// [emoguel] created 09/05/2016
+    /// [emoguel] modifed 27/06/2016 --> se volvió async
     /// </history>
-    public static List<string> GetSeriesFolioOuthouse()
+    public async static Task<List<string>> GetSeriesFolioOuthouse()
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from fo in dbContext.FoliosInvitationsOuthouse
-                    group fo by new { fo.fiSerie } into se
-                    select se;
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var query = from fo in dbContext.FoliosInvitationsOuthouse
+                      group fo by new { fo.fiSerie } into se
+                      select se;
 
-        return query.ToList().Select(se=>se.Key.fiSerie.ToString()).ToList();
-      }
+          return query.ToList().Select(se => se.Key.fiSerie.ToString()).ToList();
+        }
+      });
     }
     #endregion
 
@@ -78,16 +87,19 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 09/05/2016
     /// </history>
-    public static List<FolioInvitationOuthousePR> GetFoliosByPr(string idPr)
+    public async static Task<List<FolioInvitationOuthousePR>> GetFoliosByPr(string idPr)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from fip in dbContext.FoliosInvitationsOuthousePR
-                    where fip.fippe == idPr
-                    select fip;
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var query = from fip in dbContext.FoliosInvitationsOuthousePR
+                      where fip.fippe == idPr
+                      select fip;
 
-        return query.OrderBy(fip => fip.fipID).ToList();
-      }
+          return query.OrderBy(fip => fip.fipID).ToList();
+        }
+      });
     }
     #endregion
 
@@ -144,41 +156,44 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 09/05/2016
     /// </history>
-    public static int SaveFoliosOuthousePR(string idPr,List<FolioInvitationOuthousePR> lstAsigned, List<FolioInvitationOuthousePRCancellation> lstCancel)
+    public async static Task<int> SaveFoliosOuthousePR(string idPr,List<FolioInvitationOuthousePR> lstAsigned, List<FolioInvitationOuthousePRCancellation> lstCancel)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          try
+          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            #region Assigados
-            lstAsigned.ForEach(f =>
+            try
             {
-              f.fippe = idPr;
-              dbContext.Entry(f).State = (f.fipID > 0) ? EntityState.Modified : EntityState.Added;
+              #region Assigados
+              lstAsigned.ForEach(f =>
+              {
+                f.fippe = idPr;
+                dbContext.Entry(f).State = (f.fipID > 0) ? EntityState.Modified : EntityState.Added;
 
-            });
-            #endregion
-            #region Cancel
-            lstCancel.ForEach(f =>
+              });
+              #endregion
+              #region Cancel
+              lstCancel.ForEach(f =>
+              {
+                f.ficpe = idPr;
+                dbContext.Entry(f).State = (f.ficID > 0) ? EntityState.Modified : EntityState.Added;
+              });
+              #endregion
+
+              int nRes = dbContext.SaveChanges();
+              transaction.Commit();
+              return nRes;
+            }
+            catch
             {
-              f.ficpe = idPr;
-              dbContext.Entry(f).State = (f.ficID > 0) ? EntityState.Modified : EntityState.Added;
-            });
-            #endregion
-
-            int nRes = dbContext.SaveChanges();
-            transaction.Commit();
-            return nRes;
-          }
-          catch
-          {
-            transaction.Rollback();
-            return 0;
+              transaction.Rollback();
+              return 0;
+            }
           }
         }
-      }
+      });
     }
     #endregion
   }

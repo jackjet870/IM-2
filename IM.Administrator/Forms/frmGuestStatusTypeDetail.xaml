@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
-        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Loaded="Window_Loaded" KeyDown="Window_KeyDown"
+        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing"
         Title="Guest Status Type Detail" Height="368" Width="308" DataContext="{Binding guestStaTyp}">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
@@ -41,6 +41,10 @@
         <CheckBox Name="chkA" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="{Binding gsA}" Height="13" IsEnabled="False">Active</CheckBox>
         <CheckBox Name="chkAllTour" Grid.Column="1" Grid.Row="6" VerticalAlignment="Top" HorizontalAlignment="Right" IsChecked="{Binding gsAllowTourDisc}" Height="13" IsEnabled="False">Allow discount tour </CheckBox>
 
+        <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="0" Name="skpStatus" Visibility="Collapsed" Margin="0,0,0,7" HorizontalAlignment="Left">
+            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Base;component/Images/time.ico" Width="16" Height="16"/>
+            <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Saving Data..."/>
+        </StackPanel>
         <Button Name="btnAccept" Width="60" Height="30" Visibility="Hidden"  Grid.Column="1" Grid.Row="7" Margin="0,7,75,7" Click="btnAccept_Click" Content="_Accept"  HorizontalAlignment="Right"/>
         <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="7" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
         <!--#endregion-->

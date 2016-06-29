@@ -8,6 +8,7 @@ using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -233,18 +234,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 11/04/2016
     /// </history>
-    private void LoadPermissionsLevels(PermissionLevel permissionLevel = null)
+    private async void LoadPermissionsLevels(PermissionLevel permissionLevel = null)
     {
-      int nIndex = 0;
-      List<PermissionLevel> lstPermisssionsLevels = BRPermissionsLevels.GetPermissionsLevels(_nStatus, _permissionLevelFilter);
-      dgrPermissionsLevels.ItemsSource = lstPermisssionsLevels;
-      if (permissionLevel != null && lstPermisssionsLevels.Count > 0)
+      try
       {
-        permissionLevel = lstPermisssionsLevels.Where(pl => pl.plID == permissionLevel.plID).FirstOrDefault();
-        nIndex = lstPermisssionsLevels.IndexOf(permissionLevel);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<PermissionLevel> lstPermisssionsLevels = await BRPermissionsLevels.GetPermissionsLevels(_nStatus, _permissionLevelFilter);
+        dgrPermissionsLevels.ItemsSource = lstPermisssionsLevels;
+        if (permissionLevel != null && lstPermisssionsLevels.Count > 0)
+        {
+          permissionLevel = lstPermisssionsLevels.Where(pl => pl.plID == permissionLevel.plID).FirstOrDefault();
+          nIndex = lstPermisssionsLevels.IndexOf(permissionLevel);
+        }
+        GridHelper.SelectRow(dgrPermissionsLevels, nIndex);
+        StatusBarReg.Content = lstPermisssionsLevels.Count + " Permission Levels.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrPermissionsLevels, nIndex);
-      StatusBarReg.Content = lstPermisssionsLevels.Count + " Permission Levels.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Permission Levels");
+      }
     }
     #endregion
     
@@ -277,7 +287,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_permissionLevelFilter.plN))//filtro por descripción
       {
-        if (!permissionLevel.plN.Contains(_permissionLevelFilter.plN))
+        if (!permissionLevel.plN.Contains(_permissionLevelFilter.plN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

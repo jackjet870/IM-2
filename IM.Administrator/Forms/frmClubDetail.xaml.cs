@@ -243,7 +243,9 @@ namespace IM.Administrator.Forms
         List<Agency> lstAgencies = lstAllAgencies.Where(ag => ag.agcl == clubId).ToList();
         dgrAgencies.ItemsSource = lstAgencies;
         cmbAgencies.ItemsSource = lstAllAgencies;
-        _oldLstAgencies = lstAgencies.ToList();
+        _oldLstAgencies = lstAgencies.ToList();        
+        btnAccept.Visibility = Visibility.Visible;
+        skpStatus.Visibility = Visibility.Hidden;
       }
       catch(Exception ex)
       {

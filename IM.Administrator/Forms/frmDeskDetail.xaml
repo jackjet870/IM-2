@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False"
-        mc:Ignorable="d" WindowStartupLocation="CenterOwner" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        mc:Ignorable="d" WindowStartupLocation="CenterOwner" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Closing="Window_Closing"
         Title="Desk Detail" Height="418" Width="338" DataContext="{Binding desk}" Loaded="Window_Loaded" KeyDown="Window_KeyDown">
     <DockPanel LastChildFill="True" >
         <!--#region Top-->
@@ -26,6 +26,10 @@
 
         <!--#region  Botones-->
         <Grid DockPanel.Dock="Bottom" Background="Transparent" Height="40">
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Name="skpStatus" Visibility="Visible" Margin="10,6,96,5" HorizontalAlignment="Left">
+                <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Base;component/Images/time.ico" Width="16" Height="16"/>
+                <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
+            </StackPanel>
             <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" HorizontalAlignment="Right" Content="_Accept" Margin="0,4,84,4"/>
             <Button Name="btnCancel" Width="60" Height="30" Click="btnCancel_Click" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
         </Grid>
@@ -33,12 +37,17 @@
 
         <!--#region Grid Computers-->
         <DataGrid Name="dgrComputers" Grid.Row="3" Margin="79,0,14,0" CellEditEnding="dgrComputers_CellEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Grid.Column="1" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CanUserAddRows="True" 
-                  CanUserResizeColumns="False" CanUserResizeRows="False" >
+                  CanUserResizeColumns="False" RowEditEnding="dgrComputers_RowEditEnding" CanUserResizeRows="False" >
             <DataGrid.Columns>
-                <DataGridComboBoxColumn  Width="100*" x:Name="cmbComputers" DisplayMemberPath="cpN" SelectedValuePath="cpID" SelectedValueBinding="{Binding cpID}" Header="Computer" >
+                <DataGridComboBoxColumn  Width="100*" x:Name="cmbComputers" DisplayMemberPath="cpN" SelectedValuePath="cpID" SelectedValueBinding="{Binding cpID}" Header="Computer (0)" >
 
                 </DataGridComboBoxColumn>
             </DataGrid.Columns>
+            <DataGrid.Resources>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+                </Style>
+            </DataGrid.Resources>
         </DataGrid>
         <!--#endregion-->
     </DockPanel>

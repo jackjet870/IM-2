@@ -4,6 +4,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,48 +19,52 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo SalesAmountRange</returns>
     /// <history>
     /// [emoguel] created 20/04/2016
+    /// [emoguel] modified 28/06/2016 ----> Se volvió async
     /// </history>
-    public static List<SalesAmountRange> GetSalesAmountRanges(int nStatus = -1, SalesAmountRange salesAmountRanges = null)
+    public async static Task<List<SalesAmountRange>> GetSalesAmountRanges(int nStatus = -1, SalesAmountRange salesAmountRanges = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from sn in dbContext.SalesAmountRanges
-                    select sn;
-
-        if (nStatus != -1)
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(sn => sn.snA == blnStatus);
-        }
+          var query = from sn in dbContext.SalesAmountRanges
+                      select sn;
 
-        if (salesAmountRanges != null)
-        {
-          if(salesAmountRanges.snID>0)//Filtro por ID
+          if (nStatus != -1)
           {
-            query = query.Where(sn => sn.snID == salesAmountRanges.snID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(sn => sn.snA == blnStatus);
           }
 
-          if(!string.IsNullOrWhiteSpace(salesAmountRanges.snN))//Filtro por descripción
+          if (salesAmountRanges != null)
           {
-            query = query.Where(sn => sn.snN.Contains(salesAmountRanges.snN));
-          }
-
-          if(salesAmountRanges.snFrom>0 && salesAmountRanges.snTo>0)//Filtro por rango
-          {
-            if (salesAmountRanges.snFrom == salesAmountRanges.snTo)
+            if (salesAmountRanges.snID > 0)//Filtro por ID
             {
-              query = query.Where(sn => salesAmountRanges.snFrom >= sn.snFrom && salesAmountRanges.snTo <= sn.snTo);
+              query = query.Where(sn => sn.snID == salesAmountRanges.snID);
             }
-            else
-            {
-              query = query.Where(sn => sn.snFrom >= salesAmountRanges.snFrom && sn.snTo <= salesAmountRanges.snTo);
-            }
-          }
-          
-        }
 
-        return query.OrderBy(sn => sn.snN).ToList();
-      }
+            if (!string.IsNullOrWhiteSpace(salesAmountRanges.snN))//Filtro por descripción
+            {
+              query = query.Where(sn => sn.snN.Contains(salesAmountRanges.snN));
+            }
+
+            if (salesAmountRanges.snFrom > 0 && salesAmountRanges.snTo > 0)//Filtro por rango
+            {
+              if (salesAmountRanges.snFrom == salesAmountRanges.snTo)
+              {
+                query = query.Where(sn => salesAmountRanges.snFrom >= sn.snFrom && salesAmountRanges.snTo <= sn.snTo);
+              }
+              else
+              {
+                query = query.Where(sn => sn.snFrom >= salesAmountRanges.snFrom && sn.snTo <= salesAmountRanges.snTo);
+              }
+            }
+
+          }
+
+          return query.OrderBy(sn => sn.snN).ToList();
+        }
+      });
     }
     #endregion
 

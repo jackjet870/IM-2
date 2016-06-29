@@ -48,7 +48,12 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(leadSource, oldLeadSource,true);
       UIHelper.SetUpControls(leadSource, this);
-      if(enumMode==EnumMode.search)
+      LoadPrograms();
+      LoadSalesRoom();
+      LoadAreas();
+      LoadRegions();
+      LoadSegmentsByLeadSources();
+      if (enumMode==EnumMode.search)
       {
         txtlsID.IsEnabled = true;
         dgrAgencies.Visibility = Visibility.Collapsed;
@@ -104,16 +109,10 @@ namespace IM.Administrator.Forms
           dgrAgencies.IsReadOnly = true;
           dgrLocations.IsReadOnly = true;
           btnAccept.Visibility = Visibility.Hidden;
-        }
-        LoadHotels();
+        }        
         LoadBoss();
+        LoadHotels();
       }
-      LoadPrograms();
-      LoadSalesRoom();
-      LoadAreas();
-      LoadRegions();
-      LoadSegmentsByLeadSources();
-
       DataContext = leadSource;
     }
     #endregion
@@ -131,7 +130,8 @@ namespace IM.Administrator.Forms
     {
       if(e.Key==Key.Escape)
       {
-        btnCancel_Click(null, null);
+        btnCancel.Focus();
+        Close();
       }
     }
     #endregion
@@ -145,7 +145,7 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 16/05/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
       List<Location> lstLocations = (List<Location>)dgrLocations.ItemsSource;
@@ -161,6 +161,8 @@ namespace IM.Administrator.Forms
         else
         {
           #region Save
+          txtStatus.Text = "Saving Data...";
+          skpStatus.Visibility = Visibility.Visible;
           string strMsj = ValidateHelper.ValidateForm(this, "Lead Source");
           if (strMsj=="")
           {
@@ -173,7 +175,7 @@ namespace IM.Administrator.Forms
             List<Agency> lstAgeDel = _oldAgencies.Where(ag => !lstAgencies.Any(agg => agg.agID == ag.agID)).ToList();
             #endregion
 
-            int nRes = BRLeadSources.SaveLeadSource(leadSource,lstLocAdd,lstLocDel,lstAgeAdd,lstAgeDel,(enumMode==EnumMode.edit));
+            int nRes =await BRLeadSources.SaveLeadSource(leadSource,lstLocAdd,lstLocDel,lstAgeAdd,lstAgeDel,(enumMode==EnumMode.edit));
             UIHelper.ShowMessageResult("Lead Source", nRes);
             if(nRes>0)
             {
@@ -186,7 +188,7 @@ namespace IM.Administrator.Forms
           {
             UIHelper.ShowMessage(strMsj);
           }
-
+          skpStatus.Visibility = Visibility.Collapsed;
           #endregion
         }
        }
@@ -254,12 +256,13 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 17/05/2016
     /// </history>
-    private void dgrLocations_CellEditEnding(object sender, System.Windows.Controls.DataGridCellEditEndingEventArgs e)
+    private void dgr_CellEditEnding(object sender,DataGridCellEditEndingEventArgs e)
     {
       if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
       {
         isCellCancel = false;
-        bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrLocations);
+        DataGrid dg = sender as DataGrid;
+        bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dg);
         e.Cancel = isRepeat;
       }
       else
@@ -267,32 +270,6 @@ namespace IM.Administrator.Forms
         isCellCancel = true;
       }
     }
-    #endregion
-
-    #region dgrAgencies_CellEditEnding
-    /// <summary>
-    /// Verifica que las agencias no se puedan repetir
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 17/05/2016
-    /// </history>
-    private void dgrAgencies_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-    {
-
-      if (!Keyboard.IsKeyDown(Key.Escape))//Verificar si se está cancelando la edición
-      {
-        isCellCancel = false;
-        bool isRepeat = GridHelper.HasRepeatItem((Control)e.EditingElement, dgrAgencies);
-        e.Cancel = isRepeat;
-      }
-      else
-      {
-        isCellCancel = true;
-      }
-    }
-
     #endregion
 
     #region Window_Closing
@@ -352,8 +329,16 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadHotels()
     {
-      List<Hotel> lstHotels =await BRHotels.GetHotels(nStatus: 1);
-      cmbHotels.ItemsSource = lstHotels;
+      try
+      {
+        List<Hotel> lstHotels = await BRHotels.GetHotels(nStatus: 1);
+        cmbHotels.ItemsSource = lstHotels;
+        skpStatus.Visibility = Visibility.Hidden;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Lead Source");
+      }
     }
     #endregion
 
@@ -367,12 +352,19 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadPrograms()
     {
-      List<Program> lstPrograms = await BRPrograms.GetPrograms();
-      if(enumMode==EnumMode.search)
+      try
       {
-        lstPrograms.Insert(0, new Program { pgID = "", pgN = "" });
+        List<Program> lstPrograms = await BRPrograms.GetPrograms();
+        if (enumMode == EnumMode.search)
+        {
+          lstPrograms.Insert(0, new Program { pgID = "", pgN = "" });
+        }
+        cmblspg.ItemsSource = lstPrograms;
       }
-      cmblspg.ItemsSource = lstPrograms;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Lead Source");
+      }
     }
     #endregion
 
@@ -386,12 +378,19 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadSalesRoom()
     {
-      List<SalesRoomShort> lstSalesRooms =await  BRSalesRooms.GetSalesRooms(1);
-      if(enumMode==EnumMode.search)
+      try
       {
-        lstSalesRooms.Insert(0, new SalesRoomShort { srID = "", srN = "" });
+        List<SalesRoomShort> lstSalesRooms = await BRSalesRooms.GetSalesRooms(1);
+        if (enumMode == EnumMode.search)
+        {
+          lstSalesRooms.Insert(0, new SalesRoomShort { srID = "", srN = "" });
+        }
+        cmblssr.ItemsSource = lstSalesRooms;
       }
-      cmblssr.ItemsSource = lstSalesRooms;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Lead Source");
+      }
     }
     #endregion 
 
@@ -452,14 +451,21 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 16/05/2016
     /// </history>
-    private void LoadSegmentsByLeadSources()
+    private async void LoadSegmentsByLeadSources()
     {
-      List<SegmentByLeadSource> lstSegments = BRSegmentsByLeadSource.GetSegmentsByLeadSource();
-      if(enumMode==EnumMode.search)
+      try
       {
-        lstSegments.Insert(0, new SegmentByLeadSource { soID = "", soN = "" });
+        List<SegmentByLeadSource> lstSegments = await BRSegmentsByLeadSource.GetSegmentsByLeadSource();
+        if (enumMode == EnumMode.search)
+        {
+          lstSegments.Insert(0, new SegmentByLeadSource { soID = "", soN = "" });
+        }
+        cmblsso.ItemsSource = lstSegments;
       }
-      cmblsso.ItemsSource = lstSegments;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Lead Sources");
+      }
     }
     #endregion
 
@@ -473,8 +479,15 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadBoss()
     {
-      List<PersonnelShort> lstBoss = await BRPersonnel.GetPersonnel(roles: EnumToListHelper.GetEnumDescription(EnumRole.Boss));
-      cmblsBoss.ItemsSource = lstBoss;
+      try
+      {
+        List<PersonnelShort> lstBoss = await BRPersonnel.GetPersonnel(roles: EnumToListHelper.GetEnumDescription(EnumRole.Boss));
+        cmblsBoss.ItemsSource = lstBoss;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Lead Source");
+      }
     }
     #endregion
 
@@ -485,13 +498,20 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 16/05/2016
     /// </history>
-    private void LoadLocations()
+    private async void LoadLocations()
     {
-      List<Location> lstAllLocations = BRLocations.GetLocations();
-      cmbLocations.ItemsSource = lstAllLocations;
-      List<Location> lstLocations = lstAllLocations.Where(lo => lo.lols == leadSource.lsID).ToList();
-      dgrLocations.ItemsSource = lstLocations;
-      _oldLocations = lstLocations.ToList();
+      try
+      {
+        List<Location> lstAllLocations = await BRLocations.GetLocations();
+        cmbLocations.ItemsSource = lstAllLocations;
+        List<Location> lstLocations = lstAllLocations.Where(lo => lo.lols == leadSource.lsID).ToList();
+        dgrLocations.ItemsSource = lstLocations;
+        _oldLocations = lstLocations.ToList();
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Lead Source");
+      }
     }
     #endregion
 
@@ -504,8 +524,15 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadAgencies()
     {
-      List<Agency> lstAgencies =await BRAgencies.GetAgencies();
-      cmbAgencies.ItemsSource = lstAgencies;
+      try
+      {
+        List<Agency> lstAgencies = await BRAgencies.GetAgencies();
+        cmbAgencies.ItemsSource = lstAgencies;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Lead Source");
+      }
     }
     #endregion
 

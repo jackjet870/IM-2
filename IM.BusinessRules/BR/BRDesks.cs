@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,34 +19,40 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 16/03/2016
     /// </history>
-    public static List<Desk> GetDesks(Desk desk = null, int nStatus = -1)
+    public async static Task<List<Desk>> GetDesks(Desk desk = null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<Desk> lstDesk = new List<Desk>();
+      await Task.Run(() =>
       {
-        var query = from dk in dbContext.Desks
-                    select dk;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnEstatus = Convert.ToBoolean(nStatus);
-          query = query.Where(dk => dk.dkA == blnEstatus);
-        }
+          var query = from dk in dbContext.Desks
+                      select dk;
 
-        if (desk != null)//validacion de si hay objeto
-        {
-          if (desk.dkID > 0)//Filtro por ID
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(dk => dk.dkID == desk.dkID);
+            bool blnEstatus = Convert.ToBoolean(nStatus);
+            query = query.Where(dk => dk.dkA == blnEstatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(desk.dkN))//Filtro por Nombre Descripcion
+          if (desk != null)//validacion de si hay objeto
           {
-            query = query.Where(dk => dk.dkN.Contains(desk.dkN));
-          }
-        }
+            if (desk.dkID > 0)//Filtro por ID
+            {
+              query = query.Where(dk => dk.dkID == desk.dkID);
+            }
 
-        return query.OrderBy(dk => dk.dkN).ToList();
-      }
+            if (!string.IsNullOrWhiteSpace(desk.dkN))//Filtro por Nombre Descripcion
+            {
+              query = query.Where(dk => dk.dkN.Contains(desk.dkN));
+            }
+          }
+
+          lstDesk = query.OrderBy(dk => dk.dkN).ToList();
+        }
+      });
+
+      return lstDesk;
     }
     #endregion
 
@@ -59,62 +66,66 @@ namespace IM.BusinessRules.BR
     /// <returns>0. No se puedo guardar | > 0 . Se guardó correctamente | -1. Existe un registro con el mismo ID (Sólo cuando es insertar)</returns>
     /// <history>
     /// [emoguel] created 16/03/2016
+    /// [emoguel] modified 09/06/2016---> se volvió async
     /// </history>
-    public static int SaveDesk(Desk desk, bool blnUpdate, List<string> lstIdsComputers)
+    public async static Task<int> SaveDesk(Desk desk, bool blnUpdate, List<string> lstIdsComputers)
     {
-      int nRes = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      int nRes = await Task.Run(() =>
       {
-        using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          try
+          using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            #region Actualizar
-            if (blnUpdate)//Si es actualizar
+            try
             {
-              dbContext.Entry(desk).State = System.Data.Entity.EntityState.Modified;
-            }
-            #endregion
-            #region Agregar
-            else//Si es guardar
-            {
+              #region Actualizar
+              if (blnUpdate)//Si es actualizar
+              {
+                dbContext.Entry(desk).State = System.Data.Entity.EntityState.Modified;
+              }
+              #endregion
+              #region Agregar
+              else//Si es guardar
+              {
                 dbContext.Desks.Add(desk);
+              }
+              #endregion
+
+              #region Actualizar Computers            
+
+              #region Desaignar
+              var lstComputersDes = (from cmp in dbContext.Computers
+                                     where !lstIdsComputers.Contains(cmp.cpID)
+                                     && cmp.cpdk == desk.dkID
+                                     select cmp).ToList();//Buscamos todas las computers asigndas que ya no estan en la lista
+
+              lstComputersDes.ForEach(cmp => cmp.cpdk = null);//Des-relacionamos las computers que no esten en la nueva lista
+
+              #endregion
+
+              #region Asignar
+              var lstComputersAsi = (from cmp in dbContext.Computers
+                                     where lstIdsComputers.Contains(cmp.cpID)
+                                     select cmp).ToList();//Buscamos todas las computers que se van a asignar
+
+              lstComputersAsi.ForEach(cmp => cmp.cpdk = desk.dkID);//Des-relacionamos las computers que no esten en la nueva lista
+
+              #endregion
+              #endregion
+
+              int nSave = dbContext.SaveChanges();
+              transacction.Commit();
+              return nSave;
             }
-            #endregion
-
-            #region Actualizar Computers            
-
-            #region Desaignar
-            var lstComputersDes = (from cmp in dbContext.Computers
-                                    where !lstIdsComputers.Contains(cmp.cpID)
-                                    && cmp.cpdk == desk.dkID
-                                    select cmp).ToList();//Buscamos todas las computers asigndas que ya no estan en la lista
-
-            lstComputersDes.ForEach(cmp => cmp.cpdk = null);//Des-relacionamos las computers que no esten en la nueva lista
-
-            #endregion
-
-            #region Asignar
-            var lstComputersAsi = (from cmp in dbContext.Computers
-                                    where lstIdsComputers.Contains(cmp.cpID)
-                                    select cmp).ToList();//Buscamos todas las computers que se van a asignar
-
-            lstComputersAsi.ForEach(cmp => cmp.cpdk = desk.dkID);//Des-relacionamos las computers que no esten en la nueva lista
-
-            #endregion
-            #endregion
-
-            nRes = dbContext.SaveChanges();
-            transacction.Commit();
-          }
-          catch
-          {
-            transacction.Rollback();
-            nRes = 0;
+            catch
+            {
+              transacction.Rollback();
+              return 0;
+            }
           }
         }
-        return nRes;
-      }
+      });
+      return nRes;
     }
     #endregion
   }

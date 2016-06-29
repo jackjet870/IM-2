@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using System.Linq;
 using System;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -234,18 +235,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [Emoguel] created 14/03/2016
     /// </history>
-    private void loadCountries(Country country=null)
+    private async void loadCountries(Country country=null)
     {
-      int nIndex = 0;
-      List<Country> lstCountries = BRCountries.GetCountries(_countryFilter, _nStatus);
-      dgrCountries.ItemsSource = lstCountries;
-      if(country!=null && lstCountries.Count>0)
+      try
       {
-        country = lstCountries.Where(cu => cu.coID == country.coID).FirstOrDefault();
-        nIndex = lstCountries.IndexOf(country);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Country> lstCountries = await BRCountries.GetCountries(_countryFilter, _nStatus);
+        dgrCountries.ItemsSource = lstCountries;
+        if (country != null && lstCountries.Count > 0)
+        {
+          country = lstCountries.Where(cu => cu.coID == country.coID).FirstOrDefault();
+          nIndex = lstCountries.IndexOf(country);
+        }
+        GridHelper.SelectRow(dgrCountries, nIndex);
+        StatusBarReg.Content = lstCountries.Count + " Countries.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrCountries, nIndex);
-      StatusBarReg.Content = lstCountries.Count + " Countries.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Countries");
+      }
     }
     #endregion
 
@@ -278,7 +288,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_countryFilter.coN))
       {
-        if (!newCountry.coN.Contains(_countryFilter.coN))
+        if (!newCountry.coN.Contains(_countryFilter.coN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

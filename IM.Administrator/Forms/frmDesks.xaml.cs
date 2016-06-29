@@ -8,6 +8,7 @@ using IM.BusinessRules.BR;
 using IM.Model.Enums;
 using System.Linq;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -231,18 +232,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 17/03/2016
     /// </history>
-    private void LoadDesks(Desk desk=null)
+    private async void LoadDesks(Desk desk=null)
     {
-      int nIndex = 0;
-      List<Desk> lstDesks = BRDesks.GetDesks(_deskFilter, _nStatus);
-      dgrDesks.ItemsSource = lstDesks;
-      if (desk != null && lstDesks.Count > 0)
+      try
       {
-        desk = lstDesks.Where(dk => dk.dkID == desk.dkID).FirstOrDefault();
-        nIndex = lstDesks.IndexOf(desk);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Desk> lstDesks = await BRDesks.GetDesks(_deskFilter, _nStatus);
+        dgrDesks.ItemsSource = lstDesks;
+        if (desk != null && lstDesks.Count > 0)
+        {
+          desk = lstDesks.Where(dk => dk.dkID == desk.dkID).FirstOrDefault();
+          nIndex = lstDesks.IndexOf(desk);
+        }
+        GridHelper.SelectRow(dgrDesks, nIndex);
+        StatusBarReg.Content = lstDesks.Count + " Desks.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrDesks, nIndex);
-      StatusBarReg.Content = lstDesks.Count + " Desks.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Desks.");
+      }
     }
     #endregion
 
@@ -275,7 +285,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_deskFilter.dkN))
       {
-        if (!newDesk.dkN.Contains(_deskFilter.dkN))
+        if (!newDesk.dkN.Contains(_deskFilter.dkN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

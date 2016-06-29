@@ -8,6 +8,7 @@ using IM.BusinessRules.BR;
 using IM.Model.Enums;
 using System.Linq;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -229,16 +230,25 @@ namespace IM.Administrator.Forms
     /// </history>
     protected async void LoadCurrencies(Currency currency=null)
     {
-      int nIndex = 0;
-      List<Currency> lstCurrencies =await BRCurrencies.GetCurrencies(_currencyFilter, _nStatus);
-      dgrCurrencies.ItemsSource = lstCurrencies;
-      if(currency!=null && lstCurrencies.Count>0)
+      try
       {
-        currency = lstCurrencies.Where(cu => cu.cuID == currency.cuID).FirstOrDefault();
-        nIndex = lstCurrencies.IndexOf(currency);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Currency> lstCurrencies = await BRCurrencies.GetCurrencies(_currencyFilter, _nStatus);
+        dgrCurrencies.ItemsSource = lstCurrencies;
+        if (currency != null && lstCurrencies.Count > 0)
+        {
+          currency = lstCurrencies.Where(cu => cu.cuID == currency.cuID).FirstOrDefault();
+          nIndex = lstCurrencies.IndexOf(currency);
+        }
+        GridHelper.SelectRow(dgrCurrencies, nIndex);
+        StatusBarReg.Content = lstCurrencies.Count + " Currencies.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrCurrencies,nIndex);
-      StatusBarReg.Content = lstCurrencies.Count + " Currencies.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Currencies");
+      }
     }
     #endregion
 
@@ -271,7 +281,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_currencyFilter.cuN))
       {
-        if (!newCurrency.cuN.Contains(_currencyFilter.cuN))
+        if (!newCurrency.cuN.Contains(_currencyFilter.cuN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

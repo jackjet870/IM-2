@@ -8,6 +8,7 @@ using IM.Base.Helpers;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -230,20 +231,30 @@ namespace IM.Administrator.Forms
     /// <param name="permision">Objeto a seleccionar</param>
     /// <history>
     /// [emoguel] created 07/06/2016
+    /// [emoguel] Modified 11/06/2016 se volvió async
     /// </history>
-    private void LoadPermissions(Permission permision = null)
+    private async void LoadPermissions(Permission permision = null)
     {
-      int nIndex = 0;
-      List<Permission> lstPermissions = BRPermissions.GetPermissions(_nStatus, _permissionFilter);
-      dgrPermissions.ItemsSource = lstPermissions;
-
-      if (lstPermissions.Count > 0 && permision != null)
+      try
       {
-        permision = lstPermissions.Where(pm => pm.pmID == permision.pmID).FirstOrDefault();
-        nIndex = lstPermissions.IndexOf(permision);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Permission> lstPermissions = await BRPermissions.GetPermissions(_nStatus, _permissionFilter);
+        dgrPermissions.ItemsSource = lstPermissions;
+
+        if (lstPermissions.Count > 0 && permision != null)
+        {
+          permision = lstPermissions.Where(pm => pm.pmID == permision.pmID).FirstOrDefault();
+          nIndex = lstPermissions.IndexOf(permision);
+        }
+        GridHelper.SelectRow(dgrPermissions, nIndex);
+        StatusBarReg.Content = lstPermissions.Count + " Permissions.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrPermissions, nIndex);
-      StatusBarReg.Content = lstPermissions.Count + " Permissions.";
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Permission");
+      }
     }
     #endregion
     #region validateFilter
@@ -275,7 +286,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_permissionFilter.pmN))//Filtro por descripción
       {
-        if(!permission.pmN.Contains(_permissionFilter.pmN))
+        if(!permission.pmN.Contains(_permissionFilter.pmN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

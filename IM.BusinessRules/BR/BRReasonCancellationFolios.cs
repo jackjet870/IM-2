@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,33 +19,37 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 14/04/2016
     /// </history>
-    public static List<ReasonCancellationFolio> GetReasonCancellationFolios(int nStatus = -1, ReasonCancellationFolio reasonCancellationFolio = null)
+    public async static Task<List<ReasonCancellationFolio>> GetReasonCancellationFolios(int nStatus = -1, ReasonCancellationFolio reasonCancellationFolio = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var query = from rcf in dbContext.ReasonsCancellationFolios
-                    select rcf;
-
-        if (nStatus != -1)//Filtro por estatus
+      List<ReasonCancellationFolio> lstReasonCancellation = await Task.Run(() =>
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(rcf => rcf.rcfA==blnStatus);
-        }
-
-        if (reasonCancellationFolio != null)//Verificamos que se tenga un objeto
-        {
-          if (!string.IsNullOrWhiteSpace(reasonCancellationFolio.rcfID))//Filtro por ID
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
           {
-            query = query.Where(rcf => rcf.rcfID == reasonCancellationFolio.rcfID);
-          }
+            var query = from rcf in dbContext.ReasonsCancellationFolios
+                        select rcf;
 
-          if (!string.IsNullOrWhiteSpace(reasonCancellationFolio.rcfN))//Filtro po descripción
+            if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(rcf => rcf.rcfN.Contains(reasonCancellationFolio.rcfN));
+              bool blnStatus = Convert.ToBoolean(nStatus);
+              query = query.Where(rcf => rcf.rcfA == blnStatus);
+            }
+
+            if (reasonCancellationFolio != null)//Verificamos que se tenga un objeto
+          {
+              if (!string.IsNullOrWhiteSpace(reasonCancellationFolio.rcfID))//Filtro por ID
+            {
+                query = query.Where(rcf => rcf.rcfID == reasonCancellationFolio.rcfID);
+              }
+
+              if (!string.IsNullOrWhiteSpace(reasonCancellationFolio.rcfN))//Filtro po descripción
+            {
+                query = query.Where(rcf => rcf.rcfN.Contains(reasonCancellationFolio.rcfN));
+              }
+            }
+            return query.OrderBy(rcf => rcf.rcfN).ToList();
           }
-        }
-        return query.OrderBy(rcf => rcf.rcfN).ToList();
-      }
+        });
+      return lstReasonCancellation;
     }
 
     #endregion

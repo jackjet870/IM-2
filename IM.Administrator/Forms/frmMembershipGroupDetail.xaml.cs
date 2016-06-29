@@ -63,7 +63,8 @@ namespace IM.Administrator.Forms
     {
       if(e.Key==Key.Escape)
       {
-        btnCancel_Click(null, null);
+        btnCancel.Focus();
+        Close();
       }
     }
     #endregion
@@ -81,11 +82,14 @@ namespace IM.Administrator.Forms
     {
       if (!blnClosing)
       {
-        blnClosing = true;
-        btnCancel_Click(null, null);
-        if (!blnClosing)
+        List<MembershipType> lstMembershipTypes = (List<MembershipType>)dgrmembershipTypes.ItemsSource;
+        if (!ObjectHelper.IsEquals(membershipGroup, oldMembershipGroup) || !ObjectHelper.IsListEquals(lstMembershipTypes, _oldLstmembershipTypes))
         {
-          e.Cancel = true;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result != MessageBoxResult.Yes)
+          {
+            e.Cancel = true;
+          }
         }
       }
     }
@@ -126,23 +130,8 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      List<MembershipType> lstMembershipTypes = (List<MembershipType>)dgrmembershipTypes.ItemsSource;
-      if (!ObjectHelper.IsEquals(membershipGroup, oldMembershipGroup) || !ObjectHelper.IsListEquals(lstMembershipTypes, _oldLstmembershipTypes))
-      {
-        MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-        if (result == MessageBoxResult.Yes)
-        {
-          if (!blnClosing) { blnClosing = true; Close(); }
-        }
-        else
-        {
-          blnClosing = false;
-        }
-      }
-      else
-      {
-        if (!blnClosing) { blnClosing = true; Close(); }
-      }
+      btnCancel.Focus();
+      Close();
     }
     #endregion
 
@@ -155,35 +144,44 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 19/05/2016
     /// </history>
-    private void btnAccept_Click(object sender, RoutedEventArgs e)
+    private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
-
-      btnAccept.Focus();
-      List<MembershipType> lstMembershipGroup = (List<MembershipType>)dgrmembershipTypes.ItemsSource;
-      if (enumMode != EnumMode.add && ObjectHelper.IsEquals(membershipGroup, oldMembershipGroup) && ObjectHelper.IsListEquals(lstMembershipGroup, _oldLstmembershipTypes))
+      try
       {
-        blnClosing = true;
-        Close();
-      }
-      else
-      {
-        string strMsj = ValidateHelper.ValidateForm(this, "Membership Group");
-        if (strMsj == "")
+        btnAccept.Focus();
+        List<MembershipType> lstMembershipGroup = (List<MembershipType>)dgrmembershipTypes.ItemsSource;
+        if (enumMode != EnumMode.add && ObjectHelper.IsEquals(membershipGroup, oldMembershipGroup) && ObjectHelper.IsListEquals(lstMembershipGroup, _oldLstmembershipTypes))
         {
-          List<MembershipType> lstAdd = lstMembershipGroup.Where(mt => !_oldLstmembershipTypes.Any(mtt => mtt.mtID == mt.mtID)).ToList();
-          int nRes =BRMembershipGroups.SaveMembershipGroup(membershipGroup,lstAdd,(enumMode==EnumMode.edit));
-          UIHelper.ShowMessageResult("Membership Group", nRes);
-          if (nRes > 0)
-          {            
-            blnClosing = true;
-            DialogResult = true;
-            Close();
-          }
+          blnClosing = true;
+          Close();
         }
         else
         {
-          UIHelper.ShowMessage(strMsj);
+          txtStatus.Text = "Saving Data...";
+          skpStatus.Visibility = Visibility.Visible;
+          string strMsj = ValidateHelper.ValidateForm(this, "Membership Group");
+          if (strMsj == "")
+          {
+            List<MembershipType> lstAdd = lstMembershipGroup.Where(mt => !_oldLstmembershipTypes.Any(mtt => mtt.mtID == mt.mtID)).ToList();
+            int nRes = await BRMembershipGroups.SaveMembershipGroup(membershipGroup, lstAdd, (enumMode == EnumMode.edit));
+            UIHelper.ShowMessageResult("Membership Group", nRes);
+            if (nRes > 0)
+            {
+              blnClosing = true;
+              DialogResult = true;
+              Close();
+            }
+          }
+          else
+          {
+            UIHelper.ShowMessage(strMsj);
+          }
+          skpStatus.Visibility = Visibility.Collapsed;
         }
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Membership Group");
       }
     }
     #endregion
@@ -259,6 +257,7 @@ namespace IM.Administrator.Forms
           _oldLstmembershipTypes.Add(mtp);
         });
         cmbMembershipTypes.Header = "Membership Type (" + lstMembershipTypes.Count + ")";
+        skpStatus.Visibility = Visibility.Collapsed;
       }
       catch(Exception ex)
       {

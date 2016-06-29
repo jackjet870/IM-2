@@ -225,21 +225,28 @@ namespace IM.InvitConfig.Forms
     ///</history>
     private async void btnSave_Click(object sender, RoutedEventArgs e)
     {
-      StaStart("Save Invit...");
-      EnableControls(true, false, true, false, Visibility.Collapsed);
-      rtbFooter.IsReadOnly = rtbHeader.IsReadOnly = true;
-      #region Carga de Header y Footer
-      //Se almacena en una variabele los RTF´s
-      var header = UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtbHeader);
-      var footer = UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtbFooter);
-      StaEnd();
-      //Si almenos un RichTexBox se modifico entonces se hace la actualización
-      if (_rtfInvitation.itRTFFooter == footer || _rtfInvitation.itRTFHeader == header) return;
-      _rtfInvitation.itRTFFooter = footer;
-      _rtfInvitation.itRTFHeader = header;
-      await BREntities.OperationEntity(_rtfInvitation, EnumMode.edit);
-      StaEnd();
-      #endregion
+      try
+      {
+        StaStart("Save Invit...");
+        EnableControls(true, false, true, false, Visibility.Collapsed);
+        rtbFooter.IsReadOnly = rtbHeader.IsReadOnly = true;
+        #region Carga de Header y Footer
+        //Se almacena en una variabele los RTF´s
+        var header = UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtbHeader);
+        var footer = UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtbFooter);
+        StaEnd();
+        //Si almenos un RichTexBox se modifico entonces se hace la actualización
+        if (_rtfInvitation.itRTFFooter == footer || _rtfInvitation.itRTFHeader == header) return;
+        _rtfInvitation.itRTFFooter = footer;
+        _rtfInvitation.itRTFHeader = header;
+        await BREntities.OperationEntity(_rtfInvitation, EnumMode.edit);
+        StaEnd();
+        #endregion
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error);
+      }
     } 
     #endregion
 

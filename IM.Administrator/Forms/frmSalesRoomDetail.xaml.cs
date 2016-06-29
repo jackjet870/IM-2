@@ -21,6 +21,7 @@ namespace IM.Administrator.Forms
     public EnumMode enumMode;//Modo en que se abrirá la ventana
     public int nStatus = -1;
     public int nAppointment = -1;
+    private bool _isClosing = false;
     #endregion
     public frmSalesRoomDetail()
     {
@@ -43,6 +44,7 @@ namespace IM.Administrator.Forms
       {
         if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(salesRoom,oldSalesRoom))
         {
+          _isClosing = true;
           Close();
         }
         else
@@ -54,6 +56,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Sales Room", nRes);
             if(nRes==1)
             {
+              _isClosing = true;
               DialogResult = true;
               Close();
             }
@@ -66,6 +69,7 @@ namespace IM.Administrator.Forms
       }
       else
       {
+        _isClosing = true;
         nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
         nAppointment = Convert.ToInt32(cmbApp.SelectedValue);
         DialogResult = true;
@@ -85,25 +89,8 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if(enumMode!=EnumMode.preview && enumMode!=EnumMode.search)
-      {
-        if(!ObjectHelper.IsEquals(salesRoom,oldSalesRoom))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {
-            Close();
-          }
-        }
-        else
-        {
-          Close();
-        }
-      }
-      else
-      {
-        Close();
-      }
+      btnCancel.Focus();
+      Close();      
     } 
     #endregion
 
@@ -172,12 +159,40 @@ namespace IM.Administrator.Forms
       if (e.Key == Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
-    } 
+    }
     #endregion
 
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana verificando cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
+      {
+        if (enumMode != EnumMode.preview && enumMode != EnumMode.search)
+        {
+          if (!ObjectHelper.IsEquals(salesRoom, oldSalesRoom))
+          {
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result != MessageBoxResult.Yes)
+            {
+              _isClosing = true;
+            }
+          }
+        }
+      }
+    }
     #endregion
+    #endregion
+
     #region Methods
     #region LoadAreas
     /// <summary>
@@ -212,10 +227,17 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 22/04/2016
     /// </history>
-    private void LoadWarehouses()
+    private async void LoadWarehouses()
     {
-      List<Warehouse> lstWareHouses = BRWarehouses.GetWareHouses();
-      cmbsrWH.ItemsSource = lstWareHouses;
+      try
+      {
+        List<Warehouse> lstWareHouses = await BRWarehouses.GetWareHouses();
+        cmbsrWH.ItemsSource = lstWareHouses;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Sales Room");
+      }
     }
     #endregion
 
@@ -229,12 +251,19 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadCurrency()
     {
-      List<Currency> lstCurrency = await BRCurrencies.GetCurrencies();
-      if(enumMode==EnumMode.search && lstCurrency.Count>0)
+      try
       {
-        lstCurrency.Insert(0, new Currency { cuID = "", cuN = "" });
+        List<Currency> lstCurrency = await BRCurrencies.GetCurrencies();
+        if (enumMode == EnumMode.search && lstCurrency.Count > 0)
+        {
+          lstCurrency.Insert(0, new Currency { cuID = "", cuN = "" });
+        }
+        cmbsrcu.ItemsSource = lstCurrency;
       }
-      cmbsrcu.ItemsSource = lstCurrency;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Sales Room");
+      }
     }
     #endregion
 
@@ -247,11 +276,19 @@ namespace IM.Administrator.Forms
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
     private async void LoadBoss()
-    {       
-      List<PersonnelShort> lstPersonnel =await BRPersonnel.GetPersonnel(roles: "Boss");
-      cmbsrBoss.ItemsSource = lstPersonnel;
+    {
+      try
+      {
+        List<PersonnelShort> lstPersonnel = await BRPersonnel.GetPersonnel(roles: "Boss");
+        cmbsrBoss.ItemsSource = lstPersonnel;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Sales Room");
+      }
     }
     #endregion
+
     #endregion
   }
 }

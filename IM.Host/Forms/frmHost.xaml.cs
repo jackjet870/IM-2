@@ -541,13 +541,13 @@ namespace IM.Host
       _lstBanks = await BRBanks.GetBanks(1);
       #endregion
       #region Source Payments
-      _lstSourcePayments = BRSourcePayments.GetSourcePayments(1);
+      _lstSourcePayments = await BRSourcePayments.GetSourcePayments(1);
       #endregion
       #region SalesRoomShort
       _lstSalesRoom = await BRSalesRooms.GetSalesRooms(1);
       #endregion
       #region Locations
-      _lstLocations = BRLocations.GetLocations(1);
+      _lstLocations = await BRLocations.GetLocations(1);
       #endregion
       #region Charge To
       _lstChargeTo = await BRChargeTos.GetChargeTos();
@@ -568,7 +568,7 @@ namespace IM.Host
       _lstLeadSources = await BRLeadSources.GetLeadSources(1, EnumProgram.All);
       #endregion
       #region Refund Types
-      _lstRefundTypes = BRRefundTypes.GetRefundTypes(1);
+      _lstRefundTypes =await BRRefundTypes.GetRefundTypes(1);
       #endregion
     }
     #endregion

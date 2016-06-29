@@ -8,6 +8,7 @@ using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using IM.BusinessRules.BR;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -239,18 +240,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 18/05/2016
     /// </history>
-    private void LoadMarkets(Market market = null)
+    private async void LoadMarkets(Market market = null)
     {
-      int nIndex = 0;
-      List<Market> lstMarkets = BRMarkets.GetMarkets(_marketFilter, _nStatus);
-      dgrMarkets.ItemsSource = lstMarkets;
-      if (lstMarkets.Count > 0 && market != null)
+      try
       {
-        market = lstMarkets.Where(mk => mk.mkID == market.mkID).FirstOrDefault();
-        nIndex = lstMarkets.IndexOf(market);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Market> lstMarkets =await BRMarkets.GetMarkets(_marketFilter, _nStatus);
+        dgrMarkets.ItemsSource = lstMarkets;
+        if (lstMarkets.Count > 0 && market != null)
+        {
+          market = lstMarkets.Where(mk => mk.mkID == market.mkID).FirstOrDefault();
+          nIndex = lstMarkets.IndexOf(market);
+        }
+        GridHelper.SelectRow(dgrMarkets, nIndex);
+        StatusBarReg.Content = lstMarkets.Count + " Markets.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrMarkets, nIndex);
-      StatusBarReg.Content = lstMarkets.Count + " Markets.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Markets");
+      }
     }
     #endregion
 
@@ -284,7 +294,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_marketFilter.mkN))//Filtro por descripción
       {
-        if (!market.mkN.Contains(_marketFilter.mkN))
+        if (!market.mkN.Contains(_marketFilter.mkN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

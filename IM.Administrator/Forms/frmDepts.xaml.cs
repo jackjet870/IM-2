@@ -8,6 +8,7 @@ using IM.Base.Helpers;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Model.Enums;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -236,19 +237,29 @@ namespace IM.Administrator.Forms
     /// <param name="dept">Objeto a seleccionar</param>
     /// <history>
     /// [emoguel] created 03/05/2016
+    /// [emoguel] modified 09/06/2016--> se volvió async
     /// </history>
-    private void LoadDepts(Dept dept = null)
+    private async void LoadDepts(Dept dept = null)
     {
-      int nIndex = 0;
-      List<Dept> lstDepts = BRDepts.GetDepts(_nStatus, _deptFilter);
-      dgrDepts.ItemsSource = lstDepts;
-      if (lstDepts.Count > 0 && dept != null)
+      try
       {
-        dept = lstDepts.Where(de => de.deID == dept.deID).FirstOrDefault();
-        nIndex = lstDepts.IndexOf(dept);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Dept> lstDepts =await BRDepts.GetDepts(_nStatus, _deptFilter);
+        dgrDepts.ItemsSource = lstDepts;
+        if (lstDepts.Count > 0 && dept != null)
+        {
+          dept = lstDepts.Where(de => de.deID == dept.deID).FirstOrDefault();
+          nIndex = lstDepts.IndexOf(dept);
+        }
+        GridHelper.SelectRow(dgrDepts, nIndex);
+        StatusBarReg.Content = lstDepts.Count + " Depts.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrDepts, nIndex);
-      StatusBarReg.Content = lstDepts.Count + " Depts.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Depts");
+      }
     }
     #endregion
 
@@ -281,7 +292,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_deptFilter.deN))//Filtro por descripción
       {
-        if(!dept.deN.Contains(_deptFilter.deN))
+        if(!dept.deN.Contains(_deptFilter.deN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

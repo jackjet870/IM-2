@@ -18,6 +18,7 @@ namespace IM.Administrator.Forms
     public Rep rep = new Rep();//Objeto a guardar
     public Rep oldRep = new Rep();//Objeto con los datos iniciales de la ventana
     public EnumMode enumMode;//Modo en que se abrira la ventana
+    private bool _isClosing = false;
     #endregion
     public frmRepDetail()
     {
@@ -56,7 +57,7 @@ namespace IM.Administrator.Forms
       if(e.Key==Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     } 
     #endregion
@@ -72,25 +73,8 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if (enumMode != EnumMode.preview)
-      {
-        if (!ObjectHelper.IsEquals(rep, oldRep))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {
-            Close();
-          }
-        }
-        else
-        {
-          Close();
-        }
-      }
-      else
-      {
-        Close();
-      }
+      btnCancel.Focus();
+      Close();
     }
     #endregion
 
@@ -111,6 +95,7 @@ namespace IM.Administrator.Forms
         btnAccept.Focus();
         if (enumMode != EnumMode.add && ObjectHelper.IsEquals(rep, oldRep))
         {
+          _isClosing = true;
           Close();
         }
         else
@@ -122,6 +107,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Rep", nRes);
             if (nRes > 0)
             {
+              _isClosing = true;
               DialogResult = true;
               Close();
             }
@@ -135,6 +121,34 @@ namespace IM.Administrator.Forms
       catch(Exception ex)
       {
         UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Rep");
+      }
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana verificando cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if(!_isClosing)
+      {
+        if (enumMode != EnumMode.preview)
+        {
+          if (!ObjectHelper.IsEquals(rep, oldRep))
+          {
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result != MessageBoxResult.Yes)
+            {
+              e.Cancel = true;
+            }
+          }
+        }
       }
     } 
     #endregion

@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BRAsistencia\BRCollaborator.cs" />
     <Compile Include="BR\BRAgencies.cs" />
     <Compile Include="BR\BRAreas.cs" />
     <Compile Include="BR\BRAssignment.cs" />
@@ -126,7 +127,9 @@
     <Compile Include="BR\BRPeriods.cs" />
     <Compile Include="BR\BRPermissions.cs" />
     <Compile Include="BR\BRPermissionsLevels.cs" />
+    <Compile Include="BR\BRPersonnelAcces.cs" />
     <Compile Include="BR\BRPersonnelDayOff.cs" />
+    <Compile Include="BR\BRPersonnelStatus.cs" />
     <Compile Include="BR\BRPlaceTypes.cs" />
     <Compile Include="BR\BRPosts.cs" />
     <Compile Include="BR\BRPostsLog.cs" />
@@ -151,6 +154,8 @@
     <Compile Include="BR\BRScoreRulesConcepts.cs" />
     <Compile Include="BR\BRScoreRulesTypes.cs" />
     <Compile Include="BR\BRSegmentsByLeadSource.cs" />
+    <Compile Include="BR\BRSegmentsCategories.cs" />
+    <Compile Include="BR\BRSegmentsOrder.cs" />
     <Compile Include="BR\BRShowPrograms.cs" />
     <Compile Include="BR\BRShowProgramsCategories.cs" />
     <Compile Include="BR\BRSourcePayments.cs" />
@@ -181,6 +186,7 @@
     <Compile Include="BR\BRMarkets.cs" />
     <Compile Include="BR\BRSalesRooms.cs" />
     <Compile Include="BR\BRWeekDays.cs" />
+    <Compile Include="BR\BRWholesalers.cs" />
     <Compile Include="BR\BRZones.cs" />
     <Compile Include="BR\BRInvitsGifts.cs" />
     <Compile Include="BR\BRFoliosInvitationsOuthousePR.cs" />

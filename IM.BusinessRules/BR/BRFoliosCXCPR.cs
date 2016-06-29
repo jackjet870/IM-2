@@ -4,6 +4,7 @@ using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
 using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,32 +19,36 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 05/05/2016
     /// </history>
-    public static List<PersonnelShort> GetPRByFoliosCXC(PersonnelShort personnelShort = null)
+    public async static Task<List<PersonnelShort>> GetPRByFoliosCXC(PersonnelShort personnelShort = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var query = from pe in dbContext.Personnels
-                    join pr in dbContext.FoliosCxCPR
-                    on pe.peID equals pr.fcppe
-                    group pe by new { pe.peID, pe.peN } into p
-                    select p;
-
-        if (personnelShort != null)
+      List<PersonnelShort> lstPersonnelShort = await Task.Run(() =>
         {
-          if (!string.IsNullOrWhiteSpace(personnelShort.peID))//Filtro por ID
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
           {
-            query = query.Where(pe => pe.Key.peID == personnelShort.peID);
-          }
+            var query = from pe in dbContext.Personnels
+                        join pr in dbContext.FoliosCxCPR
+                        on pe.peID equals pr.fcppe
+                        group pe by new { pe.peID, pe.peN } into p
+                        select p;
 
-          if (!string.IsNullOrWhiteSpace(personnelShort.peN))//Filtro por descripción
-          {
-            query = query.Where(pe => pe.Key.peN.Contains(personnelShort.peN));
-          }
-        }
+            if (personnelShort != null)
+            {
+              if (!string.IsNullOrWhiteSpace(personnelShort.peID))//Filtro por ID
+            {
+                query = query.Where(pe => pe.Key.peID == personnelShort.peID);
+              }
 
-        List<PersonnelShort> lstPersonnelShorts = query.ToList().Select(pe => new PersonnelShort { peID = pe.Key.peID, peN = pe.Key.peN }).ToList();
-        return lstPersonnelShorts.OrderBy(pe => pe.peN).ToList();
-      }
+              if (!string.IsNullOrWhiteSpace(personnelShort.peN))//Filtro por descripción
+            {
+                query = query.Where(pe => pe.Key.peN.Contains(personnelShort.peN));
+              }
+            }
+
+            List<PersonnelShort> lstPersonnelShorts = query.ToList().Select(pe => new PersonnelShort { peID = pe.Key.peID, peN = pe.Key.peN }).ToList();
+            return lstPersonnelShorts.OrderBy(pe => pe.peN).ToList();
+          }
+        });
+      return lstPersonnelShort;
     }
     #endregion
 
@@ -55,13 +60,18 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de FolioCxCPR</returns>
     /// <history>
     /// [emoguel] created 05/05/2016
+    /// [emoguel] modified 09/06/2016 --> se volvió async
     /// </history>
-    public static List<FolioCxCPR> GetFoliosCXCPR(string peID)
+    public async static Task<List<FolioCxCPR>> GetFoliosCXCPR(string peID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        return dbContext.FoliosCxCPR.Where(fc => fc.fcppe == peID).ToList();
-      }
+      List<FolioCxCPR> lstFolios = await Task.Run(() =>
+        {
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          {
+            return dbContext.FoliosCxCPR.Where(fc => fc.fcppe == peID).ToList();
+          }
+        });
+      return lstFolios;
     }
     #endregion
 
@@ -116,38 +126,43 @@ namespace IM.BusinessRules.BR
     /// <returns>0. No se guardó | >0. Se guardó correctamente</returns>
     /// <history>
     /// [emoguel] created 07/05/2016
+    /// [emoguel] modified 09/06/2016 -->Se volvió async
     /// </history>
-    public static int SaveFoliosCxCByPR(PersonnelShort personnel,List<FolioCxCPR> lstFoliosCxCPR,List<FolioCxCCancellation> lstFoliosCancell)
+    public async static Task<int> SaveFoliosCxCByPR(PersonnelShort personnel,List<FolioCxCPR> lstFoliosCxCPR,List<FolioCxCCancellation> lstFoliosCancell)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-          using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+      int nRes = await Task.Run(() =>
+        {
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
           {
-          try
-          {
-            lstFoliosCxCPR.ForEach(fcp =>
+            using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
             {
-              fcp.fcppe = personnel.peID;
-              dbContext.Entry(fcp).State = (fcp.fcpID > 0) ? EntityState.Modified : EntityState.Added;
-            });
+              try
+              {
+                lstFoliosCxCPR.ForEach(fcp =>
+                {
+                  fcp.fcppe = personnel.peID;
+                  dbContext.Entry(fcp).State = (fcp.fcpID > 0) ? EntityState.Modified : EntityState.Added;
+                });
 
-            lstFoliosCancell.ForEach(fcc =>
-            {
-              fcc.fccpe = personnel.peID;
-              dbContext.Entry(fcc).State = (fcc.fccID > 0) ? EntityState.Modified : EntityState.Added;
-            });
+                lstFoliosCancell.ForEach(fcc =>
+                {
+                  fcc.fccpe = personnel.peID;
+                  dbContext.Entry(fcc).State = (fcc.fccID > 0) ? EntityState.Modified : EntityState.Added;
+                });
 
-            int nRes = dbContext.SaveChanges();
-            transacction.Commit();
-            return nRes;
+                int nSave = dbContext.SaveChanges();
+                transacction.Commit();
+                return nSave;
+              }
+              catch
+              {
+                transacction.Rollback();
+                return 0;
+              }
+            }
           }
-          catch
-          {
-            transacction.Rollback();
-            return 0;
-          }
-        }
-      }
+        });
+      return nRes;
     }
     #endregion
   }

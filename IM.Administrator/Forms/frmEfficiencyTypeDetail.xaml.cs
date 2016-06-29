@@ -17,6 +17,7 @@ namespace IM.Administrator.Forms
     public EfficiencyType efficiencyType = new EfficiencyType();//objeto a guardar|actualizar
     public EfficiencyType oldEffType = new EfficiencyType();//objeto con los datos inciales
     public EnumMode enumMode;//Modo en que se abre la ventana;
+    private bool _isClosing = false;
 
     public frmEfficiencyTypeDetail()
     {
@@ -82,6 +83,7 @@ namespace IM.Administrator.Forms
         btnAccept.Focus();
         if (ObjectHelper.IsEquals(efficiencyType, oldEffType) && enumMode != EnumMode.add)
         {
+          _isClosing = true;
           Close();
         }
         else
@@ -94,6 +96,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Efficiency Type", nRes);
             if (nRes > 0)
             {
+              _isClosing = true;
               DialogResult = true;
               Close();
             }
@@ -122,6 +125,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       if (enumMode!=EnumMode.preview)
       {
         if (!ObjectHelper.IsEquals(efficiencyType, oldEffType))
@@ -129,21 +133,52 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!_isClosing) { _isClosing = true; Close(); }
+          }
+          else
+          {
+            _isClosing = false;
           }
         }
         else
         {
-          Close();
+          if (!_isClosing) { _isClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!_isClosing) { _isClosing = true; Close(); }
       }
     }
     #endregion
+
+    #region closing
+    /// <summary>
+    /// Cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 09/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
+      {
+        _isClosing = true;
+        btnCancel_Click(null, null);
+        if (!_isClosing)
+        {
+          e.Cancel = true;
+        }
+        else
+        {
+          _isClosing = false;
+        }
+      }
+    }
     #endregion
-    
+
+    #endregion
   }
 }

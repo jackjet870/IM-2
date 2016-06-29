@@ -95,22 +95,7 @@ namespace IM.Administrator.Forms
           }
       }
     }
-    #endregion
-    
-    #region Refresh
-    /// <summary>
-    /// Recarga la lista
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 10/05/2016
-    /// </history>
-    private void btnRef_Click(object sender, RoutedEventArgs e)
-    {
-
-    }
-    #endregion
+    #endregion   
 
     #region Save
     /// <summary>
@@ -284,10 +269,17 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 10/05/2016
     /// </history>
-    private void LoadPlacesTypes()
+    private async void LoadPlacesTypes()
     {
-      List<PlaceType> lstPlacesTypes = BRPlaceTypes.GetPlaceTypes(1);
-      cmbPlace.ItemsSource = lstPlacesTypes;
+      try
+      {
+        List<PlaceType> lstPlacesTypes =await BRPlaceTypes.GetPlaceTypes(1);
+        cmbPlace.ItemsSource = lstPlacesTypes;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Goals");
+      }
     }
     #endregion
 
@@ -312,10 +304,17 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 10/05/2016
     /// </history>
-    private void LoadLocations()
+    private async void LoadLocations()
     {
-      List<Location> lstLocations = BRLocations.GetLocations(1);
-      cmbLoc.ItemsSource = lstLocations;
+      try
+      {
+        List<Location> lstLocations = await BRLocations.GetLocations(1);
+        cmbLoc.ItemsSource = lstLocations;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Goals");
+      }
     }
     #endregion
 
@@ -352,8 +351,15 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadSalesRooms()
     {
-      List<SalesRoomShort> lstSalesRoom =await BRSalesRooms.GetSalesRooms(1);
-      cmbLoc.ItemsSource = lstSalesRoom;
+      try
+      {
+        List<SalesRoomShort> lstSalesRoom = await BRSalesRooms.GetSalesRooms(1);
+        cmbLoc.ItemsSource = lstSalesRoom;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Goals");
+      }
     }
     #endregion
 
@@ -364,10 +370,17 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 11/05/2016
     /// </history>
-    private void LoadWarehouses()
+    private async void LoadWarehouses()
     {
-      List<Warehouse> lstWarehouses = BRWarehouses.GetWareHouses(1);
-      cmbLoc.ItemsSource = lstWarehouses;
+      try
+      {
+        List<Warehouse> lstWarehouses =await BRWarehouses.GetWareHouses(1);
+        cmbLoc.ItemsSource = lstWarehouses;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Goals");
+      }
     } 
     #endregion
 
@@ -380,63 +393,73 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 11/05/2016
     /// </history>
-    private void LoadGoals()
+    private async void LoadGoals()
     {
-      EnumPeriod period = ((EnumPeriod)cmbPeriod.SelectedValue);
-      _goal.gopy = cmbPlace.SelectedValue.ToString();
-      _goal.gopd = (period == EnumPeriod.Monthly) ? "M" : "W";
-      _goal.goDateFrom = Convert.ToDateTime(dtpFrom.SelectedDate);
-      _goal.goDateTo = Convert.ToDateTime(dtpTo.SelectedDate);
-
-      #region DataGridCombobox
-      switch (_goal.gopy)
+      try
       {
-        case "LS":
-          {
-            cmbLoc.SelectedValuePath = "lsID";
-            cmbLoc.DisplayMemberPath = "lsN";
-            LoadLeadSources();
-            break;
-          }
-        case "LO":
-          {
-            cmbLoc.SelectedValuePath = "loID";
-            cmbLoc.DisplayMemberPath = "loN";
-            LoadLocations();
-            break;
-          }
+        status.Visibility = Visibility.Visible;
+        EnumPeriod period = ((EnumPeriod)cmbPeriod.SelectedValue);
+        _goal.gopy = cmbPlace.SelectedValue.ToString();
+        _goal.gopd = (period == EnumPeriod.Monthly) ? "M" : "W";
+        _goal.goDateFrom = Convert.ToDateTime(dtpFrom.SelectedDate);
+        _goal.goDateTo = Convert.ToDateTime(dtpTo.SelectedDate);
 
-        case "SR":
-          {
-            cmbLoc.SelectedValuePath = "srID";
-            cmbLoc.DisplayMemberPath = "srN";
-            LoadSalesRooms();
-            break;
-          }
-        case "WH":
-          {
-            cmbLoc.SelectedValuePath = "whID";
-            cmbLoc.DisplayMemberPath = "whN";
-            LoadWarehouses();
-            break;
-          }
+        #region DataGridCombobox
+        switch (_goal.gopy)
+        {
+          case "LS":
+            {
+              cmbLoc.SelectedValuePath = "lsID";
+              cmbLoc.DisplayMemberPath = "lsN";
+              LoadLeadSources();
+              break;
+            }
+          case "LO":
+            {
+              cmbLoc.SelectedValuePath = "loID";
+              cmbLoc.DisplayMemberPath = "loN";
+              LoadLocations();
+              break;
+            }
+
+          case "SR":
+            {
+              cmbLoc.SelectedValuePath = "srID";
+              cmbLoc.DisplayMemberPath = "srN";
+              LoadSalesRooms();
+              break;
+            }
+          case "WH":
+            {
+              cmbLoc.SelectedValuePath = "whID";
+              cmbLoc.DisplayMemberPath = "whN";
+              LoadWarehouses();
+              break;
+            }
+        }
+        #endregion
+
+        List<Goal> lstGoal =await BRGoals.GetGoals(_goal);
+        _lstAllGoals = new List<Goal>();
+        lstGoal.ForEach(go =>
+        {
+          Goal goal = new Goal();
+          ObjectHelper.CopyProperties(goal, go);
+          _lstAllGoals.Add(goal);
+        });
+        if (lstGoal.Count == 0)
+        {
+          LoadGoalsDefault(_goal);
+        }
+        else
+        {
+          dgrGoals.ItemsSource = lstGoal;
+        }
+        status.Visibility = Visibility.Collapsed;
       }
-      #endregion      
-
-      List<Goal> lstGoal = BRGoals.GetGoals(_goal);
-      _lstAllGoals = new List<Goal>();
-      lstGoal.ForEach(go => {
-        Goal goal = new Goal();
-        ObjectHelper.CopyProperties(goal, go);
-        _lstAllGoals.Add(goal);
-      });      
-      if (lstGoal.Count == 0)
+      catch(Exception ex)
       {
-        LoadGoalsDefault(_goal);
-      }
-      else
-      {
-        dgrGoals.ItemsSource = lstGoal;        
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Goals");
       }
     }
 

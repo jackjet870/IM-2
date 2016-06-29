@@ -48,33 +48,36 @@ namespace IM.BusinessRules.BR
     /// [emoguel]created 09/03/2016
     /// [emoguel] modified 17/03/2016--->Se agregó la validacion null del objeto y se cambió el filtro por descripcion a "contains"
     /// </history>
-    public static List<Market> GetMarkets(Market market = null, int nStatus = -1)
+    public async static Task<List<Market>> GetMarkets(Market market = null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from mkt in dbContext.Markets
-                    select mkt;
-
-        if (nStatus != -1)//Filtro por status
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(mkt => mkt.mkA == blnStatus);
-        }
+          var query = from mkt in dbContext.Markets
+                      select mkt;
 
-        if (market != null)//Valida si se tiene un objeto
-        {
-          if (!string.IsNullOrWhiteSpace(market.mkID))//Filtro por ID
+          if (nStatus != -1)//Filtro por status
           {
-            query = query.Where(mkt => mkt.mkID == market.mkID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(mkt => mkt.mkA == blnStatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(market.mkN))//Filtro por Nombre(Descripcion)
+          if (market != null)//Valida si se tiene un objeto
           {
-            query = query.Where(mkt => mkt.mkN.Contains(market.mkN));
+            if (!string.IsNullOrWhiteSpace(market.mkID))//Filtro por ID
+            {
+              query = query.Where(mkt => mkt.mkID == market.mkID);
+            }
+
+            if (!string.IsNullOrWhiteSpace(market.mkN))//Filtro por Nombre(Descripcion)
+            {
+              query = query.Where(mkt => mkt.mkN.Contains(market.mkN));
+            }
           }
+          return query.ToList();
         }
-        return query.ToList();
-      }
+      });
     }
 
     #endregion GetMarkets

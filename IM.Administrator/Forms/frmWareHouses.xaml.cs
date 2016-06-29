@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -237,18 +238,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 28/04/2016
     /// </history>
-    private void LoadWarehouses(Warehouse warehouse = null)
+    private async void LoadWarehouses(Warehouse warehouse = null)
     {
-      int nIndex = 0;
-      List<Warehouse> lstWareHouse = BRWarehouses.GetWareHouses(_nStatus, _warehouseFilter);
-      dgrWarehouses.ItemsSource = lstWareHouse;
-      if (lstWareHouse.Count > 0 && warehouse != null)
+      try
       {
-        warehouse = lstWareHouse.Where(wh => wh.whID == warehouse.whID).FirstOrDefault();
-        nIndex = lstWareHouse.IndexOf(warehouse);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Warehouse> lstWareHouse = await BRWarehouses.GetWareHouses(_nStatus, _warehouseFilter);
+        dgrWarehouses.ItemsSource = lstWareHouse;
+        if (lstWareHouse.Count > 0 && warehouse != null)
+        {
+          warehouse = lstWareHouse.Where(wh => wh.whID == warehouse.whID).FirstOrDefault();
+          nIndex = lstWareHouse.IndexOf(warehouse);
+        }
+        GridHelper.SelectRow(dgrWarehouses, nIndex);
+        StatusBarReg.Content = lstWareHouse.Count + " Warehouses.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrWarehouses, nIndex);
-      StatusBarReg.Content = lstWareHouse.Count + " Warehouses.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Warehouses");
+      }
     }
     #endregion
 
@@ -281,7 +291,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_warehouseFilter.whN))//Filtro por descripción
       {
-        if (!warehouse.whN.Contains(_warehouseFilter.whN))
+        if (!warehouse.whN.Contains(_warehouseFilter.whN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

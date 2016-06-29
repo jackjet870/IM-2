@@ -41,7 +41,7 @@ namespace IM.Administrator
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Administrator");
-      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Normal, validateRole:true, role:EnumRole.Manager);
+      frmLogin frmLogin = new frmLogin(frmSplash, EnumLoginType.Normal, validateRole:true, role:EnumRole.Manager,changePassword:true);
       frmSplash.Show();
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
@@ -63,7 +63,6 @@ namespace IM.Administrator
       }
     }
     #endregion
-
     #region App_UnhandledException
     /// <summary>
     /// Despliega los mensajes de error de la aplicacion
@@ -98,6 +97,15 @@ namespace IM.Administrator
     }
     #endregion
 
+    #region dataGrid_MouseLeftButtonUp
+    /// <summary>
+    /// Cambia el cmapo de busqueda del grid
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [erosado] created 21/06/2016
+    /// </history>
     private void dataGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
       DataGrid dgr = sender as DataGrid;
@@ -105,7 +113,8 @@ namespace IM.Administrator
       {
         dgr.Resources["SearchField"] = dgr.CurrentColumn.SortMemberPath;
       }
-    }
+    } 
+    #endregion
 
     #endregion
   }

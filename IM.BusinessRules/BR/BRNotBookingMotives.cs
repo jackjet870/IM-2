@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,36 +19,39 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 05/04/2016
     /// </history>
-    public static List<NotBookingMotive> GetNotBookingMotives(int nStatus = -1, NotBookingMotive notBookingMotive = null)
+    public async static Task<List<NotBookingMotive>> GetNotBookingMotives(int nStatus = -1, NotBookingMotive notBookingMotive = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from nb in dbContext.NotBookingMotives
-                    select nb;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(nb => nb.nbA == blnStatus);
-        }
+          var query = from nb in dbContext.NotBookingMotives
+                      select nb;
 
-        #region Filtros adicionales
-        if (notBookingMotive != null)
-        {
-          if (notBookingMotive.nbID > 0)//Filtro por ID
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(nb => nb.nbID == notBookingMotive.nbID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(nb => nb.nbA == blnStatus);
           }
 
-          if (!string.IsNullOrEmpty(notBookingMotive.nbN))//Filtro por Descripción
+          #region Filtros adicionales
+          if (notBookingMotive != null)
           {
-            query = query.Where(nb => nb.nbN.Contains(notBookingMotive.nbN));
-          }
-        }
-        #endregion
+            if (notBookingMotive.nbID > 0)//Filtro por ID
+            {
+              query = query.Where(nb => nb.nbID == notBookingMotive.nbID);
+            }
 
-        return query.OrderBy(nb => nb.nbN).ToList();
-      }
+            if (!string.IsNullOrEmpty(notBookingMotive.nbN))//Filtro por Descripción
+            {
+              query = query.Where(nb => nb.nbN.Contains(notBookingMotive.nbN));
+            }
+          }
+          #endregion
+
+          return query.OrderBy(nb => nb.nbN).ToList();
+        }
+      });
     }
     #endregion
   }

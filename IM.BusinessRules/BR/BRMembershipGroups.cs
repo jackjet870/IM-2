@@ -70,52 +70,56 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 19/05/2016
     /// </history>
-    public static int SaveMembershipGroup(MembershipGroup membershipGroup, List<MembershipType> lstAdd, bool blnUpdate)
+    public async static Task<int> SaveMembershipGroup(MembershipGroup membershipGroup, List<MembershipType> lstAdd, bool blnUpdate)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        using (var transaccion = dbContext.Database.BeginTransaction(IsolationLevel.Serializable))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          try
+          using (var transaccion = dbContext.Database.BeginTransaction(IsolationLevel.Serializable))
           {
-            #region Update
-            if (blnUpdate)
+            try
             {
-              dbContext.Entry(membershipGroup).State = System.Data.Entity.EntityState.Modified;
-            }
-            #endregion
-            #region Add
-            else
-            {
-              if (dbContext.MembershipsGroups.Where(mg => mg.mgID == membershipGroup.mgID).FirstOrDefault() != null)
+              #region Update
+              if (blnUpdate)
               {
-                return -1;
+                dbContext.Entry(membershipGroup).State = System.Data.Entity.EntityState.Modified;
               }
+              #endregion
+              #region Add
               else
               {
-                dbContext.MembershipsGroups.Add(membershipGroup);
+                if (dbContext.MembershipsGroups.Where(mg => mg.mgID == membershipGroup.mgID).FirstOrDefault() != null)
+                {
+                  return -1;
+                }
+                else
+                {
+                  dbContext.MembershipsGroups.Add(membershipGroup);
+                }
               }
+              #endregion
+
+              #region membership a asignar
+              dbContext.MembershipTypes.AsEnumerable().Where(mt => lstAdd.Any(mtt => mtt.mtID == mt.mtID)).ToList().ForEach(mt =>
+              {
+                mt.mtGroup = membershipGroup.mgID;
+              });
+              #endregion
+
+              int nRes = 0;
+              nRes = dbContext.SaveChanges();
+              transaccion.Commit();
+              return nRes;
             }
-            #endregion
-
-            #region membership a asignar
-            dbContext.MembershipTypes.AsEnumerable().Where(mt => lstAdd.Any(mtt => mtt.mtID == mt.mtID)).ToList().ForEach(mt=>{
-              mt.mtGroup = membershipGroup.mgID;
-            });
-            #endregion
-
-            int nRes = 0;
-            nRes = dbContext.SaveChanges();
-            transaccion.Commit();
-            return nRes;
-          }
-          catch
-          {
-            transaccion.Rollback();
-            return 0;
+            catch
+            {
+              transaccion.Rollback();
+              return 0;
+            }
           }
         }
-      }
+      });
     } 
     #endregion
   }

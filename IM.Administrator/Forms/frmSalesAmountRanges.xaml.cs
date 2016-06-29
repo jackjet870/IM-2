@@ -8,6 +8,7 @@ using IM.Model;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -236,20 +237,30 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 20/04/2016
     /// </history>
-    private void LoadSaleAmountRange(SalesAmountRange salesAmountRange = null)
+    private async void LoadSaleAmountRange(SalesAmountRange salesAmountRange = null)
     {
-      int nIndex = 0;
-      List<SalesAmountRange> lstSalesAmountRange = BRSaleAmountRanges.GetSalesAmountRanges(_nStatus, _salesAmountRangeFilter);
-      dgrSalesAmountRanges.ItemsSource = lstSalesAmountRange;
-      if (lstSalesAmountRange.Count > 0 && salesAmountRange != null)
+      try
       {
-        salesAmountRange = lstSalesAmountRange.Where(sn => sn.snID == salesAmountRange.snID).FirstOrDefault();
-        nIndex = lstSalesAmountRange.IndexOf(salesAmountRange);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<SalesAmountRange> lstSalesAmountRange = await BRSaleAmountRanges.GetSalesAmountRanges(_nStatus, _salesAmountRangeFilter);
+        dgrSalesAmountRanges.ItemsSource = lstSalesAmountRange;
+        if (lstSalesAmountRange.Count > 0 && salesAmountRange != null)
+        {
+          salesAmountRange = lstSalesAmountRange.Where(sn => sn.snID == salesAmountRange.snID).FirstOrDefault();
+          nIndex = lstSalesAmountRange.IndexOf(salesAmountRange);
+        }
+        GridHelper.SelectRow(dgrSalesAmountRanges, nIndex);
+        StatusBarReg.Content = lstSalesAmountRange.Count + " Sales Amount Ranges.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrSalesAmountRanges, nIndex);
-      StatusBarReg.Content = lstSalesAmountRange.Count + " Sales Amount Ranges.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Sales Mount Ranges");
+      }
     }
     #endregion
+
     #region ValidateFilter
     /// <summary>
     /// Valida que un objeto SalesAMountRange cumpla con los filtros actuales
@@ -271,7 +282,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_salesAmountRangeFilter.snN))//Filtro por Descripción
       {
-        if(!salesAmountRange.snN.Contains(_salesAmountRangeFilter.snN))
+        if(!salesAmountRange.snN.Contains(_salesAmountRangeFilter.snN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

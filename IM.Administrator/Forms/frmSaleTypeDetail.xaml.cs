@@ -20,6 +20,7 @@ namespace IM.Administrator.Forms
     public SaleType oldSaleType = new SaleType();//Objeto con los datos iniciales 
     public EnumMode enumMode;//Modo de la ventana
     public int nStatus = -1;//Estatus para el modo search
+    private bool _isClosing = false;
     #endregion
     public frmSaleTypeDetail()
     {
@@ -70,7 +71,7 @@ namespace IM.Administrator.Forms
       if (e.Key == Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     }
     #endregion
@@ -94,6 +95,7 @@ namespace IM.Administrator.Forms
         {
           if (enumMode != EnumMode.add && ObjectHelper.IsEquals(saleType, oldSaleType))
           {
+            _isClosing = true;
             Close();
           }
           else
@@ -105,6 +107,7 @@ namespace IM.Administrator.Forms
               UIHelper.ShowMessageResult("Sale Type", nRes);
               if (nRes > 0)
               {
+                _isClosing = true;
                 DialogResult = true;
                 Close();
               }
@@ -117,6 +120,7 @@ namespace IM.Administrator.Forms
         }
         else
         {
+          _isClosing = true;
           nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
           DialogResult = true;
           Close();
@@ -141,24 +145,35 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if (enumMode != EnumMode.search)
+      btnCancel.Focus();
+      Close();
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana verificando cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
       {
-        if (!ObjectHelper.IsEquals(saleType, oldSaleType))
+        if (enumMode != EnumMode.search)
         {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
+          if (!ObjectHelper.IsEquals(saleType, oldSaleType))
           {
-            Close();
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result != MessageBoxResult.Yes)
+            {
+              e.Cancel = true;
+            }
           }
         }
-        else
-        {
-          Close();
-        }
-      }
-      else
-      {
-        Close();
       }
     }
     #endregion
@@ -172,17 +187,23 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 18/04/2016
     /// </history>
-    private void LoadSaleTypeCategories()
+    private async void LoadSaleTypeCategories()
     {
-      List<SaleTypeCategory> lstSaleTypeCategories = BRSaleTypesCategories.GetSaleCategories(1);
-      if (enumMode == EnumMode.search && lstSaleTypeCategories.Count > 0)
+      try
       {
-        lstSaleTypeCategories.Insert(0, new SaleTypeCategory { stcID = "", stcN = "" });
+        List<SaleTypeCategory> lstSaleTypeCategories = await BRSaleTypesCategories.GetSaleCategories(1);
+        if (enumMode == EnumMode.search && lstSaleTypeCategories.Count > 0)
+        {
+          lstSaleTypeCategories.Insert(0, new SaleTypeCategory { stcID = "", stcN = "" });
+        }
+        cmbststc.ItemsSource = lstSaleTypeCategories;
       }
-      cmbststc.ItemsSource = lstSaleTypeCategories;
-    } 
-    #endregion  
-    
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "");
+      }
+    }
+    #endregion
     #endregion
   }
 }

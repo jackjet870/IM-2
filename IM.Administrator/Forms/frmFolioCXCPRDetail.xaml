@@ -34,6 +34,10 @@
 
         <!--#region  Botones-->
         <Grid DockPanel.Dock="Bottom" Background="Transparent" Height="40">
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Name="skpStatus" Visibility="Visible" Margin="10,4,96,5" HorizontalAlignment="Left">
+                <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Base;component/Images/time.ico" Width="16" Height="16"/>
+                <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
+            </StackPanel>
             <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" HorizontalAlignment="Right" Visibility="Hidden" Content="_Accept" Margin="0,4,84,4"/>
             <Button Name="btnCancel" Width="60" Height="30" Click="btnCancel_Click" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
         </Grid>
@@ -53,7 +57,7 @@
                           CanUserAddRows="True" CanUserDeleteRows="False" CanUserResizeColumns="False" CanUserResizeRows="False">
                     <DataGrid.Columns>
                         <!--#region  From-->
-                        <DataGridTemplateColumn Header="From" Width="50*">
+                        <DataGridTemplateColumn Header="From" Width="50*" SortMemberPath="fcpFrom">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding fcpFrom}"/>
@@ -67,7 +71,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region To-->
-                        <DataGridTemplateColumn Header="To" Width="50*">
+                        <DataGridTemplateColumn Header="To" Width="50*" SortMemberPath="fcpTo">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding fcpTo}"/>
@@ -97,7 +101,7 @@
                           VerticalAlignment="Stretch" CanUserAddRows="True" CanUserDeleteRows="False" CanUserResizeColumns="False" CanUserResizeRows="False">
                     <DataGrid.Columns>
                         <!--#region From-->
-                        <DataGridTemplateColumn Header="From" Width="50*">
+                        <DataGridTemplateColumn Header="From" Width="50*" SortMemberPath="fccFrom">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding fccFrom}"/>
@@ -111,7 +115,7 @@
                         </DataGridTemplateColumn>
                         <!--#endregion-->
                         <!--#region To-->
-                        <DataGridTemplateColumn Header="From" Width="50*">
+                        <DataGridTemplateColumn Header="From" Width="50*" SortMemberPath="fccTo">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding fccTo}"/>

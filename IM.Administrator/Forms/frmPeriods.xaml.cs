@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -233,18 +234,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 07/06/2016
     /// </history>
-    private void LoadPeriods(Period period = null)
+    private async void LoadPeriods(Period period = null)
     {
-      int nIndex = 0;
-      List<Period> lstPeriods = BRPeriods.GetPeriods(_nStatus, _periodFilter);
-      dgrPeriods.ItemsSource = lstPeriods;
-      if (lstPeriods.Count > 0 && period != null)
+      try
       {
-        period = lstPeriods.Where(pd => pd.pdID == period.pdID).FirstOrDefault();
-        nIndex = lstPeriods.IndexOf(period);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Period> lstPeriods =await BRPeriods.GetPeriods(_nStatus, _periodFilter);
+        dgrPeriods.ItemsSource = lstPeriods;
+        if (lstPeriods.Count > 0 && period != null)
+        {
+          period = lstPeriods.Where(pd => pd.pdID == period.pdID).FirstOrDefault();
+          nIndex = lstPeriods.IndexOf(period);
+        }
+        GridHelper.SelectRow(dgrPeriods, nIndex);
+        StatusBarReg.Content = lstPeriods.Count + " Periods.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrPeriods, nIndex);
-      StatusBarReg.Content = lstPeriods.Count + " Periods.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Periods");
+      }
     }
     #endregion
 
@@ -277,7 +287,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_periodFilter.pdN))//Filtro por Descripcion
       {
-        if(!period.pdN.Contains(_periodFilter.pdN))
+        if(!period.pdN.Contains(_periodFilter.pdN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

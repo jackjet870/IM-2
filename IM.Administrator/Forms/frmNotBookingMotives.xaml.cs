@@ -8,6 +8,7 @@ using IM.Base.Helpers;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -241,19 +242,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 05/04/2016
     /// </history>
-    private void LoadNotBookingMotives(NotBookingMotive notBookingMotive = null)
+    private async void LoadNotBookingMotives(NotBookingMotive notBookingMotive = null)
     {
-      int nIndex = 0;
-      List<NotBookingMotive> lstNotBokMotives = BRNotBookingMotives.GetNotBookingMotives(_nStatus, _notBookingMotFilter);
-      dgrNotBokMotives.ItemsSource = lstNotBokMotives;
-      if (lstNotBokMotives.Count > 0 && notBookingMotive != null)
+      try
       {
-        notBookingMotive = lstNotBokMotives.Where(nb => nb.nbID == notBookingMotive.nbID).FirstOrDefault();
-        nIndex = lstNotBokMotives.IndexOf(notBookingMotive);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<NotBookingMotive> lstNotBokMotives =await BRNotBookingMotives.GetNotBookingMotives(_nStatus, _notBookingMotFilter);
+        dgrNotBokMotives.ItemsSource = lstNotBokMotives;
+        if (lstNotBokMotives.Count > 0 && notBookingMotive != null)
+        {
+          notBookingMotive = lstNotBokMotives.Where(nb => nb.nbID == notBookingMotive.nbID).FirstOrDefault();
+          nIndex = lstNotBokMotives.IndexOf(notBookingMotive);
+        }
+        GridHelper.SelectRow(dgrNotBokMotives, nIndex);
+        StatusBarReg.Content = lstNotBokMotives.Count + " Not Booking Motives.";
+        status.Visibility = Visibility.Collapsed;
       }
-
-      GridHelper.SelectRow(dgrNotBokMotives, nIndex);
-      StatusBarReg.Content = lstNotBokMotives.Count + " Not Booking Motives.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Not Booking Motives");
+      }
     }
     #endregion
 
@@ -286,7 +295,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_notBookingMotFilter.nbN))//Filtro por descripcion
       {
-        if(!notBookingMotive.nbN.Contains(_notBookingMotFilter.nbN))
+        if(!notBookingMotive.nbN.Contains(_notBookingMotFilter.nbN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

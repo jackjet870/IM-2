@@ -18,6 +18,7 @@ namespace IM.Administrator.Forms
     public GiftCategory giftCategory = new GiftCategory();//Objeto a agregar|Modificar
     public GiftCategory oldGiftCategory = new GiftCategory();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo en que se abre la ventana
+    bool _isClosing = false;
     #endregion
     public frmGiftCategoryDetail()
     {
@@ -38,9 +39,7 @@ namespace IM.Administrator.Forms
     { 
       if(e.Key==Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null, null);
-
       }
     }
     #endregion
@@ -80,6 +79,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       if(enumMode!=EnumMode.preview)
       {
         if (!ObjectHelper.IsEquals(giftCategory, oldGiftCategory))
@@ -87,17 +87,21 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!_isClosing) { _isClosing = true; Close(); }
+          }
+          else
+          {
+            _isClosing = false;
           }
         }
         else
         {
-          Close();
+          if (!_isClosing) { _isClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!_isClosing) { _isClosing = true; Close(); }
       }
     }
     #endregion
@@ -119,7 +123,8 @@ namespace IM.Administrator.Forms
         btnAccept.Focus();
         if (enumMode != EnumMode.add && ObjectHelper.IsEquals(giftCategory, oldGiftCategory))
         {
-          Close();
+          _isClosing = true;
+          Close(); 
         }
         else
         {
@@ -130,6 +135,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Gift Category", nRes);
             if (nRes > 0)
             {
+              _isClosing = true;
               DialogResult = true;
               Close();
             }
@@ -145,10 +151,35 @@ namespace IM.Administrator.Forms
         UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Gift Category");
       }
     }
-    #endregion
 
     #endregion
-              
 
+    #region Window_Closing
+    /// <summary>
+    /// Verifica que se cierre la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 27/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
+      {
+        _isClosing = true;
+        btnCancel_Click(null, null);
+        if (!_isClosing)
+        {
+          e.Cancel = true;
+        }
+        else
+        {
+          _isClosing = false;
+        }
+      }
+    }
+    #endregion
+    #endregion
   }
 }

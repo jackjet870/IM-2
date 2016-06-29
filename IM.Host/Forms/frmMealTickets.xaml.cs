@@ -74,7 +74,7 @@ namespace IM.Host.Forms
       _dsAgency.Source = await BRAgencies.GetAgencies(1);
 
       // Obtenemos los tipos de cupones de comida.
-      _dsMealTicketType.Source = BRMealTicketTypes.GetMealTicketType();
+      _dsMealTicketType.Source = await BRMealTicketTypes.GetMealTicketType();
 
       // Verificamos si es usuario estandar o de solo lectura!
       switch (modeOpen)

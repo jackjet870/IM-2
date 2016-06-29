@@ -21,7 +21,7 @@ namespace IM.Administrator.Forms
     public Hotel oldHotel = new Hotel();//Objeto con los datos iniciales
     public int nStatus = -1;//Para cuando se abra en modo search
     public EnumMode enumMode;//Modo en que se abrirá la ventana
-
+    private bool _isClosing = false;
     #endregion
     public frmHotelDetail()
     {
@@ -42,7 +42,6 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null, null);
       }
     }
@@ -108,6 +107,7 @@ namespace IM.Administrator.Forms
         {
           if (ObjectHelper.IsEquals(hotel, oldHotel) && enumMode != EnumMode.add)//si no modifico nada
           {
+            _isClosing = true;
             Close();
           }
           else//si hubo cambios
@@ -124,6 +124,7 @@ namespace IM.Administrator.Forms
                 var r = await BRHotels.GetHotels(hotel, blnInclude: true);
                 hotel = r.FirstOrDefault();
                 DialogResult = true;
+                _isClosing = true;
                 Close();
               }
             }
@@ -135,6 +136,7 @@ namespace IM.Administrator.Forms
         }
         else
         {
+          _isClosing = true;
           nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
           DialogResult = true;
           Close();
@@ -158,6 +160,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       if(enumMode!=EnumMode.preview && enumMode!=EnumMode.search)
       {
         if (!ObjectHelper.IsEquals(hotel, oldHotel))
@@ -165,19 +168,50 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!_isClosing) { _isClosing = true; Close(); }
+          }
+          else
+          {
+            _isClosing = false;
           }
         }
         else
         {
-          Close();
+          if (!_isClosing) { _isClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!_isClosing) { _isClosing = true; Close(); }
       }
-    } 
+    }
+    #endregion
+
+    #region Closing
+    /// <summary>
+    /// Cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 07/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
+      {
+        _isClosing = true;
+        btnCancel_Click(null, null);
+        if (!_isClosing)
+        {
+          e.Cancel = true;
+        }
+        else
+        {
+          _isClosing = false;
+        }
+      }
+    }
     #endregion
 
     #endregion
@@ -190,14 +224,21 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 30/03/2016
     /// </history>
-    private void LoadGroups()
+    private async void LoadGroups()
     {
-      List<HotelGroup> lstHoGroup = BRHotelGroups.GetHotelGroups(nStatus: 1);
-      if (enumMode == EnumMode.search)
+      try
       {
-        lstHoGroup.Insert(0, new HotelGroup { hgID = "", hgN = "" });
+        List<HotelGroup> lstHoGroup =await BRHotelGroups.GetHotelGroups(nStatus: 1);
+        if (enumMode == EnumMode.search)
+        {
+          lstHoGroup.Insert(0, new HotelGroup { hgID = "", hgN = "" });
+        }
+        cmbHotelGr.ItemsSource = lstHoGroup;
       }
-      cmbHotelGr.ItemsSource = lstHoGroup;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Hotel");
+      }
     }
     #endregion
 

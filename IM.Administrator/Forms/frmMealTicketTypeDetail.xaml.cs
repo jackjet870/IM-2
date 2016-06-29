@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using IM.Model.Enums;
 using IM.Model;
@@ -19,6 +18,7 @@ namespace IM.Administrator.Forms
     public MealTicketType mealTicketType = new MealTicketType();//Objeto a guardar
     public MealTicketType oldMealTicketType = new MealTicketType();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo en que se abrirá la ventana
+    private bool _isClosing = false;
     #endregion
     public frmMealTicketTypeDetail()
     {
@@ -56,7 +56,7 @@ namespace IM.Administrator.Forms
       if (e.Key == Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     }
     #endregion
@@ -78,6 +78,7 @@ namespace IM.Administrator.Forms
         btnAccept.Focus();
         if (ObjectHelper.IsEquals(mealTicketType, oldMealTicketType) && enumMode != EnumMode.add)
         {
+          _isClosing = true;
           Close();
         }
         else
@@ -89,6 +90,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Meal Ticket Detail", nRes);
             if (nRes > 0)
             {
+              _isClosing = true;
               DialogResult = true;
               Close();
             }
@@ -107,6 +109,31 @@ namespace IM.Administrator.Forms
 
     #endregion
 
+    #region Window_Closing
+    /// <summary>
+    /// Verifica cambios antes de cerrar la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
+      {
+        if (!ObjectHelper.IsEquals(mealTicketType, oldMealTicketType))
+        {
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result != MessageBoxResult.Yes)
+          {
+            e.Cancel = true;
+          }
+        }
+      }
+    }
+    #endregion
+
     #region Cancel
     /// <summary>
     /// Cierra la ventana verificando los cambios pendientes
@@ -117,20 +144,10 @@ namespace IM.Administrator.Forms
     /// [emoguel] created 04/04/2016
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
-    {      
-      if (!ObjectHelper.IsEquals(mealTicketType, oldMealTicketType))
-      {
-        MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-        if (result == MessageBoxResult.Yes)
-        {
-          Close();
-        }
-      }
-      else
-      {
-        Close();
-      }
-    } 
+    {
+      btnCancel.Focus();
+      Close();
+    }
     #endregion
   }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,12 +19,15 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [emoguel] created 09/05/2016
     /// </history>
-    public static List<FolioInvitationOuthousePRCancellation> GetFoliosCancellation(string idPr)
+    public async static Task<List<FolioInvitationOuthousePRCancellation>> GetFoliosCancellation(string idPr)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        return dbContext.FoliosInvitationsOuthousePRCancellation.Where(fic => fic.ficpe == idPr).OrderBy(fic => fic.ficID).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          return dbContext.FoliosInvitationsOuthousePRCancellation.Where(fic => fic.ficpe == idPr).OrderBy(fic => fic.ficID).ToList();
+        }
+      });
     } 
     #endregion
   }

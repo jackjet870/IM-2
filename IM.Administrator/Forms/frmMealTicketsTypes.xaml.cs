@@ -8,6 +8,7 @@ using IM.Base.Helpers;
 using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -238,19 +239,28 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 04/04/2016
     /// </history>
-    private void LoadMealTkTypes(MealTicketType mealTicketType = null)
+    private async void LoadMealTkTypes(MealTicketType mealTicketType = null)
     {
-      int nIndex = 0;
-      List<MealTicketType> lstMealTkTypes = BRMealTicketTypes.GetMealTicketType(_mealTkTypeFilter, _nWpax);
-      dgrMealTkTypes.ItemsSource = lstMealTkTypes;
-
-      if (lstMealTkTypes.Count > 0 && mealTicketType != null)
+      try
       {
-        mealTicketType = lstMealTkTypes.Where(my => my.myID == mealTicketType.myID).FirstOrDefault();
-        nIndex = lstMealTkTypes.IndexOf(mealTicketType);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<MealTicketType> lstMealTkTypes = await BRMealTicketTypes.GetMealTicketType(_mealTkTypeFilter, _nWpax);
+        dgrMealTkTypes.ItemsSource = lstMealTkTypes;
+
+        if (lstMealTkTypes.Count > 0 && mealTicketType != null)
+        {
+          mealTicketType = lstMealTkTypes.Where(my => my.myID == mealTicketType.myID).FirstOrDefault();
+          nIndex = lstMealTkTypes.IndexOf(mealTicketType);
+        }
+        GridHelper.SelectRow(dgrMealTkTypes, nIndex);
+        StatusBarReg.Content = lstMealTkTypes.Count + " Meal Ticket Types.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrMealTkTypes, nIndex);
-      StatusBarReg.Content = lstMealTkTypes.Count + " Meal Ticket Types.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Meal Ticket Types");
+      }
     }
     #endregion
 
@@ -282,7 +292,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_mealTkTypeFilter.myN))//Filtro por descripcion
       {
-        if (!mealTicketType.myN.Contains(_mealTkTypeFilter.myN))
+        if (!mealTicketType.myN.Contains(_mealTkTypeFilter.myN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

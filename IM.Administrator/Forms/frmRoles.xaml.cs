@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -236,18 +237,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 19/04/2016
     /// </history>
-    private void LoadRoles(Role role = null)
+    private async void LoadRoles(Role role = null)
     {
-      int nIndex = 0;
-      List<Role> lstRoles = BRRoles.GetRoles(_nStatus, _roleFilter);
-      dgrRoles.ItemsSource = lstRoles;
-      if (lstRoles.Count > 0 && role != null)
+      try
       {
-        role = lstRoles.Where(ro => ro.roID == role.roID).FirstOrDefault();
-        nIndex = lstRoles.IndexOf(role);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Role> lstRoles = await BRRoles.GetRoles(_nStatus, _roleFilter);
+        dgrRoles.ItemsSource = lstRoles;
+        if (lstRoles.Count > 0 && role != null)
+        {
+          role = lstRoles.Where(ro => ro.roID == role.roID).FirstOrDefault();
+          nIndex = lstRoles.IndexOf(role);
+        }
+        GridHelper.SelectRow(dgrRoles, nIndex);
+        StatusBarReg.Content = lstRoles.Count + " Roles.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrRoles, nIndex);
-      StatusBarReg.Content = lstRoles.Count + " Roles.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Roles");
+      }
     }
     #endregion
     #region ValidateFilter
@@ -279,7 +289,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_roleFilter.roN))//Filtro por descripción
       {
-        if(!role.roN.Contains(_roleFilter.roN))
+        if(!role.roN.Contains(_roleFilter.roN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

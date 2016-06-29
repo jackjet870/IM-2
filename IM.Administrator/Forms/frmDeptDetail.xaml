@@ -37,13 +37,34 @@
         <DataGrid Name="dgrPersonnel" Margin="79,0,14,0" IsSynchronizedWithCurrentItem="True" Grid.Column="1" CellEditEnding="dgrPersonnels_CellEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CanUserAddRows="True" 
                   CanUserResizeColumns="False" CanUserResizeRows="False" RowEditEnding="dgrPersonnel_RowEditEnding" >
             <DataGrid.Columns>
-                <DataGridComboBoxColumn  Width="78*" x:Name="cmbPersonnel" DisplayMemberPath="peN" SelectedValuePath="peID"
-                                         SelectedValueBinding="{Binding peID}"  Header="Personnel" >
+                <DataGridComboBoxColumn  Width="78*" x:Name="cmbPersonnel" SelectedValuePath="peID"
+                                         SelectedValueBinding="{Binding peID}" DisplayMemberPath="peN"  Header="Personnel" >
                     <DataGridComboBoxColumn.EditingElementStyle>
                         <Style TargetType="ComboBox">
                             <Setter Property="IsEditable" Value="True"/>
+                            <Setter Property="ItemTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <Border Margin="0,4,0,0">
+                                            <Grid >
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock FontWeight="Bold" TextAlignment="Justify" 
+                                Grid.Column="0" Grid.Row="0" Text="{Binding peN}"/>
+                                                <TextBlock  Text="{Binding peID}" TextAlignment="Justify" 
+                                Grid.Column="0" Grid.Row="1"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
                         </Style>
-                    </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn.EditingElementStyle>                    
                 </DataGridComboBoxColumn>
                 <DataGridCheckBoxColumn Header="Active" x:Name="chkpeA" Width="22*" IsReadOnly="True" Binding="{Binding peA,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>

@@ -8,6 +8,7 @@ using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -238,18 +239,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 14/04/2016
     /// </history>
-    private void LoadReasonCancellationFolios(ReasonCancellationFolio reasonCancellationFollio = null)
+    private async void LoadReasonCancellationFolios(ReasonCancellationFolio reasonCancellationFollio = null)
     {
-      int nIndex = 0;
-      List<ReasonCancellationFolio> lstReaCanFols = BRReasonCancellationFolios.GetReasonCancellationFolios(_nStatus, _reasonCancelFolFilter);
-      dgrReaCanFols.ItemsSource = lstReaCanFols;
-      if (lstReaCanFols.Count > 0 && reasonCancellationFollio != null)
+      try
       {
-        reasonCancellationFollio = lstReaCanFols.Where(rcf => rcf.rcfID == reasonCancellationFollio.rcfID).FirstOrDefault();
-        nIndex = lstReaCanFols.IndexOf(reasonCancellationFollio);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<ReasonCancellationFolio> lstReaCanFols =await BRReasonCancellationFolios.GetReasonCancellationFolios(_nStatus, _reasonCancelFolFilter);
+        dgrReaCanFols.ItemsSource = lstReaCanFols;
+        if (lstReaCanFols.Count > 0 && reasonCancellationFollio != null)
+        {
+          reasonCancellationFollio = lstReaCanFols.Where(rcf => rcf.rcfID == reasonCancellationFollio.rcfID).FirstOrDefault();
+          nIndex = lstReaCanFols.IndexOf(reasonCancellationFollio);
+        }
+        GridHelper.SelectRow(dgrReaCanFols, nIndex);
+        StatusBarReg.Content = lstReaCanFols.Count + " Reason For Cancellation Of Folios.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrReaCanFols, nIndex);
-      StatusBarReg.Content = lstReaCanFols.Count + " Reason For Cancellation Of Folios.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Reason For Cancellation Folios");
+      }
     }
     #endregion
 
@@ -283,7 +293,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_reasonCancelFolFilter.rcfN))//Filtro por descripción
       {
-        if(!reasonCancellationFolio.rcfN.Contains(_reasonCancelFolFilter.rcfN))
+        if(!reasonCancellationFolio.rcfN.Contains(_reasonCancelFolFilter.rcfN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

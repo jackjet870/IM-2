@@ -124,11 +124,12 @@ namespace IM.Base.Helpers
     /// <param name="control">Control que está siendo verificado</param>
     /// <param name="dgrItems">Grid que está siendo validado</param>
     /// <param name="strPropGrid">id para validar si son diferentes entidades</param>
+    /// <param name="typeName">nombre que aparecerá en el titulo del mensaje</param>
     /// <returns>True. Si existe | False.no existe</returns>
     /// <history>
     /// [emoguel] created 18/05/2016
     /// </history>
-    public static bool HasRepeatItem(Control control, DataGrid dgrItems,bool blnClone=false,string strPropGrid="")
+    public static bool HasRepeatItem(Control control, DataGrid dgrItems,bool blnClone=false,string strPropGrid="", string typeName="")
     {      
       switch (control.GetType().Name)
       {
@@ -159,7 +160,7 @@ namespace IM.Base.Helpers
                     && (typeFromGrid.GetProperty(strPropGrid).GetValue(it, null) == selectItemValue || typeFromGrid.GetProperty(strPropGrid).GetValue(it, null).Equals(selectItemValue))).FirstOrDefault();
                   if (itemVal != null)
                   {
-                    UIHelper.ShowMessage(typeFromControl.Name + " must not be repeated");
+                    UIHelper.ShowMessage(((typeName!="")?typeName:typeFromControl.Name)+ " must not be repeated");
                     return true;
                   }
                   else if(blnClone)

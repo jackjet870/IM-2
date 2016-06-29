@@ -8,6 +8,7 @@ using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -236,18 +237,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 11/04/2016
     /// </history>
-    private void LoadPosts(Post post = null)
+    private  async void LoadPosts(Post post = null)
     {
-      int nIndex = 0;
-      List<Post> lstPost = BRPosts.GetPosts(_nStatus, _postFilter);
-      dgrPosts.ItemsSource = lstPost;
-      if (lstPost.Count > 0 && post != null)
+      try
       {
-        post = lstPost.Where(po => po.poID == post.poID).FirstOrDefault();
-        nIndex = lstPost.IndexOf(post);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Post> lstPost = await BRPosts.GetPosts(_nStatus, _postFilter);
+        dgrPosts.ItemsSource = lstPost;
+        if (lstPost.Count > 0 && post != null)
+        {
+          post = lstPost.Where(po => po.poID == post.poID).FirstOrDefault();
+          nIndex = lstPost.IndexOf(post);
+        }
+        GridHelper.SelectRow(dgrPosts, nIndex);
+        StatusBarReg.Content = lstPost.Count + " Posts.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrPosts, nIndex);
-      StatusBarReg.Content = lstPost.Count + " Posts.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Posts");
+      }
     }
     #endregion
     #region ValidateFilter
@@ -279,7 +289,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_postFilter.poN))
       {
-        if(!post.poN.Contains(_postFilter.poN))
+        if(!post.poN.Contains(_postFilter.poN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

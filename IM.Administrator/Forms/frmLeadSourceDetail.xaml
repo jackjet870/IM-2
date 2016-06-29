@@ -10,6 +10,10 @@
 
         <!--#region  Botones-->
         <Grid DockPanel.Dock="Bottom" Background="Transparent" Height="40">
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Name="skpStatus" Visibility="Visible" Margin="10,6,96,4" HorizontalAlignment="Left">
+                <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Base;component/Images/time.ico" Width="16" Height="16"/>
+                <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
+            </StackPanel>
             <Button Name="btnAccept" Width="60" Height="30"  Click="btnAccept_Click" HorizontalAlignment="Right" Content="_Accept" Margin="0,4,84,4"/>
             <Button Name="btnCancel" Width="60" Height="30" Click="btnCancel_Click" HorizontalAlignment="Right" Content="_Cancel" Margin="0,4,14,4"/>
         </Grid>
@@ -60,7 +64,7 @@
                 <Label Name="lblAnimation" Grid.Column="0" Grid.Row="15" Visibility="Collapsed" >Animation</Label>
                 <!--#endregion-->
                 <!--#region Controles-->
-                <TextBox Name="txtlsID" Tag="ID" Grid.Row="0" Width="220" VerticalAlignment="Top" Text="{Binding lsID}" IsEnabled="False" CharacterCasing="Upper"  Margin="69,3,0,0" />
+                <TextBox Name="txtlsID" Tag="ID" Grid.Row="0" VerticalAlignment="Top" Text="{Binding lsID}" IsEnabled="False" CharacterCasing="Upper"  Margin="69,3,0,0" />
                 <TextBox Name="txtlsN" Tag="description" Grid.Row="1" VerticalAlignment="Top" Text="{Binding lsN}" Margin="69,3,0,0" />
                 <ComboBox Name="cmbHotels"  Grid.Row="2" VerticalAlignment="Top" SelectedValue="{Binding lsho}" DisplayMemberPath="hoID" SelectedValuePath="hoID"  Margin="69,0,0,0" />
                 <Grid Grid.Row="3" Name="grdOpera">
@@ -139,7 +143,7 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <!--#region Grid Locations-->
-                    <DataGrid Name="dgrLocations" ScrollViewer.VerticalScrollBarVisibility="Auto" RowEditEnding="dgr_RowEditEnding" CellEditEnding="dgrLocations_CellEditEnding" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                    <DataGrid Name="dgrLocations" ScrollViewer.VerticalScrollBarVisibility="Auto" RowEditEnding="dgr_RowEditEnding" CellEditEnding="dgr_CellEditEnding" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                           CanUserAddRows="True" CanUserResizeColumns="False" CanUserResizeRows="False" Margin="13,15,15,0">
                         <DataGrid.Columns>
                             <DataGridComboBoxColumn Header="Locations" x:Name="cmbLocations" Width="100*" SelectedValuePath="loID" DisplayMemberPath="loN" SelectedValueBinding="{Binding loID}"/>
@@ -150,7 +154,7 @@
 
                 <Grid Grid.Row="1" >
                     <!--#region Grid Agencies-->
-                    <DataGrid Name="dgrAgencies" CellEditEnding="dgrAgencies_CellEditEnding" RowEditEnding="dgr_RowEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch"
+                    <DataGrid Name="dgrAgencies" CellEditEnding="dgr_CellEditEnding" RowEditEnding="dgr_RowEditEnding" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" AutoGenerateColumns="False" HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch" CanUserAddRows="True" CanUserResizeColumns="False" CanUserResizeRows="False" Margin="13,13,15,0">
                         <DataGrid.Columns>
                             <DataGridComboBoxColumn Header="Agencies" x:Name="cmbAgencies" Width="100*" SelectedValueBinding="{Binding agID}" DisplayMemberPath="agN" SelectedValuePath="agID" />

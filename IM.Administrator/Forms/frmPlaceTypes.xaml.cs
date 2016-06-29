@@ -8,6 +8,7 @@ using IM.Model;
 using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -234,18 +235,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 11/04/2016
     /// </history>
-    private void LoadPlaceTypes(PlaceType placeType = null)
+    private async void LoadPlaceTypes(PlaceType placeType = null)
     {
-      int nIndex = 0;
-      List<PlaceType> lstPlaceTypes = BRPlaceTypes.GetPlaceTypes(_nStatus, _placeTypeFIlter);
-      dgrPlaceTypes.ItemsSource = lstPlaceTypes;
-      if (placeType != null && lstPlaceTypes.Count > 0)
+      try
       {
-        placeType = lstPlaceTypes.Where(py => py.pyID == placeType.pyID).FirstOrDefault();
-        nIndex = lstPlaceTypes.IndexOf(placeType);//Obtenemos la posicioón
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<PlaceType> lstPlaceTypes = await BRPlaceTypes.GetPlaceTypes(_nStatus, _placeTypeFIlter);
+        dgrPlaceTypes.ItemsSource = lstPlaceTypes;
+        if (placeType != null && lstPlaceTypes.Count > 0)
+        {
+          placeType = lstPlaceTypes.Where(py => py.pyID == placeType.pyID).FirstOrDefault();
+          nIndex = lstPlaceTypes.IndexOf(placeType);//Obtenemos la posicioón
+        }
+        GridHelper.SelectRow(dgrPlaceTypes, nIndex);
+        StatusBarReg.Content = lstPlaceTypes.Count + " Place Types.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrPlaceTypes, nIndex);
-      StatusBarReg.Content = lstPlaceTypes.Count + " Place Types.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Place Types");
+      }
     }
     #endregion
 
@@ -278,7 +288,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_placeTypeFIlter.pyN))//filtro por estatus
       {
-        if(!placeType.pyN.Contains(_placeTypeFIlter.pyN))
+        if(!placeType.pyN.Contains(_placeTypeFIlter.pyN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

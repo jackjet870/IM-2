@@ -21,6 +21,7 @@ namespace IM.Administrator.Forms
     public SalesAmountRange oldSalAmoRan = new SalesAmountRange();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo en que se abrirá la ventana
     public int nStatus = -1;//Estatus para el modo busqueda
+    private bool _isClosing = false;
     #endregion
     public frmSalesAmountRangeDetail()
     {
@@ -89,7 +90,7 @@ namespace IM.Administrator.Forms
       if (e.Key == Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     }
     #endregion
@@ -109,6 +110,7 @@ namespace IM.Administrator.Forms
       {
         if (enumMode != EnumMode.add && ObjectHelper.IsEquals(salesAmountRange, oldSalAmoRan))
         {
+          _isClosing = true;
           Close();
         }
         else
@@ -130,6 +132,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Sales Amount Range", nRes);
             if (nRes == 1)
             {
+              _isClosing = true;
               DialogResult = true;
               Close();
             }
@@ -192,6 +195,7 @@ namespace IM.Administrator.Forms
 
         if (blnDialogResult == true)
         {
+          _isClosing = true;
           nStatus = Convert.ToInt32(cmbStatus.SelectedValue);
           DialogResult = true;
           Close();
@@ -212,32 +216,11 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if (enumMode != EnumMode.search)
-      {
-        if (!ObjectHelper.IsEquals(salesAmountRange, oldSalAmoRan))
-        {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
-          {
-            Close();
-          }
-        }
-        else
-        {
-          Close();
-        }
-      }
-      else
-      {
-        Close();
-      }
+      btnCancel.Focus();
+      Close();
     }
     #endregion
-    #endregion
-
-    #region Methods
-
-    #endregion
+    
 
     #region LostFocus
     /// <summary>
@@ -267,7 +250,36 @@ namespace IM.Administrator.Forms
           txtsnN.Text = "$" + salesAmountRange.snFrom + " - " + "$" + txtsnTo.Text;
         }
       }
-    } 
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Cierra la ventana verificando si hay cambios pendientes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if(!_isClosing)
+      {
+        if (enumMode != EnumMode.search)
+        {
+          if (!ObjectHelper.IsEquals(salesAmountRange, oldSalAmoRan))
+          {
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result != MessageBoxResult.Yes)
+            {
+              e.Cancel = true;
+            }
+          }
+        }
+      }
+    }
+    #endregion
     #endregion
   }
 }

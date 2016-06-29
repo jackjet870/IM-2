@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -17,35 +18,39 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo Periods</returns>
     /// <history>
     /// [emoguel] created 07/06/2016
+    /// [emoguel] modified 28/06/2016---> Se volvió async
     /// </history>
-    public static List<Period> GetPeriods(int nStatus = -1, Period period = null)
+    public async static Task<List<Period>> GetPeriods(int nStatus = -1, Period period = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from pd in dbContext.Periods
-                    select pd;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnStatus = Convert.ToBoolean(nStatus);
-          query = query.Where(pd => pd.pdA == blnStatus);
-        }
+          var query = from pd in dbContext.Periods
+                      select pd;
 
-        if (period != null)
-        {
-          if (!string.IsNullOrWhiteSpace(period.pdID))//Filtro por ID
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(pd => pd.pdID == period.pdID);
+            bool blnStatus = Convert.ToBoolean(nStatus);
+            query = query.Where(pd => pd.pdA == blnStatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(period.pdN))//Filtro por descripción
+          if (period != null)
           {
-            query = query.Where(pd => pd.pdN.Contains(period.pdN));
-          }
-        }
+            if (!string.IsNullOrWhiteSpace(period.pdID))//Filtro por ID
+            {
+              query = query.Where(pd => pd.pdID == period.pdID);
+            }
 
-        return query.OrderBy(pd => pd.pdN).ToList();
-      }
+            if (!string.IsNullOrWhiteSpace(period.pdN))//Filtro por descripción
+            {
+              query = query.Where(pd => pd.pdN.Contains(period.pdN));
+            }
+          }
+
+          return query.OrderBy(pd => pd.pdN).ToList();
+        }
+      });
     }
     #endregion
   }

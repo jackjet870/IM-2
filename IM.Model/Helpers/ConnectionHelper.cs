@@ -2,6 +2,7 @@
 using PalaceResorts.Common.PalaceTools;
 using PalaceResorts.Common.PalaceTools.AppConfig;
 using System.Data.SqlClient;
+using IM.Model.Enums;
 
 namespace IM.Model.Helpers
 {
@@ -62,7 +63,6 @@ namespace IM.Model.Helpers
     #endregion
 
     #region ConnectionString
-
     /// <summary>
     /// Cadena de conexion
     /// </summary>

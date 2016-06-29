@@ -9,7 +9,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
-
+using System;
 
 namespace IM.Administrator.Forms
 {
@@ -226,13 +226,20 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 03/05/2016
     /// </history>
-    private void LoadPersonnels(string deptID)
+    private async void LoadPersonnels(string deptID)
     {
-      List<Personnel> lstAllPersonnels = BRPersonnel.GetPersonnels();
-      cmbPersonnel.ItemsSource = lstAllPersonnels;      
-      _lstPersonel = lstAllPersonnels.Where(pe => pe.pede == deptID).ToList();
-      dgrPersonnel.ItemsSource = _lstPersonel;
-      _lstOldPersonnel = lstAllPersonnels.Where(pe => pe.pede == deptID).ToList();//Cargamos la lista con los datos iniciales
+      try
+      {
+        List<Personnel> lstAllPersonnels = await BRPersonnel.GetPersonnels();
+        cmbPersonnel.ItemsSource = lstAllPersonnels;
+        _lstPersonel = lstAllPersonnels.Where(pe => pe.pede == deptID).ToList();
+        dgrPersonnel.ItemsSource = _lstPersonel;
+        _lstOldPersonnel = lstAllPersonnels.Where(pe => pe.pede == deptID).ToList();//Cargamos la lista con los datos iniciales
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Depts");
+      }
     }
 
     #endregion

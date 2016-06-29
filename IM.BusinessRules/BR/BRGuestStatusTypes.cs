@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Model;
 using IM.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -18,35 +19,38 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista de tipo GuestStatusType</returns>
     /// <history>
     /// [emoguel] created 24/03/2016
+    /// [emoguel] modified 27/06/2016
     /// </history>
-    public static List<GuestStatusType> GetGuestStatusTypes(GuestStatusType guestStatusType = null, int nStatus = -1)
+    public async static Task<List<GuestStatusType>> GetGuestStatusTypes(GuestStatusType guestStatusType = null, int nStatus = -1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        var query = from gs in dbContext.GuestsStatusTypes
-                    select gs;
-
-        if (nStatus != -1)//Filtro por estatus
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          bool blnEstatus = Convert.ToBoolean(nStatus);
-          query = query.Where(gs => gs.gsA == blnEstatus);
-        }
+          var query = from gs in dbContext.GuestsStatusTypes
+                      select gs;
 
-        if (guestStatusType != null)//verificar si se tiene un objeto
-        {
-          if (!string.IsNullOrWhiteSpace(guestStatusType.gsID))//filtro por ID
+          if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(gs => gs.gsID == guestStatusType.gsID);
+            bool blnEstatus = Convert.ToBoolean(nStatus);
+            query = query.Where(gs => gs.gsA == blnEstatus);
           }
 
-          if (!string.IsNullOrWhiteSpace(guestStatusType.gsN))//Filtro por descripcion
+          if (guestStatusType != null)//verificar si se tiene un objeto
           {
-            query = query.Where(gs => gs.gsN.Contains(guestStatusType.gsN));
-          }
-        }
+            if (!string.IsNullOrWhiteSpace(guestStatusType.gsID))//filtro por ID
+            {
+              query = query.Where(gs => gs.gsID == guestStatusType.gsID);
+            }
 
-        return query.OrderBy(gs => gs.gsN).ToList();
-      }
+            if (!string.IsNullOrWhiteSpace(guestStatusType.gsN))//Filtro por descripcion
+            {
+              query = query.Where(gs => gs.gsN.Contains(guestStatusType.gsN));
+            }
+          }
+          return query.OrderBy(gs => gs.gsN).ToList();
+        }
+      });
     }
     #endregion
 

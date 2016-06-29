@@ -8,6 +8,7 @@ using IM.BusinessRules.BR;
 using IM.Base.Helpers;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -36,16 +37,25 @@ namespace IM.Administrator.Forms
     /// </history>
     protected async void LoadCreditCardTypes(CreditCardType creditCardType=null)
     {
-      int nIndex = 0;
-      List<CreditCardType> lstCreditCardTypes =await BRCreditCardTypes.GetCreditCardTypes(_creditCardTypeFilter, _nStatus);
-      dgrCreditCard.ItemsSource = lstCreditCardTypes;
-      if(creditCardType!=null && lstCreditCardTypes.Count>0)
+      try
       {
-        creditCardType = lstCreditCardTypes.Where(cc => cc.ccID == creditCardType.ccID).FirstOrDefault();
-        nIndex = lstCreditCardTypes.IndexOf(creditCardType);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<CreditCardType> lstCreditCardTypes = await BRCreditCardTypes.GetCreditCardTypes(_creditCardTypeFilter, _nStatus);
+        dgrCreditCard.ItemsSource = lstCreditCardTypes;
+        if (creditCardType != null && lstCreditCardTypes.Count > 0)
+        {
+          creditCardType = lstCreditCardTypes.Where(cc => cc.ccID == creditCardType.ccID).FirstOrDefault();
+          nIndex = lstCreditCardTypes.IndexOf(creditCardType);
+        }
+        GridHelper.SelectRow(dgrCreditCard, nIndex);
+        StatusBarReg.Content = lstCreditCardTypes.Count() + "  Credit Card Types.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrCreditCard, nIndex);      
-      StatusBarReg.Content = lstCreditCardTypes.Count() + "  Credit Card Types.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Credit Card Types");
+      }
     }
     #endregion
 
@@ -78,7 +88,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_creditCardTypeFilter.ccN))
       {
-        if (!newCreditCard.ccN.Contains(_creditCardTypeFilter.ccN))
+        if (!newCreditCard.ccN.Contains(_creditCardTypeFilter.ccN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }
@@ -282,7 +292,5 @@ namespace IM.Administrator.Forms
 
     #endregion
     #endregion
-
-
   }
 }

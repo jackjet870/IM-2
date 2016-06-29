@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -238,18 +239,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 26/04/2016
     /// </history>
-    private void LoadSourcePayments(SourcePayment sourcePayment = null)
+    private async void LoadSourcePayments(SourcePayment sourcePayment = null)
     {
-      int nIndex = 0;
-      List<SourcePayment> lstSourcePayments = BRSourcePayments.GetSourcePayments(_nStatus, _sourcePaymentFilter);
-      dgrSourcePayments.ItemsSource = lstSourcePayments;
-      if (lstSourcePayments.Count > 0 && sourcePayment != null)
+      try
       {
-        sourcePayment = lstSourcePayments.Where(sb => sb.sbID == sourcePayment.sbID).FirstOrDefault();
-        nIndex = lstSourcePayments.IndexOf(sourcePayment);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<SourcePayment> lstSourcePayments = await BRSourcePayments.GetSourcePayments(_nStatus, _sourcePaymentFilter);
+        dgrSourcePayments.ItemsSource = lstSourcePayments;
+        if (lstSourcePayments.Count > 0 && sourcePayment != null)
+        {
+          sourcePayment = lstSourcePayments.Where(sb => sb.sbID == sourcePayment.sbID).FirstOrDefault();
+          nIndex = lstSourcePayments.IndexOf(sourcePayment);
+        }
+        GridHelper.SelectRow(dgrSourcePayments, nIndex);
+        StatusBarReg.Content = lstSourcePayments.Count + " Source Payments.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrSourcePayments, nIndex);
-      StatusBarReg.Content = lstSourcePayments.Count + " Source Payments.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Source Payments");
+      }
     }
     #endregion
 
@@ -282,7 +292,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(sourcePayment.sbN))//Filtro por descripción
       {
-        if(!sourcePayment.sbN.Contains(sourcePayment.sbN))
+        if(!sourcePayment.sbN.Contains(sourcePayment.sbN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

@@ -8,6 +8,7 @@ using IM.Model.Enums;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -237,19 +238,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 12/05/2016
     /// </history>
-    private void LoadHotelGroups(HotelGroup hotelGroup = null)
+    private async void LoadHotelGroups(HotelGroup hotelGroup = null)
     {
-      List<HotelGroup> lstHotelsGroup = BRHotelGroups.GetHotelGroups(_hotelGroupFilter, _nStatus);
-      dgrHotelGroups.ItemsSource = lstHotelsGroup;
-      int nIndex = 0;
-      if (lstHotelsGroup.Count > 0 && hotelGroup != null)
+      try
       {
-        hotelGroup = lstHotelsGroup.Where(ho => ho.hgID == hotelGroup.hgID).FirstOrDefault();
-        nIndex = lstHotelsGroup.IndexOf(hotelGroup);
+        status.Visibility = Visibility.Visible;
+        List<HotelGroup> lstHotelsGroup = await BRHotelGroups.GetHotelGroups(_hotelGroupFilter, _nStatus);
+        dgrHotelGroups.ItemsSource = lstHotelsGroup;
+        int nIndex = 0;
+        if (lstHotelsGroup.Count > 0 && hotelGroup != null)
+        {
+          hotelGroup = lstHotelsGroup.Where(ho => ho.hgID == hotelGroup.hgID).FirstOrDefault();
+          nIndex = lstHotelsGroup.IndexOf(hotelGroup);
+        }
+        GridHelper.SelectRow(dgrHotelGroups, nIndex);
+        StatusBarReg.Content = lstHotelsGroup.Count + " Hotel Groups";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrHotelGroups, nIndex);
-      StatusBarReg.Content = lstHotelsGroup.Count + " Hotel Groups";
-
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Hotel Groups");
+      }
     }
     #endregion
 
@@ -282,7 +291,7 @@ namespace IM.Administrator.Forms
 
       if (!string.IsNullOrWhiteSpace(_hotelGroupFilter.hgN))
       {
-        if (!hotelGroup.hgN.Contains(_hotelGroupFilter.hgN))
+        if (!hotelGroup.hgN.Contains(_hotelGroupFilter.hgN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

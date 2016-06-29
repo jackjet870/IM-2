@@ -20,6 +20,7 @@ namespace IM.Administrator.Forms
     public Location oldLocation = new Location();//Objeto con los datos iniciales
     public EnumMode enumMode;//Modo en que se abrirá la ventana
     public int nStatus = -1;//sirve para cuando se abre en modo busqueda
+    private bool _isClosing = false;
     #endregion
     public frmLocationDetail()
     {
@@ -38,7 +39,7 @@ namespace IM.Administrator.Forms
       if (e.Key == Key.Escape)
       {
         btnCancel.Focus();
-        btnCancel_Click(null, null);
+        Close();
       }
     }
     #endregion
@@ -111,10 +112,13 @@ namespace IM.Administrator.Forms
         {
           if (ObjectHelper.IsEquals(location, oldLocation) && enumMode != EnumMode.add)
           {
+            _isClosing = true;
             Close();
           }
           else
           {
+            txtStatus.Text = "Saving Data...";
+            skpStatus.Visibility = Visibility.Visible;
             int nRes = 0;
             string strMsj = ValidateHelper.ValidateForm(this, "Location");
 
@@ -124,6 +128,7 @@ namespace IM.Administrator.Forms
               UIHelper.ShowMessageResult("Location", nRes);
               if (nRes > 0)
               {
+                _isClosing = true;
                 DialogResult = true;
                 Close();
               }
@@ -132,11 +137,13 @@ namespace IM.Administrator.Forms
             {
               UIHelper.ShowMessage(strMsj);
             }
+            skpStatus.Visibility = Visibility.Collapsed;
           }
         }
         else
         {
           nStatus = Convert.ToInt32(cmbSta.SelectedValue);
+          _isClosing = true;
           DialogResult = true;
           Close();
         }
@@ -159,24 +166,35 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      if (enumMode != EnumMode.preview && enumMode != EnumMode.search)
+      btnCancel.Focus();
+      Close();
+    }
+    #endregion
+
+    #region Window_Closing
+    /// <summary>
+    /// Verifica cambios antes de cerrar
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 28/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
       {
-        if (!ObjectHelper.IsEquals(location, oldLocation))
+        if (enumMode != EnumMode.preview && enumMode != EnumMode.search)
         {
-          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-          if (result == MessageBoxResult.Yes)
+          if (!ObjectHelper.IsEquals(location, oldLocation))
           {
-            Close();
+            MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+            if (result != MessageBoxResult.Yes)
+            {
+              e.Cancel = true;
+            }
           }
         }
-        else
-        {
-          Close();
-        }
-      }
-      else
-      {
-        Close();
       }
     }
     #endregion
@@ -194,12 +212,21 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadSalesRoom()
     {
-      List<SalesRoomShort> lstSalesRoom = await BRSalesRooms.GetSalesRooms(1);
-      if(enumMode==EnumMode.search && lstSalesRoom.Count>0)
+      try
       {
-        lstSalesRoom.Insert(0, new SalesRoomShort { srID = "", srN = "" });
+        skpStatus.Visibility = Visibility.Visible;
+        List<SalesRoomShort> lstSalesRoom = await BRSalesRooms.GetSalesRooms(1);
+        if (enumMode == EnumMode.search && lstSalesRoom.Count > 0)
+        {
+          lstSalesRoom.Insert(0, new SalesRoomShort { srID = "", srN = "" });
+        }
+        cmblosr.ItemsSource = lstSalesRoom;
+        skpStatus.Visibility = Visibility.Collapsed;
       }
-      cmblosr.ItemsSource = lstSalesRoom;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Location");
+      }
     }
     #endregion
     
@@ -210,14 +237,21 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 01/04/2016
     /// </history>
-    private void LoadLocationCategories()
+    private async void LoadLocationCategories()
     {
-      List<LocationCategory> lstLocCategories = BRLocationsCategories.GetLocationsCategories();
-      if(enumMode==EnumMode.search && lstLocCategories.Count>0)
+      try
       {
-        lstLocCategories.Insert(0, new LocationCategory { lcID = "", lcN = "" });
+        List<LocationCategory> lstLocCategories =await BRLocationsCategories.GetLocationsCategories();
+        if (enumMode == EnumMode.search && lstLocCategories.Count > 0)
+        {
+          lstLocCategories.Insert(0, new LocationCategory { lcID = "", lcN = "" });
+        }
+        cmblolc.ItemsSource = lstLocCategories;
       }
-      cmblolc.ItemsSource = lstLocCategories;
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Location");
+      }
     }
     #endregion
 
@@ -230,10 +264,19 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadLeadSource()
     {
-      List<LeadSource> lstLeadSource = await BRLeadSources.GetLeadSources(1,EnumProgram.All);
-      cmblols.ItemsSource = lstLeadSource;
+      try
+      {
+        List<LeadSource> lstLeadSource = await BRLeadSources.GetLeadSources(1, EnumProgram.All);
+        cmblols.ItemsSource = lstLeadSource;
+      }
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Location");
+      }
     }
     #endregion
+
     #endregion
+   
   }
 }

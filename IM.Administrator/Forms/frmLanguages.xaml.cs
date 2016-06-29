@@ -8,6 +8,7 @@ using IM.Model;
 using IM.Base.Helpers;
 using IM.Model.Enums;
 using IM.Model.Helpers;
+using IM.Model.Extensions;
 
 namespace IM.Administrator.Forms
 {
@@ -235,16 +236,25 @@ namespace IM.Administrator.Forms
     /// </history>
     private async void LoadLanguages( Language language = null)
     {
-      int nIndex = 0;
-      List<Language> lstLanguages = await BRLanguages.GetLanguages(_languageFilter, _nStatus);
-      dgrLanguages.ItemsSource = lstLanguages;
-      if (language != null && lstLanguages.Count > 0)
+      try
       {
-        language = lstLanguages.Where(la => la.laID == language.laID).FirstOrDefault();
-        nIndex = lstLanguages.IndexOf(language);        
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<Language> lstLanguages = await BRLanguages.GetLanguages(_languageFilter, _nStatus);
+        dgrLanguages.ItemsSource = lstLanguages;
+        if (language != null && lstLanguages.Count > 0)
+        {
+          language = lstLanguages.Where(la => la.laID == language.laID).FirstOrDefault();
+          nIndex = lstLanguages.IndexOf(language);
+        }
+        GridHelper.SelectRow(dgrLanguages, nIndex);
+        StatusBarReg.Content = lstLanguages.Count + " Languages.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrLanguages, nIndex);
-      StatusBarReg.Content = lstLanguages.Count + " Languages.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error);
+      }
     }
     #endregion
 
@@ -277,7 +287,7 @@ namespace IM.Administrator.Forms
 
       if(!string.IsNullOrWhiteSpace(_languageFilter.laN))//Filtro por Descripcion
       {
-        if(!language.laN.Contains(_languageFilter.laN))
+        if(!language.laN.Contains(_languageFilter.laN,StringComparison.OrdinalIgnoreCase))
         {
           return false;
         }

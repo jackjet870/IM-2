@@ -16,7 +16,8 @@ namespace IM.Administrator.Forms
   {
     public Currency currency=new Currency();//objeto para agrear|actualizar
     public Currency oldCurrency = new Currency();//Objeto con los datos iniciales
-    public EnumMode mode;//modo en el que se abrirá la ventana add|preview|edit 
+    public EnumMode mode;//modo en el que se abrirá la ventana add|preview|edit
+    private bool _isClosing = false; 
     public frmCurrencyDetail()
     {
       InitializeComponent();
@@ -36,7 +37,6 @@ namespace IM.Administrator.Forms
     {
       if (e.Key == Key.Escape)
       {
-        btnCancel.Focus();
         btnCancel_Click(null, null);
 
       }
@@ -75,6 +75,7 @@ namespace IM.Administrator.Forms
         btnAccept.Focus();
         if (ObjectHelper.IsEquals(currency, oldCurrency) && mode != EnumMode.add)
         {
+          _isClosing = true;
           Close();
         }
         else
@@ -89,6 +90,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Currency", nRes);
             if (nRes > 0)
             {
+              _isClosing = true;
               DialogResult = true;
               Close();
             }
@@ -118,6 +120,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
+      btnCancel.Focus();
       if(mode!=EnumMode.preview)
       {
         if (!ObjectHelper.IsEquals(currency, oldCurrency))
@@ -125,21 +128,53 @@ namespace IM.Administrator.Forms
           MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
           if (result == MessageBoxResult.Yes)
           {
-            Close();
+            if (!_isClosing) { _isClosing = true; Close(); }
+          }
+          else
+          {
+            _isClosing = false;
           }
         }
         else
         {
-          Close();
+          if (!_isClosing) { _isClosing = true; Close(); }
         }
       }
       else
       {
-        Close();
+        if (!_isClosing) { _isClosing = true; Close(); }
+      }
+    }
+    #endregion
+
+    #region Closing
+    /// <summary>
+    /// Cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 09/06/2016
+    /// </history>
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      if (!_isClosing)
+      {
+        _isClosing = true;
+        btnCancel_Click(null, null);
+        if (!_isClosing)
+        {
+          e.Cancel = true;
+        }
+        else
+        {
+          _isClosing = false;
+        }
       }
     }
     #endregion
     #endregion
-    
+
+
   }
 }

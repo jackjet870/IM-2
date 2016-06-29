@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" SizeToContent="WidthAndHeight" KeyDown="Window_KeyDown" Loaded="Window_Loaded"
-        Title="Location Detail"  DataContext="{Binding Locations}">
+        Title="Location Detail"  Closing="Window_Closing" >
     <Grid Margin="10,10,14,2" Name="grdContent" >
         <!--#region Formato del grid-->
         <Grid.ColumnDefinitions>
@@ -44,6 +44,10 @@
         <CheckBox Name="chkAni" Grid.Column="1" Grid.Row="7" VerticalAlignment="Top" Margin="0,0,0,15" HorizontalAlignment="Left" IsChecked="{Binding loAnimacion}"  Height="13" IsEnabled="False">Animation</CheckBox>
         <CheckBox Name="chkFly" Grid.Column="1" Grid.Row="7" VerticalAlignment="Top" Margin="0,0,0,15" HorizontalAlignment="Center" IsChecked="{Binding loFlyers}"  Height="13" IsEnabled="False">Flyers</CheckBox>
 
+        <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.Column="0" Name="skpStatus" Visibility="Visible" Margin="10,0,0,7" HorizontalAlignment="Left">
+            <Image HorizontalAlignment="Left" VerticalAlignment="Bottom" Source="pack://application:,,,/IM.Base;component/Images/time.ico" Width="16" Height="16"/>
+            <TextBlock Name="txtStatus" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="Loading..."/>
+        </StackPanel>
         <Button Name="btnAccept" Width="60" Height="30" Visibility="Hidden"  Grid.Column="1" Grid.Row="8" Margin="0,7,75,7" Click="btnAccept_Click" Content="_Accept"  HorizontalAlignment="Right"/>
         <Button Name="btnCancel" Width="60" Height="30" Grid.Column="1" Grid.Row="8" Margin="0,7"  HorizontalAlignment="Right" Click="btnCancel_Click" Content="_Cancel"/>
         <!--#endregion-->

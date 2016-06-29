@@ -246,18 +246,27 @@ namespace IM.Administrator.Forms
     /// <history>
     /// [emoguel] created 22/03/2016
     /// </history>
-    private void LoadFoliosCXC(FolioCXC folioCxc=null)
+    private async void LoadFoliosCXC(FolioCXC folioCxc=null)
     {
-      int nIndex = 0;
-      List<FolioCXC> lstFoliosCXC = BRFoliosCXC.GetFoliosCXC(_folioFilter,_nStatus);
-      dgrFoliosCXC.ItemsSource = lstFoliosCXC;
-      if (folioCxc != null && lstFoliosCXC.Count>0)
+      try
       {
-        folioCxc = lstFoliosCXC.Where(fi => fi.fiID == folioCxc.fiID).FirstOrDefault();
-        nIndex = lstFoliosCXC.IndexOf(folioCxc);
+        status.Visibility = Visibility.Visible;
+        int nIndex = 0;
+        List<FolioCXC> lstFoliosCXC = await BRFoliosCXC.GetFoliosCXC(_folioFilter, _nStatus);
+        dgrFoliosCXC.ItemsSource = lstFoliosCXC;
+        if (folioCxc != null && lstFoliosCXC.Count > 0)
+        {
+          folioCxc = lstFoliosCXC.Where(fi => fi.fiID == folioCxc.fiID).FirstOrDefault();
+          nIndex = lstFoliosCXC.IndexOf(folioCxc);
+        }
+        GridHelper.SelectRow(dgrFoliosCXC, nIndex);
+        StatusBarReg.Content = lstFoliosCXC.Count + " Folios.";
+        status.Visibility = Visibility.Collapsed;
       }
-      GridHelper.SelectRow(dgrFoliosCXC, nIndex);
-      StatusBarReg.Content = lstFoliosCXC.Count + " Folios.";
+      catch(Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Folios CxC");
+      }
     }
     #endregion
 

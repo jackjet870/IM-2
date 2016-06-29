@@ -197,7 +197,7 @@ namespace IM.Base.Helpers
           Facet facet;
           Control control = lstControls.Where(cl => cl.Name == "txt" + pi.Name).FirstOrDefault();//buscamos si existe el control          
           if (control != null)//Verifcamos que tengamos un control
-          {
+          {            
             TextBox txt = control as TextBox;//Convertimos el control a texbox
             TypeCode typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(pi.PropertyType) ?? pi.PropertyType);            
             switch (typeCode)

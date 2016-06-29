@@ -47,51 +47,55 @@ namespace IM.BusinessRules.BR
     /// [emoguel] created 01/04/2016
     /// [emoguel] modified 27/04/2016 Se agregó el parametro blnTeamsLog para cargar el combobos de Locations en teamLog
     /// </history>
-    public static List<Location> GetLocations(int nStatus = -1, Location location = null, bool blnTeamsLog = false)
+    public async static Task<List<Location>> GetLocations(int nStatus = -1, Location location = null, bool blnTeamsLog = false)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
-      {
-        var query = from lo in dbContext.Locations
-                    select lo;
-        if (blnTeamsLog)
-        {
-          query = from tg in dbContext.TeamsGuestServices
-                  from lo in dbContext.Locations.Where(lo => lo.loID == tg.tglo).DefaultIfEmpty().Distinct()
-                  select lo;
-        }
-        if (nStatus != -1)//Filtro por estatus
-        {
-          bool blnEstatus = Convert.ToBoolean(nStatus);
-          query = query.Where(lo => lo.loA == blnEstatus);
-        }
-        #region Filtros adicionales
-
-        if (location != null)//verificar si se tiene un objeto
-        {
-          if (!string.IsNullOrWhiteSpace(location.loID))//filtro por ID
+      List<Location> lstLocations = await Task.Run(() =>
+         {
+           using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+           {
+             var query = from lo in dbContext.Locations
+                         select lo;
+             if (blnTeamsLog)
+             {
+               query = from tg in dbContext.TeamsGuestServices
+                       from lo in dbContext.Locations.Where(lo => lo.loID == tg.tglo).DefaultIfEmpty().Distinct()
+                       select lo;
+             }
+             if (nStatus != -1)//Filtro por estatus
           {
-            query = query.Where(lo => lo.loID == location.loID);
-          }
+               bool blnEstatus = Convert.ToBoolean(nStatus);
+               query = query.Where(lo => lo.loA == blnEstatus);
+             }
+          #region Filtros adicionales
 
-          if (!string.IsNullOrWhiteSpace(location.loN))//Filtro por Descripcion
+          if (location != null)//verificar si se tiene un objeto
           {
-            query = query.Where(lo => lo.loN.Contains(location.loN));
-          }
+               if (!string.IsNullOrWhiteSpace(location.loID))//filtro por ID
+            {
+                 query = query.Where(lo => lo.loID == location.loID);
+               }
 
-          if (!string.IsNullOrWhiteSpace(location.losr))//Filtro por sales room
-          {
-            query = query.Where(lo => lo.losr == location.losr);
-          }
+               if (!string.IsNullOrWhiteSpace(location.loN))//Filtro por Descripcion
+            {
+                 query = query.Where(lo => lo.loN.Contains(location.loN));
+               }
 
-          if (!string.IsNullOrWhiteSpace(location.lolc))//Filtro por categoria
-          {
-            query = query.Where(lo => lo.lolc == location.lolc);
-          }
-        }
+               if (!string.IsNullOrWhiteSpace(location.losr))//Filtro por sales room
+            {
+                 query = query.Where(lo => lo.losr == location.losr);
+               }
 
-        #endregion
-        return query.OrderBy(lo => lo.loN).ToList();
-      }
+               if (!string.IsNullOrWhiteSpace(location.lolc))//Filtro por categoria
+            {
+                 query = query.Where(lo => lo.lolc == location.lolc);
+               }
+             }
+
+          #endregion
+          return query.OrderBy(lo => lo.loN).ToList();
+           }
+         });
+      return lstLocations;
     }
 
     #endregion
@@ -116,6 +120,31 @@ namespace IM.BusinessRules.BR
 
         return await Locs.ToListAsync();
       }
+    }
+    #endregion
+
+    #region getLocationByTeamGuestSevice
+    /// <summary>
+    /// Obtiene los Locations relacionados a TeamsGuestServices
+    /// </summary>
+    /// <returns>Lista tipo Object</returns>
+    /// <history>
+    /// [emoguel] created 18/06/2016
+    /// </history>
+    public static async Task<List<object>> GetLocationByTeamGuestService()
+    {
+      List<object> lstObject = await Task.Run(() => {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var query = (from lo in dbContext.Locations
+                       from tg in dbContext.TeamsGuestServices.Distinct()
+                       where lo.loID== tg.tglo
+                       select new { loID = lo.loID, loN = lo.loN }).Distinct();
+          return query.ToList<object>();
+        }
+      });
+
+      return lstObject;
     }
     #endregion
   }

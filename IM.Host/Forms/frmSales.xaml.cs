@@ -343,7 +343,9 @@ namespace IM.Host.Forms
     private string GetSaleTypeCategory()
     {
       //cbosast.SelectedIndex = 0;
-      return BRSaleTypes.GetSalesTypes(1, new SaleType() { stID = _sale.sast }).FirstOrDefault().ststc;//cbosast.SelectedValue.ToString() }).FirstOrDefault().ststc;
+      //return BRSaleTypes.GetSalesTypes(1, new SaleType() { stID = _sale.sast }).FirstOrDefault().ststc;//cbosast.SelectedValue.ToString() }).FirstOrDefault().ststc;
+      //TODO: jorcanche repara ésta función
+      return "";
     }
 
     /// <summary>
@@ -479,7 +481,7 @@ namespace IM.Host.Forms
       //Tipo de membresia y Tipo de membresia Global
       cbosamtGlobal.ItemsSource = cbosamt.ItemsSource = await BRMemberShipTypes.GetMemberShipTypes(1);
       //Tipo de venta
-      cbosast.ItemsSource = BRSaleTypes.GetSalesTypes(1);
+      cbosast.ItemsSource = await BRSaleTypes.GetSalesTypes(1);
       //PR´s
       cbosaPR1.ItemsSource = cbosaPR2.ItemsSource = cbosaPR3.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "PR");
       //Capitanes de PRs
@@ -1045,8 +1047,10 @@ namespace IM.Host.Forms
     ///</history>
     private bool IsSaleUpdate()
     {
-      return BRSaleTypes.GetSalesTypes(1, new SaleType { stID = cbosast.SelectedValue.ToString() }).
-        FirstOrDefault().stUpdate;
+      //return BRSaleTypes.GetSalesTypes(1, new SaleType { stID = cbosast.SelectedValue.ToString() }).
+        //FirstOrDefault().stUpdate;
+        //TODO: revisa ésta función
+      return true;
     }
 
 

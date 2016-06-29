@@ -283,109 +283,116 @@ namespace IM.BusinessRules.BR
     /// <returns>-1. Existe un registro con el mismo ID | 0. No se guardó | >1. Se guardó correctamente</returns>
     /// <history>
     /// [emoguel] created 17/05/2016
+    /// [emoguel] modified 27/06/2016 --> se volvió async
     /// </history>
-    public static int SaveLeadSource(LeadSource leadSource, List<Location> lstLocAdd, List<Location> lstLocDel, List<Agency> lstAgeAdd, List<Agency> lstAgeDel, bool blnUpdate)
+    public async static Task<int> SaveLeadSource(LeadSource leadSource, List<Location> lstLocAdd, List<Location> lstLocDel, List<Agency> lstAgeAdd, List<Agency> lstAgeDel, bool blnUpdate)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      return await Task.Run(() =>
       {
-        using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
         {
-          try
+          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            #region LeadSources                                     
-            LeadSource leadSourceSave = null;
-            #region Update
-            if (blnUpdate)
+            try
             {
-              leadSourceSave = dbContext.LeadSources.Where(ls => ls.lsID == leadSource.lsID).Include("Agencies").FirstOrDefault();
-              ObjectHelper.CopyProperties(leadSourceSave, leadSource);
-            }
-            #endregion
-            #region Insert
-            else
-            {
-              leadSourceSave = dbContext.LeadSources.Where(ls => ls.lsID == leadSource.lsID).FirstOrDefault();
-              if (leadSourceSave != null)
+              #region LeadSources                                     
+              LeadSource leadSourceSave = null;
+              #region Update
+              if (blnUpdate)
               {
-                return -1;
+                leadSourceSave = dbContext.LeadSources.Where(ls => ls.lsID == leadSource.lsID).Include("Agencies").FirstOrDefault();
+                ObjectHelper.CopyProperties(leadSourceSave, leadSource);
               }
+              #endregion
+              #region Insert
               else
               {
-                DateTime dtServer= BRHelpers.GetServerDate();
-                leadSource.lsTransBridgeDT = dtServer;
-                leadSource.lsTransDT = dtServer;
-                dbContext.LeadSources.Add(leadSource);
-                leadSourceSave = leadSource;
+                leadSourceSave = dbContext.LeadSources.Where(ls => ls.lsID == leadSource.lsID).FirstOrDefault();
+                if (leadSourceSave != null)
+                {
+                  return -1;
+                }
+                else
+                {
+                  DateTime dtServer = BRHelpers.GetServerDate();
+                  leadSource.lsTransBridgeDT = dtServer;
+                  leadSource.lsTransDT = dtServer;
+                  dbContext.LeadSources.Add(leadSource);
+                  leadSourceSave = leadSource;
+                }
+
+                List<Language> lstLanguages = dbContext.Languages.ToList();
+
+                #region MailOuts
+                MailOut mailOut = new MailOut { mols = leadSourceSave.lsID, moCode = "WELCOME" };
+                #endregion
+
+                #region Mail Outs Text y Invits Text
+                lstLanguages.ForEach(la =>
+                {
+                  MailOutText mailOutText = new MailOutText
+                  {
+                    mtls = leadSourceSave.lsID,
+                    mtmoCode = "WLECOME",
+                    mtla = la.laID
+                  };
+
+                  InvitationText invitationText = new InvitationText
+                  {
+                    itls = leadSourceSave.lsID,
+                    itla = la.laID,
+                    itRTF = "<No text Saved>"
+                  };
+                });
+                #endregion
               }
-
-              List<Language> lstLanguages = dbContext.Languages.ToList();
-
-              #region MailOuts
-              MailOut mailOut = new MailOut {mols=leadSourceSave.lsID,moCode="WELCOME"};
+              #endregion
               #endregion
 
-              #region Mail Outs Text y Invits Text
-              lstLanguages.ForEach(la => {
-                MailOutText mailOutText = new MailOutText {
-                  mtls =leadSourceSave.lsID,
-                  mtmoCode="WLECOME",
-                  mtla=la.laID
-                };
-                
-                InvitationText invitationText = new InvitationText{
-                  itls=leadSourceSave.lsID,
-                  itla=la.laID,
-                  itRTF= "<No text Saved>"
-                };
+              #region Agencies
+              lstAgeDel.ForEach(ag =>
+              {
+                leadSourceSave.Agencies.Remove(leadSourceSave.Agencies.Where(agg => agg.agID == ag.agID).FirstOrDefault());
+              });
+
+              lstAgeAdd.ForEach(ag =>
+              {
+                leadSourceSave.Agencies.Add(dbContext.Agencies.Where(agg => agg.agID == ag.agID).FirstOrDefault());
               });
               #endregion
+
+              #region Locations
+              dbContext.Locations.AsEnumerable().Where(lo => lstLocAdd.Any(loc => loc.loID == lo.loID)).ToList().ForEach(lo =>
+              {
+                lo.lols = leadSourceSave.lsID;
+                dbContext.Entry(lo).State = EntityState.Modified;
+              });
+
+              dbContext.Locations.AsEnumerable().Where(lo => lstLocDel.Any(loc => loc.loID == lo.loID)).ToList().ForEach(lo =>
+              {
+                lo.lols = null;
+                dbContext.Entry(lo).State = EntityState.Modified;
+              });
+              #endregion
+
+              int nRes = dbContext.SaveChanges();
+              if (!blnUpdate)
+              {
+                dbContext.USP_OR_AddAccessAdministrator("LS");
+                dbContext.SaveChanges();
+              }
+              transaction.Commit();
+              ObjectHelper.CopyProperties(leadSource, leadSourceSave, true);
+              return nRes;
             }
-            #endregion
-            #endregion
-
-            #region Agencies
-            lstAgeDel.ForEach(ag =>
+            catch
             {
-              leadSourceSave.Agencies.Remove(leadSourceSave.Agencies.Where(agg => agg.agID == ag.agID).FirstOrDefault());
-            });
-
-            lstAgeAdd.ForEach(ag =>
-            {
-              leadSourceSave.Agencies.Add(dbContext.Agencies.Where(agg => agg.agID == ag.agID).FirstOrDefault());
-            });
-            #endregion
-
-            #region Locations
-            dbContext.Locations.AsEnumerable().Where(lo => lstLocAdd.Any(loc => loc.loID == lo.loID)).ToList().ForEach(lo =>
-            {
-              lo.lols = leadSourceSave.lsID;
-              dbContext.Entry(lo).State = EntityState.Modified;
-            });
-
-            dbContext.Locations.AsEnumerable().Where(lo => lstLocDel.Any(loc => loc.loID == lo.loID)).ToList().ForEach(lo =>
-            {
-              lo.lols = null;
-              dbContext.Entry(lo).State = EntityState.Modified;
-            });
-            #endregion
-
-            int nRes = dbContext.SaveChanges();
-            if(!blnUpdate)
-            {
-              dbContext.USP_OR_AddAccessAdministrator("LS");
-              dbContext.SaveChanges();
+              transaction.Rollback();
+              return 0;
             }
-            transaction.Commit();
-            ObjectHelper.CopyProperties(leadSource, leadSourceSave,true);
-            return nRes;
-          }
-          catch
-          {
-            transaction.Rollback();
-            return 0;
           }
         }
-      }
+      });
     } 
     #endregion
   }
