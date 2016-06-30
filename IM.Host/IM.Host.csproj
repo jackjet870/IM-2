@@ -48,6 +48,10 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=4.0.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Publish\Debug\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="PalaceResorts2.Common.PalaceTools, Version=2.3.0.0, Culture=neutral, PublicKeyToken=d399b2cc59d85ff0, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>R:\PalaceResorts\Common2.0\PalaceTools\PalaceResorts2.Common.PalaceTools.dll</HintPath>
@@ -100,6 +104,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\clsFormatReport.cs" />
     <Compile Include="Classes\Common.cs" />
     <Compile Include="Classes\Gifts.cs" />
     <Compile Include="Classes\GiftsCancel.cs" />

@@ -151,6 +151,7 @@ new ExcelFormatTable() { Title = "Bookings", PropertyName = "Bookings", Format =
     }
     #endregion
 
+    #region RptPremanifestWithGifts
     /// <summary>
     /// Formato para el reporte Premanifest With Gifts de Host e Inhouse
     /// </summary>
@@ -189,6 +190,7 @@ new ExcelFormatTable() { Title = "Bookings", PropertyName = "Bookings", Format =
       new ExcelFormatTable() { Title = "Canc Book", PropertyName = "guBookCanc", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Order = 23 },
       new ExcelFormatTable() { Title = "Gifts", PropertyName = "Gifts", Format = EnumFormatTypeExcel.General, Alignment = ExcelHorizontalAlignment.Left, Order = 24 }
     };
-    }
+    } 
+    #endregion
   }
 }

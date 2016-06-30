@@ -1586,9 +1586,34 @@ namespace IM.BusinessRules.BR
         }
       });
       return result;
-    } 
+    }
     #endregion
 
+    #endregion
+
+
+    #region GetRptUplist
+    /// <summary>
+    /// Devuelve un listado de RptUpList
+    /// </summary>
+    /// <param name="dtStart"> Fecha Inicial</param>
+    /// <param name="salesRoom"> Salas de Venta</param>
+    /// <param name="uplistType"> Tipo de Uplist
+    /// 0. Up List Start
+    /// 1. Up List End</param>
+    /// <history>
+    /// [edgrodriguez] 29/06/2016
+    /// </history>
+    public async static Task<List<RptUpList>> GetRptUplist(DateTime dtStart, string salesRoom = "ALL", int uplistType = 0 )
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          return dbContext.USP_IM_RptUpList(dtStart, salesRoom, uplistType).ToList();
+        }
+      });
+    }
     #endregion
   }
 }

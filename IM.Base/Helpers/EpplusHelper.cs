@@ -125,7 +125,8 @@ namespace IM.Base.Helpers
       #region Formato de columnas Centrar y AutoAjustar
 
       //Auto Ajuste de columnas de  acuerdo a su contenido
-      ws.Cells[ws.Dimension.Address].AutoFitColumns();
+      //ws.Cells[ws.Dimension.Address].AutoFitColumns();
+      ws.Cells.AutoFitColumns();
       //Centramos el titulo de la aplicacion
       ws.Cells[1, 1, 1, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
       //Centramos el titulo del reporte
@@ -802,7 +803,7 @@ namespace IM.Base.Helpers
           }
         }
         //Ajustamos todas las columnas a su contenido.
-        wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
+        //wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
 
         #endregion Simple con Agrupado
       }
@@ -912,7 +913,7 @@ namespace IM.Base.Helpers
       }
 
       //Ajustamos las celdas a su contenido.
-      wsData.Cells[totalFilterRows + 5, 1, rowNumber, dtTable.Columns.Count].AutoFitColumns();
+      //wsData.Cells[totalFilterRows + 5, 1, rowNumber, dtTable.Columns.Count].AutoFitColumns();
 
       #region CreateSuperHeader
       // Se Agregan los superheaders
@@ -961,6 +962,8 @@ namespace IM.Base.Helpers
       }
       #endregion
 
+      wsData.Cells.AutoFitColumns();
+
       #region SaveFile
       FileInfo pathFinalFile;
       if (fileFullPath == null)
@@ -1007,6 +1010,7 @@ namespace IM.Base.Helpers
       List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0, string fileFullPath = null)
     {
       var pk = new ExcelPackage();
+     
       var wsData = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
       var totalFilterRows = 0;
 
@@ -1468,7 +1472,7 @@ namespace IM.Base.Helpers
           }
         }
         //Ajustamos todas las columnas a su contenido.
-        wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
+        //wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
 
         #endregion Agrupado
       }
@@ -1570,10 +1574,13 @@ namespace IM.Base.Helpers
           }
           rowNumber++;
         }
-        wsData.Cells[totalFilterRows, 1, rowNumber, pivotedTable.Columns.Count].AutoFitColumns();
+        //wsData.Cells[totalFilterRows, 1, rowNumber, pivotedTable.Columns.Count].AutoFitColumns();
 
         #endregion Agregando Datos
       }
+
+      wsData.Cells.AutoFitColumns();
+
       FileInfo pathFinalFile;
       if (fileFullPath == null)
       {
@@ -2109,7 +2116,7 @@ namespace IM.Base.Helpers
               }
             }
             //Ajustamos todas las columnas a su contenido.
-            wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
+            //wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
 
             #endregion Agrupado
           }
@@ -2129,7 +2136,9 @@ namespace IM.Base.Helpers
             range.Style.Border.BorderAround(ExcelBorderStyle.Medium);
           }
         }
+        wsData.Cells.AutoFitColumns();
       }
+      
       FileInfo pathFinalFile;
       if (fileFullPath == null)
       {
@@ -2613,7 +2622,7 @@ namespace IM.Base.Helpers
           }
         }
         //Ajustamos todas las columnas a su contenido.
-        wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
+        //wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
 
         #endregion Simple con Agrupado
       }
@@ -2694,7 +2703,8 @@ namespace IM.Base.Helpers
         #endregion Simple
       }
       //Ajustamos las celdas a su contenido.
-      wsData.Cells[totalFilterRows + 5, 1, rowNumber, dtTable.Columns.Count].AutoFitColumns();
+      //wsData.Cells[totalFilterRows + 5, 1, rowNumber, dtTable.Columns.Count].AutoFitColumns();
+      wsData.Cells.AutoFitColumns();
 
       FileInfo pathFinalFile;
       if (fileFullPath == null)
@@ -3774,7 +3784,7 @@ namespace IM.Base.Helpers
             return objList.Sum(c => Convert.ToDecimal(c));
 
           default:
-            return !objList.Any() ? 0 : objList.First();
+            return !objList.Any() ? null : objList.First();
         }
       }
       catch (Exception)
