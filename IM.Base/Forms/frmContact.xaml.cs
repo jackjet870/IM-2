@@ -55,6 +55,7 @@ namespace IM.Base.Forms
     #region Metodos   
 
     #region Validate
+
     public bool Validate()
     {
       // validamos el PR
@@ -242,7 +243,7 @@ namespace IM.Base.Forms
         //se realizo, es decir ni se guardo el Guest, el Log ni los movimientos de este, siendo así ya no modificamos la variable
         //_wasSaved que es la que indica que se guardo el Avail.
         if (BRGuests.SaveGuestContact(_guest, _userPrimero.LeadSource.lsHoursDif, _userLoguedo.User.peID,
-            EnumGuestsMovementsType.Contact,Environment.MachineName.ToString(),ComputerHelper.GetIPMachine()) != 0)
+            EnumGuestsMovementsType.Contact,Environment.MachineName,ComputerHelper.GetIpMachine()) != 0)
         {
           //Modificamos las variable indicando que si se guardo la variable
           _wasSave = true;

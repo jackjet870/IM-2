@@ -351,7 +351,6 @@ namespace IM.Inhouse
 
     private void txtguum_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
     {
-      var txt = sender as TextBox;                         
       e.Handled = !ValidateHelper.OnlyNumbers(e.Text);      
     }
   }

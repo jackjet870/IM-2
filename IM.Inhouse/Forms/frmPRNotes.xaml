@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:local="clr-namespace:IM.Inhouse.Forms"
-        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Inhouse.Forms.frmPRNotes"
+        xmlns:model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Inhouse.Forms.frmPRNotes"
         mc:Ignorable="d" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
         Title="PR Notes" ShowInTaskbar="False" SizeToContent="WidthAndHeight"  Loaded="Window_Loaded" Closing="Window_Closing">
     <Window.Resources>
@@ -27,7 +27,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <CollectionViewSource x:Key="pRNoteViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:PRNote}, CreateList=True}"/>
+        <CollectionViewSource x:Key="pRNoteViewSource" d:DesignSource="{d:DesignInstance {x:Type model:PRNote}, CreateList=True}"/>
     </Window.Resources>
     <Grid Background="Beige">
         <Grid.RowDefinitions>
@@ -68,7 +68,10 @@
 
         <!--#region DataGrid-->
         <StackPanel Grid.Row="1" Orientation="Vertical" Margin="10" DataContext="{StaticResource pRNoteViewSource}" >
-            <DataGrid Height="230" Width="700" BorderBrush="Black" Background="Bisque" CanUserAddRows="False" IsReadOnly="true" SelectionUnit="FullRow" SelectionMode="Single" AlternatingRowBackground="Gainsboro"  AlternationCount="2" x:Name="dgNotes" RowDetailsVisibilityMode="VisibleWhenSelected"  ItemsSource="{Binding}"  EnableRowVirtualization="True" AutoGenerateColumns="False" MouseDoubleClick="dgNotes_MouseDoubleClick">
+            <DataGrid Height="230" Width="700" BorderBrush="Black" Background="Bisque" CanUserAddRows="False" IsReadOnly="true"
+                      SelectionUnit="FullRow" SelectionMode="Single" AlternatingRowBackground="Gainsboro"  AlternationCount="2" 
+                      x:Name="dgNotes" RowDetailsVisibilityMode="VisibleWhenSelected"  ItemsSource="{Binding}"  
+                      EnableRowVirtualization="True" AutoGenerateColumns="False" MouseDoubleClick="dgNotes_MouseDoubleClick">
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="pnDTColumn" Width="auto" Header="Date / Time" Binding="{Binding Date}" />
                     <DataGridTextColumn x:Name="pnguColumn" Width="auto" Header="PR" Binding="{Binding PR}" />
@@ -124,10 +127,10 @@
 
         <!--#region StatusBar -->
         <StatusBar Grid.Row="5" Background="Gray"  x:Name="stbStatusBar" VerticalAlignment="Bottom" >
-            <StatusBarItem Grid.Column="0" x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
-            <StatusBarItem Grid.Column="1" x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>
-            <StatusBarItem Grid.Column="2" x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
-            <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" Content="0/0" HorizontalAlignment="Right" Width="50"/>
+            <StatusBarItem x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
+            <StatusBarItem x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>
+            <StatusBarItem x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Right" Width="50" HorizontalContentAlignment="Center"/>
+            <StatusBarItem x:Name="StatusBarReg" Content="0/0" HorizontalAlignment="Right" Width="50"/>
         </StatusBar>
         <!--#endregion-->
     </Grid>

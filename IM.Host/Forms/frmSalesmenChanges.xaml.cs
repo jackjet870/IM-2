@@ -30,11 +30,17 @@ namespace IM.Host.Forms
       _membership = membership;
     }
 
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// Carga las variables del formulario
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 29062016
+    /// </history>
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       Title = $"IM Salesmen Changes - Sale ID {_sale} / Membership Number {_membership}";
-      var salesSalesMan = BRSalesSalesmen.GetSalesmenChanges(_sale);         
-      System.Windows.Data.CollectionViewSource salesmenChangesViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("salesmenChangesViewSource")));
+      var salesSalesMan = await BRSalesSalesmen.GetSalesmenChanges(_sale);         
+      CollectionViewSource salesmenChangesViewSource = ((CollectionViewSource)(FindResource("salesmenChangesViewSource")));
       salesmenChangesViewSource.Source = salesSalesMan;      
     }
   }

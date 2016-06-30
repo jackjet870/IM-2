@@ -102,7 +102,8 @@
             <!--#region Grd Guests Group-->
             <Grid x:Name="grdGroup" Grid.Column="0">
                 <DataGrid x:Name="dtgGuestsGroup" AutoGenerateColumns="False" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="3,5,5,5"  
-                          DataContext="{Binding lstGuestsGroups}" EnableRowVirtualization="True" IsReadOnly="True" SelectionChanged="dtgGuestsGroup_SelectionChanged">
+                          DataContext="{Binding lstGuestsGroups}" 
+                          EnableRowVirtualization="True" IsReadOnly="True" SelectionChanged="dtgGuestsGroup_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="gxIDColumn" Width=".6*" Header="ID" Binding="{Binding gxID}"/>
                         <DataGridTextColumn x:Name="gxNColumn" Width="2.4*" Header="Group" Binding="{Binding gxN}"/>

@@ -29,10 +29,10 @@ namespace IM.Host.Forms
       _membership = membership;
     }
 
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       Title = $"IM Sales Log - Sale ID {_sale} / Membership Number {_membership}"; 
-      var saleLog = BRSales.GetSaleLog(_sale);
+      var saleLog = await BRSales.GetSaleLog(_sale);
       var saleLogDataViewSource = ((CollectionViewSource)(FindResource("saleLogDataViewSource")));
       saleLogDataViewSource.Source = saleLog;
     }

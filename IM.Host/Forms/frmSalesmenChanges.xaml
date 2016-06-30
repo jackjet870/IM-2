@@ -16,7 +16,7 @@
     <Grid DataContext="{StaticResource salesmenChangesViewSource}">
         <DataGrid x:Name="salesmenChangesDataGrid" AutoGenerateColumns="False" CanUserAddRows="False"  CanUserResizeColumns="True"  EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="7" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" Background="Bisque">
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="schDTColumn" Header="Date / Time" Width="auto" Binding="{Binding schDT,StringFormat= sjsjs {0:dd/MM/yyyy}}"/>
+                <DataGridTextColumn x:Name="schDTColumn" Header="Date / Time" Width="auto" Binding="{Binding schDT,StringFormat= 0:dd/MM/yyyy}"/>
                 <DataGridTextColumn x:Name="schAuthorizedByColumn" Binding="{Binding schAuthorizedBy}" Header="Authorized By" Width="auto"/>
                 <DataGridTextColumn x:Name="authorizedByNColumn" Binding="{Binding AuthorizedByN}" Header="Authorized By Name" Width="auto"/>
                 <DataGridTextColumn x:Name="schMadeByColumn" Binding="{Binding schMadeBy}" Header="Made By" Width="auto"/>
@@ -29,24 +29,5 @@
                 <DataGridTextColumn x:Name="newSalesmanNColumn" Binding="{Binding NewSalesmanN}" Header="New Salesman Name" Width="auto"/>
             </DataGrid.Columns>
         </DataGrid>
-        <!--  <DataGrid x:Name="salesmenChangesDataGrid" AutoGenerateColumns="False" CanUserAddRows="False"  CanUserResizeColumns="True"  EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="7" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" Background="Bisque">
-            <DataGrid.Columns>
-                <DataGridTextColumn x:Name="schDTColumn" Header="Date / Time" Width="auto" Binding="{Binding schDT}"/>
-                <DataGridTextColumn x:Name="schAuthorizedByColumn" Binding="{Binding schAuthorizedBy}" Header="Authorized By" Width="auto"/>
-                <DataGridTextColumn x:Name="authorizedByNColumn" Binding="{Binding AuthorizedByN}" Header="Authorized By Name" Width="auto"/>
-                <DataGridTextColumn x:Name="schMadeByColumn" Binding="{Binding schMadeBy}" Header="Made By" Width="auto"/>
-                <DataGridTextColumn x:Name="madeByNColumn" Binding="{Binding MadeByN}" Header="Made By Name" Width="auto"/>
-                <DataGridTextColumn x:Name="roNColumn" Binding="{Binding roN}" Header="Role" Width="auto"/>
-                <DataGridTextColumn x:Name="schPositionColumn" Binding="{Binding schPosition}" Header="Position" Width="auto"/>
-                <DataGridTextColumn x:Name="schOldSalesmanColumn" Binding="{Binding schOldSalesman}" Header="Old Salesman" Width="auto"/>
-                <DataGridTextColumn x:Name="oldSalesmanNColumn" Binding="{Binding OldSalesmanN}" Header="Old Salesman Name" Width="auto"/>
-                <DataGridTextColumn x:Name="schNewSalesmanColumn" Binding="{Binding schNewSalesman}" Header="New Salesman" Width="auto"/>
-                <DataGridTextColumn x:Name="newSalesmanNColumn" Binding="{Binding NewSalesmanN}" Header="New Salesman Name" Width="auto"/>
-            </DataGrid.Columns>
-    
-        </DataGrid>
-    -->
-
-
     </Grid>
 </Window>

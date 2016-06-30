@@ -110,7 +110,6 @@
     <Compile Include="Classes\GiftsCancel.cs" />
     <Compile Include="Classes\GiftsExchange.cs" />
     <Compile Include="Classes\ReceiptGifts.cs" />
-    <Compile Include="Classes\SaleMan.cs" />
     <Compile Include="Enums\enumMode.cs" />
     <Compile Include="Enums\EnumOpenBy.cs" />
     <Compile Include="Enums\EnumSale.cs" />

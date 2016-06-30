@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Classes="clr-namespace:IM.Host.Classes" xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmSalesSalesmen"
-        mc:Ignorable="d"
-        Title="frmSalesSalesmen" SizeToContent="Height" Width="420" Background="Bisque" WindowStyle="ToolWindow" ResizeMode="NoResize"  Loaded="Window_Loaded" >
+        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" ShowInTaskbar="False"
+        Title="IM Salesmen" SizeToContent="Height" Width="420" Background="Bisque" WindowStyle="ToolWindow" ResizeMode="NoResize"  Loaded="Window_Loaded" >
     <Window.Resources>
         <CollectionViewSource x:Key="salesSalesmanViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:SalesSalesman}, CreateList=True}"/>
     </Window.Resources>
@@ -55,6 +55,5 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-
     </Grid>
 </Window>

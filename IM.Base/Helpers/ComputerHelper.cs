@@ -4,19 +4,24 @@ namespace IM.Base.Helpers
 {
   public class ComputerHelper
   {
-    public static string GetIPMachine()
+    /// <summary>
+    /// Obtiene la ip de la Maquina en la que esta actualmnente el usuario
+    /// </summary>
+    /// <history>
+    ///[jorcanche]  created 05032016
+    /// </history>
+    public static string GetIpMachine()
     {
-      IPHostEntry host;
-      string localIP = "";
-      host = Dns.GetHostEntry(Dns.GetHostName());
+      var localIp = string.Empty;
+      var host = Dns.GetHostEntry(Dns.GetHostName());
       foreach (IPAddress ip in host.AddressList)
       {
         if (ip.AddressFamily.ToString() == "InterNetwork")
         {
-          localIP = ip.ToString();
+          localIp = ip.ToString();
         }
       }
-      return localIP;
+      return localIp;
     }
   }
 }

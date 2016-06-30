@@ -610,7 +610,6 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int SaveChangedOfGuest(Guest guest, short lsHoursDif, string changedBy)
     {
-      int respuesta = 0;
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
@@ -623,14 +622,14 @@ namespace IM.BusinessRules.BR
             //Guardamos el Log del guest
             dbContext.USP_OR_SaveGuestLog(guest.guID, lsHoursDif, changedBy);
 
-            respuesta = dbContext.SaveChanges();
+            var respuesta = dbContext.SaveChanges();
             transaction.Commit();
             return respuesta;
           }
           catch
           {
             transaction.Rollback();
-            return respuesta = 0;
+            return 0;
           }
         }
       }
@@ -652,7 +651,6 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int SaveGuestContact(Guest guest, short lsHoursDif, string changedBy, EnumGuestsMovementsType guestMovementType, string computerName, string iPAddress)
     {
-      int respuesta = 0;
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
         using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
@@ -668,14 +666,14 @@ namespace IM.BusinessRules.BR
             //guardamos el movimiento de contactacion del huesped
             dbContext.USP_OR_SaveGuestMovement(guest.guID, EnumToListHelper.GetEnumDescription(guestMovementType), changedBy, computerName, iPAddress);
 
-            respuesta = dbContext.SaveChanges();
+            var respuesta = dbContext.SaveChanges();
             transaction.Commit();
             return respuesta;
           }
           catch
           {
             transaction.Rollback();
-            return respuesta = 0;
+            return 0;
           }
         }
       }

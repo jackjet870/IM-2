@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
         xmlns:base="clr-namespace:IM.Base.Helpers;assembly=IM.Base"        
-        Loaded="Window_Loaded" WindowStyle="SingleBorderWindow"
-        mc:Ignorable="d" Title="Sales" SizeToContent="WidthAndHeight"  WindowStartupLocation="CenterScreen" Background="Bisque">
+        Loaded="Window_Loaded" WindowStyle="SingleBorderWindow" ShowInTaskbar="False"
+        mc:Ignorable="d" Title="Sales" SizeToContent="WidthAndHeight" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"  WindowStartupLocation="CenterScreen" Background="Bisque">
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="FontSize" Value="10"/>
@@ -180,7 +180,7 @@
                                 <TextBlock x:Name="lblsast"  Text="Sale Type" />
                                 <CheckBox x:Name="chksaUpdated" IsChecked="{Binding saUpdated}" Content="Updated"/>
                             </StackPanel>
-                            <ComboBox x:Name="cbosast"  Width="150" SelectedValuePath="stID" SelectedValue="{Binding sast}" DisplayMemberPath="stN" SelectionChanged="cbo_SelectionChanged" />
+                            <ComboBox x:Name="cbosast"  Width="150" SelectedValuePath="stID" SelectedValue="{Binding sast}" DisplayMemberPath="stN" SelectionChanged="cbosast_SelectionChanged" />
                         </StackPanel>
                         <StackPanel>
                             <TextBlock x:Name="lblsaRefMember" Text="Prev Member #" />

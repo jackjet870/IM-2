@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Host.Forms" Loaded="Window_Loaded"
-        mc:Ignorable="d" Closed="Window_Closed"
+        mc:Ignorable="d" Closed="Window_Closed" ShowInTaskbar="False" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
         Title="IM Salesmen Changes Authorization" SizeToContent="WidthAndHeight" Background="Bisque">
     <Grid>
         <Grid.ColumnDefinitions>

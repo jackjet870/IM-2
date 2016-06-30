@@ -460,7 +460,7 @@ namespace IM.Inhouse.Forms
           // Actualiza los datos del grid despues de guardar la informacion de disponibilidad PR de Disponibilidad y si se marco como no disponible 
           #region Updated
           var item = dg.SelectedItem;
-          Type t = item.GetType();
+          var t = item.GetType();
           if (t.Name != "ObjGuestPremanifest")
           {
             t.GetProperty("guPRAvail").SetValue(item, frmAvail.guPRAvail);
@@ -1530,7 +1530,7 @@ namespace IM.Inhouse.Forms
     private void dg_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       var dg = sender as DataGrid;
-      StatusBarReg.Content = string.Format("{0}/{1}", dg.Items.CurrentPosition + 1, dg.Items.Count);
+      StatusBarReg.Content = $"{dg.Items.CurrentPosition + 1}/{dg.Items.Count}";
     }
 
     #endregion

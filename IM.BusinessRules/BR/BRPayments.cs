@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using IM.Model;
 using IM.Model.Helpers;
-using IM.Model.Classes;
 
 namespace IM.BusinessRules.BR
 {
@@ -20,15 +19,20 @@ namespace IM.BusinessRules.BR
     /// <hitory>
     /// [jorcanche] 20/05/2016 created
     /// </hitory>
-    public static List<Payment> GetPaymentsbySale(int saID)
+    public async static Task<List<Payment>> GetPaymentsbySale(int saID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      var res = new List<Payment>();
+      await Task.Run(() =>
       {
-        return (from gu in dbContext.Payments
-                where gu.pasa == saID
-                orderby gu.papt
-                select gu).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          res = (from gu in dbContext.Payments
+                 where gu.pasa == saID
+                 orderby gu.papt
+                 select gu).ToList();
+        }
+      });
+      return res;
     }
     #endregion
 
@@ -40,14 +44,19 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche]  created 24062016
     /// </history>
-    public static int DeletePaymentsbySale(int saleID)
+    public async static Task<int> DeletePaymentsbySale(int saleID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      int res = 0;
+      await Task.Run(() =>
       {
-        var lstPayments = dbContext.Payments.Where(p => p.pasa == saleID);
-        dbContext.Payments.RemoveRange(lstPayments);
-        return dbContext.SaveChanges();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          var lstPayments = dbContext.Payments.Where(p => p.pasa == saleID);
+          dbContext.Payments.RemoveRange(lstPayments);
+          res =  dbContext.SaveChanges();
+        }
+      });
+      return res;
     } 
     #endregion
   }

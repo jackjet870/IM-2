@@ -9,6 +9,15 @@ namespace IM.BusinessRules.BR
   public class BRGuestsLogs
   {
     #region SetLogGuest
+    /// <summary>
+    /// Guarda el log de un guest
+    /// </summary>
+    /// <param name="Guest">Id del Guest</param>
+    /// <param name="HoursDif"></param>
+    /// <param name="ChangedBy"></param>
+    /// <history>
+    /// [jorcanche] 09/03/2016
+    /// </history>
     public static void SetLogGuest(int Guest, short HoursDif, string ChangedBy)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
@@ -24,7 +33,9 @@ namespace IM.BusinessRules.BR
     /// Obtiene log del Guest Ingresado
     /// </summary>
     /// <param name="IdGuest">Id del Guest</param>
-    /// <history>[jorcanche] 09/03/2016</history>
+    /// <history>
+    /// [jorcanche] 09/03/2016
+    /// </history>
     public async static Task<List<GuestLogData>> GetGuestLog(int IdGuest)
     {
       List<GuestLogData> result = null;
@@ -47,7 +58,9 @@ namespace IM.BusinessRules.BR
     ///<param name="IdGuest"></param>
     /// <param name="changedBy"></param>
     /// <param name="changedBy"></param>
-    /// <history>[jorcanche] 11/03/2016</history>
+    /// <history>
+    /// [jorcanche] 11/03/2016
+    /// </history>
     public static void SaveGuestLog(int IdGuest, short lsHoursDif, string changedBy)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
