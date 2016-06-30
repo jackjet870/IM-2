@@ -22254,7 +22254,7 @@
           <Property Type="String" Name="DayOffList" Nullable="true" MaxLength="7" />
           <Property Type="String" Name="Language" Nullable="false" MaxLength="1" />
           <Property Type="String" Name="Location" Nullable="false" MaxLength="1" />
-          <Property Type="String" Name="Time" Nullable="false" MaxLength="1" />
+          <Property Type="DateTime" Name="Time" Nullable="true" Precision="23" />
           <Property Type="Decimal" Name="AmountYtd" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="AmountM" Nullable="true" Precision="19" />
           <Property Type="String" Name="TimeN" Nullable="true" MaxLength="10" />

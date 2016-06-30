@@ -20,7 +20,7 @@ namespace IM.Model
         public string DayOffList { get; set; }
         public string Language { get; set; }
         public string Location { get; set; }
-        public string Time { get; set; }
+        public Nullable<System.DateTime> Time { get; set; }
         public Nullable<decimal> AmountYtd { get; set; }
         public Nullable<decimal> AmountM { get; set; }
         public string TimeN { get; set; }
