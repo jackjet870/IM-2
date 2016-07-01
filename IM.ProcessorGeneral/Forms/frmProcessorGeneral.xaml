@@ -23,13 +23,13 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style TargetType="{x:Type DataGridRow}">
+        <!--<Style TargetType="{x:Type DataGridRow}">
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True" >
                     <Setter Property="Background" Value="LightBlue" />
                 </Trigger>
             </Style.Triggers>
-        </Style>      
+        </Style>-->      
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>

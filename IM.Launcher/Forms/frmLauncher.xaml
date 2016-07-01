@@ -39,7 +39,7 @@
 
         <Label Name="lblVersion" HorizontalAlignment="Center" VerticalAlignment="Center">VERSION </Label>
 
-        <ListBox Grid.Row="1" Name="lsbLauncher" Background="SkyBlue" MouseDoubleClick="lsbLauncher_MouseDoubleClick" KeyDown="lsbLauncher_KeyDown">
+        <ListBox Grid.Row="1" Name="lsbLauncher" TextSearch.TextPath="Descripcion" Background="SkyBlue" MouseDoubleClick="lsbLauncher_MouseDoubleClick" KeyDown="lsbLauncher_KeyDown">
         </ListBox>
 
     </Grid>

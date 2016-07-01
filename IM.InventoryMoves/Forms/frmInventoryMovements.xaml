@@ -42,14 +42,14 @@
           </DataGrid.Columns>
         </DataGrid>
         <Label x:Name="lblNew" Content="New Movements" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Center" FontWeight="Bold" />
-        <DataGrid x:Name="grdNew" Grid.Column="1" Grid.Row="3" CanUserAddRows="True" CanUserSortColumns="False" IsReadOnly="False" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource objWhsMovsViewSource}}">
+        <DataGrid x:Name="grdNew" Grid.Column="1" Grid.Row="3" CanUserAddRows="True" CanUserSortColumns="False" IsReadOnly="False" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource objWhsMovsViewSource}}" >
           <DataGrid.Columns>
-            <DataGridTextColumn Binding="{Binding wmQty, ValidatesOnDataErrors=True}" Header="Quantity" Width="60"/>
-            <DataGridComboBoxColumn x:Name="dgcbGifts" SelectedValueBinding="{Binding wmgi, ValidatesOnDataErrors=True}" DisplayMemberPath="giN" SelectedValuePath="giID"  Header="Gift" ItemsSource="{Binding Source={StaticResource getGiftsViewSource}}" Width="200" >
+                        <DataGridTextColumn Binding="{Binding wmQty, ValidatesOnDataErrors=True}" ElementStyle="{StaticResource ResourceKey=TextBox-ErrorInfo}" Header="Quantity" Width="60"/>
+              <DataGridComboBoxColumn x:Name="dgcbGifts" SelectedValueBinding="{Binding wmgi, ValidatesOnDataErrors=True}" DisplayMemberPath="giN" SelectedValuePath="giID"  Header="Gift" ItemsSource="{Binding Source={StaticResource getGiftsViewSource}}" Width="200">
               <DataGridComboBoxColumn.EditingElementStyle>
                 <Style TargetType="ComboBox">
-                  <Setter Property="IsEditable" Value="True"/>
-                </Style>
+                                    <Setter Property="IsEditable" Value="True"/>
+                                </Style>
               </DataGridComboBoxColumn.EditingElementStyle>
             </DataGridComboBoxColumn>
             <DataGridTextColumn Binding="{Binding wmComments}" Header="Comments" Width="*"/>

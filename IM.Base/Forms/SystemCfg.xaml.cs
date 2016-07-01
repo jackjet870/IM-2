@@ -165,6 +165,7 @@ namespace IM.Base.Forms
         {
           configurationKey.SetValue("PrintInvit", cmbPrinterInvitation.SelectedValue);
           configurationKey.SetValue("PrintMealTicket", cmbPrinterMeal.SelectedValue);
+          UIHelper.ShowMessage("Printer's was successfully saved", MessageBoxImage.Information, "System Configuration");
           SystemCommands.CloseWindow(this);
         }
 
