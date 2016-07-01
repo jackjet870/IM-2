@@ -32,7 +32,7 @@ namespace IM.BusinessRules.BR
       List<RateType> lsRateTypes = new List<RateType>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from ra in dbContext.RateTypes
                       select ra;

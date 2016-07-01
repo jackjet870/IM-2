@@ -27,7 +27,7 @@ namespace IM.BusinessRules.BR
       List < TransferStartData> listData = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           listData = dbContext.USP_OR_TransferStart().ToList();
         }
@@ -49,7 +49,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferStop();
         }
@@ -72,7 +72,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferStopZone(zone);
         }
@@ -94,7 +94,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferAddCountries();
         }
@@ -115,7 +115,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferAddCountriesHotel();
         }
@@ -136,7 +136,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateCountriesNames();
         }
@@ -157,7 +157,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateCountriesHotelNames();
         }
@@ -178,7 +178,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferAddAgencies();
         }
@@ -199,7 +199,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferAddAgenciesHotel();
         }
@@ -220,7 +220,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateAgenciesNames();
         }
@@ -241,7 +241,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateAgenciesHotelNames();
         }
@@ -262,7 +262,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferAddRoomTypes();
         }
@@ -283,7 +283,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateRoomTypesNames();
         }
@@ -304,7 +304,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferAddContracts();
         }
@@ -325,7 +325,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateContractsNames();
         }
@@ -346,7 +346,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferAddGroups();
         }
@@ -368,7 +368,7 @@ namespace IM.BusinessRules.BR
       
         await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             response = dbContext.USP_OR_TransferUpdateGroupsNames();
           }
@@ -391,7 +391,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateTransferCountries();
         }
@@ -413,7 +413,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateTransferAgencies();
         }
@@ -435,7 +435,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateTransferLanguages();
         }
@@ -457,7 +457,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateTransferMarkets();
         }
@@ -479,7 +479,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByGroups();
         }
@@ -501,7 +501,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByAgency();
         }
@@ -523,7 +523,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByCountry();
         }
@@ -544,7 +544,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByContract();
         }
@@ -566,7 +566,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesBy1Night();
         }
@@ -588,7 +588,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesBy2Nights();
         }
@@ -610,7 +610,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByTransfer();
         }
@@ -633,7 +633,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByNewMember();
         }
@@ -654,7 +654,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateTransferUnavailableMotivesByPax();
         }
@@ -676,7 +676,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateTransferAvailability();
         }
@@ -699,7 +699,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsRoomNumbers();
         }
@@ -721,7 +721,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsRoomTypes();
         }
@@ -743,7 +743,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsCreditCards();
         }
@@ -766,7 +766,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsLastNames();
         }
@@ -789,7 +789,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsFirstNames();
         }
@@ -812,7 +812,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsCheckInDates();
         }
@@ -834,7 +834,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsCheckIns();
         }
@@ -858,7 +858,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsCheckOutDates();
         }
@@ -880,7 +880,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsEmails();
         }
@@ -902,7 +902,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsCities();
         }
@@ -924,7 +924,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsStates();
         }
@@ -946,7 +946,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsCountries();
         }
@@ -968,7 +968,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsCheckOutsEarly();
         }
@@ -990,7 +990,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsGuestTypes();
         }
@@ -1012,7 +1012,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsContracts();
         }
@@ -1034,7 +1034,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsBirthDates();
         }
@@ -1056,7 +1056,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsAges();
         }
@@ -1078,7 +1078,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsPax();
         } 
@@ -1100,7 +1100,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsReservationTypes();
         }
@@ -1122,7 +1122,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsIdProfileOpera();
         }
@@ -1144,7 +1144,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsAgencies();
         }
@@ -1165,7 +1165,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsMarkets();
         }
@@ -1188,7 +1188,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsAvailabilityUnavailableMotives();
         }
@@ -1210,7 +1210,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsUnavailableMotives1NightRevert();
         }
@@ -1234,7 +1234,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferUpdateGuestsAvailables(dateFrom, dateTo);
         }
@@ -1255,7 +1255,7 @@ namespace IM.BusinessRules.BR
       List < int > response = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferAddGuests().Where(x => x.HasValue).Select(x => (int)x).ToList();
         }
@@ -1276,7 +1276,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_TransferDeleteReservationsCancelled_Timeout;
           response =  dbContext.USP_OR_TransferDeleteReservationsCancelled();
@@ -1298,7 +1298,7 @@ namespace IM.BusinessRules.BR
       int response = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferDeleteTransfer();
         }
@@ -1319,7 +1319,7 @@ namespace IM.BusinessRules.BR
       List<Transfer> response = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           response = dbContext.USP_OR_TransferGetTransfer().ToList();
         }
@@ -1338,7 +1338,7 @@ namespace IM.BusinessRules.BR
     {
       int response = 0;
       
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Transfers.Add(transfer);
           response = await dbContext.SaveChangesAsync(); //SaveChanges()
@@ -1359,7 +1359,7 @@ namespace IM.BusinessRules.BR
     {
       bool status = true;
       await Task.Run(() => { 
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var result = dbContext.Transfers.SingleOrDefault(transfer => transfer.tls == leadSource && transfer.tHReservID == tHReservID);
           status = (result != null) ?true : false;

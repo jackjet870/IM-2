@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
       List<MembershipGroup> lstMembershipGroup = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from mg in dbContext.MembershipsGroups
                       select mg;
@@ -74,7 +74,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           using (var transaccion = dbContext.Database.BeginTransaction(IsolationLevel.Serializable))
           {

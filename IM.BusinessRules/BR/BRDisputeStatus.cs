@@ -22,7 +22,7 @@ namespace IM.BusinessRules.BR
     {
       List<DisputeStatus> result = new List<DisputeStatus>();
       await Task.Run(() => {
-        using (var db = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var db = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = (from x in db.DisputeStatusList where x.dsA == status select x).OrderBy(x => x.dsID);
           result = query.ToList();

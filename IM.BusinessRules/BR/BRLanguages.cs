@@ -26,7 +26,7 @@ namespace IM.BusinessRules.BR
       List<LanguageShort> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_GetLanguages(Convert.ToByte(status)).ToList();
         }
@@ -49,7 +49,7 @@ namespace IM.BusinessRules.BR
       List<Language> lstLanguages = new List<Language>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from la in dbContext.Languages
                       select la;

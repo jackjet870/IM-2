@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
       List<Desk> lstDesk = new List<Desk>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from dk in dbContext.Desks
                       select dk;
@@ -72,7 +72,7 @@ namespace IM.BusinessRules.BR
     {
       int nRes = await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {

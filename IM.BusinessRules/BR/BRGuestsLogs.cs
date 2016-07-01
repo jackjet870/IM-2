@@ -20,7 +20,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void SetLogGuest(int Guest, short HoursDif, string ChangedBy)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_SaveGuestLog(Guest, HoursDif, ChangedBy);
       }
@@ -41,7 +41,7 @@ namespace IM.BusinessRules.BR
       List<GuestLogData> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_GetGuestLog(IdGuest).ToList();
         }
@@ -63,7 +63,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void SaveGuestLog(int IdGuest, short lsHoursDif, string changedBy)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_SaveGuestLog(IdGuest, lsHoursDif, changedBy);
       }

@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
       List<MembershipType> lstMemberShipType = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from mt in dbContext.MembershipTypes
                       select mt;
@@ -76,7 +76,7 @@ namespace IM.BusinessRules.BR
       byte?  level = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var status = Convert.ToBoolean(nStatus);
           level = (from mt in dbContext.MembershipTypes

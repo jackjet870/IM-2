@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<PaymentPlace>> GetPaymentPlaces(int nStatus = -1, PaymentPlace paymentPlaces = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var query = from pc in dbContext.PaymentPlaces
                     select pc;

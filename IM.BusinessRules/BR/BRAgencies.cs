@@ -23,7 +23,7 @@ namespace IM.BusinessRules.BR
       List<AgencyShort> result = new List<AgencyShort>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_GetAgencies(Convert.ToByte(status)).ToList();
         }
@@ -54,7 +54,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
        {
-         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
          {
            var query = from ag in dbContext.Agencies
                        select ag;
@@ -115,7 +115,7 @@ namespace IM.BusinessRules.BR
       int nRes = 0;
      nRes= await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           if (blnUpd)//Actualizar
           {
@@ -251,7 +251,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.Agencies.Where(x => agIDList.Contains(x.agID)).ToList();
         }

@@ -26,7 +26,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<SaleByPR> GetSalesByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, bool searchBySalePR)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetSalesByPR(dateFrom, dateTo, leadSources, PR, searchBySalePR).ToList();
       }
@@ -48,7 +48,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<SaleByLiner> GetSalesByLiner(DateTime dateFrom, DateTime dateTo, string salesRooms, string Liner)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetSalesByLiner(dateFrom, dateTo, salesRooms, Liner).ToList();
 
@@ -73,7 +73,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<SaleByCloser> GetSalesByCloser(DateTime dateFrom, DateTime dateTo, string salesRooms, string closer)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetSalesByCloser(dateFrom, dateTo, salesRooms, closer).ToList();
 
@@ -101,7 +101,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetSales_Timeout;
           return
@@ -124,7 +124,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbCOntext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbCOntext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return (from gu in dbCOntext.SalesRooms where gu.srID == srId select gu.srSalesCloseD).FirstOrDefault();
         }
@@ -148,7 +148,7 @@ namespace IM.BusinessRules.BR
       var sale = new Sale();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from gu in dbContext.Sales select gu;
           if (!string.IsNullOrEmpty(memebershipNum))
@@ -173,7 +173,7 @@ namespace IM.BusinessRules.BR
     /// </hitory>
     public static List<SaleType> GetSalesTypes(string stId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return (from gu in dbContext.SaleTypes
                 where gu.stA == true && gu.stID == stId
@@ -194,7 +194,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return (from s in dbContext.Sales
                   where s.sagu == sagu
@@ -217,7 +217,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return dbContext.USP_OR_UpdateSaleUpdated(saleId, updated);
         }
@@ -238,7 +238,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return dbContext.USP_OR_UpdateGuestSale(guestId, sale);
         }
@@ -256,7 +256,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int SaveChangedSale(Sale sale)
     {  
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var personel = dbContext.Personnels.First();
         sale.Personnel_LinerCaptain1 = personel;
@@ -278,7 +278,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void SaveSaleLog(int? sale, short hoursDif, string changedBy)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_SaveSaleLog(sale, hoursDif, changedBy);
       }
@@ -298,7 +298,7 @@ namespace IM.BusinessRules.BR
       var resul = new List<SaleLogData>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           resul = dbContext.USP_OR_GetSaleLog(sale).ToList();
         }
@@ -321,7 +321,7 @@ namespace IM.BusinessRules.BR
       int res = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           res = dbContext.USP_OR_DeleteSale(saleId);
         }
@@ -364,7 +364,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<ValidationData> ValidateSale(string changedBy, string password, Nullable<int> sale, string membershipNumber, Nullable<int> guest, string saleType, string salesRoom, string location, string pR1, string pR2, string pR3, string pRCaptain1, string pRCaptain2, string pRCaptain3, string liner1, string liner2, string linerCaptain, string closer1, string closer2, string closer3, string closerCaptain, string exit1, string exit2, string podium, string vLO)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_ValidateSale(changedBy, password, sale, membershipNumber, guest, saleType, salesRoom, location, pR1, pR2, pR3, pRCaptain1, pRCaptain2, pRCaptain3, liner1, liner2, linerCaptain, closer1, closer2, closer3, closerCaptain, exit1, exit2, podium, vLO).ToList();
       }

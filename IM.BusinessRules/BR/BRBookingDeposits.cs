@@ -21,7 +21,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<BookingDeposit> GetBookingDeposits(int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.BookingDeposits.Include("CreditCardType").Include("PaymentType").Where(b => b.bdgu == guestId).ToList();
       }
@@ -44,7 +44,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           lstBookingDeposits = dbContext.USP_OR_GetBookingDepositsByGuest(GuestID, RefundID).ToList();
         }

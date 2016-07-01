@@ -23,7 +23,7 @@ namespace IM.BusinessRules.BR
     {
       List<ReasonCancellationFolio> lstReasonCancellation = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             var query = from rcf in dbContext.ReasonsCancellationFolios
                         select rcf;

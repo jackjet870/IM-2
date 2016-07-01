@@ -22,7 +22,7 @@ namespace IM.BusinessRules.BR
     {
       List<SalesSalesman> result = null;
 
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from ss in dbContext.SalesSalesmen
                       select ss;
@@ -67,7 +67,7 @@ namespace IM.BusinessRules.BR
       var res = new List<SalesmenChanges>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           res = dbContext.USP_OR_GetSalesmenChanges(sale).ToList();
         }
@@ -90,7 +90,7 @@ namespace IM.BusinessRules.BR
       var res = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstsalesSalesman = dbContext.SalesSalesmen.Where(salesSalesman => salesSalesman.smsa == saleId);
           dbContext.SalesSalesmen.RemoveRange(lstsalesSalesman);
@@ -116,7 +116,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return dbContext.USP_OR_UpdateGuestSalesmen(guId, saleId);
         }

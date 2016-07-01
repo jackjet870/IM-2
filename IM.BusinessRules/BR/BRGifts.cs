@@ -28,7 +28,7 @@ namespace IM.BusinessRules.BR
       List<GiftShort> result = new List<GiftShort>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_GetGifts(location, Convert.ToByte(Status)).ToList();
         }
@@ -54,7 +54,7 @@ namespace IM.BusinessRules.BR
       List<Gift> lstResult = new List<Gift>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           bool _status = Convert.ToBoolean(status);
           lstResult = dbContext.Gifts.Where(x => x.giA == _status).OrderBy(o => o.giN).ToList();
@@ -83,7 +83,7 @@ namespace IM.BusinessRules.BR
       List<GiftCategory> result = new List<GiftCategory>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstGiftsCateg = dbContext.GiftsCategories;
           switch (Status)
@@ -118,7 +118,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<InvitationGift> GetGiftsByGuest(int guestID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.InvitationsGifts.Where(i => i.iggu == guestID).ToList();
       }
@@ -138,7 +138,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static Gift GetGiftId(string giftId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.Gifts.Where(g => g.giID == giftId).SingleOrDefault();
       }
@@ -150,7 +150,7 @@ namespace IM.BusinessRules.BR
 
     public static InvitationGift GetInventationGift(int guestId, string gift)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.InvitationsGifts.SingleOrDefault(g => g.iggu == guestId && g.iggi == gift);
       }
@@ -174,7 +174,7 @@ namespace IM.BusinessRules.BR
       var result = new List<GiftShort>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.Gifts.Where(x => giIDList.Contains(x.giID)).
           Select(x => new
@@ -208,7 +208,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     /*public static List<Gift> GetGiftsInputList(List<GiftsReceiptDetailShort> _listGiftsID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.Gifts.Where(x => x.giA == true).Intersect(_listGiftsID.Select(s => s.gegi)) // && _listGiftsID.Select(s => s.gegi).Contains(x.giID)).ToList();
       }
@@ -231,7 +231,7 @@ namespace IM.BusinessRules.BR
       List<Gift> lstGift = new List<Gift>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from gi in dbContext.Gifts
                       select gi;
@@ -271,7 +271,7 @@ namespace IM.BusinessRules.BR
     {
       IEnumerable<object> lstResult;
 
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var query = from a in dbContext.Gifts
                     where a.giA == true

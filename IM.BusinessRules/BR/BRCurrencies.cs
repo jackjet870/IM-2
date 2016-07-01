@@ -30,7 +30,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from c in dbContext.Currencies
                       select c;
@@ -79,7 +79,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static Currency GetCurrencyId(string currencyId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.Currencies.Where(c => c.cuID == currencyId).SingleOrDefault();
       }

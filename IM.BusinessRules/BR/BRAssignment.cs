@@ -27,7 +27,7 @@ namespace IM.BusinessRules.BR
       List<GuestUnassigned> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_GetGuestsUnassigned(dateFrom, dateTo, leadSource, markets, onlyAvail).OrderBy(o => o.guCheckInD).ToList();
         }
@@ -54,7 +54,7 @@ namespace IM.BusinessRules.BR
       List<RptAssignmentByPR> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_RptAssignmentByPR(dateFrom, dateTo, leadSource, markets, PR).ToList();
         }
@@ -80,7 +80,7 @@ namespace IM.BusinessRules.BR
       List<RptAssignment> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_RptAssignment(dateFrom, dateTo, leadSource, markets).ToList();
         }
@@ -106,7 +106,7 @@ namespace IM.BusinessRules.BR
       List<RptAssignmentArrivals> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_RptAssignmentArrivals(dateFrom, dateTo, leadSource, markets).ToList();
         }
@@ -134,7 +134,7 @@ namespace IM.BusinessRules.BR
       List<PRAssigned> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_GetPRsAssigned(dateFrom, dateTo, leadSource, markets, guPRs, mbrPRs).OrderByDescending(c => c.peN).OrderByDescending(c => c.Assigned).ToList();
         }
@@ -162,7 +162,7 @@ namespace IM.BusinessRules.BR
       List<GuestAssigned> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_GetGuestsAssigned(dateFrom, dateTo, leadSource, PRs, markets).ToList();
         }
@@ -186,7 +186,7 @@ namespace IM.BusinessRules.BR
       int res = 0;
       res = await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var guests = dbContext.Guests.Where(Guest => listguID.Contains(Guest.guID)).ToList();
           guests.ForEach(g => g.guPRAssign = idPR);
@@ -212,7 +212,7 @@ namespace IM.BusinessRules.BR
       int res = 0;
       res = await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var guests = dbContext.Guests.Where(Guest => listguID.Contains(Guest.guID)).ToList();
           guests.ForEach(g => g.guPRAssign = null);

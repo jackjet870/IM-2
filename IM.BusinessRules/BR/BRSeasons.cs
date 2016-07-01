@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     {
       await Task.Run(() =>
       {
-        using (var model = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var model = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           model.USP_OR_ActualizarFechasTemporadas(yearServer);
         }

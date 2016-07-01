@@ -27,7 +27,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           // Obtenemos los datos del stored
           List<GiftInvitationWithoutReceipt> lstShort = dbContext.USP_OR_GetGiftsInvitationWithoutReceipt(guestID, package).ToList();
@@ -82,7 +82,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static InvitationGift GetInvitGift(int guestID, string giftID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.InvitationsGifts.Where(x => x.iggu == guestID && x.iggi == giftID).SingleOrDefault();
       }
@@ -100,7 +100,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<InvitationGift> GetInvitsGiftsByGuestID(int guestID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.InvitationsGifts.Where(x => x.iggu == guestID).ToList();
       }

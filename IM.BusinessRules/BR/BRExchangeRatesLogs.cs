@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<ExchangeRateLogData> GetExchangeRateLog(string currency)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetExchangeRateLog(currency).ToList();
       }
@@ -45,7 +45,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void SaveExchangeRateLog(string currency, DateTime date, Int16 HoursDif, string ChangedBy)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_SaveExchangeRateLog(currency, date, HoursDif, ChangedBy);
       }

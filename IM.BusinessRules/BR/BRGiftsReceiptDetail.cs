@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
       List<GiftsReceiptDetail> lstResult = new List<GiftsReceiptDetail>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           // Obtenemos los resultados del Stored
            List<GiftsReceiptDetailShort> lstShort = dbContext.USP_OR_GetGiftsReceiptDetail(receipt, package).ToList();
@@ -51,7 +51,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static GiftsReceiptDetail GetGiftReceiptDetail(int receipt, string giftID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.GiftsReceiptsDetails.Where(x => x.gegr == receipt && x.gegi == giftID).SingleOrDefault();
       }
@@ -70,7 +70,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GiftsReceiptDetailCancel> GetGiftsReceiptDetailCancel(int GuestID, EnumExternalProduct EnumExternal, bool? package = false)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetGiftsReceiptDetailCancel(GuestID, (byte)EnumExternal, package).ToList();
       }
@@ -90,7 +90,7 @@ namespace IM.BusinessRules.BR
       //List<GiftsReceiptDetailPromotionsSistur> Result = null;
       //await Task.Run(() =>
       //{
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetGiftsReceiptDetailPromotionsPVP(ReceiptID).ToList();
       }
@@ -112,7 +112,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void UpdateGiftPromotionSistur(int Receipt, string Gift, string Promotion)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_UpdateGiftsReceiptDetailPromotionPVP(Receipt, Gift, Promotion);
       }
@@ -130,7 +130,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GiftsReceiptDetailPromotionsOpera> GetGiftsReceiptDetailPromotionsOpera(int Receipt)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetGiftsReceiptDetailPromotionsOpera(Receipt).ToList();
       }
@@ -149,7 +149,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void UpdateGiftsReceiptDetailPromotionOpera(int Receipt, string Gift, string Promotion)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_UpdateGiftsReceiptDetailPromotionOpera(Receipt, Gift, Promotion);
       }
@@ -168,7 +168,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void UpdateGiftsReceiptDetailRoomChargeOpera(int Receipt, string Gift, string Transaction)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_UpdateGiftsReceiptDetailRoomChargeOpera(Receipt, Gift, Transaction);
       }
@@ -186,7 +186,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GiftsReceiptDetailRoomChargesOpera> GetGiftsReceiptDetailRoomChargesOpera(int ReceiptID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetGiftsReceiptDetailRoomChargesOpera(ReceiptID).ToList();
       }

@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
       List<WarehouseByUser> result = new List<WarehouseByUser>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_GetWarehousesByUser(user, regions).ToList();
         }
@@ -50,7 +50,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from wh in dbContext.Warehouses
                       select wh;
@@ -97,7 +97,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int SaveWarehouse(Warehouse warehouse, bool blnUpdate)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         int nRes = 0;
         #region Update
@@ -165,7 +165,7 @@ namespace IM.BusinessRules.BR
     {
       List<WarehouseByUser> lstWarehouses = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             return dbContext.Warehouses.AsEnumerable().Where(wh => lstWarehousesID.Contains(wh.whID)).Select(wh => new WarehouseByUser { whID = wh.whID, whN = wh.whN }).ToList();
           }

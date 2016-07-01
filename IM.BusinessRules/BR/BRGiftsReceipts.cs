@@ -36,7 +36,7 @@ namespace IM.BusinessRules.BR
       List<GiftsReceipt> lstResult = new List<GiftsReceipt>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           // Obtenemos los GiftsReceiptShort del Stored correspondiente con los campos correspondientes
           List<GiftsReceiptsShort> lstShort = new List<GiftsReceiptsShort>();
@@ -65,7 +65,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static GiftsReceipt GetGiftReceipt(int GiftReceiptID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.GiftsReceipts.Where(x => x.grID == GiftReceiptID).SingleOrDefault();
       }
@@ -89,7 +89,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static ValidationData ValidateGiftsReceipt(string changedBy, string password, int guest, string location, string salesroom, string giftshost, string personnel)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_ValidateGiftsReceipt(changedBy, password, guest, location, salesroom, giftshost, personnel).SingleOrDefault();
       }
@@ -107,7 +107,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int SaveGiftReceipt(GiftsReceipt giftReceipt)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         // Guardamos el Gift Receipt Nuevo
         dbContext.Entry(giftReceipt).State = System.Data.Entity.EntityState.Added;
@@ -130,7 +130,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GetGiftsReceiptsAdditional> GetGiftsReceiptsAdditional(int GuestID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_IM_GetGiftsReceiptsAdditional(guestID: GuestID).ToList();
       }
@@ -148,7 +148,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void CancelGiftsReceipt(int ReceiptID, DateTime DateServer)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_CancelGiftsReceipt(ReceiptID, DateServer);
       }
@@ -166,7 +166,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static decimal? CalculateTotalsGiftsInvitation(int GuestID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_CalculateTotalsGiftsInvitation(GuestID).SingleOrDefault();
       }
@@ -186,7 +186,7 @@ namespace IM.BusinessRules.BR
     {
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.USP_OR_UpdateGiftsReceiptDetailPromotionPVPCancel(ReceiptID, Gift);
         }
@@ -198,7 +198,7 @@ namespace IM.BusinessRules.BR
     {
       int nRes = await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Entry(giftsReceipt).State = System.Data.Entity.EntityState.Modified;
           return dbContext.SaveChanges();

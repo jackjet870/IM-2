@@ -26,7 +26,7 @@ namespace IM.BusinessRules.BR
     {
       List<CreditCardType> lstCreditsCard = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             var query = from cct in dbContext.CreditCardTypes select cct;
 
@@ -67,7 +67,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static CreditCardType GetCreditCardTypeId(string creditcardId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.CreditCardTypes.Where(c => c.ccID == creditcardId).SingleOrDefault();
       }

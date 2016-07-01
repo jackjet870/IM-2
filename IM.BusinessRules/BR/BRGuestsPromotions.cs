@@ -27,7 +27,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void SaveGuestPromotion(int Receipt, string Gift, string Promotion, int? Guest, int Quantity, DateTime Date)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_SaveGuestPromotion(Receipt, Gift, Promotion, Guest, Quantity, Date);
       }
@@ -48,7 +48,7 @@ namespace IM.BusinessRules.BR
     {
       bool result = false;
 
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         result = Convert.ToBoolean(dbContext.USP_OR_IsUsedGuestPromotion(receiptID, gift));
       }
@@ -72,7 +72,7 @@ namespace IM.BusinessRules.BR
       GuestPromotion guest = new GuestPromotion();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           guest = dbContext.GuestsPromotions.Where(x => x.gpgr == pReceiptID && x.gpgi == pGift).SingleOrDefault();
         }

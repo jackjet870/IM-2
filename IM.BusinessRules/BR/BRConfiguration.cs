@@ -20,7 +20,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static DateTime? GetCloseDate()
     {
-      using(var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using(var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.Configurations.Single().ocInvitationsCloseD;
       }
@@ -39,7 +39,7 @@ namespace IM.BusinessRules.BR
       List<Configuration> lstConfigurations = new List<Configuration>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from configs in dbContext.Configurations
                       select configs;
@@ -63,7 +63,7 @@ namespace IM.BusinessRules.BR
       int res = 0;
       res = await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var invitationClose = dbContext.Configurations;
           invitationClose.Single().ocInvitationsCloseD = dtmCloseDate;

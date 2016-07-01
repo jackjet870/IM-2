@@ -30,7 +30,7 @@ namespace IM.BusinessRules.BR
       GiftsReceivedBySRData GiftsReceivedBySRData = new GiftsReceivedBySRData();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptGiftsReceivedBySR_Timeout;
           var resGiftsReceivedBySR = dbContext.USP_OR_RptGiftsReceivedBySR(dtmStart, dtmEnd, leadSources, chargeTo, gifts)
@@ -67,7 +67,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptCostByPR>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptCostByPR_Timeout;
           result = dbContext.USP_OR_RptCostByPR(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas)).ToList();
@@ -98,7 +98,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptCostByPRWithDetailGifts>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptCostByPRWithDetailGifts_Timeout;
           result = dbContext.USP_OR_RptCostByPRWithDetailGifts(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(detailGifts)).
@@ -130,7 +130,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptFollowUpByAgency>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptFollowUpByAgency_Timeout;
 
@@ -162,7 +162,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptFollowUpByPR>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptFollowUpByPR_Timeout;
           result = dbContext.USP_OR_RptFollowUpByPR(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival)).ToList();
@@ -192,7 +192,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptRepsPayment>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptRepsPayment_Timeout;
           result = dbContext.USP_OR_RptRepsPayment(dtmStart, dtmEnd, string.Join(",", leadSources)).ToList();
@@ -222,7 +222,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptRepsPaymentSummary>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptRepsPaymentSummary_Timeout;
           result = dbContext.USP_OR_RptRepsPaymentSummary(dtmStart, dtmEnd, string.Join(",", leadSources)).ToList();
@@ -255,7 +255,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptProductionByGiftQuantity>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByGiftQuantity_Timeout;
           result = dbContext.USP_OR_RptProductionByGiftQuantity(dtmStart, dtmEnd, string.Join(",", leadSources), string.Join(",", giftsQuantitys.Select(c => c.Value + "-" + c.Key)),
@@ -286,7 +286,7 @@ namespace IM.BusinessRules.BR
       Tuple<GraphTotals, List<GraphNotBookingArrivals>, List<GraphNotBookingArrivals>> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_GraphNotBookingArrivals_Timeout;
           var resGraphNotBookingArrivalsTotals = dbContext.USP_OR_GraphNotBookingArrivals(dtmStart, string.Join(",", leadSources))
@@ -327,7 +327,7 @@ namespace IM.BusinessRules.BR
       Tuple<GraphTotals, List<GraphUnavailableArrivals>, List<GraphUnavailableArrivals>> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_GraphUnavailableArrivals_Timeout;
           var resGraphUnavailableArrivals = dbContext.USP_OR_GraphUnavailableArrivals(dtmStart, string.Join(",", leadSources))
@@ -370,7 +370,7 @@ namespace IM.BusinessRules.BR
       Tuple<GraphMaximum, List<GraphProduction_Weeks>, List<GraphProduction_Months>> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_GraphProduction_Timeout;
           var resGraphProductionWeeks = dbContext.USP_OR_GraphProduction(dtmStart, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival))
@@ -420,7 +420,7 @@ namespace IM.BusinessRules.BR
         agencies = new[] { "ALL" };
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptUnavailableMotivesByAgency_Timeout;
           result = dbContext.USP_OR_RptUnavailableMotivesByAgency(dtmStart, dtmEnd, string.Join(",", leadSources), string.Join(",", markets), string.Join(",", agencies)).ToList();
@@ -451,7 +451,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptShowFactorByBookingDate>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptShowFactorByBookingDate_Timeout;
           result = dbContext.USP_OR_RptShowFactorByBookingDate(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas)).ToList();
@@ -482,7 +482,7 @@ namespace IM.BusinessRules.BR
       var scoreByPRData = new ScoreByPRData();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptScoreByPR_Timeout;
           //1. Reporte
@@ -558,7 +558,7 @@ namespace IM.BusinessRules.BR
         agencies = new[] { "ALL" };
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByMonth_Timeout;
           result = dbContext.USP_OR_RptProductionByMonth(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas),
@@ -597,7 +597,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptContactBookShowQuinellas>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByMonth_Timeout;
           result = dbContext.USP_IM_RptContactBookShowQuinellas(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToInt16(external), Convert.ToBoolean(basedOnArrival)).ToList();
@@ -628,7 +628,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptProductionByAgeInhouse>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByAgeInhouse_Timeout;
           result = dbContext.USP_OR_RptProductionByAgeInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival)).ToList();
@@ -660,7 +660,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptProductionByAgeMarketOriginallyAvailableInhouse>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByAgeMarketOriginallyAvailableInhouse_Timeout;
           result = dbContext.USP_OR_RptProductionByAgeMarketOriginallyAvailableInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival)).ToList();
@@ -705,7 +705,7 @@ namespace IM.BusinessRules.BR
       var productionByAgencyInhouseData = new ProductionByAgencyInhouseData();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByAgencyInhouse_Timeout;
           var resProductionByAgencyInhouse = dbContext.USP_OR_RptProductionByAgencyInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas), considerNights, nightsFrom, nightsTo,
@@ -755,7 +755,7 @@ namespace IM.BusinessRules.BR
         agencies = new List<string> { "ALL" };
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByContractAgencyInhouse_Timeout;
           result = dbContext.USP_OR_RptProductionByContractAgencyInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), string.Join(",", markets), string.Join(",", agencies), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival)).ToList();
@@ -795,7 +795,7 @@ namespace IM.BusinessRules.BR
       if (agencies == null || !agencies.Any()) agencies = new List<string> { "ALL" };
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByContractAgencyMarketOriginallyAvailableInhouse_Timeout;
           result =
@@ -842,7 +842,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByNationalityInhouse_Timeout;
           result = dbContext.USP_OR_RptProductionByNationalityInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), string.Join(",", pRs), EnumToListHelper.GetEnumDescription(program),
@@ -889,7 +889,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByNationalityInhouse_Timeout;
           result = dbContext.USP_OR_RptProductionByNationalityMarketOriginallyAvailableInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), string.Join(",", pRs),
@@ -930,7 +930,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByCoupleTypeInhouse_Timeout;
           result = dbContext.USP_OR_RptProductionByCoupleTypeInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), string.Join(",", pRs),
@@ -965,7 +965,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByDeskInhouse_Timeout;
           result = dbContext.USP_OR_RptProductionByDeskInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival)).ToList();
@@ -999,7 +999,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByGroupInhouse_Timeout;
           result = dbContext.USP_OR_RptProductionByGroupInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival)).ToList();
@@ -1033,7 +1033,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByGuestStatusInhouse_Timeout;
           result = dbContext.USP_OR_RptProductionByGuestStatusInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival)).ToList();
@@ -1075,7 +1075,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByMemberTypeAgencyInhouse_Timeout;
           result = dbContext.USP_OR_RptProductionByMemberTypeAgencyInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), string.Join(",", markets), string.Join(",", agencies), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival)).ToList();
@@ -1117,7 +1117,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse_Timeout;
           result = dbContext.USP_OR_RptProductionByMemberTypeAgencyMarketOriginallyAvailableInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), string.Join(",", markets), string.Join(",", agencies), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival)).ToList();
@@ -1152,7 +1152,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByPRInhouse_Timeout;
           result = dbContext.USP_OR_RptProductionByPRInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival), Convert.ToBoolean(basedOnPRLocation)).ToList();
@@ -1186,7 +1186,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByPRGroupInhouse_Timeout;
           result = dbContext.USP_OR_RptProductionByPRGroupInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival)).ToList();
@@ -1220,7 +1220,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByPRSalesRoomInhouse_Timeout;
           result = dbContext.USP_OR_RptProductionByPRSalesRoomInhouse(dtmStart, dtmEnd, string.Join(",", leadSources), Convert.ToBoolean(considerQuinellas), Convert.ToBoolean(basedOnArrival)).ToList();
@@ -1260,7 +1260,7 @@ namespace IM.BusinessRules.BR
       DepositsPaymentByPRData DepositsPaymentByPRData = new DepositsPaymentByPRData();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptDepositsPaymentByPR_Timeout;
           var resDepositsPaymentByPR = dbContext.USP_OR_RptDepositsPaymentByPR(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), paymentTypes, Convert.ToByte(filterDeposit))
@@ -1299,7 +1299,7 @@ namespace IM.BusinessRules.BR
       List<GuestShowNoPresentedInvitation> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_GetGuestsShowNoPresentedInvitation(dtmStart, dtmEnd, leadSources).ToList();
         }
@@ -1333,7 +1333,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByPROuthouse> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByPROutside_Timeout;
           result = dbContext.USP_OR_RptProductionByPROutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(programa), Convert.ToByte(filterDeposit), Convert.ToBoolean(basedOnBooking)).ToList();
@@ -1364,7 +1364,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByAgeOuthouse> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByAgeOutside_Timeout;
           result = dbContext.USP_OR_RptProductionByAgeOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
@@ -1397,7 +1397,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByAgeSalesRoomOuthouse> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByAgencySalesRoomOutside_Timeout;
           result = dbContext.USP_OR_RptProductionByAgeSalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposit)).ToList();
@@ -1431,7 +1431,7 @@ namespace IM.BusinessRules.BR
       ProductionByAgencyOuthouseData ProductionByAgencyOuthouseData = new ProductionByAgencyOuthouseData();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByAgencyOutside_Timeout;
 
@@ -1475,7 +1475,7 @@ namespace IM.BusinessRules.BR
       ProductionByAgencySalesRoomOuthouseData ProductionByAgencySalesRoomOuthouseData = new ProductionByAgencySalesRoomOuthouseData();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var resProductionByAgencySalesRoom = dbContext.USP_OR_RptProductionByAgencySalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToBoolean(salesByMemberShipType))
           .MultipleResults()
@@ -1516,7 +1516,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByAgencyMarketHotelOuthouse> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByAgencyMarketHotelOutside_Timeout;
           result = dbContext.USP_OR_RptProductionByAgencyMarketHotelOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposit)).ToList();
@@ -1549,7 +1549,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByCoupleTypeOuthouse> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_RptProductionByCoupleTypeOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
         }
@@ -1581,7 +1581,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByCoupleTypeSalesRoomOuthouse> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_RptProductionByCoupleTypeSalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
         }
@@ -1612,7 +1612,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByFlightSalesRoom> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_IM_RptProductionByFlightSalesRoom(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
         }
@@ -1644,7 +1644,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByGiftInvitation> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByGiftInvitation_Timeout;
           result = dbContext.USP_OR_RptProductionByGiftInvitation(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), gifts, Convert.ToByte(filterDeposits)).ToList();
@@ -1678,7 +1678,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByGiftInvitationSalesRoom> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByGiftInvitationSalesRoom_Timeout;
           result = dbContext.USP_OR_RptProductionByGiftInvitationSalesRoom(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), gifts, Convert.ToByte(filterDeposits)).ToList();
@@ -1711,7 +1711,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByGuestStatusOuthouse> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_RptProductionByGuestStatusOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
         }
@@ -1742,7 +1742,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByHotel> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_IM_RptProductionByHotel(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
         }
@@ -1772,7 +1772,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByHotelSalesRoom> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_IM_RptProductionByHotelSalesRoom(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
         }
@@ -1803,7 +1803,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByHotelGroup> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_IM_RptProductionByHotelGroup(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
         }
@@ -1833,7 +1833,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByHotelGroupSalesRoom> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_IM_RptProductionByHotelGroupSalesRoom(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
         }
@@ -1867,7 +1867,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByNationalityOuthouse> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptProductionByNationalityOutside_Timeout;
           result = dbContext.USP_OR_RptProductionByNationalityOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToByte(saveCourtesyTours)).ToList();
@@ -1903,7 +1903,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByNationalitySalesRoomOuthouse> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_RptProductionByNationalitySalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits), Convert.ToByte(saveCourtesyTours)).ToList();
         }
@@ -1937,7 +1937,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByPRSalesRoomOuthouse> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_RptProductionByPRSalesRoomOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposit), Convert.ToBoolean(basedOnBooking)).ToList();
         }
@@ -1970,7 +1970,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByPRContactOuthouse> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_RptProductionByPRContactOutside(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
         }
@@ -2002,7 +2002,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByWave> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_IM_RptProductionByWave(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
         }
@@ -2033,7 +2033,7 @@ namespace IM.BusinessRules.BR
       List<RptProductionByWaveSalesRoom> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_IM_RptProductionByWaveSalesRoom(dtmStart, dtmEnd, leadSources, PRs, EnumToListHelper.GetEnumDescription(program), Convert.ToByte(filterDeposits)).ToList();
         }
@@ -2063,7 +2063,7 @@ namespace IM.BusinessRules.BR
       List<RptFoliosInvitationByDateFolio> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_RptFoliosInvitationByDateFolio(dtmStart, dtmEnd, serie, Convert.ToInt32(folioFrom), Convert.ToInt32(folioTo), leadSources, PRs).ToList();
         }
@@ -2093,7 +2093,7 @@ namespace IM.BusinessRules.BR
       List<RptFoliosInvitationsOuthouseByPR> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptFoliosInvitationsOuthouseByPR_Timeout;
           result = dbContext.USP_OR_RptFoliosInvitationsOuthouseByPR(dtmStart, dtmEnd, serie, Convert.ToInt32(folioFrom), Convert.ToInt32(folioTo), leadSources, PRs).ToList();
@@ -2123,7 +2123,7 @@ namespace IM.BusinessRules.BR
       List<RptFoliosCxCByPR> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_RptFoliosCxCByPR(dtmStart, dtmEnd, allFolios, Convert.ToInt32(folioFrom), Convert.ToInt32(folioTo), leadSources, PRs).ToList();
         }
@@ -2152,7 +2152,7 @@ namespace IM.BusinessRules.BR
       List<RptFoliosCXC> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_RptFoliosCXC(dtmStart, dtmEnd, Convert.ToInt32(folioFrom), Convert.ToInt32(folioTo), Convert.ToInt32(allFolios), leadSources, PRs).ToList();
         }
@@ -2181,7 +2181,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstguests = dbContext.USP_OR_RptDepositsBurnedGuests(dtmStart, dtmEnd, leadSources).ToList();
 
@@ -2215,7 +2215,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstDepRef = dbContext.USP_OR_RptDepositRefund(dtmStart, dtmEnd, leadSources).ToList();
           return lstDepRef;
@@ -2241,7 +2241,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstDepPR = dbContext.USP_OR_RptDepositsByPR(dtmStart, dtmEnd, leadSources).ToList();
 
@@ -2276,7 +2276,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstDepNoShow = dbContext.USP_OR_RptDepositsNoShow(dtmStart, dtmEnd, leadSources).ToList();
 
@@ -2311,7 +2311,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstInOutPR = dbContext.USP_OR_RptInOutByPR(dtmStart, dtmEnd, leadSources).ToList();
           return lstInOutPR;
@@ -2337,7 +2337,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstPersonnelAccess = dbContext.USP_OR_RptPersonnelAccess(leadSources).ToList();
           return lstPersonnelAccess;
@@ -2364,7 +2364,7 @@ namespace IM.BusinessRules.BR
       return await Task.Run(() =>
       {
         List<string> lstLeadSources = leadSources.Split(',').ToList();
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstRptSelfGen = dbContext.sprptSelfGen(dtmStart, dtmEnd, leadSources).ToList();
 

@@ -22,7 +22,7 @@ namespace IM.BusinessRules.BR
       List<WeekDay> lstWeekDays = new List<WeekDay>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from weekdays in dbContext.WeekDays select weekdays;
           if (lan != string.Empty)

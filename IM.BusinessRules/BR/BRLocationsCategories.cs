@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from lc in dbContext.LocationsCategories
                       select lc;
@@ -69,7 +69,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int SaveLocationCategories(LocationCategory locationCategory, List<Location> lstAdd, List<Location> lstDel, bool blnUpdate)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
         {

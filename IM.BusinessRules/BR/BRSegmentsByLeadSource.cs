@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     {
       List<SegmentByLeadSource> lstSegments = await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from so in dbContext.SegmentsByLeadSources
                       select so;
@@ -72,7 +72,7 @@ namespace IM.BusinessRules.BR
     public async static Task<int> SaveSegmentByLeadSource(SegmentByLeadSource segmentByLeadSource, List<LeadSource> lstAdd, List<LeadSource> lstDel, bool blnUpdate)
     {
       int nRes = await Task.Run(() => {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {

@@ -21,7 +21,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public  static GuestStatusType GetGuestStatusTypeById(string guestStatusTypeId)
     {
-      using (var dbContect = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContect = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContect.GuestsStatusTypes.SingleOrDefault(g=> g.gsID == guestStatusTypeId);
       }

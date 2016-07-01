@@ -21,7 +21,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<WarehouseMovementShort> GetWarehouseMovements(string wmwh, DateTime wmD)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetWhsMovs(wmwh, wmD).ToList();
       }
@@ -41,7 +41,7 @@ namespace IM.BusinessRules.BR
     public static void SaveWarehouseMovements(ref List<WarehouseMovement> lstWhsMovs)
     {
       IEnumerable<WarehouseMovement> lstResult;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         lstResult = dbContext.WarehouseMovements.AddRange(lstWhsMovs);
         dbContext.SaveChanges();

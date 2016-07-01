@@ -28,7 +28,7 @@ namespace IM.BusinessRules.BR
       List<Region> lstRegions = new List<Region>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from rg in dbContext.Regions
                       select rg;

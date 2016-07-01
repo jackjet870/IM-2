@@ -26,7 +26,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void SaveSalesRoomLog(string SalesRoomID, Int16 HoursDif, string ChangedBy)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_SaveSalesRoomLog(SalesRoomID, HoursDif, ChangedBy);
       }
@@ -44,7 +44,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<SalesRoomLogData> GetSalesRoomLog(string salesRoom)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetSalesRoomLog(salesRoom).ToList();
       }

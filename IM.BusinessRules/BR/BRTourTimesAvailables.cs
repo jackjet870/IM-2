@@ -29,7 +29,7 @@ namespace IM.BusinessRules.BR
                                                                   ,DateTime? currentDate = null)
     {
 
-      using(var dbContex = new IMEntities(ConnectionHelper.ConnectionString))
+      using(var dbContex = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContex.Database.CommandTimeout = 60;
         return dbContex.USP_OR_GetTourTimesAvailables(leadSource, salesRoom, selectedDate, originalDate, originalTime, currentDate == null ? DateTime.Today : currentDate).ToList();

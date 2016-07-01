@@ -27,7 +27,7 @@ namespace IM.BusinessRules.BR
       List<SegmentByAgency> lstSegmentsByAgency = new List<SegmentByAgency>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from sba in dbContext.SegmentsByAgencies
                       select sba;
@@ -74,7 +74,7 @@ namespace IM.BusinessRules.BR
     public async static Task<int> SaveSegmentByAgency(SegmentByAgency segmentByAgency,List<Agency> lstAdd, List<Agency> lstDel,bool blnUpdate)
     {
       int nRes = await Task.Run(() => {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {

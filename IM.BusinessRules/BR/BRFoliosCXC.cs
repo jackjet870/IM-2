@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     {
       List<FolioCXC> lstFolios = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             var query = from fi in dbContext.FoliosCXC
                         select fi;
@@ -63,7 +63,7 @@ namespace IM.BusinessRules.BR
     public static int SaveFolioCXC(FolioCXC folioCXC,bool blnUpdate)
     {
       bool blnIsValid = false;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         #region Actualizar
         if (blnUpdate)//Actualizar

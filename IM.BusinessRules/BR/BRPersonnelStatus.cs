@@ -22,7 +22,7 @@ namespace IM.BusinessRules.BR
     {
       List<PersonnelStatus> lstPersonnelsStatus = await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return dbContext.PersonnelStatusList.OrderBy(ps=>ps.psN).ToList();
         }

@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
       List<CountryShort> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_GetCountries(Convert.ToByte(status)).ToList();
         }
@@ -50,7 +50,7 @@ namespace IM.BusinessRules.BR
     {
       List<Country> lstCountries = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             var query = from ct in dbContext.Countries
                         select ct;
@@ -91,7 +91,7 @@ namespace IM.BusinessRules.BR
 
     public static int TransferAddCountries()
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_TransferAddCountries();
       }

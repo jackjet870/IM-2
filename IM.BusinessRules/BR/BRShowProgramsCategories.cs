@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
       List<ShowProgramCategory> lstShowCategories =
         await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             var query = from sg in dbContext.ShowProgramsCategories
                         select sg;
@@ -71,7 +71,7 @@ namespace IM.BusinessRules.BR
     public static async Task<int> SaveShowProgramCategory(ShowProgramCategory showProgramcategory,List<ShowProgram> lstAdd,List<ShowProgram>lstDel,bool blnUpdate)
     {
       int nRes = await Task.Run(() => {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {

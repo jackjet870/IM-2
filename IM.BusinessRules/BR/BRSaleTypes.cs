@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from st in dbContext.SaleTypes
                       select st;
@@ -73,7 +73,7 @@ namespace IM.BusinessRules.BR
       string res = string.Empty;
       await Task.Run(() =>
        {
-         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
          {
            var status = Convert.ToBoolean(nStatus);
            res = (from st in dbContext.SaleTypes
@@ -99,7 +99,7 @@ namespace IM.BusinessRules.BR
       var res = false;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var status = Convert.ToBoolean(nStatus);
           res = (from st in dbContext.SaleTypes

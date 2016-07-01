@@ -26,7 +26,7 @@ namespace IM.BusinessRules.BR
     {
       List<FolioInvitationOuthouse> lstFolioInvitationsOutside = await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from fi in dbContext.FoliosInvitationsOuthouse
                       select fi;
@@ -81,7 +81,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int SaveFolioInvittionsOutside(FolioInvitationOuthouse folioInvitationOutside,bool blnUpdate)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         bool blnIsValid = false;
         #region Update

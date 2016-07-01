@@ -20,7 +20,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static DateTime GetServerDate()
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var dQuery = dbContext.Database.SqlQuery<DateTime>("SELECT GETDATE()");
         return dQuery.AsEnumerable().First();
@@ -42,7 +42,7 @@ namespace IM.BusinessRules.BR
       List<string> result = new List<string>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           string ServerName = dbContext.Database.Connection.DataSource;
           string dbName = dbContext.Database.Connection.Database;
@@ -73,7 +73,7 @@ namespace IM.BusinessRules.BR
 
     public static List<ValidationData> ValidateChangedByExist(string ptxtChangedBy, string ptxtPwd, string pstrLeadSource, string pstrUserType = "Changed By", string ptxtPR = "")
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_ValidateChangedBy(ptxtChangedBy, ptxtPwd, "LS", pstrLeadSource, pstrUserType, ptxtPR).ToList();
       }

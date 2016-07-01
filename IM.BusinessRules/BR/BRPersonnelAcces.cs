@@ -20,7 +20,7 @@ namespace IM.BusinessRules.BR
     {
       List<PersonnelAccess> lstPersonnelAcces = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             string placeType = EnumToListHelper.GetEnumDescription(enumPlaceType);
             return dbContext.PersonnelAccessList.Where(pl => pl.plpe == idUser && pl.plLSSR == placeType).ToList();

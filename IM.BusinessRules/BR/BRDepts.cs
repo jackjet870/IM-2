@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
     {
       List<Dept> lstDepts = await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from de in dbContext.Depts
                       select de;
@@ -71,7 +71,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int SaveDept(Dept dept,bool blnUpdate,List<Personnel> lstAdd, List<Personnel> lstDel)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
         {

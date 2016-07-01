@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
       await Task.Run(() =>
       {
 
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           lstScoreRules = dbContext.ScoreRulesByLeadSourceDetails.Where(sj => sj.sjls == idLS).ToList();
         }

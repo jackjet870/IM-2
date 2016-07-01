@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<MealTicket> GetMealTickets(int mealTicket = 0, string folio = "", int rateType = 0, DateTime? dateIni = null, DateTime? dateFinal = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var query = new List<MealTicket>();
 
@@ -68,7 +68,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<MealTicket> GetMealTickets(int guestID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.MealTickets.Where(x => x.megu == guestID).ToList();
       }
@@ -85,7 +85,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void InsertNewMealTicket(MealTicket pMealTicket)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.MealTickets.Add(pMealTicket);
 
@@ -104,7 +104,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void UpdateMealTicket(MealTicket pMealTicket)
     {
-      using (var dbcontext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbcontext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbcontext.Entry(pMealTicket).State = System.Data.Entity.EntityState.Modified;
 

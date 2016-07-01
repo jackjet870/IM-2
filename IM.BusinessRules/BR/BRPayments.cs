@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
       var res = new List<Payment>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           res = (from gu in dbContext.Payments
                  where gu.pasa == saID
@@ -49,7 +49,7 @@ namespace IM.BusinessRules.BR
       int res = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstPayments = dbContext.Payments.Where(p => p.pasa == saleID);
           dbContext.Payments.RemoveRange(lstPayments);

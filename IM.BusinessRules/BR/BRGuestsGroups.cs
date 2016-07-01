@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
       GuestsGroup gGroup = new GuestsGroup();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           gGroup = (from gg in dbContext.GuestsGroups
                     where gg.gxID == id
@@ -51,7 +51,7 @@ namespace IM.BusinessRules.BR
       List<GuestsGroup> lstGuestsGroups = new List<GuestsGroup>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
             //lstGuestsGroups = new List<GuestsGroup>();
             if (guestsGroup.gxID != 0) //Si mandan el ID del Grupo
@@ -127,7 +127,7 @@ namespace IM.BusinessRules.BR
       int res = 0;
       res = await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           using (var transact = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {

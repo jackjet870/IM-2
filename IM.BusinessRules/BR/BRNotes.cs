@@ -27,7 +27,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static bool  GetCountNoteGuest(int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {    
         return ((from gu in dbContext.PRNotes where gu.pngu == guestId select gu).Count() > 0) ? true : false;
       }
@@ -45,7 +45,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<NoteGuest> GetNoteGuest(int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         //--select pnDT,pnPR,p.peN,pnText from PRNotes n left join Personnel p on p.peID = n.pnPR where n.pngu = 7747521
         return (from N in dbContext.PRNotes
@@ -75,7 +75,7 @@ namespace IM.BusinessRules.BR
     public static int SaveNoteGuest(PRNote prNote, Guest guest)
     {
       int respuesta = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
         {

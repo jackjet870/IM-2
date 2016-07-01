@@ -22,7 +22,7 @@ namespace IM.BusinessRules.BR
     public async static Task SaveGiftsReceiptsLog(int ReceiptID, string ChangeBy, int HoursDiff = 0)
     {
       await Task.Run(() => { 
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.USP_OR_SaveGiftsReceiptLog(ReceiptID, Convert.ToInt16(HoursDiff), ChangeBy);
         }
@@ -45,7 +45,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           lstResult = dbContext.USP_OR_GetGiftsReceiptLog(ReceiptID).ToList(); ;
         }

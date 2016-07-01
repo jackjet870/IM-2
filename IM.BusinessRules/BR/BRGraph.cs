@@ -27,7 +27,7 @@ namespace IM.BusinessRules.BR
       var listGraphProductionByPr = new List<GraphProductionByPR>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GraphProductionByPR_Timeout;
           listGraphProductionByPr = dbContext.USP_OR_GraphProductionByPR(dateFrom, dateTo, leadSource).OrderBy(gp => gp.PR).ToList();

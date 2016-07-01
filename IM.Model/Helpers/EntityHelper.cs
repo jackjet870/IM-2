@@ -18,7 +18,7 @@ namespace IM.Model.Helpers
     /// </history>
     public static EntityTypeBase GetEntityTypeBase(Type type)
     {
-      using (var dbContex = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContex = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var objectContext = ((IObjectContextAdapter)dbContex).ObjectContext;//obtenemos el contexto
 

@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = (from sa in dbContext.SegmentsByAgencies
                        select new Item
@@ -64,7 +64,7 @@ namespace IM.BusinessRules.BR
     public async static Task<int> SaveSegmentsOrder(List<Item> lstAgency,List<Item>lstLeadSource)
     {
       int nRes = await Task.Run(() => {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         { 
           using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {

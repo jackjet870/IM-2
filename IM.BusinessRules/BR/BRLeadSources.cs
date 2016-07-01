@@ -32,7 +32,7 @@ namespace IM.BusinessRules.BR
       List<LeadSourceByUser> result = new List<LeadSourceByUser>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_GetLeadSourcesByUser(user, EnumToListHelper.GetEnumDescription(program), regions).ToList();
         }
@@ -61,7 +61,7 @@ namespace IM.BusinessRules.BR
       var pro = EnumToListHelper.GetEnumDescription(program);
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           leadSources = dbContext.LeadSources
             .Where(ls => status.Equals(1) ? ls.lsA : status.Equals(2) ? !ls.lsA : true)
@@ -89,7 +89,7 @@ namespace IM.BusinessRules.BR
       List < LeadSourceShort > leadSourceShort  = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           leadSourceShort = dbContext.USP_OR_GetLeadSourcesByZoneBoss(zone).ToList();
         }
@@ -111,7 +111,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static string GetOccupationLeadSources(DateTime date, string lS)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return "Occupancy " + dbContext.USP_OR_Occupation(date, lS).Single();
       }
@@ -131,7 +131,7 @@ namespace IM.BusinessRules.BR
     public static List<LeadSource> GetLeadSourceById(IEnumerable<string> lsIDList)
     {
       List<LeadSource> lstgetLeadSources;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         lstgetLeadSources = dbContext.LeadSources.Where(x => lsIDList.Contains(x.lsID)).
           Select(x => new
@@ -161,7 +161,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static LeadSource GetLeadSourceByID(string leadSourceID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.LeadSources.Where(x => x.lsID == leadSourceID).SingleOrDefault();
 
@@ -197,7 +197,7 @@ namespace IM.BusinessRules.BR
     {
       List<LeadSource> lstLeadSources = new List<LeadSource>();
       await Task.Run(() => { 
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {        
           var query = (from ls in dbContext.LeadSources
                       select ls);
@@ -289,7 +289,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {

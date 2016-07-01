@@ -822,7 +822,6 @@ namespace IM.Base.Helpers
           }
         });
 
-        rowNumber++;
         var columnIndex = 1;
         var rowEnd = rowNumber + dtTable.Rows.Count;
         dtTable.Columns.Cast<DataColumn>().ToList().ForEach(col =>

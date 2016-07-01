@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from rm in dbContext.ReimpresionMotives
                       select rm;
@@ -66,7 +66,7 @@ namespace IM.BusinessRules.BR
     {
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.USP_OR_UpdateGiftReceiptsReimpresionMotive(ReceiptID, ReimpresionMotive);
         }
@@ -87,7 +87,7 @@ namespace IM.BusinessRules.BR
     {
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.USP_OR_UpdateGiftReceiptsReimpresionNumber(ReceiptID);
         }

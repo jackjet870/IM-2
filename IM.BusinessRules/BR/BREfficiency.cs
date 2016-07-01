@@ -27,7 +27,7 @@ namespace IM.BusinessRules.BR
       List<Efficiency> result = new List<Efficiency>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from ef in dbContext.Efficiencies
                       where ef.efsr == sr &&

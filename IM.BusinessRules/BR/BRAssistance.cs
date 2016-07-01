@@ -21,7 +21,7 @@ namespace IM.BusinessRules.BR
     /// <history>[ECANUL] 17-03-2016 Created</history>
     public static List<AssistanceData> GetAssistance(EnumPlaceType palaceType, string PalaceID, DateTime dateStart, DateTime DateEnd)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         string strPalaceType = EnumToListHelper.GetEnumDescription(palaceType);
         return dbContext.USP_OR_GetAssistance(strPalaceType, PalaceID, dateStart, DateEnd).ToList();
@@ -42,7 +42,7 @@ namespace IM.BusinessRules.BR
     /// <history>[ECANUL] 19-03-2016 CREATED</history>
     public static List<PersonnelAssistance> GetPersonnelAssistance(EnumPlaceType palaceType, string PalaceID, DateTime dateStart, DateTime DateEnd)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         string strPalaceType = EnumToListHelper.GetEnumDescription(palaceType);
         return dbContext.USP_OR_GetPersonnelAssistance(strPalaceType, PalaceID, dateStart, DateEnd).ToList();

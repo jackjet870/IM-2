@@ -21,7 +21,7 @@ namespace IM.BusinessRules.BRAsistencia
     {
       List<Collaborator> lstCollaborator = await Task.Run(() =>
       {
-        using (var dbContext = new AsistenciaEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new AsistenciaEntities(ConnectionHelper.ConnectionString()))
         {
           return dbContext.USP_ObtenerColaboradoresPorParametro(
             (!string.IsNullOrWhiteSpace(collaborator.EmpID))? collaborator.EmpID :"ALL", 

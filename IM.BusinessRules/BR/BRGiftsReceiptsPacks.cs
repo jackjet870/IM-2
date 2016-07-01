@@ -28,7 +28,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from packs in dbContext.GiftsReceiptsPackagesItems
                       join gifts in dbContext.Gifts on packs.gkgi equals gifts.giID into result
@@ -57,7 +57,7 @@ namespace IM.BusinessRules.BR
     {
       List<GiftsReceiptPackageItem> lstResult = new List<GiftsReceiptPackageItem>();
 
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         lstResult = dbContext.GiftsReceiptsPackagesItems.Where(x => x.gkgr == receiptID).ToList();
       }

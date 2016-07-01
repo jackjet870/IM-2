@@ -23,7 +23,7 @@ namespace IM.BusinessRules.BR
     {
       List<PersonnelShort> lstPersonnelShort = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             var query = from pe in dbContext.Personnels
                         join pr in dbContext.FoliosCxCPR
@@ -66,7 +66,7 @@ namespace IM.BusinessRules.BR
     {
       List<FolioCxCPR> lstFolios = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             return dbContext.FoliosCxCPR.Where(fc => fc.fcppe == peID).ToList();
           }
@@ -89,7 +89,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static ValidationFolioData ValidateFolio(string prID, int from, int to, bool blnIsCancel)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_ValidateFolioCxCPR(prID, from, to, blnIsCancel).FirstOrDefault();
       }
@@ -108,7 +108,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static bool ValidateFolioRange(int from,int to)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var folio = dbContext.FoliosCXC.Where(f => f.fiFrom <= from && f.fiTo >= to).FirstOrDefault();
         return (folio != null);
@@ -132,7 +132,7 @@ namespace IM.BusinessRules.BR
     {
       int nRes = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
             {

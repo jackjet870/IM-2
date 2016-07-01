@@ -28,7 +28,7 @@ namespace IM.BusinessRules.BR
     /// </History> 
     public static List<Model.RptPRStats> GetPRStats(DateTime dateFrom, DateTime dateTo, List<Tuple<string, string>> filtros)
     {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_RptPRStats;
         return dbContext.USP_OR_RptPRStats(dateFrom, dateTo, filtros[1].Item2,filtros[2].Item2, filtros[3].Item2, filtros[4].Item2, filtros[5].Item2).ToList();

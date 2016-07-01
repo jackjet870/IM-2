@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
       List<LocationByUser> result = null;
       await Task.Run(() =>
      {
-       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
        {
          result = dbContext.USP_OR_GetLocationsByUser(user, programs).ToList();
        }
@@ -51,7 +51,7 @@ namespace IM.BusinessRules.BR
     {
       List<Location> lstLocations = await Task.Run(() =>
          {
-           using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+           using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
            {
              var query = from lo in dbContext.Locations
                          select lo;
@@ -111,7 +111,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<Location>> GetLocationsbyProgram(string program = "ALL")
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var Locs = (from loc in dbContext.Locations
                     join ls in dbContext.LeadSources on loc.lols equals ls.lsID
@@ -134,7 +134,7 @@ namespace IM.BusinessRules.BR
     public static async Task<List<object>> GetLocationByTeamGuestService()
     {
       List<object> lstObject = await Task.Run(() => {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = (from lo in dbContext.Locations
                        from tg in dbContext.TeamsGuestServices.Distinct()

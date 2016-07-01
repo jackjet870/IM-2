@@ -28,7 +28,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void UpdateRoomChargeConsecutive(string Hotel, string Folio)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_UpdateRoomChargesConsecutive(Hotel, Folio);
       }

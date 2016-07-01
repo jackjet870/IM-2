@@ -23,7 +23,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static bool ValidateFolioReservation(string leadSource, string folio, int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var res = dbContext.USP_OR_ValidateFolioReservation(leadSource, folio, guestId).SingleOrDefault();
         return String.IsNullOrEmpty(res);
@@ -35,7 +35,7 @@ namespace IM.BusinessRules.BR
 
     public static bool ValidateFolioInvitationOutside(int guestId, string serie, int numero)
     {
-      using(var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using(var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var res = dbContext.USP_OR_ValidateFolioInvitationOutside(serie, numero, guestId).SingleOrDefault();
         return String.IsNullOrEmpty(res);

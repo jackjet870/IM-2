@@ -34,7 +34,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           lstDepositsRefund = dbContext.USP_OR_GetDepositsRefund(Guest, RefundID, Folio, Name, Reservation, OutInv, PR, dateFrom, dateTo).ToList();
         }

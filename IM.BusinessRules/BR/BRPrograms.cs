@@ -23,7 +23,7 @@ namespace IM.BusinessRules.BR
       List<Program> lstPrograms = new List<Program>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
 
         lstPrograms = dbContext.Programs.ToList();        
@@ -50,7 +50,7 @@ namespace IM.BusinessRules.BR
       int nRes = 0;
       nRes=await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {

@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     {
       List<FolioCxCCancellation> lstFolios = await Task.Run(() =>
          {
-           using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+           using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
            {
              return dbContext.FoliosCxCCancellation.Where(fc => fc.fccpe == prId).ToList();
            }

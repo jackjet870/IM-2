@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     {
       List<EfficiencyType> lstEfficency = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             var query = from eft in dbContext.EfficiencyTypes
                         select eft;

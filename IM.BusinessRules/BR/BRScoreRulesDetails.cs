@@ -23,7 +23,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           lstScoreRuleDetail = dbContext.ScoreRulesDetails.Where(si => si.sisu == idScoreRule).ToList();
         }

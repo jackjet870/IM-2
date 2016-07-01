@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from sn in dbContext.SalesAmountRanges
                       select sn;
@@ -80,7 +80,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int SaveSalesAmountRange(SalesAmountRange salesAmountRange,bool blnUpdate)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
 
         #region Validar Rango

@@ -27,7 +27,7 @@ namespace IM.BusinessRules.BR
       List<AssistanceStatus> lstAssitanceStatus = new List<AssistanceStatus>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from ast in dbContext.AssistancesStatus
                       select ast;
