@@ -23,7 +23,7 @@ namespace IM.Host.Forms
     public frmExchangeRateEdit(ExchangeRateData _exchangeRateRow)
     {
       InitializeComponent();
-      this.DataContext = _exchangeRateRow;
+      DataContext = _exchangeRateRow;
     }
     #endregion
 

@@ -17,6 +17,9 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Data;
 using IM.Base.Reports;
+using System.ComponentModel;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace IM.Host
 {
@@ -62,6 +65,8 @@ namespace IM.Host
     public static List<Program> _lstPrograms;
     public static List<LeadSource> _lstLeadSources;
     public static List<RefundType> _lstRefundTypes;
+    public static IEnumerable<object> _lstGiftsWithPackage;
+    public static List<RefundType> _lstGiftsPackage;
     #endregion
 
 
@@ -258,7 +263,7 @@ namespace IM.Host
 
     public void ShowReportDesigner()
     {
-      frmHostReports frm = new frmHostReports(dtpDate.Value.Value) { Owner=this};
+      frmHostReports frm = new frmHostReports(dtpDate.Value.Value) { Owner = this };
       frm.ShowDialog();
     }
 
@@ -535,7 +540,7 @@ namespace IM.Host
       _lstPersonnelLINER = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "LINER", 1);
       #endregion
       #region Gifts
-      _lstGifts = BRGifts.GetGifts(1);
+      _lstGifts = await BRGifts.GetGifts(1);
       #endregion
       #region Banks
       _lstBanks = await BRBanks.GetBanks(1);
@@ -570,9 +575,22 @@ namespace IM.Host
       #region Refund Types
       _lstRefundTypes =await BRRefundTypes.GetRefundTypes(1);
       #endregion
+      #region GiftsWithPackages
+      _lstGiftsWithPackage = BRGifts.GetGiftsWithPackages();
+      #endregion
+
     }
     #endregion
 
+    #region ShowSale_Click
+    /// <summary>
+    /// Despliega el formulario Sales pulsado desde el CheckBox del grid
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 18/03/2016 Created
+    /// </history>
     private void ShowSale_Click(object sender, RoutedEventArgs e)
     {
       // Obtenemos el row seleccionado!
@@ -582,14 +600,15 @@ namespace IM.Host
 
       if (ValidateGuest(guestHost, EnumPermission.Sales, "guSale"))
       {
-        // Desplegamos el formulario Show
-        frmShow _frmShow = new frmShow(guestHost.guID);
-        _frmShow.ShowInTaskbar = false;
-        _frmShow.Owner = this;
-        _frmShow.ShowDialog();
+
 
       }
+      else
+      {
+        _chekedValue.IsChecked = false;
+      }
     }
+    #endregion
 
     #region dtpDate_PreviewKeyDown
     /// <summary>
@@ -692,7 +711,7 @@ namespace IM.Host
     /// <param name="sender"></param>
     /// <param name="e"></param>
     /// <history>
-    /// [vipacheco]
+    /// [vipacheco] 18/03/2016 Created
     /// </history>
     private void btnSales_Click(object sender, RoutedEventArgs e)
     {
@@ -712,7 +731,9 @@ namespace IM.Host
     /// </history>
     private async void btnExcel_Click(object sender, RoutedEventArgs e)
     {
-      
+      _busyIndicator.IsBusy = true;
+      _busyIndicator.BusyContent = "Loading premanifest";
+
       var dateRange = DateHelper.DateRange(dtpDate.Value.Value, dtpDate.Value.Value);
       var dateRangeFileName = DateHelper.DateRangeFileName(dtpDate.Value.Value, dtpDate.Value.Value);
       var filters = new List<Tuple<string, string>>();
@@ -721,8 +742,8 @@ namespace IM.Host
       if (lstManifestRange.Any())
       {
         var lstRptManifest = lstManifestRange[0] as List<RptManifestByLSRange>;
-        var lstBookings = lstManifestRange[1] as List<RptManifestByLSRange_Bookings>; 
-               
+        var lstBookings = lstManifestRange[1] as List<RptManifestByLSRange_Bookings>;
+
         var dtRptManifest = TableHelper.GetDataTableFromList(lstRptManifest, true);
 
         var dtBookings = TableHelper.GetDataTableFromList(lstBookings.Select(c => new
@@ -741,19 +762,7 @@ namespace IM.Host
         Tuple.Create(dtBookings, clsFormatReports.RptManifestRangeByLs_Bookings())
       }, filters, "Manifest By LS", dateRangeFileName, blnRowGrandTotal: true, blnShowSubtotal: true);
       }
-    }
-    #endregion
-
-    #region btnPrint_Click
-    /// <summary>
-    /// Imprime el reporte
-    /// </summary>
-    /// <history>
-    /// [lchairez] 09/Feb/2016 Created
-    /// </history>
-    private void btnPrint_Click(object sender, RoutedEventArgs e)
-    {
-      PrintReport();
+      _busyIndicator.IsBusy = false;
     }
     #endregion
 
@@ -813,10 +822,8 @@ namespace IM.Host
       _frmGiftsReceipts.modeOpenBy = EnumOpenBy.Button;
       _frmGiftsReceipts.modeOpen = ((modeEdit == true) ? EnumModeOpen.Edit : EnumModeOpen.Preview);
       _frmGiftsReceipts.Owner = this;
-      _frmGiftsReceipts.ShowDialog();
+      StartProcess(_frmGiftsReceipts, "Loading Gifts Receipt");
     }
-
-
     #endregion
 
     #region btnCxCAuthorization_Click
@@ -1036,24 +1043,6 @@ namespace IM.Host
     }
     #endregion
 
-    #region btnSelfGen_Click
-    /// <summary>
-    /// Despliega el formulario de busqueda casos Self Gen
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [vipacheco] 06/Junio/2016 Created
-    /// </history>
-    private void btnSelfGen_Click(object sender, RoutedEventArgs e)
-    {
-      frmSearchSelfGen _frmSearch = new frmSearchSelfGen();
-      _frmSearch.ShowInTaskbar = false;
-      _frmSearch.Owner = this;
-      _frmSearch.ShowDialog();
-    }
-    #endregion
-
     #region btnLogin_Click
     /// <summary>
     /// Llama la ventana de Login
@@ -1081,6 +1070,74 @@ namespace IM.Host
     }
     #endregion
 
+    #endregion
+
+    #region ShowDepositsRefund_Click
+    /// <summary>
+    /// Despliega el formulario de depositos devueltos
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 23/Junio/2016 Created
+    /// </history>
+    private void ShowDepositsRefund_Click(object sender, RoutedEventArgs e)
+    {
+      // Obtenemos el row seleccionado!
+      CheckBox _chekedValue = sender as CheckBox;
+      GuestPremanifestHost guestHost = (GuestPremanifestHost)_chekedValue.DataContext;
+
+      frmSearchDepositRefund frmSearchDeposit = new frmSearchDepositRefund(guestHost.guID);
+      frmSearchDeposit.ShowInTaskbar = false;
+      frmSearchDeposit.Owner = this;
+      frmSearchDeposit.ShowDialog();
+
+      DepositToRefund _result = frmSearchDeposit.grdDeposits.SelectedValue as DepositToRefund;
+
+      if (_result != null)
+      {
+        if (_result.bdRefund == true)
+          _chekedValue.IsChecked = true;
+        else
+          _chekedValue.IsChecked = false;
+      }
+      else
+        _chekedValue.IsChecked = false;
+
+    }
+    #endregion
+
+    #region StartProcess
+    /// <summary>
+    /// Muestra el Loading con el mensaje correspondiente cuando se desean abrir ventanas nuevas.
+    /// </summary>
+    /// <param name="pWindow"> Ventaha la cual se abrira </param>
+    /// <param name="pMessage"> mensaje del loading </param>
+    /// <history>
+    /// [vipacheco] 29/Junio/2016 Created
+    /// </history>
+    private void StartProcess(Window pWindow, string pMessage)
+    {
+      _busyIndicator.IsBusy = true;
+
+      Task.Factory.StartNew(() =>
+      {
+        Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+        {
+          {
+            for (int i = 0; i <= 10; i++)
+            {
+              _busyIndicator.BusyContent = pMessage;
+            }
+          }
+        }));
+        Thread.Sleep(10000);
+      }).ContinueWith((task) =>
+      {
+        _busyIndicator.IsBusy = false;
+        pWindow.ShowDialog();
+      }, TaskScheduler.FromCurrentSynchronizationContext());
+    }
     #endregion
 
   }

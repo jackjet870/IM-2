@@ -361,8 +361,58 @@ namespace IM.Host.Forms
         frmMealTickets _frmMealTicket = new frmMealTickets(GuestID);
         _frmMealTicket.ShowInTaskbar = false;
         _frmMealTicket.Owner = this;
+
+        Guest guestHost = BRGuests.GetGuest(GuestID);
+
+        List<MealTicket> _valuePreview = BRMealTickets.GetMealTickets(guestHost.guID);
+        SalesRoomCloseDates _closeSalesRoom = BRSalesRooms.GetSalesRoom(App.User.SalesRoom.srID);
+
+        if (guestHost.guMealTicket)
+        {
+          // Verificamos si alguno de sus cupones de comida es de una fecha cerrada, impedimos modificar los datos
+          _valuePreview.ForEach(x =>
+          {
+            if (IsClosed_MealTicket(x.meD, _closeSalesRoom.srMealTicketsCloseD))
+            {
+              _frmMealTicket.modeOpen = EnumModeOpen.Preview;
+              return;
+            }
+            else
+              _frmMealTicket.modeOpen = EnumModeOpen.PreviewEdit;
+          });
+        }
+        else
+          _frmMealTicket.modeOpen = EnumModeOpen.PreviewEdit;
+
         _frmMealTicket.ShowDialog();
+
       }
+    }
+    #endregion
+
+    #region IsClosed_MealTicket
+    /// <summary>
+    /// Evalua si el Mealticket no se ha cerrado!
+    /// </summary>
+    /// <param name="pdtmDate"></param>
+    /// <param name="pdtmClose"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 23/03/2016 Created
+    /// </history>
+    private bool IsClosed_MealTicket(DateTime pdtmDate, DateTime pdtmClose)
+    {
+      bool blnClosed = false;
+      DateTime _pdtmDate;
+
+      if (DateTime.TryParse(pdtmDate + "", out _pdtmDate))
+      {
+        if (_pdtmDate <= pdtmClose)
+        {
+          blnClosed = true;
+        }
+      }
+      return blnClosed;
     }
     #endregion
 

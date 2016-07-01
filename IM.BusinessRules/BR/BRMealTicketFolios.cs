@@ -24,9 +24,11 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int GetMaxMealTicketFolio(string mfsr, string mfmy, int mfra)
     {
+      string result = "";
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
       {
-        return Convert.ToInt32(dbContext.MealTicketsFolios.Where(x => x.mfsr == mfsr && x.mfmy == mfmy && x.mfra == mfra).Select(s => s.mfFolio).Max());
+        result = dbContext.MealTicketsFolios.Where(x => x.mfsr == mfsr && x.mfmy == mfmy && x.mfra == mfra).Select(s => s.mfFolio).Max();
+        return 1;
       }
     } 
     #endregion

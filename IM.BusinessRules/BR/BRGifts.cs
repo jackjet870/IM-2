@@ -47,14 +47,21 @@ namespace IM.BusinessRules.BR
     /// <returns> Lista de entidades GIFT</returns>
     /// <history>
     /// [vipacheco] 22/Abril/2016 Created
+    /// [vipacheco] 27/Junio/2016 Modified --> Se agrego sincronia y el order by de los resultados
     /// </history>
-    public static List<Gift> GetGifts(int status)
+    public async static Task<List<Gift>> GetGifts(int status)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<Gift> lstResult = new List<Gift>();
+      await Task.Run(() =>
       {
-        bool _status = Convert.ToBoolean(status);
-        return dbContext.Gifts.Where(x => x.giA == _status).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          bool _status = Convert.ToBoolean(status);
+          lstResult = dbContext.Gifts.Where(x => x.giA == _status).OrderBy(o => o.giN).ToList();
+        }
+      });
+
+      return lstResult;
     }
 
     #endregion GetGifts
@@ -209,7 +216,6 @@ namespace IM.BusinessRules.BR
 
     #endregion GetGiftsInputList
 
-
     #region GetGifts
     /// <summary>
     /// Obtiene registros del catalogo Gift
@@ -260,5 +266,26 @@ namespace IM.BusinessRules.BR
 
     } 
     #endregion
+
+    public static IEnumerable<object> GetGiftsWithPackages()
+    {
+      IEnumerable<object> lstResult;
+
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      {
+        var query = from a in dbContext.Gifts
+                    where a.giA == true
+                    select new {
+                                giID = a.giID,
+                                giN = a.giN,
+                                Visibility = a.giPack ? true : false,
+                                packs = dbContext.GiftsPackagesItems.Where(w => w.gpPack == a.giID).Select(s => dbContext.Gifts.Where(w => w.giID == s.gpgi).Select(ss => ss.giN).FirstOrDefault()).ToList()
+                                };
+
+        lstResult = query.ToList();
+      }
+
+      return lstResult;
+    } 
   }
 }

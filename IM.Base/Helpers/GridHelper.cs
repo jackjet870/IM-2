@@ -345,6 +345,56 @@ namespace IM.Base.Helpers
       }
 
       return string.Empty;
+    }
+    #endregion
+
+    #region ValidateEditNumber
+    /// <summary>
+    /// Valida los datos de una columna de tipo numerico de un grid
+    /// </summary>
+    /// <param name="pNumber"> El numero obtenido del campo en edicion </param>
+    /// <param name="pCancel"></param>
+    /// <param name="pTitle"></param>
+    /// <param name="pUpperBound"></param>
+    /// <param name="pLowerBound"></param>
+    /// <param name="pDefaultValue"></param>
+    /// <param name="pValidateBounds"></param>
+    /// <history>
+    /// [vipacheco] 30/Junio/2016 Created
+    /// </history>
+    public static void ValidateEditNumber(ref int pNumber, ref bool pCancel, string pTitle, int pUpperBound, int pLowerBound, int pDefaultValue = 0, bool pValidateBounds = true)
+    {
+      // si se ingreso un valor
+      if (pNumber != 0)
+      {
+        // si se desea validar los limites
+        if (pValidateBounds)
+        {
+          // validamos que no sea mayor al limite superior
+          if (pNumber > pUpperBound)
+          {
+            UIHelper.ShowMessage("Quantity can not be greater than " + pUpperBound, MessageBoxImage.Information, "Intelligence Marketing");
+            pCancel = true;
+          }
+          // validamos que no sea menor al limite inferior
+          else if (pNumber < pLowerBound)
+          {
+            UIHelper.ShowMessage("Quantity can not be lower than " + pLowerBound, MessageBoxImage.Information, "Intelligence Marketing");
+            pCancel = true;
+          }
+        }
+      }
+      else
+      {
+        // si se envio un valor default
+        if (pDefaultValue != 0)
+          pNumber = pDefaultValue;
+        else
+          pNumber = pLowerBound;
+      }
+
+
+
     } 
     #endregion
 

@@ -20,12 +20,22 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 06/04/2016
     /// </history>
-    public static List<GiftsReceiptDetailShort> GetGiftsReceiptDetail(int receipt, bool package = false)
+    public async static Task<List<GiftsReceiptDetail>> GetGiftsReceiptDetail(int receipt, bool package = false)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<GiftsReceiptDetail> lstResult = new List<GiftsReceiptDetail>();
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetGiftsReceiptDetail(receipt, package).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        {
+          // Obtenemos los resultados del Stored
+           List<GiftsReceiptDetailShort> lstShort = dbContext.USP_OR_GetGiftsReceiptDetail(receipt, package).ToList();
+
+          // Contruimos la entidad pura
+          lstShort.ForEach(x => lstResult.Add(dbContext.GiftsReceiptsDetails.Where(w => w.gegi == x.gegi && w.gegr == x.gegr).Single()));
+        }
+      });
+
+      return lstResult;
     }
     #endregion
 

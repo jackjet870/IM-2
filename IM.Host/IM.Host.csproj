@@ -15,6 +15,8 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -109,7 +111,9 @@
     <Compile Include="Classes\Gifts.cs" />
     <Compile Include="Classes\GiftsCancel.cs" />
     <Compile Include="Classes\GiftsExchange.cs" />
-    <Compile Include="Classes\ReceiptGifts.cs" />
+    <Compile Include="Classes\GiftsReceiptsPacks.cs" />
+    <Compile Include="Classes\GiftsReceiptsPayments.cs" />
+    <Compile Include="Classes\ReceiptsGifts.cs" />
     <Compile Include="Enums\enumMode.cs" />
     <Compile Include="Enums\EnumOpenBy.cs" />
     <Compile Include="Enums\EnumSale.cs" />
@@ -136,6 +140,9 @@
     </Compile>
     <Compile Include="Forms\frmGiftsReceiptsLog.xaml.cs">
       <DependentUpon>frmGiftsReceiptsLog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmGiftsReceipts_Full.xaml.cs">
+      <DependentUpon>frmGiftsReceipts_Full.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmHostReports.xaml.cs">
       <DependentUpon>frmHostReports.xaml</DependentUpon>
@@ -221,6 +228,10 @@
     <Page Include="Forms\frmGiftsReceiptsLog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\frmGiftsReceipts_Full.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\frmHostReports.xaml">
       <SubType>Designer</SubType>
@@ -322,6 +333,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\InputBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ComboBoxTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -444,8 +459,38 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\BGift.png" />
+    <Resource Include="Images\BGiftPack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BGiftReceipt.png" />
+    <Resource Include="Images\BGlobalSales.png" />
+    <Resource Include="Images\BSearchGuest.png" />
+    <Resource Include="Images\IM.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BDepositRefund.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BCloseSalesRoom.png" />
+    <Resource Include="Images\BMealTicket.png" />
+    <Resource Include="Images\BTransfer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BInvitation.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Fody.1.29.2\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.2\build\dotnet\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.1.29.2\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.29.2\build\dotnet\Fody.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
