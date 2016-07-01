@@ -54,13 +54,32 @@ namespace IM.SalesLiner.Forms
     /// </history>
     private void imgButtonOk_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      StaStart("Loading data...");
-      imgButtonOk.IsEnabled = false;
-      var linerPersonalShort = cbxPersonnel.SelectedValue as PersonnelShort;
-      filtersReport = new List<Tuple<string, string>>();
-      filtersReport.Add(new Tuple<string, string>("Liner", string.Concat(linerPersonalShort.peID, " - ", linerPersonalShort.peN)));
+      DateTime from = (DateTime)dtpkFrom?.SelectedDate;
+      DateTime to = (DateTime)dtpkTo?.SelectedDate;
+      if (from.Date <= to.Date)
+      {
+        if (cbxPersonnel?.SelectedValue != null)
+        {
+          StaStart("Loading data...");
+          imgButtonOk.IsEnabled = false;
+          var linerPersonalShort = cbxPersonnel.SelectedValue as PersonnelShort;
+          filtersReport = new List<Tuple<string, string>>();
+          filtersReport.Add(new Tuple<string, string>("Liner", string.Concat(linerPersonalShort.peID, " - ", linerPersonalShort.peN)));
 
-      DoGetSalesByLiner(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, App.User.SalesRoom.srID, linerPersonalShort.peID);
+          DoGetSalesByLiner(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, App.User.SalesRoom.srID, linerPersonalShort.peID);
+        }
+        else
+        {
+          UIHelper.ShowMessage("Please select a personnel", MessageBoxImage.Warning);
+          cbxPersonnel.Focus();
+        }
+      }
+      else
+      {
+        UIHelper.ShowMessage("Please check the selected date range", MessageBoxImage.Warning);
+        dtpkFrom.Focus();
+      }
+
     }
     /// <summary>
     /// Evento que se lanza cuando generamos nuestro reporte boton Print
@@ -135,6 +154,28 @@ namespace IM.SalesLiner.Forms
         LoadPersonnel();
       }
 
+    }
+
+    /// <summary>
+    /// Enviamos el Focus al siguiente DatePicker To o si esta en DatePicker From se va el focus al boton Search
+    /// </summary>
+    /// <history>
+    /// [erosado] 01/07/2016  Created.
+    /// </history>
+    private void dtpkEnterKey(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Enter)
+      {
+        DatePicker dtpk = sender as DatePicker;
+        if (dtpk.Name == "dtpkFrom")
+        {
+          dtpkTo.Focus();
+        }
+        else
+        {
+          cbxPersonnel.Focus();
+        }
+      }
     }
     #endregion
 

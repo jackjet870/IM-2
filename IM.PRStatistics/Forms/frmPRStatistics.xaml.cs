@@ -63,22 +63,34 @@ namespace IM.PRStatistics.Forms
     /// </history>
     private void imgButtonOk_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+      DateTime from = (DateTime)dtpkFrom?.SelectedDate;
+      DateTime to = (DateTime)dtpkTo?.SelectedDate;
+
+      imgButtonOk.Focus();
       if (lsbxLeadSources.SelectedItems.Count > 0 && lsbxSalesRooms.SelectedItems.Count > 0
               && lsbxCountries.SelectedItems.Count > 0 && lsbxAgencies.SelectedItems.Count > 0
               && lsbxMarkets.SelectedItems.Count > 0)
       {
+        if (from.Date <= to.Date)
+        {
+          filterTuple = new List<Tuple<string, string>>();
+          StaStart("Loading Data...");
+          imgButtonOk.IsEnabled = false;
+          filterTuple.Add(new Tuple<string, string>("DateRange", DateHelper.DateRange(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value)));
+          filterTuple.Add(new Tuple<string, string>("LeadSource", chbxLeadSources.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxLeadSources)));
+          filterTuple.Add(new Tuple<string, string>("SalesRooms", chbxSalesRooms.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxSalesRooms)));
+          filterTuple.Add(new Tuple<string, string>("Countries", chbxCountries.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxCountries)));
+          filterTuple.Add(new Tuple<string, string>("Agencies", chbxAgencies.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxAgencies)));
+          filterTuple.Add(new Tuple<string, string>("Markets", chbxMarkets.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxMarkets)));
 
-        filterTuple = new List<Tuple<string, string>>();
-        StaStart("Loading Data...");
-        imgButtonOk.IsEnabled = false;
-        filterTuple.Add(new Tuple<string, string>("DateRange", DateHelper.DateRange(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value)));
-        filterTuple.Add(new Tuple<string, string>("LeadSource", chbxLeadSources.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxLeadSources)));
-        filterTuple.Add(new Tuple<string, string>("SalesRooms", chbxSalesRooms.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxSalesRooms)));
-        filterTuple.Add(new Tuple<string, string>("Countries", chbxCountries.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxCountries)));
-        filterTuple.Add(new Tuple<string, string>("Agencies", chbxAgencies.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxAgencies)));
-        filterTuple.Add(new Tuple<string, string>("Markets", chbxMarkets.IsChecked == true ? "ALL" : UsefulMethods.SelectedItemsIdToString(lsbxMarkets)));
-
-        DoGetRptPrStats(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, filterTuple);
+          DoGetRptPrStats(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, filterTuple);
+        }
+        else
+        {
+          UIHelper.ShowMessage("Please check the selected date range", MessageBoxImage.Warning);
+          dtpkFrom.Focus();
+        }
+       
       }
       else
       {
@@ -132,6 +144,27 @@ namespace IM.PRStatistics.Forms
     private void imgButtonExit_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       Close();
+    }
+    /// <summary>
+    /// Enviamos el Focus al siguiente DatePicker To o si esta en DatePicker From se va el focus al boton Search
+    /// </summary>
+    /// <history>
+    /// [erosado] 01/07/2016  Created.
+    /// </history>
+    private void dtpkEnterKey(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Enter)
+      {
+        DatePicker dtpk = sender as DatePicker;
+        if (dtpk.Name == "dtpkFrom")
+        {
+          dtpkTo.Focus();
+        }
+        else
+        {
+          imgButtonOk.Focus();
+        }
+      }
     }
     #endregion
 
@@ -245,13 +278,11 @@ namespace IM.PRStatistics.Forms
     {
       try
       {
-
         List<LeadSourceByUser> data = await BRLeadSources.GetLeadSourcesByUser(user);
-        if (data.Count > 0)
+        if (data.Any())
         {
           lsbxLeadSources.DataContext = data;
         }
-
         StaEnd();
       }
       catch (Exception ex)
@@ -272,7 +303,7 @@ namespace IM.PRStatistics.Forms
       try
       {
         List<SalesRoomByUser> data = await BRSalesRooms.GetSalesRoomsByUser(user);
-        if (data.Count > 0)
+        if (data.Any())
         {
           lsbxSalesRooms.DataContext = data;
           chbxSalesRooms.IsChecked = true;
@@ -297,7 +328,7 @@ namespace IM.PRStatistics.Forms
       try
       {
         List<CountryShort> data =await BRCountries.GetCountries(1);
-        if (data.Count > 0)
+        if (data.Any())
         {
           lsbxCountries.DataContext = data;
           chbxCountries.IsChecked = true;
@@ -322,7 +353,7 @@ namespace IM.PRStatistics.Forms
       try
       {
           List<AgencyShort> data =await BRAgencies.GetAgencies(1);
-          if (data.Count > 0)
+          if (data.Any())
           {
             lsbxAgencies.DataContext = data;
             chbxAgencies.IsChecked = true;
@@ -346,7 +377,7 @@ namespace IM.PRStatistics.Forms
       try
       {
         List<MarketShort> data = await BRMarkets.GetMarkets(1);
-        if (!data.Any())
+        if (data.Any())
         {
           lsbxMarkets.DataContext = data;
           chbxMarkets.IsChecked = true;
@@ -562,6 +593,11 @@ namespace IM.PRStatistics.Forms
     /// </history>
     protected void LoadCatalogs()
     {
+      chbxLeadSources.IsChecked = false;
+      chbxSalesRooms.IsChecked = false;
+      chbxCountries.IsChecked = false;
+      chbxAgencies.IsChecked = false;
+      chbxMarkets.IsChecked = false;
       DoGetLeadSources(App.User.User.peID);
       DoGetSalesRooms(App.User.User.peID);
       DoGetCountries();
@@ -570,5 +606,6 @@ namespace IM.PRStatistics.Forms
     }
     #endregion
 
+   
   }
 }

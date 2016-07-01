@@ -53,12 +53,13 @@
                 <TextBlock Text="Date Range" Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" Height="40">
                     <TextBlock  Text="From" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
-                    <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=DateRange}"/>
+                    <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=DateRange}" KeyUp="dtpkEnterKey"/>
                     <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
-                    <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=DateRange}"/>
-                    <ComboBox x:Name="cbxPersonnel"  Style="{StaticResource cbxPersonnel}" TextSearch.TextPath="peID">
+                    <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=DateRange}" KeyUp="dtpkEnterKey"/>
+                    <ComboBox x:Name="cbxPersonnel" Width="200"  Style="{StaticResource cbxGeneral}" TextSearch.TextPath="peID" 
+                              ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}">
                         <ComboBox.ItemTemplate>
-                            <StaticResource ResourceKey="comboBoxTemplate"/>
+                            <StaticResource ResourceKey="tPersonnelComboBox-img"/>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                     <Border x:Name="imgButtonOk" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonOk_MouseLeftButtonDown">
@@ -101,7 +102,8 @@
         <!--#region  DataGrid Principal-->
         <Border CornerRadius="5" Padding="5" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Margin="10,5,10,0">
             <DataGrid Name="dtgr" BorderThickness="0" BorderBrush="Transparent" RowDetailsVisibilityMode="VisibleWhenSelected" ItemsSource="{Binding}" 
-                      EnableRowVirtualization="True" AutoGenerateColumns="False" CanUserAddRows="False" AlternatingRowBackground="LightGray" SelectionChanged="dtgr_SelectionChanged">
+                      EnableRowVirtualization="True" AutoGenerateColumns="False" CanUserAddRows="False" AlternatingRowBackground="LightGray" SelectionChanged="dtgr_SelectionChanged"
+                      IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="saleID" Width="Auto" Header="Sale ID" Binding="{Binding saID}"/>
                     <DataGridTextColumn x:Name="ls" Width="Auto" Header="LS" Binding="{Binding sals}" />
@@ -117,7 +119,7 @@
                     <DataGridTextColumn x:Name="ExitName" Width="Auto" Header="Exit Name" Binding="{Binding Exit1N}"/>
                     <DataGridTextColumn x:Name="amount" Width="Auto" Header="Amount" Binding="{Binding saGrossAmount, StringFormat={}{0:n2}}"/>
                     <DataGridCheckBoxColumn x:Name="cxld" Width="Auto" Header="Cxld" Binding="{Binding saCancel}" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="cancelD" Width="Auto" Header="Cancel D" Binding="{Binding saCancelD, StringFormat={}{0:dd/MM/yyyy}}"/>
+                    <DataGridTextColumn x:Name="cancelD" Width="*" Header="Cancel D" Binding="{Binding saCancelD, StringFormat={}{0:dd/MM/yyyy}}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
@@ -135,7 +137,7 @@
                     <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0"/>
                 </StackPanel>
             </StatusBarItem>
-            <StatusBarItem x:Name="StatusBarReg" Content="0/0" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
+            <StatusBarItem x:Name="StatusBarReg" Content="0/0" Width="60" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
         </StatusBar>
         <!--#endregion-->
 

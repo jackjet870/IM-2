@@ -3,6 +3,8 @@ using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.SalesCloser.Forms;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace IM.SalesCloser
@@ -49,6 +51,7 @@ namespace IM.SalesCloser
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
+        EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
         User = frmLogin.UserData;
         frmSalesCloser frmMain = new frmSalesCloser();
         frmMain.ShowDialog();
@@ -72,6 +75,25 @@ namespace IM.SalesCloser
       if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
       {
         Application.Current.Shutdown();
+      }
+    }
+    #endregion
+
+    #region dataGrid_MouseLeftButtonUp
+    /// <summary>
+    /// Cambia el cmapo de busqueda del grid
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [erosado] created 21/06/2016
+    /// </history>
+    private void dataGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+      DataGrid dgr = sender as DataGrid;
+      if (dgr.CurrentColumn != null)
+      {
+        dgr.Resources["SearchField"] = dgr.CurrentColumn.SortMemberPath;
       }
     }
     #endregion

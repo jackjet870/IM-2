@@ -5,9 +5,11 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                
                 <ResourceDictionary Source="pack://application:,,,/IM.SalesCloser;component/Styles/General.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IM.SalesCloser;component/Styles/ComboBoxTemplate.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/sDataGrid.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/sComboBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/tComboBox.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

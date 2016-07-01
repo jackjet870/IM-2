@@ -565,7 +565,7 @@
                                                 <DataGrid.Columns>
                                                     <DataGridTextColumn Header="Qty" 
                                                                         ElementStyle="{StaticResource TextBox-ErrorInfo}"
-                                                                        Binding="{Binding igQty, ValidatesOnDataErrors=True, UpdateSourceTrigger=LostFocus}"/>
+                                                                        Binding="{Binding igQty, ValidatesOnDataErrors=True}"/>
                                                     <DataGridComboBoxColumn x:Name="cmbGiftsInvitationGift" Header="Gift" Width="200"
                                                                             SelectedValueBinding="{Binding iggi, ValidatesOnDataErrors=True}"
                                                                             DisplayMemberPath="giN" 

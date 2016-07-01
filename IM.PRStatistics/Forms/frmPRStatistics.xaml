@@ -8,7 +8,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib" 
         mc:Ignorable="d"
        Title="PR Statistics"
-    d:Height="768" d:Width="1024" WindowStartupLocation="CenterScreen" 
+    d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
     Icon="/IM.PRStatistics;component/Images/IM.ico" WindowState="Maximized" WindowStyle="SingleBorderWindow"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">
     <Window.InputBindings>
@@ -54,10 +54,10 @@
                 <TextBlock Text="Date Range" Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" Height="40">
                     <TextBlock  Text="From" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
-                    <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=DateRange}"/> 
+                    <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=DateRange}" KeyUp="dtpkEnterKey"/> 
                     <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
-                    <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=DateRange}"/>
-                    <Border x:Name="imgButtonOk" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonOk_MouseLeftButtonDown">
+                    <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=DateRange}" KeyUp="dtpkEnterKey"/>
+                    <Border x:Name="imgButtonOk" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonOk_MouseLeftButtonDown" Focusable="True">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
                                 <Image Source="pack://application:,,,/IM.PRStatistics;component/Images/BSearch.png"/>
@@ -65,7 +65,7 @@
                             <TextBlock Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonPrint" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonPrint_MouseLeftButtonDown">
+                    <Border x:Name="imgButtonPrint" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonPrint_MouseLeftButtonDown" Focusable="True">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
                                 <Image Source="pack://application:,,,/IM.PRStatistics;component/Images/BPrinter.png"/>
@@ -73,7 +73,7 @@
                             <TextBlock Text="Print" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonAbout" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonAbout_MouseLeftButtonDown">
+                    <Border x:Name="imgButtonAbout" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonAbout_MouseLeftButtonDown" Focusable="True">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
                                 <Image x:Name="image" Source="pack://application:,,,/IM.PRStatistics;component/Images/BAbout.png"/>
@@ -81,7 +81,7 @@
                             <TextBlock Text="About" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonExit" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonExit_MouseLeftButtonDown">
+                    <Border x:Name="imgButtonExit" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonExit_MouseLeftButtonDown" Focusable="True">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
                                 <Image Source="pack://application:,,,/IM.PRStatistics;component/Images/BExit.png"/>
@@ -234,7 +234,8 @@
         <!--#region  DataGrid Principal-->
         <Border CornerRadius="5" Padding="5" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="3" Margin="10,5,10,0">
             <DataGrid Name="dtgr" BorderThickness="0" BorderBrush="Transparent" RowDetailsVisibilityMode="VisibleWhenSelected" ItemsSource="{Binding}" 
-                      EnableRowVirtualization="True" AutoGenerateColumns="False" CanUserAddRows="False" AlternatingRowBackground="LightGray" SelectionChanged="dtgr_SelectionChanged">
+                      EnableRowVirtualization="True" AutoGenerateColumns="False" CanUserAddRows="False"
+                      AlternatingRowBackground="LightGray" IsReadOnly="True" SelectionChanged="dtgr_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="prId2" Width="Auto" Header="PR Id" Binding="{Binding PR_ID}"/>
                     <DataGridTextColumn x:Name="prName2" Width="Auto" Header="PR Name" Binding="{Binding PR_NAME}" />

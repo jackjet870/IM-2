@@ -7,6 +7,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/IM.PRStatistics;component/Styles/General.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IM.PRStatistics;component/Styles/Lists.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/sDataGrid.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

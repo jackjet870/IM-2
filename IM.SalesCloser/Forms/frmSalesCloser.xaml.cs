@@ -58,14 +58,33 @@ namespace IM.SalesCloser.Forms
     /// </history>
     private void imgButtonOk_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      StaStart("Loading data...");
-      imgButtonOk.IsEnabled = false;
-      filtersBool = new List<bool>();
-      PersonnelShort closer = cbxPersonnel.SelectedValue as PersonnelShort;
-      filtersReport = new List<Tuple<string, string>>();
-      filtersReport.Add(new Tuple<string, string>("Closer", string.Concat(closer.peID, " - ", closer.peN)));
+      DateTime from = (DateTime)dtpkFrom?.SelectedDate;
+      DateTime to = (DateTime)dtpkTo?.SelectedDate;
+      if (from.Date <= to.Date)
+      {
+        if (cbxPersonnel?.SelectedValue != null)
+        {
+          imgButtonOk.Focus();
+          StaStart("Loading data...");
+          imgButtonOk.IsEnabled = false;
+          filtersBool = new List<bool>();
+          PersonnelShort closer = cbxPersonnel.SelectedValue as PersonnelShort;
+          filtersReport = new List<Tuple<string, string>>();
+          filtersReport.Add(new Tuple<string, string>("Closer", string.Concat(closer.peID, " - ", closer.peN)));
 
-      DoGetSalesByCloser(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, App.User.SalesRoom.srID, closer.peID);
+          DoGetSalesByCloser(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, App.User.SalesRoom.srID, closer.peID);
+        }
+        else
+        {
+          UIHelper.ShowMessage("Please select a personnel", MessageBoxImage.Warning);
+          cbxPersonnel.Focus();
+        }
+      }
+      else
+      {
+        UIHelper.ShowMessage("Please check the selected date range", MessageBoxImage.Warning);
+        dtpkFrom.Focus();
+      }
     }
     /// <summary>
     /// Evento que se lanza cuando generamos nuestro reporte boton Print
@@ -126,7 +145,7 @@ namespace IM.SalesCloser.Forms
     /// <history>
     /// [erosado] 23/Mar/2016 Created
     /// </history>
-    private async  void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private async void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       frmLogin frmlogin = new frmLogin(loginType: EnumLoginType.SalesRoom, changePassword: true, autoSign: true);
       await frmlogin.getAllPlaces();
@@ -142,6 +161,28 @@ namespace IM.SalesCloser.Forms
         LoadPersonnel();
       }
 
+    }
+
+    /// <summary>
+    /// Enviamos el Focus al siguiente DatePicker To o si esta en DatePicker From se va el focus al boton Search
+    /// </summary>
+    /// <history>
+    /// [erosado] 01/07/2016  Created.
+    /// </history>
+    private void dtpkEnterKey(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Enter)
+      {
+        DatePicker dtpk = sender as DatePicker;
+        if (dtpk.Name == "dtpkFrom")
+        {
+          dtpkTo.Focus();
+        }
+        else
+        {
+          cbxPersonnel.Focus();
+        }
+      }
     }
     #endregion
 

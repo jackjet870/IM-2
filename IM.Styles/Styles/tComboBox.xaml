@@ -18,7 +18,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
                     <Viewbox Width="16" Stretch="Uniform" >
-                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BHotel.png"/>
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BUser.png"/>
                     </Viewbox>
                     <TextBlock Text="{Binding peID}" FontWeight="Bold" TextAlignment="Center" FontSize="10"/>
                 </StackPanel>
