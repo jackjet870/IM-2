@@ -7,46 +7,105 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmGiftsReceiptsDetail"
         mc:Ignorable="d"
         Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="Gifts Receipts" Height="283.334" Width="753.441" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
-  <Window.Resources>
-    
-    <CollectionViewSource x:Key="dsGifts" d:DesignSource="{d:DesignInstance {x:Type Model:Gift}, CreateList=True}"/>
-    
-  </Window.Resources>
+        Title="Gifts Receipts" Height="325.334" Width="753.441" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" ResizeMode="NoResize">
 
   <Grid x:Name="grdMain">
-    <TextBlock x:Name="lblQty" HorizontalAlignment="Left" Margin="48,8,0,0" TextWrapping="Wrap" Text="Qty" VerticalAlignment="Top"/>
-    <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="23" Margin="34,26,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50"  Text ="{Binding geQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=False, FallbackValue=1}" PreviewTextInput="ValidateNumber" LostFocus="txtQty_LostFocus" GotFocus="Element_GotFocus"/>
-    <TextBlock x:Name="lblUnit" HorizontalAlignment="Left" Margin="150,8,0,0" TextWrapping="Wrap" Text="Unit" VerticalAlignment="Top"/>
-    <TextBox x:Name="txtUnit" HorizontalAlignment="Left" Height="23" Margin="136,26,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50" IsReadOnly="True" Text="{Binding QtyUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=False}"/>
-    <TextBlock x:Name="lblGift" HorizontalAlignment="Left" Margin="99,53,0,0" TextWrapping="Wrap" Text="Gift" VerticalAlignment="Top" Width="35"/>
-    <ComboBox x:Name="cboGift" HorizontalAlignment="Left" Margin="30,69,0,0" VerticalAlignment="Top" Width="165" SelectedValue="{Binding gegi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="giID" DisplayMemberPath="giN" ItemsSource="{Binding Source={StaticResource dsGifts}}" SelectionChanged="cboGift_SelectionChanged"/>
-    <TextBlock x:Name="lblAdults" HorizontalAlignment="Left" Margin="234,49,0,0" TextWrapping="Wrap" Text="Adults" VerticalAlignment="Top"/>
-    <TextBox x:Name="txtAdults" HorizontalAlignment="Left" Height="23" Margin="226,67,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding geAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=False, FallbackValue=0}" PreviewTextInput="ValidateNumber" LostFocus="Element_LostFocus"/>
-    <TextBlock x:Name="lblMinors" HorizontalAlignment="Left" Margin="288,49,0,0" TextWrapping="Wrap" Text="Minors" VerticalAlignment="Top"/>
-    <TextBox x:Name="txtMinors" HorizontalAlignment="Left" Height="23" Margin="280,67,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding geMinors, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=False, FallbackValue=0}" PreviewTextInput="ValidateNumber"/>
-    <TextBlock x:Name="lblEAdults" HorizontalAlignment="Left" Margin="336,49,0,0" TextWrapping="Wrap" Text="E. Adults" VerticalAlignment="Top" Width="52"/>
-    <TextBox x:Name="txtEAdults" HorizontalAlignment="Left" Height="23" Margin="334,67,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding geExtraAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=False, FallbackValue=0}" PreviewTextInput="ValidateNumber"/>
-    <TextBlock x:Name="lblCAdults" HorizontalAlignment="Left" Margin="397,49,0,0" TextWrapping="Wrap" Text="C. Adults" VerticalAlignment="Top" Width="52"/>
-    <TextBox x:Name="txtCAdults" HorizontalAlignment="Left" Height="23" Margin="391,67,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="62" IsReadOnly="True" Text="{Binding gePriceA, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}}"/>
-    <TextBlock x:Name="lblCMinors" HorizontalAlignment="Left" Margin="463,49,0,0" TextWrapping="Wrap" Text="C. Minors" VerticalAlignment="Top" Width="52"/>
-    <TextBox x:Name="txtCMinors" HorizontalAlignment="Left" Height="23" Margin="457,67,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="62" IsReadOnly="True" Text="{Binding gePriceM, StringFormat={}{0:0.00}}"/>
-    <TextBlock x:Name="lblPAdults" HorizontalAlignment="Left" Margin="529,49,0,0" TextWrapping="Wrap" Text="P. Adults" VerticalAlignment="Top" Width="52"/>
-    <TextBox x:Name="txtPAdults" HorizontalAlignment="Left" Height="23" Margin="523,67,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="62" IsReadOnly="True" Text="{Binding gePriceAdult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}}"/>
-    <TextBlock x:Name="lblPMinors" HorizontalAlignment="Left" Margin="595,49,0,0" TextWrapping="Wrap" Text="P. Minors" VerticalAlignment="Top" Width="52"/>
-    <TextBox x:Name="txtPMinors" HorizontalAlignment="Left" Height="23" Margin="589,67,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="62" IsReadOnly="True" Text="{Binding gePriceMinor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}}"/>
-    <TextBlock x:Name="lblPEAdults" HorizontalAlignment="Left" Margin="661,49,0,0" TextWrapping="Wrap" Text="P.E. Adults" VerticalAlignment="Top" Width="56"/>
-    <TextBox x:Name="txtPEAdults" HorizontalAlignment="Left" Height="23" Margin="656,67,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="62" IsReadOnly="True" Text="{Binding gePriceExtraAdult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}}"/>
-    <CheckBox x:Name="chkSale" Content="Sale" HorizontalAlignment="Left" Margin="162,106,0,0" VerticalAlignment="Top" IsChecked="{Binding geSale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-    <CheckBox x:Name="chkInSistur" Content="In Sistur" HorizontalAlignment="Left" Margin="229,106,0,0" VerticalAlignment="Top" IsEnabled="False" IsChecked="{Binding geInPVPPromo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-    <CheckBox x:Name="chkCancelSistur" Content="Cancel Sistur" HorizontalAlignment="Left" Margin="313,106,0,0" VerticalAlignment="Top" IsEnabled="False" IsChecked="{Binding geCancelPVPPromo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-    <CheckBox x:Name="chkInOpera" Content="In Opera" HorizontalAlignment="Left" Margin="416,106,0,0" VerticalAlignment="Top" IsEnabled="False" IsChecked="{Binding geInOpera}"/>
-    <CheckBox x:Name="chkAsPromotion" Content="As Promotion" HorizontalAlignment="Left" Margin="507,106,0,0" VerticalAlignment="Top" IsEnabled="False" IsChecked="{Binding geAsPromotionOpera, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-    <TextBlock x:Name="lblFolios" HorizontalAlignment="Left" Margin="107,142,0,0" TextWrapping="Wrap" Text="Folios" VerticalAlignment="Top"/>
-    <TextBox x:Name="txtFolios" HorizontalAlignment="Left" Height="23" Margin="99,160,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding geFolios, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-    <TextBlock x:Name="lblComments" HorizontalAlignment="Left" Margin="342,142,0,0" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Top" Width="56"/>
-    <TextBox x:Name="txtComments" HorizontalAlignment="Left" Height="23" Margin="154,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="451" Text="{Binding geComments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-    <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="217,200,0,0" VerticalAlignment="Top" Width="89" Height="31" Click="btnSave_Click"/>
-    <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="457,200,0,0" VerticalAlignment="Top" Width="89" Height="31" Click="btnCancel_Click" />
+    <Grid.RowDefinitions>
+      <RowDefinition Height="15"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="15"/>
+    </Grid.RowDefinitions>
+    <Border Grid.Row="0" Background="#147F79" />
+    <Border x:Name="brdDateRange" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Margin="10,5,10,5">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="*" />
+          <RowDefinition Height="*" />
+          <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+          <StackPanel Orientation="Vertical">
+            <TextBlock x:Name="lblQty" HorizontalAlignment="Center" Margin="5,5,5,0" TextWrapping="Wrap" Text="Qty" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="23" Margin="5,0,5,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50"  Text ="{Binding geQty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=False, FallbackValue=0}" PreviewTextInput="ValidateNumber" LostFocus="txtQty_LostFocus" GotFocus="Element_GotFocus"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical">
+            <TextBlock x:Name="lblUnit" HorizontalAlignment="Center" Margin="5,5,5,0" TextWrapping="Wrap" Text="Unit" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtUnit" HorizontalAlignment="Center" Height="23" Margin="5,0,5,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50" IsReadOnly="True" Text="{Binding QtyUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=False}"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Height="Auto">
+            <TextBlock x:Name="lblGift" HorizontalAlignment="Center" Margin="5,5,5,0" TextWrapping="Wrap" Text="Gift" VerticalAlignment="Top" Width="35" FontWeight="Bold"/>
+            <ComboBox x:Name="cboGift" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Top" Height="Auto" Width="590" SelectionChanged="cboGift_SelectionChanged" TextSearch.TextPath="giN" SelectedValue="{Binding gegi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  SelectedValuePath="giID">
+              <ComboBox.ItemTemplate>
+                <StaticResource ResourceKey="comboBoxTemplate"/>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+          </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+          <StackPanel Orientation="Vertical">
+            <TextBlock x:Name="lblAdults" HorizontalAlignment="Center" Margin="5,5,5,0" TextWrapping="Wrap" Text="Adults" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtAdults" HorizontalAlignment="Left" Height="23" Margin="5,0,3,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding geAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=False, FallbackValue=0}" PreviewTextInput="ValidateNumber" LostFocus="Element_LostFocus"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical">
+            <TextBlock x:Name="lblMinors" HorizontalAlignment="Center" Margin="5,5,5,0" TextWrapping="Wrap" Text="Minors" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtMinors" HorizontalAlignment="Left" Height="23" Margin="5,0,3,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding geMinors, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=False, FallbackValue=0}" PreviewTextInput="ValidateNumber"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical">
+            <TextBlock x:Name="lblEAdults" HorizontalAlignment="Center" Margin="5,5,5,0" TextWrapping="Wrap" Text="E. Adults" VerticalAlignment="Top" Width="52"/>
+            <TextBox x:Name="txtEAdults" HorizontalAlignment="Left" Height="23" Margin="5,0,3,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding geExtraAdults, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=False, FallbackValue=0}" PreviewTextInput="ValidateNumber"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical">
+            <TextBlock x:Name="lblCAdults" HorizontalAlignment="Center" Margin="5,5,5,0" TextWrapping="Wrap" Text="C. Adults" VerticalAlignment="Top" Width="52"/>
+            <TextBox x:Name="txtCAdults" HorizontalAlignment="Left" Height="23" Margin="5,0,3,0" AcceptsReturn="False" VerticalAlignment="Top" Width="62" IsReadOnly="True" Text="{Binding gePriceA, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}}"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical">
+            <TextBlock x:Name="lblCMinors" HorizontalAlignment="Center" Margin="5,5,5,0" TextWrapping="Wrap" Text="C. Minors" VerticalAlignment="Top" Width="52"/>
+            <TextBox x:Name="txtCMinors" HorizontalAlignment="Left" Height="23" Margin="5,0,3,0" AcceptsReturn="False" VerticalAlignment="Top" Width="62" IsReadOnly="True" Text="{Binding gePriceM, StringFormat={}{0:0.00}}"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical">
+            <TextBlock x:Name="lblPAdults" HorizontalAlignment="Center" Margin="5,5,5,0" TextWrapping="Wrap" Text="P. Adults" VerticalAlignment="Top" Width="52"/>
+            <TextBox x:Name="txtPAdults" HorizontalAlignment="Left" Height="23" Margin="5,0,3,0" AcceptsReturn="False" VerticalAlignment="Top" Width="62" IsReadOnly="True" Text="{Binding gePriceAdult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}}"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical">
+            <TextBlock x:Name="lblPMinors" HorizontalAlignment="Center" Margin="5,5,5,0" TextWrapping="Wrap" Text="P. Minors" VerticalAlignment="Top" Width="52"/>
+            <TextBox x:Name="txtPMinors" HorizontalAlignment="Left" Height="23" Margin="5,0,3,0" AcceptsReturn="False" VerticalAlignment="Top" Width="62" IsReadOnly="True" Text="{Binding gePriceMinor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}}"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical">
+            <TextBlock x:Name="lblPEAdults" HorizontalAlignment="Center" Margin="5,5,5,0" TextWrapping="Wrap" Text="P.E. Adults" VerticalAlignment="Top" Width="56"/>
+            <TextBox x:Name="txtPEAdults" HorizontalAlignment="Left" Height="23" Margin="5,0,5,0" AcceptsReturn="False" VerticalAlignment="Top" Width="62" IsReadOnly="True" Text="{Binding gePriceExtraAdult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0.00}}"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical">
+            <CheckBox x:Name="chkInSistur" Content="In Sistur" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" IsEnabled="False" IsChecked="{Binding geInPVPPromo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <CheckBox x:Name="chkCancelSistur" Content="Cancel Sistur" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" IsEnabled="False" IsChecked="{Binding geCancelPVPPromo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical">
+            <CheckBox x:Name="chkInOpera" Content="In Opera" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" IsEnabled="False" IsChecked="{Binding geInOpera}"/>
+            <CheckBox x:Name="chkAsPromotion" Content="As Promotion" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" IsEnabled="False" IsChecked="{Binding geAsPromotionOpera, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+          </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+          <CheckBox x:Name="chkSale" Content="Sale" HorizontalAlignment="Center" Margin="10,10,10,10" VerticalAlignment="Center" IsChecked="{Binding geSale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="15"/>
+          <StackPanel Orientation="Vertical">
+            <TextBlock x:Name="lblFolios" HorizontalAlignment="Center" Margin="5,5,5,0" TextWrapping="Wrap" Text="Folios" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtFolios" HorizontalAlignment="Left" Height="23" Margin="5,0,5,0" AcceptsReturn="False" VerticalAlignment="Top" Width="50" Text="{Binding geFolios, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+          </StackPanel>
+          <StackPanel Orientation="Vertical">
+            <TextBlock x:Name="lblComments" HorizontalAlignment="Center" Margin="5,5,5,0" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Top" Width="56"/>
+            <TextBox x:Name="txtComments" HorizontalAlignment="Left" Height="23" Margin="5,0,5,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="451" Text="{Binding geComments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+          </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+          <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="7" VerticalAlignment="Top" Width="89" Height="28" Click="btnSave_Click"/>
+          <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="7" VerticalAlignment="Top" Width="89" Height="28" Click="btnCancel_Click" />
+        </StackPanel>
+      
+      </Grid>
+    </Border>
+    <Border Grid.Row="2" Background="#147F79" />
+
   </Grid>
 </Window>

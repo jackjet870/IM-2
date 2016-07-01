@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     {
       List<Role> lstRoles = await Task.Run(() =>
        {
-         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
          {
            var query = from ro in dbContext.Roles
                        select ro;
@@ -67,7 +67,7 @@ namespace IM.BusinessRules.BR
     {
       List<Role> lstRoles = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             var person = dbContext.Personnels.Where(pe => pe.peID == idUser).Include(pe=>pe.Roles).FirstOrDefault();
 

@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
       List<Rep> lstReps = new List<Rep>();
       await Task.Run(() =>
       {        
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from r in dbContext.Reps select r;
 

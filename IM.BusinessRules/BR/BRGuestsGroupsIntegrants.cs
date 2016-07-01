@@ -13,7 +13,7 @@ namespace IM.BusinessRules.BR
 
     public static GuestsGroup GetGuestGroupByGuest(int GUID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return (from gu in dbContext.Guests
                 from ggi in gu.GuestsGroups

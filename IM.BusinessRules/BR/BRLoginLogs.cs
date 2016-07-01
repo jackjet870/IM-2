@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     /// <history>[jorcanche] 09/03/2016</history>
     public static void SaveGuestLog(string location, string user, string computerName)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_SaveLoginLog(location, user, computerName);
       }
@@ -41,7 +41,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<string>> GetLoginsLogPCName()
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var query = dbContext.LoginsLogs.Select(c => c.llPCName).OrderBy(c=>c).Distinct();
         return await query.ToListAsync();

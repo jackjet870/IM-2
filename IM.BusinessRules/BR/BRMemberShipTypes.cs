@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
       List<MembershipType> lstMemberShipType = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from mt in dbContext.MembershipTypes
                       select mt;
@@ -58,6 +58,35 @@ namespace IM.BusinessRules.BR
       });
       return lstMemberShipType;
     }
+    #endregion
+
+    #region GetMemberShipTypes
+
+    /// <summary>
+    /// Obtiene el mtLevel por id de MembershipTypes
+    /// </summary>
+    /// <param name="mtId">Id de MembershipTypes</param>
+    /// <param name="nStatus">-1. Todos los registros | 0. Registros Inactivos | 1. Registros Activos</param>
+    /// <returns>Lista de tipo MembershipType</returns>
+    /// <history>
+    /// [jorcanche] created 04/04/2016
+    /// </history>
+    public static async Task<byte?> GetLevelOfMemberShipTypes(string mtId ,int nStatus = -1 )
+    {
+      byte?  level = 0;
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var status = Convert.ToBoolean(nStatus);
+          level = (from mt in dbContext.MembershipTypes
+                      where mt.mtID == mtId && (nStatus == -1 || mt.mtA == status)
+                      select mt.mtLevel).FirstOrDefault();       
+        }
+      });
+      return level;
+    }//select Count(*) from Sales where sagu = 7752186
+
     #endregion
   }
 }

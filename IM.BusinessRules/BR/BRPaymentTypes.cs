@@ -28,7 +28,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from pt in dbContext.PaymentTypes
                       select pt;
@@ -68,7 +68,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static PaymentType GetPaymentTypeId(string paymentTypeId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.PaymentTypes.Where(p => p.ptID == paymentTypeId).SingleOrDefault();
       }

@@ -1,12 +1,15 @@
 ﻿using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Host.Classes;
+using IM.Host.Enums;
 using IM.Model;
 using IM.Model.Enums;
+using IM.Model.Helpers;
 using IM.Services.Helpers;
 using PalaceResorts.Common.PalaceTools;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -31,7 +34,7 @@ namespace IM.Host.Forms
     #region Variables
     private EnumExternalProduct _EnumExternalProduct;
     private int _ReceiptID, _GuestID;
-    public bool _ValidateMaxAuthGifts, _UseCxCCost, _Exchange, _Cancelled;
+    public bool _ValidateMaxAuthGifts, useCxCCost, _Exchange, _Cancelled;
     public MessageBoxResult _Result = MessageBoxResult.Cancel; // Variable encargado de devolver la respuesta del usuario.
     public int ReceiptExchangeID = 0;
     public frmGiftsReceipts _FrmGiftsReceipt;
@@ -48,26 +51,35 @@ namespace IM.Host.Forms
     CollectionViewSource _dsPrograms;
     CollectionViewSource _dsGiftsReceiptDetailCancel;
     CollectionViewSource _dsGifts;
-    CollectionViewSource _dsGiftInvitationWithoutReceipt;
+    CollectionViewSource _dsGiftsReceiptDetail;
+
+    ObservableCollection<GiftsReceiptDetail> _obsGifts;
+    ObservableCollection<GiftsReceiptDetail> _obsGiftsComplet;
 
     #endregion
 
     #region Contructor
     public frmCancelExternalProducts(EnumExternalProduct enumExternalProducts, int ReceiptID, int GuestID,
                                  string NameGuest, decimal MaxAuthGifts, decimal TotalGifts, decimal CurAdjustment,
-                                 bool ValidateMaxAuthGifts, bool UseCxCCost, bool Exchange, frmGiftsReceipts FrmGiftsReceipt)
+                                 bool ValidateMaxAuthGifts, bool pUseCxCCost, bool Exchange, frmGiftsReceipts FrmGiftsReceipt)
     {
       _EnumExternalProduct = enumExternalProducts;
       _ReceiptID = ReceiptID;
       _GuestID = GuestID;
       _ValidateMaxAuthGifts = ValidateMaxAuthGifts;
-      _UseCxCCost = UseCxCCost;
+      useCxCCost = pUseCxCCost;
       _Exchange = Exchange;
       _Cancelled = false;
       _FrmGiftsReceipt = FrmGiftsReceipt;
       _FrmCancelExternalProducts = this;
 
       InitializeComponent();
+
+      // Verificamos si podra agregar gifts de intercambio
+      if (_Exchange)
+        controlEditionGifts(Visibility.Visible, Visibility.Visible, true);
+      else
+        controlEditionGifts(Visibility.Hidden, Visibility.Hidden, false);
 
       // Si es monedero electronico
       if (_EnumExternalProduct == EnumExternalProduct.expElectronicPurse)
@@ -87,7 +99,7 @@ namespace IM.Host.Forms
       //Obtenemos los datos del Huesped.
       _Guest = BRGuests.GetGuestShort(_GuestID);
       txtReceipt.Text = $"{_ReceiptID}";
-      txtGuestID.Text = $"{_GuestID}";
+      txtGuestID.Text = $"{ _GuestID}";
       txtNameInvitation.Text = _Guest.Name;
       cboSalesRoom.SelectedValue = _Guest.gusr;
 
@@ -127,25 +139,25 @@ namespace IM.Host.Forms
       }
 
       // Monto maximo de reagalos
-      txtMaxAuthGifts.Text = $"${MaxAuthGifts}";
+      txtMaxAuthGifts.Text = string.Format("{0:C2}", MaxAuthGifts);
 
       // Totales de regalos
-      txtTotalGiftsInvitation.Text = $"${BRGiftsReceipts.CalculateTotalsGiftsInvitation(_GuestID)}";
+      txtTotalGiftsInvitation.Text = string.Format("{0:C2}", BRGiftsReceipts.CalculateTotalsGiftsInvitation(_GuestID));
 
       // Si se genera un recibo Exchange
       if (_Exchange)
-        txtTotalGiftsCancel.Text = $"${0.00}";
+        txtTotalGiftsCancel.Text = string.Format("{0:C2}", 0.00);
       // si se desea cancelar el recibo
       else
-        txtTotalGiftsCancel.Text = $"${TotalGifts}";
+        txtTotalGiftsCancel.Text = string.Format("{0:C2}", TotalGifts);
 
-      txtTotalGiftsExchange.Text = $"${0.00}";
+      txtTotalGiftsExchange.Text = string.Format("{0:C2}", 0.00);
       CalculateTotalGifts();
 
       // Totales del cargo
-      txtgrcxcAdj.Text = $"${CurAdjustment}";
-      ReceiptGifts.CalculateCharge(_GuestID, (ChargeTo)FrmGiftsReceipt.cbogrct.SelectedItem, txtTotalCost, FrmGiftsReceipt.chkgrExchange, FrmGiftsReceipt.txtgrgu, ref txtgrcxcGifts,
-                                              ref txtTotalCxC, ref FrmGiftsReceipt.txtgrCxCAdj, ref FrmGiftsReceipt._blnValidateMaxAuthGifts, ref FrmGiftsReceipt.txtgrls,
+      txtgrcxcAdj.Text = string.Format("{0:C2}", CurAdjustment);
+      ReceiptsGifts.CalculateCharge(_GuestID, (ChargeTo)FrmGiftsReceipt.cbogrct.SelectedItem, txtTotalCost, FrmGiftsReceipt.chkgrExchange, FrmGiftsReceipt.txtgrgu, ref txtgrcxcGifts,
+                                              ref txtTotalCxC, ref FrmGiftsReceipt.txtgrCxCAdj, ref FrmGiftsReceipt._validateMaxAuthGifts, ref FrmGiftsReceipt.txtgrls,
                                               ref FrmGiftsReceipt.txtgrMaxAuthGifts, ref FrmGiftsReceipt.lblgrMaxAuthGifts);
 
       // Si se desea cancelar el recibo
@@ -161,7 +173,7 @@ namespace IM.Host.Forms
 
 
     #region Window_Loaded
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       _dsSalesRoom = ((CollectionViewSource)(this.FindResource("dsSalesRoom")));
       _dsPrograms = ((CollectionViewSource)(this.FindResource("dsPrograms")));
@@ -169,7 +181,7 @@ namespace IM.Host.Forms
       _dsGifts = ((CollectionViewSource)(this.FindResource("dsGifts")));
 
       _dsGiftsReceiptDetailCancel = ((CollectionViewSource)(this.FindResource("dsGiftsReceiptDetailCancel")));
-      _dsGiftInvitationWithoutReceipt = ((CollectionViewSource)(this.FindResource("dsGiftInvitationWithoutReceipt")));
+      _dsGiftsReceiptDetail = ((CollectionViewSource)(this.FindResource("dsGiftsReceiptDetail")));
 
       // Cargamos los Sales Room 
       _dsSalesRoom.Source = frmHost._lstSalesRoom;
@@ -185,13 +197,18 @@ namespace IM.Host.Forms
 
       // si se debe generar un recibo exchange
       if (_Exchange)
-        _dsGiftInvitationWithoutReceipt.Source = BRInvitsGifts.GetGiftsInvitationWithoutReceipt(0);
+      {
+        List<GiftsReceiptDetail> lstResult = await BRInvitsGifts.GetGiftsInvitationWithoutReceipt(0);
+        _obsGifts = new ObservableCollection<GiftsReceiptDetail>(lstResult);
+        _obsGiftsComplet = new ObservableCollection<GiftsReceiptDetail>(lstResult);
+        _dsGiftsReceiptDetail.Source = _obsGifts;
+      }
       // Si se desea cancelar el recibo
       else
       {
         CheckAllCell(ref grdCancel, _CancelField);
         TextBox x = null;
-        ReceiptGifts.CalculateTotalGifts(grdCancel, EnumGiftsType.ReceiptGifts, ref txtTotalCost, ref x, ref x);
+        ReceiptsGifts.CalculateTotalGifts(grdCancel, EnumGiftsType.ReceiptGifts, ref txtTotalCost, ref x, ref x);
         grdCancel.IsReadOnly = true;
       }
 
@@ -233,6 +250,10 @@ namespace IM.Host.Forms
           if (grdExchange.Items.Count > 0)
           {
             // guardamos los regalos de intercambio
+            GiftsExchange.Save(ReceiptExchangeID, grdExchange);
+
+            // Guardamos las promociones en Sistur
+            SisturHelper.SavePromotionsSistur(ReceiptExchangeID, "", App.User.User.peID);
 
           }
         }
@@ -311,7 +332,7 @@ namespace IM.Host.Forms
     private bool CancelGifts(ref List<string> GiftsCancelled)
     {
       bool blnOk = false;
-      string strGift = "";
+      string strGift = "", GiftsCancellled = "", GiftsNotCancellled = "";
       List<string> aGiftsToCancel = new List<string>();
 
       // recorremos los regalos
@@ -351,14 +372,61 @@ namespace IM.Host.Forms
           }
         }
       }
-
       // si es el monedero electronico
       //****************************************************>
 
-      
-
       //****************************************************>
-      return blnOk; 
+
+      // Si no hubo error
+      if (blnOk)
+      {
+        // si se cancelaron todos los regalos
+        if (aGiftsToCancel.Count == GiftsCancelled.Count)
+        {
+          UIHelper.ShowMessage("Gifts were successfully cancelled", MessageBoxImage.Information, "Intelligence Marketing");
+        }
+        // si no se cancelaron todos los regalos
+        else
+        {
+          // si no se pudo cancelar ningun regalo
+          if (GiftsCancelled.Count <= 0)
+          {
+            UIHelper.ShowMessage("Gifts were not cancelled", MessageBoxImage.Information, "Intelligence Marketing");
+            blnOk = false;
+          }
+          // si se pudo cancelar al menos un regalo
+          else
+          {
+            // recorremos los regalos que se deseaban cancelar
+            foreach (string _Gift in aGiftsToCancel)
+            {
+              // localizamos el regalo
+              Gift _giftResult = frmHost._lstGifts.Where(x => x.giID == _Gift).Single();
+
+              // buscamos el regalo en el arreglo de regalos cancelados
+              int iIndex = GiftsCancelled.IndexOf(_Gift);
+
+              // si el regalo fue cancelado
+              if (iIndex > 0)
+              {
+                GiftsCancellled += _giftResult.giN + "\r\n";
+              }
+              // si el regalo no fue cancelado
+              else
+              {
+                GiftsNotCancellled += _giftResult.giN + "\r\n";
+              }
+            }
+            UIHelper.ShowMessage("The following gifts were cancelled from the account: \r\n" + GiftsCancellled + "\r\n\r\n" + "But the following gifts were not cancelled from the account: \r\n" + GiftsNotCancellled, MessageBoxImage.Exclamation, "Intelligence Marketing");
+          }
+        }
+      }
+      // si hubo error
+      else
+      {
+        UIHelper.ShowMessage("Gifts were not cancelled", MessageBoxImage.Information, "Intelligence Marketing");
+      }
+      return blnOk;
     }
     #endregion
 
@@ -405,7 +473,7 @@ namespace IM.Host.Forms
           return false;
       }
       return true;
-    } 
+    }
     #endregion
 
     #region ValidateGiftsReceiptExchange
@@ -447,7 +515,111 @@ namespace IM.Host.Forms
       GiftsCancel.CalculateTotalGifts(grdCancel, ref txtTotalGiftsCancel, true, _CancelField);
       CalculateTotalGifts();
       _FrmGiftsReceipt.CalculateCharge(ref _FrmCancelExternalProducts);
-    } 
+    }
+    #endregion
+
+    #region btnAddGift_Click
+    /// <summary>
+    /// Metodo que invoca el formulario para agregar un nuevo Gift Detail
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 17/Junio/2016 Created
+    /// </history>
+    private void btnAddGift_Click(object sender, RoutedEventArgs e)
+    {
+      frmGiftsReceiptsDetail _frmGiftsDetail = new frmGiftsReceiptsDetail(ref _obsGifts, _obsGiftsComplet, _GuestID, Convert.ToInt32(txtReceipt.Text), null, frmGiftsReceipts.useCxCCost, true);
+      _frmGiftsDetail.Owner = this;
+      _frmGiftsDetail.modeOpen = EnumModeOpen.Add;
+      _frmGiftsDetail.ShowInTaskbar = false;
+      _frmGiftsDetail.ShowDialog();
+    }
+    #endregion
+
+    #region btnRemoveGift_Click
+    /// <summary>
+    /// Funcion que elimina uno o varios row seleccionados del grid Gifts Detail
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 17/Junio/2016 Created
+    /// </history>
+    private void btnRemoveGift_Click(object sender, RoutedEventArgs e)
+    {
+      if (grdExchange.SelectedItems.Count == 0)
+      {
+        UIHelper.ShowMessage("Select a row!", MessageBoxImage.Information);
+        return;
+      }
+
+      // Obtenemos los index de los row a eliminar
+      string giftsNoDelete = "";
+      List<GiftsReceiptDetail> indexRemove = new List<GiftsReceiptDetail>();
+      foreach (GiftsReceiptDetail item in grdExchange.SelectedItems)
+      {
+        GiftsReceiptDetail _selected;
+        if (item is GiftsReceiptDetail)
+        {
+          _selected = item;
+
+          if (_selected.geInPVPPromo)
+            giftsNoDelete += frmHost._lstGifts.Where(x => x.giID == _selected.gegi).Select(s => s.giN).First() + "\r\n";
+          else
+            indexRemove.Add(_selected);
+        }
+      }
+
+      //Verificamos si algun gift de los seleccionados no se elimino
+      if (giftsNoDelete != "")
+        UIHelper.ShowMessage("You can not delete the gifts: \r\n" + giftsNoDelete + " because have been given in Sistur promotions", MessageBoxImage.Information);
+
+      // eliminamos los row seleccionados
+      for (int i = 0; i <= indexRemove.Count - 1; i++)
+      {
+        GiftsReceiptDetail item = indexRemove[i];
+        _obsGifts.Remove(item);
+      }
+    }
+    #endregion
+
+    #region controlEditionGifts
+    /// <summary>
+    /// Metodo encargado de mostrar, ocultar, ajustar los botos de agregar y eliminar del grid gifts detail
+    /// </summary>
+    /// <param name="_btnAdd"></param>
+    /// <param name="_btnRemove"></param>
+    /// <param name="_gridAdjustment"> FALSE - Mantiene el grid con el margin original | TRUE - Modifica el grid en modo edicion</param>
+    /// <history>
+    /// [vipacheco] 17/Junio/2016 Created
+    /// </history>
+    private void controlEditionGifts(Visibility _btnAdd, Visibility _btnRemove, bool _gridAdjustment = false)
+    {
+      btnAddGift.Visibility = _btnAdd;
+      btnRemoveGift.Visibility = _btnRemove;
+
+      if (_gridAdjustment)
+      {
+        //Ajustamos el margen del grid
+        Thickness _margin = grdExchange.Margin;
+        _margin.Left = 10;
+        _margin.Top = 78;
+        _margin.Right = 10;
+        _margin.Bottom = 10;
+        grdExchange.Margin = _margin;
+      }
+      else
+      {
+        //Ajustamos el margen del grid ORGINALMENTE si se movieron los margenes
+        Thickness _margin = grdExchange.Margin;
+        _margin.Left = 10;
+        _margin.Top = 52;
+        _margin.Right = 10;
+        _margin.Bottom = 10;
+        grdExchange.Margin = _margin;
+      }
+    }
     #endregion
 
     #region ValidateGiftsRepeated
@@ -477,7 +649,7 @@ namespace IM.Host.Forms
             // localizamos el regalo
             Gift _Gift = frmHost._lstGifts.Where(x => x.giID == result).First();
             UIHelper.ShowMessage(" The Gift '" + _Gift.giN + "' from 'Gifts exchange' can not be added \r\n" +
-                                 "to receipt exchange because would ve repeated. \r\n \r\n" + 
+                                 "to receipt exchange because would ve repeated. \r\n \r\n" +
                                  "To solve this situation, delete this gift from 'Gifts exchange' \r\n" +
                                  "or not cancel it from 'Gifts to cancel'", MessageBoxImage.Exclamation);
             return false;
@@ -486,7 +658,7 @@ namespace IM.Host.Forms
       }
 
       return true;
-    } 
+    }
     #endregion
 
     #region CalculateTotalGifts
@@ -502,8 +674,8 @@ namespace IM.Host.Forms
       decimal TotalGiftsCancel = string.IsNullOrEmpty(txtTotalGiftsCancel.Text) ? 0 : Convert.ToDecimal(txtTotalGiftsCancel.Text.Trim(new char[] { '$' }));
       decimal TotalGiftsExchange = string.IsNullOrEmpty(txtTotalGiftsExchange.Text) ? 0 : Convert.ToDecimal(txtTotalGiftsExchange.Text.Trim(new char[] { '$' }));
 
-      txtTotalCost.Text = $"${(TotalGiftsInvitation - TotalGiftsCancel) + TotalGiftsExchange} ";
-    } 
+      txtTotalCost.Text = string.Format("{0:C2}", (TotalGiftsInvitation - TotalGiftsCancel) + TotalGiftsExchange);
+    }
     #endregion
 
     #region btnClose_Click
@@ -542,7 +714,55 @@ namespace IM.Host.Forms
       }
       Grid.IsReadOnly = true;
       Grid.Items.Refresh();  // Refrescamos 
-      Grid.IsReadOnly =false;
+      Grid.IsReadOnly = false;
+    }
+    #endregion
+
+    #region grdGifts_DoubleClick
+    /// <summary>
+    /// Función encargada de Cargar la informacion para edicion de acuerdo al GIFT seleccionado!
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 06/04/2016 Created
+    /// </history>
+    private void grdGiftsReceiptDetail_DoubleClick(object sender, RoutedEventArgs e)
+    {
+      GiftsReceiptDetail _giftSelected = grdExchange.SelectedItem as GiftsReceiptDetail;
+
+      frmGiftsReceiptsDetail _frmGiftsDetail = new frmGiftsReceiptsDetail(ref _obsGifts, _obsGiftsComplet, _GuestID, Convert.ToInt32(txtReceipt.Text), _giftSelected, frmGiftsReceipts.useCxCCost, true);
+      _frmGiftsDetail.Owner = this;
+      _frmGiftsDetail.ShowInTaskbar = false;
+      _frmGiftsDetail.modeOpen = EnumModeOpen.Edit;
+      ObjectHelper.CopyProperties(_frmGiftsDetail._giftCurrent, _giftSelected); // Se copian las propiedades a una temporal
+      _frmGiftsDetail.ShowDialog();
+    }
+    #endregion
+
+    #region Row KeyDown
+    /// <summary>
+    /// abre la ventana detalle con el boton enter
+    /// cambia de fila con el boton tab
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 06/04/2016 Created
+    /// </history>
+    private void Row_KeyDown(object sender, KeyEventArgs e)
+    {
+      bool blnHandled = false;
+      switch (e.Key)
+      {
+        case Key.Enter:
+          {
+            grdGiftsReceiptDetail_DoubleClick(null, null);
+            blnHandled = true;
+            break;
+          }
+      }
+      e.Handled = blnHandled;
     }
     #endregion
 

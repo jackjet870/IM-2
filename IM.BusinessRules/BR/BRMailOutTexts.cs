@@ -22,7 +22,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<MailOutTextByLeadSource> GetMailOutTextsByLeadSource(string leadSourceID, bool status)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetMailOutTextsByLeadSource(leadSourceID, status).ToList();
       }
@@ -40,7 +40,7 @@ namespace IM.BusinessRules.BR
     /// <returns>List<MailOutText></returns>
     public static List<MailOutText> GetMailOutTexts(string leadSourceID = null, string languageID = null, int status=-1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var query = from mot in dbContext.MailOutTexts
                     select mot;
@@ -73,7 +73,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void UpdateRTFMailOutTexts(MailOutText mot)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.Entry(mot).State = System.Data.Entity.EntityState.Modified;
         int j = dbContext.SaveChanges();

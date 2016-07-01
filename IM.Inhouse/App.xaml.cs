@@ -3,6 +3,8 @@ using IM.Base.Helpers;
 using IM.Model.Classes;
 using IM.Model.Enums;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace IM.Inhouse
@@ -41,7 +43,7 @@ namespace IM.Inhouse
     /// [jorcanche] 11/04/2016  created 
     ///   [erosado] 01/06/2016  Modified. Se agrego async
     /// </history>
-    protected async override void OnStartup(StartupEventArgs e)
+    protected override async void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Inhouse");
@@ -57,6 +59,7 @@ namespace IM.Inhouse
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
+        EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
         User = frmLogin.UserData;        
         Forms.frmInhouse frmMain = new Forms.frmInhouse();
         frmMain.ShowDialog();
@@ -80,6 +83,25 @@ namespace IM.Inhouse
       if (frm.DialogResult.HasValue && !frm.DialogResult.Value)
       {
         Application.Current.Shutdown();
+      }
+    }
+    #endregion
+
+    #region dataGrid_MouseLeftButtonUp
+    /// <summary>
+    /// Cambia el cmapo de busqueda del grid
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [jorcanche] created 21/06/2016
+    /// </history>
+    private void dataGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+      DataGrid dgr = sender as DataGrid;
+      if (dgr.CurrentColumn != null)
+      {
+        dgr.Resources["SearchField"] = dgr.CurrentColumn.SortMemberPath;
       }
     }
     #endregion

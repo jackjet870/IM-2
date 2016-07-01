@@ -16,7 +16,7 @@ namespace IM.BusinessRules.BR
     public static InvitationData RptInvitationData(int GuestID)
     {
       var InvitationData = new InvitationData();
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var resInvitation =  dbContext.USP_OR_RptInvitation(GuestID);
         InvitationData.Invitation = resInvitation.FirstOrDefault();
@@ -36,7 +36,7 @@ namespace IM.BusinessRules.BR
 
     public static List<object> RptInvitationObj(int GuestID, string ChangedBy)
     {     
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var resInvitation = dbContext.USP_OR_RptInvitation(GuestID);
         RptInvitation Invitation = resInvitation.FirstOrDefault();
@@ -62,7 +62,7 @@ namespace IM.BusinessRules.BR
 
     public static InvitationText GetInvitationFooterHeader(string leadsource, string language)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var d = dbContext.InvitationsTexts.
           Where(It => It.itls == leadsource && It.itla == language).SingleOrDefault();
@@ -74,7 +74,7 @@ namespace IM.BusinessRules.BR
     public static int ModifiedInvitationfooterHeader(InvitationText invitationText)
     {
       int nRes = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {       
           dbContext.Entry(invitationText).State = System.Data.Entity.EntityState.Modified;
           return nRes = dbContext.SaveChanges();             

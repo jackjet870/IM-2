@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from gs in dbContext.GuestsStatusTypes
                       select gs;
@@ -65,7 +65,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static GuestStatusType GetGuestStatusTypeByID(string gtgs)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.GuestsStatusTypes.Where(x => x.gsID == gtgs).SingleOrDefault();
       }
@@ -83,7 +83,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static GuestStatusType GetGuestStatusTypeId(string gstId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.GuestsStatusTypes.Where(g => g.gsID == gstId).SingleOrDefault();
       }
@@ -100,7 +100,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GuestStatus> GetGuestStatus(int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.GuestsStatus.Where(g => g.gtgu == guestId).ToList();
       }

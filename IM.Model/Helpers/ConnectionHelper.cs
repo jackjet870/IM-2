@@ -3,6 +3,7 @@ using PalaceResorts.Common.PalaceTools;
 using PalaceResorts.Common.PalaceTools.AppConfig;
 using System.Data.SqlClient;
 using IM.Model.Enums;
+using System;
 
 namespace IM.Model.Helpers
 {
@@ -11,13 +12,15 @@ namespace IM.Model.Helpers
   /// </summary>
   /// <history>
   /// [wtorres]  23/Mar/2016 Created
+  /// [wtorres]  30/Jun/2016 Modified. Ahora soporta cadenas de conexion a las bases de datos de Asistencia y Clubes
   /// </history>
   public class ConnectionHelper
   {
     #region Atributos
 
-    private static string _connectionString;
-    private static string _sqlConnectionString;
+    private static int _databasesCount = Enum.GetNames(typeof(EnumDatabase)).Length;
+    private static string[] _connectionString = new string[_databasesCount];
+    private static string[] _sqlConnectionString = new string[_databasesCount];
 
     #endregion
 
@@ -28,37 +31,43 @@ namespace IM.Model.Helpers
     /// <summary>
     /// Clave de la cadena de conexion en el servicio web de App Config Manager
     /// </summary>
+    /// <param name="database">Base de datos</param>
     /// <history>
     /// [wtorres]  22/Mar/2016 Created
+    /// [wtorres]  30/Jun/2016 Modified. Agregue el parametro database
     /// </history>
-    private static string ConnectionKey
+    private static string ConnectionKey(EnumDatabase database)
     {
-      get
+      switch (database)
       {
-        return ConfigHelper.GetString("IntelligenceMarketing.ConnectionKey");
+        case EnumDatabase.Asistencia:
+          return ConfigHelper.GetString("Asistencia.ConnectionKey");
+        case EnumDatabase.IntelligenceContracts:
+          return ConfigHelper.GetString("IntelligenceContracts.ConnectionKey");
+        default:
+          return ConfigHelper.GetString("IntelligenceMarketing.ConnectionKey");
       }
     }
 
     #endregion
 
-    #region ConnectionString
+    #region SqlConnectionString
 
     /// <summary>
     /// Cadena de conexion de Sql Server
     /// </summary>
+    /// <param name="database">Base de datos</param>
     /// <history>
     /// [wtorres]  14/Abr/2016 Created
+    /// [wtorres]  30/Jun/2016 Modified. Agregue el parametro database
     /// </history>
-    private static string SqlConnectionString
+    private static string SqlConnectionString(EnumDatabase database)
     {
-      get
+      if (string.IsNullOrEmpty(_sqlConnectionString[(int)database]))
       {
-        if (string.IsNullOrEmpty(_sqlConnectionString))
-        {
-          _sqlConnectionString = AppConfigHelper.GetSettingByKey(ConnectionKey);
-        }
-        return _sqlConnectionString;
+        _sqlConnectionString[(int)database] = AppConfigHelper.GetSettingByKey(ConnectionKey(database));
       }
+      return _sqlConnectionString[(int)database];
     }
     #endregion
 
@@ -66,23 +75,22 @@ namespace IM.Model.Helpers
     /// <summary>
     /// Cadena de conexion
     /// </summary>
+    /// <param name="database">Base de datos</param>
     /// <history>
     /// [wtorres]  22/Mar/2016 Created
+    /// [wtorres]  30/Jun/2016 Modified. Agregue el parametro database
     /// </history>
-    public static string ConnectionString
+    public static string ConnectionString(EnumDatabase database = EnumDatabase.IntelligentMarketing)
     {
-      get
+      if (string.IsNullOrEmpty(_connectionString[(int)database]))
       {
-        if (string.IsNullOrEmpty(_connectionString))
-        {
-          EntityConnectionStringBuilder builder = new EntityConnectionStringBuilder();
-          builder.Provider = "System.Data.SqlClient";
-          builder.ProviderConnectionString = SqlConnectionString;
-          builder.Metadata = "res://*/IMModel.csdl|res://*/IMModel.ssdl|res://*/IMModel.msl";
-          _connectionString = builder.ToString();
-        }
-        return _connectionString;
+        EntityConnectionStringBuilder builder = new EntityConnectionStringBuilder();
+        builder.Provider = "System.Data.SqlClient";
+        builder.ProviderConnectionString = SqlConnectionString(database);
+        builder.Metadata = "res://*/IMModel.csdl|res://*/IMModel.ssdl|res://*/IMModel.msl";
+        _connectionString[(int)database] = builder.ToString();
       }
+      return _connectionString[(int)database];
     }
     #endregion
 
@@ -91,18 +99,17 @@ namespace IM.Model.Helpers
     /// <summary>
     /// Nombre del servidor
     /// </summary>
+    /// <param name="database">Base de datos</param>
     /// <history>
     /// [wtorres]  12/Abr/2016 Created
+    /// [wtorres]  30/Jun/2016 Modified. Agregue el parametro database
     /// </history>
-    public static string ServerName
+    public static string ServerName(EnumDatabase database)
     {
-      get
-      {
-        SqlConnectionStringBuilder sqlBuilder = new SqlConnectionStringBuilder();
-        sqlBuilder.ConnectionString = SqlConnectionString;
+      SqlConnectionStringBuilder sqlBuilder = new SqlConnectionStringBuilder();
+      sqlBuilder.ConnectionString = SqlConnectionString(database);
 
-        return sqlBuilder.DataSource;
-      }
+      return sqlBuilder.DataSource;
     }
     #endregion
 
@@ -111,18 +118,17 @@ namespace IM.Model.Helpers
     /// <summary>
     /// Nombre de la base de datos
     /// </summary>
+    /// <param name="database">Base de datos</param>
     /// <history>
     /// [wtorres]  12/Abr/2016 Created
+    /// [wtorres]  30/Jun/2016 Modified. Agregue el parametro database
     /// </history>
-    public static string DatabaseName
+    public static string DatabaseName(EnumDatabase database)
     {
-      get
-      {
-        SqlConnectionStringBuilder sqlBuilder = new SqlConnectionStringBuilder();
-        sqlBuilder.ConnectionString = SqlConnectionString;
+      SqlConnectionStringBuilder sqlBuilder = new SqlConnectionStringBuilder();
+      sqlBuilder.ConnectionString = SqlConnectionString(database);
 
-        return sqlBuilder.InitialCatalog;
-      }
+      return sqlBuilder.InitialCatalog;
     }
     #endregion
 

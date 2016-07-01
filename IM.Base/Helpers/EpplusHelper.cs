@@ -26,6 +26,7 @@ namespace IM.Base.Helpers
   public static class EpplusHelper
   {
     private static char separator = '_';
+    private static int ColumnMaxWidth = 60;
 
     #region Public Methods
 
@@ -125,7 +126,8 @@ namespace IM.Base.Helpers
       #region Formato de columnas Centrar y AutoAjustar
 
       //Auto Ajuste de columnas de  acuerdo a su contenido
-      ws.Cells[ws.Dimension.Address].AutoFitColumns();
+      //ws.Cells[ws.Dimension.Address].AutoFitColumns();
+      AutoFitColumns(ref ws);
       //Centramos el titulo de la aplicacion
       ws.Cells[1, 1, 1, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
       //Centramos el titulo del reporte
@@ -641,6 +643,7 @@ namespace IM.Base.Helpers
             range.Style.Border.Right.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
             range.Style.Border.Left.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
             range.Style.Border.Bottom.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+            range.Style.Font.Size = 9;
           }
 
           rowNumber += dataValues.Rows.Count;
@@ -802,7 +805,7 @@ namespace IM.Base.Helpers
           }
         }
         //Ajustamos todas las columnas a su contenido.
-        wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
+        //wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
 
         #endregion Simple con Agrupado
       }
@@ -819,7 +822,6 @@ namespace IM.Base.Helpers
           }
         });
 
-        rowNumber++;
         var columnIndex = 1;
         var rowEnd = rowNumber + dtTable.Rows.Count;
         dtTable.Columns.Cast<DataColumn>().ToList().ForEach(col =>
@@ -912,7 +914,7 @@ namespace IM.Base.Helpers
       }
 
       //Ajustamos las celdas a su contenido.
-      wsData.Cells[totalFilterRows + 5, 1, rowNumber, dtTable.Columns.Count].AutoFitColumns();
+      //wsData.Cells[totalFilterRows + 5, 1, rowNumber, dtTable.Columns.Count].AutoFitColumns();
 
       #region CreateSuperHeader
       // Se Agregan los superheaders
@@ -961,6 +963,9 @@ namespace IM.Base.Helpers
       }
       #endregion
 
+      //Ajustamos las columnas al contenido.
+      AutoFitColumns(ref wsData);
+
       #region SaveFile
       FileInfo pathFinalFile;
       if (fileFullPath == null)
@@ -1007,6 +1012,7 @@ namespace IM.Base.Helpers
       List<Tuple<string, dynamic, EnumFormatTypeExcel>> extraFieldHeader = null, int numRows = 0, string fileFullPath = null)
     {
       var pk = new ExcelPackage();
+     
       var wsData = pk.Workbook.Worksheets.Add(Regex.Replace(reportName, "[^a-zA-Z0-9_]+", " "));
       var totalFilterRows = 0;
 
@@ -1309,6 +1315,7 @@ namespace IM.Base.Helpers
             range.Style.Border.Right.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
             range.Style.Border.Left.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
             range.Style.Border.Bottom.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+            range.Style.Font.Size = 9;
           }
 
           rowNumber += dataValues.Rows.Count;
@@ -1468,7 +1475,7 @@ namespace IM.Base.Helpers
           }
         }
         //Ajustamos todas las columnas a su contenido.
-        wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
+        //wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
 
         #endregion Agrupado
       }
@@ -1500,6 +1507,7 @@ namespace IM.Base.Helpers
               using (var range = wsData.Cells[rowNumber, columnIndex, rowEnd, columnIndex])
               {
                 range.Style.Numberformat.Format = format;
+                range.Style.Font.Size = 9;
               }
             }
           }
@@ -1511,6 +1519,7 @@ namespace IM.Base.Helpers
               using (var range = wsData.Cells[rowNumber, columnIndex, rowEnd, columnIndex])
               {
                 range.Style.Numberformat.Format = format;
+                range.Style.Font.Size = 9;
               }
             }
           }
@@ -1570,10 +1579,13 @@ namespace IM.Base.Helpers
           }
           rowNumber++;
         }
-        wsData.Cells[totalFilterRows, 1, rowNumber, pivotedTable.Columns.Count].AutoFitColumns();
+        //wsData.Cells[totalFilterRows, 1, rowNumber, pivotedTable.Columns.Count].AutoFitColumns();
 
         #endregion Agregando Datos
       }
+
+      AutoFitColumns(ref wsData);
+
       FileInfo pathFinalFile;
       if (fileFullPath == null)
       {
@@ -1923,6 +1935,7 @@ namespace IM.Base.Helpers
                 range.Style.Border.Right.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
                 range.Style.Border.Left.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
                 range.Style.Border.Bottom.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+                range.Style.Font.Size = 9;
               }
 
               rowNumber += dataValues.Rows.Count;
@@ -2109,7 +2122,7 @@ namespace IM.Base.Helpers
               }
             }
             //Ajustamos todas las columnas a su contenido.
-            wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
+            //wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
 
             #endregion Agrupado
           }
@@ -2129,7 +2142,9 @@ namespace IM.Base.Helpers
             range.Style.Border.BorderAround(ExcelBorderStyle.Medium);
           }
         }
+        AutoFitColumns(ref wsData);
       }
+
       FileInfo pathFinalFile;
       if (fileFullPath == null)
       {
@@ -2394,6 +2409,7 @@ namespace IM.Base.Helpers
             range.Style.Border.Right.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
             range.Style.Border.Left.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
             range.Style.Border.Bottom.Color.SetColor(ColorTranslator.FromHtml(backgroundColorGroups[backgroundColorGroups.Count - 2].BackGroundColor));
+            range.Style.Font.Size = 9;
           }
 
           rowNumber += dataValues.Rows.Count;
@@ -2613,7 +2629,7 @@ namespace IM.Base.Helpers
           }
         }
         //Ajustamos todas las columnas a su contenido.
-        wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
+        //wsData.Cells[totalFilterRows + 5, 1, rowNumber, totalColumns].AutoFitColumns();
 
         #endregion Simple con Agrupado
       }
@@ -2694,7 +2710,8 @@ namespace IM.Base.Helpers
         #endregion Simple
       }
       //Ajustamos las celdas a su contenido.
-      wsData.Cells[totalFilterRows + 5, 1, rowNumber, dtTable.Columns.Count].AutoFitColumns();
+      //wsData.Cells[totalFilterRows + 5, 1, rowNumber, dtTable.Columns.Count].AutoFitColumns();
+      AutoFitColumns(ref wsData);
 
       FileInfo pathFinalFile;
       if (fileFullPath == null)
@@ -3116,6 +3133,7 @@ namespace IM.Base.Helpers
       {
         var tableStyle = excelWorkbook.Styles.CreateNamedStyle(tableData.Name + "TableColumnStyle" + contColumn);
         tableStyle.Style.HorizontalAlignment = item.Alignment;
+        tableStyle.Style.Font.Size = 9;
         switch (item.Format)
         {
           case EnumFormatTypeExcel.General:
@@ -3774,7 +3792,7 @@ namespace IM.Base.Helpers
             return objList.Sum(c => Convert.ToDecimal(c));
 
           default:
-            return !objList.Any() ? 0 : objList.First();
+            return !objList.Any() ? null : objList.First();
         }
       }
       catch (Exception)
@@ -3907,6 +3925,30 @@ namespace IM.Base.Helpers
     }
 
     #endregion SetDataFieldShowDataAsAttribute
+
+    #region AutoFitColumns
+    /// <summary>
+    /// Aplica el auto ajuste de las columnas segun el contenido.
+    /// Recorre las columnas y aplica el ajuste del texto al tamaño de la columna y
+    /// se le asigna el tamaño por default a la columna.
+    /// </summary>
+    /// <history>
+    ///   [edgrodriguez] 30/06/2016  Created.
+    /// </history>
+    private static void AutoFitColumns(ref ExcelWorksheet ws)
+    {
+      ws.Cells.AutoFitColumns();
+
+      var totalCols = ws.Cells.Columns;
+      for (int i = 1; i <= totalCols; i++)
+      {
+        var column = ws.Column(i);
+        column.Width = column.Width > ColumnMaxWidth ? ColumnMaxWidth : column.Width;
+        column.Style.WrapText = column.Width == ColumnMaxWidth ;
+
+      }
+    }
+    #endregion
 
     #endregion Private Methods
   }

@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from tl in dbContext.TeamsLogs
                       from pc in dbContext.Personnels.Where(pc => pc.peID == tl.tlChangedBy).DefaultIfEmpty()

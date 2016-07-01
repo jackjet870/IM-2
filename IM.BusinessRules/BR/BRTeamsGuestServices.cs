@@ -20,7 +20,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<TeamGuestServices> GetTeamsGuestServices(int nStatus = -1, TeamGuestServices teamGuestServices = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var query = from tg in dbContext.TeamsGuestServices
                     select tg;

@@ -1,4 +1,6 @@
 ﻿using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +44,21 @@ namespace IM.Host.Classes
       return GridHelper.GetItems(Grid, "gegi");
     } 
     #endregion
+
+    public async static void Save(int ReceiptID, DataGrid Grid)
+    {
+      bool MustSave = false;
+      // preparamos los regalos de paquetes de regalos del recibo de regalos para guardarse
+      GiftsReceiptsPacks.PrepareToSave(ReceiptID, ref MustSave);
+
+      // guardamos los regalos
+      foreach (GiftsReceiptDetail Current in Grid.Items)
+      {
+        // Asignamos el ID generado
+        Current.gegr = ReceiptID;
+        await BREntities.OperationEntity(Current, Model.Enums.EnumMode.add);
+      }
+    }
 
   }
 }

@@ -33,7 +33,7 @@ namespace IM.BusinessRules.BR
     public static UserData Login(EnumLoginType logintype, string user = "", string place = "")
     {
       var userData = new UserData();
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var resUser = dbContext.USP_OR_Login(Convert.ToByte(logintype), user, place)
           .MultipleResults()
@@ -76,7 +76,7 @@ namespace IM.BusinessRules.BR
     public static bool ChangePassword(string user, string newPassword, DateTime serverDate)
     {
       int result;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         Personnel personnel = GetPersonnelById(user);
         personnel.pePwd = newPassword;
@@ -117,7 +117,7 @@ namespace IM.BusinessRules.BR
       List<PersonnelShort> result = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_GetPersonnel(leadSources, salesRooms, roles, ((byte)status), permission, relationalOperator,
               ((int)level), dept, idPersonnel).ToList();
@@ -139,7 +139,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static Personnel GetPersonnelById(string id, string role = "ALL")
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.Personnels.
           FirstOrDefault(p => p.peID == id && p.Roles.Where(r => r.roID == (role.Equals("ALL")?r.roID:role)).Count() > 0);
@@ -162,7 +162,7 @@ namespace IM.BusinessRules.BR
     {
       List<Personnel> lstPersonnel = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             var query = from pe in dbContext.Personnels
                         select pe;
@@ -204,7 +204,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<Personnel>> GetPersonnelAccess()
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var query = (from pe in dbContext.Personnels
                      join pa in (from pa in dbContext.PersonnelAccessList
@@ -235,7 +235,7 @@ namespace IM.BusinessRules.BR
     {
       List<PersonnelShort> lstPersonnel = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             var query = from p in dbContext.Personnels
                         where p.Roles.Where(r => r.roID == prRol).Count() > 0
@@ -261,7 +261,7 @@ namespace IM.BusinessRules.BR
     {
       int nRes = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
             {
@@ -319,7 +319,7 @@ namespace IM.BusinessRules.BR
     {
       int nRes = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
             {
@@ -491,7 +491,7 @@ namespace IM.BusinessRules.BR
     {
       int nRes = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             dbContext.Database.CommandTimeout = Settings.Default.USP_OR_UpdatePersonnelId;
             return dbContext.USP_OR_UpdatePersonnelId(idOld, idNew);
@@ -515,7 +515,7 @@ namespace IM.BusinessRules.BR
     {
       PersonnelStatistics personnelStatistics = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             dbContext.Database.CommandTimeout = Settings.Default.USP_OR_GetPersonnelStatistics;
             return dbContext.USP_OR_GetPersonnelStatistics(idPersonnel).FirstOrDefault();

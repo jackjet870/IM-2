@@ -27,7 +27,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<ExchangeRateData> GetGetExchangeRatesWithPesosByDate(DateTime? dateSelected)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetExchangeRatesWithPesosByDate(dateSelected).ToList();
       }
@@ -46,7 +46,7 @@ namespace IM.BusinessRules.BR
     {
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.USP_OR_InsertExchangeRate(serverDate);
         }
@@ -65,7 +65,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void SaveExchangeRate(bool bUpd, ExchangeRate exchangeRate)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         if (bUpd)
         {
@@ -92,7 +92,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static ExchangeRate GetExchangeRateByID(string exchangeID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.ExchangeRates.Where(x => x.excu == exchangeID).OrderBy(o => o.exD).FirstOrDefault();
       }
@@ -109,7 +109,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<ExchangeRateShort> GetExchangeRatesByDate(DateTime? _date, string currency = "")
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetExchangeRatesByDate(_date, currency).ToList();
       }
@@ -132,7 +132,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {

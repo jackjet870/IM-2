@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
       List<Product> lstProducts = new List<Product>();
       await Task.Run(() => {
         
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var query = from pr in dbContext.Products
                     select pr;
@@ -76,7 +76,7 @@ namespace IM.BusinessRules.BR
       int nRes = 0;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {

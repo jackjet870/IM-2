@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     {
       List<Permission> lstPermission = await Task.Run(() =>
         {          
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             var query = from pm in dbContext.Permissions
                         select pm;
@@ -68,7 +68,7 @@ namespace IM.BusinessRules.BR
     {
       List<PersonnelPermission> lstPersonnelPermission = await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return dbContext.PersonnelPermissions.Where(pp => pp.pppe == idUser).ToList();
         }

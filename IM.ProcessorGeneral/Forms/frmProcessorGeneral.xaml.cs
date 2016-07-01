@@ -7,11 +7,9 @@ using System.Windows.Data;
 using System.Windows.Input;
 using IM.Model.Enums;
 using IM.BusinessRules.BR;
-using IM.Model;
 using IM.Base.Helpers;
 using System.IO;
 using IM.ProcessorGeneral.Classes;
-using System.Diagnostics;
 using IM.Base.Forms;
 
 namespace IM.ProcessorGeneral.Forms
@@ -512,15 +510,17 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 09/Mar/2016 Created
     /// </history>
-    private async void ShowSalesRoomReport(string strReportName, clsFilter Filter)
+    private async void ShowSalesRoomReport(string strReportName, clsFilter filter)
     {
       FileInfo finfo = null;
-      var dateRange = (_blnOneDate) ? DateHelper.DateRange(Filter.StartDate, Filter.StartDate) : DateHelper.DateRange(Filter.StartDate, Filter.EndDate);
-      var dateRangeFileNameRep = (_blnOneDate) ? DateHelper.DateRangeFileName(Filter.StartDate, Filter.StartDate) : DateHelper.DateRangeFileName(Filter.StartDate, Filter.EndDate);
+      var dateRange = (_blnOneDate) ? DateHelper.DateRange(filter.StartDate, filter.StartDate) : DateHelper.DateRange(filter.StartDate, filter.EndDate);
+      var dateRangeFileNameRep = (_blnOneDate) ? DateHelper.DateRangeFileName(filter.StartDate, filter.StartDate) : DateHelper.DateRangeFileName(filter.StartDate, filter.EndDate);
 
-      var filters = new List<Tuple<string, string>>();
-      filters.Add(new Tuple<string, string>("Date Range", dateRange));
-      filters.Add(new Tuple<string, string>("Sales Room", Filter.AllSalesRooms ? "ALL" : string.Join(",", Filter.LstSalesRooms)));
+      var filters = new List<Tuple<string, string>>
+      {
+        new Tuple<string, string>("Date Range", dateRange),
+        new Tuple<string, string>("Sales Room", filter.AllSalesRooms ? "ALL" : string.Join(",", filter.LstSalesRooms))
+      };
 
       string fileFullPath = EpplusHelper.CreateEmptyExcel(strReportName, dateRangeFileNameRep);
       _frmReportQueue.AddReport(fileFullPath, strReportName);
@@ -533,14 +533,14 @@ namespace IM.ProcessorGeneral.Forms
 
           #region Bookings By Sales Room, Program & Time
           case "Bookings By Sales Room, Program & Time":
-            var lstRptBbSalesRoom = await BRReportsBySalesRoom.GetRptBookingsBySalesRoomProgramTime(Filter.StartDate, (Filter.AllSalesRooms) ? "ALL" : string.Join(",", Filter.LstSalesRooms));
+            var lstRptBbSalesRoom = await BRReportsBySalesRoom.GetRptBookingsBySalesRoomProgramTime(filter.StartDate, (filter.AllSalesRooms) ? "ALL" : string.Join(",", filter.LstSalesRooms));
             if (lstRptBbSalesRoom.Any())
               finfo = clsReports.ExportRptBookingsBySalesRoomProgramTime(strReportName, fileFullPath, filters, lstRptBbSalesRoom);
             break;
           #endregion
           #region Bookings By Sales Room, Program, Lead Source & Time
           case "Bookings By Sales Room, Program, Lead Source & Time":
-            var lstRptBbSalesRoomPlst = await BRReportsBySalesRoom.GetRptBookingsBySalesRoomProgramLeadSourceTime(Filter.StartDate, (Filter.AllSalesRooms) ? "ALL" : string.Join(",", Filter.LstSalesRooms));
+            var lstRptBbSalesRoomPlst = await BRReportsBySalesRoom.GetRptBookingsBySalesRoomProgramLeadSourceTime(filter.StartDate, (filter.AllSalesRooms) ? "ALL" : string.Join(",", filter.LstSalesRooms));
             if (lstRptBbSalesRoomPlst.Any())
               finfo = clsReports.ExportRptBookingsBySalesRoomProgramLeadSourceTime(strReportName, fileFullPath, filters, lstRptBbSalesRoomPlst);
             break;
@@ -552,42 +552,42 @@ namespace IM.ProcessorGeneral.Forms
 
           #region CxC
           case "CxC":
-            var lstRptCxCExcel = await BRReportsBySalesRoom.GetRptCxC(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            var lstRptCxCExcel = await BRReportsBySalesRoom.GetRptCxC(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptCxCExcel.Any())
               finfo = clsReports.ExportRptCxC(strReportName, fileFullPath, filters, lstRptCxCExcel);
             break;
           #endregion
           #region CxC By Type
           case "CxC By Type":
-            var lstRptCxC = await BRReportsBySalesRoom.GetRptCxCByType(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            var lstRptCxC = await BRReportsBySalesRoom.GetRptCxCByType(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptCxC.Any())
               finfo = clsReports.ExportRptCxCByType(strReportName, fileFullPath, filters, lstRptCxC);
             break;
           #endregion
           #region CxC Deposits
           case "CxC Deposits":
-            var lstRptCxCDeposits = await BRReportsBySalesRoom.GetRptCxCDeposits(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            var lstRptCxCDeposits = await BRReportsBySalesRoom.GetRptCxCDeposits(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptCxCDeposits.Any())
               finfo = clsReports.ExportRptCxCDeposits(strReportName, fileFullPath, filters, lstRptCxCDeposits);
             break;
           #endregion
           #region CxC Gifts
           case "CxC Gifts":
-            var lstRptCxCGifts = await BRReportsBySalesRoom.GetRptCxCGifts(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            var lstRptCxCGifts = await BRReportsBySalesRoom.GetRptCxCGifts(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptCxCGifts.Any())
               finfo = clsReports.ExportRptCxCGift(strReportName, fileFullPath, filters, lstRptCxCGifts);
             break;
           #endregion
           #region CxC Not Authorized
           case "CxC Not Authorized":
-            var lstRptCxCNotAut = await BRReportsBySalesRoom.GetRptCxCNotAuthorized(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            var lstRptCxCNotAut = await BRReportsBySalesRoom.GetRptCxCNotAuthorized(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptCxCNotAut.Any())
               finfo = clsReports.ExportRptCxCNotAuthorized(strReportName, fileFullPath, filters, lstRptCxCNotAut);
             break;
           #endregion
           #region CxC Payments
           case "CxC Payments":
-            var lstRptCxCPayments = await BRReportsBySalesRoom.GetRptCxCPayments(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            var lstRptCxCPayments = await BRReportsBySalesRoom.GetRptCxCPayments(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptCxCPayments.Any())
               finfo = clsReports.ExportRptCxCPayments(strReportName, fileFullPath, filters, lstRptCxCPayments);
             break;
@@ -599,28 +599,28 @@ namespace IM.ProcessorGeneral.Forms
 
           #region Deposits
           case "Deposits":
-            var lstRptDeposits = await BRReportsBySalesRoom.GetRptDeposits(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            var lstRptDeposits = await BRReportsBySalesRoom.GetRptDeposits(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptDeposits.Any())
               finfo = clsReports.ExportRptDeposits(strReportName, fileFullPath, filters, lstRptDeposits);
             break;
           #endregion
           #region Burned Deposits
           case "Burned Deposits":
-            var lstRptBurnedDeposits = await BRReportsBySalesRoom.GetRptDepositsBurned(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            var lstRptBurnedDeposits = await BRReportsBySalesRoom.GetRptDepositsBurned(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptBurnedDeposits.Any())
-              finfo = clsReports.ExportRptBurnedDeposits(strReportName, fileFullPath, filters, lstRptBurnedDeposits, Filter.StartDate.Date, Filter.EndDate.Date);
+              finfo = clsReports.ExportRptBurnedDeposits(strReportName, fileFullPath, filters, lstRptBurnedDeposits, filter.StartDate.Date, filter.EndDate.Date);
             break;
           #endregion
           #region Burned Deposits by Resorts
           case "Burned Deposits by Resort":
-            var lstRptBurnedDepositsResort = await BRReportsBySalesRoom.GetRptDepositsBurnedByResort(Filter.StartDate, Filter.EndDate, string.Join(",", Filter.LstSalesRooms));
+            var lstRptBurnedDepositsResort = await BRReportsBySalesRoom.GetRptDepositsBurnedByResort(filter.StartDate, filter.EndDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptBurnedDepositsResort.Any())
-              finfo = clsReports.ExportRptBurnedDepositsByResorts(strReportName, fileFullPath, filters, lstRptBurnedDepositsResort, Filter.StartDate.Date, Filter.EndDate.Date);
+              finfo = clsReports.ExportRptBurnedDepositsByResorts(strReportName, fileFullPath, filters, lstRptBurnedDepositsResort, filter.StartDate.Date, filter.EndDate.Date);
             break;
           #endregion
           #region Paid Deposits
           case "Paid Deposits":
-            var lstRptPaidDeposits = await BRReportsBySalesRoom.GetRptPaidDeposits(Filter.StartDate, Filter.EndDate, (Filter.AllSalesRooms) ? "ALL" : string.Join(",", Filter.LstSalesRooms));
+            var lstRptPaidDeposits = await BRReportsBySalesRoom.GetRptPaidDeposits(filter.StartDate, filter.EndDate, (filter.AllSalesRooms) ? "ALL" : string.Join(",", filter.LstSalesRooms));
             if (lstRptPaidDeposits.Any())
               finfo = clsReports.ExportRptPaidDeposits(strReportName, fileFullPath, filters, lstRptPaidDeposits);
             break;
@@ -632,19 +632,19 @@ namespace IM.ProcessorGeneral.Forms
 
           #region Cancelled Gifts Manifest
           case "Cancelled Gifts Manifest":
-            var lstRptCancelledGift = await BRReportsBySalesRoom.GetRptGiftsCancelledManifest(Filter.StartDate, Filter.EndDate, (Filter.AllSalesRooms)
+            var lstRptCancelledGift = await BRReportsBySalesRoom.GetRptGiftsCancelledManifest(filter.StartDate, filter.EndDate, (filter.AllSalesRooms)
                   ? "ALL"
-                  : string.Join(",", Filter.LstSalesRooms));
+                  : string.Join(",", filter.LstSalesRooms));
             if (lstRptCancelledGift.Any())
               finfo = clsReports.ExportRptCancelledGiftsManifest(strReportName, fileFullPath, filters, lstRptCancelledGift);
             break;
           #endregion
           #region Daily Gifts (Simple)
           case "Daily Gifts (Simple)":
-            var lstRptDailyG = await BRReportsBySalesRoom.GetRptDailyGiftSimple(Filter.StartDate,
-                (Filter.AllSalesRooms)
+            var lstRptDailyG = await BRReportsBySalesRoom.GetRptDailyGiftSimple(filter.StartDate,
+                (filter.AllSalesRooms)
                   ? "ALL"
-                  : string.Join(",", Filter.LstSalesRooms));
+                  : string.Join(",", filter.LstSalesRooms));
             if (lstRptDailyG.Any())
               finfo = clsReports.ExportRptDailyGiftSimple(strReportName, fileFullPath, filters, lstRptDailyG);
             break;
@@ -653,7 +653,7 @@ namespace IM.ProcessorGeneral.Forms
           #region Gifts By Category
 
           case "Gifts By Category":
-            var lstRptGiftByCat = await BRReportsBySalesRoom.GetRptGiftsByCategory(Filter.StartDate, string.Join(",", Filter.LstSalesRooms));
+            var lstRptGiftByCat = await BRReportsBySalesRoom.GetRptGiftsByCategory(filter.StartDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptGiftByCat.Any())
               finfo = clsReports.ExportRptGiftsByCategory(strReportName, fileFullPath, filters, lstRptGiftByCat);
             break;
@@ -662,7 +662,7 @@ namespace IM.ProcessorGeneral.Forms
           #region Gifts By Category & Program
 
           case "Gifts By Category & Program":
-            var lstRptGiftByCatP = await BRReportsBySalesRoom.GetRptGiftsByCategoryProgram(Filter.StartDate, string.Join(",", Filter.LstSalesRooms));
+            var lstRptGiftByCatP = await BRReportsBySalesRoom.GetRptGiftsByCategoryProgram(filter.StartDate, string.Join(",", filter.LstSalesRooms));
             if (lstRptGiftByCatP.Any())
               finfo = clsReports.ExportRptGiftsByCategoryProgram(strReportName, fileFullPath, filters, lstRptGiftByCatP);
             break;
@@ -670,15 +670,15 @@ namespace IM.ProcessorGeneral.Forms
           #endregion
           #region Gifts Certificates
           case "Gifts Certificates":
-            var lstRptGifsCerts = await BRReportsBySalesRoom.GetRptGiftsCertificates(Filter.StartDate,
-              Filter.EndDate,
-              string.Join(",", Filter.LstSalesRooms),
-              (Filter.AllGiftsCate)
+            var lstRptGifsCerts = await BRReportsBySalesRoom.GetRptGiftsCertificates(filter.StartDate,
+              filter.EndDate,
+              string.Join(",", filter.LstSalesRooms),
+              (filter.AllGiftsCate)
                 ? "ALL"
-                : string.Join(",", Filter.LstGiftsCate),
-              (Filter.AllGifts)
+                : string.Join(",", filter.LstGiftsCate),
+              (filter.AllGifts)
                 ? "ALL"
-                : string.Join(",", Filter.LstGifts));
+                : string.Join(",", filter.LstGifts));
 
             if (lstRptGifsCerts.Any())
               finfo = clsReports.ExportRptGiftsCertificates(strReportName, fileFullPath, filters, lstRptGifsCerts);
@@ -687,11 +687,11 @@ namespace IM.ProcessorGeneral.Forms
           #endregion
           #region Gifts Manifest
           case "Gifts Manifest":
-            var lstRptGiftsManifest = await BRReportsBySalesRoom.GetRptGiftsManifest(Filter.StartDate,
-              Filter.EndDate,
-              string.Join(",", Filter.LstSalesRooms),
-              (Filter.AllGiftsCate) ? "ALL" : string.Join(",", Filter.LstGiftsCate),
-              (Filter.AllGifts) ? "ALL" : string.Join(",", Filter.LstGifts),
+            var lstRptGiftsManifest = await BRReportsBySalesRoom.GetRptGiftsManifest(filter.StartDate,
+              filter.EndDate,
+              string.Join(",", filter.LstSalesRooms),
+              (filter.AllGiftsCate) ? "ALL" : string.Join(",", filter.LstGiftsCate),
+              (filter.AllGifts) ? "ALL" : string.Join(",", filter.LstGifts),
               (EnumStatus)_frmFilter.cboStatus.SelectedValue);
 
             if (lstRptGiftsManifest.Any())
@@ -701,11 +701,11 @@ namespace IM.ProcessorGeneral.Forms
           #endregion
           #region Gifts Receipts
           case "Gifts Receipts":
-            var lstRptGiftsReceipts = await BRReportsBySalesRoom.GetRptGiftsMReceipts(Filter.StartDate,
-              Filter.EndDate,
-              string.Join(",", Filter.LstSalesRooms),
-              (Filter.AllGiftsCate) ? "ALL" : string.Join(",", Filter.LstGiftsCate),
-              (Filter.AllGifts) ? "ALL" : string.Join(",", Filter.LstGifts),
+            var lstRptGiftsReceipts = await BRReportsBySalesRoom.GetRptGiftsMReceipts(filter.StartDate,
+              filter.EndDate,
+              string.Join(",", filter.LstSalesRooms),
+              (filter.AllGiftsCate) ? "ALL" : string.Join(",", filter.LstGiftsCate),
+              (filter.AllGifts) ? "ALL" : string.Join(",", filter.LstGifts),
               (EnumStatus)_frmFilter.cboStatus.SelectedValue, (EnumGiftsReceiptType)_frmFilter.cboGiftsReceiptType.SelectedValue,
               (_frmFilter.txtGuestID.Text == string.Empty) ? 0 : Convert.ToInt32(_frmFilter.txtGuestID.Text));
 
@@ -716,9 +716,9 @@ namespace IM.ProcessorGeneral.Forms
           #endregion
           #region Gifts Receipts Payments
           case "Gifts Receipts Payments":
-            var lstRptGifsReceiptsPay = await BRReportsBySalesRoom.GetRptGiftsReceiptsPayments(Filter.StartDate,
-                Filter.EndDate,
-                string.Join(",", Filter.LstSalesRooms));
+            var lstRptGifsReceiptsPay = await BRReportsBySalesRoom.GetRptGiftsReceiptsPayments(filter.StartDate,
+                filter.EndDate,
+                string.Join(",", filter.LstSalesRooms));
 
             if (lstRptGifsReceiptsPay.Any())
               finfo = clsReports.ExportRptGiftsReceiptsPayments(strReportName, fileFullPath, filters,
@@ -729,11 +729,11 @@ namespace IM.ProcessorGeneral.Forms
           #region Gifts Sale
 
           case "Gifts Sale":
-            var lstRptGiftsSale = await BRReportsBySalesRoom.GetRptGiftsSale(Filter.StartDate,
-              Filter.EndDate,
-              (Filter.AllSalesRooms) ? "ALL" : string.Join(",", Filter.LstSalesRooms),
-              (Filter.AllGifts) ? "ALL" : string.Join(",", Filter.LstGifts),
-              (Filter.AllGiftsCate) ? "ALL" : string.Join(",", Filter.LstGiftsCate),
+            var lstRptGiftsSale = await BRReportsBySalesRoom.GetRptGiftsSale(filter.StartDate,
+              filter.EndDate,
+              (filter.AllSalesRooms) ? "ALL" : string.Join(",", filter.LstSalesRooms),
+              (filter.AllGifts) ? "ALL" : string.Join(",", filter.LstGifts),
+              (filter.AllGiftsCate) ? "ALL" : string.Join(",", filter.LstGiftsCate),
               (EnumGiftSale)_frmFilter.cboGiftSale.SelectedValue);
 
             if (lstRptGiftsSale.Any())
@@ -744,17 +744,17 @@ namespace IM.ProcessorGeneral.Forms
           #region Gifts Used by Sistur
 
           case "Gifts Used by Sistur":
-            var lstRptGiftsSistur = await BRReportsBySalesRoom.GetRptGiftsUsedBySistur(Filter.StartDate, Filter.EndDate,
-                (Filter.AllSalesRooms)
+            var lstRptGiftsSistur = await BRReportsBySalesRoom.GetRptGiftsUsedBySistur(filter.StartDate, filter.EndDate,
+                (filter.AllSalesRooms)
                   ? "ALL"
-                  : string.Join(",", Filter.LstSalesRooms),
-                (Filter.AllPrograms)
+                  : string.Join(",", filter.LstSalesRooms),
+                (filter.AllPrograms)
                   ? "ALL"
-                  : string.Join(",", Filter.LstPrograms),
-                (Filter.AllLeadSources)
+                  : string.Join(",", filter.LstPrograms),
+                (filter.AllLeadSources)
                   ? "ALL"
                   : string.Join(",",
-                    Filter.LstLeadSources));
+                    filter.LstLeadSources));
             if (lstRptGiftsSistur.Any())
               finfo = clsReports.ExportRptGiftsUsedBySistur(strReportName, fileFullPath, filters, lstRptGiftsSistur);
             break;
@@ -763,10 +763,10 @@ namespace IM.ProcessorGeneral.Forms
           #region Weekly Gifts (ITEMS) (Simple)
 
           case "Weekly Gifts (ITEMS) (Simple)":
-            var lstWeeklyGiftsSimple = await BRReportsBySalesRoom.GetRptWeeklyGiftsItemsSimple(Filter.StartDate,
-                (Filter.AllSalesRooms)
+            var lstWeeklyGiftsSimple = await BRReportsBySalesRoom.GetRptWeeklyGiftsItemsSimple(filter.StartDate,
+                (filter.AllSalesRooms)
                   ? "ALL"
-                  : string.Join(",", Filter.LstSalesRooms));
+                  : string.Join(",", filter.LstSalesRooms));
             if (lstWeeklyGiftsSimple.Any())
               finfo = clsReports.ExportRptWeeklyGiftSimple(strReportName, fileFullPath, filters, lstWeeklyGiftsSimple);
             break;
@@ -780,9 +780,9 @@ namespace IM.ProcessorGeneral.Forms
           #region Guest CECO
 
           case "Guest CECO":
-            var lstRptGuestCeco = await BRReportsBySalesRoom.GetRptGuestCeco(Filter.StartDate,
-              Filter.EndDate,
-              string.Join(",", Filter.LstSalesRooms));
+            var lstRptGuestCeco = await BRReportsBySalesRoom.GetRptGuestCeco(filter.StartDate,
+              filter.EndDate,
+              string.Join(",", filter.LstSalesRooms));
             if (lstRptGuestCeco.Any())
               finfo = clsReports.ExportRptGuestCeco(strReportName, fileFullPath, filters, lstRptGuestCeco);
             break;
@@ -791,8 +791,8 @@ namespace IM.ProcessorGeneral.Forms
           #region Guests No Buyers
 
           case "Guests No Buyers":
-            var lstRptGuestNoBuyers = await BRReportsBySalesRoom.GetRptGuestNoBuyers(Filter.StartDate, Filter.EndDate,
-                string.Join(",", Filter.LstSalesRooms));
+            var lstRptGuestNoBuyers = await BRReportsBySalesRoom.GetRptGuestNoBuyers(filter.StartDate, filter.EndDate,
+                string.Join(",", filter.LstSalesRooms));
             if (lstRptGuestNoBuyers.Any())
               finfo = clsReports.ExportRptGuestNoBuyers(strReportName, fileFullPath, filters, lstRptGuestNoBuyers);
             break;
@@ -801,9 +801,9 @@ namespace IM.ProcessorGeneral.Forms
           #region In & Out
 
           case "In & Out":
-            var lstRptInOut = await BRReportsBySalesRoom.GetRptInOut(Filter.StartDate,
-              Filter.EndDate,
-              string.Join(",", Filter.LstSalesRooms));
+            var lstRptInOut = await BRReportsBySalesRoom.GetRptInOut(filter.StartDate,
+              filter.EndDate,
+              string.Join(",", filter.LstSalesRooms));
             if (lstRptInOut.Any())
               finfo = clsReports.ExportRptInOut(strReportName, fileFullPath, filters, lstRptInOut);
             break;
@@ -812,9 +812,9 @@ namespace IM.ProcessorGeneral.Forms
           #region Manifest
 
           case "Manifest":
-            var lstRptManifestRange = await BRReportsBySalesRoom.GetRptManifestRange(Filter.StartDate,
-              Filter.EndDate,
-              string.Join(",", Filter.LstSalesRooms));
+            var lstRptManifestRange = await BRReportsBySalesRoom.GetRptManifestRange(filter.StartDate,
+              filter.EndDate,
+              string.Join(",", filter.LstSalesRooms));
             if (lstRptManifestRange.Any())
               finfo = clsReports.ExportRptManifestRange(strReportName, fileFullPath, filters, lstRptManifestRange);
             break;
@@ -823,9 +823,9 @@ namespace IM.ProcessorGeneral.Forms
           #region Manifest
 
           case "Manifest by LS":
-            var lstRptManifestRangeByLs = await BRReportsBySalesRoom.GetRptManifestRangeByLs(Filter.StartDate,
-              Filter.EndDate,
-              string.Join(",", Filter.LstSalesRooms));
+            var lstRptManifestRangeByLs = await BRReportsBySalesRoom.GetRptManifestRangeByLs(filter.StartDate,
+              filter.EndDate,
+              string.Join(",", filter.LstSalesRooms));
             if (lstRptManifestRangeByLs.Any())
               finfo = clsReports.ExportRptManifestRangeByLs(strReportName, fileFullPath, filters, lstRptManifestRangeByLs);
             break;
@@ -834,8 +834,8 @@ namespace IM.ProcessorGeneral.Forms
           #region No Shows
 
           case "No Shows":
-            var lstGuestNoShows = await BRReportsBySalesRoom.GetRptGuestNoShows(Filter.StartDate, Filter.EndDate,
-                string.Join(",", Filter.LstSalesRooms));
+            var lstGuestNoShows = await BRReportsBySalesRoom.GetRptGuestNoShows(filter.StartDate, filter.EndDate,
+                string.Join(",", filter.LstSalesRooms));
             if (lstGuestNoShows.Any())
               finfo = clsReports.ExportRptGuestNoShows(strReportName, fileFullPath, filters, lstGuestNoShows);
             break;
@@ -851,13 +851,13 @@ namespace IM.ProcessorGeneral.Forms
           case "Meal Tickets":
           case "Meal Tickets by Host":
           case "Meal Tickets Cancelled":
-            var lstMealTickets = await BRReportsBySalesRoom.GetRptMealTickets(Filter.StartDate,
-              Filter.EndDate,
-              string.Join(",", Filter.LstSalesRooms),
+            var lstMealTickets = await BRReportsBySalesRoom.GetRptMealTickets(filter.StartDate,
+              filter.EndDate,
+              string.Join(",", filter.LstSalesRooms),
               (strReportName == "Meal Tickets Cancelled"),
-              (Filter.AllRateTypes)
+              (filter.AllRateTypes)
                 ? "ALL"
-                : string.Join(",", Filter.LstRateTypes));
+                : string.Join(",", filter.LstRateTypes));
             if (lstMealTickets.Any())
               finfo = clsReports.ExportRptMealTickets(strReportName, fileFullPath, filters, lstMealTickets,
                 (strReportName == "Meal Tickets by Host"));
@@ -867,11 +867,11 @@ namespace IM.ProcessorGeneral.Forms
           #region Meal Tickets Cost
 
           case "Meal Tickets with Cost":
-            var lstMealTicketsCost = await BRReportsBySalesRoom.GetRptMealTicketsCost(Filter.StartDate, Filter.EndDate,
-                string.Join(",", Filter.LstSalesRooms),
-                (Filter.AllRateTypes)
+            var lstMealTicketsCost = await BRReportsBySalesRoom.GetRptMealTicketsCost(filter.StartDate, filter.EndDate,
+                string.Join(",", filter.LstSalesRooms),
+                (filter.AllRateTypes)
                   ? "ALL"
-                  : string.Join(",", Filter.LstRateTypes));
+                  : string.Join(",", filter.LstRateTypes));
             if (lstMealTicketsCost.Any())
               finfo = clsReports.ExportRptMealTicketsCost(strReportName, fileFullPath, filters, lstMealTicketsCost);
             break;
@@ -885,11 +885,11 @@ namespace IM.ProcessorGeneral.Forms
           #region Memberships
 
           case "Memberships":
-            var lstMemberships = await BRReportsBySalesRoom.GetRptMemberships(Filter.StartDate,
-              Filter.EndDate,
-              (Filter.AllSalesRooms)
+            var lstMemberships = await BRReportsBySalesRoom.GetRptMemberships(filter.StartDate,
+              filter.EndDate,
+              (filter.AllSalesRooms)
                 ? "ALL"
-                : string.Join(",", Filter.LstSalesRooms));
+                : string.Join(",", filter.LstSalesRooms));
             if (lstMemberships.Any())
               finfo = clsReports.ExportRptMemberships(strReportName, fileFullPath, filters, lstMemberships);
             break;
@@ -898,11 +898,11 @@ namespace IM.ProcessorGeneral.Forms
           #region Memberships by Agency & Market
 
           case "Memberships by Agency & Market":
-            var lstMembershipsAgencyM = await BRReportsBySalesRoom.GetRptMembershipsByAgencyMarket(Filter.StartDate,
-                Filter.EndDate,
-                (Filter.AllSalesRooms)
+            var lstMembershipsAgencyM = await BRReportsBySalesRoom.GetRptMembershipsByAgencyMarket(filter.StartDate,
+                filter.EndDate,
+                (filter.AllSalesRooms)
                   ? "ALL"
-                  : string.Join(",", Filter.LstSalesRooms));
+                  : string.Join(",", filter.LstSalesRooms));
             if (lstMembershipsAgencyM.Any())
               finfo = clsReports.ExportRptMembershipsByAgencyMarket(strReportName, fileFullPath, filters,
                 lstMembershipsAgencyM);
@@ -912,10 +912,10 @@ namespace IM.ProcessorGeneral.Forms
           #region Memberships by Host
 
           case "Memberships by Host":
-            var lstMembershipsHost = await BRReportsBySalesRoom.GetRptMembershipsByHost(Filter.StartDate, Filter.EndDate,
-                (Filter.AllSalesRooms)
+            var lstMembershipsHost = await BRReportsBySalesRoom.GetRptMembershipsByHost(filter.StartDate, filter.EndDate,
+                (filter.AllSalesRooms)
                   ? "ALL"
-                  : string.Join(",", Filter.LstSalesRooms));
+                  : string.Join(",", filter.LstSalesRooms));
             if (lstMembershipsHost.Any())
               finfo = clsReports.ExportRptMembershipsByHost(strReportName, fileFullPath, filters, lstMembershipsHost);
             break;
@@ -929,17 +929,17 @@ namespace IM.ProcessorGeneral.Forms
           #region Production by Sales Room
 
           case "Production by Sales Room":
-            var lstProductionBySr = await BRReportsBySalesRoom.GetRptProductionBySalesRoom(Filter.StartDate,
-                Filter.EndDate,
-                (Filter.AllSalesRooms)
+            var lstProductionBySr = await BRReportsBySalesRoom.GetRptProductionBySalesRoom(filter.StartDate,
+                filter.EndDate,
+                (filter.AllSalesRooms)
                   ? "ALL"
-                  : string.Join(",", Filter.LstSalesRooms),
-                Convert.ToBoolean(Filter.Quinellas), Convert.ToBoolean(Filter.BasedOnArrival));
+                  : string.Join(",", filter.LstSalesRooms),
+                Convert.ToBoolean(filter.Quinellas), Convert.ToBoolean(filter.BasedOnArrival));
             if (lstProductionBySr.Any())
             {
-              if (Convert.ToBoolean(Filter.BasedOnArrival))
+              if (Convert.ToBoolean(filter.BasedOnArrival))
                 filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
-              if (Convert.ToBoolean(Filter.Quinellas))
+              if (Convert.ToBoolean(filter.Quinellas))
                 filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
 
               finfo = clsReports.ExportRptProductionBySalesRoom(strReportName, fileFullPath, filters,
@@ -951,17 +951,17 @@ namespace IM.ProcessorGeneral.Forms
           #region Production by Sales Room & Market
 
           case "Production by Sales Room & Market":
-            var lstProductionBySrm = await BRReportsBySalesRoom.GetRptProductionBySalesRoomMarket(Filter.StartDate,
-                Filter.EndDate,
-                (Filter.AllSalesRooms)
+            var lstProductionBySrm = await BRReportsBySalesRoom.GetRptProductionBySalesRoomMarket(filter.StartDate,
+                filter.EndDate,
+                (filter.AllSalesRooms)
                   ? "ALL"
-                  : string.Join(",", Filter.LstSalesRooms),
-                Convert.ToBoolean(Filter.Quinellas), Convert.ToBoolean(Filter.BasedOnArrival));
+                  : string.Join(",", filter.LstSalesRooms),
+                Convert.ToBoolean(filter.Quinellas), Convert.ToBoolean(filter.BasedOnArrival));
             if (lstProductionBySrm.Any())
             {
-              if (Convert.ToBoolean(Filter.BasedOnArrival))
+              if (Convert.ToBoolean(filter.BasedOnArrival))
                 filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
-              if (Convert.ToBoolean(Filter.Quinellas))
+              if (Convert.ToBoolean(filter.Quinellas))
                 filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
 
               finfo = clsReports.ExportRptProductionBySalesRoomMarket(strReportName, fileFullPath, filters,
@@ -973,17 +973,17 @@ namespace IM.ProcessorGeneral.Forms
           #region Production by Sales Room, Program, Market & Submarket
 
           case "Production by Sales Room, Program, Market & Submarket":
-            var lstProductionBySrmSm = await BRReportsBySalesRoom.GetRptProductionBySalesRoomMarketSubMarket(Filter.StartDate,
-                Filter.EndDate,
-                (Filter.AllSalesRooms)
+            var lstProductionBySrmSm = await BRReportsBySalesRoom.GetRptProductionBySalesRoomMarketSubMarket(filter.StartDate,
+                filter.EndDate,
+                (filter.AllSalesRooms)
                   ? "ALL"
-                  : string.Join(",", Filter.LstSalesRooms),
-                Convert.ToBoolean(Filter.Quinellas), Convert.ToBoolean(Filter.BasedOnArrival));
+                  : string.Join(",", filter.LstSalesRooms),
+                Convert.ToBoolean(filter.Quinellas), Convert.ToBoolean(filter.BasedOnArrival));
             if (lstProductionBySrmSm.Any())
             {
-              if (Convert.ToBoolean(Filter.BasedOnArrival))
+              if (Convert.ToBoolean(filter.BasedOnArrival))
                 filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
-              if (Convert.ToBoolean(Filter.Quinellas))
+              if (Convert.ToBoolean(filter.Quinellas))
                 filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
 
               finfo = clsReports.ExportRptProductionBySalesRoomMarketSubMarket(strReportName, fileFullPath, filters,
@@ -995,17 +995,17 @@ namespace IM.ProcessorGeneral.Forms
           #region Production by Show Program
 
           case "Production by Show Program":
-            var lstProductionByShowProgram = await BRReportsBySalesRoom.GetRptProductionByShowProgram(Filter.StartDate,
-                Filter.EndDate,
-                (Filter.AllSalesRooms)
+            var lstProductionByShowProgram = await BRReportsBySalesRoom.GetRptProductionByShowProgram(filter.StartDate,
+                filter.EndDate,
+                (filter.AllSalesRooms)
                   ? "ALL"
-                  : string.Join(",", Filter.LstSalesRooms),
-                Convert.ToBoolean(Filter.Quinellas), Convert.ToBoolean(Filter.BasedOnArrival));
+                  : string.Join(",", filter.LstSalesRooms),
+                Convert.ToBoolean(filter.Quinellas), Convert.ToBoolean(filter.BasedOnArrival));
             if (lstProductionByShowProgram.Any())
             {
-              if (Convert.ToBoolean(Filter.BasedOnArrival))
+              if (Convert.ToBoolean(filter.BasedOnArrival))
                 filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
-              if (Convert.ToBoolean(Filter.Quinellas))
+              if (Convert.ToBoolean(filter.Quinellas))
                 filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
 
               finfo = clsReports.ExportRptProductionByShowProgram(strReportName, fileFullPath, filters,
@@ -1017,17 +1017,17 @@ namespace IM.ProcessorGeneral.Forms
           #region Production by Show, Program & Program
 
           case "Production by Show Program & Program":
-            var lstProductionByShowProgramPro = await BRReportsBySalesRoom.GetRptProductionByShowProgramProgram(Filter.StartDate,
-                Filter.EndDate,
-                (Filter.AllSalesRooms)
+            var lstProductionByShowProgramPro = await BRReportsBySalesRoom.GetRptProductionByShowProgramProgram(filter.StartDate,
+                filter.EndDate,
+                (filter.AllSalesRooms)
                   ? "ALL"
-                  : string.Join(",", Filter.LstSalesRooms),
-                Convert.ToBoolean(Filter.Quinellas), Convert.ToBoolean(Filter.BasedOnArrival));
+                  : string.Join(",", filter.LstSalesRooms),
+                Convert.ToBoolean(filter.Quinellas), Convert.ToBoolean(filter.BasedOnArrival));
             if (lstProductionByShowProgramPro.Any())
             {
-              if (Convert.ToBoolean(Filter.BasedOnArrival))
+              if (Convert.ToBoolean(filter.BasedOnArrival))
                 filters.Add(new Tuple<string, string>("*Based On Arrivals", ""));
-              if (Convert.ToBoolean(Filter.Quinellas))
+              if (Convert.ToBoolean(filter.Quinellas))
                 filters.Add(new Tuple<string, string>("*Considering Quinellas", ""));
 
               finfo = clsReports.ExportRptProductionByShowProgramProgram(strReportName, fileFullPath, filters,
@@ -1044,8 +1044,8 @@ namespace IM.ProcessorGeneral.Forms
           #region Closer Statistics
 
           case "Closer Statistics":
-            var lstCloserStatistics = await BRReportsBySalesRoom.GetRptCloserStatistics(Filter.StartDate,
-                Filter.EndDate, (Filter.AllSalesRooms) ? "ALL" : string.Join(",", Filter.LstSalesRooms));
+            var lstCloserStatistics = await BRReportsBySalesRoom.GetRptCloserStatistics(filter.StartDate,
+                filter.EndDate, (filter.AllSalesRooms) ? "ALL" : string.Join(",", filter.LstSalesRooms));
             if (lstCloserStatistics.Any())
               finfo = clsReports.ExportRptCloserStatistics(strReportName, fileFullPath, filters, lstCloserStatistics);
             break;
@@ -1054,8 +1054,8 @@ namespace IM.ProcessorGeneral.Forms
           #region Liner Statistics
 
           case "Liner Statistics":
-            var lstLinerStatistics = await BRReportsBySalesRoom.GetRptLinerStatistics(Filter.StartDate,
-                Filter.EndDate, (Filter.AllSalesRooms) ? "ALL" : string.Join(",", Filter.LstSalesRooms));
+            var lstLinerStatistics = await BRReportsBySalesRoom.GetRptLinerStatistics(filter.StartDate,
+                filter.EndDate, (filter.AllSalesRooms) ? "ALL" : string.Join(",", filter.LstSalesRooms));
             if (lstLinerStatistics.Any())
               finfo = clsReports.ExportRptLinerStatistics(strReportName, fileFullPath, filters, lstLinerStatistics);
             break;
@@ -1064,7 +1064,7 @@ namespace IM.ProcessorGeneral.Forms
           #region Weekly and Monthly Hostess
 
           case "Weekly and Monthly Hostess":
-            var lstWeeklyMontly = await BRReportsBySalesRoom.GetRptWeeklyMonthlyHostess(Filter.StartDate, (Filter.AllSalesRooms) ? "ALL" : string.Join(",", Filter.LstSalesRooms));
+            var lstWeeklyMontly = await BRReportsBySalesRoom.GetRptWeeklyMonthlyHostess(filter.StartDate, (filter.AllSalesRooms) ? "ALL" : string.Join(",", filter.LstSalesRooms));
             if (lstWeeklyMontly.Any())
               finfo = clsReports.ExportRptWeeklyMonthlyHostess(strReportName, fileFullPath, filters, lstWeeklyMontly);
             break;
@@ -1077,11 +1077,11 @@ namespace IM.ProcessorGeneral.Forms
           #region Taxis In
 
           case "Taxis In":
-            var lstTaxisIn = await BRReportsBySalesRoom.GetRptTaxisIn(Filter.StartDate,
-              Filter.EndDate,
-              (Filter.AllSalesRooms)
+            var lstTaxisIn = await BRReportsBySalesRoom.GetRptTaxisIn(filter.StartDate,
+              filter.EndDate,
+              (filter.AllSalesRooms)
                 ? "ALL"
-                : string.Join(",", Filter.LstSalesRooms));
+                : string.Join(",", filter.LstSalesRooms));
             if (lstTaxisIn.Any())
               finfo = clsReports.ExportRptTaxiIn(strReportName, fileFullPath, filters, lstTaxisIn);
             break;
@@ -1090,11 +1090,11 @@ namespace IM.ProcessorGeneral.Forms
           #region Taxis Out
 
           case "Taxis Out":
-            var lstTaxisOut = await BRReportsBySalesRoom.GetRptTaxisOut(Filter.StartDate,
-              Filter.EndDate,
-              (Filter.AllSalesRooms)
+            var lstTaxisOut = await BRReportsBySalesRoom.GetRptTaxisOut(filter.StartDate,
+              filter.EndDate,
+              (filter.AllSalesRooms)
                 ? "ALL"
-                : string.Join(",", Filter.LstSalesRooms));
+                : string.Join(",", filter.LstSalesRooms));
             if (lstTaxisOut.Any())
               finfo = clsReports.ExportRptTaxiOut(strReportName, fileFullPath, filters, lstTaxisOut);
             break;
@@ -1193,16 +1193,16 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 18/Abr/2016 Created
     /// </history>
-    private async void ShowLeadSourceReport(string strReportName, clsFilter Filter)
+    private async void ShowLeadSourceReport(string strReportName, clsFilter filter)
     {
-      var dateRange = _blnOneDate ? DateHelper.DateRange(Filter.StartDate, Filter.StartDate) : DateHelper.DateRange(Filter.StartDate, Filter.EndDate);
-      var dateRangeFileNameRep = _blnOneDate ? DateHelper.DateRangeFileName(Filter.StartDate, Filter.StartDate) : DateHelper.DateRangeFileName(Filter.StartDate, Filter.EndDate);
+      var dateRange = _blnOneDate ? DateHelper.DateRange(filter.StartDate, filter.StartDate) : DateHelper.DateRange(filter.StartDate, filter.EndDate);
+      var dateRangeFileNameRep = _blnOneDate ? DateHelper.DateRangeFileName(filter.StartDate, filter.StartDate) : DateHelper.DateRangeFileName(filter.StartDate, filter.EndDate);
       FileInfo finfo = null;
       var filters = new List<Tuple<string, string>>();
-      var leadSources = (Filter.AllLeadSources) ? "ALL" : string.Join(",", Filter.LstLeadSources);
+      var leadSources = (filter.AllLeadSources) ? "ALL" : string.Join(",", filter.LstLeadSources);
       filters.Add(new Tuple<string, string>("Date Range", dateRange));
       filters.Add(new Tuple<string, string>("Lead Sources",
-        Filter.AllLeadSources ? "ALL" : string.Join(",", Filter.LstLeadSources)));
+        filter.AllLeadSources ? "ALL" : string.Join(",", filter.LstLeadSources)));
 
       string fileFullPath = EpplusHelper.CreateEmptyExcel(strReportName, dateRangeFileNameRep);
       _frmReportQueue.AddReport(fileFullPath, strReportName);
@@ -1213,9 +1213,9 @@ namespace IM.ProcessorGeneral.Forms
           #region Burned Deposits Guests
 
           case "Burned Deposits Guests":
-            var lstRptBurnedDepsGuest = await BRReportsByLeadSource.GetRptDepositsBurnedGuests(Filter.StartDate,
-                Filter.EndDate,
-                string.Join(",", Filter.LstLeadSources));
+            var lstRptBurnedDepsGuest = await BRReportsByLeadSource.GetRptDepositsBurnedGuests(filter.StartDate,
+                filter.EndDate,
+                string.Join(",", filter.LstLeadSources));
             if (lstRptBurnedDepsGuest.Any())
               finfo = clsReports.ExportRptBurnedDepositsGuests(strReportName, fileFullPath, filters,
                 lstRptBurnedDepsGuest);
@@ -1225,7 +1225,7 @@ namespace IM.ProcessorGeneral.Forms
           #region Deposit Refund
 
           case "Deposit Refund":
-            var lstRptDepRef = await BRReportsByLeadSource.GetRptDepositRefunds(Filter.StartDate, Filter.EndDate,
+            var lstRptDepRef = await BRReportsByLeadSource.GetRptDepositRefunds(filter.StartDate, filter.EndDate,
                 leadSources);
             if (lstRptDepRef.Any())
               finfo = clsReports.ExportRptDepositRefunds(strReportName, fileFullPath, filters, lstRptDepRef);
@@ -1235,9 +1235,9 @@ namespace IM.ProcessorGeneral.Forms
           #region Deposits by PR
 
           case "Deposits by PR":
-            var lstRptDepPr = await BRReportsByLeadSource.GetRptDepositByPR(Filter.StartDate,
-              Filter.EndDate,
-              string.Join(",", Filter.LstLeadSources));
+            var lstRptDepPr = await BRReportsByLeadSource.GetRptDepositByPR(filter.StartDate,
+              filter.EndDate,
+              string.Join(",", filter.LstLeadSources));
             if (lstRptDepPr.Any())
               finfo = clsReports.ExportRptDepositByPr(strReportName, fileFullPath, filters, lstRptDepPr);
             break;
@@ -1246,9 +1246,9 @@ namespace IM.ProcessorGeneral.Forms
           #region Deposits No Show
 
           case "Deposits No Show":
-            var lstRptDepNoShow = await BRReportsByLeadSource.GetRptDepositsNoShow(Filter.StartDate,
-              Filter.EndDate,
-              string.Join(",", Filter.LstLeadSources));
+            var lstRptDepNoShow = await BRReportsByLeadSource.GetRptDepositsNoShow(filter.StartDate,
+              filter.EndDate,
+              string.Join(",", filter.LstLeadSources));
             if (lstRptDepNoShow.Any())
               finfo = clsReports.ExportRptDepositsNoShow(strReportName, fileFullPath, filters, lstRptDepNoShow);
             break;
@@ -1257,9 +1257,9 @@ namespace IM.ProcessorGeneral.Forms
           #region In & Out by PR
 
           case "In & Out by PR":
-            var lstRptInOutPr = await BRReportsByLeadSource.GetRptInOutByPR(Filter.StartDate,
-              Filter.EndDate,
-              string.Join(",", Filter.LstLeadSources));
+            var lstRptInOutPr = await BRReportsByLeadSource.GetRptInOutByPR(filter.StartDate,
+              filter.EndDate,
+              string.Join(",", filter.LstLeadSources));
             if (lstRptInOutPr.Any())
               finfo = clsReports.ExportRptInOutByPr(strReportName, fileFullPath, filters, lstRptInOutPr);
             break;
@@ -1268,8 +1268,8 @@ namespace IM.ProcessorGeneral.Forms
           #region Memberships
 
           case "Memberships":
-            var lstMemberships = await BRReportsBySalesRoom.GetRptMemberships(Filter.StartDate,
-              Filter.EndDate, leadSources: leadSources);
+            var lstMemberships = await BRReportsBySalesRoom.GetRptMemberships(filter.StartDate,
+              filter.EndDate, leadSources: leadSources);
             if (lstMemberships.Any())
               finfo = clsReports.ExportRptMemberships(strReportName, fileFullPath, filters, lstMemberships);
             break;
@@ -1278,7 +1278,7 @@ namespace IM.ProcessorGeneral.Forms
           #region Memberships by Host
 
           case "Memberships by Host":
-            var lstMembershipsHost = await BRReportsBySalesRoom.GetRptMembershipsByHost(Filter.StartDate, Filter.EndDate,
+            var lstMembershipsHost = await BRReportsBySalesRoom.GetRptMembershipsByHost(filter.StartDate, filter.EndDate,
                 leadSources: leadSources);
             if (lstMembershipsHost.Any())
               finfo = clsReports.ExportRptMembershipsByHost(strReportName, fileFullPath, filters, lstMembershipsHost);
@@ -1288,8 +1288,8 @@ namespace IM.ProcessorGeneral.Forms
           #region Paid Deposits
 
           case "Paid Deposits by PR":
-            var lstRptPaidDeposits = await BRReportsBySalesRoom.GetRptPaidDeposits(Filter.StartDate,
-              Filter.EndDate, leadSources: leadSources);
+            var lstRptPaidDeposits = await BRReportsBySalesRoom.GetRptPaidDeposits(filter.StartDate,
+              filter.EndDate, leadSources: leadSources);
             if (lstRptPaidDeposits.Any())
               finfo = clsReports.ExportRptPaidDeposits(strReportName, fileFullPath, filters, lstRptPaidDeposits, true);
             break;
@@ -1299,7 +1299,7 @@ namespace IM.ProcessorGeneral.Forms
 
           case "Personnel Access":
             var lstPersonnelAccess = await BRReportsByLeadSource.GetRptPersonnelAccess(string.Join(",",
-                Filter.LstLeadSources));
+                filter.LstLeadSources));
             if (lstPersonnelAccess.Any())
               finfo = clsReports.ExportRptPersonnelAccess(strReportName, fileFullPath, filters, lstPersonnelAccess);
             break;
@@ -1308,12 +1308,12 @@ namespace IM.ProcessorGeneral.Forms
           #region Self Gen
 
           case "Self Gen":
-            var lstRptSelfGen = await BRReportsByLeadSource.GetRptSelfGen(Filter.StartDate,
-              Filter.EndDate,
-              string.Join(",", Filter.LstLeadSources));
+            var lstRptSelfGen = await BRReportsByLeadSource.GetRptSelfGen(filter.StartDate,
+              filter.EndDate,
+              string.Join(",", filter.LstLeadSources));
             if (lstRptSelfGen.Item1.Any())
               finfo = clsReports.ExportRptSelfGen(strReportName, fileFullPath, filters, lstRptSelfGen,
-                Filter.StartDate, Filter.EndDate);
+                filter.StartDate, filter.EndDate);
             break;
 
             #endregion
@@ -1446,14 +1446,14 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 16/Mar/2016 Created
     /// </history>
-    private async void ShowGeneralReport(string strReportName, clsFilter Filter, bool blndateRange = false)
+    private async void ShowGeneralReport(string strReportName, clsFilter filter, bool blndateRange = false)
     {
       //var dateRange = (blndateRange)
       //  ? ((_blnOneDate)
       //    ? DateHelper.DateRange(_clsFilter.StartDate, _clsFilter.StartDate)
       //    : DateHelper.DateRange(_clsFilter.StartDate, _clsFilter.EndDate))
       //  : "";
-      var dateRangeFileNameRep = (blndateRange) ? (_blnOneDate ? DateHelper.DateRangeFileName(Filter.StartDate, Filter.StartDate) : DateHelper.DateRangeFileName(Filter.StartDate, Filter.EndDate)) : "";
+      var dateRangeFileNameRep = (blndateRange) ? (_blnOneDate ? DateHelper.DateRangeFileName(filter.StartDate, filter.StartDate) : DateHelper.DateRangeFileName(filter.StartDate, filter.EndDate)) : "";
       FileInfo finfo = null;
       var filters = new List<Tuple<string, string>>();
       string fileFullPath = (strReportName != "Logins Log") ? EpplusHelper.CreateEmptyExcel(strReportName, dateRangeFileNameRep) : "";
@@ -1483,7 +1483,7 @@ namespace IM.ProcessorGeneral.Forms
           #region Gifts Kardex
 
           case "Gifts Kardex":
-            var lstRptGiftKardex = await BRGeneralReports.GetRptGiftsKardex(Filter.StartDate, Filter.EndDate, Filter.LstWarehouses.FirstOrDefault());
+            var lstRptGiftKardex = await BRGeneralReports.GetRptGiftsKardex(filter.StartDate, filter.EndDate, filter.LstWarehouses.FirstOrDefault());
             if (lstRptGiftKardex.Any())
               finfo = clsReports.ExportRptGiftsKardex(strReportName, fileFullPath, filters, lstRptGiftKardex);
             break;
@@ -1509,11 +1509,11 @@ namespace IM.ProcessorGeneral.Forms
           #region Production by Lead Source & Market (Monthly)
 
           case "Production by Lead Source & Market (Monthly)":
-            var lstRptProductionByLsMarketMonthly = await BRGeneralReports.GetRptProductionByLeadSourceMarketMonthly(Filter.StartDate,
-                Filter.EndDate,
-                (Convert.ToBoolean(Filter.Quinellas)) ? EnumQuinellas.Quinellas : EnumQuinellas.NoQuinellas,
+            var lstRptProductionByLsMarketMonthly = await BRGeneralReports.GetRptProductionByLeadSourceMarketMonthly(filter.StartDate,
+                filter.EndDate,
+                (Convert.ToBoolean(filter.Quinellas)) ? EnumQuinellas.Quinellas : EnumQuinellas.NoQuinellas,
                 (EnumExternalInvitation)_frmFilter.cboExternal.SelectedValue,
-                (Convert.ToBoolean(Filter.BasedOnArrival))
+                (Convert.ToBoolean(filter.BasedOnArrival))
                   ? EnumBasedOnArrival.BasedOnArrival
                   : EnumBasedOnArrival.NoBasedOnArrival);
             if (lstRptProductionByLsMarketMonthly.Any())
@@ -1525,7 +1525,7 @@ namespace IM.ProcessorGeneral.Forms
           #region Production Referral
 
           case "Production Referral":
-            var lstRptProductionReferral = await BRGeneralReports.GetRptProductionReferral(Filter.StartDate, Filter.EndDate);
+            var lstRptProductionReferral = await BRGeneralReports.GetRptProductionReferral(filter.StartDate, filter.EndDate);
             if (lstRptProductionReferral.Any())
               finfo = clsReports.ExportRptProductionReferral(strReportName, fileFullPath, filters,
                 lstRptProductionReferral);
@@ -1544,8 +1544,8 @@ namespace IM.ProcessorGeneral.Forms
           #region Sales By Program, Lead Source & Market
 
           case "Sales By Program, Lead Source & Market":
-            var lstRptSalesByProgramLeadSourceMarkets = await BRGeneralReports.GetRptSalesByProgramLeadSourceMarket(Filter.StartDate,
-                Filter.EndDate);
+            var lstRptSalesByProgramLeadSourceMarkets = await BRGeneralReports.GetRptSalesByProgramLeadSourceMarket(filter.StartDate,
+                filter.EndDate);
             if (lstRptSalesByProgramLeadSourceMarkets.Any())
               finfo = clsReports.ExportRptSalesByProgramLeadSourceMarket(strReportName, fileFullPath, filters, lstRptSalesByProgramLeadSourceMarkets);
             break;
@@ -1554,7 +1554,7 @@ namespace IM.ProcessorGeneral.Forms
           #region Warehouse Movements
 
           case "Warehouse Movements":
-            var lstRptWarehouseMovements = await BRGeneralReports.GetRptWarehouseMovements(Filter.StartDate, Filter.EndDate, Filter.LstWarehouses.FirstOrDefault());
+            var lstRptWarehouseMovements = await BRGeneralReports.GetRptWarehouseMovements(filter.StartDate, filter.EndDate, filter.LstWarehouses.FirstOrDefault());
             if (lstRptWarehouseMovements.Any())
               finfo = clsReports.ExportRptWarehouseMovements(strReportName, fileFullPath, filters,
                 lstRptWarehouseMovements);
@@ -1740,20 +1740,20 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private void GetFirstDayValue()
     {
-      DateTime _serverDate = BRHelpers.GetServerDate();
+      DateTime serverDate = BRHelpers.GetServerDate();
       // Fecha inicial
-      ClsFilter.StartDate = new DateTime(_serverDate.Year, _serverDate.Month, 1);
+      ClsFilter.StartDate = new DateTime(serverDate.Year, serverDate.Month, 1);
 
       // obtenemos la fecha de inicio de la semana
       //_clsFilter.DtmInit = DateHelper.GetStartWeek(_serverDate.AddDays(-7)).Date;
 
       //Fecha final
-      ClsFilter.EndDate = _serverDate.Date;
+      ClsFilter.EndDate = serverDate.Date;
       string strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
       if (!File.Exists(strArchivo)) return;
-      var _iniFileHelper = new IniFileHelper(strArchivo);
-      ClsFilter.StartDate = _iniFileHelper.readDate("FilterDate", "DateStart", ClsFilter.StartDate);
-      ClsFilter.EndDate = _iniFileHelper.readDate("FilterDate", "DateEnd", ClsFilter.EndDate);
+      var iniFileHelper = new IniFileHelper(strArchivo);
+      ClsFilter.StartDate = iniFileHelper.readDate("FilterDate", "DateStart", ClsFilter.StartDate);
+      ClsFilter.EndDate = iniFileHelper.readDate("FilterDate", "DateEnd", ClsFilter.EndDate);
       //string strSalesRoom = _iniFileHelper.readText("FilterDate", "SalesRoom", string.Empty);
       //if (!string.IsNullOrEmpty(strSalesRoom)) _clsFilter.LstLeadSources.Add(strSalesRoom);
     }

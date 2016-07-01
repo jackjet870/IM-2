@@ -22,7 +22,7 @@ namespace IM.BusinessRules.BR
       List < ZoneTransfer > zoneTransfer  = null;
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           zoneTransfer = dbContext.USP_OR_GetZonesTransfer().ToList();
         }
@@ -45,7 +45,7 @@ namespace IM.BusinessRules.BR
     {
       List<Zone> lstZones = await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from zn in dbContext.Zones
                       select zn;
@@ -93,7 +93,7 @@ namespace IM.BusinessRules.BR
     {
       int nRes = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
             {

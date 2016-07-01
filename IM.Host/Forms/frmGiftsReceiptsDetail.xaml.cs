@@ -21,17 +21,14 @@ namespace IM.Host.Forms
   public partial class frmGiftsReceiptsDetail : Window
   {
     #region Variables
-    public bool _blnPublicOREmpleado = false; // FALSE - PUBLIC || TRUE - EMPLEADO
-    private bool firstChanged = false; // Verifica si es la primera vez que se carga el combo
+    public bool _blnPublicOREmpleado = false, _CancelExternal = false; // FALSE - PUBLIC || TRUE - EMPLEADO
     private int _guestID = 0;
     public EnumModeOpen modeOpen;
-    public GiftsReceiptDetailShort _GiftCurrent = new GiftsReceiptDetailShort();
-    private GiftsReceiptDetailShort _GiftOrigin;
+    public GiftsReceiptDetail _giftCurrent = new GiftsReceiptDetail();
+    private GiftsReceiptDetail _GiftOrigin;
     private GiftsReceiptDetail _GiftReceiptC;
-    private GiftsReceiptsShort _GiftReceiptCurrent;
-    private ObservableCollection<GiftsReceiptDetailShort> _obsGiftsCurrent, _obsGiftsComplet;
-
-    CollectionViewSource _dsGifts; 
+    private int _GiftReceipt;
+    private ObservableCollection<GiftsReceiptDetail> _obsGiftsCurrent, _obsGiftsComplet;
     #endregion
 
     #region CONSTRUCTOR
@@ -48,20 +45,21 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco]  22/Abril/2016 Created
     /// </history>
-    public frmGiftsReceiptsDetail(ref ObservableCollection<GiftsReceiptDetailShort> obsGiftsTemp,
-                                  ObservableCollection<GiftsReceiptDetailShort> obsGiftsComplet,
+    public frmGiftsReceiptsDetail(ref ObservableCollection<GiftsReceiptDetail> obsGiftsTemp,
+                                  ObservableCollection<GiftsReceiptDetail> obsGiftsComplet,
                                   int guestID,
-                                  GiftsReceiptsShort giftReceiptCurrent,
-                                  GiftsReceiptDetailShort GiftSelected = null,
-                                  bool publicOrEmpleado = false)
+                                  int giftReceipt = 0,
+                                  GiftsReceiptDetail GiftSelected = null,
+                                  bool publicOrEmpleado = false,
+                                  bool isCancelExternal = false)
     {
       _guestID = guestID;
       _GiftOrigin = GiftSelected; // Se guarda como llego originalmente, para futuras comparaciones.
       _obsGiftsCurrent = obsGiftsTemp;
       _obsGiftsComplet = obsGiftsComplet;
-      _GiftReceiptCurrent = giftReceiptCurrent;
+      _GiftReceipt = giftReceipt;
       _blnPublicOREmpleado = publicOrEmpleado;
-
+      _CancelExternal = isCancelExternal;
 
       InitializeComponent();
     }
@@ -70,15 +68,14 @@ namespace IM.Host.Forms
     #region Window_Loaded
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      _dsGifts = ((CollectionViewSource)(this.FindResource("dsGifts")));
-      _dsGifts.Source = frmHost._lstGifts; // Cargamos la lista de Gifts
+      cboGift.ItemsSource  = frmHost._lstGiftsWithPackage;
 
       switch (modeOpen)
       {
         case EnumModeOpen.Edit:
-          if (_GiftCurrent.geInPVPPromo)
+          if (_giftCurrent.geInPVPPromo)
           {
-            GiftsReceiptDetail _request = BRGiftsReceiptDetail.GetGiftReceiptDetail(_GiftCurrent.gegr, _GiftCurrent.gegi);
+            GiftsReceiptDetail _request = BRGiftsReceiptDetail.GetGiftReceiptDetail(_giftCurrent.gegr, _giftCurrent.gegi);
 
             if (_request != null)
             {
@@ -87,10 +84,20 @@ namespace IM.Host.Forms
             }
           }
 
-          DataContext = _GiftCurrent;
+          DataContext = _giftCurrent;
           break;
       }
-    } 
+
+      // Si se abrio del formulario Cancel External
+      if (_CancelExternal)
+      {
+        // Se ocultan controles innecesarios
+        chkAsPromotion.Visibility = Visibility.Hidden;
+        chkCancelSistur.Visibility = Visibility.Hidden;
+        chkInOpera.Visibility = Visibility.Hidden;
+        chkInSistur.Visibility = Visibility.Hidden;
+      }
+    }
     #endregion
 
     #region ValidateNumber
@@ -115,6 +122,14 @@ namespace IM.Host.Forms
     #endregion
 
     #region btnCancel_Click
+    /// <summary>
+    /// Cancela y cierra el formulario
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 25/Abril/2016 Created
+    /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       Close();
@@ -132,22 +147,23 @@ namespace IM.Host.Forms
     /// </history>
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
-      Gift _gift = (Gift)cboGift.SelectedItem;
-      if (_gift != null)
+      string _gift = cboGift.SelectedValue as string;
+      Gift _Selected = frmHost._lstGifts.Where(x => x.giID == _gift).First();
+
+      if (_Selected != null)
       {
-        if (modeOpen == EnumModeOpen.Edit && _gift.giID != _GiftOrigin.gegi || (modeOpen == EnumModeOpen.Add)) // Si es el mismo Gift en modo edicion no se realiza la validacion de repeticion.
+        if (modeOpen == EnumModeOpen.Edit && _Selected.giID != _GiftOrigin.gegi || (modeOpen == EnumModeOpen.Add)) // Si es el mismo Gift en modo edicion no se realiza la validacion de repeticion.
         {
           // Verificamos que el Gift no se encuentre repetido
           if (_obsGiftsCurrent != null)
           {
-            foreach (GiftsReceiptDetailShort item in _obsGiftsCurrent)
-            {
-              if (item.gegi == _gift.giID)
-              {
-                UIHelper.ShowMessage("Gifts must not be repeated. \r\n Gift repetead is '" + _gift.giN + "'.", MessageBoxImage.Exclamation);
-                return;
-              }
-            }
+            _obsGiftsCurrent.ToList().ForEach(x => {
+                                                    if (x.gegi == _Selected.giID)
+                                                    {
+                                                      UIHelper.ShowMessage("Gifts must not be repeated. \r\n Gift repetead is '" + _Selected.giN + "'.", MessageBoxImage.Exclamation);
+                                                      return;
+                                                    }
+                                                  });
           }
         }
       }
@@ -157,13 +173,12 @@ namespace IM.Host.Forms
         return;
       }
 
-
       switch (modeOpen)
       {
         case EnumModeOpen.Add:
-          GiftsReceiptDetailShort _giftsNew = new GiftsReceiptDetailShort
+          GiftsReceiptDetail _giftsNew = new GiftsReceiptDetail
           {
-            gegr = _GiftReceiptCurrent != null ? _GiftReceiptCurrent.grID : 0, // Se le asigna un valor 0 temporal hasta que le de guardar al Gift Receipt, se le asigna el ID del Gift Receipt correspondiente
+            gegr = _GiftReceipt, // Se le asigna un valor 0 temporal hasta que le de guardar al Gift Receipt, se le asigna el ID del Gift Receipt correspondiente
             gegi = cboGift.SelectedValue.ToString(),
             gect = "MARKETING",
             geQty = Convert.ToInt32(txtQty.Text),
@@ -173,7 +188,7 @@ namespace IM.Host.Forms
             gePriceA = Math.Round(Convert.ToDecimal(txtCAdults.Text), 4),
             gePriceM = Math.Round(Convert.ToDecimal(txtCMinors.Text), 4),
             geCharge = (decimal)Math.Round(0.0, 4),
-            geCxC = null,
+            gecxc = null,
             geComments = txtComments.Text,
             geInElectronicPurse = false,
             geConsecutiveElectronicPurse = null,
@@ -206,7 +221,7 @@ namespace IM.Host.Forms
 
                 _obsGiftsCurrent.Add(_giftsNew);
 
-                frmGiftsReceipts._LogGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.add, _GiftReceiptC));
+                frmGiftsReceipts.logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.add, _GiftReceiptC));
               }
               else // Verificamos si hubo cambio en algun campo
               {
@@ -216,18 +231,18 @@ namespace IM.Host.Forms
 
                   // Construimos la entity de acuerdo a ComplexType
                   _GiftReceiptC = BuildGiftReceiptC();
-                  List<KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>> _result = frmGiftsReceipts._LogGiftDetail.Where(x => x.Value.gegi == _GiftReceiptC.gegi).ToList();
+                  List<KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>> _result = frmGiftsReceipts.logGiftDetail.Where(x => x.Value.gegi == _GiftReceiptC.gegi).ToList();
 
                   if (_result != null && _result.Count > 0)
                   {
                     // eliminamos todas las acciones anteriores
                     foreach (KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail> item in _result)
                     {
-                      frmGiftsReceipts._LogGiftDetail.Remove(item);
+                      frmGiftsReceipts.logGiftDetail.Remove(item);
                     }
                   }
 
-                  frmGiftsReceipts._LogGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.edit, _GiftReceiptC));
+                  frmGiftsReceipts.logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.edit, _GiftReceiptC));
                 }
               }
             }
@@ -237,37 +252,29 @@ namespace IM.Host.Forms
             _GiftReceiptC = BuildGiftReceiptC();
 
             _obsGiftsCurrent.Add(_giftsNew);
-            frmGiftsReceipts._LogGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.add, _GiftReceiptC));
+            frmGiftsReceipts.logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.add, _GiftReceiptC));
           }
 
           break;
         case EnumModeOpen.Edit:
           _GiftReceiptC = BuildGiftReceiptC();
 
-          //var result = Classes.ObjectHelperGifts.fieldsValuesDiff(_GiftCurrent, _GiftOrigin);
-
-          if (!ObjectHelper.IsEquals(_GiftCurrent, _GiftOrigin))
+          if (!ObjectHelper.IsEquals(_giftCurrent, _GiftOrigin))
           {
-            if (_GiftCurrent.gegi == _GiftOrigin.gegi) // si es el mismo gift se actualizo algun campo.
-            {
-              //_Log[EnumMode.edit].Add(_GiftCurrent);
-              frmGiftsReceipts._LogGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.edit, _GiftReceiptC));
-            }
+            if (_giftCurrent.gegi == _GiftOrigin.gegi) // si es el mismo gift no se actualizo algun campo.
+              frmGiftsReceipts.logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.edit, _GiftReceiptC));
             else // Se cambio de gift
-            {
-              frmGiftsReceipts._LogGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.add, _GiftReceiptC));
-            }
+              frmGiftsReceipts.logGiftDetail.Add(new KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail>(Model.Enums.EnumMode.add, _GiftReceiptC));
 
             int i = _obsGiftsCurrent.IndexOf(_GiftOrigin);
             _obsGiftsCurrent.RemoveAt(i);
-            _obsGiftsCurrent.Insert(i, _GiftCurrent);
-
+            _obsGiftsCurrent.Insert(i, _giftCurrent);
           }
           break;
       }
 
       Close();
-    } 
+    }
     #endregion
 
     #region BuildGiftReceiptC
@@ -282,7 +289,7 @@ namespace IM.Host.Forms
     {
       return new GiftsReceiptDetail
       {
-        gegr = _GiftReceiptCurrent != null ? _GiftReceiptCurrent.grID : 0, // Se le asigna un valor 0 temporal hasta que le de guardar al Gift Receipt, se le asigna el ID del Gift Receipt correspondiente
+        gegr = _GiftReceipt, // Se le asigna un valor 0 temporal hasta que le de guardar al Gift Receipt, se le asigna el ID del Gift Receipt correspondiente
         gegi = cboGift.SelectedValue.ToString(),
         gect = "MARKETING",
         geQty = Convert.ToInt32(txtQty.Text),
@@ -321,45 +328,54 @@ namespace IM.Host.Forms
     /// </history>
     private void cboGift_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      if (firstChanged)
+      string _gift = cboGift.SelectedValue as string;
+
+      Gift _Selected = frmHost._lstGifts.Where(x => x.giID == _gift).Single();
+
+      if (_Selected != null)
       {
-        Gift _gift = (Gift)cboGift.SelectedItem;
-
-        if (_gift != null)
+        if (_Selected.giWFolio)
+          txtFolios.IsReadOnly = false;
+        else
+          txtFolios.IsReadOnly = true;
+        if (_Selected.giWPax)
         {
-          if (_gift.giWFolio)
-            txtFolios.IsReadOnly = false;
-          else
-            txtFolios.IsReadOnly = true;
-          if (_gift.giWPax)
-          {
-            txtAdults.IsReadOnly = false;
-            txtMinors.IsReadOnly = false;
-            txtEAdults.IsReadOnly = false;
-          }
-          else
-          {
-            txtAdults.IsReadOnly = true;
-            txtMinors.IsReadOnly = true;
-            txtEAdults.IsReadOnly = true;
-          }
-
-          if (Convert.ToInt32(txtQty.Text) > _gift.giMaxQty && _gift.giMaxQty != 0)
-          {
-            UIHelper.ShowMessage("The maximun quantity authorized of the gift " + _gift.giN + " has been exceeded.\r\n" +
-                                  "Max Authorized = " + _gift.giQty, MessageBoxImage.Information);
-            txtQty.Text = "1";
-          }
-          else
-          {
-            UpdateFields(_gift);
-          }
+          txtAdults.IsReadOnly = false;
+          txtMinors.IsReadOnly = false;
+          txtEAdults.IsReadOnly = false;
+        }
+        else
+        {
+          txtAdults.IsReadOnly = true;
+          txtMinors.IsReadOnly = true;
+          txtEAdults.IsReadOnly = true;
         }
 
-        firstChanged = false;
-      }
-      firstChanged = true;
+        if (Convert.ToInt32(txtQty.Text) > _Selected.giMaxQty && _Selected.giMaxQty != 0)
+        {
+          UIHelper.ShowMessage("The maximun quantity authorized of the gift " + _Selected.giN + " has been exceeded.\r\n" +
+                                "Max Authorized = " + _Selected.giQty, MessageBoxImage.Information);
+          txtQty.Text = "1";
+        }
+        else
+        {
+          UpdateFields(_Selected);
+        }
 
+        // Verificamos si tiene paquete de regalos
+        if (_Selected.giPack)
+        {
+          // Buscamos el paquete de regalos y lo agregamos a la lista
+          //List<GiftsReceiptPackageItem> lstResult = await BRGiftsReceiptsPacks.GetGiftsReceiptPackage(_GiftReceipt, _gift.giID);
+          //lstPacks = lstResult;//lstResult.Select(x => new { Qty = x.gkQty, Name = frmHost._lstGifts.Where(w => w.giID == x.gkgi).Select(s => s.giN).Single()});
+          //lstGiftsPacks.Visibility = Visibility.Visible;
+        }
+        else
+        {
+          //lstGiftsPacks.Visibility = Visibility.Hidden;
+        }
+
+      }
     }
     #endregion
 
@@ -396,18 +412,19 @@ namespace IM.Host.Forms
     /// </history>
     private void txtQty_LostFocus(object sender, RoutedEventArgs e)
     {
-      Gift _gift = (Gift)cboGift.SelectedItem;
+      string _gift = cboGift.SelectedValue as string;
+      Gift _selected = frmHost._lstGifts.Where(x => x.giID == _gift).First();
 
-      if (Convert.ToInt32(txtQty.Text) > _gift.giMaxQty && _gift.giMaxQty != 0)
+      if (Convert.ToInt32(txtQty.Text) > _selected.giMaxQty && _selected.giMaxQty != 0)
       {
-        UIHelper.ShowMessage("The maximun quantity authorized of the gift " + _gift.giN + " has been exceeded.\r\n" +
-                             "Max Authorized = " + _gift.giQty, MessageBoxImage.Information);
+        UIHelper.ShowMessage("The maximun quantity authorized of the gift " + _selected.giN + " has been exceeded.\r\n" +
+                             "Max Authorized = " + _selected.giQty, MessageBoxImage.Information);
         txtQty.Text = "1";
         return;
       }
       else
       {
-        UpdateCost(_gift);
+        UpdateCost(_selected);
       }
     }
     #endregion
@@ -456,7 +473,7 @@ namespace IM.Host.Forms
     /// <param name="sender"></param>
     /// <param name="e"></param>
     /// <history>
-    /// [vipacheco] 27/Abril/2016
+    /// [vipacheco] 27/Abril/2016 created
     /// </history>
     private void Element_GotFocus(object sender, RoutedEventArgs e)
     {
@@ -469,7 +486,7 @@ namespace IM.Host.Forms
           }
           break;
         case EnumModeOpen.Edit:
-          if (_GiftCurrent.geInPVPPromo)
+          if (_giftCurrent.geInPVPPromo)
             UIHelper.ShowMessage("You can not modify the quantity of gifts have been given in Sistur promotions.", MessageBoxImage.Information);
           break;
       }
@@ -477,13 +494,25 @@ namespace IM.Host.Forms
     #endregion
 
     #region Element_LostFocus
+    /// <summary>
+    ///  Calcula los costos del gift seleccionado
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 27/Abril/2016 Created
+    /// </history>
     private void Element_LostFocus(object sender, RoutedEventArgs e)
     {
-      Gift _gift = (Gift)cboGift.SelectedItem;
+      string _gift = cboGift.SelectedValue as string;
 
-      UpdateCost(_gift);
+      // Buscamos el Gift seleccionado
+      Gift _Selected = frmHost._lstGifts.Where(x => x.giID == _gift).Single();
 
-    } 
+      // Actualizamos costos
+      UpdateCost(_Selected);
+    }
     #endregion
   }
+
 }

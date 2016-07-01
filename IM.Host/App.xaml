@@ -11,6 +11,7 @@
         <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/tComboBox.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/IM.PRStatistics;component/Styles/Lists.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/IM.PRStatistics;component/Styles/General.xaml"/>
+		<ResourceDictionary Source="pack://application:,,,/IM.Host;component/Styles/ComboBoxTemplate.xaml"/>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>

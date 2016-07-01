@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     {
       List<SegmentCategory> lstSegmentsCategories = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             var query = from sc in dbContext.SegmentsCategories
                         select sc;
@@ -73,7 +73,7 @@ namespace IM.BusinessRules.BR
     {
       int nRes = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
             {
@@ -155,7 +155,7 @@ namespace IM.BusinessRules.BR
     {
       int nRes = await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {

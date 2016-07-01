@@ -24,9 +24,11 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int GetMaxMealTicketFolio(string mfsr, string mfmy, int mfra)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      string result = "";
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
-        return Convert.ToInt32(dbContext.MealTicketsFolios.Where(x => x.mfsr == mfsr && x.mfmy == mfmy && x.mfra == mfra).Select(s => s.mfFolio).Max());
+        result = dbContext.MealTicketsFolios.Where(x => x.mfsr == mfsr && x.mfmy == mfmy && x.mfra == mfra).Select(s => s.mfFolio).Max();
+        return 1;
       }
     } 
     #endregion
@@ -44,7 +46,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void UpdateMealTicketFolio(string SR, string MType, int RType, string strNewFolio)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_UpdateMealTicketFolio(SR, MType, strNewFolio, RType);
       }

@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
       
       List<ChargeCalculationType> lstCharge = new List<ChargeCalculationType>();
 
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var query = from cct in dbContext.ChargeCalculationTypes
                     select cct;

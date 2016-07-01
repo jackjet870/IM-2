@@ -19,7 +19,7 @@ namespace IM.BusinessRules.BR
     //public async static Task<int> SaveGuestOpera(GuestOpera guestOpera, bool? insert = true)
     //{
     //  int status = 0;
-    //  using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+    //  using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
     //  {
     //    if (insert != false)
     //    {
@@ -52,7 +52,7 @@ namespace IM.BusinessRules.BR
     //public async static Task<GuestOpera> GetGuestOpera(int guID)
     //{
     //  GuestOpera guestOpera = null;
-    //  using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+    //  using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
     //  {
     //    guestOpera = await dbContext.GuestsOpera.SingleOrDefaultAsync(go => go.gogu == guID);
     //  }

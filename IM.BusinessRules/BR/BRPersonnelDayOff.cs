@@ -19,7 +19,7 @@ namespace IM.BusinessRules.BR
     /// <history>[ECANUL] 09-08-2016 Created</history>
     public static List<PersonnelDayOff> GetPersonnelDaysOff(string placeID, EnumTeamType teamType)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         string _teamType = EnumToListHelper.GetEnumDescription(teamType);
         return dbContext.USP_OR_GetPersonnelDaysOff(_teamType, placeID).ToList();
@@ -38,7 +38,7 @@ namespace IM.BusinessRules.BR
     public static int SavePersonnelDayOff(Model.DayOff personnelDaysOf)
     {
       int nRes = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         ///Uso en try Catch porque al momento de revisar si el usuario existe o no
         ///al coinicidir un ususario existente el manejador me dice que el "Registro esta en uso y no me permite modificarlo"

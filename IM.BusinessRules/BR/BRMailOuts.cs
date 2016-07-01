@@ -22,7 +22,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void ProcessMailOuts(string leadSourceID, DateTime? date = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.spProcessMailOuts(leadSourceID, date);
       }
@@ -42,7 +42,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<MailOut> GetMailOuts(string leadSourceId = null, int status = -1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var query = from mo in dbContext.MailOuts
                     select mo;
@@ -73,7 +73,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int InsertMailOut(string _mols, string _moCode)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
         {
@@ -140,7 +140,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int UpdateMailOut(MailOut mo)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.Entry(mo).State = System.Data.Entity.EntityState.Modified;
         return dbContext.SaveChanges();
@@ -160,7 +160,7 @@ namespace IM.BusinessRules.BR
     public static int DeleteMailOut(MailOut mo)
     {
       int result= 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
         {

@@ -18,14 +18,55 @@ namespace IM.BusinessRules.BR
     /// <param name="guestID"></param>
     /// <returns></returns>
     /// <history>
-    /// [vipacheco] 28/Abril/2016
+    /// [vipacheco] 28/Abril/2016 Created
+    /// [vipacheco] 17/Junio/2016 Modified --> Se agrego sincronia y se modifico el tipo de lista retornada
     /// </history>
-    public static List<GiftInvitationWithoutReceipt> GetGiftsInvitationWithoutReceipt(int? guestID, bool? package = false)
+    public async static Task<List<GiftsReceiptDetail>> GetGiftsInvitationWithoutReceipt(int? guestID, bool? package = false)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<GiftsReceiptDetail> lstResult = new List<GiftsReceiptDetail>();
+
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetGiftsInvitationWithoutReceipt(guestID, package).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          // Obtenemos los datos del stored
+          List<GiftInvitationWithoutReceipt> lstShort = dbContext.USP_OR_GetGiftsInvitationWithoutReceipt(guestID, package).ToList();
+
+          if (lstShort.Count > 0)
+          {
+            // Contruimos la lista nueva a retornar!
+            lstResult = lstShort.Select(x => new GiftsReceiptDetail
+            {
+              geAdults = x.geAdults,
+              geAsPromotionOpera = (bool)x.geAsPromotionOpera,
+              geCancelElectronicPurse = (bool)x.geCancelElectronicPurse,
+              geCancelPVPPromo = (bool)x.geCancelPVPPromo,
+              geCharge = (decimal)x.geCharge,
+              geComments = x.geComments,
+              geConsecutiveElectronicPurse = string.IsNullOrEmpty(x.geConsecutiveElectronicPurse) ? 0 : Convert.ToInt32(x.geConsecutiveElectronicPurse),
+              gect = x.gect,
+              gecxc = x.geCxC,
+              geExtraAdults = x.geExtraAdults,
+              geFolios = x.geFolios,
+              gegi = x.gegi,
+              gegr = string.IsNullOrEmpty(x.gegr) ? 0 : Convert.ToInt32(x.gegr),
+              geInElectronicPurse = (bool)x.geInElectronicPurse,
+              geInOpera = (bool)x.geInOpera,
+              geInPVPPromo = (bool)x.geInPVPPromo,
+              geMinors = x.geMinors,
+              gePriceA = (decimal)x.gePriceA,
+              gePriceAdult = (decimal)x.gePriceAdult,
+              gePriceExtraAdult = (decimal)x.gePriceExtraAdult,
+              gePriceM = (decimal)x.gePriceM,
+              gePriceMinor = (decimal)x.gePriceMinor,
+              geQty = x.geQty,
+              geSale = (bool)x.geSale
+            }).ToList();
+          }
+        }
+      });
+
+      return lstResult;
     }
     #endregion
 
@@ -41,7 +82,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static InvitationGift GetInvitGift(int guestID, string giftID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.InvitationsGifts.Where(x => x.iggu == guestID && x.iggi == giftID).SingleOrDefault();
       }
@@ -59,7 +100,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<InvitationGift> GetInvitsGiftsByGuestID(int guestID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.InvitationsGifts.Where(x => x.iggu == guestID).ToList();
       }

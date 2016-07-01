@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     {
       List<ShowProgram> lstShowPrgrams = await Task.Run(() =>
        {
-         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
          {
            var query = from sk in dbContext.ShowPrograms
                        select sk;

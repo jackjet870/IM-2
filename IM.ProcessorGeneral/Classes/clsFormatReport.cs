@@ -1254,7 +1254,7 @@ new ExcelFormatTable() { Title = "Exit1", PropertyName = "saExit1", Order = 27 }
 new ExcelFormatTable() { Title = "Exit2", PropertyName = "saExit2", Order = 28 },
 new ExcelFormatTable() { Title = "VLO", PropertyName = "saVLO", Format = EnumFormatTypeExcel.Number, Order = 29 },
 new ExcelFormatTable() { Title = "Podium", PropertyName = "saPodium", Order = 30 },
-//new ExcelFormatTable() { Title = "GUID", PropertyName = "sagu" },
+new ExcelFormatTable() { Title = "GUID", PropertyName = "sagu", IsVisible = false },
 new ExcelFormatTable() { Title = "Comments", PropertyName = "saComments", Order = 31 },
 new ExcelFormatTable() { Title = "Total Proc", PropertyName = "TotalProcAmount", Format = EnumFormatTypeExcel.DecimalNumber, Order = 17, Function = DataFieldFunctions.Sum  }
       };

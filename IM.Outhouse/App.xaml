@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:IM.Outhouse">
          <!--StartupUri="Forms/Outhouse.xaml">-->
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/sDataGrid.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

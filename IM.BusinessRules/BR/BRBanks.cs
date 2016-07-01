@@ -27,7 +27,7 @@ namespace IM.BusinessRules.BR
       List<Bank> lstBanks = new List<Bank>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = (from bk in dbContext.Banks
                        select bk);
@@ -78,7 +78,7 @@ namespace IM.BusinessRules.BR
       int nRes = 0;      
       nRes=await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {          
           using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {

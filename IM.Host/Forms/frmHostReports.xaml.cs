@@ -8,6 +8,7 @@ using IM.Model;
 using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Base.Reports;
+using IM.Host.Classes;
 
 namespace IM.Host.Forms
 {
@@ -65,14 +66,70 @@ namespace IM.Host.Forms
           {
             filters.Add(Tuple.Create("Filter Range", daterange));
             filters.Add(Tuple.Create("Sales Room", App.User.SalesRoom.srID));
-            EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstPremanifestWithG, true, true), filters, "PremanifestWithGifts", dateFileName, clsFormatReports.RptPremanifestWithGifts());
+            EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstPremanifestWithG, true, true), filters, "Premanifest With Gifts", dateFileName, clsFormatReports.RptPremanifestWithGifts());
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");
           break;
         case "Up List End":
+          var lstUplistEnd = await BRReportsBySalesRoom.GetRptUplist(dtpDate.Value.Value.Date, salesRoom: App.User.SalesRoom.srID,uplistType: 1);
+          if (lstUplistEnd.Any())
+          {
+            filters.Add(Tuple.Create("Filter Range", daterange));
+            filters.Add(Tuple.Create("Sales Room", App.User.SalesRoom.srID));
+            var salesmans = lstUplistEnd.Select(c => c.Salesman).Distinct().ToList();
+
+            salesmans.ForEach(s =>
+            {
+              var first = lstUplistEnd.FirstOrDefault(u => u.Salesman == s);
+              var index = lstUplistEnd.IndexOf(first);
+              lstUplistEnd.Where(c => c.Salesman == s && lstUplistEnd.IndexOf(c) != index).ToList().ForEach(c =>
+                {
+                  c.AmountM = 0;
+                  c.AmountYtd = 0;
+                });
+            });
+
+            EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstUplistEnd, true, true), filters, "Up List End", dateFileName, clsFormatReport.RptUpList());
+          }
+          else
+            UIHelper.ShowMessage("There is no data for make a report");
           break;
         case "Up List Start":
+          var lstUplistStart = await BRReportsBySalesRoom.GetRptUplist(dtpDate.Value.Value, salesRoom: App.User.SalesRoom.srID);
+          if (lstUplistStart.Any())
+          {
+            filters.Add(Tuple.Create("Filter Range", daterange));
+            filters.Add(Tuple.Create("Sales Room", App.User.SalesRoom.srID));
+
+            var newUplist = new List<RptUpList>();
+            var times = new List<string> { "08:00", "10:00", "12:00" };
+            //Replicamos los registros por cada registro de la lista times
+            lstUplistStart.ForEach(c =>
+            {
+              times.ForEach(t =>
+              {
+                newUplist.Add(new RptUpList
+                {
+                  Salesman = c.Salesman,
+                  SalesmanN = c.SalesmanN,
+                  SalesmanPost = c.SalesmanPost,
+                  SalesmanPostN = c.SalesmanPostN,
+                  DayOffList = c.DayOffList,
+                  Language = c.Language,
+                  Location = c.Location,
+                  Time = c.Time,
+                  TimeN = t,
+                  AmountYtd = c.AmountYtd,
+                  AmountM = c.AmountM
+                });
+              });
+            });
+
+            EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(newUplist, true, true), filters, "Up List Start", dateFileName, clsFormatReport.RptUpList());
+          }
+          else
+            UIHelper.ShowMessage("There is no data for make a report");
           break;
       }
     }

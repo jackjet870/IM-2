@@ -27,6 +27,22 @@ namespace IM.Base.Helpers
     }
     #endregion
 
+    #region OnlyDecimals
+    /// <summary>
+    /// Valida que el texto sea sólo números de tipo decimal
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns>true es un númerico | false No es númerico </returns>
+    /// <history>
+    /// [vipacheco] created 30/Junio/2016 Created
+    /// </history>
+    public static bool OnlyDecimals(string text, TextBox sender)
+    {
+      Regex regex = new Regex("^[.][0-9]+$|^[0-9]*[.]{0,1}[0-9]*$");
+      return regex.IsMatch((sender as TextBox).Text.Insert((sender as TextBox).SelectionStart, text));
+    }
+    #endregion
+
     #region ValidateRequired
 
     /// <summary>

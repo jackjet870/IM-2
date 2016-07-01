@@ -26,7 +26,7 @@ namespace IM.BusinessRules.BR
       var result = new List<MarketShort>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_GetMarkets(Convert.ToByte(status)).ToList();
         }
@@ -52,7 +52,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from mkt in dbContext.Markets
                       select mkt;
@@ -94,7 +94,7 @@ namespace IM.BusinessRules.BR
     /// <returns></returns>
     public static int SaveMarket(Market market, List<Agency> lstAdd, bool blnUpdate)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
         {

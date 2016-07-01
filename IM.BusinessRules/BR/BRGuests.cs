@@ -26,7 +26,7 @@ namespace IM.BusinessRules.BR
     /// <param name="OnGroup">OnGroup</param>
     public static List<GuestArrival> GetGuestsArrivals(DateTime Date, string LeadSource, string Markets, int Available, int Contacted, int Invited, int OnGroup)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetArrivals_Timeout;
         return dbContext.USP_OR_GetArrivals(Date, LeadSource, Markets, Available, Contacted, Invited, OnGroup).ToList();
@@ -48,7 +48,7 @@ namespace IM.BusinessRules.BR
     /// <param name="OnGroup">OnGroup</param>
     public static List<GuestAvailable> GetGuestsAvailables(DateTime Date, string LeadSource, string Markets, int Contacted, int Invited, int OnGroup)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetAvailables_Timeout;
         return dbContext.USP_OR_GetAvailables(Date, LeadSource, Markets, Contacted, Invited, OnGroup).ToList();
@@ -70,7 +70,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetPremanifest_Timeout;
           return dbContext.USP_OR_GetPremanifest(Date, LeadSource, Markets, OnGroup).ToList();
@@ -93,7 +93,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GuestPremanifestHost> GetPremanifestHost(DateTime? currentDate, string salesRoomID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetPremanifestHost(currentDate, salesRoomID).ToList();
       }
@@ -114,7 +114,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GuestMailOut> GetGuestsMailOuts(string leadSourceID, DateTime guCheckInD, DateTime guCheckOutD, DateTime guBookD)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetGuestsMailOuts(leadSourceID, guCheckInD, guCheckOutD, guBookD).ToList();
       }
@@ -134,7 +134,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GuestPremanifestHost> GetGuestsPremanifestHost(DateTime Date, string salesRoom)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetPremanifestHost(Date, salesRoom).ToList();
       }
@@ -151,7 +151,7 @@ namespace IM.BusinessRules.BR
     /// <returns>Invitado</returns>
     public static Guest GetGuestById(int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.Guests.Include("GuestsAdditional").SingleOrDefault(g => g.guID == guestId);
       }
@@ -170,7 +170,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public async static Task<List<GuestStatusType>> GetGuestStatusType(int status)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         bool statusGuestStatus = Convert.ToBoolean(status);
         return await dbContext.GuestsStatusTypes.Where(gs => gs.gsA == statusGuestStatus).ToListAsync();
@@ -189,7 +189,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static Guest GetGuest(int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return (from gu in dbContext.Guests where gu.guID == guestId select gu).Single();
       }
@@ -207,7 +207,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static GuestShort GetGuestShort(int guestID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetGuestById(guestID).SingleOrDefault();
       }
@@ -228,7 +228,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void SaveGuestMovement(int guestId, EnumGuestsMovementsType guestMovementType, string changedBy, string computerName, string iPAddress)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_SaveGuestMovement(guestId, EnumToListHelper.GetEnumDescription(guestMovementType), changedBy, computerName, iPAddress);
       }
@@ -245,7 +245,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GuestMovements> GetGuestMovement(int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetGuestMovements(guestId).ToList();
       }
@@ -263,7 +263,7 @@ namespace IM.BusinessRules.BR
     public static int SaveGuest(Guest guest)
     {
       int nRes = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.Entry(guest).State = System.Data.Entity.EntityState.Modified;
         return nRes = dbContext.SaveChanges();
@@ -283,7 +283,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GuestCreditCard> GetGuestCreditCard(int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.GuestsCreditCards.Where(gc => gc.gdgu == guestId).ToList();
       }
@@ -313,7 +313,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void SaveGuestInvitation(Invitation invitation)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         try
         {
@@ -459,7 +459,7 @@ namespace IM.BusinessRules.BR
     public static List<GuestSearched> GetGuests(DateTime dateFrom, DateTime dateTo, string leadSource, string name = "ALL",
                                                 string roomNumber = "ALL", string reservation = "ALL", int guestID = 0)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetGuests_Timeout;
         return dbContext.USP_OR_GetGuests(dateFrom, dateTo, leadSource, name, roomNumber, reservation, guestID).ToList();
@@ -482,7 +482,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GuestByPR> GetGuestsByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, List<bool> filtros)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetGuestsByPR(dateFrom, dateTo, leadSources, PR, filtros[0], filtros[1], filtros[2], filtros[3], filtros[4], filtros[5], filtros[6]).ToList();
       }
@@ -500,7 +500,7 @@ namespace IM.BusinessRules.BR
     public static List<Guest> GetGuestsGroupsIntegrants(GuestsGroup guestsGroup)
     {
       List<Guest> lstGuests;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         lstGuests = (from gu in dbContext.Guests
                      from ggi in gu.GuestsGroups
@@ -534,7 +534,7 @@ namespace IM.BusinessRules.BR
     public static List<Guest> GetSearchGuestByLS(string leadsource, string salesRoom, string name, string room, string reservation, int guid, DateTime from, DateTime to, EnumProgram program, string PR)
     {
       var pro = EnumToListHelper.GetEnumDescription(program);
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var query = from gu in dbContext.Guests
                     join ls in dbContext.LeadSources
@@ -610,8 +610,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int SaveChangedOfGuest(Guest guest, short lsHoursDif, string changedBy)
     {
-      int respuesta = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
         {
@@ -623,14 +622,14 @@ namespace IM.BusinessRules.BR
             //Guardamos el Log del guest
             dbContext.USP_OR_SaveGuestLog(guest.guID, lsHoursDif, changedBy);
 
-            respuesta = dbContext.SaveChanges();
+            var respuesta = dbContext.SaveChanges();
             transaction.Commit();
             return respuesta;
           }
           catch
           {
             transaction.Rollback();
-            return respuesta = 0;
+            return 0;
           }
         }
       }
@@ -652,8 +651,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int SaveGuestContact(Guest guest, short lsHoursDif, string changedBy, EnumGuestsMovementsType guestMovementType, string computerName, string iPAddress)
     {
-      int respuesta = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
         {
@@ -668,14 +666,14 @@ namespace IM.BusinessRules.BR
             //guardamos el movimiento de contactacion del huesped
             dbContext.USP_OR_SaveGuestMovement(guest.guID, EnumToListHelper.GetEnumDescription(guestMovementType), changedBy, computerName, iPAddress);
 
-            respuesta = dbContext.SaveChanges();
+            var respuesta = dbContext.SaveChanges();
             transaction.Commit();
             return respuesta;
           }
           catch
           {
             transaction.Rollback();
-            return respuesta = 0;
+            return 0;
           }
         }
       }
@@ -686,7 +684,7 @@ namespace IM.BusinessRules.BR
 
     public static List<Guest> GetSearchGuest(string leadSource, string name, string room, string reservacion, DateTime dtFrom, DateTime dtTo, string lsProgram)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var guests = (from g in dbContext.Guests
                       join ls in dbContext.LeadSources on g.guls equals ls.lsID
@@ -735,7 +733,7 @@ namespace IM.BusinessRules.BR
     /// <returns></returns>
     public static ValidationData ChangedByExist(string changedBy, string password, string placesID, string placeType = "LS", string userType = "Changed By", string pr = null)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_ValidateChangedBy(changedBy, password, placeType, placesID, userType, pr).SingleOrDefault();
       }
@@ -753,7 +751,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void UpdateFieldguMealTicket(bool chkValue, int guestID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         Guest _guest = dbContext.Guests.Where(x => x.guID == guestID).FirstOrDefault<Guest>();
 
@@ -776,7 +774,7 @@ namespace IM.BusinessRules.BR
     /// </history>    
     public static List<GuestPremanifestOuthouse> GetGuestPremanifestOuthouse(bool bookinvit, DateTime Date, string LeadSource)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return (from G in dbContext.Guests
                 join Co in dbContext.Countries on G.guco equals Co.coID
@@ -830,7 +828,7 @@ namespace IM.BusinessRules.BR
     /// <param name="guID"></param>
     public static void DeleteGuest(int guID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_DeleteGuest(guID);
       }
@@ -850,7 +848,7 @@ namespace IM.BusinessRules.BR
     public async static Task<Guest> GetGuestValidForTransfer(string guHReservID, string gulsOriginal)
     {
       Guest guest = null;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         //Revisamos si ya existe en Guest
         guest = await dbContext.Guests.SingleOrDefaultAsync(g => g.guHReservID == guHReservID && g.gulsOriginal == gulsOriginal);
@@ -881,7 +879,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from _Guest in dbContext.Guests
                       join _Personnel in dbContext.Personnels on _Guest.guLiner1 equals _Personnel.peID into Joined
@@ -982,7 +980,7 @@ namespace IM.BusinessRules.BR
 
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from _Guests in dbContext.Guests
                       where _Guests.guInvit == true && (_Guests.guBookD >= dtpStart && _Guests.guBookD <= dtpEnd)

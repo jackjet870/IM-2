@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<Guest> GetGuestsAdditional(int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return (from g in dbContext.Guests
                 from a in g.GuestsAdditional

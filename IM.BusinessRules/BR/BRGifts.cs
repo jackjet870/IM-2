@@ -28,7 +28,7 @@ namespace IM.BusinessRules.BR
       List<GiftShort> result = new List<GiftShort>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_GetGifts(location, Convert.ToByte(Status)).ToList();
         }
@@ -47,14 +47,21 @@ namespace IM.BusinessRules.BR
     /// <returns> Lista de entidades GIFT</returns>
     /// <history>
     /// [vipacheco] 22/Abril/2016 Created
+    /// [vipacheco] 27/Junio/2016 Modified --> Se agrego sincronia y el order by de los resultados
     /// </history>
-    public static List<Gift> GetGifts(int status)
+    public async static Task<List<Gift>> GetGifts(int status)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<Gift> lstResult = new List<Gift>();
+      await Task.Run(() =>
       {
-        bool _status = Convert.ToBoolean(status);
-        return dbContext.Gifts.Where(x => x.giA == _status).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          bool _status = Convert.ToBoolean(status);
+          lstResult = dbContext.Gifts.Where(x => x.giA == _status).OrderBy(o => o.giN).ToList();
+        }
+      });
+
+      return lstResult;
     }
 
     #endregion GetGifts
@@ -76,7 +83,7 @@ namespace IM.BusinessRules.BR
       List<GiftCategory> result = new List<GiftCategory>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstGiftsCateg = dbContext.GiftsCategories;
           switch (Status)
@@ -111,7 +118,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<InvitationGift> GetGiftsByGuest(int guestID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.InvitationsGifts.Where(i => i.iggu == guestID).ToList();
       }
@@ -131,7 +138,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static Gift GetGiftId(string giftId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.Gifts.Where(g => g.giID == giftId).SingleOrDefault();
       }
@@ -143,7 +150,7 @@ namespace IM.BusinessRules.BR
 
     public static InvitationGift GetInventationGift(int guestId, string gift)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.InvitationsGifts.SingleOrDefault(g => g.iggu == guestId && g.iggi == gift);
       }
@@ -167,7 +174,7 @@ namespace IM.BusinessRules.BR
       var result = new List<GiftShort>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.Gifts.Where(x => giIDList.Contains(x.giID)).
           Select(x => new
@@ -201,14 +208,13 @@ namespace IM.BusinessRules.BR
     /// </history>
     /*public static List<Gift> GetGiftsInputList(List<GiftsReceiptDetailShort> _listGiftsID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.Gifts.Where(x => x.giA == true).Intersect(_listGiftsID.Select(s => s.gegi)) // && _listGiftsID.Select(s => s.gegi).Contains(x.giID)).ToList();
       }
     } */
 
     #endregion GetGiftsInputList
-
 
     #region GetGifts
     /// <summary>
@@ -225,7 +231,7 @@ namespace IM.BusinessRules.BR
       List<Gift> lstGift = new List<Gift>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from gi in dbContext.Gifts
                       select gi;
@@ -260,5 +266,26 @@ namespace IM.BusinessRules.BR
 
     } 
     #endregion
+
+    public static IEnumerable<object> GetGiftsWithPackages()
+    {
+      IEnumerable<object> lstResult;
+
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      {
+        var query = from a in dbContext.Gifts
+                    where a.giA == true
+                    select new {
+                                giID = a.giID,
+                                giN = a.giN,
+                                Visibility = a.giPack ? true : false,
+                                packs = dbContext.GiftsPackagesItems.Where(w => w.gpPack == a.giID).Select(s => dbContext.Gifts.Where(w => w.giID == s.gpgi).Select(ss => ss.giN).FirstOrDefault()).ToList()
+                                };
+
+        lstResult = query.ToList();
+      }
+
+      return lstResult;
+    } 
   }
 }

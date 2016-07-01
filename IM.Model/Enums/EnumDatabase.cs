@@ -9,7 +9,7 @@
   public enum EnumDatabase
   {
     IntelligentMarketing,
-    Assistance,
-    Clubs
+    Asistencia,
+    IntelligenceContracts
   }
 }

@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
       List<Area> lstAreas = new List<Area>();
       await Task.Run(() =>
       {        
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from areas in dbContext.Areas
                       select areas;

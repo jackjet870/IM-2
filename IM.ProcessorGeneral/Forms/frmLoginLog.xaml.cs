@@ -26,16 +26,23 @@ namespace IM.ProcessorGeneral.Forms
   /// </summary>
   public partial class frmLoginLog : Window
   {
+    #region Atributos
     private List<Location> _locations;
     private List<Personnel> _personnels;
     private List<string> _pcNames;
     CollectionViewSource lstLoginsLog;
     public frmReportQueue frmReportQ;
+    #endregion
+
+    #region Constructor
     public frmLoginLog()
     {
       InitializeComponent();
     }
+    #endregion
 
+    #region Métodos del Formulario
+    #region FrmLoginLog_OnContentRendered
     /// <summary>
     /// Inicializa los combobox.
     /// </summary>
@@ -48,7 +55,9 @@ namespace IM.ProcessorGeneral.Forms
       LoadPcNames();
       LoadLocations();
     }
+    #endregion
 
+    #region TxtPeId_OnLostFocus
     /// <summary>
     /// Asigna un valor al combobox Personnel seleccionando el usuario
     /// con el ID que se haya capturado en el textbox.
@@ -73,7 +82,9 @@ namespace IM.ProcessorGeneral.Forms
         cbPersonnel.SelectedIndex = -1;
       }
     }
+    #endregion
 
+    #region CbPersonnel_OnSelectionChanged
     /// <summary>
     /// Asigna el ID del personal a la caja de texto.
     /// </summary>
@@ -87,7 +98,9 @@ namespace IM.ProcessorGeneral.Forms
         txtPeId.Text = cbPersonnel.SelectedValue.ToString();
       }
     }
+    #endregion
 
+    #region BtnApplyFilter_OnClick
     /// <summary>
     /// Realiza la consulta y obtiene los datos segun los filtros ingresados en el formulario.
     /// </summary>
@@ -96,21 +109,28 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private async void BtnApplyFilter_OnClick(object sender, RoutedEventArgs e)
     {
-      lstLoginsLog = ((CollectionViewSource) (FindResource("lstRptLoginsLog")));
+      lstLoginsLog = ((CollectionViewSource)(FindResource("lstRptLoginsLog")));
       lstLoginsLog.Source = await BRGeneralReports.GetRptLoginsLog(dtmStart.SelectedDate.Value, dtmEnd.SelectedDate.Value,
         (cbLocation.Text != "") ? cbLocation.SelectedValue.ToString() : "ALL",
         (cbPcName.Text != "") ? cbPcName.SelectedValue.ToString() : "ALL",
         (cbPersonnel.Text != "") ? cbPersonnel.SelectedValue.ToString() : "ALL");
     }
+    #endregion
 
+    #region BtnPrin_OnClick
     /// <summary>
     /// Exporta los datos a un documento de Excel.
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+    /// <history>
+    /// [edgrodriguez] 28/Abr/2016 Created
+    /// </history>
     private void BtnPrint_OnClick(object sender, RoutedEventArgs e)
     {
       if (dgvLoginsLog.Items.Count <= 0) return;
+
+      string message = ValidateFields();
+
+      if (message != "") { UIHelper.ShowMessage(message); return; }
 
       DataTable dtRptLoginsLog = TableHelper.GetDataTableFromList(lstLoginsLog.View.Cast<RptLoginLog>().ToList(), true,
         false, true);
@@ -142,7 +162,11 @@ namespace IM.ProcessorGeneral.Forms
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
       }
     }
+    #endregion 
+    #endregion
 
+    #region Métodos Privados
+    #region LoadLocations
     /// <summary>
     /// Carga y configuracion de Locations.
     /// </summary>
@@ -151,11 +175,13 @@ namespace IM.ProcessorGeneral.Forms
     /// </history>
     private async void LoadLocations()
     {
-      _locations= await BRLocations.GetLocationsbyProgram("IH");
+      _locations = await BRLocations.GetLocationsbyProgram("IH");
       _locations.Insert(0, new Location { loID = "" });
       cbLocation.ItemsSource = _locations;
     }
+    #endregion
 
+    #region LoadPcNames
     /// <summary>
     /// Carga y configuracion de PCNames.
     /// </summary>
@@ -168,7 +194,9 @@ namespace IM.ProcessorGeneral.Forms
       _pcNames.Insert(0, "");
       cbPcName.ItemsSource = _pcNames;
     }
+    #endregion
 
+    #region LoadPersonnel
     /// <summary>
     /// Carga y configuracion de Personnels.
     /// </summary>
@@ -180,5 +208,26 @@ namespace IM.ProcessorGeneral.Forms
       _personnels = await BRPersonnel.GetPersonnelAccess();
       cbPersonnel.ItemsSource = _personnels;
     }
+    #endregion
+
+    #region ValidateFields
+
+    /// <summary>
+    /// Valida si los grid tienen al menos un elemento seleccionado.
+    /// </summary>
+    /// <returns>Message/Empty</returns>
+    /// <history>
+    /// [edgrodriguez] 30/Jun/2016 Created
+    /// </history>
+    private string ValidateFields()
+    {
+      if (dtmEnd.SelectedDate < dtmStart.SelectedDate)
+        return "End date must be greater than start date.";
+      else
+        return "";
+    }
+
+    #endregion ValidateFields 
+    #endregion
   }
 }

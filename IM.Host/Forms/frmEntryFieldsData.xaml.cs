@@ -1,6 +1,7 @@
 ﻿using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Host.Classes;
+using IM.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace IM.Host.Forms
     public string AuthorizedBy { get; internal set; }
     public bool cancel { get; internal set; }
 
-    List<SaleMan> _saleman = null;
+    List<SalesmenChanges> _saleman = null;
 
     /// <summary>
     /// Contructor que inicializa la variable del lisdo de los Sales man que se modificaron 
@@ -37,7 +38,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [jorcanche] created 16062016
     /// </history>
-    public frmEntryFieldsData(List<SaleMan> saleman)
+    public frmEntryFieldsData(List<SalesmenChanges> saleman)
     {
       InitializeComponent();
       _saleman = saleman;
@@ -55,7 +56,8 @@ namespace IM.Host.Forms
       var sales = new List<string>();
       foreach (var item in _saleman)
       {
-        sales.Add($" {item.role} {item.position} from '{item.oldSalesmanValue} - {item.oldSalesmanDisplay}' to '{item.newSalesmanValue} - {item.newSalesmanDisplay}' ");
+        //sales.Add($" {item.role} {item.position} from '{item.oldSalesmanValue} - {item.oldSalesmanDisplay}' to '{item.newSalesmanValue} - {item.newSalesmanDisplay}' ");
+        sales.Add($" {item.roN} {item.schPosition} from '{item.schOldSalesman} - {item.OldSalesmanN}' to '{item.schNewSalesman} - {item.NewSalesmanN}' ");
       }
       lviSaleMan.ItemsSource = sales;    
     }

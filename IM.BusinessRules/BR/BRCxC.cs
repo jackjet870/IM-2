@@ -29,7 +29,7 @@ namespace IM.BusinessRules.BR
     {
       List<CxCData> cxcData = new List<CxCData>();
       await Task.Run(() => {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           cxcData = dbContext.USP_OR_GetCxC(authorized, salesRoom, user, dateFrom.Value, dateTo.Value, leadSource, personnel).ToList();
         }
@@ -51,7 +51,7 @@ namespace IM.BusinessRules.BR
     {
       List<CxCPaymentShort> cxcData = new List<CxCPaymentShort>();
       await Task.Run(() => {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           cxcData = dbContext.USP_OR_GetCxCPayments(giftReceiptID.ToString()).ToList();
         }

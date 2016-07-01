@@ -1849,6 +1849,7 @@ namespace IM.Services.SisturService {
         
         /// <remarks/>
         [System.Xml.Serialization.SoapElementAttribute(DataType="date")]
+        [SoapIgnore]
         public System.DateTime book_ini {
             get {
                 return this.book_iniField;
@@ -1860,6 +1861,7 @@ namespace IM.Services.SisturService {
         
         /// <remarks/>
         [System.Xml.Serialization.SoapElementAttribute(DataType="date")]
+        [SoapIgnore]
         public System.DateTime book_fin {
             get {
                 return this.book_finField;
@@ -1871,6 +1873,7 @@ namespace IM.Services.SisturService {
         
         /// <remarks/>
         [System.Xml.Serialization.SoapElementAttribute(DataType="date")]
+        [SoapIgnore]
         public System.DateTime stay_ini {
             get {
                 return this.stay_iniField;
@@ -1882,6 +1885,7 @@ namespace IM.Services.SisturService {
         
         /// <remarks/>
         [System.Xml.Serialization.SoapElementAttribute(DataType="date")]
+        [SoapIgnore]
         public System.DateTime stay_fin {
             get {
                 return this.stay_finField;
@@ -2481,6 +2485,7 @@ namespace IM.Services.SisturService {
         
         /// <remarks/>
         [System.Xml.Serialization.SoapElementAttribute(DataType="date")]
+        [SoapIgnore] 
         public System.DateTime fechamov {
             get {
                 return this.fechamovField;
@@ -2492,6 +2497,7 @@ namespace IM.Services.SisturService {
 
         /// <remarks/>
         [System.Xml.Serialization.SoapElementAttribute(DataType ="date")]
+        [SoapIgnore]
         public System.DateTime horamov {
             get {
                 return this.horamovField;

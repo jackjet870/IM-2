@@ -47,14 +47,14 @@ namespace IM.ProcessorGeneral.Forms
     {
       InitializeComponent();
       PreviewKeyDown += Close_KeyPreviewESC;
-    } 
+    }
     #endregion
 
     #endregion Constructor
 
     #region Eventos del Formulario
 
-    #region chkAllSalesRoom_Checked
+    #region ChkAllSalesRoom_Checked
 
     /// <summary>
     /// Valida si el control Checkbox fue activado/Desactivado.
@@ -62,10 +62,11 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 04/Mar/2016 Created
     /// </history>
-    private void chkAllSalesRoom_Checked(object sender, RoutedEventArgs e)
+    private void ChkAllSalesRoom_Checked(object sender, RoutedEventArgs e)
     {
       if (chkAllSalesRoom.IsChecked != null && (bool)chkAllSalesRoom.IsChecked)
       {
+        grdSalesRoom.SelectedItem = null;
         grdSalesRoom.SelectAll();
         grdSalesRoom.IsEnabled = false;
       }
@@ -75,9 +76,9 @@ namespace IM.ProcessorGeneral.Forms
       }
     }
 
-    #endregion chkAllSalesRoom_Checked
+    #endregion ChkAllSalesRoom_Checked
 
-    #region chkCategories_Cheked
+    #region ChkAllCategories_Checked
 
     /// <summary>
     /// Obtiene el estatus del control checkbox de categoria.
@@ -85,10 +86,11 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 07/03/2016 Created
     /// </history>
-    private void chkCategories_Checked(object sender, RoutedEventArgs e)
+    private void ChkAllCategories_Checked(object sender, RoutedEventArgs e)
     {
       if (chkAllCategories.IsChecked != null && (bool)chkAllCategories.IsChecked)
       {
+        grdCategories.SelectedItem = null;
         grdCategories.SelectAll();
         grdCategories.IsEnabled = false;
       }
@@ -98,9 +100,9 @@ namespace IM.ProcessorGeneral.Forms
       }
     }
 
-    #endregion chkCategories_Cheked
+    #endregion ChkAllCategories_Checked
 
-    #region chkGifts_Checked
+    #region ChkAllGifts_Checked
 
     /// <summary>
     /// Obtiene el estatus del control checkbox de Gifts
@@ -108,10 +110,11 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 07/03/2016 Created
     /// </history>
-    private void chkGifts_Checked(object sender, RoutedEventArgs e)
+    private void ChkAllGifts_Checked(object sender, RoutedEventArgs e)
     {
       if (chkAllGifts.IsChecked != null && (bool)chkAllGifts.IsChecked)
       {
+        grdGifts.SelectedItem = null;
         grdGifts.SelectAll();
         grdGifts.IsEnabled = false;
       }
@@ -121,7 +124,7 @@ namespace IM.ProcessorGeneral.Forms
       }
     }
 
-    #endregion chkGifts_Checked
+    #endregion ChkAllGifts_Checked
 
     #region grdCategories_SelectionChanged
 
@@ -141,12 +144,12 @@ namespace IM.ProcessorGeneral.Forms
       else
         grdGifts.ItemsSource = _lstGifts;
 
-      chkGifts_Checked(null, null);
+      ChkAllGifts_Checked(null, null);
     }
 
     #endregion grdCategories_SelectionChanged
 
-    #region chkPrograms_Checked
+    #region ChkAllPrograms_Checked
 
     /// <summary>
     ///  Obtiene el estatus del control checkbox de programas.
@@ -154,10 +157,11 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 07/03/2016 Created
     /// </history>
-    private void chkPrograms_Checked(object sender, RoutedEventArgs e)
+    private void ChkAllPrograms_Checked(object sender, RoutedEventArgs e)
     {
       if (chkAllPrograms.IsChecked != null && (bool)chkAllPrograms.IsChecked)
       {
+        grdPrograms.SelectedItem = null;
         grdPrograms.SelectAll();
         grdPrograms.IsEnabled = false;
       }
@@ -167,9 +171,9 @@ namespace IM.ProcessorGeneral.Forms
       }
     }
 
-    #endregion chkPrograms_Checked
+    #endregion ChkAllPrograms_Checked
 
-    #region chkLeadSources_Checked
+    #region ChkAllLeadSources_Checked
 
     /// <summary>
     ///  Obtiene el estatus del control checkbox de lead sources.
@@ -177,10 +181,11 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 07/03/2016 Created
     /// </history>
-    private void chkLeadSources_Checked(object sender, RoutedEventArgs e)
+    private void ChkAllLeadSources_Checked(object sender, RoutedEventArgs e)
     {
       if (chkAllLeadSources.IsChecked != null && (bool)chkAllLeadSources.IsChecked)
       {
+        grdLeadSources.SelectedItem = null;
         grdLeadSources.SelectAll();
         grdLeadSources.IsEnabled = false;
       }
@@ -190,7 +195,7 @@ namespace IM.ProcessorGeneral.Forms
       }
     }
 
-    #endregion chkLeadSources_Checked
+    #endregion ChkAllLeadSources_Checked
 
     #region grdPrograms_SelectionChanged
 
@@ -212,7 +217,7 @@ namespace IM.ProcessorGeneral.Forms
         else
           grdLeadSources.ItemsSource = _lstLeadSources;
 
-        chkLeadSources_Checked(null, null);
+        ChkAllLeadSources_Checked(null, null);
       }
     }
 
@@ -260,7 +265,7 @@ namespace IM.ProcessorGeneral.Forms
 
     #endregion btnCancel_Click
 
-    #region chkAllRateTypes_Checked
+    #region ChkAllRatetypes_Checked
 
     /// <summary>
     ///  Obtiene el estatus del control checkbox de RateTypes.
@@ -268,10 +273,11 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 08/03/2016 Created
     /// </history>
-    private void chkAllRatetypes_Checked(object sender, RoutedEventArgs e)
+    private void ChkAllRatetypes_Checked(object sender, RoutedEventArgs e)
     {
       if (chkAllRatetypes.IsChecked != null && (bool)chkAllRatetypes.IsChecked)
       {
+        grdRatetypes.SelectedItem = null;
         grdRatetypes.SelectAll();
         grdRatetypes.IsEnabled = false;
       }
@@ -281,7 +287,7 @@ namespace IM.ProcessorGeneral.Forms
       }
     }
 
-    #endregion chkAllRateTypes_Checked
+    #endregion ChkAllRatetypes_Checked
 
     #region Close_KeyPreviewESC
 
@@ -346,7 +352,7 @@ namespace IM.ProcessorGeneral.Forms
 
     #endregion Window_Closing
 
-    #region chkAllWarehouses_Checked
+    #region ChkAllWarehouses_Checked
 
     /// <summary>
     ///  Obtiene el estatus del control checkbox de RateTypes.
@@ -354,10 +360,11 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 26/04/2016 Created
     /// </history>
-    private void chkAllWarehouses_Checked(object sender, RoutedEventArgs e)
+    private void ChkAllWarehouses_Checked(object sender, RoutedEventArgs e)
     {
       if (chkAllWarehouse.IsChecked != null && (bool)chkAllWarehouse.IsChecked)
       {
+        grdWarehouse.SelectedItem = null;
         grdWarehouse.SelectAll();
         grdWarehouse.IsEnabled = false;
       }
@@ -368,7 +375,7 @@ namespace IM.ProcessorGeneral.Forms
       }
     }
 
-    #endregion chkAllRateTypes_Checked
+    #endregion ChkAllWarehouses_Checked
 
     #region date_LostFocus
     /// <summary>
@@ -421,7 +428,7 @@ namespace IM.ProcessorGeneral.Forms
         enumSalesByMemberShipType, enumBasedOnBooking, enumExternalInvitation, blncbStatus, blnGiftReceiptType,
         blnGuestId, blnGiftSale);
 
-      loadCombos();
+      LoadCombos();
 
       #region Configuracion de Grids.
       LoadSalesRooms(blnOnlyOneRegister, blnSalesRoom, blnAllSalesRoom);
@@ -433,7 +440,7 @@ namespace IM.ProcessorGeneral.Forms
       LoadWarehouses(blnOnlyOneRegister, blnWarehouse, blnAllWarehouse);
       #endregion Configuracion de Grids.
 
-      LoadUserFilters(blnOneDate, blnOnlyOneRegister);
+      LoadUserFilters(blnOneDate);
     } 
     #endregion
 
@@ -588,7 +595,7 @@ namespace IM.ProcessorGeneral.Forms
     /// <history>
     /// [edgrodriguez] 03/Mar/2016 Created
     /// </history>
-    private void LoadUserFilters(bool onlyOneDate,bool onlyOneRegister)
+    private void LoadUserFilters(bool onlyOneDate)
     {
 
       cboDate.SelectedValue = (!onlyOneDate && cboDate.Items.Cast<KeyValuePair<EnumPredefinedDate, string>>().Any(c => c.Key == FrmProcGen.ClsFilter.SelectedDate)) ? FrmProcGen.ClsFilter.SelectedDate : EnumPredefinedDate.DatesSpecified;
@@ -640,14 +647,14 @@ namespace IM.ProcessorGeneral.Forms
 
     #endregion ValidateFields
 
-    #region loadCombos
+    #region LoadCombos
     /// <summary>
     /// Carga los combobox.
     /// </summary>
     /// <history>
     /// [edgrodriguez] 21/May/2016 Created
     /// </history>
-    private void loadCombos()
+    private void LoadCombos()
     {
 
       cboStatus.ItemsSource = EnumToListHelper.GetList<EnumStatus>();
@@ -682,9 +689,10 @@ namespace IM.ProcessorGeneral.Forms
 
       if (!FrmProcGen.ClsFilter.LstSalesRooms.Any()) return;
 
-      chkAllSalesRoom.IsChecked = (grdSalesRoom.SelectionMode == DataGridSelectionMode.Extended) ? FrmProcGen.ClsFilter.AllSalesRooms : false;
+      chkAllSalesRoom.IsChecked = (grdSalesRoom.SelectionMode == DataGridSelectionMode.Extended) && FrmProcGen.ClsFilter.AllSalesRooms;
       if (grdSalesRoom.ItemsSource != null && !FrmProcGen.ClsFilter.AllSalesRooms && !blnOnlyOneRegister)
       {
+        grdSalesRoom.SelectedItem = null;
         FrmProcGen.ClsFilter.LstSalesRooms.ForEach(c =>
         {
           grdSalesRoom.SelectedItems.Add(_lstSalesRoom.FirstOrDefault(s => s.srID == c));
@@ -719,9 +727,10 @@ namespace IM.ProcessorGeneral.Forms
 
       if (!FrmProcGen.ClsFilter.LstLeadSources.Any()) return;
 
-      chkAllLeadSources.IsChecked = (grdLeadSources.SelectionMode == DataGridSelectionMode.Extended) ? FrmProcGen.ClsFilter.AllLeadSources : false;
+      chkAllLeadSources.IsChecked = (grdLeadSources.SelectionMode == DataGridSelectionMode.Extended) && FrmProcGen.ClsFilter.AllLeadSources;
       if (grdLeadSources.ItemsSource != null && !FrmProcGen.ClsFilter.AllLeadSources && !blnOnlyOneRegister)
       {
+        grdLeadSources.SelectedItem = null;
         FrmProcGen.ClsFilter.LstLeadSources.ForEach(c =>
         {
           grdLeadSources.SelectedItems.Add(_lstLeadSources.FirstOrDefault(l => l.lsID == c));
@@ -756,9 +765,10 @@ namespace IM.ProcessorGeneral.Forms
 
       if (!FrmProcGen.ClsFilter.LstGiftsCate.Any()) return;
 
-      chkAllCategories.IsChecked = (grdCategories.SelectionMode == DataGridSelectionMode.Extended) ? FrmProcGen.ClsFilter.AllGiftsCate : false;
+      chkAllCategories.IsChecked = (grdCategories.SelectionMode == DataGridSelectionMode.Extended) && FrmProcGen.ClsFilter.AllGiftsCate;
       if (grdCategories.ItemsSource != null && !FrmProcGen.ClsFilter.AllGiftsCate && !blnOnlyOneRegister)
       {
+        grdCategories.SelectedItem = null;
         FrmProcGen.ClsFilter.LstGiftsCate.ForEach(c =>
         {
           grdCategories.SelectedItems.Add(_lstGiftsCate.FirstOrDefault(g => g.gcID == c));
@@ -793,9 +803,10 @@ namespace IM.ProcessorGeneral.Forms
 
       if (!FrmProcGen.ClsFilter.LstGifts.Any()) return;
 
-      chkAllGifts.IsChecked = (grdGifts.SelectionMode == DataGridSelectionMode.Extended) ? FrmProcGen.ClsFilter.AllGifts : false;
+      chkAllGifts.IsChecked = (grdGifts.SelectionMode == DataGridSelectionMode.Extended) && FrmProcGen.ClsFilter.AllGifts;
       if (grdGifts.ItemsSource != null && !FrmProcGen.ClsFilter.AllGifts && !blnOnlyOneRegister)
       {
+        grdGifts.SelectedItem = null;
         FrmProcGen.ClsFilter.LstGifts.ForEach(c =>
         {
           grdGifts.SelectedItems.Add(_lstGifts.FirstOrDefault(g => g.giID == c));
@@ -830,9 +841,10 @@ namespace IM.ProcessorGeneral.Forms
 
       if (!FrmProcGen.ClsFilter.LstRateTypes.Any()) return;
 
-      chkAllRatetypes.IsChecked = (grdRatetypes.SelectionMode == DataGridSelectionMode.Extended) ? FrmProcGen.ClsFilter.AllRateTypes : false;
+      chkAllRatetypes.IsChecked = (grdRatetypes.SelectionMode == DataGridSelectionMode.Extended) && FrmProcGen.ClsFilter.AllRateTypes;
       if (grdRatetypes.ItemsSource != null && !FrmProcGen.ClsFilter.AllRateTypes && !blnOnlyOneRegister)
       {
+        grdRatetypes.SelectedItem = null;
         FrmProcGen.ClsFilter.LstRateTypes.ForEach(c =>
         {
           grdRatetypes.SelectedItems.Add(_lstRateTypes.FirstOrDefault(r => r.raID == c));
@@ -867,9 +879,10 @@ namespace IM.ProcessorGeneral.Forms
 
       if (!FrmProcGen.ClsFilter.LstPrograms.Any()) return;
 
-      chkAllPrograms.IsChecked = (grdPrograms.SelectionMode == DataGridSelectionMode.Extended) ? FrmProcGen.ClsFilter.AllPrograms : false;
+      chkAllPrograms.IsChecked = (grdPrograms.SelectionMode == DataGridSelectionMode.Extended) && FrmProcGen.ClsFilter.AllPrograms;
       if (grdPrograms.ItemsSource != null && !FrmProcGen.ClsFilter.AllPrograms && !blnOnlyOneRegister)
       {
+        grdPrograms.SelectedItem = null;
         FrmProcGen.ClsFilter.LstPrograms.ForEach(c =>
         {
           grdPrograms.SelectedItems.Add(_lstPrograms.FirstOrDefault(p => p.pgID == c));
@@ -904,9 +917,10 @@ namespace IM.ProcessorGeneral.Forms
 
       if (!FrmProcGen.ClsFilter.LstWarehouses.Any()) return;
 
-      chkAllWarehouse.IsChecked = (grdWarehouse.SelectionMode == DataGridSelectionMode.Extended) ? FrmProcGen.ClsFilter.AllWarehouses : false;
+      chkAllWarehouse.IsChecked = (grdWarehouse.SelectionMode == DataGridSelectionMode.Extended) && FrmProcGen.ClsFilter.AllWarehouses;
       if (grdWarehouse.ItemsSource != null && !FrmProcGen.ClsFilter.AllWarehouses && !blnOnlyOneRegister)
       {
+        grdWarehouse.SelectedItem = null;
         FrmProcGen.ClsFilter.LstWarehouses.ForEach(c =>
         {
           grdWarehouse.SelectedItems.Add(_lstWarehouseByUsers.FirstOrDefault(w => w.whID == c));

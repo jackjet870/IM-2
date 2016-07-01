@@ -8,7 +8,6 @@
         mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
         Title="Inhouse" x:Name="House" Width="1100"  Height="700"  WindowState="Maximized" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
     <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <CollectionViewSource x:Key="GuestArrivalViewSource" d:DesignSource="{d:DesignInstance {x:Type classes:ObjGuestArrival}, CreateList=True}"/>
         <CollectionViewSource x:Key="GuestAvailableViewSource" d:DesignSource="{d:DesignInstance {x:Type classes:ObjGuestAvailable }, CreateList=True}"/>
         <CollectionViewSource x:Key="GuestPremanifestViewSource" d:DesignSource="{d:DesignInstance {x:Type classes:ObjGuestPremanifest}, CreateList=True}"/>
@@ -33,9 +32,7 @@
             <Setter Property="ForceCursor" Value="True"/>
         </Style>
 
-        <Style TargetType="DataGrid">
-            <Setter Property="Background" Value="#FF99C3D4"/>
-        </Style>
+       
 
         <Style TargetType="GroupBox">
             <Setter Property="Height" Value="auto"/>
@@ -268,7 +265,14 @@
                 <Button Grid.Column="2" Name="btnPremanifiest" Click="btnPremanifiest_Click" FontSize="15" Background="#FFCDF9CB" >Premanifest</Button>
             </Grid>
             <DockPanel x:Name="ccArrivals"  Grid.Row="1" Visibility="Visible" DataContext="{StaticResource GuestArrivalViewSource}">
-                <DataGrid x:Name="dgGuestArrival" CanUserDeleteRows="False"  SelectionUnit ="FullRow"  SelectionMode="Single"  CanUserAddRows="False"  AlternatingRowBackground="Gainsboro"  AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False"  SelectionChanged="dg_SelectionChanged" EnableRowVirtualization="True" EnableColumnVirtualization="True">
+                <DataGrid x:Name="dgGuestArrival" 
+                          CanUserDeleteRows="False"  
+                          SelectionUnit ="FullRow"  
+                          SelectionMode="Single"  
+                          CanUserAddRows="False"  
+                          AlternatingRowBackground="Gainsboro" 
+                          AlternationCount="2" ItemsSource="{Binding}" AutoGenerateColumns="False" 
+                          SelectionChanged="dg_SelectionChanged" EnableRowVirtualization="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="guStatusColumn"  Foreground="White" FontSize="14" FontWeight="Black" Binding="{Binding StatusColumn}" Width="auto" Header="St"  IsReadOnly="True" >
                             <DataGridTextColumn.ElementStyle>
@@ -629,10 +633,10 @@
                         <DataGridTextColumn x:Name="guPRFollowColumn2" IsReadOnly="True" Binding="{Binding guPRFollow}" Header="PR Follow" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guInvitColumn2" IsReadOnly="false" Binding="{Binding guInvit}" Header="Invit" Width="auto"/>
                         <DataGridTextColumn x:Name="guInvitDColumn" IsReadOnly="True" Binding="{Binding guInvitD, StringFormat=dd/MM/yyyy}" Header="Invit D" Width="auto"/>
-                        <DataGridTextColumn x:Name="guInvitTColumn" IsReadOnly="True" Binding="{Binding guInvitT}" Header="Invit T" Width="auto"/>
+                        <DataGridTextColumn x:Name="guInvitTColumn" IsReadOnly="True" Binding="{Binding guInvitT,StringFormat=t}" Header="Invit T" Width="auto"/>
                         <DataGridCheckBoxColumn x:Name="guReschColumn" IsReadOnly="False" Binding="{Binding guResch}" Header="Rsch" Width="auto"/>
-                        <DataGridTextColumn x:Name="guBookDColumn2" IsReadOnly="True" Header="Book D" Binding="{Binding guBookD}" Width="auto"/>
-                        <DataGridTextColumn x:Name="guBookTColumn" IsReadOnly="True" Header="Book T" Binding="{Binding guBookT}" Width="auto"/>
+                        <DataGridTextColumn x:Name="guBookDColumn2" IsReadOnly="True" Header="Book D" Binding="{Binding guBookD, StringFormat= dd/MM/yy}" Width="auto"/>
+                        <DataGridTextColumn x:Name="guBookTColumn" IsReadOnly="True" Header="Book T" Binding="{Binding guBookT, StringFormat=t}" Width="auto"/>
                         <DataGridTextColumn x:Name="guPRInvit1Column2" IsReadOnly="True" Binding="{Binding guPRInvit1}" Header="PR B" Width="auto"/>
                         <DataGridTextColumn x:Name="gunbColumn2" IsReadOnly="True" Binding="{Binding gunb}" Header="NB" Width="auto"/>
                         <DataGridTextColumn x:Name="guNoBookDColumn2" IsReadOnly="True" Header="NB D" Binding="{Binding guNoBookD, StringFormat=dd/MM/yyyy}" Width="auto"/>

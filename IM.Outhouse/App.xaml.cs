@@ -4,6 +4,8 @@ using IM.Model.Classes;
 using IM.Model.Enums;
 using IM.Outhouse.Forms;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 
@@ -42,7 +44,7 @@ namespace IM.Outhouse
     /// [jorcanche] 11/04/2016  created 
     /// [erosado] 01/06/2016  Modified. se agrego async
     /// </history>
-    protected async override void OnStartup(StartupEventArgs e)
+    protected override async void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
       frmSplash frmSplash = new frmSplash("Outhouse");
@@ -55,6 +57,7 @@ namespace IM.Outhouse
       frmSplash.ShowLogin(ref frmLogin);
       if (frmLogin.IsAuthenticated)
       {
+        EventManager.RegisterClassHandler(typeof(DataGrid), UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(dataGrid_MouseLeftButtonUp));
         User = frmLogin.UserData;
         frmOuthouse frmMain = new frmOuthouse();
         frmMain.ShowDialog();
@@ -83,6 +86,23 @@ namespace IM.Outhouse
     }
     #endregion
 
-
+    #region dataGrid_MouseLeftButtonUp
+    /// <summary>
+    /// Cambia el cmapo de busqueda del grid
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [jorcanche] created 21/06/2016
+    /// </history>
+    private void dataGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+      DataGrid dgr = sender as DataGrid;
+      if (dgr.CurrentColumn != null)
+      {
+        dgr.Resources["SearchField"] = dgr.CurrentColumn.SortMemberPath;
+      }
+    }
+    #endregion
   }
 }

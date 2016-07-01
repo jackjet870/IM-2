@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
     {
       List<PersonnelShort> lstPersonnelShort = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             var query = from pe in dbContext.Personnels
                         join pr in dbContext.FoliosInvitationsOuthousePR
@@ -66,7 +66,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from fo in dbContext.FoliosInvitationsOuthouse
                       group fo by new { fo.fiSerie } into se
@@ -91,7 +91,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from fip in dbContext.FoliosInvitationsOuthousePR
                       where fip.fippe == idPr
@@ -116,7 +116,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static bool ValidateFolioRange(string serie,int from, int to)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var folio = dbContext.FoliosInvitationsOuthouse.Where(f => f.fiFrom <= from && f.fiTo >= to && f.fiSerie==serie).FirstOrDefault();
         return (folio != null);
@@ -138,7 +138,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static ValidationFolioData ValidateFolio(string prID,string serie, int from, int to, bool blnIsCancel)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_ValidateFolioInvOutPR(prID, serie, from, to, blnIsCancel).FirstOrDefault();
       }
@@ -160,7 +160,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {

@@ -21,7 +21,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static GuestStatus GetGuestsStatus(int guestID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.GuestsStatus.Join(dbContext.GuestsStatusTypes, x => x.gtgs, y => y.gsID, (x, y) => x).SingleOrDefault();
       }
@@ -39,7 +39,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static GuestStatusValidateData GetStatusValidateInfo(int guestID, int receiptID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetGuestStatusValidateInfo(guestID, receiptID).SingleOrDefault();
       }

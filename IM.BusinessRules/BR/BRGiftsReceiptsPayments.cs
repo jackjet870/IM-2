@@ -22,7 +22,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GiftsReceiptPaymentShort> GetGiftsReceiptPaymentsShort(int receipt)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetGiftsReceiptPayments(receipt).ToList();
       }
@@ -40,7 +40,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GiftsReceiptPayment> GetGiftsReceiptPayments(int GiftsReceipt)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.GiftsReceiptsPayments.Where(x => x.gygr == GiftsReceipt).ToList();
       }
@@ -59,7 +59,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static GiftsReceiptPayment GetGiftReceiptPayment(int Receipt, int GiftPaymentID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.GiftsReceiptsPayments.Where(x => x.gygr == Receipt && x.gyID == GiftPaymentID).SingleOrDefault();
       }
@@ -81,7 +81,7 @@ namespace IM.BusinessRules.BR
     {
       List<AddGiftReceiptPayment> _AddGiftReceiptPayment = new List<AddGiftReceiptPayment>();
       await Task.Run(() => { 
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           _AddGiftReceiptPayment = dbContext.USP_OR_AddGiftReceiptPayment(GiftReceiptID, ReceivedBy, ReceivedDate, USDAmount, RateAmount, MXNAmount).ToList();
         }

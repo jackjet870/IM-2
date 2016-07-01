@@ -3,7 +3,6 @@ using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using SaleMan = IM.Host.Classes.SaleMan;
 using IM.BusinessRules.BR;
 using IM.Model;
 using System.Linq;
@@ -114,7 +113,7 @@ namespace IM.Host.Forms
        }
       );
       //Eliminamos todos los registros de la tabla SalesSalesmen que sean de este sale
-      BRSalesSalesmen.DeleteSalesmenbySale(_sale);
+      await BRSalesSalesmen.DeleteSalesSalesmenbySaleId(_sale);
       //Se guardan los SalesSaleman que se modificaron       
       foreach (var salessalesmen in lstModSalesSaleman)
       {

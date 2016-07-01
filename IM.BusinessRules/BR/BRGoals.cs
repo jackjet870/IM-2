@@ -22,7 +22,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from g in dbContext.Goals
                       select g;
@@ -58,7 +58,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int SaveGoal(Goal goal, List<Goal> lstAdd, List<Goal> lstUpdate, List<Goal> lstDel)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
         {

@@ -13,7 +13,7 @@
     <CollectionViewSource x:Key="dsLeadSource" d:DesignSource="{d:DesignInstance {x:Type Model:LeadSource}, CreateList=True}"/>
     <CollectionViewSource x:Key="dsGifts" d:DesignSource="{d:DesignInstance {x:Type Model:GiftShort}, CreateList=True}"/>
     <CollectionViewSource x:Key="dsGiftsReceiptDetailCancel" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceiptDetailCancel}, CreateList=True}"/>
-    <CollectionViewSource x:Key="dsGiftInvitationWithoutReceipt" d:DesignSource="{d:DesignInstance {x:Type Model:GiftInvitationWithoutReceipt}, CreateList=True}"/>
+    <CollectionViewSource x:Key="dsGiftsReceiptDetail" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceiptDetail}, CreateList=True}"/>
   </Window.Resources>
   <Grid>
     <GroupBox x:Name="grGuest" Header="Guest" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="102" Width="725">
@@ -33,9 +33,9 @@
         <TextBlock x:Name="lblReservation" HorizontalAlignment="Left" Margin="160,45,0,0" TextWrapping="Wrap" Text="Reservation" VerticalAlignment="Top"/>
         <TextBox x:Name="txtReservation" HorizontalAlignment="Left" Height="23" Margin="160,58,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="65" IsReadOnly="True"/>
         <TextBlock x:Name="lblArrival" HorizontalAlignment="Left" Margin="234,45,0,0" TextWrapping="Wrap" Text="Arrival" VerticalAlignment="Top"/>
-        <xctk:DateTimePicker x:Name="dtpArrival" HorizontalAlignment="Left" Margin="234,60,0,0" VerticalAlignment="Top" Width="151" Format="ShortDate" IsReadOnly="True"/>
+        <xctk:DateTimePicker x:Name="dtpArrival" HorizontalAlignment="Left" Margin="234,60,0,0" VerticalAlignment="Top" Width="151" Format="LongDate" IsReadOnly="True" TextAlignment="Left"/>
         <TextBlock x:Name="lblDeparture" HorizontalAlignment="Left" Margin="394,45,0,0" TextWrapping="Wrap" Text="Departure" VerticalAlignment="Top"/>
-        <xctk:DateTimePicker x:Name="dtpDeparture" HorizontalAlignment="Left" Margin="394,60,0,0" VerticalAlignment="Top" Width="151" Format="ShortDate" IsReadOnly="True"/>
+        <xctk:DateTimePicker x:Name="dtpDeparture" HorizontalAlignment="Left" Margin="394,60,0,0" VerticalAlignment="Top" Width="151" Format="LongDate" IsReadOnly="True" TextAlignment="Left"/>
         <TextBlock x:Name="lblQtyEPurses" HorizontalAlignment="Left" Margin="553,45,0,0" TextWrapping="Wrap" Text="Qty E-Purses" VerticalAlignment="Top"/>
         <TextBox x:Name="txtQtyEPurses" HorizontalAlignment="Left" Height="23" Margin="553,58,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="65" IsReadOnly="True"/>
         <TextBlock x:Name="lblAccountInvitation" HorizontalAlignment="Left" Margin="625,45,0,0" TextWrapping="Wrap" Text="Acoount" VerticalAlignment="Top"/>
@@ -71,7 +71,7 @@
                 </Style>
               </DataGridTemplateColumn.HeaderStyle>
             </DataGridTemplateColumn>
-            
+
             <DataGridTextColumn x:Name="geQtyColumn" Binding="{Binding geQty}" Header="Qty" Width="SizeToHeader" IsReadOnly="True">
               <DataGridTextColumn.HeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
@@ -167,8 +167,15 @@
         <TextBlock x:Name="lblgrNum" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Rcpt. Number" VerticalAlignment="Top"/>
         <TextBox x:Name="txtgrNum" HorizontalAlignment="Left" Height="23" Margin="82,7,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="120"/>
         <TextBlock x:Name="lblgrComments" HorizontalAlignment="Left" Margin="231,10,0,0" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtgrComments" HorizontalAlignment="Left" Height="50" Margin="290,7,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="412" VerticalScrollBarVisibility="Visible"/>
-        <DataGrid x:Name="grdExchange" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsGiftInvitationWithoutReceipt}}" Margin="10,62,10,10" RowDetailsVisibilityMode="VisibleWhenSelected" >
+        <TextBox x:Name="txtgrComments" HorizontalAlignment="Left" Height="40" Margin="290,7,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="412" VerticalScrollBarVisibility="Visible"/>
+        <DataGrid x:Name="grdExchange" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsGiftsReceiptDetail}}" Margin="10,78,10,10" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True">
+          <DataGrid.Resources>
+            <Style TargetType="{x:Type DataGridRow}">
+              <EventSetter Event="MouseDoubleClick" Handler="grdGiftsReceiptDetail_DoubleClick"/>
+              <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
+            </Style>
+          </DataGrid.Resources>
+          
           <DataGrid.Columns>
             <DataGridTextColumn x:Name="geQtyColumn1" Binding="{Binding geQty}" Header="Qty" Width="SizeToHeader">
               <DataGridTextColumn.HeaderStyle>
@@ -251,7 +258,17 @@
             </DataGridCheckBoxColumn>
             <DataGridTextColumn x:Name="geCommentsColumn1" Binding="{Binding geComments}" Header="Comments" Width="SizeToHeader"/>
           </DataGrid.Columns>
+
+          <DataGrid.RowDetailsTemplate>
+            <DataTemplate>
+              <Grid>
+                
+              </Grid>
+            </DataTemplate>
+          </DataGrid.RowDetailsTemplate>
         </DataGrid>
+        <Button x:Name="btnAddGift" Content="Add" HorizontalAlignment="Left" Margin="582,0,0,115"  Width="50"  Height="20" VerticalAlignment="Bottom" Click="btnAddGift_Click"/>
+        <Button x:Name="btnRemoveGift" Content="Remove" HorizontalAlignment="Left" Width="50" Margin="650,0,0,115" Height="20" VerticalAlignment="Bottom" Click="btnRemoveGift_Click"/>
 
       </Grid>
     </GroupBox>
@@ -273,7 +290,6 @@
         <TextBox x:Name="txtgrcxcAdj" HorizontalAlignment="Left" Height="23" Margin="468,60,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True"/>
         <TextBlock x:Name="lblTotalCxCCaption" HorizontalAlignment="Left" Margin="387,90,0,0" TextWrapping="Wrap" Text="Total CxC" VerticalAlignment="Top"/>
         <TextBox x:Name="txtTotalCxC" HorizontalAlignment="Left" Height="23" Margin="468,87,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True"/>
-
       </Grid>
     </GroupBox>
     <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="619,510,0,0" VerticalAlignment="Top" Width="75" Click="btnSave_Click"/>

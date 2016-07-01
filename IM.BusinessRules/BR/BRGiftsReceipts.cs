@@ -29,14 +29,28 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 06/04/2016 Created
     /// </history>
-    public static List<GiftsReceiptsShort> GetGiftsReceipts(int? guestID = 0, string salesRoom = "ALL", int receipt = 0, string folio = "ALL",
+    public async static Task<List<GiftsReceipt>> GetGiftsReceipts(int? guestID = 0, string salesRoom = "ALL", int receipt = 0, string folio = "ALL",
                                                             DateTime? dateFrom = null, DateTime? dateTo = null, string name = "ALL",
                                                             string reservation = "ALL")
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      List<GiftsReceipt> lstResult = new List<GiftsReceipt>();
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetGiftsReceipts(guestID, salesRoom, receipt, folio, dateFrom, dateTo, name, reservation).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          // Obtenemos los GiftsReceiptShort del Stored correspondiente con los campos correspondientes
+          List<GiftsReceiptsShort> lstShort = new List<GiftsReceiptsShort>();
+          lstShort = dbContext.USP_OR_GetGiftsReceipts(guestID, salesRoom, receipt, folio, dateFrom, dateTo, name, reservation).ToList();
+
+          // Recorremos la lista resultado y contruimos la lista a enviar. 
+          if (lstShort.Count > 0)
+          {
+            lstShort.ForEach(x => lstResult.Add(dbContext.GiftsReceipts.Where(w => w.grID == x.grID).Single()));
+          }
+        }
+      });
+
+      return lstResult;
     }
     #endregion
 
@@ -51,9 +65,9 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static GiftsReceipt GetGiftReceipt(int GiftReceiptID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
-        return  dbContext.GiftsReceipts.Where(x => x.grID == GiftReceiptID).SingleOrDefault();
+        return dbContext.GiftsReceipts.Where(x => x.grID == GiftReceiptID).SingleOrDefault();
       }
     }
     #endregion
@@ -75,7 +89,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static ValidationData ValidateGiftsReceipt(string changedBy, string password, int guest, string location, string salesroom, string giftshost, string personnel)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_ValidateGiftsReceipt(changedBy, password, guest, location, salesroom, giftshost, personnel).SingleOrDefault();
       }
@@ -93,7 +107,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int SaveGiftReceipt(GiftsReceipt giftReceipt)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         // Guardamos el Gift Receipt Nuevo
         dbContext.Entry(giftReceipt).State = System.Data.Entity.EntityState.Added;
@@ -116,7 +130,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<GetGiftsReceiptsAdditional> GetGiftsReceiptsAdditional(int GuestID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_IM_GetGiftsReceiptsAdditional(guestID: GuestID).ToList();
       }
@@ -134,7 +148,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void CancelGiftsReceipt(int ReceiptID, DateTime DateServer)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         dbContext.USP_OR_CancelGiftsReceipt(ReceiptID, DateServer);
       }
@@ -152,7 +166,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static decimal? CalculateTotalsGiftsInvitation(int GuestID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_CalculateTotalsGiftsInvitation(GuestID).SingleOrDefault();
       }
@@ -172,7 +186,7 @@ namespace IM.BusinessRules.BR
     {
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.USP_OR_UpdateGiftsReceiptDetailPromotionPVPCancel(ReceiptID, Gift);
         }
@@ -184,7 +198,7 @@ namespace IM.BusinessRules.BR
     {
       int nRes = await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Entry(giftsReceipt).State = System.Data.Entity.EntityState.Modified;
           return dbContext.SaveChanges();

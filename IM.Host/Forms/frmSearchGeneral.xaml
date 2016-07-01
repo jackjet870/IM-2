@@ -166,33 +166,24 @@
     <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
       <Button x:Name="btnShow" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,0" Width="100" Background="Aquamarine" Height="32" Click="btnShow_Click">
         <StackPanel Orientation="Horizontal">
-          <Viewbox Stretch="Uniform" Width="20">
-            <Image Source="pack://application:,,,/IM.Base;component/Images/CloseSalesRoom.png"/>
-          </Viewbox>
+
           <TextBlock Text="Show" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
         </StackPanel>
       </Button>
       <Button x:Name="btnMealTicket" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,0" Width="100" Background="Aquamarine" Height="32" Click="btnMealTicket_Click">
         <StackPanel Orientation="Horizontal">
-          <Viewbox Stretch="Uniform" Width="20">
-            <Image Source="pack://application:,,,/IM.Base;component/Images/CloseSalesRoom.png"/>
-          </Viewbox>
+  
           <TextBlock Text="Meal Ticket" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
         </StackPanel>
       </Button>
       <Button x:Name="btnReceipt" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,0,0" Width="100" Background="Aquamarine" Height="32" Click="btnReceipt_Click">
         <StackPanel Orientation="Horizontal">
-          <Viewbox Stretch="Uniform" Width="20">
-            <Image Source="pack://application:,,,/IM.Base;component/Images/CloseSalesRoom.png"/>
-          </Viewbox>
+
           <TextBlock Text="Receipt" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
         </StackPanel>
       </Button>
       <Button x:Name="btnSale" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0,5,0" Width="100" Background="Aquamarine" Height="32" Click="btnSale_Click">
         <StackPanel Orientation="Horizontal">
-          <Viewbox Stretch="Uniform" Width="20">
-            <Image Source="pack://application:,,,/IM.Base;component/Images/CloseSalesRoom.png"/>
-          </Viewbox>
           <TextBlock Text="Sale" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
         </StackPanel>
       </Button>

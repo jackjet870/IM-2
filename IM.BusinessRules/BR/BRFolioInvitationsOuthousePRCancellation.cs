@@ -23,7 +23,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return dbContext.FoliosInvitationsOuthousePRCancellation.Where(fic => fic.ficpe == idPr).OrderBy(fic => fic.ficID).ToList();
         }

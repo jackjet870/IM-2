@@ -25,7 +25,7 @@ namespace IM.BusinessRules.BR
       List<ScoreRuleConcept> lstScoreRuleConcept = new List<ScoreRuleConcept>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from sp in dbContext.ScoreRulesConcepts
                       select sp;

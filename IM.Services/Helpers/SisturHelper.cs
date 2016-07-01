@@ -135,7 +135,7 @@ namespace IM.Services.Helpers
 
         // si ocurrio un error
         if (Response.hasErrors)
-          UIHelper.ShowMessage(Response.message, MessageBoxImage.Error, "ActualizaEstatusPromoForzadaFolio");
+          UIHelper.ShowMessage(Response.message + "\r\n"+ Response.errorInfo, MessageBoxImage.Error, "ActualizaEstatusPromoForzadaFolio");
       }
       catch (Exception ex)
       {
@@ -174,7 +174,9 @@ namespace IM.Services.Helpers
         return false;
 
       // si no tiene detalle
-      if (Details.Length == -1)
+      if (Details == null)
+        blnAllow = true;
+      else if ((Details.Length == 0))
         blnAllow = true;
       // si tiene detalle
       else
@@ -183,7 +185,10 @@ namespace IM.Services.Helpers
 
         // si ocurrio un error al consultar el detalle del estado de cuenta
         if (Error != "")
+        {
           return false;
+        }
+          
 
         //  calculamos el monto usado del detalle
         foreach (OstdtpromosResponse Detail in Details)
@@ -294,7 +299,7 @@ namespace IM.Services.Helpers
     /// <history>
     /// [vipacheco] 27/Mayo/2016 Created
     /// </history>
-    public static void SavePromotionsSistur(int ReceiptID, string ChangeBy, string UserID)
+    public static void SavePromotionsSistur(int ReceiptID, string UserID, string ChangeBy = "")
     {
       List<GiftType> aGifts = new List<GiftType>();
       bool Error = false;

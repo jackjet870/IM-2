@@ -21,7 +21,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<TeamSalesmen> GetTeamsSalesMen(int nStatus = -1, TeamSalesmen teamSalesMen = null)
     {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from ts in dbContext.TeamsSalesmen
                       select ts;

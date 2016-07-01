@@ -129,30 +129,23 @@
         <!--#endregion-->
 
         <!--#region Grid Desposits-->
-        <GroupBox x:Name="grbDeposits" Header="Deposits" HorizontalAlignment="Stretch" Margin="0,5,0,5" VerticalAlignment="Stretch" Grid.Row="1">
-          <DataGrid x:Name="grdDeposits" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsDeposits}}" Margin="5,5,5,5" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True">
+        <GroupBox x:Name="grbDeposits" Header="Deposits" HorizontalAlignment="Stretch" Margin="0,6,0,4" VerticalAlignment="Stretch" Grid.Row="1">
+          <DataGrid x:Name="grdDeposits" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsDeposits}}" Margin="5,5,5,5" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False">
             <DataGrid.Columns>
-              <DataGridTextColumn x:Name="drIDColumn1" Binding="{Binding drID}" Header="ID" Width="Auto"/>
-              <DataGridTextColumn x:Name="drFolioColumn1" Binding="{Binding drFolio}" Header="Folio" Width="SizeToHeader"/>
-              <DataGridCheckBoxColumn x:Name="bdRefundColumn" Binding="{Binding bdRefund}" Header="Refund" Width="SizeToHeader"/>
-              <DataGridTextColumn x:Name="srNColumn" Binding="{Binding srN}" Header="Sales Room" Width="Auto"/>
-              <DataGridTextColumn x:Name="drDColumn" Binding="{Binding drD, StringFormat=d}" Header="Refund Date" Width="Auto"/>
-              <DataGridTextColumn x:Name="bdAmountColumn" Binding="{Binding bdAmount}" Header="Amount" Width="SizeToHeader"/>
-              <DataGridTextColumn x:Name="lsNColumn" Binding="{Binding lsN}" Header="Lead Source" Width="Auto"/>
-              <DataGridTextColumn x:Name="guIDColumn1" Binding="{Binding guID}" Header="GUID" Width="Auto"/>
-              <DataGridTextColumn x:Name="guestNameColumn" Binding="{Binding GuestName}" Header="Guest Name" Width="Auto"/>
-              <DataGridTextColumn x:Name="guHReservIDColumn" Binding="{Binding guHReservID}" Header="Reservation" Width="Auto"/>
-              <DataGridTextColumn x:Name="guOutInvitNumColumn" Binding="{Binding guOutInvitNum}" Header="Out Invit." Width="SizeToHeader"/>
-              <DataGridTextColumn x:Name="peIDColumn" Binding="{Binding peID}" Header="PR" Width="SizeToHeader"/>
-              <DataGridTextColumn x:Name="peNColumn" Binding="{Binding peN}" Header="PR NAme" Width="SizeToHeader"/>
-              <DataGridTextColumn x:Name="bdIDColumn" Binding="{Binding bdID}" Header="Payment ID" Width="SizeToHeader"/>
-              <!--<DataGridTemplateColumn x:Name="drDColumn" Header="dr D" Width="SizeToHeader">
-                <DataGridTemplateColumn.CellTemplate>
-                  <DataTemplate>
-                    <DatePicker SelectedDate="{Binding drD, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-                  </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-              </DataGridTemplateColumn>-->
+              <DataGridTextColumn x:Name="drIDColumn1" Binding="{Binding drID}" Header="ID" Width="Auto" IsReadOnly="True"/>
+              <DataGridTextColumn x:Name="drFolioColumn1" Binding="{Binding drFolio}" Header="Folio" Width="SizeToHeader" IsReadOnly="True"/>
+              <DataGridCheckBoxColumn x:Name="bdRefundColumn" Binding="{Binding bdRefund}" Header="Refund" Width="SizeToHeader" IsReadOnly="True"/>
+              <DataGridTextColumn x:Name="srNColumn" Binding="{Binding srN}" Header="Sales Room" Width="Auto" IsReadOnly="True"/>
+              <DataGridTextColumn x:Name="drDColumn" Binding="{Binding drD, StringFormat=d}" Header="Refund Date" Width="Auto" IsReadOnly="True"/>
+              <DataGridTextColumn x:Name="bdAmountColumn" Binding="{Binding bdAmount}" Header="Amount" Width="SizeToHeader" IsReadOnly="True"/>
+              <DataGridTextColumn x:Name="lsNColumn" Binding="{Binding lsN}" Header="Lead Source" Width="Auto" IsReadOnly="True"/>
+              <DataGridTextColumn x:Name="guIDColumn1" Binding="{Binding guID}" Header="GUID" Width="Auto" IsReadOnly="True"/>
+              <DataGridTextColumn x:Name="guestNameColumn" Binding="{Binding GuestName}" Header="Guest Name" Width="Auto" IsReadOnly="True"/>
+              <DataGridTextColumn x:Name="guHReservIDColumn" Binding="{Binding guHReservID}" Header="Reservation" Width="Auto" IsReadOnly="True"/>
+              <DataGridTextColumn x:Name="guOutInvitNumColumn" Binding="{Binding guOutInvitNum}" Header="Out Invit." Width="SizeToHeader" IsReadOnly="True"/>
+              <DataGridTextColumn x:Name="peIDColumn" Binding="{Binding peID}" Header="PR" Width="SizeToHeader" IsReadOnly="True"/>
+              <DataGridTextColumn x:Name="peNColumn" Binding="{Binding peN}" Header="PR NAme" Width="SizeToHeader" IsReadOnly="True"/>
+              <DataGridTextColumn x:Name="bdIDColumn" Binding="{Binding bdID}" Header="Payment ID" Width="SizeToHeader" IsReadOnly="True"/>
             </DataGrid.Columns>
           </DataGrid>
 
@@ -160,7 +153,7 @@
 
         <!--#region Botones-->
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
-          <Button x:Name="btnNew" Content="New" Margin="10,0" Width="50" Click="btnNew_Click"/>
+          <Button x:Name="btnNew" Content="New" Margin="10,0" Width="50" Click="btnNew_Click" Height="20" VerticalAlignment="Top"/>
           <Button x:Name="btnSave" Content="Save" Margin="10,0" Width="50"/>
           <Button x:Name="btnPrint" Content="Print" Margin="10,0" Width="50"/>
           <Button x:Name="btnCancel" Content="Cancel" Margin="10,0" Width="50" Click="btnCancel_Click"/>

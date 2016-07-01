@@ -24,7 +24,7 @@ namespace IM.BusinessRules.BR
       List<UnavailableMotive> lstUnavailMot = new List<UnavailableMotive>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from um in dbContext.UnavailableMotives
                       select um;
@@ -68,7 +68,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static UnavailableMotive GetUnavailableMotive(int id, bool nStatus)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.UnavailableMotives.Where(u => u.umID == id && u.umA == nStatus).FirstOrDefault();
       }
@@ -93,7 +93,7 @@ namespace IM.BusinessRules.BR
     {
       int nRes = await Task.Run(() => {
 
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           using (var transacction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {

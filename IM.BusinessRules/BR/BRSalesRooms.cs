@@ -21,7 +21,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return dbContext.USP_OR_GetSalesRooms(Convert.ToByte(status)).ToList();
         }
@@ -51,7 +51,7 @@ namespace IM.BusinessRules.BR
       List<SalesRoomByUser> result = new List<SalesRoomByUser>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_GetSalesRoomsByUser(user, regions).ToList();
         }
@@ -75,7 +75,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static SalesRoomCloseDates GetSalesRoom(string salesRoom)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetSalesRoom(salesRoom).FirstOrDefault();
       }
@@ -93,7 +93,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static void SetCloseSalesRoom(EnumSalesRoomType salesRoomType, string salesRoom, DateTime? dateClose)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         switch (salesRoomType)
         {
@@ -133,7 +133,7 @@ namespace IM.BusinessRules.BR
       List<SalesRoom> lstSalesRooms = new List<SalesRoom>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = from sr in dbContext.SalesRooms
                       select sr;
@@ -198,7 +198,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static int SaveSalesRoom(SalesRoom salesRoom, bool blnUpdate)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         int nRes = 0;
         #region Update
@@ -269,7 +269,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static SalesRoom GetSalesRoomByID(string srID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.SalesRooms.Where(x => x.srID == srID).FirstOrDefault();
 
@@ -297,7 +297,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static DateTime? GetCloseSalesRoom(EnumSalesRoomType salesRoomType, string salesRoom)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         SalesRoom _salesRoom;
         switch (salesRoomType)
@@ -336,7 +336,7 @@ namespace IM.BusinessRules.BR
     public static async Task<List<SalesRoomShort>> GetSalesRoomsByIDs(List<string>lstSalesRoomID)
     {
       List<SalesRoomShort> lstSalesRoom = await Task.Run(() => {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return dbContext.SalesRooms.AsEnumerable().Where(sr => lstSalesRoomID.Contains(sr.srID)).Select(sr=>new SalesRoomShort { srID=sr.srID,srN=sr.srN}).ToList();
         }
@@ -356,7 +356,7 @@ namespace IM.BusinessRules.BR
     public static async Task<List<object>> GetSalesRoombyTeamSalesMen()
     {
       List<object> lstObject = await Task.Run(() => {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var query = (from sr in dbContext.SalesRooms
                        from ts in dbContext.TeamsSalesmen.Distinct()

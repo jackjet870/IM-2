@@ -21,7 +21,7 @@ namespace IM.BusinessRules.BR
     /// </history>
     public static List<NoticeShort> GetNotices(string leadSource, Nullable<System.DateTime> date)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.USP_OR_GetNotices(leadSource, date).ToList();        
       }

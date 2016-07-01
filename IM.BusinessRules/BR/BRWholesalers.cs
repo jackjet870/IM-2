@@ -22,7 +22,7 @@ namespace IM.BusinessRules.BR
     {
       List<WholesalerData> lstWholesalers = await Task.Run(() =>
         {
-          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+          using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
           {
             var query = from ws in dbContext.USP_OR_GetWholesalers()
                         select ws;
@@ -65,7 +65,7 @@ namespace IM.BusinessRules.BR
     {
       int nRes = await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           if (dbContext.Wholesalers.Where(ws => ws.wsApplication == wholesaler.wsApplication && ws.wscl == wholesaler.wscl && ws.wsCompany == wholesaler.wsCompany).FirstOrDefault() != null)
           {

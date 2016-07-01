@@ -33,7 +33,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return dbContext.USP_OR_RptBookingsBySalesRoomProgramTime(dtmStart, salesRooms).ToList();
         }
@@ -55,7 +55,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return dbContext.USP_OR_RptBookingsBySalesRoomProgramLeadSourceTime(dtmStart, salesRooms).ToList();
         }
@@ -82,7 +82,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return dbContext.USP_OR_RptCxCExcel(dtmStart, dtmEnd, salesRooms).ToList();
         }
@@ -105,7 +105,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return dbContext.USP_OR_RptCxC(dtmStart, dtmEnd, salesRooms).ToList();
         }
@@ -128,7 +128,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstDeposits = dbContext.USP_OR_RptCxCDeposits(dtmStart, dtmEnd, salesRooms).ToList();
           var lstCurrencies = (from cxcDep in lstDeposits
@@ -156,7 +156,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los recibos de regalo.
           var lstGiftReceipt = dbContext.USP_OR_RptCxCGifts(dtmStart, dtmEnd, salesRooms).ToList();
@@ -185,7 +185,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los recibos de regalo.
           return dbContext.USP_OR_RptCxCNotAuthorized(dtmStart, dtmEnd, salesRooms).ToList();
@@ -209,7 +209,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los recibos de regalo.
           return dbContext.USP_OR_RptCxCPayments(dtmStart, dtmEnd, salesRooms).ToList();
@@ -237,7 +237,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los recibos de regalo.
           var giftReceipts = dbContext.USP_OR_RptDeposits(dtmStart, dtmEnd, salesRooms).ToList();
@@ -271,7 +271,7 @@ namespace IM.BusinessRules.BR
       return await Task.Run(() =>
       {
         List<string> salesRoom = salesRooms.Split(',').ToList();
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los recibos de regalo.
           var giftReceipts = dbContext.USP_OR_RptDepositsBurned(dtmStart, dtmEnd, salesRooms).ToList();
@@ -321,7 +321,7 @@ namespace IM.BusinessRules.BR
       return await Task.Run(() =>
       {
         List<string> salesRoom = salesRooms.Split(',').ToList();
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los recibos de regalo.
           var giftReceipts = dbContext.USP_OR_RptDepositsBurnedByResort(dtmStart, dtmEnd, salesRooms).ToList();
@@ -394,7 +394,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los recibos de regalo.
           var giftReceipts = dbContext.USP_OR_RptDepositsPaid(dtmStart, dtmEnd, leadSources, salesRooms).ToList();
@@ -432,7 +432,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los recibos de regalo.
           var lstGiftManifestCancel= dbContext.USP_OR_RptGiftsManifestCancel(dtmStart, dtmEnd, salesRooms)
@@ -462,7 +462,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los recibos de regalo.
           var lstDailyGiftSimple = dbContext.USP_IM_RptDailyGiftSimple(dtmStart, salesRooms).ToList();
@@ -486,7 +486,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los recibos de regalo.
           var lstGiftByCat = dbContext.USP_OR_RptGiftsByCategory(dtmStart, dtmStart.Value.AddDays(6).Date, salesRooms).ToList();
@@ -511,7 +511,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los recibos de regalo.
           var lstGiftByCatP = dbContext.USP_OR_RptGiftsByCategoryProgram(dtmStart, dtmStart.Value.AddDays(6).Date, salesRooms).ToList();
@@ -539,7 +539,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los certificados de regalo.
           var dailyGiftCertificates = dbContext.USP_OR_RptGiftsCertificates(dtmStart, dtmEnd, salesRooms, categories, gifts).ToList();
@@ -575,7 +575,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los certificados de regalo.
           var lstGiftsManifest = dbContext.USP_OR_RptGiftsManifest(dtmStart, dtmEnd, salesRooms, categories, gifts, Convert.ToByte(status))
@@ -614,7 +614,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los certificados de regalo.
           var lstGiftsManifest = dbContext.USP_OR_RptGiftsReceipts(dtmStart, dtmEnd, salesRooms, categories, gifts, Convert.ToByte(status), Convert.ToByte(giftReceiptType), guestId)
@@ -648,7 +648,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los certificados de regalo.
           var lstGiftRcptPay = dbContext.USP_OR_RptGiftsReceiptsPayments(dtmStart, dtmEnd, salesRooms).ToList();
@@ -689,7 +689,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los recibos de venta.
           var query = dbContext.USP_OR_RptGiftsSale(dtmStart, dtmEnd, salesRooms, categories, gifts, Convert.ToByte(sale))
@@ -725,7 +725,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los certificados de regalo.
           var lstGiftSist = dbContext.USP_OR_RptGiftsUsedBySistur(dtmStart, dtmEnd, salesRooms, programs, leadsources).ToList();
@@ -751,7 +751,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           //Obtenemos los recibos de regalo.
           var lstweeklyGiftSimple = dbContext.USP_IM_RptWeeklyGiftsItemsSimple(dtmStart, dtmStart.Value.AddDays(6), salesRooms).ToList();
@@ -779,7 +779,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstGuestCeco = dbContext.USP_OR_RptGuestCeco(dtmStart, dtmEnd, salesRooms).ToList();
           return lstGuestCeco;
@@ -802,7 +802,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstGuestNoBuyers = dbContext.USP_OR_RptGuestsNoBuyers(dtmStart, dtmEnd, salesRooms).ToList();
           return lstGuestNoBuyers;
@@ -825,7 +825,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstInOut = dbContext.USP_OR_RptInOut(dtmStart, dtmEnd, salesRooms).ToList();
           return lstInOut;
@@ -851,7 +851,7 @@ namespace IM.BusinessRules.BR
     { 
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptManifestRange_TimeOut;
           var lstManifestRange = dbContext.USP_IM_RptManifestRange(dtmStart, dtmEnd, salesRooms, EnumToListHelper.GetEnumDescription(program)).ToList();
@@ -880,7 +880,7 @@ namespace IM.BusinessRules.BR
       return await Task.Run(() =>
       {
         var lstManifestRange = new List<IEnumerable>();
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptManifestRange_TimeOut;
            lstManifestRange = dbContext.USP_IM_RptManifestByLSRange(dtmStart, dtmEnd, salesRooms)
@@ -948,7 +948,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstInOut = dbContext.USP_OR_RptGuestsNoShows(dtmStart, dtmEnd, salesRooms).ToList();
           return lstInOut;
@@ -979,7 +979,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstMealTickets = dbContext.USP_OR_RptMealTickets(dtmStart, dtmEnd, salesRooms, cancelled, rateTypes).ToList();
           return lstMealTickets;
@@ -1005,7 +1005,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstMealTicketsCost = dbContext.USP_OR_RptMealTicketsCost(dtmStart, dtmEnd, salesRooms, rateTypes).ToList();
           var mealTicketTypes = (from mtt in dbContext.MealTicketTypes
@@ -1040,7 +1040,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstMemberships = dbContext.USP_OR_RptMemberships(dtmStart, dtmEnd, salesRooms, leadSources).ToList();
 
@@ -1065,7 +1065,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstMemberships = dbContext.USP_OR_RptMembershipsByAgencyMarket(dtmStart, dtmEnd, salesRooms).ToList();
           return lstMemberships;
@@ -1090,7 +1090,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstMemberships = dbContext.USP_OR_RptMembershipsByHost(dtmStart, dtmEnd, salesRooms, leadSources).ToList();
           return lstMemberships;
@@ -1120,7 +1120,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.UPS_OR_RptProductionBySalesRoom_Timeout;
           var lstProductionBySr = dbContext.USP_OR_RptProductionBySalesRoom(dtmStart, dtmEnd, salesRooms, considerQuinellas, basedOnArrivals).ToList();
@@ -1147,7 +1147,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.UPS_OR_RptProductionBySalesRoomMarket_Timeout;
           var lstProductionBySrm = dbContext.USP_OR_RptProductionBySalesRoomMarket(dtmStart, dtmEnd, salesRooms, considerQuinellas, basedOnArrivals).ToList();
@@ -1174,7 +1174,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.UPS_OR_RptProductionBySalesRoomMarket_Timeout;
           var lstProductionBySrmSm = dbContext.USP_OR_RptProductionBySalesRoomProgramMarketSubmarket(dtmStart, dtmEnd, salesRooms, considerQuinellas, basedOnArrivals).ToList();
@@ -1201,7 +1201,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.UPS_OR_RptProductionBySalesRoomMarket_Timeout;
           var lstProductionByShowP = dbContext.USP_OR_RptProductionByShowProgram(dtmStart, dtmEnd, salesRooms, considerQuinellas, basedOnArrivals).ToList();
@@ -1228,7 +1228,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.UPS_OR_RptProductionBySalesRoomMarket_Timeout;
           var lstProductionByShowPp = dbContext.USP_OR_RptProductionByShowProgramProgram(dtmStart, dtmEnd, salesRooms, considerQuinellas, basedOnArrivals).ToList();
@@ -1257,7 +1257,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstCloserStatistics = dbContext.USP_IM_RptCloserStatistics(dtmStart, dtmEnd, salesRooms).ToList();
           return lstCloserStatistics;
@@ -1281,7 +1281,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstLinerStatistics = dbContext.USP_IM_RptLinerStatistics(dtmStart, dtmEnd, salesRooms).ToList();
           return lstLinerStatistics;
@@ -1305,7 +1305,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstRptWeeklyMonthly = dbContext.USP_IM_RptWeeklyMonthlyHostess(dtmStart, dtmStart.Value.AddDays(6), salesRooms)
           .MultipleResults()
@@ -1336,7 +1336,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstTaxisIn = dbContext.USP_OR_RptTaxisIn(dtmStart, dtmEnd, salesRooms).ToList();
           return lstTaxisIn;
@@ -1359,7 +1359,7 @@ namespace IM.BusinessRules.BR
     {
       return await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           var lstTaxisOut = dbContext.USP_OR_RptTaxisOut(dtmStart, dtmEnd, salesRooms).ToList();
           return lstTaxisOut;
@@ -1391,7 +1391,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptStatisticsByLocation>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           return dbContext.USP_OR_RptStatsByLocation(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
         }
@@ -1417,7 +1417,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptStatisticsBySalesRoomLocation>();
       await Task.Run(() =>
       {
-        using (var dbcontext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbcontext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbcontext.USP_OR_RptStatsBySalesRoomLocation(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
         }
@@ -1444,7 +1444,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptStatisticsByLocationMonthly>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_RptStatsByLocationMonthly(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
         }
@@ -1470,7 +1470,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptSalesByLocationMonthly>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_RptSalesByLocationMonthly(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
         }
@@ -1495,7 +1495,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptDailySalesHeader>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_OR_RptDailySalesHeader(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
         }
@@ -1521,7 +1521,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptDailySalesDetail>();
       await Task.Run(() =>
      {
-       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
        {
          dbContext.Database.CommandTimeout = Settings.Default.USP_OR_RptDailySalesDetail_Timeout;
          result = dbContext.USP_OR_RptDailySalesDetail(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
@@ -1548,7 +1548,7 @@ namespace IM.BusinessRules.BR
       var result = new List<RptConcentrateDailySales>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptConcentrateDailySales_TimeOut;
           result = dbContext.USP_IM_RptConcentrateDailySales(dtStart, dtEnd, string.Join(",", salesRoom)).ToList();
@@ -1580,15 +1580,40 @@ namespace IM.BusinessRules.BR
       var result = new List<RptManifest>();
       await Task.Run(() =>
       {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           result = dbContext.USP_IM_RptManifest(dtStart, dtEnd, string.Join(",", salesRoom), salesmanID, salesmanRoles, segments, programs, bySegmentsCategories, byLocationCategories).ToList();
         }
       });
       return result;
-    } 
+    }
     #endregion
 
+    #endregion
+
+
+    #region GetRptUplist
+    /// <summary>
+    /// Devuelve un listado de RptUpList
+    /// </summary>
+    /// <param name="dtStart"> Fecha Inicial</param>
+    /// <param name="salesRoom"> Salas de Venta</param>
+    /// <param name="uplistType"> Tipo de Uplist
+    /// 0. Up List Start
+    /// 1. Up List End</param>
+    /// <history>
+    /// [edgrodriguez] 29/06/2016
+    /// </history>
+    public async static Task<List<RptUpList>> GetRptUplist(DateTime dtStart, string salesRoom = "ALL", int uplistType = 0 )
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.USP_IM_RptUpList(dtStart, salesRoom, uplistType).ToList();
+        }
+      });
+    }
     #endregion
   }
 }
