@@ -130,6 +130,7 @@
     <Compile Include="Classes\ProductionByAgencyOuthouseData.cs" />
     <Compile Include="Classes\ProductionByAgencySalesRoomOuthouseData.cs" />
     <Compile Include="Classes\ScoreByPRData.cs" />
+    <Compile Include="Classes\TourTimes.cs" />
     <Compile Include="Classes\UserData.cs" />
     <Compile Include="Classes\UserNormalLogin.cs" />
     <Compile Include="Club.cs">
@@ -253,6 +254,7 @@
     <Compile Include="Enums\EnumStatus.cs" />
     <Compile Include="Enums\EnumTeamType.cs" />
     <Compile Include="Enums\EnumInvitationType.cs" />
+    <Compile Include="Enums\EnumTourTimesSchema.cs" />
     <Compile Include="Enums\EnumWindow.cs" />
     <Compile Include="ExchangeRate.cs">
       <DependentUpon>IMModel.tt</DependentUpon>

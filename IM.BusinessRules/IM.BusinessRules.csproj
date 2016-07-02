@@ -163,6 +163,7 @@
     <Compile Include="BR\BRTeamsGuestServices.cs" />
     <Compile Include="BR\BRTeamsLog.cs" />
     <Compile Include="BR\BRTeamTypes.cs" />
+    <Compile Include="BR\BRTourTimes.cs" />
     <Compile Include="BR\BRTourTimesAvailables.cs" />
     <Compile Include="BR\BRSalesRoomsLogs.cs" />
     <Compile Include="BR\BRSales.cs" />

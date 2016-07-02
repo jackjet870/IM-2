@@ -50,6 +50,27 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    #region GetTourTimesSchema
+    /// <summary>
+    ///   Obtiene el esquema de horarios de tour
+    /// </summary>
+    /// <history>
+    ///   [vku] 23/Jun/2016 Created
+    /// </history>
+    public async static Task<int> GetTourTimesSchema()
+    {
+      int tt = 0;
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          tt = dbContext.Configurations.Single().ocTourTimesSchema;
+        }
+      });
+      return tt;
+    }
+    #endregion
+
     #region SaveCloseDate
     /// <summary>
     ///   Guarda la fecha de cierre de invitaciones

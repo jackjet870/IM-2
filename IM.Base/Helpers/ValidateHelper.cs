@@ -245,5 +245,20 @@ namespace IM.Base.Helpers
       }
     }
     #endregion
+
+    #region IsValidTimeFormat
+    /// <summary>
+    ///   Valida formato de hora 12hr or 24hr
+    /// </summary>
+    /// <param name="text"></param>
+    /// <history>
+    ///   [vku] 27/Jun/2016 Created
+    /// </history>
+    public static bool IsValidTimeFormat(string text)
+    {
+      Regex regex = new Regex("^(?:(?:0?[0-9]|1[0-2]):[0-5][0-9] [ap]m|(?:[01][0-9]|2[0-3]):[0-5][0-9])$", RegexOptions.IgnoreCase);
+      return regex.IsMatch(text);
+    }
+    #endregion
   }
 }
