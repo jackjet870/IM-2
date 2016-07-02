@@ -8,6 +8,7 @@ using IM.Base.Helpers;
 using System;
 using IM.Model.Helpers;
 using System.Windows.Controls;
+using System.Linq;
 
 namespace IM.Administrator.Forms
 {
@@ -18,16 +19,16 @@ namespace IM.Administrator.Forms
   /// <history>
   ///   [vku] 14/Jun/2016 Created
   /// </history>
-  public partial class frmConfigurationDetail : Window
+  public partial class frmConfigurationDetails : Window
   {
     #region atributos
     public Configuration oldConfigurations = new Configuration();//Objeto con valores iniciales
     public Configuration configurations = new Configuration();//Objeto para llenar el formulario
-    public EnumMode mode;
+    public EnumMode mode = EnumMode.edit;
     private bool _isClosing = false;
     #endregion
 
-    public frmConfigurationDetail()
+    public frmConfigurationDetails()
     {
       InitializeComponent();
     }
@@ -45,11 +46,12 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      ObjectHelper.CopyProperties(configurations, oldConfigurations);
+      LoadConfigurations();
       LoadWeekDays();
       LoadPersonelAdmin();
       LoadTourTimesSchema();
       LoadPersonelBoss();
+      
       if (mode != EnumMode.preview)
       {
         btnAccept.Visibility = Visibility.Visible;
@@ -62,7 +64,6 @@ namespace IM.Administrator.Forms
         txtocVATRate.IsEnabled = true;
         UIHelper.SetUpControls(configurations, this);
       }   
-      DataContext = configurations;
       skpStatus.Visibility = Visibility.Collapsed;
     }
     #endregion
@@ -148,8 +149,7 @@ namespace IM.Administrator.Forms
         btnAccept.Focus();
         if (ObjectHelper.IsEquals(configurations, oldConfigurations) && !Validation.GetHasError(txtocWelcomeCopies))
         {
-          _isClosing = true;
-          Close();
+          return;
         }
         else
         {
@@ -170,9 +170,7 @@ namespace IM.Administrator.Forms
             UIHelper.ShowMessageResult("Configurations", nRes);
             if (nRes > 0)
             {
-              _isClosing = true;
-              DialogResult = true;
-              Close();
+              ObjectHelper.CopyProperties(oldConfigurations, configurations);
             }
           }
           else
@@ -192,6 +190,29 @@ namespace IM.Administrator.Forms
     #endregion
 
     #region Metodos
+
+    #region LoadConfigurations
+    /// <summary>
+    ///  Carga el unico registro de configuration
+    /// </summary>
+    /// <history>
+    ///   [vku] 13/Jun/2016 Created
+    /// </history>
+    protected async void LoadConfigurations()
+    {
+      try
+      {  
+        List<Configuration> lstConfigurations = await BRConfiguration.GetConfigurations();
+        configurations = (Configuration)lstConfigurations.FirstOrDefault();
+        ObjectHelper.CopyProperties(oldConfigurations, configurations);
+        DataContext = configurations;
+      }
+      catch (Exception ex)
+      {
+        UIHelper.ShowMessage(ex.Message, MessageBoxImage.Error, "Configuration");
+      }
+    }
+    #endregion
 
     #region LoadWeekDays
     /// <summary>

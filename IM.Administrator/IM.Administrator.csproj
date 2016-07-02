@@ -92,11 +92,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Forms\frmConfiguration.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Forms\frmConfigurationDetail.xaml">
+    <Page Include="Forms\frmConfigurationDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -588,11 +584,8 @@
     <Compile Include="Forms\frmComputers.xaml.cs">
       <DependentUpon>frmComputers.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmConfiguration.xaml.cs">
-      <DependentUpon>frmConfiguration.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmConfigurationDetail.xaml.cs">
-      <DependentUpon>frmConfigurationDetail.xaml</DependentUpon>
+    <Compile Include="Forms\frmConfigurationDetails.xaml.cs">
+      <DependentUpon>frmConfigurationDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmCountries.xaml.cs">
       <DependentUpon>frmCountries.xaml</DependentUpon>
@@ -1012,6 +1005,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\frmTourTimes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\frmTourTimeSchemaDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1115,6 +1112,9 @@
     </Compile>
     <Compile Include="Forms\frmTeamsLogDetail.xaml.cs">
       <DependentUpon>frmTeamsLogDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmTourTimes.xaml.cs">
+      <DependentUpon>frmTourTimes.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmTourTimeSchemaDetail.xaml.cs">
       <DependentUpon>frmTourTimeSchemaDetail.xaml</DependentUpon>

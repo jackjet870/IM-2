@@ -167,7 +167,7 @@ namespace IM.Administrator.Forms
       if (App.User.HasRole(EnumRole.Administrator))//Si se tiene permiso como administrador
       {
         lstMenu.Add(new { nombre = "Computers", img = "pack://application:,,,/IM.Base;component/Images/computer.png", form = "frmComputers" });
-        lstMenu.Add(new { nombre = "Configuration", img = "pack://application:,,,/IM.Base;component/Images/Configuration.ico", form = "frmConfiguration" });
+        lstMenu.Add(new { nombre = "Configuration", img = "pack://application:,,,/IM.Base;component/Images/Configuration.ico", form = "frmConfigurationDetails" });
         lstMenu.Add(new { nombre = "Desks", img = "pack://application:,,,/IM.Base;component/Images/desk.png", form = "frmDesks" });
         lstMenu.Add(new { nombre = "Close Invitation", img = "pack://application:,,,/IM.Base;component/Images/DateTime_Forbidden.png", form = "frmCloseInvitation" });
         lstMenu.Add(new { nombre = "Meal Ticket Types", img = "pack://application:,,,/IM.Base;component/Images/Cofee.png", form = "frmMealTicketsTypes" });
@@ -205,6 +205,7 @@ namespace IM.Administrator.Forms
       if(App.User.HasPermission(EnumPermission.TourTimes,EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add(new { nombre = "Tour Times Schemas", img = "pack://application:,,,/IM.Base;component/Images/IconDate.png", form = "frmTourTimesSchemas" });
+        lstMenu.Add(new { nombre = "Tour Times", img = "pack://application:,,,/IM.Base;component/Images/IconDate.png", form = "frmTourTimes" });
       }
       #endregion
 
