@@ -459,6 +459,7 @@
         <AssociationConnector Association="IMModel.FK_Sales_Personnel_FrontToMiddle1" />
         <AssociationConnector Association="IMModel.FK_Sales_Personnel_FrontToMiddle2" />
         <AssociationConnector Association="IMModel.FK_Sales_Personnel_Liner3" />
+        <AssociationConnector Association="IMModel.FK_SalesRooms_Zones" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

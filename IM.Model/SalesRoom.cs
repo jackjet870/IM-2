@@ -52,6 +52,7 @@ namespace IM.Model
         public System.DateTime srSalesCloseD { get; set; }
         public string srPropertyOpera { get; set; }
         public bool srUseSistur { get; set; }
+        public string srzn { get; set; }
     
         public virtual Area Area { internal get; set; }
         public virtual Currency Currency { internal get; set; }
@@ -77,5 +78,6 @@ namespace IM.Model
         public virtual ICollection<TourTimeBySalesRoomWeekDay> TourTimesBySalesRoomWeekDay { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Bank> Banks { internal get; set; }
+        public virtual Zone Zone { get; set; }
     }
 }

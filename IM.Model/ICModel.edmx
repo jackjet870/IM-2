@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="HotelModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <Function Name="USP_CL_DeleteMemberSalesman" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="analista_h">
+          <Parameter Name="CLMEMOPC_ID" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="USP_CL_ExistsSalesman" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="analista_h">
+          <Parameter Name="ZONA" Type="varchar" Mode="In" />
+          <Parameter Name="CODE" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_CL_GetMemberSalesmen" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="analista_h">
+          <Parameter Name="Application" Type="varchar" Mode="In" />
+          <Parameter Name="Job" Type="varchar" Mode="In" />
+          <Parameter Name="Code" Type="varchar" Mode="In" />
+          <Parameter Name="Roles" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_CL_SaveMemberSalesman" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="analista_h">
+          <Parameter Name="RECNUM" Type="decimal" Mode="In" />
+          <Parameter Name="CLMEMOPC_ID" Type="decimal" Mode="In" />
+          <Parameter Name="APPLICATION" Type="varchar" Mode="In" />
+          <Parameter Name="CLAOPC_ID" Type="varchar" Mode="In" />
+          <Parameter Name="OPC1" Type="varchar" Mode="In" />
+          <Parameter Name="OPC_PCT" Type="decimal" Mode="In" />
+          <Parameter Name="OPC_PCT2" Type="decimal" Mode="In" />
+          <Parameter Name="OPC_CPT3" Type="decimal" Mode="In" />
+          <Parameter Name="OPC_PCT4" Type="decimal" Mode="In" />
+          <Parameter Name="STATUS" Type="varchar" Mode="In" />
+          <Parameter Name="ZONA" Type="varchar" Mode="In" />
+          <Parameter Name="OPC" Type="varchar" Mode="In" />
+          <Parameter Name="User" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="HotelModelStoreContainer" />
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HotelModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ICEntities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="USP_CL_DeleteMemberSalesman">
+            <Parameter Name="CLMEMOPC_ID" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="USP_CL_ExistsSalesman" ReturnType="Collection(Int32)">
+            <Parameter Name="ZONA" Mode="In" Type="String" />
+            <Parameter Name="CODE" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_CL_GetMemberSalesmen" ReturnType="Collection(HotelModel.MemberSalesmen)">
+            <Parameter Name="Application" Mode="In" Type="String" />
+            <Parameter Name="Job" Mode="In" Type="String" />
+            <Parameter Name="Code" Mode="In" Type="String" />
+            <Parameter Name="Roles" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_CL_SaveMemberSalesman" ReturnType="Collection(HotelModel.MemberSalesmen)">
+            <Parameter Name="RECNUM" Mode="In" Type="Decimal" />
+            <Parameter Name="CLMEMOPC_ID" Mode="In" Type="Decimal" />
+            <Parameter Name="APPLICATION" Mode="In" Type="String" />
+            <Parameter Name="CLAOPC_ID" Mode="In" Type="String" />
+            <Parameter Name="OPC1" Mode="In" Type="String" />
+            <Parameter Name="OPC_PCT" Mode="In" Type="Decimal" />
+            <Parameter Name="OPC_PCT2" Mode="In" Type="Decimal" />
+            <Parameter Name="OPC_CPT3" Mode="In" Type="Decimal" />
+            <Parameter Name="OPC_PCT4" Mode="In" Type="Decimal" />
+            <Parameter Name="STATUS" Mode="In" Type="String" />
+            <Parameter Name="ZONA" Mode="In" Type="String" />
+            <Parameter Name="OPC" Mode="In" Type="String" />
+            <Parameter Name="User" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="MemberSalesmen">
+          <Property Type="Decimal" Name="RECNUM" Nullable="false" Precision="8" Scale="0" />
+          <Property Type="Decimal" Name="CLMEMOPC_ID" Nullable="false" Precision="6" Scale="0" />
+          <Property Type="String" Name="APPLICATION" Nullable="false" MaxLength="12" />
+          <Property Type="String" Name="CLAOPC_ID" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="OPC1" Nullable="false" MaxLength="6" />
+          <Property Type="Decimal" Name="OPC_PCT" Nullable="false" Precision="8" Scale="2" />
+          <Property Type="Decimal" Name="OPC_PCT2" Nullable="false" Precision="8" Scale="2" />
+          <Property Type="Decimal" Name="OPC_CPT3" Nullable="false" Precision="8" Scale="2" />
+          <Property Type="Decimal" Name="OPC_PCT4" Nullable="false" Precision="8" Scale="2" />
+          <Property Type="String" Name="STATUS" Nullable="false" MaxLength="1" />
+          <Property Type="DateTime" Name="FECHA_ALTA" Nullable="false" Precision="23" />
+          <Property Type="String" Name="HORA_ALTA" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="CVEALTA" Nullable="false" MaxLength="15" />
+          <Property Type="DateTime" Name="FECHA_MODIF" Nullable="false" Precision="23" />
+          <Property Type="String" Name="HORA_MODIF" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="CVEMODIF" Nullable="false" MaxLength="15" />
+          <Property Type="DateTime" Name="FECHA_BAJA" Nullable="false" Precision="23" />
+          <Property Type="String" Name="HORA_BAJA" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="CVEBAJA" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="ZONA" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="OPC" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="NAME" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="TITLE" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Role" Nullable="true" MaxLength="10" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HotelModelStoreContainer" CdmEntityContainer="ICEntities" >
+          <FunctionImportMapping FunctionImportName="USP_CL_DeleteMemberSalesman" FunctionName="HotelModel.Store.USP_CL_DeleteMemberSalesman" />
+          <FunctionImportMapping FunctionImportName="USP_CL_ExistsSalesman" FunctionName="HotelModel.Store.USP_CL_ExistsSalesman" />
+          <FunctionImportMapping FunctionImportName="USP_CL_GetMemberSalesmen" FunctionName="HotelModel.Store.USP_CL_GetMemberSalesmen">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HotelModel.MemberSalesmen">
+                <ScalarProperty Name="RECNUM" ColumnName="RECNUM" />
+                <ScalarProperty Name="CLMEMOPC_ID" ColumnName="CLMEMOPC_ID" />
+                <ScalarProperty Name="APPLICATION" ColumnName="APPLICATION" />
+                <ScalarProperty Name="CLAOPC_ID" ColumnName="CLAOPC_ID" />
+                <ScalarProperty Name="OPC1" ColumnName="OPC1" />
+                <ScalarProperty Name="OPC_PCT" ColumnName="OPC_PCT" />
+                <ScalarProperty Name="OPC_PCT2" ColumnName="OPC_PCT2" />
+                <ScalarProperty Name="OPC_CPT3" ColumnName="OPC_CPT3" />
+                <ScalarProperty Name="OPC_PCT4" ColumnName="OPC_PCT4" />
+                <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+                <ScalarProperty Name="FECHA_ALTA" ColumnName="FECHA_ALTA" />
+                <ScalarProperty Name="HORA_ALTA" ColumnName="HORA_ALTA" />
+                <ScalarProperty Name="CVEALTA" ColumnName="CVEALTA" />
+                <ScalarProperty Name="FECHA_MODIF" ColumnName="FECHA_MODIF" />
+                <ScalarProperty Name="HORA_MODIF" ColumnName="HORA_MODIF" />
+                <ScalarProperty Name="CVEMODIF" ColumnName="CVEMODIF" />
+                <ScalarProperty Name="FECHA_BAJA" ColumnName="FECHA_BAJA" />
+                <ScalarProperty Name="HORA_BAJA" ColumnName="HORA_BAJA" />
+                <ScalarProperty Name="CVEBAJA" ColumnName="CVEBAJA" />
+                <ScalarProperty Name="ZONA" ColumnName="ZONA" />
+                <ScalarProperty Name="OPC" ColumnName="OPC" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="TITLE" ColumnName="TITLE" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_CL_SaveMemberSalesman" FunctionName="HotelModel.Store.USP_CL_SaveMemberSalesman">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HotelModel.MemberSalesmen">
+                <ScalarProperty Name="RECNUM" ColumnName="RECNUM" />
+                <ScalarProperty Name="CLMEMOPC_ID" ColumnName="CLMEMOPC_ID" />
+                <ScalarProperty Name="APPLICATION" ColumnName="APPLICATION" />
+                <ScalarProperty Name="CLAOPC_ID" ColumnName="CLAOPC_ID" />
+                <ScalarProperty Name="OPC1" ColumnName="OPC1" />
+                <ScalarProperty Name="OPC_PCT" ColumnName="OPC_PCT" />
+                <ScalarProperty Name="OPC_PCT2" ColumnName="OPC_PCT2" />
+                <ScalarProperty Name="OPC_CPT3" ColumnName="OPC_CPT3" />
+                <ScalarProperty Name="OPC_PCT4" ColumnName="OPC_PCT4" />
+                <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+                <ScalarProperty Name="FECHA_ALTA" ColumnName="FECHA_ALTA" />
+                <ScalarProperty Name="HORA_ALTA" ColumnName="HORA_ALTA" />
+                <ScalarProperty Name="CVEALTA" ColumnName="CVEALTA" />
+                <ScalarProperty Name="FECHA_MODIF" ColumnName="FECHA_MODIF" />
+                <ScalarProperty Name="HORA_MODIF" ColumnName="HORA_MODIF" />
+                <ScalarProperty Name="CVEMODIF" ColumnName="CVEMODIF" />
+                <ScalarProperty Name="FECHA_BAJA" ColumnName="FECHA_BAJA" />
+                <ScalarProperty Name="HORA_BAJA" ColumnName="HORA_BAJA" />
+                <ScalarProperty Name="CVEBAJA" ColumnName="CVEBAJA" />
+                <ScalarProperty Name="ZONA" ColumnName="ZONA" />
+                <ScalarProperty Name="OPC" ColumnName="OPC" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="TITLE" ColumnName="TITLE" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

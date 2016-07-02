@@ -309,6 +309,9 @@
     <Compile Include="GiftLog.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="GiftLogData.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="GiftPackageItem.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -467,6 +470,21 @@
     <Compile Include="HotelGroup.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ICModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ICModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ICModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ICModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ICModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ICModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="IMModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -547,6 +565,9 @@
     </Compile>
     <Compile Include="MealTicketType.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MemberSalesmen.cs">
+      <DependentUpon>ICModel.tt</DependentUpon>
     </Compile>
     <Compile Include="MembershipGroup.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
@@ -790,6 +811,9 @@
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptFollowUpByPR.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptFTMInOutHouse.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptGifts.cs">
@@ -1324,6 +1348,13 @@
     <None Include="AsistenciaModel.edmx.diagram">
       <DependentUpon>AsistenciaModel.edmx</DependentUpon>
     </None>
+    <EntityDeploy Include="ICModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ICModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="ICModel.edmx.diagram">
+      <DependentUpon>ICModel.edmx</DependentUpon>
+    </None>
     <None Include="IMModel.edmx.diagram">
       <DependentUpon>IMModel.edmx</DependentUpon>
     </None>
@@ -1342,6 +1373,16 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>AsistenciaModel.edmx</DependentUpon>
       <LastGenOutput>AsistenciaModel.cs</LastGenOutput>
+    </Content>
+    <Content Include="ICModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ICModel.edmx</DependentUpon>
+      <LastGenOutput>ICModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="ICModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ICModel.edmx</DependentUpon>
+      <LastGenOutput>ICModel.cs</LastGenOutput>
     </Content>
     <Content Include="IMModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

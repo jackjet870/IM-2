@@ -18,6 +18,7 @@ namespace IM.Model
         public Zone()
         {
             this.LeadSources = new HashSet<LeadSource>();
+            this.SalesRooms = new HashSet<SalesRoom>();
         }
     
         public string znID { get; set; }
@@ -28,5 +29,7 @@ namespace IM.Model
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LeadSource> LeadSources { internal get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SalesRoom> SalesRooms { get; set; }
     }
 }

@@ -5953,5 +5953,35 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptUpList>("USP_IM_RptUpList", dateFromParameter, salesRoomsParameter, upListTypeParameter);
         }
+    
+        public virtual ObjectResult<RptFTMInOutHouse> USP_IM_RptFTMInOutHouse(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRooms, string salesmanID)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            var salesmanIDParameter = salesmanID != null ?
+                new ObjectParameter("SalesmanID", salesmanID) :
+                new ObjectParameter("SalesmanID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptFTMInOutHouse>("USP_IM_RptFTMInOutHouse", dateFromParameter, dateToParameter, salesRoomsParameter, salesmanIDParameter);
+        }
+    
+        public virtual ObjectResult<GiftLogData> USP_OR_GetGiftLog(string gift)
+        {
+            var giftParameter = gift != null ?
+                new ObjectParameter("Gift", gift) :
+                new ObjectParameter("Gift", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftLogData>("USP_OR_GetGiftLog", giftParameter);
+        }
     }
 }
