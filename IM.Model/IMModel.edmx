@@ -22323,7 +22323,6 @@
           <Property Type="Decimal" Name="OFTotal" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="RSalesAmount" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="RShows" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="OFSales1" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="RExit" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="RTotal" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="NSalesAmount" Nullable="true" Precision="19" />
@@ -22336,6 +22335,7 @@
           <Property Type="Decimal" Name="TSales" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="TExit" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="NTotal1" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="RSales" Nullable="true" Precision="19" />
         </ComplexType>
         <ComplexType Name="GiftLogData">
           <Property Type="String" Name="ggChangedBy" Nullable="false" MaxLength="10" />
@@ -30024,7 +30024,6 @@
                 <ScalarProperty Name="OFTotal" ColumnName="OFTotal" />
                 <ScalarProperty Name="RSalesAmount" ColumnName="RSalesAmount" />
                 <ScalarProperty Name="RShows" ColumnName="RShows" />
-                <ScalarProperty Name="OFSales1" ColumnName="OFSales1" />
                 <ScalarProperty Name="RExit" ColumnName="RExit" />
                 <ScalarProperty Name="RTotal" ColumnName="RTotal" />
                 <ScalarProperty Name="NSalesAmount" ColumnName="NSalesAmount" />
@@ -30037,6 +30036,7 @@
                 <ScalarProperty Name="TSales" ColumnName="TSales" />
                 <ScalarProperty Name="TExit" ColumnName="TExit" />
                 <ScalarProperty Name="NTotal1" ColumnName="NTotal1" />
+                <ScalarProperty Name="RSales" ColumnName="RSales" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

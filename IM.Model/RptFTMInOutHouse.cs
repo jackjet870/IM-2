@@ -23,7 +23,6 @@ namespace IM.Model
         public Nullable<decimal> OFTotal { get; set; }
         public Nullable<decimal> RSalesAmount { get; set; }
         public Nullable<decimal> RShows { get; set; }
-        public Nullable<decimal> OFSales1 { get; set; }
         public Nullable<decimal> RExit { get; set; }
         public Nullable<decimal> RTotal { get; set; }
         public Nullable<decimal> NSalesAmount { get; set; }
@@ -36,5 +35,6 @@ namespace IM.Model
         public Nullable<decimal> TSales { get; set; }
         public Nullable<decimal> TExit { get; set; }
         public Nullable<decimal> NTotal1 { get; set; }
+        public Nullable<decimal> RSales { get; set; }
     }
 }
