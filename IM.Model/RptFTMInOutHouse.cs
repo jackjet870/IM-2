@@ -34,7 +34,7 @@ namespace IM.Model
         public Nullable<decimal> TShows { get; set; }
         public Nullable<decimal> TSales { get; set; }
         public Nullable<decimal> TExit { get; set; }
-        public Nullable<decimal> NTotal1 { get; set; }
         public Nullable<decimal> RSales { get; set; }
+        public Nullable<decimal> TTotal { get; set; }
     }
 }
