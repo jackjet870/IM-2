@@ -308,6 +308,65 @@ namespace IM.ProcessorSales.Classes
     {
       var dtData = TableHelper.GetDataTableFromList(lstReport, true, true);
       return EpplusHelper.CreateExcelCustom(dtData, filters, report, dateFileName, FormatReport.RptManifest(), blnShowSubtotal: true, blnRowGrandTotal: true, blnColumnGrandTotal: false);
+    }
+    #endregion
+
+    #region RptFTMInOutHouse
+    /// <summary>
+    /// Obtiene los datos para exportar a excel el reporte RptFTMIn&OutHouse
+    /// </summary>
+    /// <param name="report">Nombre del reporte</param>
+    /// <param name="dateFileName">Rango de fechas</param>
+    /// <param name="filters">Listado de filtros</param>
+    /// <param name="lstReport">Contenido del reporte</param>
+    /// <param name="dtStart">Fecha inicial del reporte</param>
+    /// <param name="dtEnd">Fecha final del reporte</param>
+    /// <history>
+    ///  [ecanul] 02/07/2016 Created
+    /// </history>
+    public static FileInfo RptFTMInOutHouse(string report, string dateFileName, List<Tuple<string, string>> filters, List<RptFTMInOutHouse> lstReport,
+       DateTime dtStartm, DateTime dtEnd)
+    {
+      var nlist = lstReport.Select(c =>
+      new
+      {
+        GR = true,
+        c.Liner,
+        c.peN,
+        c.OOP,
+        //Overflow
+        c.OFSalesAmount,
+        c.OFShows,
+        c.OFSales,
+        c.OFExit,
+        c.OFTotal,
+        //Regen
+        c.RSalesAmount,
+        c.RShows,
+        c.RSales,
+        c.RExit,
+        c.RTotal,
+        //Normal
+        c.NSalesAmount,
+        c.NShows,
+        c.NSales,
+        c.NExit,
+        c.NTotal,
+        //TOTAL
+        c.TSalesAmount,
+        c.TShows,
+        c.TSales,
+        c.TExit,
+        c.TTotal,
+        //Calculados
+        EFFOver = c.NShows != 0 ? c.TSalesAmount / c.NShows : 0,
+        EFF = c.TShows != 0 ? c.TSalesAmount / c.TShows : 0,
+        CPer = c.TShows != 0 ? c.TTotal / c.TShows : 0,
+        AVS = c.TTotal != 0 ? c.TSalesAmount / c.TTotal : 0
+      }).ToList();
+      var data = TableHelper.GetDataTableFromList(nlist, true, true);
+      return EpplusHelper.CreateExcelCustom(data, filters, report, dateFileName, FormatReport.RptFTMInOutHouse(), 
+        blnShowSubtotal: true);
     } 
     #endregion
 

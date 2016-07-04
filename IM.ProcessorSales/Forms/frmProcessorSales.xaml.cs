@@ -279,9 +279,19 @@ namespace IM.ProcessorSales.Forms
           if (list.Count > 0 && lstHeader.Count > 0)
             file = Reports.RptDailySales(reporteName, dateRange, filters, list.Cast<RptDailySalesDetail>().ToList(), 
               lstHeader, dtmStart,dtmEnd,goal);
-          break; 
-          #endregion
+          break;
+        #endregion
 
+        #region FtmIn&OutHouse
+        case EnumRptRoomSales.FtmInAndOutHouse:
+
+          list.AddRange(await BRReportsBySalesRoom.GetRptFTMInOutHouse(dtmStart, dtmEnd, lstSalesRoom));
+          if (list.Count > 0)
+          {
+            file = Reports.RptFTMInOutHouse(reporteName, dateRangeFileName, filters, list.Cast<RptFTMInOutHouse>().ToList(), dtmStart, dtmEnd);
+          }
+          break; 
+        #endregion
       }
 
       if (file != null)

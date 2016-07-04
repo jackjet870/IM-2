@@ -1589,6 +1589,32 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    #region GetRptFTMInOutHouse
+    /// <summary>
+    /// Devuelve un listado de RptFTMIn&OutHouse
+    /// </summary>
+    /// <param name="dtStart">Fecha Inicio</param>
+    /// <param name="dtEnd">Fecha Fin </param>
+    /// <param name="salesRoom">Sales Room</param>
+    /// <param name="salesmanID">ID del salesman</param>
+    /// <history>
+    ///   [ecanul] 02/07/2016 Created
+    /// </history>
+    public async static Task<List<RptFTMInOutHouse>> GetRptFTMInOutHouse(DateTime dtStart, DateTime dtEnd, IEnumerable<string> salesRooms, string salesmanID = "ALL")
+    {
+      var result = new List<RptFTMInOutHouse>();
+      await Task.Run(() =>
+      {
+
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          result = dbContext.USP_IM_RptFTMInOutHouse(dtStart, dtEnd, string.Join(",", salesRooms), salesmanID).ToList();
+        }
+      });
+      return result;
+    } 
+    #endregion
+
     #endregion
 
 
