@@ -6067,6 +6067,41 @@
           <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="USP_OR_CopyTourTimesByLeadSourceSalesRoomToLeadSource" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LeadSourceFrom" Type="varchar" Mode="In" />
+          <Parameter Name="LeadSourceTo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_CopyTourTimesByLeadSourceSalesRoomToLeadSourcesOfProgram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LeadSource" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_CopyTourTimesByLeadSourceSalesRoomToSalesRoom" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SalesRoomFrom" Type="varchar" Mode="In" />
+          <Parameter Name="SalesRoomTo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToLeadSource" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LeadSourceFrom" Type="varchar" Mode="In" />
+          <Parameter Name="LeadSourceTo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToLeadSourcesOfProgram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LeadSource" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoom" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SalesRoomFrom" Type="varchar" Mode="In" />
+          <Parameter Name="SalesRoomTo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoomsWeekDaysOfLeadSource" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LeadSource" Type="varchar" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="WeekDay" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_CopyTourTimesBySalesRoomWeekDayToSalesRoom" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SalesRoomFrom" Type="varchar" Mode="In" />
+          <Parameter Name="SalesRoomTo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_CopyTourTimesBySalesRoomWeekDayToWeekDaysOfSalesRoom" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="WeekDay" Type="tinyint" Mode="In" />
+        </Function>
         <Function Name="USP_OR_DeleteGuest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Guest" Type="int" Mode="In" />
         </Function>
@@ -17805,7 +17840,42 @@
             <Parameter Name="SalesmanID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="USP_OR_GetGiftLog" ReturnType="Collection(IMModel.GiftLogData)">
-            <Parameter Name="Gift" Mode="In" Type="String" />
+          <Parameter Name="Gift" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_CopyTourTimesByLeadSourceSalesRoomToLeadSource">
+            <Parameter Name="LeadSourceFrom" Mode="In" Type="String" />
+            <Parameter Name="LeadSourceTo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_CopyTourTimesByLeadSourceSalesRoomToLeadSourcesOfProgram">
+            <Parameter Name="LeadSource" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_CopyTourTimesByLeadSourceSalesRoomToSalesRoom">
+            <Parameter Name="SalesRoomFrom" Mode="In" Type="String" />
+            <Parameter Name="SalesRoomTo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToLeadSource">
+            <Parameter Name="LeadSourceFrom" Mode="In" Type="String" />
+            <Parameter Name="LeadSourceTo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToLeadSourcesOfProgram">
+            <Parameter Name="LeadSource" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoom">
+            <Parameter Name="SalesRoomFrom" Mode="In" Type="String" />
+            <Parameter Name="SalesRoomTo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoomsWeekDaysOfLeadSource">
+            <Parameter Name="LeadSource" Mode="In" Type="String" />
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="WeekDay" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_CopyTourTimesBySalesRoomWeekDayToSalesRoom">
+            <Parameter Name="SalesRoomFrom" Mode="In" Type="String" />
+            <Parameter Name="SalesRoomTo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_CopyTourTimesBySalesRoomWeekDayToWeekDaysOfSalesRoom">
+            <Parameter Name="SalesRoom" Mode="In" Type="String" />
+            <Parameter Name="WeekDay" Mode="In" Type="Byte" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -30063,6 +30133,15 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_CopyTourTimesByLeadSourceSalesRoomToLeadSource" FunctionName="IMModel.Store.USP_OR_CopyTourTimesByLeadSourceSalesRoomToLeadSource" />
+          <FunctionImportMapping FunctionImportName="USP_OR_CopyTourTimesByLeadSourceSalesRoomToLeadSourcesOfProgram" FunctionName="IMModel.Store.USP_OR_CopyTourTimesByLeadSourceSalesRoomToLeadSourcesOfProgram" />
+          <FunctionImportMapping FunctionImportName="USP_OR_CopyTourTimesByLeadSourceSalesRoomToSalesRoom" FunctionName="IMModel.Store.USP_OR_CopyTourTimesByLeadSourceSalesRoomToSalesRoom" />
+          <FunctionImportMapping FunctionImportName="USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToLeadSource" FunctionName="IMModel.Store.USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToLeadSource" />
+          <FunctionImportMapping FunctionImportName="USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToLeadSourcesOfProgram" FunctionName="IMModel.Store.USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToLeadSourcesOfProgram" />
+          <FunctionImportMapping FunctionImportName="USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoom" FunctionName="IMModel.Store.USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoom" />
+          <FunctionImportMapping FunctionImportName="USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoomsWeekDaysOfLeadSource" FunctionName="IMModel.Store.USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoomsWeekDaysOfLeadSource" />
+          <FunctionImportMapping FunctionImportName="USP_OR_CopyTourTimesBySalesRoomWeekDayToSalesRoom" FunctionName="IMModel.Store.USP_OR_CopyTourTimesBySalesRoomWeekDayToSalesRoom" />
+          <FunctionImportMapping FunctionImportName="USP_OR_CopyTourTimesBySalesRoomWeekDayToWeekDaysOfSalesRoom" FunctionName="IMModel.Store.USP_OR_CopyTourTimesBySalesRoomWeekDayToWeekDaysOfSalesRoom" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

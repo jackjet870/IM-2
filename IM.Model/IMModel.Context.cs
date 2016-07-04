@@ -5983,5 +5983,118 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GiftLogData>("USP_OR_GetGiftLog", giftParameter);
         }
+    
+        public virtual int USP_OR_CopyTourTimesByLeadSourceSalesRoomToLeadSource(string leadSourceFrom, string leadSourceTo)
+        {
+            var leadSourceFromParameter = leadSourceFrom != null ?
+                new ObjectParameter("LeadSourceFrom", leadSourceFrom) :
+                new ObjectParameter("LeadSourceFrom", typeof(string));
+    
+            var leadSourceToParameter = leadSourceTo != null ?
+                new ObjectParameter("LeadSourceTo", leadSourceTo) :
+                new ObjectParameter("LeadSourceTo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CopyTourTimesByLeadSourceSalesRoomToLeadSource", leadSourceFromParameter, leadSourceToParameter);
+        }
+    
+        public virtual int USP_OR_CopyTourTimesByLeadSourceSalesRoomToLeadSourcesOfProgram(string leadSource)
+        {
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CopyTourTimesByLeadSourceSalesRoomToLeadSourcesOfProgram", leadSourceParameter);
+        }
+    
+        public virtual int USP_OR_CopyTourTimesByLeadSourceSalesRoomToSalesRoom(string salesRoomFrom, string salesRoomTo)
+        {
+            var salesRoomFromParameter = salesRoomFrom != null ?
+                new ObjectParameter("SalesRoomFrom", salesRoomFrom) :
+                new ObjectParameter("SalesRoomFrom", typeof(string));
+    
+            var salesRoomToParameter = salesRoomTo != null ?
+                new ObjectParameter("SalesRoomTo", salesRoomTo) :
+                new ObjectParameter("SalesRoomTo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CopyTourTimesByLeadSourceSalesRoomToSalesRoom", salesRoomFromParameter, salesRoomToParameter);
+        }
+    
+        public virtual int USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToLeadSource(string leadSourceFrom, string leadSourceTo)
+        {
+            var leadSourceFromParameter = leadSourceFrom != null ?
+                new ObjectParameter("LeadSourceFrom", leadSourceFrom) :
+                new ObjectParameter("LeadSourceFrom", typeof(string));
+    
+            var leadSourceToParameter = leadSourceTo != null ?
+                new ObjectParameter("LeadSourceTo", leadSourceTo) :
+                new ObjectParameter("LeadSourceTo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToLeadSource", leadSourceFromParameter, leadSourceToParameter);
+        }
+    
+        public virtual int USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToLeadSourcesOfProgram(string leadSource)
+        {
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToLeadSourcesOfProgram", leadSourceParameter);
+        }
+    
+        public virtual int USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoom(string salesRoomFrom, string salesRoomTo)
+        {
+            var salesRoomFromParameter = salesRoomFrom != null ?
+                new ObjectParameter("SalesRoomFrom", salesRoomFrom) :
+                new ObjectParameter("SalesRoomFrom", typeof(string));
+    
+            var salesRoomToParameter = salesRoomTo != null ?
+                new ObjectParameter("SalesRoomTo", salesRoomTo) :
+                new ObjectParameter("SalesRoomTo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoom", salesRoomFromParameter, salesRoomToParameter);
+        }
+    
+        public virtual int USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoomsWeekDaysOfLeadSource(string leadSource, string salesRoom, Nullable<byte> weekDay)
+        {
+            var leadSourceParameter = leadSource != null ?
+                new ObjectParameter("LeadSource", leadSource) :
+                new ObjectParameter("LeadSource", typeof(string));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var weekDayParameter = weekDay.HasValue ?
+                new ObjectParameter("WeekDay", weekDay) :
+                new ObjectParameter("WeekDay", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoomsWeekDaysOfLeadSource", leadSourceParameter, salesRoomParameter, weekDayParameter);
+        }
+    
+        public virtual int USP_OR_CopyTourTimesBySalesRoomWeekDayToSalesRoom(string salesRoomFrom, string salesRoomTo)
+        {
+            var salesRoomFromParameter = salesRoomFrom != null ?
+                new ObjectParameter("SalesRoomFrom", salesRoomFrom) :
+                new ObjectParameter("SalesRoomFrom", typeof(string));
+    
+            var salesRoomToParameter = salesRoomTo != null ?
+                new ObjectParameter("SalesRoomTo", salesRoomTo) :
+                new ObjectParameter("SalesRoomTo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CopyTourTimesBySalesRoomWeekDayToSalesRoom", salesRoomFromParameter, salesRoomToParameter);
+        }
+    
+        public virtual int USP_OR_CopyTourTimesBySalesRoomWeekDayToWeekDaysOfSalesRoom(string salesRoom, Nullable<byte> weekDay)
+        {
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var weekDayParameter = weekDay.HasValue ?
+                new ObjectParameter("WeekDay", weekDay) :
+                new ObjectParameter("WeekDay", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CopyTourTimesBySalesRoomWeekDayToWeekDaysOfSalesRoom", salesRoomParameter, weekDayParameter);
+        }
     }
 }
