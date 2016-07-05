@@ -59,5 +59,20 @@ namespace IM.Model.Helpers
       return (T)Enum.Parse(typeof(T), value, ignoreCase);
     }
 
+    #region EnumListToString
+    /// <summary>
+    /// Metodo para convertir una lista de enumerados con descripcion a string. Concatenando las descripciones
+    /// con una coma.
+    /// </summary>
+    /// <typeparam name="T">Enum</typeparam>
+    /// <returns> string </returns>
+    /// <history>
+    /// [edgrodriguez] 05/07/2016 Created
+    /// </history>
+    public static string EnumListToString<TEnum>(this List<TEnum> EnumList)
+    {
+      return String.Join(",", EnumList.Cast<TEnum>().Select(x => GetEnumDescription(x)));
+    } 
+    #endregion
   }
 }

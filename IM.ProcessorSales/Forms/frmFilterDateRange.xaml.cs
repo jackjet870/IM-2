@@ -322,8 +322,13 @@ namespace IM.ProcessorSales.Forms
 
     private async void LoadSalesman()
     {
-      _lstPersonnels = await BRPersonnel.GetPersonnel("All", "All", "PR,LINER,CLOSER,EXIT", 1, "All", "=",
-         EnumPermisionLevel.None, "All");
+      _lstPersonnels = await BRPersonnel.GetPersonnel("All", "All", new List<EnumRole> {
+        EnumRole.PR,
+        EnumRole.Liner,
+        EnumRole.Closer,
+        EnumRole.ExitCloser
+      }.EnumListToString(), 1, "All", "=",
+ EnumPermisionLevel.None, "All");
       cmbSalesman.ItemsSource = _lstPersonnels;
     }
 
