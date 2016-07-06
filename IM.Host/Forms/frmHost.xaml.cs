@@ -20,6 +20,7 @@ using IM.Base.Reports;
 using System.ComponentModel;
 using System.Windows.Threading;
 using System.Threading;
+using System.Diagnostics;
 
 namespace IM.Host
 {
@@ -757,10 +758,13 @@ namespace IM.Host
 
         filters.Add(new Tuple<string, string>("Date Range", dateRange));
         filters.Add(new Tuple<string, string>("Sales Room", App.User.SalesRoom.srID));
-        EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, List<Model.Classes.ExcelFormatTable>>> {
+        var fileinfo=EpplusHelper.ExportRptManifestRangeByLs(new List<Tuple<DataTable, List<Model.Classes.ExcelFormatTable>>> {
         Tuple.Create(dtRptManifest, clsFormatReports.RptManifestRangeByLs()),
         Tuple.Create(dtBookings, clsFormatReports.RptManifestRangeByLs_Bookings())
       }, filters, "Manifest By LS", dateRangeFileName, blnRowGrandTotal: true, blnShowSubtotal: true);
+
+        if (fileinfo != null)
+          Process.Start(fileinfo.FullName);
       }
       _busyIndicator.IsBusy = false;
     }

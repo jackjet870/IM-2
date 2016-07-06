@@ -55,6 +55,7 @@ namespace IM.Inhouse.Classes
     /// [ecanul] 06/04/2016 Created
     /// [ecanul] 07/04/2016 Modificated Agregado Validaciones y "show" del reporte
     /// [ecanul] 20/04/2016 Modificated Metodo Movido de frmInhouse a EquityHelpers
+    /// [ecanul] 06/07/2016 Modified. Agregue subreporte RptEquityMembershipsPrevious
     /// </history>
     public static void EquityReport(string membershipNum, Decimal company, int clubAgency, int clubGuest)
     {
@@ -113,7 +114,7 @@ namespace IM.Inhouse.Classes
           header.IsElite = (club == EnumClub.PalaceElite);
 
           var equity = new rptEquity();
-          //datos generales de equity
+          //datos generales de equityM:\PalaceResorts\Client4.6\Win\IntelligenceMarketing\IM.Inhouse\Classes\EquityHelpers.cs
           equity.Database.Tables["Membership"].SetDataSource(ObjectHelper.ObjectToList(rptClubes.Membership));
           equity.Database.Tables["Member"].SetDataSource(ObjectHelper.ObjectToList(rptCallCenter.Membership));
           //Si no tiene un Salesman  con OPC no se envia nada
@@ -126,6 +127,12 @@ namespace IM.Inhouse.Classes
             rptClubes.Verification.VOLUMENGOLF = rptCallCenter.Membership.Golf - (rptClubes.Verification.VOLUMENGOLF / EquityHelpers.GetIVAByOffice(rptClubes.Membership.OFFICE));
           equity.Database.Tables["Verification"].SetDataSource(ObjectHelper.ObjectToList(rptClubes.Verification));
           //Subreportes
+          if (club == EnumClub.PalaceElite)
+          {
+            Services.ClubesService.RptEquityMembershipsPrevious[] membershopsPrevious = rptClubes.MembershipsPrevious.Where(mp => mp.Application != null && mp.Application != "").ToArray();
+            header.HasMembershipsPrevious = membershopsPrevious.Length > 0;
+            equity.Subreports["rptEquityMembershipsPrevious.rpt"].SetDataSource(rptClubes.MembershipsPrevious);
+          }
           equity.Subreports["rptEquitySalesman.rpt"].SetDataSource(rptClubes.Salesmen);
           equity.Subreports["rptEquityCoOwners.rpt"].SetDataSource(rptClubes.CoOwners);
 

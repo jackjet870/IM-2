@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:s21="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ProductResponse.xsd" xmlns:s51="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityWeeksNightsDetail.xsd" xmlns:s25="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Reservation.xsd" xmlns:s16="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TarjetaRequest.xsd" xmlns:s55="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Clmember.xsd" xmlns:s46="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityRoomType.xsd" xmlns:s63="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClofficeRequest.xsd" xmlns:s8="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MovimientoTarjeta.xsd" xmlns:s32="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembershipOrigosResponse.xsd" xmlns:s23="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoAccountCard.xsd" xmlns:s62="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberExtensionResponse.xsd" xmlns:s53="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberExtension.xsd" xmlns:s1="http://webpalace/pr_xmlschemas/clubes/01-03-2006/StringRequest.xsd" xmlns:s3="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ExceptionInfo.xsd" xmlns:s27="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoAccountCardResponse.xsd" xmlns:s68="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Vendedor.xsd" xmlns:s30="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoQuery.xsd" xmlns:s60="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RecordsetResponse.xsd" xmlns:s7="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MovimientoResponse.xsd" xmlns:s34="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberSalesman.xsd" xmlns:s64="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Cloffice.xsd" xmlns:s38="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityMembership.xsd" xmlns:s19="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ProductRequest.xsd" xmlns:s49="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityPaymentPromise.xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s17="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TarjetaResponse.xsd" xmlns:s11="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Card.xsd" xmlns:s41="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityCoOwner.xsd" xmlns:tns="http://webpalace/pr_xmlschemas/clubes/01-03-2006/" xmlns:s15="http://webpalace/pr_xmlschemas/clubes/01-03-2006/CardResponse.xsd" xmlns:s45="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityGolfFieldsDetail.xsd" xmlns:s36="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityResponse.xsd" xmlns:s2="http://webpalace/pr_xmlschemas/clubes/01-03-2006/BooleanResponse.xsd" xmlns:s66="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClofficeResponse.xsd" xmlns:s57="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembresiaAsociadaRequest.xsd" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s6="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TipoMovimiento.xsd" xmlns:s22="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoAccountCardRequest.xsd" xmlns:s13="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Status.xsd" xmlns:s52="http://webpalace/pr_xmlschemas/clubes/01-03-2006/infoPromotionAffiliationStatus.xsd" xmlns:s43="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityHotel.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:s28="http://webpalace/pr_xmlschemas/clubes/01-03-2006/IntegerResponse.xsd" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s47="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityBalanceElectronicPurseHeader.xsd" xmlns:s20="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Product.xsd" xmlns:s50="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityWeeksNightsHeader.xsd" xmlns:s24="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Account.xsd" xmlns:s54="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClmemberRequest.xsd" xmlns:s39="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityVerification.xsd" xmlns:s69="http://webpalace/pr_xmlschemas/clubes/01-03-2006/VendedorResponse.xsd" xmlns:s31="http://webpalace/pr_xmlschemas/clubes/01-03-2006/StatusRegistros.xsd" xmlns:s61="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberExtensionRequest.xsd" xmlns:s5="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MPCARINV.xsd" xmlns:s35="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembershipOrigosRequest.xsd" xmlns:s26="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ReservationType.xsd" xmlns:s65="http://webpalace/pr_xmlschemas/clubes/01-03-2006/YesNo.xsd" xmlns:s56="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClmemberResponse.xsd" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s12="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Requisito.xsd" xmlns:s9="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MpCarinvResponse.xsd" xmlns:s42="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityBeneficiary.xsd" xmlns:s33="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembershipOrigos.xsd" xmlns:s58="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembresiaAsociada.xsd" xmlns:s18="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Tarjeta.xsd" xmlns:s48="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityBalanceElectronicPurseDetail.xsd" xmlns:s67="http://webpalace/pr_xmlschemas/clubes/01-03-2006/VendedorRequest.xsd" xmlns:s37="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquity.xsd" xmlns:s10="http://webpalace/pr_xmlschemas/clubes/01-03-2006/CardRequest.xsd" xmlns:s40="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquitySalesman.xsd" xmlns:s14="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TipoMonedero.xsd" xmlns:s44="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityGolfFieldsHeader.xsd" xmlns:s4="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MovimientosRequest.xsd" xmlns:s29="http://webpalace/pr_xmlschemas/clubes/01-03-2006/QueryRequest.xsd" xmlns:s59="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembresiaAsociadaResponse.xsd" targetNamespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:s21="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ProductResponse.xsd" xmlns:s51="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityWeeksNightsDetail.xsd" xmlns:s25="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Reservation.xsd" xmlns:s16="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TarjetaRequest.xsd" xmlns:s55="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClmemberRequest.xsd" xmlns:s46="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityRoomType.xsd" xmlns:s63="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberExtensionResponse.xsd" xmlns:s8="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MovimientoTarjeta.xsd" xmlns:s32="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembershipOrigosResponse.xsd" xmlns:s23="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoAccountCard.xsd" xmlns:s62="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberExtensionRequest.xsd" xmlns:s53="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberExtension.xsd" xmlns:s1="http://webpalace/pr_xmlschemas/clubes/01-03-2006/StringRequest.xsd" xmlns:s3="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ExceptionInfo.xsd" xmlns:s27="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoAccountCardResponse.xsd" xmlns:s68="http://webpalace/pr_xmlschemas/clubes/01-03-2006/VendedorRequest.xsd" xmlns:s30="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoQuery.xsd" xmlns:s60="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembresiaAsociadaResponse.xsd" xmlns:s7="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MovimientoResponse.xsd" xmlns:s34="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberSalesman.xsd" xmlns:s64="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClofficeRequest.xsd" xmlns:s38="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityMembership.xsd" xmlns:s19="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ProductRequest.xsd" xmlns:s49="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityPaymentPromise.xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s17="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TarjetaResponse.xsd" xmlns:s11="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Card.xsd" xmlns:s41="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityCoOwner.xsd" xmlns:tns="http://webpalace/pr_xmlschemas/clubes/01-03-2006/" xmlns:s15="http://webpalace/pr_xmlschemas/clubes/01-03-2006/CardResponse.xsd" xmlns:s45="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityGolfFieldsDetail.xsd" xmlns:s36="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityResponse.xsd" xmlns:s2="http://webpalace/pr_xmlschemas/clubes/01-03-2006/BooleanResponse.xsd" xmlns:s66="http://webpalace/pr_xmlschemas/clubes/01-03-2006/YesNo.xsd" xmlns:s57="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClmemberResponse.xsd" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s6="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TipoMovimiento.xsd" xmlns:s22="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoAccountCardRequest.xsd" xmlns:s13="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Status.xsd" xmlns:s52="http://webpalace/pr_xmlschemas/clubes/01-03-2006/infoPromotionAffiliationStatus.xsd" xmlns:s43="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityHotel.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:s28="http://webpalace/pr_xmlschemas/clubes/01-03-2006/IntegerResponse.xsd" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s47="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityBalanceElectronicPurseHeader.xsd" xmlns:s20="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Product.xsd" xmlns:s50="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityWeeksNightsHeader.xsd" xmlns:s24="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Account.xsd" xmlns:s54="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityMembershipsPrevious.xsd" xmlns:s39="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityVerification.xsd" xmlns:s69="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Vendedor.xsd" xmlns:s31="http://webpalace/pr_xmlschemas/clubes/01-03-2006/StatusRegistros.xsd" xmlns:s61="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RecordsetResponse.xsd" xmlns:s5="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MPCARINV.xsd" xmlns:s35="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembershipOrigosRequest.xsd" xmlns:s26="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ReservationType.xsd" xmlns:s65="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Cloffice.xsd" xmlns:s56="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Clmember.xsd" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s12="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Requisito.xsd" xmlns:s9="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MpCarinvResponse.xsd" xmlns:s42="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityBeneficiary.xsd" xmlns:s33="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembershipOrigos.xsd" xmlns:s58="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembresiaAsociadaRequest.xsd" xmlns:s18="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Tarjeta.xsd" xmlns:s48="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityBalanceElectronicPurseDetail.xsd" xmlns:s67="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClofficeResponse.xsd" xmlns:s37="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquity.xsd" xmlns:s10="http://webpalace/pr_xmlschemas/clubes/01-03-2006/CardRequest.xsd" xmlns:s40="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquitySalesman.xsd" xmlns:s70="http://webpalace/pr_xmlschemas/clubes/01-03-2006/VendedorResponse.xsd" xmlns:s14="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TipoMonedero.xsd" xmlns:s44="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityGolfFieldsHeader.xsd" xmlns:s4="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MovimientosRequest.xsd" xmlns:s29="http://webpalace/pr_xmlschemas/clubes/01-03-2006/QueryRequest.xsd" xmlns:s59="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembresiaAsociada.xsd" targetNamespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/">
       <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/StringRequest.xsd" />
@@ -263,28 +263,28 @@
       <s:element name="ObtenerContporApl">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" ref="s54:ClmemberRequest" />
+            <s:element minOccurs="0" maxOccurs="1" ref="s55:ClmemberRequest" />
           </s:sequence>
         </s:complexType>
       </s:element>
       <s:element name="ObtenerContporAplResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" ref="s56:ClmemberResponse" />
+            <s:element minOccurs="0" maxOccurs="1" ref="s57:ClmemberResponse" />
           </s:sequence>
         </s:complexType>
       </s:element>
       <s:element name="ObtenerMembresiaAsociadaOriginalPorAplicacion">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" ref="s57:MembresiaAsociadaRequest" />
+            <s:element minOccurs="0" maxOccurs="1" ref="s58:MembresiaAsociadaRequest" />
           </s:sequence>
         </s:complexType>
       </s:element>
       <s:element name="ObtenerMembresiaAsociadaOriginalPorAplicacionResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" ref="s59:MembresiaAsociadaResponse" />
+            <s:element minOccurs="0" maxOccurs="1" ref="s60:MembresiaAsociadaResponse" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -298,49 +298,49 @@
       <s:element name="ObtenerReporteVentasCaidasResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" ref="s60:RecordsetResponse" />
+            <s:element minOccurs="0" maxOccurs="1" ref="s61:RecordsetResponse" />
           </s:sequence>
         </s:complexType>
       </s:element>
       <s:element name="GetMemberExtension">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" ref="s61:MemberExtensionRequest" />
+            <s:element minOccurs="0" maxOccurs="1" ref="s62:MemberExtensionRequest" />
           </s:sequence>
         </s:complexType>
       </s:element>
       <s:element name="GetMemberExtensionResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" ref="s62:MemberExtensionResponse" />
+            <s:element minOccurs="0" maxOccurs="1" ref="s63:MemberExtensionResponse" />
           </s:sequence>
         </s:complexType>
       </s:element>
       <s:element name="ObtenerOficinaPorProyectoSalaVentas">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" ref="s63:ClofficeRequest" />
+            <s:element minOccurs="0" maxOccurs="1" ref="s64:ClofficeRequest" />
           </s:sequence>
         </s:complexType>
       </s:element>
       <s:element name="ObtenerOficinaPorProyectoSalaVentasResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" ref="s66:ClofficeResponse" />
+            <s:element minOccurs="0" maxOccurs="1" ref="s67:ClofficeResponse" />
           </s:sequence>
         </s:complexType>
       </s:element>
       <s:element name="ObtenerCatalogoVendedores">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" ref="s67:VendedorRequest" />
+            <s:element minOccurs="0" maxOccurs="1" ref="s68:VendedorRequest" />
           </s:sequence>
         </s:complexType>
       </s:element>
       <s:element name="ObtenerCatalogoVendedoresResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" ref="s69:VendedorResponse" />
+            <s:element minOccurs="0" maxOccurs="1" ref="s70:VendedorResponse" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -917,6 +917,7 @@
       <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityWeeksNightsDetail.xsd" />
       <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/infoPromotionAffiliationStatus.xsd" />
       <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberExtension.xsd" />
+      <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityMembershipsPrevious.xsd" />
       <s:complexType name="RptEquity">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" name="Membership" type="s38:RptEquityMembership" />
@@ -936,6 +937,7 @@
           <s:element minOccurs="0" maxOccurs="1" name="GolfRCI" type="s37:ArrayOfRptEquityWeeksNightsDetail" />
           <s:element minOccurs="0" maxOccurs="1" name="Promotions" type="s37:ArrayOfInfoPromotionAffiliationStatus" />
           <s:element minOccurs="0" maxOccurs="1" name="MemberExtension" type="s53:MemberExtension" />
+          <s:element minOccurs="0" maxOccurs="1" name="MembershipsPrevious" type="s37:ArrayOfRptEquityMembershipsPrevious" />
         </s:sequence>
       </s:complexType>
       <s:complexType name="ArrayOfRptEquitySalesman">
@@ -991,6 +993,11 @@
       <s:complexType name="ArrayOfInfoPromotionAffiliationStatus">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="unbounded" name="infoPromotionAffiliationStatus" nillable="true" type="s52:infoPromotionAffiliationStatus" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfRptEquityMembershipsPrevious">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RptEquityMembershipsPrevious" nillable="true" type="s54:RptEquityMembershipsPrevious" />
         </s:sequence>
       </s:complexType>
     </s:schema>
@@ -1573,12 +1580,36 @@
         </s:sequence>
       </s:complexType>
     </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityMembershipsPrevious.xsd">
+      <s:complexType name="RptEquityMembershipsPrevious">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Company" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="Application" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ApplicationPrevious" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ApplicationNext" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="TourDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="Total" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="MembershipType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MembershipTypeName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SaleType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SaleTypeName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StatusName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CancelCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CancelCodeName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CancelDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="CancelType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CancelTypeName" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClmemberRequest.xsd">
       <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Clmember.xsd" />
-      <s:element name="ClmemberRequest" type="s54:ClmemberRequest" />
+      <s:element name="ClmemberRequest" type="s55:ClmemberRequest" />
       <s:complexType name="ClmemberRequest">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="Clmember" type="s55:Clmember" />
+          <s:element minOccurs="0" maxOccurs="1" name="Clmember" type="s56:Clmember" />
           <s:element minOccurs="0" maxOccurs="1" name="IdAplicacion" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="IdProyecto" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="IdOficina" type="s:string" />
@@ -1878,7 +1909,7 @@
       <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ExceptionInfo.xsd" />
       <s:complexType name="ClmemberResponse">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s56:ArrayOfClmember" />
+          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s57:ArrayOfClmember" />
           <s:element minOccurs="1" maxOccurs="1" name="HasErrors" type="s:boolean" />
           <s:element minOccurs="0" maxOccurs="1" name="ExceptionInfo" type="s3:ExceptionInfo" />
           <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
@@ -1886,17 +1917,17 @@
       </s:complexType>
       <s:complexType name="ArrayOfClmember">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="Clmember" nillable="true" type="s55:Clmember" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Clmember" nillable="true" type="s56:Clmember" />
         </s:sequence>
       </s:complexType>
-      <s:element name="ClmemberResponse" type="s56:ClmemberResponse" />
+      <s:element name="ClmemberResponse" type="s57:ClmemberResponse" />
     </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembresiaAsociadaRequest.xsd">
       <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembresiaAsociada.xsd" />
-      <s:element name="MembresiaAsociadaRequest" type="s57:MembresiaAsociadaRequest" />
+      <s:element name="MembresiaAsociadaRequest" type="s58:MembresiaAsociadaRequest" />
       <s:complexType name="MembresiaAsociadaRequest">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="MembresiaAsociada" type="s58:MembresiaAsociada" />
+          <s:element minOccurs="0" maxOccurs="1" name="MembresiaAsociada" type="s59:MembresiaAsociada" />
           <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
         </s:sequence>
       </s:complexType>
@@ -1928,7 +1959,7 @@
       <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ExceptionInfo.xsd" />
       <s:complexType name="MembresiaAsociadaResponse">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s59:ArrayOfMembresiaAsociada" />
+          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s60:ArrayOfMembresiaAsociada" />
           <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="HasErrors" type="s:boolean" />
           <s:element minOccurs="0" maxOccurs="1" name="ExceptionInfo" type="s3:ExceptionInfo" />
@@ -1936,10 +1967,10 @@
       </s:complexType>
       <s:complexType name="ArrayOfMembresiaAsociada">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="MembresiaAsociada" nillable="true" type="s58:MembresiaAsociada" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="MembresiaAsociada" nillable="true" type="s59:MembresiaAsociada" />
         </s:sequence>
       </s:complexType>
-      <s:element name="MembresiaAsociadaResponse" type="s59:MembresiaAsociadaResponse" />
+      <s:element name="MembresiaAsociadaResponse" type="s60:MembresiaAsociadaResponse" />
     </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RecordsetResponse.xsd">
       <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ExceptionInfo.xsd" />
@@ -1951,11 +1982,11 @@
           <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
         </s:sequence>
       </s:complexType>
-      <s:element name="RecordsetResponse" type="s60:RecordsetResponse" />
+      <s:element name="RecordsetResponse" type="s61:RecordsetResponse" />
     </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberExtensionRequest.xsd">
       <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberExtension.xsd" />
-      <s:element name="MemberExtensionRequest" type="s61:MemberExtensionRequest" />
+      <s:element name="MemberExtensionRequest" type="s62:MemberExtensionRequest" />
       <s:complexType name="MemberExtensionRequest">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" name="MemberExtension" type="s53:MemberExtension" />
@@ -1968,7 +1999,7 @@
       <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ExceptionInfo.xsd" />
       <s:complexType name="MemberExtensionResponse">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s62:ArrayOfMemberExtension" />
+          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s63:ArrayOfMemberExtension" />
           <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="HasErrors" type="s:boolean" />
           <s:element minOccurs="0" maxOccurs="1" name="ExceptionInfo" type="s3:ExceptionInfo" />
@@ -1979,14 +2010,14 @@
           <s:element minOccurs="0" maxOccurs="unbounded" name="MemberExtension" nillable="true" type="s53:MemberExtension" />
         </s:sequence>
       </s:complexType>
-      <s:element name="MemberExtensionResponse" type="s62:MemberExtensionResponse" />
+      <s:element name="MemberExtensionResponse" type="s63:MemberExtensionResponse" />
     </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClofficeRequest.xsd">
       <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Cloffice.xsd" />
-      <s:element name="ClofficeRequest" type="s63:ClofficeRequest" />
+      <s:element name="ClofficeRequest" type="s64:ClofficeRequest" />
       <s:complexType name="ClofficeRequest">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="Cloffice" type="s64:Cloffice" />
+          <s:element minOccurs="0" maxOccurs="1" name="Cloffice" type="s65:Cloffice" />
           <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
         </s:sequence>
       </s:complexType>
@@ -2025,7 +2056,7 @@
           <s:element minOccurs="1" maxOccurs="1" name="DAYPASS_CONSEC" type="s:decimal" />
           <s:element minOccurs="1" maxOccurs="1" name="EARLYCHECKOUT_CONSEC" type="s:decimal" />
           <s:element minOccurs="0" maxOccurs="1" name="SALES_ROOM_ORIGOS" type="s:string" />
-          <s:element minOccurs="1" maxOccurs="1" name="WORK" type="s65:YesNo" />
+          <s:element minOccurs="1" maxOccurs="1" name="WORK" type="s66:YesNo" />
         </s:sequence>
       </s:complexType>
     </s:schema>
@@ -2042,7 +2073,7 @@
       <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ExceptionInfo.xsd" />
       <s:complexType name="ClofficeResponse">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s66:ArrayOfCloffice" />
+          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s67:ArrayOfCloffice" />
           <s:element minOccurs="1" maxOccurs="1" name="HasErrors" type="s:boolean" />
           <s:element minOccurs="0" maxOccurs="1" name="ExceptionInfo" type="s3:ExceptionInfo" />
           <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
@@ -2050,17 +2081,17 @@
       </s:complexType>
       <s:complexType name="ArrayOfCloffice">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="Cloffice" nillable="true" type="s64:Cloffice" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Cloffice" nillable="true" type="s65:Cloffice" />
         </s:sequence>
       </s:complexType>
-      <s:element name="ClofficeResponse" type="s66:ClofficeResponse" />
+      <s:element name="ClofficeResponse" type="s67:ClofficeResponse" />
     </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/VendedorRequest.xsd">
       <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Vendedor.xsd" />
-      <s:element name="VendedorRequest" type="s67:VendedorRequest" />
+      <s:element name="VendedorRequest" type="s68:VendedorRequest" />
       <s:complexType name="VendedorRequest">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="Vendedor" type="s68:Vendedor" />
+          <s:element minOccurs="0" maxOccurs="1" name="Vendedor" type="s69:Vendedor" />
           <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
         </s:sequence>
       </s:complexType>
@@ -2101,7 +2132,7 @@
       <s:import namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ExceptionInfo.xsd" />
       <s:complexType name="VendedorResponse">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s69:ArrayOfVendedor" />
+          <s:element minOccurs="0" maxOccurs="1" name="Data" type="s70:ArrayOfVendedor" />
           <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="HasErrors" type="s:boolean" />
           <s:element minOccurs="0" maxOccurs="1" name="ExceptionInfo" type="s3:ExceptionInfo" />
@@ -2109,10 +2140,10 @@
       </s:complexType>
       <s:complexType name="ArrayOfVendedor">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="Vendedor" nillable="true" type="s68:Vendedor" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Vendedor" nillable="true" type="s69:Vendedor" />
         </s:sequence>
       </s:complexType>
-      <s:element name="VendedorResponse" type="s69:VendedorResponse" />
+      <s:element name="VendedorResponse" type="s70:VendedorResponse" />
     </s:schema>
   </wsdl:types>
   <wsdl:message name="ApplyValidityByAccountsSoapIn">

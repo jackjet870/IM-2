@@ -9,6 +9,8 @@ using IM.Base.Helpers;
 using IM.BusinessRules.BR;
 using IM.Base.Reports;
 using IM.Host.Classes;
+using System.IO;
+using System.Diagnostics;
 
 namespace IM.Host.Forms
 {
@@ -47,6 +49,7 @@ namespace IM.Host.Forms
       var filters = new List<Tuple<string, string>>();
       var daterange = DateHelper.DateRange(dtpDate.Value.Value, dtpDate.Value.Value);
       var dateFileName = DateHelper.DateRangeFileName(dtpDate.Value.Value, dtpDate.Value.Value);
+      FileInfo fileinfo = null;
       switch ((lstHostReports.SelectedItem as ListBoxItem).Content.ToString())
       {
         case "Premanifest":
@@ -55,7 +58,7 @@ namespace IM.Host.Forms
           {
             filters.Add(Tuple.Create("Filter Range", daterange));
             filters.Add(Tuple.Create("Sales Room", App.User.SalesRoom.srID));
-            EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstPremanifest, true, true), filters, "Premanifest", dateFileName, clsFormatReports.RptPremanifest());
+            fileinfo=EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstPremanifest, true, true), filters, "Premanifest", dateFileName, clsFormatReports.RptPremanifest());
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");
@@ -66,7 +69,7 @@ namespace IM.Host.Forms
           {
             filters.Add(Tuple.Create("Filter Range", daterange));
             filters.Add(Tuple.Create("Sales Room", App.User.SalesRoom.srID));
-            EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstPremanifestWithG, true, true), filters, "Premanifest With Gifts", dateFileName, clsFormatReports.RptPremanifestWithGifts());
+            fileinfo=EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList(lstPremanifestWithG, true, true), filters, "Premanifest With Gifts", dateFileName, clsFormatReports.RptPremanifestWithGifts());
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");
@@ -90,7 +93,7 @@ namespace IM.Host.Forms
                 });
             });
 
-            EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstUplistEnd, true, true), filters, "Up List End", dateFileName, clsFormatReport.RptUpList());
+            fileinfo=EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(lstUplistEnd, true, true), filters, "Up List End", dateFileName, clsFormatReport.RptUpList());
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");
@@ -126,11 +129,14 @@ namespace IM.Host.Forms
               });
             });
 
-            EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(newUplist, true, true), filters, "Up List Start", dateFileName, clsFormatReport.RptUpList());
+            fileinfo=EpplusHelper.CreateExcelCustomPivot(TableHelper.GetDataTableFromList(newUplist, true, true), filters, "Up List Start", dateFileName, clsFormatReport.RptUpList());
           }
           else
             UIHelper.ShowMessage("There is no data for make a report");
           break;
+
+          if (fileinfo != null)
+            Process.Start(fileinfo.FullName);
       }
     }
     #endregion 

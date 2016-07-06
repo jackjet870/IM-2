@@ -156,6 +156,12 @@
       <DependentUpon>rptEquityGolfFields.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\rptEquityMembershipsPrevious.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptEquityMembershipsPrevious.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\rptEquityPaymentPromises.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -321,6 +327,10 @@
     <EmbeddedResource Include="Reports\rptEquityGolfFields.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptEquityGolfFields.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\rptEquityMembershipsPrevious.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptEquityMembershipsPrevious.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\rptEquityPaymentPromises.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

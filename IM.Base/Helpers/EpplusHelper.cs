@@ -207,7 +207,7 @@ namespace IM.Base.Helpers
       //Renombramos las columnas.
       dtData.Columns.Cast<DataColumn>().ToList().ForEach(c =>
       {
-        c.ColumnName = formatColumns[dtData.Columns.IndexOf(c)].Title ?? formatColumns[dtData.Columns.IndexOf(c)].PropertyName;
+        c.ColumnName = formatColumns[dtData.Columns.IndexOf(c)].PropertyName ?? formatColumns[dtData.Columns.IndexOf(c)].Title;
       });
 
       //Cargamos los datos en la hoja0.
@@ -276,7 +276,7 @@ namespace IM.Base.Helpers
         .OrderBy(c => c.Order)
         .ToList().ForEach(col =>
         {
-          var ptfField = pivotTable.ColumnFields.Add(pivotTable.Fields[col.Title ?? col.PropertyName]);
+          var ptfField = pivotTable.ColumnFields.Add(pivotTable.Fields[col.PropertyName ?? col.Title]);
 
           if (!isPivot) //Si se va manejar el formato tabular.
             ptfField.ShowAll = false;
@@ -312,7 +312,7 @@ namespace IM.Base.Helpers
         .ToList().ForEach(rowFormat =>
         {
           //Lo Agregamos a la lista de Filas.
-          var ptfField = pivotTable.RowFields.Add(pivotTable.Fields[rowFormat.Title ?? rowFormat.PropertyName]);
+          var ptfField = pivotTable.RowFields.Add(pivotTable.Fields[rowFormat.PropertyName ?? rowFormat.Title]);
 
           if (!isPivot) //Si se va manejar el formato tabular.
           {
@@ -366,11 +366,11 @@ namespace IM.Base.Helpers
         .OrderBy(c => c.Order)
         .ToList().ForEach(valueFormat =>
         {
-          var valueField = pivotTable.DataFields.Add(pivotTable.Fields[valueFormat.Title ?? valueFormat.PropertyName]);
+          var valueField = pivotTable.DataFields.Add(pivotTable.Fields[valueFormat.PropertyName ?? valueFormat.Title]);
 
           if (!isPivot)
           {
-            valueField.Name = valueFormat.Title ?? valueFormat.PropertyName;
+            valueField.Name = valueFormat.Title; //?? valueFormat.PropertyName;
             valueField.BaseField = 0;
             valueField.BaseItem = 0;
             valueField.Function = valueFormat.Function;
@@ -397,9 +397,9 @@ namespace IM.Base.Helpers
         var rowCount = pivotTable.RowFields.Count(c => !(c.Compact && c.Outline));
 
         var formatHeadersValue = formatHeaders.Where(c => c.Axis == ePivotFieldAxis.Values).OrderBy(c => c.Order).GroupBy(c => c.SuperHeader).ToList();
-        var columnasAgrupadas = new List<ExcelFormatTable>();
         formatHeadersValue.ForEach(v =>
         {
+          var columnasAgrupadas = new List<ExcelFormatTable>();
           var fromCol = 0;
           for (var i = 0; i < v.Count(); i++)
           {
@@ -3133,7 +3133,7 @@ namespace IM.Base.Helpers
       {
         var tableStyle = excelWorkbook.Styles.CreateNamedStyle(tableData.Name + "TableColumnStyle" + contColumn);
         tableStyle.Style.HorizontalAlignment = item.Alignment;
-        tableStyle.Style.Font.Size = 9;
+        //tableStyle.Style.Font.Size = 9;
         switch (item.Format)
         {
           case EnumFormatTypeExcel.General:
