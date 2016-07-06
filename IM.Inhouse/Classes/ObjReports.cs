@@ -9,7 +9,8 @@ namespace IM.Inhouse.Classes
   /// <history>
   /// [jorcanche] 05/04/2016 Created
   /// [ecanul] 07/06/2016 Modificated Archivo renombrado a ObjServices, Agregado de clase RptEquityMembershipIM
-  /// [jorcanche] 11/04/2016 Modificated  agrego la clase  
+  /// [jorcanche] 11/04/2016 Modificated  agrego la clase 
+  /// [ecanul] 06/07/2016 Modified. Agregue la clase heredada de RptEquityMembershipsPrevious
   /// </history>
   /// 
   #region Reservation
@@ -20,6 +21,8 @@ namespace IM.Inhouse.Classes
   public class RptEquityMembershipIM : RptEquityMembership { }
 
   public class RptEquityVerificationIM : RptEquityVerification { }
+
+  public class RptEquityMembershipsPreviousIM : RptEquityMembershipsPrevious { }
 
   public class RptEquitySalesmanIM : RptEquitySalesman { }
 

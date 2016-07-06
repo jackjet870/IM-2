@@ -16,14 +16,14 @@ namespace IM.Inhouse.Reports {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class rptEquityGolfFields : ReportClass {
+    public class rptEquityMembershipsPrevious : ReportClass {
         
-        public rptEquityGolfFields() {
+        public rptEquityMembershipsPrevious() {
         }
         
         public override string ResourceName {
             get {
-                return "rptEquityGolfFields.rpt";
+                return "rptEquityMembershipsPrevious.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace IM.Inhouse.Reports {
         
         public override string FullResourceName {
             get {
-                return "IM.Inhouse.Reports.rptEquityGolfFields.rpt";
+                return "IM.Inhouse.Reports.rptEquityMembershipsPrevious.rpt";
             }
             set {
                 // Do nothing
@@ -90,9 +90,9 @@ namespace IM.Inhouse.Reports {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedrptEquityGolfFields : Component, ICachedReport {
+    public class CachedrptEquityMembershipsPrevious : Component, ICachedReport {
         
-        public CachedrptEquityGolfFields() {
+        public CachedrptEquityMembershipsPrevious() {
         }
         
         [Browsable(false)]
@@ -129,7 +129,7 @@ namespace IM.Inhouse.Reports {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            rptEquityGolfFields rpt = new rptEquityGolfFields();
+            rptEquityMembershipsPrevious rpt = new rptEquityMembershipsPrevious();
             rpt.Site = this.Site;
             return rpt;
         }
