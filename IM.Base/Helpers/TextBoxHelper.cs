@@ -85,7 +85,7 @@ namespace IM.Base.Helpers
     /// </history>
     public static void IntTextInput(object sender, TextCompositionEventArgs e)
     {
-      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
+      e.Handled = !Char.IsDigit(Convert.ToChar(e.Text));
     }
     #endregion
 
