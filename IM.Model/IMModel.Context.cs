@@ -6096,5 +6096,38 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CopyTourTimesBySalesRoomWeekDayToWeekDaysOfSalesRoom", salesRoomParameter, weekDayParameter);
         }
+    
+        public virtual ObjectResult<RptStatsBySegment> USP_IM_RptStatsBySegment(string datesFrom, string datesTo, string salesRooms, string salesmanID, Nullable<bool> bySegmentsCategories, Nullable<bool> own, Nullable<bool> includeAllSalesmen)
+        {
+            var datesFromParameter = datesFrom != null ?
+                new ObjectParameter("DatesFrom", datesFrom) :
+                new ObjectParameter("DatesFrom", typeof(string));
+    
+            var datesToParameter = datesTo != null ?
+                new ObjectParameter("DatesTo", datesTo) :
+                new ObjectParameter("DatesTo", typeof(string));
+    
+            var salesRoomsParameter = salesRooms != null ?
+                new ObjectParameter("SalesRooms", salesRooms) :
+                new ObjectParameter("SalesRooms", typeof(string));
+    
+            var salesmanIDParameter = salesmanID != null ?
+                new ObjectParameter("SalesmanID", salesmanID) :
+                new ObjectParameter("SalesmanID", typeof(string));
+    
+            var bySegmentsCategoriesParameter = bySegmentsCategories.HasValue ?
+                new ObjectParameter("BySegmentsCategories", bySegmentsCategories) :
+                new ObjectParameter("BySegmentsCategories", typeof(bool));
+    
+            var ownParameter = own.HasValue ?
+                new ObjectParameter("Own", own) :
+                new ObjectParameter("Own", typeof(bool));
+    
+            var includeAllSalesmenParameter = includeAllSalesmen.HasValue ?
+                new ObjectParameter("IncludeAllSalesmen", includeAllSalesmen) :
+                new ObjectParameter("IncludeAllSalesmen", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatsBySegment>("USP_IM_RptStatsBySegment", datesFromParameter, datesToParameter, salesRoomsParameter, salesmanIDParameter, bySegmentsCategoriesParameter, ownParameter, includeAllSalesmenParameter);
+        }
     }
 }
