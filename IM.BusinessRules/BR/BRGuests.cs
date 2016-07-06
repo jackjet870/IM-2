@@ -249,7 +249,7 @@ namespace IM.BusinessRules.BR
       {
         return dbContext.USP_OR_GetGuestMovements(guestId).ToList();
       }
-    } 
+    }
     #endregion
 
     #region SaveGuest
@@ -478,14 +478,21 @@ namespace IM.BusinessRules.BR
     /// <param name="filtros"></param>
     /// <returns>List<GuestByPR></returns>
     /// <history>
-    /// [erosado] 18/Mar/2016
+    /// [erosado] 18/03/2016 Created.
+    /// [erosado] 06/07/2016 Modified. Se agregó Async.
     /// </history>
-    public static List<GuestByPR> GetGuestsByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, List<bool> filtros)
+    public async static Task<List<GuestByPR>> GetGuestsByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, List<bool> filtros)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      List<GuestByPR> result = new List<GuestByPR>();
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetGuestsByPR(dateFrom, dateTo, leadSources, PR, filtros[0], filtros[1], filtros[2], filtros[3], filtros[4], filtros[5], filtros[6]).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetGuestsByPR;
+          result = dbContext.USP_OR_GetGuestsByPR(dateFrom, dateTo, leadSources, PR, filtros[0], filtros[1], filtros[2], filtros[3], filtros[4], filtros[5], filtros[6]).ToList();
+        }
+      });
+      return result;
     }
 
     #endregion
@@ -1021,7 +1028,7 @@ namespace IM.BusinessRules.BR
       });
 
       return lstGuests;
-    } 
+    }
     #endregion
 
 

@@ -1,0 +1,425 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:IM.Styles">
+    <!--#region Personnel-->
+
+    <!--#region Personnel Img-->
+    <DataTemplate x:Key="cbx-Personnel-img">
+        <Border Height="30">
+            <Grid ToolTip="{Binding peN}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
+                    <Viewbox Width="16" Stretch="Uniform" >
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BUser.png"/>
+                    </Viewbox>
+                    <TextBlock Text="{Binding peID}" FontWeight="Bold" TextAlignment="Center" FontSize="10"/>
+                </StackPanel>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="0" Text="{Binding peN}"/>
+                <TextBlock  Text="{Binding deN}" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="1"/>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <!--#endregion-->
+
+    <!--#region Personnel Concat-->
+    <DataTemplate x:Key="cbx-Personnel-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="peID"/>
+                            <Binding Path="peN"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region Lead Source-->
+    <DataTemplate x:Key="cbx-LeadSource-img">
+        <Border Height="35" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
+                    <Viewbox Width="16" Stretch="Uniform" >
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BHotel.png"/>
+                    </Viewbox>
+                    <TextBlock Text="{Binding peID}" FontWeight="Bold" TextAlignment="Center" FontSize="10"/>
+                </StackPanel>
+
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#region Languages -->
+    <DataTemplate x:Key="cbx-Languages-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="laID"/>
+                            <Binding Path="laN"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <!--#endregion-->
+
+    <!--#region Marital-->
+    <DataTemplate x:Key="cbx-MaritalStatus-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="msID"/>
+                            <Binding Path="msN"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <!--#endregion-->
+
+    <!--#region SaleRoom-->
+
+    <!--#region SalesRoom Concat-->
+    <DataTemplate x:Key="cbx-SaleRoom-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="srID"/>
+                            <Binding Path="srN"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#region SaleRoom Img-->
+    <DataTemplate x:Key="cbx-SaleRoom-img">
+        <Border Height="30" >
+            <Grid ToolTip="{Binding srN}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
+                    <Viewbox Width="24" Stretch="Uniform" >
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BSalesRooms.png"/>
+                    </Viewbox>
+                </StackPanel>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="0" Text="{Binding srN}"/>
+                <TextBlock  Text="{Binding srID}" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="1"/>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region Location-->
+
+    <!--#region Location Concat-->
+    <DataTemplate x:Key="cbx-Location-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="loID"/>
+                            <Binding Path="loN"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#region Location Img-->
+    <DataTemplate x:Key="cbx-Location-img">
+        <Border Height="30">
+            <Grid ToolTip="{Binding loN}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
+                    <Viewbox Width="24" Stretch="Uniform" >
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BLocation.png"/>
+                    </Viewbox>
+                </StackPanel>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="0" Text="{Binding loN}"/>
+                <TextBlock  Text="{Binding loID}" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="1"/>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region Hotel Img-->
+    <DataTemplate x:Key="cbx-Hotel-img">
+        <Border Height="30">
+            <Grid ToolTip="{Binding hoID}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
+                    <Viewbox Width="24" Stretch="Uniform" >
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BHotel.png"/>
+                    </Viewbox>
+                </StackPanel>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="0" Text="{Binding hoID}"/>
+                <TextBlock  Text="{Binding hoGroup}" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="1"/>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#region Agency Img-->
+    <DataTemplate x:Key="cbx-Agency-img">
+        <Border Height="30">
+            <Grid ToolTip="{Binding agN}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
+                    <Viewbox Width="24" Stretch="Uniform" >
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BAgency.png"/>
+                    </Viewbox>
+                </StackPanel>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="0" Text="{Binding agN}"/>
+                <TextBlock  Text="{Binding agID}" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="1"/>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#region Country-->
+
+    <!--#region Country Img-->
+    <DataTemplate x:Key="cbx-Country-img">
+        <Border Height="30">
+            <Grid ToolTip="{Binding coN}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.RowSpan="2" Grid.Column="0" Margin="2">
+                    <Viewbox Width="24" Stretch="Uniform" >
+                        <Image Source="pack://application:,,,/IM.Styles;component/Images/BCountry.png"/>
+                    </Viewbox>
+                </StackPanel>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="0" Text="{Binding coN}"/>
+                <TextBlock  Text="{Binding coID}" TextAlignment="Justify" FontSize="10"
+                            Grid.Column="1" Grid.Row="1"/>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region Guest Status Type-->
+
+    <!--#region Guest Status Type Concat-->
+    <DataTemplate x:Key="cbx-GuestStatusType-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="gsID"/>
+                            <Binding Path="gsN"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region Currency-->
+
+    <!--#region Currency Concat-->
+    <DataTemplate x:Key="cbx-Currency-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="cuID"/>
+                            <Binding Path="cuN"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region Payment Type-->
+
+    <!--#region Payment Type Concat-->
+    <DataTemplate x:Key="cbx-PaymentType-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="ptID"/>
+                            <Binding Path="ptN"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region Salesmen -->
+
+    <!--#region Salesmen Concat-->
+    <DataTemplate x:Key="cbx-Salesmen-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="CODE"/>
+                            <Binding Path="NAME"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+    <!--#endregion-->
+</ResourceDictionary>

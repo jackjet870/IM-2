@@ -5,11 +5,13 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/IM.SalesLiner;component/Styles/General.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IM.SalesLiner;component/Styles/ComboBoxTemplate.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/sDataGrid.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/sComboBox.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/tComboBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDataGrid.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styComboBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Templates/tmpComboBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDatePicker.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styTextBlock.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styBorder.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styImage.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

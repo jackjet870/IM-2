@@ -23,7 +23,7 @@ namespace IM.PRStatistics.Forms
   public partial class frmPRStatistics : Window
   {
     #region Propiedades y Atributos
-    List<Tuple<string,string>> filterTuple; // Agrega los filtros de busqueda
+    List<Tuple<string, string>> filterTuple; // Agrega los filtros de busqueda
     public ExecuteCommandHelper LoadCatalogList { get; set; }
     #endregion
 
@@ -63,15 +63,13 @@ namespace IM.PRStatistics.Forms
     /// </history>
     private void imgButtonOk_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      DateTime from = (DateTime)dtpkFrom?.SelectedDate;
-      DateTime to = (DateTime)dtpkTo?.SelectedDate;
-
       imgButtonOk.Focus();
       if (lsbxLeadSources.SelectedItems.Count > 0 && lsbxSalesRooms.SelectedItems.Count > 0
               && lsbxCountries.SelectedItems.Count > 0 && lsbxAgencies.SelectedItems.Count > 0
               && lsbxMarkets.SelectedItems.Count > 0)
       {
-        if (from.Date <= to.Date)
+
+        if (dtpkFrom.Text!= "" && dtpkTo.Text!="" && dtpkFrom?.SelectedDate.Value <= dtpkTo?.SelectedDate.Value)
         {
           filterTuple = new List<Tuple<string, string>>();
           StaStart("Loading Data...");
@@ -90,7 +88,7 @@ namespace IM.PRStatistics.Forms
           UIHelper.ShowMessage("Please check the selected date range", MessageBoxImage.Warning);
           dtpkFrom.Focus();
         }
-       
+
       }
       else
       {
@@ -106,14 +104,14 @@ namespace IM.PRStatistics.Forms
     private void imgButtonPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       List<RptPRStats> lstRptStats = dtgr.DataContext as List<RptPRStats>;
-      if (lstRptStats != null )
+      if (lstRptStats != null)
       {
         string dateRangeFileName = DateHelper.DateRangeFileName(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value);
         FileInfo templatePath = new FileInfo(string.Concat(Directory.GetCurrentDirectory(), "\\ReportTemplate\\RptPRStatistics.xlsx"));
         DataTable dt = TableHelper.GetDataTableFromList(lstRptStats);
         string nombreReporte = "PR Statistics";
-        FileInfo finfo = EpplusHelper.CreateGeneralRptExcel(filterTuple, dt, nombreReporte,dateRangeFileName, UsefulMethods.getExcelFormatTable());
-        
+        FileInfo finfo = EpplusHelper.CreateGeneralRptExcel(filterTuple, dt, nombreReporte, dateRangeFileName, UsefulMethods.getExcelFormatTable());
+
         if (finfo != null)
         {
           Process.Start(finfo.FullName);
@@ -121,7 +119,7 @@ namespace IM.PRStatistics.Forms
       }
       else
       {
-        UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Information,"PR Statistics");
+        UIHelper.ShowMessage("There is no info to make a report", MessageBoxImage.Information, "PR Statistics");
       }
     }
     /// <summary>
@@ -236,7 +234,7 @@ namespace IM.PRStatistics.Forms
       lblStatusBarMessage.Content = message;
       imgStatusBarMessage.Visibility = Visibility.Visible;
       Cursor = Cursors.Wait;
-      
+
     }
 
     /// <summary>
@@ -281,14 +279,14 @@ namespace IM.PRStatistics.Forms
         List<LeadSourceByUser> data = await BRLeadSources.GetLeadSourcesByUser(user);
         if (data.Any())
         {
-          lsbxLeadSources.DataContext = data;
+          lsbxLeadSources.ItemsSource = data;
         }
         StaEnd();
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
       }
     }
 
@@ -305,7 +303,7 @@ namespace IM.PRStatistics.Forms
         List<SalesRoomByUser> data = await BRSalesRooms.GetSalesRoomsByUser(user);
         if (data.Any())
         {
-          lsbxSalesRooms.DataContext = data;
+          lsbxSalesRooms.ItemsSource = data;
           chbxSalesRooms.IsChecked = true;
         }
         StaEnd();
@@ -313,9 +311,9 @@ namespace IM.PRStatistics.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
       }
-      
+
     }
     /// <summary>
     /// Obtiene el catalogo de countries
@@ -327,10 +325,10 @@ namespace IM.PRStatistics.Forms
     {
       try
       {
-        List<CountryShort> data =await BRCountries.GetCountries(1);
+        List<CountryShort> data = await BRCountries.GetCountries(1);
         if (data.Any())
         {
-          lsbxCountries.DataContext = data;
+          lsbxCountries.ItemsSource = data;
           chbxCountries.IsChecked = true;
         }
         StaEnd();
@@ -338,7 +336,7 @@ namespace IM.PRStatistics.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
       }
     }
 
@@ -352,18 +350,18 @@ namespace IM.PRStatistics.Forms
     {
       try
       {
-          List<AgencyShort> data =await BRAgencies.GetAgencies(1);
-          if (data.Any())
-          {
-            lsbxAgencies.DataContext = data;
-            chbxAgencies.IsChecked = true;
-          }
+        List<AgencyShort> data = await BRAgencies.GetAgencies(1);
+        if (data.Any())
+        {
+          lsbxAgencies.ItemsSource = data;
+          chbxAgencies.IsChecked = true;
+        }
         StaEnd();
       }
-      catch (Exception ex )
+      catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
       }
     }
     /// <summary>
@@ -379,15 +377,17 @@ namespace IM.PRStatistics.Forms
         List<MarketShort> data = await BRMarkets.GetMarkets(1);
         if (data.Any())
         {
-          lsbxMarkets.DataContext = data;
+          lsbxMarkets.ItemsSource = data;
           chbxMarkets.IsChecked = true;
         }
+        StaEnd();
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
       }
-      StaEnd();
+     
     }
 
     /// <summary>
@@ -396,42 +396,28 @@ namespace IM.PRStatistics.Forms
     /// <history>
     /// [erosado] 08/Mar/2016 Created
     /// </history>
-    public void DoGetRptPrStats(DateTime dateFrom, DateTime dateTo, List<Tuple<string, string>> filtros)
+    public async void DoGetRptPrStats(DateTime dateFrom, DateTime dateTo, List<Tuple<string, string>> filtros)
     {
-      Task.Factory.StartNew(() => BRPRStats.GetPRStats(dateFrom, dateTo, filtros))
-      .ContinueWith(
-      (task1) =>
+      try
       {
-        if (task1.IsFaulted)
+        var data = await BRPRStats.GetPRStats(dateFrom, dateTo, filtros);
+        if (data.Any())
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          imgButtonOk.IsEnabled = true;
-          return false;
+          dtgr.DataContext = data;
+          StatusBarReg.Content = $"{(dtgr.SelectedIndex + 1).ToString()}/{ dtgr.Items.Count.ToString()}";
         }
         else
         {
-          if (task1.IsCompleted)
-          {
-            List<RptPRStats> data = task1.Result;
-            if (data.Count > 0)
-            {
-              dtgr.DataContext = data;
-              StatusBarReg.Content = string.Format("{0}/{1}", (dtgr.SelectedIndex + 1).ToString(), dtgr.Items.Count.ToString());
-              
-            }
-            else
-            {
-              UIHelper.ShowMessage("There is no data");
-            }
-            StaEnd();
-            imgButtonOk.IsEnabled = true;
-          }
-          return false;
+          UIHelper.ShowMessage("There is no data");
         }
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+        StaEnd();
+        imgButtonOk.IsEnabled = true;
+      }
+      catch (Exception ex)
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
+      }
     }
     #endregion
 
@@ -526,7 +512,7 @@ namespace IM.PRStatistics.Forms
     /// </history>
     private void lsbxLeadSources_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      txtbLSSelected.Text = string.Format("{0}/{1}", lsbxLeadSources.SelectedItems.Count.ToString(), lsbxLeadSources.Items.Count.ToString());
+      txtbLSSelected.Text = $"{lsbxLeadSources.SelectedItems.Count.ToString()}/{lsbxLeadSources.Items.Count.ToString()}";
     }
     /// <summary>
     /// Muestra en un Textblock cuantos elementos de la lista Sales Rooms estan seleccionados 
@@ -536,7 +522,7 @@ namespace IM.PRStatistics.Forms
     /// </history>
     private void lsbxSalesRooms_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      txtbSRSelected.Text = string.Format("{0}/{1}", lsbxSalesRooms.SelectedItems.Count.ToString(), lsbxSalesRooms.Items.Count.ToString());
+      txtbSRSelected.Text = $"{lsbxSalesRooms.SelectedItems.Count.ToString()}/{lsbxSalesRooms.Items.Count.ToString()}";
     }
     /// <summary>
     /// Muestra en un Textblock cuantos elementos de la lista Countries estan seleccionados 
@@ -546,7 +532,7 @@ namespace IM.PRStatistics.Forms
     /// </history>
     private void lsbxCountries_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      txtbCOSelected.Text = string.Format("{0}/{1}", lsbxCountries.SelectedItems.Count.ToString(), lsbxCountries.Items.Count.ToString());
+      txtbCOSelected.Text = $"{lsbxCountries.SelectedItems.Count.ToString()}/{lsbxCountries.Items.Count.ToString()}";
     }
     /// <summary>
     /// Muestra en un Textblock cuantos elementos de la lista Agencies estan seleccionados 
@@ -556,7 +542,7 @@ namespace IM.PRStatistics.Forms
     /// </history>
     private void lsbxAgencies_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      txtbAGSelected.Text = string.Format("{0}/{1}", lsbxAgencies.SelectedItems.Count.ToString(), lsbxAgencies.Items.Count.ToString());
+      txtbAGSelected.Text = $"{lsbxAgencies.SelectedItems.Count.ToString()}/{lsbxAgencies.Items.Count.ToString()}";
     }
     /// <summary>
     /// Muestra en un Textblock cuantos elementos de la lista Markets estan seleccionados 
@@ -566,7 +552,7 @@ namespace IM.PRStatistics.Forms
     /// </history>
     private void lsbxMarkets_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      txtbMKSelected.Text = string.Format("{0}/{1}", lsbxMarkets.SelectedItems.Count.ToString(), lsbxMarkets.Items.Count.ToString());
+      txtbMKSelected.Text = $"{lsbxMarkets.SelectedItems.Count.ToString()}/{lsbxMarkets.Items.Count.ToString()}";
     }
     /// <summary>
     /// Nos indica en la barra de estatus el numero de elementos (Index) que esta seleccionado en el datagrid
@@ -578,10 +564,8 @@ namespace IM.PRStatistics.Forms
     /// </history>
     private void dtgr_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      StatusBarReg.Content = string.Format("{0}/{1}", (dtgr.SelectedIndex + 1).ToString(), dtgr.Items.Count.ToString());
-
+      StatusBarReg.Content = $"{(dtgr.SelectedIndex + 1).ToString()}/{dtgr.Items.Count.ToString()}";
     }
-
     #endregion
 
     #region Metodos
@@ -606,6 +590,6 @@ namespace IM.PRStatistics.Forms
     }
     #endregion
 
-   
+
   }
 }

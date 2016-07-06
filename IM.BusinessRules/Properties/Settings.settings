@@ -18,7 +18,7 @@
       <Value Profile="(Default)">60</Value>
     </Setting>
     <Setting Name="USP_OR_RptPRStats" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">120</Value>
+      <Value Profile="(Default)">180</Value>
     </Setting>
     <Setting Name="UPS_OR_RptProductionBySalesRoom_Timeout" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">120</Value>
@@ -183,6 +183,9 @@
       <Value Profile="(Default)">180</Value>
     </Setting>
     <Setting Name="USP_OR_UpdatePersonnelId" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">180</Value>
+    </Setting>
+    <Setting Name="USP_OR_GetGuestsByPR" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">180</Value>
     </Setting>
   </Settings>

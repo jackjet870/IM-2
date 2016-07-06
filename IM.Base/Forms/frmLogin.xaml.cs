@@ -91,12 +91,28 @@ namespace IM.Base.Forms
     /// <param name="sender">sender</param>
     /// <param name="e">e</param>
     /// <history>
-    /// [erosado] 30/04/2016  Created
+    /// [erosado] 30/04/2016 Created
+    /// [wtorres] 05/07/2016 Modified. Ahora solo se carga la informacion del archivo Ini cuando no es modo Switch
     /// </history>
     private void Login_Loaded(object sender, RoutedEventArgs e)
     {
-      //Cargamos Datos del Configuration.ini
-      LoadFromFile();
+      //Si es modo Switch
+      if (_modeSwitchLoginUser)
+      {
+        if (UserData != null && UserData.AutoSign) // AutoSign Activo
+        {
+          // Se llenan los controles con informacion de UserData
+          txtUser.Text = UserData.User.peID;
+          txtPassword.Password = UserData.User.pePwd;
+          LoadPlace(UserData.User.peID, true, false);
+          chkAutoSign.IsChecked = UserData.AutoSign;
+        }
+      }
+      else
+      {
+        //Cargamos Datos del Configuration.ini
+        LoadFromFile();
+      }
       //Preparamos la interfaz
       UiPrepare();
     }
@@ -230,8 +246,9 @@ namespace IM.Base.Forms
     /// </summary>
     /// <history>
     /// [erosado] 19/Mar/2016 Created
-    /// [erosado] 14/04/2016  Modified Se agrego la seleccion de datos desde el archivo Configuration.ini
-    /// [erosado] 14/04/2016  Se modifico para busque en la fuente de datos que esta en memoria places.
+    /// [erosado] 14/04/2016  Modified. Se agrego la seleccion de datos desde el archivo Configuration.ini
+    /// [erosado] 14/04/2016  Modified. Se modifico para busque en la fuente de datos que esta en memoria places.
+    /// [wtorres] 05/07/2016  Modified. Ahora se busca el almacen por clave
     /// </history>
     public void DoGetWareHousesByUser(string IdUsuario, bool Autosign, bool ConfigurationIni)
     {
@@ -246,14 +263,14 @@ namespace IM.Base.Forms
         if (Autosign)
         {
           var lstPS = cmbPlace.ItemsSource as List<Item>;
-          int index = lstPS.FindIndex(x => x.Name.Equals(UserData.Warehouse.whN));
+          int index = lstPS.FindIndex(x => x.Id.Equals(UserData.Warehouse.whID));
           cmbPlace.SelectedIndex = index;
         }
         else
         {
           if (ConfigurationIni)
           {
-            var value = _iniFileHelper.readText("Login", "Warehouse", "");
+            var value = _iniFileHelper.ReadText("Login", "Warehouse", "");
             if (!string.IsNullOrEmpty(value))
             {
               cmbPlace.SelectedValue = value;
@@ -264,6 +281,7 @@ namespace IM.Base.Forms
         }
       }
       else { cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found"; }
+      cmbPlace.IsEnabled = data.Count > 1;
     }
     #endregion
 
@@ -272,8 +290,9 @@ namespace IM.Base.Forms
     /// Obtiene la lista de Location dependiendo el IdUsuario y PROGRAMAS IH
     /// </summary>
     /// <history>
-    /// [erosado] 19/Mar/2016 Created
-    /// [erosado] 14/04/2016  Modified Se agrego la seleccion de datos desde el archivo Configuration.ini
+    /// [erosado] 19/03/2016  Created
+    /// [erosado] 14/04/2016  Modified. Se agrego la seleccion de datos desde el archivo Configuration.ini
+    /// [wtorres] 05/07/2016  Modified. Ahora se busca la locacion por clave
     /// </history>
     public void DoGetLocationsByUser(string IdUsuario, bool Autosign, bool ConfigurationIni)
     {
@@ -288,14 +307,14 @@ namespace IM.Base.Forms
         if (Autosign)
         {
           var lstPS = cmbPlace.ItemsSource as List<Item>;
-          int index = lstPS.FindIndex(x => x.Name.Equals(UserData.Location.loN));
+          int index = lstPS.FindIndex(x => x.Id.Equals(UserData.Location.loID));
           cmbPlace.SelectedIndex = index;
         }
         else
         {
           if (ConfigurationIni)
           {
-            var value = _iniFileHelper.readText("Login", "Location", "");
+            var value = _iniFileHelper.ReadText("Login", "Location", "");
             if (!string.IsNullOrEmpty(value))
             {
               cmbPlace.SelectedValue = value;
@@ -331,6 +350,7 @@ namespace IM.Base.Forms
           cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found";
         }
       }
+      cmbPlace.IsEnabled = data.Count > 1;
     }
     #endregion
 
@@ -340,7 +360,8 @@ namespace IM.Base.Forms
     /// </summary>
     /// <history>
     /// [erosado] 19/Mar/2016 Created
-    /// [erosado] 14/04/2016  Modified Se agrego la seleccion de datos desde el archivo Configuration.ini
+    /// [erosado] 14/04/2016  Modified. Se agrego la seleccion de datos desde el archivo Configuration.ini
+    /// [wtorres] 05/07/2016  Modified. Ahora se busca la sala de ventas por clave
     /// </history>
     public void DoGetSalesRoomsByUser(string IdUsuario, bool Autosign, bool ConfigurationIni)
     {
@@ -354,14 +375,14 @@ namespace IM.Base.Forms
         if (Autosign)
         {
           var lstPS = cmbPlace.ItemsSource as List<Item>;
-          int index = lstPS.FindIndex(x => x.Name.Equals(UserData.SalesRoom.srN));
+          int index = lstPS.FindIndex(x => x.Id.Equals(UserData.SalesRoom.srID));
           cmbPlace.SelectedIndex = index;
         }
         else
         {
           if (ConfigurationIni)
           {
-            var value = _iniFileHelper.readText("Login", "SalesRoom", "");
+            var value = _iniFileHelper.ReadText("Login", "SalesRoom", "");
             if (!string.IsNullOrEmpty(value))
             {
               cmbPlace.SelectedValue = value;
@@ -399,8 +420,8 @@ namespace IM.Base.Forms
         {
           cmbPlace.IsEnabled = false; cmbPlace.Text = "No data found";
         }
-
       }
+      cmbPlace.IsEnabled = data.Count > 1;
     }
     #endregion
 
@@ -413,9 +434,10 @@ namespace IM.Base.Forms
     /// Funcion encargado de cargar los datos desde el archivo de configuracion
     /// </summary>
     /// <history>
-    /// [vipacheco] 08/03/2016 Modified --> se agrego case para sales room
-    /// [erosado]   14/04/2016  Modified. Se elimino la seleccion del archivo de configuracion de este metodo.
-    /// [erosado] 27/04/2016  Se simplifico la carga del archivo de configuracion.
+    /// [vipacheco] 08/03/2016 Modified. Se agrego case para sales room
+    /// [erosado]   14/04/2016 Modified. Se elimino la seleccion del archivo de configuracion de este metodo.
+    /// [erosado]   27/04/2016 Modified. Se simplifico la carga del archivo de configuracion.
+    /// [wtorres]   05/07/2016 Modified. Ahora se lee del archivo de configuracion el lugar y el Autosign
     /// </history>
     private void LoadFromFile()
     {
@@ -423,9 +445,11 @@ namespace IM.Base.Forms
       if (!File.Exists(strArchivo)) return;
       _iniFileHelper = new IniFileHelper(strArchivo);
 
-      //Se llenan los textBox de user y Password con informacion de Configuration.ini
-      txtUser.Text = _iniFileHelper.readText("Login", "UserName", "");
-      txtPassword.Password = _iniFileHelper.readText("Login", "Password", "");
+      //Se llenan los controles con informacion de Configuration.ini
+      txtUser.Text = _iniFileHelper.ReadText("Login", "UserName", "");
+      txtPassword.Password = _iniFileHelper.ReadText("Login", "Password", "");
+      LoadPlace(txtUser.Text.Trim(), false, true);
+      chkAutoSign.IsChecked = _iniFileHelper.ReadBoolean("Login", "Autosign", false);
     }
 
     #endregion
@@ -573,63 +597,31 @@ namespace IM.Base.Forms
     /// [erosado] 30/04/2016 Created
     /// </history>
     private void ValidationLoginMode()
-      {
+    {
+      bool autoSign = false;
       if (_modeSwitchLoginUser) // SwitchUser
       {
-        if (UserData != null && UserData.AutoSign) // AutoSign Activo
+        if (UserData != null && UserData.AutoSign && UserData.User.peID == txtUser.Text.Trim()) // AutoSign Activo
         {
-          if (UserData.User.peID == txtUser.Text.Trim())
-          {
-            // Se llenan los textBox de user y Password con informacion de UserData
-            txtUser.Text = UserData.User.peID;
-            txtPassword.Password = UserData.User.pePwd;
-            loadLoginControls(UserData.User.peID, true, false);
-          }
-          else
-          {
-            loadLoginControls(txtUser.Text, false, false);
-          }
-        
-        }
-        else if (_iniFileHelper != null && string.Equals(txtUser.Text, _iniFileHelper.readText("Login", "UserName", "")))
-        {// llena datos con config.
-          txtUser.Text = _iniFileHelper.readText("Login", "UserName", "");
-          txtPassword.Password = _iniFileHelper.readText("Login", "Password", "");
-          loadLoginControls(_iniFileHelper.readText("Login", "UserName", ""), false, true);
-        }
-        else
-        { //Esperar la informacion que meta el usuario
-          loadLoginControls(txtUser.Text, false, false);
+          autoSign = true;
         }
       }
-      else// New Login
-      {
-        if (_iniFileHelper != null && string.Equals(txtUser.Text, _iniFileHelper.readText("Login", "UserName", "")))
-        { // llena datos con config.
-          txtUser.Text = _iniFileHelper.readText("Login", "UserName", "");
-          txtPassword.Password = _iniFileHelper.readText("Login", "Password", "");
-          loadLoginControls(_iniFileHelper.readText("Login", "UserName", ""), false, true);
-        }
-        else
-        { //Esperar la informacion que meta el usuario
-          loadLoginControls(txtUser.Text, false, false);
-        }
-      }
+      LoadPlace(txtUser.Text.Trim(), autoSign, false);
     }
     #endregion
 
-    #region loadLoginControls
+    #region LoadPlace
 
     /// <summary>
-    /// Filtra el combobox dependiendo del tipo de login y el usuario
+    /// Filtra los lugares del usuario actual dependientdo del tipo de login y del usuario
     /// </summary>
     /// <param name="user">User</param>
     /// <param name="autosign">Si trae Activo Autosign</param>
-    /// <param name="configurationIni"></param>
+    /// <param name="configurationIni">Indica si tiene archivo de configuracion</param>
     /// <history>
     /// [erosado] 30/04/2016  Created
     /// </history>
-    private void loadLoginControls(string user, bool autosign, bool configurationIni)
+    private void LoadPlace(string user, bool autosign, bool configurationIni)
     {
       switch (_loginType)
       {

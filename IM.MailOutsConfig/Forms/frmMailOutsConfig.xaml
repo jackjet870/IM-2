@@ -7,7 +7,7 @@
         xmlns:base="clr-namespace:IM.Base.Helpers;assembly=IM.Base"
         mc:Ignorable="d" Title="Mail Outs Configuration"
     d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
-    Icon="/IM.MailOutsConfig;component/Images/IM.ico" WindowState="Normal" WindowStyle="SingleBorderWindow" ShowInTaskbar="False"
+    Icon="pack://application:,,,/IM.Styles;component/Images/IM-ico.png" WindowState="Normal" WindowStyle="SingleBorderWindow" ShowInTaskbar="False"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">
     <Window.Resources>
         <base:ByteToBoleanValueConverterHelper x:Key="ByteToBoleanValueConverterHelper"/>
@@ -31,35 +31,19 @@
         <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="3">
             <Border CornerRadius="5" BorderThickness="1" BorderBrush="Black"  Margin="0,5,5,10" Background="#147F79">
                 <StackPanel Height="40" >
-                    <TextBlock  Text="Lead Source" Style="{StaticResource ResourceKey=txtComboTitle}"/>
+                    <TextBlock  Text="Lead Source" Style="{StaticResource ResourceKey=txtb-HeaderCatalogs}"/>
                     <ComboBox x:Name="cbxLeadSource"  Width="180"  BorderThickness="0"  IsEditable="True" TextSearch.TextPath="lsN"
-                              HorizontalAlignment="Center" DisplayMemberPath="lsN" SelectedValuePath="lsID" SelectionChanged="cbxLeadSource_SelectionChanged">
-                        <ComboBox.Resources>
-                            <!--Fondo para Item Seleccionado-->
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
-                            <!--Fondo para Item No seleccionado-->
-                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
-                        </ComboBox.Resources>
-                    </ComboBox>
+                              HorizontalAlignment="Center" DisplayMemberPath="lsN" SelectedValuePath="lsID" SelectionChanged="cbxLeadSource_SelectionChanged"/>
                 </StackPanel>
             </Border>
-            <Border Style="{StaticResource brdLists}">
+            <Border Style="{StaticResource brd-Catalogs}"  Margin="0,5,5,0">
                 <StackPanel>
-                    <TextBlock Text="Mail Outs" Style="{StaticResource HeadersList}"/>
-                    <ListBox x:Name="lsbxMailOuts" ItemsSource="{Binding}" TextSearch.TextPath="moCode" SelectionChanged="lsbxMailOuts_SelectionChanged">
-                        <ListBox.Resources>
-                            <!--Fondo para Item Seleccionado-->
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
-                            <!--Fondo para Item No seleccionado-->
-                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
-                        </ListBox.Resources>
-                        <ListBox.Style>
-                            <StaticResource ResourceKey="lists"/>
-                        </ListBox.Style>
-                        <ListBox.ItemTemplate>
-                            <StaticResource ResourceKey="ListsMailOuts"/>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                    <TextBlock Text="Mail Outs" Style="{StaticResource txtb-HeaderCatalogs}"/>
+                    <ListBox x:Name="lsbxMailOuts" ItemsSource="{Binding}" TextSearch.TextPath="moCode" 
+                             SelectionChanged="lsbxMailOuts_SelectionChanged"
+                             Height="120" SelectionMode="Single" DisplayMemberPath="moCode"/>
+
+                    
                     <TextBlock Name="txtbMailOutsNumber" Text="Mail Outs" TextAlignment="Right" Margin="2,0"/>
                 </StackPanel>
             </Border>
@@ -79,7 +63,7 @@
                 </Grid.RowDefinitions>
 
                 <Viewbox Stretch="Uniform" Height="24" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0">
-                    <Image x:Name="image" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BUser.png"/>
+                    <Image x:Name="image" Source="pack://application:,,,/IM.Styles;component/Images/BUser.png"/>
                 </Viewbox>
                 <TextBlock x:Name="txtbUserName" VerticalAlignment="Center"
                            Foreground="White" Grid.Column="1" Grid.Row="0"/>
@@ -96,52 +80,52 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Horizontal"  Grid.Column="1" HorizontalAlignment="Stretch">
-                    <Border x:Name="imgEdit" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgEdit_MouseLeftButtonDown" ToolTip="Edit">
+                    <Border x:Name="imgEdit" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgEdit_MouseLeftButtonDown" ToolTip="Edit">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image x:Name="imagEdit" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BEdit.png"/>
+                                <Image x:Name="imagEdit" Source="pack://application:,,,/IM.Styles;component/Images/BEdit.png"/>
                             </Viewbox>
                             <TextBlock Text="Edit" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgAdd" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgAdd_MouseLeftButtonDown" ToolTip="Add">
+                    <Border x:Name="imgAdd" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgAdd_MouseLeftButtonDown" ToolTip="Add">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image x:Name="imagAdd" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BAdd.png"/>
+                                <Image x:Name="imagAdd" Source="pack://application:,,,/IM.Styles;component/Images/BAdd.png"/>
                             </Viewbox>
                             <TextBlock Text="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgSave" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgSave_MouseLeftButtonDown" ToolTip="Save" IsEnabled="False">
+                    <Border x:Name="imgSave" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgSave_MouseLeftButtonDown" ToolTip="Save" IsEnabled="False">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image x:Name="imagSave" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BSave.png"/>
+                                <Image x:Name="imagSave" Source="pack://application:,,,/IM.Styles;component/Images/BSave.png"/>
                             </Viewbox>
                             <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
 
-                    <Border x:Name="imgDelete" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgDelete_MouseLeftButtonDown" ToolTip="Delete" >
+                    <Border x:Name="imgDelete" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgDelete_MouseLeftButtonDown" ToolTip="Delete" >
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image x:Name="imagDelete" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BDelete.png"/>
+                                <Image x:Name="imagDelete" Source="pack://application:,,,/IM.Styles;component/Images/BDelete.png"/>
                             </Viewbox>
                             <TextBlock Text="Delete" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
 
-                    <Border x:Name="imgCancel" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgCancel_MouseLeftButtonDown" ToolTip="Cancel" IsEnabled="False">
+                    <Border x:Name="imgCancel" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgCancel_MouseLeftButtonDown" ToolTip="Cancel" IsEnabled="False">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image x:Name="imagCancel" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BCancel.png"/>
+                                <Image x:Name="imagCancel" Source="pack://application:,,,/IM.Styles;component/Images/BCancel.png"/>
                             </Viewbox>
                             <TextBlock Text="Cancel" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgExit" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgExit_MouseLeftButtonDown_1" ToolTip="Exit" Margin="5,0,5,0">
+                    <Border x:Name="imgExit" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgExit_MouseLeftButtonDown_1" ToolTip="Exit" Margin="5,0,5,0">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image x:Name="imagSalir" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BExit.png"/>
+                                <Image x:Name="imagSalir" Source="pack://application:,,,/IM.Styles;component/Images/BExit.png"/>
                             </Viewbox>
                             <TextBlock Text="Exit" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -175,14 +159,14 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <CheckBox Name="chkmoA" Content="Automatic Processing" Grid.Column="0"
-                                  Style="{StaticResource chkType2}" IsChecked="{Binding moA, Mode=TwoWay}"/>
+                                  Style="{StaticResource chk-VerticalCenter}" IsChecked="{Binding moA, Mode=TwoWay}"/>
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <TextBlock Text="Execution Order:" Style="{StaticResource txtbType1}"/>
-                        <TextBox Name="txtExecutionOrder" Style="{StaticResource txtType1}" 
+                        <TextBlock Text="Execution Order:" VerticalAlignment="Center"/>
+                        <TextBox Name="txtExecutionOrder" VerticalAlignment="Center" Width="50" Margin="5,0" 
                                      Text="{Binding moOrder, Mode=TwoWay}"/>
                     </StackPanel>
                     <CheckBox Name="chkmoCCheckIn" Content="Check In" Grid.Column="2" 
-                                  Style="{StaticResource chkType2}" IsChecked="{Binding moCCheckIn, Mode=TwoWay}"/>
+                                  Style="{StaticResource chk-VerticalCenter}" IsChecked="{Binding moCCheckIn, Mode=TwoWay}"/>
                 </Grid>
             </Border>
             <!--#endregion-->
@@ -196,22 +180,22 @@
                         <RowDefinition Height="25"/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
-                        <TextBlock Text="Arrival Date Between Today    +" Style="{StaticResource txtbType1}"/>
-                        <TextBox Name="txtmoCCheckInDFrom" Style="{StaticResource txtType1}" Text="{Binding moCCheckInDFrom, Mode=TwoWay}"/>
-                        <TextBlock Text="Days and Today +" Style="{StaticResource txtbType1}"/>
-                        <TextBox Name="txtmoCCheckInDTo" Style="{StaticResource txtType1}" Text="{Binding moCCheckInDTo, Mode=TwoWay}"/>
+                        <TextBlock Text="Arrival Date Between Today    +" VerticalAlignment="Center"/>
+                        <TextBox Name="txtmoCCheckInDFrom" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckInDFrom, Mode=TwoWay}"/>
+                        <TextBlock Text="Days and Today +" VerticalAlignment="Center"/>
+                        <TextBox Name="txtmoCCheckInDTo" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckInDTo, Mode=TwoWay}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1">
-                        <TextBlock Text="Depart. Date Between Today  +" Style="{StaticResource txtbType1}"/>
-                        <TextBox Name="txtmoCCheckOutDFrom" Style="{StaticResource txtType1}" Text="{Binding moCCheckOutDFrom, Mode=TwoWay}"/>
-                        <TextBlock Text="Days and Today +" Style="{StaticResource txtbType1}"/>
-                        <TextBox Name="txtmoCCheckOutDTo" Style="{StaticResource txtType1}" Text="{Binding moCCheckOutDTo, Mode=TwoWay}"/>
+                        <TextBlock Text="Depart. Date Between Today  +" VerticalAlignment="Center"/>
+                        <TextBox Name="txtmoCCheckOutDFrom" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckOutDFrom, Mode=TwoWay}"/>
+                        <TextBlock Text="Days and Today +" VerticalAlignment="Center"/>
+                        <TextBox Name="txtmoCCheckOutDTo" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckOutDTo, Mode=TwoWay}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="2">
-                        <CheckBox Name="chkBookD" Content="Book Date Between Today +" Style="{StaticResource chkType1}" IsChecked="{Binding moCBookD, Mode=TwoWay}"/>
-                        <TextBox Name="txtmoCBookDFrom" Style="{StaticResource txtType1}" Text="{Binding moCBookDFrom, Mode=TwoWay}" />
-                        <TextBlock Text="Days and Today +" Style="{StaticResource txtbType1}"/>
-                        <TextBox Name="txtmoCBookDTo" Style="{StaticResource txtType1}" Text="{Binding moCBookDTo, Mode=TwoWay}"/>
+                        <CheckBox Name="chkBookD" Content="Book Date Between Today +" Style="{StaticResource chk-VerticalCenter}" IsChecked="{Binding moCBookD, Mode=TwoWay}"/>
+                        <TextBox Name="txtmoCBookDFrom" VerticalAlignment="Center" Width="50" Margin="0,0,5,0" Text="{Binding moCBookDFrom, Mode=TwoWay}" />
+                        <TextBlock Text="Days and Today +" VerticalAlignment="Center"/>
+                        <TextBox Name="txtmoCBookDTo" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCBookDTo, Mode=TwoWay}"/>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -228,38 +212,38 @@
 
                     <Border Name="brdContacted" Grid.Column="0" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Background="Transparent" Margin="0,5,0,5" IsEnabled="False">
                         <StackPanel>
-                            <TextBlock  Text="Contacted" Style="{StaticResource ResourceKey=txtComboTitle}" Foreground="Black" Background="Azure"/>
+                            <TextBlock  Text="Contacted" Style="{StaticResource ResourceKey=txtb-HeaderCatalogs}" Foreground="Black" />
                             <RadioButton Name="cNo" Content="No" GroupName="contact" 
-                                         Style="{StaticResource rdbType1}" 
+                                         Margin="10,5,5,0"  
                                          IsChecked="{Binding Path=moCInfo, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=0}"/>
                             <RadioButton Name="cYes" Content="Yes" GroupName="contact"
-                                         Style="{StaticResource rdbType1}"
+                                         Margin="10,5,5,0"  
                                          IsChecked="{Binding Path=moCInfo, Mode=TwoWay, Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=1}"/>
                             <RadioButton Name="cBoth" Content="Both" GroupName="contact" 
-                                        Style="{StaticResource rdbType1}"
+                                        Margin="10,5,5,0"  
                                         IsChecked="{Binding Path=moCInfo, Mode=TwoWay, Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=2}"/>
                         </StackPanel>
                     </Border>
 
                     <Border Name="brdInvited" Grid.Column="1" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="5" IsEnabled="False">
                         <StackPanel  >
-                            <TextBlock  Text="Invited" Style="{StaticResource ResourceKey=txtComboTitle}" Foreground="Black"/>
-                            <RadioButton Name="iNo" Content="No" GroupName="invited"  Style="{StaticResource rdbType1}"
+                            <TextBlock  Text="Invited" Style="{StaticResource txtb-HeaderCatalogs}" Foreground="Black"/>
+                            <RadioButton Name="iNo" Content="No" GroupName="invited"  Margin="10,5,5,0"  
                                              IsChecked="{Binding Path=moCInvit, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=0}"/>
-                            <RadioButton Name="iYes" Content="Yes" GroupName="invited"  Style="{StaticResource rdbType1}"
+                            <RadioButton Name="iYes" Content="Yes" GroupName="invited"  Margin="10,5,5,0"  
                                              IsChecked="{Binding Path=moCInvit, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=1}"/>
-                            <RadioButton Name="iBoth" Content="Both" GroupName="invited"  Style="{StaticResource rdbType1}"
+                            <RadioButton Name="iBoth" Content="Both" GroupName="invited"  Margin="10,5,5,0"  
                                              IsChecked="{Binding Path=moCInvit, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=2}"/>
                         </StackPanel>
                     </Border>
                     <Border Name="brdBookCancelled" Grid.Column="2" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0,5,0,5" IsEnabled="False">
                         <StackPanel >
-                            <TextBlock  Text="Book Cancelled" Style="{StaticResource ResourceKey=txtComboTitle}" Foreground="Black"/>
-                            <RadioButton Name="bNo" Content="No" GroupName="bookc"  Style="{StaticResource rdbType1}"
+                            <TextBlock  Text="Book Cancelled" Style="{StaticResource ResourceKey=txtb-HeaderCatalogs}" Foreground="Black"/>
+                            <RadioButton Name="bNo" Content="No" GroupName="bookc"  Margin="10,5,5,0"  
                                          IsChecked="{Binding Path=moCBookCanc, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=0}"/>
-                            <RadioButton Name="bYes" Content="Yes" GroupName="bookc"  Style="{StaticResource rdbType1}"
+                            <RadioButton Name="bYes" Content="Yes" GroupName="bookc"  Margin="10,5,5,0"  
                                          IsChecked="{Binding Path=moCBookCanc, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=1}"/>
-                            <RadioButton Name="bBoth" Content="Both" GroupName="bookc"  Style="{StaticResource rdbType1}"
+                            <RadioButton Name="bBoth" Content="Both" GroupName="bookc"  Margin="10,5,5,0"  
                                          IsChecked="{Binding Path=moCBookCanc, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=2}"/>
                         </StackPanel>
                     </Border>
@@ -276,40 +260,21 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
-                        <TextBlock Text="Market" Style="{StaticResource txtbType1}"/>
-                        <ComboBox Name="cbxMarket" Style="{StaticResource cbxType1}"
-                                      DisplayMemberPath="mkN" SelectedValuePath="mkID" TextSearch.TextPath="{Binding moCMarket}" SelectedValue="{Binding moCMarket, Mode=TwoWay}">
-                            <ComboBox.Resources>
-                                <!--Fondo para Item Seleccionado-->
-                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
-                                <!--Fondo para Item No seleccionado-->
-                                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
-                            </ComboBox.Resources>
-                        </ComboBox>
+                        <TextBlock Text="Market" Style="{StaticResource txtb-HeaderCombo}" Foreground="Black" VerticalAlignment="Center"/>
+                        <ComboBox Name="cbxMarket" Margin="5,0" Width="120"
+                                      DisplayMemberPath="mkN" SelectedValuePath="mkID" TextSearch.TextPath="{Binding moCMarket}" SelectedValue="{Binding moCMarket, Mode=TwoWay}"/>
+
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left">
-                        <TextBlock Text="Agency" Style="{StaticResource txtbType1}"/>
-                        <ComboBox Name="cbxAgency" Style="{StaticResource cbxType1}"
-                            DisplayMemberPath="agN" SelectedValuePath="agID" TextSearch.TextPath="{Binding moCAgency}" SelectedValue="{Binding moCAgency, Mode=TwoWay}">
-                            <ComboBox.Resources>
-                                <!--Fondo para Item Seleccionado-->
-                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
-                                <!--Fondo para Item No seleccionado-->
-                                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
-                            </ComboBox.Resources>
-                        </ComboBox>
+                        <TextBlock Text="Agency" Style="{StaticResource txtb-HeaderCombo}" Foreground="Black" VerticalAlignment="Center"/>
+                        <ComboBox Name="cbxAgency" Margin="5,0" Width="120"
+                            DisplayMemberPath="agN" SelectedValuePath="agID" TextSearch.TextPath="{Binding moCAgency}" SelectedValue="{Binding moCAgency, Mode=TwoWay}"/>
+
                     </StackPanel>
                     <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Left">
-                        <TextBlock Text="Country" Style="{StaticResource txtbType1}"/>
-                        <ComboBox  Name="cbxCountry" Style="{StaticResource cbxType1}"
-                            DisplayMemberPath="coN" SelectedValuePath="coID" TextSearch.TextPath="{Binding moCCountry}" SelectedValue="{Binding moCCountry, Mode=TwoWay}">
-                            <ComboBox.Resources>
-                                <!--Fondo para Item Seleccionado-->
-                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
-                                <!--Fondo para Item No seleccionado-->
-                                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
-                            </ComboBox.Resources>
-                        </ComboBox>
+                        <TextBlock Text="Country" Style="{StaticResource txtb-HeaderCombo}" Foreground="Black" VerticalAlignment="Center"/>
+                        <ComboBox  Name="cbxCountry" Margin="5,0" Width="120"
+                            DisplayMemberPath="coN" SelectedValuePath="coID" TextSearch.TextPath="{Binding moCCountry}" SelectedValue="{Binding moCCountry, Mode=TwoWay}"/>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -327,15 +292,15 @@
                     <Border Name="brdShSa" Grid.Column="0" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Background="Transparent" Margin="0,5,0,5" IsEnabled="False">
                         <StackPanel  >
                             <CheckBox Name="chkShow" Content="Show"  
-                                      Style="{StaticResource chkType3}" IsChecked="{Binding moCShow, Mode=TwoWay}"/>
+                                      Margin="10" IsChecked="{Binding moCShow, Mode=TwoWay}"/>
                             <CheckBox Name="chkSale" Content="Sale"  
-                                          Style="{StaticResource chkType3}" IsChecked="{Binding moCSale, Mode=TwoWay}"/>
+                                          Margin="10" IsChecked="{Binding moCSale, Mode=TwoWay}"/>
                         </StackPanel>
                     </Border>
 
                     <Border Name="brdRoomNumber" Grid.Column="1" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="5" IsEnabled="False">
                         <StackPanel  >
-                            <TextBlock  Text="Room Numbers" Style="{StaticResource ResourceKey=txtComboTitle}" Foreground="Black"/>
+                            <TextBlock  Text="Room Numbers" Style="{StaticResource ResourceKey=txtb-HeaderCatalogs}" Foreground="Black"/>
                             <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
                                 <TextBlock Text="From" VerticalAlignment="Center"/>
                                 <TextBox Text="{Binding moCRoomNumFrom, Mode=TwoWay}" Width="100" Margin="10,0,0,0"/>
@@ -349,12 +314,12 @@
 
                     <Border Name="brdOnGroup" Grid.Column="2" CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0,5,0,5" IsEnabled="False">
                         <StackPanel >
-                            <TextBlock  Text="On Group" Style="{StaticResource ResourceKey=txtComboTitle}" Foreground="Black"/>
-                            <RadioButton Name="oNo" Content="No" GroupName="ongroup" Style="{StaticResource rdbType1}"
+                            <TextBlock  Text="On Group" Style="{StaticResource ResourceKey=txtb-HeaderCatalogs}" Foreground="Black"/>
+                            <RadioButton Name="oNo" Content="No" GroupName="ongroup"  Margin="10,5,5,0"  
                                              IsChecked="{Binding Path=moCOnGroup, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=0}"/>
-                            <RadioButton Name="oYes" Content="Yes" GroupName="ongroup" Style="{StaticResource rdbType1}"
+                            <RadioButton Name="oYes" Content="Yes" GroupName="ongroup"  Margin="10,5,5,0"  
                                              IsChecked="{Binding Path=moCOnGroup, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=1}"/>
-                            <RadioButton Name="oBoth" Content="Both" GroupName="ongroup" Style="{StaticResource rdbType1}"
+                            <RadioButton Name="oBoth" Content="Both" GroupName="ongroup"  Margin="10,5,5,5"  
                                              IsChecked="{Binding Path=moCOnGroup, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueConverterHelper}, ConverterParameter=2}"/>
                         </StackPanel>
                     </Border>
@@ -388,15 +353,15 @@
                     <SolidColorBrush Color="Black" Opacity="0.81"/>
                 </Border.Background>
                 <Canvas>
-                    <Image x:Name="imgCerrar" Style="{StaticResource imgLogOut}" Canvas.Left="264" Canvas.Top="4" MouseLeftButtonDown="imgCerrar_MouseLeftButtonDown"/>
+                    <Image x:Name="imgCerrar" Style="{StaticResource img-ExitButton}" Canvas.Left="264" Canvas.Top="4" MouseLeftButtonDown="imgCerrar_MouseLeftButtonDown"/>
                     <TextBlock  Text="New MailOuts" Canvas.Left="7" Canvas.Top="4" Foreground="White"/>
                     <TextBlock Text="Mail Out Name" Foreground="#147F79" TextAlignment="Center" FontWeight="Bold" FontSize="14" Canvas.Left="94" Canvas.Top="23"/>
                     <TextBox Name="txtNewMotName" Canvas.Left="29" Canvas.Top="45" Width="241" BorderThickness="0" FontSize="18.667" KeyUp="txtNewMotName_KeyUp" Focusable="True" CharacterCasing="Upper"/>
                     <Border Margin="0" Canvas.Left="206" Canvas.Top="75" Background="White" CornerRadius="5">
-                        <Border x:Name="imgSaveNewMot" Style="{StaticResource brdImageButtons}" ToolTip="Save" Margin="0" MouseLeftButtonDown="imgSaveNewMot_MouseLeftButtonDown">
+                        <Border x:Name="imgSaveNewMot" Style="{StaticResource brd-ButtonsBig}" ToolTip="Save" Margin="0" MouseLeftButtonDown="imgSaveNewMot_MouseLeftButtonDown">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Stretch="Uniform" Width="20">
-                                    <Image x:Name="imagNewCancel" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BSave.png"/>
+                                    <Image x:Name="imagNewCancel" Source="pack://application:,,,/IM.Styles;component/Images/BSave.png"/>
                                 </Viewbox>
                                 <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>

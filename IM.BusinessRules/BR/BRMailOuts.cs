@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IM.Base;
 using System.Data.Entity.Validation;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -39,24 +40,30 @@ namespace IM.BusinessRules.BR
     /// <returns>List<MailOuts></MailOuts></returns>
     /// <history>
     /// [erosado] 14/04/2016  Created
+    /// [erosado] 06/07/2016  Modified. Se agregó Async
     /// </history>
-    public static List<MailOut> GetMailOuts(string leadSourceId = null, int status = -1)
+    public async static Task<List<MailOut>> GetMailOuts(string leadSourceId = null, int status = -1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      List<MailOut> result = new List<MailOut>();
+      await Task.Run(() =>
       {
-        var query = from mo in dbContext.MailOuts
-                    select mo;
-        if (leadSourceId != null)
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          query = query.Where(mo => mo.mols == leadSourceId);
+          var query = from mo in dbContext.MailOuts
+                      select mo;
+          if (leadSourceId != null)
+          {
+            query = query.Where(mo => mo.mols == leadSourceId);
+          }
+          if (status != -1)
+          {
+            bool blStatus = Convert.ToBoolean(status);
+            query = query.Where(mo => mo.moA == blStatus);
+          }
+          result = query.ToList();
         }
-        if (status != -1)
-        {
-          bool blStatus = Convert.ToBoolean(status);
-          query = query.Where(mo => mo.moA == blStatus);
-        }
-        return query.ToList();
-      }
+      });
+      return result;
     }
 
     #endregion
@@ -70,62 +77,66 @@ namespace IM.BusinessRules.BR
     /// <returns>-1 Error -0 Ya existe ese MailOut - >0 Registros Afectados</returns>
     /// <history>
     /// [erosado] 20/04/2016  Created
+    /// [erosado] 06/07/2016  Modified. Se agregó async.
     /// </history>
-    public static int InsertMailOut(string _mols, string _moCode)
+    public async static Task<int> InsertMailOut(string _mols, string _moCode)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      int result = 0;
+      await Task.Run(() =>
       {
-        using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
+          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            //Verificamos que no exista un MailOut igual al que queremos insertar
-            if (dbContext.MailOuts.Any(x => x.mols == _mols && x.moCode == _moCode))
+            try
             {
-              return 0;
+              //Verificamos que no exista un MailOut igual al que queremos insertar
+              if (dbContext.MailOuts.Any(x => x.mols == _mols && x.moCode == _moCode))
+              {
+                result = 0;
+              }
+              else
+              {
+                //Agregamos el nuevo MailOut
+                dbContext.Entry(
+                  new MailOut()
+                  {
+                    mols = _mols,
+                    moCode = _moCode
+                  }).State = System.Data.Entity.EntityState.Added;
+
+                //Lista de Languages
+                List<string> languages = dbContext.Languages.Select(x => x.laID).ToList();
+
+                //Insertamos un MailOutText Por cada Lenguaje
+                languages.ForEach(laID => dbContext.MailOutTexts.Add(
+                  new MailOutText()
+                  {
+                    mtls = _mols,
+                    mtmoCode = _moCode,
+                    mtla = laID,
+                    mtU = BRHelpers.GetServerDate()
+                  }));
+
+                //Guardamos Cambios
+                dbContext.SaveChanges();
+                transaction.Commit();
+                result = 1;
+              }
             }
-            else
+            catch
             {
-              //Agregamos el nuevo MailOut
-              dbContext.Entry(
-                new MailOut()
-                {
-                  mols = _mols,
-                  moCode = _moCode
-                }).State = System.Data.Entity.EntityState.Added;
-
-              //Lista de Languages
-              List<string> languages = dbContext.Languages.Select(x => x.laID).ToList();
-
-              //Insertamos un MailOutText Por cada Lenguaje
-              languages.ForEach(laID => dbContext.MailOutTexts.Add(
-                new MailOutText()
-                {
-                  mtls = _mols,
-                  mtmoCode = _moCode,
-                  mtla = laID,
-                  mtU = BRHelpers.GetServerDate()
-                }));
-
-              //Guardamos Cambios
-              dbContext.SaveChanges();
-              transaction.Commit();
-              return 1;
+              transaction.Rollback();
+              result = -1;
+            }
+            finally
+            {
+              transaction.Dispose();
             }
           }
-          catch
-          {
-            transaction.Rollback();
-            return -1;
-          }
-          finally
-          {
-            transaction.Dispose();
-          }
-      }
-    }
-
-      
+        }
+      });
+      return result;
     }
     #endregion
 
@@ -137,14 +148,21 @@ namespace IM.BusinessRules.BR
     /// <returns>Registros Afectados</returns>
     /// <history>
     /// [erosado] 20/04/2016  Created
+    /// [erosado] 06/07/2016  Modified. Se agregó Async.
     /// </history>
-    public static int UpdateMailOut(MailOut mo)
+    public async static Task<int> UpdateMailOut(MailOut mo)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      int result = 0;
+      await Task.Run(() =>
       {
-        dbContext.Entry(mo).State = System.Data.Entity.EntityState.Modified;
-        return dbContext.SaveChanges();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.Entry(mo).State = System.Data.Entity.EntityState.Modified;
+          result = dbContext.SaveChanges();
+        }
+      });
+
+      return result;
     }
     #endregion
 
@@ -156,36 +174,38 @@ namespace IM.BusinessRules.BR
     /// <returns>-1 Error - >0 Registros Afectados </returns>
     /// <history>
     /// [erosado] 20/04/2016  Created
+    /// [erosado] 06/07/2016  Modified. Se agregó Async
     /// </history>
-    public static int DeleteMailOut(MailOut mo)
+    public async static Task<int> DeleteMailOut(MailOut mo)
     {
-      int result= 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      int result = 0;
+      await Task.Run(() =>
       {
-        using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
+          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            //Eliminamos el MailOut 
-            dbContext.Entry(mo).State = System.Data.Entity.EntityState.Deleted;
+            try
+            {
+              //Eliminamos el MailOut 
+              dbContext.Entry(mo).State = System.Data.Entity.EntityState.Deleted;
 
-            //Obtenemos todos los MailOutText que correspondan al MailOut Que vamos a eliminar
-            List<MailOutText> motlst = (from x in dbContext.MailOutTexts where x.mtls == mo.mols && x.mtmoCode == mo.moCode select x).ToList();
-            //Eliminamos cada uno de los MailOutTexts
-            motlst.ForEach(x => dbContext.Entry(x).State = System.Data.Entity.EntityState.Deleted);
-
-            result = dbContext.SaveChanges();
-            transaction.Commit();
-            return result;
-          }
-          catch
-          {
-            transaction.Rollback();
-            return -1;
+              //Obtenemos todos los MailOutText que correspondan al MailOut Que vamos a eliminar
+              List<MailOutText> motlst = (from x in dbContext.MailOutTexts where x.mtls == mo.mols && x.mtmoCode == mo.moCode select x).ToList();
+              //Eliminamos cada uno de los MailOutTexts
+              motlst.ForEach(x => dbContext.Entry(x).State = System.Data.Entity.EntityState.Deleted);
+              result = dbContext.SaveChanges();
+              transaction.Commit();
+            }
+            catch
+            {
+              transaction.Rollback();
+              result = -1;
+            }
           }
         }
-       
-      }
+      });
+      return result;
     }
     #endregion
 

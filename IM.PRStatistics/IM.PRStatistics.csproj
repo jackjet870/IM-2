@@ -51,7 +51,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Images\IM.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EPPlus, Version=4.0.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
@@ -94,14 +95,6 @@
     <Compile Include="Forms\frmPRStatistics.xaml.cs">
       <DependentUpon>frmPRStatistics.xaml</DependentUpon>
     </Compile>
-    <Page Include="Styles\General.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Lists.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -134,11 +127,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\BPrinter.png" />
-    <Resource Include="Images\BSearch.png" />
-    <Resource Include="Images\BUser.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\IM.Base\IM.Base.csproj">
       <Project>{5870c4ea-8b03-44a1-b9a2-20e48a59a64f}</Project>
       <Name>IM.Base</Name>
@@ -155,15 +143,6 @@
       <Project>{bad29979-3e8d-4913-8dd0-edebc8af85a7}</Project>
       <Name>IM.Styles</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\IM.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\BAbout.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\BExit.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

@@ -81,7 +81,7 @@ namespace IM.MailOutsConfig.Forms
     {
       if (UIRichTextBoxHelper.HasInfo(ref richTextBox))
       {
-        
+
         if (SelectedMailOutsText != null)
         {
           StaStart("Saving Data...");
@@ -132,11 +132,11 @@ namespace IM.MailOutsConfig.Forms
     {
       if (UIRichTextBoxHelper.HasInfo(ref richTextBox))
       {
-          StaStart("Loading preview...");
-          fillMailReport();
-          var _frmViewer = new frmViewer(_rptMailOuts);
-          _frmViewer.ShowDialog();
-          StaEnd();
+        StaStart("Loading preview...");
+        fillMailReport();
+        var _frmViewer = new frmViewer(_rptMailOuts);
+        _frmViewer.ShowDialog();
+        StaEnd();
       }
       else
       {
@@ -204,11 +204,10 @@ namespace IM.MailOutsConfig.Forms
 
       if (SelectedMailOutsText != null)
       {
+        
         UIRichTextBoxHelper.LoadRTF(ref richTextBox, SelectedMailOutsText.mtRTF);
       }
-
     }
-
     #endregion
 
     #region Async Methods
@@ -239,8 +238,9 @@ namespace IM.MailOutsConfig.Forms
       }
       catch (Exception ex)
       {
+        StaEnd();
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error, "Mail Outs Configuration");
-      }      
+      }
     }
 
     /// <summary>
@@ -268,6 +268,7 @@ namespace IM.MailOutsConfig.Forms
       }
       catch (Exception ex)
       {
+        StaEnd();
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error, "Mail Outs Configuration");
       }
     }
@@ -279,21 +280,13 @@ namespace IM.MailOutsConfig.Forms
     /// <history>
     /// [erosado] 07/04/2016  Created
     /// </history>
-    public void DoGetMailOutText(string ls, string la)
+    public async void DoGetMailOutText(string ls, string la)
     {
-      Task.Factory.StartNew(() => BRMailOutTexts.GetMailOutTexts(ls,la,1))
-      .ContinueWith(
-      task1 =>
+      try
       {
-        if (task1.IsFaulted)
+        if (!string.IsNullOrEmpty(ls) && !string.IsNullOrEmpty(la))
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error,"Mail Outs Configuration");
-          StaEnd();
-          return false;
-        }
-        if (task1.IsCompleted)
-        {
-          List<MailOutText> data = task1.Result;
+          var data = await BRMailOutTexts.GetMailOutTexts(ls, la, 1);
           if (data.Count > 0)
           {
             lsbxMailOuts.ItemsSource = data;
@@ -302,10 +295,12 @@ namespace IM.MailOutsConfig.Forms
           }
         }
         StaEnd();
-        return false;
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+      }
+      catch (Exception ex)
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
+      }
     }
     /// <summary>
     /// Actualiza la información del RTF de un MailOutsText
@@ -314,29 +309,21 @@ namespace IM.MailOutsConfig.Forms
     /// <history>
     /// [erosado] 07/04/2016  Created
     /// </history>
-    public void DoUpdateMailOutText(MailOutText mot)
+    public async void DoUpdateMailOutText(MailOutText mot)
     {
-      Task.Factory.StartNew(() => BRMailOutTexts.UpdateRTFMailOutTexts(mot))
-      .ContinueWith(
-      task1 =>
+      try
       {
-        if (task1.IsFaulted)
-        {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error, "Mail Outs Configuration");
-          StaEnd();
-          return false;
-        }
-        if (task1.IsCompleted)
-        {
-          UIRichTextBoxHelper.LoadRTF(ref richTextBox, mot.mtRTF);
-          UIHelper.ShowMessage("Data saved successfully",MessageBoxImage.Information,"Mail Outs Configuration");
-          EditModeOff();
-        }
+        await BRMailOutTexts.UpdateRTFMailOutTexts(mot);
+        UIRichTextBoxHelper.LoadRTF(ref richTextBox, mot.mtRTF);
+        UIHelper.ShowMessage("Data saved successfully", MessageBoxImage.Information, "Mail Outs Configuration");
+        EditModeOff();
         StaEnd();
-        return false;
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+      }
+      catch (Exception ex)
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
+      }
     }
     #endregion
 
@@ -540,9 +527,9 @@ namespace IM.MailOutsConfig.Forms
       }
       else
       {
-        UIHelper.ShowMessage("You must press first edit button.",MessageBoxImage.Information, "Mail Outs Configuration");
+        UIHelper.ShowMessage("You must press first edit button.", MessageBoxImage.Information, "Mail Outs Configuration");
       }
-      
+
     }
     #endregion
 

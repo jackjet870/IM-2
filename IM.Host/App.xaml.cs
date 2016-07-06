@@ -1,4 +1,5 @@
 ﻿using IM.Base.Forms;
+using IM.Host.Forms;
 using IM.Model.Classes;
 using IM.Model.Enums;
 using System.Windows;
@@ -59,6 +60,7 @@ namespace IM.Host
       if (frmLogin.IsAuthenticated)
       {
         User = frmLogin.UserData;
+       // frmSales frmMain = new frmSales(Enums.EnumSale.Sale);
         frmHost frmMain = new frmHost();
         frmMain.ShowDialog();
         frmSplash.Close();

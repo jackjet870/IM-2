@@ -35,7 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Images\IM.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CrystalDecisions.CrystalReports.Design, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
@@ -136,16 +137,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\BAbout.png" />
-    <Resource Include="Images\BExit.png" />
-    <Resource Include="Images\BKey.png" />
-    <Resource Include="Images\BPrinter.png" />
-    <Resource Include="Images\BSearch.png" />
-    <Resource Include="Images\BUser.png" />
-    <Resource Include="Images\IM.ico" />
-    <Resource Include="Images\WKey.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\IM.Base\IM.Base.csproj">
       <Project>{5870c4ea-8b03-44a1-b9a2-20e48a59a64f}</Project>
       <Name>IM.Base</Name>
@@ -164,54 +155,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\BBold.png" />
-    <Resource Include="Images\BItalic.png" />
-    <Resource Include="Images\BStrikeOut.png" />
-    <Resource Include="Images\BUnderLine.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\BCenter.png" />
-    <Resource Include="Images\BJustified.png" />
-    <Resource Include="Images\BLeft.png" />
-    <Resource Include="Images\BRight.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\BColorPick.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\BOpen.png" />
-    <Resource Include="Images\BSave.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\BAdd.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\BRtf.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\BExport.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\BCancel.png" />
-    <Resource Include="Images\BEdit.png" />
-    <Resource Include="Images\BPreview.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\BCopy.png" />
-    <Resource Include="Images\BCut.png" />
-    <Resource Include="Images\BPaste.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\BConfiguration.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\BDelete.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\GExit.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

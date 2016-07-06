@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,8 +10,7 @@ using IM.BusinessRules.BR;
 using System.Diagnostics;
 using IM.Base.Forms;
 using IM.Model.Enums;
-using IM.Model.Classes;
-
+using IM.Model.Helpers;
 namespace IM.SalesLiner.Forms
 {
   /// <summary>
@@ -54,9 +52,7 @@ namespace IM.SalesLiner.Forms
     /// </history>
     private void imgButtonOk_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      DateTime from = (DateTime)dtpkFrom?.SelectedDate;
-      DateTime to = (DateTime)dtpkTo?.SelectedDate;
-      if (from.Date <= to.Date)
+      if (dtpkFrom.Text != "" && dtpkTo.Text != "" && dtpkFrom?.SelectedDate.Value <= dtpkTo?.SelectedDate.Value)
       {
         if (cbxPersonnel?.SelectedValue != null)
         {
@@ -218,6 +214,7 @@ namespace IM.SalesLiner.Forms
       }
       catch (Exception ex)
       {
+        StaEnd();
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
       }
     }
@@ -232,44 +229,32 @@ namespace IM.SalesLiner.Forms
     /// <history>
     /// [erosado] 23/Mar/2016 Created
     /// </history>
-    public void DoGetSalesByLiner(DateTime dateFrom, DateTime dateTo, string salesRoom, string Liner)
+    public async void DoGetSalesByLiner(DateTime dateFrom, DateTime dateTo, string salesRoom, string Liner)
     {
-      Task.Factory.StartNew(() => BRSales.GetSalesByLiner(dateFrom, dateTo, salesRoom, Liner))
-      .ContinueWith(
-      (task1) =>
+      try
       {
-        if (task1.IsFaulted)
+        var data = await BRSales.GetSalesByLiner(dateFrom, dateTo, salesRoom, Liner);
+
+        if (data.Count > 0)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          imgButtonOk.IsEnabled = true;
-          return false;
+          dtgr.DataContext = data;
+          StatusBarReg.Content = $"{(dtgr.SelectedIndex + 1).ToString()}/{dtgr.Items.Count.ToString()}";
         }
         else
         {
-          if (task1.IsCompleted)
-          {
-            task1.Wait(1000);
-            List<SaleByLiner> data = task1.Result;
-            if (data.Count > 0)
-            {
-              dtgr.DataContext = data;
-              StatusBarReg.Content = string.Format("{0}/{1}", (dtgr.SelectedIndex + 1).ToString(), dtgr.Items.Count.ToString());
-            }
-            else
-            {
-              UIHelper.ShowMessage("There is no data");
-              dtgr.DataContext = null;
-            }
-            StaEnd();
-            imgButtonOk.IsEnabled = true;
-          }
-
-          return false;
+          UIHelper.ShowMessage("There is no data");
+          dtgr.DataContext = null;
         }
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+        StaEnd();
+        imgButtonOk.IsEnabled = true;
+      }
+      catch (Exception ex)
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
+      }
+
+
     }
     #endregion
 
@@ -407,7 +392,7 @@ namespace IM.SalesLiner.Forms
     public void LoadPersonnel()
     {
       StaStart("Loading Personnel...");
-      DoGetPersonnel(App.User.SalesRoom.srID, "LINER");
+      DoGetPersonnel(App.User.SalesRoom.srID, EnumToListHelper.GetEnumDescription(EnumRole.Liner));
     }
 
     /// <summary>

@@ -136,13 +136,14 @@ namespace IM.BusinessRules.BR
     /// <param name="id">Clave</param>
     /// <history>
     /// [jorcanche]  12/Mar/2016 Created
+    /// [wtorres]    05/Jul/2016 Modified. Correccion de error. Estaba devolviendo null para personal que no tenia roles
     /// </history>
     public static Personnel GetPersonnelById(string id, string role = "ALL")
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         return dbContext.Personnels.
-          FirstOrDefault(p => p.peID == id && p.Roles.Where(r => r.roID == (role.Equals("ALL")?r.roID:role)).Count() > 0);
+          FirstOrDefault(p => p.peID == id && (role == "ALL" || p.Roles.Count() > 0));
       }
     }
 

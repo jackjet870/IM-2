@@ -7,7 +7,7 @@
         mc:Ignorable="d"
          Title="Guests By PR"
     d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
-    Icon="/IM.GuestsPR;component/Images/IM.ico" WindowState="Maximized" WindowStyle="SingleBorderWindow"
+    Icon="pack://application:,,,/IM.Styles;component/Images/IM-ico.png" WindowState="Maximized" WindowStyle="SingleBorderWindow"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">
     <Window.InputBindings>
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,
@@ -38,12 +38,12 @@
                 </Grid.RowDefinitions>
 
                 <Viewbox Stretch="Uniform" Height="24" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0">
-                    <Image x:Name="image" Source="pack://application:,,,/IM.GuestsPR;component/Images/BUser.png"/>
+                    <Image x:Name="image" Source="pack://application:,,,/IM.Styles;component/Images/BUser.png"/>
                 </Viewbox>
                 <TextBlock x:Name="txtbUserName" VerticalAlignment="Center"
                            Foreground="White" Grid.Column="1" Grid.Row="0"/>
                 <Viewbox Stretch="Uniform" Height="24" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
-                    <Image x:Name="imageLogOut" Style="{StaticResource bImgLogin}" MouseLeftButtonDown="imageLogOut_MouseLeftButtonDown"/>
+                    <Image x:Name="imageLogOut" Style="{StaticResource img-LogginButton}" MouseLeftButtonDown="imageLogOut_MouseLeftButtonDown"/>
                 </Viewbox>
                 <TextBlock x:Name="txtbLocation" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="White" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"/>
             </Grid>
@@ -54,44 +54,43 @@
         <Border x:Name="brdDateRange" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Margin="10,5,10,0">
             <StackPanel >
                 <TextBlock Text="Date Range" Margin="10,0,0,0"/>
-                <StackPanel Orientation="Horizontal" Height="40">
-                    <TextBlock  Text="From" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
-                    <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=DateRange}"/>
-                    <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
-                    <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=DateRange}"/>
-                    <ComboBox x:Name="cbxPersonnel" Style="{StaticResource cbxPersonnel}" TextSearch.TextPath="peID" >
-                        <ComboBox.ItemTemplate>
-                            <StaticResource ResourceKey="comboBoxTemplate"/>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <Border x:Name="imgButtonOk" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonOk_MouseLeftButtonDown">
+                <StackPanel Orientation="Horizontal" Height="Auto">
+                    <TextBlock  Text="From" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
+                    <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=dtp-DateRange}" KeyUp="dtpkEnterKey"/>
+                    <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
+                    <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=dtp-DateRange}" KeyUp="dtpkEnterKey"/>
+                    <ComboBox x:Name="cbxPersonnel" TextSearch.TextPath="peID" 
+                              Style="{StaticResource cbx-Personnel-ValidatePermission}"
+                              ItemTemplate="{StaticResource cbx-Personnel-img}"/>
+
+                    <Border x:Name="imgButtonOk" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonOk_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image Source="pack://application:,,,/IM.GuestsPR;component/Images/BSearch.png"/>
+                                <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png"/>
                             </Viewbox>
                             <TextBlock Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonPrint" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonPrint_MouseLeftButtonDown">
+                    <Border x:Name="imgButtonPrint" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonPrint_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image Source="pack://application:,,,/IM.GuestsPR;component/Images/BPrinter.png"/>
+                                <Image Source="pack://application:,,,/IM.Styles;component/Images/BPrinter.png"/>
                             </Viewbox>
                             <TextBlock Text="Print" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonAbout" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonAbout_MouseLeftButtonDown">
+                    <Border x:Name="imgButtonAbout" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonAbout_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image x:Name="imageUser" Source="pack://application:,,,/IM.GuestsPR;component/Images/BAbout.png"/>
+                                <Image x:Name="imageUser" Source="pack://application:,,,/IM.Styles;component/Images/BAbout.png"/>
                             </Viewbox>
                             <TextBlock Text="About" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonExit" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonExit_MouseLeftButtonDown">
+                    <Border x:Name="imgButtonExit" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonExit_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image Source="pack://application:,,,/IM.GuestsPR;component/Images/BExit.png"/>
+                                <Image Source="pack://application:,,,/IM.Styles;component/Images/BExit.png"/>
                             </Viewbox>
                             <TextBlock Text="Exit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
@@ -115,7 +114,7 @@
         <!--#region  DataGrid Principal-->
         <Border CornerRadius="5" Padding="5" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Margin="10,5,10,0">
             <DataGrid Name="dtgr" BorderThickness="0" BorderBrush="Transparent" RowDetailsVisibilityMode="VisibleWhenSelected" ItemsSource="{Binding}" 
-                      EnableRowVirtualization="True" AutoGenerateColumns="False" CanUserAddRows="False" AlternatingRowBackground="LightGray" SelectionChanged="dtgr_SelectionChanged">
+                      EnableRowVirtualization="True" AutoGenerateColumns="False" CanUserAddRows="False" AlternatingRowBackground="LightGray" SelectionChanged="dtgr_SelectionChanged" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="guid" Width="Auto" Header="GUID" Binding="{Binding guID}"/>
                     <DataGridTextColumn x:Name="lastName" Width="Auto" Header="Last Name" Binding="{Binding guLastName1}" />
@@ -143,7 +142,7 @@
                     <DataGridTextColumn x:Name="shows" Width="Auto" Header="Shows" Binding="{Binding guShowsQty}"/>
                     <DataGridCheckBoxColumn x:Name="sale" Width="Auto" Header="Sale" Binding="{Binding guSale}" IsReadOnly="True"/>
                     <DataGridTextColumn x:Name="sales" Width="Auto" Header="Sales" Binding="{Binding Sales}"/>
-                    <DataGridTextColumn x:Name="amount" Width="Auto" Header="Amount" Binding="{Binding SalesAmount, StringFormat={}{0:n2}}"/>
+                    <DataGridTextColumn x:Name="amount" Width="*" Header="Amount" Binding="{Binding SalesAmount, StringFormat={}{0:n2}}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

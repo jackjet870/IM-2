@@ -45,17 +45,20 @@ namespace IM.BusinessRules.BR
     /// <returns>List<SaleByLiner></returns>
     /// <history>
     /// [erosado] 23/Mar/2016 Created
+    /// [erosado] 05/072016 Se agregó Async
     /// </history>
-    public static List<SaleByLiner> GetSalesByLiner(DateTime dateFrom, DateTime dateTo, string salesRooms, string Liner)
+    public async static Task<List<SaleByLiner>> GetSalesByLiner(DateTime dateFrom, DateTime dateTo, string salesRooms, string Liner)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      List<SaleByLiner> result = new List<SaleByLiner>();
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetSalesByLiner(dateFrom, dateTo, salesRooms, Liner).ToList();
-
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          result = dbContext.USP_OR_GetSalesByLiner(dateFrom, dateTo, salesRooms, Liner).ToList();
+        }
+      });
+      return result;
     }
-
-   
 
     #endregion
 
@@ -70,14 +73,19 @@ namespace IM.BusinessRules.BR
     /// <returns>List<SaleByCloser></returns>
     /// <history>
     /// [erosado] 24/Mar/2016 Created
+    /// [erosado] 04/07/2016  Se agregó Async.
     /// </history>
-    public static List<SaleByCloser> GetSalesByCloser(DateTime dateFrom, DateTime dateTo, string salesRooms, string closer)
+    public async static Task<List<SaleByCloser>> GetSalesByCloser(DateTime dateFrom, DateTime dateTo, string salesRooms, string closer)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      List<SaleByCloser> result = new List<SaleByCloser>();
+      await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetSalesByCloser(dateFrom, dateTo, salesRooms, closer).ToList();
-
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          result = dbContext.USP_OR_GetSalesByCloser(dateFrom, dateTo, salesRooms, closer).ToList();
+        }
+      });
+      return result;
     }
 
     #endregion
@@ -255,7 +263,7 @@ namespace IM.BusinessRules.BR
     /// [jorcanche]  creted 28062016
     /// </history>
     public static int SaveChangedSale(Sale sale)
-    {  
+    {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         var personel = dbContext.Personnels.First();

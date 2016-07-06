@@ -118,7 +118,7 @@ namespace IM.ProcessorSales.Forms
       //carga las fechas desde el archivo de configuracion
       dtmStart = _iniFieldHelper.readDate(FilterDate, "DateStart", dtmStart);
       dtmEnd = _iniFieldHelper.readDate(FilterDate, "DateEnd", dtmEnd);
-      salesRoom = _iniFieldHelper.readText(FilterDate, "SalesRoom", string.Empty);
+      salesRoom = _iniFieldHelper.ReadText(FilterDate, "SalesRoom", string.Empty);
       if (!string.IsNullOrEmpty(salesRoom))
         lstSalesRoom.Add(salesRoom);
     }
@@ -138,9 +138,9 @@ namespace IM.ProcessorSales.Forms
       if (!LoadIniField()) return;
       GetFirstDayValue();
       goal = Convert.ToDecimal(_iniFieldHelper.readDouble(FilterDate, "Goal", 0));
-      groupedByTeams = _iniFieldHelper.readBool(FilterDate, "GroupedByTeams", false);
-      includeAllSalesmen = _iniFieldHelper.readBool(FilterDate, "IncludeAllSalesmen", false);
-      _salesman = _iniFieldHelper.readText(FilterDate, "Salesman", string.Empty);
+      groupedByTeams = _iniFieldHelper.ReadBoolean(FilterDate, "GroupedByTeams", false);
+      includeAllSalesmen = _iniFieldHelper.ReadBoolean(FilterDate, "IncludeAllSalesmen", false);
+      _salesman = _iniFieldHelper.ReadText(FilterDate, "Salesman", string.Empty);
       //Se limpia el archivo de confiuguracion
       _iniFieldHelper = null;
     }

@@ -4,13 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.MailOutsConfig.Forms"
-        
         xmlns:UC="clr-namespace:IM.Styles.UserControls;assembly=IM.Styles"
-        
         mc:Ignorable="d"
           Title="Mail Outs Configuration"
     d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
-    Icon="/IM.MailOutsConfig;component/Images/IM.ico" WindowState="Maximized" WindowStyle="SingleBorderWindow"
+    Icon="pack://application:,,,/IM.Styles;component/Images/IM-ico.png" WindowState="Maximized" WindowStyle="SingleBorderWindow"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded" Closing="Window_Closing">
     <Window.InputBindings>
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}, Path=RefreshDataSource}" Key="F5" Modifiers="Ctrl"/>
@@ -32,56 +30,34 @@
         <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="4">
             <Border CornerRadius="5" BorderThickness="1" BorderBrush="Black"  Margin="0,5,5,10" Background="#147F79">
                 <StackPanel Height="40" >
-                    <TextBlock  Text="Lead Source" Style="{StaticResource ResourceKey=txtComboTitle}"/>
+                    <TextBlock  Text="Lead Source" Style="{StaticResource txtb-HeaderCombo}"/>
                     <ComboBox x:Name="cbxLeadSource"  Width="180"  BorderThickness="0"  IsEditable="True" TextSearch.TextPath="lsN"
                               HorizontalAlignment="Center" DisplayMemberPath="lsN" SelectedValuePath="lsID" SelectionChanged="cbxLeadSource_SelectionChanged">
-                        <ComboBox.Resources>
-                            <!--Fondo para Item Seleccionado-->
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
-                            <!--Fondo para Item No seleccionado-->
-                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
-                        </ComboBox.Resources>
                     </ComboBox>
                 </StackPanel>
             </Border>
             <Border CornerRadius="5" BorderThickness="1" BorderBrush="Black" Margin="0,0,5,0" Background="#147F79">
                 <StackPanel Height="40">
-                    <TextBlock  Text="Language" Style="{StaticResource ResourceKey=txtComboTitle}"/>
+                    <TextBlock  Text="Language" Style="{StaticResource txtb-HeaderCombo}"/>
                     <ComboBox x:Name="cbxLanguage"  Width="180"  BorderThickness="0"  IsEditable="True" TextSearch.TextPath="laN"
-                              HorizontalAlignment="Center" DisplayMemberPath="laN" SelectedValuePath="laID" SelectionChanged="cbxLeadSource_SelectionChanged">
-                        <ComboBox.Resources>
-                            <!--Fondo para Item Seleccionado-->
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
-                            <!--Fondo para Item No seleccionado-->
-                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
-                        </ComboBox.Resources>
+                              HorizontalAlignment="Center"
+                              DisplayMemberPath="laN" SelectedValuePath="laID" 
+                              SelectionChanged="cbxLeadSource_SelectionChanged">
                     </ComboBox>
                 </StackPanel>
             </Border>
             
-            <Border Style="{StaticResource brdLists}">
+            <Border Style="{StaticResource brd-Catalogs}" Margin="0,5,5,0" >
                 <StackPanel>
-                    <TextBlock Text="Mail Outs" Style="{StaticResource HeadersList}"/>
-                    <ListBox x:Name="lsbxMailOuts" ItemsSource="{Binding}" TextSearch.TextPath="lsN" SelectionChanged="lsbxMailOuts_SelectionChanged">
-                        <ListBox.Resources>
-                            <!--Fondo para Item Seleccionado-->
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
-                            <!--Fondo para Item No seleccionado-->
-                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
-                        </ListBox.Resources>
-                        <ListBox.Style>
-                            <StaticResource ResourceKey="lists"/>
-                        </ListBox.Style>
-                        <ListBox.ItemTemplate>
-                            <StaticResource ResourceKey="ListsMailOutTexts"/>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                    <TextBlock Text="Mail Outs" Style="{StaticResource txtb-HeaderCatalogs}"/>
+                    <ListBox x:Name="lsbxMailOuts" ItemsSource="{Binding}" TextSearch.TextPath="mtmoCode" SelectionChanged="lsbxMailOuts_SelectionChanged"
+                             Height="120" SelectionMode="Single" DisplayMemberPath="mtmoCode" />
                     <TextBlock Name="txtbMailOutsNumber" Text="Mail Outs" TextAlignment="Right" Margin="2,0"/>
                 </StackPanel>
             </Border>
-            <Border  Style="{StaticResource brdLists}">
+            <Border  Style="{StaticResource brd-Catalogs}" Margin="0,5">
                 <StackPanel>
-                    <TextBlock Text="Add Label" Style="{StaticResource HeadersList}"/>
+                    <TextBlock Text="Add Label" Style="{StaticResource txtb-HeaderCatalogs}"/>
                     <ListBox Name="lstAddLabel" BorderBrush="Transparent" MouseDoubleClick="lstAddLabel_MouseDoubleClick">
                         <ListBox.Resources>
                             <!--Fondo para Item Seleccionado-->
@@ -117,7 +93,7 @@
                 </Grid.RowDefinitions>
 
                 <Viewbox Stretch="Uniform" Height="24" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0">
-                    <Image x:Name="image" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BUser.png"/>
+                    <Image x:Name="image" Source="pack://application:,,,/IM.Styles;component/Images/BUser.png"/>
                 </Viewbox>
                 <TextBlock x:Name="txtbUserName" VerticalAlignment="Center"
                            Foreground="White" Grid.Column="1" Grid.Row="0"/>
@@ -138,51 +114,51 @@
                 <!--#endregion-->
                 
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Stretch" >
-                        <Border x:Name="imgSave" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgSave_MouseLeftButtonDown" ToolTip="Save" IsEnabled="False">
+                        <Border x:Name="imgSave" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgSave_MouseLeftButtonDown" ToolTip="Save" IsEnabled="False">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Stretch="Uniform" Width="20">
-                                    <Image x:Name="imagSave" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BSave.png"/>
+                                    <Image x:Name="imagSave" Source="pack://application:,,,/IM.Styles;component/Images/BSave.png"/>
                                 </Viewbox>
                                 <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
-                        <Border x:Name="imgEdit" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgEdit_MouseLeftButtonDown" ToolTip="Edit">
+                    <Border x:Name="imgEdit" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgEdit_MouseLeftButtonDown" ToolTip="Edit">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Stretch="Uniform" Width="20">
-                                    <Image x:Name="imagEdit" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BEdit.png"/>
+                                <Image x:Name="imagEdit" Source="pack://application:,,,/IM.Styles;component/Images/BEdit.png"/>
                                 </Viewbox>
                                 <TextBlock Text="Edit" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
-                        <Border x:Name="imgCancel" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgCancel_MouseLeftButtonDown" ToolTip="Cancel" IsEnabled="False">
+                    <Border x:Name="imgCancel" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgCancel_MouseLeftButtonDown" ToolTip="Cancel" IsEnabled="False">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Stretch="Uniform" Width="20">
-                                    <Image x:Name="imagCancel" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BCancel.png"/>
+                                <Image x:Name="imagCancel" Source="pack://application:,,,/IM.Styles;component/Images/BCancel.png"/>
                                 </Viewbox>
                                 <TextBlock Text="Cancel" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
 
-                        <Border x:Name="imgPreview" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgPreview_MouseLeftButtonDown" ToolTip="Preview">
+                    <Border x:Name="imgPreview" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgPreview_MouseLeftButtonDown" ToolTip="Preview">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Stretch="Uniform" Width="20">
-                                    <Image x:Name="imagPreview" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BPreview.png"/>
+                                <Image x:Name="imagPreview" Source="pack://application:,,,/IM.Styles;component/Images/BPreview.png"/>
                                 </Viewbox>
                                 <TextBlock Text="Preview" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
-                        <Border x:Name="imgAdminMailOuts" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgAdminMailOuts_MouseLeftButtonDown" ToolTip="Admin Mail Outs" Width="110">
+                    <Border x:Name="imgAdminMailOuts" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgAdminMailOuts_MouseLeftButtonDown" ToolTip="Admin Mail Outs" Width="110">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Stretch="Uniform" Width="20">
-                                    <Image x:Name="imagAdminMailOuts" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BConfiguration.png"/>
+                                <Image x:Name="imagAdminMailOuts" Source="pack://application:,,,/IM.Styles;component/Images/BConfiguration.png"/>
                                 </Viewbox>
                                 <TextBlock Text="Admin Mail Outs" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
-                        <Border x:Name="imgExit" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgExit_MouseLeftButtonDown_1" ToolTip="Exit" Margin="5,0,5,0">
+                    <Border x:Name="imgExit" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgExit_MouseLeftButtonDown_1" ToolTip="Exit" Margin="5,0,5,0">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Stretch="Uniform" Width="20">
-                                    <Image x:Name="imagSalir" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BExit.png"/>
+                                <Image x:Name="imagSalir" Source="pack://application:,,,/IM.Styles;component/Images/BExit.png"/>
                                 </Viewbox>
                                 <TextBlock Text="Exit" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
@@ -216,23 +192,23 @@
                         <ContextMenu>
                             <MenuItem Header="Cut"  Command="ApplicationCommands.Cut">
                                 <MenuItem.Icon>
-                                    <Image Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BCut.png" Width="12"/>
+                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BCut.png" Width="12"/>
                                 </MenuItem.Icon>
                             </MenuItem>
                             <MenuItem Header="Copy" Command="ApplicationCommands.Copy">
                                 <MenuItem.Icon>
-                                    <Image Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BCopy.png" Width="12"/>
+                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BCopy.png" Width="12"/>
                                 </MenuItem.Icon>
                             </MenuItem>
                             <MenuItem Header="Paste" Command="ApplicationCommands.Paste">
                                 <MenuItem.Icon>
-                                    <Image Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BPaste.png" Width="12"/>
+                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BPaste.png" Width="12"/>
                                 </MenuItem.Icon>
                             </MenuItem>
                             <Separator/>
                             <MenuItem Header="Add Label">
                                 <MenuItem.Icon>
-                                    <Image Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BAdd.png" Width="12"/>
+                                    <Image Source="pack://application:,,,/IM.Styles;component/Images/BAdd.png" Width="12"/>
                                 </MenuItem.Icon>
                                 <MenuItem Header="&lt;Last Name>" Click="button_Click"/>
                                 <MenuItem Header="&lt;First Name>" Click="button_Click"/>

@@ -308,7 +308,7 @@ namespace IM.ProcessorInhouse.Forms
       var _iniFileHelper = new IniFileHelper(strArchivo);
       _clsFilter.DtmStart = _iniFileHelper.readDate("FilterDate", "DateStart", _clsFilter.DtmStart);
       _clsFilter.DtmEnd = _iniFileHelper.readDate("FilterDate", "DateEnd", _clsFilter.DtmEnd);
-      string strLeadSource = _iniFileHelper.readText("FilterDate", "LeadSource", string.Empty);
+      string strLeadSource = _iniFileHelper.ReadText("FilterDate", "LeadSource", string.Empty);
       if (!string.IsNullOrEmpty(strLeadSource)) _clsFilter.LstLeadSources.Add(strLeadSource);
     }
 

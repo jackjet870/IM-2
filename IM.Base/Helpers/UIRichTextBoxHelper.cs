@@ -86,6 +86,7 @@ namespace IM.Base.Helpers
     /// <param name="rtf">string rtf</param>
     /// <history>
     /// [erosado] 16/04/2016  Created
+    /// [erosado] 06/07/2016  Modified. Se agregó limpiar si RichTextBox si No tiene RTF
     /// </history>
     public static void LoadRTF(ref RichTextBox rtb, string rtf)
     {
@@ -97,6 +98,10 @@ namespace IM.Base.Helpers
           range.Load(ms, DataFormats.Rtf);
           ms.Close();
         }
+      }
+      else
+      {
+        rtb.Document.Blocks.Clear();
       }
     }
 

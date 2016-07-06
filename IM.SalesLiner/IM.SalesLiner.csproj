@@ -35,7 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Images\IM.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EPPlus, Version=4.0.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
@@ -102,27 +103,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Resource Include="Images\BAbout.png" />
-    <Resource Include="Images\BExit.png" />
-    <Resource Include="Images\BKey.png" />
-    <Resource Include="Images\BPrinter.png" />
-    <Resource Include="Images\BSearch.png" />
-    <Resource Include="Images\BUser.png" />
-    <Resource Include="Images\IM.ico" />
-    <Resource Include="Images\WKey.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="Forms\frmSalesLiner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\ComboBoxTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\General.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

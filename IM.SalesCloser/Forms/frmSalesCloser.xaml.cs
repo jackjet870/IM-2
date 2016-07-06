@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -13,7 +12,7 @@ using System.IO;
 using System.Diagnostics;
 using IM.Base.Forms;
 using IM.Model.Enums;
-using IM.Model.Classes;
+using IM.Model.Helpers;
 
 namespace IM.SalesCloser.Forms
 {
@@ -58,9 +57,7 @@ namespace IM.SalesCloser.Forms
     /// </history>
     private void imgButtonOk_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      DateTime from = (DateTime)dtpkFrom?.SelectedDate;
-      DateTime to = (DateTime)dtpkTo?.SelectedDate;
-      if (from.Date <= to.Date)
+      if (dtpkFrom.Text != "" && dtpkTo.Text != "" && dtpkFrom?.SelectedDate.Value <= dtpkTo?.SelectedDate.Value)
       {
         if (cbxPersonnel?.SelectedValue != null)
         {
@@ -147,7 +144,7 @@ namespace IM.SalesCloser.Forms
     /// </history>
     private async void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      frmLogin frmlogin = new frmLogin(loginType: EnumLoginType.SalesRoom, changePassword: true, autoSign: true);
+      frmLogin frmlogin = new frmLogin(loginType: EnumLoginType.SalesRoom, changePassword: true, autoSign: true, switchLoginUserMode: true);
       await frmlogin.getAllPlaces();
       if (App.User.AutoSign)
       {
@@ -195,10 +192,10 @@ namespace IM.SalesCloser.Forms
     /// </history>
     private void dtgr_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      StatusBarReg.Content = string.Format("{0}/{1}", (dtgr.SelectedIndex + 1).ToString(), dtgr.Items.Count.ToString());
+      StatusBarReg.Content = $"{(dtgr.SelectedIndex + 1).ToString()}/{dtgr.Items.Count.ToString()}";
     }
     #endregion
-
+    
     #region Async Methods
     /// <summary>
     /// Obtiene la lista del personal
@@ -224,7 +221,8 @@ namespace IM.SalesCloser.Forms
       }
       catch (Exception ex)
       {
-        throw;
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
       }
     }
 
@@ -238,46 +236,29 @@ namespace IM.SalesCloser.Forms
     /// <history>
     /// [erosado] 24/Mar/2016 Created
     /// </history>
-    public void DoGetSalesByCloser(DateTime dateFrom, DateTime dateTo, string salesRoom, string closer)
+    public async void DoGetSalesByCloser(DateTime dateFrom, DateTime dateTo, string salesRoom, string closer)
     {
-      Task.Factory.StartNew(() => BRSales.GetSalesByCloser(dateFrom, dateTo, salesRoom, closer))
-      .ContinueWith(
-      (task1) =>
+      try
       {
-        if (task1.IsFaulted)
+        var data = await BRSales.GetSalesByCloser(dateFrom, dateTo, salesRoom, closer);
+        if (data.Count > 0)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          imgButtonOk.IsEnabled = true;
-          return false;
+          dtgr.DataContext = data;
+          StatusBarReg.Content = $"{(dtgr.SelectedIndex + 1).ToString()}/{dtgr.Items.Count.ToString()}";
         }
         else
         {
-          if (task1.IsCompleted)
-          {
-            task1.Wait(1000);
-            List<SaleByCloser> data = task1.Result;
-
-            if (data.Count > 0)
-            {
-              dtgr.DataContext = data;
-              StatusBarReg.Content = string.Format("{0}/{1}", (dtgr.SelectedIndex + 1).ToString(), dtgr.Items.Count.ToString());
-            }
-            else
-            {
-              UIHelper.ShowMessage("There is no data");
-              dtgr.DataContext = null;
-            }
-            StaEnd();
-            imgButtonOk.IsEnabled = true;
-
-          }
-
-          return false;
+          UIHelper.ShowMessage("There is no data");
+          dtgr.DataContext = null;
         }
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+        StaEnd();
+        imgButtonOk.IsEnabled = true;
+      }
+      catch (Exception ex)
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
+      }
     }
     #endregion
 
@@ -424,7 +405,7 @@ namespace IM.SalesCloser.Forms
     public void LoadPersonnel()
     {
       StaStart("Loading Personnel...");
-      DoGetPersonnel(App.User.SalesRoom.srID, "CLOSER");
+      DoGetPersonnel(App.User.SalesRoom.srID, EnumToListHelper.GetEnumDescription(EnumRole.Closer));
     }
     #endregion
   }

@@ -194,7 +194,7 @@ namespace IM.Base.Helpers
 
     #region Get/Set StringValue
 
-    public string readText(string Section, string Key, string Default)
+    public string ReadText(string Section, string Key, string Default)
     {
       int ret;
       string sRetVal;
@@ -237,7 +237,7 @@ namespace IM.Base.Helpers
       DateTime Value = new DateTime();
       string Text = "";
 
-      Text = readText(Section, Key, "");
+      Text = ReadText(Section, Key, "");
       if (string.IsNullOrWhiteSpace(Text) || !DateTime.TryParse(Text, out Value))
         Value = Default;
 
@@ -258,7 +258,7 @@ namespace IM.Base.Helpers
       int Value;
       string Text = "";
 
-      Text = readText(Section, Key, "");
+      Text = ReadText(Section, Key, "");
       if (Text == "")
         Value = Default;
       else
@@ -281,7 +281,7 @@ namespace IM.Base.Helpers
       double Value;
       string Text = "";
 
-      Text = readText(Section, Key, "");
+      Text = ReadText(Section, Key, "");
       if (Text == "")
         Value = Default;
       else
@@ -299,16 +299,16 @@ namespace IM.Base.Helpers
 
     #region Get/Set BooleanValue
 
-    public bool readBool(string Section, string Key, bool Default)
+    public bool ReadBoolean(string Section, string Key, bool Default)
     {
       bool Value;
       string Text = "";
 
-      Text = readText(Section, Key, "");
+      Text = ReadText(Section, Key, "");
       if (Text == "")
         Value = Default;
       else
-        Value = Convert.ToBoolean(Text);
+        Value = Text=="1" || Text=="true"?true:false;
 
       return Value;
     }

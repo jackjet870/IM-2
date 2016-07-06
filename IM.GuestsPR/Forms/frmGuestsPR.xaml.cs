@@ -57,31 +57,47 @@ namespace IM.GuestsPR.Forms
     /// </history>
     private void imgButtonOk_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      StaStart("Loading data...");
-      imgButtonOk.IsEnabled = false;
-      filtersBool = new List<bool>();
-      var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : App.User.LeadSource.lsID);
-      var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
-      #region Check Filter for Report
-      filtersReport = new List<Tuple<string, string>>();
+      if (dtpkFrom.Text != "" && dtpkTo.Text != "" && dtpkFrom?.SelectedDate.Value <= dtpkTo?.SelectedDate.Value)
+      {
+        if (cbxPersonnel?.SelectedValue != null)
+        {
+          StaStart("Loading data...");
+          imgButtonOk.IsEnabled = false;
+          filtersBool = new List<bool>();
+          var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : App.User.LeadSource.lsID);
+          var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
+          #region Check Filter for Report
+          filtersReport = new List<Tuple<string, string>>();
 
-      filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", App.User.LeadSource.lsID));
-      filtersReport.Add(chkContact.IsChecked == true ? new Tuple<string, string>("Contacts", "YES") : new Tuple<string, string>("Contacts", "ALL"));
-      filtersReport.Add(chkFollowUp.IsChecked == true ? new Tuple<string, string>("Follow Up", "YES") : new Tuple<string, string>("Follow Up", "ALL"));
-      filtersReport.Add(chkInvitation.IsChecked == true ? new Tuple<string, string>("Invitation", "YES") : new Tuple<string, string>("Invitation", "ALL"));
-      filtersReport.Add(chkShows.IsChecked == true ? new Tuple<string, string>("Shows", "YES") : new Tuple<string, string>("Shows", "ALL"));
-      filtersReport.Add(chkWithSale.IsChecked == true ? new Tuple<string, string>("With Sale", "YES") : new Tuple<string, string>("With Sale", "ALL"));
-      filtersReport.Add(chkBasedOnArrival.IsChecked == true ? new Tuple<string, string>("Based On Arrival Date", "YES") : new Tuple<string, string>("Based On Arrival Date", "ALL"));
+          filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", App.User.LeadSource.lsID));
+          filtersReport.Add(chkContact.IsChecked == true ? new Tuple<string, string>("Contacts", "YES") : new Tuple<string, string>("Contacts", "ALL"));
+          filtersReport.Add(chkFollowUp.IsChecked == true ? new Tuple<string, string>("Follow Up", "YES") : new Tuple<string, string>("Follow Up", "ALL"));
+          filtersReport.Add(chkInvitation.IsChecked == true ? new Tuple<string, string>("Invitation", "YES") : new Tuple<string, string>("Invitation", "ALL"));
+          filtersReport.Add(chkShows.IsChecked == true ? new Tuple<string, string>("Shows", "YES") : new Tuple<string, string>("Shows", "ALL"));
+          filtersReport.Add(chkWithSale.IsChecked == true ? new Tuple<string, string>("With Sale", "YES") : new Tuple<string, string>("With Sale", "ALL"));
+          filtersReport.Add(chkBasedOnArrival.IsChecked == true ? new Tuple<string, string>("Based On Arrival Date", "YES") : new Tuple<string, string>("Based On Arrival Date", "ALL"));
 
-      filtersBool.Add(chkAssign.IsChecked ?? false);
-      filtersBool.Add(chkContact.IsChecked ?? false);
-      filtersBool.Add(chkFollowUp.IsChecked ?? false);
-      filtersBool.Add(chkInvitation.IsChecked ?? false);
-      filtersBool.Add(chkShows.IsChecked ?? false);
-      filtersBool.Add(chkWithSale.IsChecked ?? false);
-      filtersBool.Add(chkBasedOnArrival.IsChecked ?? false);
-      #endregion
-      DoGetGuestsByPR(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, leadSource, personnelShort.peID, filtersBool);
+          filtersBool.Add(chkAssign.IsChecked ?? false);
+          filtersBool.Add(chkContact.IsChecked ?? false);
+          filtersBool.Add(chkFollowUp.IsChecked ?? false);
+          filtersBool.Add(chkInvitation.IsChecked ?? false);
+          filtersBool.Add(chkShows.IsChecked ?? false);
+          filtersBool.Add(chkWithSale.IsChecked ?? false);
+          filtersBool.Add(chkBasedOnArrival.IsChecked ?? false);
+          #endregion
+          DoGetGuestsByPR(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, leadSource, personnelShort.peID, filtersBool);
+        }
+        else
+        {
+          UIHelper.ShowMessage("Please select a personnel", MessageBoxImage.Warning);
+          cbxPersonnel.Focus();
+        }
+      }
+      else
+      {
+        UIHelper.ShowMessage("Please check the selected date range", MessageBoxImage.Warning);
+        dtpkFrom.Focus();
+      }
     }
     /// <summary>
     /// Evento que se lanza cuando generamos nuestro reporte boton Print
@@ -154,7 +170,27 @@ namespace IM.GuestsPR.Forms
         App.User = frmlogin.UserData;
         LoadPersonnel();
       }
-
+    }
+    /// <summary>
+    /// Enviamos el Focus al siguiente DatePicker To o si esta en DatePicker From se va el focus al boton Search
+    /// </summary>
+    /// <history>
+    /// [erosado] 01/07/2016  Created.
+    /// </history>
+    private void dtpkEnterKey(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Enter)
+      {
+        DatePicker dtpk = sender as DatePicker;
+        if (dtpk.Name == "dtpkFrom")
+        {
+          dtpkTo.Focus();
+        }
+        else
+        {
+          cbxPersonnel.Focus();
+        }
+      }
     }
     #endregion
 
@@ -196,6 +232,7 @@ namespace IM.GuestsPR.Forms
       }
       catch (Exception ex)
       {
+        StaEnd();
         UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
       }
     }
@@ -211,46 +248,31 @@ namespace IM.GuestsPR.Forms
     /// <history>
     /// [erosado] 16/Mar/2016 Created
     /// </history>
-    public void DoGetGuestsByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, List<bool> filters)
+    public async void DoGetGuestsByPR(DateTime dateFrom, DateTime dateTo, string leadSources, string PR, List<bool> filters)
     {
-      Task.Factory.StartNew(() => BRGuests.GetGuestsByPR(dateFrom, dateTo, leadSources, PR, filters))
-      .ContinueWith(
-      (task1) =>
+      try
       {
-        if (task1.IsFaulted)
+        var data = await BRGuests.GetGuestsByPR(dateFrom, dateTo, leadSources, PR, filters);
+        if (data.Count > 0)
         {
-          UIHelper.ShowMessage(task1.Exception.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          imgButtonOk.IsEnabled = true;
-          return false;
+          dtgr.DataContext = data;
+          StatusBarReg.Content = $"{(dtgr.SelectedIndex + 1).ToString()}/{dtgr.Items.Count.ToString()}";
         }
         else
         {
-          if (task1.IsCompleted)
-          {
-            task1.Wait(1000);
-            var data = task1.Result;
-
-            if (data.Count > 0)
-            {
-              dtgr.DataContext = data;
-              StatusBarReg.Content = $"{(dtgr.SelectedIndex + 1).ToString()}/{dtgr.Items.Count.ToString()}";
-            }
-            else
-            {
-              UIHelper.ShowMessage("There is no data");
-              dtgr.DataContext = null;
-            }
-            StaEnd();
-            imgButtonOk.IsEnabled = true;
-
-          }
-
-          return false;
+          UIHelper.ShowMessage("There is no data");
+          dtgr.DataContext = null;
         }
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+        StaEnd();
+        imgButtonOk.IsEnabled = true;
+      }
+      catch (Exception ex)
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
+      }
+    
+
     }
     #endregion
 

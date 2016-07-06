@@ -9,7 +9,7 @@
         mc:Ignorable="d"
        Title="PR Statistics"
     d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
-    Icon="/IM.PRStatistics;component/Images/IM.ico" WindowState="Maximized" WindowStyle="SingleBorderWindow"
+    Icon="pack://application:,,,/IM.Styles;component/Images/IM-ico.png" WindowState="Maximized" WindowStyle="SingleBorderWindow"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">
     <Window.InputBindings>
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,
@@ -17,7 +17,7 @@
             Path=LoadCatalogList}" Key="F5" Modifiers="Ctrl"/>
     </Window.InputBindings>
     <Grid x:Name="layout" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -28,7 +28,7 @@
 
         <!--#region Barra decoracion -->
         <Border Background="#147F79" Height="32" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="0" Margin="0,0,0,0">
-           <Grid HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,0,10,0" >
+            <Grid HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,0,10,0" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="24"/>
                     <ColumnDefinition Width="Auto"/>
@@ -39,7 +39,7 @@
                     <RowDefinition Height="21"/>
                 </Grid.RowDefinitions>
                 <Viewbox Stretch="Uniform" Height="24" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0">
-                    <Image x:Name="imageUser" Source="pack://application:,,,/IM.PRStatistics;component/Images/BUser.png"/>
+                    <Image x:Name="imageUser" Source="pack://application:,,,/IM.Styles;component/Images/BUser.png"/>
                 </Viewbox>
                 <TextBlock x:Name="txtbUserName" VerticalAlignment="Center"
                            Foreground="White" Grid.Column="1" Grid.Row="0"/>
@@ -53,38 +53,38 @@
             <StackPanel >
                 <TextBlock Text="Date Range" Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" Height="40">
-                    <TextBlock  Text="From" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
-                    <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=DateRange}" KeyUp="dtpkEnterKey"/> 
-                    <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
-                    <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=DateRange}" KeyUp="dtpkEnterKey"/>
-                    <Border x:Name="imgButtonOk" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonOk_MouseLeftButtonDown" Focusable="True">
+                    <TextBlock  Text="From" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
+                    <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=dtp-DateRange}" KeyUp="dtpkEnterKey"/>
+                    <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
+                    <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=dtp-DateRange}" KeyUp="dtpkEnterKey"/>
+                    <Border x:Name="imgButtonOk" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonOk_MouseLeftButtonDown" Focusable="True">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image Source="pack://application:,,,/IM.PRStatistics;component/Images/BSearch.png"/>
+                                <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png"/>
                             </Viewbox>
                             <TextBlock Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonPrint" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonPrint_MouseLeftButtonDown" Focusable="True">
+                    <Border x:Name="imgButtonPrint" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonPrint_MouseLeftButtonDown" Focusable="True">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image Source="pack://application:,,,/IM.PRStatistics;component/Images/BPrinter.png"/>
+                                <Image Source="pack://application:,,,/IM.Styles;component/Images/BPrinter.png"/>
                             </Viewbox>
                             <TextBlock Text="Print" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonAbout" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonAbout_MouseLeftButtonDown" Focusable="True">
+                    <Border x:Name="imgButtonAbout" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonAbout_MouseLeftButtonDown" Focusable="True">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image x:Name="image" Source="pack://application:,,,/IM.PRStatistics;component/Images/BAbout.png"/>
+                                <Image x:Name="image" Source="pack://application:,,,/IM.Styles;component/Images/BAbout.png"/>
                             </Viewbox>
                             <TextBlock Text="About" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonExit" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonExit_MouseLeftButtonDown" Focusable="True">
+                    <Border x:Name="imgButtonExit" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonExit_MouseLeftButtonDown" Focusable="True">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
-                                <Image Source="pack://application:,,,/IM.PRStatistics;component/Images/BExit.png"/>
+                                <Image Source="pack://application:,,,/IM.Styles;component/Images/BExit.png"/>
                             </Viewbox>
                             <TextBlock Text="Exit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
@@ -96,26 +96,22 @@
 
         <!--#region Listas de catalogos para filtrar -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Margin="10,5,10,0" >
-            <Border Style="{StaticResource brdLists}">
+            <Border Style="{StaticResource brd-Catalogs}" Width="145" Height="150" Margin="5,0,0,0">
                 <StackPanel>
-                    <TextBlock Text="Lead Sources" Style="{StaticResource HeadersList}"/>
-                    <ListBox x:Name="lsbxLeadSources" ItemsSource="{Binding}" TextSearch.TextPath="lsN" SelectionChanged="lsbxLeadSources_SelectionChanged">
+                    <TextBlock Text="Lead Sources" Style="{StaticResource txtb-HeaderCatalogs}"/>
+                    <ListBox x:Name="lsbxLeadSources" ItemsSource="{Binding}" SelectionMode="Multiple" Height="100"
+                             DisplayMemberPath="lsN" SelectedValuePath="lsID"
+                             TextSearch.TextPath="lsN" SelectionChanged="lsbxLeadSources_SelectionChanged">
                         <ListBox.Resources>
                             <!--Fondo para Item Seleccionado-->
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
                             <!--Fondo para Item No seleccionado-->
                             <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
                         </ListBox.Resources>
-                        <ListBox.Style>
-                            <StaticResource ResourceKey="lists"/>
-                        </ListBox.Style>
-                        <ListBox.ItemTemplate>
-                            <StaticResource ResourceKey="ListsLeadSources"/>
-                        </ListBox.ItemTemplate>
                     </ListBox>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox x:Name="chbxLeadSources" Content="All Lead Sources" 
-						Style="{StaticResource ResourceKey=SelectAllLists}" 
+						Margin="0,5,0,5"
 						TextSearch.Text="lsN" Checked="chbx_Checked" Unchecked="chbx_Unchecked"/>
                         <TextBlock Name="txtbLSSelected" Margin="2,5,0,0" />
                     </StackPanel>
@@ -123,107 +119,86 @@
                 </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource brdLists}" >
+            <Border Style="{StaticResource brd-Catalogs}" Width="145" Height="150" Margin="5,0,0,0">
                 <StackPanel>
-                    <TextBlock Text="Sales Rooms" Style="{StaticResource HeadersList}"/>
-                    <ListBox x:Name="lsbxSalesRooms" ItemsSource="{Binding}" TextSearch.TextPath="srN" SelectionChanged="lsbxSalesRooms_SelectionChanged">
+                    <TextBlock Text="Sales Rooms" Style="{StaticResource txtb-HeaderCatalogs}"/>
+                    <ListBox x:Name="lsbxSalesRooms" ItemsSource="{Binding}" SelectionMode="Multiple" Height="100"
+                             DisplayMemberPath="srN" SelectedValuePath="srID"
+                             TextSearch.TextPath="srN" SelectionChanged="lsbxSalesRooms_SelectionChanged">
                         <ListBox.Resources>
                             <!--Fondo para Item Seleccionado-->
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
                             <!--Fondo para Item No seleccionado-->
                             <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
                         </ListBox.Resources>
-                        <ListBox.Style>
-                            <StaticResource ResourceKey="lists"/>
-                        </ListBox.Style>
-                        <ListBox.ItemTemplate>
-                            <StaticResource ResourceKey="ListsSalesRooms"/>
-                        </ListBox.ItemTemplate>
-
                     </ListBox>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox x:Name="chbxSalesRooms" Content="All Sales Rooms" 
-						Style="{StaticResource ResourceKey=SelectAllLists}" 
-						Margin="3,5,0,5" Checked="chbx_Checked" Unchecked="chbx_Unchecked"/>
+						Margin="0,5,0,5" Checked="chbx_Checked" Unchecked="chbx_Unchecked"/>
                         <TextBlock Name="txtbSRSelected" Margin="2,5,0,0" />
                     </StackPanel>
                 </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource brdLists}" Canvas.Left="300" Canvas.Top="60">
+            <Border Style="{StaticResource brd-Catalogs}" Canvas.Left="300" Canvas.Top="60" Width="145" Height="150" Margin="5,0,0,0">
                 <StackPanel>
-                    <TextBlock Text="Countries" Style="{StaticResource HeadersList}"/>
-                    <ListBox x:Name="lsbxCountries" ItemsSource="{Binding}" TextSearch.TextPath="coN" Loaded="chbx_Checked" SelectionChanged="lsbxCountries_SelectionChanged">
+                    <TextBlock Text="Countries" Style="{StaticResource txtb-HeaderCatalogs}"/>
+                    <ListBox x:Name="lsbxCountries" ItemsSource="{Binding}" SelectionMode="Multiple" Height="100"
+                             DisplayMemberPath="coN" SelectedValuePath="coID"
+                             TextSearch.TextPath="coN" Loaded="chbx_Checked" SelectionChanged="lsbxCountries_SelectionChanged">
                         <ListBox.Resources>
                             <!--Fondo para Item Seleccionado-->
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
                             <!--Fondo para Item No seleccionado-->
                             <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
                         </ListBox.Resources>
-                        <ListBox.Style>
-                            <StaticResource ResourceKey="lists"/>
-                        </ListBox.Style>
-                        <ListBox.ItemTemplate>
-                            <StaticResource ResourceKey="ListsCountries"/>
-                        </ListBox.ItemTemplate>
-
                     </ListBox>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox x:Name="chbxCountries" Content="All Countries"
-						Style="{StaticResource ResourceKey=SelectAllLists}" 
+						Margin="0,5,0,5"
 						Checked="chbx_Checked" Unchecked="chbx_Unchecked" />
                         <TextBlock Name="txtbCOSelected" Margin="2,5,0,0" />
                     </StackPanel>
                 </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource brdLists}" >
+            <Border Style="{StaticResource brd-Catalogs}" Width="145" Height="150" Margin="5,0,0,0">
                 <StackPanel>
-                    <TextBlock Text="Agencies" Style="{StaticResource HeadersList}"/>
-                    <ListBox x:Name="lsbxAgencies" ItemsSource="{Binding}" TextSearch.TextPath="agN" Loaded="chbx_Checked" SelectionChanged="lsbxAgencies_SelectionChanged">
+                    <TextBlock Text="Agencies" Style="{StaticResource txtb-HeaderCatalogs}"/>
+                    <ListBox x:Name="lsbxAgencies" ItemsSource="{Binding}" SelectionMode="Multiple" Height="100"
+                             DisplayMemberPath="agN" SelectedValuePath="agID"
+                             TextSearch.TextPath="agN" Loaded="chbx_Checked" SelectionChanged="lsbxAgencies_SelectionChanged">
                         <ListBox.Resources>
                             <!--Fondo para Item Seleccionado-->
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
                             <!--Fondo para Item No seleccionado-->
                             <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
                         </ListBox.Resources>
-                        <ListBox.Style>
-                            <StaticResource ResourceKey="lists"/>
-                        </ListBox.Style>
-                        <ListBox.ItemTemplate>
-                            <StaticResource ResourceKey="ListsAgencies"/>
-                        </ListBox.ItemTemplate>
                     </ListBox>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox x:Name="chbxAgencies" Content="All Agencies"
-						Style="{StaticResource ResourceKey=SelectAllLists}" 
-						Checked="chbx_Checked" Unchecked="chbx_Unchecked" />
+						Margin="0,5,0,5" Checked="chbx_Checked" Unchecked="chbx_Unchecked" />
                         <TextBlock Name="txtbAGSelected" Margin="2,5,0,0" />
                     </StackPanel>
                 </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource brdLists}">
+            <Border Style="{StaticResource brd-Catalogs}" Width="145" Height="150" Margin="5,0,0,0">
                 <StackPanel >
-                    <TextBlock Text="Markets" Style="{StaticResource HeadersList}"/>
-                    <ListBox x:Name="lsbxMarkets" ItemsSource="{Binding}" TextSearch.TextPath="mkN" Loaded="chbx_Checked" SelectionChanged="lsbxMarkets_SelectionChanged">
+                    <TextBlock Text="Markets" Style="{StaticResource txtb-HeaderCatalogs}"/>
+                    <ListBox x:Name="lsbxMarkets" ItemsSource="{Binding}" SelectionMode="Multiple" Height="100"
+                             DisplayMemberPath="mkN" SelectedValuePath="mkID"
+                             TextSearch.TextPath="mkN" Loaded="chbx_Checked" SelectionChanged="lsbxMarkets_SelectionChanged">
                         <ListBox.Resources>
                             <!--Fondo para Item Seleccionado-->
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
                             <!--Fondo para Item No seleccionado-->
                             <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"  />
                         </ListBox.Resources>
-                        <ListBox.Style>
-                            <StaticResource ResourceKey="lists"/>
-                        </ListBox.Style>
-                        <ListBox.ItemTemplate>
-                            <StaticResource ResourceKey="ListsMarkets"/>
-                        </ListBox.ItemTemplate>
                     </ListBox>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox x:Name="chbxMarkets" Content="All Markets" 
-						Style="{StaticResource ResourceKey=SelectAllLists}" 
-						Checked="chbx_Checked" Unchecked="chbx_Unchecked" />
+					    Margin="0,5,0,5" Checked="chbx_Checked" Unchecked="chbx_Unchecked" />
                         <TextBlock Name="txtbMKSelected" Margin="2,5,0,0" />
                     </StackPanel>
                 </StackPanel>

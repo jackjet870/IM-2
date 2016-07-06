@@ -11,6 +11,7 @@ using IM.BusinessRules.BR;
 using System.Diagnostics;
 using IM.Base.Forms;
 using IM.Model.Enums;
+using IM.Model.Helpers;
 
 namespace IM.SalesPR.Forms
 {
@@ -52,17 +53,32 @@ namespace IM.SalesPR.Forms
     /// </history>
     private void imgButtonOk_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      StaStart("Loading data...");
-      imgButtonOk.IsEnabled = false;
-      //new List<bool>();
-      var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : App.User.LeadSource.lsID);
-      var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
-      _filtersReport = new List<Tuple<string, string>>();
-      _filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", App.User.LeadSource.lsID));
-
-      if (dtpkFrom.SelectedDate != null && dtpkTo.SelectedDate != null)
+      if (dtpkFrom.Text != "" && dtpkTo.Text != "" && dtpkFrom?.SelectedDate.Value <= dtpkTo?.SelectedDate.Value)
       {
-        DoGetSalesByPr(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, leadSource, personnelShort?.peID, (bool)rdoSalesPr.IsChecked);
+        if (cbxPersonnel?.SelectedValue != null)
+        {
+          StaStart("Loading data...");
+          imgButtonOk.IsEnabled = false;
+          var leadSource = (chkLeadSource.IsChecked == true ? "ALL" : App.User.LeadSource.lsID);
+          var personnelShort = cbxPersonnel.SelectedValue as PersonnelShort;
+          _filtersReport = new List<Tuple<string, string>>();
+          _filtersReport.Add(chkLeadSource.IsChecked == true ? new Tuple<string, string>("Lead Source", "ALL") : new Tuple<string, string>("Lead Source", App.User.LeadSource.lsID));
+
+          if (dtpkFrom.SelectedDate != null && dtpkTo.SelectedDate != null)
+          {
+            DoGetSalesByPr(dtpkFrom.SelectedDate.Value, dtpkTo.SelectedDate.Value, leadSource, personnelShort?.peID, (bool)rdoSalesPr.IsChecked);
+          }
+        }
+        else
+        {
+          UIHelper.ShowMessage("Please select a personnel", MessageBoxImage.Warning);
+          cbxPersonnel.Focus();
+        }
+      }
+      else
+      {
+        UIHelper.ShowMessage("Please check the selected date range", MessageBoxImage.Warning);
+        dtpkFrom.Focus();
       }
     }
     /// <summary>
@@ -125,9 +141,9 @@ namespace IM.SalesPR.Forms
     /// <history>
     /// [erosado] 22/Mar/2016 Created
     /// </history>
-    private async  void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private async void imageLogOut_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      var frmlogin = new frmLogin(loginType: EnumLoginType.Location, changePassword: true, autoSign: true);
+      var frmlogin = new frmLogin(loginType: EnumLoginType.Location, changePassword: true, autoSign: true, switchLoginUserMode:true);
       await frmlogin.getAllPlaces();
       if (App.User.AutoSign)
       {
@@ -141,6 +157,28 @@ namespace IM.SalesPR.Forms
         LoadPersonnel();
       }
 
+    }
+
+    /// <summary>
+    /// Enviamos el Focus al siguiente DatePicker To o si esta en DatePicker From se va el focus al boton Search
+    /// </summary>
+    /// <history>
+    /// [erosado] 01/07/2016  Created.
+    /// </history>
+    private void dtpkEnterKey(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Enter)
+      {
+        DatePicker dtpk = sender as DatePicker;
+        if (dtpk.Name == "dtpkFrom")
+        {
+          dtpkTo.Focus();
+        }
+        else
+        {
+          cbxPersonnel.Focus();
+        }
+      }
     }
     #endregion
 
@@ -171,7 +209,7 @@ namespace IM.SalesPR.Forms
     {
       try
       {
-        var data =await  BRPersonnel.GetPersonnel(leadSources, "ALL", roles);
+        var data = await BRPersonnel.GetPersonnel(leadSources, "ALL", roles);
         if (data.Count > 0)
         {
           data.Insert(0, new PersonnelShort() { peID = "ALL", peN = "ALL", deN = "ALL" });
@@ -393,7 +431,7 @@ namespace IM.SalesPR.Forms
     public void LoadPersonnel()
     {
       StaStart("Loading Personnel...");
-      DoGetPersonnel(App.User.LeadSource.lsID, "PR");
+      DoGetPersonnel(App.User.LeadSource.lsID, EnumToListHelper.GetEnumDescription(EnumRole.PR));
     }
     #endregion
   }

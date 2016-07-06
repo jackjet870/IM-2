@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:IM.Styles">
+
+    <!--#region Estilo CheckBox Centrado Vertical -->
+    <Style TargetType="{x:Type CheckBox}" x:Key="chk-VerticalCenter">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,5,0"/>
+    </Style>
+    <!--#endregion-->
+
+    <!--#region Estilo CheckBox Centrado Horizontal-->
+    <Style TargetType="{x:Type CheckBox}" x:Key="chk-HorizontalCenter" BasedOn="{StaticResource chk-VerticalCenter}">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0"/>
+    </Style>
+</ResourceDictionary>

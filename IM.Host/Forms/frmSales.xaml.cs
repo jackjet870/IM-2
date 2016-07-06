@@ -73,7 +73,7 @@ namespace IM.Host.Forms
       InitializeComponent();
       typeSale = EnumSale.Sale;
       gprCriteria.Visibility = typeSale == EnumSale.Sale ? Visibility.Collapsed : Visibility.Visible;
-      _guId = guId = 7752186;
+      _guId = guId = 7751984;
     }
 
     #region btnSalesmen_Click
@@ -1203,6 +1203,7 @@ namespace IM.Host.Forms
     ///</history>
     private async void IsSaleUpdate()
     {
+      if(cbosast.SelectedValue != null)
       _isSaleUpdate = await BRSaleTypes.GetstUpdateOfSaleTypeById(cbosast.SelectedValue.ToString(),1);
     }
 

@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Windows.Controls;
 using IM.Model;
-using System.Data;
-using System.ComponentModel;
-using IM.Base.Helpers;
 using IM.Model.Classes;
 using IM.Model.Enums;
 using OfficeOpenXml.Style;

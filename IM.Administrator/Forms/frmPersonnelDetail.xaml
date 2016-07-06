@@ -6,13 +6,6 @@
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing"
         Title="Personnel Detail" Height="480" Width="490" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/tComboBox.xaml"/>              
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
     <DockPanel LastChildFill="True">
         <Grid Height="40" DockPanel.Dock="Bottom" Background="Transparent">
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Name="skpStatus" Visibility="Visible" Margin="10,6,96,4" HorizontalAlignment="Left">
@@ -105,12 +98,12 @@
                     </Grid>
                     <ComboBox Name="cmbpeLinerID" Grid.Column="1"  Grid.Row="7" TextSearch.TextPath="peN" VerticalAlignment="Top" SelectedValuePath="peID" SelectedValue="{Binding peLinerID}" Margin="69,0,0,0" >
                         <ComboBox.ItemTemplate>
-                            <StaticResource ResourceKey="tPersonnelComboBox-Concat" />
+                            <StaticResource ResourceKey="cbx-Personnel-Concat" />
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                     <ComboBox Name="cmbpeSalesManID" Grid.Column="1" SelectedValuePath="CODE" Grid.Row="8" TextSearch.TextPath="NAME" VerticalAlignment="Top" SelectedValue="{Binding peSalesmanID}" Margin="69,0,0,0" >
                         <ComboBox.ItemTemplate>
-                            <StaticResource ResourceKey="tSalesmenComboBox-Concat"/>
+                            <StaticResource ResourceKey="cbx-Salesmen-Concat"/>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                     <Grid Grid.Row="9">

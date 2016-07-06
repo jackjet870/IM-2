@@ -173,7 +173,8 @@ namespace IM.MailOutsConfig.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
       }
     }
 
@@ -184,33 +185,25 @@ namespace IM.MailOutsConfig.Forms
     /// <history>
     /// [erosado] 13/04/2016  Created
     /// </history>
-    public void DoGetMailOuts(string ls)
+    public async void DoGetMailOuts(string ls)
     {
-      Task.Factory.StartNew(() => BRMailOuts.GetMailOuts(ls))
-      .ContinueWith(
-      task1 =>
+      try
       {
-        if (task1.IsFaulted)
+        var data = await BRMailOuts.GetMailOuts(ls);
+        if (data.Count > 0)
         {
-          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error, "Mail Outs Configuration");
-          StaEnd();
-          return false;
-        }
-        if (task1.IsCompleted)
-        {
-          List<MailOut> data = task1.Result;
-          if (data.Count > 0)
-          {
-            lsbxMailOuts.ItemsSource = data;
-            txtbMailOutsNumber.Text = data.Count.ToString();
-            lsbxMailOuts.SelectedIndex = 0;
-          }
+          lsbxMailOuts.ItemsSource = data;
+          txtbMailOutsNumber.Text = data.Count.ToString();
+          lsbxMailOuts.SelectedIndex = 0;
         }
         StaEnd();
-        return false;
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+      }
+      catch (Exception ex)
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
+      }
+
     }
 
     /// <summary>
@@ -239,7 +232,8 @@ namespace IM.MailOutsConfig.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
       }
     }
 
@@ -269,7 +263,8 @@ namespace IM.MailOutsConfig.Forms
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
       }
     }
     /// <summary>
@@ -283,7 +278,7 @@ namespace IM.MailOutsConfig.Forms
       try
       {
         List<MarketShort> data = await BRMarkets.GetMarkets(1);
-        if (!data.Any())
+        if (data.Any())
         {
           data.Insert(0, new MarketShort { mkN = "ANY ONE", mkID = "ANY ONE" });
           cbxMarket.ItemsSource = data;
@@ -293,14 +288,15 @@ namespace IM.MailOutsConfig.Forms
         {
           cbxMarket.Text = "No data found - Press Ctrl+F5 to load Data";
         }
-       
+        StaEnd();
       }
       catch (Exception ex)
       {
-        UIHelper.ShowMessage(ex.InnerException.Message, MessageBoxImage.Error);
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
       }
       StaEnd();
-     
+
     }
     /// <summary>
     /// Actualiza la información de un MailOut
@@ -309,38 +305,28 @@ namespace IM.MailOutsConfig.Forms
     /// <history>
     /// [erosado] 20/04/2016 Created
     /// </history>
-    public void DoUpdateMailOut(MailOut mo)
+    public async void DoUpdateMailOut(MailOut mo)
     {
-      Task.Factory.StartNew(() => BRMailOuts.UpdateMailOut(mo))
-      .ContinueWith(
-      task1 =>
+      try
       {
-        if (task1.IsFaulted)
+        var data = await BRMailOuts.UpdateMailOut(mo);
+        if (data > 0)
         {
-          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          return false;
+          UIHelper.ShowMessage("Data saved successfully", MessageBoxImage.Information, "Mail Outs Configuration");
+          EditModeOff();
+          cbxLeadSource_SelectionChanged(this, null);
         }
-        if (task1.IsCompleted)
+        else
         {
-          task1.Wait(1000);
-          int data = task1.Result;
-          if (data > 0)
-          {
-            UIHelper.ShowMessage("Data saved successfully", MessageBoxImage.Information, "Mail Outs Configuration");
-            EditModeOff();
-            cbxLeadSource_SelectionChanged(this, null);
-          }
-          else
-          {
-            UIHelper.ShowMessage("We have a problem", MessageBoxImage.Error, "Mail Outs Configuration");
-          }
+          UIHelper.ShowMessage("We have a problem", MessageBoxImage.Error, "Mail Outs Configuration");
         }
         StaEnd();
-        return false;
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+      }
+      catch (Exception ex)
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
+      }
     }
     /// <summary>
     /// Elimina los registros del MailOut Seleccionado
@@ -349,38 +335,28 @@ namespace IM.MailOutsConfig.Forms
     /// <history>
     /// [erosado] 20/04/2016 Created
     /// </history>
-    public void DoDeleteMailOut(MailOut mo)
+    public async void DoDeleteMailOut(MailOut mo)
     {
-      Task.Factory.StartNew(() => BRMailOuts.DeleteMailOut(mo))
-      .ContinueWith(
-      task1 =>
+      try
       {
-        if (task1.IsFaulted)
+        var data = await BRMailOuts.DeleteMailOut(mo);
+        if (data > 0)
         {
-          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          return false;
+          UIHelper.ShowMessage("Delete MailOut successfully", MessageBoxImage.Information, "Mail Outs Configuration");
+          EditModeOff();
+          cbxLeadSource_SelectionChanged(this, null);
         }
-        if (task1.IsCompleted)
+        else
         {
-          task1.Wait(1000);
-          int data = task1.Result;
-          if (data > 0)
-          {
-            UIHelper.ShowMessage("Delete MailOut successfully", MessageBoxImage.Information, "Mail Outs Configuration");
-            EditModeOff();
-            cbxLeadSource_SelectionChanged(this, null);
-          }
-          else
-          {
-            UIHelper.ShowMessage("We have a problem", MessageBoxImage.Error, "Mail Outs Configuration");
-          }
+          UIHelper.ShowMessage("We have a problem", MessageBoxImage.Error, "Mail Outs Configuration");
         }
         StaEnd();
-        return false;
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+      }
+      catch (Exception ex)
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
+      }
     }
 
     /// <summary>
@@ -391,44 +367,37 @@ namespace IM.MailOutsConfig.Forms
     /// <history>
     /// [erosado] 20/04/2016 Created
     /// </history>
-    public void DoInsertMailOut(string mols, string moCode)
+    public async  void DoInsertMailOut(string mols, string moCode)
     {
-      Task.Factory.StartNew(() => BRMailOuts.InsertMailOut(mols,moCode))
-      .ContinueWith(
-      task1 =>
+      try
       {
-        if (task1.IsFaulted)
+        var data =await  BRMailOuts.InsertMailOut(mols, moCode);
+
+        if (data != -1)
         {
-          UIHelper.ShowMessage(task1.Exception?.InnerException.Message, MessageBoxImage.Error);
-          StaEnd();
-          return false;
-        }
-        if (task1.IsCompleted)
-        {
-          task1.Wait(1000);
-          int data = task1.Result;
-          if (data != -1)
+          if (data != 0)
           {
-            if (data != 0)
-            {
-              UIHelper.ShowMessage("Insert MailOut successfully", MessageBoxImage.Information, "Mail Outs Configuration");
-              cbxLeadSource_SelectionChanged(this, null);
-            }
-            else
-            {
-              UIHelper.ShowMessage("Mail Out name already exists.", MessageBoxImage.Warning, "Mail Outs Configuration");
-            }
+            UIHelper.ShowMessage("Insert MailOut successfully", MessageBoxImage.Information, "Mail Outs Configuration");
+            cbxLeadSource_SelectionChanged(this, null);
           }
           else
           {
-            UIHelper.ShowMessage("We have a problem", MessageBoxImage.Error, "Mail Outs Configuration");
+            UIHelper.ShowMessage("Mail Out name already exists.", MessageBoxImage.Warning, "Mail Outs Configuration");
           }
         }
+        else
+        {
+          UIHelper.ShowMessage("We have a problem", MessageBoxImage.Error, "Mail Outs Configuration");
+        }
+
         StaEnd();
-        return false;
-      },
-      TaskScheduler.FromCurrentSynchronizationContext()
-      );
+      }
+      catch (Exception ex)
+      {
+        StaEnd();
+        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
+      }           
+      
     }
     #endregion
 
@@ -529,7 +498,7 @@ namespace IM.MailOutsConfig.Forms
     }
 
     #endregion
-    
+
     #region  Metodos
     /// <summary>
     /// Desactiva el Modo edicion
@@ -552,8 +521,8 @@ namespace IM.MailOutsConfig.Forms
       imgCancel.IsEnabled = true;
       txtEditMode.Visibility = Visibility.Visible;
       imgEdit.IsEnabled =
-      imgExit.IsEnabled=
-      imgDelete.IsEnabled=
+      imgExit.IsEnabled =
+      imgDelete.IsEnabled =
       imgAdd.IsEnabled = false;
     }
 
@@ -579,7 +548,7 @@ namespace IM.MailOutsConfig.Forms
       txtEditMode.Visibility = Visibility.Collapsed;
       imgEdit.IsEnabled =
       imgExit.IsEnabled =
-      imgDelete.IsEnabled=
+      imgDelete.IsEnabled =
       imgAdd.IsEnabled = true;
     }
 
@@ -614,7 +583,7 @@ namespace IM.MailOutsConfig.Forms
     {
       pupNewMot.IsOpen = false;
       txtNewMotName.Clear();
-      
+
     }
     /// <summary>
     /// Agrega un Nuevo MailOut al presionar Enter

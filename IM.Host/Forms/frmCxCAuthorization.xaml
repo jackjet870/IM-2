@@ -9,220 +9,217 @@
         mc:Ignorable="d"
   
         Title="CxC Authorization" Height="435.554" Width="977.836" Loaded="Window_Loaded">
-  <Window.Resources>
+    <Window.Resources>
 
-    <CollectionViewSource x:Key="cxCDataViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:CxCData}, CreateList=True}"/>
-    <CollectionViewSource x:Key="underPaymentMotiveViewSource"/>
+        <CollectionViewSource x:Key="cxCDataViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:CxCData}, CreateList=True}"/>
+        <CollectionViewSource x:Key="underPaymentMotiveViewSource"/>
 
-    <Style x:Name="ctrlStyleVisibility" x:Key="ctrlStyleVisibility" TargetType="{x:Type Control}">
-      <Style.Triggers>
-        <DataTrigger Binding="{Binding Authorized}" Value="False">
-          <Setter Property="Visibility" Value="Hidden"/>
-        </DataTrigger>
-        <DataTrigger Binding="{Binding Authorized}" Value="True">
-          <Setter Property="Visibility" Value="Visible"/>
-        </DataTrigger>
-      </Style.Triggers>
-    </Style>
+        <Style x:Name="ctrlStyleVisibility" x:Key="ctrlStyleVisibility" TargetType="{x:Type Control}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Authorized}" Value="False">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Authorized}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
-    <Style TargetType="{x:Type TextBox}" x:Key="styleTextBox">
-      <Style.Triggers>
-        <DataTrigger Binding="{Binding Authorized}" Value="False">
-          <Setter Property="Text" Value=""/>
-          <Setter Property="Visibility" Value="Hidden"/>
-          <Setter Property="Text" Value="{x:Null}"/>
-        </DataTrigger>
-        <DataTrigger Binding="{Binding Authorized}" Value="True">
-          <Setter Property="Visibility" Value="Visible"/>
-        </DataTrigger>
-      </Style.Triggers>
-    </Style>
+        <Style TargetType="{x:Type TextBox}" x:Key="styleTextBox">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Authorized}" Value="False">
+                    <Setter Property="Text" Value=""/>
+                    <Setter Property="Visibility" Value="Hidden"/>
+                    <Setter Property="Text" Value="{x:Null}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Authorized}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
-    <Style TargetType="{x:Type ComboBox}" x:Key="styleComboBox">
-      <Style.Triggers>
-        <DataTrigger Binding="{Binding Authorized}" Value="False">
-          <Setter Property="IsReadOnly" Value="True"/>
-          <Setter Property="Visibility" Value="Hidden"/>
-        </DataTrigger>
-        <DataTrigger Binding="{Binding Authorized}" Value="True">
-          <Setter Property="IsReadOnly" Value="False"/>
-          <Setter Property="Visibility" Value="Visible"/>
-        </DataTrigger>
-      </Style.Triggers>
-    </Style>
+        <Style TargetType="{x:Type ComboBox}" x:Key="styleComboBox">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Authorized}" Value="False">
+                    <Setter Property="IsReadOnly" Value="True"/>
+                    <Setter Property="Visibility" Value="Hidden"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Authorized}" Value="True">
+                    <Setter Property="IsReadOnly" Value="False"/>
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
-    <Style x:Name="ButtonVisibility" x:Key="styleVisibilityButton" TargetType="{x:Type Button}">
-      <Setter Property="Button.Visibility" Value="Hidden"/>
-      <Setter Property="Background" Value="Transparent"/>
-      <Setter Property="BorderBrush" Value="Transparent"/>
-      <Setter Property="BorderThickness" Value="0"/>
-      <Style.Triggers>
-        <DataTrigger Binding="{Binding Authorized}" Value="False">
-          <Setter Property="Visibility" Value="Hidden"/>
-        </DataTrigger>
-        <DataTrigger Binding="{Binding Authorized}" Value="True">
-          <Setter Property="Visibility" Value="Visible"/>
-        </DataTrigger>
-      </Style.Triggers>
-    </Style>
+        <Style x:Name="ButtonVisibility" x:Key="styleVisibilityButton" TargetType="{x:Type Button}">
+            <Setter Property="Button.Visibility" Value="Hidden"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Authorized}" Value="False">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Authorized}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
-    <Style x:Key="styleDatePickerTextBox" TargetType="{x:Type DatePickerTextBox}">
-      <Setter Property="Template">
-        <Setter.Value>
-          <ControlTemplate>
-            <TextBox IsReadOnly="True" x:Name="PART_TextBox" Text="{Binding Path=SelectedDate, StringFormat='dd/MM/yyyy', RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
-          </ControlTemplate>
-        </Setter.Value>
-      </Setter>
-    </Style>
+        <Style x:Key="styleDatePickerTextBox" TargetType="{x:Type DatePickerTextBox}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <TextBox IsReadOnly="True" x:Name="PART_TextBox" Text="{Binding Path=SelectedDate, StringFormat='dd/MM/yyyy', RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-    <Style x:Key="styleDatePicker" TargetType="{x:Type DatePicker}">
-      <Style.Triggers>
-        <DataTrigger Binding="{Binding Authorized}" Value="False">
-          <Setter Property="Visibility" Value="Hidden" />
-        </DataTrigger>
-        <DataTrigger Binding="{Binding Authorized}" Value="True">
-          <Setter Property="Visibility" Value="Visible" />
-        </DataTrigger>
-      </Style.Triggers>
-    </Style>
+        <Style x:Key="styleDatePicker" TargetType="{x:Type DatePicker}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Authorized}" Value="False">
+                    <Setter Property="Visibility" Value="Hidden" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Authorized}" Value="True">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
-    <Style x:Key ="roundButtonTemplate" TargetType ="{x:Type Button}">
-      <Setter Property ="Foreground" Value ="Black"/>
-      <Setter Property ="FontWeight" Value ="Bold"/>
-      <Setter Property ="Template">
-        <Setter.Value>
-          <ControlTemplate TargetType ="{x:Type Button}">
-            <Grid>
-              <Ellipse Name ="OuterRing" Width ="25" Height ="25" Fill ="{Binding}"/>
-              <Ellipse Name ="InnerRing" Width ="20" Height ="20" Fill ="MintCream"/>
-              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Grid>
+        <Style x:Key ="roundButtonTemplate" TargetType ="{x:Type Button}">
+            <Setter Property ="Foreground" Value ="Black"/>
+            <Setter Property ="FontWeight" Value ="Bold"/>
+            <Setter Property ="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType ="{x:Type Button}">
+                        <Grid>
+                            <Ellipse Name ="OuterRing" Width ="25" Height ="25" Fill ="{Binding}"/>
+                            <Ellipse Name ="InnerRing" Width ="20" Height ="20" Fill ="MintCream"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
 
-            <ControlTemplate.Triggers>
-              <Trigger Property ="IsMouseOver" Value ="True">
-                <Setter TargetName ="OuterRing" Property ="Fill" Value ="MediumSeaGreen"/>
-              </Trigger>
-              <Trigger Property ="IsPressed" Value ="True">
-                <Setter TargetName ="OuterRing" Property ="Height" Value ="25"/>
-                <Setter TargetName ="OuterRing" Property ="Width" Value ="25"/>
-              </Trigger>
-              <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Foreground" Value="#FFADADAD"/>
-                <Setter Property="TextElement.Foreground"  Value="#FFADADAD"/>
-              </Trigger>
-            </ControlTemplate.Triggers>
-          </ControlTemplate>
-        </Setter.Value>
-      </Setter>
-    </Style>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property ="IsMouseOver" Value ="True">
+                                <Setter TargetName ="OuterRing" Property ="Fill" Value ="MediumSeaGreen"/>
+                            </Trigger>
+                            <Trigger Property ="IsPressed" Value ="True">
+                                <Setter TargetName ="OuterRing" Property ="Height" Value ="25"/>
+                                <Setter TargetName ="OuterRing" Property ="Width" Value ="25"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#FFADADAD"/>
+                                <Setter Property="TextElement.Foreground"  Value="#FFADADAD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-  </Window.Resources>
+    </Window.Resources>
 
-  <Grid x:Name="layout" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" DataContext="{StaticResource cxCDataViewSource}">
+    <Grid x:Name="layout" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" DataContext="{StaticResource cxCDataViewSource}">
 
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="266*" MinHeight="220"/>
-      <RowDefinition Height="31*"/>
-      <RowDefinition Height="22"/>
-    </Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="266*" MinHeight="220"/>
+            <RowDefinition Height="31*"/>
+            <RowDefinition Height="22"/>
+        </Grid.RowDefinitions>
 
-    <!--#region Barra de opciones y botones -->
-    <Border x:Name="brdDateRange" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Margin="10,5,10,0">
-      <StackPanel >
-        <StackPanel Orientation="Horizontal" Height="40">
-          <TextBlock  Text="From" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
-          <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=DateRange}"/>
-          <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
-          <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=DateRange}"/>
-          <TextBlock  Text="LS" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
-          <ComboBox Name="cbxLeadSource"  Style="{StaticResource cbxPersonnel}" FontWeight="Light" DisplayMemberPath="lsN" SelectedValuePath="lsID"/>
+        <!--#region Barra de opciones y botones -->
+        <Border x:Name="brdDateRange" CornerRadius="5" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Margin="10,5,10,0">
+            <StackPanel >
+                <StackPanel Orientation="Horizontal" Height="40">
+                    <TextBlock  Text="From" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
+                    <DatePicker x:Name="dtpkFrom" Style="{StaticResource ResourceKey=DateRange}"/>
+                    <TextBlock  Text="To" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
+                    <DatePicker x:Name="dtpkTo" Style="{StaticResource ResourceKey=DateRange}"/>
+                    <TextBlock  Text="LS" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
+                    <ComboBox Name="cbxLeadSource"  Style="{StaticResource cbxPersonnel}" FontWeight="Light" DisplayMemberPath="lsN" SelectedValuePath="lsID"/>
 
-          <TextBlock  Text="PR" Style="{StaticResource ResourceKey=txtDateRangeText}"/>
-          <ComboBox x:Name="cbxPersonnel" Style="{StaticResource cbxPersonnel}" TextSearch.TextPath="peID" >
-            <ComboBox.ItemTemplate>
-              <StaticResource ResourceKey="comboBoxTemplate"/>
-            </ComboBox.ItemTemplate>
-          </ComboBox>
-          <Border x:Name="imgButtonSearch" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="Button_MouseLeftButtonDown">
-            <StackPanel Orientation="Horizontal">
-              <Viewbox Stretch="Uniform" Width="20">
-                <Image Source="pack://application:,,,/IM.GuestsPR;component/Images/BSearch.png"/>
-              </Viewbox>
-              <TextBlock Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock  Text="PR" Style="{StaticResource ResourceKey=txtb-DateRange}"/>
+                    <ComboBox x:Name="cbxPersonnel" Style="{StaticResource cbxPersonnel}" TextSearch.TextPath="peID" ItemTemplate="{StaticResource cbx-Personnel-img}"/>
+
+                    <Border x:Name="imgButtonSearch" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="Button_MouseLeftButtonDown">
+                        <StackPanel Orientation="Horizontal">
+                            <Viewbox Stretch="Uniform" Width="20">
+                                <Image Source="pack://application:,,,/IM.GuestsPR;component/Images/BSearch.png"/>
+                            </Viewbox>
+                            <TextBlock Text="Search" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <Border x:Name="imgButtonSave" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="Button_MouseLeftButtonDown">
+                        <StackPanel Orientation="Horizontal">
+                            <Viewbox Stretch="Uniform" Width="20">
+                                <Image x:Name="imagSave" Source="pack://application:,,,/IM.styles;component/Images/BSave.png"/>
+                            </Viewbox>
+                            <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <Border x:Name="imgButtonExit" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="Button_MouseLeftButtonDown">
+                        <StackPanel Orientation="Horizontal">
+                            <Viewbox Stretch="Uniform" Width="20">
+                                <Image Source="pack://application:,,,/IM.Styles;component/Images/BExit.png"/>
+                            </Viewbox>
+                            <TextBlock Text="Exit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+                <!--<TextBlock Text="Filters" Margin="10,0,0,0"/>-->
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TabControl x:Name="tbcAuthorized"  SelectionChanged="Authorized_SelectionChanged">
+                        <TabItem Header="Unauthorized CxC's"/>
+                        <TabItem Header="Authorized CxC's"/>
+                    </TabControl>
+                </StackPanel>
             </StackPanel>
-          </Border>
-          <Border x:Name="imgButtonSave" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="Button_MouseLeftButtonDown">
-            <StackPanel Orientation="Horizontal">
-              <Viewbox Stretch="Uniform" Width="20">
-                <Image x:Name="imagSave" Source="pack://application:,,,/IM.MailOutsConfig;component/Images/BSave.png"/>
-              </Viewbox>
-              <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </StackPanel>
-          </Border>
-          <Border x:Name="imgButtonExit" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="Button_MouseLeftButtonDown">
-            <StackPanel Orientation="Horizontal">
-              <Viewbox Stretch="Uniform" Width="20">
-                <Image Source="pack://application:,,,/IM.PRStatistics;component/Images/BExit.png"/>
-              </Viewbox>
-              <TextBlock Text="Exit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
-            </StackPanel>
-          </Border>
+        </Border>
+        <!--#endregion-->
 
-        </StackPanel>
-        <!--<TextBlock Text="Filters" Margin="10,0,0,0"/>-->
-        <StackPanel Orientation="Horizontal" Margin="5">
-          <TabControl x:Name="tbcAuthorized"  SelectionChanged="Authorized_SelectionChanged">
-            <TabItem Header="Unauthorized CxC's"/>
-            <TabItem Header="Authorized CxC's"/>
-          </TabControl>
-        </StackPanel>
-      </StackPanel>
-    </Border>
-    <!--#endregion-->
+        <!--#region  DataGrid Principal-->
+        <Border CornerRadius="5" Padding="5" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Margin="10,5,10,7">
+            <Grid Background="#FFE5E5E5">
+                <DataGrid x:Name="cxCDataDataGrid"  AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False" CanUserResizeColumns="False" CanUserResizeRows="False">
 
-    <!--#region  DataGrid Principal-->
-    <Border CornerRadius="5" Padding="5" BorderThickness="1" BorderBrush="Black" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Margin="10,5,10,7">
-      <Grid Background="#FFE5E5E5">
-        <DataGrid x:Name="cxCDataDataGrid"  AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False" CanUserResizeColumns="False" CanUserResizeRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn x:Name="grIDColumn" Binding="{Binding grID}" Header="Rcpt" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grNumColumn" Binding="{Binding grNum}" Header="Chb PP," IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grlsColumn" Binding="{Binding grls}" Header="LS" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grguColumn" Binding="{Binding grgu}" Header="Guest ID" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grGuestColumn" Binding="{Binding grGuest}" Header="Guest Name" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grDColumn" Binding="{Binding grD, StringFormat=dd/MM/yyyy}" Header="Rcpt Date" IsReadOnly="True" Width="auto"/>
 
-          <DataGrid.Columns>
-            <DataGridTextColumn x:Name="grIDColumn" Binding="{Binding grID}" Header="Rcpt" IsReadOnly="True" Width="auto"/>
-            <DataGridTextColumn x:Name="grNumColumn" Binding="{Binding grNum}" Header="Chb PP," IsReadOnly="True" Width="auto"/>
-            <DataGridTextColumn x:Name="grlsColumn" Binding="{Binding grls}" Header="LS" IsReadOnly="True" Width="auto"/>
-            <DataGridTextColumn x:Name="grguColumn" Binding="{Binding grgu}" Header="Guest ID" IsReadOnly="True" Width="auto"/>
-            <DataGridTextColumn x:Name="grGuestColumn" Binding="{Binding grGuest}" Header="Guest Name" IsReadOnly="True" Width="auto"/>
-            <DataGridTextColumn x:Name="grDColumn" Binding="{Binding grD, StringFormat=dd/MM/yyyy}" Header="Rcpt Date" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grpeColumn" Binding="{Binding grpe}" Header="PR" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="peNColumn" Binding="{Binding peN}" Header="PR Name" IsReadOnly="True" Width="auto"/>
 
-            <DataGridTextColumn x:Name="grpeColumn" Binding="{Binding grpe}" Header="PR" IsReadOnly="True" Width="auto"/>
-            <DataGridTextColumn x:Name="peNColumn" Binding="{Binding peN}" Header="PR Name" IsReadOnly="True" Width="auto"/>
-
-            <DataGridTextColumn x:Name="grCxCGiftsColumn" Binding="{Binding grCxCGifts, StringFormat=\{0:C\}}" Header="CxC Gifts" IsReadOnly="True" Width="auto"/>
-            <DataGridTextColumn x:Name="grcxcPRDepositColumn" Binding="{Binding grcxcPRDeposit, StringFormat=\{0:C\}}" Header="CxC Deposit" IsReadOnly="True" Width="auto"/>
-            <DataGridTextColumn x:Name="grcxcTaxiOutColumn" Binding="{Binding grcxcTaxiOut, StringFormat=\{0:C\}}" Header="CxC Taxi Out" IsReadOnly="True" Width="auto"/>
-            <DataGridTextColumn x:Name="CxCColumn" Binding="{Binding CxC, StringFormat=\{0:C\}}" Header="CxC" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grCxCGiftsColumn" Binding="{Binding grCxCGifts, StringFormat=\{0:C\}}" Header="CxC Gifts" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grcxcPRDepositColumn" Binding="{Binding grcxcPRDeposit, StringFormat=\{0:C\}}" Header="CxC Deposit" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grcxcTaxiOutColumn" Binding="{Binding grcxcTaxiOut, StringFormat=\{0:C\}}" Header="CxC Taxi Out" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="CxCColumn" Binding="{Binding CxC, StringFormat=\{0:C\}}" Header="CxC" IsReadOnly="True" Width="auto"/>
 
 
-            <DataGridTemplateColumn x:Name="AuthorizedColumn" IsReadOnly="False"  Header="Auth." Width="auto">
-              <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                  <CheckBox Name="ckbAuthorized" IsChecked="{Binding Authorized, Mode=TwoWay, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" Click="AuthorizedBox_Click"  HorizontalAlignment="Center" />
-                </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
+                        <DataGridTemplateColumn x:Name="AuthorizedColumn" IsReadOnly="False"  Header="Auth." Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox Name="ckbAuthorized" IsChecked="{Binding Authorized, Mode=TwoWay, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" Click="AuthorizedBox_Click"  HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
 
-            <DataGridTemplateColumn x:Name="grCxCAppDColumn" Header="Auth. Date"  IsReadOnly="False" Width="auto">
-              <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                  <!--<DatePickerTextBox IsEnabled="False" Text="{Binding grCxCAppD, Mode=TwoWay, StringFormat=dd/MM/yyyy, UpdateSourceTrigger=PropertyChanged}" Width="auto" IsReadOnly="True"></DatePickerTextBox>-->
-                  <TextBlock IsEnabled="False" Text="{Binding grCxCAppD, Mode=TwoWay, StringFormat=dd/MM/yyyy, UpdateSourceTrigger=PropertyChanged}" Width="auto"/>
-                </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-              <DataGridTemplateColumn.CellEditingTemplate>
-                <DataTemplate>
-                  <DatePicker 
+                        <DataGridTemplateColumn x:Name="grCxCAppDColumn" Header="Auth. Date"  IsReadOnly="False" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <!--<DatePickerTextBox IsEnabled="False" Text="{Binding grCxCAppD, Mode=TwoWay, StringFormat=dd/MM/yyyy, UpdateSourceTrigger=PropertyChanged}" Width="auto" IsReadOnly="True"></DatePickerTextBox>-->
+                                    <TextBlock IsEnabled="False" Text="{Binding grCxCAppD, Mode=TwoWay, StringFormat=dd/MM/yyyy, UpdateSourceTrigger=PropertyChanged}" Width="auto"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <DatePicker 
                     x:Name="grCxCAppD" 
                     SelectedDate="{Binding grCxCAppD, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" 
                     FirstDayOfWeek="Monday"
@@ -231,42 +228,42 @@
                     SelectedDateChanged="CxCAppD_SelectedDateChanged" 
                     Width="auto" 
                     Style="{StaticResource ResourceKey=styleDatePicker}">
-                    <DatePicker.Resources>
-                      <Style TargetType="DatePickerTextBox">
-                        <Setter Property="IsReadOnly" Value="True"/>
+                                        <DatePicker.Resources>
+                                            <Style TargetType="DatePickerTextBox">
+                                                <Setter Property="IsReadOnly" Value="True"/>
 
-                        <Setter Property="Focusable" Value="False"/>
-                        <Setter Property="IsEnabled" Value="False" />
-                        <Setter Property="IsHitTestVisible" Value="False"/>
-                      </Style>
-                    </DatePicker.Resources>
-                  </DatePicker>
+                                                <Setter Property="Focusable" Value="False"/>
+                                                <Setter Property="IsEnabled" Value="False" />
+                                                <Setter Property="IsHitTestVisible" Value="False"/>
+                                            </Style>
+                                        </DatePicker.Resources>
+                                    </DatePicker>
 
-                </DataTemplate>
-              </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
 
-            </DataGridTemplateColumn>
+                        </DataGridTemplateColumn>
 
-            <DataGridTextColumn x:Name="grAuthorizedByColumn" Binding="{Binding grAuthorizedBy}" Header="Auth. By" IsReadOnly="True" Width="auto"/>
-            <DataGridTextColumn x:Name="grAuthorizedNameColumn" Binding="{Binding grAuthorizedName}" Header="Auth. Name" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grAuthorizedByColumn" Binding="{Binding grAuthorizedBy}" Header="Auth. By" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grAuthorizedNameColumn" Binding="{Binding grAuthorizedName}" Header="Auth. Name" IsReadOnly="True" Width="auto"/>
 
-            <DataGridTextColumn x:Name="grAmountToPayColumn" Binding="{Binding grAmountToPay, StringFormat=\{0:C\}}" Header="Amount To Pay" IsReadOnly="True" Width="auto"/>
-            <DataGridTextColumn x:Name="grAmountPaidColumn" Binding="{Binding grAmountPaid, StringFormat=\{0:C\}}" Header="Amount Paid" IsReadOnly="True" Width="auto"/>
-            <DataGridTextColumn x:Name="grBalanceColumn" Binding="{Binding grBalance, StringFormat=\{0:C\}}" Header="Balance" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grAmountToPayColumn" Binding="{Binding grAmountToPay, StringFormat=\{0:C\}}" Header="Amount To Pay" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grAmountPaidColumn" Binding="{Binding grAmountPaid, StringFormat=\{0:C\}}" Header="Amount Paid" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grBalanceColumn" Binding="{Binding grBalance, StringFormat=\{0:C\}}" Header="Balance" IsReadOnly="True" Width="auto"/>
 
-            <DataGridTemplateColumn x:Name="payColumn" IsReadOnly="True"  Header="Pay" Width="auto">
-              <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate >
-                  <Button x:Name="btnPay"  Style="{StaticResource  ResourceKey=styleVisibilityButton}" Click="Button_Click">
-                    <StackPanel>
-                      <Image Source="pack://application:,,,/IM.Base;component/Images/Payment.png" Width="16" Height="16" HorizontalAlignment="Center"/>
-                    </StackPanel>
-                  </Button>
-                </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
+                        <DataGridTemplateColumn x:Name="payColumn" IsReadOnly="True"  Header="Pay" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate >
+                                    <Button x:Name="btnPay"  Style="{StaticResource  ResourceKey=styleVisibilityButton}" Click="Button_Click">
+                                        <StackPanel>
+                                            <Image Source="pack://application:,,,/IM.Base;component/Images/Payment.png" Width="16" Height="16" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
 
-            <DataGridComboBoxColumn
+                        <DataGridComboBoxColumn
               x:Name="grupColumn"
               Header="Motive"
               Width="auto"
@@ -278,66 +275,66 @@
               />
 
 
-            <DataGridTemplateColumn x:Name="grcxcAuthCommentsColumn" Header="CxC Auth Comments"  Width="auto">
-              <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                  <TextBox Name="grcxcAuthComments" IsEnabled="False" Style="{StaticResource  ResourceKey=ctrlStyleVisibility}" Text="{Binding grcxcAuthComments, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-              <DataGridTemplateColumn.CellEditingTemplate>
-                <DataTemplate>
-                  <TextBox x:Name="grcxcAuthComments" Style="{StaticResource  ResourceKey=ctrlStyleVisibility}" Text="{Binding grcxcAuthComments, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Loaded="AuthComments_Loaded" LostFocus="AuthComments_LostFocus" />
-                </DataTemplate>
-              </DataGridTemplateColumn.CellEditingTemplate>
-            </DataGridTemplateColumn>
+                        <DataGridTemplateColumn x:Name="grcxcAuthCommentsColumn" Header="CxC Auth Comments"  Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Name="grcxcAuthComments" IsEnabled="False" Style="{StaticResource  ResourceKey=ctrlStyleVisibility}" Text="{Binding grcxcAuthComments, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <TextBox x:Name="grcxcAuthComments" Style="{StaticResource  ResourceKey=ctrlStyleVisibility}" Text="{Binding grcxcAuthComments, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Loaded="AuthComments_Loaded" LostFocus="AuthComments_LostFocus" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
 
-            <DataGridTextColumn x:Name="grcxcCommentsColumn" Binding="{Binding grcxcComments}" Header="CxC Comments" IsReadOnly="True" Width="auto"/>
+                        <DataGridTextColumn x:Name="grcxcCommentsColumn" Binding="{Binding grcxcComments}" Header="CxC Comments" IsReadOnly="True" Width="auto"/>
 
-            <DataGridTemplateColumn x:Name="logColumn" IsReadOnly="True"  Header="Log" Width="auto">
-              <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate >
-                  <Button x:Name="btnLog" Click="Button_Click" Style="{StaticResource  ResourceKey=styleVisibilityButton}">
-                    <StackPanel>
-                      <Image Source="pack://application:,,,/IM.Base;component/Images/Log.ico" Width="16" Height="16" HorizontalAlignment="Center"/>
-                    </StackPanel>
-                  </Button>
-                </DataTemplate>
+                        <DataGridTemplateColumn x:Name="logColumn" IsReadOnly="True"  Header="Log" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate >
+                                    <Button x:Name="btnLog" Click="Button_Click" Style="{StaticResource  ResourceKey=styleVisibilityButton}">
+                                        <StackPanel>
+                                            <Image Source="pack://application:,,,/IM.Base;component/Images/Log.ico" Width="16" Height="16" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
 
-              </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
 
-            </DataGridTemplateColumn>
-          </DataGrid.Columns>
-        </DataGrid>
-      </Grid>
-    </Border>
-    <!--#endregion-->
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+        <!--#endregion-->
 
-    <!--#region Paginador -->
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="3" Margin="5">
-      <Button Name="btnFrist"  Content="Frist" IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" FontWeight="Bold" Height="21"/>
-      <Label x:Name="lblSpace1" Content="  " FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="7" />
-      <Button x:Name="btnPrev" Content="Prev" IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="auto"/>
-      <Label x:Name="lblPagText" Content="  0 of 0 " FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" />
-      <Button x:Name="btnNext" Content="Next"  IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" Height="21"/>
-      <Label x:Name="lblSpace2" Content="  " FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="7" />
-      <Button x:Name="btnLast"  Content="Last" IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Width="auto"/>
-    </StackPanel>
-    <!--#endregion-->
-
-    <!--#region  Estatus Bar-->
-    <StatusBar x:Name="stbStatusBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Row="4" Margin="10,0,10,0" Height="19" >
-      <StatusBarItem x:Name="StatusBarCap" Content="CAP"  HorizontalContentAlignment="Stretch" />
-      <StatusBarItem x:Name="StatusBarNum" Content="NUM"  HorizontalContentAlignment="Stretch" />
-      <StatusBarItem x:Name="StatusBarIns" Content="INS"  HorizontalContentAlignment="Stretch" />
-      <Separator />
-      <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
-        <StackPanel Orientation="Horizontal">
-          <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico"  Height="12" Visibility="Hidden" />
-          <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0"/>
+        <!--#region Paginador -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="3" Margin="5">
+            <Button Name="btnFrist"  Content="Frist" IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" FontWeight="Bold" Height="21"/>
+            <Label x:Name="lblSpace1" Content="  " FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="7" />
+            <Button x:Name="btnPrev" Content="Prev" IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="auto"/>
+            <Label x:Name="lblPagText" Content="  0 of 0 " FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" />
+            <Button x:Name="btnNext" Content="Next"  IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" Height="21"/>
+            <Label x:Name="lblSpace2" Content="  " FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" Width="7" />
+            <Button x:Name="btnLast"  Content="Last" IsEnabled="False" Click="btn_Click" FontSize="10.667" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Width="auto"/>
         </StackPanel>
-      </StatusBarItem>
-      <StatusBarItem x:Name="StatusBarReg" Content="0/0" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
-    </StatusBar>
-    <!--#endregion-->
-  </Grid>
+        <!--#endregion-->
+
+        <!--#region  Estatus Bar-->
+        <StatusBar x:Name="stbStatusBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Row="4" Margin="10,0,10,0" Height="19" >
+            <StatusBarItem x:Name="StatusBarCap" Content="CAP"  HorizontalContentAlignment="Stretch" />
+            <StatusBarItem x:Name="StatusBarNum" Content="NUM"  HorizontalContentAlignment="Stretch" />
+            <StatusBarItem x:Name="StatusBarIns" Content="INS"  HorizontalContentAlignment="Stretch" />
+            <Separator />
+            <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico"  Height="12" Visibility="Hidden" />
+                    <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0"/>
+                </StackPanel>
+            </StatusBarItem>
+            <StatusBarItem x:Name="StatusBarReg" Content="0/0" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
+        </StatusBar>
+        <!--#endregion-->
+    </Grid>
 </Window>

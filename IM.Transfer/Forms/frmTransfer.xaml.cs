@@ -177,9 +177,9 @@ namespace IM.Transfer.Forms
       if (LogHelper.ExistFile(strArchivo))
       {
         IniFileHelper _iniFileHelper = new IniFileHelper(strArchivo);
-        blnCallTransfer = _iniFileHelper.readBool("TransferReservations", "CallTransfer", true);
-        blnTransfer = _iniFileHelper.readBool("TransferReservations", "Transfer", true);
-        blnTransferToGuests = _iniFileHelper.readBool("TransferReservations", "TransferToGuests", true);
+        blnCallTransfer = _iniFileHelper.ReadBoolean("TransferReservations", "CallTransfer", true);
+        blnTransfer = _iniFileHelper.ReadBoolean("TransferReservations", "Transfer", true);
+        blnTransferToGuests = _iniFileHelper.ReadBoolean("TransferReservations", "TransferToGuests", true);
       }
 
     }

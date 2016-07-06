@@ -4,6 +4,7 @@ using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Helpers;
 using System;
+using System.Threading.Tasks;
 
 namespace IM.BusinessRules.BR
 {
@@ -38,28 +39,39 @@ namespace IM.BusinessRules.BR
     /// <param name="languageID">laID</param>
     /// <param name="status">-1 Todos, 0 Inactivos, 1 Activos</param>
     /// <returns>List<MailOutText></returns>
-    public static List<MailOutText> GetMailOutTexts(string leadSourceID = null, string languageID = null, int status=-1)
+    /// <history>
+    /// [erosado] 14/04/2016  Created.
+    /// [erosado] 05/07/2016  Modified. Se agregó async.
+    /// </history>
+    public async static Task<List<MailOutText>> GetMailOutTexts(string leadSourceID = null, string languageID = null, int status = -1)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-      {
-        var query = from mot in dbContext.MailOutTexts
-                    select mot;
+      List<MailOutText> result = new List<MailOutText>();
 
-        if (leadSourceID != null)
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          query = query.Where(mot=> mot.mtls == leadSourceID);
+          var query = from mot in dbContext.MailOutTexts
+                      select mot;
+
+          if (leadSourceID != null)
+          {
+            query = query.Where(mot => mot.mtls == leadSourceID);
+          }
+          if (languageID != null)
+          {
+            query = query.Where(mot => mot.mtla == languageID);
+          }
+          if (status != -1)
+          {
+            bool blstatus = Convert.ToBoolean(status);
+            query = query.Where(mot => mot.mtA == blstatus);
+          }
+          result = query.OrderBy(mot => mot.mtmoCode).ToList();
         }
-        if (languageID != null)
-        {
-          query = query.Where(mot => mot.mtla == languageID);
-        }
-        if (status != -1)
-        {
-          bool blstatus = Convert.ToBoolean(status);
-          query = query.Where(mot => mot.mtA == blstatus);
-        }
-        return query.OrderBy(mot => mot.mtmoCode).ToList();
-      }
+      });
+
+      return result;
     }
     #endregion
 
@@ -70,14 +82,18 @@ namespace IM.BusinessRules.BR
     /// <param name="mot">MailOutText</param>
     /// <history>
     /// [erosado] 08/04/2016  Created
+    /// [erosado] 05/07/2016  Modified. Se agregó Async.
     /// </history>
-    public static void UpdateRTFMailOutTexts(MailOutText mot)
+    public async static Task UpdateRTFMailOutTexts(MailOutText mot)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      await Task.Run(() =>
       {
-        dbContext.Entry(mot).State = System.Data.Entity.EntityState.Modified;
-        int j = dbContext.SaveChanges();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.Entry(mot).State = System.Data.Entity.EntityState.Modified;
+          dbContext.SaveChanges();
+        }
+      });
     }
     #endregion
 

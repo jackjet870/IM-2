@@ -89,7 +89,7 @@ namespace IM.Graph.Forms
       if (File.Exists(strArchivo))
       {
         _iniFileHelper = new IniFileHelper(strArchivo);
-        cmbPlace.SelectedValue = _iniFileHelper.readText("FilterDate", "LeadSource", "");
+        cmbPlace.SelectedValue = _iniFileHelper.ReadText("FilterDate", "LeadSource", "");
         btnAceptar.Focus();
       }
       else

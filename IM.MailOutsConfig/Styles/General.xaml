@@ -2,36 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:IM.Styles.Styles">
 
-    <!--#region Estilos-->
-    
-    <!--Titulo de los combobox -->
-    <Style TargetType="TextBlock" x:Key="txtComboTitle">
-        <Setter Property="TextAlignment" Value="Left"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="Margin" Value="10,0,0,5"/>
-    </Style>
-
-    <!-- Estilo de botones Principales -->
-    <Style TargetType="Border" x:Key="brdImageButtons">
-        <Style.Triggers>
-            <Trigger Property="Border.IsMouseOver" Value="True">
-                <Setter Property="Border.Background" Value="#147F79"/>
-            </Trigger>
-            <Trigger Property="Border.IsMouseOver" Value="True">
-                <Setter Property="Cursor" Value="Hand" />
-            </Trigger>
-        </Style.Triggers>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="5,0,0,0"/>
-        <Setter Property="Width" Value="64"/>
-        <Setter Property="Height" Value="32"/>
-        <Setter Property="CornerRadius" Value="5"/>
-        <Setter Property="Padding" Value="2"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="Black"/>
-    </Style>
 
     <!-- Estilo de botones PopUp -->
     <Style TargetType="Image" x:Key="imgLogOut">
@@ -56,15 +26,6 @@
         <Setter Property="Padding" Value="3"/>
     </Style>
 
-    <!--Borde de las listas de catalogos -->
-    <Style TargetType="Border" x:Key="brdLists" >
-        <Setter Property="CornerRadius" Value="5"/>
-        <Setter Property="Padding" Value="2"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="Black"/>
-        <Setter Property="Background" Value="#147F79"/>
-        <Setter Property="Margin" Value="0,5,5,0"/>
-    </Style>
     
     <!--TextBlock cabecera de las listas de catalogos-->
     <Style TargetType="TextBlock" x:Key="HeadersList" >
@@ -76,12 +37,7 @@
         <Setter Property="Margin" Value="10,0,0,5"/>
     </Style>
     
-    <!-- Estilo de listas generico-->
-    <Style TargetType="ListBox" x:Key="lists">
-        <Setter Property="SelectionMode" Value="Single"/>
-        <Setter Property="Height" Value="120"/>
-    </Style>
-    
+     
     <!-- Estilo TextBlock type1-->
     <Style TargetType="TextBlock" x:Key="txtbType1">
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -95,17 +51,7 @@
         <Setter Property="Width" Value="50"/>
     </Style>
     
-    <!-- Estilo CheckBox type1-->
-    <Style TargetType="CheckBox" x:Key="chkType1">
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0,0,5,0"/>
-    </Style>
-
-    <!-- Estilo CheckBox type2 Centrado-->
-    <Style TargetType="CheckBox" x:Key="chkType2" BasedOn="{StaticResource chkType1}">
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0"/>
-    </Style>
+   
 
     <!-- Estilo CheckBox type3 -->
     <Style TargetType="CheckBox" x:Key="chkType3">

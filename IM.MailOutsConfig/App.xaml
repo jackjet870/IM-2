@@ -5,7 +5,12 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/IM.MailOutsConfig;Component/Styles/General.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;Component/Styles/styBorder.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;Component/Styles/styTextBlock.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;Component/Styles/styListBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;Component/Styles/styComboBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;Component/Styles/styCheckBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;Component/Styles/styImage.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

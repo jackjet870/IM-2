@@ -1,0 +1,38 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:IM.Styles">
+
+    <!--#region Marca valores seleccionados de list listbox-->
+    <Style TargetType="{x:Type ComboBox}">
+        <Style.Resources>
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#147F79" />
+
+        </Style.Resources>
+    </Style>
+    <!--#endregion-->
+
+    <!--#region cbxGeneral-->
+    <Style TargetType="{x:Type ComboBox}" x:Key="cbx-General">
+        <Style.Triggers>
+            <Trigger Property="ComboBox.IsMouseOver" Value="True">
+                <Setter Property="Cursor" Value="Hand" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!--#endregion-->
+
+    <!--#region cbxPersonnel-->
+
+    <!--#region cbxPersonnel-ValidatePermission-->
+    <Style TargetType="{x:Type ComboBox}" x:Key="cbx-Personnel-ValidatePermission" BasedOn="{StaticResource cbx-General}">
+        <Setter Property="Width" Value="200"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="IsEditable" Value="False"/>
+        <Setter Property="IsEnabled" Value="False"/>
+    </Style>
+    <!--#endregion-->
+
+    <!--#endregion-->
+</ResourceDictionary>

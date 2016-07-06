@@ -216,7 +216,7 @@ namespace IM.MailOuts.Forms
 
       //cargamos los mail outs
       StaStart("Loading mail outs...");
-      _ltsMailOutTexts = BRMailOutTexts.GetMailOutTexts(App.User.LeadSource.lsID, status: 1);
+      _ltsMailOutTexts = await BRMailOutTexts.GetMailOutTexts(App.User.LeadSource.lsID, status: 1);
 
       _mailOutTextViewSource.Source = _ltsMailOutTexts.Where(x => x.mtla == "EN");
 

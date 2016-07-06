@@ -65,27 +65,47 @@
     <Compile Include="UserControls\ToolBarRtfFontStyle.xaml.cs">
       <DependentUpon>ToolBarRtfFontStyle.xaml</DependentUpon>
     </Compile>
-    <Page Include="Styles\sComboBox.xaml">
+    <Page Include="Styles\styBorder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\sDataErrorInfo.xaml">
+    <Page Include="Styles\styCheckBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\sDataGrid.xaml">
+    <Page Include="Styles\styComboBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\sRichTextFormatMenu.xaml">
+    <Page Include="Styles\styDataErrorInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\sTabControl.xaml">
+    <Page Include="Styles\styDataGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\tComboBox.xaml">
+    <Page Include="Styles\styDatePicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\styImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\styListBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\styTabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\styTextBlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Templates\tmpComboBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -165,6 +185,34 @@
   <ItemGroup>
     <Resource Include="Images\RError.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\IM-ico.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\WKey.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BAdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BConfiguration.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BDelete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BJustified.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BPreview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BRtf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\GExit.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

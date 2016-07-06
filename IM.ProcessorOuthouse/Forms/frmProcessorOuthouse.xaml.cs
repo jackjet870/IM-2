@@ -194,7 +194,7 @@ namespace IM.ProcessorOuthouse.Forms
       var _iniFileHelper = new IniFileHelper(strArchivo);
       _dtmStart = _iniFileHelper.readDate("FilterDate", "DateStart", _dtmStart);
       _dtmEnd = _iniFileHelper.readDate("FilterDate", "DateEnd", _dtmEnd);
-      string strLeadSource = _iniFileHelper.readText("FilterDate", "LeadSource", string.Empty);
+      string strLeadSource = _iniFileHelper.ReadText("FilterDate", "LeadSource", string.Empty);
       if (!string.IsNullOrEmpty(strLeadSource)) _lstLeadSources.Add(strLeadSource);
     }
     #endregion
