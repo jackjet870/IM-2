@@ -2,7 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:IM.Styles">
     <!--#region Personnel-->
-
     <!--#region Personnel Img-->
     <DataTemplate x:Key="cbx-Personnel-img">
         <Border Height="30">
@@ -30,7 +29,7 @@
     </DataTemplate>
 
     <!--#endregion-->
-
+    
     <!--#region Personnel Concat-->
     <DataTemplate x:Key="cbx-Personnel-Concat">
         <Border Height="Auto" Margin="0,2,0,0">
@@ -421,5 +420,74 @@
         </Border>
     </DataTemplate>
     <!--#endregion-->
+    <!--#endregion-->
+    
+    <!--#region ProductElectronicPurse-->
+    <DataTemplate x:Key="cbx-ProductElectronicPurse-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="IDPRODUCTO"/>
+                            <Binding Path="DESCRIPCION"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#region PromotionSistur-->
+    <DataTemplate x:Key="cbx-PromotionSistur-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="clave"/>
+                            <Binding Path="nombre"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <!--#endregion-->
+
+    <!--#region TransacctionTypeOpera-->
+    <DataTemplate x:Key="cbx-TransacctionTypeOpera-Concat">
+        <Border Height="Auto" Margin="0,2,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="15"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontWeight="Bold" TextAlignment="Justify" FontSize="10">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="Trx_code"/>
+                            <Binding Path="Description"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </DataTemplate>
     <!--#endregion-->
 </ResourceDictionary>

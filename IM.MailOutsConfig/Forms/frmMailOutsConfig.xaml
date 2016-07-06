@@ -32,7 +32,7 @@
             <Border CornerRadius="5" BorderThickness="1" BorderBrush="Black"  Margin="0,5,5,10" Background="#147F79">
                 <StackPanel Height="40" >
                     <TextBlock  Text="Lead Source" Style="{StaticResource ResourceKey=txtb-HeaderCatalogs}"/>
-                    <ComboBox x:Name="cbxLeadSource"  Width="180"  BorderThickness="0"  IsEditable="True" TextSearch.TextPath="lsN"
+                    <ComboBox x:Name="cbxLeadSource"  Width="180"  BorderThickness="0" TextSearch.TextPath="lsN"
                               HorizontalAlignment="Center" DisplayMemberPath="lsN" SelectedValuePath="lsID" SelectionChanged="cbxLeadSource_SelectionChanged"/>
                 </StackPanel>
             </Border>
