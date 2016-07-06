@@ -129,9 +129,9 @@ namespace IM.Inhouse.Classes
           //Subreportes
           if (club == EnumClub.PalaceElite)
           {
-            Services.ClubesService.RptEquityMembershipsPrevious[] membershopsPrevious = rptClubes.MembershipsPrevious.Where(mp => mp.Application != null && mp.Application != "").ToArray();
-            header.HasMembershipsPrevious = membershopsPrevious.Length > 0;
-            equity.Subreports["rptEquityMembershipsPrevious.rpt"].SetDataSource(rptClubes.MembershipsPrevious);
+            header.HasMembershipsPrevious = rptClubes.MembershipsPrevious.Length > 0;
+            if (header.HasMembershipsPrevious)
+              equity.Subreports["rptEquityMembershipsPrevious.rpt"].SetDataSource(rptClubes.MembershipsPrevious);
           }
           equity.Subreports["rptEquitySalesman.rpt"].SetDataSource(rptClubes.Salesmen);
           equity.Subreports["rptEquityCoOwners.rpt"].SetDataSource(rptClubes.CoOwners);
