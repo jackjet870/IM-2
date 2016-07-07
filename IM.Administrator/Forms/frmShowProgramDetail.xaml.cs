@@ -191,7 +191,7 @@ namespace IM.Administrator.Forms
         List<ShowProgramCategory> lstShowProCategories = await BRShowProgramsCategories.GetShowProgramsCategories();
         if (enumMode == EnumMode.search)
         {
-          lstShowProCategories.Insert(0, new ShowProgramCategory { sgID = "", sgN = "" });
+          lstShowProCategories.Insert(0, new ShowProgramCategory { sgID = "", sgN = "ALL" });
         }
         cmbsksg.ItemsSource = lstShowProCategories;
       }

@@ -435,7 +435,7 @@ namespace IM.BusinessRules.BR
                 });
                 #endregion
 
-                DateTime dtmServerDate= BR.BRHelpers.GetServerDate();
+                DateTime dtmServerDate = BRHelpers.GetServerDateTime();
 
                 #region postLog
                 if (blnPostLog)

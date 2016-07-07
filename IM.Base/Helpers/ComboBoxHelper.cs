@@ -19,7 +19,7 @@ namespace IM.Base.Helpers
     public static void LoadComboDefault(ComboBox comboBox)
     {
       List<object> lstOptions = new List<object>();
-      lstOptions.Add(new { sName = "All", sValue = -1 });
+      lstOptions.Add(new { sName = "ALL", sValue = -1 });
       lstOptions.Add(new { sName = "Yes", sValue = 1 });
       lstOptions.Add(new { sName = "No", sValue = 0 });      
       comboBox.ItemsSource = lstOptions;

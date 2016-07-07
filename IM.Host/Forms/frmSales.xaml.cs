@@ -204,7 +204,7 @@ namespace IM.Host.Forms
     {
       if (string.IsNullOrEmpty(txtsaCancelD.Text))
       {
-        if (Convert.ToDateTime(txtsaCancelD.Text) > BRHelpers.GetServerDate().Date)
+        if (Convert.ToDateTime(txtsaCancelD.Text) > BRHelpers.GetServerDate())
         {
           UIHelper.ShowMessage("Cancellation date can not be greater than today.");
           cancel = true;
@@ -1687,7 +1687,7 @@ namespace IM.Host.Forms
             return false;
           }
           //validamos que la fecha no sea mayor a la fecha actual
-          if (Convert.ToDateTime(txt.Text) > BRHelpers.GetServerDate().Date)
+          if (Convert.ToDateTime(txt.Text) > BRHelpers.GetServerDate())
           {
             UIHelper.ShowMessage("Can not be after today.");
             return false;

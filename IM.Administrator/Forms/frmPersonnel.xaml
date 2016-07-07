@@ -68,7 +68,7 @@
             </Button>
         </ToolBar>
         <!--#endregion-->
-        <!--#region DataGrid de Zones-->
+        <!--#region DataGrid de Personnel-->
         <DataGrid x:Name="dgrPersonnels" Margin="6,6,6,6" AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeRows="False"
                  SelectionMode="Single" Focusable="True" CanUserResizeColumns="False">
             <DataGrid.Resources>

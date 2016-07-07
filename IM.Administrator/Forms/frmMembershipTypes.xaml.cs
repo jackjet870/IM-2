@@ -18,7 +18,7 @@ namespace IM.Administrator.Forms
   public partial class frmMembershipTypes : Window
   {
     #region Variables
-    private MembershipType _membershipTypeFilter = new MembershipType();//Objeto con los filtros del grid
+    private MembershipType _membershipTypeFilter = new MembershipType { mtGroup=""};//Objeto con los filtros del grid
     private int _nStatus = -1;//estatus de los registros del grid
     #endregion
     public frmMembershipTypes()

@@ -1949,6 +1949,7 @@ namespace IM.Services.SisturService {
         
         /// <remarks/>
         [System.Xml.Serialization.SoapElementAttribute(DataType="date")]
+        [SoapIgnore]
         public System.DateTime ent_date {
             get {
                 return this.ent_dateField;
@@ -1990,6 +1991,7 @@ namespace IM.Services.SisturService {
         
         /// <remarks/>
         [System.Xml.Serialization.SoapElementAttribute(DataType="date")]
+        [SoapIgnore]
         public System.DateTime chg_date {
             get {
                 return this.chg_dateField;

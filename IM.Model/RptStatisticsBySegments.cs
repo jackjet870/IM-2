@@ -11,7 +11,7 @@ namespace IM.Model
 {
     using System;
     
-    public partial class RptStatsBySegment
+    public partial class RptStatisticsBySegments
     {
         public string SalemanID { get; set; }
         public string SalemanName { get; set; }

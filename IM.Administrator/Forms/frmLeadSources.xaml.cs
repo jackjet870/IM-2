@@ -17,8 +17,8 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmLeadSources : Window
   {
-    #region
-    private LeadSource _leadSourceFilter = new LeadSource();//Objeto con los filtros de la ventana
+    #region Variables
+    private LeadSource _leadSourceFilter = new LeadSource {lspg="",lssr="",lsar="",lsrg="",lsso="" };//Objeto con los filtros de la ventana
     private int _nStatus = -1;//Estatus de los registros del grid
     private int _nRegen = -1;//Si es regen
     private int _nAnimation = -1;//Si es Animation

@@ -19,6 +19,7 @@ using System.Linq.Dynamic;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Controls;
 using System.Xml;
 
 namespace IM.Base.Helpers
@@ -3226,6 +3227,10 @@ namespace IM.Base.Helpers
         case EnumFormatTypeExcel.Day:
           format = "[$-409]dddd";
           break;
+
+        case EnumFormatTypeExcel.DateTime:
+          format = "dd/MM/yyyy hh:mm:ss AM/PM;;;";
+          break;
       }
 
       return format;
@@ -3950,6 +3955,23 @@ namespace IM.Base.Helpers
     }
     #endregion
 
+    #region ReorderColumns
+    /// <summary>
+    /// Método que siver para ordenar la lista de ExcelFormat dependiedo de la posicion de las columnas de su grid
+    /// </summary>
+    /// <param name="lstColumns">Lista de columnas del grid</param>
+    /// <param name="lstExcelFormatTable">Lista de excelformattable</param>
+    /// <history>
+    /// [emoguel] created 06/07/2016
+    /// </history>
+    public static void OrderColumns(List<DataGridColumn> lstColumns, List<ExcelFormatTable> lstExcelFormatTable)
+    {
+      lstColumns.ForEach(cl =>
+      {
+        lstExcelFormatTable.Where(eft => eft.PropertyName == cl.SortMemberPath).FirstOrDefault().Order = cl.DisplayIndex + 1;
+      });
+    }
+    #endregion
     #endregion Private Methods
   }
 }

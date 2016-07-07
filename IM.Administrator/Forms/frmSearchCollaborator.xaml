@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
-        mc:Ignorable="d" KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
+        mc:Ignorable="d" KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded"
         Title="Search Collaborator"  Height="407" Width="640" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->
@@ -42,12 +42,12 @@
             <Label Grid.Row="0" Grid.Column="3" Content="Location"/>
             <Label Grid.Row="0" Grid.Column="4" Content="Hotel"/>
 
-            <TextBox Name="txtCollaboratorId" Grid.Column="0" Grid.Row="1" Height="25" VerticalAlignment="Top"/>
-            <TextBox Name="txtFullName" Grid.Column="1" Grid.Row="1" Height="25" VerticalAlignment="Top"/>
-            <TextBox Name="txtJob" Grid.Column="2" Grid.Row="1" Height="25" VerticalAlignment="Top"/>
-            <TextBox Name="txtLocation" Grid.Column="3" Grid.Row="1" Height="25" VerticalAlignment="Top"/>
-            <TextBox Name="txtHotel" Grid.Column="4" Grid.Row="1" Height="25" VerticalAlignment="Top"/>
-            <Button Name="btnSearch" Grid.Column="5" Grid.Row="2" Width="60" Height="30"  Click="btnSearch_Click" HorizontalAlignment="Center" Content="_Search" />
+            <TextBox Name="txtCollaboratorId" Grid.Column="0" Grid.Row="1" Height="25" VerticalAlignment="Top" Text="{Binding EmpID}"/>
+            <TextBox Name="txtFullName" Grid.Column="1" Grid.Row="1" Height="25" VerticalAlignment="Top" Text="{Binding NombreCompleto}"/>
+            <TextBox Name="txtJob" Grid.Column="2" Grid.Row="1" Height="25" VerticalAlignment="Top" Text="{Binding Puesto}"/>
+            <TextBox Name="txtLocation" Grid.Column="3" Grid.Row="1" Height="25" VerticalAlignment="Top" Text="{Binding Locacion}"/>
+            <TextBox Name="txtHotel" Grid.Column="4" Grid.Row="1" Height="25" VerticalAlignment="Top" Text="{Binding Hotel}"/>
+            <Button Name="btnSearch" Grid.Column="5" Grid.Row="2" Width="60" Height="25"  Click="btnSearch_Click" VerticalAlignment="Top" HorizontalAlignment="Center" Content="_Search" />
             <!--#endregion-->
         </Grid>
         <!--#endregion-->
@@ -58,16 +58,26 @@
         </Grid>
         <!--#endregion-->
         <!--#region Grid Center-->
-        <DataGrid Name="dgrCollaborator" Margin="6,6,6,6" AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeRows="False"
-                 SelectionMode="Single" Focusable="True" CanUserResizeColumns="False" >
+        <DataGrid Name="dgrCollaborator" Margin="6,6,6,6"  AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeRows="False"
+                 SelectionMode="Single" Focusable="True" >
+            <DataGrid.Resources>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="MouseDoubleClick" Handler="Cell_DoubleClick"/>
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Collaborator ID" Width="20*" Binding="{Binding EmpID}"/>
-                <DataGridTextColumn Header="Full Name" Width="20*" Binding="{Binding NombreCompleto}"/>
+                <DataGridTextColumn Header="Collaborator ID"  Width="15*" Binding="{Binding EmpID}"/>
+                <DataGridTextColumn Header="Full Name" Width="25*" Binding="{Binding NombreCompleto}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Job Description" Width="20*" Binding="{Binding Puesto}"/>
-                <DataGridTextColumn Header="Location" Width="20*" Binding="{Binding Location}"/>
+                <DataGridTextColumn Header="Location" Width="20*" Binding="{Binding Locacion}"/>
                 <DataGridTextColumn Header="Hotel" Width="20*" Binding="{Binding Hotel}"/>
             </DataGrid.Columns>
-
         </DataGrid>
         <!--#endregion-->
 

@@ -198,7 +198,7 @@ namespace IM.Inhouse.Forms
       }
       EnabledControls(false, false, true);
       //ingresamos la fecha en el campo 
-      txtpnDT.Text = BRHelpers.GetServerDate().ToString();
+      txtpnDT.Text = BRHelpers.GetServerDateTime().ToString();
       txtpnText.Focus();
       _CreatingNote = true;
     }

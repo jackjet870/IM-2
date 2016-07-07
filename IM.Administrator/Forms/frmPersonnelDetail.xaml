@@ -17,7 +17,7 @@
         </Grid>
         <TabControl Background="Transparent" BorderThickness="0">
             <!--#region General-->
-            <TabItem Name="tbiGeneral" Header="General" Height="25" VerticalAlignment="Top">
+            <TabItem Name="tbiGeneral" Header="General">
                 <Grid  Margin="10,10,10,0" IsEnabled="False" Name="grdGeneral">
                     <!--#region Formato del grid-->
                     <Grid.RowDefinitions>
@@ -47,10 +47,10 @@
                             <ColumnDefinition Width="70*"/>
                             <ColumnDefinition Width="30*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Name="txtpeID" Tag="ID" Grid.Row="0" VerticalAlignment="Top" Text="{Binding peID}" CharacterCasing="Upper"  Margin="69,3,0,0" />
-                        <CheckBox Name="chkpeA" Checked="chkpeA_CheckedChange" Unchecked="chkpeA_CheckedChange" Content="Active" TextBlock.Foreground="Black" Grid.Column="1" IsChecked="{Binding peA}" VerticalAlignment="Top" Margin="10,3,0,0"/>
+                        <TextBox Name="txtpeID" Tag="ID" Grid.Row="0" VerticalAlignment="Top" Text="{Binding peID}" CharacterCasing="Upper"  Margin="69,0,0,0" />
+                        <CheckBox Name="chkpeA" Checked="chkpeA_CheckedChange" Unchecked="chkpeA_CheckedChange" Content="Active" TextBlock.Foreground="Black" Grid.Column="1" IsChecked="{Binding peA}" VerticalAlignment="Top" Margin="10,0,0,0"/>
                     </Grid>
-                    <TextBox Name="txtpeN" Tag="description" Grid.Row="1" VerticalAlignment="Top" Text="{Binding peN}" Margin="69,3,0,0" />                    
+                    <TextBox Name="txtpeN" Tag="description" Grid.Row="1" VerticalAlignment="Top" Text="{Binding peN}" Margin="69,0,0,0" />                    
                     <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50*"/>
@@ -84,8 +84,8 @@
                         <ComboBox Name="cmbpeps" Tag="Status" Grid.Column="0" VerticalAlignment="Top" SelectedValuePath="psID" DisplayMemberPath="psN" SelectedValue="{Binding peps}"  Margin="69,0,0,0"/>
                         <TextBox Name="txtpePwdDays" Tag="Days" Grid.Column="1" VerticalAlignment="Top" Text="{Binding pePwdDays}" Margin="69,0,0,0" />
                     </Grid>
-                    <ComboBox Name="cmbpede" Grid.Row="4" Tag="depts" VerticalAlignment="Top" SelectedValue="{Binding pede}" DisplayMemberPath="deN" SelectedValuePath="deID"  Margin="69,3,0,0" />
-                    <ComboBox Name="cmbpepo" SelectionChanged="cmbpepo_SelectionChanged" Grid.Row="5" VerticalAlignment="Top" SelectedValue="{Binding pepo}" DisplayMemberPath="poN" SelectedValuePath="poID"  Margin="69,3,0,0" />
+                    <ComboBox Name="cmbpede" Grid.Row="4" Tag="depts" VerticalAlignment="Top" SelectedValue="{Binding pede}" DisplayMemberPath="deN" SelectedValuePath="deID"  Margin="69,0,0,0" />
+                    <ComboBox Name="cmbpepo" SelectionChanged="cmbpepo_SelectionChanged" Grid.Row="5" VerticalAlignment="Top" SelectedValue="{Binding pepo}" DisplayMemberPath="poN" SelectedValuePath="poID"  Margin="69,0,0,0" />
                     <Grid Grid.Row="6">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50*"/>
@@ -112,7 +112,7 @@
                             <ColumnDefinition Width="20*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" Width="60">Collaborator ID</TextBlock>
-                        <TextBox IsEnabled="False" Name="txtpeCollaboratorID" Grid.Column="0" VerticalAlignment="Top" Text="{Binding peCollaboratorID}"  Margin="69,0,0,0"/>
+                        <TextBox IsEnabled="False" Name="txtpeCollaboratorID" Grid.Column="0" VerticalAlignment="Top" Text="{Binding peCollaboratorID,Mode=TwoWay}"  Margin="69,0,0,0"/>
                         <Button Name="btnSearch" ToolTip="Search CollaboratorID." Click="btnSearch_Click" Grid.Column="1" Height="24" Margin="5,0,0,0" VerticalAlignment="Top" >
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="pack://application:,,,/IM.Base;component/Images/btnSearch.png" />
@@ -125,7 +125,7 @@
             </TabItem>
             <!--#endregion-->
             <!--#region Permission-->
-            <TabItem Header="Permission">
+            <TabItem Header="Permissions">
                 <Grid Margin="10,10,10,0" IsEnabled="False" Name="grdPermission">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="35*"/>
@@ -135,7 +135,7 @@
 
                     <!--#region  Roles-->
                     <DockPanel Grid.Column="0" Margin="2" LastChildFill="True">
-                        <Button ToolTip="Assign Permissions." Name="btnPermission" Click="btnPermission_Click" Width="105" Height="30" DockPanel.Dock="Bottom">
+                        <Button ToolTip="Assign Permissions." Margin="2" Name="btnPermission" Click="btnPermission_Click" Width="105" Height="25" DockPanel.Dock="Bottom">
                             <StackPanel Orientation="Horizontal">
                                 <AccessText Margin="3,0,0,0" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Text="Assign _Permissions"/>
                             </StackPanel>
@@ -160,7 +160,7 @@
             </TabItem>
             <!--#endregion-->
             <!--#region Places-->
-            <TabItem Header="Places" Margin="-3,-2,-1,-2">
+            <TabItem Header="Places" >
                 <Grid Margin="10,10,10,0" IsEnabled="False" Name="grdPlaces">
                     <!--#region Formato de la columna-->
                     <Grid.ColumnDefinitions>

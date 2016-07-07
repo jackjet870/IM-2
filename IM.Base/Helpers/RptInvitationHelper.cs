@@ -112,7 +112,7 @@ namespace IM.Base.Helpers
       //Notas
       rptInv.SetParameterValue("lblNotes", LanguageHelper.GetMessage(EnumMessage.msgLblNotes));
       //Fecha y hora
-      rptInv.SetParameterValue("lblDateTime", BRHelpers.GetServerDate());
+      rptInv.SetParameterValue("lblDateTime", BRHelpers.GetServerDateTime());
       //Cambiado por
       rptInv.SetParameterValue("lblChangedBy", _peID);
     }

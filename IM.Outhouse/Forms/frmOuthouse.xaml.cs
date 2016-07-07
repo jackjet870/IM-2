@@ -63,7 +63,7 @@ namespace IM.Outhouse.Forms
         return false;
       }
       // no se permite contactar si ya hizo Check Out o si ya esta contactado el Guest
-      if (!contact && checkOutD < BRHelpers.GetServerDate().Date)
+      if (!contact && checkOutD < BRHelpers.GetServerDate())
       {
         UIHelper.ShowMessage("Guest already made Check-out.", MessageBoxImage.Asterisk);
         return false;
@@ -155,7 +155,7 @@ namespace IM.Outhouse.Forms
       txtLocation.Text = App.User.Location.loN;
 
       //Cargamos la fecha actual del servidor
-      dtpDate.Value = BRHelpers.GetServerDate().Date;
+      dtpDate.Value = BRHelpers.GetServerDate();
 
       //Inicializamos la variable del datagrid
       _outPremanifestViewSource = (CollectionViewSource)FindResource("outPremanifestViewSource");

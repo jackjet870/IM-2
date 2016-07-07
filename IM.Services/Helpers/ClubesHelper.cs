@@ -133,6 +133,31 @@ namespace IM.Services.Helpers
       return Vendedores;
     }
     #endregion
+
+    #region GetProductsBySystem
+    /// <summary>
+    /// Obtiene el catalogo de productos
+    /// </summary>
+    /// <history>
+    /// [emoguel] created 04/07/2016
+    /// </history>
+    public async static Task<List<Product>> GetProductsBySystem()
+    {
+
+      return await Task.Run(() =>
+      {
+        ProductRequest request = new ProductRequest();
+        ProductResponse response = null;
+
+        response = Current().GetProductsBySystem(request);
+        //si ocurrio un error
+        if (response.HasErrors)
+          UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetProductsBySystem");
+
+        return response.Data.OrderBy(pd => pd.DESCRIPCION).ToList();
+      });
+    }
+    #endregion
     #endregion
   }
 }

@@ -17,7 +17,7 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmAgencies : Window
   {
-    private Agency _agencyFilter=new Agency();//Objeto para filtrar en la BD
+    private Agency _agencyFilter=new Agency {agse="" };//Objeto para filtrar en la BD
     private int _nStatus = -1;//Status a filtrar en la lista
     private bool _blnEdit = false;//boleano para saber si se tiene minimo permiso para editar|agregar 
 

@@ -177,7 +177,7 @@ namespace IM.Inhouse
           if (_guest.guFollow == false || (log.UserData.HasRole(EnumRole.PRCaptain) || log.UserData.HasRole(EnumRole.PRSupervisor)))
           {
             _user = log.UserData;
-            txtguFollowD.Text = BRHelpers.GetServerDate().Date.ToString("dd-MM-yyyy");
+            txtguFollowD.Text = BRHelpers.GetServerDate().ToString("dd-MM-yyyy");
             btnCancel.IsEnabled = btnSave.IsEnabled = txtguPRFollow.IsEnabled = cboguPRFollow.IsEnabled = true;
             btnEdit.IsEnabled  = false;           
             lblUserName.Content = log.UserData.User.peN;            

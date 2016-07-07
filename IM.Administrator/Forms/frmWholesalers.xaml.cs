@@ -17,7 +17,7 @@ namespace IM.Administrator.Forms
   public partial class frmWholesalers : Window
   {
     #region Variables
-    private WholesalerData _WholeSalerFilter = new WholesalerData();//Objeto con los filtros del grid
+    private WholesalerData _WholeSalerFilter = new WholesalerData { wscl=0};//Objeto con los filtros del grid
     private bool _blnEdit = false;//Para saber si se tiene permiso para editar|agregar
     private bool _blnDel = false;//para saber si se tiene permiso para Eliminar
     #endregion

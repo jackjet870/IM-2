@@ -16,6 +16,9 @@ using IM.Model;
 using IM.Model.Classes;
 using IM.BusinessRules.BR;
 using IM.Base.Forms;
+using IM.Base.Helpers;
+using IM.Model.Helpers;
+using IM.Model.Enums;
 
 namespace IM.InventoryMovements
 {
@@ -68,6 +71,7 @@ namespace IM.InventoryMovements
       lblCloseDate.Content = "Close Receipts Date: " + _salesRoom.srGiftsRcptCloseD.ToString("dd/MMM/yyyy");
       InicializarGrdNew();
       _dtmServerdate = BRHelpers.GetServerDate();
+      dtpDate_SelectedDateChanged(null, null);
     }
 
     /// <summary>
@@ -134,13 +138,13 @@ namespace IM.InventoryMovements
     private void dtpDate_SelectedDateChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
       // [wtorres] 15/Mar/2016 validamos que el formulario ya se haya inicializado
-      if (!this.IsInitialized) return;
+      if (!this.IsInitialized || string.IsNullOrEmpty(dtpDate.Text)) return;
 
       if (_dtmcurrent != dtpDate.Value.Value)
       {
         whsMovViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("whsMovViewSource")));
         // Load data by setting the CollectionViewSource.Source property:
-        whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(App.User.Warehouse.whID, dtpDate.Value.Value);
+        whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(App.User.Warehouse.whID, dtpDate.Value.Value.Date);
         StatusBarReg.Content = string.Format("{0}/{1}", grd.SelectedItems.Count, whsMovViewSource.View.SourceCollection.Cast<WarehouseMovementShort>().Count());
       }
       _dtmcurrent = dtpDate.Value.Value;
@@ -163,7 +167,7 @@ namespace IM.InventoryMovements
     /// <history>
     /// [edgrodriguez] 22/Feb/2016 Created
     /// </history>
-    private void btnSave_Click(object sender, RoutedEventArgs e)
+    private async void btnSave_Click(object sender, RoutedEventArgs e)
     {
       if (ValidateCurrentDate())
       {
@@ -189,9 +193,17 @@ namespace IM.InventoryMovements
               wmQty = c.wmQty,
               wmwh = c.wmwh
             }).ToList();
-            BRWarehouseMovements.SaveWarehouseMovements(ref lstWhsMov);
-            InicializarGrdNew();
-            grd.ItemsSource = BRWarehouseMovements.GetWarehouseMovements(App.User.Warehouse.whID, dtpDate.Value.Value);
+
+            //BRWarehouseMovements.SaveWarehouseMovements(ref lstWhsMov);
+            int nRes = await BREntities.OperationEntities(lstWhsMov, EnumMode.add);
+            if (nRes > 0)
+            {
+              UIHelper.ShowMessage("The warehouse movements was saved successfully.", title: "Intelligence Marketing");
+              InicializarGrdNew();
+              whsMovViewSource.Source = BRWarehouseMovements.GetWarehouseMovements(App.User.Warehouse.whID, dtpDate.Value.Value.Date);
+            }
+            else
+              UIHelper.ShowMessage("The warehouse movements was not saved.", MessageBoxImage.Error, "Intelligence Marketing");
           }
         }
       }
@@ -302,5 +314,26 @@ namespace IM.InventoryMovements
       getGiftsViewSource.Source =await BRGifts.GetGiftsShort(App.User.Warehouse.whID, 1);
     }
     #endregion
+
+    private void grdNew_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+    {
+      objWhsMovs _objWhsMov = e.Row.DataContext as objWhsMovs;
+
+      // Obtenemos la columna actual
+      DataGridColumn Column = e.Column;
+      DataGridCellInfo _cell = grdNew.CurrentCell;
+
+      switch (_cell.Column.SortMemberPath)
+      {
+        case "wmgi":
+          if (_objWhsMov.wmQty == 0)
+          {
+            UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+            
+            GridHelper.SelectRow(grdNew, grdNew.SelectedIndex, blnEdit: true);
+          }
+          break;
+      }
+    }
   }
 }

@@ -24,7 +24,7 @@ namespace IM.Host.Forms
 
     public ExecuteCommandHelper LoadComboPR { get; set; }
     public ExecuteCommandHelper LoadComboLS { get; set; }
-    public static DateTime _dtpServerDate = DateTime.Now;
+    public static DateTime _dtpServerDate = DateTime.Today;
     List<CxCData> lstCxCData; // lista de CxC
     
     //List<UnderPaymentMotive> lstUnderPaymentMotive = new List<UnderPaymentMotive>();
@@ -320,7 +320,7 @@ namespace IM.Host.Forms
         if (_inputBox.ShowDialog() == true)
         {
           decimal amountPay = (Decimal.TryParse(_inputBox.Input.Text, out convertToDecimal)) ? convertToDecimal : 0;
-          item.grCxCAppD = _dtpServerDate.Date;
+          item.grCxCAppD = _dtpServerDate;
           item.grAuthorizedBy = strUserID;
           item.grAuthorizedName = strUserName;
           item.grAmountToPay = amountPay;
@@ -369,7 +369,7 @@ namespace IM.Host.Forms
         if (item.grCxCAppD != null)
         {
           // validamos que la fecha de autorizacion no sea despues de hoy
-          if (item.grCxCAppD.Value.Date <= _dtpServerDate.Date)
+          if (item.grCxCAppD.Value.Date <= _dtpServerDate)
           {
             // validamos que la fecha de autorizacion no sea antes de la fecha de cierre de CxC de la sala
             if (item.grCxCAppD.Value.Date > _dtmClose.Value.Date)

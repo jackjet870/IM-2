@@ -86,6 +86,7 @@ namespace IM.Administrator.Forms
     {
       try
       {
+        btnSearch.Focus();
         status.Visibility = Visibility.Visible;
         Collaborator collaborator = (Collaborator)DataContext;
         dgrCollaborator.ItemsSource = await BRCollaborator.GetCollaborators(collaborator);
@@ -114,11 +115,53 @@ namespace IM.Administrator.Forms
       {
         Collaborator collaborator = (Collaborator)dgrCollaborator.SelectedItem;
         idCollaborator = collaborator.EmpID;
+        DialogResult = true;
+        Close();
       }
       else
       {
         UIHelper.ShowMessage("Select a collaborator");
       }
+    }
+    #endregion
+
+    #region DobleClic Grid
+    /// <summary>
+    /// Obtiene el número de collaborador y cierra la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 04/07/2016
+    /// </history>
+    private void Cell_DoubleClick(object sender, RoutedEventArgs e)
+    {
+      if (dgrCollaborator.SelectedItems.Count > 0)
+      {
+        Collaborator collaborator = (Collaborator)dgrCollaborator.SelectedItem;
+        idCollaborator = collaborator.EmpID;
+        DialogResult = true;
+        Close();
+      }
+      else
+      {
+        UIHelper.ShowMessage("Select a collaborator");
+      }
+    }
+    #endregion
+
+    #region Window_Loaded
+    /// <summary>
+    /// Carga los datos de la ventana
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] modified 02/07/2016
+    /// </history>
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+      DataContext = new Collaborator();
     } 
     #endregion
   }

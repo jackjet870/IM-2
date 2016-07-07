@@ -46,8 +46,9 @@ namespace IM.Administrator.Forms
     /// [emoguel] created 14/06/2016
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
-    {      
-      ObjectHelper.CopyProperties(personnel, oldPersonnel);
+    {
+      if (!string.IsNullOrWhiteSpace(oldPersonnel.pePwd)) { oldPersonnel.pePwd= EncryptHelper.Encrypt(oldPersonnel.pePwd); };
+      ObjectHelper.CopyProperties(personnel, oldPersonnel);   
       LoadSalesMen();
       LoadRoles();
       LoadDeps();
@@ -116,15 +117,28 @@ namespace IM.Administrator.Forms
     {
       if (!_isClosing)
       {
-        _isClosing = true;
-        btnCancel_Click(null, null);
-        if (!_isClosing)
+        #region PersonnelPermision changes
+        List<PersonnelAccess> lstWarehousesAcces = (List<PersonnelAccess>)dgrWarehouses.ItemsSource;
+        List<PersonnelAccess> lstSalesRoomAcces = (List<PersonnelAccess>)dgrSalesRoom.ItemsSource;
+        List<PersonnelAccess> lstLeadSourcesAcces = (List<PersonnelAccess>)dgrLeadSources.ItemsSource;
+        List<PersonnelPermission> lstPersonnelPermision = (List<PersonnelPermission>)dgrPermission.ItemsSource;
+        List<Role> lstRoles = (List<Role>)dgrRoles.ItemsSource;
+        var lstPersonnelPermissionAdd = (lstPersonnelPermision != null) ? lstPersonnelPermision.Where(pp => !_lstOldPersonnelPermission.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm)).ToList() : new List<PersonnelPermission>();
+        var lstPersonnelPermissionDel = _lstOldPersonnelPermission.Where(pp => !lstPersonnelPermision.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm)).ToList();
+        var lstPersonnelPermissionUpd = _lstOldPersonnelPermission.Where(pp => lstPersonnelPermision.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm && pp.pppl != ppp.pppl)).ToList();
+        #endregion
+        if (enumMode != EnumMode.preview && (!ObjectHelper.IsEquals(personnel, oldPersonnel) || HasChanged(lstWarehousesAcces, lstSalesRoomAcces, lstLeadSourcesAcces, lstRoles) || lstPersonnelPermissionAdd.Count > 0
+          || lstPersonnelPermissionDel.Count > 0 || lstPersonnelPermissionUpd.Count > 0))
         {
-          e.Cancel = true;
+          MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
+          if (result != MessageBoxResult.Yes)
+          {
+            e.Cancel = true;
+          }
         }
-        else
+        if (!string.IsNullOrWhiteSpace(oldPersonnel.pePwd))
         {
-          _isClosing = false;
+          oldPersonnel.pePwd = EncryptHelper.Encrypt(oldPersonnel.pePwd);
         }
       }
     }
@@ -142,6 +156,7 @@ namespace IM.Administrator.Forms
     private async void btnAccept_Click(object sender, RoutedEventArgs e)
     {
       btnAccept.Focus();
+      personnel.pePwd = psbpePwd.Password;
       List<PersonnelAccess> lstWarehousesAcces = (List<PersonnelAccess>)dgrWarehouses.ItemsSource;
       List<PersonnelAccess> lstSalesRoomAcces = (List<PersonnelAccess>)dgrSalesRoom.ItemsSource;
       List<PersonnelAccess> lstLeadSourcesAcces = (List<PersonnelAccess>)dgrLeadSources.ItemsSource;
@@ -151,12 +166,13 @@ namespace IM.Administrator.Forms
       #region PersonnelPermision changes
       var lstPersonnelPermissionAdd = lstPersonnelPermision.Where(pp => !_lstOldPersonnelPermission.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm)).ToList();
       var lstPersonnelPermissionDel = _lstOldPersonnelPermission.Where(pp => !lstPersonnelPermision.Any(ppp=> pp.pppe == ppp.pppe && pp.pppm == ppp.pppm)).ToList();
-      var lstPersonnelPermissionUpd = _lstOldPersonnelPermission.Where(pp => lstPersonnelPermision.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm && pp.pppl!=ppp.pppl)).ToList();
+      var lstPersonnelPermissionUpd = lstPersonnelPermision.Where(pp => _lstOldPersonnelPermission.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm && pp.pppl!=ppp.pppl)).ToList();
       #endregion
 
-      if(enumMode!=EnumMode.add && !HasChanged(lstWarehousesAcces,lstSalesRoomAcces,lstLeadSourcesAcces,lstRoles) && lstPersonnelPermissionAdd.Count==0 
+      if(enumMode!=EnumMode.add && ObjectHelper.IsEquals(personnel,oldPersonnel)  && !HasChanged(lstWarehousesAcces,lstSalesRoomAcces,lstLeadSourcesAcces,lstRoles) && lstPersonnelPermissionAdd.Count==0 
         && lstPersonnelPermissionDel.Count==0 && lstPersonnelPermissionUpd.Count==0)
       {
+        oldPersonnel.pePwd = EncryptHelper.Encrypt(oldPersonnel.pePwd);
         _isClosing = true;
         Close();
       }
@@ -181,14 +197,15 @@ namespace IM.Administrator.Forms
           var lstLeadSourceAdd = lstLeadSourcesAcces.Where(pa => !_lstOldAccesLeadSource.Any(paa=>pa.plLSSRID==paa.plLSSRID)).ToList();
           var lstLeadSourceDel = _lstOldAccesLeadSource.Where(pa => !lstLeadSourcesAcces.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
           //SalesRoom
-          var lstSalesRoomAdd = lstSalesRoomAcces.Where(pa => !_lstOldAccesLeadSource.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
-          var lstSalesRoomDel = _lstOldAccesLeadSource.Where(pa => !lstSalesRoomAcces.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
+          var lstSalesRoomAdd = lstSalesRoomAcces.Where(pa => !_lstOldAccesSalesRoom.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
+          var lstSalesRoomDel = _lstOldAccesSalesRoom.Where(pa => !lstSalesRoomAcces.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
 
           //Warehouses
           var lstWarehousesAdd = lstWarehousesAcces.Where(pa => !_lstOldAccesWH.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
           var lsWarehousesDel = _lstOldAccesWH.Where(pa => !lstWarehousesAcces.Any(paa => pa.plLSSRID == paa.plLSSRID)).ToList();
 
           //Guardar los registros
+          personnel.pePwd = EncryptHelper.Encrypt(psbpePwd.Password);
           int nRes = await BRPersonnel.SavePersonnel(App.User.User.peID, personnel, (enumMode == EnumMode.edit), lstPersonnelPermissionAdd, lstPersonnelPermissionDel, lstPersonnelPermissionUpd,
             lstLeadSourceDel, lstLeadSourceAdd, lsWarehousesDel, lstWarehousesAdd, lstSalesRoomDel, lstSalesRoomAdd, lstRolesDel, lstRolesAdd, (personnel.pepo != oldPersonnel.pepo), 
             (personnel.peTeamType!=oldPersonnel.peTeamType || personnel.pePlaceID!=oldPersonnel.pePlaceID || personnel.peTeam!=oldPersonnel.peTeam));
@@ -198,6 +215,10 @@ namespace IM.Administrator.Forms
             _isClosing = true;
             DialogResult = true;
             Close();
+          }
+          else
+          {
+            personnel.pePwd = EncryptHelper.Encrypt(psbpePwd.Password);
           }
         }
         else
@@ -221,35 +242,8 @@ namespace IM.Administrator.Forms
     /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
-      btnCancel.Focus();      
-
-      #region PersonnelPermision changes
-      List<PersonnelAccess> lstWarehousesAcces = (List<PersonnelAccess>)dgrWarehouses.ItemsSource;
-      List<PersonnelAccess> lstSalesRoomAcces = (List<PersonnelAccess>)dgrSalesRoom.ItemsSource;
-      List<PersonnelAccess> lstLeadSourcesAcces = (List<PersonnelAccess>)dgrLeadSources.ItemsSource;
-      List<PersonnelPermission> lstPersonnelPermision = (List<PersonnelPermission>)dgrPermission.ItemsSource;
-      List<Role> lstRoles = (List<Role>)dgrRoles.ItemsSource;
-      var lstPersonnelPermissionAdd = (lstPersonnelPermision != null)? lstPersonnelPermision.Where(pp => !_lstOldPersonnelPermission.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm)).ToList() : new List<PersonnelPermission>();
-      var lstPersonnelPermissionDel = _lstOldPersonnelPermission.Where(pp => !lstPersonnelPermision.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm)).ToList();
-      var lstPersonnelPermissionUpd = _lstOldPersonnelPermission.Where(pp => lstPersonnelPermision.Any(ppp => pp.pppe == ppp.pppe && pp.pppm == ppp.pppm && pp.pppl != ppp.pppl)).ToList();
-      #endregion
-      if (enumMode!= EnumMode.preview && ( !ObjectHelper.IsEquals(personnel,oldPersonnel) || HasChanged(lstWarehousesAcces, lstSalesRoomAcces, lstLeadSourcesAcces, lstRoles) || lstPersonnelPermissionAdd.Count > 0
-        || lstPersonnelPermissionDel.Count > 0 || lstPersonnelPermissionUpd.Count > 0))
-      {
-        MessageBoxResult result = UIHelper.ShowMessage("There are pending changes. Do you want to discard them?", MessageBoxImage.Question, "Closing window");
-        if (result == MessageBoxResult.Yes)
-        {
-          if (!_isClosing) { _isClosing = true; Close(); }
-        }
-        else
-        {
-          _isClosing = false;
-        }
-      }
-      else
-      {
-        if (!_isClosing) { _isClosing = true; Close(); }
-      }
+      btnCancel.Focus();
+      Close();  
     }
     #endregion
 
@@ -268,7 +262,8 @@ namespace IM.Administrator.Forms
       frmSearchCollaborator.Owner = this;
       if (frmSearchCollaborator.ShowDialog() == true)
       {
-        personnel.peCollaboratorID = frmSearchCollaborator.idCollaborator;
+        txtpeCollaboratorID.Text= frmSearchCollaborator.idCollaborator.Trim();
+        personnel.peCollaboratorID = frmSearchCollaborator.idCollaborator.Trim();
       }
     }
     #endregion
@@ -968,7 +963,7 @@ namespace IM.Administrator.Forms
         {
           _lstOldPersonnelPermission = await BRPermissions.GetPersonnelPermission(personnel.peID);          
         }
-        dgrPermission.ItemsSource = _lstOldPersonnelPermission.ToList();
+        dgrPermission.ItemsSource = _lstOldPersonnelPermission.Select(pe=>new PersonnelPermission {pppe=pe.pppe,pppl=pe.pppl,pppm=pe.pppm }).ToList();
       }
       catch (Exception ex)
       {

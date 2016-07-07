@@ -84,13 +84,13 @@ namespace IM.Graph.Forms
     /// </history>
     private async void Window_ContentRendered(object sender, EventArgs e)
     {
-      DateTime _serverDate = BRHelpers.GetServerDate();
+      DateTime serverDate = BRHelpers.GetServerDate();
 
       // Fecha inicial
-      dtpStartDate.Value = new DateTime(_serverDate.Year, _serverDate.Month, 1);
+      dtpStartDate.Value = new DateTime(serverDate.Year, serverDate.Month, 1);
 
       //Fecha final
-      dtpEndDate.Value = _serverDate.Date;
+      dtpEndDate.Value = serverDate;
 
       LoadFromFile();
 

@@ -192,7 +192,7 @@ namespace IM.Administrator.Forms
         List<Area> lstArea = await BRAreas.GetAreas();
         if (enumMode == EnumMode.search)
         {
-          lstArea.Insert(0, new Area { arID = "", arN = "" });
+          lstArea.Insert(0, new Area { arID = "", arN = "ALL" });
         }
         cmbwhar.ItemsSource = lstArea;
       }

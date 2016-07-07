@@ -195,10 +195,11 @@ namespace IM.Inhouse.Forms
     #region Window_Loaded
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      DateTime dateServer = BRHelpers.GetServerDate();
       //fecha inicial
-      dtpStart.SelectedDate = BRHelpers.GetServerDate().AddDays(-7).Date;
+      dtpStart.SelectedDate = dateServer.AddDays(-7);
       //fecha final
-      dtpEnd.SelectedDate = BRHelpers.GetServerDate().Date;
+      dtpEnd.SelectedDate = dateServer;
       //Indicamos el focus al txtname
       txtName.Focus();
     }

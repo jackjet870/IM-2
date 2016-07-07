@@ -87,7 +87,8 @@ namespace IM.Model.Helpers
         EntityConnectionStringBuilder builder = new EntityConnectionStringBuilder();
         builder.Provider = "System.Data.SqlClient";
         builder.ProviderConnectionString = SqlConnectionString(database);
-        builder.Metadata = "res://*/IMModel.csdl|res://*/IMModel.ssdl|res://*/IMModel.msl";
+        string databaseModel = EnumToListHelper.GetEnumDescription(database);
+        builder.Metadata = $"res://*/{databaseModel}.csdl|res://*/{databaseModel}.ssdl|res://*/{databaseModel}.msl";
         _connectionString[(int)database] = builder.ToString();
       }
       return _connectionString[(int)database];

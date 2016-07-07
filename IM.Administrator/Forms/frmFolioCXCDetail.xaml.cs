@@ -55,6 +55,7 @@ namespace IM.Administrator.Forms
     {
       ObjectHelper.CopyProperties(folioCXC, oldFolioCxc);
       OpenMode();
+      UIHelper.SetUpControls(folioCXC,this);
     }
     #endregion
 
@@ -82,16 +83,16 @@ namespace IM.Administrator.Forms
         #region Validar El rango del folio      
         if (folioCXC.fiFrom == 0)
         {
-          txtFrom.Text = "0";
+          txtfiFrom.Text = "0";
           strMsj += "Start number can not be 0.";
         }
         else
         {
           if (folioCXC.fiTo < folioCXC.fiFrom)
           {
-            if (string.IsNullOrWhiteSpace(txtTo.Text))
+            if (string.IsNullOrWhiteSpace(txtfiTo.Text))
             {
-              txtTo.Text = txtFrom.Text;
+              txtfiTo.Text = txtfiFrom.Text;
             }
             strMsj += "Start number can not be greater than End Number.";
           }
@@ -113,36 +114,6 @@ namespace IM.Administrator.Forms
         {
           UIHelper.ShowMessage(strMsj);
         }
-      }
-    }
-    #endregion
-    #region Preview text Input
-    /// <summary>
-    /// Valida que únicamente se acepten números
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void txtFrom_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
-    }
-    #endregion
-
-    #region txtLostFocus
-    /// <summary>
-    /// Cambia el valor del texbox cuando pierde el foco
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [emoguel] created 22/03/2016
-    /// </history>
-    private void txt_LostFocus(object sender, RoutedEventArgs e)
-    {
-      TextBox txtText = (TextBox)sender;
-      if (string.IsNullOrWhiteSpace(txtText.Text))
-      {
-        txtText.Text = "0";
       }
     }
     #endregion
@@ -227,8 +198,8 @@ namespace IM.Administrator.Forms
       if (enumMode != EnumMode.preview)
       {
         btnAccept.Visibility = Visibility.Visible;
-        txtFrom.IsEnabled = true;
-        txtTo.IsEnabled = true;
+        txtfiFrom.IsEnabled = true;
+        txtfiTo.IsEnabled = true;
         chkA.IsEnabled = true;
       }
     }

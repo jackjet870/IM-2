@@ -6015,7 +6015,7 @@
           <Parameter Name="Program" Type="varchar" Mode="In" />
           <Parameter Name="FilterDeposit" Type="tinyint" Mode="In" />
         </Function>
-        <Function Name="USP_IM_RptStatsBySegment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="USP_IM_RptStatisticsBySegments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DatesFrom" Type="varchar(max)" Mode="In" />
           <Parameter Name="DatesTo" Type="varchar(max)" Mode="In" />
           <Parameter Name="SalesRooms" Type="varchar(max)" Mode="In" />
@@ -17886,7 +17886,7 @@
             <Parameter Name="SalesRoom" Mode="In" Type="String" />
             <Parameter Name="WeekDay" Mode="In" Type="Byte" />
           </FunctionImport>
-          <FunctionImport Name="USP_IM_RptStatsBySegment" ReturnType="Collection(IMModel.RptStatsBySegment)">
+          <FunctionImport Name="USP_IM_RptStatisticsBySegments" ReturnType="Collection(IMModel.RptStatisticsBySegments)">
             <Parameter Name="DatesFrom" Mode="In" Type="String" />
             <Parameter Name="DatesTo" Mode="In" Type="String" />
             <Parameter Name="SalesRooms" Mode="In" Type="String" />
@@ -22444,7 +22444,7 @@
           <Property Type="Boolean" Name="ggWPax" Nullable="false" />
           <Property Type="Int32" Name="ggO" Nullable="false" />
         </ComplexType>
-        <ComplexType Name="RptStatsBySegment">
+        <ComplexType Name="RptStatisticsBySegments">
           <Property Type="String" Name="SalemanID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="SalemanName" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="SalemanType" Nullable="true" MaxLength="50" />
@@ -30174,9 +30174,9 @@
           <FunctionImportMapping FunctionImportName="USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoomsWeekDaysOfLeadSource" FunctionName="IMModel.Store.USP_OR_CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoomsWeekDaysOfLeadSource" />
           <FunctionImportMapping FunctionImportName="USP_OR_CopyTourTimesBySalesRoomWeekDayToSalesRoom" FunctionName="IMModel.Store.USP_OR_CopyTourTimesBySalesRoomWeekDayToSalesRoom" />
           <FunctionImportMapping FunctionImportName="USP_OR_CopyTourTimesBySalesRoomWeekDayToWeekDaysOfSalesRoom" FunctionName="IMModel.Store.USP_OR_CopyTourTimesBySalesRoomWeekDayToWeekDaysOfSalesRoom" />
-          <FunctionImportMapping FunctionImportName="USP_IM_RptStatsBySegment" FunctionName="IMModel.Store.USP_IM_RptStatsBySegment" >
+          <FunctionImportMapping FunctionImportName="USP_IM_RptStatisticsBySegments" FunctionName="IMModel.Store.USP_IM_RptStatisticsBySegments" >
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMModel.RptStatsBySegment">
+              <ComplexTypeMapping TypeName="IMModel.RptStatisticsBySegments">
                 <ScalarProperty Name="SalemanID" ColumnName="SalemanID" />
                 <ScalarProperty Name="SalemanName" ColumnName="SalemanName" />
                 <ScalarProperty Name="SalemanType" ColumnName="SalemanType" />

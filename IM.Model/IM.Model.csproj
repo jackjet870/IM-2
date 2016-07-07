@@ -1124,7 +1124,7 @@
     <Compile Include="RptStatisticsBySalesRoomLocation.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="RptStatsBySegment.cs">
+    <Compile Include="RptStatisticsBySegments.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptTaxisIn.cs">

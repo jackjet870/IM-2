@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Linq;
 
 namespace IM.Services.Helpers
 {
@@ -522,7 +523,39 @@ namespace IM.Services.Helpers
       //// verificar hotelnew --->
       //// verificar folionew --->
       Promotions[Promotions.Length].usrmodif = "";
-    } 
+    }
+    #endregion
+
+    #region getPromotionsType
+    /// <summary>
+    /// Obtiene el catalogo de Promociones tipo
+    /// </summary>
+    /// <history>
+    /// [emoguel] created 04/07/2016
+    /// </history>
+    public async static Task<List<PromocionesTipoResponse>> getPromotionsType(string tipoPromo, string status)
+    {
+      return await Task.Run(() =>
+      {
+        PromocionesTipoRequest request = new PromocionesTipoRequest();
+        PromocionesTipoResponse [] response = null;
+        PromocionesTipoResponse Promotion = null;
+        request.tipoPromo = tipoPromo;
+        request.estatus = status;
+
+        response = Current(EnumPromotionsSystem.Sistur).ObtenerPromocionesTipo(request);
+        
+        if(response!=null)
+        {
+          Promotion = response[0];
+          if(Promotion.hasErrors)
+          {
+            UIHelper.ShowMessage(Promotion.errorInfo, MessageBoxImage.Error, "getPromotionsType");
+          }
+        }
+        return response.OrderBy(ptr=>ptr.nombre).ToList();
+      });
+    }
     #endregion
 
   }

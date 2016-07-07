@@ -231,7 +231,7 @@ namespace IM.Administrator.Forms
         List<HotelGroup> lstHoGroup =await BRHotelGroups.GetHotelGroups(nStatus: 1);
         if (enumMode == EnumMode.search)
         {
-          lstHoGroup.Insert(0, new HotelGroup { hgID = "", hgN = "" });
+          lstHoGroup.Insert(0, new HotelGroup { hgID = "", hgN = "ALL" });
         }
         cmbHotelGr.ItemsSource = lstHoGroup;
       }
@@ -257,7 +257,7 @@ namespace IM.Administrator.Forms
         List<Area> lstAreas = await BRAreas.GetAreas(nStatus: 1);
         if (enumMode == EnumMode.search)
         {
-          lstAreas.Insert(0, new Area { arID = "", arN = "" });
+          lstAreas.Insert(0, new Area { arID = "", arN = "ALL" });
         }
 
         cmbHotelAr.ItemsSource = lstAreas;

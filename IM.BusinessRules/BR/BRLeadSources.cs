@@ -314,7 +314,7 @@ namespace IM.BusinessRules.BR
                 }
                 else
                 {
-                  DateTime dtServer = BRHelpers.GetServerDate();
+                  DateTime dtServer = BRHelpers.GetServerDateTime();
                   leadSource.lsTransBridgeDT = dtServer;
                   leadSource.lsTransDT = dtServer;
                   dbContext.LeadSources.Add(leadSource);

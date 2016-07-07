@@ -425,7 +425,7 @@ namespace IM.Administrator.Forms
       try
       {
         List<SegmentByAgency> lstSegmentsByAgency = await BRSegmentsByAgency.GetSegMentsByAgency(new SegmentByAgency());
-        lstSegmentsByAgency.Insert(0, new SegmentByAgency { seID = "", seN = "" });
+        lstSegmentsByAgency.Insert(0, new SegmentByAgency { seID = "", seN = "ALL" });
         cmbSegment.ItemsSource = lstSegmentsByAgency;
       }
       catch(Exception ex)

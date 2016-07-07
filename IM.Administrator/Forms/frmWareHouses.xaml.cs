@@ -18,7 +18,7 @@ namespace IM.Administrator.Forms
   public partial class frmWarehouses : Window
   {
     #region variables
-    private Warehouse _warehouseFilter = new Warehouse();//Objeto con los filtros del grid
+    private Warehouse _warehouseFilter = new Warehouse { whar=""};//Objeto con los filtros del grid
     private int _nStatus=-1;//Estatus de los registros del grid
     private bool _blnEdit = false;//Boleano para saber si se tiene permiso para editar|Agregar
     #endregion

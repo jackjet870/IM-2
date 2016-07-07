@@ -18,7 +18,7 @@ namespace IM.Administrator.Forms
   public partial class frmShowPrograms : Window
   {
     #region Variables
-    private ShowProgram _showProgramFilter = new ShowProgram();//Filtros del grid
+    private ShowProgram _showProgramFilter = new ShowProgram { sksg = "" };//Filtros del grid
     private int _nStatus = -1;//Estatus de los registros del grid
     #endregion
     public frmShowPrograms()

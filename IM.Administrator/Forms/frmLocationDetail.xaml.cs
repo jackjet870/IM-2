@@ -218,7 +218,7 @@ namespace IM.Administrator.Forms
         List<SalesRoomShort> lstSalesRoom = await BRSalesRooms.GetSalesRooms(1);
         if (enumMode == EnumMode.search && lstSalesRoom.Count > 0)
         {
-          lstSalesRoom.Insert(0, new SalesRoomShort { srID = "", srN = "" });
+          lstSalesRoom.Insert(0, new SalesRoomShort { srID = "", srN = "ALL" });
         }
         cmblosr.ItemsSource = lstSalesRoom;
         skpStatus.Visibility = Visibility.Collapsed;
@@ -244,7 +244,7 @@ namespace IM.Administrator.Forms
         List<LocationCategory> lstLocCategories =await BRLocationsCategories.GetLocationsCategories();
         if (enumMode == EnumMode.search && lstLocCategories.Count > 0)
         {
-          lstLocCategories.Insert(0, new LocationCategory { lcID = "", lcN = "" });
+          lstLocCategories.Insert(0, new LocationCategory { lcID = "", lcN = "ALL" });
         }
         cmblolc.ItemsSource = lstLocCategories;
       }
