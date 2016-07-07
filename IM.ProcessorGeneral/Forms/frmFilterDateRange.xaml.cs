@@ -757,7 +757,7 @@ namespace IM.ProcessorGeneral.Forms
 
       grdCategories.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
       pnlCategories.Visibility = Visibility.Visible;
-      _lstGiftsCate = await BRGifts.GetGiftsCategories();
+      _lstGiftsCate = await BRGiftsCategories.GetGiftsCategories();
       grdCategories.ItemsSource = _lstGiftsCate;
 
       chkAllCategories.IsChecked = blnAllCategories;

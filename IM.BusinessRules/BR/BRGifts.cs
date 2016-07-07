@@ -65,47 +65,6 @@ namespace IM.BusinessRules.BR
 
     #endregion GetGifts
 
-    #region GetGiftsCategories
-
-    /// <summary>
-    /// Método para obtener una lista de categorias de regalo.
-    /// </summary>
-    /// <param name="Status">0. Sin filtro.
-    /// 1. Activos.
-    /// 2. Inactivos.</param>
-    /// <returns> List<GiftsCateg> </returns>
-    /// <history>
-    /// [edgrodriguez] 07/03/2016 Created
-    /// </history>
-    public async static Task<List<GiftCategory>> GetGiftsCategories(int Status = 0)
-    {
-      List<GiftCategory> result = new List<GiftCategory>();
-      await Task.Run(() =>
-      {
-        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-        {
-          var lstGiftsCateg = dbContext.GiftsCategories;
-          switch (Status)
-          {
-            case 1:
-              result = lstGiftsCateg.Where(c => c.gcA == true).ToList();
-              break;
-
-            case 2:
-              result = lstGiftsCateg.Where(c => c.gcA == false).ToList();
-              break;
-
-            default:
-              result = lstGiftsCateg.ToList();
-              break;
-          }
-        }
-      });
-      return result;
-    }
-
-    #endregion GetGiftsCategories
-
     #region GetGiftsByGuest
 
     /// <summary>
