@@ -5,9 +5,11 @@ using IM.Model.Enums;
 using IM.Model.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using IM.ProcessorSales.Classes;
 using Xceed.Wpf.Toolkit;
 using System.Windows.Input;
@@ -27,13 +29,13 @@ namespace IM.ProcessorSales.Forms
     private string _salesRoom = string.Empty;
     private EnumPeriod _period;
     private bool _onePeriod;
-    private List<SalesRoomByUser> _lstSalesRoomByUsers;
+    private readonly List<SalesRoomByUser> _lstSalesRoomByUsers= new List<SalesRoomByUser>();
     private List<Program> _lstPrograms;
     private List<SegmentByAgency> _lstSegmentByAgencies;
     private List<Efficiency> _lstWeeks;
     private List<WeeksHelpper> _lstWeeksHelpp;
-    private List<GoalsHelpper> _lstGoals;
-    private List<MultiDateHelpper> _lstMultiDate;
+    private readonly ObservableCollection<GoalsHelpper> _lstGoals=new ObservableCollection<GoalsHelpper>();
+    private readonly ObservableCollection<MultiDateHelpper> _lstMultiDate = new ObservableCollection<MultiDateHelpper>();
     private List<PersonnelShort> _lstPersonnels;
 
     public frmProcessorSales frmPrs = new frmProcessorSales();
@@ -98,14 +100,14 @@ namespace IM.ProcessorSales.Forms
     /// <summary>
     /// Configura los controles de fecha
     /// </summary>
-    /// <param name="oneDate">Si requiere o no de fechas</param>
+    /// <param name="multiDate">Si requiere o no de fechas</param>
     /// <param name="period">Periodo en el que se va a filtrar las fechas</param>
     /// <history>
     /// [ecanul] 26/04/2016 Created
     /// </history>
-    private void ConfigureDates(bool oneDate, EnumPeriod period = EnumPeriod.None)
+    private void ConfigureDates(bool multiDate, EnumPeriod period = EnumPeriod.None)
     {
-      if (!oneDate) //si no es solo una fecha 
+      if (!multiDate) //si no es solo una fecha 
       {
         Dictionary<EnumPredefinedDate, string> dictionaryPredefinedDate = EnumToListHelper.GetList<EnumPredefinedDate>();
 
@@ -214,7 +216,7 @@ namespace IM.ProcessorSales.Forms
       #endregion
       
       //Carga salesRoom
-      _lstSalesRoomByUsers = await BRSalesRooms.GetSalesRoomsByUser(App.User.User.peID);
+      _lstSalesRoomByUsers.AddRange(await BRSalesRooms.GetSalesRoomsByUser(App.User.User.peID));
      
       //Si tiene SR
       dtgSalesRoom.ItemsSource = (sr) ? _lstSalesRoomByUsers : null;
@@ -242,19 +244,16 @@ namespace IM.ProcessorSales.Forms
       //Si es concentrate
       if (concentrate)
       {
-        _lstGoals = new List<GoalsHelpper>();
         foreach (var item in _lstSalesRoomByUsers)
         {
           GoalsHelpper goal = new GoalsHelpper
           {
-            isCheck = false,
-            salesRoom = item,
-            goal = 0
+            IsCheck = false,
+            SalesRoomByUser = item,
+            Goal = 0
           };
           _lstGoals.Add(goal);
         }
-
-        dtgSalesRoomConcentrate.ItemsSource = _lstGoals;
       }
 
       #endregion
@@ -263,15 +262,15 @@ namespace IM.ProcessorSales.Forms
       //si es multidate
       if (multidate)
       {
-        _lstMultiDate = new List<MultiDateHelpper>();
+
         MultiDateHelpper mdh = new MultiDateHelpper
         {
-          dtStart = _dtStart,
-          dtEnd = _dtEnd
+          SalesRoom = _salesRoom,
+          DtStart = _dtStart,
+          DtEnd = _dtEnd,
+          IsMain = true
         };
         _lstMultiDate.Add(mdh);
-        cmbSalesRoom.ItemsSource = _lstSalesRoomByUsers;
-        dtgSalesRoomMultiDateRange.ItemsSource = _lstMultiDate;
         chkAllSalesRoomMultiDateRange.Visibility = Visibility.Collapsed;
       }
 
@@ -282,11 +281,7 @@ namespace IM.ProcessorSales.Forms
       if (weeks)
         LoadEfficiencyWeek();
       #endregion
-
-      //Status Bar
-      statusBarNumSalesRoom.Content = (sr) ? $"{0}/{_lstSalesRoomByUsers.Count} Sales Rooms selected" : string.Empty;
-      statusBarNumPg.Content = (programs) ? $"{0}/{_lstPrograms.Count} Programs selected" : string.Empty;
-      statusBarNumSegments.Content = (segments) ? $"{0}/{_lstSegmentByAgencies.Count} Segments selected" : string.Empty;
+      
       //Toma la configuracion del padre
       LoadUserFilters();
       //configura el check all de los grids
@@ -355,9 +350,9 @@ namespace IM.ProcessorSales.Forms
     /// [ecanul] 27/04/2016 Created
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void ConfigureFilters(EnumBasedOnArrival? basedOnArrival, EnumQuinellas? quinellas, bool shGroup, bool group, bool shAllSalesmen, bool allSalesmen, bool isGoal, decimal? goal,
+    private void ConfigureFilters(EnumBasedOnArrival? basedOnArrival, EnumQuinellas? quinellas, bool shGroup, bool group, bool shAllSalesmen, bool allSalesmen, bool isGoal, 
       //seccion salesman
-      bool isSalesman, bool shRoles, bool pr, bool liner, bool closer, bool exit)
+      bool isSalesman, bool shRoles)
     {
       //check based on arrival date
       if (basedOnArrival != null)
@@ -375,9 +370,7 @@ namespace IM.ProcessorSales.Forms
       else
         chkGroupedByTeams.Visibility = Visibility.Collapsed;
 
-      if (isGoal)
-        txtGoal.Text = goal.ToString();
-      else
+      if (!isGoal)
         grdGoal.Visibility = Visibility.Collapsed;
       //check include all salesman
       if (shAllSalesmen)
@@ -390,14 +383,7 @@ namespace IM.ProcessorSales.Forms
         //cmb
         LoadSalesman();
         //roles
-        if (shRoles)
-        {
-          chkPr.IsChecked = pr;
-          chkLiner.IsChecked = liner;
-          chkCloser.IsChecked = closer;
-          chkExit.IsChecked = exit;
-        }
-        else
+        if (!shRoles)
           gpbRoles.Visibility = Visibility.Collapsed;
       }
       else
@@ -422,20 +408,28 @@ namespace IM.ProcessorSales.Forms
         dtgSalesRoom.SelectedItem = (from sr in _lstSalesRoomByUsers where sr.srID == _salesRoom select sr).FirstOrDefault();
       }
 
-      if (grdGoal.Visibility == Visibility.Visible && frmPrs.goal != 0)
-        txtGoal.Text = frmPrs.goal.ToString();
+      if (grdGoal.Visibility == Visibility.Visible && frmPrs._clsFilter.Goal != 0)
+        txtGoal.Text = $"{frmPrs._clsFilter.Goal}";
 
       cmbDate.SelectedValue =
-        cmbDate.Items.Cast<KeyValuePair<EnumPredefinedDate, string>>().Any(c => c.Key == frmPrs.predefinedDate)
-          ? frmPrs.predefinedDate
+        cmbDate.Items.Cast<KeyValuePair<EnumPredefinedDate, string>>().Any(c => c.Key == frmPrs._clsFilter.CboDateSelected)
+          ? frmPrs._clsFilter.CboDateSelected
           : EnumPredefinedDate.DatesSpecified;
       if (grdDates.Visibility == Visibility.Visible)
       {
-        dtmStart.Value = frmPrs.dtmStart;
-        dtmEnd.Value = frmPrs.dtmEnd;
+        dtmStart.Value = frmPrs._clsFilter.DtmStart;
+        dtmEnd.Value = frmPrs._clsFilter.DtmEnd;
       }
       chkBasedOnArrival.IsChecked = Convert.ToBoolean(frmPrs.basedOnArrival);
       chkQuinellas.IsChecked = Convert.ToBoolean(frmPrs.quinellas);
+
+      if (gpbRoles.Visibility == Visibility.Visible)
+      {
+        chkPr.IsChecked = frmPrs._clsFilter.LstEnumRole.Contains(EnumRole.PR);
+        chkLiner.IsChecked = frmPrs._clsFilter.LstEnumRole.Contains(EnumRole.Liner);
+        chkCloser.IsChecked = frmPrs._clsFilter.LstEnumRole.Contains(EnumRole.Closer);
+        chkExit.IsChecked = frmPrs._clsFilter.LstEnumRole.Contains(EnumRole.ExitCloser);
+      }
 
     }
 
@@ -457,14 +451,16 @@ namespace IM.ProcessorSales.Forms
         return "No programs is selected";
       if (pnlSegments.Visibility == Visibility.Visible && dtgSegments.SelectedItems.Count == 0)
         return "No Segments is selected";
-      if (pnlSalesRoomConcentrate.Visibility == Visibility.Visible && _lstGoals.Count(x => x.isCheck) == 0)
+      if (pnlSalesRoomConcentrate.Visibility == Visibility.Visible && !_lstGoals.Any(x => x.IsCheck))
         return "No sales room is selected";
-      if (pnlSalesRoomMultiDateRange.Visibility == Visibility.Visible && _lstMultiDate.Count(x => x.salesRoom != "") == 0)
+      if (pnlSalesRoomMultiDateRange.Visibility == Visibility.Visible && _lstMultiDate.All(x => string.IsNullOrWhiteSpace(x.SalesRoom)))
         return "Please specify one sales room";
-      if (pnlSalesRoomMultiDateRange.Visibility == Visibility.Visible && _lstMultiDate.Count(x => x.isMain) == 0)
+      if (pnlSalesRoomMultiDateRange.Visibility == Visibility.Visible && !_lstMultiDate.Any(x => x.IsMain))
         return "Please specify the main sales room";
+      if (pnlSalesRoomMultiDateRange.Visibility == Visibility.Visible && _lstMultiDate.Count(x => x.IsMain) > 1)
+        return "Please specify only one main sales room";
       //validar salesman
-      
+
 
       return string.Empty;
     }
@@ -484,40 +480,40 @@ namespace IM.ProcessorSales.Forms
       if (pnlSalesRoom.IsVisible)
         if (chkAllSalesRoom.IsChecked.Value)
         {
-          frmPrs.lstSalesRoom.Clear();
-          frmPrs.lstSalesRoom.Add("All");
+          frmPrs._clsFilter.LstSalesRoom.Clear();
+          frmPrs._clsFilter.LstSalesRoom.Add("All");
         }
         else
-          frmPrs.lstSalesRoom = dtgSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(x => x.srID).ToList();
+          frmPrs._clsFilter.LstSalesRoom = dtgSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(x => x.srID).ToList();
 
       if (pnlProggrams.IsVisible)
-        frmPrs.lstPrograms = dtgPrograms.SelectedItems.Cast<Program>().Select(x => x.pgID).ToList();
+        frmPrs._clsFilter.LstPrograms = dtgPrograms.SelectedItems.Cast<Program>().Select(x => x.pgID).ToList();
 
       if (pnlSegments.IsVisible)
-        frmPrs.lstSegments = dtgSegments.SelectedItems.Cast<SegmentByAgency>().Select(x => x.seID).ToList();
+        frmPrs._clsFilter.LstSegments = dtgSegments.SelectedItems.Cast<SegmentByAgency>().Select(x => x.seID).ToList();
       
       if (pnlSalesRoomConcentrate.IsVisible)
-        frmPrs.lstGoals = _lstGoals.Where(g => g.isCheck).ToList();
+        frmPrs._clsFilter.LstGoals = _lstGoals.Where(g => g.IsCheck).ToList();
       if (pnlSalesRoomMultiDateRange.Visibility == Visibility.Visible)
-        frmPrs.lstMultiDate = _lstMultiDate;
+        frmPrs._clsFilter.LstMultiDate = _lstMultiDate.Where(x=>!string.IsNullOrWhiteSpace(x.SalesRoom)).OrderByDescending(x=>x.IsMain).ToList();
       
       //Mandar los datos de fechas
       if (grdDates.IsVisible)
       {
-        frmPrs.predefinedDate = ((KeyValuePair<EnumPredefinedDate, string>)cmbDate.SelectedItem).Key;
-        frmPrs.dtmStart = (DateTime)dtmStart.Value;
-        frmPrs.dtmEnd = (DateTime)dtmEnd.Value;
+        frmPrs._clsFilter.CboDateSelected = ((KeyValuePair<EnumPredefinedDate, string>)cmbDate.SelectedItem).Key;
+        frmPrs._clsFilter.DtmStart = Convert.ToDateTime(dtmStart.Value);
+        frmPrs._clsFilter.DtmEnd = Convert.ToDateTime(dtmEnd.Value);
       }
       
       //si goal esta visible
       if (grdGoal.Visibility == Visibility.Visible)
-        frmPrs.goal = Convert.ToDecimal(txtGoal.Text.Trim());
+        frmPrs._clsFilter.Goal = Convert.ToDecimal(txtGoal.Text.Trim());
 
       //Region de checks
       frmPrs.basedOnArrival = (chkBasedOnArrival.IsChecked.Value) ? EnumBasedOnArrival.BasedOnArrival : EnumBasedOnArrival.NoBasedOnArrival;
       frmPrs.quinellas = (chkQuinellas.IsChecked.Value) ? EnumQuinellas.Quinellas : EnumQuinellas.NoQuinellas;
-      frmPrs.groupedByTeams = chkGroupedByTeams.IsChecked.Value;
-      frmPrs.includeAllSalesmen = chkIncludeAllSalesmen.IsChecked.Value;
+      frmPrs._clsFilter.BlnGroupedByTeams = Convert.ToBoolean(chkGroupedByTeams.IsChecked);
+      frmPrs._clsFilter.BlnIncludeAllSalesmen = Convert.ToBoolean(chkIncludeAllSalesmen.IsChecked);
 
       //si es de salesman 
       if(grdSalesman.Visibility==Visibility.Visible)
@@ -527,10 +523,15 @@ namespace IM.ProcessorSales.Forms
         //si tiene los roles visibles
         if (gpbRoles.IsVisible)
         {
-          frmPrs.pr = chkPr.IsChecked.Value;
-          frmPrs.liner = chkLiner.IsChecked.Value;
-          frmPrs.closer = chkCloser.IsChecked.Value;
-          frmPrs.exit = chkExit.IsChecked.Value;
+          frmPrs._clsFilter.LstEnumRole.Clear();
+          if(Convert.ToBoolean(chkPr.IsChecked))
+            frmPrs._clsFilter.LstEnumRole.Add(EnumRole.PR);
+          if (Convert.ToBoolean(chkLiner.IsChecked))
+            frmPrs._clsFilter.LstEnumRole.Add(EnumRole.Liner);
+          if (Convert.ToBoolean(chkCloser.IsChecked))
+            frmPrs._clsFilter.LstEnumRole.Add(EnumRole.Closer);
+          if (Convert.ToBoolean(chkExit.IsChecked))
+            frmPrs._clsFilter.LstEnumRole.Add(EnumRole.ExitCloser);
         }
       }
     }
@@ -542,10 +543,10 @@ namespace IM.ProcessorSales.Forms
     #region ConfigForm
 
     public void ConfigForm(DateTime dtStart, DateTime dtEnd, //Necesarios siempre
-      string salesRoom = null, string segments = null, string salesman = null, decimal? goal = null, //Necesarios segun el tipo de reporte
+      string salesRoom = null, string segments = null, string salesman = null, //Necesarios segun el tipo de reporte
       //Checks arriba de los grids y configuracion del friltro
-      bool allSalesRoom = false, bool allProgams = false, bool allSegments = false, bool oneDate = false, bool onlyOneRegister = false, bool groupByTeams = false,
-      bool allSalesmen = false, bool shRoles = false, bool pr = false, bool liner = false, bool closer = false, bool exit = false, bool onePeriod = false,
+      bool allSalesRoom = false, bool allProgams = false, bool allSegments = false, bool multiDate = false, bool onlyOneRegister = false, bool groupByTeams = false,
+      bool allSalesmen = false, bool shRoles = false, bool onePeriod = false,
       //Enumerados, 
       EnumPeriod period = EnumPeriod.None, EnumBasedOnArrival? basedOnArrival = null, EnumQuinellas? quinellas = null,
       //para saber que mostrar Grids 
@@ -560,10 +561,9 @@ namespace IM.ProcessorSales.Forms
       _period = period;
       _onePeriod = onePeriod;
       //Configura Fechas
-      ConfigureDates(oneDate, period);
+      ConfigureDates(multiDate, period);
       //configura la visibilidad de los filtros 
-      ConfigureFilters(basedOnArrival, quinellas, shGroupsByTeams, groupByTeams, shAllSalesmen, allSalesmen, isGoal,
-        goal, isBySalesman, shRoles, pr, liner, closer, exit);
+      ConfigureFilters(basedOnArrival, quinellas, shGroupsByTeams, groupByTeams, shAllSalesmen, allSalesmen, isGoal, isBySalesman, shRoles);
       //configura Los grids y los carga
       ConfigureGrids(shSr, shPrograms, shSegments, shMultiDateRanges, shConcentrate, shWeeks, onlyOneRegister, allProgams, allSegments);
       
@@ -580,7 +580,14 @@ namespace IM.ProcessorSales.Forms
     public frmFilterDateRange()
     {
       InitializeComponent();
-      PreviewKeyDown += Close_KeyPreviewESC;
+      var objMultiDateHelpper = (CollectionViewSource)FindResource("ObjMultiDateHelpper");
+      objMultiDateHelpper.Source = _lstMultiDate;
+      var objSalesRoomByUser = (CollectionViewSource)FindResource("ObjSalesRoomByUser");
+      objSalesRoomByUser.Source = _lstSalesRoomByUsers;
+      var objGoalsHelpper= (CollectionViewSource)FindResource("ObjGoalsHelpper");
+      objGoalsHelpper.Source = _lstGoals;
+
+      KeyDown += Close_KeyPreviewESC;
     }
     #endregion
 
@@ -591,6 +598,7 @@ namespace IM.ProcessorSales.Forms
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       ok = false;
+      SaveFilterValues();
       Close();
     }
     #endregion
@@ -637,7 +645,7 @@ namespace IM.ProcessorSales.Forms
         dtg = dtgSalesRoomConcentrate;
         foreach (GoalsHelpper item in dtg.ItemsSource)
         {
-          item.isCheck = chkAllSalesRoomConcentrate.IsChecked.Value;
+          item.IsCheck = chkAllSalesRoomConcentrate.IsChecked.Value;
         }
       }
       if (dtg == null) return;
@@ -653,7 +661,7 @@ namespace IM.ProcessorSales.Forms
     #region chkSalesRoom_Checked
     private void chkSalesRoom_Checked(object sender, RoutedEventArgs e)
     {
-      int count = _lstGoals.Count(item => item.isCheck);
+      int count = _lstGoals.Count(item => item.IsCheck);
       statusBarNumSalesRoomConcentrate.Content = $"{count}/{dtgSalesRoomConcentrate.Items.Count} Sales Rooms selected";
     }
     #endregion
@@ -661,28 +669,7 @@ namespace IM.ProcessorSales.Forms
     #endregion
 
     #region Grids
-
-    #region dtgSalesRoom_SelectionChanged
-    private void dtgSalesRoom_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      statusBarNumSalesRoom.Content = $"{dtgSalesRoom.SelectedItems.Count}/{dtgSalesRoom.Items.Count} Sales Rooms selected";
-    }
-    #endregion
-
-    #region dtgPrograms_SelectionChanged
-    private void dtgPrograms_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      statusBarNumPg.Content = $"{dtgPrograms.SelectedItems.Count}/{dtgPrograms.Items.Count} Programs selected";
-    }
-    #endregion
-
-    #region dtgSegments_SelectionChanged
-    private void dtgSegments_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-      statusBarNumSegments.Content = $"{dtgSegments.SelectedItems.Count}/{dtgSegments.Items.Count} Segments selected";
-    }
-    #endregion
-
+    
     #endregion
 
     #region TextBox
@@ -693,14 +680,6 @@ namespace IM.ProcessorSales.Forms
       _changecmb = false;
     }
     #endregion
-
-    #region txtGoal_PreviewTextInput
-    private void txtGoal_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-      if (!char.IsDigit(e.Text, e.Text.Length - 1))
-        e.Handled = true;
-    }
-    #endregion 
 
     #endregion
 
@@ -854,10 +833,65 @@ namespace IM.ProcessorSales.Forms
     private void Close_KeyPreviewESC(object sender, KeyEventArgs e)
     {
       if (e.Key == Key.Escape)
-        Close();
+        btnCancel_Click(null, null);
     }
     #endregion
 
+    #region dtgSalesRoomMultiDateRange_BeginningEdit
+    /// <summary>
+    /// Valida que se pueda editar la fila del grid
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 05/07/2016 Created
+    /// </history>
+    private void dtgSalesRoomMultiDateRange_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+    {
+      var multiDateHelpper = e.Row.Item as MultiDateHelpper;
+      if (multiDateHelpper != null && (string.IsNullOrEmpty(multiDateHelpper.SalesRoom) && !e.Column.Equals(cmbSalesRoom)))
+      {
+        UIHelper.ShowMessage("Enter the sales room first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+        int rowIndex = dtgSalesRoomMultiDateRange.SelectedIndex != -1 ? dtgSalesRoomMultiDateRange.SelectedIndex : 0;
+        GridHelper.SelectRow(dtgSalesRoomMultiDateRange, rowIndex, 0, true);
+        e.Cancel = true;
+      }
+    }
     #endregion
+
+    #region TextBoxNumeric_PreviewTextInput
+
+    /// <summary>
+    /// Valida que solo puedan insertar numeros enteros
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 07/07/2016 Created
+    /// </history>
+    private void TextBoxNumeric_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+      if (!char.IsDigit(e.Text, e.Text.Length - 1))
+        e.Handled = true;
+    }
+
+    #endregion TextBoxNumeric_PreviewTextInput
+
+    #region TextBoxNumeric_LostFocus
+
+    /// <summary>
+    /// Pone por Default el valor 0 en un TextBox al perder el foco y no tiene valor
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 07/07/2016 Created
+    /// </history>
+    private void TextBoxNumeric_LostFocus(object sender, RoutedEventArgs e)
+    {
+      TextBox textBox = (TextBox)sender;
+      if (textBox?.Text == string.Empty)
+        textBox.Text = "0";
+    }
+
+    #endregion TextBoxNumeric_LostFocus
+
+    #endregion
+
+
   }
 }

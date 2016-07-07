@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Processor Sales" Height="565" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" 
-        Icon="pack://application:,,,/IM.ProcessorSales;component/Images/IM.ico" 
+        Title="Processor Sales" Height="565" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Icon="pack://application:,,,/IM.ProcessorSales;component/Images/IM.ico"
         Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="FrmProcessorSales_Closing">
     <Window.Resources>
         <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
@@ -17,8 +17,8 @@
             <Setter Property="SelectionMode" Value="Single" />
         </Style>
         <Style TargetType="{x:Type DataGridRow}">
-            <EventSetter Event="MouseDoubleClick" Handler="grdrpt_MouseDoubleClick"/>
-            <EventSetter Event="KeyDown" Handler="grdrpt_PreviewKeyDown"/>
+            <EventSetter Event="MouseDoubleClick" Handler="grdrpt_MouseDoubleClick" />
+            <EventSetter Event="KeyDown" Handler="grdrpt_PreviewKeyDown" />
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="LightBlue" />
@@ -28,53 +28,35 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="6*"/>
-            <RowDefinition Height=".75*" />
-            <RowDefinition Height=".75*"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
-
-        <!--#region Header-->
-        <Grid Grid.Row="0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="6*" />
+                <RowDefinition Height=".75*" />
+                <RowDefinition Height=".75*" />
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="380" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="380" />
             </Grid.ColumnDefinitions>
-            <StackPanel Margin="5" VerticalAlignment="Center" Grid.Column="0">
+            <!--#region Header-->
+            <StackPanel Margin="5" VerticalAlignment="Center">
                 <Border BorderThickness="1" BorderBrush="Gray">
-                    <Label Name="lblUserName" Content="User Name" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Label Name="lblUserName" Content="User Name" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Border>
             </StackPanel>
-        </Grid>
-        <!--#endregion-->
+            <!--#endregion-->
 
-        <!--#region Grids-->
-
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-           
+            <!--#region Grids-->
             <!--#region SalesRoom-->
-            <Grid x:Name="grdSalesRooms" Grid.Column="0" Margin="5">
+            <Grid x:Name="grdSalesRooms" Grid.Row="1" Grid.Column="0" Margin="20,5,5,5">
                 <DataGrid x:Name="dtgSalesRoom">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Value}" IsReadOnly="True" Width="*" Header="REPORTS BY SALES ROOM"
-                                            HeaderStyle="{StaticResource DataGridColumnHeaderStyle}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-
-            <!--#endregion-->
-
-            <!--#region Salesman-->
-
-            <Grid x:Name="grdSalesmas" Grid.Column="1" Margin="5">
-                <DataGrid Name="dtgSalesman">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Value}" IsReadOnly="True" Width="*" Header="REPORTS BY SALES ROOM &amp; SALESMAN" 
                                             HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
                     </DataGrid.Columns>
                 </DataGrid>
@@ -82,69 +64,76 @@
 
             <!--#endregion-->
 
-        </Grid>
+            <!--#region Salesman-->
+            <Grid x:Name="grdSalesmas" Grid.Row="1" Grid.Column="2" Margin="5">
+                <DataGrid Name="dtgSalesman">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Value}" IsReadOnly="True" Width="*" Header="REPORTS BY SALES ROOM &amp; SALESMAN"
+                                            HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+            <!--#endregion-->
 
-        <!--#endregion-->
+            <!--#endregion-->
 
-        <!--#region Buttons-->
+            <!--#region Buttons-->
 
-        <Grid Grid.Row="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height=".5*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height=".5*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
-            <Button Name="btnPrintSr" Grid.Column="0" Grid.Row="1" Margin="5,0,5,0" Click="BtnPrintSr_Click">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left"/>
-                    <AccessText Text="_Print"/>
-                </StackPanel>
-            </Button>
-            <Button Name="btnPrintSm" Grid.Column="2" Grid.Row="1" Margin="5,0,5,0" Click="BtnPrintSm_Click">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left"/>
-                    <AccessText Text="_Print"/>
-                </StackPanel>
-            </Button>
-        </Grid>
-
-        <Grid Grid.Row="3">
-            <Grid.RowDefinitions>
-                <RowDefinition Height=".5*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height=".5*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="8*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
-            <Button Name="btnExit" Grid.Column="1" Grid.Row="1" Margin="5,0,10,0"  Content="_Exit" Click="btnExit_Click"/>
-        </Grid>
-
-        <!--#endregion-->
-
-        <!--#region Status Bar-->
-        <Grid Grid.Row="4">
-            <StatusBar x:Name="stbStatusBar">
-                <StatusBarItem x:Name="statusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
-                <StatusBarItem x:Name="statusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center" />
-                <StatusBarItem x:Name="statusBarIns" Content="INS" Width="50" HorizontalContentAlignment="Center" />
-                <Separator />
-                <StatusBarItem x:Name="statusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
+            <Grid Grid.Row="2" Margin="20,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=".5*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height=".5*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+                <Button Name="btnPrintSr" Grid.Column="0" Grid.Row="1" Margin="5,0,5,0" Click="BtnPrintSr_Click">
                     <StackPanel Orientation="Horizontal">
-                        <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Width="12" Height="12" Visibility="Visible" />
-                        <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" />
+                        <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left" />
+                        <AccessText Text="_Print" />
                     </StackPanel>
-                </StatusBarItem>
-                <StatusBarItem x:Name="statusBarReg" Content="0/0" Width="auto" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
-            </StatusBar>
+                </Button>
+            </Grid>
+            <Grid Grid.Row="2" Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=".5*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height=".5*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+                <Button Name="btnPrintSm" Grid.Column="0" Grid.Row="1" Margin="5,0,5,0" Click="BtnPrintSm_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" Width="15" Height="15" HorizontalAlignment="Left" />
+                        <AccessText Text="_Print" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <Grid Grid.Row="3" Grid.Column="2">
+                <Button VerticalAlignment="Center" Content="_Report Queue" Width="100" HorizontalAlignment="Left" Margin="10 0 10 0" Click="btnReportQueue_Click" />
+                <Button VerticalAlignment="Center" Content="_Exit" Width="100" HorizontalAlignment="Right" Margin="10 0 10 0" Click="btnExit_Click" />
+            </Grid>
+            <!--#endregion-->
         </Grid>
+        <!--#region Status Bar-->
+        <StatusBar x:Name="stbStatusBar" Height="30" VerticalAlignment="Bottom" Grid.Row="1">
+            <StatusBarItem x:Name="statusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
+            <StatusBarItem x:Name="statusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center" />
+            <StatusBarItem x:Name="statusBarIns" Content="INS" Width="50" HorizontalContentAlignment="Center" />
+            <Separator />
+            <StatusBarItem x:Name="statusBarMessage" HorizontalContentAlignment="Center"  Margin="10,0,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Width="12" Height="12" Visibility="Visible" />
+                    <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" />
+                </StackPanel>
+            </StatusBarItem>
+            <StatusBarItem x:Name="statusBarReg" Content="0/0" Width="auto" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
+        </StatusBar>
         <!--#endregion Status Bar-->
     </Grid>
 </Window>
