@@ -6097,7 +6097,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_CopyTourTimesBySalesRoomWeekDayToWeekDaysOfSalesRoom", salesRoomParameter, weekDayParameter);
         }
     
-        public virtual ObjectResult<RptStatsBySegment> USP_IM_RptStatsBySegment(string datesFrom, string datesTo, string salesRooms, string salesmanID, Nullable<bool> bySegmentsCategories, Nullable<bool> own, Nullable<bool> includeAllSalesmen)
+        public virtual ObjectResult<RptStatisticsBySegments> USP_IM_RptStatisticsBySegments(string datesFrom, string datesTo, string salesRooms, string salesmanID, Nullable<bool> bySegmentsCategories, Nullable<bool> own, Nullable<bool> includeAllSalesmen)
         {
             var datesFromParameter = datesFrom != null ?
                 new ObjectParameter("DatesFrom", datesFrom) :
@@ -6127,7 +6127,7 @@ namespace IM.Model
                 new ObjectParameter("IncludeAllSalesmen", includeAllSalesmen) :
                 new ObjectParameter("IncludeAllSalesmen", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatsBySegment>("USP_IM_RptStatsBySegment", datesFromParameter, datesToParameter, salesRoomsParameter, salesmanIDParameter, bySegmentsCategoriesParameter, ownParameter, includeAllSalesmenParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsBySegments>("USP_IM_RptStatisticsBySegments", datesFromParameter, datesToParameter, salesRoomsParameter, salesmanIDParameter, bySegmentsCategoriesParameter, ownParameter, includeAllSalesmenParameter);
         }
     }
 }
