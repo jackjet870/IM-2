@@ -180,15 +180,15 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     private void GetFirstDayValue()
     {
-      DateTime _serverDate = BRHelpers.GetServerDate();
+      DateTime serverDate = BRHelpers.GetServerDate();
       // Fecha inicial
-      _dtmStart = new DateTime(_serverDate.Year, _serverDate.Month, 1);
+      _dtmStart = new DateTime(serverDate.Year, serverDate.Month, 1);
 
       // obtenemos la fecha de inicio de la semana
-      _dtmInit = DateHelper.GetStartWeek(_serverDate.AddDays(-7)).Date;
+      _dtmInit = DateHelper.GetStartWeek(serverDate.AddDays(-7)).Date;
 
       //Fecha final
-      _dtmEnd = _serverDate.Date;
+      _dtmEnd = serverDate;
       string strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
       if (!File.Exists(strArchivo)) return;
       var _iniFileHelper = new IniFileHelper(strArchivo);

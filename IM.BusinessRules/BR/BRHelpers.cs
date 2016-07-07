@@ -12,13 +12,28 @@ namespace IM.BusinessRules.BR
     #region GetServerDate
 
     /// <summary>
-    /// Obtiene la fecha y hora del servidor.
+    /// Obtiene la fecha del servidor.
     /// </summary>
-    /// <returns>DateTime</returns>
     /// <history>
-    /// [edgrodriguez] 29/Feb/2016 Created
+    /// [wtorres]   06/Jul/2016 Created
     /// </history>
     public static DateTime GetServerDate()
+    {
+      return GetServerDateTime().Date;
+    }
+
+    #endregion
+
+    #region GetServerDateTime
+
+    /// <summary>
+    /// Obtiene la fecha y hora del servidor.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 29/Feb/2016 Created
+    /// [wtorres]      06/Jul/2016 Modified. Renombrado. Antes se llamaba GetServerDate
+    /// </history>
+    public static DateTime GetServerDateTime()
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {

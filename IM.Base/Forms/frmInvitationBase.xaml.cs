@@ -138,7 +138,7 @@ namespace IM.Base.Forms
     /// </history>
     private void frmInvitationBase_Loaded(object sender, RoutedEventArgs e)
     {
-      _serverDateTime = BRHelpers.GetServerDate();
+      _serverDateTime = BRHelpers.GetServerDateTime();
       _bookingDate = txtBookingDate.SelectedDate.HasValue ? txtBookingDate.SelectedDate.Value : (DateTime?)null;
       _closeDate = BRConfiguration.GetCloseDate();
 

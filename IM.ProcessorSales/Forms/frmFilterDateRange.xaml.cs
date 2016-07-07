@@ -745,7 +745,7 @@ namespace IM.ProcessorSales.Forms
           break;
 
         case EnumPredefinedDate.Yesterday:
-          dtmStart.Value = dtmEnd.Value = today.Date.AddDays(-1);
+          dtmStart.Value = dtmEnd.Value = today.AddDays(-1);
           break;
 
         case EnumPredefinedDate.ThisWeek:

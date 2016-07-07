@@ -2,6 +2,7 @@
 using System.Windows;
 using IM.Model;
 using IM.BusinessRules.BR;
+using IM.Base.Helpers;
 
 namespace IM.Base.Forms
 {
@@ -12,7 +13,7 @@ namespace IM.Base.Forms
   {
     #region Atributos
 
-    public UserLogin userLogin{ get; set; }
+    public UserLogin userLogin { get; set; }
     public DateTime serverDate { get; set; }
     public bool blnOk = false;
 
@@ -28,7 +29,7 @@ namespace IM.Base.Forms
     /// </history>
     public frmChangePassword()
     {
-      InitializeComponent();    
+      InitializeComponent();
     }
 
     #endregion
@@ -37,24 +38,32 @@ namespace IM.Base.Forms
 
     #region btnOK_Click
 
+    /// <summary>
+    /// Valida los datos del usuario
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 29/Feb/2016 Created
+    /// [wtorres]      06/Jul/2016 Modified. Ahora se despliega un mensaje de error cuando la contraseña nueva
+    ///                            es igual a la anterior
+    /// </history>
     private void btnOK_Click(object sender, RoutedEventArgs e)
     {
       //Si los textbox se encuentran vacios.
       if (txtNewPwd.Password == string.Empty)
       {
-        MessageBox.Show("Specify the NewPassword.", "Intelligence Marketing", MessageBoxButton.OK, MessageBoxImage.Information);
+        UIHelper.ShowMessage("Specify the New Password");
         return;
       }
       if (txtConfirmNewPwd.Password == string.Empty)
       {
-        MessageBox.Show("Please confirm the new password.", "Intelligence Marketing", MessageBoxButton.OK, MessageBoxImage.Information);
+        UIHelper.ShowMessage("Please confirm the new password");
         return;
       }
 
       //Si el password y la confirmacion son diferentes.
       if (!txtNewPwd.Password.Equals(txtConfirmNewPwd.Password))
       {
-        MessageBox.Show("New password and confirm password are different", "Intelligence Marketing", MessageBoxButton.OK, MessageBoxImage.Information);
+        UIHelper.ShowMessage("New password and confirm password are different");
         return;
       }
 
@@ -62,24 +71,21 @@ namespace IM.Base.Forms
       //Si la nueva contraseña es igual a la anterior.
       if (userLogin.pePwd.Equals(_encryptPass))
       {
-        blnOk = false;
-        Close();
+        UIHelper.ShowMessage("The new password can not be the same as the previous password");
         return;
       }
 
       //Si ocurrio un error al cambiar el password.
       if (!BRPersonnel.ChangePassword(userLogin.peID, _encryptPass, serverDate))
       {
-        MessageBox.Show("Could not change password", "Intelligence Marketing", MessageBoxButton.OK, MessageBoxImage.Information);
-        blnOk = false;
+        UIHelper.ShowMessage("Could not change password");
         return;
       }
-      else {
-        blnOk = true;
-        userLogin.pePwd = _encryptPass;
-        userLogin.pePwdD = serverDate.Date;
-        MessageBox.Show("Your password was changed succesfully.", "Intelligence Marketing", MessageBoxButton.OK, MessageBoxImage.Information);
-      }
+
+      blnOk = true;
+      userLogin.pePwd = _encryptPass;
+      userLogin.pePwdD = serverDate.Date;
+      UIHelper.ShowMessage("Your password was changed succesfully");
       Close();
     }
 

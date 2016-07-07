@@ -131,8 +131,9 @@ namespace IM.Base.Forms
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       cmbLeadSourse.ItemsSource = await BRLeadSources.GetLeadSources(1, _program);
-      dtpTo.SelectedDate = BRHelpers.GetServerDate().Date;
-      dtpFrom.SelectedDate = BRHelpers.GetServerDate().AddDays(-7).Date;
+      DateTime serverDate = BRHelpers.GetServerDate();
+      dtpTo.SelectedDate = serverDate;
+      dtpFrom.SelectedDate = serverDate.AddDays(-7);
       cmbLeadSourse.SelectedValue = user.LeadSource.lsID;
       StatusBarReg.Content = "0 Guests";
       if (_program == EnumProgram.Outhouse)

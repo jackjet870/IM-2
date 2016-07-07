@@ -133,7 +133,7 @@ namespace IM.Inhouse
       if (!chkguAvail.IsChecked.Value)
       {
         // validamos que el huesped no haya hecho Check Out (No aplica para gerentes y supervisores de PR)
-        if (_guest.guCheckOutD < BRHelpers.GetServerDate().Date && !(_user.HasRole(EnumRole.PRCaptain) || _user.HasRole(EnumRole.PRSupervisor)))
+        if (_guest.guCheckOutD < BRHelpers.GetServerDate() && !(_user.HasRole(EnumRole.PRCaptain) || _user.HasRole(EnumRole.PRSupervisor)))
         {
           UIHelper.ShowMessage("Guest already made Check-out.");
           return false;
