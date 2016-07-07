@@ -194,7 +194,7 @@ namespace IM.Administrator.Forms
         List<SaleTypeCategory> lstSaleTypeCategories = await BRSaleTypesCategories.GetSaleCategories(1);
         if (enumMode == EnumMode.search && lstSaleTypeCategories.Count > 0)
         {
-          lstSaleTypeCategories.Insert(0, new SaleTypeCategory { stcID = "", stcN = "" });
+          lstSaleTypeCategories.Insert(0, new SaleTypeCategory { stcID = "", stcN = "ALL" });
         }
         cmbststc.ItemsSource = lstSaleTypeCategories;
       }

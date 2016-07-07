@@ -212,7 +212,7 @@ namespace IM.Administrator.Forms
         List<MembershipGroup> lstMembershipGroup = await BRMembershipGroups.GetMembershipGroups();
         if (enumMode == EnumMode.search)
         {
-          lstMembershipGroup.Insert(0, new MembershipGroup { mgID = "", mgN = "" });
+          lstMembershipGroup.Insert(0, new MembershipGroup { mgID = "", mgN = "ALL" });
         }
         cmbmtGroup.ItemsSource = lstMembershipGroup;
         skpStatus.Visibility = Visibility.Collapsed;

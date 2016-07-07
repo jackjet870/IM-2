@@ -24,6 +24,7 @@
     Time,
     Month,
     Id,
-    Day
+    Day,
+    DateTime
   }
 }

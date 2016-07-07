@@ -113,6 +113,7 @@ namespace IM.Administrator.Forms
       {
         lstMenu.Add(new { nombre = "Gifts Categories", img = "pack://application:,,,/IM.Base;component/Images/GiftCategory.png", form = "frmGiftsCategories" });
         lstMenu.Add(new { nombre = "Products", img = "pack://application:,,,/IM.Base;component/Images/Product.ico", form = "frmProducts" });
+        //lstMenu.Add(new { nombre = "Gifts", img = "pack://application:,,,/IM.Base;component/Images/Gift.png", form = "frmGifts" });
       }
       #endregion
 
@@ -233,7 +234,7 @@ namespace IM.Administrator.Forms
       #region Personnel
       if (App.User.HasPermission(EnumPermission.Personnel, EnumPermisionLevel.ReadOnly))
       {
-        //lstMenu.Add(new { nombre = "Personnel", img = "pack://application:,,,/IM.Base;component/Images/Personnel.png", form = "frmPersonnel" });
+        lstMenu.Add(new { nombre = "Personnel", img = "pack://application:,,,/IM.Base;component/Images/Personnel.png", form = "frmPersonnel" });
       }
 
       #endregion
@@ -306,7 +307,8 @@ namespace IM.Administrator.Forms
     #region Window_Closed
     private void Window_Closed(object sender, EventArgs e)
     {
-      Application.Current.Shutdown();
+      Application.Current.Shutdown(); 
+
     }
     #endregion
 

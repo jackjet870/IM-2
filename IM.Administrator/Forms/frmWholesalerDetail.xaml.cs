@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using IM.Model;
 using IM.Model.Helpers;
 using IM.Model.Enums;
@@ -232,7 +224,7 @@ namespace IM.Administrator.Forms
         List<Club> lstClubs = await BRClubs.GetClubs(null, 1);
         if (enumMode == EnumMode.search)
         {
-          lstClubs.Insert(0, new Club { clID = 0, clN = "" });
+          lstClubs.Insert(0, new Club { clID = 0, clN = "ALL" });
         }
         cmbClub.ItemsSource = lstClubs;
         skpStatus.Visibility = Visibility.Collapsed;

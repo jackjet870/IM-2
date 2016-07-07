@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IM.Model;
 using IM.Model.Helpers;
+using IM.Model.Enums;
 
 namespace IM.BusinessRules.BRAsistencia
 {
@@ -21,7 +22,7 @@ namespace IM.BusinessRules.BRAsistencia
     {
       List<Collaborator> lstCollaborator = await Task.Run(() =>
       {
-        using (var dbContext = new AsistenciaEntities(ConnectionHelper.ConnectionString()))
+        using (var dbContext = new AsistenciaEntities(ConnectionHelper.ConnectionString(EnumDatabase.Asistencia)))
         {
           return dbContext.USP_ObtenerColaboradoresPorParametro(
             (!string.IsNullOrWhiteSpace(collaborator.EmpID))? collaborator.EmpID :"ALL", 

@@ -209,7 +209,7 @@ namespace IM.Administrator.Forms
         List<Area> lstAreas = await BRAreas.GetAreas();
         if (enumMode == EnumMode.search && lstAreas.Count > 0)
         {
-          lstAreas.Insert(0, new Area { arID = "", arN = "" });
+          lstAreas.Insert(0, new Area { arID = "", arN = "ALL" });
         }
         cmbsrar.ItemsSource = lstAreas;
       }
@@ -256,7 +256,7 @@ namespace IM.Administrator.Forms
         List<Currency> lstCurrency = await BRCurrencies.GetCurrencies();
         if (enumMode == EnumMode.search && lstCurrency.Count > 0)
         {
-          lstCurrency.Insert(0, new Currency { cuID = "", cuN = "" });
+          lstCurrency.Insert(0, new Currency { cuID = "", cuN = "ALL" });
         }
         cmbsrcu.ItemsSource = lstCurrency;
       }

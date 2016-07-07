@@ -1,0 +1,61 @@
+﻿<Window x:Class="IM.Administrator.Forms.frmGiftsLog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" Loaded="Window_Loaded" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" KeyDown="Window_KeyDown"
+        Title="Gifts Log" Height="300" Width="520" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+    <DockPanel LastChildFill="True">
+        <!--#region Status bar-->
+        <StatusBar DockPanel.Dock="Bottom" Height="24" >
+            <StatusBarItem Grid.Column="0" x:Name="StatusBarCap" Content="CAP" Width="50" HorizontalContentAlignment="Center" />
+            <StatusBarItem Grid.Column="1" x:Name="StatusBarNum" Content="NUM" Width="50" HorizontalContentAlignment="Center"/>
+            <StatusBarItem Grid.Column="2" x:Name="StatusBarIns" Content="INS" HorizontalAlignment="Left" Width="50" HorizontalContentAlignment="Center"/>
+            <StatusBarItem Grid.Column="3" x:Name="status" HorizontalAlignment="Center" Visibility="Collapsed">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/IM.Base;component/Images/Time.ico" Height="16" Width="16" />
+                    <TextBlock Margin="4,0,0,0" Name="txtStatus" VerticalAlignment="Center" Text="Loading..."/>
+                </StackPanel>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="3" x:Name="StatusBarReg" HorizontalAlignment="Right" Content="0/0">
+            </StatusBarItem>
+
+        </StatusBar>
+        <!--#endregion-->
+        <!--#region toolbar -->
+        <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch" KeyboardNavigation.TabNavigation="Continue">
+            <Button ToolTip="Print log." Name="btnPrint" Click="btnPrint_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" />
+                    <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Print"/>
+                </StackPanel>
+            </Button>
+        </ToolBar>
+        <!--#endregion-->
+        <!--#region DataGrid de Gifts Log-->
+        <DataGrid x:Name="dgrGifsLog" SelectionChanged="dgrGifsLog_SelectionChanged" Margin="6,6,6,6" AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeRows="False"
+                 SelectionMode="Single" Focusable="True" CanUserResizeColumns="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding ChangedByN}" Width="130"/>
+                <DataGridTextColumn Header="By" Binding="{Binding ggChangedBy}" Width="95"/>                
+                <DataGridTextColumn Header="Update Date/Time" Binding="{Binding ggID}" Width="125"/>
+                <DataGridTextColumn Header="Cost Adults" Binding="{Binding ggPrice1,StringFormat=N2}" Width="80"/>
+                <DataGridTextColumn Header="Cost Minors" Binding="{Binding ggPrice2,StringFormat=N2}" Width="80"/>
+                <DataGridTextColumn Header="CxC Adults" Binding="{Binding ggPrice3,StringFormat=N2}" Width="80"/>
+                <DataGridTextColumn Header="CxC Minors" Binding="{Binding ggPrice4,StringFormat=N2}" Width="80"/>
+                <DataGridTextColumn Header="Price Adults" Binding="{Binding ggPriceAdults,StringFormat=N2}" Width="80"/>
+                <DataGridTextColumn Header="Price Minors" Binding="{Binding ggPriceMinors,StringFormat=N2}" Width="80"/>
+                <DataGridTextColumn Header="P.E. Adults" Binding="{Binding ggPriceExtraAdults,StringFormat=N2}" Width="80"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding gcN}" Width="80"/>
+                <DataGridCheckBoxColumn Header="Package" Binding="{Binding ggPack}" Width="60"/>
+                <DataGridCheckBoxColumn Header="Inventory" Binding="{Binding ggInven}" Width="55"/>
+                <DataGridCheckBoxColumn Header="Active" Binding="{Binding ggA}" Width="55"/>
+                <DataGridCheckBoxColumn Header="With Folio" Binding="{Binding ggWFolio}" Width="55"/>
+                <DataGridCheckBoxColumn Header="With Pax" Binding="{Binding ggWPax}" Width="55"/>
+                <DataGridTextColumn Header="Order" Binding="{Binding ggO}" Width="70"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <!--#endregion-->
+    </DockPanel>
+</Window>

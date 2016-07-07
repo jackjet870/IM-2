@@ -18,7 +18,7 @@ namespace IM.Administrator.Forms
   public partial class frmSaleTypes : Window
   {
     #region Variables
-    private SaleType _saletTypeFilter = new SaleType();//Objeto con los filtros del grid
+    private SaleType _saletTypeFilter = new SaleType {ststc="" };//Objeto con los filtros del grid
     private int _nStatus = -1;//Estatus de los registros del grid
     #endregion
     public frmSaleTypes()

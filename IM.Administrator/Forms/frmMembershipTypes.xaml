@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.Administrator.Forms" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" ShowInTaskbar="False"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         mc:Ignorable="d" KeyDown="Window_KeyDown" Loaded="Window_Loaded" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
         Title="Membership Types" Height="407" Width="470" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
     <DockPanel LastChildFill="True">

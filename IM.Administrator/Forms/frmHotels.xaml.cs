@@ -16,7 +16,7 @@ namespace IM.Administrator.Forms
   /// </summary>
   public partial class frmHotels : Window
   {
-    private Hotel _hotelFilter = new Hotel();//Objeto con los filtros del grid
+    private Hotel _hotelFilter = new Hotel { hoar="",hoGroup=""};//Objeto con los filtros del grid
     private int _nStatus = -1;//Estatus de los registros del grid
     private bool _blnEdit = false;//Boleano para saber si se tiene permiso para editar
     public frmHotels()

@@ -227,7 +227,7 @@ namespace IM.Administrator.Forms
         List<PersonnelShort> lstPersonnel = await BRPersonnel.GetPersonnel();
         if (enumMode == EnumMode.search)
         {
-          lstPersonnel.Insert(0, new PersonnelShort { peID = "", peN = "" });
+          lstPersonnel.Insert(0, new PersonnelShort { peID = "", peN = "ALL" });
         }
         cmbppChangedBy.ItemsSource = lstPersonnel;
         cmbpppe.ItemsSource = lstPersonnel;

@@ -17,7 +17,7 @@ namespace IM.Administrator.Forms
   public partial class frmTeamsLog : Window
   {
     #region Variables
-    public TeamLog _teamLogFilter = new TeamLog();//Contiene los filtros del grid
+    public TeamLog _teamLogFilter = new TeamLog {tlChangedBy="",tlpe="" };//Contiene los filtros del grid
     private bool _blnEdit = false;//Boleano para saber si se tiene permiso para editar
     private bool _blnDel = false;//Permiso para saber si se tiene permiso para eliminar
     private bool _blnDate = false;//Boleano para saber si va a filtrar por ppDT  

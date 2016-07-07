@@ -17,7 +17,7 @@ namespace IM.Administrator.Forms
   public partial class frmLocations : Window
   {
     #region Variables
-    public Location _locationFilter = new Location();//Objeto con los filtros de la ventana
+    public Location _locationFilter = new Location {lolc="",losr="" };//Objeto con los filtros de la ventana
     public int _nStatus = -1;//contiene el estatus de los registros de la ventana
     public bool _blnEdit = false;//Boleano para saber si se tiene permiso para editar|Agregar
     #endregion

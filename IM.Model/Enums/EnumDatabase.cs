@@ -1,4 +1,6 @@
-﻿namespace IM.Model.Enums
+﻿using System.ComponentModel;
+
+namespace IM.Model.Enums
 {
   /// <summary>
   /// Enumerado para el manejo de las diferentes bases de datos
@@ -8,8 +10,13 @@
   /// </history>
   public enum EnumDatabase
   {
+    [Description("IMModel")]
     IntelligentMarketing,
+
+    [Description("AsistenciaModel")]
     Asistencia,
+
+    [Description("ICModel")]
     IntelligenceContracts
   }
 }

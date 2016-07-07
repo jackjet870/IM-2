@@ -95,6 +95,7 @@ namespace IM.Administrator.Forms
         lblAnimation.Visibility = Visibility.Visible;
         #endregion
         SizeToContent = SizeToContent.WidthAndHeight;
+        ResizeMode = ResizeMode.NoResize;
         LoadSearch();
       }
       else
@@ -357,7 +358,7 @@ namespace IM.Administrator.Forms
         List<Program> lstPrograms = await BRPrograms.GetPrograms();
         if (enumMode == EnumMode.search)
         {
-          lstPrograms.Insert(0, new Program { pgID = "", pgN = "" });
+          lstPrograms.Insert(0, new Program { pgID = "", pgN = "ALL" });
         }
         cmblspg.ItemsSource = lstPrograms;
       }
@@ -383,7 +384,7 @@ namespace IM.Administrator.Forms
         List<SalesRoomShort> lstSalesRooms = await BRSalesRooms.GetSalesRooms(1);
         if (enumMode == EnumMode.search)
         {
-          lstSalesRooms.Insert(0, new SalesRoomShort { srID = "", srN = "" });
+          lstSalesRooms.Insert(0, new SalesRoomShort { srID = "", srN = "ALL" });
         }
         cmblssr.ItemsSource = lstSalesRooms;
       }
@@ -408,7 +409,7 @@ namespace IM.Administrator.Forms
         List<Area> lstAreas = await BRAreas.GetAreas(nStatus: 1);
         if (enumMode == EnumMode.search)
         {
-          lstAreas.Insert(0, new Area { arID = "", arN = "" });
+          lstAreas.Insert(0, new Area { arID = "", arN = "ALL" });
         }
         cmblsar.ItemsSource = lstAreas;
       }
@@ -433,7 +434,7 @@ namespace IM.Administrator.Forms
         List<Region> lstRegions = await BRRegions.GetRegions(1);
         if (enumMode == EnumMode.search)
         {
-          lstRegions.Insert(0, new Region { rgID = "", rgN = "" });
+          lstRegions.Insert(0, new Region { rgID = "", rgN = "ALL" });
         }
         cmblsrg.ItemsSource = lstRegions;
       }
@@ -458,7 +459,8 @@ namespace IM.Administrator.Forms
         List<SegmentByLeadSource> lstSegments = await BRSegmentsByLeadSource.GetSegmentsByLeadSource();
         if (enumMode == EnumMode.search)
         {
-          lstSegments.Insert(0, new SegmentByLeadSource { soID = "", soN = "" });
+          lstSegments.Insert(0, new SegmentByLeadSource { soID = "", soN = "ALL" });
+          skpStatus.Visibility = Visibility.Collapsed;
         }
         cmblsso.ItemsSource = lstSegments;
       }

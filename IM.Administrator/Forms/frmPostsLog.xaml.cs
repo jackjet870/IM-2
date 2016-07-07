@@ -17,7 +17,7 @@ namespace IM.Administrator.Forms
   public partial class frmPostsLog : Window
   {
     #region Variables
-    public PostLog _postLogFilter = new PostLog();//Objeto con los filtros de la ven
+    public PostLog _postLogFilter = new PostLog { ppChangedBy="",pppe=""};//Objeto con los filtros de la ven
     private bool _blnEdit = false;//Boleano para saber si se tiene permiso para editar
     private bool _blnDel = false;//Permiso para saber si se tiene permiso para eliminar
     private bool _blnDate = false;//Boleano para saber si va a filtrar por ppDT    

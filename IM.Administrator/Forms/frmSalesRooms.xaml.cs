@@ -18,7 +18,7 @@ namespace IM.Administrator.Forms
   public partial class frmSalesRooms : Window
   {
     #region Variables
-    private SalesRoom _salesRoomFilter = new SalesRoom { srcu=""};//Contiene los filtros del grid
+    private SalesRoom _salesRoomFilter = new SalesRoom { srcu="",srar=""};//Contiene los filtros del grid
     private int _nStatus = -1;//Estatus de los registros del grid
     private int _nAppointment = -1;//Filtro de appoinment
     private bool _blnEdit = false;//Boleano para saber si se tiene permiso para editar

@@ -6,7 +6,9 @@ using IM.Services.WirePRService;
 using PalaceResorts.Common.PalaceTools;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Linq;
 
 namespace IM.Services.Helpers
 {
@@ -365,9 +367,38 @@ namespace IM.Services.Helpers
       RoomCharges[iLength].Bill_to = "F";
       RoomCharges[iLength].PostDate = BRHelpers.GetServerDate();
       RoomCharges[iLength].Entry_amt = Amount;
-    } 
+    }
     #endregion
 
+    #region GetTransactionTypes
+    /// <summary>
+    /// Obtiene las transacciones de opera
+    /// </summary>
+    /// <history>
+    /// [emoguel] created 04/07/2016
+    /// </history>
+    public async static Task<List<TransactionTypes>> GetTransactionTypes()
+    {
+
+      return await Task.Run(() =>
+      {
+        TransactionTypesRequest request = new TransactionTypesRequest();
+        TransactionTypesResponse response = null;
+
+        #region Request              
+        request.TransactionTypes = new TransactionTypes();          
+        request.TransactionTypes.Tc_Group = ConfigHelper.GetString("Opera.TransactionTypesGroups");
+        request.TransactionTypes.Tc_Subgroup = ConfigHelper.GetString("Opera.TransactionTypesSubgroups");
+        #endregion
+        response = Current.GetTransactionTypes(request);
+        //si ocurrio un error
+        if (response.HasErrors)
+          UIHelper.ShowMessage(response.ExceptionInfo.Message, MessageBoxImage.Error, "GetTransactionTypes");
+
+        return response.Data.OrderBy(t=>t.Description).ToList();
+      });
+    }
+    #endregion
     #endregion
   }
 }

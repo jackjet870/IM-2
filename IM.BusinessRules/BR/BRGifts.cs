@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Data.Entity;
 
 namespace IM.BusinessRules.BR
 {
@@ -225,8 +224,9 @@ namespace IM.BusinessRules.BR
     /// <returns>Lista tipo Gift</returns>
     /// <history>
     /// [emoguel] created 23/05/2016
+    /// [emoguel] modified 30/06/2016 ----> Se agregaron más filtros
     /// </history>
-    public async static Task<List<Gift>> GetGifts(int nStatus = -1, Gift gift = null)
+    public async static Task<List<Gift>> GetGifts(int nStatus = -1, Gift gift = null, int giftPack=-1)
     {
       List<Gift> lstGift = new List<Gift>();
       await Task.Run(() =>
@@ -235,7 +235,7 @@ namespace IM.BusinessRules.BR
         {
           var query = from gi in dbContext.Gifts
                       select gi;
-
+          
           if (nStatus != -1)//Filtro por estatus
           {
             bool blnStatus = Convert.ToBoolean(nStatus);
@@ -253,17 +253,140 @@ namespace IM.BusinessRules.BR
             {
               query = query.Where(gi => gi.giN.Contains(gift.giN));
             }
-
-            if (!string.IsNullOrWhiteSpace(gift.gipr))//Filtro por product
-            {
-              query = query.Where(gi => gi.gipr == gift.gipr);
+            
+            if(!string.IsNullOrWhiteSpace(gift.gigc))//Filtro por categoria
+            {             
+              query = query.Where(gi => gi.gigc == gift.gigc);
             }
+
+            if(giftPack!=-1)//Si es paquete
+            {
+              bool blnPack = Convert.ToBoolean(giftPack);
+              query = query.Where(gi => gi.giPack == blnPack);
+            }
+
+            #region giftCard
+            if (!string.IsNullOrEmpty(gift.giProductGiftsCard) && gift.giProductGiftsCard!="ALL")//Filtro por giftCard
+            {
+              switch (gift.giProductGiftsCard)
+              {
+                case "ANY":
+                  {
+                    query = query.Where(gi => gi.giProductGiftsCard != null);
+                    break;
+                  }
+                case "NONE":
+                  {
+                    query = query.Where(gi => gi.giProductGiftsCard == null);
+                    break;
+                  }
+                default:
+                  {
+                    query = query.Where(gi => gi.giProductGiftsCard == gift.giProductGiftsCard);
+                    break;
+                  }
+              }              
+            }
+            #endregion
+
+            #region Promotion
+            if (!string.IsNullOrWhiteSpace(gift.giPVPPromotion) && gift.giPVPPromotion!="ALL")//Filtro por Promotion
+            {
+              switch (gift.giPVPPromotion)
+              {
+                case "ANY":
+                  {
+                    query = query.Where(gi => gi.giPVPPromotion != null);
+                    break;
+                  }
+                case "NONE":
+                  {
+                    query = query.Where(gi => gi.giPVPPromotion == null);
+                    break;
+                  }
+                default:
+                  {
+                    query = query.Where(gi => gi.giPVPPromotion == gift.giPVPPromotion);
+                    break;
+                  }
+              }
+            }
+            #endregion
+
+            #region Transacction
+            if (!string.IsNullOrWhiteSpace(gift.giOperaTransactionType) && gift.giOperaTransactionType!="ALL")//Filtro por opera transacction
+            {
+              switch (gift.giOperaTransactionType)
+              {
+                case "ANY":
+                  {
+                    query = query.Where(gi => gi.giOperaTransactionType != null);
+                    break;
+                  }
+                case "NONE":
+                  {
+                    query = query.Where(gi => gi.giOperaTransactionType == null);
+                    break;
+                  }
+                default:
+                  {
+                    query = query.Where(gi => gi.giOperaTransactionType == gift.giOperaTransactionType);
+                    break;
+                  }
+              }
+            }
+            #endregion
+
+            #region Promotion Opera
+            if (!string.IsNullOrWhiteSpace(gift.giPromotionOpera) && gift.giPromotionOpera!="ALL")//Filtro por promotion Opera
+            {
+              switch (gift.giPromotionOpera)
+              {
+                case "ANY":
+                  {
+                    query = query.Where(gi => gi.giPromotionOpera != null);
+                    break;
+                  }
+                case "NONE":
+                  {
+                    query = query.Where(gi => gi.giPromotionOpera == null);
+                    break;
+                  }
+                default:
+                  {
+                    query = query.Where(gi => gi.giPromotionOpera == gift.giPromotionOpera);
+                    break;
+                  }
+              }
+            } 
+            #endregion
           }          
           lstGift= query.OrderBy(gi => gi.giN).ToList();
         }
       });
       return lstGift;
 
+    }
+    #endregion
+
+    #region GetGiftsLog
+    /// <summary>
+    /// Devuelve el log de un Gift
+    /// </summary>
+    /// <param name="idGift"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [emoguel] created 05/07/2016
+    /// </history>
+    public static async Task<List<GiftLogData>> GetGiftsLog(string idGift)
+    {
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.USP_OR_GetGiftLog(idGift).ToList();
+        }
+      });
     } 
     #endregion
 
