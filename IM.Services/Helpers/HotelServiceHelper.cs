@@ -103,8 +103,9 @@ namespace IM.Services.Helpers
         RmmoneyResponse response = new RmmoneyResponse();
         // configuramos el request
         request.Hotel = strHotel;
-        request.FechaInicial = BRHelpers.GetServerDate();
-        request.FechaFinal = BRHelpers.GetServerDate();
+        DateTime serverDate = BRHelpers.GetServerDate();
+        request.FechaInicial = serverDate;
+        request.FechaFinal = serverDate;
         //invocamos al servicio web
         response = Current.ObtenerFactoresConversion(request);// ObtenerFactoresConversion
         if (response.Data.Length > 0 && response.Data != null)

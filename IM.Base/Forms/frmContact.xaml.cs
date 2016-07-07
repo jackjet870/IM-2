@@ -102,7 +102,7 @@ namespace IM.Base.Forms
           if (_guest.guInfo == false || (log.UserData.HasRole(EnumRole.PRCaptain) || log.UserData.HasRole(EnumRole.PRSupervisor)))
           {
             _userLoguedo = log.UserData;
-            txtguInfoD.Text = BRHelpers.GetServerDate().Date.ToString("dd-MM-yyyy");
+            txtguInfoD.Text = BRHelpers.GetServerDate().ToString("dd-MM-yyyy");
             btnCancel.IsEnabled =  btnSave.IsEnabled = txtguPRInfo.IsEnabled = cboguPRInfo.IsEnabled = true;
             btnEdit.IsEnabled =  false;            
             lblUserName.Content = log.UserData.User.peN;

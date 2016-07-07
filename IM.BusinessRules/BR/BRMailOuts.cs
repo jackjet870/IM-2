@@ -115,7 +115,7 @@ namespace IM.BusinessRules.BR
                     mtls = _mols,
                     mtmoCode = _moCode,
                     mtla = laID,
-                    mtU = BRHelpers.GetServerDate()
+                    mtU = BRHelpers.GetServerDateTime()
                   }));
 
                 //Guardamos Cambios

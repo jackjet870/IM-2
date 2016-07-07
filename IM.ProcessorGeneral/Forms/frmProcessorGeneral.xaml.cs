@@ -1748,7 +1748,7 @@ namespace IM.ProcessorGeneral.Forms
       //_clsFilter.DtmInit = DateHelper.GetStartWeek(_serverDate.AddDays(-7)).Date;
 
       //Fecha final
-      ClsFilter.EndDate = serverDate.Date;
+      ClsFilter.EndDate = serverDate;
       string strArchivo = AppContext.BaseDirectory + "\\Configuration.ini";
       if (!File.Exists(strArchivo)) return;
       var iniFileHelper = new IniFileHelper(strArchivo);

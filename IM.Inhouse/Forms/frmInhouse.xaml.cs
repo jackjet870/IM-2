@@ -136,8 +136,8 @@ namespace IM.Inhouse.Forms
       }
       //validamos que el huesped este en casa con 2 dias de tolerancia
       if (App.User.HasPermission(EnumPermission.Register, EnumPermisionLevel.Special) &&
-          pguCheckInD > BRHelpers.GetServerDate().Date.AddDays(+2) ||
-          pguCheckOutD < BRHelpers.GetServerDate().Date.AddDays(-2))
+          pguCheckInD > BRHelpers.GetServerDate().AddDays(+2) ||
+          pguCheckOutD < BRHelpers.GetServerDate().AddDays(-2))
       {
         UIHelper.ShowMessage("Guest is not in house.", MessageBoxImage.Asterisk, "Permissions");
         return false;
@@ -192,7 +192,7 @@ namespace IM.Inhouse.Forms
         return false;
       }
       // no se permite contactar si ya hizo Check Out o si ya esta contactado el Guest
-      if (!contact && checkOutD < BRHelpers.GetServerDate().Date)
+      if (!contact && checkOutD < BRHelpers.GetServerDate())
       {
         UIHelper.ShowMessage("Guest already made Check-out.");
         return false;
@@ -228,7 +228,7 @@ namespace IM.Inhouse.Forms
         return false;
       }
       //validamos que el huesped no haya hecho Check Out
-      if (!followUp && checkOutD < BRHelpers.GetServerDate().Date)
+      if (!followUp && checkOutD < BRHelpers.GetServerDate())
       {
         UIHelper.ShowMessage("Guest already made Check-out.");
         return false;
@@ -316,7 +316,7 @@ namespace IM.Inhouse.Forms
         return false;
       }
       //Validamos que el huesped no haya hehco Check Out
-      if (guCheckOutD < BRHelpers.GetServerDate().Date)
+      if (guCheckOutD < BRHelpers.GetServerDate())
       {
         UIHelper.ShowMessage("Guest already made Check-out.");
         return false;
@@ -561,7 +561,7 @@ namespace IM.Inhouse.Forms
         case EnumScreen.Availables:
           if (dgGuestAvailable.Items.Count > 0)
           {
-            List<RptAvailables> aviables = BRGeneralReports.GetRptAviables(BRHelpers.GetServerDate().Date,
+            List<RptAvailables> aviables = BRGeneralReports.GetRptAviables(BRHelpers.GetServerDate(),
               App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup);
             ReportsToExcel.AvailablesToExcel(aviables);
             hasData = true;
@@ -653,7 +653,7 @@ namespace IM.Inhouse.Forms
       //Guardamos el log del login 
       BRLoginLogs.SaveGuestLog(App.User.Location.loID, App.User.User.peID, Environment.MachineName.ToString());
       //Cargamos la variable de Occupancy
-      txtOccupancy.Text = BRLeadSources.GetOccupationLeadSources(BRHelpers.GetServerDate().Date, App.User.Location.loID).ToString();
+      txtOccupancy.Text = BRLeadSources.GetOccupationLeadSources(BRHelpers.GetServerDate(), App.User.Location.loID).ToString();
       //Indicamos al statusbar que me muestre cierta informacion cuando oprimimos cierto teclado
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
@@ -663,7 +663,7 @@ namespace IM.Inhouse.Forms
       txtUser.Text = App.User.User.peN;
       txtLocation.Text = App.User.Location.loN;
       //Cargamos la fecha actual del servidor
-      dtpDate.Value = BRHelpers.GetServerDate().Date;
+      dtpDate.Value = BRHelpers.GetServerDate();
       //Inicializamos las variables de los DataGrids
       _guestArrivalViewSource = ((CollectionViewSource)(this.FindResource("GuestArrivalViewSource")));
       _guestAvailableViewSource = ((CollectionViewSource)(this.FindResource("GuestAvailableViewSource")));
@@ -1906,7 +1906,7 @@ namespace IM.Inhouse.Forms
     {
       var serverDate = BRHelpers.GetServerDate();
       Task.Factory.StartNew(() =>
-           BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup).Select(parent => new ObjGuestAvailable(parent,serverDate)).ToList()).
+           BRGuests.GetGuestsAvailables(serverDate, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup).Select(parent => new ObjGuestAvailable(parent,serverDate)).ToList()).
            ContinueWith((LoadGuestsInhouse) =>
          {
            if (LoadGuestsInhouse.IsFaulted)

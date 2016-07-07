@@ -48,7 +48,7 @@ namespace IM.Inhouse.Forms
       RTFNotices = string.Empty;
       RTFNotice = string.Empty;
 
-      var Notices = BRNotices.GetNotices(App.User.LeadSource.lsID, BRHelpers.GetServerDate().Date);
+      var Notices = BRNotices.GetNotices(App.User.LeadSource.lsID, BRHelpers.GetServerDate());
 
       if (Notices.Count > 0)
       {
