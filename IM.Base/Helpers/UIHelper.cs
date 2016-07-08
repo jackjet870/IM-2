@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
 using IM.Model.Helpers;
+using System.Data.Entity.Validation;
 
 namespace IM.Base.Helpers
 {
@@ -69,45 +70,39 @@ namespace IM.Base.Helpers
     }
 
     /// <summary>
-    /// Envia mensaje al usuario obtenido de una excepcion Implementa GetMessageError
+    /// Muestra un MessageBox con los errores encontrados en una Excepción, Implementa GetMessageError y EntityValidationException
     /// </summary>
     /// <param name="ex">Mensaje de la excepcion</param>
-    /// <param name="image">Imagen que se mostrará en la ventana</param>
-    /// <param name="title">Título de la ventana</param>
     ///<history>
     ///[erosado]  28/05/2016  Created.
+    ///[erosado]  08/07/2016  Se agregó buscar excepcion de tipo entityValidationException.
     /// </history>
-    public static MessageBoxResult ShowMessage(Exception ex, MessageBoxImage image = MessageBoxImage.Information, string title = "")
+    public static MessageBoxResult ShowMessage(Exception ex)
     {
-      string message= GetMessageError(ex);
-      MessageBoxButton button = MessageBoxButton.OK;
-      switch (image)
+      //Declaramos variables
+      string message = string.Empty;
+      List<DbValidationError> errorList = null;
+      var dbEntityValidationException = ex as DbEntityValidationException; // Casteamos la excepcion generica.
+
+      if (dbEntityValidationException != null && dbEntityValidationException.EntityValidationErrors.Any()) //Si es es de tipo DBEntityValidationException
       {
-        case MessageBoxImage.Error:
-          if (String.IsNullOrEmpty(title))
-            title = "Error";
-          break;
-
-        case MessageBoxImage.Warning:
-          if (String.IsNullOrEmpty(title))
-            title = "Warning";
-          break;
-
-        case MessageBoxImage.Question:
-          if (String.IsNullOrEmpty(title))
-            title = "Question";
-          button = MessageBoxButton.YesNo;
-          break;
-
-        default:
-          if (String.IsNullOrEmpty(title))
-            title = "Information";
-          break;
+        errorList = new List<DbValidationError>();
+        dbEntityValidationException.EntityValidationErrors.OfType<DbEntityValidationResult>().ToList().ForEach(objVR =>
+        {
+          objVR.ValidationErrors.OfType<DbValidationError>().ToList().ForEach(objVE =>
+          {
+            errorList.Add(objVE);
+          });
+        });
+        var errorListDistinct = errorList.Select(c => new { c.PropertyName, c.ErrorMessage }).Distinct().ToList();
+        errorListDistinct.ForEach(x => { message += $"{x.PropertyName}: {x.ErrorMessage} \n"; }); // Preparamos el mensaje.
       }
-
-      return MessageBox.Show(message, title, button, image);
+      else // Si es Generica
+      {
+         message = GetMessageError(ex);
+      }
+      return MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
     }
-
     #endregion ShowMessage
 
     #region ForceUIToUpdate

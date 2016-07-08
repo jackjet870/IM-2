@@ -89,6 +89,11 @@ namespace IM.Base.Classes
       else
       {
         //Search information 
+        List<InvitationGiftCustom> lista = new List<InvitationGiftCustom>();
+        lista.Add(new InvitationGiftCustom() { igQty = 1, igAdults = 2 });
+        lista.Add(new InvitationGiftCustom() { igQty = 1, igAdults = 2 });
+        lista.Add(new InvitationGiftCustom() { igQty = 1, igAdults = 2 });
+        SetField(ref _invitationGiftList, new ObservableCollection<InvitationGiftCustom>(lista), "InvitationGiftList");
       }
     }
 

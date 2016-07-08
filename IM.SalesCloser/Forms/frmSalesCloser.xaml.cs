@@ -222,7 +222,7 @@ namespace IM.SalesCloser.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -257,7 +257,7 @@ namespace IM.SalesCloser.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

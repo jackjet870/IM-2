@@ -163,7 +163,7 @@
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                         <TextBlock Text="Execution Order:" VerticalAlignment="Center"/>
                         <TextBox Name="txtExecutionOrder" VerticalAlignment="Center" Width="50" Margin="5,0" 
-                                     Text="{Binding moOrder, Mode=TwoWay}"/>
+                                     Text="{Binding moOrder, Mode=TwoWay}" MaxLength="2"/>
                     </StackPanel>
                     <CheckBox Name="chkmoCCheckIn" Content="Check In" Grid.Column="2" 
                                   Style="{StaticResource chk-VerticalCenter}" IsChecked="{Binding moCCheckIn, Mode=TwoWay}"/>
@@ -181,21 +181,21 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
                         <TextBlock Text="Arrival Date Between Today    +" VerticalAlignment="Center"/>
-                        <TextBox Name="txtmoCCheckInDFrom" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckInDFrom, Mode=TwoWay}"/>
+                        <TextBox Name="txtmoCCheckInDFrom" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckInDFrom, Mode=TwoWay}" MaxLength="2"/>
                         <TextBlock Text="Days and Today +" VerticalAlignment="Center"/>
-                        <TextBox Name="txtmoCCheckInDTo" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckInDTo, Mode=TwoWay}"/>
+                        <TextBox Name="txtmoCCheckInDTo" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckInDTo, Mode=TwoWay}" MaxLength="2"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1">
                         <TextBlock Text="Depart. Date Between Today  +" VerticalAlignment="Center"/>
-                        <TextBox Name="txtmoCCheckOutDFrom" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckOutDFrom, Mode=TwoWay}"/>
+                        <TextBox Name="txtmoCCheckOutDFrom" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckOutDFrom, Mode=TwoWay}" MaxLength="2"/>
                         <TextBlock Text="Days and Today +" VerticalAlignment="Center"/>
-                        <TextBox Name="txtmoCCheckOutDTo" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckOutDTo, Mode=TwoWay}"/>
+                        <TextBox Name="txtmoCCheckOutDTo" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCCheckOutDTo, Mode=TwoWay}" MaxLength="2"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="2">
                         <CheckBox Name="chkBookD" Content="Book Date Between Today +" Style="{StaticResource chk-VerticalCenter}" IsChecked="{Binding moCBookD, Mode=TwoWay}"/>
-                        <TextBox Name="txtmoCBookDFrom" VerticalAlignment="Center" Width="50" Margin="0,0,5,0" Text="{Binding moCBookDFrom, Mode=TwoWay}" />
+                        <TextBox Name="txtmoCBookDFrom" VerticalAlignment="Center" Width="50" Margin="0,0,5,0" Text="{Binding moCBookDFrom, Mode=TwoWay}" MaxLength="2" />
                         <TextBlock Text="Days and Today +" VerticalAlignment="Center"/>
-                        <TextBox Name="txtmoCBookDTo" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCBookDTo, Mode=TwoWay}"/>
+                        <TextBox Name="txtmoCBookDTo" VerticalAlignment="Center" Width="50" Margin="5,0" Text="{Binding moCBookDTo, Mode=TwoWay}" MaxLength="2"/>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -303,11 +303,11 @@
                             <TextBlock  Text="Room Numbers" Style="{StaticResource ResourceKey=txtb-HeaderCatalogs}" Foreground="Black"/>
                             <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
                                 <TextBlock Text="From" VerticalAlignment="Center"/>
-                                <TextBox Text="{Binding moCRoomNumFrom, Mode=TwoWay}" Width="100" Margin="10,0,0,0"/>
+                                <TextBox Text="{Binding moCRoomNumFrom, Mode=TwoWay}" MaxLength="6" Width="100" Margin="10,0,0,0"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
                                 <TextBlock Text="To" VerticalAlignment="Center"/>
-                                <TextBox  Text="{Binding moCRoomNumTo, Mode=TwoWay}" Width="100" Margin="23,0,0,0"/>
+                                <TextBox  Text="{Binding moCRoomNumTo, Mode=TwoWay}" MaxLength="6" Width="100" Margin="23,0,0,0"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -332,15 +332,15 @@
         <!--#endregion-->
 
         <!--#region  Estatus Bar-->
-        <StatusBar x:Name="stbStatusBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,6" >
+        <StatusBar x:Name="stbStatusBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,5" >
             <StatusBarItem x:Name="StatusBarCap" Content="CAP"  HorizontalContentAlignment="Stretch" />
             <StatusBarItem x:Name="StatusBarNum" Content="NUM"  HorizontalContentAlignment="Stretch" />
             <StatusBarItem x:Name="StatusBarIns" Content="INS"  HorizontalContentAlignment="Stretch" />
             <Separator />
             <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Left"  Margin="10,0,0,0">
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Height="25">
                     <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico"  Height="12" Visibility="Hidden" />
-                    <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0"/>
+                    <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0" />
                 </StackPanel>
             </StatusBarItem>
         </StatusBar>
@@ -356,14 +356,14 @@
                     <Image x:Name="imgCerrar" Style="{StaticResource img-ExitButton}" Canvas.Left="264" Canvas.Top="4" MouseLeftButtonDown="imgCerrar_MouseLeftButtonDown"/>
                     <TextBlock  Text="New MailOuts" Canvas.Left="7" Canvas.Top="4" Foreground="White"/>
                     <TextBlock Text="Mail Out Name" Foreground="#147F79" TextAlignment="Center" FontWeight="Bold" FontSize="14" Canvas.Left="94" Canvas.Top="23"/>
-                    <TextBox Name="txtNewMotName" Canvas.Left="29" Canvas.Top="45" Width="241" BorderThickness="0" FontSize="18.667" KeyUp="txtNewMotName_KeyUp" Focusable="True" CharacterCasing="Upper"/>
+                    <TextBox Name="txtNewMotName" Canvas.Left="29" Canvas.Top="45" Width="241" BorderThickness="0" FontSize="18.667" KeyUp="txtNewMotName_KeyUp" Focusable="True" CharacterCasing="Upper" MaxLength="10"/>
                     <Border Margin="0" Canvas.Left="206" Canvas.Top="75" Background="White" CornerRadius="5">
                         <Border x:Name="imgSaveNewMot" Style="{StaticResource brd-ButtonsBig}" ToolTip="Save" Margin="0" MouseLeftButtonDown="imgSaveNewMot_MouseLeftButtonDown">
                             <StackPanel Orientation="Horizontal">
                                 <Viewbox Stretch="Uniform" Width="20">
                                     <Image x:Name="imagNewCancel" Source="pack://application:,,,/IM.Styles;component/Images/BSave.png"/>
                                 </Viewbox>
-                                <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </StackPanel>
                         </Border>
 

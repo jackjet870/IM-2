@@ -99,6 +99,7 @@ namespace IM.MailOutsConfig.Forms
     private void imgAdd_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       pupNewMot.IsOpen = true;
+      txtNewMotName.Focus();
     }
     /// <summary>
     /// Evento que elimina un MailOut
@@ -174,7 +175,7 @@ namespace IM.MailOutsConfig.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -201,7 +202,7 @@ namespace IM.MailOutsConfig.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
+        UIHelper.ShowMessage(ex);
       }
 
     }
@@ -233,7 +234,7 @@ namespace IM.MailOutsConfig.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -264,7 +265,7 @@ namespace IM.MailOutsConfig.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
+        UIHelper.ShowMessage(ex);
       }
     }
     /// <summary>
@@ -293,7 +294,7 @@ namespace IM.MailOutsConfig.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
+        UIHelper.ShowMessage(ex);
       }
       StaEnd();
 
@@ -325,7 +326,7 @@ namespace IM.MailOutsConfig.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
+        UIHelper.ShowMessage(ex);
       }
     }
     /// <summary>
@@ -346,16 +347,12 @@ namespace IM.MailOutsConfig.Forms
           EditModeOff();
           cbxLeadSource_SelectionChanged(this, null);
         }
-        else
-        {
-          UIHelper.ShowMessage("We have a problem", MessageBoxImage.Error, "Mail Outs Configuration");
-        }
         StaEnd();
       }
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -367,27 +364,20 @@ namespace IM.MailOutsConfig.Forms
     /// <history>
     /// [erosado] 20/04/2016 Created
     /// </history>
-    public async  void DoInsertMailOut(string mols, string moCode)
+    public async void DoInsertMailOut(string mols, string moCode)
     {
       try
       {
-        var data =await  BRMailOuts.InsertMailOut(mols, moCode);
+        var data = await BRMailOuts.InsertMailOut(mols, moCode);
 
-        if (data != -1)
+        if (data != 0)
         {
-          if (data != 0)
-          {
-            UIHelper.ShowMessage("Insert MailOut successfully", MessageBoxImage.Information, "Mail Outs Configuration");
-            cbxLeadSource_SelectionChanged(this, null);
-          }
-          else
-          {
-            UIHelper.ShowMessage("Mail Out name already exists.", MessageBoxImage.Warning, "Mail Outs Configuration");
-          }
+          UIHelper.ShowMessage("Insert MailOut successfully", MessageBoxImage.Information, "Mail Outs Configuration");
+          cbxLeadSource_SelectionChanged(this, null);
         }
         else
         {
-          UIHelper.ShowMessage("We have a problem", MessageBoxImage.Error, "Mail Outs Configuration");
+          UIHelper.ShowMessage("Mail Out name already exists.", MessageBoxImage.Warning, "Mail Outs Configuration");
         }
 
         StaEnd();
@@ -395,9 +385,9 @@ namespace IM.MailOutsConfig.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
-      }           
-      
+        UIHelper.ShowMessage(ex);
+      }
+
     }
     #endregion
 

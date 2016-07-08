@@ -19,12 +19,12 @@
             <CollectionViewSource x:Key="paymentPlaceList" Source="{Binding PaymentPlaces}" />
             <CollectionViewSource x:Key="crediCardTypesList" Source="{Binding CreditCardTypes}" />
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/sTabControl.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/sRichTextFormatMenu.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/tComboBox.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/sComboBox.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/sDataGrid.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/sDataErrorInfo.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styTabControl.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styBorder.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Templates/tmpComboBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styComboBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDataGrid.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDataErrorInfo.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -53,7 +53,7 @@
                 </Grid.RowDefinitions>
 
                 <Viewbox Stretch="Uniform" Height="24" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0">
-                    <Image x:Name="image" Source="pack://application:,,,/IM.SalesLiner;component/Images/BUser.png"/>
+                    <Image x:Name="image" Source="pack://application:,,,/IM.Styles;component/Images/BUser.png"/>
                 </Viewbox>
                 <TextBlock x:Name="txtUserName" VerticalAlignment="Center"
                            Foreground="White" Grid.Column="1" Grid.Row="0"/>
@@ -68,7 +68,7 @@
                 <TextBlock Text="Option Menu" Margin="10,0,0,0"/>
 
                 <StackPanel Orientation="Horizontal" Height="40">
-                    <Border x:Name="imgButtonEdit" Style="{StaticResource   brdImageButtons}">
+                    <Border x:Name="imgButtonEdit" Style="{StaticResource   brd-ButtonsBig}">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
                                 <Image x:Name="imageUser" Source="pack://application:,,,/IM.Styles;component/Images/BEdit.png"/>
@@ -76,7 +76,7 @@
                             <TextBlock Text="Edit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonPrint" Style="{StaticResource brdImageButtons}" >
+                    <Border x:Name="imgButtonPrint" Style="{StaticResource brd-ButtonsBig}" >
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
                                 <Image Source="pack://application:,,,/IM.Styles;component/Images/BPrinter.png"/>
@@ -84,7 +84,7 @@
                             <TextBlock Text="Print" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonSave" Style="{StaticResource brdImageButtons}" MouseLeftButtonDown="imgButtonSave_MouseLeftButtonDown">
+                    <Border x:Name="imgButtonSave" Style="{StaticResource brd-ButtonsBig}" MouseLeftButtonDown="imgButtonSave_MouseLeftButtonDown">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
                                 <Image Source="pack://application:,,,/IM.Styles;component/Images/BSave.png"/>
@@ -92,7 +92,7 @@
                             <TextBlock Text="Save" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonCancel" Style="{StaticResource brdImageButtons}">
+                    <Border x:Name="imgButtonCancel" Style="{StaticResource brd-ButtonsBig}">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
                                 <Image Source="pack://application:,,,/IM.Styles;component/Images/BCancel.png"/>
@@ -100,7 +100,7 @@
                             <TextBlock Text="Cancel" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="imgButtonLog" Style="{StaticResource brdImageButtons}">
+                    <Border x:Name="imgButtonLog" Style="{StaticResource brd-ButtonsBig}">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Stretch="Uniform" Width="20">
                                 <Image Source="pack://application:,,,/IM.Styles;component/Images/BLog.png"/>
@@ -108,7 +108,7 @@
                             <TextBlock Text="Log" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                         </StackPanel>
                     </Border>
-                    <TextBlock Name="txtMode" Text="Edit Mode" VerticalAlignment="Center" FontSize="16" Foreground="#147F79" Visibility="Visible" TextWrapping="Wrap" FontWeight="Bold" Margin="10,0,10,0"/>
+                    <TextBlock Name="txtMode" Text="{Binding ElementName=cmbMaritalStatusGuest1, Path=SelectedItem.msID}" VerticalAlignment="Center" FontSize="16" Foreground="#147F79" Visibility="Visible" TextWrapping="Wrap" FontWeight="Bold" Margin="10,0,10,0"/>
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -144,7 +144,7 @@
                                                     <TextBlock Text="Rsrv. Num." TextAlignment="Center"/>
                                                     <TextBox Name="txtReservationNumber" Width="100" Text="{Binding GuestObj.guHReservID}"/>
                                                 </StackPanel>
-                                                <Border x:Name="imgSearch" Style="{StaticResource brdImageButtons}"  Width="75" Height="25" VerticalAlignment="Center" Margin="3,0">
+                                                <Border x:Name="imgSearch" Style="{StaticResource brd-ButtonsBig}"  Width="75" Height="25" VerticalAlignment="Center" Margin="3,0">
                                                     <StackPanel Orientation="Horizontal">
                                                         <Viewbox Stretch="Uniform" Width="20">
                                                             <Image Source="pack://application:,,,/IM.Styles;component/Images/BSearch.png"/>
@@ -191,12 +191,10 @@
                                                     </StackPanel>
                                                     <StackPanel  VerticalAlignment="Center" Margin="3,0">
                                                         <TextBlock Text="Language" TextAlignment="Center"/>
-                                                        <ComboBox Name="cmbLanguage" Width="120" Style="{StaticResource cbxGeneral}" TextSearch.TextPath="laID" ToolTip="{Binding Path=SelectedItem.laN, RelativeSource={RelativeSource Self}}"
-                                                                  ItemsSource="{Binding Languages}">
-                                                            <ComboBox.ItemTemplate>
-                                                                <StaticResource ResourceKey="tLanguagesComboBox-Concat"/>
-                                                            </ComboBox.ItemTemplate>
-                                                        </ComboBox>
+                                                        <ComboBox Name="cmbLanguage" Width="120"  TextSearch.TextPath="laID"
+                                                                  ItemsSource="{Binding Languages}" Style="{StaticResource cbx-General}"
+                                                                  ItemTemplate="{StaticResource cbx-Languages-Concat}"
+                                                                  ToolTip="{Binding Path=SelectedItem.laN, RelativeSource={RelativeSource Self}}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -250,12 +248,10 @@
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="Marital Status" TextAlignment="Center"/>
-                                                <ComboBox Name="cmbMaritalStatusGuest1" Width="100" Style="{StaticResource cbxGeneral}" TextSearch.TextPath="msID"
-                                                          ItemsSource="{Binding MaritalStatus}">
-                                                    <ComboBox.ItemTemplate>
-                                                        <StaticResource ResourceKey="tMaritalComboBox-Concat"/>
-                                                    </ComboBox.ItemTemplate>
-                                                </ComboBox>
+                                                <ComboBox Name="cmbMaritalStatusGuest1" Width="100" TextSearch.TextPath="msID"
+                                                          ItemsSource="{Binding MaritalStatus}" Style="{StaticResource cbx-General}" 
+                                                          ItemTemplate="{StaticResource cbx-MaritalStatus-Concat}"
+                                                          ToolTip="{Binding Path=SelectedItem.laN, RelativeSource={RelativeSource Self}}"/>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="Ocupation" TextAlignment="Center"/>
@@ -291,12 +287,10 @@
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="Marital Status" TextAlignment="Center"/>
-                                                <ComboBox Name="cmbMaritalStatusGuest2" Width="100" Style="{StaticResource cbxGeneral}" TextSearch.TextPath="msID"
-                                                          ItemsSource="{Binding MaritalStatus}">
-                                                    <ComboBox.ItemTemplate>
-                                                        <StaticResource ResourceKey="tMaritalComboBox-Concat"/>
-                                                    </ComboBox.ItemTemplate>
-                                                </ComboBox>
+                                                <ComboBox Name="cmbMaritalStatusGuest2" Width="100" TextSearch.TextPath="msID"
+                                                           ItemsSource="{Binding MaritalStatus}" Style="{StaticResource cbx-General}" 
+                                                          ItemTemplate="{StaticResource cbx-MaritalStatus-Concat}"
+                                                          ToolTip="{Binding Path=SelectedItem.laN, RelativeSource={RelativeSource Self}}"/>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="Ocupation" TextAlignment="Center"/>
@@ -340,12 +334,10 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <StackPanel HorizontalAlignment="Left" >
                                                         <TextBlock Text="{Binding ElementName=cmbPRContract, Path=SelectedItem.peID, StringFormat='PR ID: {0}'}" Margin="0,5"/>
-                                                        <ComboBox Name="cmbPRContact" Width="200" Style="{StaticResource cbxGeneral}" TextSearch.TextPath="peID" ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                                                  ItemsSource="{Binding Personnel}">
-                                                            <ComboBox.ItemTemplate>
-                                                                <StaticResource ResourceKey="tPersonnelComboBox-img"/>
-                                                            </ComboBox.ItemTemplate>
-                                                        </ComboBox>
+                                                        <ComboBox Name="cmbPRContact" Width="200"  TextSearch.TextPath="peID" 
+                                                                  ItemsSource="{Binding Personnel}" Style="{StaticResource cbx-General}"
+                                                                  ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                  ToolTip="{Binding Path=SelectedItem.laN, RelativeSource={RelativeSource Self}}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -354,12 +346,11 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <StackPanel HorizontalAlignment="Left">
                                                         <TextBlock Text="{Binding ElementName=cmbPR, Path=SelectedItem.peID, StringFormat='PR ID: {0}'}" Margin="0,5"/>
-                                                        <ComboBox Name="cmbPR" Width="200" Style="{StaticResource cbxGeneral}" TextSearch.TextPath="peID" ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
-                                                                  ItemsSource="{Binding Personnel}">
-                                                            <ComboBox.ItemTemplate>
-                                                                <StaticResource ResourceKey="tPersonnelComboBox-img"/>
-                                                            </ComboBox.ItemTemplate>
-                                                        </ComboBox>
+                                                        <ComboBox Name="cmbPR" Width="200"  TextSearch.TextPath="peID" 
+                                                                  ItemsSource="{Binding Personnel}" Style="{StaticResource cbx-General}"
+                                                                  ItemTemplate="{StaticResource cbx-Personnel-img}"
+                                                                  ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"/>
+
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -371,12 +362,10 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <StackPanel HorizontalAlignment="Left" >
                                                         <TextBlock Text="{Binding ElementName=cmbSalesRooms, Path=SelectedItem.srID, StringFormat='SalesRoom ID: {0}'}" Margin="0,5"/>
-                                                        <ComboBox Name="cmbSalesRooms" Width="200" Style="{StaticResource cbxGeneral}" TextSearch.TextPath="srID" ToolTip="{Binding Path=SelectedItem.srN, RelativeSource={RelativeSource Self}}"
-                                                                  ItemsSource="{Binding SalesRoom}">
-                                                            <ComboBox.ItemTemplate>
-                                                                <StaticResource ResourceKey="tSaleRoomComboBox-img"/>
-                                                            </ComboBox.ItemTemplate>
-                                                        </ComboBox>
+                                                        <ComboBox Name="cmbSalesRooms" Width="200"  TextSearch.TextPath="srID" 
+                                                                  ItemsSource="{Binding SalesRoom}" Style="{StaticResource cbx-General}"
+                                                                  ItemTemplate="{StaticResource cbx-SaleRoom-img}"
+                                                                  ToolTip="{Binding Path=SelectedItem.srN, RelativeSource={RelativeSource Self}}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -385,12 +374,10 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <StackPanel HorizontalAlignment="Left">
                                                         <TextBlock Text="{Binding ElementName=cmbLocation, Path=SelectedItem.loID, StringFormat='Location ID: {0}'}" Margin="0,5"/>
-                                                        <ComboBox Name="cmbLocation" Width="200" Style="{StaticResource cbxGeneral}" TextSearch.TextPath="loID" ToolTip="{Binding Path=SelectedItem.loN, RelativeSource={RelativeSource Self}}"
-                                                                  ItemsSource="{Binding Locations}">
-                                                            <ComboBox.ItemTemplate>
-                                                                <StaticResource ResourceKey="tLocationComboBox-img"/>
-                                                            </ComboBox.ItemTemplate>
-                                                        </ComboBox>
+                                                        <ComboBox Name="cmbLocation" Width="200"  TextSearch.TextPath="loID" 
+                                                                  ItemsSource="{Binding Locations}" Style="{StaticResource cbx-General}"
+                                                                  ItemTemplate="{StaticResource cbx-Location-img}"
+                                                                  ToolTip="{Binding Path=SelectedItem.loN, RelativeSource={RelativeSource Self}}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -400,7 +387,7 @@
                                             <CheckBox Name="chkBeforeIO" Content="Before In &amp; Out" Margin="0,5"/>
                                             <DatePicker Name="dtpBookDate" Width="120" />
                                             <TextBlock Text="Time" Margin="0,5"/>
-                                            <ComboBox Name="cbxBookTime" Width="120"  Style="{StaticResource cbxGeneral}" />
+                                            <ComboBox Name="cbxBookTime" Width="120"  Style="{StaticResource cbx-General}" />
                                             <CheckBox Name="chkDirect" Content="Direct"/>
                                         </StackPanel>
                                         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="4" Margin="0,5">
@@ -410,7 +397,7 @@
                                                     <TextBlock Text="Reschedule Date" Margin="0,5"/>
                                                     <DatePicker Name="dtpRescheduleDate" Width="120"/>
                                                     <TextBlock Text="Time" Margin="0,5"/>
-                                                    <ComboBox Name="cbxReschudeleTime" Width="120" Style="{StaticResource cbxGeneral}"/>
+                                                    <ComboBox Name="cbxReschudeleTime" Width="120" Style="{StaticResource cbx-General}"/>
                                                 </StackPanel>
                                                 <StackPanel Name="stkFlightNumber" Margin="5,0">
                                                     <TextBlock Text="Flight Number" Margin="0,5"/>
@@ -456,12 +443,10 @@
                                                     </StackPanel>
                                                     <StackPanel HorizontalAlignment="Left" Margin="5,0,0,0">
                                                         <TextBlock Text="{Binding ElementName=cmbOtherInfoHotel, Path=SelectedItem.hoID, StringFormat='Hotel ID: {0}'}" Margin="0,5"/>
-                                                        <ComboBox Name="cmbOtherInfoHotel" Width="200" Style="{StaticResource cbxGeneral}" TextSearch.TextPath="hoID" ToolTip="{Binding Path=SelectedItem.hoID, RelativeSource={RelativeSource Self}}"
-                                                                  ItemsSource="{Binding Hotels}">
-                                                            <ComboBox.ItemTemplate>
-                                                                <StaticResource ResourceKey="tHotelComboBox-img"/>
-                                                            </ComboBox.ItemTemplate>
-                                                        </ComboBox>
+                                                        <ComboBox Name="cmbOtherInfoHotel" Width="200" TextSearch.TextPath="hoID" 
+                                                                  ItemsSource="{Binding Hotels}" Style="{StaticResource cbx-General}"
+                                                                  ItemTemplate="{StaticResource cbx-Hotel-img}"
+                                                                  ToolTip="{Binding Path=SelectedItem.hoID, RelativeSource={RelativeSource Self}}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -470,12 +455,10 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <StackPanel HorizontalAlignment="Left">
                                                         <TextBlock Text="{Binding ElementName=cmbOtherInfoAgency, Path=SelectedItem.agID, StringFormat='Agency ID: {0}'}" Margin="0,5"/>
-                                                        <ComboBox Name="cmbOtherInfoAgency" Width="200" TextSearch.TextPath="agID" Style="{StaticResource cbxGeneral}" ToolTip="{Binding Path=SelectedItem.agN, RelativeSource={RelativeSource Self}}"
-                                                                  ItemsSource="{Binding Agencies}">
-                                                            <ComboBox.ItemTemplate>
-                                                                <StaticResource ResourceKey="tAgencyComboBox-img"/>
-                                                            </ComboBox.ItemTemplate>
-                                                        </ComboBox>
+                                                        <ComboBox Name="cmbOtherInfoAgency" Width="200" TextSearch.TextPath="agID"  
+                                                                  ItemsSource="{Binding Agencies}" Style="{StaticResource cbx-General}"
+                                                                  ItemTemplate="{StaticResource cbx-Agency-img}"
+                                                                  ToolTip="{Binding Path=SelectedItem.agN, RelativeSource={RelativeSource Self}}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -484,12 +467,10 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <StackPanel HorizontalAlignment="Left">
                                                         <TextBlock Text="{Binding ElementName=cmbOtherInfoCountry, Path=SelectedItem.coID, StringFormat='Country ID: {0}'}" Margin="0,5"/>
-                                                        <ComboBox Name="cmbOtherInfoCountry" Width="200" TextSearch.TextPath="coN" Style="{StaticResource cbxGeneral}" ToolTip="{Binding Path=SelectedItem.coN, RelativeSource={RelativeSource Self}}"
-                                                                  ItemsSource="{Binding Countries}">
-                                                            <ComboBox.ItemTemplate>
-                                                                <StaticResource ResourceKey="tCountryComboBox-img"/>
-                                                            </ComboBox.ItemTemplate>
-                                                        </ComboBox>
+                                                        <ComboBox Name="cmbOtherInfoCountry" Width="200" TextSearch.TextPath="coN"
+                                                                  ItemsSource="{Binding Countries}" Style="{StaticResource cbx-General}" 
+                                                                  ItemTemplate="{StaticResource cbx-Country-img}"
+                                                                  ToolTip="{Binding Path=SelectedItem.coN, RelativeSource={RelativeSource Self}}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
@@ -540,13 +521,10 @@
                                         <StackPanel Orientation="Horizontal">
                                             <StackPanel HorizontalAlignment="Left">
                                                 <TextBlock Text="{Binding ElementName=cmbGuestStatus, Path=SelectedItem.gsID, StringFormat='SalesRoom ID: {0}'}" Margin="0,5"/>
-                                                <ComboBox Name="cmbGuestStatus" Width="250" Style="{StaticResource cbxGeneral}" TextSearch.TextPath="gsN"
-                                                          ToolTip="{Binding Path=SelectedItem.gsN, RelativeSource={RelativeSource Self}}"
-                                                          ItemsSource="{Binding GuestStatusTypes}">
-                                                    <ComboBox.ItemTemplate>
-                                                        <StaticResource ResourceKey="tGuestStatusTypeComboBox-Concat"/>
-                                                    </ComboBox.ItemTemplate>
-                                                </ComboBox>
+                                                <ComboBox Name="cmbGuestStatus" Width="250"  TextSearch.TextPath="gsN"
+                                                          ItemsSource="{Binding GuestStatusTypes}" Style="{StaticResource cbx-General}"
+                                                          ItemTemplate="{StaticResource cbx-GuestStatusType-Concat}"
+                                                           ToolTip="{Binding Path=SelectedItem.gsN, RelativeSource={RelativeSource Self}}"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </Viewbox>
@@ -560,20 +538,21 @@
                                     <TextBlock Text="Gifts" Margin="2,0" Background="#147F79" FontSize="12" Foreground="White" FontWeight="Bold"/>
                                     <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Left">
                                         <StackPanel>
-                                            <DataGrid Name="dtgGifts" MaxHeight="80" Height="80" ItemsSource="{Binding InvitationGiftList}" 
-                                                       AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False" CellEditEnding="dtgGifts_CellEditEnding">
+                                            <DataGrid Name="dtg" MaxHeight="80" Height="80" ItemsSource="{Binding InvitationGiftList}" 
+                                                       AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False" CanUserSortColumns="False"
+                                                       SelectionMode="Single"  RowEditEnding="dtgGifts_RowEditEnding" CellEditEnding="dtgGifts_CellEditEnding_1"
+                                                      >
                                                 <DataGrid.Columns>
                                                     <DataGridTextColumn Header="Qty" 
-                                                                        ElementStyle="{StaticResource TextBox-ErrorInfo}"
-                                                                        Binding="{Binding igQty, ValidatesOnDataErrors=True}"/>
+                                                                        ElementStyle="{StaticResource txt-ErrorInfo}"
+                                                                        Binding="{Binding IgQtyCustom, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged , ValidatesOnDataErrors=True}"/>
                                                     <DataGridComboBoxColumn x:Name="cmbGiftsInvitationGift" Header="Gift" Width="200"
-                                                                            SelectedValueBinding="{Binding iggi, ValidatesOnDataErrors=True}"
+                                                                            SelectedValueBinding="{Binding IggiCustom, Mode=TwoWay}"
                                                                             DisplayMemberPath="giN" 
                                                                             SelectedValuePath="giID"
-                                                                            ItemsSource="{Binding Source={StaticResource giftList}}"/>
-                                                    <DataGridTextColumn Header="Adults"  
-                                                                        ElementStyle="{StaticResource TextBox-ErrorInfo}"
-                                                                        Binding="{Binding igAdults, ValidatesOnDataErrors=True}"/>
+                                                                            ItemsSource="{Binding Source={StaticResource giftList}}" />
+                                                    <DataGridTextColumn Header="Adults" x:Name="dgTextAdult"  
+                                                                        Binding="{Binding IgAdultsCustom, Mode=TwoWay}"/>
                                                     <DataGridTextColumn Header="Minors" Binding="{Binding igMinors}"/>
                                                     <DataGridTextColumn Header="E.Adults" Binding="{Binding igExtraAdults}"/>
                                                 </DataGrid.Columns>
@@ -654,33 +633,25 @@
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                     <TextBlock Text="Currency" TextAlignment="Center" Margin="0,5"/>
-                                                    <ComboBox Name="cmbCurrency" Width="200" Style="{StaticResource cbxGeneral}" TextSearch.TextPath="cuN" 
-                                                              ToolTip="{Binding Path=SelectedItem.cuN, RelativeSource={RelativeSource Self}}"
-                                                              ItemsSource="{Binding Currencies}">
-                                                        <ComboBox.ItemTemplate>
-                                                            <StaticResource ResourceKey="tCurrencyComboBox-Concat"/>
-                                                        </ComboBox.ItemTemplate>
-                                                    </ComboBox>
+                                                    <ComboBox Name="cmbCurrency" Width="200" TextSearch.TextPath="cuN" 
+                                                              ItemsSource="{Binding Currencies}" Style="{StaticResource cbx-General}" 
+                                                              ItemTemplate="{StaticResource cbx-Currency-Concat}"
+                                                               ToolTip="{Binding Path=SelectedItem.cuN, RelativeSource={RelativeSource Self}}" />
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                     <TextBlock Text="Payment Type" TextAlignment="Center" Margin="0,5"/>
-                                                    <ComboBox Name="cmbPaymentType" Width="200" Style="{StaticResource cbxGeneral}" TextSearch.TextPath="ptN"
-                                                              ToolTip="{Binding Path=SelectedItem.ptN, RelativeSource={RelativeSource Self}}"
-                                                              ItemsSource="{Binding PaymentTypes}">
-                                                        <ComboBox.ItemTemplate>
-                                                            <StaticResource ResourceKey="tPaymentTypeComboBox-Concat"/>
-                                                        </ComboBox.ItemTemplate>
-                                                    </ComboBox>
+                                                    <ComboBox Name="cmbPaymentType" Width="200"  TextSearch.TextPath="ptN"
+                                                              ItemsSource="{Binding PaymentTypes}" Style="{StaticResource cbx-General}"
+                                                              ItemTemplate="{StaticResource cbx-PaymentType-Concat}"
+                                                              ToolTip="{Binding Path=SelectedItem.ptN, RelativeSource={RelativeSource Self}}"/>
                                                 </StackPanel>
                                                 <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                                     <TextBlock Text="Resorts" TextAlignment="Center" Margin="0,5"/>
-                                                    <ComboBox Name="cmbResorts" Width="200" Style="{StaticResource cbxGeneral}" TextSearch.TextPath="hoID"
-                                                              ToolTip="{Binding Path=SelectedItem.hoID, RelativeSource={RelativeSource Self}}"
-                                                              ItemsSource="{Binding Hotels}">
-                                                        <ComboBox.ItemTemplate>
-                                                            <StaticResource ResourceKey="tHotelComboBox-img"/>
-                                                        </ComboBox.ItemTemplate>
-                                                    </ComboBox>
+                                                    <ComboBox Name="cmbResorts" Width="200"  TextSearch.TextPath="hoID"
+                                                              ItemsSource="{Binding Hotels}" Style="{StaticResource cbx-General}"
+                                                              ItemTemplate="{StaticResource cbx-Hotel-img}"
+                                                              ToolTip="{Binding Path=SelectedItem.hoID, RelativeSource={RelativeSource Self}}"/>
+
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>

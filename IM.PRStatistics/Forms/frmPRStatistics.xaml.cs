@@ -286,7 +286,7 @@ namespace IM.PRStatistics.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -311,7 +311,7 @@ namespace IM.PRStatistics.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
 
     }
@@ -336,7 +336,7 @@ namespace IM.PRStatistics.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
 
@@ -361,7 +361,7 @@ namespace IM.PRStatistics.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
     /// <summary>
@@ -385,7 +385,7 @@ namespace IM.PRStatistics.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
      
     }
@@ -416,7 +416,7 @@ namespace IM.PRStatistics.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

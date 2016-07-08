@@ -235,7 +235,7 @@
             <StatusBarItem x:Name="StatusBarIns" Content="INS"  HorizontalContentAlignment="Stretch" />
             <Separator />
             <StatusBarItem x:Name="StatusBarMessage" HorizontalContentAlignment="Left"  Margin="10,0,0,0">
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Height="25">
                     <Image x:Name="imgStatusBarMessage" Source="pack://application:,,,/IM.Base;component/Images/Time.ico"  Height="12" Visibility="Hidden" />
                     <Label x:Name="lblStatusBarMessage" Margin="5,0,0,0"/>
                 </StackPanel>

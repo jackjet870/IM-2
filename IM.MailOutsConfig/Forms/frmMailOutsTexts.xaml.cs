@@ -144,12 +144,23 @@ namespace IM.MailOutsConfig.Forms
       }
 
     }
-
+    /// <summary>
+    /// Abre la ventana MailOutsConfiguration
+    /// </summary>
+    /// <history>
+    /// [erosado] 07/04/2016  Created
+    /// [erosado] 08/07/2016  Se agregó evento al cerrar la ventana recarge los datos de la interfaz.
+    /// </history>
     private void imgAdminMailOuts_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       frmMailOutsConfig mailOutsConfig = new frmMailOutsConfig();
       mailOutsConfig.txtbUserName.Text = App.User.User.peN;
+      mailOutsConfig.Owner = this;
       mailOutsConfig.ShowDialog();
+      if (!mailOutsConfig.IsActive)
+      {
+        LoadDataSource();
+      }
     }
     /// <summary>
     /// Cierra la aplicación
@@ -296,10 +307,10 @@ namespace IM.MailOutsConfig.Forms
         }
         StaEnd();
       }
-      catch (Exception ex)
+      catch (System.Data.DataException ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
+        UIHelper.ShowMessage(ex);
       }
     }
     /// <summary>
@@ -322,7 +333,7 @@ namespace IM.MailOutsConfig.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error, "Intelligence Marketing");
+        UIHelper.ShowMessage(ex);
       }
     }
     #endregion

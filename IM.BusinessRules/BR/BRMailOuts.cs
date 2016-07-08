@@ -6,6 +6,7 @@ using System.Linq;
 using IM.Base;
 using System.Data.Entity.Validation;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace IM.BusinessRules.BR
 {
@@ -127,12 +128,9 @@ namespace IM.BusinessRules.BR
             catch
             {
               transaction.Rollback();
-              result = -1;
+              throw;
             }
-            finally
-            {
-              transaction.Dispose();
-            }
+
           }
         }
       });
@@ -171,7 +169,7 @@ namespace IM.BusinessRules.BR
     /// Elimina un MailOut de MailOuts y MailOutTexts 
     /// </summary>
     /// <param name="mo">MailOut</param>
-    /// <returns>-1 Error - >0 Registros Afectados </returns>
+    /// <returns> Numero de registros afectados </returns>
     /// <history>
     /// [erosado] 20/04/2016  Created
     /// [erosado] 06/07/2016  Modified. Se agregó Async
@@ -189,7 +187,6 @@ namespace IM.BusinessRules.BR
             {
               //Eliminamos el MailOut 
               dbContext.Entry(mo).State = System.Data.Entity.EntityState.Deleted;
-
               //Obtenemos todos los MailOutText que correspondan al MailOut Que vamos a eliminar
               List<MailOutText> motlst = (from x in dbContext.MailOutTexts where x.mtls == mo.mols && x.mtmoCode == mo.moCode select x).ToList();
               //Eliminamos cada uno de los MailOutTexts
@@ -200,7 +197,7 @@ namespace IM.BusinessRules.BR
             catch
             {
               transaction.Rollback();
-              result = -1;
+              throw;
             }
           }
         }

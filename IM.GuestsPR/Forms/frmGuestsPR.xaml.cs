@@ -269,7 +269,7 @@ namespace IM.GuestsPR.Forms
       catch (Exception ex)
       {
         StaEnd();
-        UIHelper.ShowMessage(ex, MessageBoxImage.Error);
+        UIHelper.ShowMessage(ex);
       }
     
 
