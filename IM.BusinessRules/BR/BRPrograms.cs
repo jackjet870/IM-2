@@ -33,6 +33,32 @@ namespace IM.BusinessRules.BR
     }
     #endregion
 
+    #region GetProgram
+    /// <summary>
+    ///   Obtiene la descripcion del programa d eun Lead Source
+    /// </summary>
+    /// <param name="leadSource">Clave del lead Sources</param>
+    /// <history>
+    ///   [vku] 04/Jul/2016 Created
+    /// </history>
+    public async static Task<string> GetProgram(string leadSource)
+    {
+      string program = string.Empty;
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var query = from programs in dbContext.Programs
+                      join leadSources in dbContext.LeadSources on programs.pgID equals leadSources.lspg
+                      where leadSources.lsID == leadSource
+                      select programs.pgN;
+           program = query.FirstOrDefault().ToString();
+        }
+      });
+      return program;
+    }
+    #endregion
+
     #region SaveProgram
     /// <summary>
     /// Agrega|Actualiza un Program

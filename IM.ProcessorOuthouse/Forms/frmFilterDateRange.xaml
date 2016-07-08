@@ -371,8 +371,8 @@
 
             <!--#region btns-->
             <StackPanel Grid.Row="4" Orientation="Vertical" Margin="20,3">
-                <Button Name="btnOK" Content="_OK" Width="100" HorizontalAlignment="Left" Margin="10" Click="btnOK_Click"></Button>
-                <Button Name="btnCancel" Content="_Cancel" Width="100" HorizontalAlignment="Left" Margin="10" Click="btnCancel_Click"></Button>
+                <Button Name="btnOK" Content="OK" Width="100" HorizontalAlignment="Left" Margin="10" Click="btnOK_Click"></Button>
+                <Button Name="btnCancel" Content="Cancel" Width="100" HorizontalAlignment="Left" Margin="10" Click="btnCancel_Click"></Button>
             </StackPanel>
             <!--#endregion-->
         </Grid>

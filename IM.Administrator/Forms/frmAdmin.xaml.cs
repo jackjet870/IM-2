@@ -206,7 +206,7 @@ namespace IM.Administrator.Forms
       if(App.User.HasPermission(EnumPermission.TourTimes,EnumPermisionLevel.ReadOnly))
       {
         lstMenu.Add(new { nombre = "Tour Times Schemas", img = "pack://application:,,,/IM.Base;component/Images/IconDate.png", form = "frmTourTimesSchemas" });
-        //lstMenu.Add(new { nombre = "Tour Times", img = "pack://application:,,,/IM.Base;component/Images/IconDate.png", form = "frmTourTimes" });
+        lstMenu.Add(new { nombre = "Tour Times", img = "pack://application:,,,/IM.Base;component/Images/IconDate.png", form = "frmTourTimes" });
       }
       #endregion
 

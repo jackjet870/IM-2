@@ -98,6 +98,7 @@ namespace IM.Base.Helpers
     /// <history>
     /// [jorcanche]  12/Mar/2016 Created
     /// [jorcanche]  24/03/2016 Modificado
+    /// [vku] 04/Jul/2016 Modified. Ahora soporta un combobox
     /// </history>
     public static string GetValue(Control control)
     {
@@ -112,6 +113,13 @@ namespace IM.Base.Helpers
         if (control is PasswordBox)
         {
           value = ((PasswordBox)control).Password;
+        }
+        else
+        {
+          if(control is ComboBox)
+          {
+            value = ((ComboBox)control).Text;
+          }
         }
       }
       return value;
@@ -256,8 +264,34 @@ namespace IM.Base.Helpers
     /// </history>
     public static bool IsValidTimeFormat(string text)
     {
-      Regex regex = new Regex("^(?:(?:0?[0-9]|1[0-2]):[0-5][0-9] [ap]m|(?:[01][0-9]|2[0-3]):[0-5][0-9])$", RegexOptions.IgnoreCase);
+      Regex regex = new Regex(@"^(?:(?:0?[0-9]|1[0-2]):[0-5][0-9] [ap]m|(?:[01][0-9]|2[0-3]):[0-5][0-9])$", RegexOptions.IgnoreCase);
       return regex.IsMatch(text);
+    }
+    #endregion
+
+    #region IsDate
+    /// <summary>
+    ///   Valida si es una fecha u hora
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    /// <history>
+    ///   [vku] 08/Jul/2016 Created
+    /// </history>
+    public static bool IsDate(Object obj)
+    {
+      string strDate = obj.ToString();
+      try
+      {
+        DateTime dt = DateTime.Parse(strDate);
+        if (dt != DateTime.MinValue && dt != DateTime.MaxValue)
+          return true;
+        return false;
+      }
+      catch
+      {
+        return false;
+      }
     }
     #endregion
   }

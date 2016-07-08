@@ -1704,6 +1704,10 @@ namespace IM.ProcessorOuthouse.Forms
     private void grdrp_PreviewKeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key != Key.Enter) return;
+      else if (!ConfigRegistry.ExistReportsPath())
+      {
+        if (!ShowSystemCfg()) return;
+      }
       var _dataGridRow = (DataGridRow)sender;
       if (_dataGridRow.Item.Equals(grdRptsByLeadSource.CurrentItem)) PrepareReportByLeadSource();
       else if (_dataGridRow.Item.Equals(grdRptsByPR.CurrentItem)) PrepareReportByPR();
