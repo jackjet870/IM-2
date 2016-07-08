@@ -9362,8 +9362,8 @@
           <NavigationProperty Name="GuestsPromotions" Relationship="Self.FK_GuestsPromotions_Gifts" FromRole="Gifts" ToRole="GuestsPromotions" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="InvitationsGifts" Relationship="Self.FK_InvitsGifts_Gifts" FromRole="Gifts" ToRole="InvitsGifts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="WarehouseMovements" Relationship="Self.FK_WhsMovs_Gifts" FromRole="Gifts" ToRole="WhsMovs" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="Agencies" Relationship="Self.GiftsByAgencies" FromRole="Gifts" ToRole="Agencies" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-          <NavigationProperty Name="Locations" Relationship="Self.GiftsByLoc" FromRole="Gifts" ToRole="Locations" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="Agencies" Relationship="Self.GiftsByAgencies" FromRole="Gifts" ToRole="Agencies" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="Locations" Relationship="Self.GiftsByLoc" FromRole="Gifts" ToRole="Locations" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="GiftCategory">
           <Key>
