@@ -927,1577 +927,6 @@ namespace IM.Services.ClubesService {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RecordsetResponse.xsd")]
-    public partial class RecordsetResponse {
-        
-        private string dataField;
-        
-        private bool hasErrorsField;
-        
-        private ExceptionInfo exceptionInfoField;
-        
-        private string tagField;
-        
-        /// <comentarios/>
-        public string Data {
-            get {
-                return this.dataField;
-            }
-            set {
-                this.dataField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool HasErrors {
-            get {
-                return this.hasErrorsField;
-            }
-            set {
-                this.hasErrorsField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public ExceptionInfo ExceptionInfo {
-            get {
-                return this.exceptionInfoField;
-            }
-            set {
-                this.exceptionInfoField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ExceptionInfo.xsd")]
-    public partial class ExceptionInfo {
-        
-        private string typeField;
-        
-        private string messageField;
-        
-        private string sourceField;
-        
-        private string stackTraceField;
-        
-        /// <comentarios/>
-        public string Type {
-            get {
-                return this.typeField;
-            }
-            set {
-                this.typeField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Message {
-            get {
-                return this.messageField;
-            }
-            set {
-                this.messageField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Source {
-            get {
-                return this.sourceField;
-            }
-            set {
-                this.sourceField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string StackTrace {
-            get {
-                return this.stackTraceField;
-            }
-            set {
-                this.stackTraceField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClofficeRequest.xsd")]
-    public partial class ClofficeRequest {
-        
-        private Cloffice clofficeField;
-        
-        private string tagField;
-        
-        /// <comentarios/>
-        public Cloffice Cloffice {
-            get {
-                return this.clofficeField;
-            }
-            set {
-                this.clofficeField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Cloffice.xsd")]
-    public partial class Cloffice {
-        
-        private decimal rECNUMField;
-        
-        private string cODE_PROJField;
-        
-        private string cODEField;
-        
-        private string nAMEField;
-        
-        private string aDDRESS1Field;
-        
-        private string aDDRESS2Field;
-        
-        private string pHONEField;
-        
-        private string sTATUSField;
-        
-        private System.DateTime fECHA_ALTAField;
-        
-        private string hORA_ALTAField;
-        
-        private string cVEALTAField;
-        
-        private System.DateTime fECHA_BAJAField;
-        
-        private string hORA_BAJAField;
-        
-        private string cVEBAJAField;
-        
-        private System.DateTime fECHA_MODIFField;
-        
-        private string hORA_MODIFField;
-        
-        private string cVEMODIFField;
-        
-        private decimal sTOCKWKSField;
-        
-        private decimal aVAILABLE_STOWKSField;
-        
-        private string aUTO_APPLICATIONField;
-        
-        private decimal lAST_APPLICATIONField;
-        
-        private decimal iVA_TAX_RATEField;
-        
-        private decimal cASH_REC_EXCHGField;
-        
-        private string dIRCONTRATOSField;
-        
-        private decimal cASH_REC_EXCHGMField;
-        
-        private decimal sTOCKWKSINCField;
-        
-        private decimal aVAILABLE_STOWKSINCField;
-        
-        private decimal dAYPASS_CONSECField;
-        
-        private decimal eARLYCHECKOUT_CONSECField;
-        
-        private string sALES_ROOM_ORIGOSField;
-        
-        private YesNo wORKField;
-        
-        /// <comentarios/>
-        public decimal RECNUM {
-            get {
-                return this.rECNUMField;
-            }
-            set {
-                this.rECNUMField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string CODE_PROJ {
-            get {
-                return this.cODE_PROJField;
-            }
-            set {
-                this.cODE_PROJField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string CODE {
-            get {
-                return this.cODEField;
-            }
-            set {
-                this.cODEField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string NAME {
-            get {
-                return this.nAMEField;
-            }
-            set {
-                this.nAMEField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string ADDRESS1 {
-            get {
-                return this.aDDRESS1Field;
-            }
-            set {
-                this.aDDRESS1Field = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string ADDRESS2 {
-            get {
-                return this.aDDRESS2Field;
-            }
-            set {
-                this.aDDRESS2Field = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string PHONE {
-            get {
-                return this.pHONEField;
-            }
-            set {
-                this.pHONEField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string STATUS {
-            get {
-                return this.sTATUSField;
-            }
-            set {
-                this.sTATUSField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime FECHA_ALTA {
-            get {
-                return this.fECHA_ALTAField;
-            }
-            set {
-                this.fECHA_ALTAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string HORA_ALTA {
-            get {
-                return this.hORA_ALTAField;
-            }
-            set {
-                this.hORA_ALTAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string CVEALTA {
-            get {
-                return this.cVEALTAField;
-            }
-            set {
-                this.cVEALTAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime FECHA_BAJA {
-            get {
-                return this.fECHA_BAJAField;
-            }
-            set {
-                this.fECHA_BAJAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string HORA_BAJA {
-            get {
-                return this.hORA_BAJAField;
-            }
-            set {
-                this.hORA_BAJAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string CVEBAJA {
-            get {
-                return this.cVEBAJAField;
-            }
-            set {
-                this.cVEBAJAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime FECHA_MODIF {
-            get {
-                return this.fECHA_MODIFField;
-            }
-            set {
-                this.fECHA_MODIFField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string HORA_MODIF {
-            get {
-                return this.hORA_MODIFField;
-            }
-            set {
-                this.hORA_MODIFField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string CVEMODIF {
-            get {
-                return this.cVEMODIFField;
-            }
-            set {
-                this.cVEMODIFField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal STOCKWKS {
-            get {
-                return this.sTOCKWKSField;
-            }
-            set {
-                this.sTOCKWKSField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal AVAILABLE_STOWKS {
-            get {
-                return this.aVAILABLE_STOWKSField;
-            }
-            set {
-                this.aVAILABLE_STOWKSField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string AUTO_APPLICATION {
-            get {
-                return this.aUTO_APPLICATIONField;
-            }
-            set {
-                this.aUTO_APPLICATIONField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal LAST_APPLICATION {
-            get {
-                return this.lAST_APPLICATIONField;
-            }
-            set {
-                this.lAST_APPLICATIONField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal IVA_TAX_RATE {
-            get {
-                return this.iVA_TAX_RATEField;
-            }
-            set {
-                this.iVA_TAX_RATEField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal CASH_REC_EXCHG {
-            get {
-                return this.cASH_REC_EXCHGField;
-            }
-            set {
-                this.cASH_REC_EXCHGField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string DIRCONTRATOS {
-            get {
-                return this.dIRCONTRATOSField;
-            }
-            set {
-                this.dIRCONTRATOSField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal CASH_REC_EXCHGM {
-            get {
-                return this.cASH_REC_EXCHGMField;
-            }
-            set {
-                this.cASH_REC_EXCHGMField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal STOCKWKSINC {
-            get {
-                return this.sTOCKWKSINCField;
-            }
-            set {
-                this.sTOCKWKSINCField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal AVAILABLE_STOWKSINC {
-            get {
-                return this.aVAILABLE_STOWKSINCField;
-            }
-            set {
-                this.aVAILABLE_STOWKSINCField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal DAYPASS_CONSEC {
-            get {
-                return this.dAYPASS_CONSECField;
-            }
-            set {
-                this.dAYPASS_CONSECField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal EARLYCHECKOUT_CONSEC {
-            get {
-                return this.eARLYCHECKOUT_CONSECField;
-            }
-            set {
-                this.eARLYCHECKOUT_CONSECField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string SALES_ROOM_ORIGOS {
-            get {
-                return this.sALES_ROOM_ORIGOSField;
-            }
-            set {
-                this.sALES_ROOM_ORIGOSField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public YesNo WORK {
-            get {
-                return this.wORKField;
-            }
-            set {
-                this.wORKField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/YesNo.xsd")]
-    public enum YesNo {
-        
-        /// <comentarios/>
-        Yes,
-        
-        /// <comentarios/>
-        No,
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/IntegerResponse.xsd")]
-    public partial class IntegerResponse {
-        
-        private int dataField;
-        
-        private bool hasErrorsField;
-        
-        private ExceptionInfo exceptionInfoField;
-        
-        private string tagField;
-        
-        /// <comentarios/>
-        public int Data {
-            get {
-                return this.dataField;
-            }
-            set {
-                this.dataField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool HasErrors {
-            get {
-                return this.hasErrorsField;
-            }
-            set {
-                this.hasErrorsField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public ExceptionInfo ExceptionInfo {
-            get {
-                return this.exceptionInfoField;
-            }
-            set {
-                this.exceptionInfoField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/CardRequest.xsd")]
-    public partial class CardRequest {
-        
-        private Card cardField;
-        
-        private string tagField;
-        
-        /// <comentarios/>
-        public Card Card {
-            get {
-                return this.cardField;
-            }
-            set {
-                this.cardField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Card.xsd")]
-    public partial class Card {
-        
-        private decimal rECNUMField;
-        
-        private string iDCUENTAField;
-        
-        private string iDTARJETAField;
-        
-        private System.DateTime eXPEDICIONField;
-        
-        private System.DateTime eXPIRACIONField;
-        
-        private string nOMBREField;
-        
-        private Requisito aDICIONALField;
-        
-        private Status sTATUSField;
-        
-        private string cODIGO_SEGField;
-        
-        private TipoMonedero tIPOField;
-        
-        /// <comentarios/>
-        public decimal RECNUM {
-            get {
-                return this.rECNUMField;
-            }
-            set {
-                this.rECNUMField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string IDCUENTA {
-            get {
-                return this.iDCUENTAField;
-            }
-            set {
-                this.iDCUENTAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string IDTARJETA {
-            get {
-                return this.iDTARJETAField;
-            }
-            set {
-                this.iDTARJETAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime EXPEDICION {
-            get {
-                return this.eXPEDICIONField;
-            }
-            set {
-                this.eXPEDICIONField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime EXPIRACION {
-            get {
-                return this.eXPIRACIONField;
-            }
-            set {
-                this.eXPIRACIONField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string NOMBRE {
-            get {
-                return this.nOMBREField;
-            }
-            set {
-                this.nOMBREField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public Requisito ADICIONAL {
-            get {
-                return this.aDICIONALField;
-            }
-            set {
-                this.aDICIONALField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public Status STATUS {
-            get {
-                return this.sTATUSField;
-            }
-            set {
-                this.sTATUSField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string CODIGO_SEG {
-            get {
-                return this.cODIGO_SEGField;
-            }
-            set {
-                this.cODIGO_SEGField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public TipoMonedero TIPO {
-            get {
-                return this.tIPOField;
-            }
-            set {
-                this.tIPOField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Requisito.xsd")]
-    public enum Requisito {
-        
-        /// <comentarios/>
-        N,
-        
-        /// <comentarios/>
-        Y,
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Status.xsd")]
-    public enum Status {
-        
-        /// <comentarios/>
-        B,
-        
-        /// <comentarios/>
-        A,
-        
-        /// <comentarios/>
-        T,
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TipoMonedero.xsd")]
-    public enum TipoMonedero {
-        
-        /// <comentarios/>
-        T,
-        
-        /// <comentarios/>
-        B,
-        
-        /// <comentarios/>
-        H,
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/StringRequest.xsd")]
-    public partial class StringRequest {
-        
-        private string dataField;
-        
-        private string tagField;
-        
-        /// <comentarios/>
-        public string Data {
-            get {
-                return this.dataField;
-            }
-            set {
-                this.dataField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MovimientoResponse.xsd")]
-    public partial class MovimientoResponse {
-        
-        private MovimientoTarjeta[] dataField;
-        
-        private bool hasErrorsField;
-        
-        private ExceptionInfo exceptionInfoField;
-        
-        private string tagField;
-        
-        /// <comentarios/>
-        public MovimientoTarjeta[] Data {
-            get {
-                return this.dataField;
-            }
-            set {
-                this.dataField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool HasErrors {
-            get {
-                return this.hasErrorsField;
-            }
-            set {
-                this.hasErrorsField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public ExceptionInfo ExceptionInfo {
-            get {
-                return this.exceptionInfoField;
-            }
-            set {
-                this.exceptionInfoField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MovimientoTarjeta.xsd")]
-    public partial class MovimientoTarjeta {
-        
-        private int eXITOField;
-        
-        private decimal sALDOField;
-        
-        private string descripcionErrorField;
-        
-        private string idProductoField;
-        
-        private int consecutivoField;
-        
-        /// <comentarios/>
-        public int EXITO {
-            get {
-                return this.eXITOField;
-            }
-            set {
-                this.eXITOField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal SALDO {
-            get {
-                return this.sALDOField;
-            }
-            set {
-                this.sALDOField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string DescripcionError {
-            get {
-                return this.descripcionErrorField;
-            }
-            set {
-                this.descripcionErrorField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string IdProducto {
-            get {
-                return this.idProductoField;
-            }
-            set {
-                this.idProductoField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public int Consecutivo {
-            get {
-                return this.consecutivoField;
-            }
-            set {
-                this.consecutivoField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/BooleanResponse.xsd")]
-    public partial class BooleanResponse {
-        
-        private bool dataField;
-        
-        private bool hasErrorsField;
-        
-        private ExceptionInfo exceptionInfoField;
-        
-        private string tagField;
-        
-        /// <comentarios/>
-        public bool Data {
-            get {
-                return this.dataField;
-            }
-            set {
-                this.dataField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool HasErrors {
-            get {
-                return this.hasErrorsField;
-            }
-            set {
-                this.hasErrorsField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public ExceptionInfo ExceptionInfo {
-            get {
-                return this.exceptionInfoField;
-            }
-            set {
-                this.exceptionInfoField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoAccountCardResponse.xsd")]
-    public partial class InfoAccountCardResponse {
-        
-        private InfoAccountCard dataField;
-        
-        private string tagField;
-        
-        private bool hasErrorsField;
-        
-        private ExceptionInfo exceptionInfoField;
-        
-        /// <comentarios/>
-        public InfoAccountCard Data {
-            get {
-                return this.dataField;
-            }
-            set {
-                this.dataField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool HasErrors {
-            get {
-                return this.hasErrorsField;
-            }
-            set {
-                this.hasErrorsField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public ExceptionInfo ExceptionInfo {
-            get {
-                return this.exceptionInfoField;
-            }
-            set {
-                this.exceptionInfoField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoAccountCard.xsd")]
-    public partial class InfoAccountCard {
-        
-        private Account accountField;
-        
-        private Card cardField;
-        
-        private string hashField;
-        
-        private Card[] arrayCardsField;
-        
-        private Reservation reservationField;
-        
-        /// <comentarios/>
-        public Account Account {
-            get {
-                return this.accountField;
-            }
-            set {
-                this.accountField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public Card Card {
-            get {
-                return this.cardField;
-            }
-            set {
-                this.cardField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Hash {
-            get {
-                return this.hashField;
-            }
-            set {
-                this.hashField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public Card[] ArrayCards {
-            get {
-                return this.arrayCardsField;
-            }
-            set {
-                this.arrayCardsField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public Reservation Reservation {
-            get {
-                return this.reservationField;
-            }
-            set {
-                this.reservationField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Account.xsd")]
-    public partial class Account {
-        
-        private decimal rECNUMField;
-        
-        private string iDCUENTAField;
-        
-        private string nOMBREField;
-        
-        private System.DateTime cREACIONField;
-        
-        private Status sTATUSField;
-        
-        /// <comentarios/>
-        public decimal RECNUM {
-            get {
-                return this.rECNUMField;
-            }
-            set {
-                this.rECNUMField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string IDCUENTA {
-            get {
-                return this.iDCUENTAField;
-            }
-            set {
-                this.iDCUENTAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string NOMBRE {
-            get {
-                return this.nOMBREField;
-            }
-            set {
-                this.nOMBREField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime CREACION {
-            get {
-                return this.cREACIONField;
-            }
-            set {
-                this.cREACIONField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public Status STATUS {
-            get {
-                return this.sTATUSField;
-            }
-            set {
-                this.sTATUSField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Reservation.xsd")]
-    public partial class Reservation {
-        
-        private string hotelField;
-        
-        private int folioField;
-        
-        private ReservationType typeField;
-        
-        private string hotelPreviousField;
-        
-        private int folioPreviousField;
-        
-        /// <comentarios/>
-        public string Hotel {
-            get {
-                return this.hotelField;
-            }
-            set {
-                this.hotelField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public int Folio {
-            get {
-                return this.folioField;
-            }
-            set {
-                this.folioField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public ReservationType Type {
-            get {
-                return this.typeField;
-            }
-            set {
-                this.typeField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string HotelPrevious {
-            get {
-                return this.hotelPreviousField;
-            }
-            set {
-                this.hotelPreviousField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public int FolioPrevious {
-            get {
-                return this.folioPreviousField;
-            }
-            set {
-                this.folioPreviousField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ReservationType.xsd")]
-    public enum ReservationType {
-        
-        /// <comentarios/>
-        N,
-        
-        /// <comentarios/>
-        T,
-        
-        /// <comentarios/>
-        E,
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Tarjeta.xsd")]
-    public partial class Tarjeta {
-        
-        private string numeroCuentaField;
-        
-        private string numeroTarjetaField;
-        
-        private string coField;
-        
-        private string memberField;
-        
-        private string nombreTitularField;
-        
-        private string nombreTarjetaField;
-        
-        private System.DateTime fechaCaducidadField;
-        
-        private decimal saldoField;
-        
-        private Requisito adicionalField;
-        
-        private System.DateTime expedicionField;
-        
-        private decimal idregaloField;
-        
-        private decimal menoresField;
-        
-        private decimal adultosField;
-        
-        private string idservicioField;
-        
-        private string monedaField;
-        
-        private string nombreProductoField;
-        
-        private string productoField;
-        
-        /// <comentarios/>
-        public string NumeroCuenta {
-            get {
-                return this.numeroCuentaField;
-            }
-            set {
-                this.numeroCuentaField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string NumeroTarjeta {
-            get {
-                return this.numeroTarjetaField;
-            }
-            set {
-                this.numeroTarjetaField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Co {
-            get {
-                return this.coField;
-            }
-            set {
-                this.coField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Member {
-            get {
-                return this.memberField;
-            }
-            set {
-                this.memberField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string NombreTitular {
-            get {
-                return this.nombreTitularField;
-            }
-            set {
-                this.nombreTitularField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string NombreTarjeta {
-            get {
-                return this.nombreTarjetaField;
-            }
-            set {
-                this.nombreTarjetaField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime FechaCaducidad {
-            get {
-                return this.fechaCaducidadField;
-            }
-            set {
-                this.fechaCaducidadField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal Saldo {
-            get {
-                return this.saldoField;
-            }
-            set {
-                this.saldoField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public Requisito Adicional {
-            get {
-                return this.adicionalField;
-            }
-            set {
-                this.adicionalField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime Expedicion {
-            get {
-                return this.expedicionField;
-            }
-            set {
-                this.expedicionField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal Idregalo {
-            get {
-                return this.idregaloField;
-            }
-            set {
-                this.idregaloField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal Menores {
-            get {
-                return this.menoresField;
-            }
-            set {
-                this.menoresField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal Adultos {
-            get {
-                return this.adultosField;
-            }
-            set {
-                this.adultosField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Idservicio {
-            get {
-                return this.idservicioField;
-            }
-            set {
-                this.idservicioField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Moneda {
-            get {
-                return this.monedaField;
-            }
-            set {
-                this.monedaField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string NombreProducto {
-            get {
-                return this.nombreProductoField;
-            }
-            set {
-                this.nombreProductoField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Producto {
-            get {
-                return this.productoField;
-            }
-            set {
-                this.productoField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TarjetaResponse.xsd")]
-    public partial class TarjetaResponse {
-        
-        private Tarjeta[] dataField;
-        
-        private bool hasErrorsField;
-        
-        private ExceptionInfo exceptionInfoField;
-        
-        private string tagField;
-        
-        /// <comentarios/>
-        public Tarjeta[] Data {
-            get {
-                return this.dataField;
-            }
-            set {
-                this.dataField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool HasErrors {
-            get {
-                return this.hasErrorsField;
-            }
-            set {
-                this.hasErrorsField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public ExceptionInfo ExceptionInfo {
-            get {
-                return this.exceptionInfoField;
-            }
-            set {
-                this.exceptionInfoField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RptEquityResponse.xsd")]
     public partial class RptEquityResponse {
         
@@ -8763,6 +7192,8 @@ namespace IM.Services.ClubesService {
         
         private string cancelTypeNameField;
         
+        private System.DateTime purchaseField;
+        
         /// <comentarios/>
         public decimal Company {
             get {
@@ -8942,73 +7373,14 @@ namespace IM.Services.ClubesService {
                 this.cancelTypeNameField = value;
             }
         }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TarjetaRequest.xsd")]
-    public partial class TarjetaRequest {
-        
-        private Card tarjetaField;
-        
-        private string idProductoField;
-        
-        private decimal idSistemaField;
-        
-        private string idCuentaField;
-        
-        private string tagField;
         
         /// <comentarios/>
-        public Card Tarjeta {
+        public System.DateTime Purchase {
             get {
-                return this.tarjetaField;
+                return this.purchaseField;
             }
             set {
-                this.tarjetaField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string IdProducto {
-            get {
-                return this.idProductoField;
-            }
-            set {
-                this.idProductoField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal IdSistema {
-            get {
-                return this.idSistemaField;
-            }
-            set {
-                this.idSistemaField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string IdCuenta {
-            get {
-                return this.idCuentaField;
-            }
-            set {
-                this.idCuentaField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
+                this.purchaseField = value;
             }
         }
     }
@@ -9018,1069 +7390,54 @@ namespace IM.Services.ClubesService {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberExtensionResponse.xsd")]
-    public partial class MemberExtensionResponse {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ExceptionInfo.xsd")]
+    public partial class ExceptionInfo {
         
-        private MemberExtension[] dataField;
+        private string typeField;
         
-        private string tagField;
+        private string messageField;
         
-        private bool hasErrorsField;
+        private string sourceField;
         
-        private ExceptionInfo exceptionInfoField;
+        private string stackTraceField;
         
         /// <comentarios/>
-        public MemberExtension[] Data {
+        public string Type {
             get {
-                return this.dataField;
+                return this.typeField;
             }
             set {
-                this.dataField = value;
+                this.typeField = value;
             }
         }
         
         /// <comentarios/>
-        public string Tag {
+        public string Message {
             get {
-                return this.tagField;
+                return this.messageField;
             }
             set {
-                this.tagField = value;
+                this.messageField = value;
             }
         }
         
         /// <comentarios/>
-        public bool HasErrors {
+        public string Source {
             get {
-                return this.hasErrorsField;
+                return this.sourceField;
             }
             set {
-                this.hasErrorsField = value;
+                this.sourceField = value;
             }
         }
         
         /// <comentarios/>
-        public ExceptionInfo ExceptionInfo {
+        public string StackTrace {
             get {
-                return this.exceptionInfoField;
+                return this.stackTraceField;
             }
             set {
-                this.exceptionInfoField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MpCarinvResponse.xsd")]
-    public partial class MpCarinvResponse {
-        
-        private MPCARINV[] dataField;
-        
-        private bool hasErrorsField;
-        
-        private ExceptionInfo exceptionInfoField;
-        
-        private string tagField;
-        
-        /// <comentarios/>
-        public MPCARINV[] Data {
-            get {
-                return this.dataField;
-            }
-            set {
-                this.dataField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool HasErrors {
-            get {
-                return this.hasErrorsField;
-            }
-            set {
-                this.hasErrorsField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public ExceptionInfo ExceptionInfo {
-            get {
-                return this.exceptionInfoField;
-            }
-            set {
-                this.exceptionInfoField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MPCARINV.xsd")]
-    public partial class MPCARINV {
-        
-        private decimal rECNUMField;
-        
-        private string iDCUENTAField;
-        
-        private string iDPRODUCTOField;
-        
-        private decimal cONSECUTIVOField;
-        
-        private TipoMovimiento tIPOField;
-        
-        private System.DateTime fECHAField;
-        
-        private string dESCRIPCIONField;
-        
-        private decimal iMPORTEField;
-        
-        private string rEFERENCIAField;
-        
-        private System.DateTime vIGENCIAINIField;
-        
-        private System.DateTime vIGENCIAFINField;
-        
-        private decimal iMPORTEUSADOField;
-        
-        private string iDTARJETAField;
-        
-        private string aCTIVADOField;
-        
-        private decimal iDPTOVTAField;
-        
-        private decimal cOMPANYField;
-        
-        private string aPPLICATIONField;
-        
-        private decimal cO_AMIGOField;
-        
-        private string aPP_AMIGOField;
-        
-        private string mOVTO_ESPECIALField;
-        
-        private string nOTAField;
-        
-        private System.DateTime vIGENCIAFIN15Field;
-        
-        private System.DateTime fECMONTOLIBField;
-        
-        private decimal mPAYSField;
-        
-        private System.DateTime fECHA_MODIFField;
-        
-        private string hORA_MODIFField;
-        
-        private string iDPAISField;
-        
-        private decimal aDULTOSField;
-        
-        private decimal mENORESField;
-        
-        private decimal sHOWADULTOSField;
-        
-        private decimal sHOWMENORESField;
-        
-        private System.DateTime sHOWDATEField;
-        
-        private decimal iDREGALOField;
-        
-        /// <comentarios/>
-        public decimal RECNUM {
-            get {
-                return this.rECNUMField;
-            }
-            set {
-                this.rECNUMField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string IDCUENTA {
-            get {
-                return this.iDCUENTAField;
-            }
-            set {
-                this.iDCUENTAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string IDPRODUCTO {
-            get {
-                return this.iDPRODUCTOField;
-            }
-            set {
-                this.iDPRODUCTOField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal CONSECUTIVO {
-            get {
-                return this.cONSECUTIVOField;
-            }
-            set {
-                this.cONSECUTIVOField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public TipoMovimiento TIPO {
-            get {
-                return this.tIPOField;
-            }
-            set {
-                this.tIPOField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime FECHA {
-            get {
-                return this.fECHAField;
-            }
-            set {
-                this.fECHAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string DESCRIPCION {
-            get {
-                return this.dESCRIPCIONField;
-            }
-            set {
-                this.dESCRIPCIONField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal IMPORTE {
-            get {
-                return this.iMPORTEField;
-            }
-            set {
-                this.iMPORTEField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string REFERENCIA {
-            get {
-                return this.rEFERENCIAField;
-            }
-            set {
-                this.rEFERENCIAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime VIGENCIAINI {
-            get {
-                return this.vIGENCIAINIField;
-            }
-            set {
-                this.vIGENCIAINIField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime VIGENCIAFIN {
-            get {
-                return this.vIGENCIAFINField;
-            }
-            set {
-                this.vIGENCIAFINField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal IMPORTEUSADO {
-            get {
-                return this.iMPORTEUSADOField;
-            }
-            set {
-                this.iMPORTEUSADOField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string IDTARJETA {
-            get {
-                return this.iDTARJETAField;
-            }
-            set {
-                this.iDTARJETAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string ACTIVADO {
-            get {
-                return this.aCTIVADOField;
-            }
-            set {
-                this.aCTIVADOField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal IDPTOVTA {
-            get {
-                return this.iDPTOVTAField;
-            }
-            set {
-                this.iDPTOVTAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal COMPANY {
-            get {
-                return this.cOMPANYField;
-            }
-            set {
-                this.cOMPANYField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string APPLICATION {
-            get {
-                return this.aPPLICATIONField;
-            }
-            set {
-                this.aPPLICATIONField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal CO_AMIGO {
-            get {
-                return this.cO_AMIGOField;
-            }
-            set {
-                this.cO_AMIGOField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string APP_AMIGO {
-            get {
-                return this.aPP_AMIGOField;
-            }
-            set {
-                this.aPP_AMIGOField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string MOVTO_ESPECIAL {
-            get {
-                return this.mOVTO_ESPECIALField;
-            }
-            set {
-                this.mOVTO_ESPECIALField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string NOTA {
-            get {
-                return this.nOTAField;
-            }
-            set {
-                this.nOTAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime VIGENCIAFIN15 {
-            get {
-                return this.vIGENCIAFIN15Field;
-            }
-            set {
-                this.vIGENCIAFIN15Field = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime FECMONTOLIB {
-            get {
-                return this.fECMONTOLIBField;
-            }
-            set {
-                this.fECMONTOLIBField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal MPAYS {
-            get {
-                return this.mPAYSField;
-            }
-            set {
-                this.mPAYSField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime FECHA_MODIF {
-            get {
-                return this.fECHA_MODIFField;
-            }
-            set {
-                this.fECHA_MODIFField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string HORA_MODIF {
-            get {
-                return this.hORA_MODIFField;
-            }
-            set {
-                this.hORA_MODIFField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string IDPAIS {
-            get {
-                return this.iDPAISField;
-            }
-            set {
-                this.iDPAISField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal ADULTOS {
-            get {
-                return this.aDULTOSField;
-            }
-            set {
-                this.aDULTOSField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal MENORES {
-            get {
-                return this.mENORESField;
-            }
-            set {
-                this.mENORESField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal SHOWADULTOS {
-            get {
-                return this.sHOWADULTOSField;
-            }
-            set {
-                this.sHOWADULTOSField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal SHOWMENORES {
-            get {
-                return this.sHOWMENORESField;
-            }
-            set {
-                this.sHOWMENORESField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime SHOWDATE {
-            get {
-                return this.sHOWDATEField;
-            }
-            set {
-                this.sHOWDATEField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal IDREGALO {
-            get {
-                return this.iDREGALOField;
-            }
-            set {
-                this.iDREGALOField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TipoMovimiento.xsd")]
-    public enum TipoMovimiento {
-        
-        /// <comentarios/>
-        A,
-        
-        /// <comentarios/>
-        C,
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembershipOrigosRequest.xsd")]
-    public partial class MembershipOrigosRequest {
-        
-        private MembershipOrigos membershipOrigosField;
-        
-        private string tagField;
-        
-        /// <comentarios/>
-        public MembershipOrigos MembershipOrigos {
-            get {
-                return this.membershipOrigosField;
-            }
-            set {
-                this.membershipOrigosField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembershipOrigos.xsd")]
-    public partial class MembershipOrigos {
-        
-        private decimal companyField;
-        
-        private string applicationField;
-        
-        private int guestIDField;
-        
-        private string firstNameField;
-        
-        private string lastNameField;
-        
-        private string firstName2Field;
-        
-        private string lastName2Field;
-        
-        private System.DateTime saleDateField;
-        
-        private bool procesableField;
-        
-        private System.DateTime procesableDateField;
-        
-        private bool cancelField;
-        
-        private System.DateTime cancelDateField;
-        
-        private string saleTypeField;
-        
-        private string saleTypeNField;
-        
-        private string membershipTypeField;
-        
-        private string membershipTypeNField;
-        
-        private string membershipTypeByAmountField;
-        
-        private string membershipTypeByAmountNField;
-        
-        private decimal totalField;
-        
-        private decimal subtotalField;
-        
-        private decimal downPaymentField;
-        
-        private decimal downPaymentPercentageField;
-        
-        private decimal downPaymentPaidField;
-        
-        private decimal downPaymentPaidPercentageField;
-        
-        private string previousApplicationField;
-        
-        private decimal previousTotalField;
-        
-        private decimal previousSubtotalField;
-        
-        private MemberSalesman[] salesmenField;
-        
-        /// <comentarios/>
-        public decimal Company {
-            get {
-                return this.companyField;
-            }
-            set {
-                this.companyField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Application {
-            get {
-                return this.applicationField;
-            }
-            set {
-                this.applicationField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public int GuestID {
-            get {
-                return this.guestIDField;
-            }
-            set {
-                this.guestIDField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string FirstName {
-            get {
-                return this.firstNameField;
-            }
-            set {
-                this.firstNameField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string LastName {
-            get {
-                return this.lastNameField;
-            }
-            set {
-                this.lastNameField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string FirstName2 {
-            get {
-                return this.firstName2Field;
-            }
-            set {
-                this.firstName2Field = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string LastName2 {
-            get {
-                return this.lastName2Field;
-            }
-            set {
-                this.lastName2Field = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime SaleDate {
-            get {
-                return this.saleDateField;
-            }
-            set {
-                this.saleDateField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool Procesable {
-            get {
-                return this.procesableField;
-            }
-            set {
-                this.procesableField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime ProcesableDate {
-            get {
-                return this.procesableDateField;
-            }
-            set {
-                this.procesableDateField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool Cancel {
-            get {
-                return this.cancelField;
-            }
-            set {
-                this.cancelField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime CancelDate {
-            get {
-                return this.cancelDateField;
-            }
-            set {
-                this.cancelDateField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string SaleType {
-            get {
-                return this.saleTypeField;
-            }
-            set {
-                this.saleTypeField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string SaleTypeN {
-            get {
-                return this.saleTypeNField;
-            }
-            set {
-                this.saleTypeNField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string MembershipType {
-            get {
-                return this.membershipTypeField;
-            }
-            set {
-                this.membershipTypeField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string MembershipTypeN {
-            get {
-                return this.membershipTypeNField;
-            }
-            set {
-                this.membershipTypeNField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string MembershipTypeByAmount {
-            get {
-                return this.membershipTypeByAmountField;
-            }
-            set {
-                this.membershipTypeByAmountField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string MembershipTypeByAmountN {
-            get {
-                return this.membershipTypeByAmountNField;
-            }
-            set {
-                this.membershipTypeByAmountNField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal Total {
-            get {
-                return this.totalField;
-            }
-            set {
-                this.totalField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal Subtotal {
-            get {
-                return this.subtotalField;
-            }
-            set {
-                this.subtotalField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal DownPayment {
-            get {
-                return this.downPaymentField;
-            }
-            set {
-                this.downPaymentField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal DownPaymentPercentage {
-            get {
-                return this.downPaymentPercentageField;
-            }
-            set {
-                this.downPaymentPercentageField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal DownPaymentPaid {
-            get {
-                return this.downPaymentPaidField;
-            }
-            set {
-                this.downPaymentPaidField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal DownPaymentPaidPercentage {
-            get {
-                return this.downPaymentPaidPercentageField;
-            }
-            set {
-                this.downPaymentPaidPercentageField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string PreviousApplication {
-            get {
-                return this.previousApplicationField;
-            }
-            set {
-                this.previousApplicationField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal PreviousTotal {
-            get {
-                return this.previousTotalField;
-            }
-            set {
-                this.previousTotalField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal PreviousSubtotal {
-            get {
-                return this.previousSubtotalField;
-            }
-            set {
-                this.previousSubtotalField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public MemberSalesman[] Salesmen {
-            get {
-                return this.salesmenField;
-            }
-            set {
-                this.salesmenField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberSalesman.xsd")]
-    public partial class MemberSalesman {
-        
-        private decimal rECNUMField;
-        
-        private decimal cLMEMOPC_IDField;
-        
-        private string cLAOPC_IDField;
-        
-        private string cODEField;
-        
-        private string nAMEField;
-        
-        private string sTATUSField;
-        
-        private string aPPLICATIONField;
-        
-        private bool aCTIVOField;
-        
-        /// <comentarios/>
-        public decimal RECNUM {
-            get {
-                return this.rECNUMField;
-            }
-            set {
-                this.rECNUMField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal CLMEMOPC_ID {
-            get {
-                return this.cLMEMOPC_IDField;
-            }
-            set {
-                this.cLMEMOPC_IDField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string CLAOPC_ID {
-            get {
-                return this.cLAOPC_IDField;
-            }
-            set {
-                this.cLAOPC_IDField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string CODE {
-            get {
-                return this.cODEField;
-            }
-            set {
-                this.cODEField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string NAME {
-            get {
-                return this.nAMEField;
-            }
-            set {
-                this.nAMEField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string STATUS {
-            get {
-                return this.sTATUSField;
-            }
-            set {
-                this.sTATUSField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string APPLICATION {
-            get {
-                return this.aPPLICATIONField;
-            }
-            set {
-                this.aPPLICATIONField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool ACTIVO {
-            get {
-                return this.aCTIVOField;
-            }
-            set {
-                this.aCTIVOField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/CardResponse.xsd")]
-    public partial class CardResponse {
-        
-        private Card[] dataField;
-        
-        private bool hasErrorsField;
-        
-        private ExceptionInfo exceptionInfoField;
-        
-        private string tagField;
-        
-        /// <comentarios/>
-        public Card[] Data {
-            get {
-                return this.dataField;
-            }
-            set {
-                this.dataField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool HasErrors {
-            get {
-                return this.hasErrorsField;
-            }
-            set {
-                this.hasErrorsField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public ExceptionInfo ExceptionInfo {
-            get {
-                return this.exceptionInfoField;
-            }
-            set {
-                this.exceptionInfoField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
+                this.stackTraceField = value;
             }
         }
     }
@@ -10324,10 +7681,1174 @@ namespace IM.Services.ClubesService {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembresiaAsociadaResponse.xsd")]
-    public partial class MembresiaAsociadaResponse {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/IntegerResponse.xsd")]
+    public partial class IntegerResponse {
         
-        private MembresiaAsociada[] dataField;
+        private int dataField;
+        
+        private bool hasErrorsField;
+        
+        private ExceptionInfo exceptionInfoField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public int Data {
+            get {
+                return this.dataField;
+            }
+            set {
+                this.dataField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool HasErrors {
+            get {
+                return this.hasErrorsField;
+            }
+            set {
+                this.hasErrorsField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public ExceptionInfo ExceptionInfo {
+            get {
+                return this.exceptionInfoField;
+            }
+            set {
+                this.exceptionInfoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TarjetaResponse.xsd")]
+    public partial class TarjetaResponse {
+        
+        private Tarjeta[] dataField;
+        
+        private bool hasErrorsField;
+        
+        private ExceptionInfo exceptionInfoField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public Tarjeta[] Data {
+            get {
+                return this.dataField;
+            }
+            set {
+                this.dataField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool HasErrors {
+            get {
+                return this.hasErrorsField;
+            }
+            set {
+                this.hasErrorsField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public ExceptionInfo ExceptionInfo {
+            get {
+                return this.exceptionInfoField;
+            }
+            set {
+                this.exceptionInfoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Tarjeta.xsd")]
+    public partial class Tarjeta {
+        
+        private string numeroCuentaField;
+        
+        private string numeroTarjetaField;
+        
+        private string coField;
+        
+        private string memberField;
+        
+        private string nombreTitularField;
+        
+        private string nombreTarjetaField;
+        
+        private System.DateTime fechaCaducidadField;
+        
+        private decimal saldoField;
+        
+        private Requisito adicionalField;
+        
+        private System.DateTime expedicionField;
+        
+        private decimal idregaloField;
+        
+        private decimal menoresField;
+        
+        private decimal adultosField;
+        
+        private string idservicioField;
+        
+        private string monedaField;
+        
+        private string nombreProductoField;
+        
+        private string productoField;
+        
+        /// <comentarios/>
+        public string NumeroCuenta {
+            get {
+                return this.numeroCuentaField;
+            }
+            set {
+                this.numeroCuentaField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string NumeroTarjeta {
+            get {
+                return this.numeroTarjetaField;
+            }
+            set {
+                this.numeroTarjetaField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Co {
+            get {
+                return this.coField;
+            }
+            set {
+                this.coField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Member {
+            get {
+                return this.memberField;
+            }
+            set {
+                this.memberField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string NombreTitular {
+            get {
+                return this.nombreTitularField;
+            }
+            set {
+                this.nombreTitularField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string NombreTarjeta {
+            get {
+                return this.nombreTarjetaField;
+            }
+            set {
+                this.nombreTarjetaField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime FechaCaducidad {
+            get {
+                return this.fechaCaducidadField;
+            }
+            set {
+                this.fechaCaducidadField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal Saldo {
+            get {
+                return this.saldoField;
+            }
+            set {
+                this.saldoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public Requisito Adicional {
+            get {
+                return this.adicionalField;
+            }
+            set {
+                this.adicionalField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime Expedicion {
+            get {
+                return this.expedicionField;
+            }
+            set {
+                this.expedicionField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal Idregalo {
+            get {
+                return this.idregaloField;
+            }
+            set {
+                this.idregaloField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal Menores {
+            get {
+                return this.menoresField;
+            }
+            set {
+                this.menoresField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal Adultos {
+            get {
+                return this.adultosField;
+            }
+            set {
+                this.adultosField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Idservicio {
+            get {
+                return this.idservicioField;
+            }
+            set {
+                this.idservicioField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Moneda {
+            get {
+                return this.monedaField;
+            }
+            set {
+                this.monedaField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string NombreProducto {
+            get {
+                return this.nombreProductoField;
+            }
+            set {
+                this.nombreProductoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Producto {
+            get {
+                return this.productoField;
+            }
+            set {
+                this.productoField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Requisito.xsd")]
+    public enum Requisito {
+        
+        /// <comentarios/>
+        N,
+        
+        /// <comentarios/>
+        Y,
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/VendedorRequest.xsd")]
+    public partial class VendedorRequest {
+        
+        private Vendedor vendedorField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public Vendedor Vendedor {
+            get {
+                return this.vendedorField;
+            }
+            set {
+                this.vendedorField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Vendedor.xsd")]
+    public partial class Vendedor {
+        
+        private decimal rECNUMField;
+        
+        private string zONAField;
+        
+        private string cODEField;
+        
+        private string nAMEField;
+        
+        private string jOBField;
+        
+        private string oPCField;
+        
+        private string mAIL_NAMEField;
+        
+        private string aDDRESS1Field;
+        
+        private string aDDRESS2Field;
+        
+        private string aDDRESS3Field;
+        
+        private string aDDRESS4Field;
+        
+        private string idField;
+        
+        private string sTATUSField;
+        
+        private string nO_PAYField;
+        
+        private string gL1108Field;
+        
+        private string gL2103Field;
+        
+        private string pLANField;
+        
+        private string fACTURAField;
+        
+        private string cNX_FUNDField;
+        
+        private string scField;
+        
+        private decimal pERC1Field;
+        
+        private decimal dIAS_TRABField;
+        
+        private string tIPOSCField;
+        
+        private string gPOField;
+        
+        private string cTA_BANCOField;
+        
+        /// <comentarios/>
+        public decimal RECNUM {
+            get {
+                return this.rECNUMField;
+            }
+            set {
+                this.rECNUMField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string ZONA {
+            get {
+                return this.zONAField;
+            }
+            set {
+                this.zONAField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string CODE {
+            get {
+                return this.cODEField;
+            }
+            set {
+                this.cODEField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string NAME {
+            get {
+                return this.nAMEField;
+            }
+            set {
+                this.nAMEField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string JOB {
+            get {
+                return this.jOBField;
+            }
+            set {
+                this.jOBField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string OPC {
+            get {
+                return this.oPCField;
+            }
+            set {
+                this.oPCField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string MAIL_NAME {
+            get {
+                return this.mAIL_NAMEField;
+            }
+            set {
+                this.mAIL_NAMEField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string ADDRESS1 {
+            get {
+                return this.aDDRESS1Field;
+            }
+            set {
+                this.aDDRESS1Field = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string ADDRESS2 {
+            get {
+                return this.aDDRESS2Field;
+            }
+            set {
+                this.aDDRESS2Field = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string ADDRESS3 {
+            get {
+                return this.aDDRESS3Field;
+            }
+            set {
+                this.aDDRESS3Field = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string ADDRESS4 {
+            get {
+                return this.aDDRESS4Field;
+            }
+            set {
+                this.aDDRESS4Field = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string ID {
+            get {
+                return this.idField;
+            }
+            set {
+                this.idField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string STATUS {
+            get {
+                return this.sTATUSField;
+            }
+            set {
+                this.sTATUSField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string NO_PAY {
+            get {
+                return this.nO_PAYField;
+            }
+            set {
+                this.nO_PAYField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string GL1108 {
+            get {
+                return this.gL1108Field;
+            }
+            set {
+                this.gL1108Field = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string GL2103 {
+            get {
+                return this.gL2103Field;
+            }
+            set {
+                this.gL2103Field = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string PLAN {
+            get {
+                return this.pLANField;
+            }
+            set {
+                this.pLANField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string FACTURA {
+            get {
+                return this.fACTURAField;
+            }
+            set {
+                this.fACTURAField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string CNX_FUND {
+            get {
+                return this.cNX_FUNDField;
+            }
+            set {
+                this.cNX_FUNDField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string SC {
+            get {
+                return this.scField;
+            }
+            set {
+                this.scField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal PERC1 {
+            get {
+                return this.pERC1Field;
+            }
+            set {
+                this.pERC1Field = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal DIAS_TRAB {
+            get {
+                return this.dIAS_TRABField;
+            }
+            set {
+                this.dIAS_TRABField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string TIPOSC {
+            get {
+                return this.tIPOSCField;
+            }
+            set {
+                this.tIPOSCField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string GPO {
+            get {
+                return this.gPOField;
+            }
+            set {
+                this.gPOField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string CTA_BANCO {
+            get {
+                return this.cTA_BANCOField;
+            }
+            set {
+                this.cTA_BANCOField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoQuery.xsd")]
+    public partial class InfoQuery {
+        
+        private string applicationField;
+        
+        private string proyectoField;
+        
+        private string oficinaField;
+        
+        private string companiaField;
+        
+        private System.DateTime fechaInicioField;
+        
+        private System.DateTime fechaFinField;
+        
+        private string tipoIniField;
+        
+        private string tipoFinField;
+        
+        private string carteraField;
+        
+        private string generalField;
+        
+        private string sociedadInicioField;
+        
+        private string sociedadFinField;
+        
+        private string zonaInicioField;
+        
+        private string zonaFinField;
+        
+        private string zonaField;
+        
+        private string valeField;
+        
+        private string vendedorInicialField;
+        
+        private string vendedorFinalField;
+        
+        private string regaloIdField;
+        
+        private bool todosField;
+        
+        private bool consumidosField;
+        
+        private string hotelField;
+        
+        private Status estadoField;
+        
+        private StatusRegistros statusField;
+        
+        private string locacionField;
+        
+        private System.DateTime fechaField;
+        
+        private string excluirField;
+        
+        private int yearField;
+        
+        private string listaField;
+        
+        private int folioField;
+        
+        private string iDProductoField;
+        
+        private string usuarioField;
+        
+        private decimal adminFeeField;
+        
+        private decimal downPaymentField;
+        
+        /// <comentarios/>
+        public string Application {
+            get {
+                return this.applicationField;
+            }
+            set {
+                this.applicationField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Proyecto {
+            get {
+                return this.proyectoField;
+            }
+            set {
+                this.proyectoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Oficina {
+            get {
+                return this.oficinaField;
+            }
+            set {
+                this.oficinaField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Compania {
+            get {
+                return this.companiaField;
+            }
+            set {
+                this.companiaField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime FechaInicio {
+            get {
+                return this.fechaInicioField;
+            }
+            set {
+                this.fechaInicioField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime FechaFin {
+            get {
+                return this.fechaFinField;
+            }
+            set {
+                this.fechaFinField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string TipoIni {
+            get {
+                return this.tipoIniField;
+            }
+            set {
+                this.tipoIniField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string TipoFin {
+            get {
+                return this.tipoFinField;
+            }
+            set {
+                this.tipoFinField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Cartera {
+            get {
+                return this.carteraField;
+            }
+            set {
+                this.carteraField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string General {
+            get {
+                return this.generalField;
+            }
+            set {
+                this.generalField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string SociedadInicio {
+            get {
+                return this.sociedadInicioField;
+            }
+            set {
+                this.sociedadInicioField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string SociedadFin {
+            get {
+                return this.sociedadFinField;
+            }
+            set {
+                this.sociedadFinField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string ZonaInicio {
+            get {
+                return this.zonaInicioField;
+            }
+            set {
+                this.zonaInicioField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string ZonaFin {
+            get {
+                return this.zonaFinField;
+            }
+            set {
+                this.zonaFinField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Zona {
+            get {
+                return this.zonaField;
+            }
+            set {
+                this.zonaField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Vale {
+            get {
+                return this.valeField;
+            }
+            set {
+                this.valeField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string VendedorInicial {
+            get {
+                return this.vendedorInicialField;
+            }
+            set {
+                this.vendedorInicialField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string VendedorFinal {
+            get {
+                return this.vendedorFinalField;
+            }
+            set {
+                this.vendedorFinalField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string RegaloId {
+            get {
+                return this.regaloIdField;
+            }
+            set {
+                this.regaloIdField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool Todos {
+            get {
+                return this.todosField;
+            }
+            set {
+                this.todosField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool Consumidos {
+            get {
+                return this.consumidosField;
+            }
+            set {
+                this.consumidosField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Hotel {
+            get {
+                return this.hotelField;
+            }
+            set {
+                this.hotelField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public Status Estado {
+            get {
+                return this.estadoField;
+            }
+            set {
+                this.estadoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public StatusRegistros Status {
+            get {
+                return this.statusField;
+            }
+            set {
+                this.statusField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Locacion {
+            get {
+                return this.locacionField;
+            }
+            set {
+                this.locacionField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime Fecha {
+            get {
+                return this.fechaField;
+            }
+            set {
+                this.fechaField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Excluir {
+            get {
+                return this.excluirField;
+            }
+            set {
+                this.excluirField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public int Year {
+            get {
+                return this.yearField;
+            }
+            set {
+                this.yearField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Lista {
+            get {
+                return this.listaField;
+            }
+            set {
+                this.listaField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public int Folio {
+            get {
+                return this.folioField;
+            }
+            set {
+                this.folioField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string IDProducto {
+            get {
+                return this.iDProductoField;
+            }
+            set {
+                this.iDProductoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Usuario {
+            get {
+                return this.usuarioField;
+            }
+            set {
+                this.usuarioField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal AdminFee {
+            get {
+                return this.adminFeeField;
+            }
+            set {
+                this.adminFeeField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal DownPayment {
+            get {
+                return this.downPaymentField;
+            }
+            set {
+                this.downPaymentField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Status.xsd")]
+    public enum Status {
+        
+        /// <comentarios/>
+        B,
+        
+        /// <comentarios/>
+        A,
+        
+        /// <comentarios/>
+        T,
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/StatusRegistros.xsd")]
+    public enum StatusRegistros {
+        
+        /// <comentarios/>
+        T,
+        
+        /// <comentarios/>
+        A,
+        
+        /// <comentarios/>
+        B,
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/QueryRequest.xsd")]
+    public partial class QueryRequest {
+        
+        private InfoQuery infoQueryField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public InfoQuery InfoQuery {
+            get {
+                return this.infoQueryField;
+            }
+            set {
+                this.infoQueryField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoAccountCardResponse.xsd")]
+    public partial class InfoAccountCardResponse {
+        
+        private InfoAccountCard dataField;
         
         private string tagField;
         
@@ -10336,7 +8857,7 @@ namespace IM.Services.ClubesService {
         private ExceptionInfo exceptionInfoField;
         
         /// <comentarios/>
-        public MembresiaAsociada[] Data {
+        public InfoAccountCard Data {
             get {
                 return this.dataField;
             }
@@ -10381,10 +8902,447 @@ namespace IM.Services.ClubesService {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClmemberResponse.xsd")]
-    public partial class ClmemberResponse {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoAccountCard.xsd")]
+    public partial class InfoAccountCard {
         
-        private Clmember[] dataField;
+        private Account accountField;
+        
+        private Card cardField;
+        
+        private string hashField;
+        
+        private Card[] arrayCardsField;
+        
+        private Reservation reservationField;
+        
+        /// <comentarios/>
+        public Account Account {
+            get {
+                return this.accountField;
+            }
+            set {
+                this.accountField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public Card Card {
+            get {
+                return this.cardField;
+            }
+            set {
+                this.cardField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Hash {
+            get {
+                return this.hashField;
+            }
+            set {
+                this.hashField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public Card[] ArrayCards {
+            get {
+                return this.arrayCardsField;
+            }
+            set {
+                this.arrayCardsField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public Reservation Reservation {
+            get {
+                return this.reservationField;
+            }
+            set {
+                this.reservationField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Account.xsd")]
+    public partial class Account {
+        
+        private decimal rECNUMField;
+        
+        private string iDCUENTAField;
+        
+        private string nOMBREField;
+        
+        private System.DateTime cREACIONField;
+        
+        private Status sTATUSField;
+        
+        /// <comentarios/>
+        public decimal RECNUM {
+            get {
+                return this.rECNUMField;
+            }
+            set {
+                this.rECNUMField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string IDCUENTA {
+            get {
+                return this.iDCUENTAField;
+            }
+            set {
+                this.iDCUENTAField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string NOMBRE {
+            get {
+                return this.nOMBREField;
+            }
+            set {
+                this.nOMBREField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime CREACION {
+            get {
+                return this.cREACIONField;
+            }
+            set {
+                this.cREACIONField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public Status STATUS {
+            get {
+                return this.sTATUSField;
+            }
+            set {
+                this.sTATUSField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Card.xsd")]
+    public partial class Card {
+        
+        private decimal rECNUMField;
+        
+        private string iDCUENTAField;
+        
+        private string iDTARJETAField;
+        
+        private System.DateTime eXPEDICIONField;
+        
+        private System.DateTime eXPIRACIONField;
+        
+        private string nOMBREField;
+        
+        private Requisito aDICIONALField;
+        
+        private Status sTATUSField;
+        
+        private string cODIGO_SEGField;
+        
+        private TipoMonedero tIPOField;
+        
+        /// <comentarios/>
+        public decimal RECNUM {
+            get {
+                return this.rECNUMField;
+            }
+            set {
+                this.rECNUMField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string IDCUENTA {
+            get {
+                return this.iDCUENTAField;
+            }
+            set {
+                this.iDCUENTAField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string IDTARJETA {
+            get {
+                return this.iDTARJETAField;
+            }
+            set {
+                this.iDTARJETAField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime EXPEDICION {
+            get {
+                return this.eXPEDICIONField;
+            }
+            set {
+                this.eXPEDICIONField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime EXPIRACION {
+            get {
+                return this.eXPIRACIONField;
+            }
+            set {
+                this.eXPIRACIONField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string NOMBRE {
+            get {
+                return this.nOMBREField;
+            }
+            set {
+                this.nOMBREField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public Requisito ADICIONAL {
+            get {
+                return this.aDICIONALField;
+            }
+            set {
+                this.aDICIONALField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public Status STATUS {
+            get {
+                return this.sTATUSField;
+            }
+            set {
+                this.sTATUSField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string CODIGO_SEG {
+            get {
+                return this.cODIGO_SEGField;
+            }
+            set {
+                this.cODIGO_SEGField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public TipoMonedero TIPO {
+            get {
+                return this.tIPOField;
+            }
+            set {
+                this.tIPOField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TipoMonedero.xsd")]
+    public enum TipoMonedero {
+        
+        /// <comentarios/>
+        T,
+        
+        /// <comentarios/>
+        B,
+        
+        /// <comentarios/>
+        H,
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Reservation.xsd")]
+    public partial class Reservation {
+        
+        private string hotelField;
+        
+        private int folioField;
+        
+        private ReservationType typeField;
+        
+        private string hotelPreviousField;
+        
+        private int folioPreviousField;
+        
+        /// <comentarios/>
+        public string Hotel {
+            get {
+                return this.hotelField;
+            }
+            set {
+                this.hotelField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public int Folio {
+            get {
+                return this.folioField;
+            }
+            set {
+                this.folioField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public ReservationType Type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string HotelPrevious {
+            get {
+                return this.hotelPreviousField;
+            }
+            set {
+                this.hotelPreviousField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public int FolioPrevious {
+            get {
+                return this.folioPreviousField;
+            }
+            set {
+                this.folioPreviousField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ReservationType.xsd")]
+    public enum ReservationType {
+        
+        /// <comentarios/>
+        N,
+        
+        /// <comentarios/>
+        T,
+        
+        /// <comentarios/>
+        E,
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MovimientoTarjeta.xsd")]
+    public partial class MovimientoTarjeta {
+        
+        private int eXITOField;
+        
+        private decimal sALDOField;
+        
+        private string descripcionErrorField;
+        
+        private string idProductoField;
+        
+        private int consecutivoField;
+        
+        /// <comentarios/>
+        public int EXITO {
+            get {
+                return this.eXITOField;
+            }
+            set {
+                this.eXITOField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal SALDO {
+            get {
+                return this.sALDOField;
+            }
+            set {
+                this.sALDOField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string DescripcionError {
+            get {
+                return this.descripcionErrorField;
+            }
+            set {
+                this.descripcionErrorField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string IdProducto {
+            get {
+                return this.idProductoField;
+            }
+            set {
+                this.idProductoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public int Consecutivo {
+            get {
+                return this.consecutivoField;
+            }
+            set {
+                this.consecutivoField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MovimientoResponse.xsd")]
+    public partial class MovimientoResponse {
+        
+        private MovimientoTarjeta[] dataField;
         
         private bool hasErrorsField;
         
@@ -10393,7 +9351,7 @@ namespace IM.Services.ClubesService {
         private string tagField;
         
         /// <comentarios/>
-        public Clmember[] Data {
+        public MovimientoTarjeta[] Data {
             get {
                 return this.dataField;
             }
@@ -10419,6 +9377,111 @@ namespace IM.Services.ClubesService {
             }
             set {
                 this.exceptionInfoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClmemberRequest.xsd")]
+    public partial class ClmemberRequest {
+        
+        private Clmember clmemberField;
+        
+        private string idAplicacionField;
+        
+        private string idProyectoField;
+        
+        private string idOficinaField;
+        
+        private string lastNameField;
+        
+        private string firstNameField;
+        
+        private decimal companyField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public Clmember Clmember {
+            get {
+                return this.clmemberField;
+            }
+            set {
+                this.clmemberField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string IdAplicacion {
+            get {
+                return this.idAplicacionField;
+            }
+            set {
+                this.idAplicacionField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string IdProyecto {
+            get {
+                return this.idProyectoField;
+            }
+            set {
+                this.idProyectoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string IdOficina {
+            get {
+                return this.idOficinaField;
+            }
+            set {
+                this.idOficinaField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string LastName {
+            get {
+                return this.lastNameField;
+            }
+            set {
+                this.lastNameField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string FirstName {
+            get {
+                return this.firstNameField;
+            }
+            set {
+                this.firstNameField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal Company {
+            get {
+                return this.companyField;
+            }
+            set {
+                this.companyField = value;
             }
         }
         
@@ -13783,6 +12846,1507 @@ namespace IM.Services.ClubesService {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/VendedorResponse.xsd")]
+    public partial class VendedorResponse {
+        
+        private Vendedor[] dataField;
+        
+        private string tagField;
+        
+        private bool hasErrorsField;
+        
+        private ExceptionInfo exceptionInfoField;
+        
+        /// <comentarios/>
+        public Vendedor[] Data {
+            get {
+                return this.dataField;
+            }
+            set {
+                this.dataField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool HasErrors {
+            get {
+                return this.hasErrorsField;
+            }
+            set {
+                this.hasErrorsField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public ExceptionInfo ExceptionInfo {
+            get {
+                return this.exceptionInfoField;
+            }
+            set {
+                this.exceptionInfoField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/CardResponse.xsd")]
+    public partial class CardResponse {
+        
+        private Card[] dataField;
+        
+        private bool hasErrorsField;
+        
+        private ExceptionInfo exceptionInfoField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public Card[] Data {
+            get {
+                return this.dataField;
+            }
+            set {
+                this.dataField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool HasErrors {
+            get {
+                return this.hasErrorsField;
+            }
+            set {
+                this.hasErrorsField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public ExceptionInfo ExceptionInfo {
+            get {
+                return this.exceptionInfoField;
+            }
+            set {
+                this.exceptionInfoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembresiaAsociadaResponse.xsd")]
+    public partial class MembresiaAsociadaResponse {
+        
+        private MembresiaAsociada[] dataField;
+        
+        private string tagField;
+        
+        private bool hasErrorsField;
+        
+        private ExceptionInfo exceptionInfoField;
+        
+        /// <comentarios/>
+        public MembresiaAsociada[] Data {
+            get {
+                return this.dataField;
+            }
+            set {
+                this.dataField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool HasErrors {
+            get {
+                return this.hasErrorsField;
+            }
+            set {
+                this.hasErrorsField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public ExceptionInfo ExceptionInfo {
+            get {
+                return this.exceptionInfoField;
+            }
+            set {
+                this.exceptionInfoField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembershipOrigosResponse.xsd")]
+    public partial class MembershipOrigosResponse {
+        
+        private MembershipOrigos[] dataField;
+        
+        private string tagField;
+        
+        private bool hasErrorsField;
+        
+        private ExceptionInfo exceptionInfoField;
+        
+        /// <comentarios/>
+        public MembershipOrigos[] Data {
+            get {
+                return this.dataField;
+            }
+            set {
+                this.dataField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool HasErrors {
+            get {
+                return this.hasErrorsField;
+            }
+            set {
+                this.hasErrorsField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public ExceptionInfo ExceptionInfo {
+            get {
+                return this.exceptionInfoField;
+            }
+            set {
+                this.exceptionInfoField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembershipOrigos.xsd")]
+    public partial class MembershipOrigos {
+        
+        private decimal companyField;
+        
+        private string applicationField;
+        
+        private int guestIDField;
+        
+        private string firstNameField;
+        
+        private string lastNameField;
+        
+        private string firstName2Field;
+        
+        private string lastName2Field;
+        
+        private System.DateTime saleDateField;
+        
+        private bool procesableField;
+        
+        private System.DateTime procesableDateField;
+        
+        private bool cancelField;
+        
+        private System.DateTime cancelDateField;
+        
+        private string saleTypeField;
+        
+        private string saleTypeNField;
+        
+        private string membershipTypeField;
+        
+        private string membershipTypeNField;
+        
+        private string membershipTypeByAmountField;
+        
+        private string membershipTypeByAmountNField;
+        
+        private decimal totalField;
+        
+        private decimal subtotalField;
+        
+        private decimal downPaymentField;
+        
+        private decimal downPaymentPercentageField;
+        
+        private decimal downPaymentPaidField;
+        
+        private decimal downPaymentPaidPercentageField;
+        
+        private string previousApplicationField;
+        
+        private decimal previousTotalField;
+        
+        private decimal previousSubtotalField;
+        
+        private MemberSalesman[] salesmenField;
+        
+        /// <comentarios/>
+        public decimal Company {
+            get {
+                return this.companyField;
+            }
+            set {
+                this.companyField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Application {
+            get {
+                return this.applicationField;
+            }
+            set {
+                this.applicationField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public int GuestID {
+            get {
+                return this.guestIDField;
+            }
+            set {
+                this.guestIDField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string FirstName {
+            get {
+                return this.firstNameField;
+            }
+            set {
+                this.firstNameField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string LastName {
+            get {
+                return this.lastNameField;
+            }
+            set {
+                this.lastNameField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string FirstName2 {
+            get {
+                return this.firstName2Field;
+            }
+            set {
+                this.firstName2Field = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string LastName2 {
+            get {
+                return this.lastName2Field;
+            }
+            set {
+                this.lastName2Field = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime SaleDate {
+            get {
+                return this.saleDateField;
+            }
+            set {
+                this.saleDateField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool Procesable {
+            get {
+                return this.procesableField;
+            }
+            set {
+                this.procesableField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime ProcesableDate {
+            get {
+                return this.procesableDateField;
+            }
+            set {
+                this.procesableDateField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool Cancel {
+            get {
+                return this.cancelField;
+            }
+            set {
+                this.cancelField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime CancelDate {
+            get {
+                return this.cancelDateField;
+            }
+            set {
+                this.cancelDateField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string SaleType {
+            get {
+                return this.saleTypeField;
+            }
+            set {
+                this.saleTypeField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string SaleTypeN {
+            get {
+                return this.saleTypeNField;
+            }
+            set {
+                this.saleTypeNField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string MembershipType {
+            get {
+                return this.membershipTypeField;
+            }
+            set {
+                this.membershipTypeField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string MembershipTypeN {
+            get {
+                return this.membershipTypeNField;
+            }
+            set {
+                this.membershipTypeNField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string MembershipTypeByAmount {
+            get {
+                return this.membershipTypeByAmountField;
+            }
+            set {
+                this.membershipTypeByAmountField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string MembershipTypeByAmountN {
+            get {
+                return this.membershipTypeByAmountNField;
+            }
+            set {
+                this.membershipTypeByAmountNField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal Total {
+            get {
+                return this.totalField;
+            }
+            set {
+                this.totalField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal Subtotal {
+            get {
+                return this.subtotalField;
+            }
+            set {
+                this.subtotalField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal DownPayment {
+            get {
+                return this.downPaymentField;
+            }
+            set {
+                this.downPaymentField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal DownPaymentPercentage {
+            get {
+                return this.downPaymentPercentageField;
+            }
+            set {
+                this.downPaymentPercentageField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal DownPaymentPaid {
+            get {
+                return this.downPaymentPaidField;
+            }
+            set {
+                this.downPaymentPaidField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal DownPaymentPaidPercentage {
+            get {
+                return this.downPaymentPaidPercentageField;
+            }
+            set {
+                this.downPaymentPaidPercentageField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string PreviousApplication {
+            get {
+                return this.previousApplicationField;
+            }
+            set {
+                this.previousApplicationField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal PreviousTotal {
+            get {
+                return this.previousTotalField;
+            }
+            set {
+                this.previousTotalField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal PreviousSubtotal {
+            get {
+                return this.previousSubtotalField;
+            }
+            set {
+                this.previousSubtotalField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public MemberSalesman[] Salesmen {
+            get {
+                return this.salesmenField;
+            }
+            set {
+                this.salesmenField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberSalesman.xsd")]
+    public partial class MemberSalesman {
+        
+        private decimal rECNUMField;
+        
+        private decimal cLMEMOPC_IDField;
+        
+        private string cLAOPC_IDField;
+        
+        private string cODEField;
+        
+        private string nAMEField;
+        
+        private string sTATUSField;
+        
+        private string aPPLICATIONField;
+        
+        private bool aCTIVOField;
+        
+        /// <comentarios/>
+        public decimal RECNUM {
+            get {
+                return this.rECNUMField;
+            }
+            set {
+                this.rECNUMField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal CLMEMOPC_ID {
+            get {
+                return this.cLMEMOPC_IDField;
+            }
+            set {
+                this.cLMEMOPC_IDField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string CLAOPC_ID {
+            get {
+                return this.cLAOPC_IDField;
+            }
+            set {
+                this.cLAOPC_IDField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string CODE {
+            get {
+                return this.cODEField;
+            }
+            set {
+                this.cODEField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string NAME {
+            get {
+                return this.nAMEField;
+            }
+            set {
+                this.nAMEField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string STATUS {
+            get {
+                return this.sTATUSField;
+            }
+            set {
+                this.sTATUSField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string APPLICATION {
+            get {
+                return this.aPPLICATIONField;
+            }
+            set {
+                this.aPPLICATIONField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool ACTIVO {
+            get {
+                return this.aCTIVOField;
+            }
+            set {
+                this.aCTIVOField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/BooleanResponse.xsd")]
+    public partial class BooleanResponse {
+        
+        private bool dataField;
+        
+        private bool hasErrorsField;
+        
+        private ExceptionInfo exceptionInfoField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public bool Data {
+            get {
+                return this.dataField;
+            }
+            set {
+                this.dataField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool HasErrors {
+            get {
+                return this.hasErrorsField;
+            }
+            set {
+                this.hasErrorsField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public ExceptionInfo ExceptionInfo {
+            get {
+                return this.exceptionInfoField;
+            }
+            set {
+                this.exceptionInfoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberExtensionResponse.xsd")]
+    public partial class MemberExtensionResponse {
+        
+        private MemberExtension[] dataField;
+        
+        private string tagField;
+        
+        private bool hasErrorsField;
+        
+        private ExceptionInfo exceptionInfoField;
+        
+        /// <comentarios/>
+        public MemberExtension[] Data {
+            get {
+                return this.dataField;
+            }
+            set {
+                this.dataField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool HasErrors {
+            get {
+                return this.hasErrorsField;
+            }
+            set {
+                this.hasErrorsField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public ExceptionInfo ExceptionInfo {
+            get {
+                return this.exceptionInfoField;
+            }
+            set {
+                this.exceptionInfoField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoAccountCardRequest.xsd")]
+    public partial class InfoAccountCardRequest {
+        
+        private InfoAccountCard infoAccountCardField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public InfoAccountCard InfoAccountCard {
+            get {
+                return this.infoAccountCardField;
+            }
+            set {
+                this.infoAccountCardField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/RecordsetResponse.xsd")]
+    public partial class RecordsetResponse {
+        
+        private string dataField;
+        
+        private bool hasErrorsField;
+        
+        private ExceptionInfo exceptionInfoField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public string Data {
+            get {
+                return this.dataField;
+            }
+            set {
+                this.dataField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool HasErrors {
+            get {
+                return this.hasErrorsField;
+            }
+            set {
+                this.hasErrorsField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public ExceptionInfo ExceptionInfo {
+            get {
+                return this.exceptionInfoField;
+            }
+            set {
+                this.exceptionInfoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClmemberResponse.xsd")]
+    public partial class ClmemberResponse {
+        
+        private Clmember[] dataField;
+        
+        private bool hasErrorsField;
+        
+        private ExceptionInfo exceptionInfoField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public Clmember[] Data {
+            get {
+                return this.dataField;
+            }
+            set {
+                this.dataField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool HasErrors {
+            get {
+                return this.hasErrorsField;
+            }
+            set {
+                this.hasErrorsField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public ExceptionInfo ExceptionInfo {
+            get {
+                return this.exceptionInfoField;
+            }
+            set {
+                this.exceptionInfoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/StringRequest.xsd")]
+    public partial class StringRequest {
+        
+        private string dataField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public string Data {
+            get {
+                return this.dataField;
+            }
+            set {
+                this.dataField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TarjetaRequest.xsd")]
+    public partial class TarjetaRequest {
+        
+        private Card tarjetaField;
+        
+        private string idProductoField;
+        
+        private decimal idSistemaField;
+        
+        private string idCuentaField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public Card Tarjeta {
+            get {
+                return this.tarjetaField;
+            }
+            set {
+                this.tarjetaField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string IdProducto {
+            get {
+                return this.idProductoField;
+            }
+            set {
+                this.idProductoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal IdSistema {
+            get {
+                return this.idSistemaField;
+            }
+            set {
+                this.idSistemaField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string IdCuenta {
+            get {
+                return this.idCuentaField;
+            }
+            set {
+                this.idCuentaField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembershipOrigosRequest.xsd")]
+    public partial class MembershipOrigosRequest {
+        
+        private MembershipOrigos membershipOrigosField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public MembershipOrigos MembershipOrigos {
+            get {
+                return this.membershipOrigosField;
+            }
+            set {
+                this.membershipOrigosField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClofficeRequest.xsd")]
+    public partial class ClofficeRequest {
+        
+        private Cloffice clofficeField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public Cloffice Cloffice {
+            get {
+                return this.clofficeField;
+            }
+            set {
+                this.clofficeField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Cloffice.xsd")]
+    public partial class Cloffice {
+        
+        private decimal rECNUMField;
+        
+        private string cODE_PROJField;
+        
+        private string cODEField;
+        
+        private string nAMEField;
+        
+        private string aDDRESS1Field;
+        
+        private string aDDRESS2Field;
+        
+        private string pHONEField;
+        
+        private string sTATUSField;
+        
+        private System.DateTime fECHA_ALTAField;
+        
+        private string hORA_ALTAField;
+        
+        private string cVEALTAField;
+        
+        private System.DateTime fECHA_BAJAField;
+        
+        private string hORA_BAJAField;
+        
+        private string cVEBAJAField;
+        
+        private System.DateTime fECHA_MODIFField;
+        
+        private string hORA_MODIFField;
+        
+        private string cVEMODIFField;
+        
+        private decimal sTOCKWKSField;
+        
+        private decimal aVAILABLE_STOWKSField;
+        
+        private string aUTO_APPLICATIONField;
+        
+        private decimal lAST_APPLICATIONField;
+        
+        private decimal iVA_TAX_RATEField;
+        
+        private decimal cASH_REC_EXCHGField;
+        
+        private string dIRCONTRATOSField;
+        
+        private decimal cASH_REC_EXCHGMField;
+        
+        private decimal sTOCKWKSINCField;
+        
+        private decimal aVAILABLE_STOWKSINCField;
+        
+        private decimal dAYPASS_CONSECField;
+        
+        private decimal eARLYCHECKOUT_CONSECField;
+        
+        private string sALES_ROOM_ORIGOSField;
+        
+        private YesNo wORKField;
+        
+        /// <comentarios/>
+        public decimal RECNUM {
+            get {
+                return this.rECNUMField;
+            }
+            set {
+                this.rECNUMField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string CODE_PROJ {
+            get {
+                return this.cODE_PROJField;
+            }
+            set {
+                this.cODE_PROJField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string CODE {
+            get {
+                return this.cODEField;
+            }
+            set {
+                this.cODEField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string NAME {
+            get {
+                return this.nAMEField;
+            }
+            set {
+                this.nAMEField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string ADDRESS1 {
+            get {
+                return this.aDDRESS1Field;
+            }
+            set {
+                this.aDDRESS1Field = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string ADDRESS2 {
+            get {
+                return this.aDDRESS2Field;
+            }
+            set {
+                this.aDDRESS2Field = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string PHONE {
+            get {
+                return this.pHONEField;
+            }
+            set {
+                this.pHONEField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string STATUS {
+            get {
+                return this.sTATUSField;
+            }
+            set {
+                this.sTATUSField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime FECHA_ALTA {
+            get {
+                return this.fECHA_ALTAField;
+            }
+            set {
+                this.fECHA_ALTAField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string HORA_ALTA {
+            get {
+                return this.hORA_ALTAField;
+            }
+            set {
+                this.hORA_ALTAField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string CVEALTA {
+            get {
+                return this.cVEALTAField;
+            }
+            set {
+                this.cVEALTAField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime FECHA_BAJA {
+            get {
+                return this.fECHA_BAJAField;
+            }
+            set {
+                this.fECHA_BAJAField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string HORA_BAJA {
+            get {
+                return this.hORA_BAJAField;
+            }
+            set {
+                this.hORA_BAJAField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string CVEBAJA {
+            get {
+                return this.cVEBAJAField;
+            }
+            set {
+                this.cVEBAJAField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime FECHA_MODIF {
+            get {
+                return this.fECHA_MODIFField;
+            }
+            set {
+                this.fECHA_MODIFField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string HORA_MODIF {
+            get {
+                return this.hORA_MODIFField;
+            }
+            set {
+                this.hORA_MODIFField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string CVEMODIF {
+            get {
+                return this.cVEMODIFField;
+            }
+            set {
+                this.cVEMODIFField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal STOCKWKS {
+            get {
+                return this.sTOCKWKSField;
+            }
+            set {
+                this.sTOCKWKSField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal AVAILABLE_STOWKS {
+            get {
+                return this.aVAILABLE_STOWKSField;
+            }
+            set {
+                this.aVAILABLE_STOWKSField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string AUTO_APPLICATION {
+            get {
+                return this.aUTO_APPLICATIONField;
+            }
+            set {
+                this.aUTO_APPLICATIONField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal LAST_APPLICATION {
+            get {
+                return this.lAST_APPLICATIONField;
+            }
+            set {
+                this.lAST_APPLICATIONField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal IVA_TAX_RATE {
+            get {
+                return this.iVA_TAX_RATEField;
+            }
+            set {
+                this.iVA_TAX_RATEField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal CASH_REC_EXCHG {
+            get {
+                return this.cASH_REC_EXCHGField;
+            }
+            set {
+                this.cASH_REC_EXCHGField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string DIRCONTRATOS {
+            get {
+                return this.dIRCONTRATOSField;
+            }
+            set {
+                this.dIRCONTRATOSField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal CASH_REC_EXCHGM {
+            get {
+                return this.cASH_REC_EXCHGMField;
+            }
+            set {
+                this.cASH_REC_EXCHGMField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal STOCKWKSINC {
+            get {
+                return this.sTOCKWKSINCField;
+            }
+            set {
+                this.sTOCKWKSINCField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal AVAILABLE_STOWKSINC {
+            get {
+                return this.aVAILABLE_STOWKSINCField;
+            }
+            set {
+                this.aVAILABLE_STOWKSINCField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal DAYPASS_CONSEC {
+            get {
+                return this.dAYPASS_CONSECField;
+            }
+            set {
+                this.dAYPASS_CONSECField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal EARLYCHECKOUT_CONSEC {
+            get {
+                return this.eARLYCHECKOUT_CONSECField;
+            }
+            set {
+                this.eARLYCHECKOUT_CONSECField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string SALES_ROOM_ORIGOS {
+            get {
+                return this.sALES_ROOM_ORIGOSField;
+            }
+            set {
+                this.sALES_ROOM_ORIGOSField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public YesNo WORK {
+            get {
+                return this.wORKField;
+            }
+            set {
+                this.wORKField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/YesNo.xsd")]
+    public enum YesNo {
+        
+        /// <comentarios/>
+        Yes,
+        
+        /// <comentarios/>
+        No,
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ProductRequest.xsd")]
     public partial class ProductRequest {
         
@@ -13933,44 +14497,20 @@ namespace IM.Services.ClubesService {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClofficeResponse.xsd")]
-    public partial class ClofficeResponse {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MovimientosRequest.xsd")]
+    public partial class MovimientosRequest {
         
-        private Cloffice[] dataField;
-        
-        private bool hasErrorsField;
-        
-        private ExceptionInfo exceptionInfoField;
+        private MPCARINV[] movimientosField;
         
         private string tagField;
         
         /// <comentarios/>
-        public Cloffice[] Data {
+        public MPCARINV[] Movimientos {
             get {
-                return this.dataField;
+                return this.movimientosField;
             }
             set {
-                this.dataField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool HasErrors {
-            get {
-                return this.hasErrorsField;
-            }
-            set {
-                this.hasErrorsField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public ExceptionInfo ExceptionInfo {
-            get {
-                return this.exceptionInfoField;
-            }
-            set {
-                this.exceptionInfoField = value;
+                this.movimientosField = value;
             }
         }
         
@@ -13990,102 +14530,402 @@ namespace IM.Services.ClubesService {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClmemberRequest.xsd")]
-    public partial class ClmemberRequest {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MPCARINV.xsd")]
+    public partial class MPCARINV {
         
-        private Clmember clmemberField;
+        private decimal rECNUMField;
         
-        private string idAplicacionField;
+        private string iDCUENTAField;
         
-        private string idProyectoField;
+        private string iDPRODUCTOField;
         
-        private string idOficinaField;
+        private decimal cONSECUTIVOField;
         
-        private string lastNameField;
+        private TipoMovimiento tIPOField;
         
-        private string firstNameField;
+        private System.DateTime fECHAField;
         
-        private decimal companyField;
+        private string dESCRIPCIONField;
         
-        private string tagField;
+        private decimal iMPORTEField;
+        
+        private string rEFERENCIAField;
+        
+        private System.DateTime vIGENCIAINIField;
+        
+        private System.DateTime vIGENCIAFINField;
+        
+        private decimal iMPORTEUSADOField;
+        
+        private string iDTARJETAField;
+        
+        private string aCTIVADOField;
+        
+        private decimal iDPTOVTAField;
+        
+        private decimal cOMPANYField;
+        
+        private string aPPLICATIONField;
+        
+        private decimal cO_AMIGOField;
+        
+        private string aPP_AMIGOField;
+        
+        private string mOVTO_ESPECIALField;
+        
+        private string nOTAField;
+        
+        private System.DateTime vIGENCIAFIN15Field;
+        
+        private System.DateTime fECMONTOLIBField;
+        
+        private decimal mPAYSField;
+        
+        private System.DateTime fECHA_MODIFField;
+        
+        private string hORA_MODIFField;
+        
+        private string iDPAISField;
+        
+        private decimal aDULTOSField;
+        
+        private decimal mENORESField;
+        
+        private decimal sHOWADULTOSField;
+        
+        private decimal sHOWMENORESField;
+        
+        private System.DateTime sHOWDATEField;
+        
+        private decimal iDREGALOField;
         
         /// <comentarios/>
-        public Clmember Clmember {
+        public decimal RECNUM {
             get {
-                return this.clmemberField;
+                return this.rECNUMField;
             }
             set {
-                this.clmemberField = value;
+                this.rECNUMField = value;
             }
         }
         
         /// <comentarios/>
-        public string IdAplicacion {
+        public string IDCUENTA {
             get {
-                return this.idAplicacionField;
+                return this.iDCUENTAField;
             }
             set {
-                this.idAplicacionField = value;
+                this.iDCUENTAField = value;
             }
         }
         
         /// <comentarios/>
-        public string IdProyecto {
+        public string IDPRODUCTO {
             get {
-                return this.idProyectoField;
+                return this.iDPRODUCTOField;
             }
             set {
-                this.idProyectoField = value;
+                this.iDPRODUCTOField = value;
             }
         }
         
         /// <comentarios/>
-        public string IdOficina {
+        public decimal CONSECUTIVO {
             get {
-                return this.idOficinaField;
+                return this.cONSECUTIVOField;
             }
             set {
-                this.idOficinaField = value;
+                this.cONSECUTIVOField = value;
             }
         }
         
         /// <comentarios/>
-        public string LastName {
+        public TipoMovimiento TIPO {
             get {
-                return this.lastNameField;
+                return this.tIPOField;
             }
             set {
-                this.lastNameField = value;
+                this.tIPOField = value;
             }
         }
         
         /// <comentarios/>
-        public string FirstName {
+        public System.DateTime FECHA {
             get {
-                return this.firstNameField;
+                return this.fECHAField;
             }
             set {
-                this.firstNameField = value;
+                this.fECHAField = value;
             }
         }
         
         /// <comentarios/>
-        public decimal Company {
+        public string DESCRIPCION {
             get {
-                return this.companyField;
+                return this.dESCRIPCIONField;
             }
             set {
-                this.companyField = value;
+                this.dESCRIPCIONField = value;
             }
         }
         
         /// <comentarios/>
-        public string Tag {
+        public decimal IMPORTE {
             get {
-                return this.tagField;
+                return this.iMPORTEField;
             }
             set {
-                this.tagField = value;
+                this.iMPORTEField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string REFERENCIA {
+            get {
+                return this.rEFERENCIAField;
+            }
+            set {
+                this.rEFERENCIAField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime VIGENCIAINI {
+            get {
+                return this.vIGENCIAINIField;
+            }
+            set {
+                this.vIGENCIAINIField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime VIGENCIAFIN {
+            get {
+                return this.vIGENCIAFINField;
+            }
+            set {
+                this.vIGENCIAFINField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal IMPORTEUSADO {
+            get {
+                return this.iMPORTEUSADOField;
+            }
+            set {
+                this.iMPORTEUSADOField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string IDTARJETA {
+            get {
+                return this.iDTARJETAField;
+            }
+            set {
+                this.iDTARJETAField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string ACTIVADO {
+            get {
+                return this.aCTIVADOField;
+            }
+            set {
+                this.aCTIVADOField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal IDPTOVTA {
+            get {
+                return this.iDPTOVTAField;
+            }
+            set {
+                this.iDPTOVTAField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal COMPANY {
+            get {
+                return this.cOMPANYField;
+            }
+            set {
+                this.cOMPANYField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string APPLICATION {
+            get {
+                return this.aPPLICATIONField;
+            }
+            set {
+                this.aPPLICATIONField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal CO_AMIGO {
+            get {
+                return this.cO_AMIGOField;
+            }
+            set {
+                this.cO_AMIGOField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string APP_AMIGO {
+            get {
+                return this.aPP_AMIGOField;
+            }
+            set {
+                this.aPP_AMIGOField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string MOVTO_ESPECIAL {
+            get {
+                return this.mOVTO_ESPECIALField;
+            }
+            set {
+                this.mOVTO_ESPECIALField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string NOTA {
+            get {
+                return this.nOTAField;
+            }
+            set {
+                this.nOTAField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime VIGENCIAFIN15 {
+            get {
+                return this.vIGENCIAFIN15Field;
+            }
+            set {
+                this.vIGENCIAFIN15Field = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime FECMONTOLIB {
+            get {
+                return this.fECMONTOLIBField;
+            }
+            set {
+                this.fECMONTOLIBField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal MPAYS {
+            get {
+                return this.mPAYSField;
+            }
+            set {
+                this.mPAYSField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime FECHA_MODIF {
+            get {
+                return this.fECHA_MODIFField;
+            }
+            set {
+                this.fECHA_MODIFField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string HORA_MODIF {
+            get {
+                return this.hORA_MODIFField;
+            }
+            set {
+                this.hORA_MODIFField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string IDPAIS {
+            get {
+                return this.iDPAISField;
+            }
+            set {
+                this.iDPAISField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal ADULTOS {
+            get {
+                return this.aDULTOSField;
+            }
+            set {
+                this.aDULTOSField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal MENORES {
+            get {
+                return this.mENORESField;
+            }
+            set {
+                this.mENORESField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal SHOWADULTOS {
+            get {
+                return this.sHOWADULTOSField;
+            }
+            set {
+                this.sHOWADULTOSField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal SHOWMENORES {
+            get {
+                return this.sHOWMENORESField;
+            }
+            set {
+                this.sHOWMENORESField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public System.DateTime SHOWDATE {
+            get {
+                return this.sHOWDATEField;
+            }
+            set {
+                this.sHOWDATEField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public decimal IDREGALO {
+            get {
+                return this.iDREGALOField;
+            }
+            set {
+                this.iDREGALOField = value;
             }
         }
     }
@@ -14093,58 +14933,14 @@ namespace IM.Services.ClubesService {
     /// <comentarios/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
     [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MembershipOrigosResponse.xsd")]
-    public partial class MembershipOrigosResponse {
-        
-        private MembershipOrigos[] dataField;
-        
-        private string tagField;
-        
-        private bool hasErrorsField;
-        
-        private ExceptionInfo exceptionInfoField;
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/TipoMovimiento.xsd")]
+    public enum TipoMovimiento {
         
         /// <comentarios/>
-        public MembershipOrigos[] Data {
-            get {
-                return this.dataField;
-            }
-            set {
-                this.dataField = value;
-            }
-        }
+        A,
         
         /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool HasErrors {
-            get {
-                return this.hasErrorsField;
-            }
-            set {
-                this.hasErrorsField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public ExceptionInfo ExceptionInfo {
-            get {
-                return this.exceptionInfoField;
-            }
-            set {
-                this.exceptionInfoField = value;
-            }
-        }
+        C,
     }
     
     /// <comentarios/>
@@ -14209,6 +15005,120 @@ namespace IM.Services.ClubesService {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MpCarinvResponse.xsd")]
+    public partial class MpCarinvResponse {
+        
+        private MPCARINV[] dataField;
+        
+        private bool hasErrorsField;
+        
+        private ExceptionInfo exceptionInfoField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public MPCARINV[] Data {
+            get {
+                return this.dataField;
+            }
+            set {
+                this.dataField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool HasErrors {
+            get {
+                return this.hasErrorsField;
+            }
+            set {
+                this.hasErrorsField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public ExceptionInfo ExceptionInfo {
+            get {
+                return this.exceptionInfoField;
+            }
+            set {
+                this.exceptionInfoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/ClofficeResponse.xsd")]
+    public partial class ClofficeResponse {
+        
+        private Cloffice[] dataField;
+        
+        private bool hasErrorsField;
+        
+        private ExceptionInfo exceptionInfoField;
+        
+        private string tagField;
+        
+        /// <comentarios/>
+        public Cloffice[] Data {
+            get {
+                return this.dataField;
+            }
+            set {
+                this.dataField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public bool HasErrors {
+            get {
+                return this.hasErrorsField;
+            }
+            set {
+                this.hasErrorsField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public ExceptionInfo ExceptionInfo {
+            get {
+                return this.exceptionInfoField;
+            }
+            set {
+                this.exceptionInfoField = value;
+            }
+        }
+        
+        /// <comentarios/>
+        public string Tag {
+            get {
+                return this.tagField;
+            }
+            set {
+                this.tagField = value;
+            }
+        }
+    }
+    
+    /// <comentarios/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MemberExtensionRequest.xsd")]
     public partial class MemberExtensionRequest {
         
@@ -14242,918 +15152,20 @@ namespace IM.Services.ClubesService {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoAccountCardRequest.xsd")]
-    public partial class InfoAccountCardRequest {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/CardRequest.xsd")]
+    public partial class CardRequest {
         
-        private InfoAccountCard infoAccountCardField;
-        
-        private string tagField;
-        
-        /// <comentarios/>
-        public InfoAccountCard InfoAccountCard {
-            get {
-                return this.infoAccountCardField;
-            }
-            set {
-                this.infoAccountCardField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/MovimientosRequest.xsd")]
-    public partial class MovimientosRequest {
-        
-        private MPCARINV[] movimientosField;
+        private Card cardField;
         
         private string tagField;
         
         /// <comentarios/>
-        public MPCARINV[] Movimientos {
+        public Card Card {
             get {
-                return this.movimientosField;
+                return this.cardField;
             }
             set {
-                this.movimientosField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/InfoQuery.xsd")]
-    public partial class InfoQuery {
-        
-        private string applicationField;
-        
-        private string proyectoField;
-        
-        private string oficinaField;
-        
-        private string companiaField;
-        
-        private System.DateTime fechaInicioField;
-        
-        private System.DateTime fechaFinField;
-        
-        private string tipoIniField;
-        
-        private string tipoFinField;
-        
-        private string carteraField;
-        
-        private string generalField;
-        
-        private string sociedadInicioField;
-        
-        private string sociedadFinField;
-        
-        private string zonaInicioField;
-        
-        private string zonaFinField;
-        
-        private string zonaField;
-        
-        private string valeField;
-        
-        private string vendedorInicialField;
-        
-        private string vendedorFinalField;
-        
-        private string regaloIdField;
-        
-        private bool todosField;
-        
-        private bool consumidosField;
-        
-        private string hotelField;
-        
-        private Status estadoField;
-        
-        private StatusRegistros statusField;
-        
-        private string locacionField;
-        
-        private System.DateTime fechaField;
-        
-        private string excluirField;
-        
-        private int yearField;
-        
-        private string listaField;
-        
-        private int folioField;
-        
-        private string iDProductoField;
-        
-        private string usuarioField;
-        
-        private decimal adminFeeField;
-        
-        private decimal downPaymentField;
-        
-        /// <comentarios/>
-        public string Application {
-            get {
-                return this.applicationField;
-            }
-            set {
-                this.applicationField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Proyecto {
-            get {
-                return this.proyectoField;
-            }
-            set {
-                this.proyectoField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Oficina {
-            get {
-                return this.oficinaField;
-            }
-            set {
-                this.oficinaField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Compania {
-            get {
-                return this.companiaField;
-            }
-            set {
-                this.companiaField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime FechaInicio {
-            get {
-                return this.fechaInicioField;
-            }
-            set {
-                this.fechaInicioField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime FechaFin {
-            get {
-                return this.fechaFinField;
-            }
-            set {
-                this.fechaFinField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string TipoIni {
-            get {
-                return this.tipoIniField;
-            }
-            set {
-                this.tipoIniField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string TipoFin {
-            get {
-                return this.tipoFinField;
-            }
-            set {
-                this.tipoFinField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Cartera {
-            get {
-                return this.carteraField;
-            }
-            set {
-                this.carteraField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string General {
-            get {
-                return this.generalField;
-            }
-            set {
-                this.generalField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string SociedadInicio {
-            get {
-                return this.sociedadInicioField;
-            }
-            set {
-                this.sociedadInicioField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string SociedadFin {
-            get {
-                return this.sociedadFinField;
-            }
-            set {
-                this.sociedadFinField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string ZonaInicio {
-            get {
-                return this.zonaInicioField;
-            }
-            set {
-                this.zonaInicioField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string ZonaFin {
-            get {
-                return this.zonaFinField;
-            }
-            set {
-                this.zonaFinField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Zona {
-            get {
-                return this.zonaField;
-            }
-            set {
-                this.zonaField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Vale {
-            get {
-                return this.valeField;
-            }
-            set {
-                this.valeField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string VendedorInicial {
-            get {
-                return this.vendedorInicialField;
-            }
-            set {
-                this.vendedorInicialField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string VendedorFinal {
-            get {
-                return this.vendedorFinalField;
-            }
-            set {
-                this.vendedorFinalField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string RegaloId {
-            get {
-                return this.regaloIdField;
-            }
-            set {
-                this.regaloIdField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool Todos {
-            get {
-                return this.todosField;
-            }
-            set {
-                this.todosField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool Consumidos {
-            get {
-                return this.consumidosField;
-            }
-            set {
-                this.consumidosField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Hotel {
-            get {
-                return this.hotelField;
-            }
-            set {
-                this.hotelField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public Status Estado {
-            get {
-                return this.estadoField;
-            }
-            set {
-                this.estadoField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public StatusRegistros Status {
-            get {
-                return this.statusField;
-            }
-            set {
-                this.statusField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Locacion {
-            get {
-                return this.locacionField;
-            }
-            set {
-                this.locacionField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public System.DateTime Fecha {
-            get {
-                return this.fechaField;
-            }
-            set {
-                this.fechaField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Excluir {
-            get {
-                return this.excluirField;
-            }
-            set {
-                this.excluirField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public int Year {
-            get {
-                return this.yearField;
-            }
-            set {
-                this.yearField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Lista {
-            get {
-                return this.listaField;
-            }
-            set {
-                this.listaField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public int Folio {
-            get {
-                return this.folioField;
-            }
-            set {
-                this.folioField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string IDProducto {
-            get {
-                return this.iDProductoField;
-            }
-            set {
-                this.iDProductoField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Usuario {
-            get {
-                return this.usuarioField;
-            }
-            set {
-                this.usuarioField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal AdminFee {
-            get {
-                return this.adminFeeField;
-            }
-            set {
-                this.adminFeeField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal DownPayment {
-            get {
-                return this.downPaymentField;
-            }
-            set {
-                this.downPaymentField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/StatusRegistros.xsd")]
-    public enum StatusRegistros {
-        
-        /// <comentarios/>
-        T,
-        
-        /// <comentarios/>
-        A,
-        
-        /// <comentarios/>
-        B,
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/QueryRequest.xsd")]
-    public partial class QueryRequest {
-        
-        private InfoQuery infoQueryField;
-        
-        private string tagField;
-        
-        /// <comentarios/>
-        public InfoQuery InfoQuery {
-            get {
-                return this.infoQueryField;
-            }
-            set {
-                this.infoQueryField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/VendedorResponse.xsd")]
-    public partial class VendedorResponse {
-        
-        private Vendedor[] dataField;
-        
-        private string tagField;
-        
-        private bool hasErrorsField;
-        
-        private ExceptionInfo exceptionInfoField;
-        
-        /// <comentarios/>
-        public Vendedor[] Data {
-            get {
-                return this.dataField;
-            }
-            set {
-                this.dataField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string Tag {
-            get {
-                return this.tagField;
-            }
-            set {
-                this.tagField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public bool HasErrors {
-            get {
-                return this.hasErrorsField;
-            }
-            set {
-                this.hasErrorsField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public ExceptionInfo ExceptionInfo {
-            get {
-                return this.exceptionInfoField;
-            }
-            set {
-                this.exceptionInfoField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/Vendedor.xsd")]
-    public partial class Vendedor {
-        
-        private decimal rECNUMField;
-        
-        private string zONAField;
-        
-        private string cODEField;
-        
-        private string nAMEField;
-        
-        private string jOBField;
-        
-        private string oPCField;
-        
-        private string mAIL_NAMEField;
-        
-        private string aDDRESS1Field;
-        
-        private string aDDRESS2Field;
-        
-        private string aDDRESS3Field;
-        
-        private string aDDRESS4Field;
-        
-        private string idField;
-        
-        private string sTATUSField;
-        
-        private string nO_PAYField;
-        
-        private string gL1108Field;
-        
-        private string gL2103Field;
-        
-        private string pLANField;
-        
-        private string fACTURAField;
-        
-        private string cNX_FUNDField;
-        
-        private string scField;
-        
-        private decimal pERC1Field;
-        
-        private decimal dIAS_TRABField;
-        
-        private string tIPOSCField;
-        
-        private string gPOField;
-        
-        private string cTA_BANCOField;
-        
-        /// <comentarios/>
-        public decimal RECNUM {
-            get {
-                return this.rECNUMField;
-            }
-            set {
-                this.rECNUMField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string ZONA {
-            get {
-                return this.zONAField;
-            }
-            set {
-                this.zONAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string CODE {
-            get {
-                return this.cODEField;
-            }
-            set {
-                this.cODEField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string NAME {
-            get {
-                return this.nAMEField;
-            }
-            set {
-                this.nAMEField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string JOB {
-            get {
-                return this.jOBField;
-            }
-            set {
-                this.jOBField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string OPC {
-            get {
-                return this.oPCField;
-            }
-            set {
-                this.oPCField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string MAIL_NAME {
-            get {
-                return this.mAIL_NAMEField;
-            }
-            set {
-                this.mAIL_NAMEField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string ADDRESS1 {
-            get {
-                return this.aDDRESS1Field;
-            }
-            set {
-                this.aDDRESS1Field = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string ADDRESS2 {
-            get {
-                return this.aDDRESS2Field;
-            }
-            set {
-                this.aDDRESS2Field = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string ADDRESS3 {
-            get {
-                return this.aDDRESS3Field;
-            }
-            set {
-                this.aDDRESS3Field = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string ADDRESS4 {
-            get {
-                return this.aDDRESS4Field;
-            }
-            set {
-                this.aDDRESS4Field = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string ID {
-            get {
-                return this.idField;
-            }
-            set {
-                this.idField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string STATUS {
-            get {
-                return this.sTATUSField;
-            }
-            set {
-                this.sTATUSField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string NO_PAY {
-            get {
-                return this.nO_PAYField;
-            }
-            set {
-                this.nO_PAYField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string GL1108 {
-            get {
-                return this.gL1108Field;
-            }
-            set {
-                this.gL1108Field = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string GL2103 {
-            get {
-                return this.gL2103Field;
-            }
-            set {
-                this.gL2103Field = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string PLAN {
-            get {
-                return this.pLANField;
-            }
-            set {
-                this.pLANField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string FACTURA {
-            get {
-                return this.fACTURAField;
-            }
-            set {
-                this.fACTURAField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string CNX_FUND {
-            get {
-                return this.cNX_FUNDField;
-            }
-            set {
-                this.cNX_FUNDField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string SC {
-            get {
-                return this.scField;
-            }
-            set {
-                this.scField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal PERC1 {
-            get {
-                return this.pERC1Field;
-            }
-            set {
-                this.pERC1Field = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public decimal DIAS_TRAB {
-            get {
-                return this.dIAS_TRABField;
-            }
-            set {
-                this.dIAS_TRABField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string TIPOSC {
-            get {
-                return this.tIPOSCField;
-            }
-            set {
-                this.tIPOSCField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string GPO {
-            get {
-                return this.gPOField;
-            }
-            set {
-                this.gPOField = value;
-            }
-        }
-        
-        /// <comentarios/>
-        public string CTA_BANCO {
-            get {
-                return this.cTA_BANCOField;
-            }
-            set {
-                this.cTA_BANCOField = value;
-            }
-        }
-    }
-    
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1067.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://webpalace/pr_xmlschemas/clubes/01-03-2006/VendedorRequest.xsd")]
-    public partial class VendedorRequest {
-        
-        private Vendedor vendedorField;
-        
-        private string tagField;
-        
-        /// <comentarios/>
-        public Vendedor Vendedor {
-            get {
-                return this.vendedorField;
-            }
-            set {
-                this.vendedorField = value;
+                this.cardField = value;
             }
         }
         
