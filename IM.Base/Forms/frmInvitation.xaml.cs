@@ -50,6 +50,7 @@ namespace IM.Base.Forms
     {
       //Cargamos la UI dependiendo del tipo de Invitacion
       ControlsConfiguration(_invitationType);
+
     }
 
     private void imgButtonSave_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -88,6 +89,7 @@ namespace IM.Base.Forms
       }
     }
     #endregion
+
 
     #region ControlsConfig
     /// <summary>
