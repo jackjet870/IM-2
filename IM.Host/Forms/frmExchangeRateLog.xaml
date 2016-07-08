@@ -15,8 +15,19 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid DataContext="{StaticResource dsExchangeRateLog}">
+        </Grid.RowDefinitions>        
+        <DockPanel DataContext="{StaticResource dsExchangeRateLog}">
+            <!--#region toolbar -->
+            <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch" KeyboardNavigation.TabNavigation="Continue">
+                <Button ToolTip="Print log." Name="btnPrint" Click="btnPrint_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" />
+                        <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Print"/>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+            <!--#endregion-->
+            <!--#region getExchangeRateLogDataGrid -->
             <DataGrid x:Name="getExchangeRateLogDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="10,10,10,10" ItemsSource="{Binding}" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalContentAlignment="Stretch" IsReadOnly="True" SelectionChanged="getExchangeRateLogDataGrid_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="elChangedByColumn" Width="Auto" Header="By" Binding="{Binding elChangedBy}"/>
@@ -26,8 +37,8 @@
                     <DataGridTextColumn x:Name="elExchangeRateColumn" Width="SizeToHeader" Header="Exch. Rate" Binding="{Binding elExchangeRate, StringFormat={}{0:0.0000}}"/>
                 </DataGrid.Columns>
             </DataGrid>
-
-        </Grid>
+            <!--#endregion-->
+        </DockPanel>
 
         <!--#endregion-->
 

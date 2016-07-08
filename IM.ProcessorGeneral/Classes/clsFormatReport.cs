@@ -259,25 +259,25 @@ new ExcelFormatTable() { Title = "CxC", PropertyName = "CxC", Format = EnumForma
     public static List<ExcelFormatTable> RptCxcPayments()
     {
       return new List<ExcelFormatTable>() {
-new ExcelFormatTable() { Title = "LS", PropertyName = "grls", Order = 1, IsGroup = true },
 new ExcelFormatTable() { Title = "Rcpt", PropertyName = "grID", Order = 1 },
 new ExcelFormatTable() { Title = "Rcpt D", PropertyName = "grD", Format = EnumFormatTypeExcel.Date, Order = 2 },
-new ExcelFormatTable() { Title = "PR", PropertyName = "grpe", Order = 3 },
-new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN", Order = 4 },
-new ExcelFormatTable() { Title = "Pay USD", PropertyName = "AmountToPayUSD", Format = EnumFormatTypeExcel.Currency, Order = 5 },
-new ExcelFormatTable() { Title = "Pay MXN", PropertyName = "AmountToPayMXN", Format = EnumFormatTypeExcel.Currency, Order = 6 },
-new ExcelFormatTable() { Title = "Paid USD", PropertyName = "AmountPaidUSD", Format = EnumFormatTypeExcel.Currency, Order = 7 },
-new ExcelFormatTable() { Title = "Paid MXN", PropertyName = "AmountPaidMXN", Format = EnumFormatTypeExcel.Currency, Order = 8 },
-new ExcelFormatTable() { Title = "Bal USD", PropertyName = "BalanceUSD", Format = EnumFormatTypeExcel.Currency, Order = 9 },
-new ExcelFormatTable() { Title = "Bal MXN", PropertyName = "BalanceMXN", Format = EnumFormatTypeExcel.Currency, Order = 10 },
-new ExcelFormatTable() { Title = "GUID", PropertyName = "grgu", Order = 11 },
-new ExcelFormatTable() { Title = "Reserv", PropertyName = "guHReservID", Order = 12 },
-new ExcelFormatTable() { Title = "Out Inv", PropertyName = "guOutInvitNum", Order = 13 },
-new ExcelFormatTable() { Title = "Payment Date", PropertyName = "cxD", Format = EnumFormatTypeExcel.Date, Order = 14},
-new ExcelFormatTable() { Title = "Rec By", PropertyName = "cxReceivedBy", Format = EnumFormatTypeExcel.Number, Order = 15 },
-new ExcelFormatTable() { Title = "Rec Name", PropertyName = "ReceivedByName", Order = 16 },
-new ExcelFormatTable() { Title = "Amt USD", PropertyName = "AmountUSD", Format = EnumFormatTypeExcel.Currency, Order = 17 },
-new ExcelFormatTable() { Title = "Amt MXN", PropertyName = "AmountMXN", Format = EnumFormatTypeExcel.Currency, Order = 18 }
+new ExcelFormatTable() { Title = "LS", PropertyName = "grls", Order = 3 },
+new ExcelFormatTable() { Title = "PR", PropertyName = "grpe", Order = 4 },
+new ExcelFormatTable() { Title = "PR Name", PropertyName = "peN", Order = 5 },
+new ExcelFormatTable() { Title = "Pay USD", PropertyName = "AmountToPayUSD", Format = EnumFormatTypeExcel.Currency, Order = 6 },
+new ExcelFormatTable() { Title = "Pay MXN", PropertyName = "AmountToPayMXN", Format = EnumFormatTypeExcel.Currency, Order = 7 },
+new ExcelFormatTable() { Title = "Paid USD", PropertyName = "AmountPaidUSD", Format = EnumFormatTypeExcel.Currency, Order = 8 },
+new ExcelFormatTable() { Title = "Paid MXN", PropertyName = "AmountPaidMXN", Format = EnumFormatTypeExcel.Currency, Order = 9 },
+new ExcelFormatTable() { Title = "Bal USD", PropertyName = "BalanceUSD", Format = EnumFormatTypeExcel.Currency, Order = 10 },
+new ExcelFormatTable() { Title = "Bal MXN", PropertyName = "BalanceMXN", Format = EnumFormatTypeExcel.Currency, Order = 11 },
+new ExcelFormatTable() { Title = "GUID", PropertyName = "grgu", Order = 12 },
+new ExcelFormatTable() { Title = "Reserv", PropertyName = "guHReservID", Order = 13 },
+new ExcelFormatTable() { Title = "Out Inv", PropertyName = "guOutInvitNum", Order = 14 },
+new ExcelFormatTable() { Title = "Payment Date", PropertyName = "cxD", Format = EnumFormatTypeExcel.Date, Order = 15},
+new ExcelFormatTable() { Title = "Rec By", PropertyName = "cxReceivedBy", Format = EnumFormatTypeExcel.Number, Order = 16 },
+new ExcelFormatTable() { Title = "Rec Name", PropertyName = "ReceivedByName", Order = 17 },
+new ExcelFormatTable() { Title = "Amt USD", PropertyName = "AmountUSD", Format = EnumFormatTypeExcel.Currency, Order = 18 },
+new ExcelFormatTable() { Title = "Amt MXN", PropertyName = "AmountMXN", Format = EnumFormatTypeExcel.Currency, Order = 19 }
       };
     }
 

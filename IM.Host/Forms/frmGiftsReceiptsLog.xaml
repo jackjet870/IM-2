@@ -16,18 +16,21 @@
   </Window.Resources>
   <Grid DataContext="{StaticResource dsGifsReceiptLog}">
     <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition />
-      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="30"/>
     </Grid.RowDefinitions>
-    
-    <!--#region Botones-->
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-      <Button x:Name="btnClose" Content="Close" Width="100" Margin="10" Click="btnClose_Click"/>
-    </StackPanel>
-    <!--#endregion-->
-
-    <!--#region Grid-->
+        <DockPanel LastChildFill="True">
+            <!--#region toolbar -->
+            <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch" KeyboardNavigation.TabNavigation="Continue">
+                <Button ToolTip="Print log." Name="btnPrint" Click="btnPrint_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" />
+                        <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Print"/>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+            <!--#endregion-->
+            <!--#region Grid-->
     <DataGrid x:Name="grdLog" Grid.Row="1" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="5,5,5,5" RowDetailsVisibilityMode="VisibleWhenSelected" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="grdLog_SelectionChanged" IsReadOnly="True">
       <DataGrid.Columns>
         <DataGridTextColumn x:Name="goChangedByColumn" Binding="{Binding goChangedBy}" Header="By" Width="Auto" >
@@ -143,8 +146,8 @@
     </DataGrid>
 
     <!--#endregion-->
-
-    <!--#region  Estatus Bar-->
+        </DockPanel>
+        <!--#region  Estatus Bar-->
     <StatusBar x:Name="stbStatusBar" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Grid.Row="2" Margin="5,5,5,0" >
       <StatusBarItem x:Name="StatusBarCap" Content="CAP"  HorizontalContentAlignment="Stretch" />
       <StatusBarItem x:Name="StatusBarNum" Content="NUM"  HorizontalContentAlignment="Stretch" />

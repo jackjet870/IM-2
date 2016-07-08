@@ -16,7 +16,7 @@
         <!--#region DEFINICION DE ROW's DEL GRID-->
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <!--#endregion-->
         
@@ -29,7 +29,18 @@
         </StatusBar>
         <!--#endregion-->
 
-        <!--#region DATAGRID-->
+        <DockPanel LastChildFill="True">
+            <!--#region toolbar -->
+            <ToolBar DockPanel.Dock="Top" Height="30" ToolBarTray.IsLocked="True" HorizontalAlignment="Stretch" KeyboardNavigation.TabNavigation="Continue">
+                <Button ToolTip="Print log." Name="btnPrint" Click="btnPrint_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="pack://application:,,,/IM.Base;component/Images/Printer.png" />
+                        <AccessText Margin="3,0,0,0" VerticalAlignment="Center" Text="_Print"/>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+            <!--#endregion-->
+            <!--#region DATAGRID-->
         <DataGrid x:Name="dtgSalesRoomLog" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="10,10,10,10" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" SelectionChanged="dtgSalesRoomLog_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="sqChangedByColumn" Binding="{Binding sqChangedBy}" Header="By" Width="Auto">
@@ -49,14 +60,14 @@
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="sqMealTicketsCloseDColumn" Header="Meal T Close D" Width="SizeToHeader" Binding="{Binding sqShowsCloseD, StringFormat=d}">
+                    <DataGridTextColumn x:Name="sqMealTicketsCloseDColumn" Header="Meal T Close D" Width="SizeToHeader" Binding="{Binding sqMealTicketsCloseD, StringFormat=d}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="ToolTip" Value="Meal Tickets Close Date"/>
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="sqSalesCloseDColumn" Header="Sales Close D" Width="SizeToHeader" Binding="{Binding sqShowsCloseD, StringFormat=d}">
+                    <DataGridTextColumn x:Name="sqSalesCloseDColumn" Header="Sales Close D" Width="SizeToHeader" Binding="{Binding sqSalesCloseD, StringFormat=d}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="ToolTip" Value="Sales Close Date"/>
@@ -80,6 +91,6 @@
             </DataGrid.Columns>
         </DataGrid>
         <!--#endregion-->
-
+        </DockPanel>
     </Grid>
 </Window>

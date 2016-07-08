@@ -1,6 +1,11 @@
-﻿using IM.BusinessRules.BR;
+﻿using IM.Base.Helpers;
+using IM.BusinessRules.BR;
+using IM.Host.Classes;
+using IM.Model;
+using IM.Model.Classes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +27,7 @@ namespace IM.Host.Forms
   {
 
     int _ReceiptID = 0;
+    CollectionViewSource _dsGifsReceiptLog;
 
     #region Contructores
     public frmGiftsReceiptsLog(int ReceiptID = 0)
@@ -58,7 +64,7 @@ namespace IM.Host.Forms
     /// </history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      CollectionViewSource _dsGifsReceiptLog = ((CollectionViewSource)(this.FindResource("dsGifsReceiptLog")));
+      _dsGifsReceiptLog = ((CollectionViewSource)(this.FindResource("dsGifsReceiptLog")));
       _dsGifsReceiptLog.Source = await BRGiftsReceiptLog.GetGiftsReceiptLog(_ReceiptID);
 
     }
@@ -162,7 +168,35 @@ namespace IM.Host.Forms
         return;
       }
       StatusBarReg.Content = $"{grdLog.SelectedIndex + 1} / {grdLog.Items.Count}";
-    } 
+    }
+    #endregion
+
+    #region btnPrint_Click
+    /// <summary>
+    /// Exporta los registros de grid a un archivo de excel.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 08/07/2016 Created
+    /// </history>
+    private void btnPrint_Click(object sender, RoutedEventArgs e)
+    {
+      if (((List<GiftsReceiptLogData>)_dsGifsReceiptLog.Source).Any())
+      {
+        #region format Excel
+        List<ExcelFormatTable> lstFormat = clsFormatReport.RptGiftReceiptsLog();
+        #endregion
+        EpplusHelper.OrderColumns(grdLog.Columns.ToList(), lstFormat);
+
+        var fileinfo = EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList((List<GiftsReceiptLogData>)_dsGifsReceiptLog.Source, true, true, true),
+          new List<Tuple<string, string>> { Tuple.Create("Date Range", DateHelper.DateRange(DateTime.Today, DateTime.Today)), Tuple.Create("Gift Receipt ID", string.Join(",", ((List<GiftsReceiptLogData>)_dsGifsReceiptLog.Source).Select(c => c.goID).Distinct().ToList())) },
+          "Gift Receipts Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), lstFormat);
+
+        if (fileinfo != null)
+          Process.Start(fileinfo.FullName);
+      }
+      else
+        UIHelper.ShowMessage("There is no info to make a report");
+    }
     #endregion
 
   }

@@ -391,7 +391,6 @@ namespace IM.ProcessorGeneral.Forms
         case "CxC":
         case "CxC By Type":
         case "CxC Not Authorized":
-        case "CxC Payments":
           _blnOnlyOneRegister = true;
           break;
         default:

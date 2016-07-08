@@ -4,6 +4,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using IM.BusinessRules.BR;
 using IM.Model.Classes;
+using IM.Base.Helpers;
+using System.Collections.Generic;
+using IM.Host.Classes;
+using System.Linq;
+using IM.Model;
+using System;
+using System.Diagnostics;
 
 namespace IM.Host.Forms
 {
@@ -13,7 +20,7 @@ namespace IM.Host.Forms
   public partial class frmSalesRoomsLog : Window
   {
     //private UserData _userData;
-
+    CollectionViewSource _salesRoomLog;
     public frmSalesRoomsLog()
     {
       //_userData = UserData;
@@ -24,7 +31,7 @@ namespace IM.Host.Forms
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
 
-      CollectionViewSource _salesRoomLog = ((CollectionViewSource)(this.FindResource("dsSalesRoomLog")));
+      _salesRoomLog = ((CollectionViewSource)(this.FindResource("dsSalesRoomLog")));
       // Load data by setting the CollectionViewSource.Source property:
       // salesRoomLogViewSource.Source = [generic data source]
 
@@ -97,5 +104,33 @@ namespace IM.Host.Forms
     {
       StatusBarReg.Content = string.Format("{0}/{1}", dtgSalesRoomLog.Items.IndexOf(dtgSalesRoomLog.CurrentItem) + 1, dtgSalesRoomLog.Items.Count);
     }
+
+    #region btnPrint_Click
+    /// <summary>
+    /// Exporta los registros de grid a un archivo de excel.
+    /// </summary>
+    /// <history>
+    /// [edgrodriguez] 08/07/2016 Created
+    /// </history>
+    private void btnPrint_Click(object sender, RoutedEventArgs e)
+    {
+      if (((List<SalesRoomLogData>)_salesRoomLog.Source).Any())
+      {
+        #region format Excel
+        List<ExcelFormatTable> lstFormat = clsFormatReport.RptCloseSalesRoomLog();
+        #endregion
+        EpplusHelper.OrderColumns(dtgSalesRoomLog.Columns.ToList(), lstFormat);
+
+        var fileinfo = EpplusHelper.CreateExcelCustom(TableHelper.GetDataTableFromList((List<SalesRoomLogData>)_salesRoomLog.Source, true, true, true),
+          new List<Tuple<string, string>> { Tuple.Create("Date Range", DateHelper.DateRange(DateTime.Today, DateTime.Today)), Tuple.Create("Sales Room ID", App.User.SalesRoom.srID) },
+          "Sales Rooms Log", DateHelper.DateRangeFileName(DateTime.Today, DateTime.Today), lstFormat);
+
+        if (fileinfo != null)
+          Process.Start(fileinfo.FullName);
+      }
+      else
+        UIHelper.ShowMessage("There is no info to make a report");
+    }
+    #endregion
   }
 }
