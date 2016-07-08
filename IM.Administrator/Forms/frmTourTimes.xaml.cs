@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Data;
+using System.Globalization;
 using IM.Model;
 using IM.Model.Enums;
 using IM.Model.Classes;
@@ -11,6 +13,47 @@ using IM.Base.Helpers;
 
 namespace IM.Administrator.Forms
 {
+  #region DateTimeConvert
+  /// <summary>
+  ///   Formatea los horarios de tour
+  /// </summary>
+  /// <history>
+  ///   [vku] 05/Jul/2016 Created
+  /// </history>
+  public class DateTimeConverter : IValueConverter
+  {
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+      if (value is DateTime)
+      {
+        var test = (DateTime)value;
+        if (test == DateTime.MinValue)
+        {
+          return "";
+        }
+        var date = test.ToString("hh:mm tt");
+        return (date);
+      }
+
+      return string.Empty;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+      if (ValidateHelper.IsValidTimeFormat(value.ToString()))
+      {
+        var test = DateTime.Parse(value.ToString());
+        if (test == DateTime.MinValue)
+        {
+          return "";
+        }
+        return (test);
+      }
+      return string.Empty;
+    }
+  }
+  #endregion
+
   /// <summary>
   /// Interaction logic for frmTourTimes.xaml
   /// Catalogo de horarios de tour por dia
@@ -29,10 +72,12 @@ namespace IM.Administrator.Forms
     private bool _blnEdit = false;//boleano para saber si se tiene minimo permiso para editar|agregar 
     #endregion
 
+    #region Constructor
     public frmTourTimes()
     {
       InitializeComponent();
     }
+    #endregion
 
     #region Metodos
     #region LoadCatalogs
@@ -108,7 +153,7 @@ namespace IM.Administrator.Forms
               dgrTourTimes.ItemsSource = lstTourTimes.TourTimeBySalesRoomWeekDay;
               break;
           }
-          StatusBarReg.Content = dgrTourTimes.Items.Count + " Tour Times.";
+          StatusBarReg.Content = dgrTourTimes.Items.Count - 1 + " Tour Times.";
           status.Visibility = Visibility.Collapsed;
         }
       }
@@ -181,23 +226,20 @@ namespace IM.Administrator.Forms
       {
         case EnumTourTimesSchema.ttsByLeadSourceSalesRoom:
           TourTime ttbylssr = Entity as TourTime;
-          if (ttbylssr.ttT == null) { ShowMessage(1); blnValid = false; }
-          else if(ExistTime(Convert.ToDateTime(ttbylssr.ttT))) { ShowMessage(4); blnValid = false; }
-          else if (ttbylssr.ttPickUpT == null) { ShowMessage(1); blnValid = false; }
+          if (ttbylssr.ttT == DateTime.MinValue) { ShowMessage(1); blnValid = false; }
+          else if (ttbylssr.ttPickUpT == DateTime.MinValue) { ShowMessage(2); blnValid = false; }
           else if (ttbylssr.ttMaxBooks.ToString() == "") { ShowMessage(3); blnValid = false; }
           break;
         case EnumTourTimesSchema.ttsByLeadSourceSalesRoomWeekDay:
           TourTimeByDay ttbylssrwd = Entity as TourTimeByDay;
-          if (ttbylssrwd.ttT == null) { ShowMessage(1); blnValid = false; }
-          else if (ExistTime(Convert.ToDateTime(ttbylssrwd.ttT))) { ShowMessage(4); blnValid = false; }
-          else if (ttbylssrwd.ttPickUpT == null) { ShowMessage(1); blnValid = false; }
+          if (ttbylssrwd.ttT == DateTime.MinValue) { ShowMessage(1); blnValid = false; }
+          else if (ttbylssrwd.ttPickUpT == DateTime.MinValue) { ShowMessage(2); blnValid = false; }
           else if (ttbylssrwd.ttMaxBooks.ToString() == "") { ShowMessage(3); blnValid = false; }
           break;
         case EnumTourTimesSchema.ttsBySalesRoomWeekDay:
           TourTimeBySalesRoomWeekDay ttbysrwd = Entity as TourTimeBySalesRoomWeekDay;
-          if (ttbysrwd.ttT == null) { ShowMessage(1); blnValid = false; }
-          else if (ExistTime(Convert.ToDateTime(ttbysrwd.ttT.ToString()))) { ShowMessage(4); blnValid = false; }
-          else if (ttbysrwd.ttPickUpT == null) { ShowMessage(1); blnValid = false; }
+          if (ttbysrwd.ttT == DateTime.MinValue) { ShowMessage(1); blnValid = false; }
+          else if (ttbysrwd.ttPickUpT == DateTime.MinValue) { ShowMessage(2); blnValid = false; }
           else if (ttbysrwd.ttMaxBooks.ToString() == "") { ShowMessage(3); blnValid = false; }
           break;
       }
@@ -275,7 +317,7 @@ namespace IM.Administrator.Forms
 
     #region btnRef_Click
     /// <summary>
-    ///   Refreca los 
+    ///   Refreca la lista de tour times
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -288,49 +330,9 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    #region Cell_DoubleClick
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    ///   [vku] 21/Jun/2016 Created
-    /// </history>
-    private void Cell_DoubleClick(object sender, RoutedEventArgs e)
-    {
-     
-    }
-    #endregion
-
-    #region Row_KeyDown
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    ///   [vku] 21/Jun/2016 Created
-    /// </history>
-    private void Row_KeyDown(object sender, KeyEventArgs e)
-    {
-      bool blnHandled = false;
-      switch (e.Key)
-      {
-        case Key.Enter:
-          {
-            Cell_DoubleClick(null, null);
-            blnHandled = true;
-            break;
-          }
-      }
-      e.Handled = blnHandled;
-    }
-    #endregion
-
     #region Window_KeyDown
     /// <summary>
-    /// 
+    ///   Valida las teclas INS|MAYSU|LOCKNUM
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -339,7 +341,24 @@ namespace IM.Administrator.Forms
     /// </history>
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
-
+      switch (e.Key)
+      {
+        case Key.Capital:
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
+            break;
+          }
+        case Key.Insert:
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
+            break;
+          }
+        case Key.NumLock:
+          {
+            KeyboardHelper.CkeckKeysPress(StatusBarNum, Key.NumLock);
+            break;
+          }
+      }
     }
     #endregion
 
@@ -406,21 +425,6 @@ namespace IM.Administrator.Forms
     }
     #endregion
 
-    #region txtMaxBooks_PreviewTextInput
-    /// <summary>
-    ///   Valida que solo se puedan usar números
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    ///   [vku] 21/Jun/2016 Created
-    /// </history>
-    private void txtMaxBooks_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-      e.Handled = !ValidateHelper.OnlyNumbers(e.Text);
-    }
-    #endregion
-
     #region Eventos DataGrid TourTimes
     #region dgrTourTimes_RowEditEnding
     /// <summary>
@@ -442,7 +446,6 @@ namespace IM.Administrator.Forms
       }
       else
       {
-        dgr.CommitEdit();
         int nRes = 0;
         switch (_enumTourTimes)
         {
@@ -453,23 +456,36 @@ namespace IM.Administrator.Forms
             {
               if (Validate(ttbylssr))
               {
-                status.Visibility = Visibility.Visible;
-                txtStatus.Text = "Saving Data...";
-                ttbylssr.ttls = cboLeadSource.SelectedValue.ToString();
-                ttbylssr.ttsr = cboSalesRoom.SelectedValue.ToString();
-                nRes = await BREntities.OperationEntity(ttbylssr, EnumMode.add);
-                dgr.Items.Refresh();
+                if (MessageBox.Show("Are you sure you want add new Tour Time?", "IM.Administrator",
+                 MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+                {
+                  dgr.CommitEdit();
+                  status.Visibility = Visibility.Visible;
+                  txtStatus.Text = "Saving Data...";
+                  ttbylssr.ttls = cboLeadSource.SelectedValue.ToString();
+                  ttbylssr.ttsr = cboSalesRoom.SelectedValue.ToString();
+                  nRes = await BREntities.OperationEntity(ttbylssr, EnumMode.add);
+                  dgr.Items.Refresh();
+                  dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
+                }
+                else
+                {
+                  dgr.CancelEdit();
+                  dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
+                }
               }
               else
               {
-                dgr.CancelEdit();
+                e.Cancel = true;
                 dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
-              }        
+              }           
             }
             else {
               status.Visibility = Visibility.Visible;
               txtStatus.Text = "Saving Data...";
-              nRes = await BREntities.OperationEntity(ttbylssr, EnumMode.edit); }
+              nRes = await BREntities.OperationEntity(ttbylssr, EnumMode.edit);
+              dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
+            }
             break;
           #endregion
 
@@ -480,24 +496,37 @@ namespace IM.Administrator.Forms
             {
               if (Validate(ttbylssrwd))
               {
-                status.Visibility = Visibility.Visible;
-                txtStatus.Text = "Saving Data...";
-                ttbylssrwd.ttls = cboLeadSource.SelectedValue.ToString();
-                ttbylssrwd.ttsr = cboSalesRoom.SelectedValue.ToString();
-                ttbylssrwd.ttDay = Convert.ToByte(cboWeekDay.SelectedValue.ToString());
-                nRes = await BREntities.OperationEntity(ttbylssrwd, EnumMode.add);
-                dgr.Items.Refresh();
+                if (MessageBox.Show("Are you sure you want add new Tour Time?", "IM.Administrator",
+                 MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+                {
+                  dgr.CommitEdit();
+                  status.Visibility = Visibility.Visible;
+                  txtStatus.Text = "Saving Data...";
+                  ttbylssrwd.ttls = cboLeadSource.SelectedValue.ToString();
+                  ttbylssrwd.ttsr = cboSalesRoom.SelectedValue.ToString();
+                  ttbylssrwd.ttDay = Convert.ToByte(cboWeekDay.SelectedValue.ToString());
+                  nRes = await BREntities.OperationEntity(ttbylssrwd, EnumMode.add);
+                  dgr.Items.Refresh();
+                  dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
+                }
+                else
+                {
+                  dgr.CancelEdit();
+                  dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
+                }
               }
               else
               {
-                dgr.CancelEdit();
+                e.Cancel = true;
                 dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
-              }
+              }  
             }
             else {
               status.Visibility = Visibility.Visible;
               txtStatus.Text = "Saving Data...";
-              nRes = await BREntities.OperationEntity(ttbylssrwd, EnumMode.edit); };
+              nRes = await BREntities.OperationEntity(ttbylssrwd, EnumMode.edit);
+              dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
+            }
             break;
           #endregion
 
@@ -506,29 +535,43 @@ namespace IM.Administrator.Forms
             TourTimeBySalesRoomWeekDay ttbysrwd = e.Row.DataContext as TourTimeBySalesRoomWeekDay;
             if (isInsert)
             {
-              if (Validate(ttbysrwd))
-              { 
-                status.Visibility = Visibility.Visible;
-                txtStatus.Text = "Saving Data...";
-                ttbysrwd.ttsr = cboSalesRoom.SelectedValue.ToString();
-                ttbysrwd.ttDay = Convert.ToByte(cboWeekDay.SelectedValue.ToString());
-                nRes = await BREntities.OperationEntity(ttbysrwd, EnumMode.add);
-                dgr.Items.Refresh();
+              if(Validate(ttbysrwd))
+              {
+                if (MessageBox.Show("Are you sure you want add new Tour Time?", "IM.Administrator",
+                 MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+                {
+                  dgr.CommitEdit();
+                  status.Visibility = Visibility.Visible;
+                  txtStatus.Text = "Saving Data...";
+                  ttbysrwd.ttsr = cboSalesRoom.SelectedValue.ToString();
+                  ttbysrwd.ttDay = Convert.ToByte(cboWeekDay.SelectedValue.ToString());
+                  nRes = await BREntities.OperationEntity(ttbysrwd, EnumMode.add);
+                  dgr.Items.Refresh();
+                  dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
+                }
+                else
+                {
+                  dgr.CancelEdit();
+                  dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
+                }
               }
               else
               {
-                dgr.CancelEdit();
+                e.Cancel = true;
                 dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
               }
             }
             else {
               status.Visibility = Visibility.Visible;
               txtStatus.Text = "Saving Data...";
-              nRes = await BREntities.OperationEntity(ttbysrwd, EnumMode.edit); };
+              nRes = await BREntities.OperationEntity(ttbysrwd, EnumMode.edit);
+              dgr.RowEditEnding += dgrTourTimes_RowEditEnding;
+            }
             break;
             #endregion
         }
         status.Visibility = Visibility.Collapsed;
+        StatusBarReg.Content = dgrTourTimes.Items.Count - 1 + " Tour Times.";
       }
     }
     #endregion
@@ -559,6 +602,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgrTourTimes_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
     {
+      DataGrid dg = sender as DataGrid; 
       if (_blnEdit)
       {
         if ((e.Column.Header.ToString() == "Tour Time" || e.Column.Header.ToString() == "Pickup Time") && !e.Row.IsNewItem)
@@ -567,7 +611,67 @@ namespace IM.Administrator.Forms
         }
         else
         {
-          isEdit = true;
+         if(e.Column.Header.ToString() == "Pickup Time" && e.Row.IsNewItem)
+          {
+            switch (_enumTourTimes)
+            {
+              case EnumTourTimesSchema.ttsByLeadSourceSalesRoom:
+                TourTime rowlssr = (TourTime)dgrTourTimes.SelectedItem;
+                if (rowlssr.ttT != DateTime.MinValue)
+                  rowlssr.ttPickUpT = rowlssr.ttT;
+                else
+                  e.Cancel = true;
+                break;
+              case EnumTourTimesSchema.ttsByLeadSourceSalesRoomWeekDay:
+                TourTimeByDay rowlssrwd = (TourTimeByDay)dgrTourTimes.SelectedItem;
+                if (rowlssrwd.ttT != DateTime.MinValue)
+                  rowlssrwd.ttPickUpT = rowlssrwd.ttT;
+                else
+                  e.Cancel = true;
+                break;
+              case EnumTourTimesSchema.ttsBySalesRoomWeekDay:
+                TourTimeBySalesRoomWeekDay rowttbysrwd = (TourTimeBySalesRoomWeekDay)dgrTourTimes.SelectedItem;
+                if (rowttbysrwd.ttT != DateTime.MinValue)
+                  rowttbysrwd.ttPickUpT = rowttbysrwd.ttT;
+                else
+                  e.Cancel = true;
+                break;
+            }
+          }
+          else
+          {
+            if (e.Column.Header.ToString() == "Max Books" && e.Row.IsNewItem)
+            {
+              switch (_enumTourTimes)
+              {
+                case EnumTourTimesSchema.ttsByLeadSourceSalesRoom:
+                  TourTime rowlssr = (TourTime)dgrTourTimes.SelectedItem;
+                  if (rowlssr.ttT != DateTime.MinValue && rowlssr.ttPickUpT != DateTime.MinValue)
+                    rowlssr.ttMaxBooks = 1;
+                  else
+                    e.Cancel = true;
+                  break;
+                case EnumTourTimesSchema.ttsByLeadSourceSalesRoomWeekDay:
+                  TourTimeByDay rowlssrwd = (TourTimeByDay)dgrTourTimes.SelectedItem;
+                  if (rowlssrwd.ttT != DateTime.MinValue && rowlssrwd.ttPickUpT != DateTime.MinValue)
+                    rowlssrwd.ttMaxBooks = 1;
+                  else
+                    e.Cancel = true;
+                  break;
+                case EnumTourTimesSchema.ttsBySalesRoomWeekDay:
+                  TourTimeBySalesRoomWeekDay rowsrwd = (TourTimeBySalesRoomWeekDay)dgrTourTimes.SelectedItem;
+                  if (rowsrwd.ttT != DateTime.MinValue && rowsrwd.ttPickUpT != DateTime.MinValue)
+                    rowsrwd.ttMaxBooks = 1;
+                  else
+                    e.Cancel = true;
+                  break;
+              }
+            }
+            else
+            {
+              isEdit = true;
+            }
+          }    
         }
       }
       else
@@ -588,6 +692,7 @@ namespace IM.Administrator.Forms
     /// </history>
     private void dgrTourTimes_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
     {
+      object item = dgrTourTimes.SelectedItem;
       if (e.EditAction == DataGridEditAction.Cancel)
       {
         isCancel = true;
@@ -598,27 +703,74 @@ namespace IM.Administrator.Forms
         TextBox changedTextBox = e.EditingElement as TextBox;
         switch (e.Column.Header.ToString())
         {
+          #region Tour Time
           case "Tour Time":
-            string tt = changedTextBox.Text.ToString();
-            if (!ValidateHelper.IsValidTimeFormat(tt))
-            {
+            if (changedTextBox.Text.ToString() == "")
               isCancel = true;
-              UIHelper.ShowMessage("Invalid time", MessageBoxImage.Warning, "IM.Administrator");
-            }
             else
             {
-              DateTime time = Convert.ToDateTime(tt);
-              if (ExistTime(time)) { isCancel = true; UIHelper.ShowMessage(time.ToString("hh:mm tt") + " already exists", MessageBoxImage.Warning, "IM.Administrator"); }
+              if (ValidateHelper.IsValidTimeFormat(changedTextBox.Text.ToString()) || ValidateHelper.IsDate(changedTextBox.Text.ToString()))
+              {
+                string tt = changedTextBox.Text.ToString();
+                DateTime time = Convert.ToDateTime(tt);
+                if (ExistTime(time))
+                {
+                  isCancel = true;
+                  UIHelper.ShowMessage(time.ToString("hh:mm tt") + " already exists", MessageBoxImage.Warning, "IM.Administrator");
+                }
+                else
+                {
+                  switch (_enumTourTimes)
+                  {
+                    case EnumTourTimesSchema.ttsByLeadSourceSalesRoom:
+                      ((TourTime)dgrTourTimes.SelectedItem).ttT =  time;
+                      break;
+                    case EnumTourTimesSchema.ttsByLeadSourceSalesRoomWeekDay:
+                      ((TourTimeByDay)dgrTourTimes.SelectedItem).ttT = time; 
+                      break;
+                    case EnumTourTimesSchema.ttsBySalesRoomWeekDay:
+                      ((TourTimeBySalesRoomWeekDay)dgrTourTimes.SelectedItem).ttT = time;
+                      break;
+                  }
+                }
+              }else
+              {
+                UIHelper.ShowMessage("Invalid Time", MessageBoxImage.Error, "IM.Administrator");
+              }
             }
             break;
+          #endregion
+          #region Pickup Time
           case "Pickup Time":
-            string pckUp = changedTextBox.Text.ToString();
-            if (!ValidateHelper.IsValidTimeFormat(pckUp))
-            {
+            if (changedTextBox.Text.ToString() == "")
               isCancel = true;
-              UIHelper.ShowMessage("Invalid time", MessageBoxImage.Warning, "IM.Administrator");
+            else
+            {
+              if (ValidateHelper.IsValidTimeFormat(changedTextBox.Text.ToString()) || ValidateHelper.IsDate(changedTextBox.Text.ToString()))
+              {
+                string pt = changedTextBox.Text.ToString();
+                DateTime time = Convert.ToDateTime(pt);
+                switch (_enumTourTimes)
+                {
+                  case EnumTourTimesSchema.ttsByLeadSourceSalesRoom:
+                    ((TourTime)dgrTourTimes.SelectedItem).ttPickUpT = time;
+                    break;
+                  case EnumTourTimesSchema.ttsByLeadSourceSalesRoomWeekDay:
+                    ((TourTimeByDay)dgrTourTimes.SelectedItem).ttPickUpT = time;
+                    break;
+                  case EnumTourTimesSchema.ttsBySalesRoomWeekDay:
+                    ((TourTimeBySalesRoomWeekDay)dgrTourTimes.SelectedItem).ttPickUpT = time;
+                    break;
+                }
+              }
+              else
+              {
+                UIHelper.ShowMessage("Invalid Time", MessageBoxImage.Error, "IM.Administrator");
+              }
             }
             break;
+          #endregion
+          #region Max Books
           case "Max Books":
             string maxBooks = changedTextBox.Text.ToString();
             if (!ValidateHelper.OnlyNumbers(maxBooks))
@@ -629,15 +781,47 @@ namespace IM.Administrator.Forms
             else
             {
               if (Convert.ToInt32(maxBooks) > 255)
+              {
+                isCancel = true;
                 UIHelper.ShowMessage("can not be greater than 255", MessageBoxImage.Warning, "IM.Administrator");
+              }
               else if (Convert.ToInt32(maxBooks) < 0)
+              {
+                isCancel = true;
                 UIHelper.ShowMessage("can not be lower than 0", MessageBoxImage.Warning, "IM.Administrator");
+              }
+              else
+              {
+                switch (_enumTourTimes)
+                {
+                  case EnumTourTimesSchema.ttsByLeadSourceSalesRoom:
+                    if (!e.Row.IsNewItem && Convert.ToByte(maxBooks) == ((TourTime)dgrTourTimes.SelectedItem).ttMaxBooks)
+                      isCancel = true;
+                    else
+                      ((TourTime)dgrTourTimes.SelectedItem).ttMaxBooks = Convert.ToByte(maxBooks);
+                    break;
+                  case EnumTourTimesSchema.ttsByLeadSourceSalesRoomWeekDay:
+                    if (!e.Row.IsNewItem && Convert.ToByte(maxBooks) == ((TourTimeByDay)dgrTourTimes.SelectedItem).ttMaxBooks)
+                      isCancel = true;
+                    else
+                      ((TourTimeByDay)dgrTourTimes.SelectedItem).ttMaxBooks = Convert.ToByte(maxBooks);
+                    break;
+                  case EnumTourTimesSchema.ttsBySalesRoomWeekDay:
+                    if (!e.Row.IsNewItem && Convert.ToByte(maxBooks) == ((TourTimeBySalesRoomWeekDay)dgrTourTimes.SelectedItem).ttMaxBooks)
+                      isCancel = true;
+                    else
+                      ((TourTimeBySalesRoomWeekDay)dgrTourTimes.SelectedItem).ttMaxBooks = Convert.ToByte(maxBooks);
+                    break;
+                }
+              }
             }
             break;
+            #endregion
         }
       }
     }
     #endregion
+
     #endregion
 
     #region Eventos btnsCopysTourTimes
@@ -651,9 +835,26 @@ namespace IM.Administrator.Forms
     /// <history>
     ///   [vku] 29/Jun/2016 Created
     /// </history>
-    private void btnCopyToLeadSource_Click(object sender, RoutedEventArgs e)
+    private async void btnCopyToLeadSource_Click(object sender, RoutedEventArgs e)
     {
-
+      if(!ValidateHelper.ValidateRequired(cboLeadSource, "lead source (FROM)"))
+        return;
+      else
+      {
+        if (!ValidateHelper.ValidateRequired(cboLeadSourceTo, "lead source (TO)"))
+          return;
+        else
+        {
+          if (MessageBox.Show("Are you sure you want to copy the tour times of the Lead Source " + "\""+cboLeadSource.Text+"\"" +
+             " to the Lead Source " + "\"" +cboLeadSourceTo.Text+"\"" + "?", "IM.Administrator", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+          {
+            if(_enumTourTimes == EnumTourTimesSchema.ttsByLeadSourceSalesRoom)    
+              await BRTourTimes.CopyTourTimesByLeadSourceSalesRoomToLeadSource(cboLeadSource.SelectedValue.ToString(), cboLeadSourceTo.SelectedValue.ToString());
+            else
+              await BRTourTimes.CopyTourTimesByLeadSourceSalesRoomWeekDayToLeadSource(cboLeadSource.SelectedValue.ToString(), cboLeadSourceTo.SelectedValue.ToString());  
+          }
+        }
+      }
     }
     #endregion
 
@@ -666,9 +867,34 @@ namespace IM.Administrator.Forms
     /// <history>
     ///   [vku] 29/Jun/2016 Created
     /// </history>
-    private void btnCopyToSalesRoom_Click(object sender, RoutedEventArgs e)
+    private async void btnCopyToSalesRoom_Click(object sender, RoutedEventArgs e)
     {
-
+      if (!ValidateHelper.ValidateRequired(cboSalesRoom, "sales room (FROM)"))
+        return;
+      else
+      {
+        if (!ValidateHelper.ValidateRequired(cboSalesRoomTo, "sales room (TO)"))
+          return;
+        else
+        {
+          if (MessageBox.Show("Are you sure you want to copy the tour times of the Sales Room " + "\"" +cboSalesRoom.Text+"\"" +
+             " to the Sales Room " + "\"" +cboSalesRoomTo.Text+"\"" + "?", "IM.Administrator", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+          {
+            switch (_enumTourTimes)
+            {
+              case EnumTourTimesSchema.ttsByLeadSourceSalesRoom:
+                await BRTourTimes.CopyTourTimesByLeadSourceSalesRoomToSalesRoom(cboSalesRoom.SelectedValue.ToString(), cboSalesRoomTo.SelectedValue.ToString());
+                break;
+              case EnumTourTimesSchema.ttsByLeadSourceSalesRoomWeekDay:
+                await BRTourTimes.CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoom(cboSalesRoom.SelectedValue.ToString(), cboSalesRoomTo.SelectedValue.ToString());
+                break;
+              case EnumTourTimesSchema.ttsBySalesRoomWeekDay:
+                await BRTourTimes.CopyTourTimesBySalesRoomWeekDayToSalesRoom(cboSalesRoom.SelectedValue.ToString(), cboSalesRoomTo.SelectedValue.ToString());
+                break;
+            }
+          }
+        }
+      }
     }
     #endregion
 
@@ -682,9 +908,26 @@ namespace IM.Administrator.Forms
     /// <history>
     ///   [vku] 29/Jun/2016 Created
     /// </history>
-    private void btnCopyToSalesRoomsWeekDaysOfLeadSource_Click(object sender, RoutedEventArgs e)
+    private async void btnCopyToSalesRoomsWeekDaysOfLeadSource_Click(object sender, RoutedEventArgs e)
     {
-
+      if (!ValidateHelper.ValidateRequired(cboLeadSource, "lead source"))
+        return;
+      else
+      {
+        if (!ValidateHelper.ValidateRequired(cboSalesRoom, "sales room"))
+          return;
+        else
+        {
+          if(!ValidateHelper.ValidateRequired(cboWeekDay, "week day")) 
+            return;
+          else
+          {
+            if (MessageBox.Show("Are you sure you want to copy the tour times of the Lead Source "  + "\""+cboLeadSource.Text+"\"" +
+             ", Sales Room " + "\""+cboSalesRoom.Text+"\"" + ", Week Day " + "\""+cboWeekDay.Text+"\"" + " to all others Sales Rooms & Week Days of Lead Source " + "\""+cboLeadSource.Text+"\"" +  "?", "Tour Times", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+              await BRTourTimes.CopyTourTimesByLeadSourceSalesRoomWeekDayToSalesRoomsWeekDaysOfLeadSource(cboLeadSource.SelectedValue.ToString(), cboSalesRoom.SelectedValue.ToString(), cboWeekDay.SelectedValue.ToString());
+          }
+        }
+      }
     }
     #endregion
 
@@ -698,9 +941,23 @@ namespace IM.Administrator.Forms
     /// <history>
     ///   [vku] 29/Jun/2016 Created
     /// </history>
-    private void btnCopyToLeadSourcesOfProgram_Click(object sender, RoutedEventArgs e)
+    private async void btnCopyToLeadSourcesOfProgram_Click(object sender, RoutedEventArgs e)
     {
-
+      if(!ValidateHelper.ValidateRequired(cboLeadSource, "lead source"))
+        return;
+      else
+      {
+        string strProgram;
+        strProgram = await BRPrograms.GetProgram(cboLeadSource.SelectedValue.ToString());
+        if(MessageBox.Show("Are you sure you want to copy the tour times of the Lead Source " + "\""+cboLeadSource.Text+"\"" +
+             " to all others Lead Sources of Program " + "\""+strProgram+"\"" + "?", "IM.Administrator", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+        {
+          if(_enumTourTimes == EnumTourTimesSchema.ttsByLeadSourceSalesRoom)
+            await BRTourTimes.CopyTourTimesByLeadSourceSalesRoomToLeadSourcesOfProgram(cboLeadSource.SelectedValue.ToString());
+          else
+            await BRTourTimes.CopyTourTimesByLeadSourceSalesRoomWeekDayToLeadSourcesOfProgram(cboLeadSource.SelectedValue.ToString());
+        }
+      }
     }
     #endregion
 
@@ -714,55 +971,26 @@ namespace IM.Administrator.Forms
     /// <history>
     ///   [vku] 29/Jun/2016 Created
     /// </history>
-    private void btnCopyToWeekDaysOfSalesRoom_Click(object sender, RoutedEventArgs e)
+    private async void btnCopyToWeekDaysOfSalesRoom_Click(object sender, RoutedEventArgs e)
     {
-
-    }
-    #endregion
-
-    #endregion
-
-    #endregion
-
-    private void dgrTourTimes_PreviewKeyDown(object sender, KeyEventArgs e)
-    {
-      DataGrid grid = (DataGrid)sender;
-
-      if (e.Key == Key.Enter || e.Key == Key.Return)
+      if(!ValidateHelper.ValidateRequired(cboSalesRoom, "sales room"))
+        return;
+      else
       {
-        // get the selected row
-        var selectedRow = grid.ItemContainerGenerator.ContainerFromItem(grid.SelectedItem) as DataGridRow;
-
-        // selectedRow can be null due to virtualization
-        if (selectedRow != null)
+        if(!ValidateHelper.ValidateRequired(cboWeekDay, "week day"))
+          return;
+        else
         {
-          // there should always be a selected cell
-          if (grid.SelectedCells.Count != 0)
-          {
-            // get the cell info
-            DataGridCellInfo currentCell = grid.SelectedCells[0];
-
-            // get the display index of the cell's column + 1 (for next column)
-            int columnDisplayIndex = currentCell.Column.DisplayIndex++;
-
-            // if display index is valid
-            if (columnDisplayIndex < grid.Columns.Count)
-            {
-              // get the DataGridColumn instance from the display index
-              DataGridColumn nextColumn = grid.ColumnFromDisplayIndex(columnDisplayIndex);
-
-              // now telling the grid, that we handled the key down event
-              e.Handled = true;
-
-              // setting the current cell (selected, focused)
-              grid.CurrentCell = new DataGridCellInfo(grid.SelectedItem, nextColumn);
-
-              // tell the grid to initialize edit mode for the current cell
-              grid.BeginEdit();
-            }
-          }
+          if(MessageBox.Show("Are you sure you want to copy the tour times of the Sales Room " + "\""+cboSalesRoom.Text+"\"" +
+             ", Week Day " + "\""+cboWeekDay.Text+"\"" + " to all others Week Days of Sales Room " + "\""+cboSalesRoom.Text+"\"" + "?", "IM.Administrator", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+            await BRTourTimes.CopyTourTimesBySalesRoomWeekDayToWeekDaysOfSalesRoom(cboSalesRoom.SelectedValue.ToString(), cboWeekDay.SelectedValue.ToString());
         }
       }
     }
+    #endregion
+
+    #endregion
+
+    #endregion
   }
 }

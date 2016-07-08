@@ -120,6 +120,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\ClsFilter.cs" />
     <Compile Include="Classes\FormatReport.cs" />
     <Compile Include="Classes\GoalsHelpper.cs" />
     <Compile Include="Classes\MultiDateHelpper.cs" />
@@ -189,6 +190,10 @@
     <ProjectReference Include="..\IM.Model\IM.Model.csproj">
       <Project>{4d0c8faf-7eeb-4a36-9826-e190a0d9fe72}</Project>
       <Name>IM.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IM.Styles\IM.Styles.csproj">
+      <Project>{bad29979-3e8d-4913-8dd0-edebc8af85a7}</Project>
+      <Name>IM.Styles</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

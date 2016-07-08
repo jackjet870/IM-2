@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:Classes="clr-namespace:IM.ProcessorSales.Classes"
+        xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
         mc:Ignorable="d"
         Title="Date Range" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        Icon="pack://application:,,,/IM.ProcessorSales;component/Images/IM.ico" ShowInTaskbar="False">
+        Icon="pack://application:,,,/IM.ProcessorSales;component/Images/IM.ico" ShowInTaskbar="False" >
     <Window.Resources>
         <Style TargetType="{x:Type DataGrid}">
             <Setter Property="AutoGenerateColumns" Value="False" />
@@ -21,12 +23,12 @@
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{x:Static SystemColors.HighlightColor}" />
             </Style.Resources>
         </Style>
-        
+
         <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
-        
+
         <Style x:Key="StatusBarStyle" TargetType="{x:Type StatusBar}">
             <Setter Property="Width" Value="200" />
             <Setter Property="Height" Value="30" />
@@ -44,20 +46,37 @@
             <EventSetter Event="Checked" Handler="chbx_Checked" />
             <EventSetter Event="Unchecked" Handler="chbx_Checked" />
         </Style>
-        
+        <Style x:Key="TextBoxNumeric" TargetType="{x:Type TextBox}">
+            <EventSetter Event="PreviewTextInput" Handler="TextBoxNumeric_PreviewTextInput" />
+            <EventSetter Event="LostFocus" Handler="TextBoxNumeric_LostFocus" />
+        </Style>
+        <CollectionViewSource x:Key="ObjMultiDateHelpper" d:DesignSource="{d:DesignInstance {x:Type Classes:MultiDateHelpper}, CreateList=True}" />
+        <CollectionViewSource x:Key="ObjSalesRoomByUser" d:DesignSource="{d:DesignInstance {x:Type Model:SalesRoomByUser}, CreateList=True}" />
+        <CollectionViewSource x:Key="ObjGoalsHelpper" d:DesignSource="{d:DesignInstance {x:Type Classes:GoalsHelpper}, CreateList=True}" />
     </Window.Resources>
-    
+
     <StackPanel Orientation ="Horizontal">
         <!--#region Grid SalesRoom -->
         <StackPanel Name="pnlSalesRoom">
             <CheckBox Name="chkAllSalesRoom" Content="All Sales Rooms" Style="{StaticResource CheckBoxSelectAll}"/>
-            <DataGrid Name="dtgSalesRoom" IsReadOnly="True" ItemsSource="{Binding}" SelectionChanged="dtgSalesRoom_SelectionChanged">
+            <DataGrid Name="dtgSalesRoom" IsReadOnly="True" ItemsSource="{Binding}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Sales Room" Width="*"  Binding="{Binding srN}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
                 </DataGrid.Columns>
             </DataGrid>
             <StatusBar Style="{StaticResource StatusBarStyle}">
-                <StatusBarItem x:Name="statusBarNumSalesRoom"  Style="{StaticResource StatusBarItemStyle}" />
+                <StatusBarItem Style="{StaticResource StatusBarItemStyle}">
+                    <StatusBarItem.Content>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} / {1} Sales Rooms selected">
+                                    <Binding ElementName="dtgSalesRoom"  Path="SelectedItems.Count" />
+                                    <Binding ElementName="dtgSalesRoom" Path="Items.Count" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StatusBarItem.Content>
+                </StatusBarItem>
             </StatusBar>
         </StackPanel>
         <!--#endregion-->
@@ -65,13 +84,24 @@
         <!--#region Grid Programs -->
         <StackPanel Name="pnlProggrams">
             <CheckBox Name="chkAllPrograms" Content="All Programs" Style="{StaticResource CheckBoxSelectAll}" />
-            <DataGrid Name="dtgPrograms" IsReadOnly="True" SelectionChanged="dtgPrograms_SelectionChanged">
+            <DataGrid Name="dtgPrograms" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Programs" Width="*" Binding="{Binding pgN}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
                 </DataGrid.Columns>
             </DataGrid>
             <StatusBar Style="{StaticResource StatusBarStyle}">
-                <StatusBarItem x:Name="statusBarNumPg" Style="{StaticResource StatusBarItemStyle}" />
+                <StatusBarItem Style="{StaticResource StatusBarItemStyle}">
+                    <StatusBarItem.Content>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} / {1} Programs selected">
+                                    <Binding ElementName="dtgSalesRoom"  Path="SelectedItems.Count" />
+                                    <Binding ElementName="dtgSalesRoom" Path="Items.Count" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StatusBarItem.Content>
+                </StatusBarItem>
             </StatusBar>
         </StackPanel>
         <!--#endregion-->
@@ -79,13 +109,24 @@
         <!--#region Grid Segments -->
         <StackPanel Name="pnlSegments">
             <CheckBox Name="chkAllSegments" Content="All Segments" Style="{StaticResource CheckBoxSelectAll}" />
-            <DataGrid Name="dtgSegments" IsReadOnly="True" SelectionChanged="dtgSegments_SelectionChanged">
+            <DataGrid Name="dtgSegments" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Segments" Width="*" Binding="{Binding seN}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
                 </DataGrid.Columns>
             </DataGrid>
             <StatusBar Style="{StaticResource StatusBarStyle}">
-                <StatusBarItem x:Name="statusBarNumSegments" Style="{StaticResource StatusBarItemStyle}" />
+                <StatusBarItem Style="{StaticResource StatusBarItemStyle}">
+                    <StatusBarItem.Content>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} / {1} Segments selected">
+                                    <Binding ElementName="dtgSalesRoom"  Path="SelectedItems.Count" />
+                                    <Binding ElementName="dtgSalesRoom" Path="Items.Count" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StatusBarItem.Content>
+                </StatusBarItem>
             </StatusBar>
         </StackPanel>
         <!--#endregion-->
@@ -93,46 +134,100 @@
         <!--#region Grid SalesRoom MultiDateRanges -->
         <StackPanel Name="pnlSalesRoomMultiDateRange">
             <CheckBox Name="chkAllSalesRoomMultiDateRange" Content="All Sales Rooms" Style="{StaticResource CheckBoxSelectAll}" />
-            <DataGrid Name="dtgSalesRoomMultiDateRange" IsReadOnly="False" ItemsSource="{Binding}" Width="auto" CanUserAddRows="False" SelectionUnit="Cell">
+            <DataGrid Name="dtgSalesRoomMultiDateRange" CanUserAddRows="True" CanUserSortColumns="False" IsReadOnly="False" AutoGenerateColumns="False" Width="auto" BeginningEdit="dtgSalesRoomMultiDateRange_BeginningEdit" ItemsSource="{Binding Source={StaticResource ObjMultiDateHelpper}}" >
                 <DataGrid.Columns>
-                    <DataGridComboBoxColumn x:Name="cmbSalesRoom" SelectedValueBinding="{Binding salesRoom}"
-                                              DisplayMemberPath="srN" SelectedValuePath="srID" Header="Sales Room" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}"/>
-
-                    <DataGridTemplateColumn Header="From" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                    <DataGridComboBoxColumn x:Name="cmbSalesRoom" SelectedValueBinding="{Binding SalesRoom, ValidatesOnDataErrors=True, UpdateSourceTrigger=LostFocus}" 
+                                            DisplayMemberPath="srN" SelectedValuePath="srID"  Header="Sales Room" ItemsSource="{Binding Source={StaticResource ObjSalesRoomByUser}}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                        <DataGridComboBoxColumn.EditingElementStyle>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="IsEditable" Value="True"/>
+                            </Style>
+                        </DataGridComboBoxColumn.EditingElementStyle>
+                    </DataGridComboBoxColumn>
+                    <DataGridTemplateColumn Header="From" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="130" >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding dtStart, StringFormat=MM/dd/yyyy}" />
+                                <xctk:DateTimePicker Value="{Binding DtStart}" Format="Custom" FormatString="ddd d MMM yyyy"  ShowButtonSpinner="False" ShowDropDownButton="False" IsEnabled="False" FontWeight="Bold">
+                                    <xctk:DateTimePicker.Style>
+                                        <Style TargetType="xctk:DateTimePicker" >
+                                            <Setter Property="Visibility" Value="Visible" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding SalesRoom}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </xctk:DateTimePicker.Style>
+                                </xctk:DateTimePicker>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
-                                <DatePicker SelectedDate="{Binding dtStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <xctk:DateTimePicker Value="{Binding DtStart, UpdateSourceTrigger=LostFocus}" Format="Custom" FormatString="ddd d MMM yyyy" TimePickerVisibility="Collapsed" >
+                                    <xctk:DateTimePicker.Style>
+                                        <Style TargetType="xctk:DateTimePicker" >
+                                            <Setter Property="Visibility" Value="Visible" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding SalesRoom}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </xctk:DateTimePicker.Style>
+                                </xctk:DateTimePicker>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn Header="To" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                    <DataGridTemplateColumn Header="To" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Width="130">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding dtEnd, StringFormat=MM/dd/yyyy}" />
+                                <xctk:DateTimePicker Value="{Binding DtEnd}" Format="Custom" FormatString="ddd d MMM yyyy"  ShowButtonSpinner="False" ShowDropDownButton="False" IsEnabled="False" FontWeight="Bold">
+                                    <xctk:DateTimePicker.Style>
+                                        <Style TargetType="xctk:DateTimePicker" >
+                                            <Setter Property="Visibility" Value="Visible" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding SalesRoom}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </xctk:DateTimePicker.Style>
+                                </xctk:DateTimePicker>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
-                                <DatePicker SelectedDate="{Binding dtEnd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <xctk:DateTimePicker Value="{Binding DtEnd, UpdateSourceTrigger=LostFocus}" Format="Custom" FormatString="ddd d MMM yyyy" TimePickerVisibility="Collapsed" >
+                                    <xctk:DateTimePicker.Style>
+                                        <Style TargetType="xctk:DateTimePicker" >
+                                            <Setter Property="Visibility" Value="Visible" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding SalesRoom}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </xctk:DateTimePicker.Style>
+                                </xctk:DateTimePicker>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridCheckBoxColumn Binding="{Binding isMain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
-                        <DataGridCheckBoxColumn.Header>
-                            <TextBlock Text="Is Main Sales Room"/>
-                        </DataGridCheckBoxColumn.Header>
-
+                    <DataGridCheckBoxColumn Binding="{Binding IsMain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" Header="Is Main Sales Room">
+                        <DataGridCheckBoxColumn.EditingElementStyle>
+                            <Style TargetType="CheckBox" >
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="IsEnabled" Value="True" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SalesRoom}" Value="{x:Null}">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridCheckBoxColumn.EditingElementStyle>
                     </DataGridCheckBoxColumn>
-                    <!--<DataGridTextColumn Header="Sales Room" Width="*"  Binding="{Binding srN}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />-->
                 </DataGrid.Columns>
             </DataGrid>
-            
+
             <StatusBar Style="{StaticResource StatusBarStyle}">
                 <StatusBarItem x:Name="statusBarNumSalesRoomMultiDateRange"  Style="{StaticResource StatusBarItemStyle}" />
             </StatusBar>
@@ -142,9 +237,9 @@
         <!--#region Grid SalesRoomConcentrate -->
         <StackPanel Name="pnlSalesRoomConcentrate">
             <CheckBox Name="chkAllSalesRoomConcentrate" Content="All Sales Rooms" Style="{StaticResource CheckBoxSelectAll}" />
-            <DataGrid Name="dtgSalesRoomConcentrate" IsReadOnly="False" ItemsSource="{Binding}" Width="auto" CanUserAddRows="False">
+            <DataGrid Name="dtgSalesRoomConcentrate" IsReadOnly="False"  ItemsSource="{Binding Source={StaticResource ObjGoalsHelpper}}" Width="auto" CanUserAddRows="False">
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Binding="{Binding isCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                    <DataGridCheckBoxColumn Binding="{Binding IsCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
                         <DataGridCheckBoxColumn.CellStyle>
                             <Style>
                                 <EventSetter Event="CheckBox.Checked" Handler="chkSalesRoom_Checked" />
@@ -155,12 +250,12 @@
                             <TextBlock Text="Include"/>
                         </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
-                    <DataGridTextColumn Header="Sales Room" Width="Auto"  Binding="{Binding salesRoom.srN}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Goals" Width="Auto" Binding="{Binding goal}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" IsReadOnly="False"/>
+                    <DataGridTextColumn Header="Sales Room" Width="Auto"  Binding="{Binding SalesRoomByUser.srN}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Goals" Width="Auto" Binding="{Binding Goal, TargetNullValue=0}" EditingElementStyle="{StaticResource TextBoxNumeric}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" IsReadOnly="False"/>
                 </DataGrid.Columns>
             </DataGrid>
             <StatusBar Style="{StaticResource StatusBarStyle}">
-                <StatusBarItem x:Name="statusBarNumSalesRoomConcentrate"  Style="{StaticResource StatusBarItemStyle}" />
+                <StatusBarItem x:Name="statusBarNumSalesRoomConcentrate"  Style="{StaticResource StatusBarItemStyle}" Content="0 / 0 Sales Rooms selected" />
             </StatusBar>
         </StackPanel>
         <!--#endregion-->
@@ -168,7 +263,7 @@
         <!--#region Filtros -->
 
         <StackPanel Name="skpFilters">
-            
+
             <!--#region Fechas -->
             <Border Name="bdrDates" BorderThickness="1" BorderBrush="Gray" Margin="5">
                 <Grid Name="grdDates">
@@ -206,7 +301,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" VerticalAlignment="Center" Content="Goal: " FontWeight="Bold"/>
-                <TextBox Grid.Column="1" Name="txtGoal" VerticalAlignment="Center" Margin="0,0,5,0" TextAlignment="Right" Text="txtGoal" PreviewTextInput="txtGoal_PreviewTextInput" />
+                <TextBox Grid.Column="1" Name="txtGoal" VerticalAlignment="Center" Margin="0,0,5,0" TextAlignment="Right" Text="{Binding Path=., TargetNullValue=0}" Style="{StaticResource TextBoxNumeric}" />
             </Grid>
             <!--#endregion -->
 
@@ -292,7 +387,7 @@
         <!--#region Grid Weeks -->
         <StackPanel Name="pnlWeeks">
             <Label Name="lblDate" Content="Weeks of MM of yyyy" FontWeight="Bold" Margin="5" />
-                <DataGrid Name="dtgWeeks" IsReadOnly="True">
+            <DataGrid Name="dtgWeeks" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Include" Width="*" Binding="{Binding include, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
                     <DataGridTextColumn Header="From" Width="*" Binding="{Binding dtStart}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />

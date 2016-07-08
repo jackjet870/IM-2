@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using IM.Model.Classes;
 using IM.Model.Enums;
 using OfficeOpenXml.Style;
@@ -637,7 +638,7 @@ namespace IM.ProcessorSales.Classes
       };
     }
     #endregion
-
+    
     #region RptFTMInOutHouse
     /// <summary>
     /// Formato para el reporte RptFtmIn&OutHouse
@@ -729,6 +730,62 @@ namespace IM.ProcessorSales.Classes
           Formula = "IF([TTotal]=0,0,[TSalesAmount]/[TTotal])"
           //Formula = "IF(' Sale '=0,0,' VOL '/' Sale ')"
         }
+      };
+    }
+    #endregion
+
+    #region RptStatisticsBySegments
+    /// <summary>
+    /// Formato para el reporte StatsBySegment
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 04/07/2016 Created
+    /// </history>
+    internal static List<ExcelFormatTable> RptStatisticsBySegments()
+    {
+      return new List<ExcelFormatTable>
+      {
+        new ExcelFormatTable{Title = "Segment",Order = 0, Axis = ePivotFieldAxis.Column, SubTotalFunctions = eSubTotalFunctions.Default},
+
+        new ExcelFormatTable {Title = "Salesman Type", Order = 0,  Axis = ePivotFieldAxis.Row, Compact = true, Outline = true, InsertBlankRow = true, SubTotalFunctions = eSubTotalFunctions.Default, Sort = eSortType.Ascending},
+        new ExcelFormatTable {Title = "ID", Order = 1, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable {Title = "Salesman Name", Order = 2, Axis = ePivotFieldAxis.Row},
+
+        new ExcelFormatTable {Title = "UPS", Order = 3, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.DecimalNumber},
+        new ExcelFormatTable {Title = "Sales", Order = 4, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.DecimalNumber},
+        new ExcelFormatTable {Title = "Amount", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency},
+
+        new ExcelFormatTable { Title = "Efficiency", Order = 6, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('UPS' =0,0,'Amount'/'UPS')" },
+        new ExcelFormatTable { Title = "%", Order = 7, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF('UPS' =0,0,'Sales'/'UPS')" }
+      };
+    }
+    #endregion
+
+    #region RptStatisticsBySegmentsGroupedByTeams
+    /// <summary>
+    /// Formato para el reporte StatsBySegment agrupado por Teams
+    /// </summary>
+    /// <history>
+    /// [aalcocer] 04/07/2016 Created
+    /// </history>
+    internal static List<ExcelFormatTable> RptStatisticsBySegmentsGroupedByTeams()
+    {
+      return new List<ExcelFormatTable>
+      {
+        new ExcelFormatTable{Title = "Segment",Order = 0, Axis = ePivotFieldAxis.Column, SubTotalFunctions = eSubTotalFunctions.Default},
+
+        new ExcelFormatTable {Title = "Team", Order = 0,  Axis = ePivotFieldAxis.Row, Compact = true, Outline = true, InsertBlankRow = true, SubTotalFunctions = eSubTotalFunctions.Default},
+        new ExcelFormatTable {Title = "Status", Order = 1, Axis = ePivotFieldAxis.Row, Compact = true, Outline = true, InsertBlankRow = true, SubTotalFunctions = eSubTotalFunctions.Default},
+        new ExcelFormatTable {Title = "Salesman Type", Order = 2,  Axis = ePivotFieldAxis.Row, Compact = true, Outline = true, InsertBlankRow = true, SubTotalFunctions = eSubTotalFunctions.Default, Sort = eSortType.Ascending},
+        new ExcelFormatTable {Title = "ID", Order = 3, Axis = ePivotFieldAxis.Row},
+        new ExcelFormatTable {Title = "Salesman Name", Order = 4, Axis = ePivotFieldAxis.Row},
+
+        new ExcelFormatTable {Title = "UPS", Order = 5, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.DecimalNumber},
+        new ExcelFormatTable {Title = "Sales", Order = 6, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.DecimalNumber},
+        new ExcelFormatTable {Title = "Amount", Order = 7, Axis = ePivotFieldAxis.Values,Format = EnumFormatTypeExcel.Currency},
+
+        new ExcelFormatTable { Title = "Efficiency", Order = 8, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Currency, Formula = "IF('UPS' =0,0,'Amount'/'UPS')" },
+        new ExcelFormatTable { Title = "%", Order = 9, Axis = ePivotFieldAxis.Values, Format = EnumFormatTypeExcel.Percent, Formula = "IF('UPS' =0,0,'Sales'/'UPS')" }
       };
     } 
     #endregion

@@ -1612,10 +1612,41 @@ namespace IM.BusinessRules.BR
         }
       });
       return result;
-    } 
+    }
     #endregion
 
-    #endregion
+    #region GetStatisticsBySegments
+    /// <summary>
+    /// Devuelve los datos para el reporte de estadisticas por segmentos
+    /// </summary>
+    /// <param name="ltsDtmStart">Fechas Inicio</param>
+    /// <param name="ltsDtmEnd">Fechas Fin</param>
+    /// <param name="salesRooms">Clave de las salas (El primero es la sala principal)</param>
+    /// <param name="salesmanID">Clave de un vendedor</param>
+    /// <param name="bySegmentsCategories">Indica si es por categorias de segmentos</param>
+    /// <param name="own">Indica si trabajo solo</param>
+    /// <param name="includeAllSalesmen">si se desea que esten todos los vendedores de la sala</param>
+    /// <returns><list type="RptStatisticsBySegments"></list></returns>
+    /// <history>
+    ///   [aalcocer] 04/07/2016 Created
+    /// </history>
+    public static async Task<List<RptStatisticsBySegments>> GetStatisticsBySegments(IEnumerable<DateTime> ltsDtmStart, IEnumerable<DateTime> ltsDtmEnd, 
+      IEnumerable<string> salesRooms, string salesmanID = "ALL", bool bySegmentsCategories=false, bool own = false, bool includeAllSalesmen= false )
+    {
+      var result = new List<RptStatisticsBySegments>();
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          result = dbContext.USP_IM_RptStatisticsBySegments(string.Join(",", ltsDtmStart.Select(x => $"{x:yyyyMMdd}")), string.Join(",", ltsDtmEnd.Select(x=> $"{x:yyyyMMdd}")), 
+            string.Join(",", salesRooms), salesmanID, bySegmentsCategories, own, includeAllSalesmen).ToList();
+        }
+      });
+      return result;
+    }
+    #endregion GetStatsBySegment
+
+    #endregion Processor Sales
 
 
     #region GetRptUplist
