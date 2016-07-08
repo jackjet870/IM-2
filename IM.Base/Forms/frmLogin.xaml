@@ -31,7 +31,7 @@
         <PasswordBox Name="txtPassword" Tag="Password"  Grid.Column="1" Grid.Row="2" Width="180" VerticalAlignment="Center" HorizontalAlignment="Left" MaxLength="10"/>
 
         <Label Name="lblPlace" Grid.Column="0" Grid.Row="3" Content="lblPlace:" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" Height="22" HorizontalContentAlignment="Right" />
-        <ComboBox x:Name="cmbPlace" Tag="Place"  Grid.Column="1" Grid.Row="3" Width="180" VerticalAlignment="Center" HorizontalAlignment="Left" IsEnabled="False"/>
+        <ComboBox x:Name="cmbPlace" Tag="Place"  Grid.Column="1" Grid.Row="3" Width="180" VerticalAlignment="Center" HorizontalAlignment="Left" IsEnabled="False" DisplayMemberPath="Name" SelectedValuePath="Id"/>
 
         <Button Name="btnAceptar" Content="Ok" Grid.Row="4" Grid.Column="1" Width="80" VerticalAlignment="Center" HorizontalAlignment="Left" Background="White" FontWeight="Bold" Click="btnAceptar_Click" IsDefault="True"/>
         <Button Name="btnCancelar" Content="Cancel" Grid.Row="4" Grid.Column="1" Width="80" VerticalAlignment="Center" HorizontalAlignment="Right" Background="White" FontWeight="Bold" Click="btnCancelar_Click" Margin="5 0 15 0" />

@@ -257,8 +257,6 @@ namespace IM.Base.Forms
       if (data.Count > 0)
       {
         cmbPlace.ItemsSource = data;
-        cmbPlace.SelectedValuePath = "Id";
-        cmbPlace.DisplayMemberPath = "Name";
         cmbPlace.IsEnabled = true;
         if (Autosign)
         {
@@ -300,8 +298,6 @@ namespace IM.Base.Forms
       if (data.Count > 0)
       {
         cmbPlace.ItemsSource = data;
-        cmbPlace.SelectedValuePath = "Id";
-        cmbPlace.DisplayMemberPath = "Name";
         cmbPlace.IsEnabled = true;
 
         if (Autosign)
@@ -369,8 +365,6 @@ namespace IM.Base.Forms
       if (data.Count > 0)
       {
         cmbPlace.ItemsSource = data;
-        cmbPlace.SelectedValuePath = "Id";
-        cmbPlace.DisplayMemberPath = "Name";
         cmbPlace.IsEnabled = true;
         if (Autosign)
         {
@@ -448,8 +442,8 @@ namespace IM.Base.Forms
       //Se llenan los controles con informacion de Configuration.ini
       txtUser.Text = _iniFileHelper.ReadText("Login", "UserName", "");
       txtPassword.Password = _iniFileHelper.ReadText("Login", "Password", "");
-      LoadPlace(txtUser.Text.Trim(), false, true);
       chkAutoSign.IsChecked = _iniFileHelper.ReadBoolean("Login", "Autosign", false);
+      LoadPlace(txtUser.Text.Trim(), false, true);
     }
 
     #endregion
@@ -549,7 +543,7 @@ namespace IM.Base.Forms
 
     #region UIPrepare
     /// <summary>
-    /// Prepara los elmentos que se mostraran en la interfaz y carga ejecuta LoadPlaces
+    /// Prepara los elementos que se mostraran en la interfaz y carga ejecuta LoadPlaces
     /// </summary>
     /// <history>
     /// [erosado] 27/04/2016  Created
@@ -584,8 +578,6 @@ namespace IM.Base.Forms
           btnAceptar.Focus();
           break;
       }
-      //Cargamos el comboPlace
-      txtUser_LostFocus(this, null);
     }
     #endregion
 
