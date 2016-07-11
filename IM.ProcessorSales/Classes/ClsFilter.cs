@@ -1,6 +1,7 @@
 ﻿using IM.Model.Enums;
 using System;
 using System.Collections.Generic;
+using IM.Model;
 
 namespace IM.ProcessorSales.Classes
 {
@@ -9,11 +10,16 @@ namespace IM.ProcessorSales.Classes
     public DateTime DtmStart { get; set; }
     public DateTime DtmEnd { get; set; }
 
-    public List<string> LstSalesRoom { get; set; } = new List<string>();
+    public PersonnelShort Salesman { get; set; }
+    public List<string> LstSalesRooms { get; set; } = new List<string>();
     public List<string> LstPrograms { get; set; } = new List<string>();
     public List<string> LstSegments { get; set; } = new List<string>();
     public List<MultiDateHelpper> LstMultiDate { get; set; } = new List<MultiDateHelpper>();
     public List<GoalsHelpper> LstGoals { get; set; } = new List<GoalsHelpper>();
+
+    public bool BlnAllSalesRooms { get; set; }
+    public bool BlnAllPrograms { get; set; }
+    public bool BlnAllSegments { get; set; }
 
     public List<EnumRole> LstEnumRole { get; set; } = new List<EnumRole>();
 
@@ -23,5 +29,6 @@ namespace IM.ProcessorSales.Classes
     public EnumPredefinedDate CboDateSelected { get; set; }
 
     public decimal Goal { get; set; }
+    
   }
 }

@@ -155,14 +155,12 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void grdrpt_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-      if (ConfigRegistry.ExistReportsPath())
-      {
-        var _dataGridRow = (DataGridRow)sender;
-        if (_dataGridRow.Item.Equals(grdrptLeadSources.CurrentItem)) PrepareReportByLeadSource();
-        else if (_dataGridRow.Item.Equals(grdrptPR.CurrentItem)) PrepareReportByPR();
-        else if (_dataGridRow.Item.Equals(grdrptGeneral.CurrentItem)) PrepareReportGeneral();
-      }
-      else ShowSystemCfg();
+      if (!ConfigRegistry.ExistReportsPath() && !ShowSystemCfg()) return;
+      var _dataGridRow = (DataGridRow)sender;
+      if (_dataGridRow.Item.Equals(grdrptLeadSources.CurrentItem)) PrepareReportByLeadSource();
+      else if (_dataGridRow.Item.Equals(grdrptPR.CurrentItem)) PrepareReportByPR();
+      else if (_dataGridRow.Item.Equals(grdrptGeneral.CurrentItem)) PrepareReportGeneral();
+
     }
 
     #endregion grdrpt_MouseDoubleClick
@@ -178,14 +176,12 @@ namespace IM.ProcessorInhouse.Forms
     private void grdrp_PreviewKeyDown(object sender, KeyEventArgs e)
     {
       if (e.Key != Key.Enter) return;
-      if (ConfigRegistry.ExistReportsPath())
-      {
-        var _dataGridRow = (DataGridRow)sender;
-        if (_dataGridRow.Item.Equals(grdrptLeadSources.CurrentItem)) PrepareReportByLeadSource();
-        else if (_dataGridRow.Item.Equals(grdrptPR.CurrentItem)) PrepareReportByPR();
-        else if (_dataGridRow.Item.Equals(grdrptGeneral.CurrentItem)) PrepareReportGeneral();
-      }
-      else ShowSystemCfg();
+      if (!ConfigRegistry.ExistReportsPath() && !ShowSystemCfg()) return;
+
+      var _dataGridRow = (DataGridRow)sender;
+      if (_dataGridRow.Item.Equals(grdrptLeadSources.CurrentItem)) PrepareReportByLeadSource();
+      else if (_dataGridRow.Item.Equals(grdrptPR.CurrentItem)) PrepareReportByPR();
+      else if (_dataGridRow.Item.Equals(grdrptGeneral.CurrentItem)) PrepareReportGeneral();
     }
 
     #endregion grdrp_PreviewKeyDown
@@ -200,13 +196,12 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void btnPrint_Click(object sender, RoutedEventArgs e)
     {
-      if (ConfigRegistry.ExistReportsPath())
-      {
-        if (sender.Equals(btnPrintLS)) PrepareReportByLeadSource();
-        else if (sender.Equals(btnPrintPR)) PrepareReportByPR();
-        else if (sender.Equals(btnPrintGeneral)) PrepareReportGeneral();
-      }
-      else ShowSystemCfg();
+      if (!ConfigRegistry.ExistReportsPath() && !ShowSystemCfg()) return;
+
+      if (sender.Equals(btnPrintLS)) PrepareReportByLeadSource();
+      else if (sender.Equals(btnPrintPR)) PrepareReportByPR();
+      else if (sender.Equals(btnPrintGeneral)) PrepareReportGeneral();
+
     }
 
     #endregion btnPrint_Click
@@ -221,14 +216,12 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void btnReportQueue_Click(object sender, RoutedEventArgs e)
     {
-      if (ConfigRegistry.ExistReportsPath())
-      {
-        _frmReportQueue.Show();
-        if (_frmReportQueue.WindowState == WindowState.Minimized)
-          _frmReportQueue.WindowState = WindowState.Normal;
-        _frmReportQueue.Activate();
-      }
-      else ShowSystemCfg();
+      if (!ConfigRegistry.ExistReportsPath() && !ShowSystemCfg()) return;
+
+      _frmReportQueue.Show();
+      if (_frmReportQueue.WindowState == WindowState.Minimized) _frmReportQueue.WindowState = WindowState.Normal;
+      _frmReportQueue.Activate();
+
     }
 
     #endregion btnReportQueue_Click
@@ -1340,13 +1333,19 @@ namespace IM.ProcessorInhouse.Forms
     /// </summary>
     /// <history>
     ///   [aalcocer] 13/06/2016 Created
+    ///   [aalcocer] 11/07/2016 Modified. Ahora verfica si se configuro la ruta. Devuelve true or false
     /// </history>
-    private void ShowSystemCfg()
+    private bool ShowSystemCfg()
     {
+      bool _isConfigured = false;
       MessageBoxResult result = UIHelper.ShowMessage("It is not configured path yet. Do you want to configure path now?", MessageBoxImage.Question, Title);
-      if (result != MessageBoxResult.Yes) return;
+      if (result != MessageBoxResult.Yes) return false;
       _systemConfig = new SystemCfg(EnumConfiguration.ReportsPath);
-      _systemConfig.Show();
+      if (_systemConfig.ShowDialog() == true)
+      {
+        _isConfigured = true;
+      }
+      return _isConfigured;
     }
 
     #endregion ShowSystemCfg

@@ -53,6 +53,7 @@
         <CollectionViewSource x:Key="ObjMultiDateHelpper" d:DesignSource="{d:DesignInstance {x:Type Classes:MultiDateHelpper}, CreateList=True}" />
         <CollectionViewSource x:Key="ObjSalesRoomByUser" d:DesignSource="{d:DesignInstance {x:Type Model:SalesRoomByUser}, CreateList=True}" />
         <CollectionViewSource x:Key="ObjGoalsHelpper" d:DesignSource="{d:DesignInstance {x:Type Classes:GoalsHelpper}, CreateList=True}" />
+        <CollectionViewSource x:Key="ObjPersonnelShort" d:DesignSource="{d:DesignInstance {x:Type Model:PersonnelShort}, CreateList=True}" />
     </Window.Resources>
 
     <StackPanel Orientation ="Horizontal">
@@ -82,7 +83,7 @@
         <!--#endregion-->
 
         <!--#region Grid Programs -->
-        <StackPanel Name="pnlProggrams">
+        <StackPanel Name="pnlPrograms">
             <CheckBox Name="chkAllPrograms" Content="All Programs" Style="{StaticResource CheckBoxSelectAll}" />
             <DataGrid Name="dtgPrograms" IsReadOnly="True">
                 <DataGrid.Columns>
@@ -95,8 +96,8 @@
                         <TextBlock>
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} / {1} Programs selected">
-                                    <Binding ElementName="dtgSalesRoom"  Path="SelectedItems.Count" />
-                                    <Binding ElementName="dtgSalesRoom" Path="Items.Count" />
+                                    <Binding ElementName="dtgPrograms"  Path="SelectedItems.Count" />
+                                    <Binding ElementName="dtgPrograms" Path="Items.Count" />
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
@@ -109,7 +110,7 @@
         <!--#region Grid Segments -->
         <StackPanel Name="pnlSegments">
             <CheckBox Name="chkAllSegments" Content="All Segments" Style="{StaticResource CheckBoxSelectAll}" />
-            <DataGrid Name="dtgSegments" IsReadOnly="True">
+            <DataGrid x:Name="dtgSegments" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Segments" Width="*" Binding="{Binding seN}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}" />
                 </DataGrid.Columns>
@@ -120,8 +121,8 @@
                         <TextBlock>
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} / {1} Segments selected">
-                                    <Binding ElementName="dtgSalesRoom"  Path="SelectedItems.Count" />
-                                    <Binding ElementName="dtgSalesRoom" Path="Items.Count" />
+                                    <Binding ElementName="dtgSegments"  Path="SelectedItems.Count" />
+                                    <Binding ElementName="dtgSegments" Path="Items.Count" />
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
@@ -136,7 +137,7 @@
             <CheckBox Name="chkAllSalesRoomMultiDateRange" Content="All Sales Rooms" Style="{StaticResource CheckBoxSelectAll}" />
             <DataGrid Name="dtgSalesRoomMultiDateRange" CanUserAddRows="True" CanUserSortColumns="False" IsReadOnly="False" AutoGenerateColumns="False" Width="auto" BeginningEdit="dtgSalesRoomMultiDateRange_BeginningEdit" ItemsSource="{Binding Source={StaticResource ObjMultiDateHelpper}}" >
                 <DataGrid.Columns>
-                    <DataGridComboBoxColumn x:Name="cmbSalesRoom" SelectedValueBinding="{Binding SalesRoom, ValidatesOnDataErrors=True, UpdateSourceTrigger=LostFocus}" 
+                    <DataGridComboBoxColumn x:Name="cmbSalesRoom" SelectedValueBinding="{Binding SalesRoom, ValidatesOnDataErrors=True, UpdateSourceTrigger = LostFocus}" 
                                             DisplayMemberPath="srN" SelectedValuePath="srID"  Header="Sales Room" ItemsSource="{Binding Source={StaticResource ObjSalesRoomByUser}}" HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
                         <DataGridComboBoxColumn.EditingElementStyle>
                             <Style TargetType="ComboBox">
@@ -335,7 +336,6 @@
 
 
             <!--#endregion -->
-
             <!--#region Salesman Info -->
             <Grid Name="grdSalesman">
                 <Grid.RowDefinitions>
@@ -346,12 +346,14 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="Salesman" Grid.Column="0"/>
-                    <TextBox Name="txtSalesman" Grid.Column="1" TextChanged="txtSalesman_TextChanged"/>
-                    <ComboBox Name="cmbSalesman" Grid.Column="2" ItemsSource="{Binding _lstPersonnels}" DisplayMemberPath="peN" SelectedValuePath="peID" 
-                              SelectedValue="{Binding PersonnelShort}" SelectionChanged="cmbSalesman_SelectionChanged" PreviewMouseDown="cmbSalesman_PreviewMouseDown"/>
+                    <Label Content="Salesman" VerticalAlignment="Center" Grid.Column="0"/>
+                    <ComboBox x:Name="cmbSalesman" Grid.Column="1" Width="Auto" TextSearch.TextPath="peID"
+                              ItemsSource="{Binding Source={StaticResource ObjPersonnelShort}}"
+                              ToolTip="{Binding Path=SelectedItem.peN, RelativeSource={RelativeSource Self}}"
+                              Style="{StaticResource cbx-Personnel-ValidatePermission}" ItemTemplate="{StaticResource cbx-Personnel-img}" 
+                              SelectedItem="{Binding Path=CurrentItem , Mode = TwoWay}" IsSynchronizedWithCurrentItem="True" IsEnabled="True">
+                    </ComboBox>
                 </Grid>
 
                 <GroupBox Grid.Row="1" Header="Roles" Name="gpbRoles" HorizontalAlignment="Center" 
