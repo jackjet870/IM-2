@@ -6114,6 +6114,10 @@
         <Function Name="USP_OR_DeleteGuest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Guest" Type="int" Mode="In" />
         </Function>
+        <Function Name="USP_OR_DeleteGuestPromotion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+          <Parameter Name="Gift" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_DeletePersonnel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="User" Type="varchar" Mode="In" />
         </Function>
@@ -17915,6 +17919,10 @@
             <Parameter Name="Programs" Mode="In" Type="String" />
             <Parameter Name="Status" Mode="In" Type="Byte" />
             <Parameter Name="Regions" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_OR_DeleteGuestPromotion">
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="Gift" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
@@ -30341,6 +30349,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_DeleteGuestPromotion" FunctionName="IMModel.Store.USP_OR_DeleteGuestPromotion" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

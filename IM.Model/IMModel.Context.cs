@@ -6159,5 +6159,18 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<LocationShort>("USP_OR_GetLocations", programsParameter, statusParameter, regionsParameter);
         }
+    
+        public virtual int USP_OR_DeleteGuestPromotion(Nullable<int> receipt, string gift)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            var giftParameter = gift != null ?
+                new ObjectParameter("Gift", gift) :
+                new ObjectParameter("Gift", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_DeleteGuestPromotion", receiptParameter, giftParameter);
+        }
     }
 }
