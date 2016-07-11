@@ -6129,5 +6129,35 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsBySegments>("USP_IM_RptStatisticsBySegments", datesFromParameter, datesToParameter, salesRoomsParameter, salesmanIDParameter, bySegmentsCategoriesParameter, ownParameter, includeAllSalesmenParameter);
         }
+    
+        public virtual ObjectResult<RptGiftsReceipt> USP_OR_RptGiftsReceipt(Nullable<int> receipt, Nullable<bool> isCharge)
+        {
+            var receiptParameter = receipt.HasValue ?
+                new ObjectParameter("Receipt", receipt) :
+                new ObjectParameter("Receipt", typeof(int));
+    
+            var isChargeParameter = isCharge.HasValue ?
+                new ObjectParameter("IsCharge", isCharge) :
+                new ObjectParameter("IsCharge", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptGiftsReceipt>("USP_OR_RptGiftsReceipt", receiptParameter, isChargeParameter);
+        }
+    
+        public virtual ObjectResult<LocationShort> USP_OR_GetLocations(string programs, Nullable<byte> status, string regions)
+        {
+            var programsParameter = programs != null ?
+                new ObjectParameter("Programs", programs) :
+                new ObjectParameter("Programs", typeof(string));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(byte));
+    
+            var regionsParameter = regions != null ?
+                new ObjectParameter("Regions", regions) :
+                new ObjectParameter("Regions", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<LocationShort>("USP_OR_GetLocations", programsParameter, statusParameter, regionsParameter);
+        }
     }
 }

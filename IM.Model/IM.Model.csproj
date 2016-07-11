@@ -538,6 +538,9 @@
     <Compile Include="LocationLogin.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="LocationShort.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="LoginLog.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
@@ -842,10 +845,19 @@
     <Compile Include="RptGiftsManifestCancel_Gifts.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RptGiftsReceipt.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="RptGiftsReceipts.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptGiftsReceiptsPayments.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGiftsReceipt_Gifts.cs">
+      <DependentUpon>IMModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RptGiftsReceipt_ProductLegends.cs">
       <DependentUpon>IMModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RptGiftsReceivedBySR.cs">

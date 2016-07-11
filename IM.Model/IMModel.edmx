@@ -6306,6 +6306,11 @@
         <Function Name="USP_OR_GetLeadSourcesByZoneBoss" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Zone" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="USP_OR_GetLocations" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Programs" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+          <Parameter Name="Regions" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="USP_OR_GetLocationsByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="User" Type="varchar" Mode="In" />
           <Parameter Name="Program" Type="varchar" Mode="In" />
@@ -6550,7 +6555,7 @@
         <Function Name="USP_OR_RptCxCPayments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
-          <Parameter Name="SalesRoom" Type="varchar" Mode="In" />
+          <Parameter Name="SalesRoom" Type="varchar(max)" Mode="In" />
         </Function>
         <Function Name="USP_OR_RptDailySalesDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -6698,6 +6703,10 @@
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
           <Parameter Name="SalesRooms" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_OR_RptGiftsReceipt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Receipt" Type="int" Mode="In" />
+          <Parameter Name="IsCharge" Type="bit" Mode="In" />
         </Function>
         <Function Name="USP_OR_RptGiftsReceipts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
@@ -17895,6 +17904,18 @@
             <Parameter Name="Own" Mode="In" Type="Boolean" />
             <Parameter Name="IncludeAllSalesmen" Mode="In" Type="Boolean" />
           </FunctionImport>
+          <FunctionImport Name="USP_OR_RptGiftsReceipt">
+            <ReturnType Type="Collection(IMModel.RptGiftsReceipt)"/>
+            <ReturnType Type="Collection(IMModel.RptGiftsReceipt_Gifts)"/>
+            <ReturnType Type="Collection(IMModel.RptGiftsReceipt_ProductLegends)"/>
+            <Parameter Name="Receipt" Mode="In" Type="Int32" />
+            <Parameter Name="IsCharge" Mode="In" Type="Boolean" />
+            </FunctionImport>
+          <FunctionImport Name="USP_OR_GetLocations" ReturnType="Collection(IMModel.LocationShort)">
+            <Parameter Name="Programs" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="Byte" />
+            <Parameter Name="Regions" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="CountryShort">
           <Property Type="String" Name="coID" Nullable="false" MaxLength="25" />
@@ -22457,6 +22478,64 @@
           <Property Type="Decimal" Name="Amount" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="Efficiency" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="ClosingFactor" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RptGiftsReceipt">
+          <Property Type="Int32" Name="grID" Nullable="false" />
+          <Property Type="String" Name="grNum" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="grGuest" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="grHotel" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="guHReservID" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="guOutInvitNum" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="grRoomNum" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="grpe" Nullable="true" MaxLength="53" />
+          <Property Type="String" Name="loN" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="grD" Nullable="false" Precision="23" />
+          <Property Type="Decimal" Name="grPax" Nullable="false" Precision="4" Scale="1" />
+          <Property Type="String" Name="guag" Nullable="true" MaxLength="35" />
+          <Property Type="String" Name="agN" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="grMemberNum" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="grDeposit" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="grDepositTwisted" Nullable="false" Precision="19" />
+          <Property Type="String" Name="grcu" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="ptN" Nullable="true" MaxLength="30" />
+          <Property Type="Decimal" Name="grTaxiIn" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="grTaxiOut" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="TotalUSD" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="exExchRate" Nullable="true" Precision="12" Scale="8" />
+          <Property Type="Decimal" Name="TotalMX" Nullable="true" Precision="38" Scale="15" />
+          <Property Type="String" Name="grComments" Nullable="true" MaxLength="8000" />
+          <Property Type="String" Name="GiftsHostess" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="gula" Nullable="true" MaxLength="2" />
+          <Property Type="Decimal" Name="grCxCPRDeposit" Nullable="false" Precision="19" />
+          <Property Type="String" Name="grcuCxCPRDeposit" Nullable="false" MaxLength="10" />
+          <Property Type="Decimal" Name="grCxCTaxiOut" Nullable="false" Precision="19" />
+          <Property Type="String" Name="grcuCxCTaxiOut" Nullable="false" MaxLength="10" />
+          <Property Type="Decimal" Name="grCxCGifts" Nullable="true" Precision="19" />
+          <Property Type="String" Name="grAuthorizedBy" Nullable="true" MaxLength="53" />
+          <Property Type="Byte" Name="grReimpresion" Nullable="false" />
+          <Property Type="String" Name="rmN" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="lspg" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="RptGiftsReceipt_Gifts">
+          <Property Type="Int32" Name="geQty" Nullable="false" />
+          <Property Type="String" Name="gegi" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="giN" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="geAdults" Nullable="false" />
+          <Property Type="Int32" Name="geMinors" Nullable="false" />
+          <Property Type="String" Name="geFolios" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="geComments" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="gipr" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="RptGiftsReceipt_ProductLegends">
+          <Property Type="String" Name="reType" Nullable="false" MaxLength="7" />
+          <Property Type="Int32" Name="reO" Nullable="false" />
+          <Property Type="String" Name="reTextID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="prN" Nullable="true" />
+          <Property Type="String" Name="reText" Nullable="false" MaxLength="Max" />
+        </ComplexType>
+        <ComplexType Name="LocationShort">
+          <Property Type="String" Name="loID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="loN" Nullable="false" MaxLength="30" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -30189,6 +30268,76 @@
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
                 <ScalarProperty Name="ClosingFactor" ColumnName="ClosingFactor" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_RptGiftsReceipt" FunctionName="IMModel.Store.USP_OR_RptGiftsReceipt" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptGiftsReceipt">
+                <ScalarProperty Name="grID" ColumnName="grID" />
+                <ScalarProperty Name="grNum" ColumnName="grNum" />
+                <ScalarProperty Name="grGuest" ColumnName="grGuest" />
+                <ScalarProperty Name="grHotel" ColumnName="grHotel" />
+                <ScalarProperty Name="guHReservID" ColumnName="guHReservID" />
+                <ScalarProperty Name="guOutInvitNum" ColumnName="guOutInvitNum" />
+                <ScalarProperty Name="grRoomNum" ColumnName="grRoomNum" />
+                <ScalarProperty Name="grpe" ColumnName="grpe" />
+                <ScalarProperty Name="loN" ColumnName="loN" />
+                <ScalarProperty Name="grD" ColumnName="grD" />
+                <ScalarProperty Name="grPax" ColumnName="grPax" />
+                <ScalarProperty Name="guag" ColumnName="guag" />
+                <ScalarProperty Name="agN" ColumnName="agN" />
+                <ScalarProperty Name="grMemberNum" ColumnName="grMemberNum" />
+                <ScalarProperty Name="grDeposit" ColumnName="grDeposit" />
+                <ScalarProperty Name="grDepositTwisted" ColumnName="grDepositTwisted" />
+                <ScalarProperty Name="grcu" ColumnName="grcu" />
+                <ScalarProperty Name="ptN" ColumnName="ptN" />
+                <ScalarProperty Name="grTaxiIn" ColumnName="grTaxiIn" />
+                <ScalarProperty Name="grTaxiOut" ColumnName="grTaxiOut" />
+                <ScalarProperty Name="TotalUSD" ColumnName="TotalUSD" />
+                <ScalarProperty Name="exExchRate" ColumnName="exExchRate" />
+                <ScalarProperty Name="TotalMX" ColumnName="TotalMX" />
+                <ScalarProperty Name="grComments" ColumnName="grComments" />
+                <ScalarProperty Name="GiftsHostess" ColumnName="GiftsHostess" />
+                <ScalarProperty Name="gula" ColumnName="gula" />
+                <ScalarProperty Name="grCxCPRDeposit" ColumnName="grCxCPRDeposit" />
+                <ScalarProperty Name="grcuCxCPRDeposit" ColumnName="grcuCxCPRDeposit" />
+                <ScalarProperty Name="grCxCTaxiOut" ColumnName="grCxCTaxiOut" />
+                <ScalarProperty Name="grcuCxCTaxiOut" ColumnName="grcuCxCTaxiOut" />
+                <ScalarProperty Name="grCxCGifts" ColumnName="grCxCGifts" />
+                <ScalarProperty Name="grAuthorizedBy" ColumnName="grAuthorizedBy" />
+                <ScalarProperty Name="grReimpresion" ColumnName="grReimpresion" />
+                <ScalarProperty Name="rmN" ColumnName="rmN" />
+                <ScalarProperty Name="lspg" ColumnName="lspg" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptGiftsReceipt_Gifts">
+                <ScalarProperty Name="geQty" ColumnName="geQty" />
+                <ScalarProperty Name="gegi" ColumnName="gegi" />
+                <ScalarProperty Name="giN" ColumnName="giN" />
+                <ScalarProperty Name="geAdults" ColumnName="geAdults" />
+                <ScalarProperty Name="geMinors" ColumnName="geMinors" />
+                <ScalarProperty Name="geFolios" ColumnName="geFolios" />
+                <ScalarProperty Name="geComments" ColumnName="geComments" />
+                <ScalarProperty Name="gipr" ColumnName="gipr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.RptGiftsReceipt_ProductLegends">
+                <ScalarProperty Name="reType" ColumnName="reType" />
+                <ScalarProperty Name="reO" ColumnName="reO" />
+                <ScalarProperty Name="reTextID" ColumnName="reTextID" />
+                <ScalarProperty Name="prN" ColumnName="prN" />
+                <ScalarProperty Name="reText" ColumnName="reText" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="USP_OR_GetLocations" FunctionName="IMModel.Store.USP_OR_GetLocations">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IMModel.LocationShort">
+                <ScalarProperty Name="loID" ColumnName="loID" />
+                <ScalarProperty Name="loN" ColumnName="loN" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
