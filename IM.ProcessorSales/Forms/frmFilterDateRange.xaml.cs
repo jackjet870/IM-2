@@ -420,14 +420,19 @@ namespace IM.ProcessorSales.Forms
         if (gpbRoles.IsVisible)
         {
           frmPrs._clsFilter.LstEnumRole.Clear();
-          if (Convert.ToBoolean(chkPr.IsChecked))
-            frmPrs._clsFilter.LstEnumRole.Add(EnumRole.PR);
-          if (Convert.ToBoolean(chkLiner.IsChecked))
-            frmPrs._clsFilter.LstEnumRole.Add(EnumRole.Liner);
-          if (Convert.ToBoolean(chkCloser.IsChecked))
-            frmPrs._clsFilter.LstEnumRole.Add(EnumRole.Closer);
-          if (Convert.ToBoolean(chkExit.IsChecked))
-            frmPrs._clsFilter.LstEnumRole.Add(EnumRole.ExitCloser);
+          if (Convert.ToBoolean(chkPr.IsChecked) && Convert.ToBoolean(chkLiner.IsChecked) && Convert.ToBoolean(chkCloser.IsChecked) && Convert.ToBoolean(chkExit.IsChecked))
+            frmPrs._clsFilter.LstEnumRole.Add(EnumRole.All);
+          else
+          {
+            if (Convert.ToBoolean(chkPr.IsChecked))
+              frmPrs._clsFilter.LstEnumRole.Add(EnumRole.PR);
+            if (Convert.ToBoolean(chkLiner.IsChecked))
+              frmPrs._clsFilter.LstEnumRole.Add(EnumRole.Liner);
+            if (Convert.ToBoolean(chkCloser.IsChecked))
+              frmPrs._clsFilter.LstEnumRole.Add(EnumRole.Closer);
+            if (Convert.ToBoolean(chkExit.IsChecked))
+              frmPrs._clsFilter.LstEnumRole.Add(EnumRole.ExitCloser);
+          }
         }
       }
     }

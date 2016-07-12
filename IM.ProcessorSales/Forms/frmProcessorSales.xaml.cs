@@ -219,6 +219,7 @@ namespace IM.ProcessorSales.Forms
         {
           #region Manifest
           case EnumRptRoomSales.Manifest:
+            
             list.AddRange(await BRReportsBySalesRoom.GetRptManiest(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms));
             if (list.Count > 0)
               file = Reports.RptManifest(reporteName, fileFullPath, filters, list.Cast<RptManifest>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
@@ -403,9 +404,23 @@ namespace IM.ProcessorSales.Forms
         switch (rptSalesman)
         {
           case EnumRptSalesRoomAndSalesman.FtmInAndOutHouse:
+            list.AddRange(await BRReportsBySalesRoom.GetRptFTMInOutHouse(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms,clsFilter.Salesman.peID));
+            if (list.Count > 0)
+            {
+              file = Reports.RptFTMInOutHouse(reporteName, fileFullPath, filters, list.Cast<RptFTMInOutHouse>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
+            }
             break;
+          #region Manifest
           case EnumRptSalesRoomAndSalesman.Manifest:
-            break;
+            // Roles
+            filters.Add(new Tuple<string, string>("Roles", clsFilter.LstEnumRole.EnumListToString()));
+
+            list.AddRange(await BRReportsBySalesRoom.GetRptManiest(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms,
+              clsFilter.Salesman.peID, clsFilter.LstEnumRole));
+            if (list.Any())
+              file = Reports.RptManifest(reporteName, fileFullPath, filters, list.Cast<RptManifest>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
+            break; 
+          #endregion
           case EnumRptSalesRoomAndSalesman.SelfGenAndSelfGenTeam:
             break;
           case EnumRptSalesRoomAndSalesman.StatsByCloser:

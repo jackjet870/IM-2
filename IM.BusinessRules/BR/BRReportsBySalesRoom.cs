@@ -1566,23 +1566,25 @@ namespace IM.BusinessRules.BR
     /// <param name="dtEnd">Fecha Fin </param>
     /// <param name="salesRoom">Sales Room</param>
     /// <param name="salesmanID">ID del salesman</param>
-    /// <param name="salesmanRoles">Roles de los vendedores</param>
+    /// <param name="roles">Listado de roles de los vendedores</param>
     /// <param name="segments">segmentos</param>
     /// <param name="programs">programas</param>
     /// <param name="bySegmentsCategories">por segments categories</param>
     /// <param name="byLocationCategories">por location categories</param>
     /// <history>
     ///   [ecanul] 07/06/2016 Created
+    ///   [ecanul] 12/07/2016 Modified. Cambie el parametro salesmanRoles (string) por  roles (EnumRole)
     /// </history>
     public async static Task<List<RptManifest>> GetRptManiest(DateTime dtStart, DateTime dtEnd, IEnumerable<string> salesRoom, string salesmanID = "ALL",
-      string salesmanRoles = "ALL", string segments = "ALL", string programs = "ALL", bool bySegmentsCategories = false, bool byLocationCategories = false)
+      List<EnumRole> roles = null, string segments = "ALL", string programs = "ALL", bool bySegmentsCategories = false, bool byLocationCategories = false)
     {
       var result = new List<RptManifest>();
       await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          result = dbContext.USP_IM_RptManifest(dtStart, dtEnd, string.Join(",", salesRoom), salesmanID, salesmanRoles, segments, programs, bySegmentsCategories, byLocationCategories).ToList();
+          string r = roles == null ? "ALL" : roles.EnumListToString();
+          result = dbContext.USP_IM_RptManifest(dtStart, dtEnd, string.Join(",", salesRoom), salesmanID, roles ==  null ? "All" : roles.EnumListToString() , segments, programs, bySegmentsCategories, byLocationCategories).ToList();
         }
       });
       return result;
