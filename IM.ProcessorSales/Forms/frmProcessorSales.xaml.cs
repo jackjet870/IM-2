@@ -285,7 +285,6 @@ namespace IM.ProcessorSales.Forms
 
           #region FtmIn&OutHouse
           case EnumRptRoomSales.FtmInAndOutHouse:
-
             list.AddRange(await BRReportsBySalesRoom.GetRptFTMInOutHouse(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms));
             if (list.Count > 0)
             {
@@ -406,9 +405,7 @@ namespace IM.ProcessorSales.Forms
           case EnumRptSalesRoomAndSalesman.FtmInAndOutHouse:
             list.AddRange(await BRReportsBySalesRoom.GetRptFTMInOutHouse(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms,clsFilter.Salesman.peID));
             if (list.Count > 0)
-            {
               file = Reports.RptFTMInOutHouse(reporteName, fileFullPath, filters, list.Cast<RptFTMInOutHouse>().ToList(), clsFilter.DtmStart, clsFilter.DtmEnd);
-            }
             break;
           #region Manifest
           case EnumRptSalesRoomAndSalesman.Manifest:
