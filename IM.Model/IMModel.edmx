@@ -9431,7 +9431,7 @@
           <Property Name="gpPack" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="gpgi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="gpQty" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="GiftItem" Relationship="Self.FK_GiftsPacks_Gifts_Item" FromRole="GiftsPacks" ToRole="Gifts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+          <NavigationProperty Name="GiftItem" Relationship="Self.FK_GiftsPacks_Gifts_Item" FromRole="GiftsPacks" ToRole="Gifts" a:GetterAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
           <NavigationProperty Name="GiftPackage" Relationship="Self.FK_GiftsPacks_Gifts_Pack" FromRole="GiftsPacks" ToRole="Gifts" a:GetterAccess="Internal" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         </EntityType>
         <EntityType Name="GiftsReceipt">
@@ -22508,9 +22508,9 @@
           <Property Type="String" Name="ptN" Nullable="true" MaxLength="30" />
           <Property Type="Decimal" Name="grTaxiIn" Nullable="false" Precision="19" />
           <Property Type="Decimal" Name="grTaxiOut" Nullable="false" Precision="19" />
-          <Property Type="Decimal" Name="TotalUSD" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="exExchRate" Nullable="true" Precision="12" Scale="8" />
-          <Property Type="Decimal" Name="TotalMX" Nullable="true" Precision="38" Scale="15" />
+          <Property Type="Decimal" Name="TotalUSD" Nullable="false" Precision="19" />
+          <Property Type="Decimal" Name="exExchRate" Nullable="false" Precision="12" Scale="8" />
+          <Property Type="Decimal" Name="TotalMX" Nullable="false" Precision="38" Scale="15" />
           <Property Type="String" Name="grComments" Nullable="true" MaxLength="8000" />
           <Property Type="String" Name="GiftsHostess" Nullable="true" MaxLength="40" />
           <Property Type="String" Name="gula" Nullable="true" MaxLength="2" />
@@ -22518,7 +22518,7 @@
           <Property Type="String" Name="grcuCxCPRDeposit" Nullable="false" MaxLength="10" />
           <Property Type="Decimal" Name="grCxCTaxiOut" Nullable="false" Precision="19" />
           <Property Type="String" Name="grcuCxCTaxiOut" Nullable="false" MaxLength="10" />
-          <Property Type="Decimal" Name="grCxCGifts" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="grCxCGifts" Nullable="false" Precision="19" />
           <Property Type="String" Name="grAuthorizedBy" Nullable="true" MaxLength="53" />
           <Property Type="Byte" Name="grReimpresion" Nullable="false" />
           <Property Type="String" Name="rmN" Nullable="true" MaxLength="30" />

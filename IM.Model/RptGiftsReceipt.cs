@@ -33,9 +33,9 @@ namespace IM.Model
         public string ptN { get; set; }
         public decimal grTaxiIn { get; set; }
         public decimal grTaxiOut { get; set; }
-        public Nullable<decimal> TotalUSD { get; set; }
-        public Nullable<decimal> exExchRate { get; set; }
-        public Nullable<decimal> TotalMX { get; set; }
+        public decimal TotalUSD { get; set; }
+        public decimal exExchRate { get; set; }
+        public decimal TotalMX { get; set; }
         public string grComments { get; set; }
         public string GiftsHostess { get; set; }
         public string gula { get; set; }
@@ -43,7 +43,7 @@ namespace IM.Model
         public string grcuCxCPRDeposit { get; set; }
         public decimal grCxCTaxiOut { get; set; }
         public string grcuCxCTaxiOut { get; set; }
-        public Nullable<decimal> grCxCGifts { get; set; }
+        public decimal grCxCGifts { get; set; }
         public string grAuthorizedBy { get; set; }
         public byte grReimpresion { get; set; }
         public string rmN { get; set; }
