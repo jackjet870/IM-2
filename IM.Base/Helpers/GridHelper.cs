@@ -25,6 +25,7 @@ namespace IM.Base.Helpers
     /// [emoguel] created 15/03/2016
     /// [emoguel] modified 23/03/2016 Se agregó la validacion HasItems
     /// [michan] modified 28/04/2016 Se agregó el parametro de la columna a seleccionar
+    /// [emoguel] modified Se agregó para cambiar el campo de busqueda
     /// </history>
     public static void SelectRow(DataGrid grid, int nIndex, int? column = 0,bool blnEdit=false)
     {
@@ -33,12 +34,15 @@ namespace IM.Base.Helpers
         grid.Focus();
         grid.SelectedIndex = nIndex;
         if (grid.SelectedItem != null)
-        {
+        { 
           grid.ScrollIntoView(grid.Items[nIndex]);
-          grid.UpdateLayout();
-          grid.ScrollIntoView(grid.SelectedItem);
           grid.CurrentCell = new DataGridCellInfo(grid.SelectedItem, grid.Columns[column.Value]);
-          if(blnEdit)
+          //Se cambia el campo de busqueda
+          if (grid.CurrentCell != null)
+          {
+            grid.Resources["SearchField"] = grid.CurrentColumn.SortMemberPath;
+          }
+          if (blnEdit)
           {
             grid.BeginEdit();
           }
