@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:base="clr-namespace:IM.Base.Helpers;assembly=IM.Base"        
         Loaded="Window_Loaded" WindowStyle="SingleBorderWindow" ShowInTaskbar="False"
         mc:Ignorable="d" Title="Sales" SizeToContent="WidthAndHeight" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"  WindowStartupLocation="CenterScreen" Background="Bisque">
@@ -48,7 +49,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <DataGrid x:Name="grdSale" CanUserAddRows="False" MouseLeftButtonDown="grdSale_MouseLeftButtonDown" SelectedCellsChanged="grdSale_SelectedCellsChanged"
+            <DataGrid x:Name="grdSale" CanUserAddRows="False" MouseLeftButtonDown="grdSale_MouseLeftButtonDown" 
 				IsReadOnly="True" Grid.Column="0" Grid.Row="1" Height="580" Width="250" Grid.RowSpan="2" Margin="5" 
 				RowDetailsVisibilityMode="VisibleWhenSelected" ItemsSource="{Binding}" EnableRowVirtualization="True"  
 				AutoGenerateColumns="False" SelectionUnit ="FullRow" SelectionMode="Single">
@@ -88,11 +89,11 @@
                     </StackPanel>
                     <StackPanel >
                         <TextBlock x:Name="lblCStartD" Text="From"/>
-                        <xctk:DateTimePicker Format="ShortDate"  x:Name="dtpCsaDFrom" Width="110" Value="04/11/2008" />
+                        <xctk:DateTimePicker Format="ShortDate"  x:Name="dtpCsaDFrom" Width="110"  DefaultValue="2012/01/01" DisplayDefaultValueOnEmptyText="True"/>
                     </StackPanel>
                     <StackPanel >
                         <TextBlock x:Name="lblCEndD" Text="To"/>
-                        <xctk:DateTimePicker Format="ShortDate" x:Name="dtpCsaDTo" Width="110" Value="04/11/2008"/>
+                        <xctk:DateTimePicker Format="ShortDate" x:Name="dtpCsaDTo" Width="110" DefaultValue="{x:Static sys:DateTime.Today}" DisplayDefaultValueOnEmptyText="True"/>
                     </StackPanel>
                     <Button  x:Name="btnSearch" Content="Search" VerticalAlignment="Center" Click="btnSearch_Click" Width="60" FontSize="12" FontWeight="Black" Margin="5,0,5,0"/>
                 </StackPanel>
@@ -108,7 +109,7 @@
                 </Grid.RowDefinitions>
                 <Button x:Name="btnGeneral" Content="General" Grid.Column="0" Grid.Row="0" Click="btnGeneral_Click"/>
                 <Button x:Name="btnSalesmen" Content="Salesmen" Grid.Column="1" Grid.Row="0" Click="btnSalesmen_Click"/>
-                <Grid Background="Bisque" Grid.Row="1"  Grid.ColumnSpan="2" Panel.ZIndex="1" x:Name="gGeneral" >
+                <Grid Background="Bisque" Grid.Row="1"  Grid.ColumnSpan="2" Panel.ZIndex="0" x:Name="gGeneral" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition  />
                         <ColumnDefinition />
@@ -155,60 +156,60 @@
                     <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="2" Margin="5">
                         <StackPanel>
                             <TextBlock x:Name="lblsagu" Text="GUID" />
-                            <TextBox x:Name="txtsagu" Text="{Binding sagu}" Width="80" />
+                            <TextBox x:Name="txtsagu" Text="{Binding sagu, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"  Width="80" LostFocus="Txtsagu_OnLostFocus"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock x:Name="lblGuestNameCaption" Text="Guest Name" />
-                            <TextBox x:Name="lblGuestName" Width="150"/>
+                            <TextBox x:Name="lblGuestName" Width="150" />
                         </StackPanel>
                         <StackPanel>
                             <TextBlock x:Name="lblsals"  Text="Lead Source" />
-                            <TextBox x:Name="txtsals" Text="{Binding sals}" Width="80"/>
+                            <TextBox x:Name="txtsals" Text="{Binding sals, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock x:Name="lblsalo" Text="Location" />
-                            <TextBox x:Name="txtsalo" Text="{Binding salo}" Width="80"/>
+                            <TextBox x:Name="txtsalo" Text="{Binding salo, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock x:Name="lblsasr" Text="Sales Room" />
-                            <TextBox x:Name="txtsasr" Text="{Binding sasr}" Width="80"/>
+                            <TextBox x:Name="txtsasr" Text="{Binding sasr, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.ColumnSpan="2" Grid.Row="3" Orientation="Horizontal" Margin="5">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock x:Name="lblsast"  Text="Sale Type" />
-                                <CheckBox x:Name="chksaUpdated" IsChecked="{Binding saUpdated}" Content="Updated"/>
+                                <CheckBox x:Name="chksaUpdated" IsChecked="{Binding saUpdated, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Content="Updated"/>
                             </StackPanel>
-                            <ComboBox x:Name="cbosast"  Width="150" SelectedValuePath="stID" SelectedValue="{Binding sast}" DisplayMemberPath="stN" SelectionChanged="cbosast_SelectionChanged" />
+                            <ComboBox x:Name="cbosast"  Width="150" SelectedValuePath="stID" SelectedValue="{Binding sast, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="stN" SelectionChanged="cbosast_SelectionChanged" />
                         </StackPanel>
                         <StackPanel>
                             <TextBlock x:Name="lblsaRefMember" Text="Prev Member #" />
-                            <TextBox x:Name="txtsaRefMember" Text="{Binding saRefMember}" />
+                            <TextBox x:Name="txtsaRefMember" Text="{Binding saRefMember , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel>
                             <TextBlock x:Name="lblsaProcRD" Text="Prev Proc Date" />
-                            <TextBox x:Name="txtsaProcRD" Text="{Binding saProcRD,StringFormat=dd/MM/yyyy}" Width="85"/>
+                            <TextBox x:Name="txtsaProcRD" Text="{Binding saProcRD,StringFormat=dd/MM/yyyy, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="85"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.ColumnSpan="2" Grid.Row="4" Orientation="Horizontal" Margin="5">
                         <StackPanel>
                             <TextBlock x:Name="lblsamt" Text="Membership Type" />
-                            <ComboBox x:Name="cbosamt" SelectedValue="{Binding samt}" SelectedValuePath="mtID" DisplayMemberPath="mtN" SelectionChanged="cbo_SelectionChanged"/>
+                            <ComboBox x:Name="cbosamt" SelectedValue="{Binding samt, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="mtID" DisplayMemberPath="mtN" SelectionChanged="cbo_SelectionChanged"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock x:Name="lblsamtGlobal" Text="Membership Type Global"  />
-                            <ComboBox x:Name="cbosamtGlobal" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding samtGlobal}" SelectedValuePath="mtID" DisplayMemberPath="mtN" />
+                            <ComboBox x:Name="cbosamtGlobal" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding samtGlobal, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="mtID" DisplayMemberPath="mtN" />
                         </StackPanel>
                         <StackPanel Width="150">
                             <TextBlock x:Name="lblLastName" Text="Last Name"/>
-                            <TextBox x:Name="txtsaLastName1" Margin="0,0,0,5" Text="{Binding saLastName1}"/>
-                            <TextBox x:Name="txtsaLastName2" Text="{Binding saLastName2}"/>
+                            <TextBox x:Name="txtsaLastName1" Margin="0,0,0,5" Text="{Binding saLastName1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox x:Name="txtsaLastName2" Text="{Binding saLastName2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                         <StackPanel Width="150">
                             <TextBlock x:Name="lblsaFirstName" Text="First Name" />
-                            <TextBox x:Name="txtsaFirstName1"  Margin="0,0,0,5" Text="{Binding saFirstName1}"/>
-                            <TextBox x:Name="txtsaFirstName2" Text="{Binding saFirstName2}"/>
+                            <TextBox x:Name="txtsaFirstName1"  Margin="0,0,0,5" Text="{Binding saFirstName1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox x:Name="txtsaFirstName2" Text="{Binding saFirstName2 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="6,0,0,5">
@@ -224,21 +225,21 @@
                                     <TextBlock x:Name="lblsaGrossAmount"  Text="Gross" />
                                 </StackPanel>
                                 <StackPanel  Grid.Column="1">
-                                    <TextBox x:Name="txtsaOriginalAmount" Text="{Binding saOriginalAmount,StringFormat='${0:0,0.00}'}"/>
-                                    <TextBox x:Name="txtsaNewAmount" Text="{Binding saNewAmount,StringFormat='${0:0,0.00}'}"/>
-                                    <TextBox x:Name="txtsaGrossAmount" Text="{Binding saGrossAmount,StringFormat='${0:0,0.00}'}" />
+                                    <TextBox x:Name="txtsaOriginalAmount" Text="{Binding saOriginalAmount,StringFormat='${0:0,0.00}' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox x:Name="txtsaNewAmount" Text="{Binding saNewAmount,StringFormat='${0:0,0.00}' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBox x:Name="txtsaGrossAmount" Text="{Binding saGrossAmount,StringFormat='${0:0,0.00}' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
                             </Grid>
                         </GroupBox>
                         <StackPanel Margin="40,0,0,0">
                             <TextBlock x:Name="lblsaClosingCost" Text="Closing Cost" />
-                            <TextBox x:Name="txtsaClosingCost" Text="{Binding saClosingCost, StringFormat='${0:0,0.00}'}"/>
+                            <TextBox x:Name="txtsaClosingCost" Text="{Binding saClosingCost, StringFormat='${0:0,0.00}' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock x:Name="lblsaOverPack" Text="Over Pack"/>
-                            <TextBox x:Name="txtsaOverPack" Text="{Binding saOverPack,StringFormat = '${0:0,0.00}'}" />
+                            <TextBox x:Name="txtsaOverPack" Text="{Binding saOverPack, StringFormat = '${0:0,0.00}' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <GroupBox x:Name="grbPayments" Header="Payments" Margin="40,0,0,0" Background="Beige">
-                            <DataGrid CellEditEnding="dgpayment_CellEditEnding" BeginningEdit="dgpayment_BeginningEdit"  x:Name="dgpayment" Margin="5" ItemsSource="{Binding}" Height="75" ScrollViewer.VerticalScrollBarVisibility="Auto" EnableRowVirtualization="True" AutoGenerateColumns="False"
-                                       CanUserDeleteRows="false" BorderBrush="Black" CanUserResizeColumns="False" CanUserResizeRows="False" RowHeaderWidth="0">
+                            <DataGrid CellEditEnding="dgpayment_CellEditEnding" RowEditEnding="Dgpayment_OnRowEditEnding" BeginningEdit="dgpayment_BeginningEdit"  x:Name="dgpayment" Margin="5" ItemsSource="{Binding}" Height="75" ScrollViewer.VerticalScrollBarVisibility="Auto" EnableRowVirtualization="True" AutoGenerateColumns="False"
+                                       CanUserDeleteRows="false" BorderBrush="Black" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="True" RowHeaderWidth="0">
                                 <DataGrid.Columns>
                                     <DataGridComboBoxColumn x:Name="paptColumn" Width="AUTO" Header="Payment Type" SelectedValuePath="ptID" DisplayMemberPath="ptN"  SelectedValueBinding="{Binding papt}"/>
                                     <DataGridComboBoxColumn x:Name="paccColumn" Width="AUTO" Header="Credit Card"  SelectedValuePath="ccID" DisplayMemberPath="ccN" SelectedValueBinding="{Binding pacc}"/>
@@ -262,23 +263,23 @@
                                     <TextBlock x:Name="lblsaDownPaymentPaid2" Text="Down Payment Paid" Margin="5"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1">
-                                    <TextBox x:Name="txtsaOriginalAmountWithVAT" Text="{Binding saOriginalAmountWithVAT,StringFormat='${0:0,0.00}'}"/>
-                                    <TextBox x:Name="txtsaNewAmountWithVAT" Text="{Binding saNewAmountWithVAT,StringFormat='${0:0,0.00}'}"/>
-                                    <TextBox x:Name="txtsaGrossAmountWithVAT" Text="{Binding saGrossAmountWithVAT,StringFormat='${0:0,0.00}'}" />
+                                    <TextBox x:Name="txtsaOriginalAmountWithVAT" Text="{Binding saOriginalAmountWithVAT,StringFormat='${0:0,0.00}' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBox x:Name="txtsaNewAmountWithVAT" Text="{Binding saNewAmountWithVAT,StringFormat='${0:0,0.00}' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBox x:Name="txtsaGrossAmountWithVAT" Text="{Binding saGrossAmountWithVAT,StringFormat='${0:0,0.00}' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" />
                                     <StackPanel Orientation="Horizontal" Margin="0">
-                                        <TextBox x:Name="txtsaDownPaymentPercentage" Text="{Binding saDownPaymentPercentage, StringFormat='{}{0:0.00}%' }"  Width="70"/>
-                                        <TextBox x:Name="txtsaDownPayment" Text="{Binding saDownPayment,StringFormat='${0:0,0.00}'}" Width="80"/>
+                                        <TextBox x:Name="txtsaDownPaymentPercentage" Text="{Binding saDownPaymentPercentage, StringFormat='{}{0:0.00}%' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"  Width="70"/>
+                                        <TextBox x:Name="txtsaDownPayment" Text="{Binding saDownPayment,StringFormat='${0:0,0.00}' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="0">
-                                        <TextBox x:Name="txtsaDownPaymentPaidPercentage" Text="{Binding saDownPaymentPaidPercentage, StringFormat='{}{0:0.00}%'}" Width="70"/>
-                                        <TextBox x:Name="txtsaDownPaymentPaid" Text="{Binding saDownPaymentPaid,StringFormat='${0:0.00}'}" Width="80"/>
+                                        <TextBox x:Name="txtsaDownPaymentPaidPercentage" Text="{Binding saDownPaymentPaidPercentage, StringFormat='{}{0:0.00}%' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="70"/>
+                                        <TextBox x:Name="txtsaDownPaymentPaid" Text="{Binding saDownPaymentPaid,StringFormat='${0:0.00}' , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Width="80"/>
                                     </StackPanel>
                                 </StackPanel>
                             </Grid>
                         </GroupBox>
                         <StackPanel Margin="30,0,0,0">
                             <TextBlock x:Name="lblsaComments" Text="Comments" />
-                            <TextBox x:Name="txtsaComments" Text="{Binding saComments}" TextWrapping="Wrap" Width="280" Height="105"/>
+                            <TextBox x:Name="txtsaComments" Text="{Binding saComments , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Width="280" Height="105"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
@@ -291,7 +292,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Row="0" Grid.Column="0">
-                        <CheckBox   x:Name="chksaSelfGen" Margin="20,5,5,5" HorizontalAlignment="Left" IsChecked="{Binding saSelfGen}"  Content="SELF GEN"  />
+                        <CheckBox   x:Name="chksaSelfGen" Margin="20,5,5,5" HorizontalAlignment="Left" IsChecked="{Binding saSelfGen , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"  Content="SELF GEN"  />
                         <StackPanel Orientation="Horizontal" Margin="11,0,0,0">
                             <StackPanel>
                                 <TextBlock x:Name="lblsaPR1" Text="PR 1" Margin="0,0,12,15"/>
@@ -299,30 +300,30 @@
                                 <TextBlock x:Name="lblsaPR3" Text="PR 3" Margin="0,0,0,10"/>
                             </StackPanel>
                             <StackPanel Width="100">
-                                <TextBox x:Name="txtsaPR1" LostFocus="txt_LostFocus" Text="{Binding saPR1}"/>
-                                <TextBox x:Name="txtsaPR2" LostFocus="txt_LostFocus" Text="{Binding saPR2}"/>
-                                <TextBox x:Name="txtsaPR3" LostFocus="txt_LostFocus" Text="{Binding saPR3}"/>
+                                <TextBox x:Name="txtsaPR1" LostFocus="txt_LostFocus" Text="{Binding saPR1 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox x:Name="txtsaPR2" LostFocus="txt_LostFocus" Text="{Binding saPR2 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox x:Name="txtsaPR3" LostFocus="txt_LostFocus" Text="{Binding saPR3 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                             <StackPanel Width="130">
-                                <ComboBox x:Name="cbosaPR1" Margin="0,0,0,4" SelectedValue="{Binding saPR1}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
-                                <ComboBox x:Name="cbosaPR2" Margin="0,0,0,3" SelectedValue="{Binding saPR2}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
-                                <ComboBox x:Name="cbosaPR3" Margin="0,0,0,5" SelectedValue="{Binding saPR3}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                <ComboBox x:Name="cbosaPR1" Margin="0,0,0,4" SelectedValue="{Binding saPR1 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                <ComboBox x:Name="cbosaPR2" Margin="0,0,0,3" SelectedValue="{Binding saPR2 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                <ComboBox x:Name="cbosaPR3" Margin="0,0,0,5" SelectedValue="{Binding saPR3 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
                             </StackPanel>
                         </StackPanel>
                         <Border BorderBrush="Black" BorderThickness="2"  Margin="7">
                             <StackPanel Margin="5">
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                                     <RadioButton x:Name="optsaLiner1Type1" GroupName="LinertType" Content="Liner" Margin="10,0,0,0"
-                                                 IsChecked="{Binding saLiner1Type, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueC}, ConverterParameter= 0}"/>
+                                                 IsChecked="{Binding saLiner1Type, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueC},    UpdateSourceTrigger=PropertyChanged, ConverterParameter= 0}"/>
                                     <RadioButton x:Name="optsaLiner1Type2" GroupName="LinertType" Content="Front to Middle" Margin="15,0,15,0"
-                                                 IsChecked="{Binding saLiner1Type, Mode=TwoWay, Converter={StaticResource ByteToBoleanValueC},ConverterParameter=1}"/>
+                                                 IsChecked="{Binding saLiner1Type, Mode=TwoWay, Converter={StaticResource ByteToBoleanValueC}, UpdateSourceTrigger=PropertyChanged,ConverterParameter=1}"/>
                                     <RadioButton x:Name="optsaLiner1Type3" GroupName="LinertType" Content="Front to Back" 
-                                                 IsChecked="{Binding saLiner1Type, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueC}, ConverterParameter=2}"/>
+                                                 IsChecked="{Binding saLiner1Type, Mode=TwoWay,Converter={StaticResource ByteToBoleanValueC},UpdateSourceTrigger=PropertyChanged, ConverterParameter=2}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" >
                                     <TextBlock x:Name="lblsaLiner1" Text="Liner 1" Margin="0,0,3,0" />
-                                    <TextBox x:Name="txtsaLiner1" Text="{Binding saLiner1}" Margin="0,0,5,0" Width="100" LostFocus="txt_LostFocus"/>
-                                    <ComboBox x:Name="cbosaLiner1" SelectedValue="{Binding saLiner1}" Margin="0,0,0,0" Width="130" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                    <TextBox x:Name="txtsaLiner1" Text="{Binding saLiner1 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,0" Width="100" LostFocus="txt_LostFocus"/>
+                                    <ComboBox x:Name="cbosaLiner1" SelectedValue="{Binding saLiner1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,0" Width="130" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -338,24 +339,24 @@
                                 <TextBlock x:Name="lblsaVLO" Text="VLO" Margin="12,0,0,8"/>
                             </StackPanel>
                             <StackPanel Width="100">
-                                <TextBox x:Name="txtsaLiner2" LostFocus="txt_LostFocus" Text="{Binding saLiner2}"/>
-                                <TextBox x:Name="txtsaCloser1" LostFocus="txt_LostFocus" Text="{Binding saCloser1}"/>
-                                <TextBox x:Name="txtsaCloser2" LostFocus="txt_LostFocus" Text="{Binding saCloser2}"/>
-                                <TextBox x:Name="txtsaCloser3" LostFocus="txt_LostFocus" Text="{Binding saCloser3}"/>
-                                <TextBox x:Name="txtsaExit1" LostFocus="txt_LostFocus" Text="{Binding saExit1}"/>
-                                <TextBox x:Name="txtsaExit2"  LostFocus="txt_LostFocus" Text="{Binding saExit2}"/>
-                                <TextBox x:Name="txtsaPodium"  LostFocus="txt_LostFocus" Text="{Binding saPodium}"/>
-                                <TextBox x:Name="txtsaVLO" LostFocus="txt_LostFocus" Text="{Binding saVLO}"/>
+                                <TextBox x:Name="txtsaLiner2" LostFocus="txt_LostFocus" Text="{Binding saLiner2 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox x:Name="txtsaCloser1" LostFocus="txt_LostFocus" Text="{Binding saCloser1 , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox x:Name="txtsaCloser2" LostFocus="txt_LostFocus" Text="{Binding saCloser2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox x:Name="txtsaCloser3" LostFocus="txt_LostFocus" Text="{Binding saCloser3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox x:Name="txtsaExit1" LostFocus="txt_LostFocus" Text="{Binding saExit1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox x:Name="txtsaExit2"  LostFocus="txt_LostFocus" Text="{Binding saExit2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox x:Name="txtsaPodium"  LostFocus="txt_LostFocus" Text="{Binding saPodium, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox x:Name="txtsaVLO" LostFocus="txt_LostFocus" Text="{Binding saVLO, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                             <StackPanel Width="130">
-                                <ComboBox x:Name="cbosaLiner2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saLiner2}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
-                                <ComboBox x:Name="cbosaCloser1" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser1}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
-                                <ComboBox x:Name="cbosaCloser2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser2}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
-                                <ComboBox x:Name="cbosaCloser3" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser3}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
-                                <ComboBox x:Name="cbosaExit1" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saExit1}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
-                                <ComboBox x:Name="cbosaExit2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saExit2}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
-                                <ComboBox x:Name="cbosaPodium" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saPodium}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
-                                <ComboBox x:Name="cbosaVLO" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saVLO}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                <ComboBox x:Name="cbosaLiner2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saLiner2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                <ComboBox x:Name="cbosaCloser1" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                <ComboBox x:Name="cbosaCloser2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                <ComboBox x:Name="cbosaCloser3" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saCloser3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                <ComboBox x:Name="cbosaExit1" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saExit1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                <ComboBox x:Name="cbosaExit2" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saExit2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                <ComboBox x:Name="cbosaPodium" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saPodium, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                <ComboBox x:Name="cbosaVLO" Margin="0,0,0,4" SelectionChanged="cbo_SelectionChanged" SelectedValue="{Binding saVLO, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="peID" DisplayMemberPath="peN"/>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
@@ -370,18 +371,18 @@
                                     <TextBlock x:Name="lblsaCloserCaptain1" Text="Sales Capt" Margin="0,0,0,10"/>
                                 </StackPanel>
                                 <StackPanel Width="100">
-                                    <TextBox x:Name="txtsaPRCaptain1" Text="{Binding saPRCaptain1}" LostFocus="txt_LostFocus"/>
-                                    <TextBox x:Name="txtsaPRCaptain2" Text="{Binding saPRCaptain2}" LostFocus="txt_LostFocus"/>
-                                    <TextBox x:Name="txtsaPRCaptain3" Text="{Binding saPRCaptain3}" LostFocus="txt_LostFocus"/>
-                                    <TextBox x:Name="txtsaLinerCaptain1" Text="{Binding saLinerCaptain1}" LostFocus="txt_LostFocus"/>
-                                    <TextBox x:Name="txtsaCloserCaptain1" Text="{Binding saCloserCaptain1}" LostFocus="txt_LostFocus"/>
+                                    <TextBox x:Name="txtsaPRCaptain1" Text="{Binding saPRCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" LostFocus="txt_LostFocus"/>
+                                    <TextBox x:Name="txtsaPRCaptain2" Text="{Binding saPRCaptain2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" LostFocus="txt_LostFocus"/>
+                                    <TextBox x:Name="txtsaPRCaptain3" Text="{Binding saPRCaptain3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" LostFocus="txt_LostFocus"/>
+                                    <TextBox x:Name="txtsaLinerCaptain1" Text="{Binding saLinerCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" LostFocus="txt_LostFocus"/>
+                                    <TextBox x:Name="txtsaCloserCaptain1" Text="{Binding saCloserCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" LostFocus="txt_LostFocus"/>
                                 </StackPanel>
                                 <StackPanel Width="130">
-                                    <ComboBox x:Name="cbosaPRCaptain1" Margin="0,0,0,4" SelectedValue="{Binding saPRCaptain1}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
-                                    <ComboBox x:Name="cbosaPRCaptain2" Margin="0,0,0,4" SelectedValue="{Binding saPRCaptain2}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
-                                    <ComboBox x:Name="cbosaPRCaptain3" Margin="0,0,0,4" SelectedValue="{Binding saPRCaptain3}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
-                                    <ComboBox x:Name="cbosaLinerCaptain1" Margin="0,0,0,4" SelectedValue="{Binding saLinerCaptain1}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
-                                    <ComboBox x:Name="cbosaCloserCaptain1" Margin="0,0,0,4" SelectedValue="{Binding saCloserCaptain1}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                    <ComboBox x:Name="cbosaPRCaptain1" Margin="0,0,0,4" SelectedValue="{Binding saPRCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                    <ComboBox x:Name="cbosaPRCaptain2" Margin="0,0,0,4" SelectedValue="{Binding saPRCaptain2, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                    <ComboBox x:Name="cbosaPRCaptain3" Margin="0,0,0,4" SelectedValue="{Binding saPRCaptain3, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                    <ComboBox x:Name="cbosaLinerCaptain1" Margin="0,0,0,4" SelectedValue="{Binding saLinerCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
+                                    <ComboBox x:Name="cbosaCloserCaptain1" Margin="0,0,0,4" SelectedValue="{Binding saCloserCaptain1, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbo_SelectionChanged" SelectedValuePath="peID" DisplayMemberPath="peN"/>
                                 </StackPanel>
                             </StackPanel>
                         </GroupBox>

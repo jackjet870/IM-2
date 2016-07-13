@@ -79,34 +79,42 @@ namespace IM.Inhouse.Forms
     /// Metodo que sirve para carga los DataGrid's segun su estado de Visibilidad
     /// </summary>
     ///<history>[jorcanche] 15/03/2016 </history>
-    private void LoadGrid()
+    private async void LoadGrid()
     {
+      var serverDate = BRHelpers.GetServerDate();
       if (_guestArrivalViewSource == null || _guestPremanifestViewSource == null || _guestAvailableViewSource == null) return;
+  
       switch (_screen)
       {
         case EnumScreen.Arrivals: //GuestArrival
           ccArrivals.Visibility = Visibility.Visible;
           ccAvailables.Visibility = ccPremanifest.Visibility = ccGetGuest.Visibility = Visibility.Hidden;
-          DoGetScreenArrivals();
+          var lstGuestArrivals = await BRGuests.GetGuestsArrivals(_serverDate, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup);
+          _guestArrivalViewSource.Source = lstGuestArrivals.Select(parent => new ObjGuestArrival(parent, serverDate)).ToList();
           break;
         case EnumScreen.Availables: //GuestAvailable
           ccAvailables.Visibility = Visibility.Visible;
           ccArrivals.Visibility = ccGetGuest.Visibility = ccPremanifest.Visibility = Visibility.Hidden;
-          DoGetScreenAvailables();
+          var lstGuestAvailables = await BRGuests.GetGuestsAvailables(BRHelpers.GetServerDate().Date, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup);
+          _guestAvailableViewSource.Source = lstGuestAvailables.Select(parent => new ObjGuestAvailable(parent, serverDate));
           break;
         case EnumScreen.Premanifest: //GuestPremanifest
           ccPremanifest.Visibility = Visibility.Visible;
           ccArrivals.Visibility = ccGetGuest.Visibility = ccAvailables.Visibility = Visibility.Hidden;
-          DoGetScreenPremanifest();
+          var lstGuestsPremanifest = await BRGuests.GetGuestsPremanifest(_serverDate, App.User.LeadSource.lsID, _markets, _onGroup);
+          _guestPremanifestViewSource.Source = lstGuestsPremanifest.Select(parent => new ObjGuestPremanifest(parent, serverDate)).ToList();
           break;
         case EnumScreen.Search: //GuestSearch
           ccGetGuest.Visibility = Visibility.Visible;
           ccArrivals.Visibility = ccPremanifest.Visibility = ccAvailables.Visibility = Visibility.Hidden;
-          DoGetScreenSearched();
+          var lstSearchGuest = await BRGuests.GetGuests(_guestdateFrom, _guestDateTo, App.User.LeadSource.lsID, _guestName, _guestRoom, _guestReservation, _guestGuid);
+          _guestSearchedViewSource.Source = lstSearchGuest.Select(parent => new ObjGuestSearched(parent, serverDate)).ToList();
           break;
         default:
           throw new ArgumentOutOfRangeException();
       }
+      StaEnd();
+     
     }
 
     #endregion
@@ -265,7 +273,7 @@ namespace IM.Inhouse.Forms
     /// Valida el tipo de guest y determina si el husped debe estar como disponible
     /// </summary>
     /// <history>[jorcanche] 15/03/2016 </history>
-    public bool CheckIn(DataGrid dg)
+    public async Task<bool> CheckIn(DataGrid dg)
     {
       var items = dg.SelectedItem;
       int nIndex = dg.SelectedIndex;
@@ -277,9 +285,10 @@ namespace IM.Inhouse.Forms
                                           (DateTime)t.GetProperty("guCheckOutD").GetValue(items)))
       {
         #region Updated DataGrid
+        var guestGuum = await BRGuests.GetGuest((int)t.GetProperty("guID").GetValue(items));
         //Determinamos si el huesped debe estar como disponible
-        var guum = t.Name != "ObjGuestPremanifest" ? (byte)t.GetProperty("guum").GetValue(items) :
-                                                    BRGuests.GetGuest((int)t.GetProperty("guID").GetValue(items)).guum;
+        var guum = t.Name != "ObjGuestPremanifest" ? (byte) t.GetProperty("guum").GetValue(items) : guestGuum.guum;
+                                                  
         if (guum.Equals(0))
         {
           t.GetProperty("guAvail").SetValue(items, true);
@@ -287,7 +296,7 @@ namespace IM.Inhouse.Forms
         } 
         #endregion
         #region Save DataBase
-        var editGuest = BRGuests.GetGuest((int)t.GetProperty("guID").GetValue(items));
+        var editGuest = await BRGuests.GetGuest((int)t.GetProperty("guID").GetValue(items));
         editGuest.guCheckIn = true;
         editGuest.guAvail = guum.Equals(0) ? true : false;
         BRGuests.SaveGuest(editGuest);
@@ -498,7 +507,7 @@ namespace IM.Inhouse.Forms
           var item = dg.SelectedItem;
           Type t = item.GetType();
           t.GetProperty("guFollowD").SetValue(item, frmFoll.FollowD);
-          t.GetProperty("guPRFollow").SetValue(item, frmFoll.PRFollow);
+          t.GetProperty("guPRFollow").SetValue(item, frmFoll.PrFollow);
           t.GetProperty("guFollow").SetValue(item, true);
           t.GetProperty("guAvail").SetValue(item, true);
           t.GetProperty("guInfo").SetValue(item, true);
@@ -511,7 +520,6 @@ namespace IM.Inhouse.Forms
     }
 
     #endregion
-
 
     #region ShowbtnWitGifts
 
@@ -651,9 +659,7 @@ namespace IM.Inhouse.Forms
     private async void Inhouse_Loaded()
     {
       //Guardamos el log del login 
-      BRLoginLogs.SaveGuestLog(App.User.Location.loID, App.User.User.peID, Environment.MachineName.ToString());
-      //Cargamos la variable de Occupancy
-      txtOccupancy.Text = BRLeadSources.GetOccupationLeadSources(BRHelpers.GetServerDate(), App.User.Location.loID).ToString();
+      BRLoginLogs.SaveGuestLog(App.User.Location.loID, App.User.User.peID, Environment.MachineName);     
       //Indicamos al statusbar que me muestre cierta informacion cuando oprimimos cierto teclado
       KeyboardHelper.CkeckKeysPress(StatusBarCap, Key.Capital);
       KeyboardHelper.CkeckKeysPress(StatusBarIns, Key.Insert);
@@ -664,11 +670,12 @@ namespace IM.Inhouse.Forms
       txtLocation.Text = App.User.Location.loN;
       //Cargamos la fecha actual del servidor
       dtpDate.Value = BRHelpers.GetServerDate();
+      dtpDate_ValueChanged(null,null);
       //Inicializamos las variables de los DataGrids
-      _guestArrivalViewSource = ((CollectionViewSource)(this.FindResource("GuestArrivalViewSource")));
-      _guestAvailableViewSource = ((CollectionViewSource)(this.FindResource("GuestAvailableViewSource")));
-      _guestPremanifestViewSource = ((CollectionViewSource)(this.FindResource("GuestPremanifestViewSource")));
-      _guestSearchedViewSource = ((CollectionViewSource)(this.FindResource("GuestSearchedViewSource")));
+      _guestArrivalViewSource = (CollectionViewSource)FindResource("GuestArrivalViewSource");
+      _guestAvailableViewSource =(CollectionViewSource)FindResource("GuestAvailableViewSource");
+      _guestPremanifestViewSource = (CollectionViewSource)FindResource("GuestPremanifestViewSource");
+      _guestSearchedViewSource = (CollectionViewSource)FindResource("GuestSearchedViewSource");
 
       //Cargamos los datagrids
       LoadGrid();
@@ -699,46 +706,22 @@ namespace IM.Inhouse.Forms
     /// </history>
     private void listMarkets_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      int cont = 0;
+      var cont = 0;
       _markets = string.Empty;
       var selectedItems = listMarkets.SelectedItems;
       foreach (MarketShort selectedItem in selectedItems)
       {
-        cont = cont + 1; _markets += selectedItem.mkID.ToString();
+        cont = cont + 1;
+        _markets += selectedItem.mkID;
         if (selectedItems.Count > 1 && cont < selectedItems.Count)
         {
           _markets = _markets + ",";
         }
       }
       _markets = selectedItems.Count == 0 ? "ALL" : _markets;
-      StaStart("Load Guest´s by Markets: " + _markets); LoadGrid();
+      StaStart("Load Guest´s by Markets: " + _markets);
+      LoadGrid();
     }
-
-    #region dtpDate_SelectedDateChanged
-
-    private void dtpDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-    {
-      //Obtener el valor actual del que tiene el dtpDate
-      var picker = sender as DatePicker;
-      if (!picker.SelectedDate.HasValue)
-      {
-        //Cuando el usuario ingresa una fecha invalida
-        MessageBox.Show("Specify the Date", "date invalidates", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        //Y le asignamos la fecha del servidor (la actual hora actual)
-        dtpDate.Value = BRHelpers.GetServerDate();
-      }
-      else
-      {
-        //le asignamos el valor del dtpDate a la variable global para que otro control tenga acceso al valor actual del dtpDate
-        _serverDate = picker.SelectedDate.Value;
-        //Cargamos el grid del tab que esta seleccionado
-        txtOccupancy.Text = BRLeadSources.GetOccupationLeadSources(picker.SelectedDate.Value, App.User.Location.loID);
-        LoadGrid();
-        //gprInfo.BindingGroup.GetValue                 
-      }
-    }
-
-    #endregion
 
     #region rb_Checked
 
@@ -806,12 +789,12 @@ namespace IM.Inhouse.Forms
     /// <param name="sender"></param>
     /// <param name="e"></param>
     /// <history>[jorcanche] 09/01/2015</history>
-    private void ChkguCheckInArrival_Click(object sender, RoutedEventArgs e)
+    private async void ChkguCheckInArrival_Click(object sender, RoutedEventArgs e)
     {
       //Se debe igualar el valor del check al valor que arroje las validaciones
       var chk = sender as CheckBox;
       if (chk.IsChecked.Value)
-        chk.IsChecked = CheckIn(dgGuestArrival);
+        chk.IsChecked = await CheckIn(dgGuestArrival);
       // GridHelper.SelectRow(dgGuestArrival, dgGuestArrival.SelectedIndex,dgGuestArrival.CurrentColumn.DisplayIndex)
     }
 
@@ -916,7 +899,7 @@ namespace IM.Inhouse.Forms
 
     #region chkGuestsGroupsArrivals_Clic
 
-    private void chkGuestsGroupsArrivals_Click(object sender, RoutedEventArgs e)
+    private async void chkGuestsGroupsArrivals_Click(object sender, RoutedEventArgs e)
     {
       bool show = true;
       bool group = false;
@@ -974,7 +957,7 @@ namespace IM.Inhouse.Forms
         frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.Value.Value, action);
         frmGgGu.Owner = this;
         frmGgGu.ShowDialog();
-        Guest gu = BRGuests.GetGuest(guID);
+        Guest gu = await BRGuests.GetGuest(guID);
         group = gu.guGroup;
         LoadGrid();
       }
@@ -1112,7 +1095,7 @@ namespace IM.Inhouse.Forms
 
     #region chkGuestsGroupsAviables
 
-    private void chkGuestsGroupsAvailables_Click(object sender, RoutedEventArgs e)
+    private async void chkGuestsGroupsAvailables_Click(object sender, RoutedEventArgs e)
     {
       bool show = true;
       bool group = false;
@@ -1170,7 +1153,7 @@ namespace IM.Inhouse.Forms
         frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.Value.Value.Date, action);
         frmGgGu.Owner = this;
         frmGgGu.ShowDialog();
-        Guest gu = BRGuests.GetGuest(guID);
+        Guest gu = await BRGuests.GetGuest(guID);
         group = gu.guGroup;
         LoadGrid();
       }
@@ -1194,11 +1177,11 @@ namespace IM.Inhouse.Forms
 
     #region ChkguCheckInPremanifest_Click
 
-    private void ChkguCheckInPremanifest_Click(object sender, RoutedEventArgs e)
+    private async void ChkguCheckInPremanifest_Click(object sender, RoutedEventArgs e)
     {
       var chk = sender as CheckBox;
       if (chk.IsChecked.Value)
-        chk.IsChecked = CheckIn(dgGuestPremanifest);
+        chk.IsChecked = await CheckIn(dgGuestPremanifest);
     }
 
     #endregion
@@ -1278,7 +1261,7 @@ namespace IM.Inhouse.Forms
 
     #region chkGuestsGroupsPremanifest
 
-    private void chkGuestsGroupsPremanifest_Click(object sender, RoutedEventArgs e)
+    private async void chkGuestsGroupsPremanifest_Click(object sender, RoutedEventArgs e)
     {
       bool show = true;
       bool group = false;
@@ -1337,7 +1320,7 @@ namespace IM.Inhouse.Forms
         frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.Value.Value, action);
         frmGgGu.Owner = this;
         frmGgGu.ShowDialog();
-        Guest gu = BRGuests.GetGuest(guID);
+        Guest gu = await BRGuests.GetGuest(guID);
         group = gu.guGroup;
         LoadGrid();
       }
@@ -1361,12 +1344,12 @@ namespace IM.Inhouse.Forms
 
     #region ChkguCheckInGetGuest_Click
 
-    private void ChkguCheckInGetGuest_Click(object sender, RoutedEventArgs e)
+    private async void ChkguCheckInGetGuest_Click(object sender, RoutedEventArgs e)
     {
       //Se debe igualar el valor del check al valor que arroje las validaciones
       var chk = sender as CheckBox;
       if (chk.IsChecked.Value)
-        chk.IsChecked = CheckIn(guestSearchedDataGrid);
+        chk.IsChecked = await CheckIn(guestSearchedDataGrid);
     }
 
     #endregion
@@ -1461,7 +1444,7 @@ namespace IM.Inhouse.Forms
 
     #region chkGuestsGroupsSearched
 
-    private void chkGuestsGroupsGuestSearched_Click(object sender, RoutedEventArgs e)
+    private async void chkGuestsGroupsGuestSearched_Click(object sender, RoutedEventArgs e)
     {
       bool show = true;
       bool group = false;
@@ -1517,7 +1500,7 @@ namespace IM.Inhouse.Forms
         frmGgGu = new frmGuestsGroups(gg.gxID, guID, guIDToAdd, dtpDate.Value.Value, action);
         frmGgGu.Owner = this;
         frmGgGu.ShowDialog();
-        Guest gu = BRGuests.GetGuest(guID);
+        Guest gu = await BRGuests.GetGuest(guID);
         group = gu.guGroup;
         LoadGrid();
       }
@@ -1530,14 +1513,14 @@ namespace IM.Inhouse.Forms
     private void dg_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       var dg = sender as DataGrid;
-      StatusBarReg.Content = $"{dg.Items.CurrentPosition + 1}/{dg.Items.Count}";
+      if (dg != null) StatusBarReg.Content = $"{dg.Items.CurrentPosition + 1}/{dg.Items.Count}";
     }
 
     #endregion
 
     #region Comments_LostFocus
 
-    private void Comments_LostFocus(object sender, RoutedEventArgs e)
+    private async void Comments_LostFocus(object sender, RoutedEventArgs e)
     {
       var txt = sender as TextBox;
       if (!string.IsNullOrEmpty(txt.Text))
@@ -1545,26 +1528,26 @@ namespace IM.Inhouse.Forms
         Guest guest = null;
         if (txt.Name == "guCommentsColumnArrival")
         {
-          var Row = dgGuestArrival.SelectedItem as GuestArrival;
-          guest = BRGuests.GetGuest(Row.guID);
+          var row = dgGuestArrival.SelectedItem as GuestArrival;
+          guest =  await BRGuests.GetGuest(row.guID);
         }
         if (txt.Name == "guCommentsColumnAvailable")
         {
-          var Row = dgGuestAvailable.SelectedItem as GuestAvailable;
-          guest = BRGuests.GetGuest(Row.guID);
+          var row = dgGuestAvailable.SelectedItem as GuestAvailable;
+          guest = await BRGuests.GetGuest(row.guID);
         }
         if (txt.Name == "guCommentsColumnPremanifest")
         {
-          var Row = dgGuestPremanifest.SelectedItem as GuestPremanifest;
-          guest = BRGuests.GetGuest(Row.guID);
+          var row = dgGuestPremanifest.SelectedItem as GuestPremanifest;
+          guest = await BRGuests.GetGuest(row.guID);
         }
         if (txt.Name == "guCommentsColumnSearched")
         {
-          var Row = guestSearchedDataGrid.SelectedItem as GuestSearched;
-          guest = BRGuests.GetGuest(Row.guID);
+          var row = guestSearchedDataGrid.SelectedItem as GuestSearched;
+          guest = await BRGuests.GetGuest(row.guID);
         }
         guest.guComments = txt.Text;
-        BRGuests.SaveGuest(guest);
+        await BRGuests.SaveGuest(guest);
       }
     }
 
@@ -1601,7 +1584,7 @@ namespace IM.Inhouse.Forms
     /// </history>
     private async void btnLogin_Click(object sender, RoutedEventArgs e)
     {
-      frmLogin log = new frmLogin(null, EnumLoginType.Location, program: EnumProgram.Inhouse, changePassword: false,
+      var log = new frmLogin(null, EnumLoginType.Location, program: EnumProgram.Inhouse, changePassword: false,
         autoSign: true, switchLoginUserMode: true);
 
       await log.getAllPlaces();
@@ -1648,26 +1631,16 @@ namespace IM.Inhouse.Forms
       CreateExcelReport(true);
     }
 
-    private void dtpDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-    {
-      //Obtener el valor actual del que tiene el dtpDate
-      var picker = sender as Xceed.Wpf.Toolkit.DateTimePicker;
-      if (!picker.Value.HasValue)
-      {
-        //Cuando el usuario ingresa una fecha invalida
-        MessageBox.Show("Specify the Date", "date invalidates", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        //Y le asignamos la fecha del servidor (la actual hora actual)
-        dtpDate.Value = BRHelpers.GetServerDate();
-      }
-      else
-      {
-        //le asignamos el valor del dtpDate a la variable global para que otro control tenga acceso al valor actual del dtpDate
-        _serverDate = picker.Value.Value;
-        //Cargamos el grid del tab que esta seleccionado
-        txtOccupancy.Text = BRLeadSources.GetOccupationLeadSources(picker.Value.Value, App.User.Location.loID);
-        LoadGrid();
-        //gprInfo.BindingGroup.GetValue                 
-      }
+    private async void dtpDate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {      
+      if (!IsInitialized) return;
+      if (dtpDate.Text == string.Empty) dtpDate.Value = _serverDate;
+      if (dtpDate.Value == null || _serverDate == dtpDate.Value.Value) return;      
+      //BusyIndicator.IsBusy = true;
+      _serverDate = dtpDate.Value.Value;
+      txtOccupancy.Text = await BRLeadSources.GetOccupationLeadSources(dtpDate.Value.Value, App.User.Location.loID);
+      LoadGrid();
+      dtpDate.Focus();
     }
 
     private async void btnExtInvit_Click(object sender, RoutedEventArgs e)
@@ -1683,8 +1656,10 @@ namespace IM.Inhouse.Forms
 
       if (login.IsAuthenticated)
       {
-        var invitacion = new frmInvitation(EnumInvitationType.External, login.UserData , 0, EnumInvitationMode.modAdd);
-        invitacion.Owner = this;
+        var invitacion = new frmInvitation(EnumInvitationType.External, login.UserData, 0, EnumInvitationMode.modAdd)
+        {
+          Owner = this
+        };
         invitacion.ShowDialog();
       }
     }
@@ -1868,92 +1843,9 @@ namespace IM.Inhouse.Forms
 
     #endregion
 
-    private void DoGetScreenArrivals()
-    {
-      var serverDate = BRHelpers.GetServerDate();
-      Task.Factory.StartNew(() =>
-         BRGuests.GetGuestsArrivals(_serverDate, App.User.LeadSource.lsID, _markets, _available, _info, _invited, _onGroup).Select(parent => new ObjGuestArrival(parent, serverDate)).ToList()).
-         ContinueWith((LoadGuestsInhouse) =>
-         {
-           if (LoadGuestsInhouse.IsFaulted)
-           {
-             UIHelper.ShowMessage(LoadGuestsInhouse.Exception.InnerException.Message, MessageBoxImage.Error);
-             StaEnd();
-             return false;
-           }
-           else
-           {
-             if (LoadGuestsInhouse.IsCompleted)
-             {
-               LoadGuestsInhouse.Wait(1000);
-               _guestArrivalViewSource.Source = LoadGuestsInhouse.Result;
-             }
-             StaEnd();
-             return false;
-           }
-         }, TaskScheduler.FromCurrentSynchronizationContext());
-    }
-
-    private async void DoGetScreenPremanifest()
-    {
-      var serverDate = BRHelpers.GetServerDate();
-      var lstGuestsPremanifest = await BRGuests.GetGuestsPremanifest(_serverDate, App.User.LeadSource.lsID, _markets, _onGroup);
-      _guestPremanifestViewSource.Source = lstGuestsPremanifest.Select(parent => new ObjGuestPremanifest(parent, serverDate)).ToList();
-      StaEnd();      
-    }
-
-    private void DoGetScreenAvailables()
-    {
-      var serverDate = BRHelpers.GetServerDate();
-      Task.Factory.StartNew(() =>
-           BRGuests.GetGuestsAvailables(serverDate, App.User.LeadSource.lsID, _markets, _info, _invited, _onGroup).Select(parent => new ObjGuestAvailable(parent,serverDate)).ToList()).
-           ContinueWith((LoadGuestsInhouse) =>
-         {
-           if (LoadGuestsInhouse.IsFaulted)
-           {
-             UIHelper.ShowMessage(LoadGuestsInhouse.Exception.InnerException.Message, MessageBoxImage.Error);
-             StaEnd();
-             return false;
-           }
-           else
-           {
-             if (LoadGuestsInhouse.IsCompleted)
-             {
-               LoadGuestsInhouse.Wait(1000);
-               _guestAvailableViewSource.Source = LoadGuestsInhouse.Result;
-             }
-             StaEnd();
-             return false;
-           }
-         }, TaskScheduler.FromCurrentSynchronizationContext());
-    }
-
-    private void DoGetScreenSearched()
-    {
-      var serverDate = BRHelpers.GetServerDate();
-      Task.Factory.StartNew(() =>
-         BRGuests.GetGuests(_guestdateFrom, _guestDateTo, App.User.LeadSource.lsID, _guestName, _guestRoom, _guestReservation, _guestGuid).Select(parent => new ObjGuestSearched(parent,serverDate)).ToList()).ContinueWith(
-         (LoadGuestsInhouse) =>
-         {
-           if (LoadGuestsInhouse.IsFaulted)
-           {
-             UIHelper.ShowMessage(LoadGuestsInhouse.Exception.InnerException.Message, MessageBoxImage.Error);
-             StaEnd();
-             return false;
-           }
-           else
-           {
-             if (LoadGuestsInhouse.IsCompleted)
-             {
-               LoadGuestsInhouse.Wait(1000);
-               _guestSearchedViewSource.Source = LoadGuestsInhouse.Result;
-             }
-             StaEnd();
-             return false;
-           }
-         }, TaskScheduler.FromCurrentSynchronizationContext());
-    }
+   
 
     #endregion
+  
   }
 }

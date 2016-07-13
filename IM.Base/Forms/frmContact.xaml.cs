@@ -41,13 +41,12 @@ namespace IM.Base.Forms
 
     #region Constructores y destructores
 
-    public frmContact(int guestID,UserData userData)
+    public frmContact(int guestId,UserData userData)
     {
       InitializeComponent();
-      _guestID = guestID;
+      _guestID = guestId;
       lblUserName.Content = userData.User.peN;
       _userPrimero = userData;
-      _guest = BRGuests.GetGuest(_guestID);
     }
 
     #endregion
@@ -194,33 +193,35 @@ namespace IM.Base.Forms
 
     #region Window_Loaded
     /// <summary>
-    /// 
+    /// Carga e inicializa las variables 
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     /// <history>
+    /// [jorcanche] created  05003016
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      _guest = await BRGuests.GetGuest(_guestID);
       LoadContact();
     }
 
     private async void LoadContact()
     {
       cboguPRInfo.ItemsSource = await BRPersonnel.GetPersonnel(_userPrimero.Location.loID, "ALL", "PR");
-      Guest _guest = BRGuests.GetGuest(_guestID);
-      if (_guest.guInfoD.HasValue)
+      var guest = await BRGuests.GetGuest(_guestID);
+      if (guest.guInfoD.HasValue)
       {
-        txtguInfoD.Text = _guest.guInfoD.Value.Date.ToString("dd-MM-yyyy");
+        txtguInfoD.Text = guest.guInfoD.Value.Date.ToString("dd-MM-yyyy");
       }
 
-      if (_guest.guPRInfo != string.Empty)
+      if (guest.guPRInfo != string.Empty)
       {
-        cboguPRInfo.SelectedValue = _guest.guPRInfo;
-        txtguPRInfo.Text = _guest.guPRInfo;
+        cboguPRInfo.SelectedValue = guest.guPRInfo;
+        txtguPRInfo.Text = guest.guPRInfo;
       }
-      chkguInfo.IsChecked = _guest.guInfo;
+      chkguInfo.IsChecked = guest.guInfo;
 
       btnEdit.IsEnabled = true; btnSave.IsEnabled = btnCancel.IsEnabled = false;      
       cboguPRInfo.IsEnabled = txtguPRInfo.IsEnabled = false;
@@ -228,7 +229,7 @@ namespace IM.Base.Forms
     #endregion
 
     #region btnSave_Click
-    private void btnSave_Click(object sender, RoutedEventArgs e)
+    private async void btnSave_Click(object sender, RoutedEventArgs e)
     {      
       if (Validate())
       {
@@ -242,7 +243,7 @@ namespace IM.Base.Forms
         //Si hubo un erro al ejecutar el metodo SaveGuestContact nos devolvera 0, indicando que ningun paso 
         //se realizo, es decir ni se guardo el Guest, el Log ni los movimientos de este, siendo así ya no modificamos la variable
         //_wasSaved que es la que indica que se guardo el Avail.
-        if (BRGuests.SaveGuestContact(_guest, _userPrimero.LeadSource.lsHoursDif, _userLoguedo.User.peID,
+        if (await BRGuests.SaveGuestContact(_guest, _userPrimero.LeadSource.lsHoursDif, _userLoguedo.User.peID,
             EnumGuestsMovementsType.Contact,Environment.MachineName,ComputerHelper.GetIpMachine()) != 0)
         {
           //Modificamos las variable indicando que si se guardo la variable

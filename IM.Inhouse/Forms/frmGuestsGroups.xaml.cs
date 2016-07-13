@@ -203,7 +203,7 @@ namespace IM.Inhouse.Forms
     /// </summary>
     /// <param name="id">Si solo se tiene el ID | 0 si si ya se tiene el guesped a guardar</param>
     /// <param name="guest">Guesped a Guardar en caso de que ya se tenga toda la informacion</param>
-    void AddGuestToGridGuestsGroupsIntegrants(int id, Guest guest = null)
+    async void AddGuestToGridGuestsGroupsIntegrants(int id, Guest guest = null)
     {
       Guest gu;
       if (id != 0)
@@ -212,7 +212,7 @@ namespace IM.Inhouse.Forms
           _lstGuestTemp = new List<Guest>();
         else
           _lstGuestTemp = _lstGuest;
-        _lstGuestTemp.Add(BRGuests.GetGuest(id));
+        _lstGuestTemp.Add(await BRGuests.GetGuest(id));
       }
       else
       {

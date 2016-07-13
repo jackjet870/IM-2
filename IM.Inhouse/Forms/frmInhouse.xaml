@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:classes="clr-namespace:IM.Inhouse.Classes"
         x:Class="IM.Inhouse.Forms.frmInhouse"
+         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
         Title="Inhouse" x:Name="House" Width="1100"  Height="700"  WindowState="Maximized" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
     <Window.Resources>
@@ -32,7 +33,7 @@
             <Setter Property="ForceCursor" Value="True"/>
         </Style>
 
-       
+
 
         <Style TargetType="GroupBox">
             <Setter Property="Height" Value="auto"/>
@@ -40,7 +41,6 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
     </Window.Resources>
-
     <Grid>
         <!--#region  Configuración del Grid Principal -->
         <Grid.RowDefinitions>
@@ -155,7 +155,7 @@
                     <RowDefinition Height="50*"/>
                 </Grid.RowDefinitions>
                 <!-- <GroupBox Grid.Row="0" x:Name="grbDate" Header="Date" FontWeight="Bold" Margin="2,0,2,0">-->
-                <xctk:DateTimePicker Grid.Row="0" x:Name="dtpDate" Format="ShortDate" Margin="2,0,2,0" VerticalAlignment="Bottom"  ValueChanged="dtpDate_ValueChanged"/>
+                <xctk:DateTimePicker Grid.Row="0" x:Name="dtpDate" DefaultValue="{x:Static sys:DateTime.Now}" DisplayDefaultValueOnEmptyText="True" Format="ShortDate" Margin="2,0,2,0" VerticalAlignment="Bottom"  ValueChanged="dtpDate_ValueChanged" />
                 <!--   </GroupBox>-->
                 <!-- <GroupBox Grid.Row="1" Margin="5,3,5,3" >-->
                 <Button Grid.Row="1" x:Name="btnSearchGuest"  Background="White" Margin="2,5,0,0" VerticalAlignment="Top" Click="btnSearchGuest_Click" HorizontalAlignment="Left" Width="99" >
@@ -291,7 +291,7 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn x:Name="guIDColumn" IsReadOnly="True" Binding="{Binding guID}" Header="GUID" Width="auto"/>
                         <DataGridTextColumn x:Name="gulsOriginalColumn" IsReadOnly="True" Binding="{Binding gulsOriginal}" Header="LS Orig" ToolTipService.ToolTip="Lead Source Original" Width="auto"/>
-                        <DataGridTextColumn x:Name="guHReservIDColumn" Binding="{Binding guHReservID}" IsReadOnly="false"  Header="Reserv. #" />
+                        <DataGridTextColumn x:Name="guHReservIDColumn" Binding="{Binding guHReservID}" IsReadOnly="true"  Header="Reserv. #" />
                         <DataGridTextColumn x:Name="guIdProfileOperaColumn" IsReadOnly="True" Binding="{Binding guIdProfileOpera}" Header="Opera ID" Width="auto"/>
                         <DataGridTemplateColumn x:Name="reservationColumn"   IsReadOnly="True"  Header="Rsv" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
@@ -425,7 +425,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="guCommentsColumnArrival" Text="{Binding guComments}" LostFocus="Comments_LostFocus" Loaded="CommentsColumn_Loaded"  />
+                                    <TextBox MaxLength="100" x:Name="guCommentsColumnArrival" Text="{Binding guComments}" LostFocus="Comments_LostFocus" Loaded="CommentsColumn_Loaded"  />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
@@ -564,7 +564,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="guCommentsColumnAvailable" Text="{Binding guComments}" LostFocus="Comments_LostFocus" Loaded="CommentsColumn_Loaded"  />
+                                    <TextBox x:Name="guCommentsColumnAvailable" MaxLength="100" Text="{Binding guComments}" LostFocus="Comments_LostFocus" Loaded="CommentsColumn_Loaded"  />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
@@ -707,7 +707,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="guCommentsColumnPremanifest" Text="{Binding guComments}" LostFocus="Comments_LostFocus" Loaded="CommentsColumn_Loaded"  />
+                                    <TextBox x:Name="guCommentsColumnPremanifest" MaxLength="100" Text="{Binding guComments}" LostFocus="Comments_LostFocus" Loaded="CommentsColumn_Loaded"  />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
@@ -849,7 +849,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="guCommentsColumnSearched" Text="{Binding guComments}" LostFocus="Comments_LostFocus" Loaded="CommentsColumn_Loaded"  />
+                                    <TextBox x:Name="guCommentsColumnSearched" MaxLength="100" Text="{Binding guComments}" LostFocus="Comments_LostFocus" Loaded="CommentsColumn_Loaded"  />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>

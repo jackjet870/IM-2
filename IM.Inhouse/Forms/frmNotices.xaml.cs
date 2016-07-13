@@ -39,23 +39,24 @@ namespace IM.Inhouse.Forms
 
     /// <summary>
     /// Trae las noticias y las carga en el rtb
+    /// </summary>
     /// <history>
     /// [jorcanche] 19/04/2016
-    /// <history>
-    private void GetNotices()
+    /// </history>
+    private async void GetNotices()
     {     
       rtbViewerNotice.Document.Blocks.Clear();
       RTFNotices = string.Empty;
       RTFNotice = string.Empty;
 
-      var Notices = BRNotices.GetNotices(App.User.LeadSource.lsID, BRHelpers.GetServerDate());
+      var notices =await BRNotices.GetNotices(App.User.LeadSource.lsID, BRHelpers.GetServerDate());
 
-      if (Notices.Count > 0)
+      if (notices.Count > 0)
       {
-        foreach (NoticeShort Notice in Notices)
+        foreach (var notice in notices)
         {                   
-          RTFNotices = RTFNotices + Title(Notice.noTitle);
-          RTFNotices = RTFNotices + Text(Notice.noText);
+          RTFNotices = RTFNotices + Title(notice.noTitle);
+          RTFNotices = RTFNotices + Text(notice.noText);
         }
         UIRichTextBoxHelper.LoadRTF(ref rtbViewerNotice, RTFNotices);
         RTFNotice = UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtbViewerNotice);
@@ -68,11 +69,11 @@ namespace IM.Inhouse.Forms
     /// </summary>
     /// <history>
     /// [jorcanche] 19/04/2016
-    /// <history>
-    private string Text(string Text)
+    /// </history>
+    private string Text(string text)
     {
       var rtb = new RichTextBox();
-      UIRichTextBoxHelper.LoadRTF(ref rtb, Text);
+      UIRichTextBoxHelper.LoadRTF(ref rtb, text);
       rtb.Document.Foreground = Brushes.Black;
       rtb.Document.FontSize = 10;
       //Agregamos dos saltos de pagina
@@ -85,13 +86,13 @@ namespace IM.Inhouse.Forms
     /// </summary>
     /// <history>
     /// [jorcanche] 19/04/2016
-    /// <history>
+    /// </history>
     public new string Title(string titulo)
     {
       // Create a FlowDocument
-      FlowDocument flowDocument = new FlowDocument();
+      var flowDocument = new FlowDocument();
       // Create a paragraph with text
-      Paragraph paragraph = new Paragraph();
+      var paragraph = new Paragraph();
       //Agregamos el titulo
       paragraph.Inlines.Add(new Underline(new Run(titulo)));
       paragraph.Inlines.Add(new Run("\u2028"));      
@@ -102,17 +103,17 @@ namespace IM.Inhouse.Forms
       flowDocument.FontFamily = new FontFamily("Verdana");
       flowDocument.FontSize = 20;
       flowDocument.TextAlignment = TextAlignment.Center;
-      flowDocument.FontWeight = FontWeights.Bold;      
-      var rtb = new RichTextBox();
-      rtb.Document = flowDocument;
+      flowDocument.FontWeight = FontWeights.Bold;
+      var rtb = new RichTextBox {Document = flowDocument};
       return UIRichTextBoxHelper.getRTFFromRichTextBox(ref rtb); 
     }
 
     /// <summary>
     /// Vuelve a cargar las noticias del día en el rtb
+    /// </summary>
     /// <history>
     /// [jorcanche] 19/04/2016
-    /// <history>
+    /// </history>
     private void btnRefresh_Click(object sender, RoutedEventArgs e)
     {
       //speedChanged = false;
@@ -131,7 +132,7 @@ namespace IM.Inhouse.Forms
     /// </summary>
     /// <history>
     /// [jorcanche] 19/04/2016
-    /// <history>
+    /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       GetNotices();
@@ -139,9 +140,10 @@ namespace IM.Inhouse.Forms
 
     /// <summary>
     /// inicia el tiempo y manipula el scrollViewer.
+    /// </summary>
     /// <history>
     /// [jorcanche] 19/04/2016
-    /// <history>
+    /// </history>
     private void chkAutoscroll_Checked(object sender, RoutedEventArgs e)
     {
       speed = .0025;
@@ -155,9 +157,10 @@ namespace IM.Inhouse.Forms
 
     /// <summary>
     /// Termina el tiempo y manipula el scrollViewer.
+    /// </summary>
     /// <history>
     /// [jorcanche] 19/04/2016
-    /// <history>
+    /// </history>
     private void chkAutoscroll_Unchecked(object sender, RoutedEventArgs e)
     {
       RiniciarTimer();
@@ -173,7 +176,7 @@ namespace IM.Inhouse.Forms
     /// </summary>
     /// <history>
     /// [jorcanche] 19/04/2016
-    /// <history>
+    /// </history>
     public void AutoScroll()
     {
       //PrepareRTB();
@@ -306,7 +309,7 @@ namespace IM.Inhouse.Forms
     /// <history>
     private void stbStatusBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      this.DragMove();
+      DragMove();
     }
   }
 }

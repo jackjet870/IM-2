@@ -10,6 +10,7 @@ using IM.Model.Helpers;
 using IM.Base.Helpers;
 using System;
 using System.Windows.Data;
+using IM.Host.Classes;
 
 namespace IM.Host.Forms
 {
@@ -21,8 +22,8 @@ namespace IM.Host.Forms
     List<SalesSalesman> _salesSalesmans;
     List<SalesSalesman> _oldList = new List<SalesSalesman>();
     decimal _amount,_amountOriginal, cantidadWithOwn;
-    int _sale = 0;
-    CollectionViewSource saleLogDataViewSource;
+    int _sale;
+    CollectionViewSource _saleLogDataViewSource;
 
     /// <summary>
     /// Contructor del formulario 
@@ -48,8 +49,8 @@ namespace IM.Host.Forms
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      saleLogDataViewSource = ((CollectionViewSource)(FindResource("salesSalesmanViewSource")));
-      saleLogDataViewSource.Source = _salesSalesmans;
+      _saleLogDataViewSource = ((CollectionViewSource)(FindResource("salesSalesmanViewSource")));
+      _saleLogDataViewSource.Source = _salesSalesmans;
       btnCancel.IsEnabled = btnSave.IsEnabled = false; smSaleColumn.IsReadOnly = smSaleAmountOwnColumn.IsReadOnly = smSaleAmountWithColumn.IsReadOnly = true;
 
     }  
@@ -79,10 +80,10 @@ namespace IM.Host.Forms
       smSaleColumn.IsReadOnly = smSaleAmountOwnColumn.IsReadOnly = smSaleAmountWithColumn.IsReadOnly = false;
       _oldList = new List<SalesSalesman>();
       //Se hace un Foreach a SalesSalesmen  y llenamos a _oldList, Se hace de esta forma para que no tengan la misma referencia
-      // y asi se puede moficar uno sin q el otro cambie igual
+      // y asi se puede modificar uno sin q el otro cambie igual
       _salesSalesmans.ForEach(ag =>
       {
-        SalesSalesman ss = new SalesSalesman();
+        var ss = new SalesSalesman();
         ObjectHelper.CopyProperties(ss, ag, true);
         _oldList.Add(ss);
       });
@@ -94,32 +95,12 @@ namespace IM.Host.Forms
     /// <history>
     /// [jorcanche] 14/06/2016 created
     /// </history>
-    private async void btnSave_Click(object sender, RoutedEventArgs e)
+    private void btnSave_Click(object sender, RoutedEventArgs e)
     {
       btnCancel.IsEnabled = btnSave.IsEnabled = false; btnEdit.IsEnabled = true;
       smSaleColumn.IsReadOnly = smSaleAmountOwnColumn.IsReadOnly = smSaleAmountWithColumn.IsReadOnly = true;
-
-      //1.-Extraemos el Listado de los SaleMan que se modificaron 
-      //2.-Se elimina la propiedad virtual Persaonel para que no marque error de repeticion de llaves,
-      // ya que personel tiene la llave de peID y la llave de la tabla SalesSaleman tiene igual la llave smpe y marcan conflicto
-      // var lstModSalesSaleman = lstSaleman.Where(sa => !_oldList.Any(agg => agg.smpe == sa.smpe && ObjectHelper.IsEquals(sa, agg))).ToList();
-      var lstModSalesSaleman = new List<SalesSalesman>();
-      _salesSalesmans.Where(ss => !ss.smSale || ss.smSaleAmountOwn != _amount || ss.smSaleAmountWith != _amount).
-      ToList().ForEach(x =>
-       {
-         SalesSalesman ss = new SalesSalesman();
-         ObjectHelper.CopyProperties(ss, x);
-         lstModSalesSaleman.Add(ss);
-       }
-      );
-      //Eliminamos todos los registros de la tabla SalesSalesmen que sean de este sale
-      await BRSalesSalesmen.DeleteSalesSalesmenbySaleId(_sale);
-      //Se guardan los SalesSaleman que se modificaron       
-      foreach (var salessalesmen in lstModSalesSaleman)
-      {
-        await BREntities.OperationEntity(salessalesmen, Model.Enums.EnumMode.add);
-      }
-    
+      //Guardamos los SalesSalesmen
+      SalesSalesmen.SaveSalesSalesmen(_salesSalesmans,_sale,_amount,_amountOriginal);
     }
 
     /// <summary>
@@ -134,7 +115,7 @@ namespace IM.Host.Forms
       smSaleColumn.IsReadOnly = smSaleAmountOwnColumn.IsReadOnly = smSaleAmountWithColumn.IsReadOnly = true;
       _salesSalesmans = new List<SalesSalesman>();     
       _salesSalesmans = _oldList;
-      saleLogDataViewSource.Source = _salesSalesmans;
+      _saleLogDataViewSource.Source = _salesSalesmans;
 
     }
 

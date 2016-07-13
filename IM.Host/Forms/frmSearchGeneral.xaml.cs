@@ -353,7 +353,7 @@ namespace IM.Host.Forms
     /// <hsitory>
     /// [vipacheco] 06/Junio/2016 Created
     /// </hsitory>
-    private void btnMealTicket_Click(object sender, RoutedEventArgs e)
+    private async void btnMealTicket_Click(object sender, RoutedEventArgs e)
     {
       int GuestID = 0;
       if (ValidatePermissions(EnumPermission.MealTicket, ref GuestID))
@@ -362,7 +362,7 @@ namespace IM.Host.Forms
         _frmMealTicket.ShowInTaskbar = false;
         _frmMealTicket.Owner = this;
 
-        Guest guestHost = BRGuests.GetGuest(GuestID);
+        Guest guestHost = await BRGuests.GetGuest(GuestID);
 
         List<MealTicket> _valuePreview = BRMealTickets.GetMealTickets(guestHost.guID);
         SalesRoomCloseDates _closeSalesRoom = BRSalesRooms.GetSalesRoom(App.User.SalesRoom.srID);

@@ -11,74 +11,63 @@ using IM.Model.Enums;
 
 namespace IM.BusinessRules.BR
 {
+  /// <summary>
+  /// Clase para el manejo de la informacion de la Invitación
+  /// </summary>
+  /// <history>
+  /// [jorcanche ] created 01/mayo/2016
+  /// </history>  
   public class BRInvitation
   {
-    public static InvitationData RptInvitationData(int GuestID)
+    /// <summary>
+    /// Trae la informacion de una invitación
+    /// </summary>
+    /// <param name="guestId"> Id del Huesped</param>
+    /// <history>
+    /// [jorcanche ] created 01/mayo/2016
+    /// </history>    
+    public static async Task<InvitationData> RptInvitationData(int guestId)
     {
-      var InvitationData = new InvitationData();
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      var invitationData = new InvitationData();
+      return await Task.Run(() =>
       {
-        var resInvitation =  dbContext.USP_OR_RptInvitation(GuestID);
-        InvitationData.Invitation = resInvitation.FirstOrDefault();
- 
-        var resInviationGuest = resInvitation.GetNextResult<RptInvitation_Guest>();
-        InvitationData.InvitationGuest = resInviationGuest.ToList();
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          var resInvitation = dbContext.USP_OR_RptInvitation(guestId);
+          invitationData.Invitation = resInvitation.FirstOrDefault();
 
-        var resInvitationDeposit = resInviationGuest.GetNextResult<RptInvitation_Deposit>();
-        InvitationData.InvitationDeposit = resInvitationDeposit.ToList();
+          var resInviationGuest = resInvitation.GetNextResult<RptInvitation_Guest>();
+          invitationData.InvitationGuest = resInviationGuest.ToList();
 
-        var resInvitationGift = resInvitationDeposit.GetNextResult<RptInvitation_Gift>();
-        InvitationData.InvitationGift = resInvitationGift.ToList();
+          var resInvitationDeposit = resInviationGuest.GetNextResult<RptInvitation_Deposit>();
+          invitationData.InvitationDeposit = resInvitationDeposit.ToList();
 
-        return InvitationData;
-      }
-    }
+          var resInvitationGift = resInvitationDeposit.GetNextResult<RptInvitation_Gift>();
+          invitationData.InvitationGift = resInvitationGift.ToList();
 
-    public static List<object> RptInvitationObj(int GuestID, string ChangedBy)
-    {     
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-      {
-        var resInvitation = dbContext.USP_OR_RptInvitation(GuestID);
-        RptInvitation Invitation = resInvitation.FirstOrDefault();
-
-        var resInviationGuest = resInvitation.GetNextResult<RptInvitation_Guest>();
-        RptInvitation_Guest InvitationGuest = resInviationGuest.FirstOrDefault();
-
-        var resInvitationDeposit = resInviationGuest.GetNextResult<RptInvitation_Deposit>();
-        RptInvitation_Deposit InvitationDeposit = resInvitationDeposit.FirstOrDefault();
-
-        var resInvitationGift = resInvitationDeposit.GetNextResult<RptInvitation_Gift>();
-        RptInvitation_Gift InvitationGift = resInvitationGift.FirstOrDefault();
-       
-        List<object> lstObj = new List<object>();
-        lstObj.Add(Invitation);
-        lstObj.Add(InvitationGuest);
-        lstObj.Add(InvitationDeposit);
-        lstObj.Add(InvitationGift);
-
-        return lstObj;
-      }
-    }
-
-    public static InvitationText GetInvitationFooterHeader(string leadsource, string language)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-      {
-        var d = dbContext.InvitationsTexts.
-          Where(It => It.itls == leadsource && It.itla == language).SingleOrDefault();
-        return d;
-      }
+          return invitationData;
+        }
+      });
     }
 
 
-    public static int ModifiedInvitationfooterHeader(InvitationText invitationText)
+    /// <summary>
+    /// Trae la informacion genearal la  invitacion por LeadSource y por Lenguaje 
+    /// </summary>
+    /// <param name="leadsource">Lead Source</param>
+    /// <param name="language">Lenguage</param>
+    /// <history>
+    /// [jorcanche ] created 01/mayo/2016
+    /// </history> 
+    public static async Task<InvitationText> GetInvitationFooterHeader(string leadsource, string language)
     {
-      int nRes = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-      {       
-          dbContext.Entry(invitationText).State = System.Data.Entity.EntityState.Modified;
-          return nRes = dbContext.SaveChanges();             
-      }
+      return await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.InvitationsTexts.SingleOrDefault(it => it.itls == leadsource && it.itla == language);
+        }
+      });
     }
   }
 }

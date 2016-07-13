@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -10,12 +11,16 @@ using IM.BusinessRules.BR;
 using IM.Model;
 using System.Threading.Tasks;
 using IM.Model.Helpers;
+using IM.BusinessRules.BRIC;
 
 namespace IM.Host.Forms
 {
   /// <summary>
-  /// Interaction logic for frmSales.xaml
+  /// Formulario de Sales
   /// </summary>
+  /// <history>
+  /// [jorcanche]  created 05072016
+  /// </history>
   public partial class frmSales : Window
   {
     int _guId;
@@ -29,10 +34,12 @@ namespace IM.Host.Forms
     ////private string _membershipPreviousOriginal;
 
     // Clave original de la venta anterior
-    private int? _salePreviousOriginal;
+    /**************************************/
+    //private int? _salePreviousOriginal;
 
     //Clave del huesped original
-    private int? _GuestIDOriginal;
+    /**************************************/
+    //private int? _GuestIDOriginal;
 
     //Clave original de la venta anterior
     //private int _txtsaReference;
@@ -61,12 +68,12 @@ namespace IM.Host.Forms
     //Es una actualización de saled 
     private bool _isSaleUpdate;
 
-    int txtsaCloser1P;
-    int txtsaCloser2P;
-    int txtsaCloser3P;
-    int txtsaExit1P;
-    int txtsaExit2P;
+    // Variable que indica si se encontro el tipo de membresia global
+    private bool _validateMembershipTypeGlobal;
+
     private bool _searchPRbyTxt;
+
+    #region frmSales
 
     public frmSales(EnumSale typeSale, int guId = 0)
     {
@@ -76,7 +83,10 @@ namespace IM.Host.Forms
       _guId = guId = 7751984;
     }
 
+    #endregion
+
     #region btnSalesmen_Click
+
     /// <summary>
     /// Muestra el grid que contiene la info de los Salesmen
     /// </summary>
@@ -87,9 +97,11 @@ namespace IM.Host.Forms
     {
       Panel.SetZIndex(gGeneral, 0);
     }
+
     #endregion
 
     #region btnGeneral_Click
+
     /// <summary>
     /// Muestra el grid que contiene la info General
     /// </summary>       
@@ -97,53 +109,11 @@ namespace IM.Host.Forms
     {
       Panel.SetZIndex(gGeneral, 1);
     }
-    #endregion
 
-    #region ValidateGuest
-    private bool ValidateGuest(bool guBookCanc, bool guSale, bool guShow)
-    {
-      //Validamos que no sea un booking cancelado 
-      if (guBookCanc)
-      {
-        UIHelper.ShowMessage("Cancelled booking");
-        return false;
-      }
-      //validamos  los permisos del usuario
-      if (App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.None))
-      {
-        UIHelper.ShowMessage("Access denied.");
-        return false;
-      }
-      //Solo lectura
-      if (App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.ReadOnly))
-      {
-        //si no tiene un registro en el formulario que desea abrir
-        if (!guSale)
-        {
-          UIHelper.ShowMessage("You have read access.");
-          return false;
-        }
-        else
-        {
-          //int guid = 12345;
-        }
-      }
-      else
-      {
-        //int guid = 1234;
-      }
-
-      //Validamos que tenga show para darle cupones de comida o ventas
-      if (!guShow)
-      {
-        UIHelper.ShowMessage("This option should have a show marked.");
-        return false;
-      }
-      return true;
-    }
     #endregion
 
     #region Window_Loaded
+
     /// <summary>
     /// Carga e inicializa las variables del formulario
     /// </summary>
@@ -154,20 +124,106 @@ namespace IM.Host.Forms
     {
       LoadCombosPayment();
       //Cargamos los ComboBox
-      LoadComboBox();
+      LoadPr();
+      LoadLiner();
+      LoadCloser();
+      LoadExit();
       //Cargamos el DataGrid
       LoadGrid();
+      
       //obtenemos la fecha de cierre
-     CloseDate();
-      //Fecha inicial 
-      dtpCsaDFrom.Value = Convert.ToDateTime("2012/01/01");
-      //Cargamos la fecha del servidor
-      dtpCsaDTo.Value = _ServerDate = BRHelpers.GetServerDate();
+      CloseDate();
+     
       //si el sistema esta en modo de solo lectura, no permitimos modificar, ni eliminar ventas           
+    }
+
+    #endregion
+
+    #region LoadExit
+    /// <summary>
+    /// Carga los ComboBox de los exit
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 12/07/2016
+    /// </history> 
+    private async void LoadExit()
+    {
+      //Exit Closers
+      cbosaExit1.ItemsSource = cbosaExit2.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "EXIT");
+    }
+    #endregion
+
+    #region LoadCloser
+    /// <summary>
+    /// Carga el ComboBox de Closer
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created  12/07/2016
+    /// </history>
+    private async void LoadCloser()
+    {
+      //Closers
+      cbosaCloser1.ItemsSource =
+        cbosaCloser2.ItemsSource =
+          cbosaCloser3.ItemsSource =
+            await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "CLOSER");
+      //Capitan de Closers
+      cbosaCloserCaptain1.ItemsSource =
+        await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "CLOSERCAPT");
+    }
+    #endregion
+
+    #region LoadPR
+
+    /// <summary>
+    /// Carga los combos de los Vendedores, Capitanes, Los Global Sales, Los VLO y los Podium
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 28062016
+    /// </history>
+    private async void LoadPr()
+    {
+      //Tipo de membresia y Tipo de membresia Global
+      cbosamtGlobal.ItemsSource = cbosamt.ItemsSource = await BRMemberShipTypes.GetMemberShipTypes(1);
+      //Tipo de venta
+      cbosast.ItemsSource = await BRSaleTypes.GetSalesTypes(1);
+      //PR´s
+      cbosaPR1.ItemsSource =
+        cbosaPR2.ItemsSource =
+          cbosaPR3.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "PR");
+      //Capitanes de PRs
+      cbosaPRCaptain1.ItemsSource =
+        cbosaPRCaptain2.ItemsSource =
+          cbosaPRCaptain3.ItemsSource =
+            await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "PRCAPT");
+    }
+
+    #endregion
+
+    #region LoadLiner
+    /// <summary>
+    /// Carga los ComboBox de los Liner
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 12/07/2016
+    /// </history>
+    private async void LoadLiner()
+    {
+      //Liners
+      cbosaLiner1.ItemsSource =
+        cbosaLiner2.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "LINER");
+      //Capitan de Liners
+      cbosaLinerCaptain1.ItemsSource =
+        await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "LINERCAPT");
+      //Podium
+      cbosaPodium.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "PODIUM");
+      //VLO
+      cbosaVLO.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "VLO");
     }
     #endregion
 
     #region LoadGrid
+
     /// <summary>
     /// Carga el grid de ventas
     /// </summary>
@@ -180,13 +236,14 @@ namespace IM.Host.Forms
       if (_guId.Equals(0))
       {
         //establecemos los criterios de busqueda
-        grdSale.ItemsSource = await BRSales.GetSalesShort(string.IsNullOrEmpty(txtCsagu.Text) ? 0 : Convert.ToInt32(txtCsagu.Text),
-                                                    string.IsNullOrEmpty(txtCsaID.Text) ? 0 : Convert.ToInt32(txtCsaID.Text),
-                                                    string.IsNullOrEmpty(txtCsaMembershipNum.Text) ? "ALL" : txtCsaMembershipNum.Text,
-                                                    string.IsNullOrEmpty(txtCName.Text) ? "ALL" : txtCName.Text,
-                                                    string.IsNullOrEmpty(txtCsals.Text) ? "ALL" : txtCsals.Text,
-                                                    string.IsNullOrEmpty(txtCsasr.Text) ? "ALL" : txtCsasr.Text,
-                                                    dtpCsaDFrom.Value, dtpCsaDTo.Value);
+        grdSale.ItemsSource =
+          await BRSales.GetSalesShort(string.IsNullOrEmpty(txtCsagu.Text) ? 0 : Convert.ToInt32(txtCsagu.Text),
+            string.IsNullOrEmpty(txtCsaID.Text) ? 0 : Convert.ToInt32(txtCsaID.Text),
+            string.IsNullOrEmpty(txtCsaMembershipNum.Text) ? "ALL" : txtCsaMembershipNum.Text,
+            string.IsNullOrEmpty(txtCName.Text) ? "ALL" : txtCName.Text,
+            string.IsNullOrEmpty(txtCsals.Text) ? "ALL" : txtCsals.Text,
+            string.IsNullOrEmpty(txtCsasr.Text) ? "ALL" : txtCsasr.Text,
+            dtpCsaDFrom.Value, dtpCsaDTo.Value);
       }
       else
       {
@@ -197,48 +254,19 @@ namespace IM.Host.Forms
       //Cargamos el detalle de la venta
       //de la primera venta que aparece en el grid
       LoadRecord();
-    } 
-    #endregion
-
-    private void txtsaCancelID(bool cancel)
-    {
-      if (string.IsNullOrEmpty(txtsaCancelD.Text))
-      {
-        if (Convert.ToDateTime(txtsaCancelD.Text) > BRHelpers.GetServerDate())
-        {
-          UIHelper.ShowMessage("Cancellation date can not be greater than today.");
-          cancel = true;
-        }
-        else
-        {
-          if (Convert.ToDateTime(txtsaCancelD.Text) > Convert.ToDateTime(txtsaD.Text))
-          {
-            UIHelper.ShowMessage("Cancellation date can not be before sale date.");
-            cancel = true;
-          }
-          else
-          {
-            if (!chksaCancel.IsChecked.Value)
-            {
-              chksaCancel.IsChecked = true;
-            }
-          }
-        }
-        if (!chksaCancel.IsChecked.Value)
-        {
-          chksaCancel.IsChecked = true;
-        }
-      }
     }
 
+    #endregion
+
     #region LoadRecord
+
     /// <summary>
     /// Carga la informacion segun el datagrid del sale
     /// </summary>
     /// <history>
     /// [jorcanche]  created 28062016
     /// </history>
-    private async void LoadRecord()
+    private async Task LoadRecord()
     {
       //Si hay alguna venta
       if (grdSale.Items.Count > 0)
@@ -248,10 +276,10 @@ namespace IM.Host.Forms
         _sale = new Sale();
 
         //Cargamos el OldSale Que sera la info Original q esta en la base   
-        var sale = grdSale.SelectedItem != null ? (grdSale.SelectedItem as SaleShort).saID : (grdSale.Items[0] as SaleShort).saID;
+        var sale = grdSale.SelectedItem != null ? (grdSale.SelectedItem as SaleShort)?.saID : (grdSale.Items[0] as SaleShort)?.saID;
         _oldSale = await BRSales.GetSalesbyId(sale);
 
-        //Y Cargamos el Sale que aditará y sera el que se guardara en la base        
+        //Y Cargamos el Sale que aditará y sera el que se guardara en la base                        
         ObjectHelper.CopyProperties(_sale, _oldSale);
 
         //Asignamos el datacontext para cargar los controles        
@@ -259,9 +287,9 @@ namespace IM.Host.Forms
         DataContext = _sale;
         _loading = false;
 
-       //Se respalda el reference
-        _salePreviousOriginal = _sale.saReference; 
-               
+        //Se respalda el reference
+        //_salePreviousOriginal = _sale.saReference; 
+
         //Indicamos si es una venta Out of Pendsing
         SetOutOfPending();
 
@@ -270,10 +298,10 @@ namespace IM.Host.Forms
         dgpayment.DataContext = _payments;
 
         //Nombre del huesped
-        lblGuestName.Text = GetGuestName(_sale.sagu);
+        GetGuestName(_sale.sagu);
 
-        //Respaldamos el Guest ID Original
-        _GuestIDOriginal = _sale.sagu;
+        //Respaldamos el Guest ID Original        
+        //_GuestIDOriginal = _sale.sagu;
 
         //Respaldamos el monto de la venta original
         _SaleAmount = _SaleAmountOriginal = GetSaleAmount();
@@ -284,10 +312,26 @@ namespace IM.Host.Forms
         //si la venta es de una fecha cerrada, no permitomos eliminar ventas
         if (IsClosed()) btnDelete.IsEnabled = false;
       }
-    } 
+    }
+
+    #endregion
+
+    #region LoadSale
+    /// <summary>
+    /// Carga la variable de Sale
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 12/07/2016
+    /// </history>
+    private async void LoadSale()
+    {
+      var sale = grdSale.SelectedItem != null ? (grdSale.SelectedItem as SaleShort)?.saID : (grdSale.Items[0] as SaleShort)?.saID;
+      _oldSale = await BRSales.GetSalesbyId(sale);
+    }
     #endregion
 
     #region LoadComboPayment
+
     /// <summary>
     /// Carga las combos del Datagrid de los    
     /// </summary>
@@ -298,35 +342,39 @@ namespace IM.Host.Forms
     {
       paptColumn.ItemsSource = await BRPaymentTypes.GetPaymentTypes(1);
       paccColumn.ItemsSource = await BRCreditCardTypes.GetCreditCardTypes(nStatus: 1);
-    } 
+    }
+
     #endregion
 
     #region GetGuestName
+
     /// <summary>
     /// Obtiene el nombre completo del Guest del Sale
     /// </summary>
-    /// <param name="guestID">Id del Guest</param>
+    /// <param name="guestId">Id del Guest</param>
     ///<history>
     ///[jorcanche] created 24/06/2016
     ///</history> 
-    private string GetGuestName(int? guestID)
+    private async void GetGuestName(int? guestId)
     {
-      if (guestID == null)
+      if (guestId == null) return;
+      var guest = await BRGuests.GetGuest((int) guestId);
+      if (guest != null)
       {
-        UIHelper.ShowMessage("Guest ID not found");
-        return string.Empty;
+        lblGuestName.Text = $"{guest.guLastName1} {guest.guFirstName1}";
       }
-      Guest guest = BRGuests.GetGuestById(Convert.ToInt32(guestID));
-      if (guest == null)
+      else
       {
+        _sale.sagu = null;
+        lblGuestName.Text = string.Empty;
         UIHelper.ShowMessage("Guest not found");
-        return string.Empty;
       }
-      return $"{guest.guLastName1} {guest.guFirstName1}";
-    } 
+    }
+
     #endregion
 
     #region GetSalemen
+
     /// <summary>
     /// Obtiene los vendedores
     /// </summary>
@@ -335,29 +383,30 @@ namespace IM.Host.Forms
     ///</history> 
     private void GetSalemen()
     {
-      List<SalesSalesman> salemen = new List<SalesSalesman>();
+      var salemen = new List<SalesSalesman>();
 
-      if (!string.IsNullOrEmpty(txtsaLiner1.Text) && salemen.Find(delegate (SalesSalesman sm) { return sm.smpe == txtsaLiner1.Text; }) == null)
-        salemen.Add(new SalesSalesman { smpe = txtsaLiner1.Text });
-      if (!string.IsNullOrEmpty(txtsaLiner2.Text) && salemen.Find(delegate (SalesSalesman sm) { return sm.smpe == txtsaLiner2.Text; }) == null)
-        salemen.Add(new SalesSalesman { smpe = txtsaLiner2.Text });
-      if (!string.IsNullOrEmpty(txtsaCloser1.Text) && salemen.Find(delegate (SalesSalesman sm) { return sm.smpe == txtsaCloser1.Text; }) == null)
-        salemen.Add(new SalesSalesman { smpe = txtsaCloser1.Text });
-      if (!string.IsNullOrEmpty(txtsaCloser2.Text) && salemen.Find(delegate (SalesSalesman sm) { return sm.smpe == txtsaCloser2.Text; }) == null)
-        salemen.Add(new SalesSalesman { smpe = txtsaCloser2.Text });
-      if (!string.IsNullOrEmpty(txtsaCloser3.Text) && salemen.Find(delegate (SalesSalesman sm) { return sm.smpe == txtsaCloser3.Text; }) == null)
-        salemen.Add(new SalesSalesman { smpe = txtsaCloser3.Text });
-      if (!string.IsNullOrEmpty(txtsaExit1.Text) && salemen.Find(delegate (SalesSalesman sm) { return sm.smpe == txtsaExit1.Text; }) == null)
-        salemen.Add(new SalesSalesman { smpe = txtsaExit1.Text });
-      if (!string.IsNullOrEmpty(txtsaExit2.Text) && salemen.Find(delegate (SalesSalesman sm) { return sm.smpe == txtsaExit2.Text; }) == null)
-        salemen.Add(new SalesSalesman { smpe = txtsaExit2.Text });
+      if (!string.IsNullOrEmpty(txtsaLiner1.Text) && salemen.Find(sm => sm.smpe == txtsaLiner1.Text) == null)
+        salemen.Add(new SalesSalesman {smpe = txtsaLiner1.Text});
+      if (!string.IsNullOrEmpty(txtsaLiner2.Text) && salemen.Find(sm => sm.smpe == txtsaLiner2.Text) == null)
+        salemen.Add(new SalesSalesman {smpe = txtsaLiner2.Text});
+      if (!string.IsNullOrEmpty(txtsaCloser1.Text) && salemen.Find(sm => sm.smpe == txtsaCloser1.Text) == null)
+        salemen.Add(new SalesSalesman {smpe = txtsaCloser1.Text});
+      if (!string.IsNullOrEmpty(txtsaCloser2.Text) && salemen.Find(sm => sm.smpe == txtsaCloser2.Text) == null)
+        salemen.Add(new SalesSalesman {smpe = txtsaCloser2.Text});
+      if (!string.IsNullOrEmpty(txtsaCloser3.Text) && salemen.Find(sm => sm.smpe == txtsaCloser3.Text) == null)
+        salemen.Add(new SalesSalesman {smpe = txtsaCloser3.Text});
+      if (!string.IsNullOrEmpty(txtsaExit1.Text) && salemen.Find(sm => sm.smpe == txtsaExit1.Text) == null)
+        salemen.Add(new SalesSalesman {smpe = txtsaExit1.Text});
+      if (!string.IsNullOrEmpty(txtsaExit2.Text) && salemen.Find(sm => sm.smpe == txtsaExit2.Text) == null)
+        salemen.Add(new SalesSalesman {smpe = txtsaExit2.Text});
       //Agregamos los datos del los SaleMen
 
       _saleMen = new List<SalesSalesman>();
 
       foreach (var item in salemen)
       {
-        var salesSalesMens = BRSalesSalesmen.GetSalesSalesmens(new SalesSalesman { smpe = item.smpe, smsa = Convert.ToInt32(txtsaID.Text) });
+        var salesSalesMens =
+          BRSalesSalesmen.GetSalesSalesmens(new SalesSalesman {smpe = item.smpe, smsa = Convert.ToInt32(txtsaID.Text)});
         if (salesSalesMens != null)
         {
           salesSalesMens.Personnel = BRPersonnel.GetPersonnelById(salesSalesMens.smpe);
@@ -378,6 +427,7 @@ namespace IM.Host.Forms
     #endregion
 
     #region GetSaleAmount
+
     /// <summary>
     /// devuelve el monto de la venta que se debe considerar
     /// </summary>
@@ -388,12 +438,14 @@ namespace IM.Host.Forms
     {
       //si la venta no es un Dwngrade       
       GetSaleTypeCategory();
-      return _saleTypeCategory != "DG" ? _sale.saGrossAmount //decimal.Parse( txtsaGrossAmount.Text, NumberStyles.Currency, CultureInfo.GetCultureInfo("en-US"))
-                                           : _sale.saNewAmount == null ? 0 : _sale.saNewAmount.Value; //ecimal.Parse(txtsaNewAmount.Text, NumberStyles.Currency, CultureInfo.GetCultureInfo("en-US"));
+      return _saleTypeCategory != "DG"
+        ? _sale.saGrossAmount : _sale.saNewAmount ?? 0;
     }
+
     #endregion
 
     #region GetSaleTypeCategory
+
     /// <summary>
     /// Obtiene la categoria de un tipo de venta
     /// </summary>
@@ -402,11 +454,13 @@ namespace IM.Host.Forms
     /// </history>
     private async void GetSaleTypeCategory()
     {
-      _saleTypeCategory = await BRSaleTypes.GetStstcOfSaleTypeById(_sale.sast);      
-    } 
+      _saleTypeCategory = await BRSaleTypes.GetStstcOfSaleTypeById(_sale.sast);
+    }
+
     #endregion
 
     #region SetOutOfPending
+
     /// <summary>
     /// Indica si es un venta que salio de pendiente
     /// </summary>
@@ -416,11 +470,15 @@ namespace IM.Host.Forms
     private void SetOutOfPending()
     {
       //Una  venta es Out Of Pendin si es procesable con fecha de venta distinta de la fecha de procesable
-      lblOutOfPending.Visibility = (chksaProc.IsChecked == true) && (txtsaD.Text != txtsaProcD.Text) ? Visibility.Visible : Visibility.Hidden;
+      lblOutOfPending.Visibility = (chksaProc.IsChecked == true) && (txtsaD.Text != txtsaProcD.Text)
+        ? Visibility.Visible
+        : Visibility.Hidden;
     }
+
     #endregion
 
     #region SetMode
+
     /// <summary>
     /// Habilita / deshabilita los controles del formulario segun el modo de datos
     /// </summary>
@@ -436,9 +494,11 @@ namespace IM.Host.Forms
       //criterios de busqueda
       //brincamos este paso ya que segun el modo si es Global o Sale se ocultara los criterios de busqueda asi que no ha necesidad de inabilitarlos
       //Botones
-      btnEdit.IsEnabled = (!blnEnable && App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.Standard) && grdSale.Items.Count > 0);
+      btnEdit.IsEnabled = (!blnEnable && App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.Standard) &&
+                           grdSale.Items.Count > 0);
       //Solo permite eliminar ventanas si tiene permiso super especial de ventas
-      btnDelete.IsEnabled = (!blnEnable && App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.SuperSpecial) && grdSale.Items.Count > 0);
+      btnDelete.IsEnabled = (!blnEnable && App.User.HasPermission(EnumPermission.Sales, EnumPermisionLevel.SuperSpecial) &&
+                             grdSale.Items.Count > 0);
       btnSave.IsEnabled = btnUndo.IsEnabled = blnEnable;
       btnClose.IsEnabled = !blnEnable;
       //Autenticacion automatica
@@ -466,7 +526,7 @@ namespace IM.Host.Forms
       //habilitamos los campos que no se obtienen de Clubes
       if (blnEnable)
       {
-       // gGeneral.IsEnabled = true;
+        // gGeneral.IsEnabled = true;
         //Numero de memebresia
         txtsaMembershipNum.IsEnabled = true;
         //Guest ID
@@ -500,9 +560,11 @@ namespace IM.Host.Forms
         txtsaComments.IsEnabled = false;
       }
     }
+
     #endregion
 
     #region difdate
+
     /// <summary>
     /// Diferencia entre dos fechas 
     /// </summary>
@@ -522,9 +584,11 @@ namespace IM.Host.Forms
       }
       return false;
     }
+
     #endregion
 
     #region EnabledGeneral
+
     /// <summary>
     /// Habilita o deshabilita segun el modo de edicion 
     /// </summary>
@@ -535,16 +599,21 @@ namespace IM.Host.Forms
     private void EnabledGeneral(bool enabled)
     {
       txtsaID.IsEnabled = fraProcessable.IsEnabled = txtsaMembershipNum.IsEnabled =
-      txtsaD.IsEnabled = txtsaCancelD.IsEnabled = chksaCancel.IsEnabled = chksaByPhone.IsEnabled = txtsagu.IsEnabled =
-      lblGuestName.IsEnabled = txtsals.IsEnabled = txtsalo.IsEnabled = txtsasr.IsEnabled =
-      chksaUpdated.IsEnabled = cbosast.IsEnabled = txtsaRefMember.IsEnabled = txtsaProcRD.IsEnabled =
-      cbosamt.IsEnabled = cbosamtGlobal.IsEnabled = txtsaLastName1.IsEnabled = txtsaLastName2.IsEnabled =
-      txtsaFirstName1.IsEnabled = txtsaFirstName2.IsEnabled = grbAmounts.IsEnabled = txtsaClosingCost.IsEnabled =
-      txtsaOverPack.IsEnabled = grbPayments.IsEnabled = grbAmounts_Copy.IsEnabled = chksaByPhone.IsEnabled = txtsaComments.IsEnabled = enabled;
+        txtsaD.IsEnabled = txtsaCancelD.IsEnabled = chksaCancel.IsEnabled = chksaByPhone.IsEnabled = txtsagu.IsEnabled =
+          lblGuestName.IsEnabled = txtsals.IsEnabled = txtsalo.IsEnabled = txtsasr.IsEnabled =
+            chksaUpdated.IsEnabled = cbosast.IsEnabled = txtsaRefMember.IsEnabled = txtsaProcRD.IsEnabled =
+              cbosamt.IsEnabled = cbosamtGlobal.IsEnabled = txtsaLastName1.IsEnabled = txtsaLastName2.IsEnabled =
+                txtsaFirstName1.IsEnabled =
+                  txtsaFirstName2.IsEnabled = grbAmounts.IsEnabled = txtsaClosingCost.IsEnabled =
+                    txtsaOverPack.IsEnabled =
+                      grbPayments.IsEnabled =
+                        grbAmounts_Copy.IsEnabled = chksaByPhone.IsEnabled = txtsaComments.IsEnabled = enabled;
     }
+
     #endregion
 
     #region IsClosed
+
     /// <summary>
     /// Determina si una venta esta en una fecha cerrada
     /// </summary>
@@ -553,46 +622,16 @@ namespace IM.Host.Forms
     /// </history>
     private bool IsClosed()
     {
-      bool retornar = (difdate(txtsaD.Text, _CloseD.Date) || difdate(txtsaProcD.Text, _CloseD.Date) || difdate(txtsaCancelD.Text, _CloseD.Date));
+      bool retornar = (difdate(txtsaD.Text, _CloseD.Date) || difdate(txtsaProcD.Text, _CloseD.Date) ||
+                       difdate(txtsaCancelD.Text, _CloseD.Date));
       return retornar;
     }
+
     #endregion
 
-    #region LoadComboBox
-    /// <summary>
-    /// Carga los combos de los Vendedores, Capitanes, Los Global Sales, Los VLO y los Podium
-    /// </summary>
-    /// <history>
-    /// [jorcanche]  created 28062016
-    /// </history>
-    private async void LoadComboBox()
-    {
-      //Tipo de membresia y Tipo de membresia Global
-      cbosamtGlobal.ItemsSource = cbosamt.ItemsSource = await BRMemberShipTypes.GetMemberShipTypes(1);
-      //Tipo de venta
-      cbosast.ItemsSource =await BRSaleTypes.GetSalesTypes(1);
-      //PR´s
-      cbosaPR1.ItemsSource = cbosaPR2.ItemsSource = cbosaPR3.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "PR");
-      //Capitanes de PRs
-      cbosaPRCaptain1.ItemsSource = cbosaPRCaptain2.ItemsSource = cbosaPRCaptain3.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "PRCAPT");
-      //Liners
-      cbosaLiner1.ItemsSource = cbosaLiner2.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "LINER");
-      //Capitan de Liners
-      cbosaLinerCaptain1.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "LINERCAPT");
-      //Closers
-      cbosaCloser1.ItemsSource = cbosaCloser2.ItemsSource = cbosaCloser3.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "CLOSER");
-      //Exit Closers
-      cbosaExit1.ItemsSource = cbosaExit2.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "EXIT");
-      //Capitan de Closers
-      cbosaCloserCaptain1.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "CLOSERCAPT");
-      //Podium
-      cbosaPodium.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "PODIUM");
-      //VLO
-      cbosaVLO.ItemsSource = await BRPersonnel.GetPersonnel(salesRooms: App.User.SalesRoom.srID, roles: "VLO");
-    }
-    #endregion
 
     #region btnSearch_Click
+
     /// <summary>
     /// Buscar los Sales segun los criterios de busqueda 
     /// </summary>
@@ -603,9 +642,11 @@ namespace IM.Host.Forms
     {
       LoadGrid();
     }
+
     #endregion
 
     #region ValidateSalesSalesmen
+
     /// <summary>
     /// Valida los datos necesarios para definir las ventas de los vendedores
     /// </summary>
@@ -617,9 +658,11 @@ namespace IM.Host.Forms
       //Validamos el tipo de venta       //Validamos el nuevo monto
       return !ValidateSaleType() ? false : !ValidateNewAmount() ? false : true;
     }
+
     #endregion
 
     #region ValidateNewAmount
+
     /// <summary>
     /// Valida el nuevo monto
     /// </summary>
@@ -635,6 +678,7 @@ namespace IM.Host.Forms
       }
       return true;
     }
+
     #endregion
 
     #region ValidateSaleType
@@ -655,9 +699,11 @@ namespace IM.Host.Forms
       }
       return true;
     }
+
     #endregion
 
     #region btnSalesSalesmen_Click
+
     /// <summary>
     /// Invoca el formulario de frmSalesSalesmen
     /// </summary>
@@ -677,16 +723,19 @@ namespace IM.Host.Forms
         //Obtenermos los vendedores
         GetSalemen();
         var saleAmount = GetSaleAmount();
-        frmSalesSalesmen salessalesmen = new frmSalesSalesmen(_saleMen, _sale.saID, (saleAmount < 0) ? -saleAmount : saleAmount, _SaleAmountOriginal);
-        salessalesmen.Owner = this;
+        var salessalesmen = new frmSalesSalesmen
+          (_saleMen, _sale.saID,saleAmount < 0 ? -saleAmount : saleAmount, _SaleAmountOriginal)
+        { Owner = this};
         salessalesmen.ShowDialog();
         //}
         //}
       }
     }
+
     #endregion
 
     #region grdSale_MouseLeftButtonDown
+
     /// <summary>
     /// Cuando se selecciona un row en el grid 
     /// </summary>
@@ -699,18 +748,12 @@ namespace IM.Host.Forms
       {
         LoadRecord();
       }
-    } 
-    #endregion
-
-    private void grdSale_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-    {
-      //if (btnClose.IsEnabled)
-      //{
-      //  LoadRecord();
-      //}
     }
 
+    #endregion
+
     #region cbo_SelectionChanged
+
     /// <summary>
     /// Valida cuando se cambia de Item los Combox de los vendedores y de los capitanes 
     /// </summary>
@@ -720,7 +763,7 @@ namespace IM.Host.Forms
     private void cbo_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       var cbo = sender as ComboBox;
-      var txt = (TextBox)FindName(cbo.Name.Replace("cbo", "txt"));
+      var txt = (TextBox) FindName(cbo.Name.Replace("cbo", "txt"));
       if (txt == null) return;
       if (cbo.SelectedIndex != -1 || txt.Text == string.Empty)
       {
@@ -732,10 +775,12 @@ namespace IM.Host.Forms
           }
         }
       }
-    } 
+    }
+
     #endregion
 
     #region txt_LostFocus
+
     /// <summary>
     /// Valida cuando se pierde el focus de los vendedores y de los capitanes 
     /// </summary>
@@ -744,15 +789,15 @@ namespace IM.Host.Forms
     /// </history>
     private void txt_LostFocus(object sender, RoutedEventArgs e)
     {
-      var txt = (TextBox)sender;
-      var cbo = (ComboBox)FindName(txt.Name.Replace("txt", "cbo"));
+      var txt = (TextBox) sender;
+      var cbo = (ComboBox) FindName(txt.Name.Replace("txt", "cbo"));
       _searchPRbyTxt = true;
       if (!string.IsNullOrEmpty(txt.Text))
       {
         // validamos que el motivo de indisponibilidad exista en los activos
-        var name = txt.Name.Trim(new char[] { '1', '2', '3' }).Substring(5).Replace("Captain", "CAPT");
-        Personnel PR = BRPersonnel.GetPersonnelById(txt.Text, name);
-        if (PR == null)
+        var name = txt.Name.Trim('1', '2', '3').Substring(5).Replace("Captain", "CAPT").ToUpper();
+        var pr = BRPersonnel.GetPersonnelById(txt.Text, name);
+        if (pr == null)
         {
           UIHelper.ShowMessage($"The {name.Replace("CAPT", " Captain")} not exist");
           txt.Text = string.Empty;
@@ -760,8 +805,8 @@ namespace IM.Host.Forms
         }
         else
         {
-          cbo.SelectedValue = PR.peID;
-          txt.Text = PR.peID;
+          cbo.SelectedValue = pr.peID;
+          txt.Text = pr.peID;
         }
       }
       else
@@ -769,10 +814,199 @@ namespace IM.Host.Forms
         cbo.SelectedIndex = -1;
       }
       _searchPRbyTxt = false;
-    } 
+    }
+
+    #endregion
+
+
+
+
+    /// <summary>
+    /// Obtiene la fecha de cierre
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 01072016
+    /// </history>
+    public async void CloseDate()
+    {
+      _CloseD = await BRSales.GetSalesCloseD(App.User.SalesRoom.srID);
+    }
+
+    #region ValidatePagos
+
+    /// <summary>
+    /// validamos los pagos
+    /// </summary>
+    ///<history>
+    ///[jorcanche]  created 24062016
+    ///</history>
+    private bool ValidatePagos()
+    {
+      bool foundbad = false;
+      if (_payments.Count == 0) return true;
+      foreach (var item in _payments)
+      {
+        if (item.papt == "CC" && item.pacc == null)
+        {
+          foundbad = true;
+        }
+      }
+      if (foundbad)
+      {
+        UIHelper.ShowMessage("Please specify the Credit Card Type");
+        return false;
+      }
+      return true;
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Valida el Grid:
+    /// 1.- Que tenga al menos unregistro
+    /// 2.- Que no tenga registros repetidos
+    /// </summary>
+    /// <returns></returns>
+    private bool ValidateGrid()
+    {
+      return true;
+    }
+
+    /// <summary>
+    /// Indica si un tipo de venta es una actualizacion de otra venta
+    /// </summary>
+    ///<history>
+    ///[jorcanche] 24062016
+    ///</history>
+    private async void IsSaleUpdate()
+    {
+      if (cbosast.SelectedValue != null)
+        _isSaleUpdate = await BRSaleTypes.GetstUpdateOfSaleTypeById(cbosast.SelectedValue.ToString(), 1);
+    }
+
+    #region ValidateCancelDate
+
+    /// <summary>
+    /// Valida la fecha de cancelacion
+    /// </summary>
+    ///<history>
+    ///[jorcanche] 24062016
+    ///</history>
+    private bool ValidateCancelDate()
+    {
+      //sim esta cancelada 
+      if (chksaCancel.IsChecked == null || !chksaCancel.IsChecked.Value) return true;
+      //Validamos que la fecha de procesable no este en un fecha cerrada
+      if (!ValidateCloseDate(txtsaCancelD, "Cancellation date")) return false;
+      if (Convert.ToDateTime(txtsaCancelD.Text) < Convert.ToDateTime(txtsaD.Text))
+      {
+        UIHelper.ShowMessage("Cancellation date can not be before sale date.");
+        txtsaCancelD.Focus();
+        return false;
+      }
+      //validamos que la fecha de cancelacio no sea menor a la fecha procesable
+      if (chksaProc.IsChecked == null || !chksaProc.IsChecked.Value) return true;
+      if (Convert.ToDateTime(txtsaCancelD.Text) >= Convert.ToDateTime(txtsaProcD.Text)) return true;
+      UIHelper.ShowMessage("Processable date can no be after Cancellation date.");
+      txtsaProcD.Focus();
+      return false;
+    }
+
+    #endregion
+
+    #region ValidateMembershipTypeGlobal
+
+    /// <summary>
+    /// Valida el tipo de membresia global
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 04072016
+    /// </history>
+    private async void ValidateMembershipTypeGlobal()
+    {
+      //Validamos que ingrese el tipo de membresia global
+      if (cbosamtGlobal.SelectedIndex == -1)
+      {
+        UIHelper.ShowMessage("Specify the Membership Type Globale");
+        cbosamtGlobal.Focus();
+        _validateMembershipTypeGlobal = false;
+      }
+      IsSaleUpdate();
+      if (_isSaleUpdate)
+      {
+        //Tipo de membresia de la emembresia anterior        
+        var membershipTypePrevious = await BRSales.GetMembershipType(txtsaRefMember.Text);
+
+        //si encontramos la membresia anterior 
+        if (!string.IsNullOrEmpty(membershipTypePrevious))
+        {
+          //obtenermos el nivel de la memebresia antrior                
+          var membershipPreviousLevel = await BRMemberShipTypes.GetLevelOfMemberShipTypes(membershipTypePrevious, 1);
+
+          //obtenermos el nivel de la membresia       
+          var membershipLevel =
+            await BRMemberShipTypes.GetLevelOfMemberShipTypes(cbosamtGlobal.SelectedValue.ToString(), 1);
+
+          GetSaleTypeCategory();
+          switch (_saleTypeCategory)
+          {
+            case "UG": //Upgrade
+              //Validamos el tipo de membresia no sea menor que el tipo de membresia anterior 
+              if (membershipLevel < membershipPreviousLevel)
+              {
+                UIHelper.ShowMessage(
+                  "In a Upgrade, the Membership Type Global can't be less than the Membership Type Previous");
+                _validateMembershipTypeGlobal = false;
+              }
+              break;
+            case "DG": //Downgrade
+              //Validamos el tipo de membresia no sea mayo que el tipo de membresia anterior}
+              if (membershipLevel > membershipPreviousLevel)
+              {
+                UIHelper.ShowMessage(
+                  "In a Downgrade, the Membership Type Global can't be greater than the Membership Type Previous");
+                _validateMembershipTypeGlobal = false;
+              }
+              break;
+          }
+        } //Si no encontramos la membresia anterior 
+        else
+        {
+          UIHelper.ShowMessage("Membership Number Previous not found");
+          txtsaRefMember.Focus();
+          _validateMembershipTypeGlobal = false;
+        }
+      }
+      _validateMembershipTypeGlobal = true;
+    }
+
+    #endregion
+
+    #region ValidateProcessableDate
+
+    /// <summary>
+    /// Valida la fecha procesable
+    /// </summary>
+    ///<history>
+    ///[jorcanche] 24062016
+    ///</history>
+    private bool ValidateProcessableDate()
+    {
+      //si es procesable
+      if (chksaProc.IsChecked == null || !chksaProc.IsChecked.Value) return true;
+      //Validamos que la fecha de prosesable no este en una fecha cerrada 
+      if (!ValidateCloseDate(txtsaProcD)) return false;
+      //Validamos que la fecha de procesable no sea menor a la fecha de venta
+      if (Convert.ToDateTime(txtsaProcD.Text).Date >= Convert.ToDateTime(txtsaD.Text).Date) return true;
+      UIHelper.ShowMessage("Procesable date can not be before sale date");
+      txtsaD.Focus();
+      return false;
+    }
+
     #endregion
 
     #region Validate
+
     /// <summary>
     /// Validate General
     /// </summary>
@@ -803,10 +1037,14 @@ namespace IM.Host.Forms
         return false;
       }
       return true;
-    } 
+    }
+
     #endregion
 
     #region ValidateExist
+
+    private ValidationData _validateExist;
+
     /// <summary>
     /// Valida que los datos de la ventana existan
     /// </summary>   
@@ -815,98 +1053,107 @@ namespace IM.Host.Forms
     /// </history>
     private bool ValidateExist()
     {
-      int saID = !string.IsNullOrEmpty(txtsaID.Text) ? Convert.ToInt32(txtsaID.Text) : 0;
-      List<ValidationData> result =   BRSales.ValidateSale(txtChangedBy.Text, EncryptHelper.Encrypt(txtPwd.Password), saID, txtsaMembershipNum.Text, Convert.ToInt32(txtsagu.Text), cbosast.SelectedValue.ToString(),
-                            txtsasr.Text, txtsalo.Text, txtsaPR1.Text, txtsaPR2.Text, txtsaPR3.Text, txtsaPRCaptain1.Text, txtsaPRCaptain2.Text,
-                            txtsaPRCaptain2.Text, txtsaLiner1.Text, txtsaLiner2.Text, txtsaLinerCaptain1.Text, txtsaCloser1.Text, txtsaCloser2.Text,
-                            txtsaCloser3.Text, txtsaCloserCaptain1.Text, txtsaExit1.Text, txtsaExit2.Text, txtsaPodium.Text, txtsaVLO.Text);
+      var saId = !string.IsNullOrEmpty(txtsaID.Text) ? Convert.ToInt32(txtsaID.Text) : 0;
+      ValidateExist(saId);
 
-      if (!string.IsNullOrEmpty(result.FirstOrDefault().Focus))
+      if (_validateExist == null) return true;
+      //Desplegamos el mensaje de error
+      UIHelper.ShowMessage(_validateExist.Message);
+      //Establecemos el foco en el control que tiene el error      
+
+      #region switch ValidationData
+
+      switch (_validateExist.Focus)
       {
-        //Desplegamos el mensaje de error
-        UIHelper.ShowMessage(result.FirstOrDefault().Message);
-        //Establecemos el foco en el control que tiene el error      
-        #region switch
-        switch (result.FirstOrDefault().Focus)
-        {
-          case "ChangedBy":
-            txtChangedBy.Focus();
-            break;
-          case "Password":
-            txtPwd.Focus();
-            break;
-          case "MembershipNumber":
-            txtsaMembershipNum.Focus();
-            break;
-          case "Guest":
-            txtsagu.Focus();
-            break;
-          case "SalesRoom":
-            txtsasr.Focus();
-            break;
-          case "Location":
-            txtsalo.Focus();
-            break;
-          case "PR1":
-            txtsaPR1.Focus();
-            break;
-          case "PR2":
-            txtsaPR2.Focus();
-            break;
-          case "PR3":
-            txtsaPR3.Focus();
-            break;
-          case "PRCaptain1":
-            txtsaPRCaptain1.Focus();
-            break;
-          case "PRCaptain2":
-            txtsaPRCaptain2.Focus();
-            break;
-          case "PRCaptain3":
-            txtsaPRCaptain3.Focus();
-            break;
-          case "Liner1":
-            txtsaLiner1.Focus();
-            break;
-          case "Liner2":
-            txtsaLiner2.Focus();
-            break;
-          case "LinerCaptain":
-            txtsaLinerCaptain1.Focus();
-            break;
-          case "Closer1":
-            txtsaCloser1.Focus();
-            break;
-          case "Closer2":
-            txtsaCloser2.Focus();
-            break;
-          case "Closer3":
-            txtsaCloser3.Focus();
-            break;
-          case "CloserCaptain":
-            txtsaCloserCaptain1.Focus();
-            break;
-          case "Exit1":
-            txtsaExit1.Focus();
-            break;
-          case "Exit2":
-            txtsaExit2.Focus();
-            break;
-          case "Podium":
-            txtsaPodium.Focus();
-            break;
-          case "VLO":
-            txtsaVLO.Focus();
-            break;
-        }
-        return false;
+        case "ChangedBy":
+          txtChangedBy.Focus();
+          break;
+        case "Password":
+          txtPwd.Focus();
+          break;
+        case "MembershipNumber":
+          txtsaMembershipNum.Focus();
+          break;
+        case "Guest":
+          txtsagu.Focus();
+          break;
+        case "SalesRoom":
+          txtsasr.Focus();
+          break;
+        case "Location":
+          txtsalo.Focus();
+          break;
+        case "PR1":
+          txtsaPR1.Focus();
+          break;
+        case "PR2":
+          txtsaPR2.Focus();
+          break;
+        case "PR3":
+          txtsaPR3.Focus();
+          break;
+        case "PRCaptain1":
+          txtsaPRCaptain1.Focus();
+          break;
+        case "PRCaptain2":
+          txtsaPRCaptain2.Focus();
+          break;
+        case "PRCaptain3":
+          txtsaPRCaptain3.Focus();
+          break;
+        case "Liner1":
+          txtsaLiner1.Focus();
+          break;
+        case "Liner2":
+          txtsaLiner2.Focus();
+          break;
+        case "LinerCaptain":
+          txtsaLinerCaptain1.Focus();
+          break;
+        case "Closer1":
+          txtsaCloser1.Focus();
+          break;
+        case "Closer2":
+          txtsaCloser2.Focus();
+          break;
+        case "Closer3":
+          txtsaCloser3.Focus();
+          break;
+        case "CloserCaptain":
+          txtsaCloserCaptain1.Focus();
+          break;
+        case "Exit1":
+          txtsaExit1.Focus();
+          break;
+        case "Exit2":
+          txtsaExit2.Focus();
+          break;
+        case "Podium":
+          txtsaPodium.Focus();
+          break;
+        case "VLO":
+          txtsaVLO.Focus();
+          break;
       }
-      return true; 
+      return false;
       #endregion
-    } 
+    }
+
     #endregion
 
+    public async void ValidateExist(int saId)
+    {
+      _validateExist = await BRSales.ValidateSale(txtChangedBy.Text, EncryptHelper.Encrypt(txtPwd.Password), saId,
+        txtsaMembershipNum.Text, Convert.ToInt32(txtsagu.Text), cbosast.SelectedValue.ToString(),
+        txtsasr.Text, txtsalo.Text, txtsaPR1.Text, txtsaPR2.Text, txtsaPR3.Text, txtsaPRCaptain1.Text,
+        txtsaPRCaptain2.Text, txtsaPRCaptain2.Text, txtsaLiner1.Text, txtsaLiner2.Text, txtsaLinerCaptain1.Text,
+        txtsaCloser1.Text,
+        txtsaCloser2.Text, txtsaCloser3.Text, txtsaCloserCaptain1.Text, txtsaExit1.Text, txtsaExit2.Text,
+        txtsaPodium.Text, txtsaVLO.Text);
+    }
+
     #region ValidateSalesmen
+
     /// <summary>
     /// Valida los vendedores
     /// </summary>
@@ -932,10 +1179,12 @@ namespace IM.Host.Forms
         }
       }
       return true;
-    } 
+    }
+
     #endregion
 
     #region ValidateChangedBy
+
     /// <summary>
     /// Valida que no este vacio el usuario y el Password
     /// </summary>
@@ -957,10 +1206,12 @@ namespace IM.Host.Forms
         return false;
       }
       return true;
-    } 
+    }
+
     #endregion
 
     #region ValidateGeneral
+
     /// <summary>
     /// Valida los datos Generales
     /// </summary>
@@ -1025,8 +1276,9 @@ namespace IM.Host.Forms
         cbosamt.Focus();
         return false;
       }
+      ValidateMembershipTypeGlobal();
       //Validamos el tipo de mebresia global
-      if (!ValidateMembershipTypeGlobal())
+      if (!_validateMembershipTypeGlobal)
       {
         return false;
       }
@@ -1055,204 +1307,52 @@ namespace IM.Host.Forms
         return false;
       }
       return true;
-    } 
-    #endregion
-
-
-    /// <summary>
-    /// Obtiene la fecha de cierre
-    /// </summary>
-    /// <history>
-    /// [jorcanche]  created 01072016
-    /// </history>
-    public async void CloseDate()
-    {
-      _CloseD = await BRSales.GetSalesCloseD(App.User.SalesRoom.srID);
     }
 
-    #region ValidatePagos
-    /// <summary>
-    /// validamos los pagos
-    /// </summary>
-    ///<history>
-    ///[jorcanche]  created 24062016
-    ///</history>
-    private bool ValidatePagos()
-    {
-      bool foundbad = false;
-      if (_payments.Count == 0) return true;
-      foreach (var item in _payments)
-      {
-        if (item.papt == "CC" && item.pacc == null)
-        {
-          foundbad = true;
-        }
-      }
-      if (foundbad)
-      {
-        UIHelper.ShowMessage("Please specify the Credit Card Type");
-        return false;
-      }
-      return true;
-    } 
     #endregion
 
-    /// <summary>
-    /// Valida el Grid:
-    /// 1.- Que tenga al menos unregistro
-    /// 2.- Que no tenga registros repetidos
-    /// </summary>
-    /// <returns></returns>
-    private bool ValidateGrid()
-    {
-      return true;
-    }
-    string MembershipTypePrevious = string.Empty;
-    byte? MembershipPreviousLevel = 0;
-    byte? MembershipLevel = 0;
+    #region ValidateCloseDate
 
     /// <summary>
-    /// Valida el tipo de membresia global
+    /// Validamos la fecha de venta no este en una fecha cerrada
     /// </summary>
     /// <returns></returns>
-    private bool ValidateMembershipTypeGlobal()
+    private bool ValidateCloseDate(TextBox txt, string description = "")
     {
-      //Validamos que ingrese el tipo de membresia global
-      if (cbosamtGlobal.SelectedIndex == -1)
+      DateTime result;
+      if (DateTime.TryParse(txt.Text, out result))
       {
-        UIHelper.ShowMessage("Specify the Membership Type Globale");
-        cbosamtGlobal.Focus();
-        return false;
-      }
-      IsSaleUpdate();
-      if (_isSaleUpdate)
-      {
-        //Tipo de membresia de la emembresia anterior
-        GetMembershipType();
-        //si encontramos la membresia anterior 
-        if (!string.IsNullOrEmpty(MembershipTypePrevious))
+        //Si la condicion es valida y el editor esta habilitado
+        if (txt.IsEnabled)
         {
-          //obtenermos el nivel de la memebresia antrior
-          //MembershipPreviousLevel = await  LoadMemberShipTypes(MembershipTypePrevious); 
-          Membership();
-          GetSaleTypeCategory();
-          switch (_saleTypeCategory)
+          var des = string.IsNullOrEmpty(description) ? "Sales date" : description;
+
+          //Validamos la fecha
+          if (string.IsNullOrEmpty(txt.Text))
           {
-            //Upgrade
-            case "UG":
-              //Validamos el tipo de membresia no sea menor que el tipo de membresia anterior 
-              if (MembershipLevel < MembershipPreviousLevel)
-              {
-                UIHelper.ShowMessage("In a Upgrade, the Membership Type Global can't be less than the Membership Type Previous");
-                return false;
-              }
-              break;
-            //Downgrade
-            case "DG":
-              //Validamos el tipo de membresia no sea mayo que el tipo de membresia anterior}
-              if (MembershipLevel > MembershipPreviousLevel)
-              {
-                UIHelper.ShowMessage("In a Downgrade, the Membership Type Global can't be greater than the Membership Type Previous");
-                return false;
-              }
-              break;
+            UIHelper.ShowMessage("Specify a Sale Date.");
+            return false;
           }
-        }//Si no encontramos la membresia anterior 
-        else
-        {
-          UIHelper.ShowMessage("Membership Number Previous not found");
-          txtsaRefMember.Focus();
-          return false;
+          //validamos que la fecha no sea mayor a la fecha actual
+          if (Convert.ToDateTime(txt.Text) > BRHelpers.GetServerDate().Date)
+          {
+            UIHelper.ShowMessage("Can not be after today.");
+            return false;
+          }
+          //validamos que la fecha no sea menor o igual a la fecha de cierre
+          if (Convert.ToDateTime(txt.Text) <= _CloseD)
+          {
+            UIHelper.ShowMessage($"It,s not allowed to make {des} for a closed date");
+            txt.Focus();
+            return false;
+          }
         }
       }
       return true;
     }
 
-    private async void Membership()
-    {      
-      MembershipPreviousLevel = await BRMemberShipTypes.GetLevelOfMemberShipTypes(MembershipTypePrevious, 1); 
+    #endregion
 
-      //obtenermos el nivel de la membresia       
-      MembershipLevel = await BRMemberShipTypes.GetLevelOfMemberShipTypes(cbosamtGlobal.SelectedValue.ToString(), 1);
-    }
-
-    private async Task<byte?> LoadMemberShipTypes(string MembershipTypePrevious = "")
-    {
-      var TypePrevious = string.IsNullOrEmpty(MembershipTypePrevious) ? cbosamtGlobal.SelectedValue.ToString() : MembershipTypePrevious;
-      var membershipType = await BRMemberShipTypes.GetMemberShipTypes(1, new MembershipType { mtID = TypePrevious });
-      return membershipType.FirstOrDefault().mtLevel;
-    }
-
-    /// <summary>
-    /// Obtiene el tipo de una membresia
-    /// </summary>
-    /// <history>
-    /// [jorcanche]  created 30062016
-    /// </history>
-    private async void GetMembershipType()
-    {
-      var sale = await BRSales.GetSalesbyId(memebershipNum: txtsaRefMember.Text);
-      MembershipTypePrevious = sale.samtGlobal;
-    }
-
-    /// <summary>
-    /// Indica si un tipo de venta es una actualizacion de otra venta
-    /// </summary>
-    ///<history>
-    ///[jorcanche] 24062016
-    ///</history>
-    private async void IsSaleUpdate()
-    {
-      if(cbosast.SelectedValue != null)
-      _isSaleUpdate = await BRSaleTypes.GetstUpdateOfSaleTypeById(cbosast.SelectedValue.ToString(),1);
-    }
-
-
-    /// <summary>
-    /// Valida la fecha de cancelacion
-    /// </summary>
-    ///<history>
-    ///[jorcanche] 24062016
-    ///</history>
-    private bool ValidateCancelDate()
-    {
-      //sim esta cancelada 
-      if (chksaCancel.IsChecked == null || !chksaCancel.IsChecked.Value) return true;
-      //Validamos que la fecha de procesable no este en un fecha cerrada
-      if (!ValidateCloseDate(txtsaCancelD, "Cancellation date")) return false;
-      if (Convert.ToDateTime(txtsaCancelD.Text) < Convert.ToDateTime(txtsaD.Text))
-      {
-        UIHelper.ShowMessage("Cancellation date can not be before sale date.");
-        txtsaCancelD.Focus();
-        return false;
-      }
-      //validamos que la fecha de cancelacio no sea menor a la fecha procesable
-      if (chksaProc.IsChecked == null || !chksaProc.IsChecked.Value) return true;
-      if (Convert.ToDateTime(txtsaCancelD.Text) >= Convert.ToDateTime(txtsaProcD.Text)) return true;
-      UIHelper.ShowMessage("Processable date can no be after Cancellation date.");
-      txtsaProcD.Focus();
-      return false;
-    }
-
-
-    /// <summary>
-    /// Valida la fecha procesable
-    /// </summary>
-    ///<history>
-    ///[jorcanche] 24062016
-    ///</history>
-    private bool ValidateProcessableDate()
-    {
-      //si es procesable
-      if (chksaProc.IsChecked == null || !chksaProc.IsChecked.Value) return true;
-      //Validamos que la fecha de prosesable no este en una fecha cerrada 
-      if (!ValidateCloseDate(txtsaProcD)) return false;
-      //Validamos que la fecha de procesable no sea menor a la fecha de venta
-      if (Convert.ToDateTime(txtsaProcD.Text).Date >= Convert.ToDateTime(txtsaD.Text).Date) return true;
-      UIHelper.ShowMessage("Procesable date can not be before sale date");
-      txtsaD.Focus();
-      return false;
-    }
     /// <summary>
     /// Modo edicion
     /// </summary>
@@ -1264,7 +1364,6 @@ namespace IM.Host.Forms
       SetMode(Enums.EnumMode.modEdit);
     }
 
-
     /// <summary>
     /// Elimina una Sale
     /// </summary>
@@ -1274,10 +1373,10 @@ namespace IM.Host.Forms
     private async void btnDelete_Click(object sender, RoutedEventArgs e)
     {
       //Preguntamos al usuario si en verdad desea eliminar la venta
-      var result = MessageBox.Show("Are you sure you want to delete this sale ?", "Delete", MessageBoxButton.OKCancel, MessageBoxImage.Exclamation, MessageBoxResult.OK);
+      var result = MessageBox.Show("Are you sure you want to delete this sale ?", "Delete", MessageBoxButton.OKCancel,
+        MessageBoxImage.Exclamation, MessageBoxResult.OK);
       if (result != MessageBoxResult.OK) return;
       await BRSales.DeleteSale(Convert.ToInt32(txtsaID.Text));
-      //grdSale.Items.Remove(grdSale.SelectedItem);
       //LoadRecord();
       LoadGrid();
     }
@@ -1293,6 +1392,8 @@ namespace IM.Host.Forms
       Close();
     }
 
+
+    #region btnUndo_Click
 
     /// <summary>
     /// Deshace los cambios hechos a una venta
@@ -1318,8 +1419,11 @@ namespace IM.Host.Forms
 
       //Establecemos el mode de solo lectura
       SetMode(Enums.EnumMode.modDisplay);
-
     }
+
+    #endregion
+
+    #region chksaCancel_Checked
 
     /// <summary>
     /// Agrega la fecha gdel servidor (actual) al txtsaCancelID cuando hace check al chksaCancel y viseversa
@@ -1329,8 +1433,16 @@ namespace IM.Host.Forms
     ///</history>
     private void chksaCancel_Checked(object sender, RoutedEventArgs e)
     {
-      txtsaCancelD.Text = chksaCancel.IsChecked != null && chksaCancel.IsChecked.Value ? BRHelpers.GetServerDate().ToString("dd/MM/yyyy") : string.Empty;
+      //txtsaCancelD.Text = chksaCancel.IsChecked != null && chksaCancel.IsChecked.Value ? BRHelpers.GetServerDate().ToString("dd/MM/yyyy") : string.Empty;
+      //MessageBox.Show(_sale.saCancelD.ToString());   
+      if (_loading) return;
+      _sale.saCancelD = _sale.saCancel ? (DateTime?) BRHelpers.GetServerDate() : null;
+      txtsaCancelD.Text = _sale.saCancelD.ToString();
     }
+
+    #endregion
+
+    #region btnSave_Click
 
     /// <summary>
     /// Permite guardar una venta
@@ -1338,7 +1450,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [jorcanche] 03/06/2016
     /// </history>
-    private  void btnSave_Click(object sender, RoutedEventArgs e)
+    private void btnSave_Click(object sender, RoutedEventArgs e)
     {
       var salesmenChanges = new List<SalesmenChanges>();
       string authorizedBy = string.Empty;
@@ -1352,6 +1464,8 @@ namespace IM.Host.Forms
       }
     }
 
+    #endregion
+
     /// <summary>
     /// Guarda una venta
     /// </summary>
@@ -1360,32 +1474,28 @@ namespace IM.Host.Forms
     /// </history>
     private async void Save(List<SalesmenChanges> salesmenChanges, string authorizedBy)
     {
-      //Procesable
-      if (string.IsNullOrEmpty(txtsaProcD.Text)) chksaProc.IsChecked = false;
+      //Procesable     
+      if (_sale.saProcD == null) _sale.saProc = false;
       //Cancelada
-      if (string.IsNullOrEmpty(txtsaCancelD.Text)) chksaCancel.IsChecked = false;
+      if (_sale.saCancelD == null) _sale.saCancel = false;
 
       //Establecemos los procentajes de volumen de venta de los vendedores
-      SetVolumenPorcentage();
+      SetVolumenPercentage();
       IsSaleUpdate();
       //Establecemos la fecha de procesable de referencia
-      if (!_isSaleUpdate && Convert.ToDateTime(txtsaProcRD.Text) != Convert.ToDateTime(txtsaProcD.Text))
+      if (!_isSaleUpdate && _sale.saProcRD != _sale.saProcD)
       {
-        txtsaProcRD.Text = Convert.ToDateTime(txtsaProcD.Text).ToShortDateString();
+        _sale.saProcRD = _sale.saProcD;
       }
-      if (_isSaleUpdate && string.IsNullOrEmpty(txtsaProcRD.Text))
+      if (_isSaleUpdate && _sale.saProcRD != null)
       {
-        txtsaProcRD.Text = Convert.ToDateTime(txtsaProcD.Text).ToShortDateString();
+        _sale.saProcRD = _sale.saProcD;
       }
-
-      //Es una modificacion
-      //Actualizamos el DataContext con el focus del btnSave
-      btnSave.Focus();
       //Si son diferentes los Objetos es que hubo cambios 
       if (!ObjectHelper.IsEquals(_sale, _oldSale))
       {
         //Validamos
-        string sMsjSaleGeneral = ValidateHelper.ValidateForm(gSaleGeneral, "Sale");
+        var sMsjSaleGeneral = ValidateHelper.ValidateForm(gSaleGeneral, "Sale");
         if (sMsjSaleGeneral == "")
         {
           var nRes = await BREntities.OperationEntity(_sale, Model.Enums.EnumMode.edit);
@@ -1393,20 +1503,20 @@ namespace IM.Host.Forms
           UIHelper.ShowMessageResult("Sale", nRes);
         }
         else
-          //Mostramos el mensaje de la validación
+        //Mostramos el mensaje de la validación
           UIHelper.ShowMessage(sMsjSaleGeneral);
       }
       //Guardamosa los pagos
       PaymentsSave();
 
       //Si cambio de venta anterior
-      if (txtsaRefMember.IsEnabled && _sale.saReference != _salePreviousOriginal)
+      if (txtsaRefMember.IsEnabled && _sale.saReference != _oldSale.saReference)
       {
         //si tenia venta anterior, la marcamos como actualizada
-        if (_salePreviousOriginal != null )
+        if (_oldSale.saReference != null)
         {
           //marcamos la venta anterior actual como actualizada
-          await BRSales.UpdateSaleUpdated(_salePreviousOriginal, false);
+          await BRSales.UpdateSaleUpdated(_oldSale.saReference, false);
         }
         //actualizamos los vendedores del huesped en base a los vendedores de la venta 
         await BRSales.UpdateSaleUpdated(_sale.saReference, true);
@@ -1415,40 +1525,213 @@ namespace IM.Host.Forms
       //Actualiza los vendedores del huesped en base a los vendedores de la venta 
       await BRSalesSalesmen.UpdateGuestSalesmen(_sale.sagu, _sale.saID);
 
-      //Si cambio de guest ID
-      if (_GuestIDOriginal != _sale.sagu)
+      //Si cambio de guest ID      
+      if (_oldSale.sagu != _sale.sagu)
       {
         //marcamos como venta el guest Id Nuevo
-       await BRSales.UpdateGuestSale(_sale.sagu,true);
+        await BRSales.UpdateGuestSale(_sale.sagu, true);
 
         //Desmarcamos como venta el Guest Id anterior si ya no le quedan ventas
         var sales = await BRSales.GetCoutSalesbyGuest(_sale.sagu);
         if (sales == 0)
         {
-          await BRSales.UpdateGuestSale(_GuestIDOriginal, false);
+          await BRSales.UpdateGuestSale(_oldSale.sagu, false);
         }
-        LoadRecord();
-
-        //Guardamos el historico de la venta
-        BRSales.SaveSaleLog(_sale.sagu,App.User.LeadSource.lsHoursDif, App.User.User.peID);
-
-        //Guardamos las ventas de los vendedores 
-        SalesSalesmenSave();
-
       }
+      //Recargamos la información
+      await LoadRecord();
 
+      //Guardamos el historico de la venta
+      await BRSales.SaveSaleLog(_sale.sagu, App.User.SalesRoom.srHoursDif, App.User.User.peID);
+
+      //Guardamos las ventas de los vendedores 
+      var saleAmount = GetSaleAmount();
+      Classes.SalesSalesmen.SaveSalesSalesmen(_saleMen, _sale.saID, saleAmount < 0 ? -saleAmount : saleAmount,
+        _SaleAmountOriginal);
+
+      //Guardamos el movimiento de venta del huesped
+      await
+        BRGuests.SaveGuestMovement(_sale.sagu, EnumGuestsMovementsType.Sale, txtChangedBy.Text, Environment.MachineName,
+          ComputerHelper.GetIpMachine());
+
+      //Guardamos los cambios de vendedores y la persona que autorizo los cambiuos
+      if (!string.IsNullOrEmpty(authorizedBy))
+      {
+        //SaveSalesmenChanges(salesmenChanges, authorizedBy);
+        foreach (var salesmenChange in salesmenChanges)
+        {
+          await BRSalesSalesmen.SaveSalesmenChanges
+            (_sale.sagu, authorizedBy, txtChangedBy.Text, salesmenChange.roN, salesmenChange.schPosition,
+              salesmenChange.schOldSalesman, salesmenChange.schNewSalesman);
+        }
+      }
+      //Actualizamos vendedores en Intelligence Contracts
+      SaveMemberSalesmenClubes();
     }
 
     /// <summary>
-    /// Guarda y elimina los SalesSalesmen que se modificaron
+    /// Guarda vendedores en Intelligence Contracts
+    /// </summary>
+    /// <history>/
+    /// [jorcanche] created 08/07/2016
+    /// </history>
+    private async void SaveMemberSalesmenClubes()
+    {
+      string sPRs = string.Empty, sLiners = string.Empty, sClosers = string.Empty, sExits = string.Empty;
+
+      //Obtenemos los vendedores de Intelligence Contracts 
+      var salesman = await BRMemberSalesman.GetMemberSalesmen(_sale.saMembershipNum, "ALL", "ALL", "OPC,LINER,CLOSER,EXIT" );
+
+      //Agregamos / Actualizamos los vendedores de Origos den Intelligence contracts
+     
+      //PR's
+      sPRs = await SaveMemberSalesmanClubesByRole(salesman, "OPC", "OPC", _sale.saPR1, sPRs);
+      sPRs = await SaveMemberSalesmanClubesByRole(salesman, "OPC", "OPC", _sale.saPR2, sPRs);
+      sPRs = await SaveMemberSalesmanClubesByRole(salesman, "OPC", "OPC", _sale.saPR3, sPRs);
+
+      //Liners
+      sLiners = await SaveMemberSalesmanClubesByRole(salesman, "LINER", "LIN", _sale.saLiner1, sLiners);
+      sLiners = await SaveMemberSalesmanClubesByRole(salesman, "LINER", "LIN", _sale.saLiner2, sLiners);
+
+      //Closers
+      sClosers = await SaveMemberSalesmanClubesByRole(salesman, "CLOSER", "CLOS", _sale.saCloser1, sClosers);
+      sClosers = await SaveMemberSalesmanClubesByRole(salesman, "CLOSER", "CLOS", _sale.saCloser2, sClosers);
+      sClosers = await SaveMemberSalesmanClubesByRole(salesman, "CLOSER", "CLOS", _sale.saCloser3, sClosers);
+
+      //Exit Closers
+      sExits = await SaveMemberSalesmanClubesByRole(salesman, "EXIT", "JR", _sale.saExit1, sExits);
+      sExits = await SaveMemberSalesmanClubesByRole(salesman, "EXIT", "JR", _sale.saExit2, sExits);
+
+      //Eliminamos los vendedores en Intelligence Contracts que no estan en Intelligence Marketing
+      DeleteSalesmenClubes("OPC", sPRs);
+      DeleteSalesmenClubes("LINER", sLiners);
+      DeleteSalesmenClubes("CLOSER", sClosers);
+      DeleteSalesmenClubes("EXIT", sExits);
+    }
+
+    /// <summary>
+    /// Elimina los vendedores de una afiliacion en Intelligence Contracts si no estan en Intelligence marketing
+    /// </summary>
+    /// <param name="role"></param>
+    /// <param name="salesmen"></param>
+    /// <history>
+    /// [jorcanche] created 11/07/2016
+    /// </history>
+    private async void DeleteSalesmenClubes(string role, string salesmen)
+    {
+      //Obtenemos vendedores actuales de Intelligence Contracts
+      var lstMemberSalesmens = await BRMemberSalesman.GetMemberSalesmen(_sale.saMembershipNum, "ALL", "ALL", role);
+      if (lstMemberSalesmens.Any())
+      {
+        //si el vendedor no esta en la lista de vendedores de Origos, lo eliminamos en Intellligence Contracts
+        lstMemberSalesmens.ForEach(async ms =>
+        {
+          if (!salesmen.Contains(ms.OPC))
+          {
+            await BRMemberSalesman.DeleteMemberSalesman(ms.CLMEMOPC_ID);
+          }
+        });
+      }
+    }
+
+
+    /// <summary>
+    /// Guarda un vendedor por rol en Intelligence Contracts
     /// </summary>
     /// <history>
-    /// [jorcanche]  created 01072016
+    /// [jorcanche] created 08/07/2016
     /// </history>
-    private async void SalesSalesmenSave()
+    private async Task<string> SaveMemberSalesmanClubesByRole(List<MemberSalesmen> lstSalesmen, string role, string job,string id, string salesmen)
     {
-      await BRSalesSalesmen.DeleteSalesSalesmenbySaleId(_sale.saID);
+      string salemanId, zone;
+      //si tiene una clave de vendedor de origos
+      if (!string.IsNullOrEmpty(id))
+      {
+        //agregamos la clave de vendedor en origos
+        salesmen = salesmen + id + " ";
+        //select peID, peN, peSalesmanID from Personnel order by peN
+        //obtenemos la clave del vendedor de Intelligence Contracts relaionando al vendedor de Origos
+        var personel = BRPersonnel.GetPersonnelById(id);
+        //Validamos si existe el vendedor en IM
+        if (personel != null)
+        {
+          UIHelper.ShowMessage($"The personnel {id} does not exists on Origos");
+          return salesmen;
+        }
+        //Validamos si el vendedor de origos tiene relacionada una clave de Intelligence Contracts
+        salemanId = personel.peSalesmanID;
+        if (string.IsNullOrEmpty(salemanId))
+        {
+          UIHelper.ShowMessage($"The personnel {id} is not associated with a Intelligence Contract's salesman.");
+          return salesmen;
+        }
+        //Validamos si existe la clave de intelligence Contracts
+        zone = _sale.sasr;
+        if (!await BRMemberSalesman.ExistsSalesman(salemanId, zone))
+        {
+          UIHelper.ShowMessage($"The salesman  {salemanId} from zone {zone} does not exists on Intelligence Contracts");
+          return salesmen;
+        }
+        //Localizamos el vendedor de Intelligence contracts
+        var memberSalesmens = lstSalesmen.FirstOrDefault(sa => sa.OPC == salemanId && sa.CLAOPC_ID == job);
+        //si no se localizo 
+        if (memberSalesmens == null)
+        {
+          //lo agregamos en Intelligence contracts
+          AddSalemanClubes(ref lstSalesmen, job, salemanId, zone);
+        }
+        else
+        {
+          // si tiene el rol solicitado
+          if (memberSalesmens.Role == role)
+          {
+            memberSalesmens.CLAOPC_ID = job;
+            memberSalesmens.STATUS = "A";
+            memberSalesmens.ZONA = _sale.sasr;
+            //Actualizamos el vendedor de Intelligence contracts 
+            await BRMemberSalesman.SaveMemberSalesman(memberSalesmens.RECNUM, memberSalesmens, App.User.User.peID);
+          }
+          else //Si no tiene el rol solicitado
+          {
+            //Agregamos el vendedor de intelligence contracts
+            AddSalemanClubes(ref lstSalesmen,job,salemanId,zone); 
+          }
+        }
+      }
+      return salesmen;
     }
+
+    /// <summary>
+    /// Agrega un vendedor a un afiliacion en Intelligence Contracts
+    /// </summary>
+    /// <param name="lstSalesmen"></param>
+    /// <param name="job"></param>
+    /// <param name="salemanId"></param>
+    /// <param name="zone"></param>
+    /// <history>
+    /// [jorcanche] 11/07/2016 created 
+    /// </history>
+    private void AddSalemanClubes(ref List<MemberSalesmen> lstSalesmen, string job, string salemanId, string zone)
+    {
+      var memberSalesmen = new MemberSalesmen
+      {
+        CLMEMOPC_ID = 0,
+        APPLICATION = _sale.saMembershipNum,
+        CLAOPC_ID = job,
+        OPC1 = string.Empty,
+        OPC_PCT = 0,
+        OPC_PCT2 = 0,
+        OPC_CPT3 = 0,
+        OPC_PCT4 = 4,
+        STATUS = "A",
+        ZONA = zone,
+        OPC = salemanId
+      };
+      lstSalesmen.Add(memberSalesmen);
+      //Agregamos el vendedor en intelligence Contracts
+      var membersalesaleman = BRMemberSalesman.SaveMemberSalesman(0,memberSalesmen,  App.User.User.peID);
+    }
+
 
     /// <summary>
     /// Guarda los cambios del DataGrid y valida que no se repitan los rows
@@ -1459,10 +1742,12 @@ namespace IM.Host.Forms
     private async void PaymentsSave()
     {
       //Disparamos el mensaje que nos arroja  la operación del eliminado
-      int resDelete = await BRPayments.DeletePaymentsbySale(_sale.saID);
-      if (resDelete > 0) return;
-
-      UIHelper.ShowMessageResult("Payments", resDelete);
+      if (_payments.Any())
+      {
+        int resDelete = await BRPayments.DeletePaymentsbySale(_sale.saID);
+        if (resDelete > 0) return;
+        UIHelper.ShowMessageResult("Payments", resDelete);
+      }     
       foreach (var paysale in _payments)
       {
         paysale.pasa = _sale.saID;
@@ -1473,41 +1758,43 @@ namespace IM.Host.Forms
       }
     }
 
+    #region SetVolumenPercentage
+
     /// <summary>
     /// Establece los porcentajes de volumen de venta de los vendedores
     /// </summary>
     /// <history>
     /// [jorcanche] created 24062016
     /// </history>
-    private void SetVolumenPorcentage()
+    private void SetVolumenPercentage()
     {
-      int closers = 1;
-      int vol = 0;
+      var closers = 1;
       //Obtenemos el numero de Closer + Exits
-      if (!string.IsNullOrEmpty(txtsaCloser2.Text)) closers = closers + 1;
-      if (!string.IsNullOrEmpty(txtsaCloser3.Text)) closers = closers + 1;
-      if (!string.IsNullOrEmpty(txtsaExit1.Text)) closers = closers + 1;
-      if (!string.IsNullOrEmpty(txtsaExit2.Text)) closers = closers + 1;
-
+      if (_sale.saCloser2 != null) closers = closers + 1;
+      if (_sale.saCloser3 != null) closers = closers + 1;
+      if (_sale.saExit1 != null) closers = closers + 1;
+      if (_sale.saExit2 != null) closers = closers + 1;
       //Obtenemos el porcentaje incial del volumen
-      vol = closers == 3 ? 34 : 100 / closers;
+      var vol = closers == 3 ? 34 : 100/closers;
 
       //Porcentaje de volumen del closer 1
-      txtsaCloser1P = vol;
+      _sale.saCloser1P = (byte) vol;
 
       //Porcentaje de volumen del closer 2
       if (vol == 34) vol = 33;
-      txtsaCloser2P = !string.IsNullOrEmpty(txtsaCloser2.Text) ? vol : 0;
+      _sale.saCloser2P = (byte) (_sale.saCloser2 != null ? vol : 0);
 
       //Porcentaje de volumen del Closer 3
-      txtsaCloser3P = !string.IsNullOrEmpty(txtsaCloser3.Text) ? vol : 0;
+      _sale.saCloser3P = (byte) (_sale.saCloser3 != null ? vol : 0);
 
       //Porcentaje de volumen del Exit 1
-      txtsaExit1P = !string.IsNullOrEmpty(txtsaExit1.Text) ? vol : 0;
+      _sale.saExit1P = (byte) (_sale.saExit1 != null ? vol : 0);
 
       //Porcentaje de volumen del Exit 2
-      txtsaExit2P = !string.IsNullOrEmpty(txtsaExit2.Text) ? vol : 0;
+      _sale.saExit2P = (byte) (_sale.saExit2 != null ? vol : 0);
     }
+
+    #endregion
 
     /// <summary>
     /// Obtiene los cambios de vendedores
@@ -1520,19 +1807,19 @@ namespace IM.Host.Forms
     private bool GetSalesmenChanges(ref List<SalesmenChanges> salesmenChanges, ref string authorizedBy)
     {
       //PR´s
-      SalesmanChanged(txtsaPR1, cbosaPR1, 1, "PR", ref salesmenChanges);
-      SalesmanChanged(txtsaPR2, cbosaPR2, 2, "PR", ref salesmenChanges);
-      SalesmanChanged(txtsaPR3, cbosaPR3, 3, "PR", ref salesmenChanges);
+      SalesmanChanged(txtsaPR1, cbosaPR1.Text, 1, "PR", ref salesmenChanges);
+      SalesmanChanged(txtsaPR2, cbosaPR2.Text, 2, "PR", ref salesmenChanges);
+      SalesmanChanged(txtsaPR3, cbosaPR3.Text, 3, "PR", ref salesmenChanges);
       //Liners
-      SalesmanChanged(txtsaLiner1, cbosaLiner1, 1, "LINER", ref salesmenChanges);
-      SalesmanChanged(txtsaLiner2, cbosaLiner2, 2, "LINER", ref salesmenChanges);
+      SalesmanChanged(txtsaLiner1, cbosaLiner1.Text, 1, "LINER", ref salesmenChanges);
+      SalesmanChanged(txtsaLiner2, cbosaLiner2.Text, 2, "LINER", ref salesmenChanges);
       //Closers
-      SalesmanChanged(txtsaCloser1, cbosaCloser1, 1, "CLOSER", ref salesmenChanges);
-      SalesmanChanged(txtsaCloser2, cbosaCloser2, 2, "CLOSER", ref salesmenChanges);
-      SalesmanChanged(txtsaCloser3, cbosaCloser3, 3, "CLOSER", ref salesmenChanges);
+      SalesmanChanged(txtsaCloser1, cbosaCloser1.Text, 1, "CLOSER", ref salesmenChanges);
+      SalesmanChanged(txtsaCloser2, cbosaCloser2.Text, 2, "CLOSER", ref salesmenChanges);
+      SalesmanChanged(txtsaCloser3, cbosaCloser3.Text, 3, "CLOSER", ref salesmenChanges);
       //Exit Closers
-      SalesmanChanged(txtsaExit1, cbosaExit1, 1, "EXIT", ref salesmenChanges);
-      SalesmanChanged(txtsaExit2, cbosaExit2, 2, "EXIT", ref salesmenChanges);
+      SalesmanChanged(txtsaExit1, cbosaExit1.Text, 1, "EXIT", ref salesmenChanges);
+      SalesmanChanged(txtsaExit2, cbosaExit2.Text, 2, "EXIT", ref salesmenChanges);
 
       //si hubo cambios de vendedores y no es el dia de la venta 
       if (salesmenChanges.Count > 0 && Convert.ToDateTime(txtsaD.Text) < _ServerDate)
@@ -1548,18 +1835,22 @@ namespace IM.Host.Forms
       }
       return true;
     }
+
+    #region SalesmanChanged
+
     /// <summary>
     /// Indentifica si hubo un cambio en los SalesSalesmen de se así lo agrega en el Listado SalesmenChanges
     /// </summary>
     /// <param name="txt">TextBox que contiene el Id de la persona</param>
-    /// <param name="cbo">ComboBox que contiene el Nombre de la persona</param>
+    /// <param name="newSalesman">ComboBox que contiene el Nombre de la persona</param>
     /// <param name="position">Posicion ejemplo Liner1 ó Liner 2 ó Liner 3</param>
     /// <param name="role">Role que tiene la persona</param>
     /// <param name="salesmenChanges">Listado de la persona que se modificaron agregando las persona anteriores</param>
     /// <history>
     /// [jorcanche] created 24062016
     /// </history>
-    private void SalesmanChanged(TextBox txt, ComboBox cbo, byte position, string role, ref List<SalesmenChanges> salesmenChanges)
+    private void SalesmanChanged(TextBox txt, string newSalesman, byte position, string role,
+      ref List<SalesmenChanges> salesmenChanges)
     {
       var salesSalesmenOld = _oldSale.GetType().GetProperty(txt.Name.Substring(3)).GetValue(_oldSale);
       string strSalesSalesmen = salesSalesmenOld != null ? salesSalesmenOld.ToString() : string.Empty;
@@ -1568,8 +1859,9 @@ namespace IM.Host.Forms
         salesmenChanges.Add(new SalesmenChanges
         {
           NewSalesmanN = txt.Text,
-          schNewSalesman = cbo.Text,
-          OldSalesmanN = string.IsNullOrEmpty(strSalesSalesmen) ? string.Empty : BRPersonnel.GetPersonnelById(strSalesSalesmen).peN,
+          schNewSalesman = newSalesman,
+          OldSalesmanN =
+            string.IsNullOrEmpty(strSalesSalesmen) ? string.Empty : BRPersonnel.GetPersonnelById(strSalesSalesmen).peN,
           schOldSalesman = strSalesSalesmen,
           schPosition = position,
           roN = role
@@ -1577,19 +1869,10 @@ namespace IM.Host.Forms
       }
     }
 
-    private void dgpayment_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-    {
-     // var payment = (Payment)dgpayment.CurrentCell.Item;
-      if (e.Column.Header.ToString() == "Payment Type")
-      {
-        //if (e.Editing != "CC")
-        //{
-        //  dgpayment
-        //    }
-      }
-    }
+    #endregion
 
     #region btnLog_Click
+
     /// <summary>
     /// Muestra el Log del actual Sale
     /// </summary>
@@ -1598,30 +1881,14 @@ namespace IM.Host.Forms
     /// </history>
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
-      frmSalesLog salesLog = new frmSalesLog(Convert.ToInt32(txtsaID.Text), Convert.ToInt32(txtsaMembershipNum.Text));
-      salesLog.Owner = this;
+      var salesLog = new frmSalesLog(_sale.saID, _sale.saMembershipNum) {Owner = this};
       salesLog.Show();
     }
+
     #endregion
 
-
-    #region dgpayment_BeginningEdit
-    /// <summary>
-    /// Valida antes de editar el grid de pagos 
-    /// </summary>
-    /// <history>
-    /// [jorcanche] created 24062016
-    /// </history>
-    private void dgpayment_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-    {
-      dgpayment.Focus();
-      if (e.Column.SortMemberPath != "pacc") return;
-      var payment = (Payment)e.Row.Item;
-      e.Cancel = payment.papt != "CC";
-    }
-
-
     #region cbosast_SelectionChanged
+
     /// <summary>
     /// 
     /// </summary>
@@ -1644,7 +1911,7 @@ namespace IM.Host.Forms
         //se resta y se agrega a _sale.saGrossAmount, Como el resultado puede ser nulo hacemos una validación antes de asignarla
         var monto = _sale.saNewAmount - _sale.saOriginalAmount;
         if (monto != null)
-          _sale.saGrossAmount =(decimal) monto;
+          _sale.saGrossAmount = (decimal) monto;
       }
       //habilitamos el editor de tipo de membresia global si es un Upgrade o un Downgrade
       cbosamtGlobal.IsEnabled = _isSaleUpdate;
@@ -1656,52 +1923,70 @@ namespace IM.Host.Forms
         cbosamtGlobal.SelectedValue = cbosamt.SelectedValue;
       }
     }
+
+
     #endregion
+
+
+
+
+
+    private void Dgpayment_OnRowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      //List<string> distinctStatuses = items.Select(item => item.Status)
+      //                               .Distinct()
+      //                               .ToList();
+      //If you only want the count, you can simplify this further:
+
+      //int distinctStatusCount = items.Select(item => item.Status).Distinct().Count();
+    }
+
+    /// <summary>
+    /// Valida que no se repita registros en el datagrid
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 05072016
+    /// </history>
+    private void dgpayment_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+      if (e.Column.Header.ToString() != "Payment Type") return;
+      var cbo = (ComboBox) e.EditingElement;
+      if (cbo.SelectedValue == null) return;
+      var papt = cbo.SelectedValue.ToString();
+      // if (papt == string.Empty) return;
+      var firstOrDefault = _payments.FirstOrDefault(pay => pay.papt == papt);
+      if (firstOrDefault == null) return;
+      UIHelper.ShowMessage("Payment Type must not be repeated");
+      cbo.SelectedIndex = -1;
+      e.Cancel = true;
+    }
+
+    #region dgpayment_BeginningEdit
+
+    /// <summary>
+    /// Valida antes de editar el grid de pagos 
+    /// </summary>
+    /// <history>
+    /// [jorcanche] created 24062016
+    /// </history>
+    private void dgpayment_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+    {
+      if (e.Column.SortMemberPath != "pacc") return;
+      var payment = (Payment) e.Row.Item;
+      e.Cancel = payment.papt != "CC";
+    }
 
     #endregion
 
     /// <summary>
-    /// Validamos la fecha de venta no este en una fecha cerrada
+    /// Valida si existe el Id del Guest
     /// </summary>
-    /// <returns></returns>
-    private bool ValidateCloseDate(TextBox txt, string Description = "")
-    {
-      DateTime Result;
-      int DiffDay = 0;
-      TimeSpan ts;
-      string des = string.Empty;
-      string items = string.Empty;
-      if (DateTime.TryParse(txt.Text, out Result))
-      {
-        //Dias Trasncurridos
-        DiffDay = (ts = Convert.ToDateTime(txt.Text) - _CloseD).Days;
-        //Si la condicion es valida y el editor esta habilitado
-        if (txt.IsEnabled)
-        {
-          des = string.IsNullOrEmpty(Description) ? "Sales date" : Description;
-
-          //Validamos la fecha
-          if (string.IsNullOrEmpty(txt.Text))
-          {
-            UIHelper.ShowMessage("Specify a Sale Date.");         
-            return false;
-          }
-          //validamos que la fecha no sea mayor a la fecha actual
-          if (Convert.ToDateTime(txt.Text) > BRHelpers.GetServerDate())
-          {
-            UIHelper.ShowMessage("Can not be after today.");
-            return false;
-          }
-          //validamos que la fecha no sea menor o igual a la fecha de cierre
-          if (Convert.ToDateTime(txt.Text) <=_CloseD)
-          {
-            UIHelper.ShowMessage($"It,s not allowed to make {des} for a closed date");
-            txt.Focus();
-            return false;
-          }
-        }
-      }     
-      return true;
+    /// <history>
+    /// [jorcanche]  created 05072016
+    /// </history>
+    private void Txtsagu_OnLostFocus(object sender, RoutedEventArgs e)
+    {          
+      GetGuestName(_sale.sagu);
     }
   }
 }

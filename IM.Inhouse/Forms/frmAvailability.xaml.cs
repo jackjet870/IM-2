@@ -63,16 +63,16 @@ namespace IM.Inhouse
     #region LoadControls
     private async void LoadControls()
     {
-      _guest = BRGuests.GetGuest(_guestID);
+      _guest = await BRGuests.GetGuest(_guestID);
       cboguum.ItemsSource =await BRUnavailableMotives.GetUnavailableMotives(1);
       if (_guest.guPRAvail != null)
       {
         txtguPRAvail.Text = _guest.guPRAvail;
         //Obtiene el Nombre del PR Ingresando su ID.
-        Personnel PRAvailability = BRPersonnel.GetPersonnelById(_guest.guPRAvail);
-        if (PRAvailability != null)
+        Personnel prAvailability = BRPersonnel.GetPersonnelById(_guest.guPRAvail);
+        if (prAvailability != null)
         {
-          txtguPRAvailName.Text = PRAvailability.peN;
+          txtguPRAvailName.Text = prAvailability.peN;
         }
       }
       if (_guest.guum != 0)

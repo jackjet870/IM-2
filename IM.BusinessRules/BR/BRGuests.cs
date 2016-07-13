@@ -17,20 +17,24 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene las llegadas de huespedes
     /// </summary>
-    /// <param name="Date">Fecha </param>
-    /// <param name="LeadSource">LeadSource </param>
-    /// <param name="Markets">Mercado </param>
-    /// <param name="Available">Available </param>
-    /// <param name="Contacted">Contacted</param>
-    /// <param name="Invited">Invited</param>
-    /// <param name="OnGroup">OnGroup</param>
-    public static List<GuestArrival> GetGuestsArrivals(DateTime Date, string LeadSource, string Markets, int Available, int Contacted, int Invited, int OnGroup)
+    /// <param name="date">Fecha </param>
+    /// <param name="leadSource">LeadSource </param>
+    /// <param name="markets">Mercado </param>
+    /// <param name="available">Available </param>
+    /// <param name="contacted">Contacted</param>
+    /// <param name="invited">Invited</param>
+    /// <param name="onGroup">OnGroup</param>
+    public static async Task<List<GuestArrival>> GetGuestsArrivals(DateTime date, string leadSource, string markets, int available, int contacted, int invited, int onGroup)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetArrivals_Timeout;
-        return dbContext.USP_OR_GetArrivals(Date, LeadSource, Markets, Available, Contacted, Invited, OnGroup).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetArrivals_Timeout;
+          return
+            dbContext.USP_OR_GetArrivals(date, leadSource, markets, available, contacted, invited, onGroup).ToList();
+        }
+      });
     }
 
     #endregion
@@ -40,19 +44,22 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene los huespedes disponibles
     /// </summary>
-    /// <param name="Date">Fecha </param>
-    /// <param name="LeadSource">LeadSource </param>
-    /// <param name="Markets">Mercado </param>
-    /// <param name="Contacted">Contacted</param>
-    /// <param name="Invited">Invited</param>
-    /// <param name="OnGroup">OnGroup</param>
-    public static List<GuestAvailable> GetGuestsAvailables(DateTime Date, string LeadSource, string Markets, int Contacted, int Invited, int OnGroup)
+    /// <param name="date">Fecha </param>
+    /// <param name="leadSource">LeadSource </param>
+    /// <param name="markets">Mercado </param>
+    /// <param name="contacted">Contacted</param>
+    /// <param name="invited">Invited</param>
+    /// <param name="onGroup">OnGroup</param>
+    public static async Task<List<GuestAvailable>> GetGuestsAvailables(DateTime date, string leadSource, string markets, int contacted, int invited, int onGroup)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetAvailables_Timeout;
-        return dbContext.USP_OR_GetAvailables(Date, LeadSource, Markets, Contacted, Invited, OnGroup).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetAvailables_Timeout;
+          return dbContext.USP_OR_GetAvailables(date, leadSource, markets, contacted, invited, onGroup).ToList();
+        }
+      });
     }
 
     #endregion
@@ -62,18 +69,18 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene los huespedes premanifestados
     /// </summary>
-    /// <param name="Date">Fecha </param>
-    /// <param name="LeadSource">LeadSource </param>
-    /// <param name="Markets">Mercado </param>
-    /// <param name="OnGroup">OnGroup</param>
-    public static async Task<List<GuestPremanifest>> GetGuestsPremanifest(DateTime Date, string LeadSource, string Markets, int OnGroup)
+    /// <param name="date">Fecha </param>
+    /// <param name="leadSource">LeadSource </param>
+    /// <param name="markets">Mercado </param>
+    /// <param name="onGroup">OnGroup</param>
+    public static async Task<List<GuestPremanifest>> GetGuestsPremanifest(DateTime date, string leadSource, string markets, int onGroup)
     {
       return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
           dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetPremanifest_Timeout;
-          return dbContext.USP_OR_GetPremanifest(Date, LeadSource, Markets, OnGroup).ToList();
+          return dbContext.USP_OR_GetPremanifest(date, leadSource, markets, onGroup).ToList();
         }
       });
     }
@@ -145,7 +152,7 @@ namespace IM.BusinessRules.BR
     #region GetGuestByID
 
     /// <summary>
-    /// Obtiene un invitado por su ID
+    /// Obtiene un invitado por su ID e Include("GuestsAdditional")
     /// </summary>
     /// <param name="guestId">Identificador del invitado</param>
     /// <returns>Invitado</returns>
@@ -179,20 +186,24 @@ namespace IM.BusinessRules.BR
     #endregion
 
     #region GetGuest
+
     /// <summary>
     /// get a Guest
     /// </summary>
-    /// <param name="guId">Id a Guest</param>
+    /// <param name="guestId">Id del huesped</param>
     /// <returns>Guest</returns>
     /// <history>
     /// [jorcanche] created 10/03/2016
     /// </history>
-    public static Guest GetGuest(int guestId)
+    public static async Task<Guest> GetGuest(int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        return (from gu in dbContext.Guests where gu.guID == guestId select gu).Single();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return (from gu in dbContext.Guests where gu.guID == guestId select gu).FirstOrDefault();
+        }
+      });
     }
     #endregion
 
@@ -200,21 +211,22 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene registros especificos de un guest Short con un guestID ingresado.
     /// </summary>
-    /// <param name="guestID"></param>
+    /// <param name="guestId"></param>
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 11/Abril/2016 Created
     /// </history>
-    public static GuestShort GetGuestShort(int guestID)
+    public static GuestShort GetGuestShort(int guestId)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
-        return dbContext.USP_OR_GetGuestById(guestID).SingleOrDefault();
+        return dbContext.USP_OR_GetGuestById(guestId).SingleOrDefault();
       }
     }
     #endregion
 
     #region SaveGuestMovement
+
     /// <summary>
     /// Guarda los moviemientos del Guest
     /// </summary>
@@ -226,13 +238,17 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche] created 15/03/2016
     /// </history>
-    public static void SaveGuestMovement(int guestId, EnumGuestsMovementsType guestMovementType, string changedBy, string computerName, string iPAddress)
+    public static async Task<int>  SaveGuestMovement(int? guestId, EnumGuestsMovementsType guestMovementType, string changedBy, string computerName, string iPAddress)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        dbContext.USP_OR_SaveGuestMovement(guestId, EnumToListHelper.GetEnumDescription(guestMovementType), changedBy, computerName, iPAddress);
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+         return dbContext.USP_OR_SaveGuestMovement(guestId, EnumToListHelper.GetEnumDescription(guestMovementType), changedBy,computerName, iPAddress);
+        }
+      });
     }
+
     #endregion
 
     #region GetGuestMovement
@@ -243,12 +259,15 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche] created 20/06/2016
     /// </history>
-    public static List<GuestMovements> GetGuestMovement(int guestId)
+    public static async Task<List<GuestMovements>> GetGuestMovement(int guestId)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return  await Task.Run(() =>
       {
-        return dbContext.USP_OR_GetGuestMovements(guestId).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return dbContext.USP_OR_GetGuestMovements(guestId).ToList();
+        }
+      });
     }
     #endregion
 
@@ -260,15 +279,16 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche] created 14/03/2016
     /// </history>
-    public static int SaveGuest(Guest guest)
+    public static async Task<int> SaveGuest(Guest guest)
     {
-      int nRes = 0;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        dbContext.Entry(guest).State = System.Data.Entity.EntityState.Modified;
-        return nRes = dbContext.SaveChanges();
-
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.Entry(guest).State = EntityState.Modified;
+          return dbContext.SaveChanges();
+        }
+      });
     }
     #endregion
 
@@ -289,19 +309,7 @@ namespace IM.BusinessRules.BR
       }
     }
     #endregion
-
-    #region GetExtraGuest
-    /// <summary>
-    /// Obtiene los datos de los invitados adicionales
-    /// </summary>
-    /// <param name="guestId">Identificador del invitado</param>
-    /// <returns>List<Guest></returns>
-    public static List<Guest> GetExtraGuest(int guestId)
-    {
-      return null;
-    }
-    #endregion
-
+   
     #region SaveGuestInvitation
 
     /// <summary>
@@ -456,14 +464,16 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche] created 16/03/2016
     /// </history>
-    public static List<GuestSearched> GetGuests(DateTime dateFrom, DateTime dateTo, string leadSource, string name = "ALL",
-                                                string roomNumber = "ALL", string reservation = "ALL", int guestID = 0)
+    public static async Task<List<GuestSearched>> GetGuests(DateTime dateFrom, DateTime dateTo, string leadSource, string name = "ALL",string roomNumber = "ALL", string reservation = "ALL", int guestId = 0)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetGuests_Timeout;
-        return dbContext.USP_OR_GetGuests(dateFrom, dateTo, leadSource, name, roomNumber, reservation, guestID).ToList();
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.Database.CommandTimeout = Properties.Settings.Default.USP_OR_GetGuests_Timeout;
+          return dbContext.USP_OR_GetGuests(dateFrom, dateTo, leadSource, name, roomNumber, reservation, guestId).ToList();
+        }
+      });
     }
     #endregion
 
@@ -656,76 +666,40 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche] 07/04/2016 Created
     /// </history>
-    public static int SaveGuestContact(Guest guest, short lsHoursDif, string changedBy, EnumGuestsMovementsType guestMovementType, string computerName, string iPAddress)
+    public static async Task<int> SaveGuestContact(Guest guest, short lsHoursDif, string changedBy, EnumGuestsMovementsType guestMovementType, string computerName, string iPAddress)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          try
+          using (var transaction = dbContext.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
           {
-            //guardamos la informacion de contacto
-            dbContext.Entry(guest).State = System.Data.Entity.EntityState.Modified;
+            try
+            {
+              //guardamos la informacion de contacto
+              dbContext.Entry(guest).State = EntityState.Modified;
 
-            //guardamos el Log del huesped
-            dbContext.USP_OR_SaveGuestLog(guest.guID, lsHoursDif, changedBy);
+              //guardamos el Log del huesped
+              dbContext.USP_OR_SaveGuestLog(guest.guID, lsHoursDif, changedBy);
 
-            //guardamos el movimiento de contactacion del huesped
-            dbContext.USP_OR_SaveGuestMovement(guest.guID, EnumToListHelper.GetEnumDescription(guestMovementType), changedBy, computerName, iPAddress);
+              //guardamos el movimiento de contactacion del huesped
+              dbContext.USP_OR_SaveGuestMovement(guest.guID, EnumToListHelper.GetEnumDescription(guestMovementType), changedBy, computerName, iPAddress);
 
-            var respuesta = dbContext.SaveChanges();
-            transaction.Commit();
-            return respuesta;
+              var respuesta = dbContext.SaveChanges();
+              transaction.Commit();
+              return respuesta;
+            }
+            catch
+            {
+              transaction.Rollback();
+              return 0;
+            }
           }
-          catch
-          {
-            transaction.Rollback();
-            return 0;
-          }
         }
-      }
+      });
     }
-    #endregion
-
-    #region GetSearchGuest
-
-    public static List<Guest> GetSearchGuest(string leadSource, string name, string room, string reservacion, DateTime dtFrom, DateTime dtTo, string lsProgram)
-    {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-      {
-        var guests = (from g in dbContext.Guests
-                      join ls in dbContext.LeadSources on g.guls equals ls.lsID
-                      where ls.lspg == lsProgram
-                           && (g.guCheckInD >= dtFrom && g.guCheckInD <= dtTo)
-                      select g).ToList();
-        if (!String.IsNullOrEmpty(leadSource))
-        {
-          guests = guests.Where(g => g.guls.Equals(leadSource)).ToList();
-        }
-
-        if (!String.IsNullOrEmpty(name))
-        {
-          guests = guests.Where(g => (g.guLastName1 != null && g.guLastName1.ToUpper().Contains(name))
-                                || (g.guFirstName1 != null && g.guFirstName1.ToUpper().Contains(name))
-                                || (g.guLastname2 != null && g.guLastname2.ToUpper().Contains(name))
-                                || (g.guFirstName2 != null && g.guFirstName2.ToUpper().Contains(name))).ToList();
-
-        }
-
-        if (!String.IsNullOrEmpty(room))
-        {
-          guests = guests.Where(g => g.guRoomNum != null && g.guRoomNum.Contains(room)).ToList();
-        }
-
-        if (!String.IsNullOrEmpty(reservacion))
-        {
-          guests = guests.Where(g => g.guHReservID != null && g.guHReservID.Contains(reservacion)).ToList();
-        }
-
-        return guests;
-      }
-    }
-    #endregion
+    
+    #endregion   
 
     #region ChangedByExist
     /// <summary>
@@ -771,56 +745,61 @@ namespace IM.BusinessRules.BR
     #endregion
 
     #region GetGuestPremanifestOuthouse
+
     /// <summary>
     /// Devuelve una Nota o varias dependiendo de cuantas tanga el Guest
     /// </summary>
-    /// <param name="guId">Id a Guest</param>
+    /// <param name="bookinvit"></param>
+    /// <param name="date"></param>
+    /// <param name="leadSource"></param>
     /// <returns>Un listado de PRNotes</returns>
     /// <history>
     /// [jorcanche] created 22/03/2016
     /// </history>    
-    public static List<GuestPremanifestOuthouse> GetGuestPremanifestOuthouse(bool bookinvit, DateTime Date, string LeadSource)
+    public static async Task<List<GuestPremanifestOuthouse>> GetGuestPremanifestOuthouse(bool bookinvit, DateTime date,string leadSource)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        return (from G in dbContext.Guests
-                join Co in dbContext.Countries on G.guco equals Co.coID
-                join Ag in dbContext.Agencies on G.guag equals Ag.agID
-                where (bookinvit ? G.guBookD : G.guInvitD) == Date
-                where G.guls == LeadSource
-                orderby G.guBookT, G.guLastName1
-                select new GuestPremanifestOuthouse
-                {
-                  guStatus = G.guStatus,
-                  guID = G.guID,
-                  guCheckIn = G.guCheckIn,
-                  guRoomNum = G.guRoomNum,
-                  guLastName1 = G.guLastName1,
-                  guFirstName1 = G.guFirstName1,
-                  guCheckInD = G.guCheckInD,
-                  guCheckOutD = G.guCheckOutD,
-                  guco = G.guco,
-                  coN = Co.coN,
-                  guag = G.guag,
-                  agN = Ag.agN,
-                  guAvail = G.guAvail,
-                  guInfo = G.guInfo,
-                  guPRInfo = G.guPRInfo,
-                  guInfoD = G.guInfoD,
-                  guInvit = G.guInvit,
-                  guInvitD = G.guInvitD,
-                  guBookD = G.guBookD,
-                  guBookT = G.guBookT,
-                  guPRInvit1 = G.guPRInvit1,
-                  guMembershipNum = G.guMembershipNum,
-                  guBookCanc = G.guBookCanc,
-                  guShow = G.guShow,
-                  guSale = G.guSale,
-                  guComments = G.guComments,
-                  guPax = G.guPax
-                }).ToList();
-      }
-
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          return (from g in dbContext.Guests
+            join co in dbContext.Countries on g.guco equals co.coID
+            join ag in dbContext.Agencies on g.guag equals ag.agID
+            where (bookinvit ? g.guBookD : g.guInvitD) == date
+            where g.guls == leadSource
+            orderby g.guBookT, g.guLastName1
+            select new GuestPremanifestOuthouse
+            {
+              guStatus = g.guStatus,
+              guID = g.guID,
+              guCheckIn = g.guCheckIn,
+              guRoomNum = g.guRoomNum,
+              guLastName1 = g.guLastName1,
+              guFirstName1 = g.guFirstName1,
+              guCheckInD = g.guCheckInD,
+              guCheckOutD = g.guCheckOutD,
+              guco = g.guco,
+              coN = co.coN,
+              guag = g.guag,
+              agN = ag.agN,
+              guAvail = g.guAvail,
+              guInfo = g.guInfo,
+              guPRInfo = g.guPRInfo,
+              guInfoD = g.guInfoD,
+              guInvit = g.guInvit,
+              guInvitD = g.guInvitD,
+              guBookD = g.guBookD,
+              guBookT = g.guBookT,
+              guPRInvit1 = g.guPRInvit1,
+              guMembershipNum = g.guMembershipNum,
+              guBookCanc = g.guBookCanc,
+              guShow = g.guShow,
+              guSale = g.guSale,
+              guComments = g.guComments,
+              guPax = g.guPax
+            }).ToList();
+        }
+      });
     }
 
     #endregion
@@ -832,38 +811,19 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche] 04/05/2016 created
     /// </history>
-    /// <param name="guID"></param>
-    public static void DeleteGuest(int guID)
+    /// <param name="guID">Id del Guest</param>
+    public static async Task<int>  DeleteGuest(int guID)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        dbContext.USP_OR_DeleteGuest(guID);
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+         return  dbContext.USP_OR_DeleteGuest(guID);
+        }
+      });
     }
     #endregion
-
-    #region GetGuestValidForTransfer
-    /// <summary>
-    /// Valida si existe el guesta en los registros. Si existe retorna el registro.
-    /// </summary>
-    /// <param name="guHReservID">ID de la reservación</param>
-    /// <param name="gulsOriginal">ID del guest</param>
-    /// <returns>Resgistro del Guest</returns>
-    /// <history>
-    /// [michan]  20/04/2016  Created
-    /// </history>
-    public async static Task<Guest> GetGuestValidForTransfer(string guHReservID, string gulsOriginal)
-    {
-      Guest guest = null;
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
-      {
-        //Revisamos si ya existe en Guest
-        guest = await dbContext.Guests.SingleOrDefaultAsync(g => g.guHReservID == guHReservID && g.gulsOriginal == gulsOriginal);
-      }
-      return guest;
-    }
-    #endregion
-
+ 
     #region GetSelfGen
     /// <summary>
     /// Devuelve los datos para la busqueda de casos Self Gen

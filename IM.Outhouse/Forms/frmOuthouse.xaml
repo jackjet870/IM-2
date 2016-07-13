@@ -35,7 +35,8 @@
             <Setter Property="Background" Value="Bisque"/>
         </Style>
     </Window.Resources>
-    <Grid>
+    <xctk:BusyIndicator x:Name="BusyIndicator" >
+        <Grid>
         <!--#region Grid Principal -->
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -237,6 +238,7 @@
             <StatusBarItem x:Name="StatusBarReg" Content="0/0" HorizontalAlignment="Right" Width="50"/>
         </StatusBar>
     </Grid>
+        </xctk:BusyIndicator>
 </Window>
 
 

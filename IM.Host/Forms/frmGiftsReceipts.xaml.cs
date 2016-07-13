@@ -29,7 +29,7 @@ namespace IM.Host.Forms
     private bool isManualEditCommit;
 
 
-
+    static Guest _guest = new Guest();
     private int _chargeToChanged = 0;
     public EnumModeOpen modeOpen; // Variable para saber si puede ser editado el formulario o solo carga en modo vista (Edit | Preview)
     public EnumOpenBy modeOpenBy; // Variable para saber de que fuente fue invocado el formulario (Checkbox | boton)
@@ -1687,11 +1687,12 @@ namespace IM.Host.Forms
     /// </summary>
     /// <history>
     /// [vipacheco] 09/Mayo/2016 Created
+    /// [jorcanche] 06072016 se agrego asincronia en del GetGuest
     /// </history>
     private async void UpdateGuest()
     {
       bool Update = false;
-      Guest _guest = BRGuests.GetGuest(_guestID);
+      Guest _guest = await BRGuests.GetGuest(_guestID);
 
       //Actualizamos la clave del recibo de deposito
       if (_guest.guDepositgr == null && Convert.ToDecimal(txtgrDeposit.Text) != 0)
@@ -2761,7 +2762,7 @@ namespace IM.Host.Forms
           // autorizado. De lo contrario el cargo es por el total de regalos
           case "A":
             // Validamos si tiene tour
-            Guest _guest = BRGuests.GetGuest(Convert.ToInt32(txtgrgu.Text));
+           LoadGuest(txtgrgu.Text);
             blnTour = _guest.guTour;
             if (blnTour)
               curCharge = CalculateChargeBasedOnMaxAuthGifts(curTotalCost, curMaxAuthGifts);
@@ -2792,6 +2793,20 @@ namespace IM.Host.Forms
       else
         txtTotalCxC.Text = string.Format("{0:C2}", Convert.ToDecimal(txtgrCxCGifts.Text != "" ? txtgrCxCGifts.Text.TrimStart(' ', '$') : "0") + Convert.ToDecimal(txtgrCxCAdj.Text != "" ? txtgrCxCAdj.Text.TrimStart(' ', '$') : "0"));
 
+    }
+    #endregion
+
+    #region LoadGuest
+    /// <summary>
+    /// Carga el guest segun el Id
+    /// </summary>
+    /// <param name="guestId">Id del guest</param>
+    /// <history>
+    /// [jorcanche] created 06072016
+    /// </history>
+    private static async void LoadGuest(string guestId)
+    {
+      _guest = await BRGuests.GetGuest(Convert.ToInt32(guestId));
     }
     #endregion
 

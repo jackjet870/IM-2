@@ -14,8 +14,11 @@ using System.Windows.Media;
 namespace IM.InvitConfig.Forms
 {
   /// <summary>
-  /// Interaction logic for frmInvitConfig.xaml
+  ///  Formulario para la configuracion de la informacion general de la invitacion
   /// </summary>
+  /// <history>
+  /// [jorcanche]  created 04032016
+  /// </history>
   public partial class frmInvitConfig : Window, IRichTextBoxToolBar
   {
     #region Variables Globales
@@ -134,12 +137,12 @@ namespace IM.InvitConfig.Forms
     ///<history>
     ///[jorcanche] created 12/05/2016
     ///</history>
-    private void LoadRTF()
+    private async void LoadRTF()
     {
       if (cmbLanguage.SelectedIndex == -1 || cmbLeadSource.SelectedIndex == -1) return;
       rtbHeader.Document.Blocks.Clear();
       rtbFooter.Document.Blocks.Clear();
-      _rtfInvitation = BRInvitation.GetInvitationFooterHeader(cmbLeadSource.SelectedValue.ToString(), cmbLanguage.SelectedValue.ToString());
+      _rtfInvitation = await  BRInvitation.GetInvitationFooterHeader(cmbLeadSource.SelectedValue.ToString(), cmbLanguage.SelectedValue.ToString());
       if (_rtfInvitation == null) return;
       UIRichTextBoxHelper.LoadRTF(ref rtbHeader, _rtfInvitation.itRTFHeader);
       UIRichTextBoxHelper.LoadRTF(ref rtbFooter, _rtfInvitation.itRTFFooter);
@@ -268,23 +271,26 @@ namespace IM.InvitConfig.Forms
     #endregion
 
     #region btnPreview_Click
+
     /// <summary>
     /// Visualiza como queda en el reporte de inviatacion
     /// </summary>
     ///<history>
     ///[jorcanche] created 12/05/2016
     ///</history>
-    private void btnPreview_Click(object sender, RoutedEventArgs e)
+    private async void btnPreview_Click(object sender, RoutedEventArgs e)
     {
       StaStart("Preview Invit...");
+      if (cmbLanguage.SelectedValue == null || cmbLeadSource.SelectedValue == null) return;
       EnableControls(true, false, true, false);
-      var guest = BRGuests.GetGuest(0);
+      var guest = await BRGuests.GetGuest(0);
       guest.guls = cmbLeadSource.SelectedValue.ToString();
       guest.gula = cmbLanguage.SelectedValue.ToString();
-      BRGuests.SaveGuest(guest);
-      RptInvitationHelper.RPTInvitation();
+      await BRGuests.SaveGuest(guest);
+      RptInvitationHelper.RptInvitation(frm: this);
       StaEnd();
-    } 
+    }
+
     #endregion
 
     #region btnExit_Click
@@ -311,15 +317,13 @@ namespace IM.InvitConfig.Forms
     ///</history>
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-      if (!btnEdit.IsEnabled)
+      if (btnEdit.IsEnabled) return;
+      var result = UIHelper.ShowMessage("This form is currently in edit mode. Please save or undo your changes before closing it. You still want to close?", MessageBoxImage.Question, "Mail Outs Configuration");
+      if (result == MessageBoxResult.No)
       {
-        var result = UIHelper.ShowMessage("This form is currently in edit mode. Please save or undo your changes before closing it. You still want to close?", MessageBoxImage.Question, "Mail Outs Configuration");
-        if (result == MessageBoxResult.No)
-        {
-          e.Cancel = true;
-        }
+        e.Cancel = true;
       }
-    } 
+    }
     #endregion
 
     #region rtb_GotFocus

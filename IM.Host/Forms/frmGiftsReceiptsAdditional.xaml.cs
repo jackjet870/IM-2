@@ -2,6 +2,7 @@
 using IM.Model;
 using PalaceResorts.Common.PalaceTools;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
@@ -92,7 +93,7 @@ namespace IM.Host.Forms
           lngGuestID = currentRow.gaAdditional;
 
           // Agregamos el recibo de regalos
-          lngReceiptID = AddReceipt(lngGuestID);
+          lngReceiptID = await AddReceipt(lngGuestID);
 
           // Agregamos los regalos del recibo
           AddGifts(lngGuestID, lngReceiptID);
@@ -121,10 +122,10 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 13/Mayo/2016 Created
     /// </history>
-    private int AddReceipt(int GuestID)
+    private async Task<int> AddReceipt(int GuestID)
     {
       // Obtenemos los datos del huesped
-      Guest _Guest = BRGuests.GetGuest(GuestID);
+      Guest _Guest = await BRGuests.GetGuest(GuestID);
       string _FullName = GetFullName(_Guest.guLastName1, _Guest.guFirstName1);
       string _FullName2 = GetFullName(_Guest.guLastname2, _Guest.guFirstName2);
 

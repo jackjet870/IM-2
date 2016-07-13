@@ -78,6 +78,10 @@
                 <DataGridTextColumn x:Name="slOverPackColumn" Binding="{Binding slOverPack,StringFormat='#0.00', ValidatesOnDataErrors=True}" Header="O. Pack" Width="auto"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Name="btnSalesMan" Content="Sales Man" Grid.Row="1" Margin="0,0,0,5" Width="150" Click="btnSalesMan_Click"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Name="btnSalesMan" Content="Sales Man" Margin="0,10,15,5" Width="150" Click="btnSalesMan_Click"/>
+            <Button  Name="btnPrintGuestlog" Content="Print Sale Log" Width="150" Margin="0,10,0,5" Click="btnPrintGuestLog_Click"/>
+        </StackPanel>
+            
     </Grid>
 </Window>

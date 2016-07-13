@@ -16,14 +16,17 @@ using System.Windows.Shapes;
 namespace IM.Host.Forms
 {
   /// <summary>
-  /// Interaction logic for frmSalesmenChanges.xaml
+  /// Formulario que muestra los moviemientos de los Salesmen
   /// </summary>
+  /// <history>
+  /// [jorcanche]  created 07/07/2016
+  /// </history>
   public partial class frmSalesmenChanges : Window
   {
-    private int _membership;
-    int _sale = 0;
+    private string _membership;
+    int _sale;
 
-    public frmSalesmenChanges(int sale, int membership)
+    public frmSalesmenChanges(int sale, string membership)
     {
       InitializeComponent();
       _sale = sale;
@@ -40,7 +43,7 @@ namespace IM.Host.Forms
     {
       Title = $"IM Salesmen Changes - Sale ID {_sale} / Membership Number {_membership}";
       var salesSalesMan = await BRSalesSalesmen.GetSalesmenChanges(_sale);         
-      CollectionViewSource salesmenChangesViewSource = ((CollectionViewSource)(FindResource("salesmenChangesViewSource")));
+      var salesmenChangesViewSource = (CollectionViewSource)FindResource("salesmenChangesViewSource");
       salesmenChangesViewSource.Source = salesSalesMan;      
     }
   }

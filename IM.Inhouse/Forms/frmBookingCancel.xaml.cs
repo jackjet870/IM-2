@@ -27,9 +27,8 @@ namespace IM.Inhouse.Forms
     public frmBookingCancel(int guestID, UserLogin user)
     {
       InitializeComponent();
-      this._user = user;
-      this._guestID = guestID;
-      _guest = BRGuests.GetGuest(guestID);
+      _user = user;
+      _guestID = guestID;
       lblUserName.Text = user.peN;
       chkguBookCanc.IsChecked = _guest.guBookCanc;
     }
@@ -99,5 +98,16 @@ namespace IM.Inhouse.Forms
       _cancelado = chkguBookCanc.IsChecked;
     } 
     #endregion
+
+    /// <summary>
+    /// Carga la variable de Guest
+    /// </summary>
+    /// <history>
+    /// [jorcanche]  created 06072016
+    /// </history>
+    private async void FrmBookingCancel_OnLoaded(object sender, RoutedEventArgs e)
+    {
+      _guest = await BRGuests.GetGuest(_guestID);
+    }
   }
 }

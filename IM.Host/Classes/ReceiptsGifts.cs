@@ -23,6 +23,7 @@ namespace IM.Host.Classes
   /// </history>
   public class ReceiptsGifts
   {
+    static Guest _guest = new Guest();
 
     #region StartEdit
     /// <summary>
@@ -540,7 +541,7 @@ namespace IM.Host.Classes
           // autorizado. De lo contrario el cargo es por el total de regalos
           case "A":
             // Validamos si tiene tour
-            Guest _guest = BRGuests.GetGuest(Convert.ToInt32(txtgrgu.Text));
+             LoadGuest(txtgrgu.Text); 
             blnTour = _guest.guTour;
             if (blnTour)
               curCharge = CalculateChargeBasedOnMaxAuthGifts(curTotalCost, curMaxAuthGifts);
@@ -568,6 +569,21 @@ namespace IM.Host.Classes
       // Calculamos el total del cargo
       txtTotalCxC.Text = string.Format("{0:C2}", Convert.ToDecimal(txtgrCxCGifts.Text != "" ? txtgrCxCGifts.Text.Trim(new char[] { '$' }) : "0") + Convert.ToDecimal(txtgrCxCAdj.Text != "" ? txtgrCxCAdj.Text.Trim(new char[] { '$' }) : "0"));
     }
+
+    #region LoadGuest
+    /// <summary>
+    /// Carga el guest segun el Id
+    /// </summary>
+    /// <param name="guestId">Id del guest</param>
+    /// <history>
+    /// [jorcanche] created 06072016
+    /// </history>
+    private static async void LoadGuest(string guestId)
+    {
+      _guest = await BRGuests.GetGuest(Convert.ToInt32(guestId));
+    } 
+    #endregion
+
     #endregion
 
     #region SetMaxAuthGifts

@@ -766,5 +766,17 @@ namespace IM.BusinessRules.Properties {
                 this["USP_OR_GetGuestsByPR"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("180")]
+        public int USP_OR_Occupation {
+            get {
+                return ((int)(this["USP_OR_Occupation"]));
+            }
+            set {
+                this["USP_OR_Occupation"] = value;
+            }
+        }
     }
 }

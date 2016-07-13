@@ -579,7 +579,7 @@ namespace IM.Base.Forms
     /// </history>
     private void btnPrint_Click(object sender, RoutedEventArgs e)
     {
-      RptInvitationHelper.RPTInvitation(_guestID, _user.User.peID);
+      RptInvitationHelper.RptInvitation(_guestID, _user.User.peID);
     }
 
     /// <summary>

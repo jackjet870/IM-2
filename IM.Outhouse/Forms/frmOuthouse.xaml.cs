@@ -106,45 +106,27 @@ namespace IM.Outhouse.Forms
     #endregion
 
     #region LoadGrid
+
     /// <summary>
     /// Carga el DataGrid que contiene los Guest Premanifest de Outhouse
     /// </summary>
     /// <history>
     /// [jorcanche] 05/05/2016 created
     /// </history>
-    private void LoadGrid()
+    private async void LoadGrid()
     {
-      if (_outPremanifestViewSource != null)
-        //_outPremanifestViewSource.Source = BRGuests.GetGuestPremanifestOuthouse(_bookInvit, _serverDate, App.User.Location.loID);
-        Task.Factory.StartNew(() => BRGuests.GetGuestPremanifestOuthouse(_bookInvit, _serverDate, App.User.Location.loID))
-         .ContinueWith(
-         (LoadGuestsOutSide) =>
-         {
-           if (LoadGuestsOutSide.IsFaulted)
-           {
-             UIHelper.ShowMessage(LoadGuestsOutSide.Exception.InnerException.Message, MessageBoxImage.Error);
-             StaEnd();
-             return false;
-           }
-           else
-           {
-             if (LoadGuestsOutSide.IsCompleted)
-             {
-               LoadGuestsOutSide.Wait(1000);
-               _outPremanifestViewSource.Source = LoadGuestsOutSide.Result;
-             }
-             StaEnd();
-             return false;
-           }
-         },
-         TaskScheduler.FromCurrentSynchronizationContext()
-          );
+      if (_outPremanifestViewSource == null) return;
+        BusyIndicator.IsBusy = true;
+        _outPremanifestViewSource.Source = await BRGuests.GetGuestPremanifestOuthouse(_bookInvit, _serverDate, App.User.Location.loID);
+      BusyIndicator.IsBusy = false;
     }
+
     #endregion
  
     #region LoadOuthouse
     /// <summary>
     /// Carga e incializa la variables cuando es invocado el metodo
+    /// </summary>
     /// <history>
     /// [jorcanche] created 05/05/2016
     /// </history>
@@ -318,13 +300,13 @@ namespace IM.Outhouse.Forms
     /// <history>
     /// [jorcanche] created 05/05/2016
     /// </history>
-    private void guCommentsColumnArrival_LostFocus(object sender, RoutedEventArgs e)
+    private async void guCommentsColumnArrival_LostFocus(object sender, RoutedEventArgs e)
     {
       var txt = sender as TextBox;    
       var row = dgGuestPremanifest.SelectedItem as GuestPremanifestOuthouse;
-      Guest pre = BRGuests.GetGuest(row.guID);
+      Guest pre = await BRGuests.GetGuest(row.guID);
       pre.guComments = txt.Text;
-      BRGuests.SaveGuest(pre);
+      await BRGuests.SaveGuest(pre);
     }
     #endregion
 
@@ -394,14 +376,14 @@ namespace IM.Outhouse.Forms
     /// <history>
     /// [jorcanche] created 05/05/2016
     /// </history>
-    private void dgGuestPremanifest_PreviewKeyDown(object sender, KeyEventArgs e)
+    private async void dgGuestPremanifest_PreviewKeyDown(object sender, KeyEventArgs e)
     {
       if (dgGuestPremanifest != null && e.Key == Key.Delete)
       {
         var row = dgGuestPremanifest.SelectedItem as GuestPremanifestOuthouse;
-        if (!row.guShow)
+        if (row != null && !row.guShow)
         {
-          DataGridRow dgr = (DataGridRow)dgGuestPremanifest.ItemContainerGenerator.ContainerFromIndex(dgGuestPremanifest.SelectedIndex);
+          var dgr = (DataGridRow)dgGuestPremanifest.ItemContainerGenerator.ContainerFromIndex(dgGuestPremanifest.SelectedIndex);
           if (e.Key == Key.Delete && !dgr.IsEditing)
           {
             // User is attempting to delete the row
@@ -409,7 +391,7 @@ namespace IM.Outhouse.Forms
               MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
             if (!(e.Handled = result == MessageBoxResult.No))
             {
-              BRGuests.DeleteGuest(row.guID);
+              await BRGuests.DeleteGuest(row.guID);
             }
           }
         }

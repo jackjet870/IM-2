@@ -82,7 +82,7 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MemberSalesmen>("USP_CL_GetMemberSalesmen", applicationParameter, jobParameter, codeParameter, rolesParameter);
         }
     
-        public virtual ObjectResult<MemberSalesmen> USP_CL_SaveMemberSalesman(Nullable<decimal> rECNUM, Nullable<decimal> cLMEMOPC_ID, string aPPLICATION, string cLAOPC_ID, string oPC1, Nullable<decimal> oPC_PCT, Nullable<decimal> oPC_PCT2, Nullable<decimal> oPC_CPT3, Nullable<decimal> oPC_PCT4, string sTATUS, string zONA, string oPC, string user)
+        public virtual ObjectResult<MemberSalesmen>   USP_CL_SaveMemberSalesman(Nullable<decimal> rECNUM, Nullable<decimal> cLMEMOPC_ID, string aPPLICATION, string cLAOPC_ID, string oPC1, Nullable<decimal> oPC_PCT, Nullable<decimal> oPC_PCT2, Nullable<decimal> oPC_CPT3, Nullable<decimal> oPC_PCT4, string sTATUS, string zONA, string oPC, string user)
         {
             var rECNUMParameter = rECNUM.HasValue ?
                 new ObjectParameter("RECNUM", rECNUM) :

@@ -22,20 +22,10 @@ namespace IM.Inhouse
     private UserData _user;
     private Guest _guest;
     private bool _searchPRbyTxt;
-    public DateTime FollowD
-    {
-      get
-      {
-        return Convert.ToDateTime(txtguFollowD.Text).Date;
-      }
-    }
-    public string PRFollow
-    {
-      get
-      {
-        return txtguPRFollow.Text;
-      }
-    }
+    public DateTime FollowD => Convert.ToDateTime(txtguFollowD.Text).Date;
+
+    public string PrFollow => txtguPRFollow.Text;
+
     public bool _wasSaved = false;
     string guPRAvail { get; set; }
     #endregion
@@ -47,8 +37,6 @@ namespace IM.Inhouse
       InitializeComponent();
       _guestID = guestID;
       lblUserName.Content = App.User.User.peN;
-      _guest = BRGuests.GetGuest(_guestID);
-      //cboguPRFollow.ItemsSource = BRPersonnel.GetPersonnel(App.User.Location.loID, "PR");
     }
     #endregion
 
@@ -89,13 +77,14 @@ namespace IM.Inhouse
     /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      //_guest = await BRGuests.GetGuest(_guestID);
       LoadFollwUp();
     }
 
     private async void LoadFollwUp()
     {
       cboguPRFollow.ItemsSource = await BRPersonnel.GetPersonnel(App.User.Location.loID, "ALL", "PR");
-      Guest _guest = BRGuests.GetGuest(_guestID);
+      _guest = await BRGuests.GetGuest(_guestID);
       if (_guest.guFollowD.HasValue)
       {//txtguFollowD
         txtguFollowD.Text = _guest.guFollowD.Value.Date.ToString("dd-MM-yyyy");

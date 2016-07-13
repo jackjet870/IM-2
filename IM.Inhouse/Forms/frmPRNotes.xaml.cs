@@ -31,31 +31,30 @@ namespace IM.Inhouse.Forms
     public frmPRNotes(int guestID)
     {
       InitializeComponent();
-      _guestID = guestID;
-      //Cargamos los datos del huesped
-      _guest = BRGuests.GetGuest(_guestID);
-
+      _guestID = guestID;       
     }
     #endregion
 
     #region Save
-    public void Save()
+    public async void Save()
     {
       EnabledControls(true, true, false);
       if (AfterValidate())
       {
         //Agregamos la nota 
-        PRNote note = new PRNote();
-        note.pnDT = Convert.ToDateTime(txtpnDT.Text);
-        note.pngu = _guestID;
-        note.pnPR = txtpnPR.Text;
-        note.pnText = txtpnText.Text;
+        var note = new PRNote
+        {
+          pnDT = Convert.ToDateTime(txtpnDT.Text),
+          pngu = _guestID,
+          pnPR = txtpnPR.Text,
+          pnText = txtpnText.Text
+        };
 
         //Actualizamos el guest si no tiene ninguna nota
         Guest guest = null;
-        if (!BRNotes.GetCountNoteGuest(_guestID))
+        if (! await BRNotes.GetCountNoteGuest(_guestID))
         {
-          guest = BRGuests.GetGuest(_guestID);
+          guest = await BRGuests.GetGuest(_guestID);
           guest.guPRNote = true;
           _saveNote = true;
         }
@@ -68,10 +67,10 @@ namespace IM.Inhouse.Forms
         //Si hubo un erro al ejecutar el metodo SaveNoteGuest nos devolvera 0, indicando que ningun paso 
         //se realizo, es decir ni se agrego la nota y se modifico el guest, y siendo así ya no modificamos la variable
         //_saveNote que es el que indica que se guardo el Avail.
-        if (BRNotes.SaveNoteGuest(note, guest) != 0)
+        if ( await BRNotes.SaveNoteGuest(note, guest) != 0)
         {
           //Actualizamos el datagrid 
-          _pRNoteViewSource.Source = BRNotes.GetNoteGuest(_guestID);
+          _pRNoteViewSource.Source = await BRNotes.GetNoteGuest(_guestID);
         }
         else
         {
@@ -86,22 +85,21 @@ namespace IM.Inhouse.Forms
       {
         EnabledControls(false, false, true);
       }
-      //BRNotes.SaveNoteGuest(note);
-      //BRGuests.SaveGuest(guest);
     }
     #endregion
 
     #region Window_Loaded
     /// <summary>
-    /// 
+    /// Carga e incializa las variables
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     /// <history>
+    /// [jorcanche] 02/02/2016 Created
     /// [erosado] 19/05/2016  Modified. Se agregó asincronía
     /// </history>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
+      //Cargamos los datos del huesped
+      _guest = await BRGuests.GetGuest(_guestID);
       EnabledControls(true, true, false);
       //Cargamos los PR
       cbopnPR.ItemsSource = await BRPersonnel.GetPersonnel(App.User.Location.loID, "ALL", "PR");
@@ -113,8 +111,8 @@ namespace IM.Inhouse.Forms
       txtguCheckOutD.Text = _guest.guCheckOutD.ToString("dd/MM/yyyy");
 
       //Cargamos el datagrid
-      _pRNoteViewSource = ((CollectionViewSource)(this.FindResource("pRNoteViewSource")));
-      _pRNoteViewSource.Source = BRNotes.GetNoteGuest(_guestID);
+      _pRNoteViewSource = (CollectionViewSource)FindResource("pRNoteViewSource");
+      _pRNoteViewSource.Source = await BRNotes.GetNoteGuest(_guestID);
       //Si no tiene ninguna nota se inhabilita el control
       if (dgNotes.Items.Count < 1)
       {

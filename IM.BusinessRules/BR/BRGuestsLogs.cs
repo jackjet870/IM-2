@@ -18,12 +18,15 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [jorcanche] 09/03/2016
     /// </history>
-    public static void SetLogGuest(int Guest, short HoursDif, string ChangedBy)
+    public static async Task<int> SetLogGuest(int Guest, short HoursDif, string ChangedBy)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        dbContext.USP_OR_SaveGuestLog(Guest, HoursDif, ChangedBy);
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+         return  dbContext.USP_OR_SaveGuestLog(Guest, HoursDif, ChangedBy);
+        }
+      });
     } 
     #endregion
 
@@ -32,44 +35,44 @@ namespace IM.BusinessRules.BR
     /// <summary>
     /// Obtiene log del Guest Ingresado
     /// </summary>
-    /// <param name="IdGuest">Id del Guest</param>
+    /// <param name="idGuest">Id del Guest</param>
     /// <history>
     /// [jorcanche] 09/03/2016
     /// </history>
-    public async static Task<List<GuestLogData>> GetGuestLog(int IdGuest)
-    {
-      List<GuestLogData> result = null;
-      await Task.Run(() =>
+    public static async Task<List<GuestLogData>> GetGuestLog(int idGuest)
+    {  
+     return await Task.Run(() =>
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          result = dbContext.USP_OR_GetGuestLog(IdGuest).ToList();
+          return dbContext.USP_OR_GetGuestLog(idGuest).ToList();
         }
       });
-      return result;
     }
     #endregion
 
     #region SaveGuestLog
 
-    /// <summary>
-    /// Guarda los cambios del log del Guest
-    /// </summary>
-    ///<param name="IdGuest"></param>
-    /// <param name="changedBy"></param>
+    ///  <summary>
+    ///  Guarda los cambios del log del Guest
+    ///  </summary>
+    /// <param name="idGuest"></param>
+    /// <param name="lsHoursDif"></param>
     /// <param name="changedBy"></param>
     /// <history>
-    /// [jorcanche] 11/03/2016
-    /// </history>
-    public static void SaveGuestLog(int IdGuest, short lsHoursDif, string changedBy)
+    ///  [jorcanche] 11/03/2016
+    ///  </history>
+    public static async Task<int> SaveGuestLog(int idGuest, short lsHoursDif, string changedBy)
     {
-      using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+      return await Task.Run(() =>
       {
-        dbContext.USP_OR_SaveGuestLog(IdGuest, lsHoursDif, changedBy);
-      }
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+         return dbContext.USP_OR_SaveGuestLog(idGuest, lsHoursDif, changedBy);
+        }
+      });
     }
     #endregion
-
   }
 
 }
