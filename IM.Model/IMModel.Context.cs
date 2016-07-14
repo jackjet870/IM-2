@@ -6173,13 +6173,46 @@ namespace IM.Model
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_DeleteGuestPromotion", receiptParameter, giftParameter);
         }
     
-        public virtual ObjectResult<RptRefundLetter_BookingDeposit> USP_OR_RptRefundLetter(Nullable<int> refundID)
+        public virtual ObjectResult<RptRefundLetter> USP_OR_RptRefundLetter(Nullable<int> refundID)
         {
             var refundIDParameter = refundID.HasValue ?
                 new ObjectParameter("RefundID", refundID) :
                 new ObjectParameter("RefundID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptRefundLetter_BookingDeposit>("USP_OR_RptRefundLetter", refundIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptRefundLetter>("USP_OR_RptRefundLetter", refundIDParameter);
+        }
+    
+        public virtual ObjectResult<RptStatisticsByCloser> USP_IM_RptStatisticsByCloser(Nullable<System.DateTime> dateFrom, Nullable<System.DateTime> dateTo, string salesRoom, string salesmanID, string segments, string programs, Nullable<bool> includeAllSalesmen)
+        {
+            var dateFromParameter = dateFrom.HasValue ?
+                new ObjectParameter("DateFrom", dateFrom) :
+                new ObjectParameter("DateFrom", typeof(System.DateTime));
+    
+            var dateToParameter = dateTo.HasValue ?
+                new ObjectParameter("DateTo", dateTo) :
+                new ObjectParameter("DateTo", typeof(System.DateTime));
+    
+            var salesRoomParameter = salesRoom != null ?
+                new ObjectParameter("SalesRoom", salesRoom) :
+                new ObjectParameter("SalesRoom", typeof(string));
+    
+            var salesmanIDParameter = salesmanID != null ?
+                new ObjectParameter("SalesmanID", salesmanID) :
+                new ObjectParameter("SalesmanID", typeof(string));
+    
+            var segmentsParameter = segments != null ?
+                new ObjectParameter("Segments", segments) :
+                new ObjectParameter("Segments", typeof(string));
+    
+            var programsParameter = programs != null ?
+                new ObjectParameter("Programs", programs) :
+                new ObjectParameter("Programs", typeof(string));
+    
+            var includeAllSalesmenParameter = includeAllSalesmen.HasValue ?
+                new ObjectParameter("IncludeAllSalesmen", includeAllSalesmen) :
+                new ObjectParameter("IncludeAllSalesmen", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptStatisticsByCloser>("USP_IM_RptStatisticsByCloser", dateFromParameter, dateToParameter, salesRoomParameter, salesmanIDParameter, segmentsParameter, programsParameter, includeAllSalesmenParameter);
         }
     }
 }

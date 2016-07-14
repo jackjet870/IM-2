@@ -298,7 +298,7 @@ namespace IM.Model
         public virtual ICollection<PersonnelAccess> PersonnelAccess { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Personnel> Personnel_Liners { internal get; set; }
-        public virtual Personnel Personnel_Liner { internal get; set; }
+        public virtual Personnel Personnel_Liner { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PersonnelPermission> PersonnelPermissions { internal get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
