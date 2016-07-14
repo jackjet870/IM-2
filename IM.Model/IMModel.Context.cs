@@ -6172,5 +6172,14 @@ namespace IM.Model
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("USP_OR_DeleteGuestPromotion", receiptParameter, giftParameter);
         }
+    
+        public virtual ObjectResult<RptRefundLetter_BookingDeposit> USP_OR_RptRefundLetter(Nullable<int> refundID)
+        {
+            var refundIDParameter = refundID.HasValue ?
+                new ObjectParameter("RefundID", refundID) :
+                new ObjectParameter("RefundID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RptRefundLetter_BookingDeposit>("USP_OR_RptRefundLetter", refundIDParameter);
+        }
     }
 }
