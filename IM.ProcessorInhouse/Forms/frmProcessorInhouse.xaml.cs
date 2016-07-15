@@ -432,7 +432,7 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void AbrirFilterDateRangeLS()
     {
-      _frmFilter = new frmFilterDateRange { _frmIh = this };
+      _frmFilter = new frmFilterDateRange { _frmIh = this, Owner = this};
 
       #region Abriendo FrmFilter segun reporte seleccionado.
 
@@ -556,7 +556,7 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void AbrirFilterDateRangePR()
     {
-      _frmFilter = new frmFilterDateRange { _frmIh = this };
+      _frmFilter = new frmFilterDateRange { _frmIh = this, Owner = this};
 
       #region Abriendo FrmFilter segun reporte seleccionado.
 
@@ -591,7 +591,7 @@ namespace IM.ProcessorInhouse.Forms
     /// </history>
     private void AbrirFilterDateRangeGeneral()
     {
-      _frmFilter = new frmFilterDateRange { _frmIh = this };
+      _frmFilter = new frmFilterDateRange { _frmIh = this, Owner = this};
 
       #region Abriendo FrmFilter segun reporte seleccionado.
 

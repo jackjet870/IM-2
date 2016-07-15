@@ -327,8 +327,7 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     private void OpenFilterDateRangeLS(string strReport)
     {
-      _frmFilter = new frmFilterDateRange();
-      _frmFilter.frmPO = this;
+      _frmFilter = new frmFilterDateRange { frmPO = this, Owner = this };
       switch (strReport)
       {
         case "Deposits Payment by PR":
@@ -1001,8 +1000,7 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     public void OpenFilterDateRangePR(string strReport)
     {
-      _frmFilter = new frmFilterDateRange();
-      _frmFilter.frmPO = this;
+      _frmFilter = new frmFilterDateRange { frmPO = this, Owner = this };
       switch (strReport)
       {
         case "Production by Age":
@@ -1380,8 +1378,7 @@ namespace IM.ProcessorOuthouse.Forms
     /// </history>
     public void OpenFilterDateRangeOtherReport(string strReport)
     {
-      _frmFilter = new frmFilterDateRange();
-      _frmFilter.frmPO = this;
+      _frmFilter = _frmFilter = new frmFilterDateRange { frmPO = this, Owner = this };
 
       switch (strReport)
       {

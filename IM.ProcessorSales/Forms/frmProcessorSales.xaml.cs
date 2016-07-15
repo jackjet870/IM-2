@@ -499,7 +499,7 @@ namespace IM.ProcessorSales.Forms
     /// </history>
     private void ShowDateRangeSr()
     {
-      _frmFilter = new frmFilterDateRange { frmPrs = this };
+      _frmFilter = new frmFilterDateRange { frmPrs = this, Owner = this };
       StaStart("Loading Date Range Window...");
       switch (_rptRoomSales)
       {
@@ -546,7 +546,6 @@ namespace IM.ProcessorSales.Forms
           _frmFilter.ConfigurarFomulario(salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom);
           break;
       }
-      _frmFilter.Owner = GetWindow(this);
       _frmFilter.ShowDialog();
       StaEnd();
       if (!_frmFilter.ok) return;
@@ -566,7 +565,7 @@ namespace IM.ProcessorSales.Forms
     /// </history>
     private void ShowDateRangeSm()
     {
-      _frmFilter = new frmFilterDateRange { frmPrs = this };
+      _frmFilter = new frmFilterDateRange { frmPrs = this, Owner = this };
       StaStart("Loading Date Range Window...");
       switch (_rptSalesman)
       {
@@ -577,7 +576,6 @@ namespace IM.ProcessorSales.Forms
           _frmFilter.ConfigurarFomulario(salesRoom, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnAllSalesRoom: _allSalesRoom, shGroupsByTeams: true, groupByTeams: _clsFilter.BlnGroupedByTeams, isBySalesman: true);
           break;
       }
-      _frmFilter.Owner = GetWindow(this);
       _frmFilter.ShowDialog();
       StaEnd();
       if (!_frmFilter.ok) return;
