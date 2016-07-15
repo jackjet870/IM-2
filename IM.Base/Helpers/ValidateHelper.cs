@@ -294,5 +294,27 @@ namespace IM.Base.Helpers
       }
     }
     #endregion
+
+    /// <summary>
+    /// Valida que el texto no contenga los caracteres de una lista
+    /// </summary>
+    /// <param name="text">texto a validar</param>
+    /// <history>
+    /// [emoguel] created 11/07/2016
+    /// </history>
+    /// <returns>True. No contiene los caracteres | false. Si contiene los caracteres</returns>
+    public static bool validateCharacters(string text)
+    {
+      bool _blnValid = true;
+      List<string> lstCharacters = new List<string> { "", "%", "'","-","_" };
+      text.ToCharArray().ToList().ForEach(c => {
+        if (lstCharacters.Contains(c.ToString()))
+        {
+          _blnValid = false;
+          return;
+        }
+      });
+      return _blnValid;
+    }
   }
 }

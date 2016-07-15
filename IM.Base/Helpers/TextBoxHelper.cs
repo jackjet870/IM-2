@@ -138,5 +138,20 @@ namespace IM.Base.Helpers
       }
     }
     #endregion
+
+    #region Textbox without special Character
+    /// <summary>
+    /// Valida que un texbox acepte solo números
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [emoguel] created 11/07/2016
+    /// </history>
+    public static void TextInputSpecialCharacters(object sender, TextCompositionEventArgs e)
+    {
+      e.Handled = !ValidateHelper.validateCharacters(e.Text);
+    }
+    #endregion
   }
 }
