@@ -386,10 +386,14 @@ namespace IM.ProcessorSales.Forms
           frmPrs._clsFilter.LstSalesRooms = dtgSalesRoom.SelectedItems.Cast<SalesRoomByUser>().Select(x => x.srID).ToList();
 
       if (pnlPrograms.IsVisible)
-        frmPrs._clsFilter.LstPrograms = dtgPrograms.SelectedItems.Cast<Program>().Select(x => x.pgID).ToList();
+        frmPrs._clsFilter.EnumProgram = (dtgPrograms.Items.Count == dtgPrograms.SelectedItems.Count || dtgPrograms.SelectedItems.Count == 0)
+          ? EnumProgram.All : EnumToListHelper.GetList<EnumProgram>().SingleOrDefault(x => x.Value == ((Program)dtgPrograms.SelectedItem).pgID).Key;
 
       if (pnlSegments.IsVisible)
-        frmPrs._clsFilter.LstSegments = dtgSegments.SelectedItems.Cast<SegmentByAgency>().Select(x => x.seID).ToList();
+      {
+        frmPrs._clsFilter.LstSegments = dtgSegments.SelectedItems.Cast<SegmentByAgency>().Select(c => c.seID).ToList();
+        frmPrs._clsFilter.BlnAllSegments = dtgSegments.Items.Count == dtgSegments.SelectedItems.Count;
+      }
 
       if (pnlSalesRoomConcentrate.IsVisible)
         frmPrs._clsFilter.LstGoals = _lstGoals.Where(g => g.IsCheck).ToList();
@@ -458,11 +462,11 @@ namespace IM.ProcessorSales.Forms
       pnlSalesRoomMultiDateRange.Visibility = multiDate ? Visibility.Visible : Visibility.Collapsed;
       pnlSalesRoomConcentrate.Visibility = concentrate ? Visibility.Visible : Visibility.Collapsed;
 
-      if(!blnSalesRoom && !multiDate && !concentrate)
+      if (!blnSalesRoom && !multiDate && !concentrate)
         return;
 
       _lstSalesRoomByUsers.AddRange(await BRSalesRooms.GetSalesRoomsByUser(App.User.User.peID));
-      
+
       #region multidate
       //si es multidate
       if (multiDate)
@@ -503,7 +507,7 @@ namespace IM.ProcessorSales.Forms
       #endregion
 
       dtgSalesRoom.SelectionMode = (blnOnlyOneRegister) ? DataGridSelectionMode.Single : DataGridSelectionMode.Extended;
-      
+
       dtgSalesRoom.ItemsSource = _lstSalesRoomByUsers;
 
       chkAllSalesRoom.IsChecked = blnAllSalesRoom;
@@ -530,36 +534,24 @@ namespace IM.ProcessorSales.Forms
     /// Carga y configuracion del grid Programs
     /// </summary>    
     /// <param name="blnPrograms"></param>
-    /// <param name="blnAllPrograms"></param>
     /// <history>
     /// [aalcocer] 09/07/2016 Created
     /// </history>
-    private async void LoadPrograms(bool blnPrograms, bool blnAllPrograms)
+    private async void LoadPrograms(bool blnPrograms)
     {
       if (!blnPrograms)
       {
         pnlPrograms.Visibility = Visibility.Collapsed;
         return;
       }
-      
+
       _lstPrograms = await BRPrograms.GetPrograms();
       dtgPrograms.ItemsSource = _lstPrograms;
 
-      chkAllPrograms.IsChecked = blnAllPrograms;
-
-      if (!frmPrs._clsFilter.LstPrograms.Any()) return;
-
-      chkAllPrograms.IsChecked = frmPrs._clsFilter.BlnAllPrograms;
-      if (dtgPrograms.ItemsSource != null && !frmPrs._clsFilter.BlnAllPrograms)
-      {
-        dtgPrograms.SelectedItem = null;
-        frmPrs._clsFilter.LstPrograms.ForEach(c =>
-        {
-          dtgPrograms.SelectedItems.Add(_lstPrograms.FirstOrDefault(p => p.pgID == c));
-        });
-      }
+      if (frmPrs._clsFilter.EnumProgram == EnumProgram.All)
+        chkAllPrograms.IsChecked = true;
       else
-        dtgPrograms.SelectedItem = _lstPrograms.FirstOrDefault(c => c.pgID == frmPrs._clsFilter.LstPrograms.First());
+        dtgPrograms.SelectedItem = _lstPrograms.FirstOrDefault(c => c.pgID == EnumToListHelper.GetEnumDescription(frmPrs._clsFilter.EnumProgram));
     }
     #endregion
 
@@ -607,8 +599,8 @@ namespace IM.ProcessorSales.Forms
 
     public void ConfigurarFomulario(
        string salesRoom = null,  //Necesarios segun el tipo de reporte
-      //Checks arriba de los grids y configuracion del friltro
-      bool blnAllSalesRoom = false, bool blnAllPrograms = false, bool blnAllSegments = false, bool multiDate = false, bool blnOnlyOneRegister = false, bool groupByTeams = false,
+                                 //Checks arriba de los grids y configuracion del friltro
+      bool blnAllSalesRoom = false, bool blnAllSegments = false, bool multiDate = false, bool blnOnlyOneRegister = false, bool groupByTeams = false,
       bool allSalesmen = false, bool shRoles = false, bool onePeriod = false,
       //Enumerados, 
       EnumPeriod period = EnumPeriod.None, EnumBasedOnArrival? basedOnArrival = null, EnumQuinellas? quinellas = null,
@@ -628,7 +620,7 @@ namespace IM.ProcessorSales.Forms
 
       #region Configuracion de Grids.
       LoadSalesRooms(blnOnlyOneRegister, blnSalesRoom, blnAllSalesRoom, shMultiDateRanges, shConcentrate);
-      LoadPrograms(blnPrograms, blnAllPrograms);
+      LoadPrograms(blnPrograms);
       LoadSegments(blnSegments, blnAllSegments);
       LoadEfficiencyWeek(shWeeks);
       #endregion Configuracion de Grids.
@@ -636,7 +628,7 @@ namespace IM.ProcessorSales.Forms
       //Toma la configuracion del padre
       LoadUserFilters();
       //configura el check all de los grids
-     // ConfigureSelection(onlyOneRegister, allPrograms, allSegments);
+      // ConfigureSelection(onlyOneRegister, allPrograms, allSegments);
 
     }
 
@@ -745,7 +737,7 @@ namespace IM.ProcessorSales.Forms
 
     #endregion
 
-   #region cmbDate_SelectionChanged
+    #region cmbDate_SelectionChanged
     private void cmbDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       if (e.AddedItems.Count <= 0) return;

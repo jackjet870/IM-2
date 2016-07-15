@@ -208,6 +208,12 @@ namespace IM.ProcessorSales.Forms
           filters.Add(new Tuple<string, string>("Sales Room",
             _frmFilter.dtgSalesRoom.Items.Count == clsFilter.LstSalesRooms.Count ? "All" : string.Join(",", clsFilter.LstSalesRooms)));
       }
+      if (rptRoomSales == EnumRptRoomSales.StatsByCloser || rptRoomSales == EnumRptRoomSales.StatsByExitCloser || rptRoomSales == EnumRptRoomSales.StatsByFtb)
+      {
+        filters.Add(Tuple.Create("Programs", EnumToListHelper.GetEnumDescription(clsFilter.EnumProgram)));
+        filters.Add(Tuple.Create("Segments", clsFilter.BlnAllSegments ? "ALL" : string.Join(",", clsFilter.LstSegments)));
+      }
+      
       #endregion
 
       List<dynamic> list = new List<dynamic>();
@@ -336,7 +342,16 @@ namespace IM.ProcessorSales.Forms
             if (list.Any())
               file = Reports.RptStatisticsBySegments(reporteName, fileFullPath, filters, list.Cast<RptStatisticsBySegments>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
-            #endregion Stats by Segments Categories (Multi Date Ranges)
+          #endregion Stats by Segments Categories (Multi Date Ranges)
+
+          #region Stats by Closer
+          case EnumRptRoomSales.StatsByCloser:
+            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByCloser(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), 
+              program: clsFilter.EnumProgram, segments: clsFilter.BlnAllSegments ? null : clsFilter.LstSegments, includeAllSalesmen: clsFilter.BlnIncludeAllSalesmen));
+            if (list.Any())
+              file = Reports.RptStatisticsByCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByCloser>().ToList(), clsFilter.BlnGroupedByTeams);
+            break;
+            #endregion
 
         }
 
@@ -354,8 +369,7 @@ namespace IM.ProcessorSales.Forms
       }
     }
     #endregion ShowReportBySalesRoom
-
-
+    
     #region ShowReportBySalesman
     /// <summary>
     /// Muestra el reporte de Salesman Seleccionado
@@ -420,8 +434,13 @@ namespace IM.ProcessorSales.Forms
           #endregion
           case EnumRptSalesRoomAndSalesman.SelfGenAndSelfGenTeam:
             break;
+          #region Stats by Closer
           case EnumRptSalesRoomAndSalesman.StatsByCloser:
+            list.AddRange(await BRReportsBySalesRoom.GetStatisticsByCloser(clsFilter.DtmStart, clsFilter.DtmEnd, clsFilter.LstSalesRooms.First(), clsFilter.Salesman.peID));
+            if (list.Any())
+              file = Reports.RptStatisticsByCloser(reporteName, fileFullPath, filters, list.Cast<RptStatisticsByCloser>().ToList(), clsFilter.BlnGroupedByTeams);
             break;
+          #endregion
           case EnumRptSalesRoomAndSalesman.StatsByExitCloser:
             break;
           case EnumRptSalesRoomAndSalesman.StatsByFtb:
@@ -500,7 +519,7 @@ namespace IM.ProcessorSales.Forms
         case EnumRptRoomSales.StatsByFtb:
         case EnumRptRoomSales.StatsByCloser:
         case EnumRptRoomSales.StatsByExitCloser:
-          _frmFilter.ConfigurarFomulario(salesRoom, shGroupsByTeams: true, groupByTeams: _clsFilter.BlnGroupedByTeams, shAllSalesmen: true, allSalesmen: _clsFilter.BlnIncludeAllSalesmen, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnSegments: true, blnAllSegments: _allSegments, blnPrograms: true, blnAllPrograms: _allPrograms);
+          _frmFilter.ConfigurarFomulario(salesRoom, shGroupsByTeams: true, groupByTeams: _clsFilter.BlnGroupedByTeams, shAllSalesmen: true, allSalesmen: _clsFilter.BlnIncludeAllSalesmen, multiDate: _multiDate, blnOnlyOneRegister: _onlyOnRegister, blnSegments: true, blnAllSegments: _allSegments, blnPrograms: true);
           break;
         case EnumRptRoomSales.DailySales:
           _onlyOnRegister = false;
