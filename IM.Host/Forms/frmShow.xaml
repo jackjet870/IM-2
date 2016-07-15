@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmShow"
         mc:Ignorable="d"
-        Title="frmShow" Height="708.976" Width="625.707" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+        Title="frmShow" Height="708.976" Width="625.707" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" ShowInTaskbar="False">
   <Window.Resources>
     <CollectionViewSource x:Key="guestViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:Guest}, CreateList=True}"/>
     <CollectionViewSource x:Key="dsMaritalStatus" d:DesignSource="{d:DesignInstance {x:Type Model:MaritalStatus}, CreateList=True}"/>

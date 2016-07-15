@@ -7,11 +7,10 @@
         mc:Ignorable="d"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
-        Icon="pack://application:,,,/IM.Base;component/Images/IM.png"
-        Title="Gifts Receipts - Intelligence Marketing" 
+        Title="Gifts Receipts" 
         Loaded="Window_Loaded"
         Closing="Window_Closing"
-        Height="725" Width="1048" WindowStartupLocation="CenterScreen">
+        Height="725" Width="1048" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
 
   <Window.Resources>
     <CollectionViewSource x:Key="dsGiftsReceipt" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceipt}, CreateList=True}"/>

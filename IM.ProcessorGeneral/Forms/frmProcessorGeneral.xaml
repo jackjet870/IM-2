@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.ProcessorGeneral.Forms"
         mc:Ignorable="d"
-        Title="Processor General" Height="650" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" ContentRendered="Window_Loaded" Closing="Window_Closing"  KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged">
+        Title="Processor General" Height="650" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ContentRendered="Window_Loaded" Closing="Window_Closing"  KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged">
     <Window.Resources>
         <Style x:Key="GroupHeaderStyle" TargetType="{x:Type GroupItem}">
             <Setter Property="Template">

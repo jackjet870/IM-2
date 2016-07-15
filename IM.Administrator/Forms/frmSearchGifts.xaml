@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" ResizeMode="NoResize"
-        Title="Gifts Search" Height="257" Width="440" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+        Title="Gifts Search" Height="257" Width="440">
     <DockPanel LastChildFill="True" Margin="10,10,10,5">
         <Grid DockPanel.Dock="Bottom" Background="Transparent" Height="40">
             <StackPanel Orientation="Horizontal" Grid.Row="1" Name="skpStatus" Visibility="Visible" Margin="0,6,96,0" HorizontalAlignment="Left">

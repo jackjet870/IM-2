@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmCloseSalesRoom"
         mc:Ignorable="d"
-        Title="Close Sales Room" Height="301" Width="819" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Closed="Window_Closed" Loaded="Window_Loaded">
+        Title="Close Sales Room" Height="301" Width="819" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Closed="Window_Closed" Loaded="Window_Loaded" ShowInTaskbar="False">
     <!--
     <Window.Resources>
         <CollectionViewSource x:Key="dsSalesRoom" d:DesignSource="{d:DesignInstance {x:Type Model:GetSalesRoom}, CreateList=True}"/>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" Uid="frmComputers"
         mc:Ignorable="d" ShowInTaskbar="False" KeyDown="Window_KeyDown" Loaded="Window_Loaded" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
-        Title="Computers" Height="407" Width="470" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" WindowStartupLocation="CenterOwner">
+        Title="Computers" Height="407" Width="470" WindowStartupLocation="CenterOwner">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->
         <StatusBar DockPanel.Dock="Bottom" Height="24" >

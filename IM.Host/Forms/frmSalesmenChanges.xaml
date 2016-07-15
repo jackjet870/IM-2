@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmSalesmenChanges"
         mc:Ignorable="d"
-        Background="Beige"  ResizeMode="NoResize" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        Background="Beige"  ResizeMode="NoResize"
         Title="IM Salesmen Changes" ShowInTaskbar="False"  Height="297.736" Width="860" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Window.Resources>
 

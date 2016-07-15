@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.ProcessorOuthouse.Forms"
         mc:Ignorable="d"
-        Title="Processor Outhouse" Height="650" Width="800" Icon="/IM.ProcessorOuthouse;component/Images/IM.ico" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Closing="Window_Closing">
+        Title="Processor Outhouse" Height="650" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Closing="Window_Closing">
     <!--#region window.resources-->
     <Window.Resources>
         <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">

@@ -7,7 +7,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Outhouse.Forms"
         xmlns:Classes="clr-namespace:IM.Model.Classes;assembly=IM.Model" 
-        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Loaded="Window_Loaded" KeyDown="Window_KeyDown"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown"
         Width="1100"  Height="700" Title="Outhouse" WindowState="Maximized" >
     <Window.Resources>
         <CollectionViewSource x:Key="outPremanifestViewSource" d:DesignSource="{d:DesignInstance {x:Type Classes:GuestPremanifestOuthouse}, CreateList=True}"/>

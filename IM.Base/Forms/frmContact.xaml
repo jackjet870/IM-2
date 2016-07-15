@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IM.Base.Forms"  WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        xmlns:local="clr-namespace:IM.Base.Forms"  WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
      Title="Contact" Height="315" Width="459.623" Loaded="Window_Loaded" Background="Beige">
     <Grid>
         <Grid.RowDefinitions>

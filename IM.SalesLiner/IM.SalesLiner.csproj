@@ -37,8 +37,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Images\IM.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EPPlus, Version=4.0.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
@@ -103,7 +102,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\IM.ico" />
+  </ItemGroup>
   <ItemGroup>
     <Page Include="Forms\frmSalesLiner.xaml">
       <SubType>Designer</SubType>

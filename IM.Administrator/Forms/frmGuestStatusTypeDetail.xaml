@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
-        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing"
         Title="Guest Status Type Detail" Height="368" Width="308" DataContext="{Binding guestStaTyp}">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->

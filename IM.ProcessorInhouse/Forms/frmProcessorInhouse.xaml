@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="Processor Inhouse" Height="650" Width="800"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
-        Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+       
         ContentRendered="Window_ContentRendered" Closing="Window_Closing" KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged">
     <Window.Resources>
         <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">

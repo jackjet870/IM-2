@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
         xmlns:local="clr-namespace:IM.Administrator.Forms"     
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" ShowActivated="True" KeyDown="Window_KeyDown"
-        Title="Administrator" Height="600" Width="700" Loaded="Window_Loaded" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Closed="Window_Closed">
+        Title="Administrator" Height="600" Width="700" Loaded="Window_Loaded" Closed="Window_Closed">
     <DockPanel LastChildFill="True">
         <Grid  Background="LightBlue" >
         <!--#region filas y columnas de grid-->

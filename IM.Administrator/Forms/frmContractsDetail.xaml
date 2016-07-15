@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False"
         mc:Ignorable="d" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Closing="Window_Closing"
-        Title="Contract Detail" Height="238" Width="338" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" DataContext="{Binding contract}">
+        Title="Contract Detail" Height="238" Width="338" Loaded="Window_Loaded" KeyDown="Window_KeyDown" DataContext="{Binding contract}">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
         <Grid.ColumnDefinitions>

@@ -463,7 +463,6 @@
     <Resource Include="Images\BGiftReceipt.png" />
     <Resource Include="Images\BGlobalSales.png" />
     <Resource Include="Images\BSearchGuest.png" />
-    <Resource Include="Images\IM.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\BDepositRefund.png" />

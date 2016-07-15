@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Processor Sales" Height="565" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
-        Icon="pack://application:,,,/IM.ProcessorSales;component/Images/IM.ico"
         Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="FrmProcessorSales_Closing">
     <Window.Resources>
         <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">

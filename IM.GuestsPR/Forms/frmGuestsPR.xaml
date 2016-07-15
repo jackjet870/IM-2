@@ -7,7 +7,7 @@
         mc:Ignorable="d"
          Title="Guests By PR"
     d:DesignHeight="768" d:DesignWidth="1024" WindowStartupLocation="CenterScreen" 
-    Icon="pack://application:,,,/IM.Styles;component/Images/IM-ico.png" WindowState="Maximized" WindowStyle="SingleBorderWindow"
+    WindowState="Maximized" WindowStyle="SingleBorderWindow"
     KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" Loaded="Window_Loaded">
     <Window.InputBindings>
         <KeyBinding Command="{Binding RelativeSource={RelativeSource FindAncestor,

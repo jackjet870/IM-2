@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmExchangeRateEdit"
         mc:Ignorable="d"
-        Title="Edit Exchange Rate" Height="305.66" Width="278.491" WindowStartupLocation="CenterScreen">
+        Title="Edit Exchange Rate" Height="305.66" Width="278.491" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
     <Grid>
         <TextBlock x:Name="textCurrency" HorizontalAlignment="Center" Margin="0,21,0,0" TextWrapping="Wrap" Text="Currency ID" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" />
         <TextBox x:Name="txtCurrency" HorizontalAlignment="Center" Height="23" Margin="33,40,33,0" TextWrapping="Wrap" HorizontalContentAlignment="Center" VerticalAlignment="Top" Width="204" IsEnabled="False" Text="{Binding excu}" />

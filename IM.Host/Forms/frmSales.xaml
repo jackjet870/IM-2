@@ -7,7 +7,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:base="clr-namespace:IM.Base.Helpers;assembly=IM.Base"        
         Loaded="Window_Loaded" WindowStyle="SingleBorderWindow" ShowInTaskbar="False"
-        mc:Ignorable="d" Title="Sales" SizeToContent="WidthAndHeight" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"  WindowStartupLocation="CenterScreen" Background="Bisque">
+        mc:Ignorable="d" Title="Sales" SizeToContent="WidthAndHeight"  WindowStartupLocation="CenterScreen" Background="Bisque">
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="FontSize" Value="10"/>

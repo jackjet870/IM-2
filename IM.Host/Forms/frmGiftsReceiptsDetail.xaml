@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmGiftsReceiptsDetail"
         mc:Ignorable="d"
-        Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
-        Title="Gifts Receipts" Height="325.334" Width="753.441" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" ResizeMode="NoResize">
+       
+        Title="Gifts Receipts" Height="325.334" Width="753.441" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" ResizeMode="NoResize" ShowInTaskbar="False">
 
   <Grid x:Name="grdMain">
     <Grid.RowDefinitions>

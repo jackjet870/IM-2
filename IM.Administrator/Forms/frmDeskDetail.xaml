@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False"
-        mc:Ignorable="d" WindowStartupLocation="CenterOwner" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" Closing="Window_Closing"
+        mc:Ignorable="d" WindowStartupLocation="CenterOwner" Closing="Window_Closing"
         Title="Desk Detail" Height="418" Width="338" DataContext="{Binding desk}" Loaded="Window_Loaded" KeyDown="Window_KeyDown">
     <DockPanel LastChildFill="True" >
         <!--#region Top-->

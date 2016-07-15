@@ -223,7 +223,6 @@
   <ItemGroup>
     <Resource Include="Images\About.png" />
     <Resource Include="Images\Date.png" />
-    <Resource Include="Images\IM.ico" />
     <Resource Include="Images\IM.png" />
     <Resource Include="Images\Layout.png" />
     <Resource Include="Images\Login.png" />

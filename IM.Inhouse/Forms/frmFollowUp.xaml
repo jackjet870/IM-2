@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Inhouse"
-        mc:Ignorable="d"  WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        mc:Ignorable="d"  WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
          Title="Follow Up" SizeToContent="WidthAndHeight"  Loaded="Window_Loaded" Background="Beige">
     <Grid>
         <Grid.RowDefinitions>

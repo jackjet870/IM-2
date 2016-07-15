@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Base.Forms"
-        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        mc:Ignorable="d"
         Title="Search Guest" Background="Beige"  Width="808" Height="450" ShowInTaskbar="False" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     <Window.Resources>
         <Style TargetType="Label">

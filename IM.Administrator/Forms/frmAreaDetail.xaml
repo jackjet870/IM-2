@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms"
         mc:Ignorable="d" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Closing="Window_Closing"
-        Title="Area Detail" Height="238" DataContext="{Binding Area}" Width="338" ResizeMode="NoResize" Loaded="Window_Loaded" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+        Title="Area Detail" Height="238" DataContext="{Binding Area}" Width="338" ResizeMode="NoResize" Loaded="Window_Loaded">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->
         <Grid.ColumnDefinitions>

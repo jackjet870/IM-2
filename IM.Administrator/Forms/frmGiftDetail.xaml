@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing"
-        Title="Gift Detail" Height="480" Width="490" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+        Title="Gift Detail" Height="480" Width="490">
     <DockPanel LastChildFill="True">
         <!--#region Bottom-->
         <Grid Height="40" DockPanel.Dock="Bottom" Background="Transparent">

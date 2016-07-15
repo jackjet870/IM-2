@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms"
-        mc:Ignorable="d" Uid="frmEfficiencyType" ShowInTaskbar="False" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" Uid="frmEfficiencyType" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         Title="Efficiency Types" Height="407" Width="470" Loaded="Window_Loaded" KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStyle="SingleBorderWindow"
         
-        Title="Intelligence Marketing Trasnfers" Height="604.5" Width="863.682" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" Icon="/IM.Transfer;component/Images/IM.ico" ResizeMode="CanMinimize">
+        Title="Intelligence Marketing Trasnfers" Height="604.5" Width="863.682" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
   <!--StateChanged="Window_StateChanged"-->
   <Grid>
     <Grid.RowDefinitions>

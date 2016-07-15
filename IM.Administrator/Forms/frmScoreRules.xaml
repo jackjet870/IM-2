@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" Uid="frmScoreRules" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
-        Title="Score Rules" Height="407" Width="440" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+        Title="Score Rules" Height="407" Width="440">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->
         <StatusBar DockPanel.Dock="Bottom" Height="24" >            

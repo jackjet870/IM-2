@@ -12,8 +12,8 @@
         WindowStyle="ToolWindow"
         Loaded="Window_Loaded"
         KeyDown="Window_KeyDown" 
-        IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
-        Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+        IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" ShowInTaskbar="False"
+       >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>

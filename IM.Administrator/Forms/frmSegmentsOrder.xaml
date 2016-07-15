@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d" Loaded="Window_Loaded" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" KeyDown="Window_KeyDown"
-        Title="Segments Order" Height="407" Width="440" Closing="Window_Closing" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+        Title="Segments Order" Height="407" Width="440" Closing="Window_Closing">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->
         <StatusBar DockPanel.Dock="Bottom" Height="24" >

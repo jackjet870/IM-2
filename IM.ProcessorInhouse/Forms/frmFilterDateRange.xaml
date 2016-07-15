@@ -6,9 +6,9 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="DateRange" SizeToContent="WidthAndHeight"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+        Title="Date Range" SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False"
+       >
     <Window.Resources>
         <Style TargetType="{x:Type DataGrid}">
             <Setter Property="AutoGenerateColumns" Value="False" />

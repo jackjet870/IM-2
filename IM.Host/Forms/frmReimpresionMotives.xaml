@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="Reimpresion Motives" Height="266.775" Width="249.186">
+        Title="Reimpresion Motives" Height="266.775" Width="249.186" ShowInTaskbar="False">
 
   <Window.Resources>
     <CollectionViewSource x:Key="dsReimpresionMotives" d:DesignSource="{d:DesignInstance {x:Type Model:ReimpresionMotive}, CreateList=True}"/>

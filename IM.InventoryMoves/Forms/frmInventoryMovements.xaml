@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Inventory Movements" Height="650" Width="800" WindowStartupLocation="CenterScreen" 
         MaxHeight="650" MaxWidth="800" WindowStyle="SingleBorderWindow" ResizeMode="NoResize"       
-        Loaded="frmInventoryMovements_Loaded" KeyDown="frmInventoryMovements_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+        Loaded="frmInventoryMovements_Loaded" KeyDown="frmInventoryMovements_KeyDown">
   <Window.Resources>
     <CollectionViewSource x:Key="objWhsMovsViewSource" d:DesignSource="{d:DesignInstance {x:Type Clases:objWhsMovs}, CreateList=True}"/>
     <CollectionViewSource x:Key="getGiftsViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GiftShort}, CreateList=True}"/>

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="IM.Host.Forms.frmCancelExternalProducts"
         mc:Ignorable="d"
-        Title="Cancel External Products" Height="645.658" Width="751.761" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+        Title="Cancel External Products" Height="645.658" Width="751.761" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
   <Window.Resources>
     <CollectionViewSource x:Key="dsSalesRoom" d:DesignSource="{d:DesignInstance {x:Type Model:SalesRoomShort}, CreateList=True}"/>
     <CollectionViewSource x:Key="dsPrograms" d:DesignSource="{d:DesignInstance {x:Type Model:Program}, CreateList=True}"/>

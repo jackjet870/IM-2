@@ -9,7 +9,7 @@
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model"
         mc:Ignorable="d"
         Title="Date Range" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        Icon="pack://application:,,,/IM.ProcessorSales;component/Images/IM.ico" ShowInTaskbar="False" >
+        ShowInTaskbar="False" >
     <Window.Resources>
         <Style TargetType="{x:Type DataGrid}">
             <Setter Property="AutoGenerateColumns" Value="False" />

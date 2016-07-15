@@ -6,7 +6,7 @@
         xmlns:classes="clr-namespace:IM.Inhouse.Classes"
         x:Class="IM.Inhouse.Forms.frmInhouse"
          xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        mc:Ignorable="d"
         Title="Inhouse" x:Name="House" Width="1100"  Height="700"  WindowState="Maximized" Loaded="Window_Loaded" KeyDown="Window_KeyDown" >
     <Window.Resources>
         <CollectionViewSource x:Key="GuestArrivalViewSource" d:DesignSource="{d:DesignInstance {x:Type classes:ObjGuestArrival}, CreateList=True}"/>

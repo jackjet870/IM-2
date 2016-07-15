@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms"
-        mc:Ignorable="d" WindowStartupLocation="CenterOwner" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" ResizeMode="NoResize"
+        mc:Ignorable="d" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         Title="Tour Time" SizeToContent="WidthAndHeight" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
     <Window.Resources>
         <local:DateTimeConverter x:Key="DateTimeConverter" />

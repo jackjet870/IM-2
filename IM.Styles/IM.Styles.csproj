@@ -188,9 +188,6 @@
     <Resource Include="Images\RError.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\IM-ico.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\WKey.png" />
   </ItemGroup>
   <ItemGroup>

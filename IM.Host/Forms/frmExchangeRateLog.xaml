@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmExchangeRateLog"
         mc:Ignorable="d"
-        Title="Exchange Rate Log - Exchange Rate ID " Height="350" Width="600" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+        Title="Exchange Rate Log - Exchange Rate ID " Height="350" Width="600" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
     <Window.Resources>
         <CollectionViewSource x:Key="dsExchangeRateLog" d:DesignSource="{d:DesignInstance {x:Type Model:ExchangeRateLog}, CreateList=True}"/>
     </Window.Resources>

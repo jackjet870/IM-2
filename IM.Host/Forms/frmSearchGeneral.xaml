@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         KeyDown="Window_KeyDown" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
         WindowStartupLocation="CenterScreen"
-        Title="Search General" Height="300" Width="1138.436" Loaded="Window_Loaded">
+        Title="Search General" Height="300" Width="1138.436" Loaded="Window_Loaded" ShowInTaskbar="False">
   
   <Window.Resources>
     <CollectionViewSource x:Key="dsSalesRoom" d:DesignSource="{d:DesignInstance {x:Type Model:SalesRoomShort}, CreateList=True}"/>

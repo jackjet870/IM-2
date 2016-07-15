@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" Uid="frmWholesalers" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         mc:Ignorable="d" KeyDown="Window_KeyDown" Loaded="Window_Loaded" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
-        Title="Wholesalers" Height="407" Width="870" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+        Title="Wholesalers" Height="407" Width="870">
     <DockPanel LastChildFill="True">
         <!--#region Status bar-->
         <StatusBar DockPanel.Dock="Bottom" Width="auto" Height="24" >

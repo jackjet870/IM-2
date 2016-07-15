@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Inhouse.Forms"
-        mc:Ignorable="d" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
         Title="Booking Cancellation" Height="174.698" Width="372.453" Background="Beige"  Closed="Window_Closed" Loaded="FrmBookingCancel_OnLoaded">
     <Window.Resources>
         <Style TargetType="Button">

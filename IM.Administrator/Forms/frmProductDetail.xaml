@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:UC="clr-namespace:IM.Styles.UserControls;assembly=IM.Styles"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
-        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing"
         Title="Product Detail" Height="530" Width="620">
     <DockPanel LastChildFill="True" >
 

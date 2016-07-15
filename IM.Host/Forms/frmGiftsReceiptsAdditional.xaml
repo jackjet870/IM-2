@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:UserControls="clr-namespace:IM.Styles.UserControls;assembly=IM.Styles" xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmGiftsReceiptsAdditional"
         mc:Ignorable="d"
-        Title="Gifts Receipts Additional" Height="303.909" Width="452.443" WindowStartupLocation="CenterOwner" Loaded="Window_Loaded">
+        Title="Gifts Receipts Additional" Height="303.909" Width="452.443" WindowStartupLocation="CenterOwner" Loaded="Window_Loaded" ShowInTaskbar="False">
   <Window.Resources>
     <CollectionViewSource x:Key="dsGiftsReceiptsAdditional" d:DesignSource="{d:DesignInstance {x:Type Model:GetGiftsReceiptsAdditional}, CreateList=True}"/>
   </Window.Resources>

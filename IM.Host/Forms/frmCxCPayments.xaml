@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.Forms.frmCxCPayments"
         mc:Ignorable="d"
-        Title="CxC Payments" Height="324.811" Width="457.792" Loaded="Window_Loaded" ResizeMode="NoResize">
+        Title="CxC Payments" Height="324.811" Width="457.792" Loaded="Window_Loaded" ResizeMode="NoResize" ShowInTaskbar="False">
   <Window.Resources>
     <CollectionViewSource x:Key="giftsReceiptPaymentShortViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceiptPaymentShort}, CreateList=True}"/>
     <CollectionViewSource x:Key="cxCPaymentShortViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:CxCPaymentShort}, CreateList=True}"/>

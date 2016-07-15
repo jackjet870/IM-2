@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Closing="Window_Closing"
-        Title="Score Rule Detail" Height="418" Width="338" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico">
+        Title="Score Rule Detail" Height="418" Width="338">
     <DockPanel LastChildFill="True" >
         <!--#region Top-->
         <Grid DockPanel.Dock="Top" Margin="10,10,14,2">

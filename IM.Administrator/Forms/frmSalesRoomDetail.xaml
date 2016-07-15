@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Administrator.Forms" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
-        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        mc:Ignorable="d" Loaded="Window_Loaded" KeyDown="Window_KeyDown"
         Title="Sales Room Detail" Closing="Window_Closing" SizeToContent="WidthAndHeight">
     <Grid Margin="10,10,14,2" >
         <!--#region Formato del grid-->

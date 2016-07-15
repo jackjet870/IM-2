@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:IM.Assignment"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Assignment.frmAssignment"
         mc:Ignorable="d" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner"
-        Title="Assignment" Height="549" Width="813.25" Loaded="Window_Loaded" Icon="/IM.Assignment;component/Images/IM.ico">
+        Title="Assignment" Height="549" Width="813.25" Loaded="Window_Loaded">
     <!--#region  window.Resources-->
     <Window.Resources>
         <CollectionViewSource x:Key="marketShortViewSource" d:DesignSource="{d:DesignInstance {x:Type Model:MarketShort}, CreateList=True}"/>

@@ -8,10 +8,9 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" x:Class="IM.Host.frmHost"
         mc:Ignorable="d"
-        Title="Intelligence Marketing Host" 
+        Title="Host" 
         Height="400.189" Width="1584.012" 
         WindowStartupLocation="CenterScreen" WindowState="Maximized"
-        Icon="pack://application:,,,/IM.Base;component/Images/IM.png"
         KeyDown="frmHost_KeyDown"
         IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
         Loaded="Window_Loaded">

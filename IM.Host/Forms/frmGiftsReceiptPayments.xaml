@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IM.Host.Forms"
         mc:Ignorable="d"
-        Title="frmGiftsReceiptPayments" Height="222.801" Width="554.071">
+        Title="Gifts Receipt Payments" Height="222.801" Width="554.071" ShowInTaskbar="False">
   <Grid>
     <TextBlock x:Name="lblPaid" HorizontalAlignment="Right" Margin="0,50,496,0" TextWrapping="Wrap" Text="Paid" VerticalAlignment="Top"/>
     <TextBox x:Name="txtPaid" HorizontalAlignment="Left" Height="23" Margin="15,68,0,0" AcceptsReturn="False" Text="{Binding gyAmount, StringFormat={}{0:0.00}}" VerticalAlignment="Top" Width="60"/>

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged"
-        xmlns:local="clr-namespace:IM.Administrator.Forms" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        xmlns:local="clr-namespace:IM.Administrator.Forms"
         mc:Ignorable="d" Uid="frmAgencies" Loaded="Window_Loaded" KeyDown="Window_KeyDown" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         Title="Agencies" Height="407" Width="440">
     <!--<Window.Resources>

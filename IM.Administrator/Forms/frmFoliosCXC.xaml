@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-        xmlns:local="clr-namespace:IM.Administrator.Forms" Uid="frmFoliosCxC" Icon="pack://application:,,,/IM.Base;component/Images/IM.ico"
+        xmlns:local="clr-namespace:IM.Administrator.Forms" Uid="frmFoliosCxC"
         mc:Ignorable="d" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Loaded="Window_Loaded" IsKeyboardFocusedChanged="Window_IsKeyboardFocusedChanged" KeyDown="Window_KeyDown"
         Title="Folios CxC" Height="407" Width="470">
     <DockPanel LastChildFill="True">
