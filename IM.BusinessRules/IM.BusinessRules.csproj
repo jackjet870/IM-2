@@ -90,6 +90,7 @@
     <Compile Include="BR\BRFoliosCXC.cs" />
     <Compile Include="BR\BRGifts.cs" />
     <Compile Include="BR\BRGiftsCategories.cs" />
+    <Compile Include="BR\BRGiftsPacks.cs" />
     <Compile Include="BR\BRGiftsReceiptDetail.cs" />
     <Compile Include="BR\BRGiftsReceiptLog.cs" />
     <Compile Include="BR\BRGiftsReceipts.cs" />

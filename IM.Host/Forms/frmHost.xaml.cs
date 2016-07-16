@@ -67,7 +67,7 @@ namespace IM.Host
     public static List<LeadSource> _lstLeadSources;
     public static List<RefundType> _lstRefundTypes;
     public static IEnumerable<object> _lstGiftsWithPackage;
-    public static List<RefundType> _lstGiftsPackage;
+    public static List<GiftPackageItem> _lstGiftsPacks;
     #endregion
 
 
@@ -486,100 +486,100 @@ namespace IM.Host
       // Obtenemos el id de la sala de ventas.
       string _salesRoom = App.User.SalesRoom.srID;
 
-      #region Currencies
+      // Currencies
       _lstCurrencies = await BRCurrencies.GetCurrencies(null, 1);
-      #endregion
-      #region Payment Types
+      //Payment Types
       _lstPaymentsType = await BRPaymentTypes.GetPaymentTypes(1);
-      #endregion
-      #region Marital Status
+      
+      // Marital Status
       _lstMaritalStatus = await BRMaritalStatus.GetMaritalStatus(1);
-      #endregion
-      #region Agencies
+      
+      // Agencies
       _lstAgencies = await BRAgencies.GetAgencies(1);
-      #endregion
-      #region Countries
-      _lstCountries = await BRCountries.GetCountries(1);
-      #endregion
-      #region Languajes
-      _lstLanguaje = await BRLanguages.GetLanguages(1);
-      #endregion
-      #region Hotels
-      _lstHotel = await BRHotels.GetHotels(null, 1);
-      #endregion
-      #region Team Sales Men
-      _lstTeamSalesMen = BRTeamsSalesMen.GetTeamsSalesMen(1);
-      #endregion
-      #region Personnel
-      _lstPersonnel = await BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);
-      #endregion
-      #region Host (ess) de llegada
-      _lstPersonnelHOSTENTRY = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTENTRY", 1);
-      #endregion
-      #region Host (ess) de regalos
-      _lstPersonnelHOSTGIFTS = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTGIFTS", 1);
-      #endregion
-      #region Host (ess) de salida
-      _lstPersonnelHOSTEXIT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTEXIT", 1);
-      #endregion
-      #region PR's
-      _lstPersonnelPR = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PR", 1);
-      #endregion
-      #region Closer´s
-      _lstPersonnelCLOSER = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "CLOSER", 1);
-      #endregion
-      #region Exit Closer´s
-      _lstPersonnelCLOSEREXIT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "EXIT", 1);
-      #endregion
-      #region Podium
-      _lstPersonnelPODIUM = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PODIUM", 1);
-      #endregion
-      #region Verificador Legal
-      _lstPersonnelVLO = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "VLO", 1);
-      #endregion
-      #region Liner's
-      _lstPersonnelLINER = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "LINER", 1);
-      #endregion
-      #region Gifts
-      _lstGifts = await BRGifts.GetGifts(1);
-      #endregion
-      #region Banks
-      _lstBanks = await BRBanks.GetBanks(1);
-      #endregion
-      #region Source Payments
-      _lstSourcePayments = await BRSourcePayments.GetSourcePayments(1);
-      #endregion
-      #region SalesRoomShort
-      _lstSalesRoom = await BRSalesRooms.GetSalesRooms(1);
-      #endregion
-      #region Locations
-      _lstLocations = await BRLocations.GetLocations(1);
-      #endregion
-      #region Charge To
-      _lstChargeTo = await BRChargeTos.GetChargeTos();
-      #endregion
-      #region Capitanes de PR's
-      _lstPersonnelPRCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PRCAPT", 1);
-      #endregion
-      #region Capitanes de Liner's
-      _lstPersonnelLINERCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "LINERCAPT", 1);
-      #endregion
-      #region Capitanes de Closer's
-      _lstPersonnelCLOSERCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "CLOSERCAPT", 1);
-      #endregion
-      #region Program's
-      _lstPrograms = await BRPrograms.GetPrograms();
-      #endregion
-      #region LeadSources
-      _lstLeadSources = await BRLeadSources.GetLeadSources(1, EnumProgram.All);
-      #endregion
-      #region Refund Types
-      _lstRefundTypes =await BRRefundTypes.GetRefundTypes(1);
-      #endregion
-      #region GiftsWithPackages
-      _lstGiftsWithPackage = BRGifts.GetGiftsWithPackages();
-      #endregion
 
+      // Countries
+      _lstCountries = await BRCountries.GetCountries(1);
+      
+      // Languajes
+      _lstLanguaje = await BRLanguages.GetLanguages(1);
+      
+      // Hotels
+      _lstHotel = await BRHotels.GetHotels(null, 1);
+      
+      // Team Sales Men
+      _lstTeamSalesMen = BRTeamsSalesMen.GetTeamsSalesMen(1);
+      
+      // Personnel
+      _lstPersonnel = await BRPersonnel.GetPersonnel("ALL", "ALL", "ALL", 1);
+      
+      // Host (ess) de llegada
+      _lstPersonnelHOSTENTRY = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTENTRY", 1);
+      
+      // Host (ess) de regalos
+      _lstPersonnelHOSTGIFTS = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTGIFTS", 1);
+
+      // Host (ess) de salida
+      _lstPersonnelHOSTEXIT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "HOSTEXIT", 1);
+      
+      // PR's
+      _lstPersonnelPR = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PR", 1);
+      
+      // Closer´s
+      _lstPersonnelCLOSER = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "CLOSER", 1);
+      
+      // Exit Closer´s
+      _lstPersonnelCLOSEREXIT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "EXIT", 1);
+
+      // Podium
+      _lstPersonnelPODIUM = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PODIUM", 1);
+      
+      // Verificador Legal
+      _lstPersonnelVLO = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "VLO", 1);
+      
+      // Liner's
+      _lstPersonnelLINER = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "LINER", 1);
+      
+      // Gifts
+      _lstGifts = await BRGifts.GetGifts(1);
+      
+      // Banks
+      _lstBanks = await BRBanks.GetBanks(1);
+
+      // Source Payments
+      _lstSourcePayments = await BRSourcePayments.GetSourcePayments(1);
+      
+      // SalesRoomShort
+      _lstSalesRoom = await BRSalesRooms.GetSalesRooms(1);
+     
+      // Locations
+      _lstLocations = await BRLocations.GetLocations(1);
+      
+      // Charge To
+      _lstChargeTo = await BRChargeTos.GetChargeTos();
+      
+      // Capitanes de PR's
+      _lstPersonnelPRCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "PRCAPT", 1);
+      
+      // Capitanes de Liner's
+      _lstPersonnelLINERCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "LINERCAPT", 1);
+      
+      // Capitanes de Closer's
+      _lstPersonnelCLOSERCAPT = await BRPersonnel.GetPersonnel("ALL", _salesRoom, "CLOSERCAPT", 1);
+      
+      // Program's
+      _lstPrograms = await BRPrograms.GetPrograms();
+      
+      // LeadSources
+      _lstLeadSources = await BRLeadSources.GetLeadSources(1, EnumProgram.All);
+      
+      // Refund Types
+      _lstRefundTypes =await BRRefundTypes.GetRefundTypes(1);
+      
+      // GiftsWithPackages
+      _lstGiftsWithPackage = BRGifts.GetGiftsWithPackages();
+      
+      // GiftsPacks
+      _lstGiftsPacks = await BRGiftsPacks.GetGiftsPacks(); 
     }
     #endregion
 

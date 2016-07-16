@@ -31,7 +31,7 @@
             <Canvas>
                 <TextBlock x:Name="lblMtID" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Meal Ticket ID" VerticalAlignment="Top" Canvas.Left="14" Canvas.Top="7"/>
                 <TextBox x:Name="txtMealTicket" Height="23" Canvas.Left="14" AcceptsReturn="False" Canvas.Top="21" Width="100"/>
-                <TextBlock x:Name="lblmkFolio" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Meal Ticket ID" VerticalAlignment="Top" Canvas.Left="132" Canvas.Top="7"/>
+                <TextBlock x:Name="lblmkFolio" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Folio" VerticalAlignment="Top" Canvas.Left="132" Canvas.Top="7"/>
                 <TextBox x:Name="txtFolio" Height="23" Canvas.Left="132" AcceptsReturn="False" Canvas.Top="21" Width="100"/>
                 <TextBlock x:Name="lblRateType" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Rate Type" VerticalAlignment="Top" Canvas.Left="263" Canvas.Top="9" Width="59"/>
                 <ComboBox x:Name="cboRateType"  DataContext="{StaticResource dsRateType}" Canvas.Left="263" Canvas.Top="23" Width="145" SelectedValuePath="raID" ItemsSource="{Binding}" DisplayMemberPath="raN" SelectionChanged="cboRateType_SelectionChanged"/>

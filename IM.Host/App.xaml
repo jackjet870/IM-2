@@ -13,6 +13,9 @@
                 <ResourceDictionary Source="pack://application:,,,/IM.Host;component/Styles/ComboBoxTemplate.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styTextBlock.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IM.Styles;component/Styles/styDatePicker.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Host;component/Styles/ButtonTemplate.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IM.Host;component/Styles/ExpanderTemplate.xaml"/>
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

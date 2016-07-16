@@ -91,22 +91,22 @@ namespace IM.BusinessRules.BR
     /// <history>
     /// [vipacheco] 01/03/2016  Createad
     /// </history>
-    public static void SetCloseSalesRoom(EnumSalesRoomType salesRoomType, string salesRoom, DateTime? dateClose)
+    public static void SetCloseSalesRoom(EnumEntities salesRoomType, string salesRoom, DateTime? dateClose)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         switch (salesRoomType)
         {
-          case EnumSalesRoomType.Shows:
+          case EnumEntities.Shows:
             dbContext.USP_OR_CloseShows(salesRoom, dateClose);
             break;
-          case EnumSalesRoomType.MealTickets:
+          case EnumEntities.MealTickets:
             dbContext.USP_OR_CloseMealTickets(salesRoom, dateClose);
             break;
-          case EnumSalesRoomType.Sales:
+          case EnumEntities.Sales:
             dbContext.USP_OR_CloseSales(salesRoom, dateClose);
             break;
-          case EnumSalesRoomType.GiftsReceipts:
+          case EnumEntities.GiftsReceipts:
             dbContext.USP_OR_CloseGiftsReceipts(salesRoom, dateClose);
             break;
         }
@@ -295,26 +295,26 @@ namespace IM.BusinessRules.BR
     /// [vipacheco] 19/Abril/2016 Created
     /// [michan]  07/Junio/2016 Modified Se agregó la fecha de cierre de CxC
     /// </history>
-    public static DateTime? GetCloseSalesRoom(EnumSalesRoomType salesRoomType, string salesRoom)
+    public static DateTime? GetCloseSalesRoom(EnumEntities salesRoomType, string salesRoom)
     {
       using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
       {
         SalesRoom _salesRoom;
         switch (salesRoomType)
         {
-          case EnumSalesRoomType.Shows:
+          case EnumEntities.Shows:
             _salesRoom = dbContext.SalesRooms.Where(x => x.srID == salesRoom).SingleOrDefault();
             return _salesRoom.srShowsCloseD;
-          case EnumSalesRoomType.MealTickets:
+          case EnumEntities.MealTickets:
             _salesRoom = dbContext.SalesRooms.Where(x => x.srID == salesRoom).SingleOrDefault();
             return _salesRoom.srMealTicketsCloseD;
-          case EnumSalesRoomType.Sales:
+          case EnumEntities.Sales:
             _salesRoom = dbContext.SalesRooms.Where(x => x.srID == salesRoom).SingleOrDefault();
             return _salesRoom.srSalesCloseD;
-          case EnumSalesRoomType.GiftsReceipts:
+          case EnumEntities.GiftsReceipts:
             _salesRoom = dbContext.SalesRooms.Where(x => x.srID == salesRoom).SingleOrDefault();
             return _salesRoom.srGiftsRcptCloseD;
-          case EnumSalesRoomType.CxC:
+          case EnumEntities.CxC:
             _salesRoom = dbContext.SalesRooms.Where(x => x.srID == salesRoom).SingleOrDefault();
             return _salesRoom.srCxCCloseD;
           default:

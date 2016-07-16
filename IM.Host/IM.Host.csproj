@@ -332,7 +332,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\ButtonTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\ComboBoxTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ExpanderTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -474,6 +482,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\BInvitation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BClosed.png" />
+    <Resource Include="Images\BClosedWrap.png" />
+    <Resource Include="Images\BOpen.png" />
+    <Resource Include="Images\BOpenWrap.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -710,24 +710,24 @@ namespace IM.BusinessRules.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("180")]
-        public int USP_OR_GetGiftsReceipts {
+        public int USP_OR_GetGiftsReceipts_Timeout {
             get {
-                return ((int)(this["USP_OR_GetGiftsReceipts"]));
+                return ((int)(this["USP_OR_GetGiftsReceipts_Timeout"]));
             }
             set {
-                this["USP_OR_GetGiftsReceipts"] = value;
+                this["USP_OR_GetGiftsReceipts_Timeout"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("120")]
-        public int USP_IM_RptManifestRange_TimeOut {
+        public int USP_IM_RptManifestRange_Timeout {
             get {
-                return ((int)(this["USP_IM_RptManifestRange_TimeOut"]));
+                return ((int)(this["USP_IM_RptManifestRange_Timeout"]));
             }
             set {
-                this["USP_IM_RptManifestRange_TimeOut"] = value;
+                this["USP_IM_RptManifestRange_Timeout"] = value;
             }
         }
         

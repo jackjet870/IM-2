@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:IM.Host.Forms"
         xmlns:Model="clr-namespace:IM.Model;assembly=IM.Model" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="IM.Host.Forms.frmCancelExternalProducts"
         mc:Ignorable="d"
-        Title="Cancel External Products" Height="645.658" Width="751.761" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+        Name="WindowMain"
+        Title="Cancel External Products" Height="645.658" Width="751.761" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
   <Window.Resources>
     <CollectionViewSource x:Key="dsSalesRoom" d:DesignSource="{d:DesignInstance {x:Type Model:SalesRoomShort}, CreateList=True}"/>
     <CollectionViewSource x:Key="dsPrograms" d:DesignSource="{d:DesignInstance {x:Type Model:Program}, CreateList=True}"/>
@@ -14,8 +15,17 @@
     <CollectionViewSource x:Key="dsGifts" d:DesignSource="{d:DesignInstance {x:Type Model:GiftShort}, CreateList=True}"/>
     <CollectionViewSource x:Key="dsGiftsReceiptDetailCancel" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceiptDetailCancel}, CreateList=True}"/>
     <CollectionViewSource x:Key="dsGiftsReceiptDetail" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceiptDetail}, CreateList=True}"/>
+    <CollectionViewSource x:Key="dsGiftsReceiptPackage" d:DesignSource="{d:DesignInstance {x:Type Model:GiftsReceiptPackageItem}, CreateList=True}"/>
   </Window.Resources>
   <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <StackPanel Grid.Row="0">
     <GroupBox x:Name="grGuest" Header="Guest" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="102" Width="725">
       <Grid>
         <TextBlock x:Name="lblReceiptID" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Receipt ID" VerticalAlignment="Top"/>
@@ -25,11 +35,11 @@
         <TextBlock x:Name="lblNameInvitation" HorizontalAlignment="Left" Margin="154,10,0,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top"/>
         <TextBox x:Name="txtNameInvitation" HorizontalAlignment="Left" Height="23" Margin="154,23,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="250" IsReadOnly="True"/>
         <TextBlock x:Name="lblSalesRoom" HorizontalAlignment="Left" Margin="411,10,0,0" TextWrapping="Wrap" Text="Sales Room" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cboSalesRoom" HorizontalAlignment="Left" Margin="411,23,0,0" VerticalAlignment="Top" Width="143" SelectedValuePath="srID" ItemsSource="{Binding Source={StaticResource dsSalesRoom}}" DisplayMemberPath="srN" IsReadOnly="True"/>
+          <ComboBox x:Name="cboSalesRoom" HorizontalAlignment="Left" Margin="411,23,0,0" VerticalAlignment="Top" Width="143" SelectedValuePath="srID" ItemsSource="{Binding Source={StaticResource dsSalesRoom}}" DisplayMemberPath="srN" IsEnabled="False"/>
         <TextBlock x:Name="lblProgram" HorizontalAlignment="Left" Margin="561,10,0,0" TextWrapping="Wrap" Text="Program" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cboProgram" HorizontalAlignment="Left" Margin="561,23,0,0" VerticalAlignment="Top" Width="143" SelectedValuePath="pgID" ItemsSource="{Binding Source={StaticResource dsPrograms}}" DisplayMemberPath="pgN" IsReadOnly="True"/>
+          <ComboBox x:Name="cboProgram" HorizontalAlignment="Left" Margin="561,23,0,0" VerticalAlignment="Top" Width="143" SelectedValuePath="pgID" ItemsSource="{Binding Source={StaticResource dsPrograms}}" DisplayMemberPath="pgN" IsEnabled="False"/>
         <TextBlock x:Name="lblLeadSource" HorizontalAlignment="Left" Margin="10,47,0,0" TextWrapping="Wrap" Text="Lead Source" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cboLeadSource" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Width="143" SelectedValuePath="lsID" ItemsSource="{Binding Source={StaticResource dsLeadSource}}" DisplayMemberPath="lsN" IsReadOnly="True"/>
+          <ComboBox x:Name="cboLeadSource" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Width="143" SelectedValuePath="lsID" ItemsSource="{Binding Source={StaticResource dsLeadSource}}" DisplayMemberPath="lsN" IsEnabled="False"/>
         <TextBlock x:Name="lblReservation" HorizontalAlignment="Left" Margin="160,45,0,0" TextWrapping="Wrap" Text="Reservation" VerticalAlignment="Top"/>
         <TextBox x:Name="txtReservation" HorizontalAlignment="Left" Height="23" Margin="160,58,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="65" IsReadOnly="True"/>
         <TextBlock x:Name="lblArrival" HorizontalAlignment="Left" Margin="234,45,0,0" TextWrapping="Wrap" Text="Arrival" VerticalAlignment="Top"/>
@@ -40,38 +50,54 @@
         <TextBox x:Name="txtQtyEPurses" HorizontalAlignment="Left" Height="23" Margin="553,58,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="65" IsReadOnly="True"/>
         <TextBlock x:Name="lblAccountInvitation" HorizontalAlignment="Left" Margin="625,45,0,0" TextWrapping="Wrap" Text="Acoount" VerticalAlignment="Top"/>
         <TextBox x:Name="txtAccountInvitation" HorizontalAlignment="Left" Height="23" Margin="625,58,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="79" IsReadOnly="True"/>
-
       </Grid>
     </GroupBox>
-    <GroupBox x:Name="grbGiftsToCancel" Header="Gifts To Cancel" HorizontalAlignment="Left" Margin="10,107,0,0" VerticalAlignment="Top" Width="724" Height="150">
-      <Grid >
-        <DataGrid x:Name="grdCancel" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsGiftsReceiptDetailCancel}}" Margin="10" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False" CanUserReorderColumns="False">
-          <DataGrid.Columns>
-            <DataGridTemplateColumn x:Name="geCancelElectronicPurseColumn"  Header="Cancel" Width="SizeToHeader" >
-              <DataGridTemplateColumn.CellTemplate >
-                <DataTemplate>
-                  <CheckBox IsChecked="{Binding geCancelElectronicPurse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="Cancel_Click"  HorizontalAlignment="Center" />
-                </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-              <DataGridTemplateColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Receipt"/>
-                </Style>
-              </DataGridTemplateColumn.HeaderStyle>
-            </DataGridTemplateColumn>
-            <DataGridTemplateColumn x:Name="geCancelPVPPromoColumn"  Header="Cancel" Width="SizeToHeader" >
-              <DataGridTemplateColumn.CellTemplate >
-                <DataTemplate>
-                  <CheckBox IsChecked="{Binding geCancelPVPPromo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Click="Cancel_Click"  HorizontalAlignment="Center" />
-                </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-              <DataGridTemplateColumn.HeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                  <Setter Property="ToolTip" Value="Receipt"/>
-                </Style>
-              </DataGridTemplateColumn.HeaderStyle>
-            </DataGridTemplateColumn>
+    </StackPanel>
 
+    <StackPanel Grid.Row="1">
+      <GroupBox x:Name="grbGiftsToCancel" Header="Gifts To Cancel" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="724" Height="150" Margin="10,0,0,0">
+      <Grid >
+          <DataGrid x:Name="grdCancel" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsGiftsReceiptDetailCancel}}" IsSynchronizedWithCurrentItem="True" Margin="10" RowDetailsVisibilityMode="VisibleWhenSelected" CanUserAddRows="False" CanUserReorderColumns="False" SelectionMode="Single" >
+            <DataGrid.Resources>
+              <!--#region ESTILOS DEL DATAGRID-->
+              <Style TargetType="{x:Type DataGridRow}">
+                <Style.Resources>
+                  <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                  <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                  <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                  <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
+                </Style.Resources>
+              </Style>
+              <Style TargetType="{x:Type DataGridCell}">
+                <Setter Property="IsEditing" Value="True" />
+              </Style>
+              <!--#endregion-->
+            </DataGrid.Resources>
+          <DataGrid.Columns>
+              <DataGridCheckBoxColumn x:Name="geCancelElectronicPurseColumn" Header="Cancel" Width="SizeToHeader"  Binding="{Binding geCancelElectronicPurse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <DataGridCheckBoxColumn.EditingElementStyle>
+                  <Style TargetType="CheckBox">
+                    <EventSetter Event="Click" Handler="Cancel_Click"/>
+                  </Style>
+                </DataGridCheckBoxColumn.EditingElementStyle>
+                <DataGridCheckBoxColumn.HeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                  <Setter Property="ToolTip" Value="Receipt"/>
+                </Style>
+                </DataGridCheckBoxColumn.HeaderStyle>
+              </DataGridCheckBoxColumn>
+              <DataGridCheckBoxColumn x:Name="geCancelPVPPromoColumn" Header="Cancel" Width="SizeToHeader"  Binding="{Binding geCancelPVPPromo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <DataGridCheckBoxColumn.EditingElementStyle>
+                  <Style TargetType="CheckBox">
+                    <EventSetter Event="Click" Handler="Cancel_Click"/>
+                  </Style>
+                </DataGridCheckBoxColumn.EditingElementStyle>
+                <DataGridCheckBoxColumn.HeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                  <Setter Property="ToolTip" Value="Receipt"/>
+                </Style>
+                </DataGridCheckBoxColumn.HeaderStyle>
+              </DataGridCheckBoxColumn>
             <DataGridTextColumn x:Name="geQtyColumn" Binding="{Binding geQty}" Header="Qty" Width="SizeToHeader" IsReadOnly="True">
               <DataGridTextColumn.HeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
@@ -87,7 +113,7 @@
               </DataGridTextColumn.HeaderStyle>
             </DataGridTextColumn>
             <DataGridComboBoxColumn x:Name="gegiColumn" SelectedValueBinding="{Binding gegi}" Header="Gift" Width="Auto" ItemsSource="{Binding Source={StaticResource dsGifts}}" SelectedValuePath="giID" DisplayMemberPath="giN" IsReadOnly="True"/>
-            <DataGridTextColumn x:Name="geAdultsColumn" Binding="{Binding geAdults}" Header="Adults" Width="SizeToHeader">
+              <DataGridTextColumn x:Name="geAdultsColumn" Binding="{Binding geAdults}" Header="Adults" Width="SizeToHeader" IsReadOnly="True">
               <DataGridTextColumn.HeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
                   <Setter Property="ToolTip" Value="Number of Adults"/>
@@ -162,20 +188,23 @@
         </DataGrid>
       </Grid>
     </GroupBox>
-    <GroupBox x:Name="grbGiftsReceiptExchange" Header="Gifts Receipt Exchange" HorizontalAlignment="Left" Margin="10,262,0,0" VerticalAlignment="Top" Width="724" Height="206">
+    </StackPanel>
+
+    <StackPanel Grid.Row="2">
+      <GroupBox x:Name="grbGiftsReceiptExchange" Header="Gifts Receipt Exchange" HorizontalAlignment="Left" VerticalAlignment="Top" Width="724" Height="206" Margin="10,0,0,0">
       <Grid >
         <TextBlock x:Name="lblgrNum" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Rcpt. Number" VerticalAlignment="Top"/>
         <TextBox x:Name="txtgrNum" HorizontalAlignment="Left" Height="23" Margin="82,7,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="120"/>
         <TextBlock x:Name="lblgrComments" HorizontalAlignment="Left" Margin="231,10,0,0" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Top"/>
         <TextBox x:Name="txtgrComments" HorizontalAlignment="Left" Height="40" Margin="290,7,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="412" VerticalScrollBarVisibility="Visible"/>
-        <DataGrid x:Name="grdExchange" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsGiftsReceiptDetail}}" Margin="10,78,10,10" RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True">
-          <DataGrid.Resources>
-            <Style TargetType="{x:Type DataGridRow}">
-              <EventSetter Event="MouseDoubleClick" Handler="grdGiftsReceiptDetail_DoubleClick"/>
-              <EventSetter Event="KeyDown" Handler="Row_KeyDown"/>
-            </Style>
-          </DataGrid.Resources>
+          <DataGrid x:Name="grdExchange" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource dsGiftsReceiptDetail}}" Margin="10,52,10,10" IsSynchronizedWithCurrentItem="True" RowDetailsVisibilityMode="Collapsed" CanUserReorderColumns="False" CanUserSortColumns="False" SelectionMode="Single" CanUserResizeRows="False" PreparingCellForEdit="grdExchange_PreparingCellForEdit" CellEditEnding="grdExchange_CellEditEnding">
           
+            <DataGrid.RowHeaderTemplate >
+              <DataTemplate>
+                <Expander Expanded="GiftsPacks_Expanded" Collapsed="GiftsPacks_Collapsed" Style="{StaticResource ExpanderTemplate}"/>
+              </DataTemplate>
+            </DataGrid.RowHeaderTemplate>
+
           <DataGrid.Columns>
             <DataGridTextColumn x:Name="geQtyColumn1" Binding="{Binding geQty}" Header="Qty" Width="SizeToHeader">
               <DataGridTextColumn.HeaderStyle>
@@ -191,7 +220,7 @@
                 </Style>
               </DataGridTextColumn.HeaderStyle>
             </DataGridTextColumn>
-            <DataGridComboBoxColumn x:Name="gegiColumn1" SelectedValueBinding="{Binding gegi, UpdateSourceTrigger=PropertyChanged}" Header="Gift" Width="Auto" ItemsSource="{Binding Source={StaticResource dsGifts}}" SelectedValuePath="giID" DisplayMemberPath="giN" IsReadOnly="True"/>
+              <DataGridComboBoxColumn x:Name="gegiColumn1" SelectedValueBinding="{Binding gegi, UpdateSourceTrigger=PropertyChanged}" Header="Gift" Width="Auto" ItemsSource="{Binding Source={StaticResource dsGifts}}" SelectedValuePath="giID" DisplayMemberPath="giN" />
             <DataGridTextColumn x:Name="geAdultsColumn1" Binding="{Binding geAdults}" Header="Adults" Width="SizeToHeader">
               <DataGridTextColumn.HeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
@@ -261,18 +290,29 @@
 
           <DataGrid.RowDetailsTemplate>
             <DataTemplate>
-              <Grid>
-                
-              </Grid>
+                <ListView ItemsSource="{Binding Source={StaticResource dsGiftsReceiptPackage}}" IsEnabled="True">
+                  <ListView.ItemTemplate>
+                    <DataTemplate>
+                      <WrapPanel>
+                        <Viewbox Width="16" Stretch="Uniform" >
+                          <Image Source="pack://application:,,,/IM.Host;component/Images/BGiftPack.png"/>
+                        </Viewbox>
+                        <TextBlock/>
+                        <TextBlock Text="{Binding gkgi}" FontWeight="Bold"/>
+                      </WrapPanel>
             </DataTemplate>
+                  </ListView.ItemTemplate>
+                </ListView>
+              </DataTemplate>
           </DataGrid.RowDetailsTemplate>
         </DataGrid>
-        <Button x:Name="btnAddGift" Content="Add" HorizontalAlignment="Left" Margin="582,0,0,115"  Width="50"  Height="20" VerticalAlignment="Bottom" Click="btnAddGift_Click"/>
-        <Button x:Name="btnRemoveGift" Content="Remove" HorizontalAlignment="Left" Width="50" Margin="650,0,0,115" Height="20" VerticalAlignment="Bottom" Click="btnRemoveGift_Click"/>
-
       </Grid>
     </GroupBox>
-    <GroupBox x:Name="grbTotals" Header="Totals" HorizontalAlignment="Left" Margin="10,476,0,0" VerticalAlignment="Top" Height="130" Width="563">
+    </StackPanel>
+
+    <StackPanel x:Name="RegionTotal" Grid.Row="3" Orientation="Horizontal">
+      <StackPanel>
+        <GroupBox x:Name="grbTotals" Header="Totals" HorizontalAlignment="Left" VerticalAlignment="Top" Height="130" Width="566" Margin="10,0,0,0">
       <Grid>
         <TextBlock x:Name="lblMaxAuthGiftsCaption" HorizontalAlignment="Left" Margin="6,87,0,0" TextWrapping="Wrap" Text="Max Authorized" VerticalAlignment="Top"/>
         <TextBox x:Name="txtMaxAuthGifts" HorizontalAlignment="Left" Height="23" Margin="88,84,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True"/>
@@ -292,8 +332,13 @@
         <TextBox x:Name="txtTotalCxC" HorizontalAlignment="Left" Height="23" Margin="468,87,0,0" AcceptsReturn="False" VerticalAlignment="Top" Width="80" IsReadOnly="True"/>
       </Grid>
     </GroupBox>
-    <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="619,510,0,0" VerticalAlignment="Top" Width="75" Click="btnSave_Click"/>
-    <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left" Margin="619,553,0,0" VerticalAlignment="Top" Width="75" Click="btnClose_Click"/>
+      </StackPanel>
+      <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="158">
+        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="btnSave_Click" Margin="50,30,20,30"/>
+        <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Click="btnClose_Click" Margin="50,0,0,0"/>
+      </StackPanel>
+
+    </StackPanel>
 
   </Grid>
 </Window>

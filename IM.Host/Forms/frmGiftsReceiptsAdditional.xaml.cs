@@ -19,7 +19,16 @@ namespace IM.Host.Forms
     public frmGiftsReceipts _frmGiftsReceipt;
     CollectionViewSource _dsGiftsReceiptsAdditional;
 
-    public frmGiftsReceiptsAdditional(frmGiftsReceipts frmGiftsParent,  int GuestID = 0)
+    #region frmGiftsReceiptsAdditional
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="frmGiftsParent"></param>
+    /// <param name="GuestID"></param>
+    /// <history>
+    /// [vipacheco] 12/Mayo/2016 Created
+    /// </history>
+    public frmGiftsReceiptsAdditional(frmGiftsReceipts frmGiftsParent, int GuestID = 0)
     {
       _GuestID = GuestID;
       _frmGiftsReceipt = frmGiftsParent;
@@ -30,7 +39,8 @@ namespace IM.Host.Forms
       if (ConfigHelper.GetString("ReadOnly").ToUpper().Equals("TRUE"))
         btnSave.Visibility = Visibility.Hidden;
 
-    }
+    } 
+    #endregion
 
     #region btnCancel_Click
     /// <summary>
@@ -38,12 +48,24 @@ namespace IM.Host.Forms
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    /// <history>
+    /// [vipacheco] 12/Mayo/2016 Created
+    /// </history>
+    private void btnCancel_Click(object sender, RoutedEventArgs e)                                          
     {
       Close();
     }
     #endregion
 
+    #region Window_Loaded
+    /// <summary>
+    /// Carga los componentes y la informacion inicial
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] [vipacheco] 12/Mayo/2016 Created
+    /// </history>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
       _dsGiftsReceiptsAdditional = ((CollectionViewSource)(this.FindResource("dsGiftsReceiptsAdditional")));
@@ -69,7 +91,8 @@ namespace IM.Host.Forms
         btnCancel.Visibility = Visibility.Hidden;
         btnSave.Visibility = Visibility.Hidden;
       }
-    }
+    } 
+    #endregion
 
     #region btnSave_Click
     /// <summary>
@@ -183,7 +206,7 @@ namespace IM.Host.Forms
       };
 
       // Guardamos el ReceiptGifts y Obtenemos el ID generado.
-      return BRGiftsReceipts.SaveGiftReceipt(_GiftsReceipt);
+      return await BRGiftsReceipts.SaveGiftReceipt(_GiftsReceipt);
     }
     #endregion
 

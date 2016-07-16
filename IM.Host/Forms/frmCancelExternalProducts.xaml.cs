@@ -32,6 +32,9 @@ namespace IM.Host.Forms
   {
 
     #region Variables
+    private bool bandCancel;
+    private DataGridCellInfo _currentCell;
+
     private EnumExternalProduct _EnumExternalProduct;
     private int _ReceiptID, _GuestID;
     public bool _ValidateMaxAuthGifts, useCxCCost, _Exchange, _Cancelled;
@@ -74,12 +77,6 @@ namespace IM.Host.Forms
       _FrmCancelExternalProducts = this;
 
       InitializeComponent();
-
-      // Verificamos si podra agregar gifts de intercambio
-      if (_Exchange)
-        controlEditionGifts(Visibility.Visible, Visibility.Visible, true);
-      else
-        controlEditionGifts(Visibility.Hidden, Visibility.Hidden, false);
 
       // Si es monedero electronico
       if (_EnumExternalProduct == EnumExternalProduct.expElectronicPurse)
@@ -156,13 +153,17 @@ namespace IM.Host.Forms
 
       // Totales del cargo
       txtgrcxcAdj.Text = string.Format("{0:C2}", CurAdjustment);
-      ReceiptsGifts.CalculateCharge(_GuestID, (ChargeTo)FrmGiftsReceipt.cbogrct.SelectedItem, txtTotalCost, FrmGiftsReceipt.chkgrExchange, FrmGiftsReceipt.txtgrgu, ref txtgrcxcGifts,
-                                              ref txtTotalCxC, ref FrmGiftsReceipt.txtgrCxCAdj, ref FrmGiftsReceipt._validateMaxAuthGifts, ref FrmGiftsReceipt.txtgrls,
+
+      ReceiptsGifts.CalculateCharge(_GuestID, (ChargeTo)FrmGiftsReceipt.cbogrct.SelectedItem, txtTotalCost, _Exchange, ref txtgrcxcGifts,
+                                              ref txtTotalCxC, ref FrmGiftsReceipt.txtgrCxCAdj, ref FrmGiftsReceipt._validateMaxAuthGifts, _Guest.gulsOriginal,
                                               ref FrmGiftsReceipt.txtgrMaxAuthGifts, ref FrmGiftsReceipt.lblgrMaxAuthGifts);
 
       // Si se desea cancelar el recibo
       if (!Exchange)
-        grbGiftsReceiptExchange.Visibility = Visibility.Hidden;
+      {
+        grbGiftsReceiptExchange.Visibility = Visibility.Collapsed;
+        WindowMain.Height = 424; // Ajustamos la ventana
+      }
 
       // Impedimos modificar los datos si el sistema esta en modo de solo lectura
       if (ConfigHelper.GetString("ReadOnly").ToUpper().Equals("TRUE"))
@@ -171,8 +172,12 @@ namespace IM.Host.Forms
     }
     #endregion
 
-
     #region Window_Loaded
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
       _dsSalesRoom = ((CollectionViewSource)(this.FindResource("dsSalesRoom")));
@@ -215,14 +220,24 @@ namespace IM.Host.Forms
     }
     #endregion
 
-    private void btnSave_Click(object sender, RoutedEventArgs e)
+    #region btnSave_Click
+    /// <summary>
+    /// Guarda la informacion
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 16/Mayo/2016 Created
+    /// </history>
+    private async void btnSave_Click(object sender, RoutedEventArgs e)
     {
       if (Validate())
       {
-        Save();
+        await Save();
         DialogResult = true;
       }
     }
+    #endregion
 
     #region Save
     /// <summary>
@@ -231,7 +246,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 26/Mayo/2016 Created
     /// </history>
-    private void Save()
+    private async Task Save()
     {
       List<string> aGiftsCancelled = null;
 
@@ -244,7 +259,7 @@ namespace IM.Host.Forms
         if (_Exchange)
         {
           // guardamos el recibo de regalos exchange
-          SaveReceiptExchange();
+          await SaveReceiptExchange();
 
           // si tiene regalos de intercambio
           if (grdExchange.Items.Count > 0)
@@ -268,10 +283,10 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 27/Mayo/2016 Created
     /// </history>
-    private async void SaveReceiptExchange()
+    private async Task SaveReceiptExchange()
     {
       // obtenemos los datos del recibo
-      GiftsReceipt _GRResult = BRGiftsReceipts.GetGiftReceipt(_ReceiptID);
+      GiftsReceipt _GRResult = await BRGiftsReceipts.GetGiftReceipt(_ReceiptID);
 
       // Construimos el nuevo GiftsReceipts
       GiftsReceipt _GiftsReceipt = new GiftsReceipt()
@@ -313,7 +328,7 @@ namespace IM.Host.Forms
       };
 
       // Guardamos el Gift Receipt
-      ReceiptExchangeID = BRGiftsReceipts.SaveGiftReceipt(_GiftsReceipt);
+      ReceiptExchangeID = await BRGiftsReceipts.SaveGiftReceipt(_GiftsReceipt);
 
       // Guardamos el historico del recibo
       await BRGiftsReceiptLog.SaveGiftsReceiptsLog(ReceiptExchangeID, App.User.User.peID);
@@ -518,110 +533,6 @@ namespace IM.Host.Forms
     }
     #endregion
 
-    #region btnAddGift_Click
-    /// <summary>
-    /// Metodo que invoca el formulario para agregar un nuevo Gift Detail
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [vipacheco] 17/Junio/2016 Created
-    /// </history>
-    private void btnAddGift_Click(object sender, RoutedEventArgs e)
-    {
-      frmGiftsReceiptsDetail _frmGiftsDetail = new frmGiftsReceiptsDetail(ref _obsGifts, _obsGiftsComplet, _GuestID, Convert.ToInt32(txtReceipt.Text), null, frmGiftsReceipts.useCxCCost, true);
-      _frmGiftsDetail.Owner = this;
-      _frmGiftsDetail.modeOpen = EnumModeOpen.Add;
-      _frmGiftsDetail.ShowInTaskbar = false;
-      _frmGiftsDetail.ShowDialog();
-    }
-    #endregion
-
-    #region btnRemoveGift_Click
-    /// <summary>
-    /// Funcion que elimina uno o varios row seleccionados del grid Gifts Detail
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [vipacheco] 17/Junio/2016 Created
-    /// </history>
-    private void btnRemoveGift_Click(object sender, RoutedEventArgs e)
-    {
-      if (grdExchange.SelectedItems.Count == 0)
-      {
-        UIHelper.ShowMessage("Select a row!", MessageBoxImage.Information);
-        return;
-      }
-
-      // Obtenemos los index de los row a eliminar
-      string giftsNoDelete = "";
-      List<GiftsReceiptDetail> indexRemove = new List<GiftsReceiptDetail>();
-      foreach (GiftsReceiptDetail item in grdExchange.SelectedItems)
-      {
-        GiftsReceiptDetail _selected;
-        if (item is GiftsReceiptDetail)
-        {
-          _selected = item;
-
-          if (_selected.geInPVPPromo)
-            giftsNoDelete += frmHost._lstGifts.Where(x => x.giID == _selected.gegi).Select(s => s.giN).First() + "\r\n";
-          else
-            indexRemove.Add(_selected);
-        }
-      }
-
-      //Verificamos si algun gift de los seleccionados no se elimino
-      if (giftsNoDelete != "")
-        UIHelper.ShowMessage("You can not delete the gifts: \r\n" + giftsNoDelete + " because have been given in Sistur promotions", MessageBoxImage.Information);
-
-      // eliminamos los row seleccionados
-      for (int i = 0; i <= indexRemove.Count - 1; i++)
-      {
-        GiftsReceiptDetail item = indexRemove[i];
-        _obsGifts.Remove(item);
-      }
-    }
-    #endregion
-
-    #region controlEditionGifts
-    /// <summary>
-    /// Metodo encargado de mostrar, ocultar, ajustar los botos de agregar y eliminar del grid gifts detail
-    /// </summary>
-    /// <param name="_btnAdd"></param>
-    /// <param name="_btnRemove"></param>
-    /// <param name="_gridAdjustment"> FALSE - Mantiene el grid con el margin original | TRUE - Modifica el grid en modo edicion</param>
-    /// <history>
-    /// [vipacheco] 17/Junio/2016 Created
-    /// </history>
-    private void controlEditionGifts(Visibility _btnAdd, Visibility _btnRemove, bool _gridAdjustment = false)
-    {
-      btnAddGift.Visibility = _btnAdd;
-      btnRemoveGift.Visibility = _btnRemove;
-
-      if (_gridAdjustment)
-      {
-        //Ajustamos el margen del grid
-        Thickness _margin = grdExchange.Margin;
-        _margin.Left = 10;
-        _margin.Top = 78;
-        _margin.Right = 10;
-        _margin.Bottom = 10;
-        grdExchange.Margin = _margin;
-      }
-      else
-      {
-        //Ajustamos el margen del grid ORGINALMENTE si se movieron los margenes
-        Thickness _margin = grdExchange.Margin;
-        _margin.Left = 10;
-        _margin.Top = 52;
-        _margin.Right = 10;
-        _margin.Bottom = 10;
-        grdExchange.Margin = _margin;
-      }
-    }
-    #endregion
-
     #region ValidateGiftsRepeated
     /// <summary>
     /// Valida que no se vayan a duplicar los regalos en el recibo exchange
@@ -713,58 +624,162 @@ namespace IM.Host.Forms
           item.geCancelPVPPromo = true;
       }
       Grid.IsReadOnly = true;
-      Grid.Items.Refresh();  // Refrescamos 
-      Grid.IsReadOnly = false;
     }
     #endregion
 
-    #region grdGifts_DoubleClick
+    #region GiftsPacks_Expanded
     /// <summary>
-    /// Función encargada de Cargar la informacion para edicion de acuerdo al GIFT seleccionado!
+    /// Despliega los gifts del paquete
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     /// <history>
-    /// [vipacheco] 06/04/2016 Created
+    /// vipacheco] 25/Abril/2016 Created
     /// </history>
-    private void grdGiftsReceiptDetail_DoubleClick(object sender, RoutedEventArgs e)
+    private void GiftsPacks_Expanded(object sender, RoutedEventArgs e)
     {
-      GiftsReceiptDetail _giftSelected = grdExchange.SelectedItem as GiftsReceiptDetail;
+      for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
+        if (vis is DataGridRow)
+        {
+          var row = (DataGridRow)vis;
+          GiftsReceiptDetail _GiftDetail = row.DataContext as GiftsReceiptDetail;
 
-      frmGiftsReceiptsDetail _frmGiftsDetail = new frmGiftsReceiptsDetail(ref _obsGifts, _obsGiftsComplet, _GuestID, Convert.ToInt32(txtReceipt.Text), _giftSelected, frmGiftsReceipts.useCxCCost, true);
-      _frmGiftsDetail.Owner = this;
-      _frmGiftsDetail.ShowInTaskbar = false;
-      _frmGiftsDetail.modeOpen = EnumModeOpen.Edit;
-      ObjectHelper.CopyProperties(_frmGiftsDetail._giftCurrent, _giftSelected); // Se copian las propiedades a una temporal
-      _frmGiftsDetail.ShowDialog();
-    }
-    #endregion
+          if (_GiftDetail == null) return;
+          // Buscamos el regalo seleccionado
+          Gift _Gift = frmHost._lstGifts.Where(x => x.giID == _GiftDetail.gegi).Single();
 
-    #region Row KeyDown
-    /// <summary>
-    /// abre la ventana detalle con el boton enter
-    /// cambia de fila con el boton tab
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <history>
-    /// [vipacheco] 06/04/2016 Created
-    /// </history>
-    private void Row_KeyDown(object sender, KeyEventArgs e)
-    {
-      bool blnHandled = false;
-      switch (e.Key)
-      {
-        case Key.Enter:
+          // Verificamos si tiene paquete de regalos
+          if (_Gift.giPack)
           {
-            grdGiftsReceiptDetail_DoubleClick(null, null);
-            blnHandled = true;
-            break;
+            // Buscamos los regalos del paquete
+            var packs = frmHost._lstGiftsPacks.Where(x => x.gpPack == _Gift.giID).ToList();
+            var giftsPacks = packs.Select(x => new GiftsReceiptPackageItem { gkQty = _GiftDetail.geQty, gkgi = frmHost._lstGifts.Where(w => w.giID == x.gpgi).Select(s => s.giN).First() }).ToList();
+            List<GiftsReceiptPackageItem> lstResult = giftsPacks;
+
+            row.DetailsVisibility = Visibility.Visible;
+            // Localizamos el recurso
+            CollectionViewSource dsGiftsReceiptPackage = ((CollectionViewSource)(this.FindResource("dsGiftsReceiptPackage")));
+            // Asignamos el valor a la lista
+            dsGiftsReceiptPackage.Source = lstResult;
           }
-      }
-      e.Handled = blnHandled;
+
+          break;
+        }
     }
     #endregion
+
+    #region GiftsPacks_Collapsed
+    /// <summary>
+    /// Colapsa los gifts de regalo del grid
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 25/Abril/2016 Created
+    /// </history>
+    private void GiftsPacks_Collapsed(object sender, RoutedEventArgs e)
+    {
+      for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual)
+        if (vis is DataGridRow)
+        {
+          var row = (DataGridRow)vis;
+          CollectionViewSource dsGiftsReceiptPackage = ((CollectionViewSource)(this.FindResource("dsGiftsReceiptPackage")));
+          dsGiftsReceiptPackage.Source = null;
+
+          row.DetailsVisibility = Visibility.Collapsed; //row.DetailsVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+          break;
+        }
+    }
+    #endregion
+
+    #region grdExchange_PreparingCellForEdit
+    /// <summary>
+    /// Determina si se puede editar la informacion del grid
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 25/Junio/2016 Created
+    /// </history>
+    private void grdExchange_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+    {
+      DataGrid dataGrid = sender as DataGrid;
+      GiftsReceiptDetail giftsReceiptDetail = dataGrid.Items.CurrentItem as GiftsReceiptDetail;
+      _currentCell = grdExchange.CurrentCell;
+
+      ReceiptsGifts.StartEdit(Enums.EnumMode.modEdit, giftsReceiptDetail, ref _currentCell, ref grdExchange, ref bandCancel);
+    }
+    #endregion
+
+    #region grdExchange_CellEditEnding
+    /// <summary>
+    /// Evento para validar los cambios de una celda en el grid
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 30/Junio/2016 Created 
+    /// </history>
+    private void grdExchange_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+      if (!bandCancel)
+      {
+        grdExchange.CellEditEnding -= grdExchange_CellEditEnding;
+        DataGrid dataGrid = sender as DataGrid;
+        ComboBox comboBox = e.EditingElement as ComboBox;
+        GiftsReceiptDetail giftsReceiptDetail = dataGrid.Items.CurrentItem as GiftsReceiptDetail;
+
+        // Validamos la celda
+        bool cancel = false;
+        ReceiptsGifts.ValidateEdit(giftsReceiptDetail, cancel, true, _currentCell);
+
+        // Si se cancela la edicion
+        if (!cancel)
+        {
+          TextBox _null = null;
+          ChargeTo pChargeTo = frmHost._lstChargeTo.Where(x => x.ctID.ToUpper() == "MARKETING").Single();
+          LeadSource pLeadSource = cboLeadSource.SelectedItem as LeadSource;
+
+          ReceiptsGifts.AfterEdit(ref grdExchange, _Guest, grdExchange.SelectedIndex, pGiftField: "gegi", pQuantityField: "geQty", pAdultsField: "geAdults", pMinorsField: "geMinors",
+                                        pExtraAdultsField: "geExtraAdults", pCostAdultsField: "gePriceA", pCostMinorsField: "gePriceM", pPriceAdultsField: "gePriceAdult",
+                                        pPriceMinorsField: "gePriceMinor", pPriceExtraAdultsField: "gePriceExtraAdult", pLstGifts: frmHost._lstGifts, pRow: ref giftsReceiptDetail, pCell: _currentCell, pUseCxCCost: useCxCCost, pIsExchange: true,
+                                        pChargeTo: pChargeTo, pLeadSourceID: pLeadSource.lsID, pTxtTotalCost: ref txtTotalCost, pTxtTotalPrice: ref _null, pTxtTotalToPay: ref _null, pTxtgrCxCGifts: ref txtgrcxcGifts,
+                                        pTxtTotalCxC: ref txtTotalCxC, pTxtgrCxCAdj: ref txtgrcxcAdj, pTxtgrMaxAuthGifts: ref txtMaxAuthGifts, pLblgrMaxAuthGifts: ref lblMaxAuthGiftsCaption);
+
+          dataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+          grdGifts_RowEditEnding(sender, null);
+        }
+        else
+        {
+          e.Cancel = true;
+        }
+        grdExchange.CellEditEnding += grdExchange_CellEditEnding;
+      }
+      // Verificamos si se puso en modo lectura la celda
+      if (_currentCell.Column.IsReadOnly)
+        _currentCell.Column.IsReadOnly = false;
+    }
+    #endregion
+
+    #region grdGifts_RowEditEnding
+    /// <summary>
+    /// Evento para finalizar la edicion de un row en el grid
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 30/Junio/2016 Created 
+    /// </history>
+    private void grdGifts_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+      var dataGrid = sender as DataGrid;
+      dataGrid.RowEditEnding -= grdGifts_RowEditEnding;
+      dataGrid.CommitEdit();
+      dataGrid.Items.Refresh();
+      dataGrid.RowEditEnding += grdGifts_RowEditEnding;
+    }
+    #endregion
+
 
   }
 }

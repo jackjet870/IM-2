@@ -21,6 +21,100 @@ namespace IM.Host.Classes
   public class Gifts
   {
 
+    #region CalculateCostsPrices
+    /// <summary>
+    /// Calcula los costos y precios de adultos y menores de un regalo
+    ///          Total = Cantidad de regalos * Cantidad de personas * Precio
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="pGrid"></param>
+    /// <param name="pRow"></param>
+    /// <param name="pGiftField"></param>
+    /// <param name="pQuantityField"></param>
+    /// <param name="pAdultsField"></param>
+    /// <param name="pMinorsField"></param>
+    /// <param name="pExtraAdultsField"></param>
+    /// <param name="pCostAdultsField"></param>
+    /// <param name="pCostMinorsField"></param>
+    /// <param name="pPriceAdultsField"></param>
+    /// <param name="pPriceMinorsField"></param>
+    /// <param name="pPriceExtraAdultsField"></param>
+    /// <param name="pLstGifts"></param>
+    /// <param name="pUseCxCCost"></param>
+    /// <param name="pEnum"></param>
+    /// <history>
+    /// [vipacheco] 04/Julio/2016 Created
+    /// </history>
+    public static void CalculateCostsPrices<T,U>(ref T pCurrent, int pRow, string pGiftField, string pQuantityField, string pAdultsField, string pMinorsField,
+                                               string pExtraAdultsField, string pCostAdultsField, string pCostMinorsField, string pPriceAdultsField, string pPriceMinorsField,
+                                               string pPriceExtraAdultsField, List<U> pLstGifts, bool pUseCxCCost = false, EnumPriceType pEnum = EnumPriceType.All)
+    {
+      decimal costAdult, costMinor, priceAdult, priceMinor, priceExtraAdult, quantity;
+
+      // Obtenemos su tipo
+      Type type = pCurrent.GetType();
+
+      // Si se encuentra el regalo
+      T objGift = pCurrent;
+      var gift = pLstGifts.Where(x => (string)x.GetType().GetProperty("giID").GetValue(x, null) == (string)type.GetProperty(pGiftField).GetValue(objGift, null)).FirstOrDefault();
+      if (gift != null)
+      {
+        // costos
+        // Si se va usar el costo de empleado
+        if (pUseCxCCost)
+        {
+          costAdult = (decimal)gift.GetType().GetProperty("giPrice3").GetValue(gift, null);
+          costMinor = (decimal)gift.GetType().GetProperty("giPrice4").GetValue(gift, null);
+        }
+        // si se va a usar el costo publico
+        else
+        {
+          costAdult = (decimal)gift.GetType().GetProperty("giPrice1").GetValue(gift, null);
+          costMinor = (decimal)gift.GetType().GetProperty("giPrice2").GetValue(gift, null);
+        }
+        // Precios
+        priceAdult = (decimal)gift.GetType().GetProperty("giPublicPrice").GetValue(gift, null);
+        priceMinor = (decimal)gift.GetType().GetProperty("giPriceMinor").GetValue(gift, null);
+        priceExtraAdult = (decimal)gift.GetType().GetProperty("giPriceExtraAdult").GetValue(gift, null);
+        quantity = (int)type.GetProperty(pQuantityField).GetValue(pCurrent, null);
+
+        switch (pEnum)
+        {
+          case EnumPriceType.All:
+            // Total del costo adultos
+            pCurrent.GetType().GetProperty(pCostAdultsField).SetValue(pCurrent, (quantity * ((int)type.GetProperty(pAdultsField).GetValue(pCurrent, null) + (int)type.GetProperty(pExtraAdultsField).GetValue(pCurrent, null)) * costAdult), null);
+            // Total del costo de menores
+            type.GetProperty(pCostMinorsField).SetValue(pCurrent, (quantity * (int)type.GetProperty(pMinorsField).GetValue(pCurrent, null) * costMinor), null);
+            // Total del precio adultos
+            type.GetProperty(pPriceAdultsField).SetValue(pCurrent, (quantity * (int)type.GetProperty(pAdultsField).GetValue(pCurrent, null) * priceAdult), null);
+            // Total del precio de menores
+            type.GetProperty(pPriceMinorsField).SetValue(pCurrent, (quantity * (int)type.GetProperty(pMinorsField).GetValue(pCurrent, null) * priceMinor), null);
+            // Total del precio de adultos extra
+            type.GetProperty(pPriceExtraAdultsField).SetValue(pCurrent, (quantity * (int)type.GetProperty(pExtraAdultsField).GetValue(pCurrent, null) * priceExtraAdult), null);
+            break;
+          case EnumPriceType.Adults:
+            // Total del costo adultos
+            type.GetProperty(pCostAdultsField).SetValue(pCurrent, (quantity * ((int)type.GetProperty(pAdultsField).GetValue(pCurrent, null) + (int)type.GetProperty(pExtraAdultsField).GetValue(pCurrent, null)) * costAdult), null);
+            // Total del precio adultos
+            type.GetProperty(pPriceAdultsField).SetValue(pCurrent, (quantity * (int)type.GetProperty(pAdultsField).GetValue(pCurrent, null) * priceAdult), null);
+            break;
+          case EnumPriceType.Minors:
+            // Total del costo de menores
+            type.GetProperty(pCostMinorsField).SetValue(pCurrent, (quantity * (int)type.GetProperty(pMinorsField).GetValue(pCurrent, null) * costMinor), null);
+            // Total del precio de menores
+            type.GetProperty(pPriceMinorsField).SetValue(pCurrent, (quantity * (int)type.GetProperty(pMinorsField).GetValue(pCurrent, null) * priceMinor), null);
+            break;
+          case EnumPriceType.ExtraAdults:
+            // Total del costo adultos
+            type.GetProperty(pCostAdultsField).SetValue(pCurrent, (quantity * ((int)type.GetProperty(pAdultsField).GetValue(pCurrent, null) + (int)type.GetProperty(pExtraAdultsField).GetValue(pCurrent, null)) * costAdult), null);
+            // Total del precio de adultos extra
+            type.GetProperty(pPriceExtraAdultsField).SetValue(pCurrent, (quantity * (int)type.GetProperty(pExtraAdultsField).GetValue(pCurrent, null) * priceExtraAdult), null);
+            break;
+        }
+      }
+    }
+    #endregion
+
     #region CalculateTotalGifts
     /// <summary>
     /// Calcula el costo y precio total de regalos
@@ -156,28 +250,25 @@ namespace IM.Host.Classes
     public static void ValidateAdultsMinors(EnumAdultsMinors pEnum, GiftsReceiptDetail pRow, ref bool pCancel)
     {
       int value = 0;
+      bool cancel = false;
 
       switch (pEnum)
       {
         case EnumAdultsMinors.Adults:
           value = pRow.geAdults;
-          GridHelper.ValidateEditNumber(ref value, ref pCancel, "Quantity of adults", 99, 0);
-          pRow.geAdults = value;
+          GridHelper.ValidateEditNumber(ref value, ref cancel, "Quantity of adults", 99, 0);
           break;
         case EnumAdultsMinors.Minors:
           value = pRow.geMinors;
-          GridHelper.ValidateEditNumber(ref value, ref pCancel, "Quantity of minors", 99, 0);
-          pRow.geAdults = value;
+          GridHelper.ValidateEditNumber(ref value, ref cancel, "Quantity of minors", 99, 0);
           break;
         case EnumAdultsMinors.ExtraAdults:
           value = pRow.geMinors;
-          GridHelper.ValidateEditNumber(ref value, ref pCancel, "Quantity of extra adults", 99, 0);
-          pRow.geAdults = value;
+          GridHelper.ValidateEditNumber(ref value, ref cancel, "Quantity of extra adults", 99, 0);
           break;
       }
-
       // si es valido
-      if (!pCancel)
+      if (!cancel)
       {
         if (pRow.geAdults == 0 && pRow.geMinors == 0)
         {
@@ -185,7 +276,6 @@ namespace IM.Host.Classes
           UIHelper.ShowMessage("Quantity of adults and quantity of minors they can not both be zero.", MessageBoxImage.Exclamation, "Intelligence MArketing");
         }
       }
-
     }
     #endregion
 
@@ -199,21 +289,55 @@ namespace IM.Host.Classes
     /// <history>
     /// [vipacheco] 30/Junio/2016 Created
     /// </history>
-    public static void ValidateMaxQuantityOnEntryQuantity(GiftsReceiptDetail pRow, bool pIsExchange, int pLowerBound, ref bool pCancel)
+    public static void ValidateMaxQuantityOnEntryQuantity<T>(ref T pRow, bool pIsExchange, int pLowerBound, ref bool pCancel, string pQuantityField, string pGiftField)
     {
-      int value = pRow.geQty;
-      GridHelper.ValidateEditNumber(ref value, ref pCancel, "Quantity ", 999, pLowerBound, 1);
+      int value = (int)pRow.GetType().GetProperty(pQuantityField).GetValue(pRow, null);
+      bool cancel = false;
+      GridHelper.ValidateEditNumber(ref value, ref cancel, "Quantity ", 9999, pLowerBound, 1);
 
       // si es valido
-      if (!pCancel)
+      if (!cancel)
       {
-        Gift gift = frmHost._lstGifts.Where(x => x.giID == pRow.gegi).First();
+        Gift gift = null;
+        if (pRow.GetType().GetProperty(pGiftField).GetValue(pRow, null) != null)
+        {
+          string strGift = (string)pRow.GetType().GetProperty(pGiftField).GetValue(pRow, null);
+          gift = frmHost._lstGifts.Where(x => x.giID == strGift).First();
+        }
 
         // Si ya se ingreso el regalo
         if (gift != null)
         {
-          pCancel = !ValidateMaxQuantity(gift, pRow.geQty, pIsExchange);
+          pCancel = !ValidateMaxQuantity(gift, value, pIsExchange, ref pRow, pQuantityField);
         }
+      }
+      else
+      {
+        pCancel = true;
+      }
+    }
+    #endregion
+
+    #region ValidateMaxQuantityOnEntryGift
+    /// <summary>
+    /// Valida la cantidad maxima de un regalo al ingresar el regalo
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="pGift"></param>
+    /// <param name="pQuantityField"></param>
+    /// <param name="pRow"></param>
+    /// <param name="pIsExchange"></param>
+    /// <history>
+    /// [vipacheco] 04/Julio/2016 Created
+    /// </history>
+    public static void ValidateMaxQuantityOnEntryGift<T>(Gift pGift, string pQuantityField, ref T pRow, bool pIsExchange)
+    {
+      Type type = pRow.GetType();
+
+      if (!ValidateMaxQuantity(pGift, (int)type.GetProperty(pQuantityField).GetValue(pRow, null), pIsExchange, ref pRow, pQuantityField))
+      {
+        // establecemos como cantidad la cantidad maxima autorizada
+        pRow.GetType().GetProperty(pQuantityField).SetValue(pRow, pGift.giMaxQty, null);
       }
     } 
     #endregion
@@ -229,7 +353,7 @@ namespace IM.Host.Classes
     /// <history>
     /// [vipacheco] 30/Junio/2016 Created
     /// </history>
-    public static bool ValidateMaxQuantity(Gift pGift, int pQuantity, bool pIsExchange)
+    public static bool ValidateMaxQuantity<T>(Gift pGift, int pQuantity, bool pIsExchange, ref T pRow, string pQuantityField)
     {
       // si el regalo tiene limite de cantidad
       if (pGift.giMaxQty > 0)
@@ -239,6 +363,7 @@ namespace IM.Host.Classes
         {
           UIHelper.ShowMessage("The maximum quantity authorized of the gift " + pGift.giN + "has been exceeded. \r\n" +
                                 "Max authorized = " + pGift.giMaxQty, MessageBoxImage.Exclamation, "Intelligence Marketing");
+          pRow.GetType().GetProperty(pQuantityField).SetValue(pRow, pGift.giMaxQty, null);
           return false;
         }
       }
@@ -249,6 +374,7 @@ namespace IM.Host.Classes
         if (!pIsExchange)
         {
           UIHelper.ShowMessage("The gift " + pGift.giN + " has amount modifiable therefore quantity must be 1 or -1.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+          pRow.GetType().GetProperty(pQuantityField).SetValue(pRow, 1, null);
           return false;
         }
       }

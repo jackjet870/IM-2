@@ -1,5 +1,6 @@
 ﻿using IM.Base.Helpers;
 using IM.BusinessRules.BR;
+using IM.Host.Forms;
 using IM.Model;
 using IM.Model.Enums;
 using System;
@@ -33,10 +34,12 @@ namespace IM.Host.Classes
     /// <param name="row"></param>
     /// <param name="cell"></param>
     /// <param name="grid"></param>
+    /// <param name="pCancel"></param>
     /// <history>
     /// [vipacheco] 24/junio/2016 Created
+    /// [vipacheco] 02/julio/2016 Modified --> se agrego un parametro mas para validaciones sobre el grid
     /// </history>
-    public static void StartEdit(Enums.EnumMode mode, GiftsReceiptDetail row, ref DataGridCellInfo cell, ref DataGrid grid)
+    public static void StartEdit(Enums.EnumMode mode, GiftsReceiptDetail row, ref DataGridCellInfo cell, ref DataGrid grid, ref bool pCancel)
     {
       // Obtenemos el index del row en edicion
       int rowIndex = grid.SelectedIndex != -1 ? grid.SelectedIndex : 0;
@@ -49,7 +52,9 @@ namespace IM.Host.Classes
           {
             // Cantidad
             case "geQty":
-              cell.Column.IsReadOnly = !EnableQuantity(row);
+              bool blnResult = !EnableQuantity(row);
+              cell.Column.IsReadOnly = blnResult;
+              pCancel = blnResult;
               break;
             // Regalo
             case "gegi":
@@ -57,17 +62,30 @@ namespace IM.Host.Classes
               if (row.geQty == 0)
               {
                 UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+                pCancel = true;
+
                 GridHelper.SelectRow(grid, rowIndex, 0, true);
               }
               // determinamos si se puede modificar el regalo
               else if (!EnableGift(row))
               {
+                pCancel = false;
                 cell.Column.IsReadOnly = true;
               }
               else
               {
+                pCancel = false;
                 cell.Column.IsReadOnly = false;
               }
+
+              // Habilitamos las columnas
+              DataGridCellInfo Adults = new DataGridCellInfo(grid.SelectedIndex, grid.Columns[3]);
+              Adults.Column.IsReadOnly = false;
+              DataGridCellInfo Minors = new DataGridCellInfo(grid.SelectedIndex, grid.Columns[4]);
+              Minors.Column.IsReadOnly = false;
+              DataGridCellInfo EAdults = new DataGridCellInfo(grid.SelectedIndex, grid.Columns[5]);
+              EAdults.Column.IsReadOnly = false;
+
               break;
             // Numero de adultos, menores y adultos extra
             case "geAdults":
@@ -77,12 +95,14 @@ namespace IM.Host.Classes
               if (row.geQty == 0)
               {
                 UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+                pCancel = true;
                 GridHelper.SelectRow(grid, rowIndex, 0, true);
               }
               // si no se ha ingresado el regalo
               else if (row.gegi == null)
               {
                 UIHelper.ShowMessage("Enter the Gift first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+                pCancel = true;
                 GridHelper.SelectRow(grid, rowIndex, 2, true);
               }
               else
@@ -91,7 +111,8 @@ namespace IM.Host.Classes
                 Gift _gift = frmHost._lstGifts.Where(x => x.giID == row.gegi).First();
 
                 // se permite modificar si el regalo maneja Pax
-                cell.Column.IsReadOnly = _gift.giWPax;
+                cell.Column.IsReadOnly = !_gift.giWPax;
+                pCancel = !_gift.giWPax;
               }
               break;
             // Folios
@@ -100,12 +121,14 @@ namespace IM.Host.Classes
               if (row.geQty == 0)
               {
                 UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+                pCancel = true;
                 GridHelper.SelectRow(grid, rowIndex, 0, true);
               }
               // si no se ha ingresado el regalo
               else if (row.gegi == null)
               {
                 UIHelper.ShowMessage("Enter the Gift first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+                pCancel = true;
                 GridHelper.SelectRow(grid, rowIndex, 2, true);
               }
               else
@@ -115,6 +138,7 @@ namespace IM.Host.Classes
 
                 // se permite modificar si el regalo maneja Pax
                 cell.Column.IsReadOnly = !_gift.giWFolio;
+                pCancel = false;
               }
               break;
             case "gect":
@@ -124,11 +148,13 @@ namespace IM.Host.Classes
               if (row.gegi == null && row.geMinors == 0 && row.geAdults == 0)
               {
                 UIHelper.ShowMessage("No gift and quantity has been selected.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+                pCancel = true;
                 GridHelper.SelectRow(grid, rowIndex, 0, true);
               }
               else
               {
                 cell.Column.IsReadOnly = false;
+                pCancel = false;
               }
               break;
             // Costo de adultos y menores
@@ -139,6 +165,7 @@ namespace IM.Host.Classes
 
               // se permite modificar si el regalo permite modificar los montos
               cell.Column.IsReadOnly = !_giftA.giAmountModifiable;
+              pCancel = false;
               break;
             // Regalos tipo venta y comentarios
             case "geSale":
@@ -147,15 +174,18 @@ namespace IM.Host.Classes
               if (row.geQty == 0)
               {
                 UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+                pCancel = true;
                 GridHelper.SelectRow(grid, rowIndex, 0, true);
               }
               else
               {
+                pCancel = false;
                 cell.Column.IsReadOnly = false;
               }
               break;
             // las demas columnas no se permiten modificar
             default:
+              pCancel = false;
               cell.Column.IsReadOnly = true;
               break;
           }
@@ -172,12 +202,14 @@ namespace IM.Host.Classes
                 if (row.geQty == 0)
                 {
                   UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+                  pCancel = true;
                   GridHelper.SelectRow(grid, rowIndex, 0, true);
                 }
                 // si no se ha ingresado el regalo
                 else if (row.gegi == null)
                 {
                   UIHelper.ShowMessage("Enter the Gift first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+                  pCancel = true;
                   GridHelper.SelectRow(grid, rowIndex, 2, true);
                 }
                 else
@@ -187,6 +219,7 @@ namespace IM.Host.Classes
 
                   // se permite modificar si el regalo maneja folios
                   cell.Column.IsReadOnly = !_gift.giWFolio;
+                  pCancel = false;
                 }
                 break;
               case "geComments":
@@ -194,26 +227,31 @@ namespace IM.Host.Classes
                 if (row.geQty == 0)
                 {
                   UIHelper.ShowMessage("Enter the quantity first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+                  pCancel = true;
                   GridHelper.SelectRow(grid, rowIndex, 0, true);
                 }
                 // si no se ha ingresado el regalo
                 else if (row.gegi == null)
                 {
                   UIHelper.ShowMessage("Enter the Gift first.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+                  pCancel = true;
                   GridHelper.SelectRow(grid, rowIndex, 2, true);
                 }
                 else
                 {
+                  pCancel = false;
                   cell.Column.IsReadOnly = false;
                 }
                 break;
               default:
+                pCancel = false;
                 cell.Column.IsReadOnly = true;
                 break;
             }
           }
           else
           {
+            pCancel = false;
             cell.Column.IsReadOnly = true;
           }
           break;
@@ -256,7 +294,7 @@ namespace IM.Host.Classes
           break;
         case "geQty":
           // validamos la cantidad maxima del regalo
-          Gifts.ValidateMaxQuantityOnEntryQuantity(pRow, pIsExchange, LowerBound, ref pCancel);
+          Gifts.ValidateMaxQuantityOnEntryQuantity(ref pRow, pIsExchange, LowerBound, ref pCancel, "geQty", "gegi");
 
           //si el regalo esta guardado como promocion de Opera
           if (pRow.geAsPromotionOpera == true)
@@ -277,21 +315,189 @@ namespace IM.Host.Classes
           pCancel = false;
           break;
         case "geFolios":
-          if (pRow.geFolios != "")
+          if (pRow.geFolios != null)
           {
             // validamos los folios
+            dynamic varTemp = ValidateFolios(pRow.geFolios);
 
+            // si los folios no son  validos
+            if (varTemp == null)
+              pCancel = true;
+            else
+            {
+              // si el numero de folios coincide con la cantidad de regalos 
+              if (varTemp.Count == Math.Abs(pRow.geQty))
+              {
+                pCancel = false;
+                pRow.geFolios = pRow.geFolios.ToUpper();
+              }
+              else
+              {
+                UIHelper.ShowMessage("The number of folios does not match the especified quantity.", MessageBoxImage.Information, "Intelligence Marketing");
+                pCancel = true;
+              }
+            }
           }
           break;
-
+        case "geCharge":
+          if (pRow.geCharge == -1)
+          {
+            pRow.geCharge = 0;
+          }
+          break;
       }
     }
     #endregion
 
+    #region AfterEdit
+    /// <summary>
+    /// Establece los valores default de las columnas del grid
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="pGrid"></param>
+    /// <param name="pGuest"></param>
+    /// <param name="pRowSelected"></param>
+    /// <param name="pGiftField"></param>
+    /// <param name="pQuantityField"></param>
+    /// <param name="pAdultsField"></param>
+    /// <param name="pMinorsField"></param>
+    /// <param name="pExtraAdultsField"></param>
+    /// <param name="pCostAdultsField"></param>
+    /// <param name="pCostMinorsField"></param>
+    /// <param name="pPriceAdultsField"></param>
+    /// <param name="pPriceMinorsField"></param>
+    /// <param name="pPriceExtraAdultsField"></param>
+    /// <param name="pLstGifts"></param>
+    /// <param name="pRow"></param>
+    /// <param name="pCell"></param>
+    /// <param name="pUseCxCCost"></param>
+    /// <param name="pIsExchange"></param>
+    /// <param name="pForm"></param>
+    /// <history>
+    /// [vipacheco] 30/Junio/2016 Created
+    /// </history>
+    public static void AfterEdit<T>(ref DataGrid pGrid, GuestShort pGuest, int pRowSelected, string pGiftField, string pQuantityField, string pAdultsField, string pMinorsField,
+                                             string pExtraAdultsField, string pCostAdultsField, string pCostMinorsField, string pPriceAdultsField, string pPriceMinorsField,
+                                             string pPriceExtraAdultsField, List<T> pLstGifts, ref GiftsReceiptDetail pRow, DataGridCellInfo pCell, bool pUseCxCCost, bool pIsExchange,
+                                             ChargeTo pChargeTo, string pLeadSourceID, ref TextBox pTxtTotalCost, ref TextBox pTxtTotalPrice, ref TextBox pTxtTotalToPay, ref TextBox pTxtgrCxCGifts,
+                                             ref TextBox pTxtTotalCxC, ref TextBox pTxtgrCxCAdj, ref TextBox pTxtgrMaxAuthGifts, ref TextBlock pLblgrMaxAuthGifts)
+    {
+      bool calculateCharge = false;
+
+      switch (pCell.Column.SortMemberPath)
+      {
+        case "geQty":
+          // si se ingreso el regalo, la cantidad de adultos y la cantidad de menores
+          if (pRow.gegi != null && pRow.geAdults != -1 && pRow.geMinors != -1)
+          {
+            // calculamos los costos y precios
+            Gifts.CalculateCostsPrices(ref pRow, pRowSelected, pGiftField, pQuantityField, pAdultsField, pMinorsField, pExtraAdultsField, pCostAdultsField,
+                                       pCostMinorsField, pPriceAdultsField, pPriceMinorsField, pPriceExtraAdultsField, pLstGifts, pUseCxCCost);
+            calculateCharge = true;
+          }
+          break;
+        case "gePriceA":
+        case "gePriceM":
+          // si se ingreso el regalo, la cantidad de adultos y la cantidad de menores
+          if (pRow.gegi != null && pRow.geAdults == 0 && pRow.geMinors == 0)
+            calculateCharge = true;
+          break;
+        case "gegi":
+          Gift gift = null;
+          if (pRow.gegi != null)
+          {
+            string strGift = pRow.gegi;
+            gift = frmHost._lstGifts.Where(x => x.giID == strGift).FirstOrDefault();
+          }
+
+
+          // si se ingreso el regalo
+          if (gift != null)
+          {
+            // Obtenemos la informacion del huesped para determinar si es Interval
+            string guestID = $"{pGuest.guID}";
+            string leadSource = pGuest.guls;
+            string agency = pGuest.guag;
+
+            // cargar a Marketing
+            pRow.gect = "MARKETING";
+
+            // si el regalo no maneja Pax
+            if (!gift.giWPax)
+            {
+              pRow.geAdults = 1;
+              pRow.geMinors = 0;
+              pRow.geExtraAdults = 0;
+            }
+            // establecemos los valores default de adultos y menores
+            pRow.geAdults = 1;
+            pRow.geMinors = 0;
+            pRow.geExtraAdults = 0;
+            pRow.gePriceA = 0;
+            pRow.gePriceM = 0;
+            pRow.gePriceAdult = 0;
+            pRow.gePriceMinor = 0;
+            pRow.gePriceExtraAdult = 0;
+
+            //establecemos si el regalo es tipo venta
+            pRow.geSale = gift.giSale;
+
+            // validamos la cantidad maxima del regalo
+            Gifts.ValidateMaxQuantityOnEntryGift(gift, "geQty", ref pRow, pIsExchange);
+
+            // calculamos los costos y precios
+            Gifts.CalculateCostsPrices(ref pRow, pRowSelected, pGiftField, pQuantityField, pAdultsField, pMinorsField, pExtraAdultsField, pCostAdultsField,
+                                       pCostMinorsField, pPriceAdultsField, pPriceMinorsField, pPriceExtraAdultsField, pLstGifts, pUseCxCCost);
+            calculateCharge = true;
+          }
+          break;
+        case "geAdults":
+          // calculamos los costos y precios
+          Gifts.CalculateCostsPrices(ref pRow, pRowSelected, pGiftField, pQuantityField, pAdultsField, pMinorsField, pExtraAdultsField, pCostAdultsField,
+                                     pCostMinorsField, pPriceAdultsField, pPriceMinorsField, pPriceExtraAdultsField, pLstGifts, pUseCxCCost, EnumPriceType.Adults);
+          calculateCharge = true;
+          break;
+        case "geMinors":
+          // calculamos los costos y precios
+          Gifts.CalculateCostsPrices(ref pRow, pRowSelected, pGiftField, pQuantityField, pAdultsField, pMinorsField, pExtraAdultsField, pCostAdultsField,
+                                     pCostMinorsField, pPriceAdultsField, pPriceMinorsField, pPriceExtraAdultsField, pLstGifts, pUseCxCCost, EnumPriceType.Minors);
+          calculateCharge = true;
+          break;
+        case "geExtraAdults":
+          // calculamos los costos y precios
+          Gifts.CalculateCostsPrices(ref pRow, pRowSelected, pGiftField, pQuantityField, pAdultsField, pMinorsField, pExtraAdultsField, pCostAdultsField,
+                                     pCostMinorsField, pPriceAdultsField, pPriceMinorsField, pPriceExtraAdultsField, pLstGifts, pUseCxCCost, EnumPriceType.ExtraAdults);
+          calculateCharge = true;
+          break;
+      }
+      // calculamos el monto total de regalos
+      Gifts.CalculateTotalGifts(pGrid, EnumGiftsType.ReceiptGifts, ref pTxtTotalCost, ref pTxtTotalPrice, ref pTxtTotalToPay);
+
+      // si se debe calcular el cargo
+      if (calculateCharge)
+      {
+        bool validate = false;
+        CalculateCharge(pGuest.guID, pChargeTo, pTxtTotalCost, pIsExchange, ref pTxtgrCxCGifts, ref pTxtTotalCxC, ref pTxtgrCxCAdj, ref validate, pLeadSourceID, ref pTxtgrMaxAuthGifts, ref pLblgrMaxAuthGifts);
+      }
+    }
+    #endregion
+
+    #region ValidateFolios
+    /// <summary>
+    /// Valida los folios de un regalo de recibos de regalos
+    ///             La funcion devuelve nulo cuando los folios estan erroneos
+    /// </summary>
+    /// <param name="pFolios"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 29/Julio/2016 Created
+    /// </history>
     public static dynamic ValidateFolios(string pFolios)
     {
       bool isRange = false, Error = false;
-      string initFolio = "", endFolio = "";
+      string initFolio = "", endFolio = "", num1 = "", num2 = "", serie = "", folioSec = "";
+      int intNum1, intNum2;
+      EnumFormatFolio FormatFolios;
 
       // si la lista de folios solo contiene caracteres validos
       if (ValidateIntervals(pFolios))
@@ -304,12 +510,12 @@ namespace IM.Host.Classes
           isRange = false;
 
           // Si es un rango
-          if (currentInterval.Split('-').Count() > 0)
+          if (currentInterval.Split('-').Count() > 1)
           {
             var Folios = currentInterval.Split('-');
 
             // si tiene mas de 2 folios en el rango
-            if (Folios.Count() > 1)
+            if (Folios.Count() > 2)
             {
               UIHelper.ShowMessage("Error: Too many separators on interval. " + currentInterval, MessageBoxImage.Information);
               Error = true;
@@ -339,12 +545,238 @@ namespace IM.Host.Classes
           if (isRange)
           {
             // obtenemos el formato de los folios
+            FormatFolios = GetFormatFolios(initFolio, endFolio);
+
+            // si los formatos de los folios son validos
+            if (FormatFolios != EnumFormatFolio.Invalid)
+            {
+              // recorremos los caracteres del folio inicial
+              for (int i = 0; i < initFolio.Length; i++)
+              {
+                bool bandEntryCase = false;
+
+                switch (FormatFolios)
+                {
+                  case EnumFormatFolio.Numbers:
+                    num1 = initFolio;
+                    bandEntryCase = true;
+                    break;
+                  case EnumFormatFolio.LettersNumbers:
+                    // si es un numero
+                    if (CaracterType(Convert.ToChar(initFolio.Substring(i, 1))) == EnumCaracterType.Number)
+                    {
+                      serie = initFolio.Substring(0, i - 1);
+                      num1 = initFolio.Substring(i, initFolio.Length);
+                      bandEntryCase = true;
+                    }
+                    break;
+                  case EnumFormatFolio.NumbersLetters:
+                    // si es letra
+                    if (CaracterType(Convert.ToChar(initFolio.Substring(i, 1))) == EnumCaracterType.Letter)
+                    {
+                      num1 = initFolio.Substring(0, i - 1);
+                      serie = initFolio.Substring(i, initFolio.Length);
+                      bandEntryCase = true;
+                    }
+                    break;
+                }
+
+                // verificamos si hay que salir del for
+                if (bandEntryCase)
+                  break;
+              }
+
+              // recorremos los caracteres del folio final
+              for (int i = 0; i < endFolio.Length; i++)
+              {
+                // si es un numero
+                if (CaracterType(Convert.ToChar(endFolio.Substring(i, 1))) == EnumCaracterType.Number)
+                  num2 += endFolio.Substring(i, 1);
+              }
+              intNum1 = Convert.ToInt32(num1);
+              intNum2 = ((Convert.ToInt32(num1)) / (10 * num2.Length)) + Convert.ToInt32(num2);
+
+              // si el rango esta traslapado
+              if (intNum1 > intNum2)
+              {
+                UIHelper.ShowMessage("Error: Start Folio is greater than End Folio on interval \r\n" + initFolio + "-" + endFolio, MessageBoxImage.Exclamation, "Intelligence Marketing");
+                Error = true;
+                break;
+              }
+              // si el rango no esta traslapado
+              else
+              {
+                // armamos la lista de folios secuenciales
+                for (int i = intNum1; i < intNum2; i++)
+                {
+                  switch (FormatFolios)
+                  {
+                    case EnumFormatFolio.Numbers:
+                      folioSec += Convert.ToString(i);
+                      break;
+                    case EnumFormatFolio.LettersNumbers:
+                      folioSec += serie.ToUpper() + i;
+                      break;
+                    case EnumFormatFolio.NumbersLetters:
+                      folioSec += i + serie.ToUpper();
+                      break;
+                  }
+                }
+              }
+            }
+            // si los formatos de los folios no son validos 
+            else
+            {
+              UIHelper.ShowMessage("Error: Invalid Format Folio. " + initFolio + " - " + endFolio, MessageBoxImage.Exclamation, "Intelligence Marketing");
+              Error = true;
+              break;
+            }
+          }
+          // si no es un rango y tiene un folio
+          else if (currentInterval != "")
+          {
+            // obtenemos el formato del folio
+            FormatFolios = GetFormatFolios(currentInterval);
+
+            // si el formato del folio es valido
+            if (FormatFolios != EnumFormatFolio.Invalid)
+              folioSec += currentInterval.ToUpper();
+            // si el formato del folio no es valido
+            else
+            {
+              UIHelper.ShowMessage("Error: Invalid Format Folio. " + currentInterval, MessageBoxImage.Exclamation);
+              Error = true;
+              break;
+            }
           }
         }
       }
+      // si la lista de folios contiene caracteres invalidos
+      else
+      {
+        UIHelper.ShowMessage("Invalid Characters was detected.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+        Error = true;
+      }
 
-      return true;
+      // si no hubo error
+      if (!Error)
+      {
+        List<string> foliosReturn = new List<string>();
+        // armamos el arreglo de folios
+        var folios = folioSec.Split(' ');
+        for (int i = 0; i < folios.Length; i++)
+        {
+          foliosReturn.Add(folios[i]);
+        }
+        return foliosReturn;
+      }
+      else
+        return null;
     }
+    #endregion
+
+    #region GetFormatFolio
+    /// <summary>
+    /// Obtiene los formatos de los folios inicial y final
+    /// </summary>
+    /// <param name="pInitFolio"></param>
+    /// <param name="pEndFolio"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 01/Junio/2016 Created
+    /// </history>
+    public static EnumFormatFolio GetFormatFolios(string pStartFolio, string pEndFolio = "")
+    {
+      EnumFormatFolio formatStartFolio, formatEndFolio, formatFolios;
+
+      formatFolios = EnumFormatFolio.Invalid;
+      formatStartFolio = GetFormatFolio(pStartFolio);
+
+      // si el folio inicial es valido y no solo tiene letras
+      if (formatStartFolio != EnumFormatFolio.Invalid && formatStartFolio != EnumFormatFolio.Letters)
+      {
+        // si se envio un folio final
+        if (pEndFolio != "")
+        {
+          formatEndFolio = GetFormatFolio(pEndFolio);
+
+          // si el folio final es valido
+          if (formatEndFolio != EnumFormatFolio.Invalid)
+          {
+            // si el segundo folio tiene el formato ### o tiene mismo formato que el folio inicial
+            if (formatEndFolio == EnumFormatFolio.Numbers || formatEndFolio == formatStartFolio)
+            {
+              // se acepta
+              formatFolios = formatEndFolio;
+            }
+          }
+        }
+        // si no se envio el folio final se regresa el formato del folio inicial que es valido
+        else
+        {
+          formatFolios = formatStartFolio;
+        }
+      }
+
+      return formatFolios;
+    }
+    #endregion
+
+    #region GetFormatFolio
+    /// <summary>
+    /// Obtiene el formato de un folio
+    /// </summary>
+    /// <param name="pFolio"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 01/Julio/2016 Created
+    /// </history>
+    public static EnumFormatFolio GetFormatFolio(string pFolio)
+    {
+      EnumFormatFolio FormatFolio = EnumFormatFolio.None;
+
+      // recorremos los caracteres del folio inicial
+      for (int i = 0; i < pFolio.Length; i++)
+      {
+        Char current = Convert.ToChar(pFolio.Substring(i, 1));
+
+        switch (CaracterType(current))
+        {
+          case EnumCaracterType.Letter:
+            switch (FormatFolio)
+            {
+              case EnumFormatFolio.None:
+                FormatFolio = EnumFormatFolio.Letters;
+                break;
+              case EnumFormatFolio.Numbers:
+                FormatFolio = EnumFormatFolio.NumbersLetters;
+                break;
+              case EnumFormatFolio.LettersNumbers:
+                FormatFolio = EnumFormatFolio.Invalid;
+                return FormatFolio;
+            }
+            break;
+
+          case EnumCaracterType.Number:
+            switch (FormatFolio)
+            {
+              case EnumFormatFolio.None:
+                FormatFolio = EnumFormatFolio.Numbers;
+                break;
+              case EnumFormatFolio.Letters:
+                FormatFolio = EnumFormatFolio.LettersNumbers;
+                break;
+              case EnumFormatFolio.NumbersLetters:
+                FormatFolio = EnumFormatFolio.Invalid;
+                return FormatFolio;
+            }
+            break;
+        }
+      }
+
+      return FormatFolio;
+    }
+    #endregion
 
     #region ValidateIntervals
     /// <summary>
@@ -366,7 +798,7 @@ namespace IM.Host.Classes
       }
 
       return true;
-    } 
+    }
     #endregion
 
     #region CaracterType
@@ -392,7 +824,7 @@ namespace IM.Host.Classes
         return EnumCaracterType.Colon;
       else
         return EnumCaracterType.None;
-    } 
+    }
     #endregion
 
     #region EnableQuantity
@@ -512,9 +944,9 @@ namespace IM.Host.Classes
     /// <history>
     /// [vipacheco] 14/Mayo/2016 Created
     /// </history>
-    public static void CalculateCharge(int GuestID, ChargeTo ChargeTo, TextBox txtTotalCost, CheckBox chkgrExchange,
-                                       TextBox txtgrgu, ref TextBox txtgrCxCGifts, ref TextBox txtTotalCxC, ref TextBox txtgrCxCAdj,
-                                       ref bool ValidateMaxAuthGifts, ref TextBox txtgrls, ref TextBox txtgrMaxAuthGifts,
+    public static void CalculateCharge(int GuestID, ChargeTo ChargeTo, TextBox txtTotalCost, bool pIsExchange,
+                                       ref TextBox txtgrCxCGifts, ref TextBox txtTotalCxC, ref TextBox txtgrCxCAdj,
+                                       ref bool ValidateMaxAuthGifts, string pLeadSourceID, ref TextBox txtgrMaxAuthGifts,
                                        ref TextBlock lblgrMaxAuthGifts)
     {
       decimal curCharge = 0;
@@ -522,17 +954,15 @@ namespace IM.Host.Classes
       decimal curMaxAuthGifts = 0;
       bool blnTour = false;
 
-      //ChargeTo _ChargeTo = (ChargeTo)ChargeTo.SelectedItem;
-
       curTotalCost = txtTotalCost.Text != "" ? Convert.ToDecimal(txtTotalCost.Text.Trim(new char[] { '$' })) : 0;
 
       //Establecemos el monto maximo de regalos
-      SetMaxAuthGifts(GuestID, ChargeTo, ref ValidateMaxAuthGifts, ref txtgrls, ref txtgrMaxAuthGifts, ref lblgrMaxAuthGifts);
+      SetMaxAuthGifts(GuestID, ChargeTo, ref ValidateMaxAuthGifts, pLeadSourceID, ref txtgrMaxAuthGifts, ref lblgrMaxAuthGifts);
 
       curMaxAuthGifts = txtgrMaxAuthGifts.Text != "" ? Convert.ToDecimal(txtgrMaxAuthGifts.Text.Trim(new char[] { '$' })) : 0;
 
       // Si no es un intercambio de regalos
-      if (!chkgrExchange.IsChecked.Value)
+      if (!pIsExchange)
       {
         // Localizamos a quien se carga
         switch (ChargeTo.ctCalcType)
@@ -541,7 +971,7 @@ namespace IM.Host.Classes
           // autorizado. De lo contrario el cargo es por el total de regalos
           case "A":
             // Validamos si tiene tour
-             LoadGuest(txtgrgu.Text); 
+             LoadGuest($"{GuestID}"); 
             blnTour = _guest.guTour;
             if (blnTour)
               curCharge = CalculateChargeBasedOnMaxAuthGifts(curTotalCost, curMaxAuthGifts);
@@ -594,13 +1024,13 @@ namespace IM.Host.Classes
     /// [vipacheco] 14/Mayo/2016 Created
     /// [vipacheco] 16/Mayo/2016 Modified --> Migrado a esta clase general de ReceiptGifts
     /// </history>
-    public static void SetMaxAuthGifts(int GuestID, ChargeTo ChargeTo, ref bool ValidateMaxAuthGifts, ref TextBox txtgrls, ref TextBox txtgrMaxAuthGifts,
+    public static void SetMaxAuthGifts(int GuestID, ChargeTo ChargeTo, ref bool ValidateMaxAuthGifts, string pLeadSourceID, ref TextBox txtgrMaxAuthGifts,
                                  ref TextBlock lblgrMaxAuthGifts)
     {
       decimal curMaxAuthGifts;
       bool blnWithMaxAuthGifts = false;
 
-      curMaxAuthGifts = CalculateMaxAuthGifts(GuestID, txtgrls.Text, ChargeTo, ref blnWithMaxAuthGifts);
+      curMaxAuthGifts = CalculateMaxAuthGifts(GuestID, pLeadSourceID, ChargeTo, ref blnWithMaxAuthGifts);
       txtgrMaxAuthGifts.Text = string.Format("${0}", curMaxAuthGifts);
       lblgrMaxAuthGifts.Visibility = (blnWithMaxAuthGifts) ? Visibility.Visible : Visibility.Hidden;
       txtgrMaxAuthGifts.Visibility = (blnWithMaxAuthGifts) ? Visibility.Visible : Visibility.Hidden;
@@ -613,14 +1043,14 @@ namespace IM.Host.Classes
     /// Calcula el monto maximo de regalos
     /// </summary>
     /// <param name="chargeTo"></param>
-    /// <param name="leadSource"></param>
+    /// <param name="pLeadSourceID"></param>
     /// <param name="withMaxAuthGifts"></param>
     /// <returns></returns>
     /// <history>
     /// [vipacheco] 18/Abril/2016 Created
     /// [vipacheco] 16/Mayo/2016 Modified --> Migrado a esta clase general de ReceiptGifts
     /// </history>
-    public static decimal CalculateMaxAuthGifts(int GuestID, string leadSource, ChargeTo ChargeTo, ref bool withMaxAuthGifts)
+    public static decimal CalculateMaxAuthGifts(int GuestID, string pLeadSourceID, ChargeTo ChargeTo, ref bool withMaxAuthGifts)
     {
       decimal curMaxAuthGifts = 0;
       withMaxAuthGifts = true;
@@ -630,9 +1060,9 @@ namespace IM.Host.Classes
         //Monto maximo de regalos por Lead Source
         case "A":
           // Si tiene Lead Source
-          if (leadSource != "")
+          if (pLeadSourceID != "")
           {
-            LeadSource _leadSource = BRLeadSources.GetLeadSourceByID(leadSource);
+            LeadSource _leadSource = BRLeadSources.GetLeadSourceByID(pLeadSourceID);
             //si encontro el Lead Source
             if (_leadSource != null)
             {
@@ -726,51 +1156,324 @@ namespace IM.Host.Classes
     /// [vipacheco] 30/Mayo/2016 Created
     /// [vipacheco] 21/Junio/2016 Migrado a esta clase
     /// </history>
-    public async static void Save(List<KeyValuePair<EnumMode, GiftsReceiptDetail>> _LogGiftDetail, Dictionary<string, List<GiftsReceiptPackageItem>> Packs, int _GuestID, int ReceiptID, bool _blnInvitationGifts)
+    public async static Task Save(ObservableCollection<GiftsReceiptDetail> pGiftsDetail, int pReceiptID, int pGuestID, bool pIsExchange)
     {
-      if (_blnInvitationGifts)  // Si las invitaciones vienen de InvitsGifts
+      bool notFound = false;
+
+      // cargamos los regalos del recibo de regalos
+      List<GiftsReceiptDetail> lstResult = await BRGiftsReceiptDetail.GetGiftsReceiptDetail(pReceiptID);
+
+      // agregamos o actualiza los regalos en la BD
+      foreach (GiftsReceiptDetail current in pGiftsDetail)
       {
-        if (_LogGiftDetail.Count > 0)
+        // si se ingreso la cantidad, el regalo, a quien se carga y no es un regalo de un paquete
+        if (current.geQty > 0 && current.gegi != null && current.gect != null)
         {
-          // guardamos en GiftsReceiptsC
-          foreach (KeyValuePair<EnumMode, GiftsReceiptDetail> item in _LogGiftDetail)
+          // localizamos el regalo y a quien se carga
+          GiftsReceiptDetail result = lstResult.Where(x => x.gegi == current.gegi && x.gect == current.gect).FirstOrDefault();
+
+          // si no se encuentra el regalo
+          if (result == null)
           {
-            await BREntities.OperationEntity(item.Value, EnumMode.add);
+            current.gegr = pReceiptID;
+            // agregamos un regalo
+            await BREntities.OperationEntity(current, EnumMode.add);
 
-            // Encontramos el Gifts agregado
-            Gift _Gift = frmHost._lstGifts.Where(x => x.giID == item.Value.gegi).Single();
+            // Buscamos el regalo
+            Gift gift = frmHost._lstGifts.Where(x => x.giID == current.gegi).Single();
 
-            // verificamos si maneja paquetes
-            if (_Gift.giPack)
+            // Verificamos si tiene reagalos del paquete
+            if (gift.giPack)
             {
-              // Obtenemos la lista de regalos del paquete
+              // Buscamos los regalos del paquete
+              var packs = frmHost._lstGiftsPacks.Where(x => x.gpPack == gift.giID).ToList();
+              var giftsPacks = packs.Select(x => new GiftsReceiptPackageItem
+              {
+                gkgr = pReceiptID,
+                gkPack = x.gpPack,
+                gkgi = x.gpgi,
+                gkQty = 1,
+                gkAdults = 1,
+                gkMinors = 0,
+                gkPriceA = frmHost._lstGifts.Where(f => f.giID == x.gpgi).Select(s => s.giPrice1).Single(),
+                gkPriceM = 0
+              }).ToList();
 
+              // Guardamos los regalos
+              await BREntities.OperationEntities(giftsPacks, EnumMode.add);
 
-              // Agregamos los regalos del paquete
-              GiftsReceiptsPacks.Update(ReceiptID, _Gift.giID, EnumMode.add);
             }
-
           }
-
-          // Actualizamos los campos iggr de la tabla iggr de la tabla  InvitsGifts
-          foreach (KeyValuePair<EnumMode, GiftsReceiptDetail> item in _LogGiftDetail)
+          // Si se encuentra el regalo
+          else
           {
-            InvitationGift _invitationGift = BRInvitsGifts.GetInvitGift(_GuestID, item.Value.gegi);
-
-            if (_invitationGift != null)
-              _invitationGift.iggr = ReceiptID;
-
-            // Guardamos el cambio
-            await BREntities.OperationEntity(_invitationGift, EnumMode.edit);
+            await BREntities.OperationEntity(result, EnumMode.edit);
           }
         }
       }
-      else
+
+      // eliminamos los regalos de la BD si fueron eliminados en el grid
+      if (lstResult != null && lstResult.Count > 0)
       {
-        // guardamos en GiftsReceiptsC
-        foreach (KeyValuePair<Model.Enums.EnumMode, GiftsReceiptDetail> item in _LogGiftDetail)
-          await BREntities.OperationEntity(item.Value, item.Key);
+        foreach (var item in lstResult)
+        {
+
+          // localizamos el regalo en el grid
+          notFound = false;
+          foreach (var row in pGiftsDetail)
+          {
+            // si se ingreso la cantidad, el regalo, la cantidad de adultos y la cantidad de menores
+            if (row.gegi != null)
+            {
+              // si coinciden los campos
+              if (row.geQty == item.geQty && row.gegi == item.gegi && row.geAdults == item.geAdults &&
+                  row.geMinors == item.geMinors && row.geExtraAdults == item.geExtraAdults && row.gect == item.gect)
+              {
+                notFound = true;
+                break;
+              }
+            }
+          }
+          // si no se encontro el regalo en el grid se elimina de la BD
+          if (!notFound)
+          {
+            // eliminamos los regalos del paquete
+            List<GiftsReceiptPackageItem> lstPackages = await BRGiftsReceiptsPacks.GetGiftsReceiptPackage(pReceiptID, item.gegi);
+            await BREntities.OperationEntities(lstPackages, EnumMode.deleted);
+
+            // eliminamos la promocion del regalo
+            if (item.geAsPromotionOpera)
+              BRGuestsPromotions.DeleteGuestPromotion(item.gegr, item.gegi);
+
+            // Eliminamos el regalo
+            await BREntities.OperationEntity(item, EnumMode.deleted);
+          }
+        }
       }
+
+      // si tiene invitacion y no es un intercambio de regalos
+      if (pGuestID > 0 && !pIsExchange)
+      {
+        // actualizamos los regalos de la invitacion
+        UpdateInvitsGifts(pReceiptID, pGuestID, pGiftsDetail);
+      }
+
+    }
+    #endregion
+
+    #region UpdateInvitsGifts
+    /// <summary>
+    /// Actualiza los regalos de la invitacion
+    /// </summary>
+    /// <param name="pReceiptID"></param>
+    /// <param name="pGuestID"></param>
+    /// <history>
+    /// [vipacheco] 11/Julio/2016 Created
+    /// </history>
+    public async static void UpdateInvitsGifts(int pReceiptID, int pGuestID, ObservableCollection<GiftsReceiptDetail> pGiftsReceipts)
+    {
+      bool blnUpd = false;
+
+      //  seleccionamos los regalos de la invitacion
+      var lstResult = BRInvitsGifts.GetInvitsGiftsByGuestID(pGuestID);
+
+      // actualizamos los regalos en la BD
+      foreach (var item in pGiftsReceipts)
+      {
+        // si se ingreso la cantidad, el regalo y a quien se carga
+        if (item.geQty != 0 && item.gegi != null && item.gect != null)
+        {
+          // localizamos el regalo y a quien se carga
+          InvitationGift result = lstResult.Where(x => x.iggi == item.gegi && x.igct == item.gect).FirstOrDefault();
+
+          // si se encuentra el regalo
+          if (result != null)
+          {
+            // actualizamos el regalo existente solo si cambio algun campo
+            // si cambio el recibo
+            if ((result.iggr == null && pReceiptID != 0) || (pReceiptID == 0 && result.iggr != null) || (result.iggr != pReceiptID))
+            {
+              result.iggr = pReceiptID;
+              blnUpd = true;
+            }
+            // si cambio los folios
+            if ((result.igFolios == null && item.geFolios != null) || (item.geFolios == null && result.igFolios != null) || (result.igFolios != item.geFolios))
+            {
+              result.igFolios = item.geFolios;
+              blnUpd = true;
+            }
+            // si cambio los comentarios
+            if ((result.igComments == null && item.geComments != null) || (item.geComments == null && result.igComments != null) || (result.igComments != item.geComments))
+            {
+              result.igComments = item.geComments;
+              blnUpd = true;
+            }
+          }
+          // si se debe actualizar el regalo
+          if (blnUpd)
+          {
+            await BREntities.OperationEntity(result, EnumMode.edit);
+          }
+        }
+      }
+
+    }
+    #endregion
+
+    #region Validate
+    /// <summary>
+    /// Valida los regalos de recibos de regalos
+    /// </summary>
+    /// <param name="pRows"></param>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 12/Julio/2016 Created
+    /// </history>
+    public static bool Validate(ObservableCollection<GiftsReceiptDetail> pRows, bool pValidateMaxAuthGifts, bool pApplyGuestStatusValidation, GuestStatusValidateData pGuestStatus, 
+                                string pTotalCost, string pMaxAuthGifts)
+    {
+      bool blnvalid = true;
+      int i = 0;
+      foreach (var item in pRows)
+      {
+        int j = 0;
+        foreach (var itemTemp in pRows)
+        {
+          if (i != j)
+          {
+            // si se ingreso un regalo y es el mismo regalo
+            if (item.gegi == itemTemp.gegi && item.gegi != null)
+            {
+              string giftsRepeated = frmHost._lstGifts.Where(x => x.giID == item.gegi).Select(s => s.giN).First();
+              UIHelper.ShowMessage("Gifts must not be repeated.\r\nGift repetead is '" + giftsRepeated + "'.", MessageBoxImage.Exclamation, "Intelligence Marketing");
+              blnvalid = false;
+              break;
+            }
+          }
+          j++;
+        }
+        i++;
+        // Si no es valido
+        if (!blnvalid)
+          break;
+      }
+
+      // Si se debe validar el monto maximo de regalos
+      if (pValidateMaxAuthGifts)
+      {
+        // validamos el monto maximo de regalos
+        blnvalid = Gifts.ValidateMaxAuthGifts(pTotalCost, pMaxAuthGifts);
+      }
+
+      // Si hay GuestStatus o se debe validar
+      if (pApplyGuestStatusValidation)
+      {
+        blnvalid = ValidateGiftsGuestStatus(pRows, pGuestStatus);
+      }
+
+      return blnvalid;
+    }
+    #endregion
+
+    #region ValidateGiftsGuestStatus
+    /// <summary>
+    /// Valida la informacion del GuestStaus x los regalos || Valida los regalos y el GuestStatus
+    /// </summary>
+    /// <returns></returns>
+    /// <history>
+    /// [vipacheco] 19/Abril/2016 Created
+    /// </history>
+    private static bool ValidateGiftsGuestStatus(ObservableCollection<GiftsReceiptDetail> pGridGifts, GuestStatusValidateData pGuestStatus)
+    {
+      int iToursUsed, iDiscsUsed, iTourAllowed, iTours, iTCont = 0, iDCont = 0, iMaxTours;
+      decimal iPax, iDiscAllowed, iDisc, iAdults = 0, iMinors = 0, TotPax = 0;
+      bool? blnDisc;
+      string strMsg = "";
+
+      // Asignamos los valores del GuestStatus para validar
+      iMaxTours = (int)pGuestStatus.gsMaxQtyTours;
+      iToursUsed = pGuestStatus.TourUsed;
+      blnDisc = pGuestStatus.gsAllowTourDisc;
+      iDiscsUsed = pGuestStatus.DiscUsed;
+      iPax = pGuestStatus.guPax;
+
+      // Calculamos el total Pax
+      CalculateAdultsMinorsByPax(iPax, ref iAdults, ref iMinors);
+      TotPax = iAdults + iMinors;
+
+      // Los Tours permitidos
+      iTourAllowed = iMaxTours - iToursUsed;
+      iTours = iTourAllowed;
+
+      // Validamos con cada registro de tour
+      foreach (GiftsReceiptDetail _item in pGridGifts)
+      {
+        Gift _giftResult = frmHost._lstGifts.Where(x => x.giID == _item.gegi).SingleOrDefault();
+
+        if (_giftResult != null)
+        {
+          // Evaluamos si son de toures y con descuento
+          if (_giftResult.gigc == "TOURS" && !(bool)_giftResult.giDiscount)
+          {
+            iTours += iTours - (_giftResult.giQty * _item.geQty);
+            iTCont += iTCont + (_giftResult.giQty * _item.geQty);
+          }
+        }
+      }
+
+      // Los descuentos permitidos son los restantes de los PAX restantes
+      iDiscAllowed = TotPax - iTCont;
+      iDiscAllowed = iDiscAllowed - iDiscsUsed;
+      iDisc = iDiscAllowed;
+
+      // Validamos con cada registro de descuentos
+      foreach (GiftsReceiptDetail _item in pGridGifts)
+      {
+        Gift _giftResult = frmHost._lstGifts.Where(x => x.giID == _item.gegi).SingleOrDefault(); //  BRGifts.GetGiftId(_item.gegi);
+
+        if (_giftResult != null)
+        {
+          if (_giftResult.gigc == "TOURS" && (bool)_giftResult.giDiscount)
+          {
+            iDisc = iDisc - (_giftResult.giQty * _item.geQty);
+            iDCont = iDCont + (_giftResult.giQty * _item.geQty);
+          }
+        }
+      }
+
+      //Revisamos el remanente de la revision de Gifts
+      if (iTours < 0)
+        strMsg = "The maximum number of tours " + iTourAllowed + " has been exceeded. \r\n There are " + iTCont + " tours on this receipt";
+
+      if (iDisc < 0 && strMsg == "")
+        strMsg = "The maximum number of discount tours " + iDiscAllowed + " has been exceeded.\r\n There are " + iDCont + " discount tours on this receipt";
+
+
+      //Revisamos el remanente de la revision de Gifts
+      if (strMsg != "")
+      {
+        UIHelper.ShowMessage(strMsg, MessageBoxImage.Exclamation);
+        return false;
+      }
+      else
+        return true;
+    }
+    #endregion
+
+    #region CalculateAdultsMinorsByPax
+    /// <summary>
+    /// Calcula el numero de adultos y menores en base al Pax
+    /// </summary>
+    /// <param name="pcurPax"></param>
+    /// <param name="piAdults"></param>
+    /// <param name="piMinors"></param>
+    /// <history>
+    /// [vipacheco] 10/Mayo/2016 Created
+    /// </history>
+    private static void CalculateAdultsMinorsByPax(decimal pcurPax, ref decimal piAdults, ref decimal piMinors)
+    {
+      piAdults = Convert.ToInt32(pcurPax);
+      piMinors = (pcurPax - piAdults) * 10;
     }
     #endregion
 

@@ -69,22 +69,22 @@ namespace IM.Host.Forms
     #region EVENTOS DE TIPO BOTON
     private void btnCloseShows_Click(object sender, RoutedEventArgs e)
     {
-      CloseSalesRoom(EnumSalesRoomType.Shows, ref dtpCloseShows, dtpCloseSalesLast);
+      CloseSalesRoom(EnumEntities.Shows, ref dtpCloseShows, dtpCloseSalesLast);
     }
 
     private void btnCloseMealTickets_Click(object sender, RoutedEventArgs e)
     {
-      CloseSalesRoom(EnumSalesRoomType.MealTickets, ref dtpCloseMealTicket, dtpCloseSalesLast);
+      CloseSalesRoom(EnumEntities.MealTickets, ref dtpCloseMealTicket, dtpCloseSalesLast);
     }
 
     private void btnCloseSales_Click(object sender, RoutedEventArgs e)
     {
-      CloseSalesRoom(EnumSalesRoomType.Sales, ref dtpCloseSales, dtpCloseSalesLast);
+      CloseSalesRoom(EnumEntities.Sales, ref dtpCloseSales, dtpCloseSalesLast);
     }
 
     private void btnCloseGiftsReceipts_Click(object sender, RoutedEventArgs e)
     {
-      CloseSalesRoom(EnumSalesRoomType.GiftsReceipts, ref dtpCloseGiftsReceipts, dtpCloseSalesLast);
+      CloseSalesRoom(EnumEntities.GiftsReceipts, ref dtpCloseGiftsReceipts, dtpCloseSalesLast);
     }
 
     /// <summary>
@@ -134,7 +134,7 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 01/03/2016 Created
     /// </history>
-    private void CloseSalesRoom(EnumSalesRoomType _closeType, ref DatePicker _dateClose, DatePicker _dateCloseLast)
+    private void CloseSalesRoom(EnumEntities _closeType, ref DatePicker _dateClose, DatePicker _dateCloseLast)
     {
       //verificacion de fechas no mayores a la actual
       if (_dateClose.SelectedDate.Value > _serverDate)
@@ -166,23 +166,23 @@ namespace IM.Host.Forms
     /// <history>
     /// [vipacheco] 02/03/2016 Created
     /// </history>
-    private void updateDate(EnumSalesRoomType salesRoomType, DateTime? dateUpdate)
+    private void updateDate(EnumEntities salesRoomType, DateTime? dateUpdate)
     {
       switch (salesRoomType)
       {
-        case EnumSalesRoomType.Shows:
+        case EnumEntities.Shows:
           dtpCloseShows.SelectedDate = _serverDate.AddDays(-1);
           dtpCloseShowsLast.SelectedDate = dateUpdate;
           break;
-        case EnumSalesRoomType.MealTickets:
+        case EnumEntities.MealTickets:
           dtpCloseMealTicket.SelectedDate = _serverDate.AddDays(-1);
           dtpCloseMealTicketsLast.SelectedDate = dateUpdate;
           break;
-        case EnumSalesRoomType.Sales:
+        case EnumEntities.Sales:
           dtpCloseSales.SelectedDate = _serverDate.AddDays(-1);
           dtpCloseSalesLast.SelectedDate = dateUpdate;
           break;
-        case EnumSalesRoomType.GiftsReceipts:
+        case EnumEntities.GiftsReceipts:
           dtpCloseGiftsReceipts.SelectedDate = _serverDate.AddDays(-1);
           dtpCloseGiftsReceiptsLast.SelectedDate = dateUpdate;
           break;

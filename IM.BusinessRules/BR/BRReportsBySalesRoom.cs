@@ -853,7 +853,7 @@ namespace IM.BusinessRules.BR
       {
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptManifestRange_TimeOut;
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptManifestRange_Timeout;
           var lstManifestRange = dbContext.USP_IM_RptManifestRange(dtmStart, dtmEnd, salesRooms, EnumToListHelper.GetEnumDescription(program)).ToList();
           return lstManifestRange;
         }
@@ -882,7 +882,7 @@ namespace IM.BusinessRules.BR
         var lstManifestRange = new List<IEnumerable>();
         using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
         {
-          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptManifestRange_TimeOut;
+          dbContext.Database.CommandTimeout = Settings.Default.USP_IM_RptManifestRange_Timeout;
            lstManifestRange = dbContext.USP_IM_RptManifestByLSRange(dtmStart, dtmEnd, salesRooms)
           .MultipleResults()
           .With<RptManifestByLSRange>()

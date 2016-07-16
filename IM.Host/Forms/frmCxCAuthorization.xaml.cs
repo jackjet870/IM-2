@@ -241,7 +241,7 @@ namespace IM.Host.Forms
       var leadSource = cbxLeadSource.SelectedValue as LeadSourceByUser;
       strPR = (personnelShort != null) ? personnelShort.peID : "ALL";
       strLeadSource = (leadSource != null) ? leadSource.lsID : "ALL";
-      _dtmClose = BRSalesRooms.GetCloseSalesRoom(EnumSalesRoomType.CxC, strSalesRoom);
+      _dtmClose = BRSalesRooms.GetCloseSalesRoom(EnumEntities.CxC, strSalesRoom);
     }
     #endregion
 
@@ -481,7 +481,7 @@ namespace IM.Host.Forms
       {
         if (cxcData.Authorized.Value == !blnFilterAuthorized)
         {
-          GiftsReceipt _giftsReceipt = SetCxCDataToGiftsReceipt(cxcData);
+          GiftsReceipt _giftsReceipt = await SetCxCDataToGiftsReceipt(cxcData);
           int nRes = await BREntities.OperationEntity(_giftsReceipt, EnumMode.edit);
           await SaveGiftsReceiptsLog(_giftsReceipt.grID, strUserID);
         }
@@ -500,9 +500,9 @@ namespace IM.Host.Forms
     /// <history>
     /// [michan] 17/06/2016 Created
     /// </history>
-    public GiftsReceipt SetCxCDataToGiftsReceipt(CxCData cxcData)
+    public async Task<GiftsReceipt> SetCxCDataToGiftsReceipt(CxCData cxcData)
     {
-      GiftsReceipt giftsReceipt = BRGiftsReceipts.GetGiftReceipt(cxcData.grID);
+      GiftsReceipt giftsReceipt = await BRGiftsReceipts.GetGiftReceipt(cxcData.grID);
       //var cxcGR = lstCxCData.SingleOrDefault(cxc => cxc.grID == giftsReceipt.grID);
       giftsReceipt.grCxCAppD = cxcData.grCxCAppD;
       giftsReceipt.grAuthorizedBy = (String.IsNullOrEmpty(cxcData.grAuthorizedBy)) ? null : cxcData.grAuthorizedBy;

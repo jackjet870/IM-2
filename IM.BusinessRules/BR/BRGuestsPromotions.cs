@@ -79,6 +79,27 @@ namespace IM.BusinessRules.BR
       });
 
       return guest;
+    }
+    #endregion
+
+    #region DeleteGuestPromotion
+    /// <summary>
+    /// Elimina una promocion
+    /// </summary>
+    /// <param name="pReceipt"></param>
+    /// <param name="pGift"></param>
+    /// <history>
+    /// [vipacheco] 11/Julio/2016 Created
+    /// </history>
+    public async static void DeleteGuestPromotion(int pReceipt, string pGift)
+    {
+      await Task.Run(() =>
+      {
+        using (var dbContext = new IMEntities(ConnectionHelper.ConnectionString()))
+        {
+          dbContext.USP_OR_DeleteGuestPromotion(pReceipt, pGift);
+        }
+      });
     } 
     #endregion
 

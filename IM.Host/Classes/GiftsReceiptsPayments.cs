@@ -47,8 +47,6 @@ namespace IM.Host.Classes
     /// </history>
     private static bool ValidateBySource(DataGrid Grid)
     {
-      Grid.IsReadOnly = true;
-
       foreach (var Current in Grid.Items)
       {
         Type type = Current.GetType();

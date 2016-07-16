@@ -120,7 +120,7 @@
             </Button>
             <Button x:Name="btnCloseSalesRoom" HorizontalAlignment="Left" Margin="3,3,0,0" VerticalAlignment="Top" Width="Auto" Background="White" Height="43" Click="btnCloseSalesRoom_Click">
               <StackPanel>
-                <Image Source="pack://application:,,,/IM.Host;component/Images/BCloseSalesRoom.png" Width="24" Height="24" HorizontalAlignment="Center"/>
+                <Image Source="pack://application:,,,/IM.Host;component/Images/BCloseSalesRoom.png" Width="Auto" Height="24" HorizontalAlignment="Center"/>
                 <TextBlock Text="Close Sales Room" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>

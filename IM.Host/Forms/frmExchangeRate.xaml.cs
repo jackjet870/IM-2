@@ -24,6 +24,7 @@ namespace IM.Host.Forms
     private int _monthCurrent;
     private int _dayCurrent;
     private string _currencyID;
+    private int _dayLimit;
     private DateTime? _dtServer;
     public static decimal _exchangeRateMEX;
     List<Currency> _listCurrencies = new List<Currency>();
@@ -54,8 +55,8 @@ namespace IM.Host.Forms
       validateUserPermissions(App.User);
     }
     #endregion
-    
-    
+
+    #region calDate_SelectedDatesChanged
     /// <summary>
     /// Función encargado de evaluar el cambio en el Calendar del formulario
     /// </summary>
@@ -77,8 +78,10 @@ namespace IM.Host.Forms
       _exchangeRateMEX = _listExchageRateData.Where(x => x.excu == "MEX").Select(s => s.exExchRate).First();
       _dsExchangeRates.Source = _listExchageRateData;
 
-    }
+    } 
+    #endregion
 
+    #region calDate_Loaded
     /// <summary>
     /// Función load del calendario que se utiliza para iniciar valores y rangos de fechas disponibles
     /// </summary>
@@ -98,8 +101,13 @@ namespace IM.Host.Forms
       //Agregamos el rango de dias disponibleas.
       calDate.DisplayDateStart = new DateTime(1990, calDate.SelectedDate.Value.Month, 1); //   Convert.ToDateTime(String.Format("{0}/{1}/{2}", calDate.SelectedDate.Value.Month, 01, 1990));
       calDate.DisplayDateEnd = new DateTime(calDate.SelectedDate.Value.Year, calDate.SelectedDate.Value.Month, calDate.SelectedDate.Value.Day); // Convert.ToDateTime(String.Format("{0}/{1}/{2}", calDate.SelectedDate.Value.Month, calDate.SelectedDate.Value.Day, calDate.SelectedDate.Value.Year));
-    }
 
+      // Obtenemos los limites actuales
+      _dayLimit = calDate.SelectedDate.Value.Day;
+    } 
+    #endregion
+
+    #region validateRange
     /// <summary>
     /// Función encargada de evaluar el rango de dias por mes para mostrar en el textbox
     /// </summary>
@@ -115,13 +123,18 @@ namespace IM.Host.Forms
         return _dayCurrent;
       }
       return DateTime.DaysInMonth(dateSelected.Value.Year, dateSelected.Value.Month);
-    }
+    } 
+    #endregion
 
+    #region btnLog_Click
     /// <summary>
     /// Función evento click encargado llamar al formulario Log
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 05/03/2016 Created
+    /// </history>
     private void btnLog_Click(object sender, RoutedEventArgs e)
     {
       frmExchangeRateLog _frmExchangeRateLog = new frmExchangeRateLog(_currencyID);
@@ -129,8 +142,10 @@ namespace IM.Host.Forms
       _frmExchangeRateLog.ShowInTaskbar = false;
       _frmExchangeRateLog.Owner = this;
       _frmExchangeRateLog.ShowDialog();
-    }
+    } 
+    #endregion
 
+    #region dgExchangeRates_SelectionChanged
     /// <summary>
     /// Función para actualizar el currency utilizado al invocar el formulario log.
     /// </summary>
@@ -146,7 +161,8 @@ namespace IM.Host.Forms
 
       // Se asigna el tipo de currency segun el row seleccionado.
       _currencyID = itemRow.excu;
-    }
+    } 
+    #endregion
 
     #region validateUserPermissions
     /// <summary>
@@ -174,6 +190,9 @@ namespace IM.Host.Forms
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 03/14/2016 Created
+    /// </history>
     private void btnEdit_Click(object sender, RoutedEventArgs e)
     {
       // Habilitamos los botones correspondientes.
@@ -196,22 +215,24 @@ namespace IM.Host.Forms
           if (valor.Equals("MEX"))
           {
             row.IsEnabled = false;
-            //((TextBlock)dgExchangeRates.Columns[1].GetCellContent(row)).IsEnabled = true;
             ((ComboBox)dgExchangeRates.Columns[0].GetCellContent(row)).Foreground = new SolidColorBrush(Colors.Black);
-            //((TextBlock)dgExchangeRates.Columns[1].GetCellContent(row)).Foreground = new SolidColorBrush(Colors.Black);
             ((TextBlock)dgExchangeRates.Columns[2].GetCellContent(row)).Foreground = new SolidColorBrush(Colors.Black);
           }
-          //else
-            //row.IsEnabled = true;
-
-          //else
-          //((TextBlock)dgExchangeRates.Columns[1].GetCellContent(row)).Foreground = new SolidColorBrush(Colors.DarkBlue);
+          
         }
       }
     }
     #endregion
 
     #region btnCancel_Click
+    /// <summary>
+    /// Cancela una edicion
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 03/14/2016 Created
+    /// </history>
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       // Deshabilitamos los botones correspondientes.
@@ -271,12 +292,20 @@ namespace IM.Host.Forms
     {
       List<string> _exceptCurency = new List<string> { "US" };
       //Obtenemos la lista de Currencies
-      _listCurrencies =await BRCurrencies.GetCurrencies(null, 1, _exceptCurency);
+      _listCurrencies = await BRCurrencies.GetCurrencies(null, 1, _exceptCurency);
       currencyViewSource.Source = _listCurrencies;
     }
     #endregion
 
-    #region Cell_DoubleClick
+    #region Cell_DoubleClick    
+    /// <summary>
+    /// Despliega el formulario de detalles
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 03/14/2016 Created
+    /// </history>
     private void Cell_DoubleClick(object sender, RoutedEventArgs e)
     {
       //Verificamos que este en modo Edición!
@@ -296,6 +325,26 @@ namespace IM.Host.Forms
         calDate_SelectedDatesChanged(null, null);
       }
     }
+    #endregion
+
+    #region calDate_DisplayDateChanged
+    /// <summary>
+    /// Actualiza la informacion cuando se cambia la fecha por los botones del Calendar
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <history>
+    /// [vipacheco] 14/Julio/2016 Created
+    /// </history>
+    private void calDate_DisplayDateChanged(object sender, CalendarDateChangedEventArgs e)
+    {
+      int day = calDate.SelectedDate.Value.Day;
+
+      if (day > _dayLimit)
+        calDate.SelectedDate = e.AddedDate.Value.AddDays(_dayLimit - 1);
+      else
+        calDate.SelectedDate = e.AddedDate.Value.AddDays(day - 1);
+    } 
     #endregion
 
   }

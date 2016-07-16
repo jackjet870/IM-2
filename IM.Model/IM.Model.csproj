@@ -216,6 +216,7 @@
     <Compile Include="Enums\EnumExternalProduct.cs" />
     <Compile Include="Enums\EnumDataFieldShowDataAs.cs" />
     <Compile Include="Enums\EnumFilterDeposit.cs" />
+    <Compile Include="Enums\EnumFormatFolio.cs" />
     <Compile Include="Enums\EnumFormatTypeExcel.cs" />
     <Compile Include="Enums\EnumGiftsType.cs" />
     <Compile Include="Enums\EnumInvitationMode.cs" />
@@ -225,6 +226,7 @@
     <Compile Include="Enums\EnumOnlyWholesalers.cs" />
     <Compile Include="Enums\EnumPermission.cs" />
     <Compile Include="Enums\EnumPlaceType.cs" />
+    <Compile Include="Enums\EnumPriceType.cs" />
     <Compile Include="Enums\EnumProgram.cs" />
     <Compile Include="Enums\EnumPromotionsSystem.cs" />
     <Compile Include="Enums\EnumRole.cs" />

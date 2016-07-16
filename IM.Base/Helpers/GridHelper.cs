@@ -263,7 +263,7 @@ namespace IM.Base.Helpers
       message = NamePlural + " must not be repeated.\r\n" + NameSingular + " repetead is ";
 
       string RepeatFields = "";
-      Grid.IsReadOnly = true;
+      //Grid.IsReadOnly = true;
 
       // recorremos las filas
       foreach (var _Grid in Grid.Items)
@@ -280,7 +280,7 @@ namespace IM.Base.Helpers
             Type typeTemp = _GridTemp.GetType();
             var propertyTemp = typeTemp.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
 
-            if (i != j) // Para evitar que sea el mismo row
+            if (propertyTemp.Count > 0 &&  i != j) // Para evitar que sea el mismo row
             {
               // recorremos los campos que forman la llave primaria
               foreach (string field in Fields)
@@ -305,7 +305,7 @@ namespace IM.Base.Helpers
           i++;
         }
       }
-      Grid.IsReadOnly = false;
+      //Grid.IsReadOnly = false;
 
       return false;
     }
@@ -369,7 +369,7 @@ namespace IM.Base.Helpers
     public static void ValidateEditNumber(ref int pNumber, ref bool pCancel, string pTitle, int pUpperBound, int pLowerBound, int pDefaultValue = 0, bool pValidateBounds = true)
     {
       // si se ingreso un valor
-      if (pNumber != 0)
+      if (pNumber >= 0)
       {
         // si se desea validar los limites
         if (pValidateBounds)
@@ -396,8 +396,6 @@ namespace IM.Base.Helpers
         else
           pNumber = pLowerBound;
       }
-
-
 
     } 
     #endregion
